@@ -15,7 +15,6 @@
 
     </View>
 
-
     <ImageView
         android:id="@+id/overlayBackButton"
         android:layout_width="44dp"
@@ -69,13 +68,30 @@
         tools:text="Bill 29 Jun at 19:42" />
 
     <ImageView
+        android:id="@+id/overlayDownloadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/action_download"
+        android:focusable="true"
+        android:padding="6dp"
+        app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
+        app:layout_constraintEnd_toStartOf="@id/overlayShareButton"
+        app:layout_constraintTop_toTopOf="@id/overlayTopBackground"
+        app:srcCompat="@drawable/ic_material_save"
+        app:tint="?colorOnPrimary"
+        tools:ignore="MissingPrefix" />
+
+    <ImageView
         android:id="@+id/overlayShareButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:contentDescription="@string/share"
+        android:contentDescription="@string/action_share"
         android:focusable="true"
         android:padding="6dp"
         app:layout_constraintBottom_toBottomOf="@id/overlayTopBackground"
@@ -84,7 +100,6 @@
         app:srcCompat="@drawable/ic_share"
         app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
-
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/overlayVideoControlsGroup"
@@ -109,7 +124,7 @@
         android:layout_marginEnd="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:contentDescription="@string/play_video"
+        android:contentDescription="@string/action_play"
         android:focusable="true"
         android:padding="6dp"
         android:scaleType="centerInside"

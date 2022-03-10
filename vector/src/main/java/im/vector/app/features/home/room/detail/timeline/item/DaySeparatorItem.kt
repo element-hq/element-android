@@ -26,7 +26,7 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 @EpoxyModelClass(layout = R.layout.item_timeline_event_day_separator)
 abstract class DaySeparatorItem : EpoxyModelWithHolder<DaySeparatorItem.Holder>() {
 
-    @EpoxyAttribute lateinit var formattedDay: CharSequence
+    @EpoxyAttribute lateinit var formattedDay: String
 
     override fun bind(holder: Holder) {
         super.bind(holder)

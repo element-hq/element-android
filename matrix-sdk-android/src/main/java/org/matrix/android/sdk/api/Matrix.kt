@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import androidx.work.WorkerFactory
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -33,6 +34,7 @@ import org.matrix.android.sdk.internal.di.DaggerMatrixComponent
 import org.matrix.android.sdk.internal.network.ApiInterceptor
 import org.matrix.android.sdk.internal.network.UserAgentHolder
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
+import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
 import org.matrix.olm.OlmManager
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
@@ -53,12 +55,17 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var sessionManager: SessionManager
     @Inject internal lateinit var homeServerHistoryService: HomeServerHistoryService
     @Inject internal lateinit var apiInterceptor: ApiInterceptor
+    @Inject internal lateinit var matrixWorkerFactory: MatrixWorkerFactory
 
     init {
         Monarchy.init(context)
         DaggerMatrixComponent.factory().create(context, matrixConfiguration).inject(this)
         if (context.applicationContext !is Configuration.Provider) {
-            WorkManager.initialize(context, Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build())
+            val configuration = Configuration.Builder()
+                    .setExecutor(Executors.newCachedThreadPool())
+                    .setWorkerFactory(matrixWorkerFactory)
+                    .build()
+            WorkManager.initialize(context, configuration)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
     }
@@ -77,6 +84,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         return legacySessionImporter
     }
 
+    fun workerFactory(): WorkerFactory = matrixWorkerFactory
+
     fun registerApiInterceptorListener(path: ApiPath, listener: ApiInterceptorListener) {
         apiInterceptor.addListener(path, listener)
     }
@@ -90,12 +99,31 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         private lateinit var instance: Matrix
         private val isInit = AtomicBoolean(false)
 
+        /**
+         * Creates a new instance of Matrix, it's recommended to manage this instance as a singleton.
+         * To make use of the built in singleton use Matrix.initialize() and/or Matrix.getInstance(context) instead
+         **/
+        fun createInstance(context: Context, matrixConfiguration: MatrixConfiguration): Matrix {
+            return Matrix(context.applicationContext, matrixConfiguration)
+        }
+
+        /**
+         * Initializes a singleton instance of Matrix for the given MatrixConfiguration
+         * This instance will be returned by Matrix.getInstance(context)
+         */
+        @Deprecated("Use Matrix.createInstance and manage the instance manually")
         fun initialize(context: Context, matrixConfiguration: MatrixConfiguration) {
             if (isInit.compareAndSet(false, true)) {
                 instance = Matrix(context.applicationContext, matrixConfiguration)
             }
         }
 
+        /**
+         * Either provides an already initialized singleton Matrix instance or queries the application context for a MatrixConfiguration.Provider
+         * to lazily create and store the instance.
+         */
+        @Suppress("deprecation") // suppressing warning as this method is unused but is still provided for SDK clients
+        @Deprecated("Use Matrix.createInstance and manage the instance manually")
         fun getInstance(context: Context): Matrix {
             if (isInit.compareAndSet(false, true)) {
                 val appContext = context.applicationContext
@@ -104,7 +132,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
                     instance = Matrix(appContext, matrixConfiguration)
                 } else {
                     throw IllegalStateException("Matrix is not initialized properly." +
-                            " You should call Matrix.initialize or let your application implements MatrixConfiguration.Provider.")
+                            " If you want to manage your own Matrix instance use Matrix.createInstance" +
+                            " otherwise you should call Matrix.initialize or let your application implement MatrixConfiguration.Provider.")
                 }
             }
             return instance

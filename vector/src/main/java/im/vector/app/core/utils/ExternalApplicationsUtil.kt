@@ -80,11 +80,7 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
             putExtra(Browser.EXTRA_CREATE_NEW_TAB, true)
         }
 
-        try {
-            context.startActivity(browserIntent)
-        } catch (activityNotFoundException: ActivityNotFoundException) {
-            context.toast(R.string.error_no_external_application_found)
-        }
+        context.safeStartActivity(browserIntent)
     }
 }
 
@@ -124,22 +120,6 @@ fun openUrlInChromeCustomTab(context: Context,
 }
 
 /**
- * Open sound recorder external application
- */
-fun openSoundRecorder(activity: Activity, requestCode: Int) {
-    val recordSoundIntent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
-
-    // Create chooser
-    val chooserIntent = Intent.createChooser(recordSoundIntent, activity.getString(R.string.go_on_with))
-
-    try {
-        activity.startActivityForResult(chooserIntent, requestCode)
-    } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
-    }
-}
-
-/**
  * Open file selection activity
  */
 fun openFileSelection(activity: Activity,
@@ -153,96 +133,14 @@ fun openFileSelection(activity: Activity,
     fileIntent.type = MimeTypes.Any
 
     try {
-        activityResultLauncher
-                ?.launch(fileIntent)
-                ?: run {
-                    activity.startActivityForResult(fileIntent, requestCode)
-                }
-    } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
-    }
-}
-
-/**
- * Open external video recorder
- */
-fun openVideoRecorder(activity: Activity, requestCode: Int) {
-    val captureIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-
-    // lowest quality
-    captureIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0)
-
-    try {
-        activity.startActivityForResult(captureIntent, requestCode)
-    } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
-    }
-}
-
-/**
- * Open external camera
- * @return the latest taken picture camera uri
- */
-fun openCamera(activity: Activity, titlePrefix: String, requestCode: Int): String? {
-    val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-    // the following is a fix for buggy 2.x devices
-    val date = Date()
-    val formatter = SimpleDateFormat("yyyyMMddHHmmss", Locale.US)
-    val values = ContentValues()
-    values.put(MediaStore.Images.Media.TITLE, titlePrefix + formatter.format(date))
-    // The Galaxy S not only requires the name of the file to output the image to, but will also not
-    // set the mime type of the picture it just took (!!!). We assume that the Galaxy S takes image/jpegs
-    // so the attachment uploader doesn't freak out about there being no mimetype in the content database.
-    values.put(MediaStore.Images.Media.MIME_TYPE, MimeTypes.Jpeg)
-    var dummyUri: Uri? = null
-    try {
-        dummyUri = activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-
-        if (null == dummyUri) {
-            Timber.e("Cannot use the external storage media to save image")
+        if (activityResultLauncher != null) {
+            activityResultLauncher.launch(fileIntent)
+        } else {
+            activity.startActivityForResult(fileIntent, requestCode)
         }
-    } catch (uoe: UnsupportedOperationException) {
-        Timber.e(uoe, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI.")
-        Timber.e("no SD card? Attempting to insert into device storage.")
-    } catch (e: Exception) {
-        Timber.e(e, "Unable to insert camera URI into MediaStore.Images.Media.EXTERNAL_CONTENT_URI.")
-    }
-
-    if (null == dummyUri) {
-        try {
-            dummyUri = activity.contentResolver.insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, values)
-            if (null == dummyUri) {
-                Timber.e("Cannot use the internal storage to save media to save image")
-            }
-        } catch (e: Exception) {
-            Timber.e(e, "Unable to insert camera URI into internal storage. Giving up.")
-        }
-    }
-
-    if (dummyUri != null) {
-        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, dummyUri)
-        Timber.v("trying to take a photo on $dummyUri")
-    } else {
-        Timber.v("trying to take a photo with no predefined uri")
-    }
-
-    // Store the dummy URI which will be set to a placeholder location. When all is lost on Samsung devices,
-    // this will point to the data we're looking for.
-    // Because Activities tend to use a single MediaProvider for all their intents, this field will only be the
-    // *latest* TAKE_PICTURE Uri. This is deemed acceptable as the normal flow is to create the intent then immediately
-    // fire it, meaning onActivityResult/getUri will be the next thing called, not another createIntentFor.
-    val result = if (dummyUri == null) null else dummyUri.toString()
-
-    try {
-        activity.startActivityForResult(captureIntent, requestCode)
-
-        return result
     } catch (activityNotFoundException: ActivityNotFoundException) {
         activity.toast(R.string.error_no_external_application_found)
     }
-
-    return null
 }
 
 /**
@@ -254,11 +152,7 @@ fun sendMailTo(address: String, subject: String? = null, message: String? = null
     intent.putExtra(Intent.EXTRA_SUBJECT, subject)
     intent.putExtra(Intent.EXTRA_TEXT, message)
 
-    try {
-        activity.startActivity(intent)
-    } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
-    }
+    activity.safeStartActivity(intent)
 }
 
 /**
@@ -267,11 +161,7 @@ fun sendMailTo(address: String, subject: String? = null, message: String? = null
 fun openUri(activity: Activity, uri: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
 
-    try {
-        activity.startActivity(intent)
-    } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
-    }
+    activity.safeStartActivity(intent)
 }
 
 /**
@@ -290,11 +180,27 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
 
-    try {
-        activity.startActivity(intent)
-    } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
+    activity.safeStartActivity(intent)
+}
+
+/**
+ * Open external location
+ * @param activity the activity
+ * @param latitude latitude of the location
+ * @param longitude longitude of the location
+ */
+fun openLocation(activity: Activity, latitude: Double, longitude: Double) {
+    val locationUri = buildString {
+        append("geo:")
+        append(latitude)
+        append(",")
+        append(longitude)
+        append("?q=") // This is required to drop a pin to the location
+        append(latitude)
+        append(",")
+        append(longitude)
     }
+    openUri(activity, locationUri)
 }
 
 fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
@@ -305,28 +211,30 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
         return
     }
 
-    val sendIntent = ShareCompat.IntentBuilder(context)
+    val chooserIntent = ShareCompat.IntentBuilder(context)
             .setType(mediaMimeType)
             .setStream(mediaUri)
-            .getIntent()
+            .setChooserTitle(R.string.action_share)
+            .createChooserIntent()
 
-    sendShareIntent(context, sendIntent)
+    context.safeStartActivity(chooserIntent)
 }
 
 fun shareText(context: Context, text: String) {
-    val sendIntent = Intent()
-    sendIntent.action = Intent.ACTION_SEND
-    sendIntent.type = "text/plain"
-    sendIntent.putExtra(Intent.EXTRA_TEXT, text)
+    val chooserIntent = ShareCompat.IntentBuilder(context)
+            .setType("text/plain")
+            .setText(text)
+            .setChooserTitle(R.string.action_share)
+            .createChooserIntent()
 
-    sendShareIntent(context, sendIntent)
+    context.safeStartActivity(chooserIntent)
 }
 
-private fun sendShareIntent(context: Context, intent: Intent) {
+fun Context.safeStartActivity(intent: Intent) {
     try {
-        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+        startActivity(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        context.toast(R.string.error_no_external_application_found)
+        toast(R.string.error_no_external_application_found)
     }
 }
 
@@ -452,25 +360,18 @@ fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID
     try {
         activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appId")))
     } catch (activityNotFoundException: ActivityNotFoundException) {
-        try {
-            activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appId")))
-        } catch (activityNotFoundException: ActivityNotFoundException) {
-            activity.toast(R.string.error_no_external_application_found)
-        }
+        activity.safeStartActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appId")))
     }
 }
 
 fun openAppSettingsPage(activity: Activity) {
-    try {
-        activity.startActivity(
-                Intent().apply {
-                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    data = Uri.fromParts("package", activity.packageName, null)
-                })
-    } catch (activityNotFoundException: ActivityNotFoundException) {
-        activity.toast(R.string.error_no_external_application_found)
-    }
+    activity.safeStartActivity(
+            Intent().apply {
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                data = Uri.fromParts("package", activity.packageName, null)
+            }
+    )
 }
 
 /**
@@ -486,9 +387,8 @@ fun selectTxtFileToWrite(
     intent.addCategory(Intent.CATEGORY_OPENABLE)
     intent.type = "text/plain"
     intent.putExtra(Intent.EXTRA_TITLE, defaultFileName)
-
+    val chooserIntent = Intent.createChooser(intent, chooserHint)
     try {
-        val chooserIntent = Intent.createChooser(intent, chooserHint)
         activityResultLauncher.launch(chooserIntent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         activity.toast(R.string.error_no_external_application_found)

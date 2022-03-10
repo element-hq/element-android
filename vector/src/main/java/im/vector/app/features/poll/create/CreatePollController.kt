@@ -27,6 +27,8 @@ import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditTextWithDeleteItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import javax.inject.Inject
 
 class CreatePollController @Inject constructor(
@@ -47,9 +49,29 @@ class CreatePollController @Inject constructor(
         val host = this
 
         genericItem {
+            id("poll_type_title")
+            style(ItemStyle.BIG_TEXT)
+            title(host.stringProvider.getString(R.string.poll_type_title).toEpoxyCharSequence())
+        }
+
+        pollTypeSelectionItem {
+            id("poll_type_selection")
+            pollType(currentState.pollType)
+            pollTypeChangedListener { _, id ->
+                host.callback?.onPollTypeChanged(
+                        if (id == R.id.openPollTypeRadioButton) {
+                            PollType.DISCLOSED
+                        } else {
+                            PollType.UNDISCLOSED
+                        }
+                )
+            }
+        }
+
+        genericItem {
             id("question_title")
             style(ItemStyle.BIG_TEXT)
-            title(host.stringProvider.getString(R.string.create_poll_question_title))
+            title(host.stringProvider.getString(R.string.create_poll_question_title).toEpoxyCharSequence())
         }
 
         val questionImeAction = if (currentState.options.isEmpty()) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
@@ -60,7 +82,7 @@ class CreatePollController @Inject constructor(
             hint(host.stringProvider.getString(R.string.create_poll_question_hint))
             singleLine(true)
             imeOptions(questionImeAction)
-            maxLength(500)
+            maxLength(340)
             onTextChange {
                 host.callback?.onQuestionChanged(it)
             }
@@ -69,7 +91,7 @@ class CreatePollController @Inject constructor(
         genericItem {
             id("options_title")
             style(ItemStyle.BIG_TEXT)
-            title(host.stringProvider.getString(R.string.create_poll_options_title))
+            title(host.stringProvider.getString(R.string.create_poll_options_title).toEpoxyCharSequence())
         }
 
         currentState.options.forEachIndexed { index, option ->
@@ -80,6 +102,7 @@ class CreatePollController @Inject constructor(
                 hint(host.stringProvider.getString(R.string.create_poll_options_hint, (index + 1)))
                 singleLine(true)
                 imeOptions(imeOptions)
+                maxLength(340)
                 onTextChange {
                     host.callback?.onOptionChanged(index, it)
                 }
@@ -96,6 +119,7 @@ class CreatePollController @Inject constructor(
                 textColor(host.colorProvider.getColor(R.color.palette_element_green))
                 gravity(Gravity.START)
                 bold(true)
+                highlight(false)
                 buttonClickAction {
                     host.callback?.onAddOption()
                 }
@@ -108,5 +132,6 @@ class CreatePollController @Inject constructor(
         fun onOptionChanged(index: Int, option: String)
         fun onDeleteOption(index: Int)
         fun onAddOption()
+        fun onPollTypeChanged(type: PollType)
     }
 }

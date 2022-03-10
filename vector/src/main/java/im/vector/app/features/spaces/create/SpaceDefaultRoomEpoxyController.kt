@@ -24,6 +24,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.form.formEditTextItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class SpaceDefaultRoomEpoxyController @Inject constructor(
@@ -45,7 +46,7 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
                         host.stringProvider.getString(R.string.create_spaces_room_public_header, data.name)
                     } else {
                         host.stringProvider.getString(R.string.create_spaces_room_private_header)
-                    }
+                    }.toEpoxyCharSequence()
             )
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
         }
@@ -59,7 +60,7 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
                             } else {
                                 R.string.create_spaces_room_private_header_desc
                             }
-                    )
+                    ).toEpoxyCharSequence()
             )
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary))
         }

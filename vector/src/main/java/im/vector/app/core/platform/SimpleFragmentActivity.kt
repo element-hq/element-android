@@ -30,7 +30,8 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
     final override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun initUiAndData() {
-        configureToolbar(views.toolbar)
+        setupToolbar(views.toolbar)
+                .allowBack(true)
         waitingView = views.waitingView.waitingView
     }
 

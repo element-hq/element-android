@@ -44,7 +44,7 @@ class JoinReplacementRoomBottomSheet :
     @Inject
     lateinit var errorFormatter: ErrorFormatter
 
-    private val viewModel: RoomDetailViewModel by parentFragmentViewModel()
+    private val viewModel: TimelineViewModel by parentFragmentViewModel()
 
     override val showExpanded: Boolean
         get() = true

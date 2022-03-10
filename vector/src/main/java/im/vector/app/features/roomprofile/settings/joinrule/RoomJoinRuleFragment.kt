@@ -60,7 +60,7 @@ class RoomJoinRuleFragment @Inject constructor(
                     .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
                         requireActivity().finish()
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
             return true
         }
@@ -75,7 +75,7 @@ class RoomJoinRuleFragment @Inject constructor(
             views.cancelButton.isVisible = true
             views.positiveButton.text = getString(R.string.warning_unsaved_change_discard)
             views.positiveButton.isVisible = true
-            views.positiveButton.text = getString(R.string.save)
+            views.positiveButton.text = getString(R.string.action_save)
             views.positiveButton.debouncedClicks {
                 viewModel.handle(RoomJoinRuleChooseRestrictedActions.DoUpdateJoinRules)
             }

@@ -9,7 +9,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.8.1"
+        classpath "io.realm:realm-gradle-plugin:10.9.0"
     }
 }
 
@@ -31,7 +31,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.3.9\""
+        buildConfigField "String", "SDK_VERSION", "\"1.4.4\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
@@ -45,7 +45,7 @@ android {
 
     testOptions {
         // Comment to run on Android 12
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+//        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     buildTypes {
@@ -64,6 +64,7 @@ android {
 
     adbOptions {
         installOptions "-g"
+//        timeOutInMs 350 * 1000
     }
 
     compileOptions {
@@ -131,6 +132,11 @@ dependencies {
     implementation libs.squareup.retrofit
     implementation libs.squareup.retrofitMoshi
 
+    // When version of okhttp is updated (current is 4.9.3), consider removing the workaround
+    // to force usage of Protocol.HTTP_1_1. Check the status of:
+    // - https://github.com/square/okhttp/issues/3278
+    // - https://github.com/square/okhttp/issues/4455
+    // - https://github.com/square/okhttp/issues/3146
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
@@ -149,6 +155,9 @@ dependencies {
 
     kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
 
+    // Shared Preferences
+    implementation libs.androidx.preferenceKtx
+
     // Work
     implementation libs.androidx.work
 
@@ -156,8 +165,8 @@ dependencies {
     implementation libs.arrow.core
     implementation libs.arrow.instances
 
-    // olm lib is now hosted by jitpack: https://jitpack.io/#org.matrix.gitlab.matrix-org/olm
-    implementation 'org.matrix.gitlab.matrix-org:olm:3.2.4'
+    // olm lib is now hosted in MavenCentral
+    implementation 'org.matrix.android:olm-sdk:3.2.10'
 
     // DI
     implementation libs.dagger.dagger
@@ -174,10 +183,10 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.38'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.44'
 
     testImplementation libs.tests.junit
-    testImplementation 'org.robolectric:robolectric:4.7.2'
+    testImplementation 'org.robolectric:robolectric:4.7.3'
     //testImplementation 'org.robolectric:shadows-support-v4:3.0'
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
     testImplementation libs.mockk.mockk

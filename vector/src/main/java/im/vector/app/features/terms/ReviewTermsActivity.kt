@@ -40,7 +40,7 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
         super.initUiAndData()
 
         if (isFirstCreation()) {
-            replaceFragment(R.id.container, ReviewTermsFragment::class.java)
+            replaceFragment(views.container, ReviewTermsFragment::class.java)
         }
 
         reviewTermsViewModel.termsArgs = intent.getParcelableExtra(EXTRA_INFO) ?: error("Missing parameter")

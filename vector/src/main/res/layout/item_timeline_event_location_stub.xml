@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Size will be overrode -->
+    <ImageView
+        android:id="@+id/staticMapImageView"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/a11y_static_map_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <ImageView
+        android:id="@+id/staticMapPinImageView"
+        android:layout_width="51dp"
+        android:layout_height="55dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="28dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/bg_map_user_pin"
+        app:layout_constraintBottom_toBottomOf="@id/staticMapImageView"
+        app:layout_constraintEnd_toEndOf="@id/staticMapImageView"
+        app:layout_constraintStart_toStartOf="@id/staticMapImageView"
+        app:layout_constraintTop_toTopOf="@id/staticMapImageView" />
+
+    <TextView
+        android:id="@+id/staticMapErrorTextView"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="54dp"
+        android:text="@string/location_timeline_failed_to_load_map"
+        android:textColor="?vctr_content_tertiary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/staticMapPinImageView"
+        app:layout_constraintStart_toStartOf="@id/staticMapPinImageView"
+        app:layout_constraintTop_toBottomOf="@id/staticMapPinImageView"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

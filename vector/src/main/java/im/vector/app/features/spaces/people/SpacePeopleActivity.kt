@@ -24,9 +24,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
-import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.GenericIdArgs
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleLoadingBinding
@@ -64,16 +63,11 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
         super.onCreate(savedInstanceState)
         val args = intent?.getParcelableExtra<GenericIdArgs>(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
-            val simpleName = SpacePeopleFragment::class.java.simpleName
-            if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
-                supportFragmentManager.commitTransaction {
-                    replace(R.id.simpleFragmentContainer,
-                            SpacePeopleFragment::class.java,
-                            Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
-                            simpleName
-                    )
-                }
-            }
+            replaceFragment(
+                    views.simpleFragmentContainer,
+                    SpacePeopleFragment::class.java,
+                    args
+            )
         }
 
         sharedActionViewModel = viewModelProvider.get(SpacePeopleSharedActionViewModel::class.java)

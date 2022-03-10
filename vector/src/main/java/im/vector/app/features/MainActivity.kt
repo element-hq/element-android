@@ -29,9 +29,11 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
+import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.ActivityMainBinding
+import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -39,10 +41,9 @@ import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.UnlockedActivity
 import im.vector.app.features.popup.PopupAlertManager
+import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
-import im.vector.app.features.signout.soft.SoftLogoutActivity
-import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
@@ -98,6 +99,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     @Inject lateinit var pinCodeStore: PinCodeStore
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var popupAlertManager: PopupAlertManager
+    @Inject lateinit var vectorAnalytics: VectorAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,13 +145,15 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             startNextActivityAndFinish()
             return
         }
+
+        val onboardingStore = session.vectorStore(this)
         when {
             args.isAccountDeactivated -> {
                 lifecycleScope.launch {
                     // Just do the local cleanup
                     Timber.w("Account deactivated, start app")
                     sessionHolder.clearActiveSession()
-                    doLocalCleanup(clearPreferences = true)
+                    doLocalCleanup(clearPreferences = true, onboardingStore)
                     startNextActivityAndFinish()
                 }
             }
@@ -163,14 +167,14 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     }
                     Timber.w("SIGN_OUT: success, start app")
                     sessionHolder.clearActiveSession()
-                    doLocalCleanup(clearPreferences = true)
+                    doLocalCleanup(clearPreferences = true, onboardingStore)
                     startNextActivityAndFinish()
                 }
             }
             args.clearCache           -> {
                 lifecycleScope.launch {
                     session.clearCache()
-                    doLocalCleanup(clearPreferences = false)
+                    doLocalCleanup(clearPreferences = false, onboardingStore)
                     session.startSyncing(applicationContext)
                     startNextActivityAndFinish()
                 }
@@ -183,7 +187,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         Timber.w("Ignoring invalid token global error")
     }
 
-    private suspend fun doLocalCleanup(clearPreferences: Boolean) {
+    private suspend fun doLocalCleanup(clearPreferences: Boolean, vectorSessionStore: VectorSessionStore) {
         // On UI Thread
         Glide.get(this@MainActivity).clearMemory()
 
@@ -192,6 +196,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             uiStateRepository.reset()
             pinLocker.unlock()
             pinCodeStore.deleteEncodedPin()
+            vectorAnalytics.onSignOut()
+            vectorSessionStore.clear()
         }
         withContext(Dispatchers.IO) {
             // On BG thread
@@ -208,7 +214,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(errorFormatter.toHumanReadable(failure))
                     .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
-                    .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
+                    .setNegativeButton(R.string.action_cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
                     .setCancelable(false)
                     .show()
         }
@@ -223,9 +229,11 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 navigator.openLogin(this, null)
                 null
             }
-            args.isSoftLogout                                            ->
+            args.isSoftLogout                                            -> {
                 // The homeserver has invalidated the token, with a soft logout
-                getSoftLogoutActivityIntent()
+                navigator.softLogout(this)
+                null
+            }
             args.isUserLoggedOut                                         ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
@@ -236,7 +244,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     HomeActivity.newIntent(this)
                 } else {
                     // The token is still invalid
-                    getSoftLogoutActivityIntent()
+                    navigator.softLogout(this)
+                    null
                 }
             else                                                         -> {
                 // First start, or no active session
@@ -246,13 +255,5 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         }
         intent?.let { startActivity(it) }
         finish()
-    }
-
-    private fun getSoftLogoutActivityIntent(): Intent {
-        return if (resources.getBoolean(R.bool.useLoginV2)) {
-            SoftLogoutActivity2.newIntent(this)
-        } else {
-            SoftLogoutActivity.newIntent(this)
-        }
     }
 }

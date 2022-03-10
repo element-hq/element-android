@@ -20,13 +20,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.longClickOn
 import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.adevinta.android.barista.interaction.BaristaMenuClickInteractions.openMenu
@@ -37,7 +37,6 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBot
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.interactWithSheet
-import im.vector.app.waitForView
 import im.vector.app.withRetry
 import java.lang.Thread.sleep
 
@@ -61,8 +60,6 @@ class RoomDetailRobot {
         pressBack()
         clickMenu(R.id.video_call)
         pressBack()
-        clickMenu(R.id.search)
-        pressBack()
     }
 
     fun crawlMessage(message: String) {
@@ -71,6 +68,7 @@ class RoomDetailRobot {
         openMessageMenu(message) {
             addQuickReaction(quickReaction)
         }
+        waitUntilViewVisible(withText(quickReaction))
         println("Open reactions bottom sheet")
         // Open reactions
         longClickReaction(quickReaction)
@@ -104,7 +102,7 @@ class RoomDetailRobot {
 
     private fun longClickReaction(quickReaction: String) {
         withRetry {
-            longClickOn(quickReaction)
+            onView(withText(quickReaction)).perform(longClick())
         }
     }
 
@@ -127,7 +125,7 @@ class RoomDetailRobot {
 
     fun openSettings(block: RoomSettingsRobot.() -> Unit) {
         clickMenu(R.id.timeline_setting)
-        waitForView(withId(R.id.roomProfileAvatarView))
+        waitUntilViewVisible(withId(R.id.roomProfileAvatarView))
         sleep(1000)
         block(RoomSettingsRobot())
         pressBack()

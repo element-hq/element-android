@@ -26,6 +26,8 @@ import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewState
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationCancelController @Inject constructor(
@@ -49,12 +51,12 @@ class VerificationCancelController @Inject constructor(
             if (state.currentDeviceCanCrossSign) {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verify_cancel_self_verification_from_trusted))
+                    notice(host.stringProvider.getString(R.string.verify_cancel_self_verification_from_trusted).toEpoxyCharSequence())
                 }
             } else {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verify_cancel_self_verification_from_untrusted))
+                    notice(host.stringProvider.getString(R.string.verify_cancel_self_verification_from_untrusted).toEpoxyCharSequence())
                 }
             }
         } else {
@@ -63,9 +65,11 @@ class VerificationCancelController @Inject constructor(
             bottomSheetVerificationNoticeItem {
                 id("notice")
                 notice(
-                        host.stringProvider.getString(R.string.verify_cancel_other, otherDisplayName, otherUserID)
-                                .toSpannable()
-                                .colorizeMatchingText(otherUserID, host.colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
+                        EpoxyCharSequence(
+                                host.stringProvider.getString(R.string.verify_cancel_other, otherDisplayName, otherUserID)
+                                        .toSpannable()
+                                        .colorizeMatchingText(otherUserID, host.colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
+                        )
                 )
             }
         }
@@ -76,7 +80,7 @@ class VerificationCancelController @Inject constructor(
 
         bottomSheetVerificationActionItem {
             id("cancel")
-            title(host.stringProvider.getString(R.string.skip))
+            title(host.stringProvider.getString(R.string.action_skip))
             titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
             iconRes(R.drawable.ic_arrow_right)
             iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))

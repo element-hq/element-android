@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
@@ -83,13 +84,16 @@ class SpaceDirectoryFragment @Inject constructor(
             bundle.getString(SpaceAddRoomSpaceChooserBottomSheet.BUNDLE_KEY_ACTION)?.let { action ->
                 val spaceId = withState(viewModel) { it.spaceId }
                 when (action) {
-                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_ROOMS  -> {
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_ROOMS   -> {
                         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRooms))
                     }
-                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_SPACES -> {
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_SPACES  -> {
                         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRoomsOnlySpaces))
                     }
-                    else                                                  -> {
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_CREATE_ROOM -> {
+                        viewModel.handle(SpaceDirectoryViewAction.CreateNewRoom)
+                    }
+                    else                                                   -> {
                         // nop
                     }
                 }
@@ -100,12 +104,9 @@ class SpaceDirectoryFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vectorBaseActivity.setSupportActionBar(views.toolbar)
+        setupToolbar(views.toolbar)
+                .allowBack()
 
-        vectorBaseActivity.supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(true)
-            it.setDisplayHomeAsUpEnabled(true)
-        }
         epoxyController.listener = this
         views.spaceDirectoryList.configureWith(epoxyController)
         epoxyVisibilityTracker.attach(views.spaceDirectoryList)
@@ -114,8 +115,32 @@ class SpaceDirectoryFragment @Inject constructor(
             invalidateOptionsMenu()
         }
 
+        views.addOrCreateChatRoomButton.debouncedClicks {
+            withState(viewModel) {
+                addExistingRooms(it.spaceId)
+            }
+        }
+
         views.spaceCard.matrixToCardMainButton.isVisible = false
         views.spaceCard.matrixToCardSecondaryButton.isVisible = false
+
+        // Hide FAB when list is scrolling
+        views.spaceDirectoryList.addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        views.addOrCreateChatRoomButton.removeCallbacks(showFabRunnable)
+
+                        when (newState) {
+                            RecyclerView.SCROLL_STATE_IDLE     -> {
+                                views.addOrCreateChatRoomButton.postDelayed(showFabRunnable, 250)
+                            }
+                            RecyclerView.SCROLL_STATE_DRAGGING,
+                            RecyclerView.SCROLL_STATE_SETTLING -> {
+                                views.addOrCreateChatRoomButton.hide()
+                            }
+                        }
+                    }
+                })
     }
 
     override fun onDestroyView() {
@@ -125,6 +150,12 @@ class SpaceDirectoryFragment @Inject constructor(
         super.onDestroyView()
     }
 
+    private val showFabRunnable = Runnable {
+        if (isAdded) {
+            views.addOrCreateChatRoomButton.show()
+        }
+    }
+
     override fun invalidate() = withState(viewModel) { state ->
         epoxyController.setData(state)
 
@@ -132,16 +163,15 @@ class SpaceDirectoryFragment @Inject constructor(
 
         if (currentParentId == null) {
             // it's the root
-            val title = getString(R.string.space_explore_activity_title)
-            views.toolbar.title = title
+            toolbar?.setTitle(R.string.space_explore_activity_title)
         } else {
-            val title = state.currentRootSummary?.name
+            toolbar?.title = state.currentRootSummary?.name
                     ?: state.currentRootSummary?.canonicalAlias
                     ?: getString(R.string.space_explore_activity_title)
-            views.toolbar.title = title
         }
 
-        spaceCardRenderer.render(state.currentRootSummary, emptyList(), this, views.spaceCard)
+        spaceCardRenderer.render(state.currentRootSummary, emptyList(), this, views.spaceCard, showDescription = false)
+        views.addOrCreateChatRoomButton.isVisible = state.canAddRooms
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) = withState(viewModel) { state ->
@@ -215,7 +245,7 @@ class SpaceDirectoryFragment @Inject constructor(
                             .setPositiveButton(R.string._continue) { _, _ ->
                                 openUrlInExternalBrowser(requireContext(), url)
                             }
-                            .setNegativeButton(R.string.cancel, null)
+                            .setNegativeButton(R.string.action_cancel, null)
                             .show()
                 } else {
                     // Open in external browser, in a new Tab

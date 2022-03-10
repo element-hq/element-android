@@ -23,17 +23,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentCreatePollBinding
+import im.vector.app.features.poll.create.CreatePollViewModel.Companion.MAX_OPTIONS_COUNT
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import javax.inject.Inject
 
 @Parcelize
 data class CreatePollArgs(
         val roomId: String,
+        val editedEventId: String?,
+        val mode: PollMode
 ) : Parcelable
 
 class CreatePollFragment @Inject constructor(
@@ -41,6 +47,7 @@ class CreatePollFragment @Inject constructor(
 ) : VectorBaseFragment<FragmentCreatePollBinding>(), CreatePollController.Callback {
 
     private val viewModel: CreatePollViewModel by activityViewModel()
+    private val args: CreatePollArgs by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCreatePollBinding {
         return FragmentCreatePollBinding.inflate(inflater, container, false)
@@ -48,14 +55,25 @@ class CreatePollFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vectorBaseActivity.setSupportActionBar(views.createPollToolbar)
+
+        setupToolbar(views.createPollToolbar)
+                .allowBack(useCross = true)
+
+        when (args.mode) {
+            PollMode.CREATE -> {
+                views.createPollToolbar.title = getString(R.string.create_poll_title)
+                views.createPollButton.text = getString(R.string.create_poll_title)
+            }
+            PollMode.EDIT   -> {
+                views.createPollToolbar.title = getString(R.string.edit_poll_title)
+                views.createPollButton.text = getString(R.string.edit_poll_title)
+            }
+        }.exhaustive
 
         views.createPollRecyclerView.configureWith(controller, disableItemAnimation = true)
+        // workaround for https://github.com/vector-im/element-android/issues/4735
+        views.createPollRecyclerView.setItemViewCacheSize(MAX_OPTIONS_COUNT + 6)
         controller.callback = this
-
-        views.createPollClose.debouncedClicks {
-            requireActivity().finish()
-        }
 
         views.createPollButton.debouncedClicks {
             viewModel.handle(CreatePollAction.OnCreatePoll)
@@ -98,6 +116,10 @@ class CreatePollFragment @Inject constructor(
                 smoothScrollToPosition(adapter?.itemCount?.minus(1) ?: 0)
             }, 100)
         }
+    }
+
+    override fun onPollTypeChanged(type: PollType) {
+        viewModel.handle(CreatePollAction.OnPollTypeChanged(type))
     }
 
     private fun handleSuccess() {

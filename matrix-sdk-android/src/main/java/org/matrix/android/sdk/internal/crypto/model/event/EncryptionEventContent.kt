@@ -27,7 +27,7 @@ data class EncryptionEventContent(
          * Required. The encryption algorithm to be used to encrypt messages sent in this room. Must be 'm.megolm.v1.aes-sha2'.
          */
         @Json(name = "algorithm")
-        val algorithm: String,
+        val algorithm: String?,
 
         /**
          * How long the session should be used before changing it. 604800000 (a week) is the recommended default.

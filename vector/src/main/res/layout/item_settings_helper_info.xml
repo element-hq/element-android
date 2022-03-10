@@ -13,4 +13,5 @@
     android:paddingBottom="8dp"
     android:textColor="?vctr_content_secondary"
     tools:drawableStart="@drawable/vector_warning_red"
-    tools:text="If you don’t want this, opt out below. You can also manage any of these preferences in Settings." />
+    tools:text="If you don’t want this, opt out below. You can also manage any of these preferences in Settings."
+    tools:viewBindingIgnore="true" />

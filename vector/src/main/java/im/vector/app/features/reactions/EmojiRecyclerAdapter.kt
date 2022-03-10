@@ -32,6 +32,7 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import im.vector.app.R
 import im.vector.app.features.reactions.data.EmojiData
+import im.vector.lib.core.utils.compat.removeIfCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -215,14 +216,7 @@ class EmojiRecyclerAdapter @Inject constructor() :
     override fun onViewRecycled(holder: ViewHolder) {
         if (holder is EmojiViewHolder) {
             holder.data = null
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                toUpdateWhenNotBusy.removeIf { it.second == holder }
-            } else {
-                val index = toUpdateWhenNotBusy.indexOfFirst { it.second == holder }
-                if (index != -1) {
-                    toUpdateWhenNotBusy.removeAt(index)
-                }
-            }
+            toUpdateWhenNotBusy.removeIfCompat { it.second == holder }
         }
         super.onViewRecycled(holder)
     }

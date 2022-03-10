@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,7 +8,8 @@
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:viewBindingIgnore="true">
 
     <FrameLayout
         android:id="@+id/knownUserAvatarContainer"
@@ -49,10 +48,10 @@
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/knownUserID"
+        app:layout_constraintBottom_toTopOf="@id/knownUserID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/knownUserAvatarContainer"
+        app:layout_constraintStart_toEndOf="@id/knownUserAvatarContainer"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@sample/users.json/data/displayName" />
 
@@ -67,8 +66,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/knownUserName"
-        app:layout_constraintTop_toBottomOf="@+id/knownUserName"
+        app:layout_constraintStart_toStartOf="@id/knownUserName"
+        app:layout_constraintTop_toBottomOf="@id/knownUserName"
         tools:text="@sample/users.json/data/id" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

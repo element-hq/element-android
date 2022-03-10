@@ -51,7 +51,7 @@ class LoginWebFragment @Inject constructor(
         private val assetReader: AssetReader
 ) : AbstractLoginFragment<FragmentLoginWebBinding>() {
 
-    val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
+    private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWebBinding {
         return FragmentLoginWebBinding.inflate(inflater, container, false)
@@ -64,6 +64,7 @@ class LoginWebFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.loginWebToolbar)
+                .allowBack()
     }
 
     override fun updateWithState(state: LoginViewState) {
@@ -78,7 +79,7 @@ class LoginWebFragment @Inject constructor(
     }
 
     private fun setupTitle(state: LoginViewState) {
-        views.loginWebToolbar.title = when (state.signMode) {
+        toolbar?.title = when (state.signMode) {
             SignMode.SignIn -> getString(R.string.login_signin)
             else            -> getString(R.string.login_signup)
         }
@@ -149,7 +150,7 @@ class LoginWebFragment @Inject constructor(
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
-                views.loginWebToolbar.subtitle = url
+                toolbar?.subtitle = url
             }
 
             override fun onPageFinished(view: WebView, url: String) {

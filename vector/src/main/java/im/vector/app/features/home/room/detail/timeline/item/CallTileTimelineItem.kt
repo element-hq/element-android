@@ -50,7 +50,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -142,7 +142,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
         when {
             attributes.callKind == CallKind.CONFERENCE -> {
                 holder.rejectView.isVisible = true
-                holder.rejectView.setText(R.string.leave)
+                holder.rejectView.setText(R.string.action_leave)
                 holder.rejectView.setLeftDrawable(R.drawable.ic_call_hangup, R.attr.colorOnPrimary)
                 holder.rejectView.onClick {
                     attributes.callback?.onTimelineItemAction(RoomDetailAction.LeaveJitsiCall)
@@ -176,7 +176,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
                 }
                 holder.acceptView.isVisible = true
                 holder.rejectView.isVisible = false
-                holder.acceptView.setText(R.string.join)
+                holder.acceptView.setText(R.string.action_join)
                 holder.acceptView.setLeftDrawable(R.drawable.ic_call_video_small, R.attr.colorOnPrimary)
             }
             !attributes.informationData.sentByMe && attributes.isStillActive -> {

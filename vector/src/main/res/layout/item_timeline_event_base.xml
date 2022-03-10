@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:addStatesFromChildren="true"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.core.platform.CheckableView
         android:id="@+id/messageSelectedBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/informationBottom"
+        android:layout_alignBottom="@id/informationBottom"
         android:layout_alignParentTop="true"
         android:background="@drawable/highlighted_message_background" />
 
@@ -33,8 +34,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:layout_toStartOf="@+id/messageTimeView"
-        android:layout_toEndOf="@+id/messageStartGuideline"
+        android:textAlignment="viewStart"
+        android:layout_toStartOf="@id/messageTimeView"
+        android:layout_toEndOf="@id/messageStartGuideline"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
@@ -46,7 +48,7 @@
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/messageMemberNameView"
+        android:layout_alignBaseline="@id/messageMemberNameView"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -75,84 +77,29 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
-    <FrameLayout
+    <include
         android:id="@+id/viewStubContainer"
-        android:layout_width="match_parent"
+        layout="@layout/item_timeline_event_view_stubs_container"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/messageMemberNameView"
+        android:layout_marginEnd="8dp"
         android:layout_toStartOf="@id/messageSendStateImageView"
         android:layout_toEndOf="@id/messageStartGuideline"
-        android:addStatesFromChildren="true">
-
-        <ViewStub
-            android:id="@+id/messageContentTextStub"
-            style="@style/TimelineContentStubBaseParams"
-            android:layout_height="wrap_content"
-            android:layout="@layout/item_timeline_event_text_message_stub"
-            tools:visibility="visible" />
-
-        <ViewStub
-            android:id="@+id/messageContentCodeBlockStub"
-            style="@style/TimelineContentStubBaseParams"
-            android:layout_height="wrap_content"
-            android:layout="@layout/item_timeline_event_code_block_stub"
-            tools:visibility="visible" />
-
-        <ViewStub
-            android:id="@+id/messageContentMediaStub"
-            style="@style/TimelineContentStubBaseParams"
-            android:layout_height="wrap_content"
-            android:inflatedId="@+id/messageContentMedia"
-            android:layout="@layout/item_timeline_event_media_message_stub" />
-
-        <ViewStub
-            android:id="@+id/messageContentFileStub"
-            style="@style/TimelineContentStubBaseParams"
-            android:layout_height="wrap_content"
-            android:layout="@layout/item_timeline_event_file_stub" />
-
-        <ViewStub
-            android:id="@+id/messageContentRedactedStub"
-            style="@style/TimelineContentStubBaseParams"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="56dp"
-            android:layout="@layout/item_timeline_event_redacted_stub" />
-
-        <ViewStub
-            android:id="@+id/messagePollStub"
-            style="@style/TimelineContentStubBaseParams"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="56dp"
-            android:layout="@layout/item_timeline_event_poll_stub" />
-
-        <ViewStub
-            android:id="@+id/messageOptionsStub"
-            style="@style/TimelineContentStubBaseParams"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="56dp"
-            android:layout="@layout/item_timeline_event_option_buttons_stub" />
-
-        <ViewStub
-            android:id="@+id/messageContentVoiceStub"
-            style="@style/TimelineContentStubBaseParams"
-            android:layout_marginEnd="56dp"
-            android:layout="@layout/item_timeline_event_voice_stub"
-            tools:visibility="visible" />
-
-    </FrameLayout>
+        android:addStatesFromChildren="true" />
 
     <im.vector.app.core.ui.views.SendStateImageView
         android:id="@+id/messageSendStateImageView"
         android:layout_width="@dimen/item_event_message_state_size"
         android:layout_height="@dimen/item_event_message_state_size"
-        android:layout_alignBottom="@+id/viewStubContainer"
+        android:layout_alignBottom="@id/viewStubContainer"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:contentDescription="@string/event_status_a11y_sending"
         android:src="@drawable/ic_sending_message"
-        android:visibility="gone"
+        android:visibility="invisible"
         tools:tint="?vctr_content_tertiary"
         tools:visibility="visible" />
 
@@ -160,7 +107,7 @@
         android:id="@+id/eventSendingIndicator"
         android:layout_width="@dimen/item_event_message_state_size"
         android:layout_height="@dimen/item_event_message_state_size"
-        android:layout_alignBottom="@+id/viewStubContainer"
+        android:layout_alignBottom="@id/viewStubContainer"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -175,8 +122,8 @@
         android:id="@+id/informationBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/viewStubContainer"
-        android:layout_toEndOf="@+id/messageStartGuideline"
+        android:layout_below="@id/viewStubContainer"
+        android:layout_toEndOf="@id/messageStartGuideline"
         android:addStatesFromChildren="true"
         android:orientation="vertical">
 
@@ -199,5 +146,28 @@
 
         </com.google.android.flexbox.FlexboxLayout>
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/messageThreadSummaryConstraintLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/informationBottom"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="4dp"
+        android:paddingStart="13dp"
+        android:paddingEnd="13dp"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:background="@drawable/rounded_rect_shape_8"
+        android:contentDescription="@string/room_threads_filter"
+        android:maxWidth="496dp"
+        android:minWidth="144dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <include layout="@layout/view_thread_room_summary" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </RelativeLayout>

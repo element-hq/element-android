@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler.room
 
+import dagger.Lazy
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -35,10 +36,13 @@ import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
+import org.matrix.android.sdk.internal.database.helper.updateThreadSummaryIfNeeded
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
+import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
@@ -52,6 +56,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
+import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
@@ -79,7 +84,9 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
                                                    private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
                                                    @UserId private val userId: String,
-                                                   private val timelineInput: TimelineInput) {
+                                                   private val lightweightSettingsStorage: LightweightSettingsStorage,
+                                                   private val timelineInput: TimelineInput,
+                                                   private val liveEventService: Lazy<StreamEventsManager>) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -218,6 +225,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 }
                 val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
                 val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
+                Timber.v("## received state event ${event.type} and key ${event.stateKey}")
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     // Timber.v("## Space state event: $eventEntity")
                     eventId = event.eventId
@@ -345,37 +353,41 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      syncLocalTimestampMillis: Long,
                                      aggregator: SyncResponsePostTreatmentAggregator): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
+        if (isLimited && lastChunk != null) {
+            lastChunk.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
+        }
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
-            realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
+            realm.createObject<ChunkEntity>().apply {
+                this.prevToken = prevToken
+                this.isLastForward = true
+            }
         }
-        // Only one chunk has isLastForward set to true
-        lastChunk?.isLastForward = false
-        chunkEntity.isLastForward = true
-
         val eventIds = ArrayList<String>(eventList.size)
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
+        val optimizedThreadSummaryMap = hashMapOf<String, EventEntity>()
         for (event in eventList) {
             if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
             }
+
             eventIds.add(event.eventId)
+            liveEventService.get().dispatchLiveEventReceived(event, roomId, insertType == EventInsertType.INITIAL_SYNC)
 
             val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
             if (event.isEncrypted() && !isInitialSync) {
                 decryptIfNeeded(event, roomId)
             }
-
-            threadsAwarenessHandler.handleIfNeeded(
-                    realm = realm,
-                    roomId = roomId,
-                    event = event)
+            var contentToInject: String? = null
+            if (!isInitialSync) {
+                contentToInject = threadsAwarenessHandler.makeEventThreadAware(realm, roomId, event)
+            }
 
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs, contentToInject).copyToRealmOrIgnore(realm, insertType)
             if (event.stateKey != null) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = event.eventId
@@ -387,6 +399,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     roomMemberEventHandler.handle(realm, roomEntity.roomId, event.stateKey, fixedContent, aggregator)
                 }
             }
+
             roomMemberContentsByUser.getOrPut(event.senderId) {
                 // If we don't have any new state on this user, get it from db
                 val rootStateEvent = CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root
@@ -394,6 +407,15 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
 
             chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
+            if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
+                eventEntity.rootThreadEventId?.let {
+                    // This is a thread event
+                    optimizedThreadSummaryMap[it] = eventEntity
+                } ?: run {
+                    // This is a normal event or a root thread one
+                    optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
+                }
+            }
             // Give info to crypto module
             cryptoService.onLiveEvent(roomEntity.roomId, event)
 
@@ -418,6 +440,16 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 }
             }
         }
+        // Handle deletion of [stuck] local echos if needed
+        deleteLocalEchosIfNeeded(insertType, roomEntity, eventList)
+        if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
+            optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
+                    roomId = roomId,
+                    realm = realm,
+                    chunkEntity = chunkEntity,
+                    currentUserId = userId)
+        }
+
         // posting new events to timeline if any is registered
         timelineInput.onNewTimelineEvents(roomId = roomId, eventIds = eventIds)
         return chunkEntity
@@ -469,5 +501,50 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
 
         return result
+    }
+
+    /**
+     * There are multiple issues like #516 that report stuck local echo events
+     * at the bottom of each room timeline.
+     *
+     * That can happen when a message is SENT but not received back from the /sync.
+     * Until now we use unsignedData.transactionId to determine whether or not the local
+     * event should be deleted on every /sync. However, this is partially correct, lets have a look
+     * at the following scenario:
+     *
+     * [There is no Internet connection] --> [10 Messages are sent] --> [The 10 messages are in the queue] -->
+     * [Internet comes back for 1 second] --> [3 messages are sent] --> [Internet drops again] -->
+     * [No /sync response is triggered | home server can even replied with /sync but never arrived while we are offline]
+     *
+     * So the state until now is that we have 7 pending events to send and 3 sent but not received them back from /sync
+     * Subsequently, those 3 local messages will not be deleted while there is no transactionId from the /sync
+     *
+     * lets continue:
+     * [Now lets assume that in the same room another user sent 15 events] -->
+     * [We are finally back online!] -->
+     * [We will receive the 10 latest events for the room and of course sent the pending 7 messages] -->
+     * Now /sync response will NOT contain the 3 local messages so our events will stuck in the device.
+     *
+     * Someone can say, yes but it will come with the rooms/{roomId}/messages while paginating,
+     * so the problem will be solved. No that is not the case for two reasons:
+     *   1. rooms/{roomId}/messages response do not contain the unsignedData.transactionId so we cannot know which event
+     *   to delete
+     *   2. even if transactionId was there, currently we are not deleting it from the pagination
+     *
+     * ---------------------------------------------------------------------------------------------
+     * While we cannot know when a specific event arrived from the pagination (no transactionId included), after each room /sync
+     * we clear all SENT events, and we are sure that we will receive it from /sync or pagination
+     */
+    private fun deleteLocalEchosIfNeeded(insertType: EventInsertType, roomEntity: RoomEntity, eventList: List<Event>) {
+        // Skip deletion if we are on initial sync
+        if (insertType == EventInsertType.INITIAL_SYNC) return
+        // Skip deletion if there are no timeline events or there is no event received from the current user
+        if (eventList.firstOrNull { it.senderId == userId } == null) return
+        roomEntity.sendingTimelineEvents.filter { timelineEvent ->
+            timelineEvent.root?.sendState == SendState.SENT
+        }.forEach {
+            roomEntity.sendingTimelineEvents.remove(it)
+            it.deleteOnCascade(true)
+        }
     }
 }

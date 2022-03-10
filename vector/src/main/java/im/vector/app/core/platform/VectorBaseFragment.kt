@@ -42,7 +42,9 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.flow.throttleFirst
+import im.vector.app.core.utils.ToolbarConfig
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 import kotlinx.coroutines.flow.launchIn
@@ -51,6 +53,17 @@ import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 
 abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView {
+    /* ==========================================================================================
+     * Analytics
+     * ========================================================================================== */
+
+    protected var analyticsScreenName: MobileScreen.ScreenName? = null
+
+    protected lateinit var analyticsTracker: AnalyticsTracker
+
+    /* ==========================================================================================
+     * Activity
+     * ========================================================================================== */
 
     protected val vectorBaseActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -66,6 +79,12 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     private var progress: AlertDialog? = null
 
+    /**
+     * [ToolbarConfig] instance from host activity
+     * */
+    protected var toolbar: ToolbarConfig? = null
+            get() = (activity as? VectorBaseActivity<*>)?.toolbar
+            private set
     /* ==========================================================================================
      * View model
      * ========================================================================================== */
@@ -97,6 +116,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
         val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
         navigator = singletonEntryPoint.navigator()
         errorFormatter = singletonEntryPoint.errorFormatter()
+        analyticsTracker = singletonEntryPoint.analyticsTracker()
         unrecognizedCertificateDialog = singletonEntryPoint.unrecognizedCertificateDialog()
         viewModelFactory = activityEntryPoint.viewModelFactory()
         childFragmentManager.fragmentFactory = activityEntryPoint.fragmentFactory()
@@ -123,6 +143,9 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Fragment ${javaClass.simpleName}")
+        analyticsScreenName?.let {
+            analyticsTracker.screen(MobileScreen(screenName = it))
+        }
     }
 
     @CallSuper
@@ -149,6 +172,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     override fun onDestroyView() {
         Timber.i("onDestroyView Fragment ${javaClass.simpleName}")
         _binding = null
+        dismissLoadingDialog()
         super.onDestroyView()
     }
 
@@ -210,13 +234,12 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * ========================================================================================== */
 
     /**
-     * Configure the Toolbar.
-     */
-    protected fun setupToolbar(toolbar: MaterialToolbar) {
-        val parentActivity = vectorBaseActivity
-        if (parentActivity is ToolbarConfigurable) {
-            parentActivity.configure(toolbar)
-        }
+     * Sets toolbar as actionBar for current activity
+     *
+     * @return Instance of [ToolbarConfig] with set of helper methods to configure toolbar
+     * */
+    protected fun setupToolbar(toolbar: MaterialToolbar): ToolbarConfig {
+        return vectorBaseActivity.setupToolbar(toolbar)
     }
 
     /* ==========================================================================================
@@ -239,7 +262,6 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300)
                 .onEach { onClicked() }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }

@@ -61,7 +61,7 @@ class AppStateHandler @Inject constructor(
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
 
-    val selectedRoomGroupingObservable = selectedSpaceDataSource.stream()
+    val selectedRoomGroupingFlow = selectedSpaceDataSource.stream()
 
     fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? {
         // XXX we should somehow make it live :/ just a work around
@@ -78,11 +78,17 @@ class AppStateHandler @Inject constructor(
         }
     }
 
-    fun setCurrentSpace(spaceId: String?, session: Session? = null) {
+    fun setCurrentSpace(spaceId: String?, session: Session? = null, persistNow: Boolean = false) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
         if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace &&
                 spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
         val spaceSum = spaceId?.let { uSession.getRoomSummary(spaceId) }
+
+        if (persistNow) {
+            uiStateRepository.storeGroupingMethod(true, uSession.sessionId)
+            uiStateRepository.storeSelectedSpace(spaceSum?.roomId, uSession.sessionId)
+        }
+
         selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.BySpace(spaceSum)))
         if (spaceId != null) {
             uSession.coroutineScope.launch(Dispatchers.IO) {

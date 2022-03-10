@@ -40,8 +40,6 @@ import kotlin.coroutines.resume
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 class VerificationTest : InstrumentedTest {
-    private val mTestHelper = CommonTestHelper(context())
-    private val mCryptoTestHelper = CryptoTestHelper(mTestHelper)
 
     data class ExpectedResult(
             val sasIsSupported: Boolean = false,
@@ -155,12 +153,14 @@ class VerificationTest : InstrumentedTest {
                        bobSupportedMethods: List<VerificationMethod>,
                        expectedResultForAlice: ExpectedResult,
                        expectedResultForBob: ExpectedResult) {
-        val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
+         val testHelper = CommonTestHelper(context())
+         val cryptoTestHelper = CryptoTestHelper(testHelper)
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession!!
 
-        mTestHelper.doSync<Unit> { callback ->
+        testHelper.doSync<Unit> { callback ->
             aliceSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -176,7 +176,7 @@ class VerificationTest : InstrumentedTest {
                             }, callback)
         }
 
-        mTestHelper.doSync<Unit> { callback ->
+        testHelper.doSync<Unit> { callback ->
             bobSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -234,7 +234,7 @@ class VerificationTest : InstrumentedTest {
         val bobUserId = bobSession.myUserId
         // Step 1: Alice starts a verification request
         aliceVerificationService.requestKeyVerificationInDMs(aliceSupportedMethods, bobUserId, cryptoTestData.roomId)
-        mTestHelper.await(latch)
+        testHelper.await(latch)
 
         aliceReadyPendingVerificationRequest!!.let { pr ->
             pr.isSasSupported() shouldBe expectedResultForAlice.sasIsSupported
@@ -248,6 +248,6 @@ class VerificationTest : InstrumentedTest {
             pr.otherCanScanQrCode() shouldBe expectedResultForBob.otherCanScanQrCode
         }
 
-        cryptoTestData.cleanUp(mTestHelper)
+        cryptoTestData.cleanUp(testHelper)
     }
 }

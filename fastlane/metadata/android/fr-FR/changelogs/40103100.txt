@@ -1,0 +1,2 @@
+Principaux changements pour cette version : prise en charge des sondages (dans les labs). Nouvel affichage des prévisualisations d’URL
+Intégralité des changements : https://github.com/vector-im/element-android/releases/tag/v1.3.10

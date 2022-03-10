@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="width_percent">0.6</dimen>
+    <bool name="is_tablet">true</bool>
+
+</resources>

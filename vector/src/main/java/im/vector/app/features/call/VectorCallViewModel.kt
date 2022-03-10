@@ -29,13 +29,17 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.audio.CallAudioManager
+import im.vector.app.features.call.dialpad.DialPadLookup
+import im.vector.app.features.call.transfer.CallTransferResult
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.call.webrtc.getOpponentAsMatrixItem
+import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
@@ -47,7 +51,9 @@ class VectorCallViewModel @AssistedInject constructor(
         @Assisted initialState: VectorCallViewState,
         val session: Session,
         val callManager: WebRtcCallManager,
-        val proximityManager: CallProximityManager
+        val proximityManager: CallProximityManager,
+        private val dialPadLookup: DialPadLookup,
+        private val directRoomHelper: DirectRoomHelper,
 ) : VectorViewModel<VectorCallViewState, VectorCallViewActions, VectorCallViewEvents>(initialState) {
 
     private var call: WebRtcCall? = null
@@ -319,9 +325,16 @@ class VectorCallViewModel @AssistedInject constructor(
                 call?.sendDtmfDigit(action.digit)
             }
             VectorCallViewActions.InitiateCallTransfer -> {
+                call?.updateRemoteOnHold(true)
                 _viewEvents.post(
                         VectorCallViewEvents.ShowCallTransferScreen
                 )
+            }
+            VectorCallViewActions.CallTransferSelectionCancelled -> {
+                call?.updateRemoteOnHold(false)
+            }
+            is VectorCallViewActions.CallTransferSelectionResult -> {
+                handleCallTransferSelectionResult(action.callTransferResult)
             }
             VectorCallViewActions.TransferCall         -> {
                 handleCallTransfer()
@@ -338,6 +351,53 @@ class VectorCallViewModel @AssistedInject constructor(
             val currentCall = call ?: return@launch
             val transfereeCall = callManager.getTransfereeForCallId(currentCall.callId) ?: return@launch
             currentCall.transferToCall(transfereeCall)
+        }
+    }
+
+    private fun handleCallTransferSelectionResult(result: CallTransferResult) {
+        when (result) {
+            is CallTransferResult.ConnectWithUserId      -> connectWithUserId(result)
+            is CallTransferResult.ConnectWithPhoneNumber -> connectWithPhoneNumber(result)
+        }.exhaustive
+    }
+
+    private fun connectWithUserId(result: CallTransferResult.ConnectWithUserId) {
+        viewModelScope.launch {
+            try {
+                if (result.consultFirst) {
+                    val dmRoomId = directRoomHelper.ensureDMExists(result.selectedUserId)
+                    callManager.startOutgoingCall(
+                            nativeRoomId = dmRoomId,
+                            otherUserId = result.selectedUserId,
+                            isVideoCall = call?.mxCall?.isVideoCall.orFalse(),
+                            transferee = call
+                    )
+                } else {
+                    call?.transferToUser(result.selectedUserId, null)
+                }
+            } catch (failure: Throwable) {
+                _viewEvents.post(VectorCallViewEvents.FailToTransfer)
+            }
+        }
+    }
+
+    private fun connectWithPhoneNumber(action: CallTransferResult.ConnectWithPhoneNumber) {
+        viewModelScope.launch {
+            try {
+                val result = dialPadLookup.lookupPhoneNumber(action.phoneNumber)
+                if (action.consultFirst) {
+                    callManager.startOutgoingCall(
+                            nativeRoomId = result.roomId,
+                            otherUserId = result.userId,
+                            isVideoCall = call?.mxCall?.isVideoCall.orFalse(),
+                            transferee = call
+                    )
+                } else {
+                    call?.transferToUser(result.userId, result.roomId)
+                }
+            } catch (failure: Throwable) {
+                _viewEvents.post(VectorCallViewEvents.FailToTransfer)
+            }
         }
     }
 

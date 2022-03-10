@@ -35,9 +35,9 @@ class ${activityClass} : VectorBaseActivity(), ToolbarConfigurable {
 			<#if createFragmentArgs>
 			val fragmentArgs: ${fragmentArgsClass} = intent?.extras?.getParcelable(EXTRA_FRAGMENT_ARGS)
                                                    ?: return
-            addFragment(R.id.simpleFragmentContainer, ${fragmentClass}::class.java, fragmentArgs)
+            addFragment(views.simpleFragmentContainer.id, ${fragmentClass}::class.java, fragmentArgs)
 			<#else>
-			addFragment(R.id.simpleFragmentContainer, ${fragmentClass}::class.java)
+			addFragment(views.simpleFragmentContainer.id, ${fragmentClass}::class.java)
 			</#if>
         }
     }

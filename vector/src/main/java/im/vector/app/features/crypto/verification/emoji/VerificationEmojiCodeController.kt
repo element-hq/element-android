@@ -31,6 +31,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationE
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
 import im.vector.app.features.displayname.getBestName
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationEmojiCodeController @Inject constructor(
@@ -64,7 +65,7 @@ class VerificationEmojiCodeController @Inject constructor(
             is Success -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verification_emoji_notice))
+                    notice(host.stringProvider.getString(R.string.verification_emoji_notice).toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationEmojisItem {
@@ -101,7 +102,7 @@ class VerificationEmojiCodeController @Inject constructor(
             is Success -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verification_code_notice))
+                    notice(host.stringProvider.getString(R.string.verification_code_notice).toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationDecimalCodeItem {

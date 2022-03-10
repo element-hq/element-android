@@ -20,6 +20,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.multibindings.IntoMap
+import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
+import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
 import im.vector.app.features.auth.ReAuthViewModel
 import im.vector.app.features.call.VectorCallViewModel
 import im.vector.app.features.call.conference.JitsiCallViewModel
@@ -37,11 +39,11 @@ import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.discovery.change.SetIdentityServerViewModel
 import im.vector.app.features.home.HomeActivityViewModel
 import im.vector.app.features.home.HomeDetailViewModel
-import im.vector.app.features.home.PromoteRestrictedViewModel
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
 import im.vector.app.features.home.UnreadMessagesSharedViewModel
+import im.vector.app.features.home.UserColorAccountDataViewModel
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
-import im.vector.app.features.home.room.detail.RoomDetailViewModel
+import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
 import im.vector.app.features.home.room.detail.search.SearchViewModel
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsViewModel
@@ -51,11 +53,15 @@ import im.vector.app.features.home.room.detail.upgrade.MigrateRoomViewModel
 import im.vector.app.features.home.room.list.RoomListViewModel
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
 import im.vector.app.features.invite.InviteUsersToRoomViewModel
+import im.vector.app.features.location.LocationSharingViewModel
 import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login2.LoginViewModel2
 import im.vector.app.features.login2.created.AccountCreatedViewModel
 import im.vector.app.features.matrixto.MatrixToBottomSheetViewModel
+import im.vector.app.features.media.VectorAttachmentViewerViewModel
+import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.poll.create.CreatePollViewModel
+import im.vector.app.features.qrcode.QrCodeScannerViewModel
 import im.vector.app.features.rageshake.BugReportViewModel
 import im.vector.app.features.reactions.EmojiSearchResultViewModel
 import im.vector.app.features.room.RequireActiveMembershipViewModel
@@ -85,6 +91,7 @@ import im.vector.app.features.settings.devtools.KeyRequestListViewModel
 import im.vector.app.features.settings.devtools.KeyRequestViewModel
 import im.vector.app.features.settings.homeserver.HomeserverSettingsViewModel
 import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
+import im.vector.app.features.settings.legals.LegalsViewModel
 import im.vector.app.features.settings.locale.LocalePickerViewModel
 import im.vector.app.features.settings.push.PushGatewaysViewModel
 import im.vector.app.features.settings.threepids.ThreePidsSettingsViewModel
@@ -216,6 +223,11 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
+    @MavericksViewModelKey(QrCodeScannerViewModel::class)
+    fun qrCodeViewModelFactory(factory: QrCodeScannerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
     @MavericksViewModelKey(RoomNotificationSettingsViewModel::class)
     fun roomNotificationSettingsViewModelFactory(factory: RoomNotificationSettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
@@ -228,11 +240,6 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(SharedSecureStorageViewModel::class)
     fun sharedSecureStorageViewModelFactory(factory: SharedSecureStorageViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
-
-    @Binds
-    @IntoMap
-    @MavericksViewModelKey(PromoteRestrictedViewModel::class)
-    fun promoteRestrictedViewModelFactory(factory: PromoteRestrictedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap
@@ -411,6 +418,11 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
+    @MavericksViewModelKey(UserColorAccountDataViewModel::class)
+    fun userColorAccountDataViewModelFactory(factory: UserColorAccountDataViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
     @MavericksViewModelKey(RoomPreviewViewModel::class)
     fun roomPreviewViewModelFactory(factory: RoomPreviewViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
@@ -446,6 +458,11 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
+    @MavericksViewModelKey(OnboardingViewModel::class)
+    fun onboardingViewModelFactory(factory: OnboardingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
     @MavericksViewModelKey(LoginViewModel2::class)
     fun loginViewModel2Factory(factory: LoginViewModel2.Factory): MavericksAssistedViewModelFactory<*, *>
 
@@ -453,6 +470,16 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(LoginViewModel::class)
     fun loginViewModelFactory(factory: LoginViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(AnalyticsConsentViewModel::class)
+    fun analyticsConsentViewModelFactory(factory: AnalyticsConsentViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(AnalyticsAccountDataViewModel::class)
+    fun analyticsAccountDataViewModelFactory(factory: AnalyticsAccountDataViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap
@@ -506,8 +533,13 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
-    @MavericksViewModelKey(RoomDetailViewModel::class)
-    fun roomDetailViewModelFactory(factory: RoomDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+    @MavericksViewModelKey(LegalsViewModel::class)
+    fun legalsViewModelFactory(factory: LegalsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(TimelineViewModel::class)
+    fun roomDetailViewModelFactory(factory: TimelineViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap
@@ -558,4 +590,14 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(CreatePollViewModel::class)
     fun createPollViewModelFactory(factory: CreatePollViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(LocationSharingViewModel::class)
+    fun createLocationSharingViewModelFactory(factory: LocationSharingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(VectorAttachmentViewerViewModel::class)
+    fun vectorAttachmentViewerViewModelFactory(factory: VectorAttachmentViewerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

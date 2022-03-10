@@ -20,7 +20,7 @@
             app:scrimAnimationDuration="250"
             app:scrimVisibleHeightTrigger="120dp"
             app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar">
+            app:toolbarId="@id/toolbar">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
@@ -33,22 +33,21 @@
                     android:padding="8dp">
 
                     <TextView
-                        style="@style/Widget.Vector.TextView.ActionBarTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/select_spaces" />
+                        android:text="@string/select_spaces"
+                        android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle" />
 
                     <TextView
-                        style="@style/Widget.Vector.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="8dp"
                         android:text="@string/decide_which_spaces_can_access"
+                        android:textAppearance="@style/Widget.Vector.TextView.Subtitle"
                         android:textColor="?vctr_content_secondary" />
                 </LinearLayout>
 
             </com.google.android.material.appbar.MaterialToolbar>
-
 
             <!--            <com.google.android.material.appbar.MaterialToolbar-->
             <!--                android:id="@+id/toolbar"-->
@@ -63,7 +62,6 @@
             <!--                android:layout_height="wrap_content"-->
             <!--                android:text="@string/decide_which_spaces_can_access" />-->
 
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <androidx.appcompat.widget.SearchView
@@ -74,7 +72,6 @@
             android:layout_marginBottom="8dp"
             app:queryHint="@string/search_hint_room_name" />
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -95,12 +92,11 @@
         android:paddingEnd="16dp">
 
         <Button
-            style="@style/Widget.Vector.Button.Positive"
             android:id="@+id/okButton"
+            style="@style/Widget.Vector.Button.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ok" />
     </LinearLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

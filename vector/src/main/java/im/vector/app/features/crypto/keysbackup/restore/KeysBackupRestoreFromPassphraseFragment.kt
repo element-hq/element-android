@@ -58,8 +58,8 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
             return@setOnEditorActionListener false
         }
 
-        views.helperTextWithLink.setOnClickListener { onUseRecoveryKey() }
-        views.keysBackupRestoreWithPassphraseSubmit.setOnClickListener { onRestoreBackup() }
+        views.helperTextWithLink.debouncedClicks { onUseRecoveryKey() }
+        views.keysBackupRestoreWithPassphraseSubmit.debouncedClicks { onRestoreBackup() }
         views.keysBackupPassphraseEnterEdittext.doOnTextChanged { text, _, _, _ -> onPassphraseTextEditChange(text) }
     }
 

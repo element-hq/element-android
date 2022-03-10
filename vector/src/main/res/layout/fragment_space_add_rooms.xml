@@ -24,43 +24,8 @@
             android:id="@+id/addRoomToSpaceToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:minHeight="0dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/appBarTitle"
-                    style="@style/Widget.Vector.TextView.HeadlineMedium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:gravity="start|center"
-                    android:maxLines="1"
-                    android:text="@string/space_add_existing_rooms"
-                    android:textColor="?vctr_content_primary"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/appBarSpaceInfo"
-                    style="@style/Widget.Vector.TextView.Subtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:gravity="start|center"
-                    android:maxLines="1"
-                    android:textColor="?vctr_content_secondary"
-                    tools:text="@sample/spaces.json/data/name" />
-
-            </LinearLayout>
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
+            android:minHeight="0dp"
+            app:title="@string/space_add_existing_rooms"/>
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/publicRoomsFilter"
@@ -70,7 +35,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRoomToSpaceToolbar"
+            app:layout_constraintTop_toBottomOf="@id/addRoomToSpaceToolbar"
             app:queryHint="@string/search_hint_room_name" />
 
         <Button
@@ -87,7 +52,7 @@
             app:iconPadding="13dp"
             app:iconTint="?colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRoomToSpaceToolbar"
+            app:layout_constraintTop_toBottomOf="@id/addRoomToSpaceToolbar"
             tools:ignore="MissingPrefix" />
 
     </com.google.android.material.appbar.AppBarLayout>

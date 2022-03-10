@@ -25,6 +25,7 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheetViewSta
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationNotMeController @Inject constructor(
@@ -46,7 +47,7 @@ class VerificationNotMeController @Inject constructor(
         val host = this
         bottomSheetVerificationNoticeItem {
             id("notice")
-            notice(host.eventHtmlRenderer.render(host.stringProvider.getString(R.string.verify_not_me_self_verification)))
+            notice(host.eventHtmlRenderer.render(host.stringProvider.getString(R.string.verify_not_me_self_verification)).toEpoxyCharSequence())
         }
 
         bottomSheetDividerItem {
@@ -55,7 +56,7 @@ class VerificationNotMeController @Inject constructor(
 
         bottomSheetVerificationActionItem {
             id("skip")
-            title(host.stringProvider.getString(R.string.skip))
+            title(host.stringProvider.getString(R.string.action_skip))
             titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             iconRes(R.drawable.ic_arrow_right)
             iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))

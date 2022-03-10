@@ -19,7 +19,6 @@ package im.vector.app.features.home
 import android.content.Context
 import android.content.pm.ShortcutInfo
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.os.Build
 import androidx.annotation.WorkerThread
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -61,7 +60,12 @@ class ShortcutCreator @Inject constructor(
     fun create(roomSummary: RoomSummary, rank: Int = 1): ShortcutInfoCompat {
         val intent = RoomDetailActivity.shortcutIntent(context, roomSummary.roomId)
         val bitmap = try {
-            avatarRenderer.shortcutDrawable(GlideApp.with(context), roomSummary.toMatrixItem(), iconSize)
+            val glideRequests = GlideApp.with(context)
+            val matrixItem = roomSummary.toMatrixItem()
+            when (useAdaptiveIcon) {
+                true  -> avatarRenderer.adaptiveShortcutDrawable(glideRequests, matrixItem, iconSize, adaptiveIconSize, adaptiveIconOuterSides.toFloat())
+                false -> avatarRenderer.shortcutDrawable(glideRequests, matrixItem, iconSize)
+            }
         } catch (failure: Throwable) {
             null
         }
@@ -83,11 +87,7 @@ class ShortcutCreator @Inject constructor(
 
     private fun Bitmap.toProfileImageIcon(): IconCompat {
         return if (useAdaptiveIcon) {
-            val insetBmp = Bitmap.createBitmap(adaptiveIconSize, adaptiveIconSize, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(insetBmp)
-            canvas.drawBitmap(this, adaptiveIconOuterSides.toFloat(), adaptiveIconOuterSides.toFloat(), null)
-
-            IconCompat.createWithAdaptiveBitmap(insetBmp)
+            IconCompat.createWithAdaptiveBitmap(this)
         } else {
             IconCompat.createWithBitmap(this)
         }

@@ -38,7 +38,6 @@ internal class DefaultUploadKeysTask @Inject constructor(
 
     override suspend fun execute(params: UploadKeysTask.Params): KeysUploadResponse {
         Timber.i("## Uploading device keys -> $params.body")
-
         return executeRequest(globalErrorReceiver) {
             cryptoApi.uploadKeys(params.body)
         }

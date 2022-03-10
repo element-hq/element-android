@@ -11,7 +11,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/radioIcon"
@@ -69,13 +70,13 @@
     <TextView
         android:id="@+id/listTitle"
         style="@style/Widget.Vector.TextView.Body.Medium"
-        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="@string/spaces_which_can_access"
         android:textAllCaps="true"
         android:textColor="?vctr_content_secondary"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/actionTitle"
         app:layout_constraintTop_toBottomOf="@id/upgradeRequiredButton"
         app:layout_goneMarginTop="8dp" />
@@ -91,7 +92,6 @@
     <!--        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
     <!--        tools:listitem="@layout/item_space_simple"-->
     <!--        tools:orientation="horizontal" />-->
-
 
     <ImageView
         android:id="@+id/rest1"
@@ -156,7 +156,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?vctr_content_secondary"
         tools:ignore="MissingConstraints" />
-
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/spacesFlow"

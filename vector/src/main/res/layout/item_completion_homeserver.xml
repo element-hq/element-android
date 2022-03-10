@@ -11,4 +11,5 @@
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
     android:textColor="?android:attr/textColorAlertDialogListItem"
-    tools:text="https://matrix.org" />
+    tools:text="https://matrix.org"
+    tools:viewBindingIgnore="true" />

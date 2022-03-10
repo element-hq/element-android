@@ -86,7 +86,7 @@ class ViewReactionsViewModel @AssistedInject constructor(@Assisted
                     annotationsSummary.reactionsSummary
                             .flatMap { reactionsSummary ->
                                 reactionsSummary.sourceEvents.map {
-                                    val event = room.getTimeLineEvent(it)
+                                    val event = room.getTimelineEvent(it)
                                             ?: throw RuntimeException("Your eventId is not valid")
                                     ReactionInfo(
                                             event.root.eventId!!,

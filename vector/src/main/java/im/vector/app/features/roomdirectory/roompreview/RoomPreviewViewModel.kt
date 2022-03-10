@@ -27,6 +27,9 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsRoomSize
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.roomdirectory.JoinState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -44,9 +47,11 @@ import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
-class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val initialState: RoomPreviewViewState,
-                                                       private val session: Session) :
-    VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
+class RoomPreviewViewModel @AssistedInject constructor(
+        @Assisted private val initialState: RoomPreviewViewState,
+        private val analyticsTracker: AnalyticsTracker,
+        private val session: Session
+) : VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<RoomPreviewViewModel, RoomPreviewViewState> {
@@ -71,7 +76,7 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
                         .getThreePids()
                         .filterIsInstance<ThreePid.Email>()
 
-                val status = if (threePids.indexOfFirst { it.email == initialState.fromEmailInvite.email } != -1) {
+                val status = if (threePids.any { it.email == initialState.fromEmailInvite.email }) {
                     try {
                         session.identityService().getShareStatus(threePids)
                     } catch (failure: Throwable) {
@@ -243,6 +248,12 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
         viewModelScope.launch {
             try {
                 session.joinRoom(state.roomId, viaServers = state.homeServers)
+                analyticsTracker.capture(JoinedRoom(
+                        // Always false in this case (?)
+                        isDM = false,
+                        isSpace = false,
+                        roomSize = state.numJoinMembers.toAnalyticsRoomSize()
+                ))
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
             } catch (failure: Throwable) {

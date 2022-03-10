@@ -12,5 +12,6 @@
     android:paddingBottom="8dp"
     android:textColor="?vctr_content_primary"
     android:textStyle="bold"
-    tools:text="Security" />
+    tools:text="Security"
+    tools:viewBindingIgnore="true" />
 

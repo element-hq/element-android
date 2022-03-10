@@ -40,10 +40,6 @@ internal class DefaultSpace(
 
     override val spaceId = room.roomId
 
-    override suspend fun leave(reason: String?) {
-        return room.leave(reason)
-    }
-
     override fun spaceSummary(): RoomSummary? {
         return spaceSummaryDataSource.getSpaceSummary(room.roomId)
     }

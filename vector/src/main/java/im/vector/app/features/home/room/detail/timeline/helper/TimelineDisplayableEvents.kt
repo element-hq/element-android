@@ -50,12 +50,14 @@ object TimelineDisplayableEvents {
             EventType.STATE_ROOM_TOMBSTONE,
             EventType.STATE_ROOM_JOIN_RULES,
             EventType.KEY_VERIFICATION_DONE,
-            EventType.KEY_VERIFICATION_CANCEL
+            EventType.KEY_VERIFICATION_CANCEL,
+            EventType.POLL_START
     )
 }
 
 fun TimelineEvent.canBeMerged(): Boolean {
-    return root.getClearType() == EventType.STATE_ROOM_MEMBER
+    return root.getClearType() == EventType.STATE_ROOM_MEMBER ||
+            root.getClearType() == EventType.STATE_ROOM_SERVER_ACL
 }
 
 fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {

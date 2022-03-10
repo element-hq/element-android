@@ -14,49 +14,8 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/userListToolbar"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/userListClose"
-                    android:layout_width="@dimen/layout_touch_size"
-                    android:layout_height="@dimen/layout_touch_size"
-                    android:clickable="true"
-                    android:contentDescription="@string/action_close"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:scaleType="center"
-                    android:src="@drawable/ic_x_18dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="?vctr_content_secondary"
-                    tools:ignore="MissingPrefix" />
-
-                <TextView
-                    android:id="@+id/userListTitle"
-                    style="@style/Widget.Vector.TextView.HeadlineMedium"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="@string/fab_menu_create_chat"
-                    android:textColor="?vctr_content_primary"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/userListClose"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.appbar.MaterialToolbar>
+            android:layout_height="?actionBarSize"
+            app:title="@string/fab_menu_create_chat"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -69,7 +28,7 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:maxHeight="64dp">
 
         <com.google.android.material.chip.ChipGroup
@@ -97,7 +56,7 @@
         android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroupScrollView" />
+        app:layout_constraintTop_toBottomOf="@id/chipGroupScrollView" />
 
     <View
         android:id="@+id/userListFilterDivider"
@@ -106,8 +65,7 @@
         android:background="?vctr_list_separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userListSearch" />
-
+        app:layout_constraintTop_toBottomOf="@id/userListSearch" />
 
     <TextView
         android:id="@+id/userListE2EbyDefaultDisabled"
@@ -133,7 +91,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userListE2EbyDefaultDisabled"
+        app:layout_constraintTop_toBottomOf="@id/userListE2EbyDefaultDisabled"
         tools:listitem="@layout/item_known_user" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

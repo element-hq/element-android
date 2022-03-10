@@ -31,6 +31,7 @@ import im.vector.app.features.discovery.settingsCenteredImageItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.federation.FederationVersion
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.homeserver.RoomVersionStatus
@@ -143,14 +144,14 @@ class HomeserverSettingsController @Inject constructor(
 
                 genericWithValueItem {
                     id("room_version_default")
-                    title(host.stringProvider.getString(R.string.settings_server_default_room_version))
+                    title(host.stringProvider.getString(R.string.settings_server_default_room_version).toEpoxyCharSequence())
                     value(roomCapabilities.defaultRoomVersion)
                 }
 
                 roomCapabilities.supportedVersion.forEach {
                     genericWithValueItem {
                         id("room_version_${it.version}")
-                        title(it.version)
+                        title(it.version.toEpoxyCharSequence())
                         value(
                                 host.stringProvider.getString(
                                         when (it.status) {

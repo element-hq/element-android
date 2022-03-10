@@ -48,8 +48,8 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
 
     override suspend fun execute(params: GetPreviewUrlTask.Params): PreviewUrlData {
         return when (params.cacheStrategy) {
-            CacheStrategy.NoCache -> doRequest(params.url, params.timestamp)
-            is CacheStrategy.TtlCache -> doRequestWithCache(
+            CacheStrategy.NoCache       -> doRequest(params.url, params.timestamp)
+            is CacheStrategy.TtlCache   -> doRequestWithCache(
                     params.url,
                     params.timestamp,
                     params.cacheStrategy.validityDurationInMillis,
@@ -77,7 +77,9 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
                 siteName = (get("og:site_name") as? String)?.unescapeHtml(),
                 title = (get("og:title") as? String)?.unescapeHtml(),
                 description = (get("og:description") as? String)?.unescapeHtml(),
-                mxcUrl = get("og:image") as? String
+                mxcUrl = get("og:image") as? String,
+                imageHeight = (get("og:image:height") as? Double)?.toInt(),
+                imageWidth = (get("og:image:width") as? Double)?.toInt(),
         )
     }
 
@@ -114,7 +116,8 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
             previewUrlCacheEntity.title = data.title
             previewUrlCacheEntity.description = data.description
             previewUrlCacheEntity.mxcUrl = data.mxcUrl
-
+            previewUrlCacheEntity.imageHeight = data.imageHeight
+            previewUrlCacheEntity.imageWidth = data.imageWidth
             previewUrlCacheEntity.lastUpdatedTimestamp = Date().time
         }
 

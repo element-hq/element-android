@@ -104,6 +104,8 @@ object EventType {
 
     // Poll
     const val POLL_START = "org.matrix.msc3381.poll.start"
+    const val POLL_RESPONSE = "org.matrix.msc3381.poll.response"
+    const val POLL_END = "org.matrix.msc3381.poll.end"
 
     // Unwedging
     internal const val DUMMY = "m.dummy"

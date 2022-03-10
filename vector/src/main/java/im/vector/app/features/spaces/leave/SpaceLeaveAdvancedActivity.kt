@@ -26,23 +26,20 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleLoadingBinding
 import im.vector.app.features.spaces.SpaceBottomSheetSettingsArgs
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
-        ToolbarConfigurable {
+class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
 
     override fun getBinding(): ActivitySimpleLoadingBinding = ActivitySimpleLoadingBinding.inflate(layoutInflater)
 
@@ -69,17 +66,11 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
         val args = intent?.getParcelableExtra<SpaceBottomSheetSettingsArgs>(Mavericks.KEY_ARG)
 
         if (isFirstCreation()) {
-            val simpleName = SpaceLeaveAdvancedFragment::class.java.simpleName
-            if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
-                supportFragmentManager.commitTransaction {
-                    replace(
-                            R.id.simpleFragmentContainer,
-                            SpaceLeaveAdvancedFragment::class.java,
-                            Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
-                            simpleName
-                    )
-                }
-            }
+            replaceFragment(
+                    views.simpleFragmentContainer,
+                    SpaceLeaveAdvancedFragment::class.java,
+                    args
+            )
         }
     }
 
@@ -118,9 +109,5 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
                 putExtra(Mavericks.KEY_ARG, SpaceBottomSheetSettingsArgs(spaceId))
             }
         }
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
     }
 }

@@ -29,6 +29,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.group
 import im.vector.app.space
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -46,10 +48,6 @@ class SpaceSummaryController @Inject constructor(
     private var viewState: SpaceListViewState? = null
 
     private val subSpaceComparator: Comparator<SpaceChildInfo> = compareBy<SpaceChildInfo> { it.order }.thenBy { it.childRoomId }
-
-    init {
-        requestModelBuild()
-    }
 
     fun update(viewState: SpaceListViewState) {
         this.viewState = viewState
@@ -69,7 +67,7 @@ class SpaceSummaryController @Inject constructor(
         if (!nonNullViewState.legacyGroups.isNullOrEmpty()) {
             genericFooterItem {
                 id("legacy_space")
-                text(" ")
+                text(" ".toEpoxyCharSequence())
             }
 
             genericHeaderItem {
@@ -144,7 +142,7 @@ class SpaceSummaryController @Inject constructor(
                     val isSelected = selected is RoomGroupingMethod.BySpace && groupSummary.roomId == selected.space()?.roomId
                     // does it have children?
                     val subSpaces = groupSummary.spaceChildren?.filter { childInfo ->
-                        summaries?.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
+                        summaries?.any { it.roomId == childInfo.childRoomId }.orFalse()
                     }?.sortedWith(subSpaceComparator)
                     val hasChildren = (subSpaces?.size ?: 0) > 0
                     val expanded = expandedStates[groupSummary.roomId] == true
@@ -174,7 +172,7 @@ class SpaceSummaryController @Inject constructor(
                     if (hasChildren && expanded) {
                         // it's expanded
                         subSpaces?.forEach { child ->
-                            buildSubSpace(summaries, expandedStates, selected, child, 1, 3)
+                            buildSubSpace(groupSummary.roomId, summaries, expandedStates, selected, child, 1, 3)
                         }
                     }
                 }
@@ -185,7 +183,8 @@ class SpaceSummaryController @Inject constructor(
         }
     }
 
-    private fun buildSubSpace(summaries: List<RoomSummary>?,
+    private fun buildSubSpace(idPrefix: String,
+                              summaries: List<RoomSummary>?,
                               expandedStates: Map<String, Boolean>,
                               selected: RoomGroupingMethod,
                               info: SpaceChildInfo, currentDepth: Int, maxDepth: Int) {
@@ -194,14 +193,16 @@ class SpaceSummaryController @Inject constructor(
         val childSummary = summaries?.firstOrNull { it.roomId == info.childRoomId } ?: return
         // does it have children?
         val subSpaces = childSummary.spaceChildren?.filter { childInfo ->
-            summaries.indexOfFirst { it.roomId == childInfo.childRoomId } != -1
+            summaries.any { it.roomId == childInfo.childRoomId }
         }?.sortedWith(subSpaceComparator)
         val expanded = expandedStates[childSummary.roomId] == true
         val isSelected = selected is RoomGroupingMethod.BySpace && childSummary.roomId == selected.space()?.roomId
 
+        val id = "$idPrefix:${childSummary.roomId}"
+
         subSpaceSummaryItem {
             avatarRenderer(host.avatarRenderer)
-            id(childSummary.roomId)
+            id(id)
             hasChildren(!subSpaces.isNullOrEmpty())
             selected(isSelected)
             expanded(expanded)
@@ -220,7 +221,7 @@ class SpaceSummaryController @Inject constructor(
 
         if (expanded) {
             subSpaces?.forEach {
-                buildSubSpace(summaries, expandedStates, selected, it, currentDepth + 1, maxDepth)
+                buildSubSpace(id, summaries, expandedStates, selected, it, currentDepth + 1, maxDepth)
             }
         }
     }

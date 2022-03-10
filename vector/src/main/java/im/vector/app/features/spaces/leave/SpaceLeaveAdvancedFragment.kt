@@ -47,6 +47,7 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.toolbar)
+                .allowBack()
         controller.listener = this
         views.roomList.configureWith(controller)
         views.spaceLeaveCancel.debouncedClicks { requireActivity().finish() }

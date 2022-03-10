@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -27,17 +28,16 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.endKeepScreenOn
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.keepScreenOn
 import im.vector.app.core.extensions.replaceFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
@@ -51,7 +51,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RoomDetailActivity :
         VectorBaseActivity<ActivityRoomDetailBinding>(),
-        ToolbarConfigurable,
         MatrixToBottomSheet.InteractionListener {
 
     override fun getBinding(): ActivityRoomDetailBinding {
@@ -98,18 +97,18 @@ class RoomDetailActivity :
         super.onCreate(savedInstanceState)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         waitingView = views.waitingView.waitingView
-        val roomDetailArgs: RoomDetailArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
-            RoomDetailArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
+        val timelineArgs: TimelineArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
+            TimelineArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
         } else {
             intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
         }
-        if (roomDetailArgs == null) return
-        intent.putExtra(Mavericks.KEY_ARG, roomDetailArgs)
-        currentRoomId = roomDetailArgs.roomId
+        if (timelineArgs == null) return
+        intent.putExtra(Mavericks.KEY_ARG, timelineArgs)
+        currentRoomId = timelineArgs.roomId
 
         if (isFirstCreation()) {
-            replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, roomDetailArgs)
-            replaceFragment(R.id.roomDetailDrawerContainer, BreadcrumbsFragment::class.java)
+            replaceFragment(views.roomDetailContainer, TimelineFragment::class.java, timelineArgs)
+            replaceFragment(views.roomDetailDrawerContainer, BreadcrumbsFragment::class.java)
         }
 
         sharedActionViewModel = viewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
@@ -146,7 +145,7 @@ class RoomDetailActivity :
         if (currentRoomId != switchToRoom.roomId) {
             currentRoomId = switchToRoom.roomId
             requireActiveMembershipViewModel.handle(RequireActiveMembershipAction.ChangeRoom(switchToRoom.roomId))
-            replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, RoomDetailArgs(switchToRoom.roomId))
+            replaceFragment(views.roomDetailContainer, TimelineFragment::class.java, TimelineArgs(switchToRoom.roomId))
         }
     }
 
@@ -157,11 +156,11 @@ class RoomDetailActivity :
         super.onDestroy()
     }
 
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
-    }
-
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
+        override fun onDrawerOpened(drawerView: View) {
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.Breadcrumbs))
+        }
+
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
 
@@ -191,9 +190,9 @@ class RoomDetailActivity :
         const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
         const val ACTION_ROOM_DETAILS_FROM_SHORTCUT = "ROOM_DETAILS_FROM_SHORTCUT"
 
-        fun newIntent(context: Context, roomDetailArgs: RoomDetailArgs): Intent {
+        fun newIntent(context: Context, timelineArgs: TimelineArgs): Intent {
             return Intent(context, RoomDetailActivity::class.java).apply {
-                putExtra(EXTRA_ROOM_DETAIL_ARGS, roomDetailArgs)
+                putExtra(EXTRA_ROOM_DETAIL_ARGS, timelineArgs)
             }
         }
 

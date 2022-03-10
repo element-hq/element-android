@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.prevOrNull
 import im.vector.app.features.home.AvatarRenderer
@@ -26,10 +27,10 @@ import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisi
 import im.vector.app.features.home.room.detail.timeline.helper.canBeMerged
 import im.vector.app.features.home.room.detail.timeline.helper.isRoomConfiguration
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
-import im.vector.app.features.home.room.detail.timeline.item.MergedMembershipEventsItem
-import im.vector.app.features.home.room.detail.timeline.item.MergedMembershipEventsItem_
 import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationItem_
+import im.vector.app.features.home.room.detail.timeline.item.MergedSimilarEventsItem
+import im.vector.app.features.home.room.detail.timeline.item.MergedSimilarEventsItem_
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -82,8 +83,14 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                                                    event: TimelineEvent,
                                                    eventIdToHighlight: String?,
                                                    requestModelBuild: () -> Unit,
-                                                   callback: TimelineEventController.Callback?): MergedMembershipEventsItem_? {
-        val mergedEvents = timelineEventVisibilityHelper.prevSameTypeEvents(items, currentPosition, 2, eventIdToHighlight)
+                                                   callback: TimelineEventController.Callback?): MergedSimilarEventsItem_? {
+        val mergedEvents = timelineEventVisibilityHelper.prevSameTypeEvents(
+                items,
+                currentPosition,
+                2,
+                eventIdToHighlight,
+                partialState.rootThreadEventId,
+                partialState.isFromThreadTimeline())
         return if (mergedEvents.isEmpty()) {
             null
         } else {
@@ -116,23 +123,31 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                 collapsedEventIds.removeAll(mergedEventIds)
             }
             val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
-            val attributes = MergedMembershipEventsItem.Attributes(
-                    isCollapsed = isCollapsed,
-                    mergeData = mergedData,
-                    avatarRenderer = avatarRenderer,
-                    onCollapsedStateChanged = {
-                        mergeItemCollapseStates[event.localId] = it
-                        requestModelBuild()
-                    }
-            )
-            MergedMembershipEventsItem_()
-                    .id(mergeId)
-                    .leftGuideline(avatarSizeProvider.leftGuideline)
-                    .highlighted(isCollapsed && highlighted)
-                    .attributes(attributes)
-                    .also {
-                        it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
-                    }
+            val summaryTitleResId = when (event.root.getClearType()) {
+                EventType.STATE_ROOM_MEMBER     -> R.plurals.membership_changes
+                EventType.STATE_ROOM_SERVER_ACL -> R.plurals.notice_room_server_acl_changes
+                else                            -> null
+            }
+            summaryTitleResId?.let { summaryTitle ->
+                val attributes = MergedSimilarEventsItem.Attributes(
+                        summaryTitleResId = summaryTitle,
+                        isCollapsed = isCollapsed,
+                        mergeData = mergedData,
+                        avatarRenderer = avatarRenderer,
+                        onCollapsedStateChanged = {
+                            mergeItemCollapseStates[event.localId] = it
+                            requestModelBuild()
+                        }
+                )
+                MergedSimilarEventsItem_()
+                        .id(mergeId)
+                        .leftGuideline(avatarSizeProvider.leftGuideline)
+                        .highlighted(isCollapsed && highlighted)
+                        .attributes(attributes)
+                        .also {
+                            it.setOnVisibilityStateChanged(MergedTimelineEventVisibilityStateChangedListener(callback, mergedEvents))
+                        }
+            }
         }
     }
 

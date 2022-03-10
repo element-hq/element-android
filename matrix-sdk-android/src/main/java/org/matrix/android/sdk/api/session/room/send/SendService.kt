@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 
@@ -57,16 +58,27 @@ interface SendService {
     fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String = MessageType.MSGTYPE_TEXT): Cancelable
 
     /**
+     * Method to quote an events content.
+     * @param quotedEvent The event to which we will quote it's content.
+     * @param text the text message to send
+     * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
+     * @return a [Cancelable]
+     */
+    fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String? = null): Cancelable
+
+    /**
      * Method to send a media asynchronously.
      * @param attachment the media to send
      * @param compressBeforeSending set to true to compress images before sending them
      * @param roomIds set of roomIds to where the media will be sent. The current roomId will be add to this set if not present.
      *                It can be useful to send media to multiple room. It's safe to include the current roomId in this set
+     * @param rootThreadEventId when this param is not null, the Media will be sent in this specific thread
      * @return a [Cancelable]
      */
     fun sendMedia(attachment: ContentAttachmentData,
                   compressBeforeSending: Boolean,
-                  roomIds: Set<String>): Cancelable
+                  roomIds: Set<String>,
+                  rootThreadEventId: String? = null): Cancelable
 
     /**
      * Method to send a list of media asynchronously.
@@ -74,28 +86,37 @@ interface SendService {
      * @param compressBeforeSending set to true to compress images before sending them
      * @param roomIds set of roomIds to where the media will be sent. The current roomId will be add to this set if not present.
      *                It can be useful to send media to multiple room. It's safe to include the current roomId in this set
+     * @param rootThreadEventId when this param is not null, all the Media will be sent in this specific thread
      * @return a [Cancelable]
      */
     fun sendMedias(attachments: List<ContentAttachmentData>,
                    compressBeforeSending: Boolean,
-                   roomIds: Set<String>): Cancelable
+                   roomIds: Set<String>,
+                   rootThreadEventId: String? = null): Cancelable
 
     /**
      * Send a poll to the room.
+     * @param pollType indicates open or closed polls
      * @param question the question
      * @param options list of options
      * @return a [Cancelable]
      */
-    fun sendPoll(question: String, options: List<String>): Cancelable
+    fun sendPoll(pollType: PollType, question: String, options: List<String>): Cancelable
 
     /**
      * Method to send a poll response.
      * @param pollEventId the poll currently replied to
-     * @param optionIndex The reply index
-     * @param optionValue The option value (for compatibility)
+     * @param answerId The id of the answer
      * @return a [Cancelable]
      */
-    fun sendOptionsReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable
+    fun voteToPoll(pollEventId: String, answerId: String): Cancelable
+
+    /**
+     * End a poll in the room.
+     * @param pollEventId event id of the poll
+     * @return a [Cancelable]
+     */
+    fun endPoll(pollEventId: String): Cancelable
 
     /**
      * Redact (delete) the given event.
@@ -115,6 +136,14 @@ interface SendService {
      * @param localEcho the unsent local echo
      */
     fun resendMediaMessage(localEcho: TimelineEvent): Cancelable
+
+    /**
+     * Send a location event to the room
+     * @param latitude required latitude of the location
+     * @param longitude required longitude of the location
+     * @param uncertainty Accuracy of the location in meters
+     */
+    fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?): Cancelable
 
     /**
      * Remove this failed message from the timeline

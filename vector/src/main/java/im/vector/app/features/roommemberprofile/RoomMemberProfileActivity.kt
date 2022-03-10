@@ -22,20 +22,15 @@ import android.content.Intent
 import android.widget.Toast
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
 
 @AndroidEntryPoint
-class RoomMemberProfileActivity :
-        VectorBaseActivity<ActivitySimpleBinding>(),
-        ToolbarConfigurable {
+class RoomMemberProfileActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     companion object {
         fun newIntent(context: Context, args: RoomMemberProfileArgs): Intent {
@@ -54,7 +49,7 @@ class RoomMemberProfileActivity :
     override fun initUiAndData() {
         if (isFirstCreation()) {
             val fragmentArgs: RoomMemberProfileArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
-            addFragment(R.id.simpleFragmentContainer, RoomMemberProfileFragment::class.java, fragmentArgs)
+            addFragment(views.simpleFragmentContainer, RoomMemberProfileFragment::class.java, fragmentArgs)
         }
 
         requireActiveMembershipViewModel.observeViewEvents {
@@ -62,10 +57,6 @@ class RoomMemberProfileActivity :
                 is RequireActiveMembershipViewEvents.RoomLeft -> handleRoomLeft(it)
             }
         }
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
     }
 
     private fun handleRoomLeft(roomLeft: RequireActiveMembershipViewEvents.RoomLeft) {

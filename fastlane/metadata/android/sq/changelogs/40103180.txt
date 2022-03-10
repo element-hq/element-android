@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: dërgojeni vendndodhjen tuaj në çfarëdo dhome. Përpunoni pyetësorë.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.3.18

@@ -32,6 +32,7 @@ import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
@@ -40,7 +41,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                                     private val colorProvider: ColorProvider,
                                                     private val dimensionConverter: DimensionConverter,
                                                     private val vectorPreferences: VectorPreferences) :
-    TypedEpoxyController<DeviceListViewState>() {
+        TypedEpoxyController<DeviceListViewState>() {
 
     interface InteractionListener {
         fun onDeviceSelected(device: CryptoDeviceInfo)
@@ -75,11 +76,11 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                     style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(if (allGreen) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                     title(
-                            host.stringProvider.getString(
-                                    if (allGreen) R.string.verification_profile_verified else R.string.verification_profile_warning
-                            )
+                            host.stringProvider
+                                    .getString(if (allGreen) R.string.verification_profile_verified else R.string.verification_profile_warning)
+                                    .toEpoxyCharSequence()
                     )
-                    description(host.stringProvider.getString(R.string.verification_conclusion_ok_notice))
+                    description(host.stringProvider.getString(R.string.verification_conclusion_ok_notice).toEpoxyCharSequence())
                 }
 
                 if (vectorPreferences.developerMode()) {
@@ -90,13 +91,13 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                 genericItem {
                     id("sessions")
                     style(ItemStyle.BIG_TEXT)
-                    title(host.stringProvider.getString(R.string.room_member_profile_sessions_section_title))
+                    title(host.stringProvider.getString(R.string.room_member_profile_sessions_section_title).toEpoxyCharSequence())
                 }
                 if (deviceList.isEmpty()) {
                     // Can this really happen?
                     genericFooterItem {
                         id("empty")
-                        text(host.stringProvider.getString(R.string.search_no_results))
+                        text(host.stringProvider.getString(R.string.search_no_results).toEpoxyCharSequence())
                     }
                 } else {
                     // Build list of device with status
@@ -105,7 +106,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                             id(device.deviceId)
                             titleIconResourceId(if (device.isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                             apply {
-                                if (host.vectorPreferences.developerMode()) {
+                                val title = if (host.vectorPreferences.developerMode()) {
                                     val seq = span {
                                         +(device.displayName() ?: device.deviceId)
                                         +"\n"
@@ -115,10 +116,11 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                             textSize = host.dimensionConverter.spToPx(14)
                                         }
                                     }
-                                    title(seq)
+                                    seq
                                 } else {
-                                    title(device.displayName() ?: device.deviceId)
+                                    device.displayName() ?: device.deviceId
                                 }
+                                title(title.toEpoxyCharSequence())
                             }
                             value(
                                     host.stringProvider.getString(
@@ -163,7 +165,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                 textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
-                        }
+                        }.toEpoxyCharSequence()
                 )
             }
         }
@@ -179,7 +181,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                 textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
-                        }
+                        }.toEpoxyCharSequence()
                 )
             }
         }
@@ -195,7 +197,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                 textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
-                        }
+                        }.toEpoxyCharSequence()
                 )
             }
         }

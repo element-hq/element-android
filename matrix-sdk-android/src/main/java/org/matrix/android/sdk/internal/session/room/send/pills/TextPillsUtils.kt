@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.session.room.send.pills
 
 import android.text.SpannableString
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
+import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.session.displayname.DisplayNameResolver
 import java.util.Collections
 import javax.inject.Inject
@@ -51,6 +52,8 @@ internal class TextPillsUtils @Inject constructor(
         val pills = spannableString
                 ?.getSpans(0, text.length, MatrixItemSpan::class.java)
                 ?.map { MentionLinkSpec(it, spannableString.getSpanStart(it), spannableString.getSpanEnd(it)) }
+                // we use the raw text for @room notification instead of a link
+                ?.filterNot { it.span.matrixItem is MatrixItem.EveryoneInRoomItem }
                 ?.toMutableList()
                 ?.takeIf { it.isNotEmpty() }
                 ?: return null

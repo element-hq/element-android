@@ -18,10 +18,13 @@ package org.matrix.android.sdk.internal.session.terms
 
 import dagger.Lazy
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.terms.GetTermsResponse
 import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.network.RetrofitFactory
@@ -33,6 +36,7 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.AcceptedTe
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class DefaultTermsService @Inject constructor(
@@ -53,6 +57,36 @@ internal class DefaultTermsService @Inject constructor(
             termsAPI.getTerms("${url}terms")
         }
         return GetTermsResponse(termsResponse, getAlreadyAcceptedTermUrlsFromAccountData())
+    }
+
+    /**
+     * We use a trick here to get the homeserver T&C, we use the register API
+     */
+    override suspend fun getHomeserverTerms(baseUrl: String): TermsResponse {
+        return try {
+            val request = baseUrl.ensureTrailingSlash() + NetworkConstants.URI_API_PREFIX_PATH_R0 + "register"
+            executeRequest(null) {
+                termsAPI.register(request)
+            }
+            // Return empty result if it succeed, but it should never happen
+            Timber.w("Request $request succeeded, it should never happen")
+            TermsResponse()
+        } catch (throwable: Throwable) {
+            val registrationFlowResponse = throwable.toRegistrationFlowResponse()
+            if (registrationFlowResponse != null) {
+                @Suppress("UNCHECKED_CAST")
+                TermsResponse(
+                        policies = (registrationFlowResponse
+                                .params
+                                ?.get(LoginFlowTypes.TERMS) as? JsonDict)
+                                ?.get("policies") as? JsonDict
+                )
+            } else {
+                // Other error
+                Timber.e(throwable, "Error while getting homeserver terms")
+                throw throwable
+            }
+        }
     }
 
     override suspend fun agreeToTerms(serviceType: TermsService.ServiceType,
@@ -91,7 +125,7 @@ internal class DefaultTermsService @Inject constructor(
     private fun buildUrl(baseUrl: String, serviceType: TermsService.ServiceType): String {
         val servicePath = when (serviceType) {
             TermsService.ServiceType.IntegrationManager -> NetworkConstants.URI_INTEGRATION_MANAGER_PATH
-            TermsService.ServiceType.IdentityService -> NetworkConstants.URI_IDENTITY_PATH_V2
+            TermsService.ServiceType.IdentityService    -> NetworkConstants.URI_IDENTITY_PATH_V2
         }
         return "${baseUrl.ensureTrailingSlash()}$servicePath"
     }

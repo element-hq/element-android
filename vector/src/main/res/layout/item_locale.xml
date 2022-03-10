@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground"
-    android:minHeight="64dp">
+    android:minHeight="64dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/localeTitle"
@@ -15,7 +16,7 @@
         android:paddingStart="@dimen/layout_horizontal_margin"
         android:paddingEnd="@dimen/layout_horizontal_margin"
         android:textColor="?vctr_content_primary"
-        app:layout_constraintBottom_toTopOf="@+id/localeSubtitle"
+        app:layout_constraintBottom_toTopOf="@id/localeSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/localeTitle"
+        app:layout_constraintTop_toBottomOf="@id/localeTitle"
         tools:text="details"
         tools:visibility="visible" />
 

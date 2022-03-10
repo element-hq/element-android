@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
-    android:minHeight="64dp">
+    android:minHeight="64dp"
+    tools:viewBindingIgnore="true">
 
     <Button
         android:id="@+id/settings_item_button"

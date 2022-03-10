@@ -40,7 +40,7 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.resetPasswordMailConfirmationSubmit.setOnClickListener { submit() }
+        views.resetPasswordMailConfirmationSubmit.debouncedClicks { submit() }
     }
 
     private fun setupUi(state: LoginViewState) {

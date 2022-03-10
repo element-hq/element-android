@@ -20,7 +20,7 @@
             app:scrimAnimationDuration="250"
             app:scrimVisibleHeightTrigger="120dp"
             app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar">
+            app:toolbarId="@id/toolbar">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -43,7 +43,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/spaceDirectoryList"
         android:layout_width="match_parent"
@@ -51,5 +50,17 @@
         android:background="?android:colorBackground"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_room_directory" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addOrCreateChatRoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp "
+        android:contentDescription="@string/a11y_create_room"
+        android:scaleType="center"
+        android:src="@drawable/ic_fab_add"
+        app:maxImageSize="20dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

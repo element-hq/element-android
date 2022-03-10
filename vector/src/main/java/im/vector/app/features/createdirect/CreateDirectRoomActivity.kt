@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -42,7 +43,12 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.contactsbook.ContactsBookFragment
+import im.vector.app.features.qrcode.QrCodeScannerEvents
+import im.vector.app.features.qrcode.QrCodeScannerFragment
+import im.vector.app.features.qrcode.QrCodeScannerViewModel
+import im.vector.app.features.qrcode.QrScannerArgs
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
@@ -58,11 +64,14 @@ import javax.inject.Inject
 class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
+    private val qrViewModel: QrCodeScannerViewModel by viewModel()
+
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
     @Inject lateinit var errorFormatter: ErrorFormatter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.StartChat
         views.toolbar.visibility = View.GONE
 
         sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
@@ -80,7 +89,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                 .launchIn(lifecycleScope)
         if (isFirstCreation()) {
             addFragment(
-                    R.id.container,
+                    views.container,
                     UserListFragment::class.java,
                     UserListFragmentArgs(
                             title = getString(R.string.fab_menu_create_chat),
@@ -91,24 +100,51 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         viewModel.onEach(CreateDirectRoomViewState::createAndInviteState) {
             renderCreateAndInviteState(it)
         }
+
+        viewModel.observeViewEvents {
+            when (it) {
+                CreateDirectRoomViewEvents.InvalidCode -> {
+                    Toast.makeText(this, R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                CreateDirectRoomViewEvents.DmSelf      -> {
+                    Toast.makeText(this, R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }.exhaustive
+        }
+
+        qrViewModel.observeViewEvents {
+            when (it) {
+                is QrCodeScannerEvents.CodeParsed  -> {
+                    viewModel.handle(CreateDirectRoomAction.QrScannedAction(it.result))
+                }
+                is QrCodeScannerEvents.ParseFailed -> {
+                    Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                else                               -> Unit
+            }.exhaustive
+        }
     }
 
     private fun openAddByQrCode() {
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
-            addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
+            val args = QrScannerArgs(showExtraButtons = false, R.string.add_by_qr_code)
+            addFragment(views.container, QrCodeScannerFragment::class.java, args)
         }
     }
 
     private fun openPhoneBook() {
         // Check permission first
         if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, this, permissionReadContactLauncher)) {
-            addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+            addFragmentToBackstack(views.container, ContactsBookFragment::class.java)
         }
     }
 
     private val permissionReadContactLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+            doOnPostResume { addFragmentToBackstack(views.container, ContactsBookFragment::class.java) }
         } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
         }
@@ -116,7 +152,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val permissionCameraLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
+            val args = QrScannerArgs(showExtraButtons = false, R.string.add_by_qr_code)
+            addFragment(views.container, QrCodeScannerFragment::class.java, args)
         } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
         }
@@ -168,11 +205,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
-    private fun renderCreationSuccess(roomId: String?) {
-        // Navigate to freshly created room
-        if (roomId != null) {
-            navigator.openRoom(this, roomId)
-        }
+    private fun renderCreationSuccess(roomId: String) {
+        navigator.openRoom(this, roomId)
         finish()
     }
 

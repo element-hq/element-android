@@ -138,7 +138,7 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
         }
     }
 
-     fun deleteFailedEchoAsync(roomId: String, eventId: String?) {
+    fun deleteFailedEchoAsync(roomId: String, eventId: String?) {
         monarchy.runTransactionSync { realm ->
             TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
             EventEntity.where(realm, eventId = eventId ?: "").findFirst()?.deleteFromRealm()
@@ -214,5 +214,14 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
                         }
                     }
         }
+    }
+
+    /**
+     * Returns the latest known thread event message, or the rootThreadEventId if no other event found
+     */
+    fun getLatestThreadEvent(rootThreadEventId: String): String {
+        return realmSessionProvider.withRealm { realm ->
+            EventEntity.where(realm, eventId = rootThreadEventId).findFirst()?.threadSummaryLatestMessage?.eventId
+        } ?: rootThreadEventId
     }
 }

@@ -29,8 +29,10 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.ui.list.GenericHeaderItem_
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -42,7 +44,8 @@ class SearchResultController @Inject constructor(
         private val session: Session,
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
-        private val dateFormatter: VectorDateFormatter
+        private val dateFormatter: VectorDateFormatter,
+        private val userPreferencesProvider: UserPreferencesProvider
 ) : TypedEpoxyController<SearchViewState>() {
 
     var listener: Listener? = null
@@ -52,10 +55,6 @@ class SearchResultController @Inject constructor(
     interface Listener {
         fun onItemClicked(event: Event)
         fun loadMore()
-    }
-
-    init {
-        setData(null)
     }
 
     override fun buildModels(data: SearchViewState?) {
@@ -104,7 +103,7 @@ class SearchResultController @Inject constructor(
 
             // Take new content first
             @Suppress("UNCHECKED_CAST")
-val text = ((event.content?.get("m.new_content") as? Content) ?: event.content)?.get("body") as? String ?: return@forEach
+            val text = ((event.content?.get("m.new_content") as? Content) ?: event.content)?.get("body") as? String ?: return@forEach
             val spannable = setHighLightedText(text, data.highlights) ?: return@forEach
 
             val eventDate = Calendar.getInstance().apply {
@@ -122,9 +121,11 @@ val text = ((event.content?.get("m.new_content") as? Content) ?: event.content)?
                     .id(eventAndSender.event.eventId)
                     .avatarRenderer(avatarRenderer)
                     .formattedDate(dateFormatter.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE))
-                    .spannable(spannable)
+                    .spannable(spannable.toEpoxyCharSequence())
                     .sender(eventAndSender.sender
                             ?: eventAndSender.event.senderId?.let { session.getRoomMember(it, data.roomId) }?.toMatrixItem())
+                    .threadDetails(event.threadDetails)
+                    .areThreadMessagesEnabled(userPreferencesProvider.areThreadMessagesEnabled())
                     .listener { listener?.onItemClicked(eventAndSender.event) }
                     .let { result.add(it) }
         }

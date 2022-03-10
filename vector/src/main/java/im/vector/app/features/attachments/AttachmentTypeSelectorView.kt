@@ -26,23 +26,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.OvershootInterpolator
-import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.annotation.StringRes
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.doOnNextLayout
-import com.amulyakhare.textdrawable.TextDrawable
-import com.amulyakhare.textdrawable.util.ColorGenerator
+import androidx.core.view.isVisible
 import im.vector.app.R
-import im.vector.app.core.extensions.getMeasurements
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
+import im.vector.app.core.utils.PERMISSIONS_FOR_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.databinding.ViewAttachmentTypeSelectorBinding
-import im.vector.app.features.attachments.AttachmentTypeSelectorView.Callback
 import kotlin.math.max
 
 private const val ANIMATION_DURATION = 250
@@ -51,16 +49,15 @@ private const val ANIMATION_DURATION = 250
  * This class is the view presenting choices for picking attachments.
  * It will return result through [Callback].
  */
+
 class AttachmentTypeSelectorView(context: Context,
                                  inflater: LayoutInflater,
-                                 var callback: Callback?) :
-    PopupWindow(context) {
+                                 var callback: Callback?
+) : PopupWindow(context) {
 
     interface Callback {
         fun onTypeSelected(type: Type)
     }
-
-    private val iconColorGenerator = ColorGenerator.MATERIAL
 
     private val views: ViewAttachmentTypeSelectorBinding
 
@@ -73,9 +70,9 @@ class AttachmentTypeSelectorView(context: Context,
         views.attachmentCameraButton.configure(Type.CAMERA)
         views.attachmentFileButton.configure(Type.FILE)
         views.attachmentStickersButton.configure(Type.STICKER)
-        views.attachmentAudioButton.configure(Type.AUDIO)
         views.attachmentContactButton.configure(Type.CONTACT)
         views.attachmentPollButton.configure(Type.POLL)
+        views.attachmentLocationButton.configure(Type.LOCATION)
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
         animationStyle = 0
@@ -84,35 +81,40 @@ class AttachmentTypeSelectorView(context: Context,
         inputMethodMode = INPUT_METHOD_NOT_NEEDED
         isFocusable = true
         isTouchable = true
+
+        views.attachmentCloseButton.onClick {
+            dismiss()
+        }
     }
 
-    fun show(anchor: View, isKeyboardOpen: Boolean) {
+    private fun animateOpen() {
+        views.attachmentCloseButton.animate()
+                .setDuration(200)
+                .rotation(135f)
+    }
+
+    private fun animateClose() {
+        views.attachmentCloseButton.animate()
+                .setDuration(200)
+                .rotation(0f)
+    }
+
+    fun show(anchor: View) {
+        animateOpen()
+
         this.anchor = anchor
         val anchorCoordinates = IntArray(2)
         anchor.getLocationOnScreen(anchorCoordinates)
-        if (isKeyboardOpen) {
-            showAtLocation(anchor, Gravity.NO_GRAVITY, 0, anchorCoordinates[1] + anchor.height)
-        } else {
-            val contentViewHeight = if (contentView.height == 0) {
-                contentView.getMeasurements().second
-            } else {
-                contentView.height
-            }
-            showAtLocation(anchor, Gravity.NO_GRAVITY, 0, anchorCoordinates[1] - contentViewHeight)
-        }
+        showAtLocation(anchor, Gravity.NO_GRAVITY, 0, anchorCoordinates[1])
+
         contentView.doOnNextLayout {
             animateWindowInCircular(anchor, contentView)
         }
-        animateButtonIn(views.attachmentGalleryButton, ANIMATION_DURATION / 2)
-        animateButtonIn(views.attachmentCameraButton, ANIMATION_DURATION / 4)
-        animateButtonIn(views.attachmentFileButton, ANIMATION_DURATION / 2)
-        animateButtonIn(views.attachmentAudioButton, 0)
-        animateButtonIn(views.attachmentContactButton, ANIMATION_DURATION / 4)
-        animateButtonIn(views.attachmentStickersButton, ANIMATION_DURATION / 2)
-        animateButtonIn(views.attachmentPollButton, ANIMATION_DURATION / 4)
     }
 
     override fun dismiss() {
+        animateClose()
+
         val capturedAnchor = anchor
         if (capturedAnchor != null) {
             animateWindowOutCircular(capturedAnchor, contentView)
@@ -121,14 +123,18 @@ class AttachmentTypeSelectorView(context: Context,
         }
     }
 
-    private fun animateButtonIn(button: View, delay: Int) {
-        val animation = AnimationSet(true)
-        val scale = ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.0f)
-        animation.addAnimation(scale)
-        animation.interpolator = OvershootInterpolator(1f)
-        animation.duration = ANIMATION_DURATION.toLong()
-        animation.startOffset = delay.toLong()
-        button.startAnimation(animation)
+    fun setAttachmentVisibility(type: Type, isVisible: Boolean) {
+        when (type) {
+            Type.CAMERA   -> views.attachmentCameraButton
+            Type.GALLERY  -> views.attachmentGalleryButton
+            Type.FILE     -> views.attachmentFileButton
+            Type.STICKER  -> views.attachmentStickersButton
+            Type.CONTACT  -> views.attachmentContactButton
+            Type.POLL     -> views.attachmentPollButton
+            Type.LOCATION -> views.attachmentLocationButton
+        }.let {
+            it.isVisible = isVisible
+        }
     }
 
     private fun animateWindowInCircular(anchor: View, contentView: View) {
@@ -140,12 +146,6 @@ class AttachmentTypeSelectorView(context: Context,
                 max(contentView.width, contentView.height).toFloat())
         animator.duration = ANIMATION_DURATION.toLong()
         animator.start()
-    }
-
-    private fun animateWindowInTranslate(contentView: View) {
-        val animation = TranslateAnimation(0f, 0f, contentView.height.toFloat(), 0f)
-        animation.duration = ANIMATION_DURATION.toLong()
-        getContentView().startAnimation(animation)
     }
 
     private fun animateWindowOutCircular(anchor: View, contentView: View) {
@@ -192,8 +192,8 @@ class AttachmentTypeSelectorView(context: Context,
     }
 
     private fun ImageButton.configure(type: Type): ImageButton {
-        this.background = TextDrawable.builder().buildRound("", iconColorGenerator.getColor(type.ordinal))
         this.setOnClickListener(TypeClickListener(type))
+        TooltipCompat.setTooltipText(this, context.getString(type.tooltipRes))
         return this
     }
 
@@ -206,15 +206,15 @@ class AttachmentTypeSelectorView(context: Context,
     }
 
     /**
-     * The all possible types to pick with their required permissions.
+     * The all possible types to pick with their required permissions and tooltip resource
      */
-    enum class Type(val permissions: List<String>) {
-        CAMERA(PERMISSIONS_FOR_TAKING_PHOTO),
-        GALLERY(PERMISSIONS_EMPTY),
-        FILE(PERMISSIONS_EMPTY),
-        STICKER(PERMISSIONS_EMPTY),
-        AUDIO(PERMISSIONS_EMPTY),
-        CONTACT(PERMISSIONS_FOR_PICKING_CONTACT),
-        POLL(PERMISSIONS_EMPTY)
+    enum class Type(val permissions: List<String>, @StringRes val tooltipRes: Int) {
+        CAMERA(PERMISSIONS_FOR_TAKING_PHOTO, R.string.tooltip_attachment_photo),
+        GALLERY(PERMISSIONS_EMPTY, R.string.tooltip_attachment_gallery),
+        FILE(PERMISSIONS_EMPTY, R.string.tooltip_attachment_file),
+        STICKER(PERMISSIONS_EMPTY, R.string.tooltip_attachment_sticker),
+        CONTACT(PERMISSIONS_FOR_PICKING_CONTACT, R.string.tooltip_attachment_contact),
+        POLL(PERMISSIONS_EMPTY, R.string.tooltip_attachment_poll),
+        LOCATION(PERMISSIONS_FOR_LOCATION_SHARING, R.string.tooltip_attachment_location)
     }
 }

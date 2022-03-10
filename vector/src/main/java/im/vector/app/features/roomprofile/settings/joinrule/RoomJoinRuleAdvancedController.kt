@@ -25,6 +25,7 @@ import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedState
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import timber.log.Timber
 import javax.inject.Inject
@@ -49,7 +50,7 @@ class RoomJoinRuleAdvancedController @Inject constructor(
 
         genericFooterItem {
             id("header")
-            text(host.stringProvider.getString(R.string.room_settings_room_access_title))
+            text(host.stringProvider.getString(R.string.room_settings_room_access_title).toEpoxyCharSequence())
             centered(false)
             style(ItemStyle.TITLE)
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
@@ -57,7 +58,7 @@ class RoomJoinRuleAdvancedController @Inject constructor(
 
         genericFooterItem {
             id("desc")
-            text(host.stringProvider.getString(R.string.decide_who_can_find_and_join))
+            text(host.stringProvider.getString(R.string.decide_who_can_find_and_join).toEpoxyCharSequence())
             centered(false)
         }
 

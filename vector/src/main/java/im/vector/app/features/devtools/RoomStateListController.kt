@@ -22,6 +22,7 @@ import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.json.JSONObject
 import javax.inject.Inject
@@ -36,7 +37,7 @@ class RoomStateListController @Inject constructor(
     override fun buildModels(data: RoomDevToolViewState?) {
         val host = this
         when (data?.displayMode) {
-            RoomDevToolViewState.Mode.StateEventList -> {
+            RoomDevToolViewState.Mode.StateEventList       -> {
                 val stateEventsGroups = data.stateEvents.invoke().orEmpty().groupBy { it.getClearType() }
 
                 if (stateEventsGroups.isEmpty()) {
@@ -48,8 +49,8 @@ class RoomStateListController @Inject constructor(
                     stateEventsGroups.forEach { entry ->
                         genericItem {
                             id(entry.key)
-                            title(entry.key)
-                            description(host.stringProvider.getQuantityString(R.plurals.entries, entry.value.size, entry.value.size))
+                            title(entry.key.toEpoxyCharSequence())
+                            description(host.stringProvider.getQuantityString(R.plurals.entries, entry.value.size, entry.value.size).toEpoxyCharSequence())
                             itemClickAction {
                                 host.interactionListener?.processAction(RoomDevToolAction.ShowStateEventType(entry.key))
                             }
@@ -88,8 +89,8 @@ class RoomStateListController @Inject constructor(
                                     text = stateEvent.stateKey.let { "\"$it\"" }
                                     textStyle = "normal"
                                 }
-                            })
-                            description(contentJson)
+                            }.toEpoxyCharSequence())
+                            description(contentJson.toEpoxyCharSequence())
                             itemClickAction {
                                 host.interactionListener?.processAction(RoomDevToolAction.ShowStateEvent(stateEvent))
                             }

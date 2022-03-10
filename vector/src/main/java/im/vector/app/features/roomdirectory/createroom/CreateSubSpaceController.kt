@@ -28,6 +28,7 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableSquareAvatarItem
 import im.vector.app.features.form.formMultiLineEditTextItem
 import im.vector.app.features.form.formSubmitButtonItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.MatrixConstants
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
@@ -52,7 +53,7 @@ class CreateSubSpaceController @Inject constructor(
             id("beta")
             imageRes(R.drawable.ic_beta_pill)
             tintIcon(false)
-            text(host.stringProvider.getString(R.string.space_add_space_to_any_space_you_manage))
+            text(host.stringProvider.getString(R.string.space_add_space_to_any_space_you_manage).toEpoxyCharSequence())
         }
 
         formEditableSquareAvatarItem {

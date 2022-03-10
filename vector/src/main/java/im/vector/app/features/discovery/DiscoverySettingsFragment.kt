@@ -153,7 +153,7 @@ class DiscoverySettingsFragment @Inject constructor(
                     .setTitle(R.string.change_identity_server)
                     .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
                     .setPositiveButton(R.string._continue) { _, _ -> navigateToChangeIdentityServerFragment() }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
             Unit
         } else {
@@ -167,17 +167,18 @@ class DiscoverySettingsFragment @Inject constructor(
             val pidList = state.emailList().orEmpty() + state.phoneNumbersList().orEmpty()
             val hasBoundIds = pidList.any { it.isShared() == SharedState.SHARED }
 
+            val serverUrl = state.identityServer()?.serverUrl.orEmpty()
             val message = if (hasBoundIds) {
-                getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer())
+                getString(R.string.settings_discovery_disconnect_with_bound_pid, serverUrl, serverUrl)
             } else {
-                getString(R.string.disconnect_identity_server_dialog_content, state.identityServer())
+                getString(R.string.disconnect_identity_server_dialog_content, serverUrl)
             }
 
             MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.disconnect_identity_server)
                     .setMessage(message)
-                    .setPositiveButton(R.string.disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setPositiveButton(R.string.action_disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         }
     }
@@ -186,8 +187,7 @@ class DiscoverySettingsFragment @Inject constructor(
         if (newValue) {
             withState(viewModel) { state ->
                 requireContext().showIdentityServerConsentDialog(
-                        state.identityServer.invoke()?.serverUrl,
-                        policyLinkCallback = { viewModel.handle(DiscoverySettingsAction.SetPoliciesExpandState(expanded = true)) },
+                        state.identityServer.invoke(),
                         consentCallBack = { viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true)) }
                 )
             }
@@ -204,7 +204,7 @@ class DiscoverySettingsFragment @Inject constructor(
         viewModel.handle(DiscoverySettingsAction.SetPoliciesExpandState(expanded = newExpandedState))
     }
 
-    override fun onPolicyTapped(policy: IdentityServerPolicy) {
+    override fun onPolicyTapped(policy: ServerPolicy) {
         openUrlInChromeCustomTab(requireContext(), null, policy.url)
     }
 

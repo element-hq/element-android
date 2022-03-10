@@ -34,6 +34,7 @@ import im.vector.app.core.ui.list.genericEmptyWithActionItem
 import im.vector.app.core.ui.list.genericPillItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.spaceChildInfoItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError.Companion.M_UNRECOGNIZED
@@ -87,7 +88,7 @@ class SpaceDirectoryController @Inject constructor(
                                 span(host.stringProvider.getString(R.string.spaces_no_server_support_description)) {
                                     textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 }
-                            }
+                            }.toEpoxyCharSequence()
                     )
                 }
             } else {
@@ -155,7 +156,7 @@ class SpaceDirectoryController @Inject constructor(
                                 when {
                                     error != null -> host.stringProvider.getString(R.string.global_retry)
                                     isJoined      -> host.stringProvider.getString(R.string.action_open)
-                                    else          -> host.stringProvider.getString(R.string.join)
+                                    else          -> host.stringProvider.getString(R.string.action_join)
                                 }
                         )
                         apply {

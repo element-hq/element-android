@@ -54,7 +54,7 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
         if (isFirstCreation()) {
-            replaceFragment(R.id.container, KeysBackupSetupStep1Fragment::class.java)
+            replaceFragment(views.container, KeysBackupSetupStep1Fragment::class.java)
         }
 
         viewModel = viewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
@@ -80,11 +80,11 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             when (uxStateEvent) {
                 KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2      -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    replaceFragment(R.id.container, KeysBackupSetupStep2Fragment::class.java)
+                    replaceFragment(views.container, KeysBackupSetupStep2Fragment::class.java)
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3      -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    replaceFragment(R.id.container, KeysBackupSetupStep3Fragment::class.java)
+                    replaceFragment(views.container, KeysBackupSetupStep3Fragment::class.java)
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_FINISH         -> {
                     val resultIntent = Intent()
@@ -177,8 +177,8 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.keys_backup_setup_skip_title)
                     .setMessage(R.string.keys_backup_setup_skip_msg)
-                    .setNegativeButton(R.string.cancel, null)
-                    .setPositiveButton(R.string.leave) { _, _ ->
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .setPositiveButton(R.string.action_leave) { _, _ ->
                         finish()
                     }
                     .show()

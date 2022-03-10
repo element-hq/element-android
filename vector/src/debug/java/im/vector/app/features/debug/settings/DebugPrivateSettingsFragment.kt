@@ -43,9 +43,13 @@ class DebugPrivateSettingsFragment : VectorBaseFragment<FragmentDebugPrivateSett
         views.forceDialPadTabDisplay.setOnCheckedChangeListener { _, isChecked ->
             viewModel.handle(DebugPrivateSettingsViewActions.SetDialPadVisibility(isChecked))
         }
+        views.forceLoginFallback.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.handle(DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled(isChecked))
+        }
     }
 
     override fun invalidate() = withState(viewModel) {
         views.forceDialPadTabDisplay.isChecked = it.dialPadVisible
+        views.forceLoginFallback.isChecked = it.forceLoginFallback
     }
 }

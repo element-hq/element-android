@@ -29,7 +29,7 @@ import java.io.File
  * Transient events for RoomDetail
  */
 sealed class RoomDetailViewEvents : VectorViewEvents {
-    data class Failure(val throwable: Throwable) : RoomDetailViewEvents()
+    data class Failure(val throwable: Throwable, val showInDialog: Boolean = false) : RoomDetailViewEvents()
     data class OnNewTimelineEvents(val eventIds: List<String>) : RoomDetailViewEvents()
 
     data class ActionSuccess(val action: RoomDetailAction) : RoomDetailViewEvents()
@@ -48,6 +48,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     object OpenInvitePeople : RoomDetailViewEvents()
     object OpenSetRoomAvatarDialog : RoomDetailViewEvents()
     object OpenRoomSettings : RoomDetailViewEvents()
+    object OpenRoomProfile : RoomDetailViewEvents()
     data class ShowRoomAvatarFullScreen(val matrixItem: MatrixItem?, val view: View?) : RoomDetailViewEvents()
 
     object ShowWaitingView : RoomDetailViewEvents()
