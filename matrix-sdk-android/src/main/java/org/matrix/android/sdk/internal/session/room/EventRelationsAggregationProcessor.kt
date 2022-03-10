@@ -385,7 +385,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 }
 
         val closedTime = existingPollSummary?.closedTime
-        if (closedTime != null) {
+        if (closedTime != null && eventTimestamp > closedTime) {
             Timber.v("## POLL is closed ignore event poll:$targetEventId, event :${event.eventId}")
             return
         }
@@ -499,6 +499,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
 
         val txId = event.unsignedData?.transactionId
+        existingPollSummary.closedTime = event.originServerTs
+
         // is it a remote echo?
         if (!isLocalEcho && existingPollSummary.sourceLocalEchoEvents.contains(txId)) {
             // ok it has already been managed
@@ -507,8 +509,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             existingPollSummary.sourceEvents.add(event.eventId)
             return
         }
-
-        existingPollSummary.closedTime = event.originServerTs
     }
 
     private fun getPollEvent(roomId: String, eventId: String): TimelineEvent? {
