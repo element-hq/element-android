@@ -85,7 +85,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         }
     }
 
-    private fun isPollActive(optionViewState: PollOptionViewState) = true // TODO: Revert (true for debugging)
+    private fun isPollActive(optionViewState: PollOptionViewState) = optionViewState.let { true } // TODO: Revert (true for debugging)
 //    private fun isPollActive(optionViewState: PollOptionViewState) = optionViewState !is PollOptionViewState.PollEnded
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
