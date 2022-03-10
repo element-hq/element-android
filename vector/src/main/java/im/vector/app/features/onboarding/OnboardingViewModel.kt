@@ -159,7 +159,7 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is OnboardingAction.UpdateDisplayName          -> updateDisplayName(action.displayName)
             OnboardingAction.UpdateDisplayNameSkipped      -> handleDisplayNameStepComplete()
-            OnboardingAction.UpdateProfilePictureSkipped   -> _viewEvents.post(OnboardingViewEvents.OnPersonalizationComplete)
+            OnboardingAction.UpdateProfilePictureSkipped   -> completePersonalization()
             OnboardingAction.PersonalizeProfile            -> handlePersonalizeProfile()
             is OnboardingAction.ProfilePictureSelected     -> handleProfilePictureSelected(action)
             OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
@@ -954,7 +954,7 @@ class OnboardingViewModel @AssistedInject constructor(
         withPersonalisationState {
             when {
                 it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
-                else                              -> _viewEvents.post(OnboardingViewEvents.OnPersonalizationComplete)
+                else                              -> completePersonalization()
             }
         }
     }
@@ -1000,6 +1000,10 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun onProfilePictureSaved() {
+        completePersonalization()
+    }
+
+    private fun completePersonalization() {
         _viewEvents.post(OnboardingViewEvents.OnPersonalizationComplete)
     }
 }
