@@ -332,7 +332,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                 .findAll()
         cacheEventRootId.add(rootThreadEventId)
         return threadList.filter {
-            it.asDomain().getRelationContentForType(RelationType.IO_THREAD)?.inReplyTo?.eventId == currentEventId
+            it.asDomain().getRelationContentForType(RelationType.THREAD)?.inReplyTo?.eventId == currentEventId
         }
     }
 
@@ -350,7 +350,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * @param event
      */
     private fun isThreadEvent(event: Event): Boolean =
-            event.content.toModel<MessageRelationContent>()?.relatesTo?.type == RelationType.IO_THREAD
+            event.content.toModel<MessageRelationContent>()?.relatesTo?.type == RelationType.THREAD
 
     /**
      * Returns the root thread eventId or null otherwise

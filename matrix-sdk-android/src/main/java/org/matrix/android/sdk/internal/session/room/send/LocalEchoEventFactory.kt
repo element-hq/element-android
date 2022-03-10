@@ -353,7 +353,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 url = attachment.queryUri.toString(),
                 relatesTo = rootThreadEventId?.let {
                     RelationDefaultContent(
-                            type = RelationType.IO_THREAD,
+                            type = RelationType.THREAD,
                             eventId = it,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
@@ -396,7 +396,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 url = attachment.queryUri.toString(),
                 relatesTo = rootThreadEventId?.let {
                     RelationDefaultContent(
-                            type = RelationType.IO_THREAD,
+                            type = RelationType.THREAD,
                             eventId = it,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
@@ -426,7 +426,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap(),
                 relatesTo = rootThreadEventId?.let {
                     RelationDefaultContent(
-                            type = RelationType.IO_THREAD,
+                            type = RelationType.THREAD,
                             eventId = it,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
@@ -446,7 +446,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 url = attachment.queryUri.toString(),
                 relatesTo = rootThreadEventId?.let {
                     RelationDefaultContent(
-                            type = RelationType.IO_THREAD,
+                            type = RelationType.THREAD,
                             eventId = it,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
@@ -479,7 +479,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     private fun enhanceStickerIfNeeded(type: String, content: Content?): Content? {
         var newContent: Content? = null
         if (type == EventType.STICKER) {
-            val isThread = (content.toModel<MessageStickerContent>())?.relatesTo?.type == RelationType.IO_THREAD
+            val isThread = (content.toModel<MessageStickerContent>())?.relatesTo?.type == RelationType.THREAD
             val rootThreadEventId = (content.toModel<MessageStickerContent>())?.relatesTo?.eventId
             if (isThread && rootThreadEventId != null) {
                 val newRelationalDefaultContent = (content.toModel<MessageStickerContent>())?.relatesTo?.copy(
@@ -579,7 +579,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     private fun generateReplyRelationContent(eventId: String, rootThreadEventId: String? = null, showAsReply: Boolean): RelationDefaultContent =
             rootThreadEventId?.let {
                 RelationDefaultContent(
-                        type = RelationType.IO_THREAD,
+                        type = RelationType.THREAD,
                         eventId = it,
                         inReplyTo = ReplyToContent(eventId = eventId, renderIn = if (showAsReply) arrayListOf("m.thread") else null))
             } ?: RelationDefaultContent(null, null, ReplyToContent(eventId = eventId))

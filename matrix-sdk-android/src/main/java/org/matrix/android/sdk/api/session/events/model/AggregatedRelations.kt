@@ -50,5 +50,5 @@ import com.squareup.moshi.JsonClass
 data class AggregatedRelations(
         @Json(name = "m.annotation") val annotations: AggregatedAnnotation? = null,
         @Json(name = "m.reference") val references: DefaultUnsignedRelationInfo? = null,
-        @Json(name = RelationType.IO_THREAD) val latestThread: LatestThreadUnsignedRelation? = null
+        @Json(name = RelationType.THREAD) val latestThread: LatestThreadUnsignedRelation? = null
 )

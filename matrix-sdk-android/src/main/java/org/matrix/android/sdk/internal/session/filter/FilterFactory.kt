@@ -28,7 +28,7 @@ internal object FilterFactory {
                 limit = numberOfEvents,
 //                senders = listOf(userId),
 //                relationSenders = userId?.let { listOf(it) },
-                relationTypes = listOf(RelationType.IO_THREAD)
+                relationTypes = listOf(RelationType.THREAD)
         )
     }
 

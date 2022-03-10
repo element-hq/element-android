@@ -239,7 +239,7 @@ internal interface RoomAPI {
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/relations/{eventId}/{relationType}")
     suspend fun getThreadsRelations(@Path("roomId") roomId: String,
                                     @Path("eventId") eventId: String,
-                                    @Path("relationType") relationType: String = RelationType.IO_THREAD,
+                                    @Path("relationType") relationType: String = RelationType.THREAD,
                                     @Query("from") from: String? = null,
                                     @Query("to") to: String? = null,
                                     @Query("limit") limit: Int? = null

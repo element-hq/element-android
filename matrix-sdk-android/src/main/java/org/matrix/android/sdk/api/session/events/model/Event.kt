@@ -392,9 +392,9 @@ fun Event.isReplyRenderedInThread(): Boolean {
     return isReply() && getRelationContent()?.inReplyTo?.shouldRenderInThread() == true
 }
 
-fun Event.isThread(): Boolean = getRelationContentForType(RelationType.IO_THREAD)?.eventId != null
+fun Event.isThread(): Boolean = getRelationContentForType(RelationType.THREAD)?.eventId != null
 
-fun Event.getRootThreadEventId(): String? = getRelationContentForType(RelationType.IO_THREAD)?.eventId
+fun Event.getRootThreadEventId(): String? = getRelationContentForType(RelationType.THREAD)?.eventId
 
 fun Event.isEdition(): Boolean {
     return getRelationContentForType(RelationType.REPLACE)?.eventId != null
