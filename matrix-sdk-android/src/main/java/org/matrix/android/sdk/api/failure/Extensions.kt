@@ -58,6 +58,11 @@ fun Throwable.getRetryDelay(defaultValue: Long): Long {
             ?: defaultValue
 }
 
+fun Throwable.isInvalidUsername(): Boolean {
+    return this is Failure.ServerError &&
+            error.code == MatrixError.M_INVALID_USERNAME
+}
+
 fun Throwable.isInvalidPassword(): Boolean {
     return this is Failure.ServerError &&
             error.code == MatrixError.M_FORBIDDEN &&
@@ -67,6 +72,16 @@ fun Throwable.isInvalidPassword(): Boolean {
 fun Throwable.isRegistrationDisabled(): Boolean {
     return this is Failure.ServerError && error.code == MatrixError.M_FORBIDDEN &&
             httpCode == HttpsURLConnection.HTTP_FORBIDDEN
+}
+
+fun Throwable.isWeakPassword(): Boolean {
+    return this is Failure.ServerError && error.code == MatrixError.M_WEAK_PASSWORD
+}
+
+fun Throwable.isLoginEmailUnknown(): Boolean {
+    return this is Failure.ServerError &&
+            error.code == MatrixError.M_FORBIDDEN &&
+            error.message.isEmpty()
 }
 
 fun Throwable.isInvalidUIAAuth(): Boolean {
