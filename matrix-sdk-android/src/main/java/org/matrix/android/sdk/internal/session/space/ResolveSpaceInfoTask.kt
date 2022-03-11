@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.space
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
+import retrofit2.HttpException
 import javax.inject.Inject
 
 internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, SpacesResponse> {
@@ -28,7 +29,6 @@ internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, Spac
             val maxDepth: Int?,
             val from: String?,
             val suggestedOnly: Boolean?
-//            val autoJoinOnly: Boolean?
     )
 }
 
@@ -36,14 +36,30 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
         private val spaceApi: SpaceApi,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : ResolveSpaceInfoTask {
-    override suspend fun execute(params: ResolveSpaceInfoTask.Params): SpacesResponse {
-        return executeRequest(globalErrorReceiver) {
+
+    override suspend fun execute(params: ResolveSpaceInfoTask.Params) = executeRequest(globalErrorReceiver) {
+        try {
+            getSpaceHierarchy(params)
+        } catch (e: HttpException) {
+            getUnstableSpaceHierarchy(params)
+        }
+    }
+
+    private suspend fun getSpaceHierarchy(params: ResolveSpaceInfoTask.Params) =
             spaceApi.getSpaceHierarchy(
                     spaceId = params.spaceId,
                     suggestedOnly = params.suggestedOnly,
                     limit = params.limit,
                     maxDepth = params.maxDepth,
-                    from = params.from)
-        }
-    }
+                    from = params.from,
+            )
+
+    private suspend fun getUnstableSpaceHierarchy(params: ResolveSpaceInfoTask.Params) =
+            spaceApi.getSpaceHierarchyUnstable(
+                    spaceId = params.spaceId,
+                    suggestedOnly = params.suggestedOnly,
+                    limit = params.limit,
+                    maxDepth = params.maxDepth,
+                    from = params.from,
+            )
 }
