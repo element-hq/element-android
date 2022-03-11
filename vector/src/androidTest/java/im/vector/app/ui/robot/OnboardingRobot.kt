@@ -30,7 +30,6 @@ import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writ
 import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.waitForView
-import kotlinx.coroutines.delay
 
 class OnboardingRobot {
 
