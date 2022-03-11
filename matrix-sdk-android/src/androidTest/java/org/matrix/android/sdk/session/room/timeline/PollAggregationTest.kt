@@ -19,6 +19,7 @@ package org.matrix.android.sdk.session.room.timeline
 import org.amshove.kluent.fail
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldContainAll
 import org.junit.FixMethodOrder
@@ -62,7 +63,7 @@ class PollAggregationTest : InstrumentedTest {
         val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
-        val TOTAL_TEST_COUNT = 5
+        val TOTAL_TEST_COUNT = 6
         val lock = CountDownLatch(TOTAL_TEST_COUNT)
 
         val aliceEventsListener = object : Timeline.Listener {
@@ -101,6 +102,11 @@ class PollAggregationTest : InstrumentedTest {
                         }
                         TOTAL_TEST_COUNT - 4 -> {
                             testAliceVotesOption1AndBobVotesOption2(pollContent, pollSummary)
+                            lock.countDown()
+                            roomFromBobPOV.endPoll(pollEventId)
+                        }
+                        TOTAL_TEST_COUNT - 5 -> {
+                            testEndedPoll(pollSummary)
                             lock.countDown()
                         }
                         else                 -> {
@@ -197,6 +203,10 @@ class PollAggregationTest : InstrumentedTest {
             aggregatedContent.votesSummary?.get(firstAnswerId)?.percentage shouldBeEqualTo 0.5
             aggregatedContent.votesSummary?.get(secondAnswerId)?.percentage shouldBeEqualTo 0.5
         } ?: run { fail("Aggregated poll content shouldn't be null after someone votes") }
+    }
+
+    private fun testEndedPoll(pollSummary: PollResponseAggregatedSummary?) {
+        pollSummary?.closedTime ?: 0 shouldBeGreaterThan 0
     }
 
     private fun assertTotalVotesCount(aggregatedContent: PollSummaryContent, expectedVoteCount: Int) {
