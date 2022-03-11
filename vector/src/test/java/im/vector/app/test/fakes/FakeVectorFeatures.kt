@@ -16,12 +16,7 @@
 
 package im.vector.app.test.fakes
 
+import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.VectorFeatures
 
-class FakeVectorFeatures : VectorFeatures {
-    override fun onboardingVariant() = VectorFeatures.OnboardingVariant.FTUE_AUTH
-    override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
-    override fun isOnboardingSplashCarouselEnabled() = true
-    override fun isOnboardingUseCaseEnabled() = true
-    override fun isOnboardingPersonalizeEnabled() = true
-}
+class FakeVectorFeatures : VectorFeatures by DefaultVectorFeatures()
