@@ -1079,7 +1079,7 @@
     <string name="login_splash_text3">Erweitere und individualisiere dein Benutzererlebnis</string>
     <string name="login_connect_to">Mit %1$s verbinden</string>
     <string name="login_connect_to_modular">Mit Element Matrix Services verbinden</string>
-    <string name="login_connect_to_a_custom_server">Mit einem individuellen Server verbinden</string>
+    <string name="login_connect_to_a_custom_server">Mit einem anderen Server verbinden</string>
     <string name="login_signin_to">Bei %1$s anmelden</string>
     <string name="login_signup">Registrieren</string>
     <string name="login_signin">Anmelden</string>
