@@ -2279,7 +2279,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="shortcut_disabled_reason_room_left">Elhagytad a szobát!</string>
     <string name="identity_server_consent_dialog_content_3">A meglévő kapcsolatok felderítéséhez információkat (e-mail cím és telefonszám) kell elküldeni az azonosítási szolgáltatónak. Az adatok az adatvédelem miatt hashelve lesznek elküldve.</string>
     <string name="identity_server_consent_dialog_content_question">Beleegyezel az információk elküldésébe\?</string>
-    <string name="action_not_now">Nem most</string>
+    <string name="action_not_now">Ne most</string>
     <string name="action_enable">Engedélyezés</string>
     <string name="delete_poll_dialog_content">Biztosan törlöd ezt a szavazást\? Ezt a műveletet később nem lehet visszavonni.</string>
     <string name="delete_poll_dialog_title">Szavazás törlése</string>
