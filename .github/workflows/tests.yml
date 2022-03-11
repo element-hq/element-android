@@ -79,6 +79,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
           matrix_room_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
-          text_template: "Build is broken for ${{ github.ref }} 🎊: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
-          html_template: "Build is broken for ${{ github.ref }} 🎊: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion }}{{name}} <font color='{{color conclusion }}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"
+          text_template: "Build is broken for ${{ github.ref }}: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
+          html_template: "Build is broken for ${{ github.ref }}: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion }}{{name}} <font color='{{color conclusion }}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"
 
