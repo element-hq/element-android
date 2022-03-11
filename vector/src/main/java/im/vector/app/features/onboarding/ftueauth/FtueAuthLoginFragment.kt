@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
 import org.matrix.android.sdk.api.failure.isRegistrationDisabled
+import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
@@ -260,26 +261,26 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         // Trick to display the error without text.
         views.loginFieldTil.error = " "
         when {
-            throwable.isInvalidUsername()                               -> {
+            throwable.isUsernameInUse() || throwable.isInvalidUsername() -> {
                 views.loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isLoginEmailUnknown()                             -> {
+            throwable.isLoginEmailUnknown()                              -> {
                 views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
             }
-            throwable.isInvalidPassword() && spaceInPassword()          -> {
+            throwable.isInvalidPassword() && spaceInPassword()           -> {
                 views.passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
             }
-            throwable.isWeakPassword() || throwable.isInvalidPassword() -> {
+            throwable.isWeakPassword() || throwable.isInvalidPassword()  -> {
                 views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isRegistrationDisabled()                          -> {
+            throwable.isRegistrationDisabled()                           -> {
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.dialog_title_error)
                         .setMessage(getString(R.string.login_registration_disabled))
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            else                                                        -> {
+            else                                                         -> {
                 super.onError(throwable)
             }
         }

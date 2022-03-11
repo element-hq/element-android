@@ -58,6 +58,10 @@ fun Throwable.getRetryDelay(defaultValue: Long): Long {
             ?: defaultValue
 }
 
+fun Throwable.isUsernameInUse(): Boolean {
+    return this is Failure.ServerError && error.code == MatrixError.M_USER_IN_USE
+}
+
 fun Throwable.isInvalidUsername(): Boolean {
     return this is Failure.ServerError &&
             error.code == MatrixError.M_INVALID_USERNAME
