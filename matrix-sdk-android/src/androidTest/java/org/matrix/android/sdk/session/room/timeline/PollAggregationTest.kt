@@ -191,7 +191,7 @@ class PollAggregationTest : InstrumentedTest {
         pollSummary.aggregatedContent?.let { aggregatedContent ->
             assertTotalVotesCount(aggregatedContent, 2)
             aggregatedContent.votes!!.map { it.option } shouldContain firstAnswerId
-            aggregatedContent.votes!!.map { it.option } shouldBeEqualTo secondAnswerId
+            aggregatedContent.votes!!.map { it.option } shouldContain secondAnswerId
             aggregatedContent.votesSummary?.get(firstAnswerId)?.total shouldBeEqualTo 1
             aggregatedContent.votesSummary?.get(secondAnswerId)?.total shouldBeEqualTo 1
             aggregatedContent.votesSummary?.get(firstAnswerId)?.percentage shouldBeEqualTo 0.5
