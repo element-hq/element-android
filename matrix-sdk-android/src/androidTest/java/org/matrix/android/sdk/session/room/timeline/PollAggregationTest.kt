@@ -63,7 +63,7 @@ class PollAggregationTest : InstrumentedTest {
         val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
-        val TOTAL_TEST_COUNT = 6
+        val TOTAL_TEST_COUNT = 7
         val lock = CountDownLatch(TOTAL_TEST_COUNT)
 
         val aliceEventsListener = object : Timeline.Listener {
@@ -86,26 +86,38 @@ class PollAggregationTest : InstrumentedTest {
                             roomFromBobPOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.firstOrNull()?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 1 -> {
+                            // Bob: Option 1
                             testBobVotesOption1(pollContent, pollSummary)
                             lock.countDown()
                             roomFromBobPOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.get(1)?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 2 -> {
+                            // Bob: Option 2
                             testBobChangesVoteToOption2(pollContent, pollSummary)
                             lock.countDown()
                             roomFromAlicePOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.get(1)?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 3 -> {
+                            // Alice: Option 2, Bob: Option 2
                             testAliceAndBobVoteToOption2(pollContent, pollSummary)
                             lock.countDown()
                             roomFromAlicePOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.firstOrNull()?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 4 -> {
+                            // Alice: Option 1, Bob: Option 2
                             testAliceVotesOption1AndBobVotesOption2(pollContent, pollSummary)
                             lock.countDown()
                             roomFromBobPOV.endPoll(pollEventId)
                         }
                         TOTAL_TEST_COUNT - 5 -> {
+                            // Alice: Option 1, Bob: Option 2 [poll is ended]
+                            testEndedPoll(pollSummary)
+                            lock.countDown()
+                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.get(1)?.id ?: "")
+                        }
+                        TOTAL_TEST_COUNT - 6 -> {
+                            // Alice: Option 1 (ignore change), Bob: Option 2 [poll is ended]
+                            testAliceVotesOption1AndBobVotesOption2(pollContent, pollSummary)
                             testEndedPoll(pollSummary)
                             lock.countDown()
                         }
