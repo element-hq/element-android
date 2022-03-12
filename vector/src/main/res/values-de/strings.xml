@@ -1257,7 +1257,7 @@
     <string name="room_profile_section_more_leave">Raum verlassen</string>
     <string name="room_profile_leaving_room">Verlasse den Raum…</string>
     <string name="room_member_power_level_admins">Administratoren</string>
-    <string name="room_member_power_level_moderators">Moderationen</string>
+    <string name="room_member_power_level_moderators">Moderatoren</string>
     <string name="room_member_power_level_custom">Benutzerdefiniert</string>
     <string name="room_member_power_level_invites">Eingeladen</string>
     <string name="room_member_power_level_users">Nutzer</string>
