@@ -21,7 +21,6 @@ import org.amshove.kluent.shouldBe
 import org.junit.Assert
 import org.junit.Before
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -85,7 +84,6 @@ class UnwedgingTest : InstrumentedTest {
      * -> This is automatically fixed after SDKs restarted the olm session
      */
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun testUnwedging() {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
@@ -94,9 +92,7 @@ class UnwedgingTest : InstrumentedTest {
         val bobSession = cryptoTestData.secondSession!!
 
         val aliceCryptoStore = (aliceSession.cryptoService() as DefaultCryptoService).cryptoStoreForTesting
-
-        // bobSession.cryptoService().setWarnOnUnknownDevices(false)
-        // aliceSession.cryptoService().setWarnOnUnknownDevices(false)
+        val olmDevice = (aliceSession.cryptoService() as DefaultCryptoService).olmDeviceForTest
 
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
@@ -175,6 +171,7 @@ class UnwedgingTest : InstrumentedTest {
         Timber.i("## CRYPTO | testUnwedging: wedge the session now. Set crypto state like after the first message")
 
         aliceCryptoStore.storeSession(OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!), bobSession.cryptoService().getMyDevice().identityKey()!!)
+        olmDevice.clearOlmSessionCache()
         Thread.sleep(6_000)
 
         // Force new session, and key share
@@ -227,8 +224,10 @@ class UnwedgingTest : InstrumentedTest {
         testHelper.waitWithLatch {
             testHelper.retryPeriodicallyWithLatch(it) {
                 // we should get back the key and be able to decrypt
-                val result = tryOrNull {
-                    bobSession.cryptoService().decryptEvent(messagesReceivedByBob[0].root, "")
+                val result = testHelper.runBlockingTest {
+                    tryOrNull {
+                        bobSession.cryptoService().decryptEvent(messagesReceivedByBob[0].root, "")
+                    }
                 }
                 Timber.i("## CRYPTO | testUnwedging: decrypt result  ${result?.clearEvent}")
                 result != null

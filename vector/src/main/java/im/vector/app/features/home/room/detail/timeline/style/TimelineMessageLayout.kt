@@ -24,12 +24,14 @@ sealed interface TimelineMessageLayout : Parcelable {
     val layoutRes: Int
     val showAvatar: Boolean
     val showDisplayName: Boolean
+    val addTopMargin: Boolean
     val showTimestamp: Boolean
 
     @Parcelize
     data class Default(override val showAvatar: Boolean,
                        override val showDisplayName: Boolean,
                        override val showTimestamp: Boolean,
+                       override val addTopMargin: Boolean = false,
             // Keep defaultLayout generated on epoxy items
                        override val layoutRes: Int = 0) : TimelineMessageLayout
 
@@ -38,6 +40,7 @@ sealed interface TimelineMessageLayout : Parcelable {
             override val showAvatar: Boolean,
             override val showDisplayName: Boolean,
             override val showTimestamp: Boolean = true,
+            override val addTopMargin: Boolean = false,
             val isIncoming: Boolean,
             val isPseudoBubble: Boolean,
             val cornersRadius: CornersRadius,

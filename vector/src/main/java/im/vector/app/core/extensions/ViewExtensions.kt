@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -68,6 +69,15 @@ fun View.setAttributeTintedBackground(@DrawableRes drawableRes: Int, @AttrRes ti
     val drawable = ContextCompat.getDrawable(context, drawableRes)!!
     DrawableCompat.setTint(drawable, ThemeUtils.getColor(context, tint))
     background = drawable
+}
+
+fun View.tintBackground(@ColorInt tintColor: Int) {
+    val bkg = background?.let {
+        val backgroundDrawable = DrawableCompat.wrap(background)
+        DrawableCompat.setTint(backgroundDrawable, tintColor)
+        backgroundDrawable
+    }
+    background = bkg
 }
 
 fun ImageView.setAttributeTintedImageResource(@DrawableRes drawableRes: Int, @AttrRes tint: Int) {

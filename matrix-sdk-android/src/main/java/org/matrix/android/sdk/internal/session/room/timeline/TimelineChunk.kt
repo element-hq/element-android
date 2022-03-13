@@ -144,14 +144,14 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
 
         val offsetCount = count - loadFromStorage.numberOfEvents
 
-        return if (direction == Timeline.Direction.FORWARDS && isLastForward.get()) {
+        return if (offsetCount == 0) {
+            LoadMoreResult.SUCCESS
+        } else if (direction == Timeline.Direction.FORWARDS && isLastForward.get()) {
             LoadMoreResult.REACHED_END
         } else if (direction == Timeline.Direction.BACKWARDS && isLastBackward.get()) {
             LoadMoreResult.REACHED_END
         } else if (timelineSettings.isThreadTimeline() && loadFromStorage.threadReachedEnd) {
             LoadMoreResult.REACHED_END
-        } else if (offsetCount == 0) {
-            LoadMoreResult.SUCCESS
         } else {
             delegateLoadMore(fetchOnServerIfNeeded, offsetCount, direction)
         }
@@ -508,13 +508,18 @@ private fun RealmQuery<TimelineEventEntity>.offsets(
         count: Int,
         startDisplayIndex: Int
 ): RealmQuery<TimelineEventEntity> {
-    sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-    if (direction == Timeline.Direction.BACKWARDS) {
+    return if (direction == Timeline.Direction.BACKWARDS) {
         lessThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
+        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+        limit(count.toLong())
     } else {
         greaterThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
+        // We need to sort ascending first so limit works in the right direction
+        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+        limit(count.toLong())
+        // Result is expected to be sorted descending
+        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     }
-    return limit(count.toLong())
 }
 
 private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
