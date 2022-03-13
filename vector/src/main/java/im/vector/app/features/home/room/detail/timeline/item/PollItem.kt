@@ -39,7 +39,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     var eventId: String? = null
 
     @EpoxyAttribute
-    var pollSent: Boolean = false
+    var canVote: Boolean = false
 
     @EpoxyAttribute
     var totalVotesText: String? = null
@@ -80,12 +80,10 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     private fun onPollItemClick(optionViewState: PollOptionViewState) {
         val relatedEventId = eventId
 
-        if (isPollActive(optionViewState) && relatedEventId != null) {
+        if (canVote && relatedEventId != null) {
             callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, optionViewState.optionId))
         }
     }
-
-    private fun isPollActive(optionViewState: PollOptionViewState) = optionViewState !is PollOptionViewState.PollEnded
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val questionTextView by bind<TextView>(R.id.questionTextView)
