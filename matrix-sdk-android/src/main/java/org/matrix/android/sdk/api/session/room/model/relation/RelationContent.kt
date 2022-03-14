@@ -24,5 +24,9 @@ interface RelationContent {
     val eventId: String?
     val inReplyTo: ReplyToContent?
     val option: Int?
-    val isFallingBack: Boolean? // Thread fallback to differentiate replies within threads
+    /**
+     * This flag indicates that the message should be displayed in the main
+     * timeline as a reply if needed
+     */
+    val isFallingBack: Boolean?
 }

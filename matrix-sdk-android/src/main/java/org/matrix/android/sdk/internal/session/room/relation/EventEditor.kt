@@ -100,7 +100,7 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
                     eventReplied = originalTimelineEvent,
                     replyText = newBodyText,
                     autoMarkdown = false,
-                    showInThread = false    // Test that value
+                    showInThread = false
             )?.copy(
                     eventId = replyToEdit.eventId
             ) ?: return NoOpCancellable
