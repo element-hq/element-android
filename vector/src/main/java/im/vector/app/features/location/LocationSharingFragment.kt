@@ -50,6 +50,8 @@ class LocationSharingFragment @Inject constructor(
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
+    private val viewNavigator: ILocationSharingNavigator by lazy { LocationSharingNavigator(activity) }
+
     // Keep a ref to handle properly the onDestroy callback
     private var mapView: WeakReference<MapView>? = null
 
@@ -78,7 +80,7 @@ class LocationSharingFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
-                LocationSharingViewEvents.Close                     -> activity?.finish()
+                LocationSharingViewEvents.Close                     -> viewNavigator.quit()
                 is LocationSharingViewEvents.ZoomToUserLocation     -> handleZoomToUserLocationEvent(it)
             }.exhaustive
         }
@@ -138,8 +140,20 @@ class LocationSharingFragment @Inject constructor(
                 .setTitle(R.string.location_not_available_dialog_title)
                 .setMessage(R.string.location_not_available_dialog_content)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    activity?.finish()
+                    viewNavigator.quit()
                 }
+                .setCancelable(false)
+                .show()
+    }
+
+    private fun handleMissingBackgroundLocationPermission() {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.location_in_background_missing_permission_dialog_title)
+                .setMessage(R.string.location_in_background_missing_permission_dialog_content)
+                .setPositiveButton(R.string.settings) { _, _ ->
+                    viewNavigator.goToAppSettings()
+                }
+                .setNegativeButton(R.string.action_not_now, null)
                 .setCancelable(false)
                 .show()
     }
