@@ -2461,4 +2461,9 @@
     <string name="bootstrap_progress_generating_ssss_recovery">Generovanie kľúča SSSS z kľúča pre obnovu</string>
     <string name="bootstrap_crosssigning_progress_default_key">Definovanie predvoleného kľúča SSSS</string>
     <string name="settings_developer_mode_fail_fast_title">Rýchle-zlyhanie</string>
+    <string name="call_transfer_consult_first">Najprv konzultovať</string>
+    <string name="pick_tings_to_leave">Vyberte si, čo opustíte</string>
+    <string name="command_description_leave_room">Opustiť miestnosť s daným id (alebo aktuálnu miestnosť, ak je prázdna)</string>
+    <string name="a11y_trust_level_warning">Varovná úroveň dôveryhodnosti</string>
+    <string name="call_transfer_connect_action">Pripojiť</string>
 </resources>
