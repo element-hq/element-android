@@ -48,6 +48,7 @@ import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -156,12 +157,13 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.ResetAction                -> handleResetAction(action)
             is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
-            is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
             is OnboardingAction.UpdateDisplayName          -> updateDisplayName(action.displayName)
-            OnboardingAction.UpdateDisplayNameSkipped      -> _viewEvents.post(OnboardingViewEvents.OnDisplayNameSkipped)
-            OnboardingAction.UpdateProfilePictureSkipped   -> _viewEvents.post(OnboardingViewEvents.OnPersonalizationComplete)
+            OnboardingAction.UpdateDisplayNameSkipped      -> handleDisplayNameStepComplete()
+            OnboardingAction.UpdateProfilePictureSkipped   -> completePersonalization()
+            OnboardingAction.PersonalizeProfile            -> handlePersonalizeProfile()
             is OnboardingAction.ProfilePictureSelected     -> handleProfilePictureSelected(action)
             OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
+            is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
     }
 
@@ -762,15 +764,33 @@ class OnboardingViewModel @AssistedInject constructor(
 
         authenticationService.reset()
         session.configureAndStart(applicationContext)
-        setState {
-            copy(
-                    asyncLoginAction = Success(Unit)
-            )
-        }
 
         when (isAccountCreated) {
-            true  -> _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
-            false -> _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
+            true  -> {
+                val personalizationState = createPersonalizationState(session, state)
+                setState {
+                    copy(asyncLoginAction = Success(Unit), personalizationState = personalizationState)
+                }
+                _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
+            }
+            false -> {
+                setState { copy(asyncLoginAction = Success(Unit)) }
+                _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
+            }
+        }
+    }
+
+    private suspend fun createPersonalizationState(session: Session, state: OnboardingViewState): PersonalizationState {
+        return when {
+            vectorFeatures.isOnboardingPersonalizeEnabled() -> {
+                val homeServerCapabilities = session.getHomeServerCapabilities()
+                val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities?.firstOrNull()
+                state.personalizationState.copy(
+                        supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
+                        supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
+                )
+            }
+            else                                            -> state.personalizationState
         }
     }
 
@@ -910,10 +930,31 @@ class OnboardingViewModel @AssistedInject constructor(
                             personalizationState = personalizationState.copy(displayName = displayName)
                     )
                 }
-                _viewEvents.post(OnboardingViewEvents.OnDisplayNameUpdated)
+                handleDisplayNameStepComplete()
             } catch (error: Throwable) {
                 setState { copy(asyncDisplayName = Fail(error)) }
                 _viewEvents.post(OnboardingViewEvents.Failure(error))
+            }
+        }
+    }
+
+    private fun handlePersonalizeProfile() {
+        withPersonalisationState {
+            when {
+                it.supportsChangingDisplayName    -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
+                it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
+                else                              -> {
+                    throw IllegalStateException("It should not be possible to personalize without supporting display name or avatar changing")
+                }
+            }
+        }
+    }
+
+    private fun handleDisplayNameStepComplete() {
+        withPersonalisationState {
+            when {
+                it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
+                else                              -> completePersonalization()
             }
         }
     }
@@ -922,6 +963,10 @@ class OnboardingViewModel @AssistedInject constructor(
         setState {
             copy(personalizationState = personalizationState.copy(selectedPictureUri = action.uri))
         }
+    }
+
+    private fun withPersonalisationState(block: (PersonalizationState) -> Unit) {
+        withState { block(it.personalizationState) }
     }
 
     private fun updateProfilePicture() {
@@ -955,6 +1000,10 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun onProfilePictureSaved() {
+        completePersonalization()
+    }
+
+    private fun completePersonalization() {
         _viewEvents.post(OnboardingViewEvents.OnPersonalizationComplete)
     }
 }

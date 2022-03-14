@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isInvisible
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -70,6 +71,8 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
     }
 
     override fun updateWithState(state: OnboardingViewState) {
+        views.profilePictureToolbar.isInvisible = !state.personalizationState.supportsChangingDisplayName
+
         val hasSetPicture = state.personalizationState.selectedPictureUri != null
         views.profilePictureSubmit.isEnabled = hasSetPicture
         views.changeProfilePictureIcon.setImageResource(if (hasSetPicture) R.drawable.ic_edit else R.drawable.ic_camera_plain)
@@ -92,5 +95,15 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
 
     override fun resetViewModel() {
         // Nothing to do
+    }
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        return when (withState(viewModel) { it.personalizationState.supportsChangingDisplayName }) {
+            true  -> super.onBackPressed(toolbarButton)
+            false -> {
+                viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome))
+                true
+            }
+        }
     }
 }

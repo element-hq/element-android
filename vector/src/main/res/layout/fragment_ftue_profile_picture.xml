@@ -31,6 +31,7 @@
             style="@style/Widget.Vector.Toolbar.Settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@id/profilePictureView"
             app:layout_constraintTop_toBottomOf="@id/profilePictureToolbar"
             app:layout_constraintTop_toTopOf="parent"

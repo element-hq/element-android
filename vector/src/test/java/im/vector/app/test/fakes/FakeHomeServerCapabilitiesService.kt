@@ -16,20 +16,14 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.core.di.ActiveSessionHolder
 import io.mockk.every
-import io.mockk.justRun
 import io.mockk.mockk
-import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 
-class FakeActiveSessionHolder(
-        private val fakeSession: FakeSession = FakeSession()
-) {
-    val instance = mockk<ActiveSessionHolder> {
-        every { getActiveSession() } returns fakeSession
-    }
+class FakeHomeServerCapabilitiesService : HomeServerCapabilitiesService by mockk() {
 
-    fun expectSetsActiveSession(session: Session) {
-        justRun { instance.setActiveSession(session) }
+    fun givenCapabilities(homeServerCapabilities: HomeServerCapabilities) {
+        every { getHomeServerCapabilities() } returns homeServerCapabilities
     }
 }

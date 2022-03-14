@@ -16,20 +16,15 @@
 
 package im.vector.app.test.fakes
 
-import im.vector.app.core.di.ActiveSessionHolder
-import io.mockk.every
-import io.mockk.justRun
+import io.mockk.coEvery
 import io.mockk.mockk
+import org.matrix.android.sdk.api.auth.registration.RegistrationResult
+import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.session.Session
 
-class FakeActiveSessionHolder(
-        private val fakeSession: FakeSession = FakeSession()
-) {
-    val instance = mockk<ActiveSessionHolder> {
-        every { getActiveSession() } returns fakeSession
-    }
+class FakeRegistrationWizard : RegistrationWizard by mockk() {
 
-    fun expectSetsActiveSession(session: Session) {
-        justRun { instance.setActiveSession(session) }
+    fun givenSuccessfulDummy(session: Session) {
+        coEvery { dummy() } returns RegistrationResult.Success(session)
     }
 }
