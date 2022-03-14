@@ -71,7 +71,7 @@ class LocationSharingFragment @Inject constructor(
             )
         }
 
-        initLocateBtn()
+        initLocateButton()
         initOptionsPicker()
 
         viewModel.observeViewEvents {
@@ -143,7 +143,7 @@ class LocationSharingFragment @Inject constructor(
                 .show()
     }
 
-    private fun initLocateBtn() {
+    private fun initLocateButton() {
         views.mapView.locateBtn.setOnClickListener {
             viewModel.handle(LocationSharingAction.ZoomToUserLocationAction)
         }
