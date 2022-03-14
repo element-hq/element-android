@@ -19,8 +19,8 @@ package im.vector.app.features.location
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class LocationSharingAction : VectorViewModelAction {
-    object CurrentUserLocationSharingAction : LocationSharingAction()
-    data class PinnedLocationSharingAction(val locationData: LocationData?) : LocationSharingAction()
-    data class LocationTargetChangeAction(val locationData: LocationData) : LocationSharingAction()
-    object ZoomToUserLocationAction : LocationSharingAction()
+    object CurrentUserLocationSharing : LocationSharingAction()
+    data class PinnedLocationSharing(val locationData: LocationData?) : LocationSharingAction()
+    data class LocationTargetChange(val locationData: LocationData) : LocationSharingAction()
+    object ZoomToUserLocation : LocationSharingAction()
 }

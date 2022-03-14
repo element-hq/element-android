@@ -115,10 +115,10 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     override fun handle(action: LocationSharingAction) {
         when (action) {
-            LocationSharingAction.CurrentUserLocationSharingAction -> handleCurrentUserLocationSharingAction()
-            is LocationSharingAction.PinnedLocationSharingAction   -> handlePinnedLocationSharingAction(action)
-            is LocationSharingAction.LocationTargetChangeAction    -> handleLocationTargetChangeAction(action)
-            LocationSharingAction.ZoomToUserLocationAction         -> handleZoomToUserLocationAction()
+            LocationSharingAction.CurrentUserLocationSharing -> handleCurrentUserLocationSharingAction()
+            is LocationSharingAction.PinnedLocationSharing   -> handlePinnedLocationSharingAction(action)
+            is LocationSharingAction.LocationTargetChange    -> handleLocationTargetChangeAction(action)
+            LocationSharingAction.ZoomToUserLocation         -> handleZoomToUserLocationAction()
         }.exhaustive
     }
 
@@ -126,7 +126,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         shareLocation(state.lastKnownUserLocation, isUserLocation = true)
     }
 
-    private fun handlePinnedLocationSharingAction(action: LocationSharingAction.PinnedLocationSharingAction) {
+    private fun handlePinnedLocationSharingAction(action: LocationSharingAction.PinnedLocationSharing) {
         shareLocation(action.locationData, isUserLocation = false)
     }
 
@@ -144,7 +144,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleLocationTargetChangeAction(action: LocationSharingAction.LocationTargetChangeAction) {
+    private fun handleLocationTargetChangeAction(action: LocationSharingAction.LocationTargetChange) {
         viewModelScope.launch {
             locationTargetFlow.emit(action.locationData)
         }

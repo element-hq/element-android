@@ -120,7 +120,7 @@ class LocationSharingFragment @Inject constructor(
     }
 
     override fun onLocationTargetChange(target: LocationData) {
-        viewModel.handle(LocationSharingAction.LocationTargetChangeAction(target))
+        viewModel.handle(LocationSharingAction.LocationTargetChange(target))
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -145,7 +145,7 @@ class LocationSharingFragment @Inject constructor(
 
     private fun initLocateButton() {
         views.mapView.locateBtn.setOnClickListener {
-            viewModel.handle(LocationSharingAction.ZoomToUserLocationAction)
+            viewModel.handle(LocationSharingAction.ZoomToUserLocation)
         }
     }
 
@@ -158,10 +158,10 @@ class LocationSharingFragment @Inject constructor(
         views.shareLocationOptionsPicker.render()
         views.shareLocationOptionsPicker.optionPinned.debouncedClicks {
             val targetLocation = views.mapView.getLocationOfMapCenter()
-            viewModel.handle(LocationSharingAction.PinnedLocationSharingAction(targetLocation))
+            viewModel.handle(LocationSharingAction.PinnedLocationSharing(targetLocation))
         }
         views.shareLocationOptionsPicker.optionUserCurrent.debouncedClicks {
-            viewModel.handle(LocationSharingAction.CurrentUserLocationSharingAction)
+            viewModel.handle(LocationSharingAction.CurrentUserLocationSharing)
         }
         views.shareLocationOptionsPicker.optionUserLive.debouncedClicks {
             // TODO
