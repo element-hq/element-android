@@ -27,6 +27,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.mapboxsdk.maps.MapView
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
@@ -170,16 +171,19 @@ class LocationSharingFragment @Inject constructor(
 
     private fun updateMap(state: LocationSharingViewState) {
         // first, update the options view
-        when (state.areTargetAndUserLocationEqual) {
-            // TODO activate USER_LIVE option when implemented
-            true  -> views.shareLocationOptionsPicker.render(
-                    LocationSharingOption.USER_CURRENT
-            )
-            false -> views.shareLocationOptionsPicker.render(
-                    LocationSharingOption.PINNED
-            )
-            else  -> views.shareLocationOptionsPicker.render()
+        val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
+            true  -> {
+                if (BuildConfig.ENABLE_LIVE_LOCATION_SHARING) {
+                    setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
+                } else {
+                    setOf(LocationSharingOption.USER_CURRENT)
+                }
+            }
+            false -> setOf(LocationSharingOption.PINNED)
+            else  -> emptySet()
         }
+        views.shareLocationOptionsPicker.render(options)
+
         // then, update the map using the height of the options view after it has been rendered
         views.shareLocationOptionsPicker.post {
             val mapState = state
