@@ -37,17 +37,22 @@ class ReadReceiptsItemFactory @Inject constructor(private val avatarRenderer: Av
         val readReceiptsData = readReceipts
                 .map {
                     ReadReceiptData(it.roomMember.userId, it.roomMember.avatarUrl, it.roomMember.displayName, it.originServerTs)
-                }
-                .toList()
-
+                }.toList()
+        val readReceiptsDataSorted = sortItem(readReceiptsData)
         return ReadReceiptsItem_()
                 .id("read_receipts_$eventId")
                 .eventId(eventId)
-                .readReceipts(readReceiptsData)
+                .readReceipts(readReceiptsDataSorted)
                 .avatarRenderer(avatarRenderer)
                 .shouldHideReadReceipts(isFromThreadTimeLine)
                 .clickListener {
-                    callback?.onReadReceiptsClicked(readReceiptsData)
+                    callback?.onReadReceiptsClicked(readReceiptsDataSorted)
                 }
+    }
+
+    fun sortItem(readReceipt: List<ReadReceiptData>): List<ReadReceiptData> {
+        return readReceipt.sortedByDescending {
+            it.timestamp
+        }
     }
 }
