@@ -139,6 +139,8 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
                 marginStart = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
             }
         }
+
+        views.additionalTopSpace.isVisible = messageLayout.addTopMargin
     }
 
     private fun TimelineMessageLayout.Bubble.CornersRadius.toFloatArray(): FloatArray {
