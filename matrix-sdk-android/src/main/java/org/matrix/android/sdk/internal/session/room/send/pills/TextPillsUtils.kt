@@ -16,9 +16,12 @@
 package org.matrix.android.sdk.internal.session.room.send.pills
 
 import android.text.SpannableString
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.session.displayname.DisplayNameResolver
+import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import java.util.Collections
 import javax.inject.Inject
 
@@ -28,7 +31,8 @@ import javax.inject.Inject
  */
 internal class TextPillsUtils @Inject constructor(
         private val mentionLinkSpecComparator: MentionLinkSpecComparator,
-        private val displayNameResolver: DisplayNameResolver
+        private val displayNameResolver: DisplayNameResolver,
+        private val matrixConfiguration: MatrixConfiguration
 ) {
 
     /**
@@ -36,7 +40,7 @@ internal class TextPillsUtils @Inject constructor(
      * @return the transformed String or null if no Span found
      */
     fun processSpecialSpansToHtml(text: CharSequence): String? {
-        return transformPills(text, MENTION_SPAN_TO_HTML_TEMPLATE)
+        return transformPills(text, createHtmlMentionSpanTemplate(forceMatrixTo = false))
     }
 
     /**
@@ -44,7 +48,7 @@ internal class TextPillsUtils @Inject constructor(
      * @return the transformed String or null if no Span found
      */
     fun processSpecialSpansToMarkdown(text: CharSequence): String? {
-        return transformPills(text, MENTION_SPAN_TO_MD_TEMPLATE)
+        return transformPills(text, createMdMentionSpanTemplate(forceMatrixTo = false))
     }
 
     private fun transformPills(text: CharSequence, template: String): String? {
@@ -109,9 +113,42 @@ internal class TextPillsUtils @Inject constructor(
         }
     }
 
-    companion object {
-        private const val MENTION_SPAN_TO_HTML_TEMPLATE = "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
+    private fun baseUrl(forceMatrixTo: Boolean): String {
+        return matrixConfiguration.clientPermalinkBaseUrl
+                ?.takeUnless { forceMatrixTo }
+                ?: MATRIX_TO_URL_BASE
+    }
 
-        private const val MENTION_SPAN_TO_MD_TEMPLATE = "[%2\$s](https://matrix.to/#/%1\$s)"
+    private fun useClientFormat(forceMatrixTo: Boolean): Boolean {
+        return !forceMatrixTo && matrixConfiguration.clientPermalinkBaseUrl != null
+    }
+
+    private fun createHtmlMentionSpanTemplate(forceMatrixTo: Boolean): String {
+        return buildString {
+            append(MENTION_SPAN_TO_HTML_TEMPLATE_BEGIN)
+            append(baseUrl(forceMatrixTo))
+            if (useClientFormat(forceMatrixTo)) {
+                append(PermalinkFactory.USER_PATH)
+            }
+            append(MENTION_SPAN_TO_HTML_TEMPLATE_END)
+        }
+    }
+
+    private fun createMdMentionSpanTemplate(forceMatrixTo: Boolean): String {
+        return buildString {
+            append(MENTION_SPAN_TO_MD_TEMPLATE_BEGIN)
+            append(baseUrl(forceMatrixTo))
+            if (useClientFormat(forceMatrixTo)) {
+                append(PermalinkFactory.USER_PATH)
+            }
+            append(MENTION_SPAN_TO_MD_TEMPLATE_END)
+        }
+    }
+
+    companion object {
+        private const val MENTION_SPAN_TO_HTML_TEMPLATE_BEGIN = "<a href=\""
+        private const val MENTION_SPAN_TO_HTML_TEMPLATE_END = "%1\$s\">%2\$s</a>"
+        private const val MENTION_SPAN_TO_MD_TEMPLATE_BEGIN = "[%2\$s]("
+        private const val MENTION_SPAN_TO_MD_TEMPLATE_END = "%1\$s)"
     }
 }

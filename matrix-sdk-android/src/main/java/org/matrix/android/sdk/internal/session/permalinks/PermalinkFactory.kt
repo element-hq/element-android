@@ -145,7 +145,7 @@ internal class PermalinkFactory @Inject constructor(
 
     companion object {
         private const val ROOM_PATH = "room/"
-        private const val USER_PATH = "user/"
+        const val USER_PATH = "user/"
         private const val GROUP_PATH = "group/"
     }
 }

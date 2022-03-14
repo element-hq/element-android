@@ -60,6 +60,10 @@ class MarkdownParserTest : InstrumentedTest {
                                     applicationFlavor = "TestFlavor",
                                     roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
                             )
+                    ),
+                    MatrixConfiguration(
+                            applicationFlavor = "TestFlavor",
+                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
                     ))
     )
 
