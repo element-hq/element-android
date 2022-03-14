@@ -113,70 +113,107 @@ internal class DefaultSpaceService @Inject constructor(
         return peekSpaceTask.execute(PeekSpaceTask.Params(spaceId))
     }
 
-    override suspend fun querySpaceChildren(spaceId: String,
-                                            suggestedOnly: Boolean?,
-                                            limit: Int?,
-                                            from: String?,
-                                            knownStateList: List<Event>?): SpaceHierarchyData {
-        return resolveSpaceInfoTask.execute(
-                ResolveSpaceInfoTask.Params(
-                        spaceId = spaceId, limit = limit, maxDepth = 1, from = from, suggestedOnly = suggestedOnly
-                )
-        ).let { response ->
-            val spaceDesc = response.rooms?.firstOrNull { it.roomId == spaceId }
-            val root = RoomSummary(
-                    roomId = spaceDesc?.roomId ?: spaceId,
-                    roomType = spaceDesc?.roomType,
-                    name = spaceDesc?.name ?: "",
-                    displayName = spaceDesc?.name ?: "",
-                    topic = spaceDesc?.topic ?: "",
-                    joinedMembersCount = spaceDesc?.numJoinedMembers,
-                    avatarUrl = spaceDesc?.avatarUrl ?: "",
-                    encryptionEventTs = null,
-                    typingUsers = emptyList(),
-                    isEncrypted = false,
-                    flattenParentIds = emptyList(),
-                    canonicalAlias = spaceDesc?.canonicalAlias,
-                    joinRules = RoomJoinRules.PUBLIC.takeIf { spaceDesc?.worldReadable == true }
-            )
-            val children = response.rooms
-                    ?.filter { it.roomId != spaceId }
-                    ?.flatMap { childSummary ->
-                        (spaceDesc?.childrenState ?: knownStateList)
-                                ?.filter { it.stateKey == childSummary.roomId && it.type == EventType.STATE_SPACE_CHILD }
-                                ?.mapNotNull { childStateEv ->
-                                    // create a child entry for everytime this room is the child of a space
-                                    // beware that a room could appear then twice in this list
-                                    childStateEv.content.toModel<SpaceChildContent>()?.let { childStateEvContent ->
-                                        SpaceChildInfo(
-                                                childRoomId = childSummary.roomId,
-                                                isKnown = true,
-                                                roomType = childSummary.roomType,
-                                                name = childSummary.name,
-                                                topic = childSummary.topic,
-                                                avatarUrl = childSummary.avatarUrl,
-                                                order = childStateEvContent.order,
-//                                                        autoJoin = childStateEvContent.autoJoin ?: false,
-                                                viaServers = childStateEvContent.via.orEmpty(),
-                                                activeMemberCount = childSummary.numJoinedMembers,
-                                                parentRoomId = childStateEv.roomId,
-                                                suggested = childStateEvContent.suggested,
-                                                canonicalAlias = childSummary.canonicalAlias,
-                                                aliases = childSummary.aliases,
-                                                worldReadable = childSummary.worldReadable
-                                        )
-                                    }
-                                }.orEmpty()
-                    }
-                    .orEmpty()
-            SpaceHierarchyData(
-                    rootSummary = root,
-                    children = children,
-                    childrenState = spaceDesc?.childrenState.orEmpty(),
-                    nextToken = response.nextBatch
-            )
-        }
+    override suspend fun querySpaceChildren(
+            spaceId: String,
+            suggestedOnly: Boolean?,
+            limit: Int?,
+            from: String?,
+            knownStateList: List<Event>?
+    ): SpaceHierarchyData {
+        val spacesResponse = getSpacesResponse(spaceId, suggestedOnly, limit, from)
+        val spaceRootResponse = spacesResponse.getRoot(spaceId)
+        val spaceRoot = spaceRootResponse?.toRoomSummary() ?: createBlankRoomSummary(spaceId)
+        val spaceChildren = spacesResponse.rooms.mapSpaceChildren(spaceId, spaceRootResponse, knownStateList)
+
+        return SpaceHierarchyData(
+                rootSummary = spaceRoot,
+                children = spaceChildren,
+                childrenState = spaceRootResponse?.childrenState.orEmpty(),
+                nextToken = spacesResponse.nextBatch
+        )
     }
+
+    private suspend fun getSpacesResponse(spaceId: String, suggestedOnly: Boolean?, limit: Int?, from: String?) =
+            resolveSpaceInfoTask.execute(
+                    ResolveSpaceInfoTask.Params(spaceId = spaceId, limit = limit, maxDepth = 1, from = from, suggestedOnly = suggestedOnly)
+            )
+
+    private fun SpacesResponse.getRoot(spaceId: String) = rooms?.firstOrNull { it.roomId == spaceId }
+
+    private fun SpaceChildSummaryResponse.toRoomSummary() = RoomSummary(
+            roomId = roomId,
+            roomType = roomType,
+            name = name ?: "",
+            displayName = name ?: "",
+            topic = topic ?: "",
+            joinedMembersCount = numJoinedMembers,
+            avatarUrl = avatarUrl ?: "",
+            encryptionEventTs = null,
+            typingUsers = emptyList(),
+            isEncrypted = false,
+            flattenParentIds = emptyList(),
+            canonicalAlias = canonicalAlias,
+            joinRules = RoomJoinRules.PUBLIC.takeIf { isWorldReadable }
+    )
+
+    private fun createBlankRoomSummary(spaceId: String) = RoomSummary(
+            roomId = spaceId,
+            joinedMembersCount = null,
+            encryptionEventTs = null,
+            typingUsers = emptyList(),
+            isEncrypted = false,
+            flattenParentIds = emptyList(),
+            canonicalAlias = null,
+            joinRules = null
+    )
+
+    private fun List<SpaceChildSummaryResponse>?.mapSpaceChildren(
+            spaceId: String,
+            spaceRootResponse: SpaceChildSummaryResponse?,
+            knownStateList: List<Event>?,
+    ) = this?.filterIdIsNot(spaceId)
+            ?.toSpaceChildInfoList(spaceId, spaceRootResponse, knownStateList)
+            .orEmpty()
+
+    private fun List<SpaceChildSummaryResponse>.filterIdIsNot(spaceId: String) = filter { it.roomId != spaceId }
+
+    private fun List<SpaceChildSummaryResponse>.toSpaceChildInfoList(
+            spaceId: String,
+            rootRoomResponse: SpaceChildSummaryResponse?,
+            knownStateList: List<Event>?,
+    ) = flatMap { spaceChildSummary ->
+        (rootRoomResponse?.childrenState ?: knownStateList)
+                ?.filter { it.isChildOf(spaceChildSummary) }
+                ?.mapNotNull { childStateEvent -> childStateEvent.toSpaceChildInfo(spaceId, spaceChildSummary) }
+                .orEmpty()
+    }
+
+    private fun Event.isChildOf(space: SpaceChildSummaryResponse) = stateKey == space.roomId && type == EventType.STATE_SPACE_CHILD
+
+    private fun Event.toSpaceChildInfo(spaceId: String, summary: SpaceChildSummaryResponse) = content.toModel<SpaceChildContent>()?.let { content ->
+        createSpaceChildInfo(spaceId, summary, content)
+    }
+
+    private fun createSpaceChildInfo(
+            spaceId: String,
+            summary: SpaceChildSummaryResponse,
+            content: SpaceChildContent
+    ) = SpaceChildInfo(
+            childRoomId = summary.roomId,
+            isKnown = true,
+            roomType = summary.roomType,
+            name = summary.name,
+            topic = summary.topic,
+            avatarUrl = summary.avatarUrl,
+            order = content.order,
+            viaServers = content.via.orEmpty(),
+            activeMemberCount = summary.numJoinedMembers,
+            parentRoomId = spaceId,
+            suggested = content.suggested,
+            canonicalAlias = summary.canonicalAlias,
+            aliases = summary.aliases,
+            worldReadable = summary.isWorldReadable
+    )
 
     override suspend fun joinSpace(spaceIdOrAlias: String,
                                    reason: String?,
@@ -191,10 +228,6 @@ internal class DefaultSpaceService @Inject constructor(
     override suspend fun rejectInvite(spaceId: String, reason: String?) {
         leaveRoomTask.execute(LeaveRoomTask.Params(spaceId, reason))
     }
-
-//    override fun getSpaceParentsOfRoom(roomId: String): List<SpaceSummary> {
-//        return spaceSummaryDataSource.getParentsOfRoom(roomId)
-//    }
 
     override suspend fun setSpaceParent(childRoomId: String, parentSpaceId: String, canonical: Boolean, viaServers: List<String>) {
         // Should we perform some validation here?,

@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
+import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
@@ -99,7 +100,6 @@ class E2eeSanityTests : InstrumentedTest {
         ensureMembersHaveJoined(aliceSession, otherAccounts, e2eRoomID)
 
         Log.v("#E2E TEST", "All users have joined the room")
-
         Log.v("#E2E TEST", "Alice is sending the message")
 
         val text = "This is my message"
@@ -172,7 +172,7 @@ class E2eeSanityTests : InstrumentedTest {
                     }
                     timelineEvent != null &&
                             timelineEvent.root.getClearType() == EventType.MESSAGE &&
-                            secondMessage.equals(timelineEvent.root.getClearContent().toModel<MessageContent>()?.body)
+                            secondMessage == timelineEvent.root.getClearContent().toModel<MessageContent>()?.body
                 }
             }
         }
@@ -186,11 +186,11 @@ class E2eeSanityTests : InstrumentedTest {
     }
 
     /**
-     * Quick test for basic keybackup
+     * Quick test for basic key backup
      * 1. Create e2e between Alice and Bob
      * 2. Alice sends 3 messages, using 3 different sessions
      * 3. Ensure bob can decrypt
-     * 4. Create backup for bob and uplaod keys
+     * 4. Create backup for bob and upload keys
      *
      * 5. Sign out alice and bob to ensure no gossiping will happen
      *
@@ -206,14 +206,14 @@ class E2eeSanityTests : InstrumentedTest {
         val bobSession = cryptoTestData.secondSession!!
         val e2eRoomID = cryptoTestData.roomId
 
-        Log.v("#E2E TEST", "Create and start keybackup for bob ...")
-        val keysBackupService = bobSession.cryptoService().keysBackupService()
+        Log.v("#E2E TEST", "Create and start key backup for bob ...")
+        val bobKeysBackupService = bobSession.cryptoService().keysBackupService()
         val keyBackupPassword = "FooBarBaz"
         val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
-            keysBackupService.prepareKeysBackupVersion(keyBackupPassword, null, it)
+            bobKeysBackupService.prepareKeysBackupVersion(keyBackupPassword, null, it)
         }
         val version = testHelper.doSync<KeysVersion> {
-            keysBackupService.createKeysBackupVersion(megolmBackupCreationInfo, it)
+            bobKeysBackupService.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
         Log.v("#E2E TEST", "... Key backup started and enabled for bob")
         // Bob session should now have
@@ -249,12 +249,12 @@ class E2eeSanityTests : InstrumentedTest {
 
         Log.v("#E2E TEST", "Force key backup for Bob...")
         testHelper.waitWithLatch { latch ->
-            keysBackupService.backupAllGroupSessions(
+            bobKeysBackupService.backupAllGroupSessions(
                     null,
                     TestMatrixCallback(latch, true)
             )
         }
-        Log.v("#E2E TEST", "... Keybackup done for Bob")
+        Log.v("#E2E TEST", "... Key backup done for Bob")
 
         // Now lets logout both alice and bob to ensure that we won't have any gossiping
 
@@ -397,7 +397,7 @@ class E2eeSanityTests : InstrumentedTest {
     }
 
     /**
-     * Test that if a better key is forwared (lower index, it is then used)
+     * Test that if a better key is forwarded (lower index, it is then used)
      */
     @Test
     fun testForwardBetterKey() {
@@ -525,15 +525,16 @@ class E2eeSanityTests : InstrumentedTest {
     private fun sendMessageInRoom(aliceRoomPOV: Room, text: String): String? {
         aliceRoomPOV.sendTextMessage(text)
         var sentEventId: String? = null
-        testHelper.waitWithLatch(4 * 60_000) {
+        testHelper.waitWithLatch(4 * TestConstants.timeOutMillis) { latch ->
             val timeline = aliceRoomPOV.createTimeline(null, TimelineSettings(60))
             timeline.start()
 
-            testHelper.retryPeriodicallyWithLatch(it) {
+            testHelper.retryPeriodicallyWithLatch(latch) {
                 val decryptedMsg = timeline.getSnapshot()
                         .filter { it.root.getClearType() == EventType.MESSAGE }
-                        .also {
-                            Log.v("#E2E TEST", "Timeline snapshot is ${it.map { "${it.root.type}|${it.root.sendState}" }.joinToString(",", "[", "]")}")
+                        .also { list ->
+                            val message = list.joinToString(",", "[", "]") { "${it.root.type}|${it.root.sendState}" }
+                            Log.v("#E2E TEST", "Timeline snapshot is $message")
                         }
                         .filter { it.root.sendState == SendState.SYNCED }
                         .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
@@ -547,8 +548,8 @@ class E2eeSanityTests : InstrumentedTest {
     }
 
     private fun ensureMembersHaveJoined(aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String) {
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
+        testHelper.waitWithLatch { latch ->
+            testHelper.retryPeriodicallyWithLatch(latch) {
                 otherAccounts.map {
                     aliceSession.getRoomMember(it.myUserId, e2eRoomID)?.membership
                 }.all {
@@ -559,8 +560,8 @@ class E2eeSanityTests : InstrumentedTest {
     }
 
     private fun waitForAndAcceptInviteInRoom(otherSession: Session, e2eRoomID: String) {
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
+        testHelper.waitWithLatch { latch ->
+            testHelper.retryPeriodicallyWithLatch(latch) {
                 val roomSummary = otherSession.getRoomSummary(e2eRoomID)
                 (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
                     if (it) {

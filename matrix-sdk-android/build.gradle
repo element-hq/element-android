@@ -166,7 +166,7 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.44'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.45'
 
     testImplementation libs.tests.junit
     testImplementation 'org.robolectric:robolectric:4.7.3'
@@ -174,7 +174,7 @@ dependencies {
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
     testImplementation libs.mockk.mockk
     testImplementation libs.tests.kluent
-    implementation libs.jetbrains.coroutinesAndroid
+    testImplementation libs.jetbrains.coroutinesTest
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
     // Transitively required for mocking realm as monarchy doesn't expose Rx
