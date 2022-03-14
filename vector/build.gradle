@@ -355,6 +355,7 @@ dependencies {
     // Lifecycle
     implementation libs.androidx.lifecycleLivedata
     implementation libs.androidx.lifecycleProcess
+    implementation libs.androidx.lifecycleRuntimeKtx
 
     implementation libs.androidx.datastore
     implementation libs.androidx.datastorepreferences
