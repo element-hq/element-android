@@ -506,7 +506,10 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
         val content = initialState.rootThreadEventId?.let {
-            action.stickerContent.copy(relatesTo = RelationDefaultContent(RelationType.THREAD, it))
+            action.stickerContent.copy(relatesTo = RelationDefaultContent(
+                    type = RelationType.THREAD,
+                    isFallingBack = true,
+                    eventId = it))
         } ?: action.stickerContent
 
         room.sendEvent(EventType.STICKER, content.toContent())

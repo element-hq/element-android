@@ -26,8 +26,8 @@ interface RelationContent {
     val option: Int?
 
     /**
-     * This flag indicates that the message should be displayed in the main
-     * timeline as a reply if needed
+     * This flag indicates that the message should be rendered as a reply
+     * fallback, when isFallingBack = false
      */
     val isFallingBack: Boolean?
 }

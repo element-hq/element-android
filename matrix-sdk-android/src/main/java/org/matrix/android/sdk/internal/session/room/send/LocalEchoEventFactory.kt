@@ -355,6 +355,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                     RelationDefaultContent(
                             type = RelationType.THREAD,
                             eventId = it,
+                            isFallingBack = true,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
                 }
@@ -398,6 +399,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                     RelationDefaultContent(
                             type = RelationType.THREAD,
                             eventId = it,
+                            isFallingBack = true,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
                 }
@@ -428,6 +430,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                     RelationDefaultContent(
                             type = RelationType.THREAD,
                             eventId = it,
+                            isFallingBack = true,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
                 }
@@ -448,6 +451,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                     RelationDefaultContent(
                             type = RelationType.THREAD,
                             eventId = it,
+                            isFallingBack = true,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
                 }

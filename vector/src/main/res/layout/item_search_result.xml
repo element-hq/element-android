@@ -40,7 +40,8 @@
         android:id="@+id/additionalTopSpace"
         android:layout_height="12dp"
         android:layout_width="0dp"
-        android:layout_toEndOf="@id/messageStartGuideline" />
+        android:layout_toEndOf="@id/messageStartGuideline"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/messageTimeView"

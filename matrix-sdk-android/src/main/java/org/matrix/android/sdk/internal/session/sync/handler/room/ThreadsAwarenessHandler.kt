@@ -162,7 +162,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                              eventEntity: EventEntity? = null): String? {
         event ?: return null
         roomId ?: return null
-        if (lightweightSettingsStorage.areThreadMessagesEnabled()) return null
+        if (lightweightSettingsStorage.areThreadMessagesEnabled() && !isReplyEvent(event)) return null
         handleRootThreadEventsIfNeeded(realm, roomId, eventEntity, event)
         if (!isThreadEvent(event)) return null
         val eventPayload = if (!event.isEncrypted()) {
@@ -386,6 +386,16 @@ internal class ThreadsAwarenessHandler @Inject constructor(
 
     private fun getPreviousEventOrRoot(event: Event): String? =
             event.content.toModel<MessageRelationContent>()?.relatesTo?.inReplyTo?.eventId
+
+    /**
+     * Returns if we should html inject the current event.
+     */
+    private fun isReplyEvent(event: Event): Boolean {
+        return isThreadEvent(event) && !isFallingBack(event) && getPreviousEventOrRoot(event) != null
+    }
+
+    private fun isFallingBack(event: Event): Boolean =
+            event.content.toModel<MessageRelationContent>()?.relatesTo?.isFallingBack == true
 
     @Suppress("UNCHECKED_CAST")
     private fun getValueFromPayload(payload: JsonDict?, key: String): String? {
