@@ -24,6 +24,7 @@ interface RelationContent {
     val eventId: String?
     val inReplyTo: ReplyToContent?
     val option: Int?
+
     /**
      * This flag indicates that the message should be displayed in the main
      * timeline as a reply if needed
