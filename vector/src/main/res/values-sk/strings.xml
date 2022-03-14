@@ -2452,4 +2452,5 @@
         <item quantity="other">%1$d ďalších</item>
     </plurals>
     <string name="login_server_url_form_modular_notice">Zadajte URL adresu servera Modular Element alebo adresu servera, ktorý si želáte použiť</string>
+    <string name="poll_response_room_list_preview">Hlasovať</string>
 </resources>
