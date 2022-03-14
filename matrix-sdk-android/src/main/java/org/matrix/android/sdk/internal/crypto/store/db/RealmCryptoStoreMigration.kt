@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo013
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo014
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo015
+import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo016
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,7 +48,7 @@ internal class RealmCryptoStoreMigration @Inject constructor() : RealmMigration 
     // 0, 1, 2: legacy Riot-Android
     // 3: migrate to RiotX schema
     // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
-    val schemaVersion = 15L
+    val schemaVersion = 16L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.d("Migrating Realm Crypto from $oldVersion to $newVersion")
@@ -67,5 +68,6 @@ internal class RealmCryptoStoreMigration @Inject constructor() : RealmMigration 
         if (oldVersion < 13) MigrateCryptoTo013(realm).perform()
         if (oldVersion < 14) MigrateCryptoTo014(realm).perform()
         if (oldVersion < 15) MigrateCryptoTo015(realm).perform()
+        if (oldVersion < 16) MigrateCryptoTo016(realm).perform()
     }
 }

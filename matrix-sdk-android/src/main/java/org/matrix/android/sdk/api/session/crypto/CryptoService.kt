@@ -35,12 +35,12 @@ import org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequest
-import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequest
+import org.matrix.android.sdk.internal.crypto.model.AuditTrail
 
 interface CryptoService {
 
@@ -94,8 +94,6 @@ interface CryptoService {
 
     fun reRequestRoomKeyForEvent(event: Event)
 
-    fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody)
-
     fun addRoomKeysRequestListener(listener: GossipingRequestListener)
 
     fun removeRoomKeysRequestListener(listener: GossipingRequestListener)
@@ -142,14 +140,14 @@ interface CryptoService {
     fun addNewSessionListener(newSessionListener: NewSessionListener)
     fun removeSessionListener(listener: NewSessionListener)
 
-    fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>
-    fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingRoomKeyRequest>>
+    fun getOutgoingRoomKeyRequests(): List<OutgoingKeyRequest>
+    fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingKeyRequest>>
 
     fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
     fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>>
 
-    fun getGossipingEventsTrail(): LiveData<PagedList<Event>>
-    fun getGossipingEvents(): List<Event>
+    fun getGossipingEventsTrail(): LiveData<PagedList<AuditTrail>>
+    fun getGossipingEvents(): List<AuditTrail>
 
     // For testing shared session
     fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>

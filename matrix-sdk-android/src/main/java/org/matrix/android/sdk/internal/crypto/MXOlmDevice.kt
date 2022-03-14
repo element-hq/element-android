@@ -42,7 +42,6 @@ import org.matrix.olm.OlmOutboundGroupSession
 import org.matrix.olm.OlmSession
 import org.matrix.olm.OlmUtility
 import timber.log.Timber
-import java.net.URLEncoder
 import javax.inject.Inject
 
 private val loggerTag = LoggerTag("MXOlmDevice", LoggerTag.CRYPTO)
@@ -329,13 +328,13 @@ internal class MXOlmDevice @Inject constructor(
                 Timber.tag(loggerTag.value).e(e, "## createInboundSession() : removeOneTimeKeys failed")
             }
 
-            Timber.tag(loggerTag.value).v("## createInboundSession() : ciphertext: $ciphertext")
-            try {
-                val sha256 = olmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))
-                Timber.tag(loggerTag.value).v("## createInboundSession() :ciphertext: SHA256: $sha256")
-            } catch (e: Exception) {
-                Timber.tag(loggerTag.value).e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
-            }
+//            Timber.tag(loggerTag.value).v("## createInboundSession() : ciphertext: $ciphertext.")
+//            try {
+//                val sha256 = olmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))
+//                Timber.tag(loggerTag.value).v("## createInboundSession() :ciphertext: SHA256: $sha256")
+//            } catch (e: Exception) {
+//                Timber.tag(loggerTag.value).e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
+//            }
 
             val olmMessage = OlmMessage()
             olmMessage.mCipherText = ciphertext
@@ -787,7 +786,7 @@ internal class MXOlmDevice @Inject constructor(
 
                 if (timelineSet.contains(messageIndexKey)) {
                     val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
-                    Timber.tag(loggerTag.value).e("## decryptGroupMessage() : $reason")
+                    Timber.tag(loggerTag.value).e("## decryptGroupMessage() timelineId=$timeline: $reason")
                     throw MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, reason)
                 }
 

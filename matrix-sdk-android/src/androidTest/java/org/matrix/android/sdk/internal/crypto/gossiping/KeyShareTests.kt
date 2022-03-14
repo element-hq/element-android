@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreation
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.GossipingRequestState
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestState
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
@@ -187,9 +186,9 @@ class KeyShareTests : InstrumentedTest {
         Thread.sleep(6_000)
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
-                aliceSession2.cryptoService().getOutgoingRoomKeyRequests().let {
-                    it.any { it.requestBody?.sessionId == eventMegolmSessionId && it.state == OutgoingGossipingRequestState.CANCELLED }
-                }
+                // It should have been deleted from store
+                val outgoingRoomKeyRequests = aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
+                outgoingRoomKeyRequests.isEmpty()
             }
         }
 

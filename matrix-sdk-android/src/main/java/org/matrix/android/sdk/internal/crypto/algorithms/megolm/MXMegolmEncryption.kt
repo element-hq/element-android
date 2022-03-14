@@ -28,7 +28,6 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.model.forEach
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
@@ -281,24 +280,13 @@ internal class MXMegolmEncryption(
         // attempted to share with) rather than the contentMap (those we did
         // share with), because we don't want to try to claim a one-time-key
         // for dead devices on every message.
-        val gossipingEventBuffer = arrayListOf<Event>()
         for ((userId, devicesToShareWith) in devicesByUser) {
             for (deviceInfo in devicesToShareWith) {
                 session.sharedWithHelper.markedSessionAsShared(deviceInfo, chainIndex)
-                gossipingEventBuffer.add(
-                        Event(
-                                type = EventType.ROOM_KEY,
-                                senderId = myUserId,
-                                content = submap.apply {
-                                    this["session_key"] = ""
-                                    // we add a fake key for trail
-                                    this["_dest"] = "$userId|${deviceInfo.deviceId}"
-                                }
-                        ))
+                // XXX is it needed to add it to the audit trail?
+                // For now decided that no, we are more interested by forward trail
             }
         }
-
-        cryptoStore.saveGossipingEvents(gossipingEventBuffer)
 
         if (haveTargets) {
             t0 = System.currentTimeMillis()

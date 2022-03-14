@@ -33,6 +33,8 @@ import timber.log.Timber
  * (room key request, or sss secret sharing, as well as cancellations)
  *
  */
+
+// not used anymore, just here for db migration
 internal open class GossipingEventEntity(@Index var type: String? = "",
                                          var content: String? = null,
                                          @Index var sender: String? = null,

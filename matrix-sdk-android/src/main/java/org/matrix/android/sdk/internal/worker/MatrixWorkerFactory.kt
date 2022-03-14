@@ -22,9 +22,6 @@ import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.crypto.CancelGossipRequestWorker
-import org.matrix.android.sdk.internal.crypto.SendGossipRequestWorker
-import org.matrix.android.sdk.internal.crypto.SendGossipWorker
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
 import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixScope
@@ -56,8 +53,6 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
                 CheckFactoryWorker(appContext, workerParameters, true)
             AddPusherWorker::class.java.name                      ->
                 AddPusherWorker(appContext, workerParameters, sessionManager)
-            CancelGossipRequestWorker::class.java.name            ->
-                CancelGossipRequestWorker(appContext, workerParameters, sessionManager)
             GetGroupDataWorker::class.java.name                   ->
                 GetGroupDataWorker(appContext, workerParameters, sessionManager)
             MultipleEventSendingDispatcherWorker::class.java.name ->
@@ -66,10 +61,6 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
                 RedactEventWorker(appContext, workerParameters, sessionManager)
             SendEventWorker::class.java.name                      ->
                 SendEventWorker(appContext, workerParameters, sessionManager)
-            SendGossipRequestWorker::class.java.name              ->
-                SendGossipRequestWorker(appContext, workerParameters, sessionManager)
-            SendGossipWorker::class.java.name                     ->
-                SendGossipWorker(appContext, workerParameters, sessionManager)
             SendVerificationMessageWorker::class.java.name        ->
                 SendVerificationMessageWorker(appContext, workerParameters, sessionManager)
             SyncWorker::class.java.name                           ->

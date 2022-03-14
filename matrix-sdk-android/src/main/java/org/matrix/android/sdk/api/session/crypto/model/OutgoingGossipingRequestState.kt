@@ -16,12 +16,17 @@
 
 package org.matrix.android.sdk.api.session.crypto.model
 
-enum class OutgoingGossipingRequestState {
+enum class OutgoingRoomKeyRequestState {
     UNSENT,
-    SENDING,
     SENT,
-    CANCELLING,
-    CANCELLED,
-    FAILED_TO_SEND,
-    FAILED_TO_CANCEL
+    CANCELLATION_PENDING,
+    CANCELLATION_PENDING_AND_WILL_RESEND;
+
+    companion object {
+        fun pendingStates() = setOf(
+                UNSENT,
+                CANCELLATION_PENDING_AND_WILL_RESEND,
+                CANCELLATION_PENDING
+        )
+    }
 }

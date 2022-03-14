@@ -31,8 +31,14 @@ import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
@@ -46,7 +52,11 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
+import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.util.Optional
+import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import java.util.UUID
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -290,6 +300,59 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
                                     )
                                 }
                             }, it)
+        }
+    }
+
+    /**
+     * Initialize cross-signing, set up megolm backup and save all in 4S
+     */
+    fun bootstrapSecurity(session: Session) {
+        initializeCrossSigning(session)
+        val ssssService = session.sharedSecretStorageService
+        testHelper.runBlockingTest {
+            val keyInfo = ssssService.generateKey(
+                    UUID.randomUUID().toString(),
+                    null,
+                    "ssss_key",
+                    EmptyKeySigner()
+            )
+            ssssService.setDefaultKey(keyInfo.keyId)
+
+            ssssService.storeSecret(
+                    MASTER_KEY_SSSS_NAME,
+                    session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.master!!,
+                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+            )
+
+            ssssService.storeSecret(
+                    SELF_SIGNING_KEY_SSSS_NAME,
+                    session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.selfSigned!!,
+                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+            )
+
+            ssssService.storeSecret(
+                    USER_SIGNING_KEY_SSSS_NAME,
+                    session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.user!!,
+                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+            )
+
+            // set up megolm backup
+            val creationInfo = awaitCallback<MegolmBackupCreationInfo> {
+                session.cryptoService().keysBackupService().prepareKeysBackupVersion(null, null, it)
+            }
+            val version = awaitCallback<KeysVersion> {
+                session.cryptoService().keysBackupService().createKeysBackupVersion(creationInfo, it)
+            }
+            // Save it for gossiping
+            session.cryptoService().keysBackupService().saveBackupRecoveryKey(creationInfo.recoveryKey, version = version.version)
+
+            extractCurveKeyFromRecoveryKey(creationInfo.recoveryKey)?.toBase64NoPadding()?.let { secret ->
+                ssssService.storeSecret(
+                        KEYBACKUP_SECRET_SSSS_NAME,
+                        secret,
+                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                )
+            }
         }
     }
 

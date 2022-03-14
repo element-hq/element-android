@@ -808,12 +808,16 @@ internal class DefaultKeysBackupService @Inject constructor(
             ))
         } else if (roomId != null) {
             // Get all keys for the room
-            val data = getRoomSessionsDataTask.execute(GetRoomSessionsDataTask.Params(roomId, version))
+            val data = withContext(coroutineDispatchers.io) {
+                getRoomSessionsDataTask.execute(GetRoomSessionsDataTask.Params(roomId, version))
+            }
             // Convert to KeysBackupData
             KeysBackupData(mutableMapOf(roomId to data))
         } else {
             // Get all keys
-            getSessionsDataTask.execute(GetSessionsDataTask.Params(version))
+            withContext(coroutineDispatchers.io) {
+                getSessionsDataTask.execute(GetSessionsDataTask.Params(version))
+            }
         }
     }
 

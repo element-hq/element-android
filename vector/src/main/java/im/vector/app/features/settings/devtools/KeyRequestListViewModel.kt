@@ -33,11 +33,11 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
-import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequest
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequest
 
 data class KeyRequestListViewState(
         val incomingRequests: Async<PagedList<IncomingRoomKeyRequest>> = Uninitialized,
-        val outgoingRoomKeyRequests: Async<PagedList<OutgoingRoomKeyRequest>> = Uninitialized
+        val outgoingRoomKeyRequests: Async<PagedList<OutgoingKeyRequest>> = Uninitialized
 ) : MavericksState
 
 class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState: KeyRequestListViewState,

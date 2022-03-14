@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.algorithms
+package org.matrix.android.sdk.internal.crypto.store.db.model
 
-import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+import io.realm.RealmObject
 
-internal interface IMXWithHeldExtension {
-    fun onRoomKeyWithHeldEvent(withHeldInfo: RoomKeyWithHeldContent)
+internal open class AuditTrailEntity(
+        var ageLocalTs: Long? = null,
+        var type: String? = null,
+        var contentJson: String? = null
+) : RealmObject() {
+    companion object
 }

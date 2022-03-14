@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.crypto
 
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestState
+import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequestState
 
 /**
  * Represents an outgoing room key request
@@ -33,7 +33,7 @@ internal class OutgoingSecretRequest(
         // the transaction id when sending the to_device messages to our local
         override var requestId: String,
         // current state of this request
-        override var state: OutgoingGossipingRequestState) : OutgoingGossipingRequest {
+        override var state: OutgoingRoomKeyRequestState) : OutgoingGossipingRequest {
 
     // transaction id for the cancellation, if any
 }

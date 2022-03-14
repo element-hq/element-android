@@ -59,9 +59,9 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationStartContent
 import org.matrix.android.sdk.api.session.room.model.message.ValidVerificationDone
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
-import org.matrix.android.sdk.internal.crypto.IncomingGossipingRequestManager
 import org.matrix.android.sdk.internal.crypto.MyDeviceInfoHolder
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationAccept
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
@@ -95,7 +95,7 @@ internal class DefaultVerificationService @Inject constructor(
         @DeviceId private val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
+        private val secretShareManager: SecretShareManager,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         private val deviceListManager: DeviceListManager,
         private val setDeviceVerificationAction: SetDeviceVerificationAction,
@@ -548,7 +548,7 @@ internal class DefaultVerificationService @Inject constructor(
                             cryptoStore,
                             crossSigningService,
                             outgoingGossipingRequestManager,
-                            incomingGossipingRequestManager,
+                            secretShareManager,
                             myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                             startReq.transactionId,
                             otherUserId,
@@ -807,17 +807,15 @@ internal class DefaultVerificationService @Inject constructor(
             getExistingTransaction(userId, doneReq.transactionId)
                     ?: getOldTransaction(userId, doneReq.transactionId)
                             ?.let { vt ->
-                                val otherDeviceId = vt.otherDeviceId
+                                val otherDeviceId = vt.otherDeviceId ?: return@let
                                 if (!crossSigningService.canCrossSign()) {
-                                    outgoingGossipingRequestManager.sendSecretShareRequest(MASTER_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                            ?: "*")))
-                                    outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                            ?: "*")))
-                                    outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                            ?: "*")))
+                                    cryptoCoroutineScope.launch {
+                                        secretShareManager.requestSecretTo(otherDeviceId, MASTER_KEY_SSSS_NAME)
+                                        secretShareManager.requestSecretTo(otherDeviceId, SELF_SIGNING_KEY_SSSS_NAME)
+                                        secretShareManager.requestSecretTo(otherDeviceId, USER_SIGNING_KEY_SSSS_NAME)
+                                        secretShareManager.requestSecretTo(otherDeviceId, KEYBACKUP_SECRET_SSSS_NAME)
+                                    }
                                 }
-                                outgoingGossipingRequestManager.sendSecretShareRequest(KEYBACKUP_SECRET_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                        ?: "*")))
                             }
         }
     }
@@ -912,7 +910,7 @@ internal class DefaultVerificationService @Inject constructor(
                     otherDeviceId = readyReq.fromDevice,
                     crossSigningService = crossSigningService,
                     outgoingGossipingRequestManager = outgoingGossipingRequestManager,
-                    incomingGossipingRequestManager = incomingGossipingRequestManager,
+                    secretShareManager = secretShareManager,
                     cryptoStore = cryptoStore,
                     qrCodeData = qrCodeData,
                     userId = userId,
@@ -1111,7 +1109,7 @@ internal class DefaultVerificationService @Inject constructor(
                     cryptoStore,
                     crossSigningService,
                     outgoingGossipingRequestManager,
-                    incomingGossipingRequestManager,
+                    secretShareManager,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     txID,
                     otherUserId,
@@ -1303,7 +1301,7 @@ internal class DefaultVerificationService @Inject constructor(
                     cryptoStore,
                     crossSigningService,
                     outgoingGossipingRequestManager,
-                    incomingGossipingRequestManager,
+                    secretShareManager,
                     myDeviceInfoHolder.get().myDevice.fingerprint()!!,
                     transactionId,
                     otherUserId,
@@ -1441,7 +1439,7 @@ internal class DefaultVerificationService @Inject constructor(
                         otherDeviceId = otherDeviceId,
                         crossSigningService = crossSigningService,
                         outgoingGossipingRequestManager = outgoingGossipingRequestManager,
-                        incomingGossipingRequestManager = incomingGossipingRequestManager,
+                        secretShareManager = secretShareManager,
                         cryptoStore = cryptoStore,
                         qrCodeData = qrCodeData,
                         userId = userId,
