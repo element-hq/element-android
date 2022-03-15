@@ -103,9 +103,9 @@ object EventType {
     const val REACTION = "m.reaction"
 
     // Poll
-    const val POLL_START = "org.matrix.msc3381.poll.start"
-    const val POLL_RESPONSE = "org.matrix.msc3381.poll.response"
-    const val POLL_END = "org.matrix.msc3381.poll.end"
+    val POLL_START = listOf("org.matrix.msc3381.poll.start", "m.poll.start")
+    val POLL_RESPONSE = listOf("org.matrix.msc3381.poll.response", "m.poll.response")
+    val POLL_END = listOf("org.matrix.msc3381.poll.end", "m.poll.end")
 
     // Unwedging
     internal const val DUMMY = "m.dummy"
