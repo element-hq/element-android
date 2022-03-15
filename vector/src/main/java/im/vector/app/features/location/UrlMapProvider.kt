@@ -39,7 +39,7 @@ class UrlMapProvider @Inject constructor(
 
     suspend fun getMapUrl(): String {
         val upstreamMapUrl = tryOrNull { rawService.getElementWellknown(session.sessionParams) }
-                ?.mapTileServerConfig
+                ?.getBestMapTileServerConfig()
                 ?.mapStyleUrl
         return upstreamMapUrl ?: fallbackMapUrl
     }

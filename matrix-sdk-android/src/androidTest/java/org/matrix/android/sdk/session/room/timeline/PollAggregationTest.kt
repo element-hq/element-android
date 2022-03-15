@@ -68,7 +68,7 @@ class PollAggregationTest : InstrumentedTest {
 
         val aliceEventsListener = object : Timeline.Listener {
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                snapshot.firstOrNull { it.root.getClearType() == EventType.POLL_START }?.let { pollEvent ->
+                snapshot.firstOrNull { it.root.getClearType() in EventType.POLL_START }?.let { pollEvent ->
                     val pollEventId = pollEvent.eventId
                     val pollContent = pollEvent.root.content?.toModel<MessagePollContent>()
                     val pollSummary = pollEvent.annotations?.pollResponseSummary
@@ -83,25 +83,25 @@ class PollAggregationTest : InstrumentedTest {
                             // Poll has just been created.
                             testInitialPollConditions(pollContent, pollSummary)
                             lock.countDown()
-                            roomFromBobPOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.firstOrNull()?.id ?: "")
+                            roomFromBobPOV.voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.firstOrNull()?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 1 -> {
                             // Bob: Option 1
                             testBobVotesOption1(pollContent, pollSummary)
                             lock.countDown()
-                            roomFromBobPOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.get(1)?.id ?: "")
+                            roomFromBobPOV.voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 2 -> {
                             // Bob: Option 2
                             testBobChangesVoteToOption2(pollContent, pollSummary)
                             lock.countDown()
-                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.get(1)?.id ?: "")
+                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 3 -> {
                             // Alice: Option 2, Bob: Option 2
                             testAliceAndBobVoteToOption2(pollContent, pollSummary)
                             lock.countDown()
-                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.firstOrNull()?.id ?: "")
+                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.firstOrNull()?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 4 -> {
                             // Alice: Option 1, Bob: Option 2
@@ -113,7 +113,7 @@ class PollAggregationTest : InstrumentedTest {
                             // Alice: Option 1, Bob: Option 2 [poll is ended]
                             testEndedPoll(pollSummary)
                             lock.countDown()
-                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.get(1)?.id ?: "")
+                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id ?: "")
                         }
                         TOTAL_TEST_COUNT - 6 -> {
                             // Alice: Option 1 (ignore change), Bob: Option 2 [poll is ended]
@@ -144,11 +144,11 @@ class PollAggregationTest : InstrumentedTest {
         // No votes yet, poll summary should be null
         pollSummary shouldBe null
         // Question should be the same as intended
-        pollContent.pollCreationInfo?.question?.question shouldBeEqualTo pollQuestion
+        pollContent.getBestPollCreationInfo()?.question?.getBestQuestion() shouldBeEqualTo pollQuestion
         // Options should be the same as intended
-        pollContent.pollCreationInfo?.answers?.let { answers ->
+        pollContent.getBestPollCreationInfo()?.answers?.let { answers ->
             answers.size shouldBeEqualTo pollOptions.size
-            answers.map { it.answer } shouldContainAll pollOptions
+            answers.map { it.getBestAnswer() } shouldContainAll pollOptions
         }
     }
 
@@ -157,7 +157,7 @@ class PollAggregationTest : InstrumentedTest {
             fail("Poll summary shouldn't be null when someone votes")
             return
         }
-        val answerId = pollContent.pollCreationInfo?.answers?.first()?.id
+        val answerId = pollContent.getBestPollCreationInfo()?.answers?.first()?.id
         // Check if the intended vote is in poll summary
         pollSummary.aggregatedContent?.let { aggregatedContent ->
             assertTotalVotesCount(aggregatedContent, 1)
@@ -172,7 +172,7 @@ class PollAggregationTest : InstrumentedTest {
             fail("Poll summary shouldn't be null when someone votes")
             return
         }
-        val answerId = pollContent.pollCreationInfo?.answers?.get(1)?.id
+        val answerId = pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id
         // Check if the intended vote is in poll summary
         pollSummary.aggregatedContent?.let { aggregatedContent ->
             assertTotalVotesCount(aggregatedContent, 1)
@@ -187,7 +187,7 @@ class PollAggregationTest : InstrumentedTest {
             fail("Poll summary shouldn't be null when someone votes")
             return
         }
-        val answerId = pollContent.pollCreationInfo?.answers?.get(1)?.id
+        val answerId = pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id
         // Check if the intended votes is in poll summary
         pollSummary.aggregatedContent?.let { aggregatedContent ->
             assertTotalVotesCount(aggregatedContent, 2)
@@ -203,8 +203,8 @@ class PollAggregationTest : InstrumentedTest {
             fail("Poll summary shouldn't be null when someone votes")
             return
         }
-        val firstAnswerId = pollContent.pollCreationInfo?.answers?.firstOrNull()?.id
-        val secondAnswerId = pollContent.pollCreationInfo?.answers?.get(1)?.id
+        val firstAnswerId = pollContent.getBestPollCreationInfo()?.answers?.firstOrNull()?.id
+        val secondAnswerId = pollContent.getBestPollCreationInfo()?.answers?.get(1)?.id
         // Check if the intended votes is in poll summary
         pollSummary.aggregatedContent?.let { aggregatedContent ->
             assertTotalVotesCount(aggregatedContent, 2)
