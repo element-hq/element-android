@@ -53,8 +53,4 @@
     <color name="element_room_01">@color/palette_verde</color>
     <color name="element_room_02">@color/palette_azure</color>
     <color name="element_room_03">@color/palette_grape</color>
-
-    <!-- For presence -->
-    <color name="presence_online">@color/palette_element_green</color>
-
 </resources>
