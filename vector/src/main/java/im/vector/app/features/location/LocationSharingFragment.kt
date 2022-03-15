@@ -16,6 +16,7 @@
 
 package im.vector.app.features.location
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,7 +45,7 @@ class LocationSharingFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val avatarRenderer: AvatarRenderer,
         private val matrixItemColorProvider: MatrixItemColorProvider
-) : VectorBaseFragment<FragmentLocationSharingBinding>() {
+) : VectorBaseFragment<FragmentLocationSharingBinding>(), LocationTargetChangeListener {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
@@ -64,15 +65,20 @@ class LocationSharingFragment @Inject constructor(
         views.mapView.onCreate(savedInstanceState)
 
         lifecycleScope.launchWhenCreated {
-            views.mapView.initialize(urlMapProvider.getMapUrl())
+            views.mapView.initialize(
+                    url = urlMapProvider.getMapUrl(),
+                    locationTargetChangeListener = this@LocationSharingFragment
+            )
         }
 
+        initLocateButton()
         initOptionsPicker()
 
         viewModel.observeViewEvents {
             when (it) {
                 LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
                 LocationSharingViewEvents.Close                     -> activity?.finish()
+                is LocationSharingViewEvents.ZoomToUserLocation     -> handleZoomToUserLocationEvent(it)
             }.exhaustive
         }
     }
@@ -113,10 +119,17 @@ class LocationSharingFragment @Inject constructor(
         super.onDestroy()
     }
 
+    override fun onLocationTargetChange(target: LocationData) {
+        viewModel.handle(LocationSharingAction.LocationTargetChange(target))
+    }
+
     override fun invalidate() = withState(viewModel) { state ->
-        views.mapView.render(state.toMapState())
-        views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
+        updateMap(state)
         updateUserAvatar(state.userItem)
+        if (state.locationTargetDrawable != null) {
+            updateLocationTargetPin(state.locationTargetDrawable)
+        }
+        views.shareLocationGpsLoading.isGone = state.lastKnownUserLocation != null
     }
 
     private fun handleLocationNotAvailableError() {
@@ -130,18 +143,49 @@ class LocationSharingFragment @Inject constructor(
                 .show()
     }
 
+    private fun initLocateButton() {
+        views.mapView.locateButton.setOnClickListener {
+            viewModel.handle(LocationSharingAction.ZoomToUserLocation)
+        }
+    }
+
+    private fun handleZoomToUserLocationEvent(event: LocationSharingViewEvents.ZoomToUserLocation) {
+        views.mapView.zoomToLocation(event.userLocation.latitude, event.userLocation.longitude)
+    }
+
     private fun initOptionsPicker() {
-        // TODO
-        //  change the options dynamically depending on the current chosen location
-        views.shareLocationOptionsPicker.render(LocationSharingOption.USER_CURRENT)
+        // set no option at start
+        views.shareLocationOptionsPicker.render()
         views.shareLocationOptionsPicker.optionPinned.debouncedClicks {
-            // TODO
+            val targetLocation = views.mapView.getLocationOfMapCenter()
+            viewModel.handle(LocationSharingAction.PinnedLocationSharing(targetLocation))
         }
         views.shareLocationOptionsPicker.optionUserCurrent.debouncedClicks {
-            viewModel.handle(LocationSharingAction.OnShareLocation)
+            viewModel.handle(LocationSharingAction.CurrentUserLocationSharing)
         }
         views.shareLocationOptionsPicker.optionUserLive.debouncedClicks {
             // TODO
+        }
+    }
+
+    private fun updateMap(state: LocationSharingViewState) {
+        // first, update the options view
+        when (state.areTargetAndUserLocationEqual) {
+            // TODO activate USER_LIVE option when implemented
+            true  -> views.shareLocationOptionsPicker.render(
+                    LocationSharingOption.USER_CURRENT
+            )
+            false -> views.shareLocationOptionsPicker.render(
+                    LocationSharingOption.PINNED
+            )
+            else  -> views.shareLocationOptionsPicker.render()
+        }
+        // then, update the map using the height of the options view after it has been rendered
+        views.shareLocationOptionsPicker.post {
+            val mapState = state
+                    .toMapState()
+                    .copy(logoMarginBottom = views.shareLocationOptionsPicker.height)
+            views.mapView.render(mapState)
         }
     }
 
@@ -153,5 +197,9 @@ class LocationSharingFragment @Inject constructor(
                     val tintColor = matrixItemColorProvider.getColor(it)
                     views.shareLocationOptionsPicker.optionUserCurrent.setIconBackgroundTint(tintColor)
                 }
+    }
+
+    private fun updateLocationTargetPin(drawable: Drawable) {
+        views.shareLocationPin.setImageDrawable(drawable)
     }
 }

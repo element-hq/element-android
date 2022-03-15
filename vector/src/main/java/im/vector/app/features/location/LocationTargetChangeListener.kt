@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.message
+package im.vector.app.features.location
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-
-@JsonClass(generateAdapter = true)
-data class LocationAsset(
-        @Json(name = "type") val type: String? = null
-)
+interface LocationTargetChangeListener {
+    fun onLocationTargetChange(target: LocationData)
+}
