@@ -38,7 +38,7 @@ internal class TextPillsUtils @Inject constructor(
      * @return the transformed String or null if no Span found
      */
     fun processSpecialSpansToHtml(text: CharSequence): String? {
-        return transformPills(text, permalinkService.createHtmlMentionSpanTemplate())
+        return transformPills(text, permalinkService.createMentionSpanTemplate(PermalinkService.SpanTemplateType.HTML))
     }
 
     /**
@@ -46,7 +46,7 @@ internal class TextPillsUtils @Inject constructor(
      * @return the transformed String or null if no Span found
      */
     fun processSpecialSpansToMarkdown(text: CharSequence): String? {
-        return transformPills(text, permalinkService.createMdMentionSpanTemplate())
+        return transformPills(text, permalinkService.createMentionSpanTemplate(PermalinkService.SpanTemplateType.MARKDOWN))
     }
 
     private fun transformPills(text: CharSequence, template: String): String? {

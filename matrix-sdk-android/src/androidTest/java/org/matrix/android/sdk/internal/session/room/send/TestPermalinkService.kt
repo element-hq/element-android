@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.*
 
 class TestPermalinkService : PermalinkService {
     override fun createPermalink(event: Event, forceMatrixTo: Boolean): String? {
@@ -40,11 +41,10 @@ class TestPermalinkService : PermalinkService {
         return null
     }
 
-    override fun createHtmlMentionSpanTemplate(forceMatrixTo: Boolean): String {
-        return "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
-    }
-
-    override fun createMdMentionSpanTemplate(forceMatrixTo: Boolean): String {
-        return "[%2\$s](https://matrix.to/#/%1\$s)"
+    override fun createMentionSpanTemplate(type: PermalinkService.SpanTemplateType, forceMatrixTo: Boolean): String {
+        return when (type) {
+            HTML     -> "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
+            MARKDOWN -> "[%2\$s](https://matrix.to/#/%1\$s)"
+        }
     }
 }

@@ -28,6 +28,11 @@ interface PermalinkService {
         const val MATRIX_TO_URL_BASE = "https://matrix.to/#/"
     }
 
+    enum class SpanTemplateType {
+        HTML,
+        MARKDOWN
+    }
+
     /**
      * Creates a permalink for an event.
      * Ex: "https://matrix.to/#/!nbzmcXAqpxBXjAdgoX:matrix.org/$1531497316352799BevdV:matrix.org"
@@ -82,22 +87,13 @@ interface PermalinkService {
     fun getLinkedId(url: String): String?
 
     /**
-     * Creates a HTML mention span template. Can be used to replace a mention with a permalink to mentioned user.
-     * Ex: "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
+     * Creates a HTML or Markdown mention span template. Can be used to replace a mention with a permalink to mentioned user.
+     * Ex: "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>" or "[%2\$s](https://matrix.to/#/%1\$s)"
      *
+     * @param type: type of template to create
      * @param forceMatrixTo whether we should force using matrix.to base URL
      *
-     * @return the HTML template
+     * @return the created template
      */
-    fun createHtmlMentionSpanTemplate(forceMatrixTo: Boolean = false): String
-
-    /**
-     * Creates a Markdown mention span template. Can be used to replace a mention with a permalink to mentioned user.
-     * Ex: "[%2\$s](https://matrix.to/#/%1\$s)"
-     *
-     * @param forceMatrixTo whether we should force using matrix.to base URL
-     *
-     * @return the Markdown template
-     */
-    fun createMdMentionSpanTemplate(forceMatrixTo: Boolean = false): String
+    fun createMentionSpanTemplate(type: SpanTemplateType, forceMatrixTo: Boolean = false): String
 }

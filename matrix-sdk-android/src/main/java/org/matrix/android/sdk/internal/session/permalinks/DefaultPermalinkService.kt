@@ -44,11 +44,7 @@ internal class DefaultPermalinkService @Inject constructor(
         return permalinkFactory.getLinkedId(url)
     }
 
-    override fun createHtmlMentionSpanTemplate(forceMatrixTo: Boolean): String {
-        return permalinkFactory.createHtmlMentionSpanTemplate(forceMatrixTo)
-    }
-
-    override fun createMdMentionSpanTemplate(forceMatrixTo: Boolean): String {
-        return permalinkFactory.createMdMentionSpanTemplate(forceMatrixTo)
+    override fun createMentionSpanTemplate(type: PermalinkService.SpanTemplateType, forceMatrixTo: Boolean): String {
+        return permalinkFactory.createMentionSpanTemplate(type, forceMatrixTo)
     }
 }
