@@ -16,22 +16,22 @@
 
 package org.matrix.android.sdk.internal.auth.login
 
-enum class LoginType(val value: String) {
-    PASSWORD("password"),
-    SSO("sso"),
-    UNSUPPORTED("unsupported"),
-    CUSTOM("custom"),
-    DIRECT("direct"),
-    UNKNOWN("unknown");
+enum class LoginType {
+    PASSWORD,
+    SSO,
+    UNSUPPORTED,
+    CUSTOM,
+    DIRECT,
+    UNKNOWN;
 
     companion object {
 
-        fun fromValue(value: String) = when (value) {
-            PASSWORD.value -> PASSWORD
-            SSO.value -> SSO
-            UNSUPPORTED.value -> UNSUPPORTED
-            CUSTOM.value -> CUSTOM
-            DIRECT.value -> DIRECT
+        fun fromName(name: String) = when (name) {
+            PASSWORD.name -> PASSWORD
+            SSO.name -> SSO
+            UNSUPPORTED.name -> UNSUPPORTED
+            CUSTOM.name -> CUSTOM
+            DIRECT.name -> DIRECT
             else -> UNKNOWN
         }
     }

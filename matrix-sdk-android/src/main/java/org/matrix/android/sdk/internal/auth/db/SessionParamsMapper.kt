@@ -38,7 +38,7 @@ internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {
         if (credentials == null || homeServerConnectionConfig == null) {
             return null
         }
-        return SessionParams(credentials, homeServerConnectionConfig, entity.isTokenValid, LoginType.fromValue(entity.loginType))
+        return SessionParams(credentials, homeServerConnectionConfig, entity.isTokenValid, LoginType.fromName(entity.loginType))
     }
 
     fun map(sessionParams: SessionParams?): SessionParamsEntity? {
@@ -56,7 +56,7 @@ internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {
                 credentialsJson,
                 homeServerConnectionConfigJson,
                 sessionParams.isTokenValid,
-                sessionParams.loginType.value,
+                sessionParams.loginType.name,
         )
     }
 }

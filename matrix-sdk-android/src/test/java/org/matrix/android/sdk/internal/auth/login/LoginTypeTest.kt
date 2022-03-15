@@ -23,22 +23,22 @@ import org.junit.Test
 class LoginTypeTest {
 
     @Test
-    fun `when getting type fromValue, then map correctly`() {
-        LoginType.fromValue(LoginType.PASSWORD.value) shouldBeEqualTo LoginType.PASSWORD
-        LoginType.fromValue(LoginType.SSO.value) shouldBeEqualTo LoginType.SSO
-        LoginType.fromValue(LoginType.UNSUPPORTED.value) shouldBeEqualTo LoginType.UNSUPPORTED
-        LoginType.fromValue(LoginType.CUSTOM.value) shouldBeEqualTo LoginType.CUSTOM
-        LoginType.fromValue(LoginType.DIRECT.value) shouldBeEqualTo LoginType.DIRECT
-        LoginType.fromValue(LoginType.UNKNOWN.value) shouldBeEqualTo LoginType.UNKNOWN
+    fun `when getting type fromName, then map correctly`() {
+        LoginType.fromName(LoginType.PASSWORD.name) shouldBeEqualTo LoginType.PASSWORD
+        LoginType.fromName(LoginType.SSO.name) shouldBeEqualTo LoginType.SSO
+        LoginType.fromName(LoginType.UNSUPPORTED.name) shouldBeEqualTo LoginType.UNSUPPORTED
+        LoginType.fromName(LoginType.CUSTOM.name) shouldBeEqualTo LoginType.CUSTOM
+        LoginType.fromName(LoginType.DIRECT.name) shouldBeEqualTo LoginType.DIRECT
+        LoginType.fromName(LoginType.UNKNOWN.name) shouldBeEqualTo LoginType.UNKNOWN
     }
 
     @Test // The failure of this test means that an existing type has not been correctly added to fromValue
-    fun `given non-unknown type value, when getting type fromValue, then type is not UNKNOWN`() {
+    fun `given non-unknown type name, when getting type fromName, then type is not UNKNOWN`() {
         val types = LoginType.values()
 
         types.forEach { type ->
             if (type != LoginType.UNKNOWN) {
-                LoginType.fromValue(type.value) shouldNotBeEqualTo LoginType.UNKNOWN
+                LoginType.fromName(type.name) shouldNotBeEqualTo LoginType.UNKNOWN
             }
         }
     }

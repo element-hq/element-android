@@ -54,7 +54,7 @@ internal class FakeSessionParamsMapperMoshi {
                 credentials,
                 homeServerConnectionConfig,
                 sessionParamsEntity.isTokenValid,
-                LoginType.fromValue(sessionParamsEntity.loginType)
+                LoginType.fromName(sessionParamsEntity.loginType)
         )
     }
 
@@ -69,7 +69,7 @@ internal class FakeSessionParamsMapperMoshi {
                 CREDENTIALS_JSON,
                 HOME_SERVER_CONNECTION_CONFIG_JSON,
                 sessionParams.isTokenValid,
-                sessionParams.loginType.value,
+                sessionParams.loginType.name,
         )
     }
 
