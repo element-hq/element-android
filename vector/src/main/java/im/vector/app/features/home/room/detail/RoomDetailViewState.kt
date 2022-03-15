@@ -96,7 +96,7 @@ data class RoomDetailViewState(
         Timber.d("WebRTCTest joined members: $joinedMembersCount")
         Timber.d("WebRTCTest isDirect: $isDirect")
         joinedMembersCount <= 2
-    }
+    } ?: true // if room summary cannot be found, assume call option should be available
 
     fun isSearchAvailable() = asyncRoomSummary()?.isEncrypted == false
 
