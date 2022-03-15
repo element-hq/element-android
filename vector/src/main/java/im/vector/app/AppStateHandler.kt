@@ -133,20 +133,6 @@ class AppStateHandler @Inject constructor(
                         } else {
                             setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
                         }
-                    }
-                }
-                .launchIn(coroutineScope)
-
-        sessionDataSource.stream()
-                .distinctUntilChanged()
-                .onEach {
-                    // sessionDataSource could already return a session while activeSession holder still returns null
-                    it.orNull()?.let { session ->
-                        if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
-                            setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
-                        } else {
-                            setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
-                        }
                         observeSyncStatus(session)
                     }
                 }
