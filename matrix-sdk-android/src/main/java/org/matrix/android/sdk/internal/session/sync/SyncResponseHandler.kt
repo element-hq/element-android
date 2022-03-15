@@ -18,20 +18,15 @@ package org.matrix.android.sdk.internal.session.sync
 
 import androidx.work.ExistingPeriodicWorkPolicy
 import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
-import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
-import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
@@ -170,25 +165,9 @@ internal class SyncResponseHandler @Inject constructor(
         Timber.v("On sync completed")
         cryptoSyncHandler.onSyncCompleted(syncResponse)
 
-        monarchy.awaitTransaction {
-            trackUserSpaceNumber(it)
-        }
-
         // post sync stuffs
         monarchy.writeAsync {
             roomSyncHandler.postSyncSpaceHierarchyHandle(it)
-        }
-    }
-
-    fun trackUserSpaceNumber(realm: Realm) {
-        val joinedSpacesNumber = realm.where(RoomSummaryEntity::class.java)
-                .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
-                .equalTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
-                .count()
-
-        val session = sessionManager.getSessionComponent(sessionId)?.session()
-        session.dispatchTo(sessionListeners) { _session, listener ->
-            listener.onJoinedSpaceCounted(_session, joinedSpacesNumber.toInt())
         }
     }
 
