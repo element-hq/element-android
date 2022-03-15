@@ -88,15 +88,7 @@ data class RoomDetailViewState(
             rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
     )
 
-    // TODO: Add condition here to check that room is DM-based group chat and not group room
-    fun isWebRTCCallOptionAvailable() = asyncRoomSummary.invoke()?.let { roomSummary ->
-        val joinedMembersCount = roomSummary.joinedMembersCount ?: 0
-        val isDirect = roomSummary.isDirect
-        Timber.d("WebRTCTest roomSummary: $roomSummary")
-        Timber.d("WebRTCTest joined members: $joinedMembersCount")
-        Timber.d("WebRTCTest isDirect: $isDirect")
-        joinedMembersCount <= 2
-    } ?: true // if room summary cannot be found, assume call option should be available
+    fun isWebRTCCallOptionAvailable() = asyncRoomSummary.invoke()?.isDirect ?: true
 
     fun isSearchAvailable() = asyncRoomSummary()?.isEncrypted == false
 
