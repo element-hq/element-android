@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,37 +14,38 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.permalinks
+package org.matrix.android.sdk.internal.session.room.send
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
-import javax.inject.Inject
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.HTML
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.MARKDOWN
 
-internal class DefaultPermalinkService @Inject constructor(
-        private val permalinkFactory: PermalinkFactory
-) : PermalinkService {
-
+class TestPermalinkService : PermalinkService {
     override fun createPermalink(event: Event, forceMatrixTo: Boolean): String? {
-        return permalinkFactory.createPermalink(event, forceMatrixTo)
+        return null
     }
 
     override fun createPermalink(id: String, forceMatrixTo: Boolean): String? {
-        return permalinkFactory.createPermalink(id, forceMatrixTo)
-    }
-
-    override fun createRoomPermalink(roomId: String, viaServers: List<String>?, forceMatrixTo: Boolean): String? {
-        return permalinkFactory.createRoomPermalink(roomId, viaServers, forceMatrixTo)
+        return ""
     }
 
     override fun createPermalink(roomId: String, eventId: String, forceMatrixTo: Boolean): String {
-        return permalinkFactory.createPermalink(roomId, eventId, forceMatrixTo)
+        return ""
+    }
+
+    override fun createRoomPermalink(roomId: String, viaServers: List<String>?, forceMatrixTo: Boolean): String? {
+        return null
     }
 
     override fun getLinkedId(url: String): String? {
-        return permalinkFactory.getLinkedId(url)
+        return null
     }
 
     override fun createMentionSpanTemplate(type: PermalinkService.SpanTemplateType, forceMatrixTo: Boolean): String {
-        return permalinkFactory.createMentionSpanTemplate(type, forceMatrixTo)
+        return when (type) {
+            HTML     -> "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
+            MARKDOWN -> "[%2\$s](https://matrix.to/#/%1\$s)"
+        }
     }
 }
