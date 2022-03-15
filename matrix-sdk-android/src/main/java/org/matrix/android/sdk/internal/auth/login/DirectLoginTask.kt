@@ -77,7 +77,7 @@ internal class DefaultDirectLoginTask @Inject constructor(
             }
         }
 
-        return sessionCreator.createSession(credentials, params.homeServerConnectionConfig, LoginType.UNSUPPORTED)
+        return sessionCreator.createSession(credentials, params.homeServerConnectionConfig, LoginType.DIRECT)
     }
 
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {

@@ -27,6 +27,8 @@ class LoginTypeTest {
         LoginType.fromValue(LoginType.PASSWORD.value) shouldBeEqualTo LoginType.PASSWORD
         LoginType.fromValue(LoginType.SSO.value) shouldBeEqualTo LoginType.SSO
         LoginType.fromValue(LoginType.UNSUPPORTED.value) shouldBeEqualTo LoginType.UNSUPPORTED
+        LoginType.fromValue(LoginType.CUSTOM.value) shouldBeEqualTo LoginType.CUSTOM
+        LoginType.fromValue(LoginType.DIRECT.value) shouldBeEqualTo LoginType.DIRECT
         LoginType.fromValue(LoginType.UNKNOWN.value) shouldBeEqualTo LoginType.UNKNOWN
     }
 

@@ -98,7 +98,7 @@ internal class DefaultLoginWizard(
             authAPI.login(data)
         }
 
-        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig, LoginType.UNSUPPORTED)
+        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig, LoginType.CUSTOM)
     }
 
     override suspend fun resetPassword(email: String, newPassword: String) {

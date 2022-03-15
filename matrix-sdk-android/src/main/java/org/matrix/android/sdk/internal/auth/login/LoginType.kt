@@ -20,6 +20,8 @@ enum class LoginType(val value: String) {
     PASSWORD("password"),
     SSO("sso"),
     UNSUPPORTED("unsupported"),
+    CUSTOM("custom"),
+    DIRECT("direct"),
     UNKNOWN("unknown");
 
     companion object {
@@ -28,6 +30,8 @@ enum class LoginType(val value: String) {
             PASSWORD.value -> PASSWORD
             SSO.value -> SSO
             UNSUPPORTED.value -> UNSUPPORTED
+            CUSTOM.value -> CUSTOM
+            DIRECT.value -> DIRECT
             else -> UNKNOWN
         }
     }
