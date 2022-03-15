@@ -61,10 +61,8 @@ class MarkdownParserTest : InstrumentedTest {
                                     roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
                             )
                     ),
-                    MatrixConfiguration(
-                            applicationFlavor = "TestFlavor",
-                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
-                    ))
+                    TestPermalinkService()
+            )
     )
 
     @Test
