@@ -18,7 +18,8 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
-import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.*
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.HTML
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.MARKDOWN
 
 class TestPermalinkService : PermalinkService {
     override fun createPermalink(event: Event, forceMatrixTo: Boolean): String? {

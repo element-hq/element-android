@@ -23,7 +23,8 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
-import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.*
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.HTML
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.MARKDOWN
 import org.matrix.android.sdk.internal.di.UserId
 import javax.inject.Inject
 
