@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.room.send
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 
-class TestPermalinkService: PermalinkService {
+class TestPermalinkService : PermalinkService {
     override fun createPermalink(event: Event, forceMatrixTo: Boolean): String? {
         return null
     }
