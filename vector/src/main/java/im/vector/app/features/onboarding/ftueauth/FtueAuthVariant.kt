@@ -227,7 +227,7 @@ class FtueAuthVariant(
             OnboardingViewEvents.OnChooseDisplayName                           -> onChooseDisplayName()
             OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
             OnboardingViewEvents.OnChooseProfilePicture                        -> onChooseProfilePicture()
-            OnboardingViewEvents.OnPersonalizationComplete                     -> navigateToHome(createdAccount = true)
+            OnboardingViewEvents.OnPersonalizationComplete                     -> onPersonalizationComplete()
             OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
         }.exhaustive
     }
@@ -393,7 +393,8 @@ class FtueAuthVariant(
         activity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         activity.replaceFragment(
                 views.loginFragmentContainer,
-                FtueAuthAccountCreatedFragment::class.java
+                FtueAuthAccountCreatedFragment::class.java,
+                useCustomAnimation = true
         )
     }
 
@@ -414,6 +415,15 @@ class FtueAuthVariant(
         activity.addFragmentToBackstack(views.loginFragmentContainer,
                 FtueAuthChooseProfilePictureFragment::class.java,
                 option = commonOption
+        )
+    }
+
+    private fun onPersonalizationComplete() {
+        activity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        activity.replaceFragment(
+                views.loginFragmentContainer,
+                FtueAuthPersonalizationCompleteFragment::class.java,
+                useCustomAnimation = true
         )
     }
 }
