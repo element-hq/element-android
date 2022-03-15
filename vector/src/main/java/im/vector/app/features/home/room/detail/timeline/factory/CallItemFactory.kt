@@ -26,6 +26,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttrib
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.CallTileTimelineItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryEvents
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -61,7 +62,8 @@ class CallItemFactory @Inject constructor(
                             highlight = params.isHighlighted,
                             informationData = informationData,
                             isStillActive = callEventGrouper.isInCall(),
-                            formattedDuration = callEventGrouper.formattedDuration()
+                            formattedDuration = callEventGrouper.formattedDuration(),
+                            reactionsSummaryEvents = params.reactionsSummaryEvents
                     )
                 } else {
                     null
@@ -78,7 +80,8 @@ class CallItemFactory @Inject constructor(
                             highlight = params.isHighlighted,
                             informationData = informationData,
                             isStillActive = callEventGrouper.isRinging(),
-                            formattedDuration = callEventGrouper.formattedDuration()
+                            formattedDuration = callEventGrouper.formattedDuration(),
+                            reactionsSummaryEvents = params.reactionsSummaryEvents
                     )
                 } else {
                     null
@@ -94,7 +97,8 @@ class CallItemFactory @Inject constructor(
                         highlight = params.isHighlighted,
                         informationData = informationData,
                         isStillActive = false,
-                        formattedDuration = callEventGrouper.formattedDuration()
+                        formattedDuration = callEventGrouper.formattedDuration(),
+                        reactionsSummaryEvents = params.reactionsSummaryEvents
                 )
             }
             EventType.CALL_HANGUP -> {
@@ -111,7 +115,8 @@ class CallItemFactory @Inject constructor(
                         highlight = params.isHighlighted,
                         informationData = informationData,
                         isStillActive = false,
-                        formattedDuration = callEventGrouper.formattedDuration()
+                        formattedDuration = callEventGrouper.formattedDuration(),
+                        reactionsSummaryEvents = params.reactionsSummaryEvents
                 )
             }
             else                  -> null
@@ -133,10 +138,11 @@ class CallItemFactory @Inject constructor(
             highlight: Boolean,
             isStillActive: Boolean,
             formattedDuration: String,
-            callback: TimelineEventController.Callback?
+            callback: TimelineEventController.Callback?,
+            reactionsSummaryEvents: ReactionsSummaryEvents?
     ): CallTileTimelineItem? {
         val userOfInterest = roomSummary.toMatrixItem()
-        val attributes = messageItemAttributesFactory.create(null, informationData, callback).let {
+        val attributes = messageItemAttributesFactory.create(null, informationData, callback, reactionsSummaryEvents).let {
             CallTileTimelineItem.Attributes(
                     callId = callId,
                     callKind = callKind,
@@ -151,7 +157,8 @@ class CallItemFactory @Inject constructor(
                     readReceiptsCallback = it.readReceiptsCallback,
                     userOfInterest = userOfInterest,
                     callback = callback,
-                    isStillActive = isStillActive
+                    isStillActive = isStillActive,
+                    reactionsSummaryEvents = reactionsSummaryEvents
             )
         }
         return CallTileTimelineItem_()

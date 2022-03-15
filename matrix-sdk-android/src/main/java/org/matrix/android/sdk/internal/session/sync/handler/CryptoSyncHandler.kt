@@ -38,7 +38,7 @@ private val loggerTag = LoggerTag("CryptoSyncHandler", LoggerTag.CRYPTO)
 internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
                                                      private val verificationService: DefaultVerificationService) {
 
-    fun handleToDevice(toDevice: ToDeviceSyncResponse, progressReporter: ProgressReporter? = null) {
+    suspend fun handleToDevice(toDevice: ToDeviceSyncResponse, progressReporter: ProgressReporter? = null) {
         val total = toDevice.events?.size ?: 0
         toDevice.events?.forEachIndexed { index, event ->
             progressReporter?.reportProgress(index * 100F / total)
@@ -66,7 +66,7 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
      * @param timelineId the timeline identifier
      * @return true if the event has been decrypted
      */
-    private fun decryptToDeviceEvent(event: Event, timelineId: String?): Boolean {
+    private suspend fun decryptToDeviceEvent(event: Event, timelineId: String?): Boolean {
         Timber.v("## CRYPTO | decryptToDeviceEvent")
         if (event.getClearType() == EventType.ENCRYPTED) {
             var result: MXEventDecryptionResult? = null
@@ -80,6 +80,8 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
                     it.identityKey() == senderKey
                 }?.deviceId ?: senderKey
                 Timber.e("## CRYPTO | Failed to decrypt to device event from ${event.senderId}|$deviceId reason:<${event.mCryptoError ?: exception}>")
+            } catch (failure: Throwable) {
+                Timber.e(failure, "## CRYPTO | Failed to decrypt to device event from ${event.senderId}")
             }
 
             if (null != result) {
@@ -91,7 +93,9 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
                 )
                 return true
             } else {
-                // should not happen
+                // Could happen for to device events
+                // None of the known session could decrypt the message
+                // In this case unwedging process might have been started (rate limited)
                 Timber.e("## CRYPTO | ERROR NULL DECRYPTION RESULT from ${event.senderId}")
             }
         }

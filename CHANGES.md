@@ -1,3 +1,96 @@
+Changes in Element v1.4.4 (2022-03-09)
+======================================
+
+Features ✨
+----------
+ - Adds animated typing indicator to the bottom of the timeline ([#3296](https://github.com/vector-im/element-android/issues/3296))
+ - Removes the topic and typing information from the room's top bar ([#4642](https://github.com/vector-im/element-android/issues/4642))
+ - Add possibility to save media from Gallery + reorder choices in message context menu ([#5005](https://github.com/vector-im/element-android/issues/5005))
+ - Improves settings error dialog messaging when changing avatar or display name fails ([#5418](https://github.com/vector-im/element-android/issues/5418))
+ 
+Bugfixes 🐛
+----------
+ - Open direct message screen when clicking on DM button in the space members list ([#4319](https://github.com/vector-im/element-android/issues/4319))
+ - Fix incorrect media cache size in settings ([#5394](https://github.com/vector-im/element-android/issues/5394))
+ - Setting an avatar when creating a room had no effect ([#5402](https://github.com/vector-im/element-android/issues/5402))
+ - Fix reactions summary crash when reopening a room ([#5463](https://github.com/vector-im/element-android/issues/5463))
+ - Fixing room titles overlapping the room image in the room toolbar ([#5468](https://github.com/vector-im/element-android/issues/5468))
+
+In development 🚧
+----------------
+ - Starts the FTUE account personalisation flow by adding an account created screen behind a feature flag ([#5158](https://github.com/vector-im/element-android/issues/5158))
+
+SDK API changes ⚠️
+------------------
+ - Change name of getTimeLineEvent and getTimeLineEventLive methods to getTimelineEvent and getTimelineEventLive. ([#5330](https://github.com/vector-im/element-android/issues/5330))
+
+Other changes
+-------------
+ - Improve Bubble layouts rendering ([#5303](https://github.com/vector-im/element-android/issues/5303))
+ - Continue improving realm usage (potentially helping with storage and RAM usage) ([#5330](https://github.com/vector-im/element-android/issues/5330))
+ - Update reaction button layout. ([#5313](https://github.com/vector-im/element-android/issues/5313))
+ - Adds forceLoginFallback feature flag and usages to FTUE login and registration ([#5325](https://github.com/vector-im/element-android/issues/5325))
+ - Override task affinity to prevent unknown activities running in our app tasks. ([#4498](https://github.com/vector-im/element-android/issues/4498))
+ - Tentatively fixing the UI sanity test being unable to click on the space menu items ([#5269](https://github.com/vector-im/element-android/issues/5269))
+ - Moves attachment-viewer, diff-match-patch, and multipicker modules to subfolders under library ([#5309](https://github.com/vector-im/element-android/issues/5309))
+ - Log the `since` token used and `next_batch` token returned when doing an incremental sync. ([#5312](https://github.com/vector-im/element-android/issues/5312), [#5318](https://github.com/vector-im/element-android/issues/5318))
+ - Upgrades material dependency version from 1.4.0 to 1.5.0 ([#5392](https://github.com/vector-im/element-android/issues/5392))
+ - Using app name instead of hardcoded "Element" for exported keys filename ([#5326](https://github.com/vector-im/element-android/issues/5326))
+ - Upgrade the plugin which generate strings with template from 1.2.2 to 2.0.0 ([#5348](https://github.com/vector-im/element-android/issues/5348))
+ - Remove about 700 unused strings and their translations ([#5352](https://github.com/vector-im/element-android/issues/5352))
+ - Creates dedicated VectorOverrides for forcing behaviour for local testing/development ([#5361](https://github.com/vector-im/element-android/issues/5361))
+ - Cleanup unused threads build configurations ([#5379](https://github.com/vector-im/element-android/issues/5379))
+ - Notify element-android channel each time a nightly build completes. ([#5314](https://github.com/vector-im/element-android/issues/5314))
+ - Iterate on badge / unread indicator color ([#5456](https://github.com/vector-im/element-android/issues/5456))
+
+
+Changes in Element v1.4.2 (2022-02-22 Palindrome Day!)
+======================================================
+
+Features ✨
+----------
+ - Open the room when user accepts an invite from the room list ([#3771](https://github.com/vector-im/element-android/issues/3771))
+ - Add completion for @room to notify everyone in a room ([#5123](https://github.com/vector-im/element-android/issues/5123))
+ - Improve UI of reactions in timeline, including quick add reaction. ([#5204](https://github.com/vector-im/element-android/issues/5204))
+ - Support creating disclosed polls ([#5290](https://github.com/vector-im/element-android/issues/5290))
+
+Bugfixes 🐛
+----------
+ - Remove redundant highlight on add poll option button ([#5178](https://github.com/vector-im/element-android/issues/5178))
+ - Reliably display crash report prompt ([#5195](https://github.com/vector-im/element-android/issues/5195))
+ - Fix for rooms with virtual rooms not showing call status events in the timeline. ([#5198](https://github.com/vector-im/element-android/issues/5198))
+ - Fix for call transfer with consult failing to make outgoing consultation call. ([#5201](https://github.com/vector-im/element-android/issues/5201))
+ - Fix crash during account registration when redirecting to Web View ([#5218](https://github.com/vector-im/element-android/issues/5218))
+ - Analytics: Fixes missing use case identity values from within the onboarding flow ([#5234](https://github.com/vector-im/element-android/issues/5234))
+ - Fixing crash when adding room by QR code after accepting the camera permission for the first time ([#5295](https://github.com/vector-im/element-android/issues/5295))
+
+SDK API changes ⚠️
+------------------
+ - `join` and `leave` methods moved from MembershipService to RoomService and SpaceService to split logic for rooms and spaces ([#5183](https://github.com/vector-im/element-android/issues/5183))
+ - Deprecates Matrix.initialize and Matrix.getInstance in favour of the client providing its own singleton instance via Matrix.createInstance ([#5185](https://github.com/vector-im/element-android/issues/5185))
+ - Adds support for MSC3283, additional homeserver capabilities ([#5207](https://github.com/vector-im/element-android/issues/5207))
+
+Other changes
+-------------
+ - Right align the notifications badge in the rooms list (and DMs) so that it's always in a consistent place on the screen. ([#4640](https://github.com/vector-im/element-android/issues/4640))
+ - Collapse successive ACLs events in room timeline ([#2782](https://github.com/vector-im/element-android/issues/2782))
+ - Home screen: Replacing search icon by filter icon in the top right menu ([#4643](https://github.com/vector-im/element-android/issues/4643))
+ - Make Space creation screens more consistent ([#5104](https://github.com/vector-im/element-android/issues/5104))
+ - Defensive coding to ensure encryption when room was once e2e ([#5136](https://github.com/vector-im/element-android/issues/5136))
+ - Reduce verbosity of debug logging, ([#5209](https://github.com/vector-im/element-android/issues/5209))
+ - Standardise emulator versions of GHA integration tests. ([#5210](https://github.com/vector-im/element-android/issues/5210))
+ - Replacing color "vctr_unread_room_badge" by "vctr_content_secondary" ([#5225](https://github.com/vector-im/element-android/issues/5225))
+ - Change preferred jitsi domain from `jitsi.riot.im` to `meet.element.io` ([#5254](https://github.com/vector-im/element-android/issues/5254))
+ - Analytics screen events are now tracked on screen enter instead of screen leave ([#5256](https://github.com/vector-im/element-android/issues/5256))
+ - Improves bitmap memory usage by caching the shortcut images ([#5276](https://github.com/vector-im/element-android/issues/5276))
+ - Changes unread marker in room list from green to grey ([#5294](https://github.com/vector-im/element-android/issues/5294))
+ - Improve some internal realm usages. ([#5297](https://github.com/vector-im/element-android/issues/5297))
+
+Translations 🗣
+--------------
+ - Improved Japanese translations (special thanks to Suguru Hirahara!)
+
+
 Changes in Element v1.4.0 (2022-02-09)
 ======================================
 

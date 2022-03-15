@@ -36,7 +36,7 @@ internal interface IMXDecrypting {
      * @return the decryption information, or an error
      */
     @Throws(MXCryptoError::class)
-    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
+    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
     /**
      * Handle a key event.

@@ -58,9 +58,9 @@ class FlowRoom(private val room: Room) {
     }
 
     fun liveTimelineEvent(eventId: String): Flow<Optional<TimelineEvent>> {
-        return room.getTimeLineEventLive(eventId).asFlow()
+        return room.getTimelineEventLive(eventId).asFlow()
                 .startWith(room.coroutineDispatchers.io) {
-                    room.getTimeLineEvent(eventId).toOptional()
+                    room.getTimelineEvent(eventId).toOptional()
                 }
     }
 

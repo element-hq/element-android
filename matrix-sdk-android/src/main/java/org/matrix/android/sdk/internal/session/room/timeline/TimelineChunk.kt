@@ -90,8 +90,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     private val timelineEventsChangeListener =
             OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
                 Timber.v("on timeline events chunk update")
-                val frozenResults = results.freeze()
-                handleDatabaseChangeSet(frozenResults, changeSet)
+                handleDatabaseChangeSet(results, changeSet)
             }
 
     private var timelineEventEntities: RealmResults<TimelineEventEntity> = chunkEntity.sortedTimelineEvents(timelineSettings.rootThreadEventId)
@@ -145,14 +144,14 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
 
         val offsetCount = count - loadFromStorage.numberOfEvents
 
-        return if (direction == Timeline.Direction.FORWARDS && isLastForward.get()) {
+        return if (offsetCount == 0) {
+            LoadMoreResult.SUCCESS
+        } else if (direction == Timeline.Direction.FORWARDS && isLastForward.get()) {
             LoadMoreResult.REACHED_END
         } else if (direction == Timeline.Direction.BACKWARDS && isLastBackward.get()) {
             LoadMoreResult.REACHED_END
         } else if (timelineSettings.isThreadTimeline() && loadFromStorage.threadReachedEnd) {
             LoadMoreResult.REACHED_END
-        } else if (offsetCount == 0) {
-            LoadMoreResult.SUCCESS
         } else {
             delegateLoadMore(fetchOnServerIfNeeded, offsetCount, direction)
         }
@@ -287,7 +286,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      * @return the number of events loaded. If we are in a thread timeline it also returns
      * whether or not we reached the end/root message
      */
-    private suspend fun loadFromStorage(count: Int, direction: Timeline.Direction): LoadedFromStorage {
+    private fun loadFromStorage(count: Int, direction: Timeline.Direction): LoadedFromStorage {
         val displayIndex = getNextDisplayIndex(direction) ?: return LoadedFromStorage()
         val baseQuery = timelineEventEntities.where()
 
@@ -428,10 +427,10 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      * This method is responsible for managing insertions and updates of events on this chunk.
      *
      */
-    private fun handleDatabaseChangeSet(frozenResults: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
+    private fun handleDatabaseChangeSet(results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
         val insertions = changeSet.insertionRanges
         for (range in insertions) {
-            val newItems = frozenResults
+            val newItems = results
                     .subList(range.startIndex, range.startIndex + range.length)
                     .map { it.buildAndDecryptIfNeeded() }
             builtEventsIndexes.entries.filter { it.value >= range.startIndex }.forEach { it.setValue(it.value + range.length) }
@@ -447,7 +446,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val modifications = changeSet.changeRanges
         for (range in modifications) {
             for (modificationIndex in (range.startIndex until range.startIndex + range.length)) {
-                val updatedEntity = frozenResults[modificationIndex] ?: continue
+                val updatedEntity = results[modificationIndex] ?: continue
                 try {
                     builtEvents[modificationIndex] = updatedEntity.buildAndDecryptIfNeeded()
                 } catch (failure: Throwable) {
@@ -461,17 +460,16 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     }
 
     private fun getNextDisplayIndex(direction: Timeline.Direction): Int? {
-        val frozenTimelineEvents = timelineEventEntities.freeze()
-        if (frozenTimelineEvents.isEmpty()) {
+        if (timelineEventEntities.isEmpty()) {
             return null
         }
         return if (builtEvents.isEmpty()) {
             if (initialEventId != null) {
-                frozenTimelineEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, initialEventId).findFirst()?.displayIndex
+                timelineEventEntities.where().equalTo(TimelineEventEntityFields.EVENT_ID, initialEventId).findFirst()?.displayIndex
             } else if (direction == Timeline.Direction.BACKWARDS) {
-                frozenTimelineEvents.first(null)?.displayIndex
+                timelineEventEntities.first(null)?.displayIndex
             } else {
-                frozenTimelineEvents.last(null)?.displayIndex
+                timelineEventEntities.last(null)?.displayIndex
             }
         } else if (direction == Timeline.Direction.FORWARDS) {
             builtEvents.first().displayIndex + 1
@@ -510,13 +508,18 @@ private fun RealmQuery<TimelineEventEntity>.offsets(
         count: Int,
         startDisplayIndex: Int
 ): RealmQuery<TimelineEventEntity> {
-    sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-    if (direction == Timeline.Direction.BACKWARDS) {
+    return if (direction == Timeline.Direction.BACKWARDS) {
         lessThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
+        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+        limit(count.toLong())
     } else {
         greaterThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
+        // We need to sort ascending first so limit works in the right direction
+        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+        limit(count.toLong())
+        // Result is expected to be sorted descending
+        sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     }
-    return limit(count.toLong())
 }
 
 private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {

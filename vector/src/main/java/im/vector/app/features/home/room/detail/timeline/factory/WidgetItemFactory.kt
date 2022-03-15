@@ -88,7 +88,8 @@ class WidgetItemFactory @Inject constructor(
                 userOfInterest = userOfInterest,
                 callback = params.callback,
                 isStillActive = isCallStillActive,
-                formattedDuration = ""
+                formattedDuration = "",
+                reactionsSummaryEvents = params.reactionsSummaryEvents
         )
         return CallTileTimelineItem_()
                 .attributes(attributes)

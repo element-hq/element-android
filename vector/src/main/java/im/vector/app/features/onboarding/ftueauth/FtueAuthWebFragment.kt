@@ -30,7 +30,6 @@ import android.view.ViewGroup
 import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.airbnb.mvrx.activityViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.utils.AssetReader
@@ -40,8 +39,6 @@ import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
-import im.vector.app.features.signout.soft.SoftLogoutAction
-import im.vector.app.features.signout.soft.SoftLogoutViewModel
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
@@ -56,14 +53,11 @@ class FtueAuthWebFragment @Inject constructor(
         private val assetReader: AssetReader
 ) : AbstractFtueAuthFragment<FragmentLoginWebBinding>() {
 
-    val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
-
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWebBinding {
         return FragmentLoginWebBinding.inflate(inflater, container, false)
     }
 
     private var isWebViewLoaded = false
-    private var isForSessionRecovery = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,8 +68,6 @@ class FtueAuthWebFragment @Inject constructor(
 
     override fun updateWithState(state: OnboardingViewState) {
         setupTitle(state)
-
-        isForSessionRecovery = state.deviceId?.isNotBlank() == true
 
         if (!isWebViewLoaded) {
             setupWebView(state)
@@ -239,11 +231,7 @@ class FtueAuthWebFragment @Inject constructor(
     }
 
     private fun notifyViewModel(credentials: Credentials) {
-        if (isForSessionRecovery) {
-            softLogoutViewModel.handle(SoftLogoutAction.WebLoginSuccess(credentials))
-        } else {
-            viewModel.handle(OnboardingAction.WebLoginSuccess(credentials))
-        }
+        viewModel.handle(OnboardingAction.WebLoginSuccess(credentials))
     }
 
     override fun resetViewModel() {

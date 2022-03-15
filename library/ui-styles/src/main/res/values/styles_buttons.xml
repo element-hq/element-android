@@ -33,24 +33,6 @@
         <!-- Keep default colors from the theme -->
     </style>
 
-    <style name="Widget.Vector.Button.Unelevated" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:minWidth">94dp</item>
-        <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
-        <item name="cornerRadius">8dp</item>
-        <item name="lineHeight">24sp</item>
-    </style>
-
-    <style name="Widget.Vector.Button.Unelevated.Bot">
-        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayBot</item>
-    </style>
-
-    <style name="VectorMaterialThemeOverlayBot">
-        <item name="colorPrimary">@color/button_bot_background_color</item>
-        <item name="colorOnPrimary">@color/button_bot_enabled_text_color</item>
-    </style>
-
     <style name="Widget.Vector.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="colorControlHighlight">?colorSecondary</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
@@ -81,11 +63,6 @@
 
     <style name="VectorMaterialThemeOverlayOnPrimary">
         <item name="colorPrimary">?colorOnPrimary</item>
-    </style>
-
-    <style name="Widget.Vector.Button.Outlined.Poll">
-        <item name="android:minHeight">44dp</item>
-        <item name="cornerRadius">10dp</item>
     </style>
 
 </resources>

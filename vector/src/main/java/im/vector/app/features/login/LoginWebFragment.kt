@@ -51,7 +51,7 @@ class LoginWebFragment @Inject constructor(
         private val assetReader: AssetReader
 ) : AbstractLoginFragment<FragmentLoginWebBinding>() {
 
-    val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
+    private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWebBinding {
         return FragmentLoginWebBinding.inflate(inflater, container, false)

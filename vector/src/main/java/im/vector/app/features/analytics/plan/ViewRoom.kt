@@ -26,6 +26,18 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
  */
 data class ViewRoom(
         /**
+         * active space when user navigated to the room.
+         */
+        val activeSpace: ActiveSpace? = null,
+        /**
+         * Whether the room is a DM.
+         */
+        val isDM: Boolean? = null,
+        /**
+         * Whether the room is a Space.
+         */
+        val isSpace: Boolean? = null,
+        /**
          * The reason for the room change if known.
          */
         val trigger: Trigger? = null,
@@ -179,10 +191,36 @@ data class ViewRoom(
         Widget,
     }
 
+    enum class ActiveSpace {
+
+        /**
+         * Active space is Home.
+         */
+        Home,
+
+        /**
+         * Active space is a meta space.
+         */
+        Meta,
+
+        /**
+         * Active space is a private space.
+         */
+        Private,
+
+        /**
+         * Active space is a public space.
+         */
+        Public,
+    }
+
     override fun getName() = "ViewRoom"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
+            activeSpace?.let { put("activeSpace", it.name) }
+            isDM?.let { put("isDM", it) }
+            isSpace?.let { put("isSpace", it) }
             trigger?.let { put("trigger", it.name) }
             viaKeyboard?.let { put("viaKeyboard", it) }
         }.takeIf { it.isNotEmpty() }

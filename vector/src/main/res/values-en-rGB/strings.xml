@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_splash_text3">Extend &amp; customise your experience</string>
-    <string name="home_filter_placeholder_favorites">Filter favourites</string>
     <string name="room_list_quick_actions_favorite_remove">Remove from favourites</string>
     <string name="room_list_quick_actions_favorite_add">Add to favourites</string>
     <string name="bootstrap_crosssigning_progress_save_ssk">Synchronising Self Signing key</string>
@@ -14,10 +13,7 @@
     <string name="settings_background_fdroid_sync_mode_battery">Optimised for battery</string>
     <string name="settings_background_sync">Background synchronisation</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignore Optimisation</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} is not affected by Battery Optimisation.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} is not affected by Battery Optimisation.</string>
     <string name="settings_troubleshoot_test_battery_title">Battery Optimisation</string>
-    <string name="room_settings_de_prioritize">De-prioritise</string>
-    <string name="call_error_camera_init_failed">Cannot initialise the camera</string>
     <string name="error_unauthorized">Unauthorised, missing valid authentication credentials</string>
-    <string name="notification_sync_init">Initialising service</string>
 </resources>

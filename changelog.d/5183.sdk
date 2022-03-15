@@ -1,1 +1,0 @@
-`join` and `leave` methods moved from MembershipService to RoomService and SpaceService to split logic for rooms and spaces

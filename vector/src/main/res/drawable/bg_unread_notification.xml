@@ -4,5 +4,5 @@
 
     <corners android:radius="40dp" />
 
-    <solid android:color="?vctr_unread_room_badge" />
+    <solid android:color="?vctr_unread_background" />
 </shape>

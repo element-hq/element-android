@@ -152,7 +152,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val permissionCameraLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            addFragment(views.container, QrCodeScannerFragment::class.java)
+            val args = QrScannerArgs(showExtraButtons = false, R.string.add_by_qr_code)
+            addFragment(views.container, QrCodeScannerFragment::class.java, args)
         } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
         }

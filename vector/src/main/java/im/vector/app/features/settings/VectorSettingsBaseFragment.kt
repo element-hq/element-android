@@ -31,7 +31,6 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.analytics.screen.ScreenEvent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
@@ -44,7 +43,6 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
      * ========================================================================================== */
 
     protected var analyticsScreenName: MobileScreen.ScreenName? = null
-    private var screenEvent: ScreenEvent? = null
 
     protected lateinit var analyticsTracker: AnalyticsTracker
 
@@ -91,15 +89,12 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Fragment ${javaClass.simpleName}")
-        screenEvent = analyticsScreenName?.let { ScreenEvent(it) }
+        analyticsScreenName?.let {
+            analyticsTracker.screen(MobileScreen(screenName = it))
+        }
         vectorActivity.supportActionBar?.setTitle(titleRes)
         // find the view from parent activity
         mLoadingView = vectorActivity.findViewById(R.id.vector_settings_spinner_views)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        screenEvent?.send(analyticsTracker)
     }
 
     abstract fun bindPref()
@@ -150,24 +145,6 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
 
         if (refresh) {
             // TODO refreshDisplay()
-        }
-    }
-
-    /**
-     * A request has been processed.
-     * Display a toast if there is a an error message
-     *
-     * @param errorMessage the error message
-     */
-    protected fun onCommonDone(errorMessage: String?) {
-        if (!isAdded) {
-            return
-        }
-        activity?.runOnUiThread {
-            if (errorMessage != null && errorMessage.isNotBlank()) {
-                displayErrorDialog(errorMessage)
-            }
-            hideLoadingView()
         }
     }
 

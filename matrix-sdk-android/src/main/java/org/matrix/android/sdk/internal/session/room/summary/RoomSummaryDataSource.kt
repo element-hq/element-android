@@ -25,7 +25,13 @@ import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
+import io.realm.kotlin.toFlow
 import io.realm.kotlin.where
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.isNormalized
@@ -42,6 +48,7 @@ import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotification
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.RoomSummaryMapper
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
@@ -55,8 +62,10 @@ import javax.inject.Inject
 
 internal class RoomSummaryDataSource @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
+        private val realmSessionProvider: RealmSessionProvider,
         private val roomSummaryMapper: RoomSummaryMapper,
-        private val queryStringValueProcessor: QueryStringValueProcessor
+        private val queryStringValueProcessor: QueryStringValueProcessor,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
 
     fun getRoomSummary(roomIdOrAlias: String): RoomSummary? {
@@ -219,16 +228,28 @@ internal class RoomSummaryDataSource @Inject constructor(
         return object : UpdatableLivePageResult {
             override val livePagedList: LiveData<PagedList<RoomSummary>> = mapped
 
-            override fun updateQuery(builder: (RoomSummaryQueryParams) -> RoomSummaryQueryParams) {
-                realmDataSourceFactory.updateQuery {
-                    roomSummariesQuery(it, builder.invoke(queryParams)).process(sortOrder)
-                }
-            }
-
             override val liveBoundaries: LiveData<ResultBoundaries>
                 get() = boundaries
+
+            override var queryParams: RoomSummaryQueryParams = queryParams
+                set(value) {
+                    field = value
+                    realmDataSourceFactory.updateQuery {
+                        roomSummariesQuery(it, value).process(sortOrder)
+                    }
+                }
         }
     }
+
+    fun getCountFlow(queryParams: RoomSummaryQueryParams): Flow<Int> =
+            realmSessionProvider
+                    .withRealm { realm -> roomSummariesQuery(realm, queryParams).findAllAsync() }
+                    .toFlow()
+                    // need to create the flow on a context dispatcher with a thread with attached Looper
+                    .flowOn(coroutineDispatchers.main)
+                    .map { it.size }
+                    .flowOn(coroutineDispatchers.io)
+                    .distinctUntilChanged()
 
     fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
         var notificationCount: RoomAggregateNotificationCount? = null

@@ -46,7 +46,7 @@ internal class RealmSendingEventsDataSource(
 
     private val sendingTimelineEventsListener = RealmChangeListener<RealmList<TimelineEventEntity>> { events ->
         uiEchoManager.onSentEventsInDatabase(events.map { it.eventId })
-        frozenSendingTimelineEvents = sendingTimelineEvents?.freeze()
+        updateFrozenResults(events)
         onEventsUpdated(false)
     }
 
@@ -59,21 +59,32 @@ internal class RealmSendingEventsDataSource(
 
     override fun stop() {
         sendingTimelineEvents?.removeChangeListener(sendingTimelineEventsListener)
+        updateFrozenResults(null)
         sendingTimelineEvents = null
         roomEntity = null
+    }
+
+    private fun updateFrozenResults(sendingEvents: RealmList<TimelineEventEntity>?) {
+        // Makes sure to close the previous frozen realm
+        if (frozenSendingTimelineEvents?.isValid == true) {
+            frozenSendingTimelineEvents?.realm?.close()
+        }
+        frozenSendingTimelineEvents = sendingEvents?.freeze()
     }
 
     override fun buildSendingEvents(): List<TimelineEvent> {
         val builtSendingEvents = mutableListOf<TimelineEvent>()
         uiEchoManager.getInMemorySendingEvents()
                 .addWithUiEcho(builtSendingEvents)
-        frozenSendingTimelineEvents
-                ?.filter { timelineEvent ->
-                    builtSendingEvents.none { it.eventId == timelineEvent.eventId }
-                }
-                ?.map {
-                    timelineEventMapper.map(it)
-                }?.addWithUiEcho(builtSendingEvents)
+        if (frozenSendingTimelineEvents?.isValid == true) {
+            frozenSendingTimelineEvents
+                    ?.filter { timelineEvent ->
+                        builtSendingEvents.none { it.eventId == timelineEvent.eventId }
+                    }
+                    ?.map {
+                        timelineEventMapper.map(it)
+                    }?.addWithUiEcho(builtSendingEvents)
+        }
 
         return builtSendingEvents
     }

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="summary_message">%1$s: %2$s</string>
     <string name="notice_room_invite_no_invitee">%s님의 초대</string>
-    <string name="summary_user_sent_image">%1$s님이 사진을 보냈습니다.</string>
-    <string name="summary_user_sent_sticker">%1$s님이 스티커를 보냈습니다.</string>
     <string name="notice_room_invite">%1$s님이 %2$s님을 초대했습니다</string>
     <string name="notice_room_invite_you">%1$s님이 당신을 초대했습니다</string>
     <string name="notice_room_join">%1$s님이 참가했습니다</string>
@@ -16,7 +13,7 @@
     <string name="notice_avatar_url_changed">%1$s님이 아바타를 변경했습니다</string>
     <string name="notice_display_name_set">%1$s님이 표시 이름을 %2$s(으)로 설정했습니다</string>
     <string name="notice_display_name_changed_from">%1$s님이 표시 이름을 %2$s에서 %3$s(으)로 변경했습니다</string>
-    <string name="notice_display_name_removed">%1$s님이 표시 이름을 삭제했습니다 (%2$s)</string>
+    <string name="notice_display_name_removed">%1$s님이 표시 이름을 삭제했습니다 (이전 이름: %2$s)</string>
     <string name="notice_room_topic_changed">%1$s님이 주제를 다음으로 변경했습니다: %2$s</string>
     <string name="notice_room_name_changed">%1$s님이 방 이름을 다음으로 변경했습니다: %2$s</string>
     <string name="notice_placed_video_call">%s님이 영상 통화를 걸었습니다.</string>
@@ -24,42 +21,25 @@
     <string name="notice_answered_call">%s님이 전화를 받았습니다.</string>
     <string name="notice_ended_call">%s님이 전화를 끊었습니다.</string>
     <string name="notice_made_future_room_visibility">%1$s님이 이후 %2$s에게 방 기록을 공개했습니다</string>
-    <string name="notice_room_visibility_invited">초대된 시점부터 모든 방 구성원</string>
-    <string name="notice_room_visibility_joined">들어온 시점부터 모든 방 구성원</string>
-    <string name="notice_room_visibility_shared">모든 방 구성원</string>
+    <string name="notice_room_visibility_invited">초대된 시점부터 모든 방 구성원.</string>
+    <string name="notice_room_visibility_joined">들어온 시점부터 모든 방 구성원.</string>
+    <string name="notice_room_visibility_shared">모든 방 구성원.</string>
     <string name="notice_room_visibility_world_readable">누구나.</string>
-    <string name="notice_room_visibility_unknown">알 수 없음 (%s).</string>
-    <string name="notice_end_to_end">%1$s님이 종단간 암호화를 켰습니다 (%2$s)</string>
     <string name="notice_room_update">%s님이 방을 업그레이드했습니다.</string>
-    <string name="notice_requested_voip_conference">%1$s님이 VoIP 회의를 요청했습니다</string>
-    <string name="notice_voip_started">VoIP 회의가 시작했습니다</string>
-    <string name="notice_voip_finished">VoIP 회의가 끝났습니다</string>
     <string name="notice_avatar_changed_too">(아바타도 변경됨)</string>
     <string name="notice_room_name_removed">%1$s님이 방 이름을 삭제했습니다</string>
     <string name="notice_room_topic_removed">%1$s님이 방 주제를 삭제했습니다</string>
-    <string name="notice_event_redacted">메시지가 삭제되었습니다</string>
-    <string name="notice_event_redacted_by">메시지가 %1$s님에 의해 삭제되었습니다</string>
-    <string name="notice_event_redacted_with_reason">메시지가 삭제되었습니다 [이유: %1$s]</string>
-    <string name="notice_event_redacted_by_with_reason">메시지가 %1$s님에 의해 삭제되었습니다 [이유: %2$s]</string>
-    <string name="notice_profile_change_redacted">%1$s님이 프로필 %2$s을(를) 업데이트했습니다</string>
     <string name="notice_room_third_party_invite">%1$s님이 %2$s님에게 방 초대를 보냈습니다</string>
     <string name="notice_room_third_party_registered_invite">%1$s님이 %2$s의 초대를 수락했습니다</string>
     <string name="notice_crypto_unable_to_decrypt">** 암호를 복호화할 수 없음: %s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">발신인의 기기에서 이 메시지의 키를 보내지 않았습니다.</string>
-    <string name="could_not_redact">검열할 수 없습니다</string>
     <string name="unable_to_send_message">메시지를 보낼 수 없습니다</string>
-    <string name="message_failed_to_upload">사진 업로드에 실패했습니다</string>
-    <string name="network_error">네트워크 오류</string>
     <string name="matrix_error">Matrix 오류</string>
-    <string name="room_error_join_failed_empty_room">현재 빈 방에 다시 들어갈 수 없습니다.</string>
     <string name="medium_email">이메일 주소</string>
     <string name="medium_phone_number">전화번호</string>
-    <string name="room_displayname_invite_from">%s에서 초대함</string>
     <string name="room_displayname_room_invite">방 초대</string>
     <string name="room_displayname_two_members">%1$s님과 %2$s님</string>
-    <plurals name="room_displayname_three_and_more_members">
-        <item quantity="other">%1$s님 외 %2$d명</item>
-    </plurals>
+
     <string name="room_displayname_empty_room">빈 방</string>
     <string name="initial_sync_start_importing_account">초기 동기화:
 \n계정 가져오는 중…</string>
@@ -78,27 +58,19 @@
     <string name="initial_sync_start_importing_account_data">초기 동기화:
 \n계정 데이터 가져오는 중</string>
     <string name="event_status_sending_message">메시지 보내는 중…</string>
-    <string name="clear_timeline_send_queue">전송 대기 열 지우기</string>
     <string name="notice_room_third_party_revoked_invite">%1$s님이 %2$s님에게 방에 참가하라고 보낸 초대를 취소했습니다</string>
     <string name="light_theme">밝은 테마</string>
     <string name="dark_theme">어두운 테마</string>
     <string name="black_theme">검정 테마</string>
-    <string name="notification_sync_in_progress">동기화 중…</string>
-    <string name="title_activity_home">메시지</string>
-    <string name="title_activity_room">방</string>
     <string name="title_activity_settings">설정</string>
-    <string name="title_activity_historical">기록</string>
     <string name="title_activity_bug_report">버그 신고</string>
     <string name="title_activity_choose_sticker">스티커 보내기</string>
-    <string name="dialog_title_third_party_licences">제 3자 라이선스</string>
     <string name="loading">불러오는 중…</string>
     <string name="ok">네</string>
     <string name="action_cancel">취소</string>
     <string name="action_save">저장</string>
     <string name="action_leave">떠나기</string>
     <string name="action_send">보내기</string>
-    <string name="action_resend">다시 보내기</string>
-    <string name="action_redact">감추기</string>
     <string name="action_quote">인용</string>
     <string name="action_download">다운로드</string>
     <string name="action_share">공유</string>
@@ -108,37 +80,22 @@
     <string name="action_delete">삭제</string>
     <string name="action_rename">다시 이름 짓기</string>
     <string name="report_content">내용 신고하기</string>
-    <string name="ongoing_conference_call_voice">음성</string>
-    <string name="ongoing_conference_call_video">영상</string>
-    <string name="cannot_start_call">전화를 걸 수 없습니다, 나중에 다시 시도해주세요</string>
-    <string name="missing_permissions_warning">권한이 없어졌기 때문에, 일부 기능이 빠졌을 수 있습니다…</string>
-    <string name="missing_permissions_error">현재 권한이 없기 때문에 이 작업을 수행할 수 없습니다.</string>
-    <string name="missing_permissions_title_to_start_conf_call">전화를 걸 수 없습니다</string>
-    <string name="device_information">기기 정보</string>
-    <string name="send_anyway">무시하고 보내기</string>
     <string name="or">또는</string>
     <string name="action_invite">초대</string>
-    <string name="offline">오프라인</string>
-    <string name="action_exit">나가기</string>
-    <string name="actions">활동</string>
     <string name="action_sign_out">로그아웃</string>
     <string name="action_voice_call">음성 통화하기</string>
     <string name="action_video_call">영상 통화하기</string>
     <string name="action_mark_all_as_read">모두 읽음으로 표시</string>
-    <string name="action_historical">기록</string>
     <string name="action_quick_reply">빠른 답장</string>
     <string name="action_open">열기</string>
     <string name="action_close">닫기</string>
     <string name="copied_to_clipboard">클립보드에 복사되었습니다</string>
-    <string name="action_disable">비활성화</string>
     <string name="dialog_title_confirmation">확인</string>
     <string name="dialog_title_warning">경고</string>
     <string name="dialog_title_error">오류</string>
-    <string name="bottom_action_home">홈</string>
     <string name="bottom_action_favourites">즐겨찾기</string>
     <string name="bottom_action_people">사람</string>
     <string name="bottom_action_rooms">방</string>
-    <string name="bottom_action_groups">커뮤니티</string>
     <string name="home_filter_placeholder_home">방 이름 필터</string>
     <string name="system_alerts_header">시스템 알림</string>
     <string name="no_result_placeholder">결과 없음</string>
@@ -152,16 +109,11 @@
     <string name="send_bug_report_placeholder">여기에 문제를 설명해주세요</string>
     <string name="send_bug_report_sent">버그 보고서를 보내는데 성공했습니다</string>
     <string name="send_bug_report_failed">버그 보고서를 보내는데 실패했습니다 (%s)</string>
-    <string name="create_account">계정 만들기</string>
-    <string name="login">로그인</string>
     <string name="logout">로그아웃</string>
     <string name="hs_url">홈서버 URL</string>
-    <string name="identity_url">ID 서버 URL</string>
     <string name="search">검색</string>
-    <string name="start_new_chat">새 대화 시작하기</string>
     <string name="start_voice_call">음성 통화 시작하기</string>
     <string name="start_video_call">영상 통화 시작하기</string>
-    <string name="start_new_chat_prompt_msg">정말로 %s님과 새 대화를 시작하시겠습니까\?</string>
     <string name="start_voice_call_prompt_msg">정말 음성통화를 시작하시겠습니까\?</string>
     <string name="start_video_call_prompt_msg">정말 영상통화를 시작하시겠습니까\?</string>
     <string name="option_send_files">파일 보내기</string>
@@ -170,302 +122,124 @@
     <string name="option_take_photo">사진 촬영</string>
     <string name="option_take_video">영상 촬영</string>
     <string name="auth_login">로그인</string>
-    <string name="auth_register">계정 만들기</string>
     <string name="auth_submit">제출하기</string>
-    <string name="auth_skip">건너뛰기</string>
-    <string name="auth_user_id_placeholder">이메일이나 사용자 이름</string>
-    <string name="auth_password_placeholder">비밀번호</string>
-    <string name="auth_new_password_placeholder">새 비밀번호</string>
-    <string name="auth_user_name_placeholder">사용자 이름</string>
-    <string name="notification_sync_init">서비스 초기화 중</string>
     <string name="notification_noisy_notifications">소리로 알림</string>
     <string name="notification_silent_notifications">소리 없이 알림</string>
-    <string name="title_activity_member_details">구성원 정보</string>
-    <string name="title_activity_group_details">커뮤니티 정보</string>
     <string name="title_activity_keys_backup_setup">키 백업</string>
     <string name="title_activity_keys_backup_restore">키 백업하기</string>
-    <string name="title_activity_verify_device">기기 확인</string>
-    <string name="keys_backup_is_not_finished_please_wait">키 백업이 끝나지 않았습니다, 기다려주세요…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">지금 로그아웃하면 암호화된 메세지가 사라집니다</string>
-    <string name="keys_backup_activate">키 백업하기</string>
     <string name="are_you_sure">확신합니까\?</string>
     <string name="backup">백업</string>
-    <string name="action_stay">머물기</string>
     <string name="action_skip">넘기기</string>
     <string name="done">완료</string>
     <string name="action_sign_out_confirmation_simple">정말 로그아웃하시겠습니까\?</string>
     <string name="action_mark_room_read">읽음으로 표시</string>
-    <string name="template_no_contact_access_placeholder">${app_name}이 연락처에 접근할 수 없게 되어 있습니다</string>
-    <plurals name="public_room_nb_users">
-        <item quantity="other">%d명의 사용자</item>
-    </plurals>
-    <string name="groups_invite_header">초대</string>
+
     <string name="groups_header">커뮤니티</string>
     <string name="send_bug_report_app_crashed">최근에 애플리케이션이 충돌한 것 같습니다. 충돌 보고서를 열까요\?</string>
-    <string name="read_receipt">읽음</string>
     <string name="username">사용자 이름</string>
     <string name="option_send_voice">음성 보내기</string>
     <string name="no_sticker_application_dialog_content">스티커팩이 하나도 없습니다.
 \n
 \n뭐라도 추가할까요\?</string>
-    <string name="auth_return_to_login">로그인 화면으로 돌아가기</string>
-    <string name="auth_email_placeholder">이메일 주소</string>
-    <string name="auth_opt_email_placeholder">이메일 주소 (선택)</string>
-    <string name="auth_phone_number_placeholder">전화번호</string>
-    <string name="auth_opt_phone_number_placeholder">전화번호 (선택)</string>
-    <string name="auth_repeat_password_placeholder">비밀번호 확인</string>
-    <string name="auth_repeat_new_password_placeholder">새 비밀번호 확인</string>
     <string name="auth_invalid_login_param">알맞지 않은 사용자 이름이나 비밀번호</string>
-    <string name="auth_invalid_password">비밀번호가 너무 짧아요 (최소 6자)</string>
     <string name="auth_invalid_email">올바른 이메일 주소가 아닙니다</string>
-    <string name="auth_invalid_phone">올바른 전화번호가 아닙니다</string>
-    <string name="auth_password_dont_match">비밀번호가 맞지 않아요</string>
     <string name="auth_forgot_password">비밀번호를 잊어버리셨나요\?</string>
-    <string name="auth_username_in_use">사용 중인 사용자 이름입니다</string>
-    <string name="auth_home_server">홈서버:</string>
-    <string name="auth_reset_password_message">비밀번호를 초기화하려면, 계정에 이메일을 등록해야합니다:</string>
-    <string name="auth_reset_password_missing_password">새 비밀번호를 입력해야합니다.</string>
-    <string name="auth_reset_password_success_message">비밀번호가 초기화되었습니다.
-\n
-\n모든 기기에서 로그아웃되고 알림도 가지 않을 거에요. 다시 알림을 받으려면, 각 기기에 다시 로그인하세요.</string>
+
     <string name="notification_listening_for_events">이벤트 청취하기</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">키 백업이 진행 중입니다. 지금 로그아웃하면 암호화된 메시지에 접근할 수 없습니다.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">암호화된 메시지에 대한 접근을 읽지 않도록 모든 장치에서 보안 키 백업이 활성화되어 있어야 합니다.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">암호화된 메시지를 원하지 않습니다</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">키 백업 중…</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">로그아웃하기 전에 키를 백업하지 않으면 암호화된 메시지에 접근할 수 없습니다.</string>
-    <string name="action_speak">말하기</string>
-    <string name="action_clear">지우기</string>
     <string name="later">후</string>
-    <string name="action_forward">가져오기</string>
-    <string name="active_call">현재 전화</string>
-    <string name="ongoing_conference_call">회의 전화가 진행 중입니다.
-\n%1$s 또는 %2$s로 참가하세요</string>
-    <string name="missing_permissions_to_start_conf_call">이 방에서 회의를 시작하려면 초대할 권한이 필요합니다</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">회의 전화는 암호화된 방에서 지원하지 않습니다</string>
-    <string name="call_anyway">무시하고 통화</string>
+
     <string name="action_accept">수락하기</string>
-    <string name="action_abort">중단</string>
     <string name="action_ignore">차단</string>
-    <string name="action_global_search">세계 검색</string>
-    <string name="home_filter_placeholder_favorites">즐겨찾기 필터</string>
-    <string name="home_filter_placeholder_people">사람 필터</string>
-    <string name="home_filter_placeholder_rooms">방 이름 필터</string>
-    <string name="home_filter_placeholder_groups">커뮤니티 이름 필터</string>
     <string name="invitations_header">초대</string>
     <string name="low_priority_header">중요하지 않음</string>
     <string name="direct_chats_header">대화</string>
-    <string name="local_address_book_header">로컬 연락처</string>
-    <string name="user_directory_header">사용자 목록</string>
     <string name="matrix_only_filter">Matrix 연락처만</string>
-    <string name="no_conversation_placeholder">대화 안 함</string>
-    <string name="rooms_directory_header">방 목록</string>
-    <string name="no_room_placeholder">방 없음</string>
-    <string name="no_public_room_placeholder">이용할 수 있는 공공 방이 없음</string>
-    <string name="no_group_placeholder">그룹 없음</string>
     <string name="send_bug_report_logs_description">문제를 진단하기 위해, 이 클라이언트의 로그는 버그 보고서와 함께 전송됩니다. 이 버그 보고서에는 로그와 스크린샷이 포함되면 공개적으로 표시되지 않습니다. 위의 텍스트만 보내려면 다음을 선택 해제하세요:</string>
     <string name="send_bug_report_alert_message">좌절감에 휴대 전화를 흔들고 있는 것 같네요. 버그 보고서 화면을 열어보겠습니까\?</string>
     <string name="send_bug_report_rage_shake">분노의 흔들기로 버그 신고하기</string>
     <string name="send_bug_report_progress">진행 (%s%%)</string>
-    <string name="send_files_in">여기로 보내기</string>
     <string name="join_room">방 들어가기</string>
-    <string name="go_on_with">계속…</string>
     <string name="error_no_external_application_found">죄송합니다, 이 작업을 완료하기 위한 외부 애플리케이션이 없습니다.</string>
     <string name="auth_login_sso">통합 인증으로 로그인</string>
-    <string name="auth_send_reset_email">재 설정 이메일 보내기</string>
-    <string name="auth_invalid_user_name">사용자 이름은 문자, 숫자, 점, 하이픈 및 밑줄만 포함할 수 있습니다</string>
-    <string name="auth_missing_password">비밀번호가 누락되었습니다</string>
     <string name="auth_email_already_defined">이 이메일 주소는 이미 정의되었습니다.</string>
-    <string name="auth_missing_email">이메일 주소가 누락되었습니다</string>
-    <string name="auth_missing_phone">전화번호가 누락되었습니다</string>
-    <string name="auth_missing_email_or_phone">이메일 주소나 전화번호가 누락되었습니다</string>
-    <string name="auth_invalid_token">옳지 않은 토큰</string>
-    <string name="auth_use_server_options">맞춤 서버 설정을 사용하기 (고급)</string>
-    <string name="auth_email_validation_message">등록을 계속하려면 이메일을 확인하세요</string>
-    <string name="auth_threepid_warning_message">API가 존재하기 전까지는 이메일과 전화번호로 한 번에 등록할 수 없습니다. 오직 전화번호만 고려됩니다.
-\n
-\n설정에서 프로필에 이메일을 추가할 수 있습니다.</string>
+
     <string name="auth_recaptcha_message">이 홈서버는 당신이 로봇인지 아닌 지를 확인하고 싶습니다</string>
-    <string name="auth_identity_server">ID 서버:</string>
-    <string name="auth_reset_password_next_step_button">제 이메일 주소를 확인했습니다</string>
     <string name="auth_reset_password_missing_email">계정에 연결된 이메일 주소를 입력해야 합니다.</string>
-    <string name="auth_reset_password_email_validation_message">이메일 %s(으)로 전송했습니다. 이메일에 포함된 링크를 들어갔다면, 아래를 클릭해주세요.</string>
     <string name="auth_reset_password_error_unauthorized">이메일 주소를 확인할 수 없습니다: 이메일에 있는 링크를 클릭했는 지 확인하세요</string>
     <string name="auth_accept_policies">이 홈서버의 규칙을 숙지한 후 수락하세요:</string>
-    <string name="login_error_must_start_http">URL은 http[s]://로 시작해야 합니다</string>
-    <string name="login_error_network_error">로그인할 수 없음: 네트워크 오류</string>
-    <string name="login_error_unable_login">로그인할 수 없음</string>
-    <string name="login_error_registration_network_error">등록할 수 없음: 네트워크 오류</string>
-    <string name="login_error_unable_register">등록할 수 없음</string>
-    <string name="login_error_unable_register_mail_ownership">등록할 수 없음: 이메일 인증 실패</string>
     <string name="login_error_invalid_home_server">올바른 URL을 입력하세요</string>
-    <string name="login_error_unknown_host">이 URL에 연결할 수 없습니다, 확인해주세요</string>
-    <string name="login_error_ssl_handshake">기기가 오래된 TLS 보안 프로토콜을 사용하고 있습니다, 공격에 취약하며, 보안 상의 이유로 연결할 수 없습니다</string>
-    <string name="login_error_forbidden">옳지 않은 사용자 이름/비밀번호</string>
-    <string name="login_error_unknown_token">지정된 액세스 토큰을 인식할 수 없습니다</string>
     <string name="login_error_bad_json">잘못된 JSON</string>
     <string name="login_error_not_json">올바른 JSON을 갖고 있지 않음</string>
     <string name="login_error_limit_exceeded">너무 많은 요청을 보냈습니다</string>
-    <string name="login_error_user_in_use">이 사용자 이름은 이미 사용 중입니다</string>
-    <string name="login_error_login_email_not_yet">이메일 링크를 아직 클릭하지 않았습니다</string>
     <string name="e2e_re_request_encryption_key">다른 기기에서 온 <u>다시 요청된 암호 키</u>.</string>
-    <string name="e2e_re_request_encryption_key_sent">키 요청을 보냈습니다.</string>
-    <string name="e2e_re_request_encryption_key_dialog_title">요청 보냄</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">다른 기기에서 ${app_name}을 설치해서 메시지를 암호화하고 이 기기로 키를 보내도록 합니다.</string>
-    <string name="read_receipts_list">읽은 기록 읽기</string>
-    <string name="groups_list">그룹 목록</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">다른 기기에서 ${app_name}을 설치해서 메시지를 암호화하고 이 기기로 키를 보내도록 합니다.</string>
     <plurals name="membership_changes">
         <item quantity="other">%d명의 구성원 변경 사항</item>
     </plurals>
-    <string name="compression_options">이렇게 보내기</string>
     <string name="compression_opt_list_original">원본</string>
     <string name="compression_opt_list_large">크게</string>
     <string name="compression_opt_list_medium">중간</string>
     <string name="compression_opt_list_small">작게</string>
-    <string name="attachment_cancel_download">다운로드를 취소하겠습니까\?</string>
-    <string name="attachment_cancel_upload">업로드를 취소하겠습니까\?</string>
-    <string name="attachment_remaining_time_seconds">%d초</string>
-    <string name="attachment_remaining_time_minutes">%1$d분 %2$d초</string>
-    <string name="yesterday">어제</string>
-    <string name="today">오늘</string>
-    <string name="room_info_room_name">방 이름</string>
-    <string name="room_info_room_topic">방 주제</string>
     <string name="settings_call_category">전화</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">수신 전화에 ${app_name} 기본 벨소리를 사용합니다</string>
+    <string name="settings_call_ringtone_use_app_ringtone">수신 전화에 ${app_name} 기본 벨소리를 사용합니다</string>
     <string name="settings_call_ringtone_title">수신 전화 벨소리</string>
     <string name="settings_call_ringtone_dialog_title">전화에 사용할 벨소리를 선택하세요:</string>
     <string name="call">전화</string>
-    <string name="call_connected">전화 연결됨</string>
     <string name="call_connecting">전화 연결 중…</string>
     <string name="call_ended">전화 종료됨</string>
-    <string name="call_ring">전화 중…</string>
-    <string name="incoming_call">수신 전화</string>
     <string name="incoming_video_call">수신 영상 통화</string>
     <string name="incoming_voice_call">수신 음성 통화</string>
     <string name="call_in_progress">전화 진행 중…</string>
     <string name="video_call_in_progress">영상 통화 진행 중…</string>
     <string name="call_error_user_not_responding">상대방이 전화를 받지 못했습니다.</string>
-    <string name="call_error_ice_failed">미디어 연결 실패</string>
-    <string name="call_error_camera_init_failed">카메라를 초기화할 수 없습니다</string>
-    <string name="call_error_answered_elsewhere">다른 곳에서 전화 응답</string>
-    <string name="media_picker_both_capture_title">사진이나 영상 촬영</string>
-    <string name="media_picker_cannot_record_video">영상을 촬영할 수 없음</string>
     <string name="permissions_rationale_popup_title">정보</string>
-    <string name="template_permissions_rationale_msg_storage">첨부 파일을 보내고 저장하려면 ${app_name}은 영상과 사진 보관함에 접근하는 권한이 필요합니다.
-\n
-\n당신의 휴대 전화에서 파일을 보내려면 다음 팝업에서 접근을 허용해주세요.</string>
-    <string name="template_permissions_rationale_msg_camera">사진을 찍고 영상 통화를 하려면 ${app_name}은 카메라에 접근하는 권한이 필요합니다.</string>
-    <string name="permissions_rationale_msg_camera_explanation">"
-\n
-\n전화를 하려면 다음 팝업에서 접근을 허용해주세요."</string>
-    <string name="template_permissions_rationale_msg_record_audio">음성 통화를 하려면 ${app_name}은 마이크에 접근하는 권한이 필요합니다.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">"
-\n
-\n전화를 하려면 다음 팝업에서 접근을 허용해주세요."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">영상 통화를 하려면 ${app_name}은 카메라와 마이크에 접근하는 권한이 필요합니다.
+
+
+    <string name="permissions_rationale_msg_record_audio">음성 통화를 하려면 ${app_name}은 마이크에 접근하는 권한이 필요합니다.</string>
+
+    <string name="permissions_rationale_msg_camera_and_audio">영상 통화를 하려면 ${app_name}은 카메라와 마이크에 접근하는 권한이 필요합니다.
 \n
 \n전화를 하려면 다음 팝업에서 접근을 허용해주세요.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name}은 당신의 연락처를 확인해서 이메일과 전화번호를 기반으로 다른 Matrix 사용자를 찾을 수 있습니다. 이런 이유로 연락처를 공유하는 것을 허용한다면, 다음 팝업에서 접근을 허용해주세요.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">"${app_name}은  당신의 연락처를 확인하여 이메일과 전화번호를 기반으로 다른 Matrix 사용자를 찾을 수 있습니다.
-\n 
-\n이런 이유로 연락처를 공유하는 것을 허용하겠습니까\?"</string>
-    <string name="permissions_action_not_performed_missing_permissions">죄송합니다. 권한이 없어서, 작업이 수행되지 않았습니다</string>
-    <string name="media_slider_saved">저장됨</string>
-    <string name="media_slider_saved_message">다운로드 폴더에 저장하겠습니까\?</string>
+
     <string name="yes">네</string>
     <string name="no">아니오</string>
     <string name="_continue">계속</string>
     <string name="action_remove">제거</string>
     <string name="action_join">참가</string>
-    <string name="action_preview">미리보기</string>
     <string name="action_reject">받지 않기</string>
     <string name="list_members">구성원 목록</string>
-    <string name="open_chat_header">헤더 열기</string>
-    <string name="room_sync_in_progress">동기화 중…</string>
     <string name="room_jump_to_first_unread">읽지 않은 첫 부분으로 이동하기.</string>
-    <string name="room_preview_invitation_format">%s님이 이 방알 초대했습니다</string>
-    <string name="room_preview_unlinked_email_warning">이 초대장은 %s님이 보냈습니다, 이 계정과는 관련이 없습니다.
-\n다른 계정으로 로그인하거나, 이 이메일을 계정에 추가할 수 있습니다.</string>
-    <string name="room_preview_try_join_an_unknown_room">%s 방으로 접근하려고 했습니다. 토론에 참여하기 위해 참가하는 것입니까\?</string>
-    <string name="room_preview_try_join_an_unknown_room_default">방</string>
-    <string name="room_preview_room_interactions_disabled">이 방의 미리보기입니다. 방 상호작용이 비활성화됩니다.</string>
-    <string name="room_creation_title">새 대화</string>
-    <string name="room_creation_add_member">구성원 추가</string>
-    <plurals name="room_header_active_members_count">
-        <item quantity="other">%d명의 활동 중인 구성원</item>
-    </plurals>
+
+
     <plurals name="room_title_members">
         <item quantity="other">%d명의 구성원</item>
     </plurals>
-    <string name="room_title_one_member">1명의 구성원</string>
-    <plurals name="format_time_s">
-        <item quantity="other">%d초</item>
-    </plurals>
-    <plurals name="format_time_m">
-        <item quantity="other">%d분</item>
-    </plurals>
-    <plurals name="format_time_h">
-        <item quantity="other">%d시</item>
-    </plurals>
-    <plurals name="format_time_d">
-        <item quantity="other">%d일</item>
-    </plurals>
+
+
+
+
     <string name="room_participants_leave_prompt_title">방 떠나기</string>
     <string name="room_participants_leave_prompt_msg">방을 떠나겠습니까\?</string>
-    <string name="room_participants_create">만들기</string>
-    <string name="room_participants_online">온라인</string>
-    <string name="room_participants_offline">오프라인</string>
-    <string name="room_participants_idle">휴식</string>
-    <string name="room_participants_now">%1$s 상태</string>
-    <string name="room_participants_ago">%2$s 전 %1$s 상태였음</string>
-    <string name="room_participants_header_admin_tools">관리자 도구</string>
-    <string name="room_participants_header_call">전화</string>
     <string name="room_participants_header_direct_chats">다이렉트 대화</string>
-    <string name="room_participants_header_devices">기기</string>
     <string name="room_participants_action_invite">초대</string>
-    <string name="room_participants_action_leave">이 방 떠나기</string>
     <string name="room_participants_action_ban">출입 금지</string>
     <string name="room_participants_action_unban">출입 금지 풀기</string>
     <string name="room_participants_action_remove">추방</string>
-    <string name="room_participants_action_set_default_power_level">일반 사용자로 재 설정</string>
-    <string name="room_participants_action_set_moderator">중재자로 하기</string>
-    <string name="room_participants_action_set_admin">관리자로 하기</string>
     <string name="room_participants_action_ignore">차단</string>
     <string name="room_participants_action_unignore">차단 해제</string>
-    <string name="room_participants_invite_search_another_user">사용자 ID, 이름 혹은 이메일</string>
     <string name="room_participants_action_mention">언급</string>
-    <string name="room_participants_action_devices_list">기기 목록 보이기</string>
     <string name="room_participants_power_level_prompt">사용자를 자신과 동일한 권한 등급으로 승격시키는 것은 취소할 수 없습니다.
 \n확신합니까\?</string>
     <string name="room_participants_ban_prompt_msg">이 사용자를 이 대화에서 출입 금지하겠습니까\?</string>
-    <string name="reason_hint">이유</string>
-    <string name="room_participants_invite_prompt_msg">%s님을 이 대화에 초대하겠습니까\?</string>
-    <string name="room_participants_invite_join_names">"%1$s님, "</string>
-    <string name="room_participants_invite_join_names_and">%1$s님과 %2$s님</string>
-    <string name="room_participants_invite_join_names_combined">%1$s %2$s님</string>
-    <string name="people_search_invite_by_id"><u>ID로 초대</u></string>
-    <string name="people_search_local_contacts">로컬 연락처 (%d)</string>
-    <string name="people_search_user_directory">사용자 목록 (%s)</string>
-    <string name="people_search_filter_text">Matrix 사용자만</string>
-    <string name="people_search_invite_by_id_dialog_title">ID로 사용자 초대</string>
-    <string name="people_search_invite_by_id_dialog_description">이메일 주소나 Matrix ID를 입력해주세요</string>
-    <string name="people_search_invite_by_id_dialog_hint">이메일 혹은 Matrix ID</string>
-    <string name="room_menu_search">검색</string>
     <string name="room_one_user_is_typing">%s님이 입력 중…</string>
     <string name="room_two_users_are_typing">%1$s님과 %2$s님이 입력 중…</string>
     <string name="room_many_users_are_typing">%1$s님과 %2$s님 외 여러 명이 입력 중…</string>
-    <string name="room_message_placeholder_encrypted">암호화된 메시지를 보내세요…</string>
-    <string name="room_message_placeholder_not_encrypted">(암호화 안 된) 메시지를 보내세요…</string>
-    <string name="room_message_placeholder_reply_to_encrypted">암호화된 답장을 보내세요…</string>
-    <string name="room_message_placeholder_reply_to_not_encrypted">(암호화 안 된) 답장을 보내세요…</string>
-    <string name="room_offline_notification">서버와의 연결이 끊어졌습니다.</string>
-    <string name="room_unsent_messages_notification">메시지가 보내지지 않았습니다. %1$s, %2$s, 둘 중 어느 것을 하겠습니까\?</string>
-    <string name="room_unknown_devices_messages_notification">알 수 없는 기기가 있어 메시지가 보내지지 않았습니다. %1$s, %2$s, 둘 중 어느 것을 하겠습니까\?</string>
-    <string name="room_prompt_resend">모두 다시 보내기</string>
-    <string name="room_prompt_cancel">모두 취소하기</string>
-    <string name="room_resend_unsent_messages">보내지지 않은 메시지 다시 보내기</string>
-    <string name="room_delete_unsent_messages">보내지지 않은 메시지 삭제하기</string>
-    <string name="room_message_file_not_found">파일을 찾을 수 없음</string>
     <string name="room_do_not_have_permission_to_post">이 방에 글을 올릴 권한이 없습니다</string>
     <plurals name="room_new_messages_notification">
         <item quantity="other">%d개의 새 메시지</item>
@@ -481,66 +255,25 @@
     <string name="ssl_unexpected_existing_expl">인증서가 휴대 전화가 신뢰하는 인증서에서 변경되었습니다. 이것은 매우 비정상적입니다. 새 인증서에 수락하지 않는 것을 권합니다.</string>
     <string name="ssl_expected_existing_expl">이전 신뢰하던 인증서에서 신뢰하지 않는 인증서로 변경되었습니다. 서버가 인증서를 새로 갱신했을 수 있습니다. 예상되는 핑거프린트는 서버 관리자에게 문의하세요.</string>
     <string name="ssl_only_accept">서버 관리자가 위의 핑거프린트와 일치하는 것을 게시하는 경우에만 인증서를 수락할 수 있습니다.</string>
-    <string name="room_details_title">방 세부 사항</string>
-    <string name="room_details_people">사람</string>
-    <string name="room_details_files">파일</string>
-    <string name="room_details_settings">설정</string>
     <plurals name="room_details_selected">
         <item quantity="other">%d개 선택됨</item>
     </plurals>
-    <string name="malformed_id">잘못된 ID입니다. 이메일 주소나 \'@localpart:domain\'와 같은 Matrix ID이어야 합니다</string>
-    <string name="room_details_people_invited_group_name">초대받음</string>
-    <string name="room_details_people_present_group_name">참가함</string>
-    <string name="room_event_action_report_prompt_reason">이 내용을 신고하는 이유</string>
-    <string name="room_event_action_report_prompt_ignore_user">이 사용자의 모든 메시지를 숨기겠습니까\?
-\n
-\n이 동작은 앱을 다시 시작하며 일정 시간이 걸릴 수 있습니다.</string>
-    <string name="room_event_action_cancel_upload">업로드 취소</string>
-    <string name="room_event_action_cancel_download">다운로드 취소</string>
+
     <string name="search_hint">검색</string>
     <string name="search_members_hint">방 구성원 필터</string>
     <string name="search_no_results">결과 없음</string>
-    <string name="tab_title_search_rooms">방</string>
-    <string name="tab_title_search_messages">메시지</string>
-    <string name="tab_title_search_people">사람</string>
-    <string name="tab_title_search_files">파일</string>
-    <string name="directory_search_results_title">목록 찾기</string>
-    <plurals name="directory_search_rooms">
-        <item quantity="other">%d개의 방</item>
-    </plurals>
-    <plurals name="directory_search_rooms_for">
-        <item quantity="other">%2$s 검색 결과로 %1$s개의 방을 찾음</item>
-    </plurals>
-    <string name="directory_searching_title">목록 검색 중…</string>
-    <string name="room_settings_all_messages_noisy">모든 메시지 (소리)</string>
+
+
     <string name="room_settings_all_messages">모든 메시지</string>
-    <string name="room_settings_mention_only">언급만</string>
-    <string name="room_settings_mute">무음</string>
-    <string name="room_settings_favourite">즐겨찾기</string>
-    <string name="room_settings_de_prioritize">중요하지 않음</string>
-    <string name="room_settings_direct_chat">다이렉트 대화</string>
-    <string name="room_settings_leave_conversation">대화 떠나기</string>
-    <string name="room_settings_forget">잊기</string>
     <string name="room_settings_add_homescreen_shortcut">홈 화면에 단축 아이콘 추가</string>
-    <string name="room_sliding_menu_messages">메시지</string>
-    <string name="room_sliding_menu_settings">설정</string>
-    <string name="room_sliding_menu_version">버전</string>
-    <string name="room_sliding_menu_version_x">버전 %s</string>
-    <string name="room_sliding_menu_term_and_conditions">이용 약관</string>
-    <string name="room_sliding_menu_third_party_notices">제 3자 고지</string>
-    <string name="room_sliding_menu_copyright">저작권</string>
-    <string name="room_sliding_menu_privacy_policy">개인 정보 정책</string>
     <string name="settings_profile_picture">프로필 사진</string>
     <string name="settings_display_name">표시 이름</string>
-    <string name="settings_email_address">이메일</string>
     <string name="settings_add_email_address">이메일 주소 추가</string>
-    <string name="settings_phone_number">휴대 전화</string>
     <string name="settings_add_phone_number">전화번호 추가</string>
     <string name="settings_app_info_link_title">애플리케이션 정보</string>
     <string name="settings_app_info_link_summary">시스템 설정에서 애플리케이션 정보를 표시하세요.</string>
     <string name="settings_notification_advanced">고급 알림 설정</string>
     <string name="settings_notification_by_event">이벤트 별 알림 중요도</string>
-    <string name="settings_notification_privacy">알림 개인 정보</string>
     <string name="settings_notification_troubleshoot">알림 문제 해결</string>
     <string name="settings_troubleshoot_diagnostic">문제 해결 진단</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">테스트 실행</string>
@@ -560,17 +293,15 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">켜기</string>
     <string name="settings_troubleshoot_test_device_settings_title">기기 설정.</string>
     <string name="settings_troubleshoot_test_device_settings_success">알림이 이 기기에서 켜집니다.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">알림이 이 기기에서 허용되지 않습니다.
+    <string name="settings_troubleshoot_test_device_settings_failed">알림이 이 기기에서 허용되지 않습니다.
 \n${app_name} 설정을 확인해주세요.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">켜기</string>
     <string name="settings_troubleshoot_test_bing_settings_title">맞춤 설정.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">일부 메시지 유형은 조용하게 설정되어 있습니다 (소리가 없는 알림을 생성합니다).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">일부 알림이 맞춤 설정에서 꺼집니다.</string>
-    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">맞춤 규칙을 불러오는 데 실패했습니다, 다시 시도해주세요.</string>
-    <string name="settings_troubleshoot_test_bing_settings_quickfix">설정 확인</string>
     <string name="settings_troubleshoot_test_play_services_title">Play 서비스 확인</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play 서비스 APK는 최신 버전입니다.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name}은 Google Play 서비스를 사용해 푸시 메시지를 보내지만 올바르게 설정되지 않은 모양입니다:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name}은 Google Play 서비스를 사용해 푸시 메시지를 보내지만 올바르게 설정되지 않은 모양입니다:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Play 서비스 고치기</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase 토큰</string>
@@ -578,48 +309,35 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCM 토큰을 검색하는데 실패했습니다:
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \n이 오류는 ${app_name}의 통제 밖에 있으며 Google과 관련이 있습니다, 이 오류는 기기가 FCM에 등록된 앱이 너무 많다는 것을 나타냅니다. 오류는 수 많은 앱이 있는 경우에만 발생하고, 일반 사용자에게 영향을 미치지 않아야 합니다.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \n이 오류는 ${app_name}의 통제 밖입니다. 여러 이유로 발생할 수 있습니다. 나중에 다시 시도하면 작동할 지도 모릅니다, 시스템 설정에서 Google Play 서비스의 데이터 사용이 제한되었는지, 기기의 시간은 맞는 지 확인해보세요, 혹은 커스텀 롬 환경에서 발생할 수 있습니다.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \n이 오류는 ${app_name}의 통제 밖에 있습니다. 휴대 전화에 Google 계정이 없습니다. 계정 관리자를 열어 Google 계정을 추가하세요.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">계정 추가</string>
     <string name="settings_troubleshoot_test_token_registration_title">토큰 등록</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM 토큰이 성공적으로 홈서버에 등록되었습니다.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM 토큰을 홈서버에 등록 실패:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_service_restart_title">알림 서비스 자동 다시 시작</string>
-    <string name="settings_troubleshoot_test_service_restart_success">서비스가 종료되고 자동으로 다시 시작되었습니다.</string>
-    <string name="settings_troubleshoot_test_service_restart_failed">서비스 다시 시작에 실패함</string>
     <string name="settings_troubleshoot_test_service_boot_title">부팅 시 시작</string>
     <string name="settings_troubleshoot_test_service_boot_success">기기가 다시 시작되면 서비스가 시작됩니다.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">기기가 다시 시작될 때 서비스가 시작되지 않습니다, 다시 시작한 후 ${app_name}을 한 번이라도 열지 않으면 알림을 받을 수 없습니다.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">기기가 다시 시작될 때 서비스가 시작되지 않습니다, 다시 시작한 후 ${app_name}을 한 번이라도 열지 않으면 알림을 받을 수 없습니다.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">부팅 시 시작 활성화</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">백그라운드 제한 사항 확인</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">${app_name}에 대한 백그라운드 제한 사항을 비활성화합니다. 이 테스트는 모바일 데이터를 사용해야 합니다 (WIFI 없음).
+    <string name="settings_troubleshoot_test_bg_restricted_success">${app_name}에 대한 백그라운드 제한 사항을 비활성화합니다. 이 테스트는 모바일 데이터를 사용해야 합니다 (WIFI 없음).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">${app_name}에 대한 백그라운드 제한 사항이 활성화됩니다.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">${app_name}에 대한 백그라운드 제한 사항이 활성화됩니다.
 \n앱이 백그라운드에서 작업하는 동안 앱이 시도하는 작업은 적극적으로 제한되며, 이는 알림에 영향을 줄 수 있습니다.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">제한 사항 비활성화</string>
     <string name="settings_troubleshoot_test_battery_title">배터리 최적화</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name}은 배터리 최적화의 영향을 받지 않습니다.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name}은 배터리 최적화의 영향을 받지 않습니다.</string>
     <string name="settings_troubleshoot_test_battery_failed">사용자가 기기 화면을 끈 상태로 일정 시간 동안 연결되지 않은 상태로 두면, 기기는 Doze 모드에 들어갑니다. 이렇게 하면 앱이 네트워크에 접근하지 못하고 작업, 동기화 및 표준 경보가 지연됩니다.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">최적화 무시하기</string>
-    <string name="settings_notification_privacy_normal">보통</string>
-    <string name="settings_notification_privacy_reduced">감소된 개인 정보 보호</string>
-    <string name="settings_notification_privacy_need_permission">앱을 백그라운드에서 실행하려면 권한이 필요합니다</string>
-    <string name="settings_notification_privacy_no_background_sync">앱은 백그라운드에서 홈서버로 연결할 <b>필요가 없고</b>, 이는 배터리 사용량을 줄입니다</string>
-    <string name="settings_notification_privacy_fcm">• 알림은 Firebase 클라우드 메시징을 통해 보내집니다</string>
-    <string name="settings_notification_privacy_metadata">• 알림은 오직 메타데이터만 갖습니다</string>
-    <string name="settings_notification_privacy_secure_message_content">• 알림의 메시지 내용은 <b>Matrix 홈서버에서 안전하게 직접 배치됩니다</b></string>
-    <string name="settings_notification_privacy_nosecure_message_content">• 알림은 <b>메타데이터와 메시지 데이터</b>를 갖습니다</string>
-    <string name="settings_notification_privacy_message_content_not_shown">• 알림은 <b>메시지 내용을 보여주지 않습니다</b></string>
     <string name="settings_notification_ringtone">알림 소리</string>
     <string name="settings_enable_all_notif">이 계정에서 알림 켜기</string>
     <string name="settings_enable_this_device">이 기기에서 알림 켜기</string>
-    <string name="settings_turn_screen_on">3초 동안 화면을 켜기</string>
     <string name="settings_noisy_notifications_preferences">소리 알림 설정</string>
     <string name="settings_call_notifications_preferences">전화 알림 설정</string>
     <string name="settings_silent_notifications_preferences">조용한 알림 설정</string>
@@ -633,7 +351,6 @@
     <string name="settings_messages_sent_by_bot">봇에게 받은 메시지</string>
     <string name="settings_background_sync">백그라운드 동기화</string>
     <string name="settings_start_on_boot">부팅 시 시작</string>
-    <string name="settings_enable_background_sync">백그라운드 동기화 켜기</string>
     <string name="settings_set_sync_timeout">동기화 요청 시간 초과</string>
     <string name="settings_set_sync_delay">각 동기화 간 딜레이</string>
     <string name="settings_version">버전</string>
@@ -659,7 +376,6 @@
     <string name="settings_home_display">홈 표시</string>
     <string name="settings_pin_missed_notifications">알림을 놓친 방을 고정</string>
     <string name="settings_pin_unread_messages">읽지 않은 메시지가 있는 방 고정</string>
-    <string name="settings_devices_list">기기</string>
     <string name="settings_inline_url_preview">인라인 URL 미리보기</string>
     <string name="settings_inline_url_preview_summary">홈서버가 이 기능을 지원한다면 대화 내에서 링크를 미리 볼 수 있습니다.</string>
     <string name="settings_send_typing_notifs">입력 중 알림 보내기</string>
@@ -680,32 +396,17 @@
     <string name="settings_send_message_with_enter_summary">가상 키보드의 엔터 버튼으로 줄 바꿈을 하는 대신 메시지를 보냅니다</string>
     <string name="settings_deactivate_account_section">계정 비활성화</string>
     <string name="settings_deactivate_my_account">내 계정 비활성화</string>
-    <string name="startup_notification_privacy_title">알림 개인 정보</string>
-    <string name="template_startup_notification_privacy_message">${app_name}은 백그라운드에서 실행되어 알림을 안전하고 은밀하게 관리할 수 있습니다. 이것은 배터리 사용량에 영향을 줄 수 있습니다.</string>
-    <string name="startup_notification_privacy_button_grant">권한 부여</string>
-    <string name="startup_notification_privacy_button_other">다른 설정을 선택하세요</string>
-    <string name="startup_notification_fdroid_battery_optim_title">백그라운드 연결</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name}은 신뢰가 있는 알림을 위해 낮은 영향의 백그라운드 연결을 유지해야 합니다.
-\n다른 화면에서 ${app_name}이 항상 백그라운드에서 실행하도록 허용하는 메시지가 표시됩니다, 수락해주세요.</string>
-    <string name="startup_notification_fdroid_battery_optim_button_grant">권한 부여</string>
+
     <string name="settings_analytics">정보 분석</string>
     <string name="settings_opt_in_of_analytics">정보 분석 데이터 보내기</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name}은 애플리케이션을 개선할 수 있도록 익명의 분석을 수집합니다.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">분석을 활성화해서 ${app_name}이 개선할 수 있도록 도와주세요.</string>
-    <string name="settings_opt_in_of_analytics_ok">예, 저도 돕고 싶습니다!</string>
-    <string name="settings_data_save_mode">데이터 절약 모드</string>
-    <string name="settings_data_save_mode_summary">데이터 절약 모드는 특정 필터를 적용하여 현재 상태 업데이트와 입력 중 알림을 걸러냅니다.</string>
-    <string name="devices_details_dialog_title">기기 정보</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name}은 애플리케이션을 개선할 수 있도록 익명의 분석을 수집합니다.</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">공개 이름</string>
     <string name="devices_details_device_name">공개 이름 업데이트</string>
     <string name="devices_details_last_seen_title">마지막으로 본 순간</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_delete_dialog_text">이 작업은 추가 인증이 필요합니다.
-\n계속하려면, 비밀번호를 입력하세요.</string>
+
     <string name="devices_delete_dialog_title">인증</string>
-    <string name="devices_delete_pswd">비밀번호:</string>
-    <string name="devices_delete_submit_button_label">제출하기</string>
     <string name="settings_logged_in">이것으로 로그인</string>
     <string name="settings_home_server">홈서버</string>
     <string name="settings_identity_server">ID 서버</string>
@@ -713,40 +414,20 @@
     <string name="settings_user_interface">사용자 인터페이스</string>
     <string name="settings_interface_language">언어</string>
     <string name="settings_select_language">언어를 선택하세요</string>
-    <string name="account_email_validation_title">확인 보류 중</string>
     <string name="account_email_validation_message">이메일을 인증해서 거기에 있는 링크를 클릭하세요. 모두 끝나면, 계속하기를 클릭하세요.</string>
-    <string name="account_email_validation_error">이메일 주소를 확인할 수 없습니다. 이메일을 인증해서 거기에 있는 링크를 클릭하세요. 모두 끝나면, 계속하기를 클릭하세요.</string>
     <string name="account_email_already_used_error">이 이메일 주소는 이미 사용 중입니다.</string>
-    <string name="account_email_not_found_error">이 이메일 주소를 찾을 수 없습니다.</string>
     <string name="account_phone_number_already_used_error">이 전화번호는 이미 사용 중입니다.</string>
-    <string name="account_email_error">이메일 주소를 확인하는 중 오류가 발생했습니다.</string>
     <string name="settings_password">비밀번호</string>
     <string name="settings_change_password">비밀번호 변경</string>
     <string name="settings_old_password">현재 비밀번호</string>
     <string name="settings_new_password">새 비밀번호</string>
-    <string name="settings_confirm_password">새 비밀번호 확인</string>
-    <string name="settings_change_password_submit">비밀번호 갱신</string>
     <string name="settings_fail_to_update_password">비밀번호 갱신 실패</string>
     <string name="settings_fail_to_update_password_invalid_current_password">비밀번호가 올바르지 않습니다</string>
     <string name="settings_password_updated">당신의 비밀번호가 갱신되었습니다</string>
     <string name="settings_unignore_user">%s님의 모든 메시지를 표시하시겠습니까\?
 \n
 \n이 동작은 앱을 다시 시작하고 일정 시간이 걸릴 수 있습니다.</string>
-    <string name="passwords_do_not_match">비밀번호가 맞지 않음</string>
-    <string name="settings_delete_notification_targets_confirmation">이 알림 대상을 제거하겠습니까\?</string>
-    <string name="settings_delete_threepid_confirmation">%1$s %2$s님을 제거하겠습니까\?</string>
     <string name="settings_select_country">나라를 선택하세요</string>
-    <string name="settings_phone_number_country_label">나라</string>
-    <string name="settings_phone_number_country_error">나라를 선택해주세요</string>
-    <string name="settings_phone_number_label">전화번호</string>
-    <string name="settings_phone_number_error">선택한 나라에 올바르지 않은 전화번호</string>
-    <string name="settings_phone_number_verification">휴대 전화 확인</string>
-    <string name="settings_phone_number_verification_instruction">활성 코드가 담신 SMS를 보냈습니다. 코드를 아래에 입력하세요.</string>
-    <string name="settings_phone_number_verification_error_empty_code">활성 코드 입력</string>
-    <string name="settings_phone_number_verification_error">전화번호를 확인하는 중 오류</string>
-    <string name="settings_phone_number_code">코드</string>
-    <string name="account_phone_number_error">전화번호를 확인하는 중 오류가 발생했습니다.</string>
-    <string name="account_additional_info">추가 정보: %s</string>
     <string name="settings_media">미디어</string>
     <string name="settings_default_compression">기본 압축</string>
     <string name="compression_opt_list_choose">선택</string>
@@ -754,89 +435,36 @@
     <string name="media_source_choose">선택</string>
     <string name="settings_play_shutter_sound">셔터 소리 재생하기</string>
     <string name="settings_flair">재능</string>
-    <string name="settings_without_flair">현재는 어떤 커뮤니티의 구성원이 아닙니다.</string>
     <string name="media_saving_period_3_days">3일</string>
     <string name="media_saving_period_1_week">1주</string>
     <string name="media_saving_period_1_month">1달</string>
     <string name="media_saving_period_forever">영원히</string>
-    <string name="room_settings_room_photo">방 사진</string>
-    <string name="room_settings_room_name">방 이름</string>
     <string name="room_settings_topic">주제</string>
-    <string name="room_settings_room_tag">방 태그</string>
-    <string name="room_settings_tag_pref_dialog_title">이것으로 태그됨:</string>
-    <string name="room_settings_tag_pref_entry_favourite">즐겨찾기</string>
-    <string name="room_settings_tag_pref_entry_low_priority">중요하지 않음</string>
-    <string name="room_settings_tag_pref_entry_none">없음</string>
-    <string name="room_settings_category_access_visibility_title">접근성 및 가시성</string>
-    <string name="room_settings_directory_visibility">이 방을 방 목록에 놓기</string>
-    <string name="room_settings_room_notifications_title">알림</string>
-    <string name="room_settings_room_access_rules_pref_title">방 접근성</string>
     <string name="room_settings_room_read_history_rules_pref_title">방 기록 읽기 권한</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">누가 기록을 읽을 수 있나요\?</string>
-    <string name="room_settings_room_access_rules_pref_dialog_title">누가 이 방에 접근할 수 있나요\?</string>
     <string name="room_settings_read_history_entry_anyone">누구나</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">(이 설정을 선택한 시점부터) 구성원만</string>
     <string name="room_settings_read_history_entry_members_only_invited">(초대받은 시점부터) 구성원만</string>
     <string name="room_settings_read_history_entry_members_only_joined">(참가한 시점부터) 구성원만</string>
-    <string name="room_settings_room_access_warning">이 방에 링크를 타고 오려면 주소가 있어야 합니다.</string>
-    <string name="room_settings_room_access_entry_only_invited">초대받은 사람들만</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">방의 링크를 아는 누구나, 손님 제외</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">방의 링크를 아는 누구나, 손님 포함</string>
     <string name="room_settings_banned_users_title">출입 금지한 사용자</string>
     <string name="room_settings_category_advanced_title">고급</string>
     <string name="room_settings_room_internal_id">이 방의 내부 ID</string>
-    <string name="room_settings_addresses_pref_title">주소</string>
     <string name="room_settings_labs_pref_title">실험실</string>
     <string name="room_settings_labs_warning_message">예기치 않은 방식으로 중단될 수 있는 실험적인 기능들입니다. 주의해서 사용하세요.</string>
-    <string name="room_settings_labs_end_to_end">종단간 암호화</string>
-    <string name="room_settings_labs_end_to_end_is_active">종단간 암호화가 켜졌습니다</string>
-    <string name="room_settings_labs_end_to_end_warnings">암호화를 켜기 위해 로그아웃을 해야 합니다.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">확인된 기기로만 암호화</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">이 기기로는 방에서 확인되지 않은 기기로 암호화된 메시지를 절대 보내지 않기.</string>
-    <string name="room_settings_addresses_no_local_addresses">이 방은 로컬 주소가 없습니다</string>
-    <string name="room_settings_addresses_add_new_address">새 주소 (예: #foo:matrix.org)</string>
-    <string name="room_settings_no_flair">이 방은 어떤 커뮤니티에도 재능을 표시하지 않습니다</string>
-    <string name="room_settings_add_new_group">새 커뮤니니 ID (예: +foo:matrix.org)</string>
-    <string name="room_settings_invalid_group_format_dialog_title">올바르지 않은 커뮤니티 ID</string>
-    <string name="room_settings_invalid_group_format_dialog_body">\'%s\'은(는) 올바르지 않은 커뮤니티 ID입니다</string>
-    <string name="room_settings_addresses_invalid_format_dialog_title">올바르지 않은 별칭 형식</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\'은(는) 별칭에 올바르지 않은 형식입니다</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">이 방에 지정된 메인 주소가 없습니다.</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_title">메인 주소 경고</string>
     <string name="room_settings_set_main_address">메인 주소로 설정</string>
     <string name="room_settings_unset_main_address">메인 주소로 설정 해제</string>
-    <string name="room_settings_copy_room_id">방 ID 복사</string>
-    <string name="room_settings_copy_room_address">방 주소 복사</string>
-    <string name="room_settings_addresses_e2e_enabled">이 방에서 암호화가 켜졌습니다.</string>
-    <string name="room_settings_addresses_e2e_disabled">이 방에서 암호화가 꺼졌습니다.</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">암호화 활성화
-\n(경고: 다시 비활성화할 수 없음!)</string>
-    <string name="directory_title">목록</string>
+
     <string name="settings_theme">테마</string>
-    <string name="failed_to_load_timeline_position">%s님이 이 방의 특정 지점을 불러오려 했으나 찾을 수 없었습니다.</string>
-    <string name="encryption_information_title">종단간 암호화 정보</string>
-    <string name="encryption_information_device_info">이벤트 정보</string>
-    <string name="encryption_information_user_id">사용자 ID</string>
-    <string name="encryption_information_curve25519_identity_key">Curve25519 ID 키</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">Ed25519 핑거프린트 키가 필요함</string>
-    <string name="encryption_information_algorithm">알고리즘</string>
-    <string name="encryption_information_session_id">세션 ID</string>
     <string name="encryption_information_decryption_error">암호 복호화 오류</string>
-    <string name="encryption_information_sender_device_information">발신자 기기 정보</string>
     <string name="encryption_information_device_name">공개 이름</string>
-    <string name="encryption_information_name">공개 이름</string>
     <string name="encryption_information_device_id">ID</string>
     <string name="encryption_information_device_key">기기 키</string>
-    <string name="encryption_information_verification">확인</string>
-    <string name="encryption_information_ed25519_fingerprint">Ed25519 핑거프린트</string>
     <string name="encryption_export_e2e_room_keys">종단간 암호화 방 키 내보내기</string>
     <string name="encryption_export_room_keys">방 키 내보내기</string>
     <string name="encryption_export_room_keys_summary">로컬 파일로 키 내보내기</string>
     <string name="encryption_export_export">내보내기</string>
     <string name="encryption_export_notice">내보낸 키를 암호화하는 암호를 만드세요. 키를 가져오려면 같은 암호를 입력해야 합니다.</string>
-    <string name="encryption_export_saved_as">종단간 암호화 방 키가 \'%s\'에 저장되었습니다.
-\n
-\n경고: 애플리케이션을 삭제하면 이 파일도 삭제됩니다.</string>
+
     <string name="encryption_message_recovery">암호화된 메시지 복구</string>
     <string name="encryption_settings_manage_message_recovery_summary">키 백업 관리</string>
     <string name="encryption_import_e2e_room_keys">종단간 암호화 방 키 가져오기</string>
@@ -847,37 +475,19 @@
     <string name="encryption_never_send_to_unverified_devices_summary">이 기기에서 확인되지 않은 기기로 절대 암호화된 메시지를 보내지 않습니다.</string>
     <string name="encryption_information_not_verified">확인되지 않음</string>
     <string name="encryption_information_verified">확인됨</string>
-    <string name="encryption_information_blocked">블랙리스트 대상</string>
-    <string name="encryption_information_unknown_device">알 수 없는 기기</string>
     <string name="encryption_information_unknown_ip">알 수 없는 ip</string>
-    <string name="encryption_information_none">없음</string>
     <string name="encryption_information_verify">확인</string>
-    <string name="encryption_information_unverify">확인하지 않음</string>
-    <string name="encryption_information_block">블랙리스트</string>
-    <string name="encryption_information_unblock">블랙리스트 제외</string>
-    <string name="encryption_information_verify_device">기기 확인</string>
     <string name="encryption_information_verify_device_warning">이 기기가 신뢰할 수 있는 지 확인하려면, 다른 방법을 사용하여 소유자에게 연락하세요 (예: 현실에서 혹은 전화로) 그리고 이 기기의 사용자 설정에서 표시된 키가 아래에 있는 키와 맞는지 물어보세요:</string>
     <string name="encryption_information_verify_device_warning2">그것이 맞다면, 아래의 확인 버튼을 누르세요. 맞지 않다면, 다른 사람이 이 기기를 가로채고 있는 것이고 블랙리스트에 올려야 합니다. 앞으로 이 확인 절차는 더 정교해질 것입니다.</string>
-    <string name="encryption_information_verify_key_match">키가 맞다는 것은 확인합니다</string>
-    <string name="unknown_devices_alert_title">알 수 없는 기기가 있는 방</string>
-    <string name="unknown_devices_alert_message">이 방에는 확인되지 않은 알 수 없는 기기가 있습니다. 
-\n즉, 사용자에 속해 있다고 주장하는 기기라는 보장이 없습니다. 
-\n저희는 계속하기 전에 각 기기에 확인 절차를 하기를 권합니다, 하지만 원한다면 확인하지 않고 바로 메시지를 보낼 수 있습니다. 
-\n 
-\n알 수 없는 기기:</string>
+
     <string name="select_room_directory">방 목록 선택</string>
-    <string name="directory_server_fail_to_retrieve_server">서버를 이용할 수 없거나 과부하 상태입니다</string>
-    <string name="directory_server_type_homeserver">공개 서버를 표시할 홈서버를 입력하세요</string>
     <string name="directory_server_placeholder">홈서버 URL</string>
     <string name="directory_server_all_rooms_on_server">%s 서버의 모든 방</string>
     <string name="directory_server_native_rooms">모든 기본 %s 방</string>
-    <string name="lock_screen_hint">여기에 입력…</string>
     <plurals name="notification_unread_notified_messages">
         <item quantity="other">%d개의 읽지 않은 알림 메시지</item>
     </plurals>
-    <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="other">%d개의 읽지 않은 알림 메시지</item>
-    </plurals>
+
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="other">%d개의 방</item>
     </plurals>
@@ -894,7 +504,6 @@
     <string name="notification_new_invitation">새 초대</string>
     <string name="notification_sender_me">나</string>
     <string name="notification_inline_reply_failed">** 보내기 실패 - 방을 열어주세요</string>
-    <string name="historical_placeholder">기록 검색</string>
     <string name="font_size">글씨 크기</string>
     <string name="tiny">매우 작게</string>
     <string name="small">작게</string>
@@ -903,9 +512,6 @@
     <string name="larger">더 크게</string>
     <string name="largest">매우 크게</string>
     <string name="huge">가장 크게</string>
-    <string name="widget_no_power_to_manage">이 방에서 위젯을 다루려면 권한이 있어야 합니다</string>
-    <string name="widget_creation_failure">위젯 생성 실패</string>
-    <string name="settings_labs_create_conference_with_jitsi">Jitsi로 회의 전화 만들기</string>
     <string name="widget_delete_message_confirmation">이 방에서 위젯을 삭제하겠습니까\?</string>
     <plurals name="active_widgets">
         <item quantity="other">%d개의 활성 위젯</item>
@@ -920,14 +526,9 @@
     <string name="widget_integration_missing_user_id">요청에 user_id가 없습니다.</string>
     <string name="widget_integration_room_not_visible">방 %s이(가) 보이지 않습니다.</string>
     <string name="widget_integration_missing_parameter">필수 매개 변수가 없습니다.</string>
-    <string name="widget_integration_invalid_parameter">매개 변수가 올바르지 않습니다.</string>
-    <string name="integration_manager_not_configured">통합 관리자가 설정되지 않았습니다.</string>
     <string name="room_add_matrix_apps">Matrix 앱 추가</string>
     <string name="settings_labs_native_camera">기본 카메라 사용</string>
     <string name="settings_labs_native_camera_summary">맞춤 카메라 화면 대신 시스템 카메라를 실행합니다.</string>
-    <string name="settings_labs_keyboard_options_to_send_message">키보드 엔터 키로 메시지 보내기</string>
-    <string name="settings_labs_enable_send_voice">음성 메시지 보내기</string>
-    <string name="settings_labs_enable_send_voice_summary">이 설정은 메시지를 기록하기 위한 제 3자 애플리케이션이 필요합니다.</string>
     <string name="you_added_a_new_device">새 기기 \'%s\'을(를) 추가했습니다, 여기에는 암호화 키가 필요합니다.</string>
     <string name="you_added_a_new_device_with_info">새 기기에는 암호화 키가 필요합니다.
 \n기기 이름: %1$s
@@ -939,14 +540,9 @@
 \n마지막으로 본 순간: %2$s 
 \n다른 기기에서 로그인하지 않았다면, 이 요청을 무시하세요.</string>
     <string name="start_verification">확인 시작</string>
-    <string name="start_verification_short_label">확인</string>
-    <string name="share_without_verifying">확인하지 않고 공유</string>
     <string name="share_without_verifying_short_label">공유</string>
     <string name="key_share_request">키 공유 요청</string>
-    <string name="ignore_request">요청 무시하기</string>
     <string name="ignore_request_short_label">무시</string>
-    <string name="conference_call_warning_title">경고!</string>
-    <string name="conference_call_warning_message">회의 전화는 개발 중이며 신뢰할 수 없을 수 있습니다.</string>
     <string name="command_error">명령어 오류</string>
     <string name="unrecognized_command">인식할 수 없는 명령어: %s</string>
     <string name="command_problem_with_parameters">\"%s\" 명령어는 더 많은 매개 변수가 필요하거나, 일부 매개 변수가 옳지 않습니다.</string>
@@ -970,34 +566,14 @@
     <string name="notification_noisy">소리</string>
     <string name="encrypted_message">암호화된 메시지</string>
     <string name="create">만들기</string>
-    <string name="create_community">커뮤니티 만들기</string>
-    <string name="community_name">커뮤니티 이름</string>
-    <string name="community_name_hint">예시</string>
-    <string name="community_id">커뮤니티 ID</string>
-    <string name="community_id_hint">예시</string>
     <string name="group_details_home">홈</string>
-    <string name="group_details_people">사람</string>
-    <string name="group_details_rooms">방</string>
-    <string name="no_users_placeholder">사용자 없음</string>
     <string name="rooms">방</string>
-    <string name="joined">참가함</string>
     <string name="invited">초대받음</string>
-    <string name="filter_group_members">구성원 그룹 필터</string>
-    <string name="filter_group_rooms">방 그룹 필터</string>
-    <plurals name="group_members">
-        <item quantity="other">%d명의 구성원</item>
-    </plurals>
-    <plurals name="group_rooms">
-        <item quantity="other">%d개의 방</item>
-    </plurals>
-    <string name="group_no_long_description">커뮤니티 관리자가 이 커뮤니티에 대한 자세한 설명을 제공하지 않았습니다.</string>
+
+
     <string name="has_been_removed">%2$s님에 의해 %1$s 방에서 추방당했습니다</string>
     <string name="has_been_banned">%2$s님에 의해 %1$s 방에서 출입 금지당했습니다</string>
     <string name="reason_colon">이유: %1$s</string>
-    <string name="rejoin">다시 참가하기</string>
-    <string name="forget_room">방 잊어버리기</string>
-    <string name="receipt_avatar">아바타 메모</string>
-    <string name="notice_avatar">아바타 공지</string>
     <string name="avatar">아바타</string>
     <string name="dialog_user_consent_content">%1$s 홈서버를 계속 사용하려면 이용 약관을 검토하고 승인해야 합니다.</string>
     <string name="dialog_user_consent_submit">지금 검토하기</string>
@@ -1008,7 +584,6 @@
 \n 
 \nMatrix의 메시지 가시성은 이메일과 유사합니다. 우리가 메시지를 잊는 것은 보낸 메시지가 모든 새 사용자 혹은 등록하지 않은 사용자와 공유하지 않는다는 것입니다, 하지만 이 메시지에 접근한 등록된 사용자는 이 사본으로 여전히 접근할 수 있을 것입니다.</string>
     <string name="deactivate_account_delete_checkbox">내 계정을 비활성화하면 내가 보낸 모든 메시지는 잊어주세요 (경고: 이것은 미래 사용자가 불완전한 대화를 읽게 됩니다)</string>
-    <string name="deactivate_account_prompt_password">계속하려면, 비밀번호를 입력하세요:</string>
     <string name="deactivate_account_submit">계정 비활성화</string>
     <string name="error_empty_field_enter_user_name">사용자 이름을 입력하세요.</string>
     <string name="error_empty_field_your_password">비밀번호를 입력하세요.</string>
@@ -1016,8 +591,6 @@
     <string name="room_tombstone_continuation_link">대화는 여기서 계속됩니다</string>
     <string name="room_tombstone_continuation_description">이 방은 다른 대화의 연장선입니다</string>
     <string name="room_tombstone_predecessor_link">오래된 메시지를 보려면 여기를 클릭</string>
-    <string name="resource_limit_exceeded_title">리소스 한도 초과됨</string>
-    <string name="resource_limit_contact_action">관리자 연락</string>
     <string name="resource_limit_contact_admin">서비스 관리자에게 연락</string>
     <string name="resource_limit_soft_default">이 홈서버가 리소스 한도를 초과해서 <b>일부 사용자는 로그인할 수 없습니다</b>.</string>
     <string name="resource_limit_hard_default">이 홈서버가 리소스 한도를 초과했습니다.</string>
@@ -1025,19 +598,10 @@
     <string name="resource_limit_hard_mau">이 홈서버가 월 간 활성 사용자 한도를 초과했습니다.</string>
     <string name="resource_limit_soft_contact">한도를 높이려면 %s하세요.</string>
     <string name="resource_limit_hard_contact">이 서비스 사용을 계속하려면 %s하세요.</string>
-    <string name="settings_lazy_loading_title">방 구성원 불러오기 지연</string>
-    <string name="settings_lazy_loading_description">첫 화면에서 방 멤버만 불러옴으로써 퍼포먼스를 향상시킵니다.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">아직 홈서버가 방 구성원 불러오기 지연을 지원하지 않습니다. 나중에 시도하세요.</string>
     <string name="unknown_error">죄송합니다, 오류가 발생했습니다</string>
     <string name="merged_events_expand">펼치기</string>
     <string name="merged_events_collapse">접기</string>
-    <string name="settings_info_area_show">정보 영역 보이기</string>
-    <string name="show_info_area_always">항상</string>
-    <string name="show_info_area_messages_and_errors">메시지와 오류일 시</string>
-    <string name="show_info_area_only_errors">오류만</string>
-    <string name="generic_label">%1$s:</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">올바른 Google Play 서비스 APK를 찾을 수 없습니다. 알림이 제대로 작동하지 않을 수 있습니다.</string>
     <string name="passphrase_create_passphrase">암호 만들기</string>
@@ -1046,8 +610,7 @@
     <string name="passphrase_passphrase_does_not_match">암호가 맞지 않음</string>
     <string name="passphrase_empty_error_message">암호를 입력하세요</string>
     <string name="passphrase_passphrase_too_weak">암호가 너무 약합니다</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">${app_name}으로 복구 키를 생성하려면 암호를 지워주세요.</string>
-    <string name="keys_backup_no_session_error">이용할 수 있는 Matrix 세션이 없음</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">${app_name}으로 복구 키를 생성하려면 암호를 지워주세요.</string>
     <string name="keys_backup_setup_step1_title">암호화된 메시지를 잃지 마세요</string>
     <string name="keys_backup_setup_step1_description">암호화된 방의 메시지는 종단간 암호화로 보호됩니다. 자신과 수신자만이 메시지를 읽을 수 있는 키를 갖습니다.
 \n
@@ -1073,9 +636,7 @@
     <string name="keys_backup_setup_step3_copy_button_title">복구 키 저장</string>
     <string name="keys_backup_setup_step3_share_recovery_file">공유</string>
     <string name="keys_backup_setup_step3_save_button_title">파일로 저장</string>
-    <string name="recovery_key_export_saved_as_warning">복구 키가 \'%s\'(으)로 저장되었습니다.
-\n
-\n경고: 이 파일은 애플리케이션이 삭제되면 함께 삭제됩니다.</string>
+
     <string name="keys_backup_setup_override_backup_prompt_tile">백업이 이미 홈서버에 존재합니다</string>
     <string name="keys_backup_setup_override_backup_prompt_description">이미 키 백업을 다른 기기에 설정한 모양입니다. 만들고 있는 것으로 바꾸겠습니까\?</string>
     <string name="keys_backup_setup_override_replace">바꾸기</string>
@@ -1085,8 +646,6 @@
     <string name="keys_backup_setup_step3_generating_key_status">암호를 사용해 복구 키를 생성하는 것은 시간이 걸릴 수 있습니다.</string>
     <string name="recovery_key">복구 키</string>
     <string name="unexpected_error">예기치 않은 오류</string>
-    <string name="keys_backup_setup_backup_started_title">백업 시작함</string>
-    <string name="keys_backup_setup_backup_started_message">이제 암호화 키가 백그라운드에서 홈서버로 백업됩니다. 처음 백업에는 몇 분이 걸릴 수 있습니다.</string>
     <string name="keys_backup_setup_skip_title">확신합니까\?</string>
     <string name="keys_backup_setup_skip_msg">로그아웃을 하거나 이 기기를 잃어버리면 메시지에 접근할 수 없게 될지도 모릅니다.</string>
     <string name="keys_backup_restore_is_getting_backup_version">백업 버전 가져오는 중…</string>
@@ -1095,10 +654,8 @@
     <string name="keys_backup_restore_with_passphrase_helper_with_link">복구 암호가 기억나지 않는다면, %s할 수 있습니다.</string>
     <string name="keys_backup_restore_with_recovery_key">복구 키를 사용해서 암호화된 메시지 기록을 풀기</string>
     <string name="keys_backup_restore_key_enter_hint">복구 키 입력</string>
-    <string name="keys_backup_restore_setup_recovery_key">메시지 복구</string>
     <string name="keys_backup_restore_with_key_helper">복구 키를 잃어버렸나요\? 설정에서 새로운 키를 만들 수 있습니다.</string>
     <string name="keys_backup_passphrase_error_decrypt">이 암호로 백업을 복호화할 수 없습니다: 올바른 복구 암호를 입력해서 확인해주세요.</string>
-    <string name="network_error_please_check_and_retry">네트워크 오류: 인터넷 연결 상태를 확인하고 다시 시도해주세요.</string>
     <string name="keys_backup_restoring_waiting_message">백업 복구:</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">복구 키 계산 중…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">키 다운로드 중…</string>
@@ -1114,7 +671,6 @@
         <item quantity="other">%d개의 새 키가 이 기기에 추가되었습니다.</item>
     </plurals>
     <string name="keys_backup_get_version_error">최신 복구 키 버전을 가져오는 데 실패했습니다 (%s).</string>
-    <string name="keys_backup_no_keysbackup_sdk_error">세션 암호화가 활성화되지 않았습니다</string>
     <string name="keys_backup_settings_restore_backup_button">백업에서 복구</string>
     <string name="keys_backup_settings_delete_backup_button">백업 삭제</string>
     <string name="keys_backup_settings_status_ok">이 기기를 위한 키 백업이 올바르게 설정되었습니다.</string>
@@ -1126,20 +682,12 @@
     <string name="keys_backup_settings_valid_signature_from_unverified_device">백업이 확인되지 않은 기기 %s의 올바른 서명이 있습니다</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">백업이 확인된 기기 %s의 올바르지 않은 서명이 있습니다</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">백업이 확인되지 않은 기기 %s의 올바르지 않은 서명이 있습니다</string>
-    <string name="keys_backup_get_trust_error">백업에 대한 신뢰 정보를 주지 못했습니다 (%s).</string>
     <string name="keys_backup_settings_untrusted_backup">이 기기에서 키 백업을 사용하려면, 지금 암호나 복구 키를 복구하세요.</string>
     <string name="keys_backup_settings_deleting_backup">백업 삭제 중…</string>
-    <string name="keys_backup_settings_delete_backup_error">백업 삭제에 실패함 (%s)</string>
     <string name="keys_backup_settings_checking_backup_state">백업 상태 확인하기</string>
     <string name="keys_backup_settings_delete_confirm_title">백업 삭제</string>
     <string name="keys_backup_settings_delete_confirm_message">서버에서 백업한 암호화 키를 삭제하겠습니까\? 더 이상 복구 키를 사용해 암호화된 메시지 기록을 읽을 수 없습니다.</string>
-    <string name="new_recovery_method_popup_title">새 키 백업</string>
-    <string name="new_recovery_method_popup_description">새 보안 메시지 키 백업이 삭제되었습니다.
-\n
-\n새 복구 방법을 설정하지 않으면, 공격하는 사람이 계정에 접근하려 할 수도 있습니다. 설정에 가서 계정 비밀번호를 바꾸고 새로운 복구 방법을 설정하세요.</string>
-    <string name="new_recovery_method_popup_was_me">접니다</string>
-    <string name="keys_backup_banner_setup_line1">암호화된 메시지를 잃지 마세요</string>
-    <string name="keys_backup_banner_setup_line2">키 백업 시작</string>
+
     <string name="keys_backup_banner_recover_line1">암호화된 메시지를 잃지 마세요</string>
     <string name="keys_backup_banner_recover_line2">키 백업하기</string>
     <string name="keys_backup_banner_update_line1">새 암호화된 메시지 키</string>
@@ -1152,72 +700,32 @@
     <string name="keys_backup_info_title_version">버전</string>
     <string name="keys_backup_info_title_algorithm">알고리즘</string>
     <string name="keys_backup_info_title_signature">서명</string>
-    <string name="autodiscover_invalid_response">잘못된 홈서버 검색 응답</string>
-    <string name="autodiscover_well_known_autofill_dialog_title">자동 완성 서버 설정</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name}이 userId 도메인 \"%1$s\"에 대한 맞춤 서버 설정을 감지했습니다:
-\n%2$s</string>
-    <string name="autodiscover_well_known_autofill_confirm">설정 사용</string>
-    <string name="invalid_or_expired_credentials">올바르지 않거나 만료된 자격 때문에 로그아웃되었습니다.</string>
-    <string name="sas_verify_title">짧은 문장과 비교하여 확인하세요.</string>
-    <string name="sas_security_advise">보안을 최대화하려면, 상대방과 직접 대면하거나 신뢰할 수 있는 다른 대화 수단을 사용하는 것이 좋습니다.</string>
-    <string name="sas_verify_start_button_title">확인 시작</string>
-    <string name="sas_incoming_request_title">수신 확인 요청</string>
-    <string name="sas_incoming_request_description">이 기기를 확인하여 신뢰할 수 있는 것으로 표시하세요. 종단간 암호화 메시지를 사용하는 경우 상대방의 기기를 신뢰하면 안심할 수 있습니다.</string>
-    <string name="sas_incoming_request_description_2">이 기기를 확인하여 신뢰할 수 있는 것으로 표시하세요, 그리고 당신의 기기도 상대방에게 신뢰할 수 있는 것으로 표시하세요.</string>
-    <string name="sas_emoji_description">다음 이모지가 상대방의 화면에 나타나는 것을 확인하는 것으로 이 기기를 인증합니다</string>
-    <string name="sas_decimal_description">다음 숫자가 상대방의 화면에 나타나는 것을 확인하는 것으로 이 기기를 인증합니다</string>
-    <string name="sas_incoming_verification_request_dialog">수신 확인 요청을 받았습니다.</string>
-    <string name="sas_view_request_action">요청 보기</string>
-    <string name="sas_waiting_for_partner">상대방이 확인하기를 기다리는 중…</string>
+
     <string name="sas_verified">확인되었습니다!</string>
-    <string name="sas_verified_successful">성공적으로 이 기기를 확인했습니다.</string>
-    <string name="sas_verified_successful_description">이 사용자 간의 보안 메시지는 종단간 암호화 되며 제 3자가 읽을 수 없습니다.</string>
     <string name="sas_got_it">알겠습니다</string>
-    <string name="sas_verifying_keys">아무것도 안 나타나나요\? 일부 클라이언트는 아직 대화 식 확인을 지원하지 않습니다. 옛날 확인 방식을 사용하세요.</string>
-    <string name="sas_legacy_verification_button_title">옛날 확인 방식 사용하기.</string>
-    <string name="sas_verification_request_notification_channel_title">키 확인</string>
-    <string name="sas_cancelled_dialog_title">요청 취소됨</string>
-    <string name="sas_cancelled_by_other">상대방이 확인을 취소했습니다.
-\n%s</string>
-    <string name="sas_cancelled_by_me">확인이 취소되었습니다. 
-\n이유: %s</string>
-    <string name="sas_verification_request_notification_channel">상호작용 기기 확인</string>
+
+
     <string name="sas_incoming_request_notif_title">확인 요청</string>
     <string name="sas_incoming_request_notif_content">%s님이 당신의 기기를 확인하고 싶습니다</string>
-    <string name="sas_error_m_user">사용자가 확인을 취소했습니다</string>
-    <string name="sas_error_m_timeout">확인 과정 시간이 초과되었습니다</string>
-    <string name="sas_error_m_unknown_transaction">기기는 이 처리에 대해 모릅니다</string>
-    <string name="sas_error_m_unknown_method">기기는 키 계약, 해시, MAC 또는 SAS 방식에 동의할 수 없습니다</string>
-    <string name="sas_error_m_mismatched_commitment">해시 커밋이 일치하지 않습니다</string>
-    <string name="sas_error_m_mismatched_sas">SAS가 일치하지 않습니다</string>
-    <string name="sas_error_m_unexpected_message">기기가 예기치 못한 메시지를 받았습니다</string>
-    <string name="sas_error_m_invalid_message">올바르지 않은 메시지를 받았습니다</string>
-    <string name="sas_error_m_key_mismatch">키 맞지 않음</string>
-    <string name="sas_error_m_user_error">사용자 맞지 않음</string>
     <string name="sas_error_unknown">알 수 없는 오류</string>
     <string name="edit">편집</string>
     <string name="reply">답장</string>
     <string name="global_retry">다시 시도</string>
-    <string name="room_list_empty">앱을 시작하면 방에 참가하기.</string>
     <string name="send_you_invite">초대장을 보냈습니다</string>
     <string name="invited_by">%1$s 님이 초대했습니다</string>
     <string name="room_list_catchup_empty_title">모두 읽었습니다!</string>
     <string name="room_list_catchup_empty_body">더 이상 읽지 않은 메시지가 없습니다</string>
-    <string name="room_list_catchup_welcome_title">홈에 온 것을 환영합니다!</string>
-    <string name="room_list_catchup_welcome_body">여기부터 읽지 않은 메시지를 읽으세요</string>
     <string name="room_list_people_empty_title">대화</string>
     <string name="room_list_people_empty_body">다이렉트 메시지 대화가 여기에 표시됩니다</string>
     <string name="room_list_rooms_empty_title">방</string>
     <string name="room_list_rooms_empty_body">방이 여기 표시됩니다</string>
     <string name="title_activity_emoji_reaction_picker">리액션</string>
     <string name="action_agree">동의</string>
-    <string name="action_like">좋아요</string>
     <string name="message_add_reaction">리액션 추가</string>
     <string name="message_view_reaction">리액션 보기</string>
     <string name="reactions">리액션</string>
     <string name="event_redacted_by_user_reason">사용자가 감춘 이벤트</string>
     <string name="event_redacted_by_admin_reason">방 관리자가 감춘 이벤트</string>
-    <string name="last_edited_info_message">%1$s님이 %2$s에 마지막으로 편집함</string>
     <string name="malformed_message">잘못된 이벤트, 표시할 수 없음</string>
     <string name="create_new_room">새 방 만들기</string>
     <string name="error_no_network">네트워크 없음. 인터넷 연결 상태를 확인하세요.</string>
@@ -1226,27 +734,21 @@
     <string name="please_wait">기다려주세요…</string>
     <string name="group_all_communities">모든 커뮤니티</string>
     <string name="room_preview_no_preview">이 방은 미리 볼 수 없습니다</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">세계가 읽을 수 있는 방의 미리보기는 아직 ${app_name}X에서 지원하지 않습니다</string>
     <string name="fab_menu_create_room">방</string>
     <string name="fab_menu_create_chat">다이렉트 메시지</string>
-    <string name="create_room_title">새 방</string>
     <string name="create_room_action_create">만들기</string>
     <string name="create_room_name_hint">방 이름</string>
     <string name="create_room_public_title">공공</string>
     <string name="create_room_public_description">누구나 이 방에 참가할 수 있습니다</string>
-    <string name="create_room_directory_title">방 목록</string>
-    <string name="create_room_directory_description">이 방을 방 목록에 게시</string>
     <string name="keys_backup_unable_to_get_trust_info">신뢰 정보를 얻는 과정에서 오류가 발생했습니다</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">키 백업 데이터를 얻는 과정에서 오류가 발생했습니다</string>
     <string name="import_e2e_keys_from_file">파일 \"%1$s\"에서 종단간 암호화 키 가져옴.</string>
     <string name="settings_sdk_version">Matrix SDK 버전</string>
     <string name="settings_other_third_party_notices">다른 제 3자 고지</string>
     <string name="navigate_to_room_when_already_in_the_room">이 방을 이미 봤습니다!</string>
-    <string name="quick_reactions">빠른 리액션</string>
     <string name="settings_general_title">기본</string>
     <string name="settings_preferences">환경 설정</string>
     <string name="settings_security_and_privacy">보안 &amp; 개인</string>
-    <string name="settings_expert">전문가</string>
     <string name="settings_push_rules">푸시 규칙</string>
     <string name="settings_push_rules_no_rules">푸시 규칙이 정의되지 않음</string>
     <string name="settings_push_gateway_no_pushers">등록된 푸시 게이트웨이가 없음</string>
@@ -1271,7 +773,6 @@
     <string name="send_file_step_sending_thumbnail">썸네일 보내는 중 (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">파일 암호화 중…</string>
     <string name="send_file_step_sending_file">파일 보내는 중 (%1$s / %2$s)</string>
-    <string name="downloading_file">파일 %1$s 다운로드하는 중…</string>
     <string name="downloaded_file">파일 %1$s을(를) 다운로드했습니다!</string>
     <string name="edited_suffix">(편집됨)</string>
     <string name="message_edits">메시지 편집</string>
@@ -1284,58 +785,31 @@
     <string name="room_directory_search_hint">이름 혹은 ID (#예시:matrix.org)</string>
     <string name="labs_swipe_to_reply_in_timeline">타임라인에서 스와이프로 답장 기능 켜기</string>
     <string name="link_copied_to_clipboard">클립보드에 링크 복사</string>
-    <string name="add_by_matrix_id">Matrix ID로 추가</string>
     <string name="creating_direct_room">방 만드는 중…</string>
-    <string name="direct_room_no_known_users">결과가 없습니다, Matrix ID로 추가를 사용하여 서버를 검색하세요.</string>
-    <string name="direct_room_start_search">결과를 얻기 위해 검색 시작</string>
-    <string name="direct_room_filter_hint">사용자 이름 또는 ID로 필터…</string>
-    <string name="joining_room">방에 참가하는 중…</string>
     <string name="message_view_edit_history">편집 기록 보기</string>
-    <string name="action_review">검토</string>
     <string name="action_decline">끊기</string>
     <string name="widget_integration_review_terms">계속 하려면 이 서비스 약관에 동의해야 합니다.</string>
     <string name="terms_of_service">서비스 약관</string>
-    <string name="review_terms">조건 검토</string>
     <string name="terms_description_for_identity_server">다른 사람이 검색할 수 있음</string>
     <string name="terms_description_for_integration_manager">봇, 브릿지, 위젯과 스티커 팩을 사용하세요</string>
-    <string name="read_at">읽은 시간</string>
     <string name="none">없음</string>
     <string name="action_revoke">취소</string>
     <string name="action_disconnect">연결 해제</string>
-    <string name="people_no_identity_server">설정된 ID 서버가 없습니다.</string>
-    <string name="call_failed_no_ice_title">잘놋 설정된 서버로 인해 전화에 실패함</string>
-    <string name="call_failed_no_ice_description">전화가 정상적으로 작동하도록 TURN 서버를 설정하려면 홈서버 (%1$s)의 관리자에게 연락해주세요.
-\n
-\n아니면 %2$s에서 공개 서버를 사용할 수 있습니다, 하지만 신뢰할 수 없고 서버와 IP 주소를 공유하게 됩니다. 설정에서 이것을 관리할 수도 있습니다.</string>
-    <string name="call_failed_no_ice_use_alt">%s 사용하기</string>
-    <string name="call_failed_dont_ask_again">다시 묻지 않기</string>
-    <string name="auth_add_email_message_2">계정 복구 용 이메일을 설정합니다, 그리고 이후 알고 있는 사람들이 당신을 찾을 수 있는지 여부를 선택할 수 있습니다.</string>
-    <string name="auth_add_phone_message_2">전화를 설정합니다, 그리고 이후 알고 있는 사람들이 당신을 찾을 수 있는지 여부를 선택할 수 있습니다.</string>
-    <string name="auth_add_email_phone_message_2">계정 복구 용 이메일을 설정합니다. 이메일이나 전화로 이후 알고 있는 사람들이 당신을 찾을 수 있는지 여부를 선택하는데 사용됩니다.</string>
-    <string name="auth_add_email_and_phone_message_2">계정 복구 용 이메일을 설정합니다. 이메일이나 전화로 이후 알고 있는 사람들이 당신을 찾을 수 있는지 여부를 선택하는데 사용됩니다.</string>
+
     <string name="login_error_homeserver_not_found">이 URL로는 홈서버에 접근할 수 없습니다, 확인해주세요</string>
-    <string name="settings_call_ringtone_use_default_stun">대체 전화 지원 서버 허용</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">홈서버가 전화를 지원하지 않는다면 %s을(를) 지원 서버로 사용합니다 (전화하는 동안 IP 주소가 공유됩니다)</string>
-    <string name="invite_no_identity_server_error">이 작업을 하려면 설정에서 ID 서버를 추가하세요.</string>
     <string name="settings_background_fdroid_sync_mode">백그라운드 동기화 모드 (실험적)</string>
     <string name="settings_background_fdroid_sync_mode_battery">배터리에 최적화됨</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name}은 기기의 제한된 자원 (배터리)을 유지하기 위해 백그라운드에서 동기화합니다.
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name}은 기기의 제한된 자원 (배터리)을 유지하기 위해 백그라운드에서 동기화합니다.
 \n기기 자원 상태에 따라 운영체제에 의해 동기화는 지연될 수 있습니다.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">실시간으로 최적화됨</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name}은 (설정할 수 있는) 특정 시간에 주기적으로 백그라운드에거 동기화됩니다.
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name}은 (설정할 수 있는) 특정 시간에 주기적으로 백그라운드에거 동기화됩니다.
 \n이는 라디오와 배터리 사용에 영향을 주며 ${app_name}이 이벤트를 수신하고 있는 상태라는 알림이 영구적으로 표시됩니다.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">백그라운드 동기화 없음</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">앱이 백그라운드에 있을 때 수신 메시지의 알림을 받지 않습니다.</string>
-    <string name="settings_background_sync_update_error">설정을 업데이트하는데 실패했습니다.</string>
-    <string name="settings_set_workmanager_delay">원하는 동기화 간격</string>
-    <string name="settings_set_workmanager_delay_summary">%s
-\n동기화는 자원 (배터리)이나 기기의 상태 (수면)에 따라 지연됩니다.</string>
+
     <string name="settings_discovery_category">탐색</string>
     <string name="settings_discovery_manage">탐색 설정을 관리합니다.</string>
-    <string name="encryption_information_device_name_with_warning">공개 이름 (대화하는 사람들에게 보여집니다)</string>
-    <string name="device_name_warning">기기의 공개 이름은 대화하는 사람들에게 보여집니다</string>
     <string name="identity_server_not_defined">ID 서버를 사용하고 있지 않습니다</string>
-    <string name="identity_server_not_defined_for_password_reset">설정된 ID 서버가 없습니다, 비밀번호를 초기화하려면 ID 서버가 필요합니다.</string>
     <string name="error_user_already_logged_in">다른 홈서버로 연결을 시도합니다. 로그아웃하겠습니까\?</string>
     <string name="identity_server">ID 서버</string>
     <string name="disconnect_identity_server">ID 서버 연결 해제</string>
@@ -1349,7 +823,6 @@
     <string name="settings_discovery_disconnect_identity_server_info">ID 서버에서 연결을 해제하면 이메일이나 전화로 다른 사용자가 당신을 찾을 수 없게 되고 다른 사람들을 초대할 수 없게 됩니다.</string>
     <string name="settings_discovery_msisdn_title">전화번호로 찾을 수 있음</string>
     <string name="settings_discovery_confirm_mail">%s(으)로 확인 이메일을 보냈습니다, 이메일을 확인하고 확인 링크를 클릭하세요</string>
-    <string name="settings_discovery_mail_pending">보류 중</string>
     <string name="settings_discovery_enter_identity_server">새 ID 서버를 입력</string>
     <string name="settings_discovery_bad_identity_server">ID 서버에 연결할 수 없음</string>
     <string name="settings_discovery_please_enter_server">ID 서버 URL을 입력해주세요</string>
@@ -1369,8 +842,6 @@
     <string name="a11y_create_direct_message">새 다이렉트 대화 만들기</string>
     <string name="a11y_create_room">새 방 만들기</string>
     <string name="a11y_close_keys_backup_banner">키 백업 배너 닫기</string>
-    <string name="a11y_show_password">비밀번호 보이기</string>
-    <string name="a11y_hide_password">비밀번호 감추기</string>
     <string name="a11y_jump_to_bottom">맨 아래로 건너뛰기</string>
     <string name="three_users_read">%1$s님, %2$s님 그리고 %3$s님이 읽음</string>
     <string name="two_users_read">%1$s님 그리고 %2$s님이 읽음</string>
@@ -1378,12 +849,10 @@
     <plurals name="fallback_users_read">
         <item quantity="other">%d명이 읽음</item>
     </plurals>
-    <string name="error_file_too_big">파일 \'%1$s\' (%2$s)이(가) 업로드하기에 너무 큽니다. 제한은 %3$s입니다.</string>
     <string name="error_attachment">첨부 파일을 검색하는 중 오류가 발생했습니다.</string>
     <string name="attachment_type_file">파일</string>
     <string name="attachment_type_contact">연락처</string>
     <string name="attachment_type_camera">카메라</string>
-    <string name="attachment_type_audio">소리</string>
     <string name="attachment_type_gallery">갤러리</string>
     <string name="attachment_type_sticker">스티커</string>
     <string name="error_handling_incoming_share">공유 데이터를 처리할 수 없음</string>
@@ -1406,13 +875,7 @@
     <string name="content_reported_as_inappropriate_content">이 내용을 부적절한 문자로 신고했습니다.
 \n
 \n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다.</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name}은 종단간 키를 디스크에 저장하려면 권한이 필요합니다.
-\n
-\n키를 수동으로 내보내려면 다음 팝업에서 접근을 허용해주세요.</string>
-    <string name="no_network_indicator">현재 네트워크 연결이 없습니다</string>
-    <string name="settings_add_3pid_confirm_password_title">비밀번호가 정확하지 않습니다</string>
-    <string name="template_settings_add_3pid_flow_not_supported">라이엇 모바일에서 불가능한 것입니다</string>
-    <string name="settings_add_3pid_authentication_needed">인증이 요구됩니다</string>
+
     <string name="settings_integrations">통합</string>
     <string name="settings_integration_allow">통합 수락</string>
     <string name="create_space_topic_hint">설명</string>
@@ -1454,7 +917,6 @@
     <string name="audio_video_meeting_description">회의는 Jitsi의 보안 및 권한 정책을 사용합니다. 회의가 진행되는 동안 방에 있는 사람들이 참여 버튼을 통해 참가할 수 있습니다.</string>
     <string name="audio_meeting">전화 회의 시작</string>
     <string name="video_meeting">화상회의 시작</string>
-    <string name="conference_call_in_progress">회의가 이미 진행 중입니다!</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">전화를 걸 수 있는 권한이 없습니다</string>
     <string name="no_permissions_to_start_webrtc_call">이 방에서 전화를 걸 수 있는 권한이 없습니다</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">전화 회의를 시작할 수 있는 권한이 없습니다</string>
@@ -1462,7 +924,6 @@
     <string name="missing_permissions_title">권한 없음</string>
     <string name="denied_permission_camera">이 작업을 수행하려면 시스템 설정에서 카메라 권한을 허용해주세요.</string>
     <string name="denied_permission_generic">이 작업을 수행할 수 있는 일부 권한이 없습니다. 시스템 설정에서 권한을 허용해주세요.</string>
-    <string name="action_pause">일시 정지</string>
     <string name="action_play">재생</string>
     <string name="denied_permission_voice_message">음성 메시지를 보내려면 마이크 권한을 허용해주세요.</string>
     <string name="event_redacted">삭제된 메시지</string>
@@ -1486,7 +947,7 @@
     <string name="settings_active_sessions_show_all">모든 세션 보기</string>
     <string name="settings_active_sessions_list">활성 세션</string>
     <string name="settings_security_application_protection_screen_title">보안 설정</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">${app_name}을 2분 동안 사용하지 않으면 PIN을 사용하도록 설정합니다.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">${app_name}을 2분 동안 사용하지 않으면 PIN을 사용하도록 설정합니다.</string>
     <string name="settings_security_pin_code_grace_period_title">2분 후 PIN 잠금</string>
     <string name="settings_security_pin_code_notifications_summary_on">방 이름이나 메시지 내용같은 자세한 정보를 표시합니다.</string>
     <string name="settings_security_pin_code_notifications_title">알림에 내용 표시</string>
@@ -1502,4 +963,23 @@
     <string name="notice_direct_room_created">%1$s가 새로운 토론을 생성함</string>
     <string name="notice_direct_room_created_by_you">새로운 토론을 생성함</string>
     <string name="notice_room_created_by_you">새로운 방을 생성함</string>
+    <string name="notice_display_name_set_by_you">표시 이름을 %1$s(으)로 변경했습니다</string>
+    <string name="notice_avatar_url_changed_by_you">아바타를 변경했습니다</string>
+    <string name="notice_room_withdraw_by_you">%1$s님의 초대를 취소했습니다</string>
+    <string name="notice_room_ban_by_you">%1$s을 출입 금지했습니다</string>
+    <string name="notice_room_unban_by_you">%1$s님의 출입 금지를 풀었습니다</string>
+    <string name="notice_room_remove_by_you">%1$s님을 추방했습니다</string>
+    <string name="notice_room_reject_by_you">초대를 거부했습니다</string>
+    <string name="notice_direct_room_leave_by_you">방을 떠났습니다</string>
+    <string name="notice_direct_room_leave">%1$s님이 방을 떠났습니다</string>
+    <string name="notice_room_leave_by_you">방을 떠났습니다</string>
+    <string name="notice_direct_room_join_by_you">참가했습니다</string>
+    <string name="notice_direct_room_join">%1$s님이 참가했습니다</string>
+    <string name="notice_room_join_by_you">방에 참가했습니다</string>
+    <string name="notice_room_invite_by_you">%1$s님을 초대했습니다</string>
+    <string name="notice_room_created">%1$s님이 새로운 방을 생성함</string>
+    <string name="notice_room_invite_no_invitee_by_you">내가 보낸 초대</string>
+    <string name="notice_room_topic_changed_by_you">주제를 다음으로 변경했습니다: %1$s</string>
+    <string name="notice_display_name_removed_by_you">표시 이름을 삭제했습니다 (이전 이름: %1$s)</string>
+    <string name="notice_display_name_changed_from_by_you">표시 이름을 %1$s에서 %2$s(으)로 변경했습니다</string>
 </resources>

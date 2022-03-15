@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryEvents
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptsItem
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -415,7 +416,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                         partialState = partialState,
                         lastSentEventIdWithoutReadReceipts = lastSentEventWithoutReadReceipts,
                         callback = callback,
-                        eventsGroup = timelineEventsGroup
+                        eventsGroup = timelineEventsGroup,
+                        reactionsSummaryEvents = ReactionsSummaryEvents(
+                                onAddMoreClicked = { reactionListFactory.onAddMoreClicked(callback, event) },
+                                onShowLessClicked = { reactionListFactory.onShowLessClicked(event.eventId) },
+                                onShowMoreClicked = { reactionListFactory.onShowMoreClicked(event.eventId) }
+                        )
                 )
                 modelCache[position] = buildCacheItem(params)
                 numberOfEventsToBuild++
@@ -516,7 +522,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             val event = itr.previous()
             timelineEventsGroups.addOrIgnore(event)
             val currentReadReceipts = ArrayList(event.readReceipts).filter {
-                it.user.userId != session.myUserId
+                it.roomMember.userId != session.myUserId
             }
             if (timelineEventVisibilityHelper.shouldShowEvent(
                             timelineEvent = event,

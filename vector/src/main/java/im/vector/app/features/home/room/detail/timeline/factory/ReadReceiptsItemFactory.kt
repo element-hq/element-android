@@ -36,10 +36,9 @@ class ReadReceiptsItemFactory @Inject constructor(private val avatarRenderer: Av
         }
         val readReceiptsData = readReceipts
                 .map {
-                    ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
+                    ReadReceiptData(it.roomMember.userId, it.roomMember.avatarUrl, it.roomMember.displayName, it.originServerTs)
                 }
-                .toList()
-
+                .sortedByDescending { it.timestamp }
         return ReadReceiptsItem_()
                 .id("read_receipts_$eventId")
                 .eventId(eventId)

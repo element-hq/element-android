@@ -32,6 +32,8 @@ import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.popBackstack
+import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ScreenOrientationLocker
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
@@ -74,6 +76,8 @@ class FtueAuthVariant(
     private val popEnterAnim = R.anim.no_anim
     private val popExitAnim = R.anim.exit_fade_out
 
+    private var isForceLoginFallbackEnabled = false
+
     private val topFragment: Fragment?
         get() = supportFragmentManager.findFragmentById(views.loginFragmentContainer.id)
 
@@ -108,10 +112,6 @@ class FtueAuthVariant(
         }
     }
 
-    override fun setIsLoading(isLoading: Boolean) {
-        // do nothing
-    }
-
     private fun addFirstFragment() {
         val splashFragment = when (vectorFeatures.isOnboardingSplashCarouselEnabled()) {
             true -> FtueAuthSplashCarouselFragment::class.java
@@ -120,11 +120,17 @@ class FtueAuthVariant(
         activity.addFragment(views.loginFragmentContainer, splashFragment)
     }
 
+    private fun updateWithState(viewState: OnboardingViewState) {
+        isForceLoginFallbackEnabled = viewState.isForceLoginFallbackEnabled
+        views.loginLoading.isVisible = viewState.isLoading()
+    }
+
+    override fun setIsLoading(isLoading: Boolean) = Unit
+
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
             is OnboardingViewEvents.RegistrationFlowResult                     -> {
-                // Check that all flows are supported by the application
-                if (viewEvents.flowResult.missingStages.any { !it.isSupported() }) {
+                if (registrationShouldFallback(viewEvents)) {
                     // Display a popup to propose use web fallback
                     onRegistrationStageNotSupported()
                 } else {
@@ -135,11 +141,7 @@ class FtueAuthVariant(
                         // First ask for login and password
                         // I add a tag to indicate that this fragment is a registration stage.
                         // This way it will be automatically popped in when starting the next registration stage
-                        activity.addFragmentToBackstack(views.loginFragmentContainer,
-                                FtueAuthLoginFragment::class.java,
-                                tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                                option = commonOption
-                        )
+                        openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
                     }
                 }
             }
@@ -220,22 +222,33 @@ class FtueAuthVariant(
                         FtueAuthUseCaseFragment::class.java,
                         option = commonOption)
             }
+            is OnboardingViewEvents.OnAccountCreated                           -> onAccountCreated()
+            OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
+            OnboardingViewEvents.OnChooseDisplayName                           -> onChooseDisplayName()
+            OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
+            OnboardingViewEvents.OnChooseProfilePicture                        -> onChooseProfilePicture()
+            OnboardingViewEvents.OnPersonalizationComplete                     -> navigateToHome(createdAccount = true)
+            OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
         }.exhaustive
     }
 
-    private fun updateWithState(viewState: OnboardingViewState) {
-        if (viewState.isUserLogged()) {
-            val intent = HomeActivity.newIntent(
-                    activity,
-                    accountCreation = viewState.signMode == SignMode.SignUp
-            )
-            activity.startActivity(intent)
-            activity.finish()
-            return
-        }
+    private fun registrationShouldFallback(registrationFlowResult: OnboardingViewEvents.RegistrationFlowResult) =
+            isForceLoginFallbackEnabled || registrationFlowResult.containsUnsupportedRegistrationFlow()
 
-        // Loading
-        views.loginLoading.isVisible = viewState.isLoading()
+    private fun OnboardingViewEvents.RegistrationFlowResult.containsUnsupportedRegistrationFlow() =
+            flowResult.missingStages.any { !it.isSupported() }
+
+    private fun onRegistrationStageNotSupported() {
+        MaterialAlertDialogBuilder(activity)
+                .setTitle(R.string.app_name)
+                .setMessage(activity.getString(R.string.login_registration_not_supported))
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    activity.addFragmentToBackstack(views.loginFragmentContainer,
+                            FtueAuthWebFragment::class.java,
+                            option = commonOption)
+                }
+                .setNegativeButton(R.string.no, null)
+                .show()
     }
 
     private fun onWebLoginError(onWebLoginError: OnboardingViewEvents.OnWebLoginError) {
@@ -265,27 +278,56 @@ class FtueAuthVariant(
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (OnboardingViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp             -> {
-                // This is managed by the OnboardingViewEvents
-            }
-            SignMode.SignIn             -> {
-                // It depends on the LoginMode
-                when (state.loginMode) {
-                    LoginMode.Unknown,
-                    is LoginMode.Sso      -> error("Developer error")
-                    is LoginMode.SsoAndPassword,
-                    LoginMode.Password    -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                            FtueAuthLoginFragment::class.java,
-                            tag = FRAGMENT_LOGIN_TAG,
-                            option = commonOption)
-                    LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
-                }.exhaustive
-            }
-            SignMode.SignInWithMatrixId -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                    FtueAuthLoginFragment::class.java,
-                    tag = FRAGMENT_LOGIN_TAG,
-                    option = commonOption)
+            SignMode.SignUp             -> Unit // This case is processed in handleOnboardingViewEvents
+            SignMode.SignIn             -> handleSignInSelected(state)
+            SignMode.SignInWithMatrixId -> handleSignInWithMatrixId(state)
         }.exhaustive
+    }
+
+    private fun handleSignInSelected(state: OnboardingViewState) {
+        if (isForceLoginFallbackEnabled) {
+            onLoginModeNotSupported(state.loginModeSupportedTypes)
+        } else {
+            disambiguateLoginMode(state)
+        }
+    }
+
+    private fun disambiguateLoginMode(state: OnboardingViewState) = when (state.loginMode) {
+        LoginMode.Unknown,
+        is LoginMode.Sso      -> error("Developer error")
+        is LoginMode.SsoAndPassword,
+        LoginMode.Password    -> openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
+        LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
+    }
+
+    private fun openAuthLoginFragmentWithTag(tag: String) {
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthLoginFragment::class.java,
+                tag = tag,
+                option = commonOption)
+    }
+
+    private fun onLoginModeNotSupported(supportedTypes: List<String>) {
+        MaterialAlertDialogBuilder(activity)
+                .setTitle(R.string.app_name)
+                .setMessage(activity.getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
+                .setPositiveButton(R.string.yes) { _, _ -> openAuthWebFragment() }
+                .setNegativeButton(R.string.no, null)
+                .show()
+    }
+
+    private fun handleSignInWithMatrixId(state: OnboardingViewState) {
+        if (isForceLoginFallbackEnabled) {
+            onLoginModeNotSupported(state.loginModeSupportedTypes)
+        } else {
+            openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
+        }
+    }
+
+    private fun openAuthWebFragment() {
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthWebFragment::class.java,
+                option = commonOption)
     }
 
     /**
@@ -295,32 +337,6 @@ class FtueAuthVariant(
         intent?.data
                 ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
                 ?.let { onboardingViewModel.handle(OnboardingAction.LoginWithToken(it)) }
-    }
-
-    private fun onRegistrationStageNotSupported() {
-        MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.app_name)
-                .setMessage(activity.getString(R.string.login_registration_not_supported))
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    activity.addFragmentToBackstack(views.loginFragmentContainer,
-                            FtueAuthWebFragment::class.java,
-                            option = commonOption)
-                }
-                .setNegativeButton(R.string.no, null)
-                .show()
-    }
-
-    private fun onLoginModeNotSupported(supportedTypes: List<String>) {
-        MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.app_name)
-                .setMessage(activity.getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    activity.addFragmentToBackstack(views.loginFragmentContainer,
-                            FtueAuthWebFragment::class.java,
-                            option = commonOption)
-                }
-                .setNegativeButton(R.string.no, null)
-                .show()
     }
 
     private fun handleRegistrationNavigation(flowResult: FlowResult) {
@@ -367,5 +383,37 @@ class FtueAuthVariant(
                     option = commonOption)
             else               -> Unit // Should not happen
         }
+    }
+
+    private fun onAccountSignedIn() {
+        navigateToHome(createdAccount = false)
+    }
+
+    private fun onAccountCreated() {
+        activity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        activity.replaceFragment(
+                views.loginFragmentContainer,
+                FtueAuthAccountCreatedFragment::class.java
+        )
+    }
+
+    private fun navigateToHome(createdAccount: Boolean) {
+        val intent = HomeActivity.newIntent(activity, accountCreation = createdAccount)
+        activity.startActivity(intent)
+        activity.finish()
+    }
+
+    private fun onChooseDisplayName() {
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthChooseDisplayNameFragment::class.java,
+                option = commonOption
+        )
+    }
+
+    private fun onChooseProfilePicture() {
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthChooseProfilePictureFragment::class.java,
+                option = commonOption
+        )
     }
 }

@@ -92,7 +92,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class UpdateJoinJitsiCallStatus(val conferenceEvent: ConferenceEvent) : RoomDetailAction()
 
-    data class OpenOrCreateDm(val userId: String) : RoomDetailAction()
     data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
     object QuickActionInvitePeople : RoomDetailAction()
     object QuickActionSetAvatar : RoomDetailAction()

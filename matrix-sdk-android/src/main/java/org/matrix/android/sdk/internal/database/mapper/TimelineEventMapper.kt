@@ -48,7 +48,7 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                 ),
                 readReceipts = readReceipts
                         ?.distinctBy {
-                            it.user
+                            it.roomMember
                         }?.sortedByDescending {
                             it.originServerTs
                         }.orEmpty()
