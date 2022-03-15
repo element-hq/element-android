@@ -16,13 +16,10 @@
 package org.matrix.android.sdk.internal.session.room.send.pills
 
 import android.text.SpannableString
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
-import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.session.displayname.DisplayNameResolver
-import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import java.util.Collections
 import javax.inject.Inject
 
