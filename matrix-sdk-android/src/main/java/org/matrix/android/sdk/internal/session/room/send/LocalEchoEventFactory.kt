@@ -626,7 +626,9 @@ internal class LocalEchoEventFactory @Inject constructor(
             MessageType.MSGTYPE_AUDIO      -> return TextContent("sent an audio file.")
             MessageType.MSGTYPE_IMAGE      -> return TextContent("sent an image.")
             MessageType.MSGTYPE_VIDEO      -> return TextContent("sent a video.")
-            MessageType.MSGTYPE_POLL_START -> return TextContent((content as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "")
+            MessageType.MSGTYPE_POLL_START -> {
+                return TextContent((content as? MessagePollContent)?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: "")
+            }
             else                           -> return TextContent(content?.body ?: "")
         }
     }
