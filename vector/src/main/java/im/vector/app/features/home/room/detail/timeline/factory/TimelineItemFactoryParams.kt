@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventsGroup
+import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryEvents
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 data class TimelineItemFactoryParams(
@@ -29,6 +30,7 @@ data class TimelineItemFactoryParams(
         val partialState: TimelineEventController.PartialState = TimelineEventController.PartialState(),
         val lastSentEventIdWithoutReadReceipts: String? = null,
         val callback: TimelineEventController.Callback? = null,
+        val reactionsSummaryEvents: ReactionsSummaryEvents? = null,
         val eventsGroup: TimelineEventsGroup? = null
 ) {
 

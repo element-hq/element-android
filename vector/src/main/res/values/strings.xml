@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
     <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
     <string name="notice_room_created">%1$s created the room</string>
@@ -2924,9 +2924,17 @@
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
     <string name="location_activity_title_preview">Location</string>
-    <string name="a11y_location_share_icon">Share location</string>
+    <!-- TODO delete -->
+    <string name="a11y_location_share_icon" tools:ignore="UnusedResources">Share location</string>
     <string name="a11y_static_map_image">Map</string>
-    <string name="location_share">Share location</string>
+    <!-- TODO delete -->
+    <string name="location_share" tools:ignore="UnusedResources">Share location</string>
+    <string name="location_share_option_user_current">Share my current location</string>
+    <string name="a11y_location_share_option_user_current_icon">Share my current location</string>
+    <string name="location_share_option_user_live">Share live location</string>
+    <string name="a11y_location_share_option_user_live_icon">Share live location</string>
+    <string name="location_share_option_pinned">Share this location</string>
+    <string name="a11y_location_share_option_pinned_icon">Share this location</string>
     <string name="location_not_available_dialog_title">${app_name} could not access your location</string>
     <string name="location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>

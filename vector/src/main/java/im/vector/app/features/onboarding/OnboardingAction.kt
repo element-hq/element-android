@@ -75,6 +75,7 @@ sealed class OnboardingAction : VectorViewModelAction {
 
     data class UserAcceptCertificate(val fingerprint: Fingerprint) : OnboardingAction()
 
+    object PersonalizeProfile : OnboardingAction()
     data class UpdateDisplayName(val displayName: String) : OnboardingAction()
     object UpdateDisplayNameSkipped : OnboardingAction()
     data class ProfilePictureSelected(val uri: Uri) : OnboardingAction()

@@ -16,7 +16,18 @@
 
 package im.vector.app.test.fakes
 
+import io.mockk.coJustRun
+import io.mockk.every
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 
-class FakeAuthenticationService : AuthenticationService by mockk()
+class FakeAuthenticationService : AuthenticationService by mockk() {
+    fun givenRegistrationWizard(registrationWizard: RegistrationWizard) {
+        every { getRegistrationWizard() } returns registrationWizard
+    }
+
+    fun expectReset() {
+        coJustRun { reset() }
+    }
+}

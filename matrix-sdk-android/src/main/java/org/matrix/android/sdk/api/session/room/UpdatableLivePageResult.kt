@@ -22,10 +22,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 interface UpdatableLivePageResult {
     val livePagedList: LiveData<PagedList<RoomSummary>>
-
-    fun updateQuery(builder: (RoomSummaryQueryParams) -> RoomSummaryQueryParams)
-
     val liveBoundaries: LiveData<ResultBoundaries>
+    var queryParams: RoomSummaryQueryParams
 }
 
 data class ResultBoundaries(

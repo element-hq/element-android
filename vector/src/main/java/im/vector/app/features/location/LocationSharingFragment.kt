@@ -30,6 +30,10 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLocationSharingBinding
+import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.location.option.LocationSharingOption
+import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -37,13 +41,17 @@ import javax.inject.Inject
  * We should consider using SupportMapFragment for a out of the box lifecycle handling
  */
 class LocationSharingFragment @Inject constructor(
-        private val urlMapProvider: UrlMapProvider
+        private val urlMapProvider: UrlMapProvider,
+        private val avatarRenderer: AvatarRenderer,
+        private val matrixItemColorProvider: MatrixItemColorProvider
 ) : VectorBaseFragment<FragmentLocationSharingBinding>() {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
     // Keep a ref to handle properly the onDestroy callback
     private var mapView: WeakReference<MapView>? = null
+
+    private var hasRenderedUserAvatar = false
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLocationSharingBinding {
         return FragmentLocationSharingBinding.inflate(inflater, container, false)
@@ -59,9 +67,7 @@ class LocationSharingFragment @Inject constructor(
             views.mapView.initialize(urlMapProvider.getMapUrl())
         }
 
-        views.shareLocationContainer.debouncedClicks {
-            viewModel.handle(LocationSharingAction.OnShareLocation)
-        }
+        initOptionsPicker()
 
         viewModel.observeViewEvents {
             when (it) {
@@ -107,6 +113,12 @@ class LocationSharingFragment @Inject constructor(
         super.onDestroy()
     }
 
+    override fun invalidate() = withState(viewModel) { state ->
+        views.mapView.render(state.toMapState())
+        views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
+        updateUserAvatar(state.userItem)
+    }
+
     private fun handleLocationNotAvailableError() {
         MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.location_not_available_dialog_title)
@@ -118,8 +130,28 @@ class LocationSharingFragment @Inject constructor(
                 .show()
     }
 
-    override fun invalidate() = withState(viewModel) { state ->
-        views.mapView.render(state.toMapState())
-        views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
+    private fun initOptionsPicker() {
+        // TODO
+        //  change the options dynamically depending on the current chosen location
+        views.shareLocationOptionsPicker.render(LocationSharingOption.USER_CURRENT)
+        views.shareLocationOptionsPicker.optionPinned.debouncedClicks {
+            // TODO
+        }
+        views.shareLocationOptionsPicker.optionUserCurrent.debouncedClicks {
+            viewModel.handle(LocationSharingAction.OnShareLocation)
+        }
+        views.shareLocationOptionsPicker.optionUserLive.debouncedClicks {
+            // TODO
+        }
+    }
+
+    private fun updateUserAvatar(userItem: MatrixItem.UserItem?) {
+        userItem?.takeUnless { hasRenderedUserAvatar }
+                ?.let {
+                    hasRenderedUserAvatar = true
+                    avatarRenderer.render(it, views.shareLocationOptionsPicker.optionUserCurrent.iconView)
+                    val tintColor = matrixItemColorProvider.getColor(it)
+                    views.shareLocationOptionsPicker.optionUserCurrent.setIconBackgroundTint(tintColor)
+                }
     }
 }
