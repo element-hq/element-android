@@ -34,7 +34,7 @@
     <string name="notice_crypto_error_unknown_inbound_session_id">L’appareil de l’expéditeur ne nous a pas envoyé les clés pour ce message.</string>
     <string name="unable_to_send_message">Envoi du message impossible</string>
     <string name="matrix_error">Erreur de Matrix</string>
-    <string name="medium_email">Adresse e-mail</string>
+    <string name="medium_email">Adresse électronique</string>
     <string name="medium_phone_number">Numéro de téléphone</string>
     <string name="room_displayname_room_invite">Invitation au salon</string>
     <string name="room_displayname_empty_room">Salon vide</string>
@@ -372,7 +372,7 @@
     <string name="send_bug_report_app_crashed">L’application s’est arrêtée anormalement la dernière fois. Souhaitez-vous ouvrir l’écran de rapport d’anomalie \?</string>
     <string name="send_bug_report_sent">Le rapport d’anomalie a bien été envoyé</string>
     <string name="send_bug_report_failed">L’envoi du rapport d’anomalie a échoué (%s)</string>
-    <string name="auth_invalid_email">Ceci ne ressemble pas à une adresse e-mail valide</string>
+    <string name="auth_invalid_email">Ceci ne ressemble pas à une adresse électronique valide</string>
     <string name="auth_email_already_defined">Cette adresse e-mail est déjà utilisée.</string>
     <string name="auth_recaptcha_message">Ce serveur d’accueil souhaite s’assurer que vous n’êtes pas un robot</string>
     <string name="auth_reset_password_missing_email">L’adresse e-mail liée à votre compte doit être saisie.</string>
@@ -2415,4 +2415,8 @@
     <string name="action_thread_copy_link_to_thread">Copier le lien du fil de discussion</string>
     <string name="action_thread_view_in_room">Voir dans le salon</string>
     <string name="action_view_threads">Voir les fils de discussions</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d changement des ACL du serveur</item>
+        <item quantity="other">%d changements des ACL du serveur</item>
+    </plurals>
 </resources>
