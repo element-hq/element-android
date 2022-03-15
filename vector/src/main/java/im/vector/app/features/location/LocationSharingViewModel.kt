@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
 
@@ -74,7 +75,7 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun updatePin(isUserPin: Boolean? = true) {
-        if (isUserPin == true) {
+        if (isUserPin.orFalse()) {
             locationPinProvider.create(userId = session.myUserId) {
                 updatePinDrawableInState(it)
             }
