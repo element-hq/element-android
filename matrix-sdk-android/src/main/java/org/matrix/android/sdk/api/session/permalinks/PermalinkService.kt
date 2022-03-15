@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.api.session.permalinks
 
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 
 /**
  * Useful methods to create permalink (like matrix.to links or client permalinks).
