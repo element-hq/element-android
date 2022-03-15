@@ -144,7 +144,7 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun initLocateButton() {
-        views.mapView.locateBtn.setOnClickListener {
+        views.mapView.locateButton.setOnClickListener {
             viewModel.handle(LocationSharingAction.ZoomToUserLocation)
         }
     }

@@ -53,10 +53,10 @@ class MapTilerMapView @JvmOverloads constructor(
     private val userLocationDrawable by lazy {
         ContextCompat.getDrawable(context, R.drawable.ic_location_user)
     }
-    val locateBtn by lazy { createLocateBtn() }
+    val locateButton by lazy { createLocateButton() }
     private var mapRefs: MapRefs? = null
     private var initZoomDone = false
-    private var showLocationBtn = false
+    private var showLocationButton = false
 
     init {
         context.theme.obtainStyledAttributes(
@@ -66,15 +66,15 @@ class MapTilerMapView @JvmOverloads constructor(
                 0
         ).run {
             try {
-                setLocateBtnVisibility(this)
+                setLocateButtonVisibility(this)
             } finally {
                 recycle()
             }
         }
     }
 
-    private fun setLocateBtnVisibility(typedArray: TypedArray) {
-        showLocationBtn = typedArray.getBoolean(R.styleable.MapTilerMapView_showLocateButton, false)
+    private fun setLocateButtonVisibility(typedArray: TypedArray) {
+        showLocationButton = typedArray.getBoolean(R.styleable.MapTilerMapView_showLocateButton, false)
     }
 
     /**
@@ -87,7 +87,7 @@ class MapTilerMapView @JvmOverloads constructor(
         Timber.d("## Location: initialize")
         getMapAsync { map ->
             initMapStyle(map, url)
-            initLocateBtn(map)
+            initLocateButton(map)
             notifyLocationOfMapCenter(locationTargetChangeListener)
             listenCameraMove(map, locationTargetChangeListener)
         }
@@ -105,21 +105,21 @@ class MapTilerMapView @JvmOverloads constructor(
         }
     }
 
-    private fun initLocateBtn(map: MapboxMap) {
-        if (showLocationBtn) {
-            addView(locateBtn)
-            adjustCompassBtn(map)
+    private fun initLocateButton(map: MapboxMap) {
+        if (showLocationButton) {
+            addView(locateButton)
+            adjustCompassButton(map)
         }
     }
 
-    private fun createLocateBtn(): ImageView =
+    private fun createLocateButton(): ImageView =
             ImageView(context).apply {
                 setImageDrawable(ContextCompat.getDrawable(context, R.drawable.btn_locate))
-                contentDescription = context.getString(R.string.a11y_location_share_locate_btn)
+                contentDescription = context.getString(R.string.a11y_location_share_locate_button)
                 layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
                 updateLayoutParams<MarginLayoutParams> {
-                    val marginHorizontal = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_btn_margin_horizontal)
-                    val marginVertical = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_btn_margin_vertical)
+                    val marginHorizontal = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_button_margin_horizontal)
+                    val marginVertical = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_button_margin_vertical)
                     setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical)
                 }
                 updateLayoutParams<LayoutParams> {
@@ -127,10 +127,10 @@ class MapTilerMapView @JvmOverloads constructor(
                 }
             }
 
-    private fun adjustCompassBtn(map: MapboxMap) {
-        locateBtn.post {
-            val marginTop = locateBtn.height + locateBtn.marginTop + locateBtn.marginBottom
-            val marginRight = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_compass_btn_margin_horizontal)
+    private fun adjustCompassButton(map: MapboxMap) {
+        locateButton.post {
+            val marginTop = locateButton.height + locateButton.marginTop + locateButton.marginBottom
+            val marginRight = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_compass_button_margin_horizontal)
             map.uiSettings.setCompassMargins(0, marginTop, marginRight, 0)
         }
     }
