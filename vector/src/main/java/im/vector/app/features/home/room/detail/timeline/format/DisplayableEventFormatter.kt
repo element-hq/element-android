@@ -216,14 +216,14 @@ class DisplayableEventFormatter @Inject constructor(
                     emojiSpanify.spanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
                 } ?: span { }
             }
-            EventType.POLL_START    -> {
+            in EventType.POLL_START    -> {
                 event.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            EventType.POLL_RESPONSE -> {
+            in EventType.POLL_RESPONSE -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            EventType.POLL_END      -> {
+            in EventType.POLL_END      -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
             else                    -> {
