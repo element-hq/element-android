@@ -28,5 +28,5 @@ data class CreatePollViewState(
     val options: List<String> = List(CreatePollViewModel.MIN_OPTIONS_COUNT) { "" },
     val canCreatePoll: Boolean = false,
     val canAddMoreOptions: Boolean = true,
-    val pollType: PollType = PollType.DISCLOSED
+    val pollType: PollType = PollType.DISCLOSED_UNSTABLE
 ) : MavericksState

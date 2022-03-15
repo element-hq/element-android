@@ -28,6 +28,7 @@ import im.vector.app.features.invite.showInvites
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -72,7 +73,18 @@ class RoomListSectionBuilderGroup(
                             session.getFilteredPagedRoomSummariesLive(qpm)
                                     .let { updatableFilterLivePageResult ->
                                         onUpdatable(updatableFilterLivePageResult)
-                                        sections.add(RoomsSection(name, updatableFilterLivePageResult.livePagedList))
+
+                                        val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
+                                                .flatMapLatest { session.getRoomCountFlow(updatableFilterLivePageResult.queryParams) }
+                                                .distinctUntilChanged()
+
+                                        sections.add(
+                                                RoomsSection(
+                                                        sectionName = name,
+                                                        livePages = updatableFilterLivePageResult.livePagedList,
+                                                        itemCount = itemCountFlow
+                                                )
+                                        )
                                     }
                         }
                 )
@@ -109,9 +121,7 @@ class RoomListSectionBuilderGroup(
                 .onEach { groupingMethod ->
                     val selectedGroupId = (groupingMethod.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
                     activeGroupAwareQueries.onEach { updater ->
-                        updater.updateQuery { query ->
-                            query.copy(activeGroupId = selectedGroupId)
-                        }
+                        updater.queryParams = updater.queryParams.copy(activeGroupId = selectedGroupId)
                     }
                 }.launchIn(coroutineScope)
 
@@ -265,7 +275,8 @@ class RoomListSectionBuilderGroup(
                                         RoomsSection(
                                                 sectionName = name,
                                                 livePages = livePagedList,
-                                                notifyOfLocalEcho = notifyOfLocalEcho
+                                                notifyOfLocalEcho = notifyOfLocalEcho,
+                                                itemCount = session.getRoomCountFlow(roomQueryParams)
                                         )
                                 )
                             }

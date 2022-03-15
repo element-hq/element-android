@@ -16,6 +16,7 @@
 
 package im.vector.app.ui.robot.settings
 
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import im.vector.app.R
 import im.vector.app.clickOnAndGoBack
 
@@ -51,8 +52,13 @@ class SettingsRobot {
         clickOnAndGoBack(R.string.settings_security_and_privacy) { block(SettingsSecurityRobot()) }
     }
 
-    fun labs(block: () -> Unit = {}) {
-        clickOnAndGoBack(R.string.room_settings_labs_pref_title) { block() }
+    fun labs(shouldGoBack: Boolean = true, block:  () -> Unit = {}) {
+        if (shouldGoBack) {
+            clickOnAndGoBack(R.string.room_settings_labs_pref_title) { block() }
+        } else {
+            clickOn(R.string.room_settings_labs_pref_title)
+            block()
+        }
     }
 
     fun advancedSettings(block: SettingsAdvancedRobot.() -> Unit) {

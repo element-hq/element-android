@@ -106,8 +106,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.timeView.isVisible = false
         }
 
-        holder.additionalTopSpace.isVisible = attributes.informationData.messageLayout.addTopMargin
-
         // Render send state indicator
         holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
         holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
@@ -118,7 +116,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             attributes.threadDetails?.let { threadDetails ->
                 holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
                 holder.threadSummaryCounterTextView.text = threadDetails.numberOfThreads.toString()
-                holder.threadSummaryInfoTextView.text = threadDetails.threadSummaryLatestTextMessage ?: attributes.decryptionErrorMessage
+                holder.threadSummaryInfoTextView.text = attributes.threadSummaryFormatted ?: attributes.decryptionErrorMessage
 
                 val userId = threadDetails.threadSummarySenderInfo?.userId ?: return@let
                 val displayName = threadDetails.threadSummarySenderInfo?.displayName
@@ -157,7 +155,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
     abstract class Holder(@IdRes stubId: Int) : AbsBaseMessageItem.Holder(stubId) {
 
-        val additionalTopSpace by bind<View>(R.id.additionalTopSpace)
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
@@ -187,6 +184,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             val emojiTypeFace: Typeface? = null,
             val decryptionErrorMessage: String? = null,
+            val threadSummaryFormatted: String? = null,
             val threadDetails: ThreadDetails? = null,
             val areThreadMessagesEnabled: Boolean = false,
             override val reactionsSummaryEvents: ReactionsSummaryEvents? = null,

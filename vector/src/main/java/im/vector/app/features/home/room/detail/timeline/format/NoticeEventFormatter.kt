@@ -106,8 +106,8 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STATE_SPACE_PARENT,
             EventType.REDACTION,
             EventType.STICKER,
-            EventType.POLL_RESPONSE,
-            EventType.POLL_END                      -> formatDebug(timelineEvent.root)
+            in EventType.POLL_RESPONSE,
+            in EventType.POLL_END                   -> formatDebug(timelineEvent.root)
             else                                    -> {
                 Timber.v("Type $type not handled by this formatter")
                 null
@@ -196,8 +196,8 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatDebug(event: Event): CharSequence {
-            val threadPrefix = if (event.isThread()) "thread" else ""
-            return "Debug: $threadPrefix event type \"${event.getClearType()}\""
+        val threadPrefix = if (event.isThread()) "thread" else ""
+        return "Debug: $threadPrefix event type \"${event.getClearType()}\""
     }
 
     private fun formatRoomCreateEvent(event: Event, isDm: Boolean): CharSequence? {

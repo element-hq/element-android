@@ -182,7 +182,7 @@ import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
-import im.vector.app.features.poll.PollMode
+import im.vector.app.features.poll.create.PollMode
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
 import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.session.coroutineScope
@@ -1189,7 +1189,7 @@ class TimelineFragment @Inject constructor(
             val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
             getString(R.string.voice_message_reply_content, formattedDuration)
         } else if (messageContent is MessagePollContent) {
-            messageContent.pollCreationInfo?.question?.question
+            messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
         } else {
             messageContent?.body ?: ""
         }
@@ -2165,16 +2165,12 @@ class TimelineFragment @Inject constructor(
                 timelineViewModel.handle(RoomDetailAction.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is EventSharedAction.Edit                       -> {
-                when {
-                    action.eventType == EventType.POLL_START -> {
-                        navigator.openCreatePoll(requireContext(), timelineArgs.roomId, action.eventId, PollMode.EDIT)
-                    }
-                    withState(messageComposerViewModel) { it.isVoiceMessageIdle } -> {
-                        messageComposerViewModel.handle(MessageComposerAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
-                    }
-                    else -> {
-                        requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
-                    }
+                if (action.eventType in EventType.POLL_START) {
+                    navigator.openCreatePoll(requireContext(), timelineArgs.roomId, action.eventId, PollMode.EDIT)
+                } else if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
+                    messageComposerViewModel.handle(MessageComposerAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
+                } else {
+                    requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }
             }
             is EventSharedAction.Quote                      -> {
