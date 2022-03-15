@@ -406,3 +406,5 @@ fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
 fun Event.getPollContent(): MessagePollContent? {
     return content.toModel<MessagePollContent>()
 }
+
+fun Event.supportsNotification() = this.getClearType() in EventType.MESSAGE + EventType.POLL_START
