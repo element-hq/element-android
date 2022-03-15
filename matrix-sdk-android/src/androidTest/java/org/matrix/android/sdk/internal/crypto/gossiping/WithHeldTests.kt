@@ -80,11 +80,11 @@ class WithHeldTests : InstrumentedTest {
         // await for bob unverified session to get the message
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
-                bobUnverifiedSession.getRoom(roomId)?.getTimeLineEvent(timelineEvent.eventId) != null
+                bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(timelineEvent.eventId) != null
             }
         }
 
-        val eventBobPOV = bobUnverifiedSession.getRoom(roomId)?.getTimeLineEvent(timelineEvent.eventId)!!
+        val eventBobPOV = bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(timelineEvent.eventId)!!
 
         // =============================
         // ASSERT
@@ -93,7 +93,9 @@ class WithHeldTests : InstrumentedTest {
         // Bob should not be able to decrypt because the keys is withheld
         try {
             // .. might need to wait a bit for stability?
-            bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
+            testHelper.runBlockingTest {
+                bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
+            }
             Assert.fail("This session should not be able to decrypt")
         } catch (failure: Throwable) {
             val type = (failure as MXCryptoError.Base).errorType
@@ -109,7 +111,7 @@ class WithHeldTests : InstrumentedTest {
 
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
-                val ev = bobUnverifiedSession.getRoom(roomId)?.getTimeLineEvent(secondEvent.eventId)
+                val ev = bobUnverifiedSession.getRoom(roomId)?.getTimelineEvent(secondEvent.eventId)
                 // wait until it's decrypted
                 ev?.root?.getClearType() == EventType.MESSAGE
             }
@@ -118,7 +120,9 @@ class WithHeldTests : InstrumentedTest {
         // Previous message should still be undecryptable (partially withheld session)
         try {
             // .. might need to wait a bit for stability?
-            bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
+            testHelper.runBlockingTest {
+                bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
+            }
             Assert.fail("This session should not be able to decrypt")
         } catch (failure: Throwable) {
             val type = (failure as MXCryptoError.Base).errorType
@@ -157,15 +161,17 @@ class WithHeldTests : InstrumentedTest {
         // await for bob session to get the message
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
-                bobSession.getRoom(testData.roomId)?.getTimeLineEvent(eventId) != null
+                bobSession.getRoom(testData.roomId)?.getTimelineEvent(eventId) != null
             }
         }
 
         // Previous message should still be undecryptable (partially withheld session)
-        val eventBobPOV = bobSession.getRoom(testData.roomId)?.getTimeLineEvent(eventId)
+        val eventBobPOV = bobSession.getRoom(testData.roomId)?.getTimelineEvent(eventId)
         try {
             // .. might need to wait a bit for stability?
-            bobSession.cryptoService().decryptEvent(eventBobPOV!!.root, "")
+            testHelper.runBlockingTest {
+                bobSession.cryptoService().decryptEvent(eventBobPOV!!.root, "")
+            }
             Assert.fail("This session should not be able to decrypt")
         } catch (failure: Throwable) {
             val type = (failure as MXCryptoError.Base).errorType
@@ -190,7 +196,7 @@ class WithHeldTests : InstrumentedTest {
         // await for bob SecondSession session to get the message
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
-                bobSecondSession.getRoom(testData.roomId)?.getTimeLineEvent(secondMessageId) != null
+                bobSecondSession.getRoom(testData.roomId)?.getTimelineEvent(secondMessageId) != null
             }
         }
 
@@ -231,9 +237,13 @@ class WithHeldTests : InstrumentedTest {
         // await for bob SecondSession session to get the message
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
-                val timeLineEvent = bobSecondSession.getRoom(testData.roomId)?.getTimeLineEvent(eventId)?.also {
+                val timeLineEvent = bobSecondSession.getRoom(testData.roomId)?.getTimelineEvent(eventId)?.also {
                     // try to decrypt and force key request
-                    tryOrNull { bobSecondSession.cryptoService().decryptEvent(it.root, "") }
+                    tryOrNull {
+                        testHelper.runBlockingTest {
+                            bobSecondSession.cryptoService().decryptEvent(it.root, "")
+                        }
+                    }
                 }
                 sessionId = timeLineEvent?.root?.content?.toModel<EncryptedEventContent>()?.sessionId
                 timeLineEvent != null

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- This file contains values to show or hide some settings, and default values for some settings
+     - boolean keys ending with "_visible" set the visibility of the setting
+     - boolean keys ending with "_default" set the default value of the setting
+     When a setting is hidden, the default value still applies
+     -->
+
+    <!-- Level 0: Root -->
+
+    <bool name="settings_root_general_visible">true</bool>
+    <bool name="settings_root_notification_visible">true</bool>
+    <bool name="settings_root_preferences_visible">true</bool>
+    <bool name="settings_root_voice_video_visible">true</bool>
+    <bool name="settings_root_ignored_users_visible">true</bool>
+    <bool name="settings_root_security_privacy_visible">true</bool>
+    <bool name="settings_root_labs_visible">true</bool>
+    <bool name="settings_root_advanced_visible">true</bool>
+    <bool name="settings_root_help_about_visible">true</bool>
+    <bool name="settings_root_legals_visible">true</bool>
+
+    <!-- Level 1: General -->
+
+    <!-- Level 1: Notifications -->
+
+    <!-- Level 1: Preferences -->
+
+    <bool name="settings_interface_bubble_visible">true</bool>
+    <bool name="settings_interface_bubble_default">false</bool>
+
+    <!-- Level 1: Voice and video -->
+
+    <!-- Level 1: Ignored Users -->
+
+    <!-- Level 1: Security and Privacy -->
+
+    <!-- Level 1: Labs -->
+
+    <!-- Level 1: Advcanced settings -->
+
+    <!-- Level 1: Help and about -->
+
+    <!-- Level 1: Legals -->
+
+
+</resources>

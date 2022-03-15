@@ -34,7 +34,7 @@ class ReactionsSummaryFactory @Inject constructor() {
         return eventsRequestingBuild.remove(event.eventId)
     }
 
-    fun create(event: TimelineEvent, callback: TimelineEventController.Callback?): ReactionsSummaryData {
+    fun create(event: TimelineEvent): ReactionsSummaryData {
         val eventId = event.eventId
         val showAllStates = showAllReactionsByEvent.contains(eventId)
         val reactions = event.annotations?.reactionsSummary
@@ -43,19 +43,22 @@ class ReactionsSummaryFactory @Inject constructor() {
                 }
         return ReactionsSummaryData(
                 reactions = reactions,
-                showAll = showAllStates,
-                onShowMoreClicked = {
-                    showAllReactionsByEvent.add(eventId)
-                    onRequestBuild(eventId)
-                },
-                onShowLessClicked = {
-                    showAllReactionsByEvent.remove(eventId)
-                    onRequestBuild(eventId)
-                },
-                onAddMoreClicked = {
-                    callback?.onAddMoreReaction(event)
-                }
+                showAll = showAllStates
         )
+    }
+
+    fun onAddMoreClicked(callback: TimelineEventController.Callback?, event: TimelineEvent) {
+        callback?.onAddMoreReaction(event)
+    }
+
+    fun onShowMoreClicked(eventId: String) {
+        showAllReactionsByEvent.add(eventId)
+        onRequestBuild(eventId)
+    }
+
+    fun onShowLessClicked(eventId: String) {
+        showAllReactionsByEvent.remove(eventId)
+        onRequestBuild(eventId)
     }
 
     private fun onRequestBuild(eventId: String) {

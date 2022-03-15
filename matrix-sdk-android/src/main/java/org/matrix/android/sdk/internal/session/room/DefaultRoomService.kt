@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
+import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.RoomService
@@ -107,6 +108,10 @@ internal class DefaultRoomService @Inject constructor(
                                                    pagedListConfig: PagedList.Config,
                                                    sortOrder: RoomSortOrder): UpdatableLivePageResult {
         return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
+    }
+
+    override fun getRoomCountFlow(queryParams: RoomSummaryQueryParams): Flow<Int> {
+        return roomSummaryDataSource.getCountFlow(queryParams)
     }
 
     override fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {

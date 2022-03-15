@@ -71,7 +71,7 @@ class CommonTestHelper(context: Context) {
                     )
             )
         }
-        matrix = TestMatrix.getInstance(context)
+        matrix = TestMatrix.getInstance()
     }
 
     fun createAccount(userNamePrefix: String, testParams: SessionTestParams): Session {

@@ -23,6 +23,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,8 +52,10 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -287,6 +291,7 @@ class RoomListFragment @Inject constructor(
                                             ))
                                             checkEmptyState()
                                         }
+                                        observeItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
@@ -310,6 +315,7 @@ class RoomListFragment @Inject constructor(
                                             ))
                                             checkEmptyState()
                                         }
+                                        observeItemCount(section, sectionAdapter)
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
                                             refreshCollapseStates()
                                         }
@@ -326,6 +332,7 @@ class RoomListFragment @Inject constructor(
                                                     isLoading = false))
                                             checkEmptyState()
                                         }
+                                        observeItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
@@ -370,6 +377,18 @@ class RoomListFragment @Inject constructor(
                 RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.show()
                 else                              -> Unit
             }
+        }
+    }
+
+    private fun observeItemCount(section: RoomsSection, sectionAdapter: SectionHeaderAdapter) {
+        lifecycleScope.launch {
+            section.itemCount
+                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                    .collect { count ->
+                        sectionAdapter.updateSection(
+                                sectionAdapter.roomsSectionData.copy(itemCount = count)
+                        )
+                    }
         }
     }
 

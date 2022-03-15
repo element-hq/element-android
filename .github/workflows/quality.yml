@@ -10,7 +10,7 @@ jobs:
     name: Project Check Suite
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
@@ -18,8 +18,12 @@ jobs:
   ktlint:
     name: Kotlin Linter
     runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('ktlint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('ktlint-develop-{0}', github.sha) || format('ktlint-{0}', github.ref) }}
+      cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Run ktlint
         run: |
           ./gradlew ktlintCheck --continue
@@ -87,8 +91,12 @@ jobs:
   android-lint:
     name: Android Linter
     runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('android-lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('android-lint-develop-{0}', github.sha) || format('android-lint-{0}', github.ref) }}
+      cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/cache@v2
         with:
           path: |
@@ -116,8 +124,12 @@ jobs:
       fail-fast: false
       matrix:
         target: [ Gplay, Fdroid ]
+    # Allow all jobs on develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/develop' && format('apk-lint-develop-{0}-{1}', matrix.target, github.sha) || format('apk-lint-{0}-{1}', matrix.target, github.ref) }}
+      cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/cache@v2
         with:
           path: |

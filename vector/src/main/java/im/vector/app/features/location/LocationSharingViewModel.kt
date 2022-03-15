@@ -26,6 +26,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.toMatrixItem
 
 class LocationSharingViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationSharingViewState,
@@ -45,7 +46,12 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     init {
         locationTracker.start(this)
+        setUserItem()
         createPin()
+    }
+
+    private fun setUserItem() {
+        setState { copy(userItem = session.getUser(session.myUserId)?.toMatrixItem()) }
     }
 
     private fun createPin() {

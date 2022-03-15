@@ -38,8 +38,13 @@ data class ElementWellKnown(
         val riotE2E: E2EWellKnownConfig? = null,
 
         @Json(name = "org.matrix.msc3488.tile_server")
+        val unstableMapTileServerConfig: MapTileServerConfig? = null,
+
+        @Json(name = "m.tile_server")
         val mapTileServerConfig: MapTileServerConfig? = null
-)
+) {
+    fun getBestMapTileServerConfig() = mapTileServerConfig ?: unstableMapTileServerConfig
+}
 
 @JsonClass(generateAdapter = true)
 data class E2EWellKnownConfig(

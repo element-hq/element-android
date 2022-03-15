@@ -23,6 +23,7 @@ import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEnti
 import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntityFields
+import org.matrix.android.sdk.internal.extensions.forceRefreshOfHomeServerCapabilities
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 /**
@@ -59,5 +60,6 @@ class MigrateSessionTo026(realm: DynamicRealm) : RealmMigrator(realm, 26) {
 
         realm.schema.get("HomeServerCapabilitiesEntity")
                 ?.addField(HomeServerCapabilitiesEntityFields.CAN_USE_THREADING, Boolean::class.java)
+                ?.forceRefreshOfHomeServerCapabilities()
     }
 }

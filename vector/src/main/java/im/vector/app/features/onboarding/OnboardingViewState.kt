@@ -16,15 +16,17 @@
 
 package im.vector.app.features.onboarding
 
+import android.net.Uri
+import android.os.Parcelable
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.PersistState
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import kotlinx.parcelize.Parcelize
 
 data class OnboardingViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
@@ -32,6 +34,8 @@ data class OnboardingViewState(
         val asyncResetPassword: Async<Unit> = Uninitialized,
         val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
         val asyncRegistration: Async<Unit> = Uninitialized,
+        val asyncDisplayName: Async<Unit> = Uninitialized,
+        val asyncProfilePicture: Async<Unit> = Uninitialized,
 
         @PersistState
         val onboardingFlow: OnboardingFlow? = null,
@@ -62,7 +66,11 @@ data class OnboardingViewState(
         // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
         @PersistState
         val loginModeSupportedTypes: List<String> = emptyList(),
-        val knownCustomHomeServersUrls: List<String> = emptyList()
+        val knownCustomHomeServersUrls: List<String> = emptyList(),
+        val isForceLoginFallbackEnabled: Boolean = false,
+
+        @PersistState
+        val personalizationState: PersonalizationState = PersonalizationState()
 ) : MavericksState {
 
     fun isLoading(): Boolean {
@@ -70,11 +78,9 @@ data class OnboardingViewState(
                 asyncHomeServerLoginFlowRequest is Loading ||
                 asyncResetPassword is Loading ||
                 asyncResetMailConfirmed is Loading ||
-                asyncRegistration is Loading
-    }
-
-    fun isAuthTaskCompleted(): Boolean {
-        return asyncLoginAction is Success
+                asyncRegistration is Loading ||
+                asyncDisplayName is Loading ||
+                asyncProfilePicture is Loading
     }
 }
 
@@ -82,4 +88,15 @@ enum class OnboardingFlow {
     SignIn,
     SignUp,
     SignInSignUp
+}
+
+@Parcelize
+data class PersonalizationState(
+        val supportsChangingDisplayName: Boolean = false,
+        val supportsChangingProfilePicture: Boolean = false,
+        val displayName: String? = null,
+        val selectedPictureUri: Uri? = null
+) : Parcelable {
+
+    fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture
 }

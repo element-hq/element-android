@@ -155,7 +155,7 @@ class MessageItemFactory @Inject constructor(
 
         if (event.root.isRedacted()) {
             // message is redacted
-            val attributes = messageItemAttributesFactory.create(null, informationData, callback, threadDetails)
+            val attributes = messageItemAttributesFactory.create(null, informationData, callback, params.reactionsSummaryEvents)
             return buildRedactedItem(attributes, highlight)
         }
 
@@ -177,7 +177,7 @@ class MessageItemFactory @Inject constructor(
         }
 
         // always hide summary when we are on thread timeline
-        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, threadDetails)
+        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, params.reactionsSummaryEvents, threadDetails)
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
@@ -247,7 +247,7 @@ class MessageItemFactory @Inject constructor(
         val didUserVoted = pollResponseSummary?.myVote?.isNotEmpty().orFalse()
         val winnerVoteCount = pollResponseSummary?.winnerVoteCount
         val isPollSent = informationData.sendState.isSent()
-        val isPollUndisclosed = pollContent.pollCreationInfo?.kind == PollType.UNDISCLOSED
+        val isPollUndisclosed = pollContent.getBestPollCreationInfo()?.kind == PollType.UNDISCLOSED_UNSTABLE
 
         val totalVotesText = (pollResponseSummary?.totalVotes ?: 0).let {
             when {
@@ -262,13 +262,13 @@ class MessageItemFactory @Inject constructor(
             }
         }
 
-        pollContent.pollCreationInfo?.answers?.forEach { option ->
+        pollContent.getBestPollCreationInfo()?.answers?.forEach { option ->
             val voteSummary = pollResponseSummary?.votes?.get(option.id)
             val isMyVote = pollResponseSummary?.myVote == option.id
             val voteCount = voteSummary?.total ?: 0
             val votePercentage = voteSummary?.percentage ?: 0.0
             val optionId = option.id ?: ""
-            val optionAnswer = option.answer ?: ""
+            val optionAnswer = option.getBestAnswer() ?: ""
 
             optionViewStates.add(
                     if (!isPollSent) {
@@ -291,7 +291,7 @@ class MessageItemFactory @Inject constructor(
             )
         }
 
-        val question = pollContent.pollCreationInfo?.question?.question ?: ""
+        val question = pollContent.getBestPollCreationInfo()?.question?.getBestQuestion() ?: ""
 
         return PollItem_()
                 .attributes(attributes)
@@ -413,7 +413,8 @@ class MessageItemFactory @Inject constructor(
                                 itemClickListener = attributes.itemClickListener,
                                 reactionPillCallback = attributes.reactionPillCallback,
                                 readReceiptsCallback = attributes.readReceiptsCallback,
-                                emojiTypeFace = attributes.emojiTypeFace
+                                emojiTypeFace = attributes.emojiTypeFace,
+                                reactionsSummaryEvents = attributes.reactionsSummaryEvents
                         )
                 )
                 .callback(callback)

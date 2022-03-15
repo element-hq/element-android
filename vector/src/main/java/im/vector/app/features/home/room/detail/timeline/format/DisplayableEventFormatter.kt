@@ -122,14 +122,14 @@ class DisplayableEventFormatter @Inject constructor(
             EventType.CALL_CANDIDATES       -> {
                 span { }
             }
-            EventType.POLL_START            -> {
-                timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
+            in EventType.POLL_START         -> {
+                timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.getBestPollCreationInfo()?.question?.getBestQuestion()
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            EventType.POLL_RESPONSE         -> {
+            in EventType.POLL_RESPONSE      -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            EventType.POLL_END              -> {
+            in EventType.POLL_END           -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
             else                            -> {

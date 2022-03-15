@@ -37,6 +37,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.VectorOverrides
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toTrackingValue
 import im.vector.app.features.analytics.plan.UserProperties
@@ -47,6 +48,7 @@ import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -63,6 +65,7 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
+import java.util.UUID
 import java.util.concurrent.CancellationException
 
 /**
@@ -78,7 +81,9 @@ class OnboardingViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val homeServerHistoryService: HomeServerHistoryService,
         private val vectorFeatures: VectorFeatures,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val uriFilenameResolver: UriFilenameResolver,
+        private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -90,11 +95,18 @@ class OnboardingViewModel @AssistedInject constructor(
 
     init {
         getKnownCustomHomeServersUrls()
+        observeDataStore()
     }
 
     private fun getKnownCustomHomeServersUrls() {
         setState {
             copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
+        }
+    }
+
+    private fun observeDataStore() = viewModelScope.launch {
+        vectorOverrides.forceLoginFallback.setOnEach { isForceLoginFallbackEnabled ->
+            copy(isForceLoginFallbackEnabled = isForceLoginFallbackEnabled)
         }
     }
 
@@ -145,6 +157,12 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.ResetAction                -> handleResetAction(action)
             is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
+            is OnboardingAction.UpdateDisplayName          -> updateDisplayName(action.displayName)
+            OnboardingAction.UpdateDisplayNameSkipped      -> handleDisplayNameStepComplete()
+            OnboardingAction.UpdateProfilePictureSkipped   -> completePersonalization()
+            OnboardingAction.PersonalizeProfile            -> handlePersonalizeProfile()
+            is OnboardingAction.ProfilePictureSelected     -> handleProfilePictureSelected(action)
+            OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
             is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
     }
@@ -746,15 +764,33 @@ class OnboardingViewModel @AssistedInject constructor(
 
         authenticationService.reset()
         session.configureAndStart(applicationContext)
-        setState {
-            copy(
-                    asyncLoginAction = Success(Unit)
-            )
-        }
 
         when (isAccountCreated) {
-            true  -> _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
-            false -> _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
+            true  -> {
+                val personalizationState = createPersonalizationState(session, state)
+                setState {
+                    copy(asyncLoginAction = Success(Unit), personalizationState = personalizationState)
+                }
+                _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
+            }
+            false -> {
+                setState { copy(asyncLoginAction = Success(Unit)) }
+                _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
+            }
+        }
+    }
+
+    private suspend fun createPersonalizationState(session: Session, state: OnboardingViewState): PersonalizationState {
+        return when {
+            vectorFeatures.isOnboardingPersonalizeEnabled() -> {
+                val homeServerCapabilities = session.getHomeServerCapabilities()
+                val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities?.firstOrNull()
+                state.personalizationState.copy(
+                        supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
+                        supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
+                )
+            }
+            else                                            -> state.personalizationState
         }
     }
 
@@ -880,6 +916,95 @@ class OnboardingViewModel @AssistedInject constructor(
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {
         return authenticationService.getFallbackUrl(forSignIn, deviceId)
+    }
+
+    private fun updateDisplayName(displayName: String) {
+        setState { copy(asyncDisplayName = Loading()) }
+        viewModelScope.launch {
+            val activeSession = activeSessionHolder.getActiveSession()
+            try {
+                activeSession.setDisplayName(activeSession.myUserId, displayName)
+                setState {
+                    copy(
+                            asyncDisplayName = Success(Unit),
+                            personalizationState = personalizationState.copy(displayName = displayName)
+                    )
+                }
+                handleDisplayNameStepComplete()
+            } catch (error: Throwable) {
+                setState { copy(asyncDisplayName = Fail(error)) }
+                _viewEvents.post(OnboardingViewEvents.Failure(error))
+            }
+        }
+    }
+
+    private fun handlePersonalizeProfile() {
+        withPersonalisationState {
+            when {
+                it.supportsChangingDisplayName    -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
+                it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
+                else                              -> {
+                    throw IllegalStateException("It should not be possible to personalize without supporting display name or avatar changing")
+                }
+            }
+        }
+    }
+
+    private fun handleDisplayNameStepComplete() {
+        withPersonalisationState {
+            when {
+                it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
+                else                              -> completePersonalization()
+            }
+        }
+    }
+
+    private fun handleProfilePictureSelected(action: OnboardingAction.ProfilePictureSelected) {
+        setState {
+            copy(personalizationState = personalizationState.copy(selectedPictureUri = action.uri))
+        }
+    }
+
+    private fun withPersonalisationState(block: (PersonalizationState) -> Unit) {
+        withState { block(it.personalizationState) }
+    }
+
+    private fun updateProfilePicture() {
+        withState { state ->
+            when (val pictureUri = state.personalizationState.selectedPictureUri) {
+                null -> _viewEvents.post(OnboardingViewEvents.Failure(NullPointerException("picture uri is missing from state")))
+                else -> {
+                    setState { copy(asyncProfilePicture = Loading()) }
+                    viewModelScope.launch {
+                        val activeSession = activeSessionHolder.getActiveSession()
+                        try {
+                            activeSession.updateAvatar(
+                                    activeSession.myUserId,
+                                    pictureUri,
+                                    uriFilenameResolver.getFilenameFromUri(pictureUri) ?: UUID.randomUUID().toString()
+                            )
+                            setState {
+                                copy(
+                                        asyncProfilePicture = Success(Unit),
+                                )
+                            }
+                            onProfilePictureSaved()
+                        } catch (error: Throwable) {
+                            setState { copy(asyncProfilePicture = Fail(error)) }
+                            _viewEvents.post(OnboardingViewEvents.Failure(error))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onProfilePictureSaved() {
+        completePersonalization()
+    }
+
+    private fun completePersonalization() {
+        _viewEvents.post(OnboardingViewEvents.OnPersonalizationComplete)
     }
 }
 

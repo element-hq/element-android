@@ -353,7 +353,7 @@ fun Event.isAttachmentMessage(): Boolean {
             }
 }
 
-fun Event.isPoll(): Boolean = getClearType() == EventType.POLL_START || getClearType() == EventType.POLL_END
+fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START || getClearType() in EventType.POLL_END
 
 fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
 
@@ -376,7 +376,7 @@ fun Event.getRelationContent(): RelationDefaultContent? {
  * Returns the poll question or null otherwise
  */
 fun Event.getPollQuestion(): String? =
-        getPollContent()?.pollCreationInfo?.question?.question
+        getPollContent()?.getBestPollCreationInfo()?.question?.getBestQuestion()
 
 /**
  * Returns the relation content for a specific type or null otherwise
@@ -389,12 +389,12 @@ fun Event.isReply(): Boolean {
 }
 
 fun Event.isReplyRenderedInThread(): Boolean {
-    return isReply() && getRelationContent()?.inReplyTo?.shouldRenderInThread() == true
+    return isReply() && getRelationContent()?.shouldRenderInThread() == true
 }
 
-fun Event.isThread(): Boolean = getRelationContentForType(RelationType.IO_THREAD)?.eventId != null
+fun Event.isThread(): Boolean = getRelationContentForType(RelationType.THREAD)?.eventId != null
 
-fun Event.getRootThreadEventId(): String? = getRelationContentForType(RelationType.IO_THREAD)?.eventId
+fun Event.getRootThreadEventId(): String? = getRelationContentForType(RelationType.THREAD)?.eventId
 
 fun Event.isEdition(): Boolean {
     return getRelationContentForType(RelationType.REPLACE)?.eventId != null

@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 
 fun <T> Flow<T>.test(scope: CoroutineScope): FlowTestObserver<T> {
     return FlowTestObserver(scope, this)
@@ -37,13 +38,17 @@ class FlowTestObserver<T>(
                 values.add(it)
             }.launchIn(scope)
 
-    fun assertNoValues(): FlowTestObserver<T> {
-        assertEquals(emptyList<T>(), this.values)
+    fun assertNoValues() = assertValues(emptyList())
+
+    fun assertValues(vararg values: T) = assertValues(values.toList())
+
+    fun assertValue(position: Int, predicate: (T) -> Boolean): FlowTestObserver<T> {
+        assertTrue(predicate(values[position]))
         return this
     }
 
-    fun assertValues(vararg values: T): FlowTestObserver<T> {
-        assertEquals(values.toList(), this.values)
+    fun assertValues(values: List<T>): FlowTestObserver<T> {
+        assertEquals(values, this.values)
         return this
     }
 

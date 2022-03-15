@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.internal.auth.version.Versions
+import org.matrix.android.sdk.internal.auth.version.doesServerSupportThreads
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -122,7 +123,8 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                 homeServerCapabilitiesEntity.roomVersionsJson = capabilities?.roomVersions?.let {
                     MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).toJson(it)
                 }
-                homeServerCapabilitiesEntity.canUseThreading = capabilities?.threads?.enabled.orFalse()
+                homeServerCapabilitiesEntity.canUseThreading = /* capabilities?.threads?.enabled.orFalse() || */
+                        getVersionResult?.doesServerSupportThreads().orFalse()
             }
 
             if (getMediaConfigResult != null) {

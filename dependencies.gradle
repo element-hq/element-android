@@ -58,6 +58,7 @@ ext.libs = [
                 'lifecycleCommon'         : "androidx.lifecycle:lifecycle-common:$lifecycle",
                 'lifecycleLivedata'       : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle",
                 'lifecycleProcess'        : "androidx.lifecycle:lifecycle-process:$lifecycle",
+                'lifecycleRuntimeKtx'     : "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle",
                 'datastore'               : "androidx.datastore:datastore:1.0.0",
                 'datastorepreferences'    : "androidx.datastore:datastore-preferences:1.0.0",
                 'pagingRuntimeKtx'        : "androidx.paging:paging-runtime-ktx:2.1.2",
@@ -71,8 +72,7 @@ ext.libs = [
                 'espressoIntents'         : "androidx.test.espresso:espresso-intents:$espresso"
         ],
         google      : [
-                // TODO There is 1.6.0?
-                'material'                : "com.google.android.material:material:1.4.0"
+                'material'                : "com.google.android.material:material:1.5.0"
         ],
         dagger      : [
                 'dagger'                  : "com.google.dagger:dagger:$dagger",

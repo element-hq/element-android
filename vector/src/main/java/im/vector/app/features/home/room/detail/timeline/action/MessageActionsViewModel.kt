@@ -182,7 +182,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             } else {
                 when (timelineEvent.root.getClearType()) {
                     EventType.MESSAGE,
-                    EventType.STICKER     -> {
+                    EventType.STICKER       -> {
                         val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
                         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
                             val html = messageContent.formattedBody
@@ -208,13 +208,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     EventType.CALL_INVITE,
                     EventType.CALL_CANDIDATES,
                     EventType.CALL_HANGUP,
-                    EventType.CALL_ANSWER -> {
+                    EventType.CALL_ANSWER   -> {
                         noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
                     }
-                    EventType.POLL_START  -> {
-                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question ?: ""
+                    in EventType.POLL_START -> {
+                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)
+                                ?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: ""
                     }
-                    else                  -> null
+                    else                    -> null
                 }
             }
         } catch (failure: Throwable) {
@@ -344,24 +345,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
             }
 
-            if (canRedact(timelineEvent, actionPermissions)) {
-                if (timelineEvent.root.getClearType() == EventType.POLL_START) {
-                    add(EventSharedAction.Redact(
-                            eventId,
-                            askForReason = informationData.senderId != session.myUserId,
-                            dialogTitleRes = R.string.delete_poll_dialog_title,
-                            dialogDescriptionRes = R.string.delete_poll_dialog_content
-                    ))
-                } else {
-                    add(EventSharedAction.Redact(
-                            eventId,
-                            askForReason = informationData.senderId != session.myUserId,
-                            dialogTitleRes = R.string.delete_event_dialog_title,
-                            dialogDescriptionRes = R.string.delete_event_dialog_content
-                    ))
-                }
-            }
-
             if (canCopy(msgType)) {
                 // TODO copy images? html? see ClipBoard
                 add(EventSharedAction.Copy(messageContent!!.body))
@@ -383,12 +366,30 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.ViewEditHistory(informationData))
             }
 
+            if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
+                add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
+            }
+
             if (canShare(msgType)) {
                 add(EventSharedAction.Share(timelineEvent.eventId, messageContent!!))
             }
 
-            if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
-                add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
+            if (canRedact(timelineEvent, actionPermissions)) {
+                if (timelineEvent.root.getClearType() in EventType.POLL_START) {
+                    add(EventSharedAction.Redact(
+                            eventId,
+                            askForReason = informationData.senderId != session.myUserId,
+                            dialogTitleRes = R.string.delete_poll_dialog_title,
+                            dialogDescriptionRes = R.string.delete_poll_dialog_content
+                    ))
+                } else {
+                    add(EventSharedAction.Redact(
+                            eventId,
+                            askForReason = informationData.senderId != session.myUserId,
+                            dialogTitleRes = R.string.delete_event_dialog_title,
+                            dialogDescriptionRes = R.string.delete_event_dialog_content
+                    ))
+                }
             }
         }
 
@@ -426,7 +427,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
         // Only EventType.MESSAGE and EventType.POLL_START event types are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.POLL_START)) return false
+        if (event.root.getClearType() !in EventType.POLL_START + EventType.MESSAGE) return false
         if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
             MessageType.MSGTYPE_TEXT,
@@ -512,7 +513,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.POLL_START)) return false
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START) return false
         // Message sent by the current user can always be redacted
         if (event.root.senderId == session.myUserId) return true
         // Check permission for messages sent by other users
@@ -527,13 +528,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
         // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.POLL_START)) return false
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START) return false
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
     private fun canEdit(event: TimelineEvent, myUserId: String, actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.POLL_START)) return false
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE) + EventType.POLL_START) return false
         if (!actionPermissions.canSendMessage) return false
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
@@ -579,13 +580,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canEndPoll(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        return event.root.getClearType() == EventType.POLL_START &&
+        return event.root.getClearType() in EventType.POLL_START &&
                 canRedact(event, actionPermissions) &&
                 event.annotations?.pollResponseSummary?.closedTime == null
     }
 
     private fun canEditPoll(event: TimelineEvent): Boolean {
-        return event.root.getClearType() == EventType.POLL_START &&
+        return event.root.getClearType() in EventType.POLL_START &&
                 event.annotations?.pollResponseSummary?.closedTime == null &&
                 event.annotations?.pollResponseSummary?.aggregatedContent?.totalVotes ?: 0 == 0
     }

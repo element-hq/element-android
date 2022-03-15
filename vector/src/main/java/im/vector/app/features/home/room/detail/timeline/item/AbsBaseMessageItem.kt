@@ -121,18 +121,24 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
                 val showReactionsTextView = createReactionTextView(holder)
                 if (reactionsSummary.showAll) {
                     showReactionsTextView.setText(R.string.message_reaction_show_less)
-                    showReactionsTextView.onClick { reactionsSummary.onShowLessClicked() }
+                    showReactionsTextView.onClick {
+                        baseAttributes.reactionsSummaryEvents?.onShowLessClicked?.invoke()
+                    }
                 } else {
                     val moreCount = reactions.count() - MAX_REACTIONS_TO_SHOW
                     showReactionsTextView.text = holder.view.resources.getQuantityString(R.plurals.message_reaction_show_more, moreCount, moreCount)
-                    showReactionsTextView.onClick { reactionsSummary.onShowMoreClicked() }
+                    showReactionsTextView.onClick {
+                        baseAttributes.reactionsSummaryEvents?.onShowMoreClicked?.invoke()
+                    }
                 }
                 holder.reactionsContainer.addView(showReactionsTextView)
             }
             val addMoreReactionsTextView = createReactionTextView(holder)
 
             addMoreReactionsTextView.text = holder.view.context.getDrawableAsSpannable(R.drawable.ic_add_reaction_small)
-            addMoreReactionsTextView.onClick { reactionsSummary.onAddMoreClicked() }
+            addMoreReactionsTextView.onClick {
+                baseAttributes.reactionsSummaryEvents?.onAddMoreClicked?.invoke()
+            }
             holder.reactionsContainer.addView(addMoreReactionsTextView)
             holder.reactionsContainer.setOnLongClickListener(baseAttributes.itemLongClickListener)
         }
@@ -180,6 +186,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
         //        val memberClickListener: ClickListener?
         val reactionPillCallback: TimelineEventController.ReactionPillCallback?
+        val reactionsSummaryEvents: ReactionsSummaryEvents?
 
         //        val avatarCallback: TimelineEventController.AvatarCallback?
         val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback?

@@ -65,7 +65,7 @@ internal class DefaultThreadsService @AssistedInject constructor(
         )
     }
 
-    override fun enhanceWithEditions(threads: List<ThreadSummary>): List<ThreadSummary> {
+    override fun enhanceThreadWithEditions(threads: List<ThreadSummary>): List<ThreadSummary> {
         return Realm.getInstance(monarchy.realmConfiguration).use {
             threads.enhanceWithEditions(it, roomId)
         }

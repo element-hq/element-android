@@ -68,12 +68,13 @@ class CreatePollViewModel @AssistedInject constructor(
     }
 
     private fun initializeEditedPoll(eventId: String) {
-        val event = room.getTimeLineEvent(eventId) ?: return
+        val event = room.getTimelineEvent(eventId) ?: return
         val content = event.getLastMessageContent() as? MessagePollContent ?: return
 
-        val pollType = content.pollCreationInfo?.kind ?: PollType.DISCLOSED
-        val question = content.pollCreationInfo?.question?.question ?: ""
-        val options = content.pollCreationInfo?.answers?.mapNotNull { it.answer } ?: List(MIN_OPTIONS_COUNT) { "" }
+        val pollCreationInfo = content.getBestPollCreationInfo()
+        val pollType = pollCreationInfo?.kind ?: PollType.DISCLOSED_UNSTABLE
+        val question = pollCreationInfo?.question?.getBestQuestion() ?: ""
+        val options = pollCreationInfo?.answers?.mapNotNull { it.getBestAnswer() } ?: List(MIN_OPTIONS_COUNT) { "" }
 
         setState {
             copy(
@@ -115,7 +116,7 @@ class CreatePollViewModel @AssistedInject constructor(
     }
 
     private fun sendEditedPoll(editedEventId: String, pollType: PollType, question: String, options: List<String>) {
-        val editedEvent = room.getTimeLineEvent(editedEventId) ?: return
+        val editedEvent = room.getTimelineEvent(editedEventId) ?: return
         room.editPoll(editedEvent, pollType, question, options)
     }
 

@@ -20,7 +20,6 @@ import io.realm.Realm
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
@@ -99,14 +98,11 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     }
 
     override suspend fun execute(params: FetchThreadTimelineTask.Params): Result {
-        val isRoomEncrypted = cryptoSessionInfoProvider.isRoomEncrypted(params.roomId)
         val response = executeRequest(globalErrorReceiver) {
-            roomAPI.getRelations(
+            roomAPI.getThreadsRelations(
                     roomId = params.roomId,
                     eventId = params.rootThreadEventId,
-                    relationType = RelationType.IO_THREAD,
                     from = params.from,
-                    eventType = if (isRoomEncrypted) EventType.ENCRYPTED else EventType.MESSAGE,
                     limit = params.limit
             )
         }
@@ -212,13 +208,13 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
      */
     private fun createEventEntity(roomId: String, event: Event, realm: Realm): EventEntity {
         val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
-        return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
+        return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
     }
 
     /**
      * Invoke the event decryption mechanism for a specific event
      */
-    private fun decryptIfNeeded(event: Event, roomId: String) {
+    private suspend fun decryptIfNeeded(event: Event, roomId: String) {
         try {
             // Event from sync does not have roomId, so add it to the event first
             val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")

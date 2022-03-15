@@ -198,7 +198,7 @@ internal class LoadTimelineStrategy(
             }
         }
         if (mode is Mode.Thread) {
-            return timelineChunk?.loadMoreThread(count, Timeline.Direction.BACKWARDS) ?: LoadMoreResult.FAILURE
+            return timelineChunk?.loadMoreThread(count) ?: LoadMoreResult.FAILURE
         }
         return timelineChunk?.loadMore(count, direction, fetchOnServerIfNeeded) ?: LoadMoreResult.FAILURE
     }

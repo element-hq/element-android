@@ -33,6 +33,7 @@ class SectionHeaderAdapter constructor(
 
     data class RoomsSectionData(
             val name: String,
+            val itemCount: Int = 0,
             val isExpanded: Boolean = true,
             val notificationCount: Int = 0,
             val isHighlighted: Boolean = false,
@@ -85,8 +86,9 @@ class SectionHeaderAdapter constructor(
             val expandedArrowDrawable = ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
                 DrawableCompat.setTint(it, tintColor)
             }
+            binding.roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
+            binding.roomCategoryCounterView.text = roomsSectionData.itemCount.takeIf { it > 0 }?.toString().orEmpty()
             binding.roomCategoryUnreadCounterBadgeView.render(UnreadCounterBadgeView.State(roomsSectionData.notificationCount, roomsSectionData.isHighlighted))
-            binding.roomCategoryTitleView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         }
 
         companion object {

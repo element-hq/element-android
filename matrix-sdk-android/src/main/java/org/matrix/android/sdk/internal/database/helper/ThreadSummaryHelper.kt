@@ -127,7 +127,7 @@ private fun EventEntity.toTimelineEventEntity(roomMemberContentsByUser: HashMap<
     return timelineEventEntity
 }
 
-internal fun ThreadSummaryEntity.Companion.createOrUpdate(
+internal suspend fun ThreadSummaryEntity.Companion.createOrUpdate(
         threadSummaryType: ThreadSummaryUpdateType,
         realm: Realm,
         roomId: String,
@@ -204,7 +204,7 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
     }
 }
 
-private fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEntity, roomId: String) {
+private suspend fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEntity, roomId: String) {
     cryptoService ?: return
     val event = eventEntity.asDomain()
     if (event.isEncrypted() && event.mxDecryptionResult == null && event.eventId != null) {
@@ -260,7 +260,7 @@ private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roo
  */
 private fun createEventEntity(roomId: String, event: Event, realm: Realm): EventEntity {
     val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
-    return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
+    return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
 }
 
 /**

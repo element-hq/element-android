@@ -28,6 +28,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.VectorOverrides
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -67,7 +68,8 @@ class HomeDetailViewModel @AssistedInject constructor(
         private val callManager: WebRtcCallManager,
         private val directRoomHelper: DirectRoomHelper,
         private val appStateHandler: AppStateHandler,
-        private val autoAcceptInvites: AutoAcceptInvites
+        private val autoAcceptInvites: AutoAcceptInvites,
+        private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
@@ -106,8 +108,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                     pushCounter = nbOfPush
             )
         }
-
-        vectorDataStore.forceDialPadDisplayFlow.setOnEach { force ->
+        vectorOverrides.forceDialPad.setOnEach { force ->
             copy(
                     forceDialPadTab = force
             )

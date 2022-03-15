@@ -9,10 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
       - name: Install Prerequisite dependencies
@@ -35,10 +36,11 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
       - name: Install Prerequisite dependencies
@@ -60,8 +62,9 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Run analytics import script
         run: ./tools/import_analytic_plan.sh
       - name: Create Pull Request for analytics plan

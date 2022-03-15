@@ -106,6 +106,11 @@ data class MobileScreen(
         Room,
 
         /**
+         * The room addresses screen shown from the Room Details screen.
+         */
+        RoomAddresses,
+
+        /**
          * The screen shown when tapping the name of a room from the Room
          * screen.
          */
@@ -131,6 +136,16 @@ data class MobileScreen(
          * The notifications settings screen shown from the Room Details screen.
          */
         RoomNotifications,
+
+        /**
+         * The roles permissions screen shown from the Room Details screen.
+         */
+        RoomPermissions,
+
+        /**
+         * Screen that displays room preview if user hasn't joined yet
+         */
+        RoomPreview,
 
         /**
          * The screen that allows you to search for messages/files in a specific
@@ -181,9 +196,40 @@ data class MobileScreen(
         Settings,
 
         /**
+         * The advanced settings screen (developer mode, rageshake, push
+         * notification rules)
+         */
+        SettingsAdvanced,
+
+        /**
          * The settings screen to change the default notification options.
          */
         SettingsDefaultNotifications,
+
+        /**
+         * The settings screen with general profile settings.
+         */
+        SettingsGeneral,
+
+        /**
+         * The Help and About screen
+         */
+        SettingsHelp,
+
+        /**
+         * The settings screen with list of the ignored users.
+         */
+        SettingsIgnoredUsers,
+
+        /**
+         * The experimental features settings screen,
+         */
+        SettingsLabs,
+
+        /**
+         * The settings screen with legals information
+         */
+        SettingsLegals,
 
         /**
          * The settings screen to manage notification mentions and keywords.
@@ -191,9 +237,24 @@ data class MobileScreen(
         SettingsMentionsAndKeywords,
 
         /**
+         * The notifications settings screen.
+         */
+        SettingsNotifications,
+
+        /**
+         * The preferences screen (theme, language, editor preferences, etc.
+         */
+        SettingsPreferences,
+
+        /**
          * The global security settings screen.
          */
         SettingsSecurity,
+
+        /**
+         * The calls settings screen.
+         */
+        SettingsVoiceVideo,
 
         /**
          * The sidebar shown on mobile with spaces, settings etc.
