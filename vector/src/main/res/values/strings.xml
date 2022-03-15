@@ -2715,7 +2715,7 @@
 
     <string name="public_space">Public space</string>
     <string name="private_space">Private space</string>
-    <string name="add_space">Add Space</string>
+    <string name="add_space">Add space</string>
     <string name="your_public_space">Your public space</string>
     <string name="your_private_space">Your private space</string>
     <string name="create_spaces_choose_type_label">What type of space do you want to create?</string>
@@ -2759,7 +2759,7 @@
     <!-- First one is the space name, and the second one is the matrix.to link -->
     <string name="share_space_link_message">Join my space %1$s %2$s</string>
     <string name="skip_for_now">Skip for now</string>
-    <string name="create_space">Create Space</string>
+    <string name="create_space">Create space</string>
     <string name="join_space">Join Space</string>
     <string name="join_anyway">Join Anyway</string>
     <string name="room_alias_preview_not_found">This alias is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
