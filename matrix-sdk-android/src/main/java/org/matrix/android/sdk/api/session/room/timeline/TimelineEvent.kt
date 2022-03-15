@@ -54,6 +54,7 @@ data class TimelineEvent(
          * It's not unique on the timeline as it's reset on each chunk.
          */
         val displayIndex: Int,
+        var ownedByThreadChunk: Boolean = false,
         val senderInfo: SenderInfo,
         val annotations: EventAnnotationsSummary? = null,
         val readReceipts: List<ReadReceipt> = emptyList()

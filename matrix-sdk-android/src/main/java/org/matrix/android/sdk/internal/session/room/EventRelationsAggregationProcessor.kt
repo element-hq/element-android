@@ -57,6 +57,7 @@ import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryE
 import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.ReferencesAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
@@ -114,8 +115,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
 
                         EventAnnotationsSummaryEntity.where(realm, roomId, event.eventId ?: "").findFirst()
                                 ?.let {
-                                    TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId ?: "").findFirst()
-                                            ?.let { tet -> tet.annotations = it }
+                                    TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId ?: "").findAll()
+                                            ?.forEach { tet -> tet.annotations = it }
                                 }
                     }
 
@@ -193,6 +194,16 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             handleReaction(realm, event, roomId, isLocalEcho)
                         }
                     }
+                    // HandleInitialAggregatedRelations should also be applied in encrypted messages with annotations
+//                    else if (event.unsignedData?.relations?.annotations != null) {
+//                        Timber.v("###REACTION e2e Aggregation in room $roomId for event ${event.eventId}")
+//                        handleInitialAggregatedRelations(realm, event, roomId, event.unsignedData.relations.annotations)
+//                         EventAnnotationsSummaryEntity.where(realm, roomId, event.eventId ?: "").findFirst()
+//                                 ?.let {
+//                                     TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId ?: "").findAll()
+//                                             ?.forEach { tet -> tet.annotations = it }
+//                                 }
+//                    }
                 }
                 EventType.REDACTION            -> {
                     val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }
@@ -240,7 +251,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     }
 
     // OPT OUT serer aggregation until API mature enough
-    private val SHOULD_HANDLE_SERVER_AGREGGATION = false
+    private val SHOULD_HANDLE_SERVER_AGREGGATION = false // should be true to work with e2e
 
     private fun handleReplace(realm: Realm,
                               event: Event,
@@ -332,13 +343,18 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
 
         if (!isLocalEcho) {
-            val replaceEvent = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
+            val replaceEvent = TimelineEventEntity
+                    .where(realm, roomId, eventId)
+                    .equalTo(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, false)
+                    .findFirst()
             handleThreadSummaryEdition(editedEvent, replaceEvent, existingSummary?.editions)
         }
     }
 
     /**
      * Check if the edition is on the latest thread event, and update it accordingly
+     * @param editedEvent The event that will be changed
+     * @param replaceEvent The new event
      */
     private fun handleThreadSummaryEdition(editedEvent: EventEntity?,
                                            replaceEvent: TimelineEventEntity?,

@@ -465,7 +465,8 @@ class MessageComposerViewModel @AssistedInject constructor(
                     // is original event a reply?
                     val relationContent = state.sendMode.timelineEvent.getRelationContent()
                     val inReplyTo = if (state.rootThreadEventId != null) {
-                        if (relationContent?.inReplyTo?.shouldRenderInThread() == true) {
+                        // Thread event
+                        if (relationContent?.shouldRenderInThread() == true) {
                             // Reply within a thread event
                             relationContent.inReplyTo?.eventId
                         } else {
@@ -509,6 +510,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 is SendMode.Reply   -> {
                     val timelineEvent = state.sendMode.timelineEvent
                     val showInThread = state.sendMode.timelineEvent.root.isThread() && state.rootThreadEventId == null
+                    // If threads are disabled this will make the fallback replies visible to clients with threads enabled
                     val rootThreadEventId = if (showInThread) timelineEvent.root.getRootThreadEventId() else null
                     state.rootThreadEventId?.let {
                         room.replyInThread(

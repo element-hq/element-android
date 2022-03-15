@@ -17,9 +17,15 @@
 package im.vector.app.ui.robot
 
 import android.view.View
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogNegativeButton
@@ -35,6 +41,7 @@ import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.onboarding.OnboardingActivity
 import im.vector.app.initialSyncIdlingResource
 import im.vector.app.ui.robot.settings.SettingsRobot
+import im.vector.app.ui.robot.settings.labs.LabFeature
 import im.vector.app.ui.robot.space.SpaceRobot
 import im.vector.app.withIdlingResource
 import timber.log.Timber
@@ -70,11 +77,11 @@ class ElementRobot {
         }
     }
 
-    fun settings(block: SettingsRobot.() -> Unit) {
+    fun settings(shouldGoBack: Boolean = true, block: SettingsRobot.() -> Unit) {
         openDrawer()
         clickOn(R.id.homeDrawerHeaderSettingsView)
         block(SettingsRobot())
-        pressBack()
+        if (shouldGoBack) pressBack()
         waitUntilViewVisible(withId(R.id.bottomNavigationView))
     }
 
@@ -101,6 +108,22 @@ class ElementRobot {
         clickOn(R.id.bottom_action_rooms)
         block(RoomListRobot())
         waitUntilViewVisible(withId(R.id.bottomNavigationView))
+    }
+
+    fun toggleLabFeature(labFeature: LabFeature) {
+        when (labFeature) {
+            LabFeature.THREAD_MESSAGES -> {
+                settings(shouldGoBack = false) {
+                    labs(shouldGoBack = false) {
+                        onView(withText(R.string.labs_enable_thread_messages))
+                                .check(ViewAssertions.matches(isDisplayed()))
+                                .perform(ViewActions.closeSoftKeyboard(), click())
+                    }
+                }
+            }
+            else                       -> {
+            }
+        }
     }
 
     fun signout(expectSignOutWarning: Boolean) {

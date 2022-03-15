@@ -341,8 +341,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                 url = attachment.queryUri.toString(),
                 relatesTo = rootThreadEventId?.let {
                     RelationDefaultContent(
-                            type = RelationType.IO_THREAD,
+                            type = RelationType.THREAD,
                             eventId = it,
+                            isFallingBack = true,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
                 }
@@ -384,8 +385,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                 url = attachment.queryUri.toString(),
                 relatesTo = rootThreadEventId?.let {
                     RelationDefaultContent(
-                            type = RelationType.IO_THREAD,
+                            type = RelationType.THREAD,
                             eventId = it,
+                            isFallingBack = true,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
                 }
@@ -414,8 +416,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                 voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap(),
                 relatesTo = rootThreadEventId?.let {
                     RelationDefaultContent(
-                            type = RelationType.IO_THREAD,
+                            type = RelationType.THREAD,
                             eventId = it,
+                            isFallingBack = true,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
                 }
@@ -434,8 +437,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                 url = attachment.queryUri.toString(),
                 relatesTo = rootThreadEventId?.let {
                     RelationDefaultContent(
-                            type = RelationType.IO_THREAD,
+                            type = RelationType.THREAD,
                             eventId = it,
+                            isFallingBack = true,
                             inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
                     )
                 }
@@ -467,7 +471,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     private fun enhanceStickerIfNeeded(type: String, content: Content?): Content? {
         var newContent: Content? = null
         if (type == EventType.STICKER) {
-            val isThread = (content.toModel<MessageStickerContent>())?.relatesTo?.type == RelationType.IO_THREAD
+            val isThread = (content.toModel<MessageStickerContent>())?.relatesTo?.type == RelationType.THREAD
             val rootThreadEventId = (content.toModel<MessageStickerContent>())?.relatesTo?.eventId
             if (isThread && rootThreadEventId != null) {
                 val newRelationalDefaultContent = (content.toModel<MessageStickerContent>())?.relatesTo?.copy(
@@ -548,7 +552,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 relatesTo = generateReplyRelationContent(
                         eventId = eventId,
                         rootThreadEventId = rootThreadEventId,
-                        showAsReply = showInThread))
+                        showInThread = showInThread))
         return createMessageEvent(roomId, content)
     }
 
@@ -558,18 +562,20 @@ internal class LocalEchoEventFactory @Inject constructor(
      * "m.relates_to": {
      *      "rel_type": "m.thread",
      *      "event_id": "$thread_root",
+     *      "is_falling_back": false,
      *      "m.in_reply_to": {
-     *          "event_id": "$event_target",
-     *          "render_in": ["m.thread"]
-     *        }
-     *   }
+     *          "event_id": "$event_target"
+     *      }
+     *  }
      */
-    private fun generateReplyRelationContent(eventId: String, rootThreadEventId: String? = null, showAsReply: Boolean): RelationDefaultContent =
+    private fun generateReplyRelationContent(eventId: String, rootThreadEventId: String? = null, showInThread: Boolean): RelationDefaultContent =
             rootThreadEventId?.let {
                 RelationDefaultContent(
-                        type = RelationType.IO_THREAD,
+                        type = RelationType.THREAD,
                         eventId = it,
-                        inReplyTo = ReplyToContent(eventId = eventId, renderIn = if (showAsReply) arrayListOf("m.thread") else null))
+                        isFallingBack = showInThread,
+                        // False when is a rich reply from within a thread, and true when is a reply that should be visible from threads
+                        inReplyTo = ReplyToContent(eventId = eventId))
             } ?: RelationDefaultContent(null, null, ReplyToContent(eventId = eventId))
 
     private fun buildFormattedReply(permalink: String, userLink: String, userId: String, bodyFormatted: String, newBodyFormatted: String): String {

@@ -201,7 +201,11 @@ data class Event(
      */
     fun getDecryptedTextSummary(): String? {
         if (isRedacted()) return "Message Deleted"
-        val text = getDecryptedValue() ?: return null
+        val text = getDecryptedValue() ?: run {
+            if (isPoll()) { return getPollQuestion() ?: "created a poll." }
+            return null
+        }
+
         return when {
             isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
             isFileMessage()                        -> "sent a file."
@@ -385,12 +389,12 @@ fun Event.isReply(): Boolean {
 }
 
 fun Event.isReplyRenderedInThread(): Boolean {
-    return isReply() && getRelationContent()?.inReplyTo?.shouldRenderInThread() == true
+    return isReply() && getRelationContent()?.shouldRenderInThread() == true
 }
 
-fun Event.isThread(): Boolean = getRelationContentForType(RelationType.IO_THREAD)?.eventId != null
+fun Event.isThread(): Boolean = getRelationContentForType(RelationType.THREAD)?.eventId != null
 
-fun Event.getRootThreadEventId(): String? = getRelationContentForType(RelationType.IO_THREAD)?.eventId
+fun Event.getRootThreadEventId(): String? = getRelationContentForType(RelationType.THREAD)?.eventId
 
 fun Event.isEdition(): Boolean {
     return getRelationContentForType(RelationType.REPLACE)?.eventId != null

@@ -17,51 +17,43 @@
 package org.matrix.android.sdk.api.session.room.threads
 
 import androidx.lifecycle.LiveData
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 
 /**
- * This interface defines methods to interact with threads related features.
- * It's implemented at the room level within the main timeline.
+ * This interface defines methods to interact with thread related features.
+ * It's the dynamic threads implementation and the homeserver must return
+ * a capability entry for threads. If the server do not support m.thread
+ * then [ThreadsLocalService] should be used instead
  */
 interface ThreadsService {
 
     /**
-     * Returns a [LiveData] list of all the thread root TimelineEvents that exists at the room level
+     * Returns a [LiveData] list of all the [ThreadSummary] that exists at the room level
      */
-    fun getAllThreadsLive(): LiveData<List<TimelineEvent>>
+    fun getAllThreadSummariesLive(): LiveData<List<ThreadSummary>>
 
     /**
-     * Returns a list of all the thread root TimelineEvents that exists at the room level
+     * Returns a list of all the [ThreadSummary] that exists at the room level
      */
-    fun getAllThreads(): List<TimelineEvent>
+    fun getAllThreadSummaries(): List<ThreadSummary>
 
     /**
-     * Returns a [LiveData] list of all the marked unread threads that exists at the room level
-     */
-    fun getMarkedThreadNotificationsLive(): LiveData<List<TimelineEvent>>
-
-    /**
-     * Returns a list of all the marked unread threads that exists at the room level
-     */
-    fun getMarkedThreadNotifications(): List<TimelineEvent>
-
-    /**
-     * Returns whether or not the current user is participating in the thread
-     * @param rootThreadEventId the eventId of the current thread
-     */
-    fun isUserParticipatingInThread(rootThreadEventId: String): Boolean
-
-    /**
-     * Enhance the provided root thread TimelineEvent [List] by adding the latest
+     * Enhance the provided ThreadSummary[List] by adding the latest
      * message edition for that thread
      * @return the enhanced [List] with edited updates
      */
-    fun mapEventsWithEdition(threads: List<TimelineEvent>): List<TimelineEvent>
+    fun enhanceThreadWithEditions(threads: List<ThreadSummary>): List<ThreadSummary>
 
     /**
-     * Marks the current thread as read in local DB.
-     * note: read receipts within threads are not yet supported with the API
-     * @param rootThreadEventId the root eventId of the current thread
+     * Fetch all thread replies for the specified thread using the /relations api
+     * @param rootThreadEventId the root thread eventId
+     * @param from defines the token that will fetch from that position
+     * @param limit defines the number of max results the api will respond with
      */
-    suspend fun markThreadAsRead(rootThreadEventId: String)
+    suspend fun fetchThreadTimeline(rootThreadEventId: String, from: String, limit: Int)
+
+    /**
+     * Fetch all thread summaries for the current room using the enhanced /messages api
+     */
+    suspend fun fetchThreadSummaries()
 }

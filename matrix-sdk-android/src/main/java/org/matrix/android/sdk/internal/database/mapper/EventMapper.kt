@@ -114,7 +114,7 @@ internal object EventMapper {
                         )
                     },
                     threadNotificationState = eventEntity.threadNotificationState,
-                    threadSummaryLatestTextMessage = eventEntity.threadSummaryLatestMessage?.root?.asDomain()?.getDecryptedTextSummary(),
+                    threadSummaryLatestEvent = eventEntity.threadSummaryLatestMessage?.root?.asDomain(),
                     lastMessageTimestamp = eventEntity.threadSummaryLatestMessage?.root?.originServerTs
 
             )

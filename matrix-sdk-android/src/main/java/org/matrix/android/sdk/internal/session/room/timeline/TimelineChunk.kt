@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
+import io.realm.RealmConfiguration
 import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
@@ -36,6 +37,8 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.session.room.relation.threads.DefaultFetchThreadTimelineTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import timber.log.Timber
 import java.util.Collections
@@ -50,8 +53,10 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                              private val timelineSettings: TimelineSettings,
                              private val roomId: String,
                              private val timelineId: String,
+                             private val fetchThreadTimelineTask: FetchThreadTimelineTask,
                              private val eventDecryptor: TimelineEventDecryptor,
                              private val paginationTask: PaginationTask,
+                             private val realmConfiguration: RealmConfiguration,
                              private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
                              private val timelineEventMapper: TimelineEventMapper,
                              private val uiEchoManager: UIEchoManager? = null,
@@ -141,6 +146,9 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val loadFromStorage = loadFromStorage(count, direction).also {
             logLoadedFromStorage(it, direction)
         }
+        if (loadFromStorage.numberOfEvents == 6) {
+            Timber.i("here")
+        }
 
         val offsetCount = count - loadFromStorage.numberOfEvents
 
@@ -154,6 +162,29 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
             LoadMoreResult.REACHED_END
         } else {
             delegateLoadMore(fetchOnServerIfNeeded, offsetCount, direction)
+        }
+    }
+
+    /**
+     * This function will fetch more live thread timeline events using the /relations api. It will
+     * always fetch results, while we want our data to be up to dated.
+     */
+    suspend fun loadMoreThread(count: Int, direction: Timeline.Direction = Timeline.Direction.BACKWARDS): LoadMoreResult {
+        val rootThreadEventId = timelineSettings.rootThreadEventId ?: return LoadMoreResult.FAILURE
+        return if (direction == Timeline.Direction.BACKWARDS) {
+            try {
+                fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(
+                        roomId,
+                        rootThreadEventId,
+                        chunkEntity.prevToken,
+                        count
+                )).toLoadMoreResult()
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Failed to fetch thread timeline events from the server")
+                LoadMoreResult.FAILURE
+            }
+        } else {
+            LoadMoreResult.FAILURE
         }
     }
 
@@ -413,6 +444,14 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         }
     }
 
+    private fun DefaultFetchThreadTimelineTask.Result.toLoadMoreResult(): LoadMoreResult {
+        return when (this) {
+            DefaultFetchThreadTimelineTask.Result.REACHED_END -> LoadMoreResult.REACHED_END
+            DefaultFetchThreadTimelineTask.Result.SHOULD_FETCH_MORE,
+            DefaultFetchThreadTimelineTask.Result.SUCCESS     -> LoadMoreResult.SUCCESS
+        }
+    }
+
     private fun getOffsetIndex(): Int {
         var offset = 0
         var currentNextChunk = nextChunk
@@ -454,6 +493,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 }
             }
         }
+
         if (insertions.isNotEmpty() || modifications.isNotEmpty()) {
             onBuiltEvents(true)
         }
@@ -487,6 +527,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 timelineId = timelineId,
                 eventDecryptor = eventDecryptor,
                 paginationTask = paginationTask,
+                realmConfiguration = realmConfiguration,
+                fetchThreadTimelineTask = fetchThreadTimelineTask,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,
                 uiEchoManager = uiEchoManager,
@@ -538,7 +580,6 @@ private fun ChunkEntity.sortedTimelineEvents(rootThreadEventId: String?): RealmR
                 .or()
                 .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, rootThreadEventId)
                 .endGroup()
-                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
                 .findAll()
     }
 }

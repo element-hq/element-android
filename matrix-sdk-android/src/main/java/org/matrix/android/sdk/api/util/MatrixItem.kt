@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.util
 
 import org.matrix.android.sdk.BuildConfig
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -198,6 +199,8 @@ fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name ?: getPrimaryAl
 fun RoomMemberSummary.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
 
 fun SenderInfo.toMatrixItem() = MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl)
+
+fun SenderInfo.toMatrixItemOrNull() = tryOrNull {  MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl) }
 
 fun SpaceChildInfo.toMatrixItem() = if (roomType == RoomType.SPACE) {
     MatrixItem.SpaceItem(childRoomId, name ?: canonicalAlias, avatarUrl)
