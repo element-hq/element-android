@@ -19,13 +19,18 @@ package im.vector.app.features.location
 import android.app.Activity
 import im.vector.app.core.utils.openAppSettingsPage
 
-class LocationSharingNavigator constructor(val activity: Activity?): ILocationSharingNavigator {
+class LocationSharingNavigator constructor(val activity: Activity?) : ILocationSharingNavigator {
+
+    override var goingToAppSettings: Boolean = false
 
     override fun quit() {
         activity?.finish()
     }
 
     override fun goToAppSettings() {
-        activity?.let { openAppSettingsPage(it) }
+        activity?.let {
+            goingToAppSettings = true
+            openAppSettingsPage(it)
+        }
     }
 }

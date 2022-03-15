@@ -37,7 +37,7 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
-import im.vector.app.core.utils.PERMISSIONS_FOR_LOCATION_SHARING
+import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.databinding.ViewAttachmentTypeSelectorBinding
@@ -215,6 +215,6 @@ class AttachmentTypeSelectorView(context: Context,
         STICKER(PERMISSIONS_EMPTY, R.string.tooltip_attachment_sticker),
         CONTACT(PERMISSIONS_FOR_PICKING_CONTACT, R.string.tooltip_attachment_contact),
         POLL(PERMISSIONS_EMPTY, R.string.tooltip_attachment_poll),
-        LOCATION(PERMISSIONS_FOR_LOCATION_SHARING, R.string.tooltip_attachment_location)
+        LOCATION(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, R.string.tooltip_attachment_location)
     }
 }
