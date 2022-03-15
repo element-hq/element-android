@@ -258,9 +258,10 @@ class MessageItemFactory @Inject constructor(
     ): PollItem {
         val pollResponseSummary = informationData.pollResponseAggregatedSummary
         val pollState = createPollState(informationData, pollResponseSummary, pollContent)
-        val optionViewStates = pollContent.pollCreationInfo?.answers?.mapToOptions(pollState, informationData)
-        val questionText = pollContent.pollCreationInfo?.question?.question.orEmpty()
+        val pollCreationInfo = pollContent.getBestPollCreationInfo()
+        val questionText = pollCreationInfo?.question?.getBestQuestion().orEmpty()
         val question = createPollQuestion(informationData, questionText, callback)
+        val optionViewStates = pollCreationInfo?.answers?.mapToOptions(pollState, informationData)
         val totalVotesText = createTotalVotesText(pollState, pollResponseSummary)
 
         return PollItem_()
@@ -283,7 +284,7 @@ class MessageItemFactory @Inject constructor(
     ): PollState = when {
         !informationData.sendState.isSent() -> Sending
         pollResponseSummary?.isClosed.orFalse() -> Ended
-        pollContent.pollCreationInfo?.kind == PollType.UNDISCLOSED -> Undisclosed
+        pollContent.getBestPollCreationInfo()?.kind == PollType.UNDISCLOSED -> Undisclosed
         pollResponseSummary?.myVote?.isNotEmpty().orFalse() -> Voted(pollResponseSummary?.totalVotes ?: 0)
         else -> Ready
     }
@@ -295,7 +296,7 @@ class MessageItemFactory @Inject constructor(
         val pollResponseSummary = informationData.pollResponseAggregatedSummary
         val winnerVoteCount = pollResponseSummary?.winnerVoteCount
         val optionId = answer.id ?: ""
-        val optionAnswer = answer.answer ?: ""
+        val optionAnswer = answer.getBestAnswer() ?: ""
         val voteSummary = pollResponseSummary?.votes?.get(answer.id)
         val voteCount = voteSummary?.total ?: 0
         val votePercentage = voteSummary?.percentage ?: 0.0
