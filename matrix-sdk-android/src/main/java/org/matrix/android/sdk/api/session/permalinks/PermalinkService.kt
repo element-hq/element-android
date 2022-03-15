@@ -97,7 +97,7 @@ interface PermalinkService {
      *
      * @param forceMatrixTo whether we should force using matrix.to base URL
      *
-     * @return the HTML template
+     * @return the Markdown template
      */
     fun createMdMentionSpanTemplate(forceMatrixTo: Boolean = false): String
 }
