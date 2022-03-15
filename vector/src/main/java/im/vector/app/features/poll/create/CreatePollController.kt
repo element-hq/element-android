@@ -60,9 +60,9 @@ class CreatePollController @Inject constructor(
             pollTypeChangedListener { _, id ->
                 host.callback?.onPollTypeChanged(
                         if (id == R.id.openPollTypeRadioButton) {
-                            PollType.DISCLOSED
+                            PollType.DISCLOSED_UNSTABLE
                         } else {
-                            PollType.UNDISCLOSED
+                            PollType.UNDISCLOSED_UNSTABLE
                         }
                 )
             }

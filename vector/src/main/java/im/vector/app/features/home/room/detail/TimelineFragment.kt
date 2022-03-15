@@ -1189,7 +1189,7 @@ class TimelineFragment @Inject constructor(
             val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
             getString(R.string.voice_message_reply_content, formattedDuration)
         } else if (messageContent is MessagePollContent) {
-            messageContent.pollCreationInfo?.question?.question
+            messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
         } else {
             messageContent?.body ?: ""
         }
@@ -2165,7 +2165,7 @@ class TimelineFragment @Inject constructor(
                 timelineViewModel.handle(RoomDetailAction.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is EventSharedAction.Edit                       -> {
-                if (action.eventType == EventType.POLL_START) {
+                if (action.eventType in EventType.POLL_START) {
                     navigator.openCreatePoll(requireContext(), timelineArgs.roomId, action.eventId, PollMode.EDIT)
                 } else if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
                     messageComposerViewModel.handle(MessageComposerAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))

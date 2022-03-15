@@ -353,7 +353,7 @@ fun Event.isAttachmentMessage(): Boolean {
             }
 }
 
-fun Event.isPoll(): Boolean = getClearType() == EventType.POLL_START || getClearType() == EventType.POLL_END
+fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START || getClearType() in EventType.POLL_END
 
 fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
 
@@ -376,7 +376,7 @@ fun Event.getRelationContent(): RelationDefaultContent? {
  * Returns the poll question or null otherwise
  */
 fun Event.getPollQuestion(): String? =
-        getPollContent()?.pollCreationInfo?.question?.question
+        getPollContent()?.getBestPollCreationInfo()?.question?.getBestQuestion()
 
 /**
  * Returns the relation content for a specific type or null otherwise

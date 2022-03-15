@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.message
+package im.vector.app.test.fakes
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import im.vector.app.features.DefaultVectorOverrides
+import im.vector.app.features.VectorOverrides
 
-@JsonClass(generateAdapter = true)
-data class PollAnswer(
-        @Json(name = "id") val id: String? = null,
-        @Json(name = "org.matrix.msc1767.text") val unstableAnswer: String? = null,
-        @Json(name = "m.text") val answer: String? = null
-) {
-
-    fun getBestAnswer() = answer ?: unstableAnswer
-}
+class FakeVectorOverrides : VectorOverrides by DefaultVectorOverrides()

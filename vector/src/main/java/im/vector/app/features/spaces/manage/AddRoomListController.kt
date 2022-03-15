@@ -94,6 +94,12 @@ class AddRoomListController @Inject constructor(
         }
 
     var totalSize: Int = 0
+        set(value) {
+            if (value != field) {
+                field = value
+                requestForcedModelBuild()
+            }
+        }
 
     var selectedItems: Map<String, Boolean> = emptyMap()
         set(value) {
@@ -120,7 +126,8 @@ class AddRoomListController @Inject constructor(
             add(
                     RoomCategoryItem_().apply {
                         id("header")
-                        title(host.sectionName ?: "")
+                        title(host.sectionName.orEmpty())
+                        itemCount(host.totalSize)
                         expanded(host.expanded)
                         listener {
                             host.expanded = !host.expanded
