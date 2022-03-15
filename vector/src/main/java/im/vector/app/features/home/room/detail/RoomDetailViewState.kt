@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationBadgeState
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import timber.log.Timber
 
 sealed class UnreadState {
     object Unknown : UnreadState()
@@ -87,7 +88,15 @@ data class RoomDetailViewState(
             rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
     )
 
-    fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2
+    // TODO: Add condition here to check that room is DM-based group chat and not group room
+    fun isWebRTCCallOptionAvailable() = asyncRoomSummary.invoke()?.let { roomSummary ->
+        val joinedMembersCount = roomSummary.joinedMembersCount ?: 0
+        val isDirect = roomSummary.isDirect
+        Timber.d("WebRTCTest roomSummary: $roomSummary")
+        Timber.d("WebRTCTest joined members: $joinedMembersCount")
+        Timber.d("WebRTCTest isDirect: $isDirect")
+        joinedMembersCount <= 2
+    }
 
     fun isSearchAvailable() = asyncRoomSummary()?.isEncrypted == false
 
