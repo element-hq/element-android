@@ -31,12 +31,11 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.4.4\""
+        buildConfigField "String", "SDK_VERSION", "\"1.4.6\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
-        resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
-        resValue "string", "git_sdk_revision_unix_date", "\"${gitRevisionUnixDate()}\""
-        resValue "string", "git_sdk_revision_date", "\"${gitRevisionDate()}\""
+        buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
+        buildConfigField "String", "GIT_SDK_REVISION_DATE", "\"${gitRevisionDate()}\""
 
         defaultConfig {
             consumerProguardFiles 'proguard-rules.pro'
@@ -167,7 +166,7 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.44'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.45'
 
     testImplementation libs.tests.junit
     testImplementation 'org.robolectric:robolectric:4.7.3'
@@ -175,7 +174,7 @@ dependencies {
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
     testImplementation libs.mockk.mockk
     testImplementation libs.tests.kluent
-    implementation libs.jetbrains.coroutinesAndroid
+    testImplementation libs.jetbrains.coroutinesTest
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
     // Transitively required for mocking realm as monarchy doesn't expose Rx

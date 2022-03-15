@@ -13,52 +13,7 @@ env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx4g
     -Porg.gradle.parallel=false
-    -PallWarningsAsErrors=false
 jobs:
-  # Build Android Tests [Matrix SDK]
-  build-android-test-matrix-sdk:
-    name: Matrix SDK - Build Android Tests
-    runs-on: macos-latest
-    # No concurrency required, runs every time on a schedule.
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: 11
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Build Android Tests for matrix-sdk-android
-        run: ./gradlew clean matrix-sdk-android:assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace
-
-  # Build Android Tests [Matrix APP]
-  build-android-test-app:
-    name: App - Build Android Tests
-    runs-on: macos-latest
-    # No concurrency required, runs every time on a schedule.
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: 11
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Build Android Tests for vector
-        run: ./gradlew clean vector:assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace
-
   # Run Android Tests
   integration-tests:
     name: Matrix SDK - Running Integration Tests
@@ -69,7 +24,7 @@ jobs:
         api-level: [ 28 ]
     # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v2
         with:
@@ -88,11 +43,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Start synapse server
-        run: |
-          pip install matrix-synapse
-          curl https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh -o start.sh
-          chmod 777 start.sh
-          ./start.sh --no-rate-limit
+        uses: michaelkaye/setup-matrix-synapse@v0.3.0
+        with:
+          uploadLogs: true
+          httpPort: 8080
+          disableRateLimiting: true
       # package: org.matrix.android.sdk.session
       - name: Run integration tests for  Matrix SDK [org.matrix.android.sdk.session] API[${{ matrix.api-level }}]
         uses: reactivecircus/android-emulator-runner@v2
@@ -261,7 +216,7 @@ jobs:
         api-level: [ 28 ]
     # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python 3.8
         uses: actions/setup-python@v3
         with:
@@ -275,10 +230,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Start synapse server
-        run: |
-          pip install matrix-synapse
-          curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
-            | sed s/127.0.0.1/0.0.0.0/g | sed 's/http:\/\/localhost/http:\/\/10.0.2.2/g' | bash -s -- --no-rate-limit
+        uses: michaelkaye/setup-matrix-synapse@v0.3.0
+        with:
+          uploadLogs: true
+          httpPort: 8080
+          disableRateLimiting: true
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
@@ -298,7 +254,7 @@ jobs:
             touch emulator.log
             chmod 777 emulator.log
             adb logcat >> emulator.log &
-            ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || (adb pull storage/emulated/0/Pictures/failure_screenshots && exit 1 )
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || (adb pull storage/emulated/0/Pictures/failure_screenshots && exit 1 )
       - name: Upload Test Report Log
         uses: actions/upload-artifact@v2
         if: always()
@@ -311,7 +267,7 @@ jobs:
   codecov-units:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v2
         with: 
           distribution: 'adopt'
@@ -339,7 +295,7 @@ jobs:
     needs:
       - codecov-units
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
@@ -367,9 +323,6 @@ jobs:
     needs:
       - integration-tests
       - ui-tests
-#      - unit-tests
-      - build-android-test-matrix-sdk 
-      - build-android-test-app
       - sonarqube
     if: always() && github.event_name != 'workflow_dispatch'
     # No concurrency required, runs every time on a schedule.

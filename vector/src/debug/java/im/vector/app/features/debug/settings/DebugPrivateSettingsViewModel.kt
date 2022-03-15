@@ -22,9 +22,12 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.debug.features.DebugVectorOverrides
+import im.vector.app.features.debug.settings.DebugPrivateSettingsViewActions.SetAvatarCapabilityOverride
+import im.vector.app.features.debug.settings.DebugPrivateSettingsViewActions.SetDisplayNameCapabilityOverride
 import kotlinx.coroutines.launch
 
 class DebugPrivateSettingsViewModel @AssistedInject constructor(
@@ -40,10 +43,10 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<DebugPrivateSettingsViewModel, DebugPrivateSettingsViewState> by hiltMavericksViewModelFactory()
 
     init {
-        observeVectorDataStore()
+        observeVectorOverrides()
     }
 
-    private fun observeVectorDataStore() {
+    private fun observeVectorOverrides() {
         debugVectorOverrides.forceDialPad.setOnEach {
             copy(
                     dialPadVisible = it
@@ -52,13 +55,23 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         debugVectorOverrides.forceLoginFallback.setOnEach {
             copy(forceLoginFallback = it)
         }
+        debugVectorOverrides.forceHomeserverCapabilities.setOnEach {
+            val activeDisplayNameOption = BooleanHomeserverCapabilitiesOverride.from(it.canChangeDisplayName)
+            val activeAvatarOption = BooleanHomeserverCapabilitiesOverride.from(it.canChangeAvatar)
+            copy(homeserverCapabilityOverrides = homeserverCapabilityOverrides.copy(
+                    displayName = homeserverCapabilityOverrides.displayName.copy(activeOption = activeDisplayNameOption),
+                    avatar = homeserverCapabilityOverrides.avatar.copy(activeOption = activeAvatarOption),
+            ))
+        }
     }
 
     override fun handle(action: DebugPrivateSettingsViewActions) {
         when (action) {
             is DebugPrivateSettingsViewActions.SetDialPadVisibility         -> handleSetDialPadVisibility(action)
             is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
-        }
+            is SetDisplayNameCapabilityOverride                             -> handSetDisplayNameCapabilityOverride(action)
+            is SetAvatarCapabilityOverride                                  -> handSetAvatarCapabilityOverride(action)
+        }.exhaustive
     }
 
     private fun handleSetDialPadVisibility(action: DebugPrivateSettingsViewActions.SetDialPadVisibility) {
@@ -70,6 +83,20 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
     private fun handleSetForceLoginFallbackEnabled(action: DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled) {
         viewModelScope.launch {
             debugVectorOverrides.setForceLoginFallback(action.force)
+        }
+    }
+
+    private fun handSetDisplayNameCapabilityOverride(action: SetDisplayNameCapabilityOverride) {
+        viewModelScope.launch {
+            val forceDisplayName = action.option.toBoolean()
+            debugVectorOverrides.setHomeserverCapabilities { copy(canChangeDisplayName = forceDisplayName) }
+        }
+    }
+
+    private fun handSetAvatarCapabilityOverride(action: SetAvatarCapabilityOverride) {
+        viewModelScope.launch {
+            val forceAvatar = action.option.toBoolean()
+            debugVectorOverrides.setHomeserverCapabilities { copy(canChangeAvatar = forceAvatar) }
         }
     }
 }

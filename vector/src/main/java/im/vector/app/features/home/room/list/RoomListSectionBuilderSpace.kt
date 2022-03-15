@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
@@ -91,7 +92,18 @@ class RoomListSectionBuilderSpace(
                             session.getFilteredPagedRoomSummariesLive(qpm)
                                     .let { updatableFilterLivePageResult ->
                                         onUpdatable(updatableFilterLivePageResult)
-                                        sections.add(RoomsSection(name, updatableFilterLivePageResult.livePagedList))
+
+                                        val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
+                                                .flatMapLatest { session.getRoomCountFlow(updatableFilterLivePageResult.queryParams) }
+                                                .distinctUntilChanged()
+
+                                        sections.add(
+                                                RoomsSection(
+                                                        sectionName = name,
+                                                        livePages = updatableFilterLivePageResult.livePagedList,
+                                                        itemCount = itemCountFlow
+                                                )
+                                        )
                                     }
                         }
                 )
@@ -261,7 +273,8 @@ class RoomListSectionBuilderSpace(
                 RoomsSection(
                         sectionName = stringProvider.getString(R.string.suggested_header),
                         liveSuggested = liveSuggestedRooms,
-                        notifyOfLocalEcho = false
+                        notifyOfLocalEcho = false,
+                        itemCount = suggestedRoomsFlow.map { suggestions -> suggestions.size }
                 )
         )
     }
@@ -338,11 +351,9 @@ class RoomListSectionBuilderSpace(
                             RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                                 activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                                     override fun updateForSpaceId(roomId: String?) {
-                                        it.updateQuery {
-                                            it.copy(
-                                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
-                                            )
-                                        }
+                                        it.queryParams = roomQueryParams.copy(
+                                                activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
+                                        )
                                     }
                                 })
                             }
@@ -350,17 +361,13 @@ class RoomListSectionBuilderSpace(
                                 activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                                     override fun updateForSpaceId(roomId: String?) {
                                         if (roomId != null) {
-                                            it.updateQuery {
-                                                it.copy(
-                                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
-                                                )
-                                            }
+                                            it.queryParams = roomQueryParams.copy(
+                                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
+                                            )
                                         } else {
-                                            it.updateQuery {
-                                                it.copy(
-                                                        activeSpaceFilter = ActiveSpaceFilter.None
-                                                )
-                                            }
+                                            it.queryParams = roomQueryParams.copy(
+                                                    activeSpaceFilter = ActiveSpaceFilter.None
+                                            )
                                         }
                                     }
                                 })
@@ -390,11 +397,19 @@ class RoomListSectionBuilderSpace(
                                         .flowOn(Dispatchers.Default)
                                         .launchIn(viewModelScope)
 
+                                val itemCountFlow = livePagedList.asFlow()
+                                        .flatMapLatest {
+                                            val queryParams = roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
+                                            session.getRoomCountFlow(queryParams)
+                                        }
+                                        .distinctUntilChanged()
+
                                 sections.add(
                                         RoomsSection(
                                                 sectionName = name,
                                                 livePages = livePagedList,
-                                                notifyOfLocalEcho = notifyOfLocalEcho
+                                                notifyOfLocalEcho = notifyOfLocalEcho,
+                                                itemCount = itemCountFlow
                                         )
                                 )
                             }

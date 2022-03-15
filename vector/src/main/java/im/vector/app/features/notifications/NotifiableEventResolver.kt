@@ -191,7 +191,7 @@ class NotifiableEventResolver @Inject constructor(
         }
     }
 
-    private fun TimelineEvent.attemptToDecryptIfNeeded(session: Session) {
+    private suspend fun TimelineEvent.attemptToDecryptIfNeeded(session: Session) {
         if (root.isEncrypted() && root.mxDecryptionResult == null) {
             // TODO use a global event decryptor? attache to session and that listen to new sessionId?
             // for now decrypt sync
