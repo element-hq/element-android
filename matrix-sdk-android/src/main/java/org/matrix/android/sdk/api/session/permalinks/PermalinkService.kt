@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.permalinks
 
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 
 /**
  * Useful methods to create permalink (like matrix.to links or client permalinks).
@@ -80,4 +81,24 @@ interface PermalinkService {
      * @return the id from the url, ex: "@benoit:matrix.org", or null if the url is not a permalink
      */
     fun getLinkedId(url: String): String?
+
+    /**
+     * Creates a HTML mention span template. Can be used to replace a mention with a permalink to mentioned user.
+     * Ex: "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
+     *
+     * @param forceMatrixTo whether we should force using matrix.to base URL
+     *
+     * @return the HTML template
+     */
+    fun createHtmlMentionSpanTemplate(forceMatrixTo: Boolean = false): String
+
+    /**
+     * Creates a Markdown mention span template. Can be used to replace a mention with a permalink to mentioned user.
+     * Ex: "[%2\$s](https://matrix.to/#/%1\$s)"
+     *
+     * @param forceMatrixTo whether we should force using matrix.to base URL
+     *
+     * @return the HTML template
+     */
+    fun createMdMentionSpanTemplate(forceMatrixTo: Boolean = false): String
 }

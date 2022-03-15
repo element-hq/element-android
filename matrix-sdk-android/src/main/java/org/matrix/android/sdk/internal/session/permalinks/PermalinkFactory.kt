@@ -105,6 +105,28 @@ internal class PermalinkFactory @Inject constructor(
                 ?.substringBeforeLast("?")
     }
 
+    fun createHtmlMentionSpanTemplate(forceMatrixTo: Boolean): String {
+        return buildString {
+            append(MENTION_SPAN_TO_HTML_TEMPLATE_BEGIN)
+            append(baseUrl(forceMatrixTo))
+            if (useClientFormat(forceMatrixTo)) {
+                append(USER_PATH)
+            }
+            append(MENTION_SPAN_TO_HTML_TEMPLATE_END)
+        }
+    }
+
+    fun createMdMentionSpanTemplate(forceMatrixTo: Boolean): String {
+        return buildString {
+            append(MENTION_SPAN_TO_MD_TEMPLATE_BEGIN)
+            append(baseUrl(forceMatrixTo))
+            if (useClientFormat(forceMatrixTo)) {
+                append(USER_PATH)
+            }
+            append(MENTION_SPAN_TO_MD_TEMPLATE_END)
+        }
+    }
+
     /**
      * Escape '/' in id, because it is used as a separator
      *
@@ -145,7 +167,11 @@ internal class PermalinkFactory @Inject constructor(
 
     companion object {
         private const val ROOM_PATH = "room/"
-        const val USER_PATH = "user/"
+        private const val USER_PATH = "user/"
         private const val GROUP_PATH = "group/"
+        private const val MENTION_SPAN_TO_HTML_TEMPLATE_BEGIN = "<a href=\""
+        private const val MENTION_SPAN_TO_HTML_TEMPLATE_END = "%1\$s\">%2\$s</a>"
+        private const val MENTION_SPAN_TO_MD_TEMPLATE_BEGIN = "[%2\$s]("
+        private const val MENTION_SPAN_TO_MD_TEMPLATE_END = "%1\$s)"
     }
 }
