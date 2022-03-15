@@ -2250,4 +2250,6 @@
     <string name="a11y_error_message_not_sent">ההודעה לא נשלחה עקב שגיאה</string>
     <string name="a11y_unchecked">לא בָּדוּק</string>
     <string name="a11y_checked">בָּדוּק</string>
+    <string name="invite_by_email">הזמינו בדואר אלקטרוני</string>
+    <string name="invite_people_to_your_space_desc">זה רק אתה כרגע. %s יהיה טוב יותר עם אחרים.</string>
 </resources>
