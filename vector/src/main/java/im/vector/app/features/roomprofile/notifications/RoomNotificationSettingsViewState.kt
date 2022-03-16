@@ -40,14 +40,16 @@ data class RoomNotificationSettingsViewState(
  */
 val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotificationState>
     get() {
-        if ((roomSummary()?.isEncrypted == true && notificationState() == RoomNotificationState.MENTIONS_ONLY) ||
-                notificationState() == RoomNotificationState.ALL_MESSAGES) {
-            /** if in an encrypted room, mentions notifications are not supported so show "All Messages" as selected.
+        return when {
+            /**
+             * if in an encrypted room, mentions notifications are not supported so show "None" as selected.
              * Also in the new settings there is no notion of notifications without sound so it maps to noisy also
              */
-            return Success(RoomNotificationState.ALL_MESSAGES_NOISY)
+            (roomSummary()?.isEncrypted == true && notificationState() == RoomNotificationState.MENTIONS_ONLY)
+                                                                      -> Success(RoomNotificationState.MUTE)
+            notificationState() == RoomNotificationState.ALL_MESSAGES -> Success(RoomNotificationState.ALL_MESSAGES_NOISY)
+            else                                                      -> notificationState
         }
-        return  notificationState
     }
 
 /**
