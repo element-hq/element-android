@@ -38,6 +38,7 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.find
+import org.matrix.android.sdk.internal.database.query.findAll
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
@@ -80,7 +81,26 @@ internal class TokenChunkEventPersistor @Inject constructor(
 
                     val existingChunk = ChunkEntity.find(realm, roomId, prevToken = prevToken, nextToken = nextToken)
                     if (existingChunk != null) {
-                        Timber.v("This chunk is already in the db, returns")
+                        Timber.v("This chunk is already in the db, checking if this might be caused by broken links")
+                        if (direction == PaginationDirection.FORWARDS) {
+                            val prevChunks = ChunkEntity.findAll(realm, roomId, nextToken = prevToken)
+                            Timber.v("Found ${prevChunks?.size} prevChunks")
+                            prevChunks?.forEach {
+                                if (it.nextChunk != existingChunk) {
+                                    Timber.i("Set nextChunk for ${it.identifier()} from ${it.nextChunk?.identifier()} to ${existingChunk.identifier()}")
+                                    it.nextChunk = existingChunk
+                                }
+                            }
+                        } else {
+                            val nextChunks = ChunkEntity.findAll(realm, roomId, prevToken = nextToken)
+                            Timber.v("Found ${nextChunks?.size} nextChunks")
+                            nextChunks?.forEach {
+                                if (it.prevChunk != existingChunk) {
+                                    Timber.i("Set prevChunk for ${it.identifier()} from ${it.prevChunk?.identifier()} to ${existingChunk.identifier()}")
+                                    it.prevChunk = existingChunk
+                                }
+                            }
+                        }
                         return@awaitTransaction
                     }
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
