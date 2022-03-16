@@ -54,6 +54,9 @@ class DebugVectorFeatures(
     override fun isOnboardingPersonalizeEnabled(): Boolean = read(DebugFeatureKeys.onboardingPersonalize)
             ?: vectorFeatures.isOnboardingPersonalizeEnabled()
 
+    override fun isOnboardingCombinedChooseServerEnabled(): Boolean = read(DebugFeatureKeys.onboardingCombinedChooseServer)
+            ?: vectorFeatures.isOnboardingCombinedChooseServerEnabled()
+
     override fun isLiveLocationEnabled(): Boolean = read(DebugFeatureKeys.liveLocationSharing)
             ?: vectorFeatures.isLiveLocationEnabled()
 
@@ -109,5 +112,6 @@ object DebugFeatureKeys {
     val onboardingSplashCarousel = booleanPreferencesKey("onboarding-splash-carousel")
     val onboardingUseCase = booleanPreferencesKey("onbboarding-splash-carousel")
     val onboardingPersonalize = booleanPreferencesKey("onbboarding-personalize")
+    val onboardingCombinedChooseServer = booleanPreferencesKey("onbboarding-combined-choose-server")
     val liveLocationSharing = booleanPreferencesKey("live-location-sharing")
 }

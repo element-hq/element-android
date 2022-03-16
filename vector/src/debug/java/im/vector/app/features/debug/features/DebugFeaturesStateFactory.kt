@@ -55,6 +55,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                         factory = VectorFeatures::isOnboardingPersonalizeEnabled
                 ),
                 createBooleanFeature(
+                        label = "FTUE Personalize combined choose server",
+                        key = DebugFeatureKeys.onboardingCombinedChooseServer,
+                        factory = VectorFeatures::isOnboardingCombinedChooseServerEnabled
+                ),
+                createBooleanFeature(
                         label = "Live location sharing",
                         key = DebugFeatureKeys.liveLocationSharing,
                         factory = VectorFeatures::isLiveLocationEnabled
