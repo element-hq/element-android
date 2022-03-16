@@ -54,7 +54,7 @@ class LocationSharingFragment @Inject constructor(
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
-    private val viewNavigator: ILocationSharingNavigator by lazy { LocationSharingNavigator(activity) }
+    private val locationSharingNavigator: LocationSharingSettingsNavigator by lazy { DefaultLocationSharingSettingsNavigator(activity) }
 
     // Keep a ref to handle properly the onDestroy callback
     private var mapView: WeakReference<MapView>? = null
@@ -83,7 +83,7 @@ class LocationSharingFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                LocationSharingViewEvents.Close                     -> viewNavigator.quit()
+                LocationSharingViewEvents.Close                     -> locationSharingNavigator.quit()
                 LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
                 is LocationSharingViewEvents.ZoomToUserLocation     -> handleZoomToUserLocationEvent(it)
             }.exhaustive
@@ -93,8 +93,8 @@ class LocationSharingFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
         views.mapView.onResume()
-        if (viewNavigator.goingToAppSettings) {
-            viewNavigator.goingToAppSettings = false
+        if (locationSharingNavigator.goingToAppSettings) {
+            locationSharingNavigator.goingToAppSettings = false
             // retry to start live location
             tryStartLiveLocationSharing()
         }
@@ -149,7 +149,7 @@ class LocationSharingFragment @Inject constructor(
                 .setTitle(R.string.location_not_available_dialog_title)
                 .setMessage(R.string.location_not_available_dialog_content)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    viewNavigator.quit()
+                    locationSharingNavigator.quit()
                 }
                 .setCancelable(false)
                 .show()
@@ -160,7 +160,7 @@ class LocationSharingFragment @Inject constructor(
                 .setTitle(R.string.location_in_background_missing_permission_dialog_title)
                 .setMessage(R.string.location_in_background_missing_permission_dialog_content)
                 .setPositiveButton(R.string.settings) { _, _ ->
-                    viewNavigator.goToAppSettings()
+                    locationSharingNavigator.goToAppSettings()
                 }
                 .setNegativeButton(R.string.action_not_now, null)
                 .setCancelable(false)
