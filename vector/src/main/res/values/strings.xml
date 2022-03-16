@@ -1623,6 +1623,7 @@
 
     <!-- Create room screen -->
     <string name="create_room_action_create">"CREATE"</string>
+    <string name="create_room_action_go">Go</string>
     <string name="create_room_name_section">"Room name"</string>
     <string name="create_room_name_hint">"Name"</string>
     <string name="create_room_topic_section">"Room topic (optional)"</string>
