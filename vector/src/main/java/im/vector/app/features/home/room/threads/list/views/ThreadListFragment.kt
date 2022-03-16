@@ -30,6 +30,7 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentThreadListBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.animation.TimelineItemAnimator
 import im.vector.app.features.home.room.threads.ThreadsActivity
@@ -62,6 +63,7 @@ class ThreadListFragment @Inject constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.ThreadList
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

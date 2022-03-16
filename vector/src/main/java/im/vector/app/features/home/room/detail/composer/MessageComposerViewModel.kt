@@ -27,6 +27,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsComposer
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.command.CommandParser
@@ -188,6 +189,9 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleSendMessage(action: MessageComposerAction.SendMessage) {
         withState { state ->
+            analyticsTracker.capture(state.toAnalyticsComposer()).also {
+                setState { copy(startsThread = false) }
+            }
             when (state.sendMode) {
                 is SendMode.Regular -> {
                     when (val slashCommandResult = commandParser.parseSlashCommand(

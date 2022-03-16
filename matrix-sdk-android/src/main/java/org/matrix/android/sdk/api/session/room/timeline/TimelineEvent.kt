@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.room.timeline
 
 import org.matrix.android.sdk.BuildConfig
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -157,6 +158,13 @@ fun TimelineEvent.isPoll(): Boolean =
 
 fun TimelineEvent.isSticker(): Boolean {
     return root.isSticker()
+}
+
+/**
+ * Returns whether or not the event is a root thread event
+ */
+fun TimelineEvent.isRootThread(): Boolean {
+    return root.threadDetails?.isRootThread.orFalse()
 }
 
 /**
