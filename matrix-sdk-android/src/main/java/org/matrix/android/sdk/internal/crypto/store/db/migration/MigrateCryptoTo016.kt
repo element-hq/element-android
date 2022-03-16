@@ -42,6 +42,9 @@ class MigrateCryptoTo016(realm: DynamicRealm) : RealmMigrator(realm, 15) {
                 .addField(OutgoingKeyRequestEntityFields.REQUEST_STATE_STR, String::class.java)
                 .addIndex(OutgoingKeyRequestEntityFields.REQUEST_STATE_STR)
                 .addField(OutgoingKeyRequestEntityFields.REQUESTED_INFO_STR, String::class.java)
+                .addField(OutgoingKeyRequestEntityFields.ROOM_ID, String::class.java)
+                .addIndex(OutgoingKeyRequestEntityFields.ROOM_ID)
+                .addField(OutgoingKeyRequestEntityFields.REQUESTED_INDEX, String::class.java)
                 .addField(OutgoingKeyRequestEntityFields.CREATION_TIME_STAMP, Long::class.java)
                 .setNullable(OutgoingKeyRequestEntityFields.CREATION_TIME_STAMP, true)
 
@@ -50,6 +53,7 @@ class MigrateCryptoTo016(realm: DynamicRealm) : RealmMigrator(realm, 15) {
                 .setNullable(AuditTrailEntityFields.AGE_LOCAL_TS, true)
                 .addField(AuditTrailEntityFields.CONTENT_JSON, String::class.java)
                 .addField(AuditTrailEntityFields.TYPE, String::class.java)
+                .addIndex(AuditTrailEntityFields.TYPE)
 
         realm.schema.create("KeyRequestReplyEntity")
                 .addField(KeyRequestReplyEntityFields.SENDER_ID, String::class.java)

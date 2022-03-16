@@ -88,6 +88,12 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                                 TrailType.IncomingKeyRequest  -> {
                                     // no additional info
                                 }
+                                TrailType.IncomingKeyForward  -> {
+
+                                }
+                                TrailType.Unknown             -> {
+
+                                }
                             }
                         }
                     }.toEpoxyCharSequence()
