@@ -417,6 +417,16 @@ internal interface IMXCryptoStore {
             chainIndex: Long?
     )
 
+    fun saveIncomingForwardKeyAuditTrail(
+            roomId: String,
+            sessionId: String,
+            senderKey: String,
+            algorithm: String,
+            userId: String,
+            deviceId: String,
+            chainIndex: Long?
+    )
+
     fun addNewSessionListener(listener: NewSessionListener)
 
     fun removeSessionListener(listener: NewSessionListener)

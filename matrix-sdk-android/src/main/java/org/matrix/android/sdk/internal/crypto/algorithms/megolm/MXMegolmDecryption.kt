@@ -234,6 +234,15 @@ internal class MXMegolmDecryption(
                         fromDevice = fromDevice,
                         event = event)
 
+                cryptoStore.saveIncomingForwardKeyAuditTrail(
+                        roomId = roomKeyContent.roomId,
+                        sessionId = roomKeyContent.sessionId,
+                        senderKey = senderKey,
+                        algorithm = roomKeyContent.algorithm ?: "",
+                        userId = event.senderId ?: "",
+                        deviceId = fromDevice ?: "",
+                        chainIndex = index.toLong())
+
                 // The index is used to decide if we cancel sent request or if we wait for a better key
                 outgoingKeyRequestManager.postCancelRequestForSessionIfNeeded(roomKeyContent.sessionId, roomKeyContent.roomId, senderKey, index)
             }

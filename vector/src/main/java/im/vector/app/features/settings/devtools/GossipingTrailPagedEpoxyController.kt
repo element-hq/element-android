@@ -89,10 +89,13 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                                     // no additional info
                                 }
                                 TrailType.IncomingKeyForward  -> {
-
+                                    val fInfo = event.info as ForwardInfo
+                                    span("\nchainIndex: ") {
+                                        textStyle = "bold"
+                                    }
+                                    +"${fInfo.chainIndex}"
                                 }
                                 TrailType.Unknown             -> {
-
                                 }
                             }
                         }

@@ -49,6 +49,12 @@ class GossipingEventsSerializer {
                             append("code: ${it.code} ")
                         }
                     }
+                    TrailType.IncomingKeyForward -> {
+                        append("from:${info.userId}|${info.deviceId} - ")
+                        (trail.info as? ForwardInfo)?.let {
+                            append("chainIndex: ${it.chainIndex} ")
+                        }
+                    }
                     else                         -> {
                         append("??")
                     }
