@@ -46,10 +46,9 @@ val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotific
              * Also in the new settings there is no notion of notifications without sound so it maps to noisy also
              */
             (roomSummary()?.isEncrypted == true && notificationState() == RoomNotificationState.MENTIONS_ONLY)
-                 -> Success(RoomNotificationState.MUTE)
-            (roomSummary()?.isEncrypted == true && notificationState() == RoomNotificationState.ALL_MESSAGES)
-                 -> Success(RoomNotificationState.ALL_MESSAGES_NOISY)
-            else -> notificationState
+                                                                      -> Success(RoomNotificationState.MUTE)
+            notificationState() == RoomNotificationState.ALL_MESSAGES -> Success(RoomNotificationState.ALL_MESSAGES_NOISY)
+            else                                                      -> notificationState
         }
     }
 
