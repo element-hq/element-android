@@ -42,7 +42,7 @@ data class MessageLocationContent(
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
         @Json(name = "m.new_content") override val newContent: Content? = null,
         /**
-         * See https://github.com/matrix-org/matrix-doc/blob/matthew/location/proposals/3488-location.md
+         * See [MSC3488](https://github.com/matrix-org/matrix-doc/blob/matthew/location/proposals/3488-location.md)
          */
         @Json(name = "org.matrix.msc3488.location") val unstableLocationInfo: LocationInfo? = null,
         @Json(name = "m.location") val locationInfo: LocationInfo? = null,
@@ -54,10 +54,11 @@ data class MessageLocationContent(
         @Json(name = "org.matrix.msc1767.text") val unstableText: String? = null,
         @Json(name = "m.text") val text: String? = null,
         /**
-         * m.asset defines a generic asset that can be used for location tracking but also in other places like
+         * Defines a generic asset that can be used for location tracking but also in other places like
          * inventories, geofencing, checkins/checkouts etc.
          * It should contain a mandatory namespaced type key defining what particular asset is being referred to.
          * For the purposes of user location tracking m.self should be used in order to avoid duplicating the mxid.
+         * See [MSC3488](https://github.com/matrix-org/matrix-doc/blob/matthew/location/proposals/3488-location.md)
          */
         @Json(name = "org.matrix.msc3488.asset") val unstableLocationAsset: LocationAsset? = null,
         @Json(name = "m.asset") val locationAsset: LocationAsset? = null
