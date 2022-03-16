@@ -22,8 +22,6 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEnt
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.GossipingEventEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.IncomingGossipingRequestEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeyInfoEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeyRequestReplyEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity

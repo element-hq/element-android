@@ -311,10 +311,19 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         } else {
             Timber.v("## CRYPTO | downloadKeys() : starts")
             val t0 = System.currentTimeMillis()
-            val result = doKeyDownloadForUsers(downloadUsers)
-            Timber.v("## CRYPTO | downloadKeys() : doKeyDownloadForUsers succeeds after ${System.currentTimeMillis() - t0} ms")
-            result.also {
-                it.addEntriesFromMap(stored)
+            try {
+                val result = doKeyDownloadForUsers(downloadUsers)
+                Timber.v("## CRYPTO | downloadKeys() : doKeyDownloadForUsers succeeds after ${System.currentTimeMillis() - t0} ms")
+                result.also {
+                    it.addEntriesFromMap(stored)
+                }
+            } catch (failure: Throwable) {
+                Timber.w(failure, "## CRYPTO | downloadKeys() : doKeyDownloadForUsers failed after ${System.currentTimeMillis() - t0} ms")
+                if (forceDownload) {
+                    throw failure
+                } else {
+                    stored
+                }
             }
         }
     }

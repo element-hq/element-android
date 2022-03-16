@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -74,6 +75,21 @@ internal class SecretShareManager @Inject constructor(
      * so we can just store in memory.
      */
     private val outgoingSecretRequests = mutableListOf<SecretShareRequest>()
+
+    // the listeners
+    private val gossipingRequestListeners: MutableSet<GossipingRequestListener> = HashSet()
+
+    fun addListener(listener: GossipingRequestListener) {
+        synchronized(gossipingRequestListeners) {
+            gossipingRequestListeners.add(listener)
+        }
+    }
+
+    fun removeRoomKeysRequestListener(listener: GossipingRequestListener) {
+        synchronized(gossipingRequestListeners) {
+            gossipingRequestListeners.remove(listener)
+        }
+    }
 
     /**
      * Called when a session has been verified.
@@ -140,7 +156,11 @@ internal class SecretShareManager @Inject constructor(
                 else                       -> null
             }
             if (secretValue == null) {
-                Timber.e("The secret is unknown $secretName")
+                Timber.i("The secret is unknown $secretName, passing to app layer")
+                val toList = synchronized(gossipingRequestListeners) { gossipingRequestListeners.toList() }
+                toList.onEach { listener ->
+                    listener.onSecretShareRequest(request)
+                }
                 return
             }
 

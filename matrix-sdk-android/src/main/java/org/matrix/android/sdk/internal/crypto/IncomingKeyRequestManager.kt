@@ -26,10 +26,14 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyShareRequest
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
@@ -53,6 +57,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
         private val olmDevice: MXOlmDevice,
+        private val cryptoConfig: MXCryptoConfig,
         private val messageEncrypter: MessageEncrypter,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val sendToDeviceTask: SendToDeviceTask) {
@@ -71,6 +76,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
     }
 
     data class ValidMegolmRequestBody(
+            val requestId: String,
             val requestingUserId: String,
             val requestingDeviceId: String,
             val roomId: String,
@@ -87,6 +93,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
         val roomId = body.roomId ?: return null
         val sessionId = body.sessionId ?: return null
         val senderKey = body.senderKey ?: return null
+        val requestId = this.requestId ?: return null
         if (body.algorithm != MXCRYPTO_ALGORITHM_MEGOLM) return null
         val action = when (this.action) {
             "request"              -> MegolmRequestAction.Request
@@ -94,6 +101,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
             else                   -> null
         } ?: return null
         return ValidMegolmRequestBody(
+                requestId = requestId,
                 requestingUserId = senderId,
                 requestingDeviceId = deviceId,
                 roomId = roomId,
@@ -121,6 +129,21 @@ internal class IncomingKeyRequestManager @Inject constructor(
                         }
                         MegolmRequestAction.Cancel  -> {
                             // ignore, we can't cancel as it's not known (probably already processed)
+                            // still notify app layer if it was passed up previously
+                            IncomingRoomKeyRequest.fromRestRequest(senderId, request)?.let { iReq ->
+                                outgoingRequestScope.launch(coroutineDispatchers.computation) {
+                                    val listenersCopy = synchronized(gossipingRequestListeners) {
+                                        gossipingRequestListeners.toList()
+                                    }
+                                    listenersCopy.onEach {
+                                        tryOrNull {
+                                            withContext(coroutineDispatchers.main) {
+                                                it.onRequestCancelled(iReq)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 } else {
@@ -131,6 +154,18 @@ internal class IncomingKeyRequestManager @Inject constructor(
                         MegolmRequestAction.Cancel  -> {
                             // discard the request in buffer
                             incomingRequestBuffer.remove(existing)
+                            outgoingRequestScope.launch(coroutineDispatchers.computation) {
+                                val listenersCopy = synchronized(gossipingRequestListeners) {
+                                    gossipingRequestListeners.toList()
+                                }
+                                listenersCopy.onEach {
+                                    IncomingRoomKeyRequest.fromRestRequest(senderId, request)?.let { iReq ->
+                                        withContext(coroutineDispatchers.main) {
+                                            tryOrNull { it.onRequestCancelled(iReq) }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -170,6 +205,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
                         }
 
         cryptoStore.saveIncomingKeyRequestAuditTrail(
+                request.requestId,
                 request.roomId,
                 request.sessionId,
                 request.senderKey,
@@ -205,6 +241,10 @@ internal class IncomingKeyRequestManager @Inject constructor(
                 shareIfItWasPreviouslyShared(request, requestingDevice)
             }
         } else {
+            if (cryptoConfig.limitRoomKeyRequestsToMyDevices) {
+                Timber.tag(loggerTag.value).v("Ignore request from other user as per crypto config: ${request.shortDbgString()}")
+                return
+            }
             Timber.tag(loggerTag.value).v("handling request from other user: megolm session ${request.sessionId}")
             if (requestingDevice.isBlocked) {
                 // it's blocked, so send a withheld code
@@ -224,12 +264,39 @@ internal class IncomingKeyRequestManager @Inject constructor(
             // we share from the index it was previously shared with
             shareMegolmKey(request, requestingDevice, wasSessionSharedWithUser.chainIndex.toLong())
         } else {
-            sendWithheldForRequest(request, WithHeldCode.UNAUTHORISED)
-            // TODO if it's our device we could delegate to the app layer to decide?
+            val isOwnDevice = requestingDevice.userId == credentials.userId
+            sendWithheldForRequest(request, if (isOwnDevice) WithHeldCode.UNVERIFIED else WithHeldCode.UNAUTHORISED)
+            // if it's our device we could delegate to the app layer to decide
+            if (isOwnDevice) {
+                outgoingRequestScope.launch(coroutineDispatchers.computation) {
+                    val listenersCopy = synchronized(gossipingRequestListeners) {
+                        gossipingRequestListeners.toList()
+                    }
+                    val iReq = IncomingRoomKeyRequest(
+                            userId = requestingDevice.userId,
+                            deviceId = requestingDevice.deviceId,
+                            requestId = request.requestId,
+                            requestBody = RoomKeyRequestBody(
+                                    algorithm = MXCRYPTO_ALGORITHM_MEGOLM,
+                                    senderKey = request.senderKey,
+                                    sessionId = request.sessionId,
+                                    roomId = request.roomId
+                            ),
+                            localCreationTimestamp = System.currentTimeMillis()
+                    )
+                    listenersCopy.onEach {
+                        withContext(coroutineDispatchers.main) {
+                            tryOrNull { it.onRoomKeyRequest(iReq) }
+                        }
+                    }
+                }
+            }
         }
     }
 
     private suspend fun sendWithheldForRequest(request: ValidMegolmRequestBody, code: WithHeldCode) {
+        Timber.tag(loggerTag.value)
+                .w("Send withheld $code for req: ${request.shortDbgString()}")
         val withHeldContent = RoomKeyWithHeldContent(
                 roomId = request.roomId,
                 senderKey = request.senderKey,
@@ -253,13 +320,13 @@ internal class IncomingKeyRequestManager @Inject constructor(
             }
 
             cryptoStore.saveWithheldAuditTrail(
-                    request.roomId,
-                    request.sessionId,
-                    request.senderKey,
-                    MXCRYPTO_ALGORITHM_MEGOLM,
-                    code,
-                    request.requestingUserId,
-                    request.requestingDeviceId
+                    roomId = request.roomId,
+                    sessionId = request.sessionId,
+                    senderKey = request.senderKey,
+                    algorithm = MXCRYPTO_ALGORITHM_MEGOLM,
+                    code = code,
+                    userId = request.requestingUserId,
+                    deviceId = request.requestingDeviceId
             )
         } catch (failure: Throwable) {
             // Ignore it's not that important?
@@ -267,6 +334,31 @@ internal class IncomingKeyRequestManager @Inject constructor(
             Timber.tag(loggerTag.value)
                     .w("Failed to send withheld $code req: ${request.shortDbgString()} reason:${failure.localizedMessage}")
         }
+    }
+
+    suspend fun manuallyAcceptRoomKeyRequest(request: IncomingRoomKeyRequest) {
+        request.requestId ?: return
+        request.deviceId ?: return
+        request.userId ?: return
+        request.requestBody?.roomId ?: return
+        request.requestBody.senderKey ?: return
+        request.requestBody.sessionId ?: return
+        val validReq = ValidMegolmRequestBody(
+                requestId = request.requestId,
+                requestingDeviceId = request.deviceId,
+                requestingUserId = request.userId,
+                roomId = request.requestBody.roomId,
+                senderKey = request.requestBody.senderKey,
+                sessionId = request.requestBody.sessionId,
+                action = MegolmRequestAction.Request
+        )
+        val requestingDevice =
+                cryptoStore.getUserDevice(request.userId, request.deviceId)
+                        ?: return Unit.also {
+                            Timber.tag(loggerTag.value).d("Ignoring key request: ${validReq.shortDbgString()}")
+                        }
+
+        shareMegolmKey(validReq, requestingDevice, null)
     }
 
     private suspend fun shareMegolmKey(validRequest: ValidMegolmRequestBody,
@@ -341,14 +433,12 @@ internal class IncomingKeyRequestManager @Inject constructor(
 
     fun addRoomKeysRequestListener(listener: GossipingRequestListener) {
         synchronized(gossipingRequestListeners) {
-            // TODO
             gossipingRequestListeners.add(listener)
         }
     }
 
     fun removeRoomKeysRequestListener(listener: GossipingRequestListener) {
         synchronized(gossipingRequestListeners) {
-            // TODO
             gossipingRequestListeners.remove(listener)
         }
     }

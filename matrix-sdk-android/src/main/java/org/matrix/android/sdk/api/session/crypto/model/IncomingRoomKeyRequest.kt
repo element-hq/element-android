@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.api.session.crypto.model
 
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.internal.crypto.IncomingShareRequestCommon
+import org.matrix.android.sdk.internal.crypto.model.AuditTrail
+import org.matrix.android.sdk.internal.crypto.model.IncomingKeyRequestInfo
+import org.matrix.android.sdk.internal.crypto.model.TrailType
 
 /**
  * IncomingRoomKeyRequest class defines the incoming room keys request.
@@ -27,56 +27,61 @@ data class IncomingRoomKeyRequest(
         /**
          * The user id
          */
-        override val userId: String? = null,
+        val userId: String? = null,
 
         /**
          * The device id
          */
-        override val deviceId: String? = null,
+        val deviceId: String? = null,
 
         /**
          * The request id
          */
-        override val requestId: String? = null,
+        val requestId: String? = null,
 
         /**
          * The request body
          */
         val requestBody: RoomKeyRequestBody? = null,
 
-        val state: GossipingRequestState = GossipingRequestState.NONE,
-
-        /**
-         * The runnable to call to accept to share the keys
-         */
-        @Transient
-        var share: Runnable? = null,
-
-        /**
-         * The runnable to call to ignore the key share request.
-         */
-        @Transient
-        var ignore: Runnable? = null,
-        override val localCreationTimestamp: Long?
-) : IncomingShareRequestCommon {
+        val localCreationTimestamp: Long?
+) {
     companion object {
         /**
          * Factory
          *
          * @param event the event
          */
-        fun fromEvent(event: Event): IncomingRoomKeyRequest? {
-            return event.getClearContent()
-                    .toModel<RoomKeyShareRequest>()
+        fun fromEvent(trail: AuditTrail): IncomingRoomKeyRequest? {
+            return trail
+                    .takeIf { it.type == TrailType.IncomingKeyRequest }
+                    ?.let {
+                        it.info as? IncomingKeyRequestInfo
+                    }
                     ?.let {
                         IncomingRoomKeyRequest(
-                                userId = event.senderId,
-                                deviceId = it.requestingDeviceId,
+                                userId = it.userId,
+                                deviceId = it.deviceId,
                                 requestId = it.requestId,
-                                requestBody = it.body ?: RoomKeyRequestBody(),
-                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
+                                requestBody = RoomKeyRequestBody(
+                                        algorithm = it.alg,
+                                        roomId = it.roomId,
+                                        senderKey = it.senderKey,
+                                        sessionId = it.sessionId
+                                ),
+                                localCreationTimestamp = trail.ageLocalTs
                         )
                     }
+        }
+
+        fun fromRestRequest(senderId: String, request: RoomKeyShareRequest): IncomingRoomKeyRequest? {
+            return IncomingRoomKeyRequest(
+                    userId = senderId,
+                    deviceId = request.requestingDeviceId,
+                    requestId = request.requestId,
+                    requestBody = request.body,
+                    localCreationTimestamp = System.currentTimeMillis()
+            )
         }
     }
 }

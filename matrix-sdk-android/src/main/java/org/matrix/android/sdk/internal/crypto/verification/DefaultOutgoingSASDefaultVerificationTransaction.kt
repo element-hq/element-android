@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
 import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -32,7 +32,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         deviceId: String?,
         cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
-        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+        outgoingKeyRequestManager: OutgoingKeyRequestManager,
         secretShareManager: SecretShareManager,
         deviceFingerprint: String,
         transactionId: String,
@@ -44,7 +44,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         deviceId,
         cryptoStore,
         crossSigningService,
-        outgoingGossipingRequestManager,
+        outgoingKeyRequestManager,
         secretShareManager,
         deviceFingerprint,
         transactionId,

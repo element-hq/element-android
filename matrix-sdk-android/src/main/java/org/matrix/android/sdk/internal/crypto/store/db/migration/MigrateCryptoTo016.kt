@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,6 @@ class MigrateCryptoTo016(realm: DynamicRealm) : RealmMigrator(realm, 15) {
                 .addField(OutgoingKeyRequestEntityFields.CREATION_TIME_STAMP, Long::class.java)
                 .setNullable(OutgoingKeyRequestEntityFields.CREATION_TIME_STAMP, true)
 
-
         realm.schema.create("AuditTrailEntity")
                 .addField(AuditTrailEntityFields.AGE_LOCAL_TS, Long::class.java)
                 .setNullable(AuditTrailEntityFields.AGE_LOCAL_TS, true)
@@ -56,6 +55,5 @@ class MigrateCryptoTo016(realm: DynamicRealm) : RealmMigrator(realm, 15) {
                 .addField(KeyRequestReplyEntityFields.SENDER_ID, String::class.java)
                 .addField(KeyRequestReplyEntityFields.FROM_DEVICE, String::class.java)
                 .addField(KeyRequestReplyEntityFields.EVENT_JSON, String::class.java)
-
     }
 }

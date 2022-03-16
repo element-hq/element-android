@@ -62,10 +62,6 @@ class IncomingKeyRequestPagedController @Inject constructor(
                             textStyle = "bold"
                         }
                         +"${roomKeyRequest.deviceId}"
-                        span("\nstate: ") {
-                            textStyle = "bold"
-                        }
-                        +roomKeyRequest.state.name
                     }.toEpoxyCharSequence()
             )
         }

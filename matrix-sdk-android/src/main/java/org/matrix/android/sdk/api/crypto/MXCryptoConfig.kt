@@ -31,5 +31,11 @@ data class MXCryptoConfig constructor(
          * If set to false, the request will be forwarded to the application layer; in this
          * case the application can decide to prompt the user.
          */
-        val discardRoomKeyRequestsFromUntrustedDevices: Boolean = true
+        val discardRoomKeyRequestsFromUntrustedDevices: Boolean = true,
+
+        /**
+         * Currently megolm keys are requested to the sender device and to all of our devices.
+         * You can limit request only to your sessions by turning this setting to `true`
+         */
+        val limitRoomKeyRequestsToMyDevices: Boolean = false
 )

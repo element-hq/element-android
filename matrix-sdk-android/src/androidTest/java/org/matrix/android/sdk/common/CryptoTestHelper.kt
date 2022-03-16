@@ -19,6 +19,7 @@ package org.matrix.android.sdk.common
 import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.Observer
+import org.amshove.kluent.fail
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -31,6 +32,7 @@ import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
@@ -39,6 +41,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
@@ -46,11 +49,13 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxStat
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
@@ -299,7 +304,8 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
     }
 
@@ -308,7 +314,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
      */
     fun bootstrapSecurity(session: Session) {
         initializeCrossSigning(session)
-        val ssssService = session.sharedSecretStorageService
+        val ssssService = session.sharedSecretStorageService()
         testHelper.runBlockingTest {
             val keyInfo = ssssService.generateKey(
                     UUID.randomUUID().toString(),
@@ -369,7 +375,8 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
                 requestID,
                 roomId,
                 bob.myUserId,
-                bob.sessionParams.credentials.deviceId!!)
+                bob.sessionParams.credentials.deviceId!!
+        )
 
         // we should reach SHOW SAS on both
         var alicePovTx: OutgoingSasVerificationTransaction? = null
@@ -450,5 +457,51 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         }
 
         return CryptoTestData(roomId, sessions)
+    }
+
+    fun ensureCanDecrypt(sentEventIds: List<String>, session: Session, e2eRoomID: String, messagesText: List<String>) {
+        sentEventIds.forEachIndexed { index, sentEventId ->
+            testHelper.waitWithLatch { latch ->
+                testHelper.retryPeriodicallyWithLatch(latch) {
+                    val event = session.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
+                    testHelper.runBlockingTest {
+                        try {
+                            session.cryptoService().decryptEvent(event, "").let { result ->
+                                event.mxDecryptionResult = OlmDecryptionResult(
+                                        payload = result.clearEvent,
+                                        senderKey = result.senderCurve25519Key,
+                                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                                )
+                            }
+                        } catch (error: MXCryptoError) {
+                            // nop
+                        }
+                    }
+                    Log.v("TEST", "ensureCanDecrypt ${event.getClearType()} is ${event.getClearContent()}")
+                    event.getClearType() == EventType.MESSAGE &&
+                            messagesText[index] == event.getClearContent()?.toModel<MessageContent>()?.body
+                }
+            }
+        }
+    }
+
+    fun ensureCannotDecrypt(sentEventIds: List<String>, session: Session, e2eRoomID: String, expectedError: MXCryptoError.ErrorType? = null) {
+        sentEventIds.forEach { sentEventId ->
+            val event = session.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
+            testHelper.runBlockingTest {
+                try {
+                    session.cryptoService().decryptEvent(event, "")
+                    fail("Should not be able to decrypt event")
+                } catch (error: MXCryptoError) {
+                    val errorType = (error as? MXCryptoError.Base)?.errorType
+                    if (expectedError == null) {
+                        assertNotNull(errorType)
+                    } else {
+                        assertEquals("Unexpected reason", expectedError, errorType)
+                    }
+                }
+            }
+        }
     }
 }

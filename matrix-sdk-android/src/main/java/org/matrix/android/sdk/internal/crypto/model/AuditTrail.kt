@@ -65,7 +65,8 @@ data class IncomingKeyRequestInfo(
         override val senderKey: String,
         override val alg: String,
         override val userId: String,
-        override val deviceId: String
+        override val deviceId: String,
+        val requestId: String
 ) : AuditInfo
 
 data class AuditTrail(

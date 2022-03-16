@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.SasMode
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
 import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -42,7 +42,7 @@ internal abstract class SASDefaultVerificationTransaction(
         open val deviceId: String?,
         private val cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
-        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+        outgoingKeyRequestManager: OutgoingKeyRequestManager,
         secretShareManager: SecretShareManager,
         private val deviceFingerprint: String,
         transactionId: String,
@@ -52,7 +52,7 @@ internal abstract class SASDefaultVerificationTransaction(
 ) : DefaultVerificationTransaction(
         setDeviceVerificationAction,
         crossSigningService,
-        outgoingGossipingRequestManager,
+        outgoingKeyRequestManager,
         secretShareManager,
         userId,
         transactionId,

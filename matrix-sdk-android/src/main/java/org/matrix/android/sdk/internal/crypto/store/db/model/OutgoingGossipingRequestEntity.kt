@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import io.realm.RealmObject
 import io.realm.annotations.Index
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
 
 // not used anymore, just here for db migration
 internal open class OutgoingGossipingRequestEntity(
@@ -28,5 +27,5 @@ internal open class OutgoingGossipingRequestEntity(
         @Index var typeStr: String? = null
 ) : RealmObject() {
 
-    private var requestStateStr: String = OutgoingGossipingRequestState.UNSENT.name
+    private var requestStateStr: String = ""
 }

@@ -16,21 +16,18 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-internal interface IncomingShareRequestCommon {
-    /**
-     * The user id
-     */
-    val userId: String?
+enum class OutgoingRoomKeyRequestState {
+    UNSENT,
+    SENT,
+    SENT_THEN_CANCELED,
+    CANCELLATION_PENDING,
+    CANCELLATION_PENDING_AND_WILL_RESEND;
 
-    /**
-     * The device id
-     */
-    val deviceId: String?
-
-    /**
-     * The request id
-     */
-    val requestId: String?
-
-    val localCreationTimestamp: Long?
+    companion object {
+        fun pendingStates() = setOf(
+                UNSENT,
+                CANCELLATION_PENDING_AND_WILL_RESEND,
+                CANCELLATION_PENDING
+        )
+    }
 }

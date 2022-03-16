@@ -17,48 +17,31 @@
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import dagger.Lazy
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.withLock
-import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.crypto.model.ForwardedRoomKeyContent
-import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
-import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
-import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
-import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
-import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("MXMegolmDecryption", LoggerTag.CRYPTO)
 
-internal class MXMegolmDecryption(private val userId: String,
-                                  private val olmDevice: MXOlmDevice,
-                                  private val deviceListManager: DeviceListManager,
-                                  private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-                                  private val messageEncrypter: MessageEncrypter,
-                                  private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-                                  private val cryptoStore: IMXCryptoStore,
-                                  private val sendToDeviceTask: SendToDeviceTask,
-                                  private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                  private val cryptoCoroutineScope: CoroutineScope,
-                                  private val liveEventManager: Lazy<StreamEventsManager>
+internal class MXMegolmDecryption(
+        private val olmDevice: MXOlmDevice,
+        private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
+        private val cryptoStore: IMXCryptoStore,
+        private val liveEventManager: Lazy<StreamEventsManager>
 ) : IMXDecrypting {
 
     var newSessionListener: NewSessionListener? = null
@@ -122,23 +105,9 @@ internal class MXMegolmDecryption(private val userId: String,
                             if (throwable is MXCryptoError.OlmError) {
                                 // TODO Check the value of .message
                                 if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
-                                    // addEventToPendingList(event, timeline)
-                                    // The session might has been partially withheld (and only pass ratcheted)
-                                    val withHeldInfo = cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)
-                                    if (withHeldInfo != null) {
-                                        if (requestKeysOnFail) {
-                                            requestKeysForEvent(event, true)
-                                        }
-                                        // Encapsulate as withHeld exception
-                                        throw MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD,
-                                                withHeldInfo.code?.value ?: "",
-                                                withHeldInfo.reason)
-                                    }
-
                                     if (requestKeysOnFail) {
-                                        requestKeysForEvent(event, false)
+                                        requestKeysForEvent(event)
                                     }
-
                                     throw MXCryptoError.Base(
                                             MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX,
                                             "UNKNOWN_MESSAGE_INDEX",
@@ -154,25 +123,9 @@ internal class MXMegolmDecryption(private val userId: String,
                                         detailedReason)
                             }
                             if (throwable is MXCryptoError.Base) {
-                                if (
-                                /** if the session is unknown*/
-                                        throwable.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID
-                                ) {
-                                    val withHeldInfo = cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)
-                                    if (withHeldInfo != null) {
-                                        if (requestKeysOnFail) {
-                                            requestKeysForEvent(event, true)
-                                        }
-                                        // Encapsulate as withHeld exception
-                                        throw MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD,
-                                                withHeldInfo.code?.value ?: "",
-                                                withHeldInfo.reason)
-                                    } else {
-                                        // This is un-used in Matrix Android SDK2, not sure if needed
-                                        // addEventToPendingList(event, timeline)
-                                        if (requestKeysOnFail) {
-                                            requestKeysForEvent(event, false)
-                                        }
+                                if (throwable.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
+                                    if (requestKeysOnFail) {
+                                        requestKeysForEvent(event)
                                     }
                                 }
                             }
@@ -188,59 +141,9 @@ internal class MXMegolmDecryption(private val userId: String,
      *
      * @param event the event
      */
-    override fun requestKeysForEvent(event: Event, withHeld: Boolean) {
-        val sender = event.senderId ?: return
-        val encryptedEventContent = event.content.toModel<EncryptedEventContent>() ?: return Unit.also {
-            Timber.tag(loggerTag.value).e("requestRoomKeyForEvent Failed to re-request key, null content")
-        }
-        val senderDevice = encryptedEventContent.deviceId
-
-        val recipients = if (event.senderId == userId || withHeld) {
-            mapOf(
-                    userId to listOf("*")
-            )
-        } else {
-            // for the case where you share the key with a device that has a broken olm session
-            // The other user might Re-shares a megolm session key with devices if the key has already been
-            // sent to them.
-            mapOf(
-                    userId to listOf("*"),
-
-                    // TODO we might not have deviceId in the future due to https://github.com/matrix-org/matrix-spec-proposals/pull/3700
-                    // so in this case query to all
-                    sender to listOf(senderDevice ?: "*")
-            )
-        }
-
-        val requestBody = RoomKeyRequestBody(
-                roomId = event.roomId,
-                algorithm = encryptedEventContent.algorithm,
-                senderKey = encryptedEventContent.senderKey,
-                sessionId = encryptedEventContent.sessionId
-        )
-
-        outgoingGossipingRequestManager.postRoomKeyRequest(requestBody, recipients, force = withHeld)
+    private fun requestKeysForEvent(event: Event) {
+        outgoingKeyRequestManager.requestKeyForEvent(event, false)
     }
-
-//    /**
-//     * Add an event to the list of those we couldn't decrypt the first time we
-//     * saw them.
-//     *
-//     * @param event      the event to try to decrypt later
-//     * @param timelineId the timeline identifier
-//     */
-//    private fun addEventToPendingList(event: Event, timelineId: String) {
-//        val encryptedEventContent = event.content.toModel<EncryptedEventContent>() ?: return
-//        val pendingEventsKey = "${encryptedEventContent.senderKey}|${encryptedEventContent.sessionId}"
-//
-//        val timeline = pendingEvents.getOrPut(pendingEventsKey) { HashMap() }
-//        val events = timeline.getOrPut(timelineId) { ArrayList() }
-//
-//        if (event !in events) {
-//            Timber.v("## CRYPTO | addEventToPendingList() : add Event ${event.eventId} in room id ${event.roomId}")
-//            events.add(event)
-//        }
-//    }
 
     /**
      * Handle a key event.
@@ -289,16 +192,6 @@ internal class MXMegolmDecryption(private val userId: String,
             }
 
             keysClaimed["ed25519"] = forwardedRoomKeyContent.senderClaimedEd25519Key
-
-            val fromDevice = event.getSenderKey()?.let { cryptoStore.deviceWithIdentityKey(it) }?.deviceId
-
-            outgoingGossipingRequestManager.onRoomKeyForwarded(
-                    sessionId = roomKeyContent.sessionId,
-                    algorithm = roomKeyContent.algorithm ?: "",
-                    roomId = roomKeyContent.roomId,
-                    senderKey = forwardedRoomKeyContent.senderKey ?: "",
-                    fromDevice = fromDevice,
-                    event = event)
         } else {
             Timber.tag(loggerTag.value).i("onRoomKeyEvent(), Adding key : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
             if (null == senderKey) {
@@ -319,12 +212,37 @@ internal class MXMegolmDecryption(private val userId: String,
                 keysClaimed,
                 exportFormat)
 
-        if (added) {
+        when (added) {
+            is MXOlmDevice.AddSessionResult.Imported               -> added.ratchetIndex
+            is MXOlmDevice.AddSessionResult.NotImportedHigherIndex -> added.newIndex
+            else                                                   -> null
+        }?.let { index ->
+            if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
+                val fromDevice = (event.content?.get("sender_key") as? String)?.let { senderDeviceIdentityKey ->
+                    cryptoStore.getUserDeviceList(event.senderId ?: "")
+                            ?.firstOrNull {
+                                it.identityKey() == senderDeviceIdentityKey
+                            }
+                }?.deviceId
+
+                outgoingKeyRequestManager.onRoomKeyForwarded(
+                        sessionId = roomKeyContent.sessionId,
+                        algorithm = roomKeyContent.algorithm ?: "",
+                        roomId = roomKeyContent.roomId,
+                        senderKey = senderKey,
+                        fromIndex = index,
+                        fromDevice = fromDevice,
+                        event = event)
+
+                // The index is used to decide if we cancel sent request or if we wait for a better key
+                outgoingKeyRequestManager.postCancelRequestForSessionIfNeeded(roomKeyContent.sessionId, roomKeyContent.roomId, senderKey, index)
+            }
+        }
+
+        if (added is MXOlmDevice.AddSessionResult.Imported) {
             Timber.tag(loggerTag.value)
                     .d("onRoomKeyEvent(${event.getClearType()}) : Added megolm session ${roomKeyContent.sessionId} in ${roomKeyContent.roomId}")
             defaultKeysBackupService.maybeBackupKeys()
-
-            outgoingGossipingRequestManager.postCancelRequestForSessionIfNeeded(roomKeyContent.sessionId, roomKeyContent.roomId, senderKey)
 
             onNewSession(roomKeyContent.roomId, senderKey, roomKeyContent.sessionId)
         }
@@ -341,72 +259,4 @@ internal class MXMegolmDecryption(private val userId: String,
         Timber.tag(loggerTag.value).v("ON NEW SESSION $sessionId - $senderKey")
         newSessionListener?.onNewSession(roomId, senderKey, sessionId)
     }
-
-    override fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean {
-        val roomId = request.requestBody?.roomId ?: return false
-        val senderKey = request.requestBody.senderKey ?: return false
-        val sessionId = request.requestBody.sessionId ?: return false
-        return olmDevice.hasInboundSessionKeys(roomId, senderKey, sessionId)
-    }
-
-    override fun shareKeysWithDevice(request: IncomingRoomKeyRequest) {
-        // sanity checks
-        if (request.requestBody == null) {
-            return
-        }
-        val userId = request.userId ?: return
-
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            val body = request.requestBody
-            val sessionHolder = try {
-                olmDevice.getInboundGroupSession(body.sessionId, body.senderKey, body.roomId)
-            } catch (failure: Throwable) {
-                Timber.tag(loggerTag.value).e(failure, "shareKeysWithDevice: failed to get session for request $body")
-                return@launch
-            }
-
-            val export = sessionHolder.mutex.withLock {
-                sessionHolder.wrapper.exportKeys()
-            } ?: return@launch Unit.also {
-                Timber.tag(loggerTag.value).e("shareKeysWithDevice: failed to export group session ${body.sessionId}")
-            }
-
-            runCatching { deviceListManager.downloadKeys(listOf(userId), false) }
-                    .mapCatching {
-                        val deviceId = request.deviceId
-                        val deviceInfo = cryptoStore.getUserDevice(userId, deviceId ?: "")
-                        if (deviceInfo == null) {
-                            throw RuntimeException()
-                        } else {
-                            val devicesByUser = mapOf(userId to listOf(deviceInfo))
-                            val usersDeviceMap = ensureOlmSessionsForDevicesAction.handle(devicesByUser)
-                            val olmSessionResult = usersDeviceMap.getObject(userId, deviceId)
-                            if (olmSessionResult?.sessionId == null) {
-                                // no session with this device, probably because there
-                                // were no one-time keys.
-                                Timber.tag(loggerTag.value).e("no session with this device $deviceId, probably because there were no one-time keys.")
-                                return@mapCatching
-                            }
-                            Timber.tag(loggerTag.value).i("shareKeysWithDevice() : sharing session ${body.sessionId} with device $userId:$deviceId")
-
-                            val payloadJson = mapOf(
-                                    "type" to EventType.FORWARDED_ROOM_KEY,
-                                    "content" to export
-                            )
-
-                            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
-                            val sendToDeviceMap = MXUsersDevicesMap<Any>()
-                            sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
-                            Timber.tag(loggerTag.value).i("shareKeysWithDevice() : sending ${body.sessionId} to $userId:$deviceId")
-                            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-                            try {
-                                sendToDeviceTask.execute(sendToDeviceParams)
-                            } catch (failure: Throwable) {
-                                Timber.tag(loggerTag.value).e(failure, "shareKeysWithDevice() : Failed to send ${body.sessionId} to $userId:$deviceId")
-                            }
-                        }
-                    }
-        }
-    }
-
 }

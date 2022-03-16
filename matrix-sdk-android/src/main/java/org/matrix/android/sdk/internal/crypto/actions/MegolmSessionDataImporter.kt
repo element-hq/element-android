@@ -17,12 +17,13 @@
 package org.matrix.android.sdk.internal.crypto.actions
 
 import androidx.annotation.WorkerThread
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
 import org.matrix.android.sdk.internal.crypto.RoomDecryptorProvider
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmDecryption
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -33,7 +34,7 @@ private val loggerTag = LoggerTag("MegolmSessionDataImporter", LoggerTag.CRYPTO)
 
 internal class MegolmSessionDataImporter @Inject constructor(private val olmDevice: MXOlmDevice,
                                                              private val roomDecryptorProvider: RoomDecryptorProvider,
-                                                             private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+                                                             private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
                                                              private val cryptoStore: IMXCryptoStore) {
 
     /**
@@ -71,10 +72,15 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
                     // cancel any outstanding room key requests for this session
 
                     Timber.tag(loggerTag.value).d("Imported megolm session $sessionId from backup=$fromBackup in ${megolmSessionData.roomId}")
-                    outgoingGossipingRequestManager.postCancelRequestForSessionIfNeeded(
+                    outgoingKeyRequestManager.postCancelRequestForSessionIfNeeded(
                             megolmSessionData.sessionId ?: "",
                             megolmSessionData.roomId ?: "",
-                            megolmSessionData.senderKey ?: ""
+                            megolmSessionData.senderKey ?: "",
+                            tryOrNull {
+                                olmInboundGroupSessionWrappers
+                                        .firstOrNull { it.olmInboundGroupSession?.sessionIdentifier() == megolmSessionData.sessionId }
+                                        ?.firstKnownIndex?.toInt()
+                            } ?: 0
                     )
 
                     // Have another go at decrypting events sent with this session

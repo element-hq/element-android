@@ -25,22 +25,19 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.api.session.crypto.model.GossipingRequestState
-import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequestState
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.IncomingShareRequestCommon
 import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequest
-import org.matrix.android.sdk.internal.crypto.OutgoingSecretRequest
+import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequestState
 import org.matrix.android.sdk.internal.crypto.model.AuditTrail
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
+import org.matrix.android.sdk.internal.crypto.model.TrailType
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmOutboundGroupSession
@@ -126,18 +123,6 @@ internal interface IMXCryptoStore {
      * @return the devices statuses map (userId -> tracking status)
      */
     fun getDeviceTrackingStatuses(): Map<String, Int>
-
-    /**
-     * @return the pending IncomingRoomKeyRequest requests
-     */
-    fun getPendingIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
-
-    fun getPendingIncomingGossipingRequests(): List<IncomingShareRequestCommon>
-
-    fun storeIncomingGossipingRequest(request: IncomingShareRequestCommon, ageLocalTS: Long?)
-
-    fun storeIncomingGossipingRequests(requests: List<IncomingShareRequestCommon>)
-//    fun getPendingIncomingSecretShareRequests(): List<IncomingSecretShareRequest>
 
     /**
      * Indicate if the store contains data for the passed account.
@@ -389,25 +374,21 @@ internal interface IMXCryptoStore {
      * @param request the request
      * @return either the same instance as passed in, or the existing one.
      */
-    fun getOrAddOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody, recipients: Map<String, List<String>>): OutgoingKeyRequest
+    fun getOrAddOutgoingRoomKeyRequest(requestBody: RoomKeyRequestBody, recipients: Map<String, List<String>>, fromIndex: Int): OutgoingKeyRequest
     fun updateOutgoingRoomKeyRequestState(requestId: String, newState: OutgoingRoomKeyRequestState)
+    fun updateOutgoingRoomKeyRequiredIndex(requestId: String, newIndex: Int)
     fun updateOutgoingRoomKeyReply(
             roomId: String,
             sessionId: String,
             algorithm: String,
-            senderKey: String, fromDevice: String?, event: Event)
+            senderKey: String,
+            fromDevice: String?,
+            event: Event)
 
     fun deleteOutgoingRoomKeyRequest(requestId: String)
 
-    fun getOrAddOutgoingSecretShareRequest(secretName: String, recipients: Map<String, List<String>>): OutgoingSecretRequest?
-
-    @Deprecated("TODO")
-    fun saveGossipingEvent(event: Event) = saveGossipingEvents(listOf(event))
-
-    @Deprecated("TODO")
-    fun saveGossipingEvents(events: List<Event>)
-
     fun saveIncomingKeyRequestAuditTrail(
+            requestId: String,
             roomId: String,
             sessionId: String,
             senderKey: String,
@@ -435,32 +416,6 @@ internal interface IMXCryptoStore {
             deviceId: String,
             chainIndex: Long?
     )
-
-    fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState) {
-        updateGossipingRequestState(
-                requestUserId = request.userId,
-                requestDeviceId = request.deviceId,
-                requestId = request.requestId,
-                state = state
-        )
-    }
-
-    fun updateGossipingRequestState(requestUserId: String?,
-                                    requestDeviceId: String?,
-                                    requestId: String?,
-                                    state: GossipingRequestState)
-
-    /**
-     * Search an IncomingRoomKeyRequest
-     *
-     * @param userId    the user id
-     * @param deviceId  the device id
-     * @param requestId the request id
-     * @return an IncomingRoomKeyRequest if it exists, else null
-     */
-    fun getIncomingRoomKeyRequest(userId: String, deviceId: String, requestId: String): IncomingRoomKeyRequest?
-
-    fun updateOutgoingGossipingRequestState(requestId: String, state: OutgoingRoomKeyRequestState)
 
     fun addNewSessionListener(listener: NewSessionListener)
 
@@ -522,11 +477,8 @@ internal interface IMXCryptoStore {
 
     fun getOutgoingRoomKeyRequests(): List<OutgoingKeyRequest>
     fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingKeyRequest>>
-    fun getOutgoingSecretKeyRequests(): List<OutgoingSecretRequest>
-    fun getOutgoingSecretRequest(secretName: String): OutgoingSecretRequest?
-    fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
-    fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>>
     fun getGossipingEventsTrail(): LiveData<PagedList<AuditTrail>>
+    fun <T> getGossipingEventsTrail(type: TrailType, mapper: ((AuditTrail) -> T)): LiveData<PagedList<T>>
     fun getGossipingEvents(): List<AuditTrail>
 
     fun setDeviceKeysUploaded(uploaded: Boolean)

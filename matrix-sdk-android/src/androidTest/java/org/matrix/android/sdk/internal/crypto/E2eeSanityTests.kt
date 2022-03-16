@@ -34,7 +34,6 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
@@ -296,7 +295,7 @@ class E2eeSanityTests : InstrumentedTest {
             }
         }
         // after initial sync events are not decrypted, so we have to try manually
-        ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
+        cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
 
         // Let's now import keys from backup
 
@@ -317,7 +316,7 @@ class E2eeSanityTests : InstrumentedTest {
         }
 
         // ensure bob can now decrypt
-        ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
+        cryptoTestHelper.ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
 
         testHelper.signOutAndClose(newBobSession)
     }
@@ -368,7 +367,7 @@ class E2eeSanityTests : InstrumentedTest {
         // check that new bob can't currently decrypt
         Log.v("#E2E TEST", "check that new bob can't currently decrypt")
 
-        ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
+        cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
 //        newBobSession.cryptoService().getOutgoingRoomKeyRequests()
 //                .firstOrNull {
 //                    it.sessionId ==
@@ -408,7 +407,7 @@ class E2eeSanityTests : InstrumentedTest {
             }
         }
 
-        ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
+        cryptoTestHelper.ensureCannotDecrypt(sentEventIds, newBobSession, e2eRoomID, null)
 
         // Now mark new bob session as verified
 
@@ -421,7 +420,7 @@ class E2eeSanityTests : InstrumentedTest {
             newBobSession.cryptoService().reRequestRoomKeyForEvent(event)
         }
 
-        ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
+        cryptoTestHelper.ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
 
         cryptoTestData.cleanUp(testHelper)
         testHelper.signOutAndClose(newBobSession)
@@ -467,7 +466,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // check that new bob can't currently decrypt
         Log.v("#E2E TEST", "check that new bob can't currently decrypt")
-        ensureCannotDecrypt(listOf(firstEventId), newBobSession, e2eRoomID, MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
+        cryptoTestHelper.ensureCannotDecrypt(listOf(firstEventId), newBobSession, e2eRoomID, MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
 
         // Now let alice send a new message. this time the new bob session will be able to decrypt
         var secondEventId: String
@@ -686,8 +685,13 @@ class E2eeSanityTests : InstrumentedTest {
         // wait for secret gossiping to happen
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
-                aliceNewSession.cryptoService().crossSigningService().allPrivateKeysKnown() &&
-                        aliceNewSession.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo() != null
+                aliceNewSession.cryptoService().crossSigningService().allPrivateKeysKnown()
+            }
+        }
+
+        testHelper.waitWithLatch { latch ->
+            testHelper.retryPeriodicallyWithLatch(latch) {
+                aliceNewSession.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo() != null
             }
         }
 
@@ -765,32 +769,6 @@ class E2eeSanityTests : InstrumentedTest {
         }
     }
 
-    private fun ensureCanDecrypt(sentEventIds: MutableList<String>, session: Session, e2eRoomID: String, messagesText: List<String>) {
-        sentEventIds.forEachIndexed { index, sentEventId ->
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val event = session.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
-                    testHelper.runBlockingTest {
-                        try {
-                            session.cryptoService().decryptEvent(event, "").let { result ->
-                                event.mxDecryptionResult = OlmDecryptionResult(
-                                        payload = result.clearEvent,
-                                        senderKey = result.senderCurve25519Key,
-                                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                                )
-                            }
-                        } catch (error: MXCryptoError) {
-                            // nop
-                        }
-                    }
-                    event.getClearType() == EventType.MESSAGE &&
-                            messagesText[index] == event.getClearContent()?.toModel<MessageContent>()?.body
-                }
-            }
-        }
-    }
-
     private fun ensureIsDecrypted(sentEventIds: List<String>, session: Session, e2eRoomID: String) {
         testHelper.waitWithLatch { latch ->
             sentEventIds.forEach { sentEventId ->
@@ -799,25 +777,6 @@ class E2eeSanityTests : InstrumentedTest {
                     timeLineEvent != null &&
                             timeLineEvent.isEncrypted() &&
                             timeLineEvent.root.getClearType() == EventType.MESSAGE
-                }
-            }
-        }
-    }
-
-    private fun ensureCannotDecrypt(sentEventIds: List<String>, newBobSession: Session, e2eRoomID: String, expectedError: MXCryptoError.ErrorType?) {
-        sentEventIds.forEach { sentEventId ->
-            val event = newBobSession.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
-            testHelper.runBlockingTest {
-                try {
-                    newBobSession.cryptoService().decryptEvent(event, "")
-                    fail("Should not be able to decrypt event")
-                } catch (error: MXCryptoError) {
-                    val errorType = (error as? MXCryptoError.Base)?.errorType
-                    if (expectedError == null) {
-                        Assert.assertNotNull(errorType)
-                    } else {
-                        assertEquals(expectedError, errorType, "Unexpected reason")
-                    }
                 }
             }
         }

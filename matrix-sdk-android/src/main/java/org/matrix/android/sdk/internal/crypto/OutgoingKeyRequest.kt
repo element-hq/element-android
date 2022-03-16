@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ data class RequestReply(
 )
 
 sealed class RequestResult {
-    object Success : RequestResult()
+    data class  Success(val chainIndex: Int) : RequestResult()
     data class Failure(val code: WithHeldCode) : RequestResult()
 }
 
@@ -35,6 +35,7 @@ data class OutgoingKeyRequest(
         var requestBody: RoomKeyRequestBody?,
         // recipients for the request map of users to list of deviceId
         val recipients: Map<String, List<String>>,
+        val fromIndex: Int,
         // Unique id for this request. Used for both
         // an id within the request for later pairing with a cancellation, and for
         // the transaction id when sending the to_device messages to our local

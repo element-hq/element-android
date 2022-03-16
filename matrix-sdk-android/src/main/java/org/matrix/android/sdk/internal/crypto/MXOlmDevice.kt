@@ -585,6 +585,13 @@ internal class MXOlmDevice @Inject constructor(
 
     //  Inbound group session
 
+    sealed class AddSessionResult {
+        data class Imported(val ratchetIndex: Int) : AddSessionResult()
+        abstract class Failure : AddSessionResult()
+        object NotImported : Failure()
+        data class NotImportedHigherIndex(val newIndex: Int) : AddSessionResult()
+    }
+
     /**
      * Add an inbound group session to the session store.
      *
@@ -603,7 +610,7 @@ internal class MXOlmDevice @Inject constructor(
                                senderKey: String,
                                forwardingCurve25519KeyChain: List<String>,
                                keysClaimed: Map<String, String>,
-                               exportFormat: Boolean): Boolean {
+                               exportFormat: Boolean): AddSessionResult {
         val candidateSession = OlmInboundGroupSessionWrapper2(sessionKey, exportFormat)
         val existingSessionHolder = tryOrNull { getInboundGroupSession(sessionId, senderKey, roomId) }
         val existingSession = existingSessionHolder?.wrapper
@@ -611,7 +618,7 @@ internal class MXOlmDevice @Inject constructor(
         if (existingSession != null) {
             Timber.tag(loggerTag.value).d("## addInboundGroupSession() check if known session is better than candidate session")
             try {
-                val existingFirstKnown = existingSession.firstKnownIndex ?: return false.also {
+                val existingFirstKnown = existingSession.firstKnownIndex ?: return AddSessionResult.NotImported.also {
                     // This is quite unexpected, could throw if native was released?
                     Timber.tag(loggerTag.value).e("## addInboundGroupSession() null firstKnownIndex on existing session")
                     candidateSession.olmInboundGroupSession?.releaseSession()
@@ -622,12 +629,12 @@ internal class MXOlmDevice @Inject constructor(
                 if (newKnownFirstIndex != null && existingFirstKnown <= newKnownFirstIndex) {
                     Timber.tag(loggerTag.value).d("## addInboundGroupSession() : ignore session our is better $senderKey/$sessionId")
                     candidateSession.olmInboundGroupSession?.releaseSession()
-                    return false
+                    return AddSessionResult.NotImportedHigherIndex(newKnownFirstIndex.toInt())
                 }
             } catch (failure: Throwable) {
                 Timber.tag(loggerTag.value).e("## addInboundGroupSession() Failed to add inbound: ${failure.localizedMessage}")
                 candidateSession.olmInboundGroupSession?.releaseSession()
-                return false
+                return AddSessionResult.NotImported
             }
         }
 
@@ -637,19 +644,19 @@ internal class MXOlmDevice @Inject constructor(
         val candidateOlmInboundSession = candidateSession.olmInboundGroupSession
         if (null == candidateOlmInboundSession) {
             Timber.tag(loggerTag.value).e("## addInboundGroupSession : invalid session <null>")
-            return false
+            return AddSessionResult.NotImported
         }
 
         try {
             if (candidateOlmInboundSession.sessionIdentifier() != sessionId) {
                 Timber.tag(loggerTag.value).e("## addInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
                 candidateOlmInboundSession.releaseSession()
-                return false
+                return AddSessionResult.NotImported
             }
         } catch (e: Throwable) {
             candidateOlmInboundSession.releaseSession()
             Timber.tag(loggerTag.value).e(e, "## addInboundGroupSession : sessionIdentifier() failed")
-            return false
+            return AddSessionResult.NotImported
         }
 
         candidateSession.senderKey = senderKey
@@ -663,7 +670,7 @@ internal class MXOlmDevice @Inject constructor(
             inboundGroupSessionStore.storeInBoundGroupSession(InboundGroupSessionHolder(candidateSession), sessionId, senderKey)
         }
 
-        return true
+        return AddSessionResult.Imported(candidateSession.firstKnownIndex?.toInt() ?: 0)
     }
 
     /**

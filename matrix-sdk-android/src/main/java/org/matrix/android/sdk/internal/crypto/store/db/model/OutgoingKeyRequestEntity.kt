@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,10 +32,10 @@ import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.internal.crypto.RequestReply
 import org.matrix.android.sdk.internal.crypto.RequestResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import timber.log.Timber
 
 internal open class OutgoingKeyRequestEntity(
         @Index var requestId: String? = null,
+        var requestedIndex: Int? = null,
         var recipientsData: String? = null,
         var requestedInfoStr: String? = null,
         var creationTimeStamp: Long? = null,
@@ -84,7 +84,6 @@ internal open class OutgoingKeyRequestEntity(
     }
 
     fun addReply(userId: String, fromDevice: String?, event: Event) {
-        Timber.w("##VALR: add reply $userId / $fromDevice  / $event")
         val newReply = KeyRequestReplyEntity(
                 senderId = userId,
                 fromDevice = fromDevice,
@@ -98,6 +97,7 @@ internal open class OutgoingKeyRequestEntity(
                 requestBody = getRequestedKeyInfo(),
                 recipients = getRecipients().orEmpty(),
                 requestId = requestId ?: "",
+                fromIndex = requestedIndex ?: 0,
                 state = requestState,
                 results = replies.mapNotNull { entity ->
                     val userId = entity.senderId ?: return@mapNotNull null
@@ -107,9 +107,9 @@ internal open class OutgoingKeyRequestEntity(
                         eventToResult(event)
                     } ?: return@mapNotNull null
                     RequestReply(
-                            userId,
-                            entity.fromDevice,
-                            result
+                            userId = userId,
+                            fromDevice = entity.fromDevice,
+                            result = result
                     )
                 }
         )
@@ -123,7 +123,7 @@ internal open class OutgoingKeyRequestEntity(
                 }
             }
             EventType.FORWARDED_ROOM_KEY -> {
-                RequestResult.Success
+                RequestResult.Success((event.content?.get("chain_index") as? Number)?.toInt() ?: 0)
             }
             else                         -> null
         }
