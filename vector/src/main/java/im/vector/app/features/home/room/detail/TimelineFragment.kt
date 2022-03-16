@@ -1771,13 +1771,11 @@ class TimelineFragment @Inject constructor(
             }
             is RoomDetailAction.ResumeVerification        -> {
                 val otherUserId = data.otherUserId ?: return
-                VerificationBottomSheet().apply {
-                    setArguments(VerificationBottomSheet.VerificationArgs(
-                            otherUserId = otherUserId,
-                            verificationId = data.transactionId,
-                            roomId = timelineArgs.roomId
-                    ))
-                }.show(parentFragmentManager, "REQ")
+                VerificationBottomSheet.withArgs(
+                        roomId = timelineArgs.roomId,
+                        otherUserId = otherUserId,
+                        transactionId = data.transactionId,
+                ).show(parentFragmentManager, "REQ")
             }
         }
     }
