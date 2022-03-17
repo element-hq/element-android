@@ -46,13 +46,13 @@ sealed interface OnboardingAction : VectorViewModelAction {
     data class PostRegisterAction(val registerAction: RegisterAction) : OnboardingAction
 
     // Reset actions
-    open class ResetAction : OnboardingAction
+    sealed interface ResetAction : OnboardingAction
 
-    object ResetHomeServerType : ResetAction()
-    object ResetHomeServerUrl : ResetAction()
-    object ResetSignMode : ResetAction()
-    object ResetLogin : ResetAction()
-    object ResetResetPassword : ResetAction()
+    object ResetHomeServerType : ResetAction
+    object ResetHomeServerUrl : ResetAction
+    object ResetSignMode : ResetAction
+    object ResetLogin : ResetAction
+    object ResetResetPassword : ResetAction
 
     // Homeserver history
     object ClearHomeServerHistory : OnboardingAction
