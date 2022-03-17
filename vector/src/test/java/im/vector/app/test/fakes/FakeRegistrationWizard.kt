@@ -24,15 +24,7 @@ import org.matrix.android.sdk.api.session.Session
 
 class FakeRegistrationWizard : RegistrationWizard by mockk() {
 
-    fun givenSuccessfulDummy(session: Session) {
-        givenSuccessFor(session) { dummy() }
-    }
-
     fun givenSuccessFor(result: Session, expect: suspend RegistrationWizard.() -> RegistrationResult) {
         coEvery { expect(this@FakeRegistrationWizard) } returns RegistrationResult.Success(result)
-    }
-
-    fun givenSuccessfulAcceptTerms(session: Session) {
-        coEvery { acceptTerms() } returns RegistrationResult.Success(session)
     }
 }
