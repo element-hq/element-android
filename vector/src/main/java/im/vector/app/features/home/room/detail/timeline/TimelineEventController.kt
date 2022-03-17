@@ -57,6 +57,7 @@ import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryEve
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptsItem
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
+import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
@@ -127,7 +128,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun onEventVisible(event: TimelineEvent)
         fun onRoomCreateLinkClicked(url: String)
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
-        fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View)
+        fun onImageMessageClicked(messageImageContent: MessageImageInfoContent,
+                                  mediaData: ImageContentRenderer.Data,
+                                  view: View,
+                                  inMemory: List<AttachmentData>)
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
 
         //        fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)
