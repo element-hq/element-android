@@ -209,14 +209,14 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun tryStartLiveLocationSharing() {
-        // TODO handle Android 11+ case => cannot ask runtime permission for background location
-        //  when ActivityCompat.shouldShowRequestPermissionRationale() returns true
-        //  show dialog to redirect to app settings (handleMissingBackgroundLocationPermission())
-
-        // TODO test with Android 6, Android 10 and Android 11
         // we need to re-check foreground location to be sure it has not changed after landing on this screen
         if (checkPermissions(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, requireActivity(), foregroundLocationResultLauncher) &&
-                checkPermissions(PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING, requireActivity(), backgroundLocationResultLauncher)) {
+                checkPermissions(
+                        PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING,
+                        requireActivity(),
+                        backgroundLocationResultLauncher,
+                        R.string.location_in_background_missing_permission_dialog_content
+                )) {
             startLiveLocationSharing()
         }
     }
