@@ -126,7 +126,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.UpdateSignMode(SignMode.SignUp))
 
         test
-                .assertStatesWithPrevious(
+                .assertStatesChanges(
                         initialState,
                         { copy(signMode = SignMode.SignUp) },
                         { copy(asyncRegistration = Loading()) },
@@ -144,7 +144,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
 
         test
-                .assertStatesWithPrevious(
+                .assertStatesChanges(
                         initialState,
                         { copy(asyncRegistration = Loading()) },
                         { copy(asyncRegistration = Uninitialized) }
@@ -174,7 +174,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.PostRegisterAction(A_RESULT_IGNORED_REGISTER_ACTION))
 
         test
-                .assertStatesWithPrevious(
+                .assertStatesChanges(
                         initialState,
                         { copy(asyncRegistration = Loading()) },
                         { copy(asyncRegistration = Uninitialized) }
@@ -192,7 +192,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
 
         test
-                .assertStatesWithPrevious(
+                .assertStatesChanges(
                         initialState,
                         { copy(asyncRegistration = Loading()) },
                         { copy(asyncLoginAction = Success(Unit), personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) },
@@ -210,7 +210,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
 
         test
-                .assertStatesWithPrevious(
+                .assertStatesChanges(
                         initialState,
                         { copy(asyncRegistration = Loading()) },
                         { copy(asyncLoginAction = Success(Unit), personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) },
@@ -229,7 +229,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
         test
-                .assertStatesWithPrevious(personalisedInitialState, expectedSuccessfulDisplayNameUpdateStates())
+                .assertStatesChanges(personalisedInitialState, expectedSuccessfulDisplayNameUpdateStates())
                 .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
                 .finish()
         fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
@@ -244,7 +244,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
         test
-                .assertStatesWithPrevious(personalisedInitialState, expectedSuccessfulDisplayNameUpdateStates())
+                .assertStatesChanges(personalisedInitialState, expectedSuccessfulDisplayNameUpdateStates())
                 .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
                 .finish()
         fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
@@ -258,7 +258,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
         test
-                .assertStatesWithPrevious(
+                .assertStatesChanges(
                         initialState,
                         { copy(asyncDisplayName = Loading()) },
                         { copy(asyncDisplayName = Fail(AN_ERROR)) },
