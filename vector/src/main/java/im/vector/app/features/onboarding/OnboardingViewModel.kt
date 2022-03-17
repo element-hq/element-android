@@ -165,7 +165,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.ProfilePictureSelected     -> handleProfilePictureSelected(action)
             OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
             is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
-            OnboardingAction.StopEmailValidationCheck      -> currentJob = null
+            OnboardingAction.StopEmailValidationCheck      -> cancelWaitForEmailValidation()
         }.exhaustive
     }
 
@@ -914,6 +914,10 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun completePersonalization() {
         _viewEvents.post(OnboardingViewEvents.OnPersonalizationComplete)
+    }
+
+    private fun cancelWaitForEmailValidation() {
+        currentJob = null
     }
 }
 
