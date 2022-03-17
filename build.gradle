@@ -156,6 +156,11 @@ project(":library:diff-match-patch") {
     }
 }
 
+// Global configuration across all modules
+ext {
+    isPresenceSyncEnabled = true
+}
+
 //project(":matrix-sdk-android") {
 //    sonarqube {
 //        properties {

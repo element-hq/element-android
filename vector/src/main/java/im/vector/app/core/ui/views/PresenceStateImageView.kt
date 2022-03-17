@@ -20,6 +20,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.isVisible
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
@@ -34,7 +35,7 @@ class PresenceStateImageView @JvmOverloads constructor(
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
     fun render(showPresence: Boolean = true, userPresence: UserPresence?) {
-        isVisible = showPresence && userPresence != null
+        isVisible = showPresence && userPresence != null && BuildConfig.PRESENCE_SYNC_ENABLED
 
         when (userPresence?.presence) {
             PresenceEnum.ONLINE      -> {
