@@ -29,4 +29,11 @@ data class CreatePollViewState(
     val canCreatePoll: Boolean = false,
     val canAddMoreOptions: Boolean = true,
     val pollType: PollType = PollType.DISCLOSED_UNSTABLE
-) : MavericksState
+) : MavericksState {
+
+    constructor(args: CreatePollArgs) : this(
+            roomId = args.roomId,
+            editedEventId = args.editedEventId,
+            mode = args.mode
+    )
+}
