@@ -1244,7 +1244,7 @@ class TimelineFragment @Inject constructor(
     override fun onPause() {
         super.onPause()
         notificationDrawerManager.setCurrentRoom(null)
-        voiceMessagePlaybackTracker.unTrack(VoiceMessagePlaybackTracker.RECORDING_ID)
+        voiceMessagePlaybackTracker.untrack(VoiceMessagePlaybackTracker.RECORDING_ID)
 
         if (withState(messageComposerViewModel) { it.isVoiceRecording } && requireActivity().isChangingConfigurations) {
             // we're rotating, maintain any active recordings

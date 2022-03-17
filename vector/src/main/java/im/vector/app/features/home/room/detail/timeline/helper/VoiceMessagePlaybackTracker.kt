@@ -46,7 +46,7 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
         }
     }
 
-    fun unTrack(id: String) {
+    fun untrack(id: String) {
         listeners.remove(id)
     }
 
