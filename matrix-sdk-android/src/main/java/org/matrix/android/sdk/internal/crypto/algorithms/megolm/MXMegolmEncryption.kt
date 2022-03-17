@@ -280,7 +280,7 @@ internal class MXMegolmEncryption(
         // attempted to share with) rather than the contentMap (those we did
         // share with), because we don't want to try to claim a one-time-key
         // for dead devices on every message.
-        for ((userId, devicesToShareWith) in devicesByUser) {
+        for ((_, devicesToShareWith) in devicesByUser) {
             for (deviceInfo in devicesToShareWith) {
                 session.sharedWithHelper.markedSessionAsShared(deviceInfo, chainIndex)
                 // XXX is it needed to add it to the audit trail?
