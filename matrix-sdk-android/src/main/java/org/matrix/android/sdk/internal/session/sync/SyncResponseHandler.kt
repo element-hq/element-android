@@ -75,7 +75,7 @@ internal class SyncResponseHandler @Inject constructor(
     suspend fun handleResponse(syncResponse: SyncResponse,
                                fromToken: String?,
                                reporter: ProgressReporter?) {
-        val isInitialSync = fromToken == null
+        var isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 
         measureTimeMillis {

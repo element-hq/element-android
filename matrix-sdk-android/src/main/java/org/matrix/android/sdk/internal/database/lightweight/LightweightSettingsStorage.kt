@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.database.lightweight
 import android.content.Context
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import org.matrix.android.sdk.api.MatrixConfiguration
 import javax.inject.Inject
 
 /**
@@ -27,7 +28,10 @@ import javax.inject.Inject
  * not for large data sets
  */
 
-class LightweightSettingsStorage  @Inject constructor(context: Context) {
+class LightweightSettingsStorage  @Inject constructor(
+        context: Context,
+        val matrixConfiguration: MatrixConfiguration
+) {
 
     private val sdkDefaultPrefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
 
@@ -38,7 +42,7 @@ class LightweightSettingsStorage  @Inject constructor(context: Context) {
     }
 
     fun areThreadMessagesEnabled(): Boolean {
-        return sdkDefaultPrefs.getBoolean(MATRIX_SDK_SETTINGS_THREAD_MESSAGES_ENABLED, false)
+        return sdkDefaultPrefs.getBoolean(MATRIX_SDK_SETTINGS_THREAD_MESSAGES_ENABLED, matrixConfiguration.threadMessagesEnabledDefault)
     }
 
     companion object {

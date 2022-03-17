@@ -90,6 +90,7 @@ import javax.inject.Inject
 data class HomeActivityArgs(
         val clearNotification: Boolean,
         val accountCreation: Boolean,
+        val existingSession: Boolean = false,
         val inviteNotificationRoomId: String? = null
 ) : Parcelable
 
@@ -253,6 +254,8 @@ class HomeActivity :
                 HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
                 is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn               -> handleShowAnalyticsOptIn()
+                HomeActivityViewEvents.NotifyUserForThreadsMigration    -> handleNotifyUserForThreadsMigration()
+                is HomeActivityViewEvents.MigrateThreads                -> migrateThreadsIfNeeded(it.checkSession)
             }.exhaustive
         }
         homeActivityViewModel.onEach { renderState(it) }
@@ -267,6 +270,49 @@ class HomeActivity :
 
     private fun handleShowAnalyticsOptIn() {
         navigator.openAnalyticsOptIn(this)
+    }
+
+    /**
+     * Migrating from old threads io.element.thread to new m.thread needs an initial sync to
+     * sync and display existing messages appropriately
+     */
+    private fun migrateThreadsIfNeeded(checkSession: Boolean) {
+
+        if (checkSession) {
+            // We should check session to ensure we will only clear cache if needed
+            val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+            if (args?.existingSession == true) {
+                // existingSession --> Will be true only if we came from an existing active session
+                Timber.i("----> Migrating threads from an existing session..")
+                handleThreadsMigration()
+            } else {
+                // We came from a new session and not an existing one,
+                // so there is no need to migrate threads while an initial synced performed
+                Timber.i("----> No thread migration needed, we are ok")
+                vectorPreferences.threadsMigrated()
+            }
+        } else {
+            // Proceed with migration
+            handleThreadsMigration()
+        }
+    }
+
+    /**
+     * Clear cache and restart to invoke an initial sync for threads migration
+     */
+    private fun handleThreadsMigration() {
+        Timber.i("----> Threads Migration detected, clearing cache and sync...")
+        vectorPreferences.threadsMigrated()
+        MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+    }
+
+    private fun handleNotifyUserForThreadsMigration() {
+        MaterialAlertDialogBuilder(this)
+                .setTitle("Threads, no longer experimental")
+                .setMessage("All \uD83C\uDF89 \uD83C\uDF89 threads created during experimental period will\n\n now be rendered as regular replies. This will be an one-off transition, as threads are now part of the matrix specification")
+                .setCancelable(true)
+                .setPositiveButton(R.string.ok) { _, _ -> }
+                .show()
     }
 
     private fun handleIntent(intent: Intent?) {
@@ -546,11 +592,13 @@ class HomeActivity :
         fun newIntent(context: Context,
                       clearNotification: Boolean = false,
                       accountCreation: Boolean = false,
+                      existingSession: Boolean = false,
                       inviteNotificationRoomId: String? = null
         ): Intent {
             val args = HomeActivityArgs(
                     clearNotification = clearNotification,
                     accountCreation = accountCreation,
+                    existingSession = existingSession,
                     inviteNotificationRoomId = inviteNotificationRoomId
             )
 

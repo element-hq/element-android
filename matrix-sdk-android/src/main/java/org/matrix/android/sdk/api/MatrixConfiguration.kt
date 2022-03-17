@@ -60,7 +60,11 @@ data class MatrixConfiguration(
         /**
          * RoomDisplayNameFallbackProvider to provide default room display name.
          */
-        val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider
+        val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider,
+        /**
+         * Thread messages default enable/disabled value
+         */
+        val threadMessagesEnabledDefault: Boolean = false,
 ) {
 
     /**
