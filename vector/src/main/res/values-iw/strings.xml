@@ -2252,4 +2252,57 @@
     <string name="a11y_checked">בָּדוּק</string>
     <string name="invite_by_email">הזמינו בדואר אלקטרוני</string>
     <string name="invite_people_to_your_space_desc">זה רק אתה כרגע. %s יהיה טוב יותר עם אחרים.</string>
+    <string name="this_space_has_no_rooms">בחלל זה אין חדרים</string>
+    <string name="spaces_no_server_support_description">אנא צור קשר עם מנהל השרת הביתי שלך לקבלת מידע נוסף</string>
+    <string name="spaces_no_server_support_title">נראה שהשרת הביתי שלך עדיין לא תומך במרחבים</string>
+    <string name="spaces_feeling_experimental_subspace">מרגיש ניסיוני\?
+\nניתן להוסיף חללים קיימים למרחב.</string>
+    <string name="preference_show_all_rooms_in_home">הצג את כל החדרים בדף הבית</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">כל החדרים שבהם אתה נמצא יוצגו בדף הבית.</string>
+    <string name="space_manage_rooms_and_spaces">ניהול חדרים ומרחבים</string>
+    <string name="space_mark_as_not_suggested">סמן כלא מוצע</string>
+    <string name="space_suggested">מוצע</string>
+    <string name="space_mark_as_suggested">סמן כמוצע</string>
+    <string name="looking_for_someone_not_in_space">מחפש מישהו שאינו ב-%s\?</string>
+    <string name="user_invites_you">%s מזמין אותך</string>
+    <string name="labs_enable_thread_messages_desc">הערה: האפליקציה תופעל מחדש</string>
+    <string name="labs_enable_thread_messages">אפשר הודעות שרשור</string>
+    <string name="labs_auto_report_uisi_desc">המערכת שלך תשלח אוטומטית יומנים כאשר מתרחשת שגיאה ללא יכולת לפענח</string>
+    <string name="labs_auto_report_uisi">דווח אוטומטית על שגיאות פענוח.</string>
+    <string name="you_are_invited">אתם מוזמנים</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">מרחבים הם דרך חדשה לאיחוד של חדרים ואנשים.</string>
+    <string name="space_add_space_to_any_space_you_manage">הוסף מרחב לכל מרחב שאתה מנהל.</string>
+    <string name="space_add_existing_spaces">הוסף מרחבים קיימים</string>
+    <string name="space_add_existing_rooms_only">הוסף חדרים קיימים</string>
+    <string name="space_add_existing_rooms">הוסף חדרים ומרחבים קיימים</string>
+    <string name="pick_tings_to_leave">בחר דברים להשאיר</string>
+    <string name="leave_specific_ones">השאירו חדרים ומרחבים ספציפיים…</string>
+    <string name="dont_leave_any">אל תעזובו חדרים וא מרחבים</string>
+    <string name="leave_all_rooms_and_spaces">עזבו את כל החדרים והמרחבים</string>
+    <string name="space_leave_prompt_msg_as_admin">אתה המנהל היחיד של המרחב הזה. עזיבה תגרום לכך שאף אחד לא ישלוט על המרחב.</string>
+    <string name="space_leave_prompt_msg_private">לא תוכל להצטרף מחדש אלא אם כן תוזמן מחדש.</string>
+    <string name="space_leave_prompt_msg_only_you">אתה האדם היחיד כאן. אם תעזוב, אף אחד לא יוכל להצטרף בעתיד, כולל אותך.</string>
+    <string name="space_leave_prompt_msg_with_name">האם אתה בטוח שברצונך לעזוב את %s\?</string>
+    <string name="leave_space">עזוב את המרחב</string>
+    <string name="space_add_child_title">הוסיפו חדרים</string>
+    <string name="space_explore_activity_title">גלה חדרים</string>
+    <plurals name="space_people_you_know">
+        <item quantity="one">אדם %d שאתה מכיר כבר הצטרף</item>
+        <item quantity="two">%d אנשים שאתה מכיר כבר הצטרפו</item>
+        <item quantity="many">%d אנשים שאתה מכיר כבר הצטרפו</item>
+        <item quantity="other">%d אנשים שאתה מכיר כבר הצטרפו</item>
+    </plurals>
+    <string name="discovery_section">גילוי (%s)</string>
+    <string name="finish_setup">סיים את ההגדרה</string>
+    <string name="discovery_invite">הזמן בדואר אלקטרוני, מצא אנשי קשר ועוד…</string>
+    <string name="finish_setting_up_discovery">סיים להגדיר את הגילוי.</string>
+    <string name="create_space_identity_server_info_none">אינך משתמש כעת בשרת זהות. על מנת להזמין חברים לצוות ולהיות ניתנים לגילוי על ידם, הגדר שרת זהות למטה.</string>
+    <string name="room_alias_preview_not_found">כינוי זה אינו נגיש בשלב זה.
+\nנסה שוב מאוחר יותר, או בקש ממנהל חדר לבדוק אם יש לך גישה.</string>
+    <string name="invite_just_to_this_room_desc">הם לא יהיו חלק מ-%s</string>
+    <string name="invite_just_to_this_room">רק לחדר הזה</string>
+    <string name="invite_to_space_with_name_desc">הם יוכלו לחקור את %s</string>
+    <string name="invite_to_space_with_name">הזמן אל %s</string>
+    <string name="invite_by_link">שתף קישור</string>
+    <string name="invite_by_username_or_mail">הזמן לפי שם משתמש או דואר אלקטרוני</string>
 </resources>
