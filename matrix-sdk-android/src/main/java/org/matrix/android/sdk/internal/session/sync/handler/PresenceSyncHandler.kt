@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.sync.handler
 
 import io.realm.Realm
-import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.getPresenceContent

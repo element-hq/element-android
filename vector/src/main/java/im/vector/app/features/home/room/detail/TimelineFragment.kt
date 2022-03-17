@@ -1613,7 +1613,10 @@ class TimelineFragment @Inject constructor(
                 views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
                 avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
                 views.includeRoomToolbar.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
-                views.includeRoomToolbar.roomToolbarPresenceImageView.render(roomSummary.isDirect && matrixConfiguration.presenceSyncEnabled, roomSummary.directUserPresence)
+                views.includeRoomToolbar.roomToolbarPresenceImageView.render(
+                        roomSummary.isDirect && matrixConfiguration.presenceSyncEnabled,
+                        roomSummary.directUserPresence
+                )
                 views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
             }
         } else {
