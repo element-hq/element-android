@@ -128,6 +128,7 @@ fun checkPermissions(permissionsToBeGranted: List<String>,
                     .setPositiveButton(R.string.ok) { _, _ ->
                         activityResultLauncher.launch(missingPermissions.toTypedArray())
                     }
+                    .setNegativeButton(R.string.action_not_now, null)
                     .show()
         } else {
             // some permissions are not granted, ask permissions

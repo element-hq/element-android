@@ -54,7 +54,7 @@ class LocationSharingFragment @Inject constructor(
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
-    private val locationSharingNavigator: LocationSharingSettingsNavigator by lazy { DefaultLocationSharingSettingsNavigator(activity) }
+    private val locationSharingNavigator: LocationSharingNavigator by lazy { DefaultLocationSharingNavigator(activity) }
 
     // Keep a ref to handle properly the onDestroy callback
     private var mapView: WeakReference<MapView>? = null
