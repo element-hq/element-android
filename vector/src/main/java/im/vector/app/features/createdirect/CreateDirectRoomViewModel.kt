@@ -61,7 +61,8 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
+            is CreateDirectRoomAction.PrepareRoomWithSelectedUsers -> onSubmitInvitees(action.selections)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onCreateRoomWithInvitees()
             is CreateDirectRoomAction.QrScannedAction -> onCodeParsed(action)
         }
     }
@@ -96,16 +97,18 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
         }
         if (existingRoomId != null) {
             // Do not create a new DM, just tell that the creation is successful by passing the existing roomId
-            setState {
-                copy(createAndInviteState = Success(existingRoomId))
-            }
+            setState { copy(createAndInviteState = Success(existingRoomId)) }
         } else {
-            // Create the DM
-            createRoomAndInviteSelectedUsers(selections)
+            createLocalRoomWithSelectedUsers(selections)
         }
     }
 
-    private fun createRoomAndInviteSelectedUsers(selections: Set<PendingSelection>) {
+    private fun onCreateRoomWithInvitees() {
+        // Create the DM
+        withState { createLocalRoomWithSelectedUsers(it.pendingSelections) }
+    }
+
+    private fun createLocalRoomWithSelectedUsers(selections: Set<PendingSelection>) {
         setState { copy(createAndInviteState = Loading()) }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -127,8 +130,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
 
             val result = runCatchingToAsync {
                 if (vectorFeatures.shouldStartDmOnFirstMessage()) {
-                    // Todo: Prepare direct room creation
-                    throw Throwable("Start DM on first message is not implemented yet.")
+                    session.roomService().createLocalRoom(roomParams)
                 } else {
                     session.roomService().createRoom(roomParams)
                 }

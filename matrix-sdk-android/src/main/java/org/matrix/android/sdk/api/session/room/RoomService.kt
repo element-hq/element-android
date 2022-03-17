@@ -41,6 +41,13 @@ interface RoomService {
     suspend fun createRoom(createRoomParams: CreateRoomParams): String
 
     /**
+     * Create a room locally.
+     * This room will not be synchronized with the server and will not come back from the sync, so all the events related to this room will be generated
+     * locally.
+     */
+    suspend fun createLocalRoom(createRoomParams: CreateRoomParams): String
+
+    /**
      * Create a direct room asynchronously. This is a facility method to create a direct room with the necessary parameters.
      */
     suspend fun createDirectRoom(otherUserId: String): String {
