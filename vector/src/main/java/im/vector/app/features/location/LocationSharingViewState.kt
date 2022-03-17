@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.R
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.util.MatrixItem
 
 enum class LocationSharingMode(@StringRes val titleRes: Int) {
@@ -31,8 +32,9 @@ data class LocationSharingViewState(
         val roomId: String,
         val mode: LocationSharingMode,
         val userItem: MatrixItem.UserItem? = null,
-        val lastKnownLocation: LocationData? = null,
-        val pinDrawable: Drawable? = null
+        val areTargetAndUserLocationEqual: Boolean? = null,
+        val lastKnownUserLocation: LocationData? = null,
+        val locationTargetDrawable: Drawable? = null
 ) : MavericksState {
 
     constructor(locationSharingArgs: LocationSharingArgs) : this(
@@ -43,7 +45,9 @@ data class LocationSharingViewState(
 
 fun LocationSharingViewState.toMapState() = MapState(
         zoomOnlyOnce = true,
-        pinLocationData = lastKnownLocation,
+        userLocationData = lastKnownUserLocation,
         pinId = DEFAULT_PIN_ID,
-        pinDrawable = pinDrawable
+        pinDrawable = null,
+        // show the map pin only when target location and user location are not equal
+        showPin = areTargetAndUserLocationEqual.orTrue().not()
 )
