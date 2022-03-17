@@ -273,7 +273,7 @@ class OnboardingViewModel @AssistedInject constructor(
             if (action.hasLoadingState()) {
                 setState { copy(asyncRegistration = Loading()) }
             }
-            kotlin.runCatching { registrationActionHandler.handleRegisterAction(registrationWizard, action) }
+            runCatching { registrationActionHandler.handleRegisterAction(registrationWizard, action) }
                     .fold(
                             onSuccess = {
                                 when {
