@@ -35,7 +35,7 @@ class PresenceStateImageView @JvmOverloads constructor(
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
     fun render(showPresence: Boolean = true, userPresence: UserPresence?) {
-        isVisible = showPresence && userPresence != null && BuildConfig.PRESENCE_SYNC_ENABLED
+        isVisible = showPresence && userPresence != null
 
         when (userPresence?.presence) {
             PresenceEnum.ONLINE      -> {

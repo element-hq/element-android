@@ -37,7 +37,6 @@ android {
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
         buildConfigField "String", "GIT_SDK_REVISION_DATE", "\"${gitRevisionDate()}\""
 
-        buildConfigField "Boolean", "PRESENCE_SYNC_ENABLED", "${isPresenceSyncEnabled}"
         defaultConfig {
             consumerProguardFiles 'proguard-rules.pro'
         }
