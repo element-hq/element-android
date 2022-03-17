@@ -164,9 +164,10 @@ class HomeActivityViewModel @AssistedInject constructor(
         }
         // Enable all users
         // When we would to enable threads for all
-        // if(vectorPreferences.shouldMigrateThreads) -->
-        // vectorPreferences.setThreadMessagesEnabled() &&
-        // lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
+//        if(vectorPreferences.shouldMigrateThreads()) {
+//            vectorPreferences.setThreadMessagesEnabled()
+//            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
+//        }
         if(vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled()){
             Timber.i("----> Try to migrate threads")
             _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = true))
