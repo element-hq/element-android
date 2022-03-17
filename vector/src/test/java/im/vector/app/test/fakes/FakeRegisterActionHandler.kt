@@ -28,15 +28,15 @@ class FakeRegisterActionHandler {
     val instance = mockk<RegistrationActionHandler>()
 
     fun givenResultFor(wizard: RegistrationWizard, action: RegisterAction, result: RegistrationResult) {
-        coEvery { instance.handleRegisterAction(wizard, action) } answers {
-            it.invocation.args.first()
+        coEvery { instance.handleRegisterAction(wizard, action) } answers { call ->
+            call.invocation.args.first()
             result
         }
     }
 
     fun givenResultsFor(wizard: RegistrationWizard, result: List<Pair<RegisterAction, RegistrationResult>>) {
-        coEvery { instance.handleRegisterAction(wizard, any()) } answers {
-            val actionArg = it.invocation.args[1] as RegisterAction
+        coEvery { instance.handleRegisterAction(wizard, any()) } answers { call ->
+            val actionArg = call.invocation.args[1] as RegisterAction
             result.first { it.first == actionArg }.second
         }
     }
