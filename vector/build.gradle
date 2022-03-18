@@ -151,6 +151,7 @@ android {
 
         buildConfigField "Boolean", "enableLocationSharing", "true"
         buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
+        buildConfigField "Boolean", "PRESENCE_SYNC_ENABLED", "true"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

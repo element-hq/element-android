@@ -118,7 +118,8 @@ import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentTimelineBinding
-import im.vector.app.features.analytics.plan.Composer
+import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
+import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
@@ -205,6 +206,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -259,7 +261,8 @@ class TimelineFragment @Inject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
-        private val clock: Clock
+        private val clock: Clock,
+        private val matrixConfiguration: MatrixConfiguration
 ) :
         VectorBaseFragment<FragmentTimelineBinding>(),
         TimelineEventController.Callback,
@@ -1491,9 +1494,6 @@ class TimelineFragment @Inject constructor(
             return
         }
         if (text.isNotBlank()) {
-            withState(messageComposerViewModel) { state ->
-                analyticsTracker.capture(Composer(isThreadTimeLine(), isEditing = state.sendMode is SendMode.Edit, isReply = state.sendMode is SendMode.Reply))
-            }
             // We collapse ASAP, if not there will be a slight annoying delay
             views.composerLayout.collapse(true)
             lockSendButton = true
@@ -1613,7 +1613,10 @@ class TimelineFragment @Inject constructor(
                 views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
                 avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
                 views.includeRoomToolbar.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
-                views.includeRoomToolbar.roomToolbarPresenceImageView.render(roomSummary.isDirect, roomSummary.directUserPresence)
+                views.includeRoomToolbar.roomToolbarPresenceImageView.render(
+                        roomSummary.isDirect && matrixConfiguration.presenceSyncEnabled,
+                        roomSummary.directUserPresence
+                )
                 views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
             }
         } else {
@@ -1773,13 +1776,11 @@ class TimelineFragment @Inject constructor(
             }
             is RoomDetailAction.ResumeVerification        -> {
                 val otherUserId = data.otherUserId ?: return
-                VerificationBottomSheet().apply {
-                    setArguments(VerificationBottomSheet.VerificationArgs(
-                            otherUserId = otherUserId,
-                            verificationId = data.transactionId,
-                            roomId = timelineArgs.roomId
-                    ))
-                }.show(parentFragmentManager, "REQ")
+                VerificationBottomSheet.withArgs(
+                        roomId = timelineArgs.roomId,
+                        otherUserId = otherUserId,
+                        transactionId = data.transactionId,
+                ).show(parentFragmentManager, "REQ")
             }
         }
     }
@@ -2174,7 +2175,7 @@ class TimelineFragment @Inject constructor(
             }
             is EventSharedAction.ReplyInThread              -> {
                 if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
-                    navigateToThreadTimeline(action.eventId)
+                    navigateToThreadTimeline(action.eventId, action.startsThread)
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }
@@ -2333,9 +2334,11 @@ class TimelineFragment @Inject constructor(
      * using the ThreadsActivity
      */
 
-    private fun navigateToThreadTimeline(rootThreadEventId: String) {
+    private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false) {
+        analyticsTracker.capture(Interaction.Name.MobileRoomThreadSummaryItem.toAnalyticsInteraction())
         context?.let {
             val roomThreadDetailArgs = ThreadTimelineArgs(
+                    startsThread = startsThread,
                     roomId = timelineArgs.roomId,
                     displayName = timelineViewModel.getRoomSummary()?.displayName,
                     avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl,
@@ -2351,6 +2354,7 @@ class TimelineFragment @Inject constructor(
      */
 
     private fun navigateToThreadList() {
+        analyticsTracker.capture(Interaction.Name.MobileRoomThreadListButton.toAnalyticsInteraction())
         context?.let {
             val roomThreadDetailArgs = ThreadTimelineArgs(
                     roomId = timelineArgs.roomId,

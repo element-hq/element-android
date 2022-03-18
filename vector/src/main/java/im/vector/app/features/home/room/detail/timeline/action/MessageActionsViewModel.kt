@@ -61,6 +61,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.api.session.room.timeline.isPoll
+import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import org.matrix.android.sdk.api.session.room.timeline.isSticker
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
@@ -329,7 +330,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
 
             if (canReplyInThread(timelineEvent, messageContent, actionPermissions)) {
-                add(EventSharedAction.ReplyInThread(eventId))
+                add(EventSharedAction.ReplyInThread(eventId, !timelineEvent.isRootThread()))
             }
 
             if (canViewInRoom(timelineEvent, messageContent, actionPermissions)) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.threads.arguments
+package im.vector.app.features.analytics.extensions
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import im.vector.app.features.analytics.plan.Interaction
 
-@Parcelize
-data class ThreadTimelineArgs(
-        val roomId: String,
-        val displayName: String?,
-        val avatarUrl: String?,
-        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel?,
-        val rootThreadEventId: String? = null,
-        val startsThread: Boolean = false
-) : Parcelable
+fun Interaction.Name.toAnalyticsInteraction(interactionType: Interaction.InteractionType = Interaction.InteractionType.Touch) =
+        Interaction(
+                name = this,
+                interactionType = interactionType
+        )
