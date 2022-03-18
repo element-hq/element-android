@@ -295,9 +295,9 @@ class RoomListFragment @Inject constructor(
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
-                                                    isHighlighted = counts.isHighlight
+                                                    isHighlighted = counts.isHighlight,
+                                                    shouldShowExpandedArrow = shouldShowExpendedArrow()
                                             ))
-                                            setUpCollapse()
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
                                             refreshCollapseStates()
@@ -330,18 +330,18 @@ class RoomListFragment @Inject constructor(
                                             controller.setData(list)
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     isHidden = list.isEmpty(),
-                                                    isLoading = false
+                                                    isLoading = false,
+                                                    shouldShowExpandedArrow = shouldShowExpendedArrow()
                                             ))
                                             checkEmptyState()
-                                            setUpCollapse()
                                         }
                                         observeItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
-                                                    isHighlighted = counts.isHighlight
+                                                    isHighlighted = counts.isHighlight,
+                                                    shouldShowExpandedArrow = shouldShowExpendedArrow()
                                             ))
-                                            setUpCollapse()
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
                                             refreshCollapseStates()
