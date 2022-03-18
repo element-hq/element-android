@@ -32,7 +32,7 @@ import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldCo
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequest
-import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequestState
+import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequestState
 import org.matrix.android.sdk.internal.crypto.model.AuditTrail
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
@@ -80,6 +80,15 @@ internal interface IMXCryptoStore {
      * @param block true to unilaterally blacklist all
      */
     fun setGlobalBlacklistUnverifiedDevices(block: Boolean)
+
+    /**
+     * Enable or disable key gossiping.
+     * Default is true.
+     * If set to false this device won't send key_request nor will accept key forwarded
+     */
+    fun enableKeyGossiping(enable: Boolean)
+
+    fun isKeyGossipingEnabled(): Boolean
 
     /**
      * Provides the rooms ids list in which the messages are not encrypted for the unverified devices.
@@ -386,6 +395,7 @@ internal interface IMXCryptoStore {
             event: Event)
 
     fun deleteOutgoingRoomKeyRequest(requestId: String)
+    fun deleteOutgoingRoomKeyRequestInState(state: OutgoingRoomKeyRequestState)
 
     fun saveIncomingKeyRequestAuditTrail(
             requestId: String,

@@ -54,10 +54,7 @@ internal class MXMegolmDecryption(
 
     @Throws(MXCryptoError::class)
     override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-        // If cross signing is enabled, we don't send request until the keys are trusted
-        // There could be a race effect here when xsigning is enabled, we should ensure that keys was downloaded once
-        val requestOnFail = cryptoStore.getMyCrossSigningInfo()?.isTrusted() == true
-        return decryptEvent(event, timeline, requestOnFail)
+        return decryptEvent(event, timeline, true)
     }
 
     @Throws(MXCryptoError::class)
@@ -164,6 +161,11 @@ internal class MXMegolmDecryption(
             return
         }
         if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
+            if (!cryptoStore.isKeyGossipingEnabled()) {
+                Timber.tag(loggerTag.value)
+                        .i("onRoomKeyEvent(), ignore forward adding as per crypto config : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
+                return
+            }
             Timber.tag(loggerTag.value).i("onRoomKeyEvent(), forward adding key : ${roomKeyContent.roomId}|${roomKeyContent.sessionId}")
             val forwardedRoomKeyContent = event.getClearContent().toModel<ForwardedRoomKeyContent>()
                     ?: return

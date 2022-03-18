@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.store.db.migration
 
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntityFields
+import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeyRequestReplyEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeyRequestReplyEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntityFields
@@ -59,5 +60,12 @@ class MigrateCryptoTo016(realm: DynamicRealm) : RealmMigrator(realm, 15) {
                 .addField(KeyRequestReplyEntityFields.SENDER_ID, String::class.java)
                 .addField(KeyRequestReplyEntityFields.FROM_DEVICE, String::class.java)
                 .addField(KeyRequestReplyEntityFields.EVENT_JSON, String::class.java)
+
+        realm.schema.get("CryptoMetadataEntity")
+                ?.addField(CryptoMetadataEntityFields.GLOBAL_ENABLE_KEY_REQUESTING_AND_SHARING, Boolean::class.java)
+                ?.transform {
+                    // set the default value to true
+                    it.setBoolean(CryptoMetadataEntityFields.GLOBAL_ENABLE_KEY_REQUESTING_AND_SHARING, true)
+                }
     }
 }

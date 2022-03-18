@@ -76,6 +76,15 @@ interface CryptoService {
 
     fun setGlobalBlacklistUnverifiedDevices(block: Boolean)
 
+    /**
+     * Enable or disable key gossiping.
+     * Default is true.
+     * If set to false this device won't send key_request nor will accept key forwarded
+     */
+    fun enableKeyGossiping(enable: Boolean)
+
+    fun isKeyGossipingEnabled(): Boolean
+
     fun setRoomUnBlacklistUnverifiedDevices(roomId: String)
 
     fun getDeviceTrackingStatus(userId: String): Int

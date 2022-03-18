@@ -1080,6 +1080,12 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.setGlobalBlacklistUnverifiedDevices(block)
     }
 
+    override fun enableKeyGossiping(enable: Boolean) {
+        cryptoStore.enableKeyGossiping(enable)
+    }
+
+    override fun isKeyGossipingEnabled() = cryptoStore.isKeyGossipingEnabled()
+
     /**
      * Tells whether the client should ever send encrypted messages to unverified devices.
      * The default value is false.

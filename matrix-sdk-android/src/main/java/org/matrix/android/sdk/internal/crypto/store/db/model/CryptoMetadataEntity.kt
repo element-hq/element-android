@@ -33,6 +33,8 @@ internal open class CryptoMetadataEntity(
         var deviceSyncToken: String? = null,
         // Settings for blacklisting unverified devices.
         var globalBlacklistUnverifiedDevices: Boolean = false,
+        // setting to enable or disable key gossiping
+        var globalEnableKeyRequestingAndSharing: Boolean = true,
         // The keys backup version currently used. Null means no backup.
         var backupVersion: String? = null,
 
