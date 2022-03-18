@@ -33,6 +33,7 @@ private val keyForceDialPadDisplay = booleanPreferencesKey("force_dial_pad_displ
 private val keyForceLoginFallback = booleanPreferencesKey("force_login_fallback")
 private val forceCanChangeDisplayName = booleanPreferencesKey("force_can_change_display_name")
 private val forceCanChangeAvatar = booleanPreferencesKey("force_can_change_avatar")
+private val keyForceEnableLiveLocationSharing = booleanPreferencesKey("force_enable_live_location_sharing")
 
 class DebugVectorOverrides(private val context: Context) : VectorOverrides {
 
@@ -49,6 +50,10 @@ class DebugVectorOverrides(private val context: Context) : VectorOverrides {
                 canChangeDisplayName = preferences[forceCanChangeDisplayName],
                 canChangeAvatar = preferences[forceCanChangeAvatar]
         )
+    }
+
+    override val forceEnableLiveLocationSharing = context.dataStore.data.map { preferences ->
+        preferences[keyForceEnableLiveLocationSharing].orFalse()
     }
 
     suspend fun setForceDialPadDisplay(force: Boolean) {
@@ -74,6 +79,12 @@ class DebugVectorOverrides(private val context: Context) : VectorOverrides {
                 null -> settings.remove(forceCanChangeAvatar)
                 else -> settings[forceCanChangeAvatar] = capabilitiesOverride.canChangeAvatar
             }
+        }
+    }
+
+    suspend fun setForceEnableLiveLocationSharing(force: Boolean) {
+        context.dataStore.edit { settings ->
+            settings[keyForceEnableLiveLocationSharing] = force
         }
     }
 }
