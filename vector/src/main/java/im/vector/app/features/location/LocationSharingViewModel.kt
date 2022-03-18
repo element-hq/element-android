@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
 
 /**
  * Sampling period to compare target location and user location.
@@ -120,6 +121,7 @@ class LocationSharingViewModel @AssistedInject constructor(
             is LocationSharingAction.PinnedLocationSharing   -> handlePinnedLocationSharingAction(action)
             is LocationSharingAction.LocationTargetChange    -> handleLocationTargetChangeAction(action)
             LocationSharingAction.ZoomToUserLocation         -> handleZoomToUserLocationAction()
+            LocationSharingAction.StartLiveLocationSharing   -> handleStartLiveLocationSharingAction()
         }.exhaustive
     }
 
@@ -155,6 +157,11 @@ class LocationSharingViewModel @AssistedInject constructor(
         state.lastKnownUserLocation?.let { location ->
             _viewEvents.post(LocationSharingViewEvents.ZoomToUserLocation(location))
         }
+    }
+
+    private fun handleStartLiveLocationSharingAction() {
+        // TODO start sharing live location and update view state
+        Timber.d("live location sharing started")
     }
 
     override fun onLocationUpdate(locationData: LocationData) {
