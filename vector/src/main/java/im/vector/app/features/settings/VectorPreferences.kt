@@ -1058,10 +1058,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     /**
      * Indicates that there no longer threads migration needed
      */
-    fun threadsMigrated() {
+    fun setShouldMigrateThreads(shouldMigrate: Boolean) {
         defaultPrefs
                 .edit()
-                .putBoolean(SETTINGS_THREAD_MESSAGES_SYNCED, false)
+                .putBoolean(SETTINGS_THREAD_MESSAGES_SYNCED, shouldMigrate)
                 .apply()
     }
 }

@@ -140,37 +140,36 @@ class HomeActivityViewModel @AssistedInject constructor(
      * - Handle migration when threads are enabled by default
      */
     private fun initThreadsMigration() {
-        // Notify users
-        if (vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.areThreadMessagesEnabled()) {
-            Timber.i("----> Notify users about threads")
-            // Notify the user if needed that we migrated to support m.thread
-            // instead of io.element.thread so old thread messages will be displayed as normal timeline messages
-            _viewEvents.post(HomeActivityViewEvents.NotifyUserForThreadsMigration)
-            vectorPreferences.userNotifiedAboutThreads()
-            return
-        }
-
-        // Migrate users with enabled lab settings
-        if (vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads()) {
-            Timber.i("----> Migrate threads with enabled labs")
-            // If user had io.element.thread enabled then enable the new thread support,
-            // clear cache to sync messages appropriately
-            vectorPreferences.setThreadMessagesEnabled()
-            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
-            // Clear Cache
-            _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = false))
-            return
-        }
-        // Enable all users
-        // When we would to enable threads for all
+        // When we would like to enable threads for all users
 //        if(vectorPreferences.shouldMigrateThreads()) {
 //            vectorPreferences.setThreadMessagesEnabled()
 //            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
 //        }
-        if (vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled()) {
-            Timber.i("----> Try to migrate threads")
-            _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = true))
-            return
+
+        when {
+            // Notify users
+            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.areThreadMessagesEnabled() -> {
+                Timber.i("----> Notify users about threads")
+                // Notify the user if needed that we migrated to support m.thread
+                // instead of io.element.thread so old thread messages will be displayed as normal timeline messages
+                _viewEvents.post(HomeActivityViewEvents.NotifyUserForThreadsMigration)
+                vectorPreferences.userNotifiedAboutThreads()
+            }
+            // Migrate users with enabled lab settings
+            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads()     -> {
+                Timber.i("----> Migrate threads with enabled labs")
+                // If user had io.element.thread enabled then enable the new thread support,
+                // clear cache to sync messages appropriately
+                vectorPreferences.setThreadMessagesEnabled()
+                lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
+                // Clear Cache
+                _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = false))
+            }
+            // Enable all users
+            vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled()         -> {
+                Timber.i("----> Try to migrate threads")
+                _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = true))
+            }
         }
     }
 

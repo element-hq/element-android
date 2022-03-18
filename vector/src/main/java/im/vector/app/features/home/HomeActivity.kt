@@ -288,7 +288,7 @@ class HomeActivity :
                 // We came from a new session and not an existing one,
                 // so there is no need to migrate threads while an initial synced performed
                 Timber.i("----> No thread migration needed, we are ok")
-                vectorPreferences.threadsMigrated()
+                vectorPreferences.setShouldMigrateThreads(shouldMigrate = false)
             }
         } else {
             // Proceed with migration
@@ -301,7 +301,7 @@ class HomeActivity :
      */
     private fun handleThreadsMigration() {
         Timber.i("----> Threads Migration detected, clearing cache and sync...")
-        vectorPreferences.threadsMigrated()
+        vectorPreferences.setShouldMigrateThreads(shouldMigrate = false)
         MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
     }
 
