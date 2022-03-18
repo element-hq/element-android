@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
