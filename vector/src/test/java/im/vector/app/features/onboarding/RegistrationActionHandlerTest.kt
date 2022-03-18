@@ -37,9 +37,6 @@ private val A_PID_TO_REGISTER = RegisterThreePid.Email("an email")
 
 class RegistrationActionHandlerTest {
 
-    private val fakeRegistrationWizard = FakeRegistrationWizard()
-    private val registrationActionHandler = RegistrationActionHandler()
-
     @Test
     fun `when handling register action then delegates to wizard`() = runBlockingTest {
         val cases = listOf(
@@ -60,6 +57,8 @@ class RegistrationActionHandlerTest {
     }
 
     private suspend fun testSuccessfulActionDelegation(case: Case) {
+        val registrationActionHandler = RegistrationActionHandler()
+        val fakeRegistrationWizard = FakeRegistrationWizard()
         fakeRegistrationWizard.givenSuccessFor(result = A_SESSION, case.expect)
 
         val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, case.action)
@@ -71,3 +70,5 @@ class RegistrationActionHandlerTest {
 private fun case(action: RegisterAction, expect: suspend RegistrationWizard.() -> RegistrationResult) = Case(action, expect)
 
 private class Case(val action: RegisterAction, val expect: suspend RegistrationWizard.() -> RegistrationResult)
+
+
