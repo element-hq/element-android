@@ -277,7 +277,6 @@ class HomeActivity :
      * sync and display existing messages appropriately
      */
     private fun migrateThreadsIfNeeded(checkSession: Boolean) {
-
         if (checkSession) {
             // We should check session to ensure we will only clear cache if needed
             val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
@@ -308,10 +307,10 @@ class HomeActivity :
 
     private fun handleNotifyUserForThreadsMigration() {
         MaterialAlertDialogBuilder(this)
-                .setTitle("Threads, no longer experimental")
-                .setMessage("All \uD83C\uDF89 \uD83C\uDF89 threads created during experimental period will\n\n now be rendered as regular replies. This will be an one-off transition, as threads are now part of the matrix specification")
+                .setTitle(R.string.threads_notice_migration_title)
+                .setMessage(R.string.threads_notice_migration_message)
                 .setCancelable(true)
-                .setPositiveButton(R.string.ok) { _, _ -> }
+                .setPositiveButton(R.string.sas_got_it) { _, _ -> }
                 .show()
     }
 

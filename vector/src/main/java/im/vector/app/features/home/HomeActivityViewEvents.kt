@@ -27,5 +27,4 @@ sealed interface HomeActivityViewEvents : VectorViewEvents {
     object ShowAnalyticsOptIn : HomeActivityViewEvents
     object NotifyUserForThreadsMigration : HomeActivityViewEvents
     data class MigrateThreads(val checkSession: Boolean) : HomeActivityViewEvents
-
 }

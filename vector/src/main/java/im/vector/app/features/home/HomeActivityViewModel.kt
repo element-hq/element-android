@@ -140,7 +140,6 @@ class HomeActivityViewModel @AssistedInject constructor(
      * - Handle migration when threads are enabled by default
      */
     private fun initThreadsMigration() {
-
         // Notify users
         if (vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.areThreadMessagesEnabled()) {
             Timber.i("----> Notify users about threads")
@@ -168,13 +167,11 @@ class HomeActivityViewModel @AssistedInject constructor(
 //            vectorPreferences.setThreadMessagesEnabled()
 //            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
 //        }
-        if(vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled()){
+        if (vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled()) {
             Timber.i("----> Try to migrate threads")
             _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = true))
             return
         }
-
-
     }
 
     private fun observeInitialSync() {
