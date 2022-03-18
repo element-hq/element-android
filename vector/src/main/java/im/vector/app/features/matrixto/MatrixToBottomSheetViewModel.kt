@@ -30,6 +30,8 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,7 +50,8 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val directRoomHelper: DirectRoomHelper,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
 
     @AssistedFactory
@@ -273,6 +276,11 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 val joinResult = session.spaceService().joinSpace(joinSpace.spaceID, null, joinSpace.viaServers?.take(3) ?: emptyList())
+                withState { state ->
+                    session.getRoomSummary(joinSpace.spaceID)?.let { summary ->
+                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.source.toJoinedRoomTrigger()))
+                    }
+                }
                 if (joinResult.isSuccess()) {
                     _viewEvents.post(MatrixToViewEvents.NavigateToSpace(joinSpace.spaceID))
                 } else {
@@ -297,6 +305,11 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.joinRoom(action.roomId, null, action.viaServers?.take(3) ?: emptyList())
+                withState { state ->
+                    session.getRoomSummary(action.roomId)?.let { summary ->
+                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.source.toJoinedRoomTrigger()))
+                    }
+                }
                 _viewEvents.post(MatrixToViewEvents.NavigateToRoom(action.roomId))
             } catch (failure: Throwable) {
                 _viewEvents.post(MatrixToViewEvents.ShowModalError(errorFormatter.toHumanReadable(failure)))

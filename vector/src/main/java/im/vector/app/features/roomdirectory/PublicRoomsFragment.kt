@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -33,6 +34,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPublicRoomsBinding
+import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import kotlinx.coroutines.flow.debounce
@@ -52,7 +55,8 @@ import javax.inject.Inject
 class PublicRoomsFragment @Inject constructor(
         private val publicRoomsController: PublicRoomsController,
         private val permalinkHandler: PermalinkHandler,
-        private val session: Session
+        private val session: Session,
+        private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentPublicRoomsBinding>(),
         PublicRoomsController.Callback {
 
@@ -143,6 +147,12 @@ class PublicRoomsFragment @Inject constructor(
         withState(viewModel) { state ->
             when (joinState) {
                 JoinState.JOINED -> {
+                    analyticsTracker.capture(
+                            publicRoom.toAnalyticsViewRoom(
+                                    trigger = ViewRoom.Trigger.RoomDirectory,
+                                    groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
+                            )
+                    )
                     navigator.openRoom(requireActivity(), publicRoom.roomId)
                 }
                 else             -> {

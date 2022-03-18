@@ -18,6 +18,9 @@ package im.vector.app.features.crypto.verification
 import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
@@ -42,7 +45,9 @@ import javax.inject.Singleton
 class IncomingVerificationRequestHandler @Inject constructor(
         private val context: Context,
         private var avatarRenderer: Provider<AvatarRenderer>,
-        private val popupAlertManager: PopupAlertManager) : VerificationService.Listener {
+        private val popupAlertManager: PopupAlertManager,
+        private val analyticsTracker: AnalyticsTracker,
+) : VerificationService.Listener {
 
     private var session: Session? = null
 
@@ -156,6 +161,11 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 if (roomId.isNullOrBlank()) {
                                     it.navigator.waitSessionVerification(it)
                                 } else {
+                                    analyticsTracker.capture(
+                                            session?.getRoomSummary(roomId).toAnalyticsViewRoom(
+                                                    trigger = ViewRoom.Trigger.VerificationRequest
+                                            )
+                                    )
                                     it.navigator.openRoom(it, roomId, pr.transactionId)
                                 }
                             }

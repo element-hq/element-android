@@ -68,6 +68,7 @@ import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.matrixto.MatrixToSource
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
@@ -291,13 +292,13 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openMatrixToBottomSheet(context: Context, link: String) {
+    override fun openMatrixToBottomSheet(context: Context, link: String, source: MatrixToSource) {
         if (context is AppCompatActivity) {
             if (context !is MatrixToBottomSheet.InteractionListener) {
                 fatalError("Caller context should implement MatrixToBottomSheet.InteractionListener", vectorPreferences.failFast())
             }
             // TODO check if there is already one??
-            MatrixToBottomSheet.withLink(link)
+            MatrixToBottomSheet.withLink(link, source)
                     .show(context.supportFragmentManager, "HA#MatrixToBottomSheet")
         }
     }

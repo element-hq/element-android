@@ -29,6 +29,7 @@ import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
+import im.vector.app.features.matrixto.MatrixToSource
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.poll.PollMode
@@ -78,7 +79,7 @@ interface Navigator {
 
     fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData, fromEmailInviteLink: PermalinkData.RoomEmailInviteLink? = null)
 
-    fun openMatrixToBottomSheet(context: Context, link: String)
+    fun openMatrixToBottomSheet(context: Context, link: String, source: MatrixToSource)
 
     fun openCreateRoom(context: Context, initialName: String = "", openAfterCreate: Boolean = true)
 

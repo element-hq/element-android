@@ -28,12 +28,15 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetMatrixToCardBinding
+import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -44,10 +47,13 @@ class MatrixToBottomSheet :
 
     @Parcelize
     data class MatrixToArgs(
-            val matrixToLink: String
+            val matrixToLink: String,
+            val source: MatrixToSource
     ) : Parcelable
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var session: Session
+    @Inject lateinit var appStateHandler: AppStateHandler
 
     var interactionListener: InteractionListener? = null
 
@@ -98,6 +104,14 @@ class MatrixToBottomSheet :
             when (it) {
                 is MatrixToViewEvents.NavigateToRoom  -> {
                     interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId)
+                    withState(viewModel) { state ->
+                        analyticsTracker.capture(
+                                session.getRoomSummary(it.roomId).toAnalyticsViewRoom(
+                                    trigger = state.source.toViewRoomTrigger(),
+                                    groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
+                                )
+                        )
+                    }
                     dismiss()
                 }
                 MatrixToViewEvents.Dismiss            -> dismiss()
@@ -116,9 +130,9 @@ class MatrixToBottomSheet :
     }
 
     companion object {
-        fun withLink(matrixToLink: String): MatrixToBottomSheet {
+        fun withLink(matrixToLink: String, source: MatrixToSource): MatrixToBottomSheet {
             return MatrixToBottomSheet().apply {
-                setArguments(MatrixToArgs(matrixToLink = matrixToLink))
+                setArguments(MatrixToArgs(matrixToLink = matrixToLink, source = source))
             }
         }
     }

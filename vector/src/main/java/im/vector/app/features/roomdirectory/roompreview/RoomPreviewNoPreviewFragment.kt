@@ -30,6 +30,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ButtonStateView
@@ -37,12 +38,15 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.core.utils.tappableMatchingText
 import im.vector.app.databinding.FragmentRoomPreviewNoPreviewBinding
+import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.JoinState
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -51,7 +55,9 @@ import javax.inject.Inject
  * Note: this Fragment is also used for world readable room for the moment
  */
 class RoomPreviewNoPreviewFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        private val session: Session,
+        private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentRoomPreviewNoPreviewBinding>() {
 
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
@@ -94,6 +100,12 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
             if (state.roomType == RoomType.SPACE) {
                 navigator.switchToSpace(requireActivity(), state.roomId, Navigator.PostSwitchSpaceAction.None)
             } else {
+                analyticsTracker.capture(
+                    session.getRoomSummary(state.roomId).toAnalyticsViewRoom(
+                            trigger = ViewRoom.Trigger.MobileRoomPreview,
+                            groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
+                    )
+                )
                 navigator.openRoom(requireActivity(), state.roomId, roomPreviewData.eventId, roomPreviewData.buildTask)
             }
         }

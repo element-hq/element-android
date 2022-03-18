@@ -29,6 +29,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -37,8 +38,11 @@ import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSearchBinding
+import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import javax.inject.Inject
@@ -51,7 +55,9 @@ data class SearchArgs(
 ) : Parcelable
 
 class SearchFragment @Inject constructor(
-        private val controller: SearchResultController
+        private val controller: SearchResultController,
+        private val session: Session,
+        private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentSearchBinding>(),
         StateView.EventCallback,
         SearchResultController.Listener {
@@ -134,7 +140,17 @@ class SearchFragment @Inject constructor(
                     roomEncryptionTrustLevel = null,
                     rootThreadEventId = it)
             navigator.openThread(requireContext(), threadTimelineArgs, event.eventId)
-        } ?: navigator.openRoom(requireContext(), roomId, event.eventId)
+        } ?: openRoom(roomId, event.eventId)
+    }
+
+    private fun openRoom(roomId: String, eventId: String?) {
+        analyticsTracker.capture(
+                session.getRoomSummary(roomId).toAnalyticsViewRoom(
+                        trigger = ViewRoom.Trigger.MessageSearch,
+                        groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
+                )
+        )
+        navigator.openRoom(requireContext(), roomId, eventId)
     }
 
     override fun loadMore() {

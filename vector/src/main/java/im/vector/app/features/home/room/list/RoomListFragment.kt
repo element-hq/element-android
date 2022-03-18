@@ -35,6 +35,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
@@ -43,13 +44,16 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
+import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
+import im.vector.app.features.matrixto.MatrixToSource
 import im.vector.app.features.notifications.NotificationDrawerManager
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -58,6 +62,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orTrue
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
@@ -73,7 +78,9 @@ class RoomListFragment @Inject constructor(
         private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val footerController: RoomListFooterController,
-        private val userPreferencesProvider: UserPreferencesProvider
+        private val userPreferencesProvider: UserPreferencesProvider,
+        private val session: Session,
+        private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentRoomListBinding>(),
         RoomListListener,
         OnBackPressed,
@@ -180,7 +187,7 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun handleShowMxToLink(link: String) {
-        navigator.openMatrixToBottomSheet(requireContext(), link)
+        navigator.openMatrixToBottomSheet(requireContext(), link, MatrixToSource.ROOM_LIST)
     }
 
     override fun onDestroyView() {
@@ -197,6 +204,12 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom, isInviteAlreadyAccepted: Boolean) {
+        analyticsTracker.capture(
+                event.roomSummary.toAnalyticsViewRoom(
+                        trigger = ViewRoom.Trigger.RoomList,
+                        groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
+                )
+        )
         navigator.openRoom(context = requireActivity(), roomId = event.roomSummary.roomId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
     }
 

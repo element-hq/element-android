@@ -30,6 +30,7 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -38,6 +39,8 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentCreateRoomBinding
+import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
@@ -47,6 +50,7 @@ import im.vector.app.features.roomprofile.settings.joinrule.toOption
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
@@ -62,7 +66,9 @@ data class CreateRoomArgs(
 class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController,
         private val createSpaceController: CreateSubSpaceController,
-        colorProvider: ColorProvider
+        colorProvider: ColorProvider,
+        private val session: Session,
+        private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentCreateRoomBinding>(),
         CreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,
@@ -219,20 +225,27 @@ class CreateRoomFragment @Inject constructor(
         val async = state.asyncCreateRoomRequest
         views.waitingView.root.isVisible = async is Loading
         if (async is Success) {
+            val roomId = async()
             // Navigate to freshly created room
             if (state.openAfterCreate) {
                 if (state.isSubSpace) {
                     navigator.switchToSpace(
                             requireContext(),
-                            async(),
+                            roomId,
                             Navigator.PostSwitchSpaceAction.None
                     )
                 } else {
-                    navigator.openRoom(requireActivity(), async())
+                    analyticsTracker.capture(
+                            session.getRoomSummary(roomId).toAnalyticsViewRoom(
+                                    trigger = ViewRoom.Trigger.Created,
+                                    groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
+                            )
+                    )
+                    navigator.openRoom(requireActivity(), roomId)
                 }
             }
 
-            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoomSuccess(async()))
+            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoomSuccess(roomId))
             sharedActionViewModel.post(RoomDirectorySharedAction.Close)
         } else {
             // Populate list with Epoxy

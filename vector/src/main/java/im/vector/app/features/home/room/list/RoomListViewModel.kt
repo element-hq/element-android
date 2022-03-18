@@ -32,6 +32,8 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
@@ -266,7 +268,6 @@ class RoomListViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.joinRoom(action.roomId, null, action.viaServers ?: emptyList())
-
                 suggestedRoomJoiningState.postValue(suggestedRoomJoiningState.value.orEmpty().toMutableMap().apply {
                     this[action.roomId] = Success(Unit)
                 }.toMap())
@@ -275,6 +276,8 @@ class RoomListViewModel @AssistedInject constructor(
                     this[action.roomId] = Fail(failure)
                 }.toMap())
             }
+            session.getRoomSummary(action.roomId)
+                    ?.let { analyticsTracker.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.RoomDirectory)) }
         }
     }
 

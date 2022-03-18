@@ -35,6 +35,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.matrixto.MatrixToSource
 import im.vector.app.features.qrcode.QrCodeScannerEvents
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.qrcode.QrCodeScannerViewModel
@@ -92,7 +93,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
                 }
                 is UserCodeState.Mode.RESULT -> {
                     showFragment(ShowUserCodeFragment::class)
-                    MatrixToBottomSheet.withLink(mode.rawLink).show(supportFragmentManager, "MatrixToBottomSheet")
+                    MatrixToBottomSheet.withLink(mode.rawLink, MatrixToSource.USER_CODE).show(supportFragmentManager, "MatrixToBottomSheet")
                 }
             }
         }

@@ -29,6 +29,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -226,7 +227,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.joinRoom(action.publicRoom.roomId, viaServers = viaServers)
-                analyticsTracker.capture(action.publicRoom.toAnalyticsJoinedRoom())
+                analyticsTracker.capture(action.publicRoom.toAnalyticsJoinedRoom(JoinedRoom.Trigger.RoomDirectory))
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
             } catch (failure: Throwable) {

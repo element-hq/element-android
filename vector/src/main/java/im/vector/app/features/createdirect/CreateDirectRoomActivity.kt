@@ -31,6 +31,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
@@ -42,7 +43,9 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.qrcode.QrCodeScannerEvents
 import im.vector.app.features.qrcode.QrCodeScannerFragment
@@ -55,6 +58,7 @@ import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import java.net.HttpURLConnection
 import javax.inject.Inject
@@ -67,6 +71,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
     @Inject lateinit var errorFormatter: ErrorFormatter
+    @Inject lateinit var session: Session
+    @Inject lateinit var appStateHandler: AppStateHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -206,6 +212,12 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     }
 
     private fun renderCreationSuccess(roomId: String) {
+        analyticsTracker.capture(
+                session.getRoomSummary(roomId).toAnalyticsViewRoom(
+                        trigger = ViewRoom.Trigger.MessageUser,
+                        groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
+                )
+        )
         navigator.openRoom(this, roomId)
         finish()
     }
