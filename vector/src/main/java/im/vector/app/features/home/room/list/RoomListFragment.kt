@@ -167,6 +167,15 @@ class RoomListFragment @Inject constructor(
         }
     }
 
+    private fun setUpCollapse() {
+        roomListViewModel.sections.forEachIndexed { index, _ ->
+            val actualBlock = adapterInfosList[index]
+            actualBlock.sectionHeaderAdapter.updateSection(
+                    actualBlock.sectionHeaderAdapter.roomsSectionData.copy(shouldShowExpandedArrow = shouldShowExpendedArrow())
+            )
+        }
+    }
+
     override fun showFailure(throwable: Throwable) {
         showErrorInSnackbar(throwable)
     }
@@ -297,6 +306,7 @@ class RoomListFragment @Inject constructor(
                                                     notificationCount = counts.totalCount,
                                                     isHighlighted = counts.isHighlight
                                             ))
+                                            setUpCollapse()
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
                                             refreshCollapseStates()
@@ -329,8 +339,10 @@ class RoomListFragment @Inject constructor(
                                             controller.setData(list)
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     isHidden = list.isEmpty(),
-                                                    isLoading = false))
+                                                    isLoading = false
+                                            ))
                                             checkEmptyState()
+                                            setUpCollapse()
                                         }
                                         observeItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
@@ -338,6 +350,7 @@ class RoomListFragment @Inject constructor(
                                                     notificationCount = counts.totalCount,
                                                     isHighlighted = counts.isHighlight
                                             ))
+                                            setUpCollapse()
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
                                             refreshCollapseStates()
@@ -442,6 +455,10 @@ class RoomListFragment @Inject constructor(
 
     override fun invalidate() = withState(roomListViewModel) { state ->
         footerController.setData(state)
+    }
+
+    private fun shouldShowExpendedArrow(): Boolean {
+        return adapterInfosList.filter { !it.sectionHeaderAdapter.roomsSectionData.isHidden }.size >= 2
     }
 
     private fun checkEmptyState() {
