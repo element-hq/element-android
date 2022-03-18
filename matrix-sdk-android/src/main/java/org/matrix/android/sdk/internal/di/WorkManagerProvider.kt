@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -80,8 +81,8 @@ internal class WorkManagerProvider @Inject constructor(
             workManager.enqueue(checkWorkerRequest)
             val checkWorkerLiveState = workManager.getWorkInfoByIdLiveData(checkWorkerRequest.id)
             val observer = object : Observer<WorkInfo> {
-                override fun onChanged(workInfo: WorkInfo) {
-                    if (workInfo.state.isFinished) {
+                override fun onChanged(workInfo: WorkInfo?) {
+                    if (workInfo?.state?.isFinished == true) {
                         checkWorkerLiveState.removeObserver(this)
                         if (workInfo.state == WorkInfo.State.FAILED) {
                             throw RuntimeException("MatrixWorkerFactory is not being set on your worker configuration.\n" +
