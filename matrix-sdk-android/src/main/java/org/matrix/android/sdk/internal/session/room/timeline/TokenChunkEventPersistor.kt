@@ -109,8 +109,14 @@ internal class TokenChunkEventPersistor @Inject constructor(
                         this.nextChunk = nextChunk
                         this.prevChunk = prevChunk
                     }
-                    nextChunk?.prevChunk = currentChunk
-                    prevChunk?.nextChunk = currentChunk
+                    val allNextChunks = ChunkEntity.findAll(realm, roomId, prevToken = nextToken)
+                    val allPrevChunks = ChunkEntity.findAll(realm, roomId, nextToken = prevToken)
+                    allNextChunks?.forEach {
+                        it.prevChunk = currentChunk
+                    }
+                    allPrevChunks?.forEach {
+                        it.nextChunk = currentChunk
+                    }
                     if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
                         handleReachEnd(roomId, direction, currentChunk)
                     } else {
