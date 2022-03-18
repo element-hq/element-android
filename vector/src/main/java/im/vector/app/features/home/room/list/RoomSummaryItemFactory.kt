@@ -28,8 +28,8 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -43,7 +43,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                                                  private val typingHelper: TypingHelper,
                                                  private val avatarRenderer: AvatarRenderer,
                                                  private val errorFormatter: ErrorFormatter,
-                                                 private val matrixConfiguration: MatrixConfiguration) {
+                                                 private val vectorPreferences: VectorPreferences) {
 
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
@@ -127,7 +127,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 // We do not display shield in the room list anymore
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .izPublic(roomSummary.isPublic)
-                .showPresence(roomSummary.isDirect && matrixConfiguration.presenceSyncEnabled)
+                .showPresence(roomSummary.isDirect && vectorPreferences.showPresence())
                 .userPresence(roomSummary.directUserPresence)
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)

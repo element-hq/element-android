@@ -51,10 +51,10 @@ import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
@@ -69,7 +69,7 @@ class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-        private val matrixConfiguration: MatrixConfiguration
+        private val vectorPreferences: VectorPreferences
 ) :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomProfileController.Callback {
@@ -224,7 +224,7 @@ class RoomProfileFragment @Inject constructor(
                 avatarRenderer.render(matrixItem, views.matrixProfileToolbarAvatarImageView)
                 headerViews.roomProfileDecorationImageView.render(it.roomEncryptionTrustLevel)
                 views.matrixProfileDecorationToolbarAvatarImageView.render(it.roomEncryptionTrustLevel)
-                headerViews.roomProfilePresenceImageView.render(it.isDirect && matrixConfiguration.presenceSyncEnabled, it.directUserPresence)
+                headerViews.roomProfilePresenceImageView.render(it.isDirect && vectorPreferences.showPresence(), it.directUserPresence)
                 headerViews.roomProfilePublicImageView.isVisible = it.isPublic && !it.isDirect
             }
         }

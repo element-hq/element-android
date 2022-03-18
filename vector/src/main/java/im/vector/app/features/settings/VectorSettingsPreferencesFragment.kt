@@ -71,6 +71,14 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             }
         }
 
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_SHOW_PRESENCE)!!.let { pref ->
+            pref.isChecked = vectorPreferences.showPresence()
+            pref.setOnPreferenceChangeListener { _, _ ->
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
+                true
+            }
+        }
+
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME)!!.let { pref ->
             pref.isChecked = vectorPreferences.prefSpacesShowAllRoomInHome()
             pref.setOnPreferenceChangeListener { _, _ ->

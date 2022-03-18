@@ -60,11 +60,7 @@ data class MatrixConfiguration(
         /**
          * RoomDisplayNameFallbackProvider to provide default room display name.
          */
-        val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider,
-        /**
-         * True to enable presence information sync (if available). False to disable regardless of server setting.
-         */
-        val presenceSyncEnabled: Boolean = true
+        val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider
 ) {
 
     /**

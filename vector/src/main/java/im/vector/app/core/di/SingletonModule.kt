@@ -117,7 +117,6 @@ object VectorStaticModule {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
-                presenceSyncEnabled = BuildConfig.PRESENCE_SYNC_ENABLED
         )
     }
 

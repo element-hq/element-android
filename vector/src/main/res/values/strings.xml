@@ -1047,6 +1047,11 @@
     <string name="media_saving_period_1_month">1 month</string>
     <string name="media_saving_period_forever">Forever</string>
 
+    <!-- Presence settings -->
+    <string name="settings_presence">Presence</string>
+    <string name="settings_show_presence">Show presence</string>
+    <string name="settings_show_presence_summary">If available, presence will be shown on other users avatars</string>
+
     <!-- Room Settings -->
 
     <!-- room global settings-->
