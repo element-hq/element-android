@@ -46,6 +46,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!-- Jitsi SDK is now API23+ -->
     <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react" />
@@ -84,8 +85,8 @@
         android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Vector.Light"
         android:taskAffinity="${applicationId}.${appTaskAffinitySuffix}"
+        android:theme="@style/Theme.Vector.Light"
         tools:replace="android:allowBackup">
 
         <!-- No limit for screen ratio: avoid black strips -->
@@ -368,6 +369,11 @@
                 <action android:name="android.telecom.ConnectionService" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".features.location.LocationSharingService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
 
         <!-- Receivers -->
 

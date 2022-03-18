@@ -26,7 +26,9 @@ import androidx.core.location.LocationListenerCompat
 import im.vector.app.BuildConfig
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class LocationTracker @Inject constructor(
         context: Context
 ) : LocationListenerCompat {
