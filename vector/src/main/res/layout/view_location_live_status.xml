@@ -39,14 +39,10 @@
 
     <Button
         android:id="@+id/locationLiveStatusStop"
-        style="Widget.Vector.Button.Text.OnPrimary"
+        style="@style/Widget.Vector.Button.Text.OnPrimary.LocationLive"
         android:layout_width="60dp"
         android:layout_height="0dp"
-        android:background="?selectableItemBackground"
-        android:gravity="center"
-        android:padding="0dp"
         android:text="@string/location_share_live_stop"
-        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/locationLiveStatusContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/locationLiveStatusContainer" />
