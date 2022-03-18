@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.login.terms
+package org.matrix.android.sdk.api.auth
 
 data class UrlAndName(
         val url: String,
