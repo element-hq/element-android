@@ -29,7 +29,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.mapboxsdk.maps.MapView
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING
@@ -243,7 +242,7 @@ class LocationSharingFragment @Inject constructor(
         // first, update the options view
         val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
             true  -> {
-                if (BuildConfig.ENABLE_LIVE_LOCATION_SHARING) {
+                if (state.isLiveLocationSharingEnabled) {
                     setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
                 } else {
                     setOf(LocationSharingOption.USER_CURRENT)

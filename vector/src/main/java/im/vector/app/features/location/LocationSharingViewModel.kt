@@ -21,9 +21,11 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.VectorOverrides
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.domain.usecase.CompareLocationsUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -48,7 +50,8 @@ class LocationSharingViewModel @AssistedInject constructor(
         private val locationTracker: LocationTracker,
         private val locationPinProvider: LocationPinProvider,
         private val session: Session,
-        private val compareLocationsUseCase: CompareLocationsUseCase
+        private val compareLocationsUseCase: CompareLocationsUseCase,
+        private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<LocationSharingViewState, LocationSharingAction, LocationSharingViewEvents>(initialState), LocationTracker.Callback {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -68,6 +71,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         setUserItem()
         updatePin()
         compareTargetAndUserLocation()
+        observeVectorOverrides()
     }
 
     private fun setUserItem() {
@@ -107,6 +111,12 @@ class LocationSharingViewModel @AssistedInject constructor(
     private suspend fun compareTargetLocation(targetLocation: LocationData): Boolean? {
         return awaitState().lastKnownUserLocation
                 ?.let { userLocation -> compareLocationsUseCase.execute(userLocation, targetLocation) }
+    }
+
+    private fun observeVectorOverrides() {
+        vectorOverrides.forceEnableLiveLocationSharing.setOnEach { forceLiveLocation ->
+            copy(isLiveLocationSharingEnabled = forceLiveLocation || BuildConfig.ENABLE_LIVE_LOCATION_SHARING)
+        }
     }
 
     override fun onCleared() {
