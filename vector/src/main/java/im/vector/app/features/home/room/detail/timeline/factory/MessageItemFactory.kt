@@ -326,8 +326,8 @@ class MessageItemFactory @Inject constructor(
         } ?: ""
         return MessageFileItem_()
                 .attributes(attributes)
-                .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
-                .izDownloaded(session.fileService().isFileInCache(
+                .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
+                .isDownloaded(session.fileService().isFileInCache(
                         fileUrl,
                         messageContent.getFileName(),
                         messageContent.mimeType,
@@ -368,8 +368,8 @@ class MessageItemFactory @Inject constructor(
                 .waveform(messageContent.audioWaveformInfo?.waveform?.toFft().orEmpty())
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
                 .voiceMessagePlaybackTracker(voiceMessagePlaybackTracker)
-                .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
-                .izDownloaded(session.fileService().isFileInCache(
+                .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
+                .isDownloaded(session.fileService().isFileInCache(
                         fileUrl,
                         messageContent.getFileName(),
                         messageContent.mimeType,
@@ -431,8 +431,8 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .izLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
-                .izDownloaded(session.fileService().isFileInCache(messageContent))
+                .isLocalFile(localFilesHelper.isLocalFile(messageContent.getFileUrl()))
+                .isDownloaded(session.fileService().isFileInCache(messageContent))
                 .mxcUrl(mxcUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)

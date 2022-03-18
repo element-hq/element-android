@@ -51,9 +51,11 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
 //    var clickListener: ClickListener? = null
 
     @EpoxyAttribute
+    @JvmField
     var isLocalFile = false
 
     @EpoxyAttribute
+    @JvmField
     var isDownloaded = false
 
     @EpoxyAttribute

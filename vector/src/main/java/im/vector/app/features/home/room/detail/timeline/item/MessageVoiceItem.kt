@@ -48,9 +48,11 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     var waveform: List<Int> = emptyList()
 
     @EpoxyAttribute
+    @JvmField
     var isLocalFile = false
 
     @EpoxyAttribute
+    @JvmField
     var isDownloaded = false
 
     @EpoxyAttribute
