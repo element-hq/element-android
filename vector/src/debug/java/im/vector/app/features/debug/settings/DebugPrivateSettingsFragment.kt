@@ -46,6 +46,9 @@ class DebugPrivateSettingsFragment : VectorBaseFragment<FragmentDebugPrivateSett
         views.forceLoginFallback.setOnCheckedChangeListener { _, isChecked ->
             viewModel.handle(DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled(isChecked))
         }
+        views.forceEnableLiveLocationSharing.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.handle(DebugPrivateSettingsViewActions.SetEnableLiveLocationSharing(isChecked))
+        }
     }
 
     override fun invalidate() = withState(viewModel) {
@@ -57,5 +60,6 @@ class DebugPrivateSettingsFragment : VectorBaseFragment<FragmentDebugPrivateSett
             viewModel.handle(DebugPrivateSettingsViewActions.SetAvatarCapabilityOverride(option))
         }
         views.forceLoginFallback.isChecked = it.forceLoginFallback
+        views.forceEnableLiveLocationSharing.isChecked = it.forceEnableLiveLocationSharing
     }
 }

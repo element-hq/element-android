@@ -62,6 +62,9 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
                     avatar = homeserverCapabilityOverrides.avatar.copy(activeOption = activeAvatarOption),
             ))
         }
+        debugVectorOverrides.forceEnableLiveLocationSharing.setOnEach {
+            copy(forceEnableLiveLocationSharing = it)
+        }
     }
 
     override fun handle(action: DebugPrivateSettingsViewActions) {
@@ -70,6 +73,7 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
             is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
             is SetDisplayNameCapabilityOverride                             -> handSetDisplayNameCapabilityOverride(action)
             is SetAvatarCapabilityOverride                                  -> handSetAvatarCapabilityOverride(action)
+            is DebugPrivateSettingsViewActions.SetEnableLiveLocationSharing -> handleSetEnableLiveLocationSharingOverride(action)
         }
     }
 
@@ -85,17 +89,23 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handSetDisplayNameCapabilityOverride(action: SetDisplayNameCapabilityOverride) {
+    private fun handleSetDisplayNameCapabilityOverride(action: SetDisplayNameCapabilityOverride) {
         viewModelScope.launch {
             val forceDisplayName = action.option.toBoolean()
             debugVectorOverrides.setHomeserverCapabilities { copy(canChangeDisplayName = forceDisplayName) }
         }
     }
 
-    private fun handSetAvatarCapabilityOverride(action: SetAvatarCapabilityOverride) {
+    private fun handleSetAvatarCapabilityOverride(action: SetAvatarCapabilityOverride) {
         viewModelScope.launch {
             val forceAvatar = action.option.toBoolean()
             debugVectorOverrides.setHomeserverCapabilities { copy(canChangeAvatar = forceAvatar) }
+        }
+    }
+
+    private fun handleSetEnableLiveLocationSharingOverride(action: DebugPrivateSettingsViewActions.SetEnableLiveLocationSharing) {
+        viewModelScope.launch {
+            debugVectorOverrides.setForceEnableLiveLocationSharing(action.force)
         }
     }
 }
