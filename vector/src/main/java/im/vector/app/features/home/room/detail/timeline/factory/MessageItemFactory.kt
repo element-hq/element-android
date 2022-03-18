@@ -192,7 +192,7 @@ class MessageItemFactory @Inject constructor(
                 if (messageContent.voiceMessageIndicator != null) {
                     buildVoiceMessageItem(params, messageContent, informationData, highlight, attributes)
                 } else {
-                    buildAudioMessageItem(messageContent, informationData, highlight, attributes)
+                    buildAudioMessageItem(params, messageContent, informationData, highlight, attributes)
                 }
             }
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
@@ -312,11 +312,12 @@ class MessageItemFactory @Inject constructor(
                 .callback(callback)
     }
 
-    private fun buildAudioMessageItem(messageContent: MessageAudioContent,
+    private fun buildAudioMessageItem(params: TimelineItemFactoryParams,
+                                      messageContent: MessageAudioContent,
                                       @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
-                                      attributes: AbsMessageItem.Attributes): MessageFileItem? {
+                                      attributes: AbsMessageItem.Attributes): MessageVoiceItem? {
         val fileUrl = messageContent.getFileUrl()?.let {
             if (informationData.sentByMe && !informationData.sendState.isSent()) {
                 it
@@ -324,8 +325,18 @@ class MessageItemFactory @Inject constructor(
                 it.takeIf { it.isMxcUrl() }
             }
         } ?: ""
-        return MessageFileItem_()
+
+        val playbackControlButtonClickListener: ClickListener = object : ClickListener {
+            override fun invoke(view: View) {
+                params.callback?.onVoiceControlButtonClicked(informationData.eventId, messageContent)
+            }
+        }
+
+        return MessageVoiceItem_()
                 .attributes(attributes)
+                .duration(messageContent.audioInfo?.duration ?: 0)
+                .playbackControlButtonClickListener(playbackControlButtonClickListener)
+                .voiceMessagePlaybackTracker(voiceMessagePlaybackTracker)
                 .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .isDownloaded(session.fileService().isFileInCache(
                         fileUrl,
@@ -338,8 +349,6 @@ class MessageItemFactory @Inject constructor(
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .filename(messageContent.body)
-                .iconRes(R.drawable.ic_headphones)
     }
 
     private fun buildVoiceMessageItem(params: TimelineItemFactoryParams,
