@@ -1028,6 +1028,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 .putBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, true)
                 .apply()
     }
+
     /**
      * Indicates whether or not the user will be notified about the new thread support
      * We should notify the user only if he had old thread support enabled
