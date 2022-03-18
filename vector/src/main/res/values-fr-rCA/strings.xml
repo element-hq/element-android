@@ -2069,4 +2069,9 @@
         <item quantity="one">%d changement des ACL du serveur</item>
         <item quantity="other">%d changements des ACL du serveur</item>
     </plurals>
+    <string name="action_enable">Activer</string>
+    <string name="action_view_threads">Voir les fils de discussions</string>
+    <string name="missing_permissions_title">Permissions manquantes</string>
+    <string name="denied_permission_voice_message">Pour envoyer des messages vocaux, veuillez accorder la permission Microphone.</string>
+    <string name="denied_permission_camera">Pour effectuer cette action, veuillez autoriser la permission Caméra depuis les réglages système.</string>
 </resources>
