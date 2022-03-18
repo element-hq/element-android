@@ -18,6 +18,7 @@ package im.vector.app.features.onboarding
 
 import im.vector.app.test.fakes.FakeRegistrationWizard
 import im.vector.app.test.fakes.FakeSession
+import io.mockk.coVerifyAll
 import kotlinx.coroutines.test.runBlockingTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
@@ -63,6 +64,7 @@ class RegistrationActionHandlerTest {
 
         val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, case.action)
 
+        coVerifyAll { case.expect(fakeRegistrationWizard) }
         result shouldBeEqualTo AN_EXPECTED_RESULT
     }
 }
@@ -70,5 +72,3 @@ class RegistrationActionHandlerTest {
 private fun case(action: RegisterAction, expect: suspend RegistrationWizard.() -> RegistrationResult) = Case(action, expect)
 
 private class Case(val action: RegisterAction, val expect: suspend RegistrationWizard.() -> RegistrationResult)
-
-
