@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.auth.registration
 
+import org.matrix.android.sdk.api.util.JsonDict
+
 /**
  * Set of methods to be able to create an account on a homeserver.
  *
@@ -74,6 +76,11 @@ interface RegistrationWizard {
     suspend fun dummy(): RegistrationResult
 
     /**
+     * Perform the other stage.
+     */
+    suspend fun registrationOther(authParams: JsonDict): RegistrationResult
+
+    /**
      * Perform the "m.login.email.identity" or "m.login.msisdn" stage.
      *
      * @param threePid the threePid to add to the account. If this is an email, the homeserver will send an email
@@ -110,4 +117,10 @@ interface RegistrationWizard {
      * called successfully.
      */
     val isRegistrationStarted: Boolean
+
+    /**
+     * True when login and password have been sent with success to the homeserver, i.e. [createAccount] has been
+     * called successfully.
+     */
+    val currentRegistrationSessionId: String?
 }
