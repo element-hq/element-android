@@ -202,10 +202,7 @@ internal class DefaultRegistrationWizard(
         val mutableParams = authParams.toMutableMap()
         mutableParams["session"] = safeSession
 
-        val params =
-                RegistrationOtherParams(
-                        auth = mutableParams
-                )
+        val params = RegistrationOtherParams(auth = mutableParams)
         return performRegistrationOtherRequest(params)
     }
 
