@@ -1177,6 +1177,9 @@ class TimelineFragment @Inject constructor(
 
         val messageContent: MessageContent? = event.getLastMessageContent()
         val nonFormattedBody = when {
+            messageContent is MessageAudioContent -> {
+                getAudioContentBodyText(messageContent)
+            }
             messageContent is MessageAudioContent && messageContent.voiceMessageIndicator != null -> {
                 val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
                 getString(R.string.voice_message_reply_content, formattedDuration)
@@ -1223,6 +1226,14 @@ class TimelineFragment @Inject constructor(
             }
         }
         focusComposerAndShowKeyboard()
+    }
+
+    private fun getAudioContentBodyText(messageContent: MessageAudioContent): String {
+        val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
+        return if (messageContent.voiceMessageIndicator != null)
+            getString(R.string.voice_message_reply_content, formattedDuration)
+        else
+            getString(R.string.audio_message_reply_content, messageContent.body, formattedDuration)
     }
 
     override fun onResume() {
