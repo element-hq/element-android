@@ -109,7 +109,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val mainLayout by bind<ViewGroup>(R.id.messageFileMainLayout)
-        val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
+        val progressLayout by bind<ViewGroup>(R.id.audioFileUploadProgressLayout)
         val fileLayout by bind<ViewGroup>(R.id.messageFileLayout)
         val fileImageView by bind<ImageView>(R.id.messageFileIconView)
         val fileImageWrapper by bind<ViewGroup>(R.id.messageFileImageView)

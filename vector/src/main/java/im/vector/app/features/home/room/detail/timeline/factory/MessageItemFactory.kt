@@ -43,6 +43,8 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttrib
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
@@ -52,8 +54,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
-import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
-import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
 import im.vector.app.features.home.room.detail.timeline.item.PollItem
 import im.vector.app.features.home.room.detail.timeline.item.PollItem_
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
@@ -96,7 +96,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.PollType
-import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -314,36 +313,18 @@ class MessageItemFactory @Inject constructor(
 
     private fun buildAudioMessageItem(params: TimelineItemFactoryParams,
                                       messageContent: MessageAudioContent,
-                                      @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
-                                      attributes: AbsMessageItem.Attributes): MessageVoiceItem? {
-        val fileUrl = messageContent.getFileUrl()?.let {
-            if (informationData.sentByMe && !informationData.sendState.isSent()) {
-                it
-            } else {
-                it.takeIf { it.isMxcUrl() }
-            }
-        } ?: ""
+                                      attributes: AbsMessageItem.Attributes): MessageAudioItem {
+        val fileUrl = getAudioFileUrl(messageContent, informationData)
+        val playbackControlButtonClickListener = createOnPlaybackButtonClickListener(messageContent, informationData, params)
 
-        val playbackControlButtonClickListener: ClickListener = object : ClickListener {
-            override fun invoke(view: View) {
-                params.callback?.onVoiceControlButtonClicked(informationData.eventId, messageContent)
-            }
-        }
-
-        return MessageVoiceItem_()
+        return MessageAudioItem_()
                 .attributes(attributes)
                 .duration(messageContent.audioInfo?.duration ?: 0)
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
                 .voiceMessagePlaybackTracker(voiceMessagePlaybackTracker)
                 .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
-                .isDownloaded(session.fileService().isFileInCache(
-                        fileUrl,
-                        messageContent.getFileName(),
-                        messageContent.mimeType,
-                        messageContent.encryptedFileInfo?.toElementToDecrypt())
-                )
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
@@ -351,39 +332,42 @@ class MessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
     }
 
+    private fun getAudioFileUrl(
+            messageContent: MessageAudioContent,
+            informationData: MessageInformationData,
+    ) = messageContent.getFileUrl()?.let {
+        if (informationData.sentByMe && !informationData.sendState.isSent()) {
+            it
+        } else {
+            it.takeIf { it.isMxcUrl() }
+        }
+    } ?: ""
+
+    private fun createOnPlaybackButtonClickListener(
+            messageContent: MessageAudioContent,
+            informationData: MessageInformationData,
+            params: TimelineItemFactoryParams,
+    ) = object : ClickListener {
+        override fun invoke(view: View) {
+            params.callback?.onVoiceControlButtonClicked(informationData.eventId, messageContent)
+        }
+    }
+
     private fun buildVoiceMessageItem(params: TimelineItemFactoryParams,
                                       messageContent: MessageAudioContent,
-                                      @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
-                                      attributes: AbsMessageItem.Attributes): MessageVoiceItem? {
-        val fileUrl = messageContent.getFileUrl()?.let {
-            if (informationData.sentByMe && !informationData.sendState.isSent()) {
-                it
-            } else {
-                it.takeIf { it.isMxcUrl() }
-            }
-        } ?: ""
+                                      attributes: AbsMessageItem.Attributes): MessageAudioItem {
+        val fileUrl = getAudioFileUrl(messageContent, informationData)
+        val playbackControlButtonClickListener = createOnPlaybackButtonClickListener(messageContent, informationData, params)
 
-        val playbackControlButtonClickListener: ClickListener = object : ClickListener {
-            override fun invoke(view: View) {
-                params.callback?.onVoiceControlButtonClicked(informationData.eventId, messageContent)
-            }
-        }
-
-        return MessageVoiceItem_()
+        return MessageAudioItem_()
                 .attributes(attributes)
                 .duration(messageContent.audioWaveformInfo?.duration ?: 0)
                 .waveform(messageContent.audioWaveformInfo?.waveform?.toFft().orEmpty())
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
                 .voiceMessagePlaybackTracker(voiceMessagePlaybackTracker)
                 .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
-                .isDownloaded(session.fileService().isFileInCache(
-                        fileUrl,
-                        messageContent.getFileName(),
-                        messageContent.mimeType,
-                        messageContent.encryptedFileInfo?.toElementToDecrypt())
-                )
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)
@@ -432,10 +416,8 @@ class MessageItemFactory @Inject constructor(
     }
 
     private fun buildFileMessageItem(messageContent: MessageFileContent,
-//                                     informationData: MessageInformationData,
                                      highlight: Boolean,
-//                                     callback: TimelineEventController.Callback?,
-                                     attributes: AbsMessageItem.Attributes): MessageFileItem? {
+                                     attributes: AbsMessageItem.Attributes): MessageFileItem {
         val mxcUrl = messageContent.getFileUrl() ?: ""
         return MessageFileItem_()
                 .attributes(attributes)

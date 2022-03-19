@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/voiceLayout"
+    android:id="@+id/audioLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,13 +10,13 @@
     tools:viewBindingIgnore="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/voicePlaybackLayout"
+        android:id="@+id/audioPlaybackLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/TimelineContentMediaPillStyle">
 
         <ImageButton
-            android:id="@+id/voicePlaybackControlButton"
+            android:id="@+id/audioPlaybackControlButton"
             android:layout_width="@dimen/item_event_message_media_button_size"
             android:layout_height="@dimen/item_event_message_media_button_size"
             android:background="@drawable/bg_voice_play_pause_button"
@@ -29,19 +29,19 @@
             app:tint="?vctr_content_secondary" />
 
         <TextView
-            android:id="@+id/voicePlaybackTime"
+            android:id="@+id/audioPlaybackTime"
             style="@style/Widget.Vector.TextView.Body.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:textColor="?vctr_content_secondary"
-            app:layout_constraintBottom_toBottomOf="@id/voicePlaybackControlButton"
-            app:layout_constraintStart_toEndOf="@id/voicePlaybackControlButton"
-            app:layout_constraintTop_toTopOf="@id/voicePlaybackControlButton"
+            app:layout_constraintBottom_toBottomOf="@id/audioPlaybackControlButton"
+            app:layout_constraintStart_toEndOf="@id/audioPlaybackControlButton"
+            app:layout_constraintTop_toTopOf="@id/audioPlaybackControlButton"
             tools:text="0:23" />
 
         <com.visualizer.amplitude.AudioRecordView
-            android:id="@+id/voicePlaybackWaveform"
+            android:id="@+id/audioPlaybackWaveform"
             style="@style/VoicePlaybackWaveform"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -50,13 +50,13 @@
             android:importantForAccessibility="no"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/voicePlaybackTime"
+            app:layout_constraintStart_toEndOf="@id/audioPlaybackTime"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
-        android:id="@+id/messageFileUploadProgressLayout"
+        android:id="@+id/audioFileUploadProgressLayout"
         layout="@layout/media_upload_download_progress_layout"
         android:layout_width="match_parent"
         android:layout_height="46dp"

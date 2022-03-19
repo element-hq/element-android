@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.text.format.DateUtils
@@ -36,7 +37,7 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLay
 import im.vector.app.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
-abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
+abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
 
     @EpoxyAttribute
     var mxcUrl: String = ""
@@ -53,7 +54,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
     @EpoxyAttribute
     @JvmField
-    var isDownloaded = false
+    var isVoiceMessage = false
 
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
@@ -69,21 +70,21 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        renderSendState(holder.voiceLayout, null)
+        renderSendState(holder.audioLayout, null)
         if (!attributes.informationData.sendState.hasFailed()) {
             contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
         } else {
-            holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_cross)
-            holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.error_voice_message_unable_to_play)
+            holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_cross)
+            holder.audioPlaybackControlButton.contentDescription = getUnableToPlayContentDescription(holder.view.context)
             holder.progressLayout.isVisible = false
         }
 
-        holder.voicePlaybackWaveform.setOnLongClickListener(attributes.itemLongClickListener)
+        holder.audioPlaybackWaveform.setOnLongClickListener(attributes.itemLongClickListener)
 
-        holder.voicePlaybackWaveform.post {
-            holder.voicePlaybackWaveform.recreate()
+        holder.audioPlaybackWaveform.post {
+            holder.audioPlaybackWaveform.recreate()
             waveform.forEach { amplitude ->
-                holder.voicePlaybackWaveform.update(amplitude)
+                holder.audioPlaybackWaveform.update(amplitude)
             }
         }
 
@@ -92,8 +93,8 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         else
             ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_quinary)
 
-        holder.voicePlaybackLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
-        holder.voicePlaybackControlButton.setOnClickListener { playbackControlButtonClickListener?.invoke(it) }
+        holder.audioPlaybackLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
+        holder.audioPlaybackControlButton.setOnClickListener { playbackControlButtonClickListener?.invoke(it) }
 
         voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : VoiceMessagePlaybackTracker.Listener {
             override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
@@ -107,22 +108,34 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         })
     }
 
+    private fun getUnableToPlayContentDescription(context: Context) = context.getString(
+            if (isVoiceMessage) R.string.error_voice_message_unable_to_play else R.string.error_audio_message_unable_to_play
+    )
+
     private fun renderIdleState(holder: Holder) {
-        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
-        holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_voice_message)
-        holder.voicePlaybackTime.text = formatPlaybackTime(duration)
+        holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
+        holder.audioPlaybackControlButton.contentDescription = getPlayMessageContentDescription(holder.view.context)
+        holder.audioPlaybackTime.text = formatPlaybackTime(duration)
     }
+
+    private fun getPlayMessageContentDescription(context: Context) = context.getString(
+            if (isVoiceMessage) R.string.a11y_play_voice_message else R.string.a11y_play_audio_message
+    )
 
     private fun renderPlayingState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
-        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
-        holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_pause_voice_message)
-        holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
+        holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
+        holder.audioPlaybackControlButton.contentDescription = getPauseMessageContentDescription(holder.view.context)
+        holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 
+    private fun getPauseMessageContentDescription(context: Context) = context.getString(
+            if (isVoiceMessage) R.string.a11y_pause_voice_message else R.string.a11y_pause_audio_message
+    )
+
     private fun renderPausedState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Paused) {
-        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
-        holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_voice_message)
-        holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
+        holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
+        holder.audioPlaybackControlButton.contentDescription = getPlayMessageContentDescription(holder.view.context)
+        holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
@@ -137,15 +150,15 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val voicePlaybackLayout by bind<View>(R.id.voicePlaybackLayout)
-        val voiceLayout by bind<ViewGroup>(R.id.voiceLayout)
-        val voicePlaybackControlButton by bind<ImageButton>(R.id.voicePlaybackControlButton)
-        val voicePlaybackTime by bind<TextView>(R.id.voicePlaybackTime)
-        val voicePlaybackWaveform by bind<AudioRecordView>(R.id.voicePlaybackWaveform)
-        val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
+        val audioPlaybackLayout by bind<View>(R.id.audioPlaybackLayout)
+        val audioLayout by bind<ViewGroup>(R.id.audioLayout)
+        val audioPlaybackControlButton by bind<ImageButton>(R.id.audioPlaybackControlButton)
+        val audioPlaybackTime by bind<TextView>(R.id.audioPlaybackTime)
+        val audioPlaybackWaveform by bind<AudioRecordView>(R.id.audioPlaybackWaveform)
+        val progressLayout by bind<ViewGroup>(R.id.audioFileUploadProgressLayout)
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentVoiceStub
+        private const val STUB_ID = R.id.messageContentAudioStub
     }
 }

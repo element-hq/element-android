@@ -163,7 +163,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
-import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -1163,6 +1163,7 @@ class TimelineFragment @Inject constructor(
         views.composerLayout.views.sendButton.contentDescription = getString(R.string.action_send)
     }
 
+    // TODO: Test this
     private fun renderSpecialMode(event: TimelineEvent,
                                   @DrawableRes iconRes: Int,
                                   @StringRes descriptionRes: Int,
@@ -1175,13 +1176,17 @@ class TimelineFragment @Inject constructor(
         }
 
         val messageContent: MessageContent? = event.getLastMessageContent()
-        val nonFormattedBody = if (messageContent is MessageAudioContent && messageContent.voiceMessageIndicator != null) {
-            val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
-            getString(R.string.voice_message_reply_content, formattedDuration)
-        } else if (messageContent is MessagePollContent) {
-            messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
-        } else {
-            messageContent?.body ?: ""
+        val nonFormattedBody = when {
+            messageContent is MessageAudioContent && messageContent.voiceMessageIndicator != null -> {
+                val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
+                getString(R.string.voice_message_reply_content, formattedDuration)
+            }
+            messageContent is MessagePollContent                                                  -> {
+                messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
+            }
+            else                                                                                  -> {
+                messageContent?.body ?: ""
+            }
         }
         var formattedBody: CharSequence? = null
         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
@@ -1372,7 +1377,7 @@ class TimelineFragment @Inject constructor(
                     }
                     return when (model) {
                         is MessageFileItem,
-                        is MessageVoiceItem,
+                        is MessageAudioItem,
                         is MessageImageVideoItem,
                         is MessageTextItem -> {
                             return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED
