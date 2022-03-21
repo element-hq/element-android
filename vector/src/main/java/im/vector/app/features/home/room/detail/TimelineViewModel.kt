@@ -1099,11 +1099,13 @@ class TimelineViewModel @AssistedInject constructor(
             computeUnreadState(timelineEvents, roomSummary)
         }
                 // We don't want live update of unread so we skip when we already had a HasUnread or HasNoUnread
-                // However, we want to update an existing HasUnread, as we might get additional information during loading of events.
+                // However, we want to update an existing HasUnread, if the readMarkerId hasn't changed,
+                // as we might be loading new events to fill gaps in the timeline.
                 .distinctUntilChanged { previous, current ->
                     when {
                         previous is UnreadState.Unknown || previous is UnreadState.ReadMarkerNotLoaded -> false
-                        previous is UnreadState.HasUnread && current is UnreadState.HasUnread          -> false
+                        previous is UnreadState.HasUnread && current is UnreadState.HasUnread &&
+                                previous.readMarkerId == current.readMarkerId                          -> false
                         current is UnreadState.HasUnread || current is UnreadState.HasNoUnread         -> true
                         else                                                                           -> false
                     }
@@ -1132,7 +1134,7 @@ class TimelineViewModel @AssistedInject constructor(
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown
             val isFromMe = timelineEvent.root.senderId == session.myUserId
             if (!isFromMe) {
-                return UnreadState.HasUnread(eventId)
+                return UnreadState.HasUnread(eventId, readMarkerIdSnapshot)
             }
         }
         return UnreadState.HasNoUnread
