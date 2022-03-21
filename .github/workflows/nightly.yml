@@ -308,7 +308,7 @@ jobs:
             failure_screenshots/
 
   codecov-units:
-    name: Unit tests with codecoverage
+    name: Unit tests with code coverage
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
