@@ -47,9 +47,6 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     @DrawableRes
     var iconRes: Int = 0
 
-//    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-//    var clickListener: ClickListener? = null
-
     @EpoxyAttribute
     @JvmField
     var isLocalFile = false
@@ -67,13 +64,16 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.fileLayout, holder.filenameView)
+
         if (!attributes.informationData.sendState.hasFailed()) {
             contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
         } else {
             holder.fileImageView.setImageResource(R.drawable.ic_cross)
             holder.progressLayout.isVisible = false
         }
+
         holder.filenameView.text = filename
+
         if (attributes.informationData.sendState.isSending()) {
             holder.fileImageView.setImageResource(iconRes)
         } else {
@@ -85,7 +85,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
                 holder.fileImageView.setImageResource(R.drawable.ic_download)
             }
         }
-//        holder.view.setOnClickListener(clickListener)
+
         val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
             Color.TRANSPARENT
         } else {
@@ -109,7 +109,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val mainLayout by bind<ViewGroup>(R.id.messageFileMainLayout)
-        val progressLayout by bind<ViewGroup>(R.id.audioFileUploadProgressLayout)
+        val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
         val fileLayout by bind<ViewGroup>(R.id.messageFileLayout)
         val fileImageView by bind<ImageView>(R.id.messageFileIconView)
         val fileImageWrapper by bind<ViewGroup>(R.id.messageFileImageView)

@@ -54,6 +54,8 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
 import im.vector.app.features.home.room.detail.timeline.item.PollItem
 import im.vector.app.features.home.room.detail.timeline.item.PollItem_
 import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
@@ -321,6 +323,7 @@ class MessageItemFactory @Inject constructor(
 
         return MessageAudioItem_()
                 .attributes(attributes)
+                .filename(messageContent.body)
                 .duration(messageContent.audioInfo?.duration ?: 0)
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
                 .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
@@ -357,16 +360,16 @@ class MessageItemFactory @Inject constructor(
                                       messageContent: MessageAudioContent,
                                       informationData: MessageInformationData,
                                       highlight: Boolean,
-                                      attributes: AbsMessageItem.Attributes): MessageAudioItem {
+                                      attributes: AbsMessageItem.Attributes): MessageVoiceItem {
         val fileUrl = getAudioFileUrl(messageContent, informationData)
         val playbackControlButtonClickListener = createOnPlaybackButtonClickListener(messageContent, informationData, params)
 
-        return MessageAudioItem_()
+        return MessageVoiceItem_()
                 .attributes(attributes)
                 .duration(messageContent.audioWaveformInfo?.duration ?: 0)
                 .waveform(messageContent.audioWaveformInfo?.waveform?.toFft().orEmpty())
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
-                .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
+                .voiceMessagePlaybackTracker(audioMessagePlaybackTracker)
                 .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)

@@ -19,12 +19,14 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.text.format.DateUtils
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.visualizer.amplitude.AudioRecordView
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
@@ -34,10 +36,7 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLay
 import im.vector.app.features.themes.ThemeUtils
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
-abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
-
-    @EpoxyAttribute
-    var filename: String = ""
+abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
     @EpoxyAttribute
     var mxcUrl: String = ""
@@ -46,8 +45,15 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     var duration: Int = 0
 
     @EpoxyAttribute
+    var waveform: List<Int> = emptyList()
+
+    @EpoxyAttribute
     @JvmField
     var isLocalFile = false
+
+    @EpoxyAttribute
+    @JvmField
+    var isDownloaded = false
 
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
@@ -59,66 +65,63 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     var playbackControlButtonClickListener: ClickListener? = null
 
     @EpoxyAttribute
-    lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
+    lateinit var voiceMessagePlaybackTracker: AudioMessagePlaybackTracker
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        renderSendState(holder.rootLayout, null)
-        bindUploadState(holder)
-        holder.filenameView.text = filename
-        applyLayoutTint(holder)
-        holder.audioPlaybackControlButton.setOnClickListener { playbackControlButtonClickListener?.invoke(it) }
-        renderStateBasedOnAudioPlayback(holder)
-    }
-
-    private fun bindUploadState(holder: Holder) {
+        renderSendState(holder.voiceLayout, null)
         if (!attributes.informationData.sendState.hasFailed()) {
             contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
         } else {
-            holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_cross)
-            holder.audioPlaybackControlButton.contentDescription = holder.view.context.getString(R.string.error_audio_message_unable_to_play)
+            holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_cross)
+            holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.error_voice_message_unable_to_play)
             holder.progressLayout.isVisible = false
         }
-    }
 
-    private fun applyLayoutTint(holder: Holder) {
-        val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble)
+        holder.voicePlaybackWaveform.setOnLongClickListener(attributes.itemLongClickListener)
+
+        holder.voicePlaybackWaveform.post {
+            holder.voicePlaybackWaveform.recreate()
+            waveform.forEach { amplitude ->
+                holder.voicePlaybackWaveform.update(amplitude)
+            }
+        }
+
+        val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
             Color.TRANSPARENT
-        else
+        } else {
             ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_quinary)
+        }
+        holder.voicePlaybackLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
+        holder.voicePlaybackControlButton.setOnClickListener { playbackControlButtonClickListener?.invoke(it) }
 
-        holder.mainLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
-    }
-
-    private fun renderStateBasedOnAudioPlayback(holder: Holder) {
-        audioMessagePlaybackTracker.track(attributes.informationData.eventId, object : AudioMessagePlaybackTracker.Listener {
+        voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : AudioMessagePlaybackTracker.Listener {
             override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
                 when (state) {
-                    is AudioMessagePlaybackTracker.Listener.State.Idle      -> renderIdleState(holder)
-                    is AudioMessagePlaybackTracker.Listener.State.Playing   -> renderPlayingState(holder, state)
-                    is AudioMessagePlaybackTracker.Listener.State.Paused    -> renderPausedState(holder, state)
-                    is AudioMessagePlaybackTracker.Listener.State.Recording -> Unit
+                    is AudioMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder)
+                    is AudioMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state)
+                    is AudioMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state)
                 }
             }
         })
     }
 
     private fun renderIdleState(holder: Holder) {
-        holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
-        holder.audioPlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_audio_message)
-        holder.audioPlaybackTime.text = formatPlaybackTime(duration)
+        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
+        holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_voice_message)
+        holder.voicePlaybackTime.text = formatPlaybackTime(duration)
     }
 
     private fun renderPlayingState(holder: Holder, state: AudioMessagePlaybackTracker.Listener.State.Playing) {
-        holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
-        holder.audioPlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_pause_audio_message)
-        holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
+        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
+        holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_pause_voice_message)
+        holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 
     private fun renderPausedState(holder: Holder, state: AudioMessagePlaybackTracker.Listener.State.Paused) {
-        holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
-        holder.audioPlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_audio_message)
-        holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
+        holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
+        holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_voice_message)
+        holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
@@ -127,21 +130,21 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         super.unbind(holder)
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
         contentDownloadStateTrackerBinder.unbind(mxcUrl)
-        audioMessagePlaybackTracker.untrack(attributes.informationData.eventId)
+        voiceMessagePlaybackTracker.untrack(attributes.informationData.eventId)
     }
 
     override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val rootLayout by bind<ViewGroup>(R.id.messageRootLayout)
-        val mainLayout by bind<ViewGroup>(R.id.messageMainInnerLayout)
-        val filenameView by bind<TextView>(R.id.messageFilenameView)
-        val audioPlaybackControlButton by bind<ImageButton>(R.id.audioPlaybackControlButton)
-        val audioPlaybackTime by bind<TextView>(R.id.audioPlaybackTime)
+        val voicePlaybackLayout by bind<View>(R.id.voicePlaybackLayout)
+        val voiceLayout by bind<ViewGroup>(R.id.voiceLayout)
+        val voicePlaybackControlButton by bind<ImageButton>(R.id.voicePlaybackControlButton)
+        val voicePlaybackTime by bind<TextView>(R.id.voicePlaybackTime)
+        val voicePlaybackWaveform by bind<AudioRecordView>(R.id.voicePlaybackWaveform)
         val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
     }
 
     companion object {
-        private const val STUB_ID = R.id.messageContentAudioStub
+        private const val STUB_ID = R.id.messageContentVoiceStub
     }
 }
