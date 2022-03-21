@@ -177,6 +177,7 @@ import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.invite.VectorInviteView
 import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.location.toLocationData
+import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -1871,12 +1872,16 @@ class TimelineFragment @Inject constructor(
         vectorBaseActivity.notImplemented("encrypted message click")
     }
 
-    override fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View) {
+    override fun onImageMessageClicked(messageImageContent: MessageImageInfoContent,
+                                       mediaData: ImageContentRenderer.Data,
+                                       view: View,
+                                       inMemory: List<AttachmentData>) {
         navigator.openMediaViewer(
                 activity = requireActivity(),
                 roomId = timelineArgs.roomId,
                 mediaData = mediaData,
-                view = view
+                view = view,
+                inMemory = inMemory
         ) { pairs ->
             pairs.add(Pair(views.roomToolbar, ViewCompat.getTransitionName(views.roomToolbar) ?: ""))
             pairs.add(Pair(views.composerLayout, ViewCompat.getTransitionName(views.composerLayout) ?: ""))
