@@ -16,7 +16,7 @@
 
         <path
             android:pathData="M0 0V12H11.8857V0"
-            android:fillColor="#0DBD8B"
+            android:fillColor="?vctr_presence_indicator_online"
             />
 
     </group>
