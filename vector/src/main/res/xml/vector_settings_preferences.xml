@@ -204,7 +204,7 @@
             android:title="@string/settings_show_presence"
             android:summary="@string/settings_show_presence_summary"
             android:key="SETTINGS_SHOW_PRESENCE"
-            android:defaultValue="true" />
+            android:defaultValue="@bool/settings_show_presence" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
