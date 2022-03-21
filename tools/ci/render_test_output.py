@@ -13,32 +13,35 @@ print("::group::Arguments")
 print(f"{sys.argv}") 
 print("::endgroup::")
 for xmlfile in xmlfiles:
-    tree = ET.parse(xmlfile)
+    try:
+        tree = ET.parse(xmlfile)
     
-    root = tree.getroot()
-    name = root.attrib['name']
-    time = root.attrib['time']
-    tests = int(root.attrib['tests'])
-    skipped = int(root.attrib['skipped'])
-    errors = int(root.attrib['errors'])
-    failures = int(root.attrib['failures'])
-    success = tests - failures - errors - skipped
-    total = tests - skipped
-    print(f"::group::{name} {success}/{total} ({skipped} skipped) in {time}")
-    
-    for testcase in root:
-        if testcase.tag != "testcase":
-            continue
-        testname = testcase.attrib['classname']
-        message = testcase.attrib['name']
-        time = testcase.attrib['time']
-        child = testcase.find("failure")
-        if child is None:
-            print(f"{message} in {time}s")
-        else:
-            print(f"::error file={testname}::{message} in {time}s")
-            print(child.text)
-    body = f"passed={success} failures={failures} errors={errors} skipped={skipped}"
-    print(f"::set-output name={suitename}::={body}")
+        root = tree.getroot()
+        name = root.attrib['name']
+        time = root.attrib['time']
+        tests = int(root.attrib['tests'])
+        skipped = int(root.attrib['skipped'])
+        errors = int(root.attrib['errors'])
+        failures = int(root.attrib['failures'])
+        success = tests - failures - errors - skipped
+        total = tests - skipped
+        print(f"::group::{name} {success}/{total} ({skipped} skipped) in {time}")
+        
+        for testcase in root:
+            if testcase.tag != "testcase":
+                continue
+            testname = testcase.attrib['classname']
+            message = testcase.attrib['name']
+            time = testcase.attrib['time']
+            child = testcase.find("failure")
+            if child is None:
+                print(f"{message} in {time}s")
+            else:
+                print(f"::error file={testname}::{message} in {time}s")
+                print(child.text)
+        body = f" passed={success} failures={failures} errors={errors} skipped={skipped}"
+        print(f"::set-output name={suitename}::={body}")
+    except FileNotFoundError:
+        print(f"::error::Unable to open test results file {xmlfile} - check if the tests completed")
     print("::endgroup::")
 

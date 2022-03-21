@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
@@ -52,7 +53,10 @@ class RoomEventsAttachmentProvider(
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
         return getItem(position).let {
-            val content = it.root.getClearContent().toModel<MessageContent>() as? MessageWithAttachmentContent
+            val clearContent = it.root.getClearContent()
+            val content = clearContent.toModel<MessageContent>()
+                    ?: clearContent.toModel<MessageStickerContent>()
+                            as? MessageWithAttachmentContent
             if (content is MessageImageContent) {
                 val data = ImageContentRenderer.Data(
                         eventId = it.eventId,
@@ -65,6 +69,33 @@ class RoomEventsAttachmentProvider(
                         width = null,
                         height = null,
                         allowNonMxcUrls = it.root.sendState.isSending()
+
+                )
+                if (content.mimeType == MimeTypes.Gif) {
+                    AttachmentInfo.AnimatedImage(
+                            uid = it.eventId,
+                            url = content.url ?: "",
+                            data = data
+                    )
+                } else {
+                    AttachmentInfo.Image(
+                            uid = it.eventId,
+                            url = content.url ?: "",
+                            data = data
+                    )
+                }
+            } else if (content is MessageStickerContent) {
+                val data = ImageContentRenderer.Data(
+                        eventId = it.eventId,
+                        filename = content.body,
+                        mimeType = content.mimeType,
+                        url = content.getFileUrl(),
+                        elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
+                        maxHeight = -1,
+                        maxWidth = -1,
+                        width = null,
+                        height = null,
+                        allowNonMxcUrls = false
 
                 )
                 if (content.mimeType == MimeTypes.Gif) {
