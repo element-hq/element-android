@@ -155,8 +155,8 @@ import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
-import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
@@ -164,6 +164,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoIt
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -1178,20 +1179,10 @@ class TimelineFragment @Inject constructor(
         }
 
         val messageContent: MessageContent? = event.getLastMessageContent()
-        val nonFormattedBody = when {
-            messageContent is MessageAudioContent -> {
-                getAudioContentBodyText(messageContent)
-            }
-            messageContent is MessageAudioContent && messageContent.voiceMessageIndicator != null -> {
-                val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
-                getString(R.string.voice_message_reply_content, formattedDuration)
-            }
-            messageContent is MessagePollContent                                                  -> {
-                messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
-            }
-            else                                                                                  -> {
-                messageContent?.body ?: ""
-            }
+        val nonFormattedBody = when (messageContent) {
+            is MessageAudioContent -> getAudioContentBodyText(messageContent)
+            is MessagePollContent  -> messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
+            else                   -> messageContent?.body ?: ""
         }
         var formattedBody: CharSequence? = null
         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
@@ -1232,10 +1223,11 @@ class TimelineFragment @Inject constructor(
 
     private fun getAudioContentBodyText(messageContent: MessageAudioContent): String {
         val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
-        return if (messageContent.voiceMessageIndicator != null)
+        return if (messageContent.voiceMessageIndicator != null) {
             getString(R.string.voice_message_reply_content, formattedDuration)
-        else
+        } else {
             getString(R.string.audio_message_reply_content, messageContent.body, formattedDuration)
+        }
     }
 
     override fun onResume() {
@@ -1391,6 +1383,7 @@ class TimelineFragment @Inject constructor(
                     return when (model) {
                         is MessageFileItem,
                         is MessageAudioItem,
+                        is MessageVoiceItem,
                         is MessageImageVideoItem,
                         is MessageTextItem -> {
                             return (model as AbsMessageItem).attributes.informationData.sendState == SendState.SYNCED

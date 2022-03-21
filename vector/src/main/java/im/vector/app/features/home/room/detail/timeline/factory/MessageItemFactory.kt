@@ -34,6 +34,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
@@ -41,7 +42,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem_
@@ -189,13 +189,7 @@ class MessageItemFactory @Inject constructor(
             is MessageNoticeContent              -> buildNoticeMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageVideoContent               -> buildVideoMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageFileContent                -> buildFileMessageItem(messageContent, highlight, attributes)
-            is MessageAudioContent               -> {
-                if (messageContent.voiceMessageIndicator != null) {
-                    buildVoiceMessageItem(params, messageContent, informationData, highlight, attributes)
-                } else {
-                    buildAudioMessageItem(params, messageContent, informationData, highlight, attributes)
-                }
-            }
+            is MessageAudioContent               -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent            -> {
@@ -434,6 +428,17 @@ class MessageItemFactory @Inject constructor(
                 .filename(messageContent.body)
                 .iconRes(R.drawable.ic_paperclip)
     }
+
+    private fun buildAudioContent(params: TimelineItemFactoryParams,
+                                  messageContent: MessageAudioContent,
+                                  informationData: MessageInformationData,
+                                  highlight: Boolean,
+                                  attributes: AbsMessageItem.Attributes) =
+            if (messageContent.voiceMessageIndicator != null) {
+                buildVoiceMessageItem(params, messageContent, informationData, highlight, attributes)
+            } else {
+                buildAudioMessageItem(params, messageContent, informationData, highlight, attributes)
+            }
 
     private fun buildNotHandledMessageItem(messageContent: MessageContent,
                                            informationData: MessageInformationData,

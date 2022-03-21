@@ -2861,7 +2861,6 @@
     <string name="a11y_play_audio_message">Play Audio Message</string>
     <string name="a11y_pause_audio_message">Pause Audio Message</string>
     <string name="error_audio_message_unable_to_play">Pause Audio Message</string>
-    <string name="error_audio_message_cannot_reply_or_edit">Cannot reply or edit while audio message is active</string>
     <string name="audio_message_reply_content">%1$s (%2$s)</string>
 
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>

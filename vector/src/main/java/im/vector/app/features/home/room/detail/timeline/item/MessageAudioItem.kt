@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,11 +82,11 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     }
 
     private fun applyLayoutTint(holder: Holder) {
-        val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble)
+        val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
             Color.TRANSPARENT
-        else
+        } else {
             ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_quinary)
-
+        }
         holder.mainLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
     }
 
