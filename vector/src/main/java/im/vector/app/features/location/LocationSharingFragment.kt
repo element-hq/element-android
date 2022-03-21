@@ -16,11 +16,13 @@
 
 package im.vector.app.features.location
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
@@ -83,9 +85,10 @@ class LocationSharingFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                LocationSharingViewEvents.Close                     -> locationSharingNavigator.quit()
-                LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
-                is LocationSharingViewEvents.ZoomToUserLocation     -> handleZoomToUserLocationEvent(it)
+                LocationSharingViewEvents.Close                       -> locationSharingNavigator.quit()
+                LocationSharingViewEvents.LocationNotAvailableError   -> handleLocationNotAvailableError()
+                is LocationSharingViewEvents.ZoomToUserLocation       -> handleZoomToUserLocationEvent(it)
+                is LocationSharingViewEvents.StartLiveLocationService -> handleStartLiveLocationService(it)
             }.exhaustive
         }
     }
@@ -175,6 +178,17 @@ class LocationSharingFragment @Inject constructor(
 
     private fun handleZoomToUserLocationEvent(event: LocationSharingViewEvents.ZoomToUserLocation) {
         views.mapView.zoomToLocation(event.userLocation.latitude, event.userLocation.longitude)
+    }
+
+    private fun handleStartLiveLocationService(event: LocationSharingViewEvents.StartLiveLocationService) {
+        Intent(requireContext(), LocationSharingService::class.java)
+                .apply {
+                    putExtra(LocationSharingService.EXTRA_SESSION_ID, event.sessionId)
+                    putExtra(LocationSharingService.EXTRA_ROOM_ID, event.roomId)
+                }
+                .also {
+                    ContextCompat.startForegroundService(requireContext(), it)
+                }
     }
 
     private fun initOptionsPicker() {

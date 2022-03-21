@@ -160,8 +160,10 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun handleStartLiveLocationSharingAction() {
-        // TODO start sharing live location and update view state
-        Timber.d("live location sharing started")
+        _viewEvents.post(LocationSharingViewEvents.StartLiveLocationService(
+                sessionId = session.sessionId,
+                roomId = room.roomId
+        ))
     }
 
     override fun onLocationUpdate(locationData: LocationData) {

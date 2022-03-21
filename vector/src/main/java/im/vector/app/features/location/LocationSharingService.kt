@@ -16,12 +16,45 @@
 
 package im.vector.app.features.location
 
-import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.services.VectorService
+import im.vector.app.features.notifications.NotificationUtils
+import timber.log.Timber
+import javax.inject.Inject
 
-class LocationSharingService : Service() {
+@AndroidEntryPoint
+class LocationSharingService : VectorService() {
+
+    @Inject lateinit var notificationUtils: NotificationUtils
+
+    private var sessionId: String? = null
+    private var roomId: String? = null
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        sessionId = intent?.getStringExtra(EXTRA_SESSION_ID)
+        roomId = intent?.getStringExtra(EXTRA_ROOM_ID)
+
+        Timber.d("LocationSharingService $sessionId - $roomId")
+
+        if (sessionId == null || roomId == null) {
+            stopForeground(true)
+            stopSelf()
+        }
+
+        val notification = notificationUtils.buildLiveLocationSharingNotification()
+        startForeground(roomId!!.hashCode(), notification)
+
+        return START_STICKY
+    }
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
+    }
+
+    companion object {
+        const val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
+        const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
     }
 }
