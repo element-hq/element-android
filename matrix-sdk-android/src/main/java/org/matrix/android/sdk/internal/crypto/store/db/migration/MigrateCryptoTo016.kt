@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto.store.db.migration
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields
-import org.matrix.android.sdk.internal.crypto.store.db.model.KeyRequestReplyEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeyRequestReplyEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingKeyRequestEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
@@ -33,19 +32,24 @@ class MigrateCryptoTo016(realm: DynamicRealm) : RealmMigrator(realm, 15) {
 
         // No need to migrate existing request, just start fresh
 
+        val replySchema = realm.schema.create("KeyRequestReplyEntity")
+                .addField(KeyRequestReplyEntityFields.SENDER_ID, String::class.java)
+                .addField(KeyRequestReplyEntityFields.FROM_DEVICE, String::class.java)
+                .addField(KeyRequestReplyEntityFields.EVENT_JSON, String::class.java)
+
         realm.schema.create("OutgoingKeyRequestEntity")
                 .addField(OutgoingKeyRequestEntityFields.REQUEST_ID, String::class.java)
                 .addIndex(OutgoingKeyRequestEntityFields.REQUEST_ID)
                 .addField(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID, String::class.java)
                 .addIndex(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID)
-                .addRealmListField(OutgoingKeyRequestEntityFields.REPLIES.`$`, KeyRequestReplyEntity::class.java)
+                .addRealmListField(OutgoingKeyRequestEntityFields.REPLIES.`$`, replySchema)
                 .addField(OutgoingKeyRequestEntityFields.RECIPIENTS_DATA, String::class.java)
                 .addField(OutgoingKeyRequestEntityFields.REQUEST_STATE_STR, String::class.java)
                 .addIndex(OutgoingKeyRequestEntityFields.REQUEST_STATE_STR)
                 .addField(OutgoingKeyRequestEntityFields.REQUESTED_INFO_STR, String::class.java)
                 .addField(OutgoingKeyRequestEntityFields.ROOM_ID, String::class.java)
                 .addIndex(OutgoingKeyRequestEntityFields.ROOM_ID)
-                .addField(OutgoingKeyRequestEntityFields.REQUESTED_INDEX, String::class.java)
+                .addField(OutgoingKeyRequestEntityFields.REQUESTED_INDEX, Integer::class.java)
                 .addField(OutgoingKeyRequestEntityFields.CREATION_TIME_STAMP, Long::class.java)
                 .setNullable(OutgoingKeyRequestEntityFields.CREATION_TIME_STAMP, true)
 
@@ -55,11 +59,6 @@ class MigrateCryptoTo016(realm: DynamicRealm) : RealmMigrator(realm, 15) {
                 .addField(AuditTrailEntityFields.CONTENT_JSON, String::class.java)
                 .addField(AuditTrailEntityFields.TYPE, String::class.java)
                 .addIndex(AuditTrailEntityFields.TYPE)
-
-        realm.schema.create("KeyRequestReplyEntity")
-                .addField(KeyRequestReplyEntityFields.SENDER_ID, String::class.java)
-                .addField(KeyRequestReplyEntityFields.FROM_DEVICE, String::class.java)
-                .addField(KeyRequestReplyEntityFields.EVENT_JSON, String::class.java)
 
         realm.schema.get("CryptoMetadataEntity")
                 ?.addField(CryptoMetadataEntityFields.GLOBAL_ENABLE_KEY_REQUESTING_AND_SHARING, Boolean::class.java)
