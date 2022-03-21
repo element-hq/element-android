@@ -20,6 +20,7 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
 import io.realm.kotlin.createObject
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -127,7 +128,7 @@ private fun EventEntity.toTimelineEventEntity(roomMemberContentsByUser: HashMap<
     return timelineEventEntity
 }
 
-internal suspend fun ThreadSummaryEntity.Companion.createOrUpdate(
+internal fun ThreadSummaryEntity.Companion.createOrUpdate(
         threadSummaryType: ThreadSummaryUpdateType,
         realm: Realm,
         roomId: String,
@@ -153,10 +154,18 @@ internal suspend fun ThreadSummaryEntity.Companion.createOrUpdate(
             }
 
             val rootThreadEventEntity = createEventEntity(roomId, rootThreadEvent, realm).also {
-                decryptIfNeeded(cryptoService, it, roomId)
+                try {
+                    decryptIfNeeded(cryptoService, it, roomId)
+                } catch (e: InterruptedException) {
+                    Timber.i("Decryption got interrupted")
+                }
             }
             val latestThreadEventEntity = createLatestEventEntity(roomId, rootThreadEvent, roomMemberContentsByUser, realm)?.also {
-                decryptIfNeeded(cryptoService, it, roomId)
+                try {
+                    decryptIfNeeded(cryptoService, it, roomId)
+                } catch (e: InterruptedException) {
+                    Timber.i("Decryption got interrupted")
+                }
             }
             val isUserParticipating = rootThreadEvent.unsignedData.relations.latestThread.isUserParticipating == true || rootThreadEvent.senderId == userId
             roomMemberContentsByUser.addSenderState(realm, roomId, rootThreadEvent.senderId)
@@ -204,8 +213,8 @@ internal suspend fun ThreadSummaryEntity.Companion.createOrUpdate(
     }
 }
 
-private suspend fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEntity, roomId: String) {
-    cryptoService ?: return
+private fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEntity, roomId: String) = runBlocking {
+    cryptoService ?: return@runBlocking
     val event = eventEntity.asDomain()
     if (event.isEncrypted() && event.mxDecryptionResult == null && event.eventId != null) {
         try {
