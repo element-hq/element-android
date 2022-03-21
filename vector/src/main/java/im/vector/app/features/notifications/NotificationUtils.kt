@@ -529,6 +529,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setContentTitle(stringProvider.getString(R.string.live_location_sharing_notification_title))
                 .setContentText(stringProvider.getString(R.string.live_location_sharing_notification_description))
                 .setSmallIcon(R.drawable.ic_attachment_location_live_white)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setCategory(NotificationCompat.CATEGORY_LOCATION_SHARING)
                 .build()
     }
