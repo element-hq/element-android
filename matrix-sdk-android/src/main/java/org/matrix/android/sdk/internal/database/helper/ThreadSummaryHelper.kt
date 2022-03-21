@@ -213,6 +213,7 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
     }
 }
 
+// note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
 private fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEntity, roomId: String) = runBlocking {
     cryptoService ?: return@runBlocking
     val event = eventEntity.asDomain()

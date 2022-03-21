@@ -101,9 +101,7 @@ internal class TimelineEventDecryptor @Inject constructor(
         executor?.execute {
             Realm.getInstance(realmConfiguration).use { realm ->
                 try {
-                    runBlocking {
-                        processDecryptRequest(request, realm)
-                    }
+                    processDecryptRequest(request, realm)
                 } catch (e: InterruptedException) {
                     Timber.i("Decryption got interrupted")
                 }
@@ -113,16 +111,18 @@ internal class TimelineEventDecryptor @Inject constructor(
 
     private fun threadAwareNonEncryptedEvents(request: DecryptionRequest, realm: Realm) {
         val event = request.event
-            realm.executeTransaction {
-                val eventId = event.eventId ?: return@executeTransaction
-                val eventEntity = EventEntity
-                        .where(it, eventId = eventId)
-                        .findFirst()
-                val decryptedEvent = eventEntity?.asDomain()
-                threadsAwarenessHandler.makeEventThreadAware(realm, event.roomId, decryptedEvent, eventEntity)
+        realm.executeTransaction {
+            val eventId = event.eventId ?: return@executeTransaction
+            val eventEntity = EventEntity
+                    .where(it, eventId = eventId)
+                    .findFirst()
+            val decryptedEvent = eventEntity?.asDomain()
+            threadsAwarenessHandler.makeEventThreadAware(realm, event.roomId, decryptedEvent, eventEntity)
         }
     }
-    private suspend fun processDecryptRequest(request: DecryptionRequest, realm: Realm) {
+
+    // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
+    private fun processDecryptRequest(request: DecryptionRequest, realm: Realm) = runBlocking {
         val event = request.event
         val timelineId = request.timelineId
 
@@ -130,7 +130,7 @@ internal class TimelineEventDecryptor @Inject constructor(
             // Here we have requested a decryption to an event that is not encrypted
             // We will simply make this event thread aware
             threadAwareNonEncryptedEvents(request, realm)
-            return
+            return@runBlocking
         }
         try {
             val result = cryptoService.decryptEvent(request.event, timelineId)

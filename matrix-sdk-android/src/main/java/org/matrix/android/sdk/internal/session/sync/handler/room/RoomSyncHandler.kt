@@ -506,6 +506,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
     }
 
+    // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
     private fun decryptIfNeeded(event: Event, roomId: String) = runBlocking {
         try {
             // Event from sync does not have roomId, so add it to the event first
