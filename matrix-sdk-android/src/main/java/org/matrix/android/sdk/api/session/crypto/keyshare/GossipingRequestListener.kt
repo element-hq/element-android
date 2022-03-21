@@ -41,5 +41,5 @@ interface GossipingRequestListener {
      *
      * @param request the cancellation request
      */
-    fun onRequestCancelled(requestId: IncomingRoomKeyRequest)
+    fun onRequestCancelled(request: IncomingRoomKeyRequest)
 }
