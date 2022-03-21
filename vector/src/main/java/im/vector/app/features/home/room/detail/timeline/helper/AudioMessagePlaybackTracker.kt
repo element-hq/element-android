@@ -22,7 +22,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class VoiceMessagePlaybackTracker @Inject constructor() {
+class AudioMessagePlaybackTracker @Inject constructor() {
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private val listeners = mutableMapOf<String, Listener>()
@@ -33,7 +33,7 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
         activityListeners.add(listener)
     }
 
-    fun unTrackActivity(listener: ActivityListener) {
+    fun untrackActivity(listener: ActivityListener) {
         activityListeners.remove(listener)
     }
 

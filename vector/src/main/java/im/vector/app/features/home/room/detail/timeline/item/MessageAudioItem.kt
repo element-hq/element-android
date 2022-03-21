@@ -32,7 +32,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.themes.ThemeUtils
 
@@ -66,7 +66,7 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     var playbackControlButtonClickListener: ClickListener? = null
 
     @EpoxyAttribute
-    lateinit var voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker
+    lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -96,13 +96,13 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         holder.audioPlaybackLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
         holder.audioPlaybackControlButton.setOnClickListener { playbackControlButtonClickListener?.invoke(it) }
 
-        voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : VoiceMessagePlaybackTracker.Listener {
-            override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
+        audioMessagePlaybackTracker.track(attributes.informationData.eventId, object : AudioMessagePlaybackTracker.Listener {
+            override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
                 when (state) {
-                    is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder)
-                    is VoiceMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state)
-                    is VoiceMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state)
-                    is VoiceMessagePlaybackTracker.Listener.State.Recording -> Unit
+                    is AudioMessagePlaybackTracker.Listener.State.Idle      -> renderIdleState(holder)
+                    is AudioMessagePlaybackTracker.Listener.State.Playing   -> renderPlayingState(holder, state)
+                    is AudioMessagePlaybackTracker.Listener.State.Paused    -> renderPausedState(holder, state)
+                    is AudioMessagePlaybackTracker.Listener.State.Recording -> Unit
                 }
             }
         })
@@ -122,7 +122,7 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
             if (isVoiceMessage) R.string.a11y_play_voice_message else R.string.a11y_play_audio_message
     )
 
-    private fun renderPlayingState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
+    private fun renderPlayingState(holder: Holder, state: AudioMessagePlaybackTracker.Listener.State.Playing) {
         holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
         holder.audioPlaybackControlButton.contentDescription = getPauseMessageContentDescription(holder.view.context)
         holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
@@ -132,7 +132,7 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
             if (isVoiceMessage) R.string.a11y_pause_voice_message else R.string.a11y_pause_audio_message
     )
 
-    private fun renderPausedState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Paused) {
+    private fun renderPausedState(holder: Holder, state: AudioMessagePlaybackTracker.Listener.State.Paused) {
         holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
         holder.audioPlaybackControlButton.contentDescription = getPlayMessageContentDescription(holder.view.context)
         holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
@@ -144,7 +144,7 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         super.unbind(holder)
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
         contentDownloadStateTrackerBinder.unbind(mxcUrl)
-        voiceMessagePlaybackTracker.untrack(attributes.informationData.eventId)
+        audioMessagePlaybackTracker.untrack(attributes.informationData.eventId)
     }
 
     override fun getViewStubId() = STUB_ID

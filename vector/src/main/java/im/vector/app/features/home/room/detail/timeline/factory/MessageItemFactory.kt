@@ -41,7 +41,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem_
@@ -126,7 +126,7 @@ class MessageItemFactory @Inject constructor(
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val spanUtils: SpanUtils,
         private val session: Session,
-        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
+        private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
         private val urlMapProvider: UrlMapProvider,
@@ -323,7 +323,7 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .duration(messageContent.audioInfo?.duration ?: 0)
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
-                .voiceMessagePlaybackTracker(voiceMessagePlaybackTracker)
+                .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
                 .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
@@ -366,7 +366,7 @@ class MessageItemFactory @Inject constructor(
                 .duration(messageContent.audioWaveformInfo?.duration ?: 0)
                 .waveform(messageContent.audioWaveformInfo?.waveform?.toFft().orEmpty())
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
-                .voiceMessagePlaybackTracker(voiceMessagePlaybackTracker)
+                .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
                 .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)

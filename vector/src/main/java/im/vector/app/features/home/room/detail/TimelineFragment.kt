@@ -156,7 +156,7 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBot
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
@@ -259,7 +259,7 @@ class TimelineFragment @Inject constructor(
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
-        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
+        private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val clock: Clock
 ) :
         VectorBaseFragment<FragmentTimelineBinding>(),
@@ -726,7 +726,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun setupVoiceMessageView() {
-        voiceMessagePlaybackTracker.track(VoiceMessagePlaybackTracker.RECORDING_ID, views.voiceMessageRecorderView)
+        audioMessagePlaybackTracker.track(AudioMessagePlaybackTracker.RECORDING_ID, views.voiceMessageRecorderView)
         views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
 
             override fun onVoiceRecordingStarted() {
@@ -1260,7 +1260,7 @@ class TimelineFragment @Inject constructor(
     override fun onPause() {
         super.onPause()
         notificationDrawerManager.setCurrentRoom(null)
-        voiceMessagePlaybackTracker.untrack(VoiceMessagePlaybackTracker.RECORDING_ID)
+        audioMessagePlaybackTracker.untrack(AudioMessagePlaybackTracker.RECORDING_ID)
 
         if (withState(messageComposerViewModel) { it.isVoiceRecording } && requireActivity().isChangingConfigurations) {
             // we're rotating, maintain any active recordings
