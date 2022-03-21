@@ -40,18 +40,17 @@ class LocationTracker @Inject constructor(
         fun onLocationProviderIsNotAvailable()
     }
 
-    private var callback: Callback? = null
+    private var callbacks = mutableListOf<Callback>()
 
     private var hasGpsProviderLiveLocation = false
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
-    fun start(callback: Callback?) {
+    fun start() {
         Timber.d("## LocationTracker. start()")
         hasGpsProviderLiveLocation = false
-        this.callback = callback
 
         if (locationManager == null) {
-            callback?.onLocationProviderIsNotAvailable()
+            callbacks.forEach { it.onLocationProviderIsNotAvailable() }
             Timber.v("## LocationTracker. LocationManager is not available")
             return
         }
@@ -81,7 +80,7 @@ class LocationTracker @Inject constructor(
                     )
                 }
                 ?: run {
-                    callback?.onLocationProviderIsNotAvailable()
+                    callbacks.forEach { it.onLocationProviderIsNotAvailable() }
                     Timber.v("## LocationTracker. There is no location provider available")
                 }
     }
@@ -90,7 +89,24 @@ class LocationTracker @Inject constructor(
     fun stop() {
         Timber.d("## LocationTracker. stop()")
         locationManager?.removeUpdates(this)
-        callback = null
+        callbacks.clear()
+    }
+
+    fun addCallback(callback: Callback) {
+        synchronized(callbacks) {
+            if (!callbacks.contains(callback)) {
+                callbacks.add(callback)
+            }
+        }
+    }
+
+    fun removeCallback(callback: Callback) {
+        synchronized(callbacks) {
+            callbacks.remove(callback)
+            if (callbacks.size == 0) {
+                stop()
+            }
+        }
     }
 
     override fun onLocationChanged(location: Location) {
@@ -115,12 +131,12 @@ class LocationTracker @Inject constructor(
                 }
             }
         }
-        callback?.onLocationUpdate(location.toLocationData())
+        callbacks.forEach { it.onLocationUpdate(location.toLocationData()) }
     }
 
     override fun onProviderDisabled(provider: String) {
         Timber.d("## LocationTracker. onProviderDisabled: $provider")
-        callback?.onLocationProviderIsNotAvailable()
+        callbacks.forEach { it.onLocationProviderIsNotAvailable() }
     }
 
     private fun Location.toLocationData(): LocationData {

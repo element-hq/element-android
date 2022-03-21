@@ -528,7 +528,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
         return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(stringProvider.getString(R.string.live_location_sharing_notification_title))
                 .setContentText(stringProvider.getString(R.string.live_location_sharing_notification_description))
-                .setSmallIcon(R.drawable.ic_location_pin)
+                .setSmallIcon(R.drawable.ic_attachment_location_live_white)
                 .setCategory(NotificationCompat.CATEGORY_LOCATION_SHARING)
                 .build()
     }

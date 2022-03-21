@@ -65,7 +65,8 @@ class LocationSharingViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<LocationSharingViewModel, LocationSharingViewState> by hiltMavericksViewModelFactory()
 
     init {
-        locationTracker.start(this)
+        locationTracker.addCallback(this)
+        locationTracker.start()
         setUserItem()
         updatePin()
         compareTargetAndUserLocation()
@@ -112,7 +113,7 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        locationTracker.stop()
+        locationTracker.removeCallback(this)
     }
 
     override fun handle(action: LocationSharingAction) {
