@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/roomToolbar"
@@ -46,20 +46,32 @@
 
     <im.vector.app.features.sync.widget.SyncStateView
         android:id="@+id/syncStateView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
+    <im.vector.app.features.location.live.LocationLiveStatusView
+        android:id="@+id/locationLiveStatusIndicator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/syncStateView"
+        tools:visibility="visible" />
+
     <im.vector.app.features.call.conference.RemoveJitsiWidgetView
         android:id="@+id/removeJitsiWidgetView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?android:colorBackground"
         android:minHeight="54dp"
         android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/syncStateView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locationLiveStatusIndicator" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/timelineRecyclerView"
@@ -86,19 +98,19 @@
         app:closeIcon="@drawable/ic_close_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"/>
+        app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView" />
 
     <im.vector.app.core.ui.views.TypingMessageView
         android:id="@+id/typingMessageView"
-        app:layout_constraintBottom_toTopOf="@id/composerLayout"
-        app:layout_constraintTop_toBottomOf="@id/timelineRecyclerView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_width="0dp"
+        android:layout_height="20dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        tools:visibility="visible"
-        android:layout_height="20dp"/>
+        app:layout_constraintBottom_toTopOf="@id/composerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timelineRecyclerView"
+        tools:visibility="visible" />
 
     <im.vector.app.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
@@ -108,7 +120,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <ViewStub
         android:id="@+id/failedMessagesWarningStub"
@@ -130,7 +142,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
         android:id="@+id/voiceMessageRecorderView"

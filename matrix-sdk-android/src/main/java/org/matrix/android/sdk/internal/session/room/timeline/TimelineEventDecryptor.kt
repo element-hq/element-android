@@ -100,8 +100,12 @@ internal class TimelineEventDecryptor @Inject constructor(
         }
         executor?.execute {
             Realm.getInstance(realmConfiguration).use { realm ->
-                runBlocking {
-                    processDecryptRequest(request, realm)
+                try {
+                    runBlocking {
+                        processDecryptRequest(request, realm)
+                    }
+                } catch (e: InterruptedException) {
+                    Timber.i("Decryption got interrupted")
                 }
             }
         }

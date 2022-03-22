@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.app.test.fakes
+package im.vector.app.features.location
 
-import io.mockk.coJustRun
-import io.mockk.every
-import io.mockk.mockk
-import org.matrix.android.sdk.api.auth.AuthenticationService
-import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
+import android.app.Activity
+import im.vector.app.core.utils.openAppSettingsPage
 
-class FakeAuthenticationService : AuthenticationService by mockk() {
+class DefaultLocationSharingNavigator constructor(val activity: Activity?) : LocationSharingNavigator {
 
-    fun givenRegistrationWizard(registrationWizard: RegistrationWizard) {
-        every { getRegistrationWizard() } returns registrationWizard
+    override var goingToAppSettings: Boolean = false
+
+    override fun quit() {
+        activity?.finish()
     }
 
-    fun givenRegistrationStarted(started: Boolean) {
-        every { isRegistrationStarted } returns started
-    }
-
-    fun expectReset() {
-        coJustRun { reset() }
+    override fun goToAppSettings() {
+        activity?.let {
+            goingToAppSettings = true
+            openAppSettingsPage(it)
+        }
     }
 }

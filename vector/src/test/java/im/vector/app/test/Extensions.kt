@@ -55,6 +55,25 @@ class ViewModelTest<S, VE>(
         return this
     }
 
+    fun assertStatesChanges(initial: S, vararg expected: S.() -> S): ViewModelTest<S, VE> {
+        return assertStatesChanges(initial, expected.toList())
+    }
+
+    /**
+     * Asserts the expected states are in the same order as the actual state emissions
+     * Each expected lambda is given the previous expected state, starting with the initial
+     */
+    fun assertStatesChanges(initial: S, expected: List<S.() -> S>): ViewModelTest<S, VE> {
+        val reducedExpectedStates = expected.fold(mutableListOf(initial)) { acc, curr ->
+            val next = curr.invoke(acc.last())
+            acc.add(next)
+            acc
+        }
+
+        states.assertValues(reducedExpectedStates)
+        return this
+    }
+
     fun assertStates(expected: List<S>): ViewModelTest<S, VE> {
         states.assertValues(expected)
         return this

@@ -16,23 +16,21 @@
 
 package im.vector.app.test.fakes
 
-import io.mockk.coJustRun
-import io.mockk.every
+import im.vector.app.features.onboarding.RegisterAction
+import im.vector.app.features.onboarding.RegistrationActionHandler
+import io.mockk.coEvery
 import io.mockk.mockk
-import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 
-class FakeAuthenticationService : AuthenticationService by mockk() {
+class FakeRegisterActionHandler {
 
-    fun givenRegistrationWizard(registrationWizard: RegistrationWizard) {
-        every { getRegistrationWizard() } returns registrationWizard
-    }
+    val instance = mockk<RegistrationActionHandler>()
 
-    fun givenRegistrationStarted(started: Boolean) {
-        every { isRegistrationStarted } returns started
-    }
-
-    fun expectReset() {
-        coJustRun { reset() }
+    fun givenResultsFor(wizard: RegistrationWizard, result: List<Pair<RegisterAction, RegistrationResult>>) {
+        coEvery { instance.handleRegisterAction(wizard, any()) } answers { call ->
+            val actionArg = call.invocation.args[1] as RegisterAction
+            result.first { it.first == actionArg }.second
+        }
     }
 }
