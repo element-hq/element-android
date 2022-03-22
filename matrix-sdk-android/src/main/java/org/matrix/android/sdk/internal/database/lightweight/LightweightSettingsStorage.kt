@@ -24,13 +24,13 @@ import javax.inject.Inject
 
 /**
  * The purpose of this class is to provide an alternative and lightweight way to store settings/data
- * on the sdi without using the database. This should be used just for sdk/user preferences and
+ * on the sdk without using the database. This should be used just for sdk/user preferences and
  * not for large data sets
  */
 
 class LightweightSettingsStorage  @Inject constructor(
         context: Context,
-        val matrixConfiguration: MatrixConfiguration
+        private val matrixConfiguration: MatrixConfiguration
 ) {
 
     private val sdkDefaultPrefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)

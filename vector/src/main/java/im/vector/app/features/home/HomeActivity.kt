@@ -90,7 +90,7 @@ import javax.inject.Inject
 data class HomeActivityArgs(
         val clearNotification: Boolean,
         val accountCreation: Boolean,
-        val existingSession: Boolean = false,
+        val hasExistingSession: Boolean = false,
         val inviteNotificationRoomId: String? = null
 ) : Parcelable
 
@@ -280,7 +280,7 @@ class HomeActivity :
         if (checkSession) {
             // We should check session to ensure we will only clear cache if needed
             val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
-            if (args?.existingSession == true) {
+            if (args?.hasExistingSession == true) {
                 // existingSession --> Will be true only if we came from an existing active session
                 Timber.i("----> Migrating threads from an existing session..")
                 handleThreadsMigration()
@@ -597,7 +597,7 @@ class HomeActivity :
             val args = HomeActivityArgs(
                     clearNotification = clearNotification,
                     accountCreation = accountCreation,
-                    existingSession = existingSession,
+                    hasExistingSession = existingSession,
                     inviteNotificationRoomId = inviteNotificationRoomId
             )
 
