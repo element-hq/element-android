@@ -529,7 +529,7 @@
         <item quantity="one">%d mudança de filiação</item>
         <item quantity="other">%d mudanças de filiação</item>
     </plurals>
-    <string name="list_members">Listar membros</string>
+    <string name="list_members">Membros</string>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d mensagem notificada não-lida</item>
         <item quantity="other">%d mensagens notificadas não-lidas</item>
@@ -2016,7 +2016,7 @@
     <string name="space_leave_prompt_msg_as_admin">Você é a/o única(o) admin deste espaço. Sair dele vai significar que ninguém tem controle sobre ele.</string>
     <string name="space_leave_prompt_msg_private">Você não vai ser capaz de se rejuntar a menos que você seja re-convidada(o).</string>
     <string name="space_leave_prompt_msg_only_you">Você é a única pessoa aqui. Se você sair, ninguém vai ser capaz de se juntar no futuro, incluindo você.</string>
-    <string name="leave_space">Sair de Espaço</string>
+    <string name="leave_space">Sair</string>
     <string name="space_add_child_title">Adicionar salas</string>
     <string name="space_explore_activity_title">Explorar salas</string>
     <plurals name="space_people_you_know">
@@ -2419,4 +2419,23 @@
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s e outras(os)</string>
     <string name="room_notification_two_users_are_typing">%1$s e %2$s</string>
+    <string name="location_share_live_enabled">Localização ao vivo habilitada</string>
+    <string name="location_in_background_missing_permission_dialog_content">Se você gostaria de compartilhar sua localização Ao Vivo, ${app_name} precisa de acesso de localização todo o tempo quando o app está no background.
+\nNós vamos somente acessar sua localização pela duração que você escolher.</string>
+    <string name="a11y_location_share_option_pinned_icon">Compartilhar esta localização</string>
+    <string name="location_share_option_pinned">Compartilhar esta localização</string>
+    <string name="a11y_location_share_option_user_live_icon">Compartilhar localização ao vivo</string>
+    <string name="location_share_option_user_live">Compartilhar localização ao vivo</string>
+    <string name="a11y_location_share_option_user_current_icon">Compartilhar minha localização atual</string>
+    <string name="location_share_option_user_current">Compartilhar minha localização atual</string>
+    <string name="a11y_location_share_locate_button">Zoom para localização atual</string>
+    <string name="a11y_location_share_pin_on_map">Pin de localização selecionada em mapa</string>
+    <string name="location_share_live_stop">Parar</string>
+    <string name="location_in_background_missing_permission_dialog_title">Permitir acesso</string>
+    <string name="threads_notice_migration_message">Nós estamos ficando mais perto de lançar uma Beta pública para Threads.
+\n
+\nEnquanto nos preparamos para isso, nós precisamos fazer algumas mudanças: threads criadas antes deste ponto vão ser exibidas como respostas regulares.
+\n
+\nIsto vai ser uma transição única visto que Threads são agora parte da especificação Matrix.</string>
+    <string name="threads_notice_migration_title">Threads Aproximando-Se a Beta 🎉</string>
 </resources>
