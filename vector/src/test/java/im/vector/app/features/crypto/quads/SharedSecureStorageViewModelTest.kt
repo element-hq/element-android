@@ -51,7 +51,7 @@ class SharedSecureStorageViewModelTest {
         givenKey(KEY_INFO_WITH_PASSPHRASE)
         val viewModel = createViewModel()
         viewModel
-                .test(this)
+                .test()
                 .assertState(aViewState(
                         hasPassphrase = true,
                         step = SharedSecureStorageViewState.Step.EnterPassphrase
@@ -66,7 +66,7 @@ class SharedSecureStorageViewModelTest {
         val viewModel = createViewModel()
 
         viewModel
-                .test(this)
+                .test()
                 .assertState(aViewState(
                         hasPassphrase = false,
                         step = SharedSecureStorageViewState.Step.EnterKey
@@ -79,7 +79,7 @@ class SharedSecureStorageViewModelTest {
         givenKey(KEY_INFO_WITHOUT_PASSPHRASE)
 
         val viewModel = createViewModel()
-        val test = viewModel.test(this)
+        val test = viewModel.test()
         viewModel.handle(SharedSecureStorageAction.Back)
         test
                 .assertEvents(SharedSecureStorageViewEvent.Dismiss)
@@ -90,7 +90,7 @@ class SharedSecureStorageViewModelTest {
     fun `given on passphrase step when using key then step is EnterKey`() = runTest {
         givenKey(KEY_INFO_WITH_PASSPHRASE)
         val viewModel = createViewModel()
-        val test = viewModel.test(this)
+        val test = viewModel.test()
 
         viewModel.handle(SharedSecureStorageAction.UseKey)
 
@@ -112,7 +112,7 @@ class SharedSecureStorageViewModelTest {
     fun `given a key info with passphrase and on EnterKey step when going back then step is EnterPassphrase`() = runTest {
         givenKey(KEY_INFO_WITH_PASSPHRASE)
         val viewModel = createViewModel()
-        val test = viewModel.test(this)
+        val test = viewModel.test()
 
         viewModel.handle(SharedSecureStorageAction.UseKey)
         viewModel.handle(SharedSecureStorageAction.Back)
@@ -139,7 +139,7 @@ class SharedSecureStorageViewModelTest {
     fun `given on passphrase step when going back then dismisses`() = runTest {
         givenKey(KEY_INFO_WITH_PASSPHRASE)
         val viewModel = createViewModel()
-        val test = viewModel.test(this)
+        val test = viewModel.test()
 
         viewModel.handle(SharedSecureStorageAction.Back)
 
