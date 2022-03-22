@@ -1414,7 +1414,7 @@
     <string name="qr_code_scanned_by_other_notice">Quase lá! %s está mostrando um tick (✓)\?</string>
     <string name="qr_code_scanned_by_other_yes">Sim</string>
     <string name="qr_code_scanned_by_other_no">Não</string>
-    <string name="no_connectivity_to_the_server_indicator">A conexão com o servidor foi perdida</string>
+    <string name="no_connectivity_to_the_server_indicator">Conectividade ao servidor tem sido perdida</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Modo avião está ligado</string>
     <string name="settings_dev_tools">Ferramentas Dev</string>
     <string name="settings_account_data">Dados de Conta</string>

@@ -2002,7 +2002,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \n${app_name} Desktop</string>
     <string name="change_password_summary">Atur kata sandi akun baru…</string>
     <string name="error_saving_media_file">Tidak dapat menyimpan file media</string>
-    <string name="settings_security_prevent_screenshots_summary">Mengaktifkan pengaturan ini menambahkan FLAG_SECURE ke semua Aktifitas. Mulai ulang aplikasi ini untuk berpengaruh pada perubahannya.</string>
+    <string name="settings_security_prevent_screenshots_summary">Mengaktifkan pengaturan ini menambahkan FLAG_SECURE ke semua Aktivitas. Mulai ulang aplikasi ini untuk berpengaruh pada perubahannya.</string>
     <string name="settings_security_prevent_screenshots_title">Mencegah tangkapan layar dari aplikasi</string>
     <string name="bootstrap_migration_backup_recovery_key">Kunci pemulihan kunci cadangan</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Tidak tahu Kunci Frasa Sandi Cadangan, Anda dapat %s.</string>
