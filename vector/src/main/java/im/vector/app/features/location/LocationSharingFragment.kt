@@ -183,8 +183,8 @@ class LocationSharingFragment @Inject constructor(
     private fun handleStartLiveLocationService(event: LocationSharingViewEvents.StartLiveLocationService) {
         Intent(requireContext(), LocationSharingService::class.java)
                 .apply {
-                    putExtra(LocationSharingService.EXTRA_SESSION_ID, event.sessionId)
-                    putExtra(LocationSharingService.EXTRA_ROOM_ID, event.roomId)
+                    putExtra(LocationSharingService.EXTRA_ROOM_ARGS,
+                            LocationSharingService.RoomArgs(event.sessionId, event.roomId, event.duration))
                 }
                 .also {
                     ContextCompat.startForegroundService(requireContext(), it)
@@ -236,7 +236,9 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun startLiveLocationSharing() {
-        viewModel.handle(LocationSharingAction.StartLiveLocationSharing)
+        // TODO. Get duration from user
+        val duration = 30 * 1000L
+        viewModel.handle(LocationSharingAction.StartLiveLocationSharing(duration))
     }
 
     private fun updateMap(state: LocationSharingViewState) {

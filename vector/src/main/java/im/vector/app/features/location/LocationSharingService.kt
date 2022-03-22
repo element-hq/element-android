@@ -18,44 +18,87 @@ package im.vector.app.features.location
 
 import android.content.Intent
 import android.os.IBinder
+import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.services.VectorService
 import im.vector.app.features.notifications.NotificationUtils
+import kotlinx.parcelize.Parcelize
 import timber.log.Timber
+import java.util.Timer
+import java.util.TimerTask
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class LocationSharingService : VectorService(), LocationTracker.Callback {
 
+    @Parcelize
+    data class RoomArgs(
+            val sessionId: String,
+            val roomId: String,
+            val durationMillis: Long
+    ) : Parcelable
+
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var locationTracker: LocationTracker
 
-    private var sessionId: String? = null
-    private var roomId: String? = null
+    private var roomArgsList = mutableListOf<RoomArgs>()
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        sessionId = intent?.getStringExtra(EXTRA_SESSION_ID)
-        roomId = intent?.getStringExtra(EXTRA_ROOM_ID)
-
-        if (sessionId == null || roomId == null) {
-            stopForeground(true)
-            stopSelf()
-        }
-
-        // Show a sticky notification
-        val notification = notificationUtils.buildLiveLocationSharingNotification()
-        startForeground(roomId!!.hashCode(), notification)
+    override fun onCreate() {
+        super.onCreate()
+        Timber.d("### LocationSharingService.onCreate")
 
         // Start tracking location
         locationTracker.addCallback(this)
         locationTracker.start()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val roomArgs = intent?.getParcelableExtra(EXTRA_ROOM_ARGS) as? RoomArgs
+
+        Timber.d("### LocationSharingService.onStartCommand. sessionId - roomId ${roomArgs?.sessionId} - ${roomArgs?.roomId}")
+
+        if (roomArgs != null) {
+            roomArgsList.add(roomArgs)
+
+            // Show a sticky notification
+            val notification = notificationUtils.buildLiveLocationSharingNotification()
+            startForeground(roomArgs.roomId.hashCode(), notification)
+
+            // Schedule a timer to stop sharing
+            scheduleTimer(roomArgs.roomId, roomArgs.durationMillis)
+        }
 
         return START_STICKY
     }
 
+    private fun scheduleTimer(roomId: String, durationMillis: Long) {
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                stopSharingLocation(roomId)
+            }
+        }, durationMillis)
+    }
+
+    private fun stopSharingLocation(roomId: String) {
+        Timber.d("### LocationSharingService.stopSharingLocation for $roomId")
+        synchronized(roomArgsList) {
+            roomArgsList.removeAll { it.roomId == roomId }
+            if (roomArgsList.isEmpty()) {
+                Timber.d("### LocationSharingService. Destroying self, time is up for all rooms")
+                destroyMe()
+            }
+        }
+    }
+
+    private fun destroyMe() {
+        locationTracker.removeCallback(this)
+        stopSelf()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        locationTracker.removeCallback(this)
+        Timber.d("### LocationSharingService.onDestroy")
+        destroyMe()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -63,12 +106,11 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     companion object {
-        const val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
-        const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
+        const val EXTRA_ROOM_ARGS = "EXTRA_ROOM_ARGS"
     }
 
     override fun onLocationUpdate(locationData: LocationData) {
-        Timber.d("### LocationSharingService.onLocationUpdate: ${locationData.latitude} - ${locationData.longitude}")
+        Timber.d("### LocationSharingService.onLocationUpdate. Lat - lon: ${locationData.latitude} - ${locationData.longitude}")
     }
 
     override fun onLocationProviderIsNotAvailable() {
