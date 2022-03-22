@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -85,31 +86,8 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
             holder.progressLayout.isVisible = false
         }
 
-        holder.voicePlaybackWaveform.setOnLongClickListener(attributes.itemLongClickListener)
-
-        val waveformColorIdle = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_quaternary)
-        val waveformColorPlayed = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
-
-        holder.voicePlaybackWaveform.post {
-            holder.voicePlaybackWaveform.clear()
-            waveform.forEach { amplitude ->
-                holder.voicePlaybackWaveform.add(AudioWaveformView.FFT(amplitude.toFloat(), waveformColorIdle))
-            }
-            holder.voicePlaybackWaveform.summarize()
-
-            holder.voicePlaybackWaveform.setOnTouchListener { view, motionEvent ->
-                when (motionEvent.action) {
-                    MotionEvent.ACTION_UP   -> {
-                        val percentage = getTouchedPositionPercentage(motionEvent, view)
-                        waveformTouchListener?.onWaveformTouchedUp(percentage)
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        val percentage = getTouchedPositionPercentage(motionEvent, view)
-                        waveformTouchListener?.onWaveformMovedTo(percentage)
-                    }
-                }
-                true
-            }
+        holder.voicePlaybackWaveform.doOnLayout {
+            onWaveformViewReady(holder)
         }
 
         val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
@@ -119,19 +97,43 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         }
         holder.voicePlaybackLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
         holder.voicePlaybackControlButton.setOnClickListener { playbackControlButtonClickListener?.invoke(it) }
+    }
 
-        // Don't track and don't try to update UI before view is present
-        holder.view.post {
-            voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : VoiceMessagePlaybackTracker.Listener {
-                override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
-                    when (state) {
-                        is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder, waveformColorIdle, waveformColorPlayed)
-                        is VoiceMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state, waveformColorIdle, waveformColorPlayed)
-                        is VoiceMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state, waveformColorIdle, waveformColorPlayed)
-                    }
-                }
-            })
+    private fun onWaveformViewReady(holder: Holder) {
+        holder.voicePlaybackWaveform.setOnLongClickListener(attributes.itemLongClickListener)
+
+        val waveformColorIdle = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_quaternary)
+        val waveformColorPlayed = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
+
+        holder.voicePlaybackWaveform.clear()
+        waveform.forEach { amplitude ->
+            holder.voicePlaybackWaveform.add(AudioWaveformView.FFT(amplitude.toFloat(), waveformColorIdle))
         }
+        holder.voicePlaybackWaveform.summarize()
+
+        holder.voicePlaybackWaveform.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_UP   -> {
+                    val percentage = getTouchedPositionPercentage(motionEvent, view)
+                    waveformTouchListener?.onWaveformTouchedUp(percentage)
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val percentage = getTouchedPositionPercentage(motionEvent, view)
+                    waveformTouchListener?.onWaveformMovedTo(percentage)
+                }
+            }
+            true
+        }
+
+        voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : VoiceMessagePlaybackTracker.Listener {
+            override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
+                when (state) {
+                    is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder, waveformColorIdle, waveformColorPlayed)
+                    is VoiceMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state, waveformColorIdle, waveformColorPlayed)
+                    is VoiceMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state, waveformColorIdle, waveformColorPlayed)
+                }
+            }
+        })
     }
 
     private fun getTouchedPositionPercentage(motionEvent: MotionEvent, view: View) = (motionEvent.x / view.width).coerceIn(0f, 1f)
