@@ -40,7 +40,7 @@ import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorOverrides
 import im.vector.app.test.fixtures.aHomeServerCapabilities
 import im.vector.app.test.test
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -82,7 +82,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when handling PostViewEvent, then emits contents as view event`() = runBlockingTest {
+    fun `when handling PostViewEvent, then emits contents as view event`() = runTest {
         val test = viewModel.test(this)
 
         viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome))
@@ -93,7 +93,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given supports changing display name, when handling PersonalizeProfile, then emits contents choose display name`() = runBlockingTest {
+    fun `given supports changing display name, when handling PersonalizeProfile, then emits contents choose display name`() = runTest {
         val initialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = true, supportsChangingProfilePicture = false))
         viewModel = createViewModel(initialState)
         val test = viewModel.test(this)
@@ -106,7 +106,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given only supports changing profile picture, when handling PersonalizeProfile, then emits contents choose profile picture`() = runBlockingTest {
+    fun `given only supports changing profile picture, when handling PersonalizeProfile, then emits contents choose profile picture`() = runTest {
         val initialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = false, supportsChangingProfilePicture = true))
         viewModel = createViewModel(initialState)
         val test = viewModel.test(this)
@@ -119,7 +119,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when handling SignUp then sets sign mode to sign up and starts registration`() = runBlockingTest {
+    fun `when handling SignUp then sets sign mode to sign up and starts registration`() = runTest {
         givenRegistrationResultFor(RegisterAction.StartRegistration, ANY_CONTINUING_REGISTRATION_RESULT)
         val test = viewModel.test(this)
 
@@ -137,7 +137,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given register action requires more steps, when handling action, then posts next steps`() = runBlockingTest {
+    fun `given register action requires more steps, when handling action, then posts next steps`() = runTest {
         val test = viewModel.test(this)
         givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, ANY_CONTINUING_REGISTRATION_RESULT)
 
@@ -154,7 +154,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given register action is non loadable, when handling action, then posts next steps without loading`() = runBlockingTest {
+    fun `given register action is non loadable, when handling action, then posts next steps without loading`() = runTest {
         val test = viewModel.test(this)
         givenRegistrationResultFor(A_NON_LOADABLE_REGISTER_ACTION, ANY_CONTINUING_REGISTRATION_RESULT)
 
@@ -167,7 +167,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given register action ignores result, when handling action, then does nothing on success`() = runBlockingTest {
+    fun `given register action ignores result, when handling action, then does nothing on success`() = runTest {
         val test = viewModel.test(this)
         givenRegistrationResultFor(A_RESULT_IGNORED_REGISTER_ACTION, RegistrationResult.FlowResponse(AN_IGNORED_FLOW_RESULT))
 
@@ -184,7 +184,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when registering account, then updates state and emits account created event`() = runBlockingTest {
+    fun `when registering account, then updates state and emits account created event`() = runTest {
         givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationResult.Success(fakeSession))
         givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
         val test = viewModel.test(this)
@@ -203,7 +203,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() = runBlockingTest {
+    fun `given registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() = runTest {
         givenSuccessfulRegistrationForStartAndDummySteps(missingStages = listOf(Stage.Dummy(mandatory = true)))
         val test = viewModel.test(this)
 
@@ -221,7 +221,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given changing profile picture is supported, when updating display name, then updates upstream user display name and moves to choose profile picture`() = runBlockingTest {
+    fun `given changing profile picture is supported, when updating display name, then updates upstream user display name and moves to choose profile picture`() = runTest {
         val personalisedInitialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = true))
         viewModel = createViewModel(personalisedInitialState)
         val test = viewModel.test(this)
@@ -236,7 +236,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given changing profile picture is not supported, when updating display name, then updates upstream user display name and completes personalization`() = runBlockingTest {
+    fun `given changing profile picture is not supported, when updating display name, then updates upstream user display name and completes personalization`() = runTest {
         val personalisedInitialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = false))
         viewModel = createViewModel(personalisedInitialState)
         val test = viewModel.test(this)
@@ -251,7 +251,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given upstream failure, when handling display name update, then emits failure event`() = runBlockingTest {
+    fun `given upstream failure, when handling display name update, then emits failure event`() = runTest {
         val test = viewModel.test(this)
         fakeSession.fakeProfileService.givenSetDisplayNameErrors(AN_ERROR)
 
@@ -268,7 +268,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when handling profile picture selected, then updates selected picture state`() = runBlockingTest {
+    fun `when handling profile picture selected, then updates selected picture state`() = runTest {
         val test = viewModel.test(this)
 
         viewModel.handle(OnboardingAction.ProfilePictureSelected(fakeUri.instance))
@@ -283,7 +283,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given a selected picture, when handling save selected profile picture, then updates upstream avatar and completes personalization`() = runBlockingTest {
+    fun `given a selected picture, when handling save selected profile picture, then updates upstream avatar and completes personalization`() = runTest {
         val initialStateWithPicture = givenPictureSelected(fakeUri.instance, A_PICTURE_FILENAME)
         viewModel = createViewModel(initialStateWithPicture)
         val test = viewModel.test(this)
@@ -298,7 +298,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given upstream update avatar fails, when saving selected profile picture, then emits failure event`() = runBlockingTest {
+    fun `given upstream update avatar fails, when saving selected profile picture, then emits failure event`() = runTest {
         fakeSession.fakeProfileService.givenUpdateAvatarErrors(AN_ERROR)
         val initialStateWithPicture = givenPictureSelected(fakeUri.instance, A_PICTURE_FILENAME)
         viewModel = createViewModel(initialStateWithPicture)
@@ -313,7 +313,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given no selected picture, when saving selected profile picture, then emits failure event`() = runBlockingTest {
+    fun `given no selected picture, when saving selected profile picture, then emits failure event`() = runTest {
         val test = viewModel.test(this)
 
         viewModel.handle(OnboardingAction.SaveSelectedProfilePicture)
@@ -325,7 +325,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when handling profile skipped, then completes personalization`() = runBlockingTest {
+    fun `when handling profile skipped, then completes personalization`() = runTest {
         val test = viewModel.test(this)
 
         viewModel.handle(OnboardingAction.UpdateProfilePictureSkipped)
