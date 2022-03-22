@@ -44,7 +44,7 @@ internal interface FetchThreadSummariesTask : Task<FetchThreadSummariesTask.Para
     data class Params(
             val roomId: String,
             val from: String = "",
-            val limit: Int = 100,
+            val limit: Int = 500,
             val isUserParticipating: Boolean = true
     )
 }
