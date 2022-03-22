@@ -87,7 +87,7 @@ data class RoomDetailViewState(
             rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
     )
 
-    fun isWebRTCCallOptionAvailable() = asyncRoomSummary.invoke()?.isDirect ?: true
+    fun isCallOptionAvailable() = asyncRoomSummary.invoke()?.isDirect ?: true
 
     fun isSearchAvailable() = asyncRoomSummary()?.isEncrypted == false
 
