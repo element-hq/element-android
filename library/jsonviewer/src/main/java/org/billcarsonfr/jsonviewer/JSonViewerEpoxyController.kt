@@ -20,7 +20,6 @@ import android.content.Context
 import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Success
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.Span
 import me.gujun.android.span.span
@@ -44,10 +43,8 @@ internal class JSonViewerEpoxyController(private val context: Context) :
                     text(async.error.localizedMessage?.toEpoxyCharSequence())
                 }
             }
-            is Success -> {
-                val model = data.root.invoke()
-
-                model?.let {
+            else    -> {
+                async.invoke()?.let {
                     buildRec(it, 0, "")
                 }
             }
