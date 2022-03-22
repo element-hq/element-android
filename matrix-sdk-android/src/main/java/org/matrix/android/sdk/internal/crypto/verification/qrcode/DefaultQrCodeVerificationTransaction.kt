@@ -272,6 +272,7 @@ internal class DefaultQrCodeVerificationTransaction(
                 // I now know that i can trust my MSK
                 trust(true, emptyList(), true)
             }
+            null                                           -> Unit
         }
     }
 
