@@ -363,7 +363,7 @@
     <string name="action_join">Vstoupit</string>
     <string name="e2e_re_request_encryption_key_dialog_content">Prosím, spusťte ${app_name} na jiném zařízení, které může dešifrovat zprávu, aby poslalo klíče této relaci.</string>
     <string name="action_reject">Odmítnout</string>
-    <string name="list_members">Zobrazit členy</string>
+    <string name="list_members">Členové</string>
     <string name="room_jump_to_first_unread">Přejít na nepřečtené</string>
     <plurals name="room_title_members">
         <item quantity="one">%d člen</item>
@@ -1998,7 +1998,7 @@
     <string name="spaces_header">Prostory</string>
     <string name="you_are_invited">Jste zváni</string>
     <string name="space_add_existing_rooms">Přidat existující místnosti a prostor</string>
-    <string name="leave_space">Opustit prostor</string>
+    <string name="leave_space">Opustit</string>
     <string name="space_add_child_title">Přidat místnosti</string>
     <string name="space_explore_activity_title">Prozkoumat místnosti</string>
     <plurals name="space_people_you_know">
@@ -2466,4 +2466,23 @@
     <string name="message_reaction_show_less">Zobrazit méně</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s a další</string>
     <string name="room_notification_two_users_are_typing">%1$s a %2$s</string>
+    <string name="location_share_live_stop">Zastavit</string>
+    <string name="location_share_live_enabled">Poloha živě povolena</string>
+    <string name="location_in_background_missing_permission_dialog_content">Pokud chcete sdílet svou polohu živě, ${název_aplikace} potřebuje přístup k poloze po celou dobu, kdy je aplikace na pozadí.
+\nK vaší poloze budeme mít přístup pouze po dobu, kterou si zvolíte.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Povolit přístup</string>
+    <string name="a11y_location_share_option_pinned_icon">Sdílet tuto polohu</string>
+    <string name="location_share_option_pinned">Sdílet tuto polohu</string>
+    <string name="a11y_location_share_option_user_live_icon">Sdílet polohu živě</string>
+    <string name="location_share_option_user_live">Sdílet polohu živě</string>
+    <string name="a11y_location_share_option_user_current_icon">Sdílet moji současnou polohu</string>
+    <string name="location_share_option_user_current">Sdílet moji současnou polohu</string>
+    <string name="a11y_location_share_locate_button">Přiblížit na současnou polohu</string>
+    <string name="a11y_location_share_pin_on_map">Připnout vybranou pozici na mapě</string>
+    <string name="threads_notice_migration_message">Blížíme se k vydání veřejné betaverze vláken.
+\n
+\nV rámci příprav na ni musíme provést několik změn: vlákna vytvořená před tímto okamžikem se budou zobrazovat jako běžné odpovědi.
+\n
+\nPůjde o jednorázový přechod, protože vlákna jsou nyní součástí Matrix specifikace.</string>
+    <string name="threads_notice_migration_title">Vlákna se blíží k betaverzi 🎉</string>
 </resources>
