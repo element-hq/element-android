@@ -2274,7 +2274,7 @@
     <string name="end_poll_confirmation_description">Týmto sa zastaví možnosť hlasovania a zobrazia sa konečné výsledky ankety.</string>
     <string name="delete_poll_dialog_content">Určite chcete túto anketu odstrániť\? Po odstránení ju už nebudete môcť obnoviť.</string>
     <string name="poll_type_title">Typ ankety</string>
-    <string name="open_poll_option_title">Otvoriť anketu</string>
+    <string name="open_poll_option_title">Otvorená anketa</string>
     <string name="open_poll_option_description">Hlasujúci uvidia výsledky hneď po hlasovaní</string>
     <string name="closed_poll_option_title">Uzavretá anketa</string>
     <string name="action_view_threads">Zobraziť vlákna</string>
@@ -2452,4 +2452,18 @@
         <item quantity="other">%1$d ďalších</item>
     </plurals>
     <string name="login_server_url_form_modular_notice">Zadajte URL adresu servera Modular Element alebo adresu servera, ktorý si želáte použiť</string>
+    <string name="poll_response_room_list_preview">Hlasovať</string>
+    <string name="dev_tools_send_state_event">Odoslať stav udalosti</string>
+    <string name="identity_server_error_binding_error">Priradenie sa nepodarilo.</string>
+    <string name="identity_server_error_no_current_binding_error">V súčasnosti neexistuje žiadne priradenie k tomuto identifikátoru.</string>
+    <string name="bootstrap_migration_use_recovery_key">použite záložný kľúč na obnovu kľúča</string>
+    <string name="bootstrap_progress_storing_in_sss">Uloženie tajnej zálohy kľúčov v SSSS</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">Generovanie kľúča SSSS z kľúča pre obnovu</string>
+    <string name="bootstrap_crosssigning_progress_default_key">Definovanie predvoleného kľúča SSSS</string>
+    <string name="settings_developer_mode_fail_fast_title">Rýchle-zlyhanie</string>
+    <string name="call_transfer_consult_first">Najprv konzultovať</string>
+    <string name="pick_tings_to_leave">Vyberte si, čo opustíte</string>
+    <string name="command_description_leave_room">Opustiť miestnosť s daným id (alebo aktuálnu miestnosť, ak je prázdna)</string>
+    <string name="a11y_trust_level_warning">Varovná úroveň dôveryhodnosti</string>
+    <string name="call_transfer_connect_action">Pripojiť</string>
 </resources>
