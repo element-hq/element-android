@@ -23,7 +23,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.DimensionConverter
@@ -168,7 +167,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             DraggingState.Ready         -> {
                 // do nothing
             }
-        }.exhaustive
+        }
         dragState = newDragState
     }
 

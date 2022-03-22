@@ -29,7 +29,6 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
@@ -104,7 +103,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -114,7 +113,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
             SignMode.SignUp             -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
             SignMode.SignIn,
             SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
-        }.exhaustive
+        }
     }
 
     private fun submit() {

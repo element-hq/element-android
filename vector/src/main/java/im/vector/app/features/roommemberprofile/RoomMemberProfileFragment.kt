@@ -39,7 +39,6 @@ import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
@@ -134,7 +133,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
                 is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> Unit
                 is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
-            }.exhaustive
+            }
         }
         setupLongClicks()
     }

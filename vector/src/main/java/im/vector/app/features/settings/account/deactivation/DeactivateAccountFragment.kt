@@ -25,7 +25,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.fragmentViewModel
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentDeactivateAccountBinding
@@ -128,7 +127,7 @@ class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<Fragm
                         reAuthActivityResultLauncher.launch(intent)
                     }
                 }
-            }.exhaustive
+            }
         }
     }
 }

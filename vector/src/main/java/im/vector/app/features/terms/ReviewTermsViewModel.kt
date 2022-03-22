@@ -24,7 +24,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
@@ -49,7 +48,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
             is ReviewTermsAction.LoadTerms          -> loadTerms(action)
             is ReviewTermsAction.MarkTermAsAccepted -> markTermAsAccepted(action)
             ReviewTermsAction.Accept                -> acceptTerms()
-        }.exhaustive
+        }
     }
 
     private fun markTermAsAccepted(action: ReviewTermsAction.MarkTermAsAccepted) = withState { state ->

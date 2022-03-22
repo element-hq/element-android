@@ -31,7 +31,6 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
@@ -105,7 +104,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
                 }
                 holder.statusTextView.isVisible = true
             }
-        }.exhaustive
+        }
 
         // Always hide buttons if request is too old
         if (!VerificationService.isValidRequest(attributes.informationData.ageLocalTS)) {

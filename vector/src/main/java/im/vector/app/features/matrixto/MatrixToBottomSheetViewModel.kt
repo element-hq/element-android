@@ -28,7 +28,6 @@ import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.createdirect.DirectRoomHelper
@@ -264,7 +263,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
             is MatrixToAction.OpenRoom              -> {
                 _viewEvents.post(MatrixToViewEvents.NavigateToRoom(action.roomId))
             }
-        }.exhaustive
+        }
     }
 
     private fun handleJoinSpace(joinSpace: MatrixToAction.JoinSpace) {

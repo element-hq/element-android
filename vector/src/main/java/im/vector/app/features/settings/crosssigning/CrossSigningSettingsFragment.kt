@@ -28,7 +28,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
@@ -100,7 +99,7 @@ class CrossSigningSettingsFragment @Inject constructor(
                 CrossSigningSettingsViewEvents.HideModalWaitingView    -> {
                     views.waitingView.waitingView.isVisible = false
                 }
-            }.exhaustive
+            }
         }
     }
 

@@ -36,7 +36,6 @@ import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
@@ -85,7 +84,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                         is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(action)
                         UserListSharedAction.OpenPhoneBook         -> openPhoneBook()
                         UserListSharedAction.AddByQrCode           -> openAddByQrCode()
-                    }.exhaustive
+                    }
                 }
                 .launchIn(lifecycleScope)
         if (isFirstCreation()) {
@@ -112,7 +111,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     Toast.makeText(this, R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-            }.exhaustive
+            }
         }
 
         qrViewModel.observeViewEvents {
@@ -125,7 +124,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     finish()
                 }
                 else                               -> Unit
-            }.exhaustive
+            }
         }
     }
 

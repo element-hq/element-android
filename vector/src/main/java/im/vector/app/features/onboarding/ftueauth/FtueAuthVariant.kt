@@ -31,7 +31,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.popBackstack
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ScreenOrientationLocker
@@ -229,7 +228,7 @@ class FtueAuthVariant(
             OnboardingViewEvents.OnChooseProfilePicture                        -> onChooseProfilePicture()
             OnboardingViewEvents.OnPersonalizationComplete                     -> onPersonalizationComplete()
             OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
-        }.exhaustive
+        }
     }
 
     private fun registrationShouldFallback(registrationFlowResult: OnboardingViewEvents.RegistrationFlowResult) =
@@ -281,7 +280,7 @@ class FtueAuthVariant(
             SignMode.SignUp             -> Unit // This case is processed in handleOnboardingViewEvents
             SignMode.SignIn             -> handleSignInSelected(state)
             SignMode.SignInWithMatrixId -> handleSignInWithMatrixId(state)
-        }.exhaustive
+        }
     }
 
     private fun handleSignInSelected(state: OnboardingViewState) {

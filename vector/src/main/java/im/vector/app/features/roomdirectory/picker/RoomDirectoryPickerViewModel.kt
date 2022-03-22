@@ -27,7 +27,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -104,7 +103,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
             is RoomDirectoryPickerAction.SetServerUrl -> handleSetServerUrl(action)
             RoomDirectoryPickerAction.Submit          -> handleSubmit()
             is RoomDirectoryPickerAction.RemoveServer -> handleRemoveServer(action)
-        }.exhaustive
+        }
     }
 
     private fun handleEnterEditMode() {

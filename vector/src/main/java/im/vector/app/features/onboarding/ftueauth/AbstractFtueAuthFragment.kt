@@ -26,7 +26,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.features.onboarding.OnboardingAction
@@ -73,7 +72,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
             else                            ->
                 // This is handled by the Activity
                 Unit
-        }.exhaustive
+        }
     }
 
     override fun showFailure(throwable: Throwable) {
