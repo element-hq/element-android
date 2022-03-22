@@ -252,6 +252,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                             VerificationConclusionFragment.Args(false, state.sasTransactionState.cancelCode.value, state.isMe)
                     )
                 }
+                else                             -> Unit
             }
 
             return@withState

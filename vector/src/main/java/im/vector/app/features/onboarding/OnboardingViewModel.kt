@@ -222,6 +222,7 @@ class OnboardingViewModel @AssistedInject constructor(
                                 .withAllowedFingerPrints(listOf(action.fingerprint))
                                 .build()
                 )
+            else                                 -> Unit
         }
     }
 

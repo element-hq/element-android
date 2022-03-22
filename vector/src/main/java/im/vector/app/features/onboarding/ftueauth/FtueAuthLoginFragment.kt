@@ -28,7 +28,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
@@ -299,7 +298,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                 }
             }
             // Success is handled by the LoginActivity
-            is Success -> Unit
+            else       -> Unit
         }
 
         when (state.asyncRegistration) {
@@ -308,7 +307,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                 views.passwordField.hidePassword()
             }
             // Success is handled by the LoginActivity
-            is Success -> Unit
+            else       -> Unit
         }
     }
 

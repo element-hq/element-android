@@ -22,8 +22,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.epoxy.EpoxyTouchHelper
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.core.extensions.cleanup
@@ -121,8 +122,10 @@ class SpaceListFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) { state ->
         when (state.asyncSpaces) {
-            is Incomplete -> views.stateView.state = StateView.State.Loading
-            is Success    -> views.stateView.state = StateView.State.Content
+            Uninitialized,
+            is Loading -> views.stateView.state = StateView.State.Loading
+            is Success -> views.stateView.state = StateView.State.Content
+            else       -> Unit
         }
         spaceController.update(state)
     }

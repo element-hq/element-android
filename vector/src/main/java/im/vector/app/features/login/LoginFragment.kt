@@ -29,6 +29,7 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
@@ -269,6 +270,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
         setupButtons(state)
 
         when (state.asyncLoginAction) {
+            Uninitialized,
             is Loading -> {
                 // Ensure password is hidden
                 views.passwordField.hidePassword()
@@ -300,7 +302,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 views.passwordField.hidePassword()
             }
             // Success is handled by the LoginActivity
-            is Success -> Unit
+            else       -> Unit
         }
     }
 

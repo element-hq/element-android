@@ -173,6 +173,7 @@ class LoginViewModel @AssistedInject constructor(
                                 .withAllowedFingerPrints(listOf(action.fingerprint))
                                 .build()
                 )
+            else                            -> Unit
         }
     }
 

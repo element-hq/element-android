@@ -49,8 +49,8 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val directRoomHelper: DirectRoomHelper,
-        private val errorFormatter: ErrorFormatter) :
-    VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
+        private val errorFormatter: ErrorFormatter
+) : VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> {
@@ -61,22 +61,23 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
 
     init {
         when (initialState.linkType) {
-            is PermalinkData.RoomLink     -> {
+            is PermalinkData.RoomLink            -> {
                 setState {
                     copy(roomPeekResult = Loading())
                 }
             }
-            is PermalinkData.UserLink     -> {
+            is PermalinkData.UserLink            -> {
                 setState {
                     copy(matrixItem = Loading())
                 }
             }
-            is PermalinkData.GroupLink    -> {
+            is PermalinkData.GroupLink           -> {
                 // Not yet supported
             }
-            is PermalinkData.FallbackLink -> {
+            is PermalinkData.FallbackLink        -> {
                 // Not yet supported
             }
+            is PermalinkData.RoomEmailInviteLink -> Unit
         }
         viewModelScope.launch(Dispatchers.IO) {
             resolveLink(initialState)

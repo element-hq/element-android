@@ -18,7 +18,6 @@ package im.vector.app.features.login2
 
 import android.content.Context
 import android.net.Uri
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -172,6 +171,7 @@ class LoginViewModel2 @AssistedInject constructor(
                 handleSetUserPassword(finalLastAction)
             is LoginAction2.LoginWith        ->
                 handleLoginWith(finalLastAction)
+            else                             -> Unit
         }
     }
 

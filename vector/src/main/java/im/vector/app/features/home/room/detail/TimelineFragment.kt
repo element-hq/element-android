@@ -1782,6 +1782,7 @@ class TimelineFragment @Inject constructor(
                         transactionId = data.transactionId,
                 ).show(parentFragmentManager, "REQ")
             }
+            else                                          -> Unit
         }
     }
 
@@ -2236,6 +2237,8 @@ class TimelineFragment @Inject constructor(
             is EventSharedAction.EndPoll                    -> {
                 askConfirmationToEndPoll(action.eventId)
             }
+            is EventSharedAction.ReportContent              -> Unit /* Not clickable */
+            EventSharedAction.Separator                     -> Unit /* Not clickable */
         }
     }
 
