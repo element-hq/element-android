@@ -521,7 +521,7 @@
     <string name="notice_room_unban_with_reason">%1$s tók %2$s úr banni. Ástæða: %3$s</string>
     <string name="notice_room_remove_with_reason_by_you">Þú fjarlægðir %1$s. Ástæða: %2$s</string>
     <string name="notice_room_remove_with_reason">%1$s fjarlægði %2$s. Ástæða: %3$s</string>
-    <string name="notice_room_reject_with_reason_by_you">Þú hafnaðir boðinu. Ástæða: %2$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Þú hafnaðir boðinu. Ástæða: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s hafnaði boðinu. Ástæða: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Þú hættir. Ástæða: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s hætti. Ástæða: %2$s</string>
@@ -562,7 +562,7 @@
     <string name="notice_widget_removed">%1$s fjarlægði %2$s viðmótshluta</string>
     <string name="notice_widget_added_by_you">Þú bættir við %1$s viðmótshluta</string>
     <string name="notice_widget_added">%1$s bætti við %2$s viðmótshluta</string>
-    <string name="notice_room_third_party_registered_invite_by_you">Þú samþykktir boð um að taka þátt í %$s</string>
+    <string name="notice_room_third_party_registered_invite_by_you">Þú samþykktir boð um að taka þátt í %1$s</string>
     <string name="notice_direct_room_third_party_revoked_invite_by_you">Þú afturkallaðir boðið til %1$s</string>
     <string name="notice_direct_room_third_party_revoked_invite">%1$s afturkallaði boðið til %2$s</string>
     <string name="notice_room_third_party_revoked_invite_by_you">Þú afturkallaðir boð til %1$s um þátttöku í spjallrásinni</string>
