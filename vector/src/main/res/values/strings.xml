@@ -1546,7 +1546,7 @@
 
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>
-    <string name="reply_in_thread">Reply In Thread</string>
+    <string name="reply_in_thread">Reply in thread</string>
     <string name="view_in_room">View In Room</string>
 
     <string name="global_retry">Retry</string>
