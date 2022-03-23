@@ -39,7 +39,6 @@
     <string name="notice_display_name_removed">%1$s hoqi emrin e tij në ekran (%2$s)</string>
     <string name="notice_room_topic_removed">%1$s hoqi temën e dhomës</string>
     <string name="notice_room_third_party_invite">%1$s dërgoi një ftesë për %2$s që të marrë pjesë në dhomë</string>
-
     <string name="notice_room_update">%s e përmirësoi këtë dhomë.</string>
     <string name="initial_sync_start_importing_account">Njëkohësimi fillestar:
 \nPo importohet llogaria…</string>
@@ -311,14 +310,10 @@
     <string name="yes">PO</string>
     <string name="_continue">Vazhdo</string>
     <string name="action_remove">Hiqe</string>
-    <string name="action_join">Bëhuni pjesë</string>
+    <string name="action_join">Hyni</string>
     <string name="action_reject">Hidheni tej</string>
     <string name="list_members">Anëtarë liste</string>
     <string name="room_jump_to_first_unread">Hidhu te të palexuarit</string>
-
-
-
-
     <string name="room_participants_leave_prompt_title">Dilni nga dhoma</string>
     <string name="room_participants_leave_prompt_msg">Jeni i sigurt se doni të dilni nga dhoma?</string>
     <string name="room_participants_header_direct_chats">FJALOSJE TË DREJTPËRDREJTA</string>
@@ -501,8 +496,6 @@
     <string name="group_details_home">Kreu</string>
     <string name="rooms">Dhoma</string>
     <string name="invited">I ftuar</string>
-
-
     <string name="has_been_removed">Jeni përzënë prej %1$s nga %2$s</string>
     <string name="has_been_banned">Jeni dëbuar prej %1$s nga %2$s</string>
     <string name="reason_colon">Arsye: %1$s</string>
@@ -520,7 +513,6 @@
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="x_plus">%d+</string>
     <string name="notification_listening_for_events">Po përgjohet për akte</string>
-
     <string name="bottom_action_favourites">Të parapëlqyer</string>
     <string name="send_bug_report_description">Ju lutemi, përshkruajeni të metën. Ç’po bënit? Ç’prisnit të ndodhte? Ç’ndodhi në fakt?</string>
     <string name="send_bug_report_alert_message">Duket se po përplasni telefonin nga inati. Do të donit të hapej skena për njoftim të metash?</string>
@@ -528,17 +520,12 @@
     <string name="send_bug_report_failed">Dështoi dërgimi i njoftimit të të metës (%s)</string>
     <string name="logout">Dilni</string>
     <string name="option_send_voice">Dërgoni mesazh zanor</string>
-
     <string name="auth_reset_password_error_unauthorized">Verifikimi i adresës email dështoi: sigurohuni se keni klikuar lidhjen te email-i</string>
-
     <string name="e2e_re_request_encryption_key_dialog_content">Ju lutemi, niseni ${app_name}-in në një tjetër pajisje që mund të shfshehtëzojë mesazhin, që kështu të mund të dërgojë kyçet te ky sesion.</string>
-
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; të tjerë po shtypin…</string>
     <string name="settings_olm_version">version olm</string>
     <string name="settings_pin_missed_notifications">Fikso dhomat me njoftime të humbura</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Vetëm anëtarët (që nga çasti i përzgjedhjes së kësaj mundësie)</string>
-
-
     <string name="settings_labs_native_camera">Përdor kamerë të brendshme</string>
     <string name="you_added_a_new_device">Shtuat një sesion të ri \'%s\', i cili po kërkon kyçe fshehtëzimi.</string>
     <string name="your_unverified_device_requesting">Sesioni juaj i paverifikuar \'%s\' po kërkon kyçe fshehtëzimi.</string>
@@ -551,7 +538,6 @@
     <string name="resource_limit_soft_contact">Ju lutemi, %s për ta zmadhuar këtë kufi.</string>
     <string name="resource_limit_hard_contact">Ju lutemi, %s që të vazhdoni përdorimin e këtij shërbimi.</string>
     <string name="or">ose</string>
-
     <string name="send_bug_report_description_in_english">Në qoftë e mundur, ju lutemi, përshkrimin shkruajeni në anglisht.</string>
     <string name="no_sticker_application_dialog_content">Hëpërhë, s’keni të aktivizuar ndonjë pako ngjitësash.
 \n
@@ -565,16 +551,11 @@
     </plurals>
     <string name="call_connecting">Po bëhet lidhja e thirrjes…</string>
     <string name="call_error_user_not_responding">Ana e largët dështoi të përgjigjet.</string>
-
-
     <string name="permissions_rationale_msg_record_audio">Për të kryer thirrje audio, ${app_name}-i lyp leje të përdorë mikrofonin tuaj.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">Për të kryer thirrje video, ${app_name}-i lyp leje të përdorë kamerën dhe mikrofonin tuaj.
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluskat pasuese, që të jetë në gjendje të bëjë thirrjen.</string>
-
     <string name="no">JO</string>
-
     <plurals name="room_title_members">
         <item quantity="one">%d anëtar</item>
         <item quantity="other">%d anëtarë</item>
@@ -585,14 +566,9 @@
         <item quantity="one">%d mesazh i ri</item>
         <item quantity="other">%d mesazhe të rinj</item>
     </plurals>
-
-
-
-
     <string name="account_email_validation_message">Ju lutemi, kontrolloni email-in tuaj dhe klikoni mbi lidhjen që përmban. Pasi të jetë bërë kjo, klikoni që të vazhdohet.</string>
     <string name="room_settings_labs_warning_message">Këto janë veçori eksperimentale që mund të ngecin në rrugë të papritura. Përdorini me kujdes.</string>
     <string name="encryption_export_notice">Ju lutemi, krijoni një frazëkalim për fshehtëzimin e kyçeve të eksportuar. Që të jeni në gjendje t’i importoni kyçet, do t’ju duhet të jepni të njëjtin frazëkalim.</string>
-
     <string name="encryption_never_send_to_unverified_devices_summary">Mos dërgo kurrë prej këtij sesioni mesazhe të fshehtëzuar te sesione të paverifikuar.</string>
     <string name="encryption_information_verify_device_warning">Ripohojeni duke krahasuar sa vijon me Rregullimet e Përdoruesit te sesioni juaj tjetër:</string>
     <string name="encryption_information_verify_device_warning2">Nëse s’përputhen, siguria e komunikimeve tuaja mund të jetë komprometuar.</string>
@@ -639,7 +615,6 @@
         <item quantity="one">%d mesazh i njoftuar i palexuar</item>
         <item quantity="other">%d mesazhe të njoftuar të palexuar</item>
     </plurals>
-
     <string name="title_activity_choose_sticker">Dërgoni një ngjitës</string>
     <string name="option_send_sticker">Dërgoni një ngjitës</string>
     <string name="settings_call_category">Thirrje</string>
@@ -700,7 +675,6 @@
     <string name="settings_troubleshoot_test_battery_success">${app_name}-i nuk preket nga Optimizime Baterie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Nëse një përdorues e lë një pajisje jo në prizë dhe të palëvizshme për një periudhë, me ekranin të fikur, pajisja kalon nën mënyrën Dremitje. Kjo u parandalon aplikimeve të hyjnë në rrjet dhe shtyn për më vonë punët e tyre, njëkohësimet dhe alarmet standarde.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Shpërfille Optimizimin</string>
-
     <string name="no_valid_google_play_services_apk">S’u gjet APK për Google Play Services. Njoftimet mund të mos punojnë saktë.</string>
     <string name="video_call_in_progress">Thirrje Video Në Kryerje e Sipër…</string>
     <string name="title_activity_keys_backup_setup">Kopjeruajtje Kyçesh</string>
@@ -737,7 +711,6 @@
     <string name="keys_backup_setup_step3_button_title">U bë</string>
     <string name="keys_backup_setup_step3_copy_button_title">Ruani Kyç Rimarrjesh</string>
     <string name="keys_backup_setup_step3_save_button_title">Ruaje si Skedë</string>
-
     <string name="keys_backup_setup_step3_please_make_copy">Ju lutemi, bëni një kopje</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Jepjani kyçin e rimarrjeve…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Po prodhohet Kyç Rimarrjesh duke përdorur frazëkalim, ky proces mund të hajë disa sekonda.</string>
@@ -831,8 +804,6 @@
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Po shkarkohen kyçe…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Po importohen kyçe…</string>
     <string name="keys_backup_settings_untrusted_backup">Që të përdorni Kopjeruajtje Kyçesh në këtë sesion, rikthejeni tani përmes frazëkalimit tuaj ose kyçi rimarrjesh.</string>
-
-
     <string name="settings_media">Media</string>
     <string name="settings_default_compression">Ngjeshje parazgjedhje</string>
     <string name="compression_opt_list_choose">Zgjidhni</string>
@@ -869,8 +840,6 @@
     <string name="ignore_request_short_label">Shpërfille</string>
     <string name="sas_verified">U verifikua!</string>
     <string name="sas_got_it">E mora vesh</string>
-
-
     <string name="sas_incoming_request_notif_title">Kërkesë Verifikimi</string>
     <string name="sas_incoming_request_notif_content">%s dëshiron të verifikojë sesionin tuaj</string>
     <string name="sas_error_unknown">Gabim i Panjohur</string>
@@ -965,7 +934,6 @@
     <string name="none">Asnjë</string>
     <string name="action_revoke">Shfuqizoje</string>
     <string name="action_disconnect">Shkëputu</string>
-
     <string name="login_error_homeserver_not_found">S’kapet dot shërbyes Home te kjo URL, ju lutemi, kontrollojeni</string>
     <string name="settings_background_fdroid_sync_mode">Mënyrë Njëkohësimi Në Prapaskenë</string>
     <string name="settings_background_fdroid_sync_mode_battery">E optimizuar për baterinë</string>
@@ -976,7 +944,6 @@
 \nKjo do të ketë ndikim mbi përdorimin e baterisë dhe të transmetimit, do të shfaqet një njoftim i pandërprerë që pohon se ${app_name}-i po përgjon për akte.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Pa njëkohësim në prapraskenë</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">S’do të njoftoheni për mesazhe ardhës, kur aplikacioni gjendet në prapaskenë.</string>
-
     <string name="settings_discovery_manage">Administroni rregullimet tuaja për zbulime.</string>
     <string name="identity_server_not_defined">S’po përdorni ndonjë shërbyes identitetesh</string>
     <string name="error_user_already_logged_in">Duket se po rrekeni të lidheni me një tjetër shërbyes Home. Doni të bëhet dalja\?</string>
@@ -1045,7 +1012,6 @@
     <string name="content_reported_as_inappropriate_content">Kjo lëndë është raportuar si e papërshtatshme. 
 \n 
 \nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që të fshihen mesazhet e tij.</string>
-
     <string name="settings_integrations">Integrime</string>
     <string name="settings_integrations_summary">Përdorni një përgjegjës integrimesh që të administroni robotë, ura, widget-e dhe paketa ngjitësish.
 \nPërgjegjësit e integrimeve marrin të dhëna formësimi dhe mund të ndryshojnë widget-e, të dërgojnë ftesa për në dhoma dhe të caktojnë shkallë pushteti në emrin tuaj.</string>
@@ -1324,7 +1290,6 @@
     <string name="verification_request_other_accepted">%s u pranua</string>
     <string name="verification_scan_notice">Skanojeni kodin me pajisjen e përdoruesit tjetër, për të verifikuar në mënyrë të sigurt njëri-tjetrin</string>
     <string name="verification_scan_emoji_subtitle">Nëse s’jeni vetë atje, krahasoni emoji-n</string>
-
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} nuk trajton akte të llojit \'%1$s\'</string>
     <string name="rendering_event_error_exception">${app_name} ndeshi një problem kur vizatohej lëndë e aktit me ID \'%1$s\'</string>
     <string name="verify_cannot_cross_sign">Ky sesion s’është në gjendje të ndajë këtë verifikim me sesionet tuaj të tjerë.
@@ -1407,7 +1372,6 @@
     <string name="bootstrap_crosssigning_print_it">Shtypeni dhe ruajeni diku në një vend të parrezik</string>
     <string name="bootstrap_crosssigning_save_usb">Ruajeni në një diskth USB ose pajisje kopjeruajtjesh</string>
     <string name="bootstrap_crosssigning_save_cloud">Kopjojeni te depozita juaj personale në re</string>
-
     <string name="encryption_enabled">Fshehtëzimi u aktivizua</string>
     <string name="encryption_enabled_tile_description">Mesazhet në këtë dhomë janë të fshehtëzuara skaj-më-skaj. Mësoni më tepër &amp; verifikoni përdorues te profilet e tyre.</string>
     <string name="encryption_not_enabled">Fshehtëzim jo i aktivizuar</string>
@@ -1811,7 +1775,6 @@
     <string name="hide_advanced">Fshihi të mëtejshmet</string>
     <string name="show_advanced">Shfaq të mëtejshme</string>
     <string name="attachment_viewer_item_x_of_y">%1$d nga %2$d</string>
-
     <string name="settings_discovery_consent_action_give_consent">Jepe pranimin</string>
     <string name="settings_discovery_consent_action_revoke">Shfuqizoje pranimin tim</string>
     <string name="settings_discovery_consent_notice_on">Keni dhënë pranimin tuaj për të dërguar email-e dhe numra telefonash te ky shërbyes identitetesh që të zbulojë përdorues të tjerë prej kontakteve tuaj.</string>
@@ -1863,8 +1826,6 @@
     <string name="call_transfer_title">Shpërngule</string>
     <string name="call_transfer_connect_action">Lidhe</string>
     <string name="call_transfer_consult_first">Konsultohu së pari</string>
-
-
     <string name="call_only_active">Thirrje aktive (%1$s)</string>
     <string name="call_dial_pad_lookup_error">Pati një gabim gjatë kërkimit të numrit të telefonit</string>
     <string name="call_dial_pad_title">Pjesa e numrave</string>
@@ -2028,7 +1989,7 @@
     <string name="create_spaces_me_and_teammates">Unë dhe anëtarët e ekipit tim</string>
     <string name="create_spaces_organise_rooms">Një hapësirë private për të sistemuar dhomat tuaja</string>
     <string name="create_spaces_just_me">Unë vetëm</string>
-    <string name="create_spaces_make_sure_access">Siguroni që personat e duhur të kenë hyrje te %s. Këtë mund të ndryshoni më vonë.</string>
+    <string name="create_spaces_make_sure_access">Siguroni që personat e duhur të kenë hyrje te %s.</string>
     <string name="create_spaces_who_are_you_working_with">Me cilët po punoni\?</string>
     <string name="create_spaces_join_info_help">Që të hyni në një hapësirë ekzistuese, ju duhet një ftesë.</string>
     <string name="create_spaces_you_can_change_later">Këtë mund ta ndryshoni më vonë</string>
@@ -2102,7 +2063,6 @@
     <string name="directory_add_a_new_server_prompt">Jepni emrin e e një shërbyesi të ri që doni të eksploroni.</string>
     <string name="directory_add_a_new_server">Shtoni shërbyes të ri</string>
     <string name="directory_your_server">Shërbyesi juaj</string>
-
     <string name="error_failed_to_join_room">Na ndjeni, ndodhi një gabim teksa provohej të hyhej: %s</string>
     <string name="create_space_alias_hint">Adresë hapësire</string>
     <string name="space_settings_alias_title">Adresa hapësire</string>
@@ -2302,7 +2262,6 @@
     <string name="create_poll_title">Krijoni Pyetësor</string>
     <string name="identity_server_consent_dialog_content_question">A pranoni të dërgohen këto hollësi\?</string>
     <string name="identity_server_consent_dialog_content_3">Për të zbuluar kontakte ekzistuese, duhet të dërgoni hollësi kontakti (email-e dhe numra telefonash) te shërbyesi juaj i identiteteve. Para dërgimit, i fshehtëzojmë të dhënat tuaja, për privatësi.</string>
-
     <string name="identity_server_consent_dialog_title_2">Dërgo email-e dhe numra telefonash te %s</string>
     <string name="settings_discovery_consent_notice_off_2">Kontaktet tuaja janë private. Për të zbuluar përdorues prej kontakteve tuaja, na duhet leja juaj për të dërguar hollësi kontakti te shërbyesi juaj i identiteteve.</string>
     <string name="shortcut_disabled_reason_sign_out">Është bërë dalja nga sesioni!</string>
@@ -2435,4 +2394,18 @@
     <string name="action_thread_copy_link_to_thread">Kopjoje lidhjen te rrjedha</string>
     <string name="action_thread_view_in_room">Shiheni në dhomë</string>
     <string name="action_view_threads">Shihni Rrjedha</string>
+    <string name="room_notification_two_users_are_typing">%1$s dhe %2$s</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s dhe të tjerë</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d më tepër</item>
+        <item quantity="other">%1$d më tepër</item>
+    </plurals>
+    <string name="room_message_notify_everyone">Njofto krejt dhomën</string>
+    <string name="room_message_autocomplete_users">Përdorues</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d ndryshim ACL-sh shërbyesi</item>
+        <item quantity="other">%d ndryshimë ACL-sh shërbyesi</item>
+    </plurals>
+    <string name="room_message_autocomplete_notification">Njoftim dhome</string>
+    <string name="message_reaction_show_less">Shfaq më pak</string>
 </resources>

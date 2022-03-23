@@ -100,8 +100,10 @@ import im.vector.app.features.matrixto.MatrixToUserFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthAccountCreatedFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseDisplayNameFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseProfilePictureFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLoginFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthPersonalizationCompleteFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordMailConfirmationFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordSuccessFragment
@@ -484,6 +486,16 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthChooseDisplayNameFragment::class)
     fun bindFtueAuthChooseDisplayNameFragment(fragment: FtueAuthChooseDisplayNameFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthChooseProfilePictureFragment::class)
+    fun bindFtueAuthChooseProfilePictureFragment(fragment: FtueAuthChooseProfilePictureFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthPersonalizationCompleteFragment::class)
+    fun bindFtueAuthPersonalizationCompleteFragment(fragment: FtueAuthPersonalizationCompleteFragment): Fragment
 
     @Binds
     @IntoMap

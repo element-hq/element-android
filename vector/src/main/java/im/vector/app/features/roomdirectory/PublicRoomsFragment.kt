@@ -28,7 +28,6 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
@@ -96,7 +95,7 @@ class PublicRoomsFragment @Inject constructor(
             is RoomDirectoryViewEvents.Failure -> {
                 views.coordinatorLayout.showOptimizedSnackbar(errorFormatter.toHumanReadable(viewEvents.throwable))
             }
-        }.exhaustive
+        }
     }
 
     override fun onDestroyView() {

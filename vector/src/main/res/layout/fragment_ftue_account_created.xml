@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     android:background="?colorSecondary">
 
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/viewKonfetti"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/ftueAuthGutterStart"
         android:layout_width="wrap_content"
@@ -34,14 +40,16 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/element_background_light"
         android:importantForAccessibility="no"
-        android:src="@drawable/ic_user_round"
+        android:src="@drawable/ic_user_fg"
         app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintHeight_percent="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace1"
-        app:tint="@color/element_background_light" />
+        app:tint="?colorSecondary" />
 
     <Space
         android:id="@+id/accountCreatedSpace2"
@@ -86,6 +94,14 @@
         app:layout_constraintBottom_toTopOf="@id/accountCreatedPersonalize"
         app:layout_constraintTop_toBottomOf="@id/accountCreatedSubtitle" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/personalizeButtonGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="accountCreatedPersonalize,accountCreatedTakeMeHome"
+        tools:visibility="visible" />
+
     <Button
         android:id="@+id/accountCreatedPersonalize"
         style="@style/Widget.Vector.Button.Login"
@@ -96,11 +112,10 @@
         android:textAllCaps="true"
         android:textColor="?colorSecondary"
         android:transitionName="loginSubmitTransition"
-        app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace5"
+        app:layout_constraintBottom_toTopOf="@id/accountCreatedTakeMeHome"
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace4"
-        tools:text="@string/ftue_account_created_personalize" />
+        app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace4" />
 
     <Button
         android:id="@+id/accountCreatedTakeMeHome"
@@ -111,10 +126,39 @@
         android:textAllCaps="true"
         android:textColor="@color/element_background_light"
         android:transitionName="loginSubmitTransition"
-        app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace5"
+        app:layout_constraintBottom_toTopOf="@id/ctaBottomBarrier"
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
         app:layout_constraintTop_toBottomOf="@id/accountCreatedPersonalize" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/takeMeHomeButtonGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="accountCreatedTakeMeHomeCta" />
+
+    <Button
+        android:id="@+id/accountCreatedTakeMeHomeCta"
+        style="@style/Widget.Vector.Button.Login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/element_background_light"
+        android:text="@string/ftue_account_created_take_me_home"
+        android:textAllCaps="true"
+        android:textColor="?colorSecondary"
+        android:transitionName="loginSubmitTransition"
+        app:layout_constraintBottom_toTopOf="@id/ctaBottomBarrier"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace4" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/ctaBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="accountCreatedTakeMeHomeCta,accountCreatedTakeMeHome" />
 
     <Space
         android:id="@+id/accountCreatedSpace5"
@@ -122,6 +166,6 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.05"
-        app:layout_constraintTop_toBottomOf="@id/accountCreatedPersonalize" />
+        app:layout_constraintTop_toBottomOf="@id/ctaBottomBarrier" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

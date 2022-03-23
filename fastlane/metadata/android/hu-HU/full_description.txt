@@ -1,43 +1,43 @@
-Element egy biztonságos üzenetküldő és csapatmunka támogató alkalmazás ami ideális távoli munkavégzés közben csoportos csevegéshez. Az alkalmazás végpontok közötti titkosítást használ videó konferenciához, fájl megosztáshoz és videó hivásokhoz.
+Az Element egy biztonságos üzenetküldő, és egy csapatmunka app, amely távoli munkavégzéshez is alkalmas lehet. Az alkalmazás végponti titkosítás használatával biztosít videó konferencia, fájlmegosztás, és audio hívás lehetőségeket.
 
-<b>Element tulajdonságai:</b>
-- Fejlett online kommunikációs eszköz
-- Teljesen titkosított üzenetküldés biztonságos céges kommunikációt kínál még a távdolgozóknak is
-- Elosztott csevegés a Matrix nyílt forráskódú keretrendszer felhasználásával
-- Bizontságos fájl megosztás titkosítottan projektek kezeléséhez
-- Videó hívás VoIP-pal és képernyőmegosztással
-- Könnyen integrálható a kedvenc online kollaborációs eszközöddel, projekt menedzsment eszközzel, VoIP szolgáltatással vagy más csoport üzenetküldő alkalmazással
+<b>Az Element funkciói többek között:</b>
+- Fejlett online kommunikációs eszközök
+- Titkosított üzenetek a biztonságos céges kommunikációhoz, otthonról dolgozóknak is
+- Decentralizált chat a nyílt forráskódú Matrix protokoll használatával
+- Biztonságos fájlmegosztáss a projektek kezeléséhez
+- Videochat, VoIP, és képernyőmegosztási lehetőséggel 
+- Egyszerű integráció a kedvenc online kollaborációs eszközeiddel, projektkezelési eszközökkel, VoIP szolgáltatásokkal, és más csoportos üzenetküldő alkalmazásokkal
 
-Element teljesen más mint a többi üzenetküldő alkalmazás. Matrixot használ, egy nyílt hálózatot a decentralizált biztonságos kommunikációhoz. Lehetőséget ad saját szerver üzemeltetésére ami maximális tulajdont és kontrollt biztosít az adatok fölött.
+Az Element teljesen más, mint az összes többi üzenetküldő és kollaborációs alkalmazás. A biztonságos üzenetküldést és decentralizált kommunikációt biztosító Matrix platformot használja. Akár egyénileg üzemeltetett szervereket is lehet használni az adatok teljes kontrollálása érdekében.
 
-<b>Magánélet védelme és titkosított üzenetküldés</b>
-Element megóv a kéretlen hirdetésektől, adatbányászattól és a különböző szigetszerű megoldásoktól. Minden adatot biztonságba helyez, egy az egybe videó és hang kommunikáció végpontok között titkosítva ahol az eszközök hitelesítve vannak.
+<b>Magánszféra és titkosított csevegés</b>
+Az Element megvéd a nemkívánatos hirdetésektől, adatbányászattól, és a zárt platformoktól. Ezeken felül biztonságban tartja az összes adatod és 1:1 hívásod a végponti titkosításnak és az eszközök-közti hitelesítésnek köszönhetően.
 
-Element a kezedbe adja az adatvédelmi irányítást miközben bárkivel kommunikálhatsz a Matrix hálózatban vagy más üzleti kollaborációs eszközzel ami integrálva van, mint amilyen a Slack.
+Az Element átadja neked az irányítást a magánszférád felett, miközben lehetővé teszi, hogy biztonságosan kommunikálj bárkivel a Matrix hálózatban, vagy a többi üzleti kommunikációs eszközt használókkal, az olyan appok integrálásának köszönhetően, mint például a Slack.
 
-<b>Element futtatható saját szerveren</b>
 
-Azért, hogy az érzékeny adatok és beszélgetések minnél inkább az irányításod alatt lehessen az Elementet saját magadnak üzemeltetheted vagy választhatsz bármely Matrixon alapuló - szabványos nyílt forráskódú és decentralizált kommunikáció - szoláltató közül. Element adatvédelmet, biztonságot és rugalmas integrációkat biztosít.
+<b>Element can be self-hosted</b>
+To allow more control of your sensitive data and conversations, Element can be self-hosted or you can choose any Matrix-based host - the standard for open source, decentralized communication. Element gives you privacy, security compliance and integration flexibility.
 
-<b>A te adatod a tiéd</b>
-Te döntöd el, hogy hol tárolod az adataidat és üzeneteidet. Adatbányászat vagy harmadik fél hozzáférésének kockázata nélkül.
+<b>Own your data</b>
+You decide where to keep your data and messages. Without the risk of data mining or access from third parties.
 
-Element többféle képpen adja vissza az irányítást:
-1. Szerezz egy ingyenes hozzáférést a matrix.org nyilvános szerverre amit a Matrix fejlesztők üzemeltetnek vagy válassz a több ezer önkéntesek által üzemeltetett nyilvános szerverből 
-2. Üzemeltess szerver magadnak a saját infrastruktúrádon
-3. Iratkozz fel egy egyedi szerverre az Element Matrix Services platformon
+Element puts you in control in different ways:
+1. Get a free account on the matrix.org public server hosted by the Matrix developers, or choose from thousands of public servers hosted by volunteers
+2. Self-host your account by running a server on your own IT infrastructure
+3. Sign up for an account on a custom server by simply subscribing to the Element Matrix Services hosting platform
 
-<b>Nyílt üzenetküldés és kollaboráció</b>
-Bárkivel beszélgethetsz a Matrix hálózaton, akár az Elementet használja akár egy másik Matrix alkalmazást használ vagy akár egy eltérő üzenetküldőt. 
+<b>Open messaging and collaboration</b>
+You can chat with anyone on the Matrix network, whether they’re using Element, another Matrix app or even if they are using a different messaging app.
 
-<b>Fantasztikusan biztonságos</b>
-Igazi végpontok között titkosítás (csak a beszélgetésben résztvevők tudják visszafejteni) és hitelesítés eszközök közötti aláírásokkal.
+<b>Super secure</b>
+Real end-to-end encryption (only those in the conversation can decrypt messages), and cross-signed device verification.
 
-<b>Teljes kommunikáció és integráció</b>
-Üzenetküldés, hang és videóhívás, fájl megosztás, képernyő megosztás és egy csomó integráció, botok és kisalkalmazások. Építs szobákat, közösségeket, maradj kapcsolatban és végezz el dolgokat.
+<b>Complete communication and integration</b>
+Messaging, voice and video calls, file sharing, screen sharing and a whole bunch of integrations, bots and widgets. Build rooms, communities, stay in touch and get things done.
 
-<b>Vedd fel a fonalat</b>
-Maradj kapcsolatban bárhol minden eszközödön a szinkronizált üzenetekkel és a weben a https://app.element.io oldallal
+<b>Pick up where you left off</b>
+Stay in touch wherever you are with fully synchronised message history across all your devices and on the web at https://app.element.io
 
-<b>Nyílt forráskód</b>
-Element Android egy nyílt forráskódú projekt a GitHubon. Küldj hibajegyet és/vagy vegyél részt a fejlesztésében itt: https://github.com/vector-im/element-android
+<b>Open source</b>
+Element Android is an open source project, hosted by GitHub. Please report bugs and/or contribute to its development at https://github.com/vector-im/element-android

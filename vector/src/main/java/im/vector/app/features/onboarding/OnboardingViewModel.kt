@@ -31,7 +31,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -48,6 +47,7 @@ import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -64,6 +64,7 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
+import java.util.UUID
 import java.util.concurrent.CancellationException
 
 /**
@@ -80,6 +81,8 @@ class OnboardingViewModel @AssistedInject constructor(
         private val homeServerHistoryService: HomeServerHistoryService,
         private val vectorFeatures: VectorFeatures,
         private val analyticsTracker: AnalyticsTracker,
+        private val uriFilenameResolver: UriFilenameResolver,
+        private val registrationActionHandler: RegistrationActionHandler,
         private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
@@ -113,15 +116,15 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
+    private val registrationWizard: RegistrationWizard
+        get() = authenticationService.getRegistrationWizard()
+
     val currentThreePid: String?
-        get() = registrationWizard?.currentThreePid
+        get() = registrationWizard.currentThreePid
 
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean
         get() = authenticationService.isRegistrationStarted
-
-    private val registrationWizard: RegistrationWizard?
-        get() = authenticationService.getRegistrationWizard()
 
     private val loginWizard: LoginWizard?
         get() = authenticationService.getLoginWizard()
@@ -150,14 +153,19 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword              -> handleResetPassword(action)
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
-            is OnboardingAction.RegisterAction             -> handleRegisterAction(action)
+            is OnboardingAction.PostRegisterAction         -> handleRegisterAction(action.registerAction)
             is OnboardingAction.ResetAction                -> handleResetAction(action)
             is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
-            is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
             is OnboardingAction.UpdateDisplayName          -> updateDisplayName(action.displayName)
-            OnboardingAction.UpdateDisplayNameSkipped      -> _viewEvents.post(OnboardingViewEvents.OnDisplayNameSkipped)
-        }.exhaustive
+            OnboardingAction.UpdateDisplayNameSkipped      -> handleDisplayNameStepComplete()
+            OnboardingAction.UpdateProfilePictureSkipped   -> completePersonalization()
+            OnboardingAction.PersonalizeProfile            -> handlePersonalizeProfile()
+            is OnboardingAction.ProfilePictureSelected     -> handleProfilePictureSelected(action)
+            OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
+            is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
+            OnboardingAction.StopEmailValidationCheck      -> cancelWaitForEmailValidation()
+        }
     }
 
     private fun handleSplashAction(resetConfig: Boolean, onboardingFlow: OnboardingFlow) {
@@ -213,6 +221,7 @@ class OnboardingViewModel @AssistedInject constructor(
                                 .withAllowedFingerPrints(listOf(action.fingerprint))
                                 .build()
                 )
+            else                                 -> Unit
         }
     }
 
@@ -259,131 +268,41 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRegisterAction(action: OnboardingAction.RegisterAction) {
-        when (action) {
-            is OnboardingAction.CaptchaDone                  -> handleCaptchaDone(action)
-            is OnboardingAction.AcceptTerms                  -> handleAcceptTerms()
-            is OnboardingAction.RegisterDummy                -> handleRegisterDummy()
-            is OnboardingAction.AddThreePid                  -> handleAddThreePid(action)
-            is OnboardingAction.SendAgainThreePid            -> handleSendAgainThreePid()
-            is OnboardingAction.ValidateThreePid             -> handleValidateThreePid(action)
-            is OnboardingAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated(action)
-            is OnboardingAction.StopEmailValidationCheck     -> handleStopEmailValidationCheck()
-        }
-    }
-
-    private fun handleCheckIfEmailHasBeenValidated(action: OnboardingAction.CheckIfEmailHasBeenValidated) {
-        // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
-        currentJob = executeRegistrationStep(withLoading = false) {
-            it.checkIfEmailHasBeenValidated(action.delayMillis)
-        }
-    }
-
-    private fun handleStopEmailValidationCheck() {
-        currentJob = null
-    }
-
-    private fun handleValidateThreePid(action: OnboardingAction.ValidateThreePid) {
-        currentJob = executeRegistrationStep {
-            it.handleValidateThreePid(action.code)
-        }
-    }
-
-    private fun executeRegistrationStep(withLoading: Boolean = true,
-                                        block: suspend (RegistrationWizard) -> RegistrationResult): Job {
-        if (withLoading) {
-            setState { copy(asyncRegistration = Loading()) }
-        }
-        return viewModelScope.launch {
-            try {
-                registrationWizard?.let { block(it) }
-                /*
-                   // Simulate registration disabled
-                   throw Failure.ServerError(MatrixError(
-                           code = MatrixError.FORBIDDEN,
-                           message = "Registration is disabled"
-                   ), 403))
-                */
-            } catch (failure: Throwable) {
-                if (failure !is CancellationException) {
-                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
-                }
-                null
-            }
-                    ?.let { data ->
-                        when (data) {
-                            is RegistrationResult.Success      -> onSessionCreated(data.session, isAccountCreated = true)
-                            is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
-                        }
-                    }
-
-            setState {
-                copy(
-                        asyncRegistration = Uninitialized
-                )
-            }
-        }
-    }
-
-    private fun handleAddThreePid(action: OnboardingAction.AddThreePid) {
-        setState { copy(asyncRegistration = Loading()) }
+    private fun handleRegisterAction(action: RegisterAction) {
         currentJob = viewModelScope.launch {
-            try {
-                registrationWizard?.addThreePid(action.threePid)
-            } catch (failure: Throwable) {
-                _viewEvents.post(OnboardingViewEvents.Failure(failure))
+            if (action.hasLoadingState()) {
+                setState { copy(asyncRegistration = Loading()) }
             }
-            setState {
-                copy(
-                        asyncRegistration = Uninitialized
-                )
-            }
-        }
-    }
-
-    private fun handleSendAgainThreePid() {
-        setState { copy(asyncRegistration = Loading()) }
-        currentJob = viewModelScope.launch {
-            try {
-                registrationWizard?.sendAgainThreePid()
-            } catch (failure: Throwable) {
-                _viewEvents.post(OnboardingViewEvents.Failure(failure))
-            }
-            setState {
-                copy(
-                        asyncRegistration = Uninitialized
-                )
-            }
-        }
-    }
-
-    private fun handleAcceptTerms() {
-        currentJob = executeRegistrationStep {
-            it.acceptTerms()
-        }
-    }
-
-    private fun handleRegisterDummy() {
-        currentJob = executeRegistrationStep {
-            it.dummy()
+            runCatching { registrationActionHandler.handleRegisterAction(registrationWizard, action) }
+                    .fold(
+                            onSuccess = {
+                                when {
+                                    action.ignoresResult() -> {
+                                        // do nothing
+                                    }
+                                    else                   -> when (it) {
+                                        is RegistrationResult.Success      -> onSessionCreated(it.session, isAccountCreated = true)
+                                        is RegistrationResult.FlowResponse -> onFlowResponse(it.flowResult)
+                                    }
+                                }
+                            },
+                            onFailure = {
+                                if (it !is CancellationException) {
+                                    _viewEvents.post(OnboardingViewEvents.Failure(it))
+                                }
+                            }
+                    )
+            setState { copy(asyncRegistration = Uninitialized) }
         }
     }
 
     private fun handleRegisterWith(action: OnboardingAction.LoginOrRegister) {
         reAuthHelper.data = action.password
-        currentJob = executeRegistrationStep {
-            it.createAccount(
-                    action.username,
-                    action.password,
-                    action.initialDeviceName
-            )
-        }
-    }
-
-    private fun handleCaptchaDone(action: OnboardingAction.CaptchaDone) {
-        currentJob = executeRegistrationStep {
-            it.performReCaptcha(action.captchaResponse)
-        }
+        handleRegisterAction(RegisterAction.CreateAccount(
+                action.username,
+                action.password,
+                action.initialDeviceName
+        ))
     }
 
     private fun handleResetAction(action: OnboardingAction.ResetAction) {
@@ -454,7 +373,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
 
         when (action.signMode) {
-            SignMode.SignUp             -> startRegistrationFlow()
+            SignMode.SignUp             -> handleRegisterAction(RegisterAction.StartRegistration)
             SignMode.SignIn             -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown            -> Unit
@@ -484,7 +403,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
             ServerType.EMS,
             ServerType.Other     -> _viewEvents.post(OnboardingViewEvents.OnServerSelectionDone(action.serverType))
-        }.exhaustive
+        }
     }
 
     private fun handleInitWith(action: OnboardingAction.InitWith) {
@@ -492,7 +411,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
         // If there is a pending email validation continue on this step
         try {
-            if (registrationWizard?.isRegistrationStarted == true) {
+            if (registrationWizard.isRegistrationStarted) {
                 currentThreePid?.let {
                     handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendEmailSuccess(it)))
                 }
@@ -592,7 +511,7 @@ class OnboardingViewModel @AssistedInject constructor(
             SignMode.SignIn             -> handleLogin(action)
             SignMode.SignUp             -> handleRegisterWith(action)
             SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
-        }.exhaustive
+        }
     }
 
     private fun handleDirectLogin(action: OnboardingAction.LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?) {
@@ -622,7 +541,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 else                          -> {
                     onWellKnownError()
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -723,12 +642,6 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun startRegistrationFlow() {
-        currentJob = executeRegistrationStep {
-            it.getRegistrationFlow()
-        }
-    }
-
     private fun startAuthenticationFlow() {
         // Ensure Wizard is ready
         loginWizard
@@ -738,13 +651,16 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun onFlowResponse(flowResult: FlowResult) {
         // If dummy stage is mandatory, and password is already sent, do the dummy stage now
-        if (isRegistrationStarted &&
-                flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
+        if (isRegistrationStarted && flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
             handleRegisterDummy()
         } else {
             // Notify the user
             _viewEvents.post(OnboardingViewEvents.RegistrationFlowResult(flowResult, isRegistrationStarted))
         }
+    }
+
+    private fun handleRegisterDummy() {
+        handleRegisterAction(RegisterAction.RegisterDummy)
     }
 
     private suspend fun onSessionCreated(session: Session, isAccountCreated: Boolean) {
@@ -757,15 +673,33 @@ class OnboardingViewModel @AssistedInject constructor(
 
         authenticationService.reset()
         session.configureAndStart(applicationContext)
-        setState {
-            copy(
-                    asyncLoginAction = Success(Unit)
-            )
-        }
 
         when (isAccountCreated) {
-            true  -> _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
-            false -> _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
+            true  -> {
+                val personalizationState = createPersonalizationState(session, state)
+                setState {
+                    copy(asyncLoginAction = Success(Unit), personalizationState = personalizationState)
+                }
+                _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
+            }
+            false -> {
+                setState { copy(asyncLoginAction = Success(Unit)) }
+                _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
+            }
+        }
+    }
+
+    private suspend fun createPersonalizationState(session: Session, state: OnboardingViewState): PersonalizationState {
+        return when {
+            vectorFeatures.isOnboardingPersonalizeEnabled() -> {
+                val homeServerCapabilities = session.getHomeServerCapabilities()
+                val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities?.firstOrNull()
+                state.personalizationState.copy(
+                        supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
+                        supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
+                )
+            }
+            else                                            -> state.personalizationState
         }
     }
 
@@ -899,13 +833,91 @@ class OnboardingViewModel @AssistedInject constructor(
             val activeSession = activeSessionHolder.getActiveSession()
             try {
                 activeSession.setDisplayName(activeSession.myUserId, displayName)
-                setState { copy(asyncDisplayName = Success(Unit)) }
-                _viewEvents.post(OnboardingViewEvents.OnDisplayNameUpdated)
+                setState {
+                    copy(
+                            asyncDisplayName = Success(Unit),
+                            personalizationState = personalizationState.copy(displayName = displayName)
+                    )
+                }
+                handleDisplayNameStepComplete()
             } catch (error: Throwable) {
                 setState { copy(asyncDisplayName = Fail(error)) }
                 _viewEvents.post(OnboardingViewEvents.Failure(error))
             }
         }
+    }
+
+    private fun handlePersonalizeProfile() {
+        withPersonalisationState {
+            when {
+                it.supportsChangingDisplayName    -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
+                it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
+                else                              -> {
+                    throw IllegalStateException("It should not be possible to personalize without supporting display name or avatar changing")
+                }
+            }
+        }
+    }
+
+    private fun handleDisplayNameStepComplete() {
+        withPersonalisationState {
+            when {
+                it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
+                else                              -> completePersonalization()
+            }
+        }
+    }
+
+    private fun handleProfilePictureSelected(action: OnboardingAction.ProfilePictureSelected) {
+        setState {
+            copy(personalizationState = personalizationState.copy(selectedPictureUri = action.uri))
+        }
+    }
+
+    private fun withPersonalisationState(block: (PersonalizationState) -> Unit) {
+        withState { block(it.personalizationState) }
+    }
+
+    private fun updateProfilePicture() {
+        withState { state ->
+            when (val pictureUri = state.personalizationState.selectedPictureUri) {
+                null -> _viewEvents.post(OnboardingViewEvents.Failure(NullPointerException("picture uri is missing from state")))
+                else -> {
+                    setState { copy(asyncProfilePicture = Loading()) }
+                    viewModelScope.launch {
+                        val activeSession = activeSessionHolder.getActiveSession()
+                        try {
+                            activeSession.updateAvatar(
+                                    activeSession.myUserId,
+                                    pictureUri,
+                                    uriFilenameResolver.getFilenameFromUri(pictureUri) ?: UUID.randomUUID().toString()
+                            )
+                            setState {
+                                copy(
+                                        asyncProfilePicture = Success(Unit),
+                                )
+                            }
+                            onProfilePictureSaved()
+                        } catch (error: Throwable) {
+                            setState { copy(asyncProfilePicture = Fail(error)) }
+                            _viewEvents.post(OnboardingViewEvents.Failure(error))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onProfilePictureSaved() {
+        completePersonalization()
+    }
+
+    private fun completePersonalization() {
+        _viewEvents.post(OnboardingViewEvents.OnPersonalizationComplete)
+    }
+
+    private fun cancelWaitForEmailValidation() {
+        currentJob = null
     }
 }
 

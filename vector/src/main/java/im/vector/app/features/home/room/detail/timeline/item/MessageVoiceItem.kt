@@ -131,6 +131,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
                     is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder, waveformColorIdle, waveformColorPlayed)
                     is VoiceMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state, waveformColorIdle, waveformColorPlayed)
                     is VoiceMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state, waveformColorIdle, waveformColorPlayed)
+                    is VoiceMessagePlaybackTracker.Listener.State.Recording -> Unit
                 }
             }
         })

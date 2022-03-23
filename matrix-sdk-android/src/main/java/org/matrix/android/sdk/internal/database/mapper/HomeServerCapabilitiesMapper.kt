@@ -41,7 +41,8 @@ internal object HomeServerCapabilitiesMapper {
                 maxUploadFileSize = entity.maxUploadFileSize,
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
                 defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
-                roomVersions = mapRoomVersion(entity.roomVersionsJson)
+                roomVersions = mapRoomVersion(entity.roomVersionsJson),
+                canUseThreading = entity.canUseThreading
         )
     }
 

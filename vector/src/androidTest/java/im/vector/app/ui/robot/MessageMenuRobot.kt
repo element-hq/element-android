@@ -70,4 +70,13 @@ class MessageMenuRobot(
         clickOn(R.string.edit)
         autoClosed = true
     }
+
+    fun replyInThread() {
+        clickOn(R.string.reply_in_thread)
+        autoClosed = true
+    }
+    fun viewInRoom() {
+        clickOn(R.string.view_in_room)
+        autoClosed = true
+    }
 }

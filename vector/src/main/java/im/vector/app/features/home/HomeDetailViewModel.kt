@@ -273,6 +273,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                 )
                             }
                         }
+                        null                                -> Unit
                     }
                 }
                 .launchIn(viewModelScope)

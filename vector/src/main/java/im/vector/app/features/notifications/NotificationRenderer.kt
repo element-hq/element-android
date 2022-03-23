@@ -47,11 +47,9 @@ class NotificationRenderer @Inject constructor(private val notificationDisplayer
             )
 
             // Remove summary first to avoid briefly displaying it after dismissing the last notification
-            when (summaryNotification) {
-                SummaryNotification.Removed -> {
-                    Timber.d("Removing summary notification")
-                    notificationDisplayer.cancelNotificationMessage(null, SUMMARY_NOTIFICATION_ID)
-                }
+            if (summaryNotification == SummaryNotification.Removed) {
+                Timber.d("Removing summary notification")
+                notificationDisplayer.cancelNotificationMessage(null, SUMMARY_NOTIFICATION_ID)
             }
 
             roomNotifications.forEach { wrapper ->
@@ -94,11 +92,9 @@ class NotificationRenderer @Inject constructor(private val notificationDisplayer
             }
 
             // Update summary last to avoid briefly displaying it before other notifications
-            when (summaryNotification) {
-                is SummaryNotification.Update -> {
-                    Timber.d("Updating summary notification")
-                    notificationDisplayer.showNotificationMessage(null, SUMMARY_NOTIFICATION_ID, summaryNotification.notification)
-                }
+            if (summaryNotification is SummaryNotification.Update) {
+                Timber.d("Updating summary notification")
+                notificationDisplayer.showNotificationMessage(null, SUMMARY_NOTIFICATION_ID, summaryNotification.notification)
             }
         }
     }

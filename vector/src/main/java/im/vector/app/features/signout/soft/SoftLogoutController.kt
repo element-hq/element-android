@@ -18,8 +18,9 @@ package im.vector.app.features.signout.soft
 
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
@@ -89,19 +90,20 @@ class SoftLogoutController @Inject constructor(
     private fun buildForm(state: SoftLogoutViewState) {
         val host = this
         when (state.asyncHomeServerLoginFlowRequest) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 loadingItem {
                     id("loading")
                 }
             }
-            is Fail       -> {
+            is Fail    -> {
                 loginErrorWithRetryItem {
                     id("errorRetry")
                     text(host.errorFormatter.toHumanReadable(state.asyncHomeServerLoginFlowRequest.error))
                     listener { host.listener?.retry() }
                 }
             }
-            is Success    -> {
+            is Success -> {
                 when (state.asyncHomeServerLoginFlowRequest.invoke()) {
                     LoginMode.Password          -> {
                         loginPasswordFormItem {

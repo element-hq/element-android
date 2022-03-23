@@ -54,7 +54,7 @@ internal interface IMXCryptoStore {
     /**
      * @return the olm account
      */
-    fun getOlmAccount(): OlmAccount
+    fun <T> doWithOlmAccount(block: (OlmAccount) -> T): T
 
     fun getOrCreateOlmAccount(): OlmAccount
 
@@ -261,7 +261,7 @@ internal interface IMXCryptoStore {
     fun storeSession(olmSessionWrapper: OlmSessionWrapper, deviceKey: String)
 
     /**
-     * Retrieve the end-to-end session ids between the logged-in user and another
+     * Retrieve all end-to-end session ids between our own device and another
      * device.
      *
      * @param deviceKey the public key of the other device.
@@ -270,7 +270,7 @@ internal interface IMXCryptoStore {
     fun getDeviceSessionIds(deviceKey: String): List<String>?
 
     /**
-     * Retrieve an end-to-end session between the logged-in user and another
+     * Retrieve an end-to-end session between our own device and another
      * device.
      *
      * @param sessionId the session Id.

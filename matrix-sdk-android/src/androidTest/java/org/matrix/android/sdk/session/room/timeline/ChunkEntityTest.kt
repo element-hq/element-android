@@ -62,7 +62,11 @@ internal class ChunkEntityTest : InstrumentedTest {
             val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, System.currentTimeMillis()).let {
                 realm.copyToRealm(it)
             }
-            chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
+            chunk.addTimelineEvent(
+                    roomId = ROOM_ID,
+                    eventEntity = fakeEvent,
+                    direction = PaginationDirection.FORWARDS,
+                    roomMemberContentsByUser = emptyMap())
             chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
@@ -74,8 +78,16 @@ internal class ChunkEntityTest : InstrumentedTest {
             val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, System.currentTimeMillis()).let {
                 realm.copyToRealm(it)
             }
-            chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
-            chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
+            chunk.addTimelineEvent(
+                    roomId = ROOM_ID,
+                    eventEntity = fakeEvent,
+                    direction = PaginationDirection.FORWARDS,
+                    roomMemberContentsByUser = emptyMap())
+            chunk.addTimelineEvent(
+                    roomId = ROOM_ID,
+                    eventEntity = fakeEvent,
+                    direction = PaginationDirection.FORWARDS,
+                    roomMemberContentsByUser = emptyMap())
             chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
@@ -144,7 +156,11 @@ internal class ChunkEntityTest : InstrumentedTest {
             val fakeEvent = event.toEntity(roomId, SendState.SYNCED, System.currentTimeMillis()).let {
                 realm.copyToRealm(it)
             }
-            addTimelineEvent(roomId, fakeEvent, direction, emptyMap())
+            addTimelineEvent(
+                    roomId = roomId,
+                    eventEntity = fakeEvent,
+                    direction = direction,
+                    roomMemberContentsByUser = emptyMap())
         }
     }
 

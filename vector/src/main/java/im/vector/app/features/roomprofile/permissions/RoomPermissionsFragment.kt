@@ -27,7 +27,6 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
@@ -67,7 +66,7 @@ class RoomPermissionsFragment @Inject constructor(
             when (it) {
                 is RoomPermissionsViewEvents.Failure -> showFailure(it.throwable)
                 RoomPermissionsViewEvents.Success    -> showSuccess()
-            }.exhaustive
+            }
         }
     }
 

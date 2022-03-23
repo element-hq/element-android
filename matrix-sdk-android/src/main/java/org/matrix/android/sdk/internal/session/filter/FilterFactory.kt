@@ -17,8 +17,20 @@
 package org.matrix.android.sdk.internal.session.filter
 
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.RelationType
+import timber.log.Timber
 
 internal object FilterFactory {
+
+    fun createThreadsFilter(numberOfEvents: Int, userId: String?): RoomEventFilter {
+        Timber.i("$userId")
+        return RoomEventFilter(
+                limit = numberOfEvents,
+//                senders = listOf(userId),
+//                relationSenders = userId?.let { listOf(it) },
+                relationTypes = listOf(RelationType.THREAD)
+        )
+    }
 
     fun createUploadsFilter(numberOfEvents: Int): RoomEventFilter {
         return RoomEventFilter(
@@ -58,8 +70,8 @@ internal object FilterFactory {
 
     private fun createElementTimelineFilter(): RoomEventFilter? {
         return null // RoomEventFilter().apply {
-            // TODO Enable this for optimization
-            // types = listOfSupportedEventTypes.toMutableList()
+        // TODO Enable this for optimization
+        // types = listOfSupportedEventTypes.toMutableList()
         // }
     }
 

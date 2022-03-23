@@ -42,9 +42,11 @@ import im.vector.app.features.home.room.detail.timeline.style.shapeAppearanceMod
 import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 
-class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                                  defStyleAttr: Int = 0) :
-        RelativeLayout(context, attrs, defStyleAttr), TimelineMessageLayoutRenderer {
+class MessageBubbleView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+) : RelativeLayout(context, attrs, defStyleAttr), TimelineMessageLayoutRenderer {
 
     private var isIncoming: Boolean = false
 
@@ -87,22 +89,43 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             outlineProvider = ViewOutlineProvider.BACKGROUND
             clipToOutline = true
             background = RippleDrawable(
-                    ContextCompat.getColorStateList(context, R.color.mtrl_btn_ripple_color) ?: ColorStateList.valueOf(Color.TRANSPARENT),
-                    bubbleDrawable,
-                    rippleMaskDrawable)
+                ContextCompat.getColorStateList(context, R.color.mtrl_btn_ripple_color) ?: ColorStateList.valueOf(Color.TRANSPARENT),
+                bubbleDrawable,
+                rippleMaskDrawable)
         }
     }
 
     override fun renderMessageLayout(messageLayout: TimelineMessageLayout) {
-        if (messageLayout !is TimelineMessageLayout.Bubble) {
-            Timber.v("Can't render messageLayout $messageLayout")
-            return
+        (messageLayout as? TimelineMessageLayout.Bubble)
+            ?.updateDrawables()
+            ?.setConstraintsAndColor()
+            ?.toggleMessageOverlay()
+            ?.setPadding()
+            ?.setMargins()
+            ?.setAdditionalTopSpace()
+            ?: Timber.v("Can't render messageLayout $messageLayout")
+    }
+
+    private fun TimelineMessageLayout.Bubble.updateDrawables() = apply {
+        val shapeAppearanceModel = cornersRadius.shapeAppearanceModel()
+        bubbleDrawable.apply {
+            this.shapeAppearanceModel = shapeAppearanceModel
+            this.fillColor = if (isPseudoBubble) {
+                ColorStateList.valueOf(Color.TRANSPARENT)
+            } else {
+                val backgroundColorAttr = if (isIncoming) R.attr.vctr_message_bubble_inbound else R.attr.vctr_message_bubble_outbound
+                val backgroundColor = ThemeUtils.getColor(context, backgroundColorAttr)
+                ColorStateList.valueOf(backgroundColor)
+            }
         }
-        updateDrawables(messageLayout)
+        rippleMaskDrawable.shapeAppearanceModel = shapeAppearanceModel
+    }
+
+    private fun TimelineMessageLayout.Bubble.setConstraintsAndColor() = apply {
         ConstraintSet().apply {
             clone(views.bubbleView)
             clear(R.id.viewStubContainer, ConstraintSet.END)
-            if (messageLayout.timestampAsOverlay) {
+            if (timestampAsOverlay) {
                 val timeColor = ContextCompat.getColor(context, R.color.palette_white)
                 views.messageTimeView.setTextColor(timeColor)
                 connect(R.id.viewStubContainer, ConstraintSet.END, R.id.parent, ConstraintSet.END, 0)
@@ -113,17 +136,26 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             }
             applyTo(views.bubbleView)
         }
-        if (messageLayout.timestampAsOverlay) {
+    }
+
+    private fun TimelineMessageLayout.Bubble.toggleMessageOverlay() = apply {
+        if (timestampAsOverlay) {
             views.messageOverlayView.isVisible = true
-            (views.messageOverlayView.background as? GradientDrawable)?.cornerRadii = messageLayout.cornersRadius.toFloatArray()
+            (views.messageOverlayView.background as? GradientDrawable)?.cornerRadii = cornersRadius.toFloatArray()
         } else {
             views.messageOverlayView.isVisible = false
         }
-        if (messageLayout.isPseudoBubble && messageLayout.timestampAsOverlay) {
+    }
+
+    private fun TimelineMessageLayout.Bubble.setPadding() = apply {
+        if (isPseudoBubble && timestampAsOverlay) {
             views.viewStubContainer.root.setPadding(0, 0, 0, 0)
         } else {
             views.viewStubContainer.root.setPadding(horizontalStubPadding, verticalStubPadding, horizontalStubPadding, verticalStubPadding)
         }
+    }
+
+    private fun TimelineMessageLayout.Bubble.setMargins() = apply {
         if (isIncoming) {
             views.messageEndGuideline.updateLayoutParams<LayoutParams> {
                 marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
@@ -141,22 +173,11 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    private fun TimelineMessageLayout.Bubble.CornersRadius.toFloatArray(): FloatArray {
-        return floatArrayOf(topStartRadius, topStartRadius, topEndRadius, topEndRadius, bottomEndRadius, bottomEndRadius, bottomStartRadius, bottomStartRadius)
+    private fun TimelineMessageLayout.Bubble.setAdditionalTopSpace() = apply {
+        views.additionalTopSpace.isVisible = addTopMargin
     }
 
-    private fun updateDrawables(messageLayout: TimelineMessageLayout.Bubble) {
-        val shapeAppearanceModel = messageLayout.cornersRadius.shapeAppearanceModel()
-        bubbleDrawable.apply {
-            this.shapeAppearanceModel = shapeAppearanceModel
-            this.fillColor = if (messageLayout.isPseudoBubble) {
-                ColorStateList.valueOf(Color.TRANSPARENT)
-            } else {
-                val backgroundColorAttr = if (isIncoming) R.attr.vctr_message_bubble_inbound else R.attr.vctr_message_bubble_outbound
-                val backgroundColor = ThemeUtils.getColor(context, backgroundColorAttr)
-                ColorStateList.valueOf(backgroundColor)
-            }
-        }
-        rippleMaskDrawable.shapeAppearanceModel = shapeAppearanceModel
+    private fun TimelineMessageLayout.Bubble.CornersRadius.toFloatArray(): FloatArray {
+        return floatArrayOf(topStartRadius, topStartRadius, topEndRadius, topEndRadius, bottomEndRadius, bottomEndRadius, bottomStartRadius, bottomStartRadius)
     }
 }

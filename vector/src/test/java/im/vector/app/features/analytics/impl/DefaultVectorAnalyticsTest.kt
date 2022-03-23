@@ -30,7 +30,7 @@ import im.vector.app.test.fixtures.aVectorAnalyticsScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
@@ -60,35 +60,35 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `when setting user consent then updates analytics store`() = runBlockingTest {
+    fun `when setting user consent then updates analytics store`() = runTest {
         defaultVectorAnalytics.setUserConsent(true)
 
         fakeAnalyticsStore.verifyConsentUpdated(updatedValue = true)
     }
 
     @Test
-    fun `when consenting to analytics then updates posthog opt out to false`() = runBlockingTest {
+    fun `when consenting to analytics then updates posthog opt out to false`() = runTest {
         fakeAnalyticsStore.givenUserContent(consent = true)
 
         fakePostHog.verifyOptOutStatus(optedOut = false)
     }
 
     @Test
-    fun `when revoking consent to analytics then updates posthog opt out to true`() = runBlockingTest {
+    fun `when revoking consent to analytics then updates posthog opt out to true`() = runTest {
         fakeAnalyticsStore.givenUserContent(consent = false)
 
         fakePostHog.verifyOptOutStatus(optedOut = true)
     }
 
     @Test
-    fun `when setting the analytics id then updates analytics store`() = runBlockingTest {
+    fun `when setting the analytics id then updates analytics store`() = runTest {
         defaultVectorAnalytics.setAnalyticsId(AN_ANALYTICS_ID)
 
         fakeAnalyticsStore.verifyAnalyticsIdUpdated(updatedValue = AN_ANALYTICS_ID)
     }
 
     @Test
-    fun `given lateinit user properties when valid analytics id updates then identify with lateinit properties`() = runBlockingTest {
+    fun `given lateinit user properties when valid analytics id updates then identify with lateinit properties`() = runTest {
         fakeLateInitUserPropertiesFactory.givenCreatesProperties(A_LATE_INIT_USER_PROPERTIES)
 
         fakeAnalyticsStore.givenAnalyticsId(AN_ANALYTICS_ID)
@@ -97,7 +97,7 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `when signing out then resets posthog`() = runBlockingTest {
+    fun `when signing out then resets posthog`() = runTest {
         fakeAnalyticsStore.allowSettingAnalyticsIdToCallBackingFlow()
 
         defaultVectorAnalytics.onSignOut()
@@ -106,7 +106,7 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `given user consent when tracking screen events then submits to posthog`() = runBlockingTest {
+    fun `given user consent when tracking screen events then submits to posthog`() = runTest {
         fakeAnalyticsStore.givenUserContent(consent = true)
 
         defaultVectorAnalytics.screen(A_SCREEN_EVENT)
@@ -115,7 +115,7 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `given user has not consented when tracking screen events then does not track`() = runBlockingTest {
+    fun `given user has not consented when tracking screen events then does not track`() = runTest {
         fakeAnalyticsStore.givenUserContent(consent = false)
 
         defaultVectorAnalytics.screen(A_SCREEN_EVENT)
@@ -124,7 +124,7 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `given user consent when tracking events then submits to posthog`() = runBlockingTest {
+    fun `given user consent when tracking events then submits to posthog`() = runTest {
         fakeAnalyticsStore.givenUserContent(consent = true)
 
         defaultVectorAnalytics.capture(AN_EVENT)
@@ -133,7 +133,7 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `given user has not consented when tracking events then does not track`() = runBlockingTest {
+    fun `given user has not consented when tracking events then does not track`() = runTest {
         fakeAnalyticsStore.givenUserContent(consent = false)
 
         defaultVectorAnalytics.capture(AN_EVENT)

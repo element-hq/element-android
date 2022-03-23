@@ -30,7 +30,6 @@ import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
@@ -127,7 +126,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
                     Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -153,7 +152,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
             UserCodeState.Mode.SHOW -> super.onBackPressed()
             is UserCodeState.Mode.RESULT,
             UserCodeState.Mode.SCAN -> sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
-        }.exhaustive
+        }
     }
 
     companion object {

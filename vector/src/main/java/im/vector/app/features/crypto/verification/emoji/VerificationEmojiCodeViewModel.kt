@@ -139,6 +139,7 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
                     )
                 }
             }
+            else                                  -> Unit
         }
     }
 

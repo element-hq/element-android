@@ -38,7 +38,6 @@
     <string name="room_displayname_empty_room">غُرفة فارِغة</string>
     <string name="room_displayname_two_members">%1$s وَ %2$s</string>
     <string name="room_displayname_room_invite">دَعوة لغُرفة</string>
-
     <string name="notice_room_invite_no_invitee_by_you">دعوتك</string>
     <string name="notice_room_created">أنشأ ⁨%1$s⁩ الغرفة</string>
     <string name="notice_room_created_by_you">أنشأتَ الغرفة</string>
@@ -156,7 +155,7 @@
     <string name="initial_sync_start_importing_account_rooms">المُزامنة الأولية:
 \nيستورد الغُرف</string>
     <string name="initial_sync_start_importing_account_crypto">المُزامنة الأولية:
-\nيجري إستيرد التَعمية</string>
+\nيستورد التَعمية</string>
     <string name="room_displayname_empty_room_was">غُرفة فارِغة (كانت %s)</string>
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="zero">%1$s، %2$s و%3$s</item>
@@ -192,7 +191,6 @@
     <string name="action_delete">احذف</string>
     <string name="action_rename">غيّر الاسم</string>
     <string name="report_content">أبلِغ عن المحتوى</string>
-
     <string name="action_sign_out">اخرج</string>
     <string name="action_voice_call">مكالمة صوتية</string>
     <string name="action_video_call">مكالمة صورية</string>
@@ -209,7 +207,6 @@
     <string name="matrix_only_filter">متراسلو «ماترِكس» فقط</string>
     <string name="no_result_placeholder">لا نتائج</string>
     <string name="rooms_header">الغرف</string>
-
     <string name="send_bug_report_include_logs">أرسِل السجلات</string>
     <string name="send_bug_report_include_crash_logs">أرسِل سجلات الانهيار</string>
     <string name="send_bug_report_include_screenshot">أرسِل لقطة شاشة</string>
@@ -234,7 +231,6 @@
     <string name="auth_forgot_password">أنسيت كلمة السر؟</string>
     <string name="auth_reset_password_missing_email">يجب إدخال عنوان البريد الإلكتروني المرتبط بحسابك.</string>
     <string name="auth_reset_password_error_unauthorized">فشل تأكيد عنوان البريد: تحقق من نقر الرابط في البريد</string>
-
     <string name="login_error_invalid_home_server">أدخِل مسارا صالحا</string>
     <string name="login_error_not_json">لم يحتوي JSON صالح</string>
     <string name="login_error_limit_exceeded">أُرسلت الكثير من الطلبات</string>
@@ -261,7 +257,6 @@
     <string name="ssl_logout_account">اخرج</string>
     <string name="ssl_fingerprint_hash">البصمة (⁨%s⁩):</string>
     <string name="ssl_could_not_verify">تعذّر التحقق من معرّف الخادوم البعيد.</string>
-
     <string name="search_no_results">لا نتائج</string>
     <string name="settings_profile_picture">صورة اللاحة</string>
     <string name="settings_display_name">اسم العرض</string>
@@ -325,7 +320,6 @@
     <string name="settings_labs_native_camera">استخدم الكمرة الأصيلة</string>
     <string name="room_settings_set_main_address">اضبطه كعنوان رئيسي</string>
     <string name="room_settings_unset_main_address">ألغِ ضبطه كعنوان رئيسي</string>
-
     <string name="settings_theme">السمة</string>
     <string name="encryption_information_decryption_error">خطأ في فكّ التعمية</string>
     <string name="encryption_information_device_name">اسم الجهاز</string>
@@ -335,7 +329,6 @@
     <string name="encryption_export_room_keys_summary">صدّر المفاتيح إلى ملف محلي</string>
     <string name="passphrase_enter_passphrase">أدخِل عبارة المرور</string>
     <string name="passphrase_confirm_passphrase">أكّد عبارة المرور</string>
-
     <string name="encryption_import_e2e_room_keys">استورد مفاتيح الطرفين لغرفة</string>
     <string name="encryption_import_room_keys">استورد مفاتيح الغرفة</string>
     <string name="encryption_import_room_keys_summary">استورد المفاتيح من ملف محلي</string>
@@ -363,9 +356,7 @@
     <string name="send_bug_report">بلاغ علة</string>
     <string name="send_bug_report_alert_message">يبدو أنك تهزّ الهاتف وأنت مُحبط. أتريد إرسال بلاغ علة؟</string>
     <string name="send_bug_report_progress">التقدم (%s٪)</string>
-
     <string name="loading">يحمّل…</string>
-
     <plurals name="room_title_members">
         <item quantity="zero">لا أعضاء</item>
         <item quantity="one">عضو واحد</item>
@@ -384,7 +375,6 @@
         <item quantity="many">%d رسالة جديدة</item>
         <item quantity="other">%d رسالة جديدة</item>
     </plurals>
-
     <string name="low_priority_header">أولوية منخفضة</string>
     <string name="groups_header">المجتمعات</string>
     <string name="send_bug_report_rage_shake">هزّ الجهاز بجنون يُرسل بلاغًا بعلة</string>
@@ -396,7 +386,6 @@
     <string name="start_voice_call_prompt_msg">أمتأكد من بدء محادثة صوتية؟</string>
     <string name="start_video_call_prompt_msg">أمتأكد من بدء محادثة صورية؟</string>
     <string name="auth_email_already_defined">عنوان البريد مُعرّف بالفعل.</string>
-
     <string name="auth_recaptcha_message">يريد خادوم المنزل هذا التأكد من أنك لست أحد الآليين</string>
     <string name="login_error_bad_json">JSON‏ معطوب</string>
     <plurals name="membership_changes">
@@ -407,19 +396,14 @@
         <item quantity="many">%d تغييرا على العضوية</item>
         <item quantity="other">%d تغيير على العضوية</item>
     </plurals>
-
     <string name="permissions_rationale_msg_record_audio">يحتاج Element تصريحا منك للوصول إلى المِكرفون لإجراء المكالمات الصوتية.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">يحتاج Element تصريحا منك للوصول إلى الكمرة والمِكرفون لإجراء المكالمات الصورية.
 
 رجاءً اسمح بالوصول في المنبثقة التالية لتقدر على إرسال إجراء المكالمات الصورية.</string>
-
-
     <string name="action_invite">ادعُ</string>
     <string name="join_room">انضم إلى الغرفة</string>
     <string name="compression_opt_list_original">الأصلي</string>
     <string name="call_error_user_not_responding">لم يُجب الطرف البعيد.</string>
-
     <string name="room_participants_header_direct_chats">الدردشات المباشرة</string>
     <string name="room_participants_action_mention">أشِر إليه</string>
     <string name="room_participants_power_level_prompt">لن تستطيع العودة عن هذا التغيير إذ أنك تمنح المستخدم نفس مستوى السلطة الذي لك.
@@ -482,7 +466,6 @@
     <string name="settings_vibrate_on_mention">هُزّ الجهاز عند الإشارة إليّ</string>
     <string name="settings_analytics">التحاليل</string>
     <string name="devices_details_last_seen_format">‏⁨%1$s⁩ في ⁨%2$s⁩</string>
-
     <string name="devices_delete_dialog_title">تخويل</string>
     <string name="settings_logged_in">والج كَ‍</string>
     <string name="settings_home_server">خادوم المنزل</string>
@@ -493,7 +476,6 @@
     <string name="settings_flair">الميل</string>
     <string name="notification_off">معطّل</string>
     <string name="notification_noisy">مزعج</string>
-
     <string name="encryption_never_send_to_unverified_devices_summary">لا ترسل من هذا الجهاز الرسائل المعمّاة إلى الأجهزة غير المؤكّدة</string>
     <string name="encryption_never_send_to_unverified_devices_title">عمِّ إلى الأجهزة المؤكّدة فقط</string>
     <string name="encryption_information_not_verified">&lt;b&gt;غير&lt;b/&gt; مؤكّدة</string>
@@ -504,7 +486,6 @@
     <string name="ssl_cert_not_trust">قد يعني هذا بأن أحدهم يعترض الاتصال بعدوانية، أو أن هاتفك لا يثق بالشهادة التي قدّمها الخادوم البعيد.</string>
     <string name="ssl_cert_new_account_expl">إن قال مدير الخادوم بأن هذا متوقع، فتأكد من أن البصمة أدناه تطابق البصمة التي وفّرها.</string>
     <string name="ssl_expected_existing_expl">تغيّرت الشهادة من شهادة كنت تثق بها إلى شهادة لا تثق بها. لربما جدّد الخادوم شهادته. راسل إدارة الخادوم واسألهم عن البصمة المتوقعة.</string>
-
     <string name="room_settings_add_homescreen_shortcut">أضِف اختصارا إلى الشاشة الرئيسية</string>
     <string name="settings_app_info_link_summary">شاشة معلومات التطبيق في النظام</string>
     <string name="settings_call_invitations">دعوات المكالمات</string>
@@ -545,10 +526,6 @@
     <string name="error_empty_field_your_password">رجاءً اكتب كلمة السر.</string>
     <string name="send_bug_report_description_in_english">رجاءً اكتب الوصف بالإنجليزية إن أمكن.</string>
     <string name="system_alerts_header">تنبيهات النظام</string>
-
-
-
-
     <plurals name="room_details_selected">
         <item quantity="zero">لا شيء محدّد</item>
         <item quantity="one">واحدة محدّدة</item>
@@ -566,14 +543,11 @@
         <item quantity="many">%d رسالة إخطار غير مقروءة</item>
         <item quantity="other">%d رسالة إخطار غير مقروءة</item>
     </plurals>
-
     <string name="command_description_ban_user">يمنع المستخدم حسب المعرّف المعطى</string>
     <string name="command_description_unban_user">يُلغي المنع عن المستخدم حسب المعرّف المعطى</string>
     <string name="command_description_op_user">يُحدّد مستوى قدرة المستخدم</string>
     <string name="command_description_invite_user">يدعو المستخدم حسب المعرّف المعطى إلى الغرفة الحالية</string>
     <string name="command_description_markdown">شغّل/عطّل مارك‌داون</string>
-
-
     <string name="deactivate_account_submit">ألغِ تفعيل الحساب</string>
     <string name="room_tombstone_versioned_description">استُبدلت هذه الغرفة ولم تعد نشطة بعد الآن</string>
     <string name="room_tombstone_continuation_description">هذه الغرفة هي استمرار لمحادثة أخرى</string>
@@ -610,8 +584,8 @@
     <string name="room_participants_action_remove">طرد</string>
     <string name="settings_notification_advanced">الإعدادات المتقدمة للإشعارات</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">عند تسجيل الخروج الآن ستخسر مفاتيحك</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">النسخ الاحتياطي المفاتيح ما زال جاريا. في حال خروجك الآن لن تتمكن لاحقا من قراءة الرسائل المشفرة.</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">تأكد من تفعيل النسخ الاحتياطي للمفاتيح على كل أجهزتك كي لا تخسر رسائلك المشفرة</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">النسخ الاحتياطي المفاتيح ما زال جاريا. في حال خروجك الآن لن تتمكن لاحقا من قراءة الرسائل المعماة.</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">تأكد من تفعيل النسخ الاحتياطي للمفاتيح على كل أجهزتك كي لا تخسر رسائلك المعماة</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">ينسخ احتياطيا المفاتيح…</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">ليس لديك تصريح لبدء إجتماع</string>
     <string name="no_permissions_to_start_conf_call">ليس لديك تصريح لبدء إجتماع في هذه الغرفة</string>
@@ -622,10 +596,10 @@
     <string name="action_disconnect">إفصل</string>
     <string name="action_revoke">أبّطل</string>
     <string name="none">لاشيء</string>
-    <string name="sign_out_bottom_sheet_will_lose_secure_messages">ستفقد الوصول إلى رسائلك المشفرة إلا إذا أخذت نسخة إحتياطية من مفاتيحك قبل تسجيلك للخروج.</string>
+    <string name="sign_out_bottom_sheet_will_lose_secure_messages">ستفقد الوصول إلى رسائلك المعماة إلا إذا أخذت نسخة إحتياطية من مفاتيحك قبل تسجيلك للخروج.</string>
     <string name="backup">نسخة إحتياطية</string>
     <string name="are_you_sure">هل أنت متأكد؟</string>
-    <string name="sign_out_bottom_sheet_dont_want_secure_messages">لا أريد رسائلي المشفرة</string>
+    <string name="sign_out_bottom_sheet_dont_want_secure_messages">لا أريد رسائلي المعماة</string>
     <string name="title_activity_keys_backup_setup">نسخ إحتياطي للمفتاح</string>
     <string name="system_theme">إفتراضي النظام</string>
     <string name="notice_room_canonical_alias_set">غير %1$s عنوان الغرفة الى %2$s.</string>
@@ -840,4 +814,62 @@
     <string name="keys_backup_restoring_importing_keys_waiting_message">يستورد المفاتيح…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">ينزّل المفاتيح…</string>
     <string name="room_error_access_unauthorized">لا يسمح لك بالانضمام لهذه الغرفة</string>
+    <string name="call_failed_no_connection">فشلت مكالمة ${app_name}</string>
+    <string name="action_thread_copy_link_to_thread">انسخ رابط النقاش</string>
+    <string name="action_thread_view_in_room">اعرضه في الغرفة</string>
+    <string name="action_agree">أقبل</string>
+    <string name="action_view_threads">اعرض النقاشات</string>
+    <string name="failed_to_remove_widget">فشلت إزالة الودجة</string>
+    <string name="failed_to_add_widget">فشلت إضافة الودجة</string>
+    <string name="notification_listening_for_notifications">يستمع للإشعارات</string>
+    <string name="verification_request_waiting">ينتظر…</string>
+    <string name="sent_a_reaction">تفاعلَ بـ: %s</string>
+    <string name="sent_a_poll">استبيان</string>
+    <string name="send_a_sticker">ملصق</string>
+    <string name="sent_a_file">ملف</string>
+    <string name="sent_a_voice_message">تسجيل صوتي</string>
+    <string name="sent_an_audio_file">صوت</string>
+    <string name="sent_an_image">صورة.</string>
+    <string name="sent_a_video">فيديو.</string>
+    <string name="verification_conclusion_not_secure">ليس آمن</string>
+    <string name="create_space_in_progress">ينشئ فضاءً…</string>
+    <string name="send_suggestion_failed">فشل إرسال الاقتراح (%s)</string>
+    <string name="send_suggestion_sent">شكرًا، أُرسل اقتراحك</string>
+    <string name="send_suggestion_report_placeholder">صِف اقتراحك</string>
+    <string name="send_suggestion_content">اكتب اقتراحك أدناه.</string>
+    <string name="preference_system_settings">إعدادات النظام</string>
+    <string name="preference_help_summary">احصل على المساعدة باستخدام ${app_name}</string>
+    <string name="preference_voice_and_video">الصوت والفيديو</string>
+    <string name="settings_security_and_privacy">الأمان والخصوصية</string>
+    <string name="settings_preferences">الخيارات</string>
+    <string name="settings_general_title">عام</string>
+    <string name="create_room_federation_error">"أُنشئت  الغرفة، لكن فشل إرسال بعض الدعوات بسبب:
+\n
+\n%s"</string>
+    <string name="create_room_public_description">يمكن لأي شخص الإنضمام لهذه الغرفة</string>
+    <string name="create_room_public_title">علنية</string>
+    <string name="create_room_settings_section">إعدادات الغرفة</string>
+    <string name="create_room_topic_hint">الموضوع</string>
+    <string name="create_room_topic_section">موضوع الغرفة (اختياري)</string>
+    <string name="create_room_name_hint">الاسم</string>
+    <string name="create_room_name_section">اسم الغرفة</string>
+    <string name="create_room_action_create">أنشئ</string>
+    <string name="fab_menu_create_chat">رسالة مباشرة</string>
+    <string name="fab_menu_create_room">الغرف</string>
+    <string name="room_preview_no_preview_join">لا يمكنك معاينة هذه الغرفة، هل تريد الإنضمام إليها؟</string>
+    <string name="room_preview_not_found">لا يمكنك الوصول إلى هذه الغرفة حاليًا.
+\nحاول لاحقًا، أو اسأل مدير الغرفة إن كان لديك نفاذ لها.</string>
+    <string name="room_preview_no_preview">تتعذر معاية هذه الغرفة</string>
+    <string name="group_all_communities">كل المجتمعات</string>
+    <string name="please_wait">رجاء انتظر…</string>
+    <string name="change_room_directory_network">غيّر الشبكة</string>
+    <string name="create_new_space">أنشئ فضاء جديد</string>
+    <string name="create_new_room">أنشئ غرفة جديدة</string>
+    <string name="event_redacted_by_user_reason">حدث حذفه مستخدم</string>
+    <string name="settings_show_redacted">اعرض الرسائل المحذوفة</string>
+    <string name="event_redacted">حُذفت الرسالة</string>
+    <string name="reactions">الانفعالات</string>
+    <string name="message_view_reaction">اعرض الانفعالات</string>
+    <string name="message_add_reaction">أضف انفعالًا</string>
+    <string name="title_activity_emoji_reaction_picker">الانفعالات</string>
 </resources>

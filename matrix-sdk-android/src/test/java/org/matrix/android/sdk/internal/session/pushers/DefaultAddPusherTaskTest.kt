@@ -16,7 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.pushers
 
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.internal.assertFailsWith
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
@@ -39,6 +40,7 @@ private val A_JSON_PUSHER = JsonPusher(
         data = JsonPusherData(brand = "Element")
 )
 
+@ExperimentalCoroutinesApi
 class DefaultAddPusherTaskTest {
 
     private val pushersAPI = FakePushersAPI()
@@ -55,7 +57,7 @@ class DefaultAddPusherTaskTest {
     fun `given no persisted pusher when adding Pusher then updates api and inserts result with Registered state`() {
         monarchy.givenWhereReturns<PusherEntity>(result = null)
 
-        runBlocking { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
+        runTest { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
 
         pushersAPI.verifySetPusher(A_JSON_PUSHER)
         monarchy.verifyInsertOrUpdate<PusherEntity> {
@@ -70,7 +72,7 @@ class DefaultAddPusherTaskTest {
         val realmResult = PusherEntity(appDisplayName = null)
         monarchy.givenWhereReturns(result = realmResult)
 
-        runBlocking { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
+        runTest { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
 
         pushersAPI.verifySetPusher(A_JSON_PUSHER)
 
@@ -85,7 +87,7 @@ class DefaultAddPusherTaskTest {
         pushersAPI.givenSetPusherErrors(SocketException())
 
         assertFailsWith<SocketException> {
-            runBlocking { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
+            runTest { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
         }
 
         realmResult.state shouldBeEqualTo PusherState.FAILED_TO_REGISTER
@@ -97,7 +99,7 @@ class DefaultAddPusherTaskTest {
         pushersAPI.givenSetPusherErrors(SocketException())
 
         assertFailsWith<SocketException> {
-            runBlocking { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
+            runTest { addPusherTask.execute(AddPusherTask.Params(A_JSON_PUSHER)) }
         }
     }
 }

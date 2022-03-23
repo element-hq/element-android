@@ -24,9 +24,11 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.html.EventHtmlRenderer
 import me.gujun.android.span.span
 import org.commonmark.node.Document
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -120,20 +122,112 @@ class DisplayableEventFormatter @Inject constructor(
             EventType.CALL_CANDIDATES       -> {
                 span { }
             }
-            EventType.POLL_START                     -> {
-                timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
+            in EventType.POLL_START         -> {
+                timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.getBestPollCreationInfo()?.question?.getBestQuestion()
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            EventType.POLL_RESPONSE                  -> {
+            in EventType.POLL_RESPONSE      -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            EventType.POLL_END                       -> {
+            in EventType.POLL_END           -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
             else                            -> {
                 span {
                     text = noticeEventFormatter.format(timelineEvent, isDm) ?: ""
                     textStyle = "italic"
+                }
+            }
+        }
+    }
+
+    fun formatThreadSummary(
+            event: Event?,
+            latestEdition: String? = null): CharSequence {
+        event ?: return ""
+
+        // There event have been edited
+        if (latestEdition != null) {
+            return run {
+                val localFormattedBody = htmlRenderer.get().parse(latestEdition) as Document
+                val renderedBody = htmlRenderer.get().render(localFormattedBody) ?: latestEdition
+                renderedBody
+            }
+        }
+
+        // The event have been redacted
+        if (event.isRedacted()) {
+            return noticeEventFormatter.formatRedactedEvent(event)
+        }
+
+        // The event is encrypted
+        if (event.isEncrypted() &&
+                event.mxDecryptionResult == null) {
+            return stringProvider.getString(R.string.encrypted_message)
+        }
+
+        return when (event.getClearType()) {
+            EventType.MESSAGE       -> {
+                (event.getClearContent().toModel() as? MessageContent)?.let { messageContent ->
+                    when (messageContent.msgType) {
+                        MessageType.MSGTYPE_TEXT                 -> {
+                            val body = messageContent.getTextDisplayableContent()
+                            if (messageContent is MessageTextContent && messageContent.matrixFormattedBody.isNullOrBlank().not()) {
+                                val localFormattedBody = htmlRenderer.get().parse(body) as Document
+                                val renderedBody = htmlRenderer.get().render(localFormattedBody) ?: body
+                                renderedBody
+                            } else {
+                                body
+                            }
+                        }
+                        MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
+                            stringProvider.getString(R.string.verification_request)
+                        }
+                        MessageType.MSGTYPE_IMAGE                -> {
+                            stringProvider.getString(R.string.sent_an_image)
+                        }
+                        MessageType.MSGTYPE_AUDIO                -> {
+                            if ((messageContent as? MessageAudioContent)?.voiceMessageIndicator != null) {
+                                stringProvider.getString(R.string.sent_a_voice_message)
+                            } else {
+                                stringProvider.getString(R.string.sent_an_audio_file)
+                            }
+                        }
+                        MessageType.MSGTYPE_VIDEO                -> {
+                            stringProvider.getString(R.string.sent_a_video)
+                        }
+                        MessageType.MSGTYPE_FILE                 -> {
+                            stringProvider.getString(R.string.sent_a_file)
+                        }
+                        MessageType.MSGTYPE_LOCATION             -> {
+                            stringProvider.getString(R.string.sent_location)
+                        }
+                        else                                     -> {
+                            messageContent.body
+                        }
+                    }
+                } ?: span { }
+            }
+            EventType.STICKER       -> {
+                stringProvider.getString(R.string.send_a_sticker)
+            }
+            EventType.REACTION      -> {
+                event.getClearContent().toModel<ReactionContent>()?.relatesTo?.let {
+                    emojiSpanify.spanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
+                } ?: span { }
+            }
+            in EventType.POLL_START    -> {
+                event.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
+                        ?: stringProvider.getString(R.string.sent_a_poll)
+            }
+            in EventType.POLL_RESPONSE -> {
+                stringProvider.getString(R.string.poll_response_room_list_preview)
+            }
+            in EventType.POLL_END      -> {
+                stringProvider.getString(R.string.poll_end_room_list_preview)
+            }
+            else                    -> {
+                span {
                 }
             }
         }

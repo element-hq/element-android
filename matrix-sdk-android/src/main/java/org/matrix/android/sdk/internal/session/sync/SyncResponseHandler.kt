@@ -110,6 +110,7 @@ internal class SyncResponseHandler @Inject constructor(
 
         // Start one big transaction
         monarchy.awaitTransaction { realm ->
+            // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
             measureTimeMillis {
                 Timber.v("Handle rooms")
                 reportSubtask(reporter, InitSyncStep.ImportingAccountRoom, 1, 0.7f) {

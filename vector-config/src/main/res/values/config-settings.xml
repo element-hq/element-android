@@ -36,8 +36,9 @@
     <!-- Level 1: Security and Privacy -->
 
     <!-- Level 1: Labs -->
+    <bool name="settings_labs_thread_messages_default">false</bool>
 
-    <!-- Level 1: Advcanced settings -->
+    <!-- Level 1: Advanced settings -->
 
     <!-- Level 1: Help and about -->
 

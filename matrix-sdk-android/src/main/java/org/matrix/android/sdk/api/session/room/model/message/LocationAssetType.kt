@@ -16,11 +16,20 @@
 
 package org.matrix.android.sdk.api.session.room.model.message
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+/**
+ * Define what particular asset is being referred to.
+ * We don't use enum type since it is not limited to a specific set of values.
+ * The way this type should be interpreted in client side is described in
+ * [MSC3488](https://github.com/matrix-org/matrix-doc/blob/matthew/location/proposals/3488-location.md)
+ */
+object LocationAssetType {
+    /**
+     * Used for user location sharing.
+     **/
+    const val SELF = "m.self"
 
-@JsonClass(generateAdapter = false)
-enum class LocationAssetType {
-    @Json(name = "m.self")
-    SELF
+    /**
+     * Used for pin drop location sharing.
+     **/
+    const val PIN = "m.pin"
 }

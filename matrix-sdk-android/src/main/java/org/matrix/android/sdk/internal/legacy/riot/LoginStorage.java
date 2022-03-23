@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.legacy.riot;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -196,6 +197,7 @@ public class LoginStorage {
     /**
      * Clear the stored values
      */
+    @SuppressLint("ApplySharedPref")
     public void clear() {
         SharedPreferences prefs = mContext.getSharedPreferences(PREFS_LOGIN, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();

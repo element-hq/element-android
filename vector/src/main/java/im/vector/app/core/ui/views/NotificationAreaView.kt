@@ -27,7 +27,6 @@ import androidx.core.text.italic
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.error.ResourceLimitErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewNotificationAreaBinding
 import im.vector.app.features.themes.ThemeUtils
@@ -77,7 +76,7 @@ class NotificationAreaView @JvmOverloads constructor(
             is State.UnsupportedAlgorithm       -> renderUnsupportedAlgorithm(newState)
             is State.Tombstone                  -> renderTombstone()
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
-        }.exhaustive
+        }
     }
 
     // PRIVATE METHODS ****************************************************************************************************************************************

@@ -105,16 +105,9 @@ internal class TestMatrix constructor(context: Context, matrixConfiguration: Mat
             }
         }
 
-        fun getInstance(context: Context): TestMatrix {
-            if (isInit.compareAndSet(false, true)) {
-                val appContext = context.applicationContext
-                if (appContext is MatrixConfiguration.Provider) {
-                    val matrixConfiguration = (appContext as MatrixConfiguration.Provider).providesMatrixConfiguration()
-                    instance = TestMatrix(appContext, matrixConfiguration)
-                } else {
-                    throw IllegalStateException("Matrix is not initialized properly." +
-                            " You should call Matrix.initialize or let your application implements MatrixConfiguration.Provider.")
-                }
+        fun getInstance(): TestMatrix {
+            if (isInit.compareAndSet(false, false)) {
+                throw IllegalStateException("Matrix is not initialized properly. You should call TestMatrix.initialize first")
             }
             return instance
         }

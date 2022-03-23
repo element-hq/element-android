@@ -39,7 +39,6 @@
     <string name="room_displayname_room_invite">Huonekutsu</string>
     <string name="room_displayname_two_members">%1$s ja %2$s</string>
     <string name="room_displayname_empty_room">Tyhjä huone</string>
-
     <string name="initial_sync_start_importing_account">Alkusynkronointi:
 \nTuodaan tiliä…</string>
     <string name="initial_sync_start_importing_account_crypto">Alkusynkronointi:
@@ -47,7 +46,8 @@
     <string name="initial_sync_start_importing_account_rooms">Alkusynkronointi:
 \nTuodaan huoneita</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Alkusynkronointi:
-\nTuodaan liityttyjä huoneita</string>
+\nLadataan keskustelujasi
+\nMikäli olet liittynyt moniin huoneisiin, tässä voi mennä tovi</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Alkusynkronointi:
 \nTuodaan kutsuttuja huoneita</string>
     <string name="initial_sync_start_importing_account_left_rooms">Alkusynkronointi:
@@ -190,7 +190,6 @@
     <string name="action_delete">Poista</string>
     <string name="action_rename">Nimeä uudelleen</string>
     <string name="report_content">Ilmoita epäilyttävästä sisällöstä</string>
-
     <string name="or">tai</string>
     <string name="action_invite">Kutsu</string>
     <string name="action_sign_out">Kirjaudu ulos</string>
@@ -213,7 +212,6 @@
     <string name="matrix_only_filter">Ainoastaan Matrix-yhteyshenkilöt</string>
     <string name="no_result_placeholder">Ei tuloksia</string>
     <string name="rooms_header">Huoneet</string>
-
     <string name="send_bug_report_include_logs">Lähetä lokit</string>
     <string name="send_bug_report_include_crash_logs">Lähetä kaatumislokit</string>
     <string name="send_bug_report_include_screenshot">Lähetä näytönkaappauskuva</string>
@@ -259,13 +257,10 @@
     <string name="call_in_progress">Puhelu käynnissä…</string>
     <string name="call_error_user_not_responding">Toinen puoli ei vastannut.</string>
     <string name="permissions_rationale_popup_title">Huomio</string>
-
     <string name="permissions_rationale_msg_record_audio">${app_name} tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
 \n
 \nSalli mikrofonin ja kameran käyttö seuraavilla näytöillä aloittaaksesi tämän puhelun.</string>
-
     <string name="yes">KYLLÄ</string>
     <string name="no">EI</string>
     <string name="_continue">Jatka</string>
@@ -273,7 +268,6 @@
     <string name="action_join">Liity</string>
     <string name="action_reject">Hylkää</string>
     <string name="room_jump_to_first_unread">Siirry ensimmäiseen lukemattomaan viestiin.</string>
-
     <string name="room_participants_leave_prompt_title">Poistu huoneesta</string>
     <string name="room_participants_leave_prompt_msg">Haluatko varmasti poistua huoneesta?</string>
     <string name="room_participants_header_direct_chats">YKSITYISKESKUSTELUT</string>
@@ -299,7 +293,6 @@
     <string name="ssl_unexpected_existing_expl">Sertifikaatti johon laitteesi luotti aikaisemmin on vaihtunut. Tämä on HYVIN EPÄTAVALLISTA. On suositeltavaa, että ET hyväksy tätä uutta sertifikaattia.</string>
     <string name="ssl_expected_existing_expl">Sertifikaatti on vaihtunut ennestään luotetusta ei-luotettuun. Palvelin on voinut uusia sertifikaattinsa. Kysy palvelimen ylläpitäjältä, mikä sormenjäljen pitäisi olla.</string>
     <string name="ssl_only_accept">Hyväksy sertifikaatti vain, jos palvelimen ylläpitäjä on julkaissut sormenjäljen, joka täsmää yllä olevan kanssa.</string>
-
     <string name="search_hint">Etsi</string>
     <string name="search_members_hint">Etsi huoneen jäsenistä</string>
     <string name="search_no_results">Ei tuloksia</string>
@@ -344,7 +337,6 @@
     <string name="devices_details_device_name">Päivitä julkinen nimi</string>
     <string name="devices_details_last_seen_title">Viimeksi käytetty</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-
     <string name="devices_delete_dialog_title">Tunnistautuminen</string>
     <string name="settings_logged_in">Kirjautuneena nimellä</string>
     <string name="settings_home_server">Kotipalvelin</string>
@@ -374,8 +366,7 @@
     <string name="room_settings_labs_pref_title">Kokeelliset</string>
     <string name="room_settings_labs_warning_message">Nämä ovat kokeellisia ominaisuuksia, jotka voivat mennä rikki. Käytä varoen.</string>
     <string name="room_settings_set_main_address">Aseta pääosoitteeksi</string>
-    <string name="room_settings_unset_main_address">Poista pääosoite</string>
-
+    <string name="room_settings_unset_main_address">Kumoa pääosoitteeksi asettaminen</string>
     <string name="encryption_information_decryption_error">Salauksenpurkuvirhe</string>
     <string name="encryption_information_device_name">Julkinen nimi</string>
     <string name="encryption_information_device_id">Istunnon tunnus</string>
@@ -386,7 +377,6 @@
     <string name="encryption_export_export">Vie</string>
     <string name="passphrase_enter_passphrase">Anna salasana</string>
     <string name="passphrase_confirm_passphrase">Vahvista salasana</string>
-
     <string name="encryption_import_e2e_room_keys">Tuo salatun huoneen avaimet</string>
     <string name="encryption_import_room_keys">Tuo huoneen avaimet</string>
     <string name="encryption_import_room_keys_summary">Tuo avaimet paikallisesta tiedostosta</string>
@@ -527,16 +517,11 @@
     <string name="settings_call_ringtone_title">Saapuvien puheluiden soittoääni</string>
     <string name="video_call_in_progress">Videopuhelu menossa…</string>
     <string name="list_members">Käyttäjälista</string>
-
     <plurals name="room_title_members">
         <item quantity="one">yksi jäsen</item>
         <item quantity="other">%d jäsentä</item>
     </plurals>
-
-
-
-
-    <string name="room_participants_action_remove">Poista huoneesta</string>
+    <string name="room_participants_action_remove">Poista keskustelusta</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">yksi uusi viesti</item>
         <item quantity="other">%d uutta viestiä</item>
@@ -545,8 +530,6 @@
         <item quantity="one">yksi valittu</item>
         <item quantity="other">%d valittu</item>
     </plurals>
-
-
     <string name="settings_notification_advanced">Edistyneet ilmoitusasetukset</string>
     <string name="settings_notification_by_event">Ilmoituksen tärkeys tapahtumakohtaisesti</string>
     <string name="settings_notification_troubleshoot">Ratkaise ilmoituksien ongelmia</string>
@@ -621,7 +604,6 @@
     <string name="settings_show_read_receipts_summary">Paina lukukuittauksesta nähdäksesi tarkemman listan.</string>
     <string name="settings_show_join_leave_messages_summary">Ei vaikuta kutsuihin, poistamisiin ja porttikieltoihin.</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Sisältää hahmokuvat ja näyttönimien vaihdot.</string>
-
     <string name="settings_opt_in_of_analytics_summary">${app_name} kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
     <string name="encryption_export_notice">Luo salalause salataksesi viedyt avaimet. Tarvitset saman salalauseen avainten tuomiseen.</string>
     <string name="encryption_message_recovery">Salattujen viestien palautus</string>
@@ -630,7 +612,6 @@
         <item quantity="one">yksi lukematon ilmoitettu viesti</item>
         <item quantity="other">%d lukematonta ilmoitettua viestiä</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">yksi huone</item>
         <item quantity="other">%d huonetta</item>
@@ -648,7 +629,7 @@
     <string name="command_description_op_user">Määritä käyttäjän oikeuksien taso</string>
     <string name="command_description_deop_user">Poistaa käyttäjän operaattorioikeudet</string>
     <string name="command_description_invite_user">Kutsuu käyttäjän nykyiseen huoneeseen</string>
-    <string name="command_description_join_room">Liittyy annettuun huoneeseen</string>
+    <string name="command_description_join_room">Liittyy osoitteen mukaiseen huoneeseen</string>
     <string name="command_description_part_room">Poistu huoneesta</string>
     <string name="command_description_topic">Aseta huoneen aihe</string>
     <string name="command_description_remove_user">Potkaisee käyttäjän pois</string>
@@ -656,8 +637,6 @@
     <string name="command_description_markdown">Markdown päällä/pois</string>
     <string name="command_description_clear_scalar_token">Matrix-sovellusten hallinnan korjaamiseen</string>
     <string name="notification_silent">Hiljainen</string>
-
-
     <string name="avatar">Hahmokuva</string>
     <string name="dialog_user_consent_content">Jatkaaksesi kotipalvelimen %1$s käyttöä, sinun täytyy hyväksyä palvelun käyttöehdot.</string>
     <string name="dialog_user_consent_submit">Näytä ehdot</string>
@@ -668,7 +647,7 @@
 \nViestien näkyvyys Matrixissa on samantapainen kuin sähköpostissa. Viestiesi unohtaminen tarkoittaa, että lähettämiäsi viestejä ei näytetä uusille tai rekisteröitymättömille käyttäjille. Ne rekisteröityneet käyttäjät, joilla viestisi jo on, pääsevät kuitenkin näkemään oman kopionsa niistä jatkossakin.</string>
     <string name="deactivate_account_delete_checkbox">Unohda kaikki viestit, jotka olen lähettänyt, kun tilini on poistettu (Varoitus: tästä seuraa, että tulevat käyttäjät näkevät vanhat keskustelut epätäydellisinä)</string>
     <string name="error_empty_field_enter_user_name">Syötä käyttäjätunnus.</string>
-    <string name="room_tombstone_versioned_description">Tämä huone on korvattu toisella huoneella</string>
+    <string name="room_tombstone_versioned_description">Tämä huone on korvattu toisella eikä ole enää aktiivinen.</string>
     <string name="room_tombstone_continuation_link">Keskustelu jatkuu täällä</string>
     <string name="room_tombstone_continuation_description">Tämä huone on jatkoa toiselle keskustelulle</string>
     <string name="room_tombstone_predecessor_link">Paina tästä nähdäksesi vanhemmat viestit</string>
@@ -715,7 +694,6 @@
     <string name="keys_backup_setup_step3_copy_button_title">Tallenna palautusavain</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Jaa</string>
     <string name="keys_backup_setup_step3_save_button_title">Tallenna tiedostona</string>
-
     <string name="keys_backup_setup_step3_please_make_copy">Teethän kopion</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Jaa palautusavain kohteelle…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Luodaan palautusavainta käyttäen salalausetta. Tässä saattaa kestää useampi sekunti.</string>
@@ -782,8 +760,6 @@
     <string name="settings_send_message_with_enter_summary">Näppäimistön enter-näppäin lähettää viestin sen sijaan, että se lisäisi rivinvaihdon</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Salasana ei ole kelvollinen</string>
     <string name="notification_unread_notified_messages_in_room">%1$s -&gt; %2$s</string>
-
-
     <string name="settings_media">Media</string>
     <string name="settings_default_compression">Oletuksena oleva pakkauksen määrä</string>
     <string name="compression_opt_list_choose">Valitse</string>
@@ -826,9 +802,9 @@
     <string name="invited_by">%s kutsui</string>
     <string name="room_list_catchup_empty_body">Sinulla ei ole enempää lukemattomia viestejä</string>
     <string name="room_list_people_empty_title">Keskustelut</string>
-    <string name="room_list_people_empty_body">Yksityisviestisi näytetään tässä. Napsauta + oikeasta alakulmasta aloittaaksesi.</string>
+    <string name="room_list_people_empty_body">Yksityisviestisi näytetään tässä. Napauta + oikeasta alakulmasta aloittaaksesi keskustelun.</string>
     <string name="room_list_rooms_empty_title">Huoneet</string>
-    <string name="room_list_rooms_empty_body">Huoneesi näytetään tässä. Napsauta + oikeasta alakulmasta aloittaaksesi.</string>
+    <string name="room_list_rooms_empty_body">Huoneesi näytetään tässä. Napauta + oikeasta alakulmasta löytääksesi olemassa olevia tai perustaaksesi omiasi.</string>
     <string name="title_activity_emoji_reaction_picker">Reaktiot</string>
     <string name="action_agree">Samaa mieltä</string>
     <string name="message_add_reaction">Lisää reaktio</string>
@@ -887,8 +863,6 @@
     <string name="message_view_edit_history">Näytä muokkaushistoria</string>
     <string name="key_share_request">Avaimen jakopyyntö</string>
     <string name="sas_verified">Vahvistettu!</string>
-
-
     <string name="sas_incoming_request_notif_title">Vahvistuspyyntö</string>
     <string name="sas_incoming_request_notif_content">%s haluaa vahvistaa laitteesi</string>
     <string name="settings_push_rules">Viesti-ilmoitusten säännöt</string>
@@ -898,7 +872,6 @@
     <string name="settings_background_fdroid_sync_mode">Taustasynkronointitila</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Ei taustasynkronointia</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Et saa ilmoituksia saapuvista viesteistä, kun sovellus on taustalla.</string>
-
     <string name="widget_integration_review_terms">Jatkaaksesi sinun täytyy hyväksyä palvelun käyttöehdot.</string>
     <string name="identity_server_not_defined">Et käytä mitään identiteettipalvelinta</string>
     <string name="error_user_already_logged_in">Näyttää, että yrität yhdistää toiseen kotipalvelimeen. Haluatko kirjautua ulos\?</string>
@@ -942,7 +915,6 @@
     <string name="report_content_spam">Se on roskapostia</string>
     <string name="report_content_inappropriate">Se on sopimaton</string>
     <string name="none">Ei mitään</string>
-
     <string name="settings_background_fdroid_sync_mode_battery">Optimoitu akunkestoa varten</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} synkronoi taustalla laitteen rajallisia resursseja (akkua) säästäen.
 \nLaitteesi resurssien tilasta riippuen käyttöjärjestelmä saattaa lykätä synkronointia.</string>
@@ -1025,7 +997,6 @@
     <string name="content_reported_as_inappropriate_content">Tämä sisältö on ilmiannettu epäsopivana. 
 \n 
 \nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit.</string>
-
     <string name="login_error_no_homeserver_found">Tämä ei ole kelvollinen Matrix-palvelimen osoite</string>
     <string name="message_ignore_user">Jätä käyttäjä huomiotta</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Kaikki viestit (äänekäs)</string>
@@ -1222,7 +1193,6 @@
     <string name="verification_verify_user">Varmenna %s</string>
     <string name="verification_verified_user">Varmennettu %s</string>
     <string name="verification_request_waiting_for">Odotetaan käyttäjää %s…</string>
-
     <string name="room_profile_not_encrypted_subtitle">Huoneessa olevat viesti eivät ole salattu osapuolten välisellä salauksella.</string>
     <string name="room_profile_encrypted_subtitle">Huoneen viestit ovat salattu osapuolten välisellä salauksella.
 \n
@@ -1436,7 +1406,7 @@
     <string name="settings_category_composer">Viestieditori</string>
     <string name="choose_locale_other_locales_title">Muut kielet</string>
     <string name="settings_show_redacted_summary">Näytä merkki poistettujen viestien paikalla</string>
-    <string name="settings_chat_effects_description">Käytä /snow kometoa tai lähetä viesti jossa on ❄️ tai 🎉</string>
+    <string name="settings_chat_effects_description">Käytä /confetti-komentoa tai lähetä viesti jossa on ❄️ tai 🎉</string>
     <string name="settings_chat_effects_title">Näytä keskustelujen tehosteet</string>
     <string name="settings_show_redacted">Näytä poistetut viestit</string>
     <string name="room_participants_unban_prompt_msg">Jos poistat käyttäjän porttikiellon, hän voi liittyä huoneeseen uudelleen.</string>
@@ -1538,7 +1508,7 @@
     <string name="initial_sync_start_downloading">Ensimmäinen synkronointi:
 \nLadataan tietoja…</string>
     <string name="initial_sync_start_server_computing">Ensimmäinen synkronointi:
-\nOdotetaan palvelimen vastausta. . .</string>
+\nOdotetaan palvelimen vastausta…</string>
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="one">%1$s, %2$s, %3$s ja %4$d muu</item>
         <item quantity="other">%1$s, %2$s, %3$s ja %4$d muuta</item>
@@ -1674,8 +1644,6 @@
         <item quantity="one">Aktiivinen puhelu ·</item>
         <item quantity="other">%1$d aktiivista puhelua ·</item>
     </plurals>
-
-
     <string name="call_only_active">Aktiivinen puhelu (%1$s)</string>
     <string name="call_dial_pad_title">Numeronäppäimistö</string>
     <string name="call_tile_no_answer">Ei vastausta</string>
@@ -1926,14 +1894,14 @@
     <string name="missing_permissions_title">Puuttuvat oikeudet</string>
     <string name="spaces">Avaruudet</string>
     <plurals name="create_poll_not_enough_options_error">
-        <item quantity="one">Vähintään %1$s valinta vaaditaan</item>
-        <item quantity="other">Vähintään %1$s valintaa vaaditaan</item>
+        <item quantity="one">Vähintään yksi vaihtoehto vaaditaan</item>
+        <item quantity="other">Vähintään %1$s vaihtoehtoa vaaditaan</item>
     </plurals>
     <string name="create_poll_empty_question_error">Kysymys ei voi olla tyhjä</string>
     <string name="create_poll_button">LUO KYSELY</string>
-    <string name="create_poll_add_option">LISÄÄ VALINTA</string>
-    <string name="create_poll_options_hint">Valinta %1$d</string>
-    <string name="create_poll_options_title">Luo valinnat</string>
+    <string name="create_poll_add_option">LISÄÄ VAIHTOEHTO</string>
+    <string name="create_poll_options_hint">Vaihtoehto %1$d</string>
+    <string name="create_poll_options_title">Luo vaihtoehdot</string>
     <string name="create_poll_question_hint">Kysymys tai aihe</string>
     <string name="create_poll_question_title">Kyselyn kysymys tai aihe</string>
     <string name="create_poll_title">Luo kysely</string>
@@ -1954,4 +1922,135 @@
     <string name="room_permissions_send_m_room_server_acl_events">Lähetä m.room.server_acl-tapahtumia</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Valitse kotipalvelin</string>
     <string name="action_not_now">Ei nyt</string>
+    <string name="room_profile_section_restore_security">Palauta salaus</string>
+    <string name="default_message_emote_snow">lähettää lumisadetta ❄️</string>
+    <string name="default_message_emote_confetti">lähettää konfettia 🎉</string>
+    <string name="invite_friends_rich_title">🔐️ Liity seuraani ${app_name}-sovelluksessa</string>
+    <string name="invite_friends_text">Hei, juttele minulle ${app_name}-sovelluksessa: %s</string>
+    <string name="identity_server_set_default_notice">Kotipalvelimesi (%1$s) ehdottaa, että käytät palvelinta %2$s identiteettipalvelimenasi</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Odotetaan salaushistoriaa</string>
+    <string name="crypto_error_withheld_generic">Sinulla ei ole pääsyä tähän viestiin, koska lähettäjä jätti avaimet tarkoituksella lähettämättä</string>
+    <string name="crypto_error_withheld_unverified">Sinulla ei ole pääsyä tähän viestiin, koska lähettäjä ei luota istuntoosi</string>
+    <string name="crypto_error_withheld_blacklisted">Sinulla ei ole pääsyä tähän viestiin, koska lähettäjä esti sinut</string>
+    <string name="a11y_presence_unavailable">Ei saatavilla</string>
+    <string name="dev_tools_success_event">Tapahtuma lähetetty!</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Odotetaan tätä viestiä, tässä voi kestää jonkin aikaa</string>
+    <string name="notice_crypto_unable_to_decrypt_final">Sinulla ei ole pääsyä tähän viestiin</string>
+    <string name="member_banned_by">%1$s antoi porttikiellon</string>
+    <string name="open_poll_option_description">Äänestäjät näkevät tulokset heti äänestettyään</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Lopullinen tulos yhden äänen perusteella</item>
+        <item quantity="other">Lopullinen tulos %1$d äänen perusteella</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">Yksi ääni annettu. Äänestä nähdäksesi tulokset</item>
+        <item quantity="other">%1$d ääntä annettu. Äänestä nähdäksesi tulokset</item>
+    </plurals>
+    <string name="poll_no_votes_cast">Ääniä ei annettu</string>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Perustuen yhteen ääneen</item>
+        <item quantity="other">Perustuen %1$d ääneen</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">yksi ääni</item>
+        <item quantity="other">%1$d ääntä</item>
+    </plurals>
+    <string name="poll_response_room_list_preview">Ääni annettu</string>
+    <string name="a11y_static_map_image">Kartta</string>
+    <string name="a11y_location_share_icon">Jaa sijainti</string>
+    <string name="location_activity_title_preview">Sijainti</string>
+    <string name="location_activity_title_static_sharing">Jaa sijainti</string>
+    <string name="closed_poll_option_title">Suljettu kysely</string>
+    <string name="open_poll_option_title">Avoin kysely</string>
+    <string name="poll_type_title">Kyselyn tyyppi</string>
+    <string name="edit_poll_title">Muokkaa kyselyä</string>
+    <string name="delete_poll_dialog_title">Poista kysely</string>
+    <string name="tooltip_attachment_sticker">Lähetä tarra</string>
+    <string name="tooltip_attachment_gallery">Lähetä kuvia ja videoita</string>
+    <string name="tooltip_attachment_photo">Avaa kamera</string>
+    <string name="message_bubbles">Näytä viestikuplat</string>
+    <string name="location_timeline_failed_to_load_map">Kartan lataaminen epäonnistui</string>
+    <string name="location_share">Jaa sijainti</string>
+    <string name="tooltip_attachment_poll">Luo kysely</string>
+    <string name="tooltip_attachment_location">Jaa sijainti</string>
+    <string name="message_reaction_show_less">Näytä vähemmän</string>
+    <string name="ftue_auth_carousel_encrypted_body">Läpisalattu, puhelinnumeroa ei vaadita. Ei mainoksia tai tiedonlouhintaa.</string>
+    <string name="ftue_auth_carousel_control_body">Valitse missä keskustelujasi säilytetään – sinä päätät ja olet riippumaton. Yhdistäjänä Matrix.</string>
+    <string name="ftue_auth_carousel_control_title">Sinä päätät.</string>
+    <string name="ftue_auth_carousel_secure_body">Turvallista ja riippumatonta viestintää, joka on yhtä yksityistä kuin keskustelisit kasvokkain kotonasi.</string>
+    <string name="ftue_auth_carousel_workplace_title">Viestintää tiimillesi.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Turvallista viestintää.</string>
+    <string name="ftue_auth_carousel_secure_title">Pidä keskustelusi hallussasi.</string>
+    <string name="ftue_auth_use_case_connect_to_server">Yhdistä palvelimeen</string>
+    <string name="login_splash_already_have_account">Minulla on jo tili</string>
+    <string name="login_splash_create_account">Luo tili</string>
+    <string name="location_not_available_dialog_content">${app_name} ei voinut käyttää sijaintiasi. Yritä myöhemmin uudelleen.</string>
+    <string name="location_not_available_dialog_title">${app_name} ei voinut käyttää sijaintiasi</string>
+    <string name="delete_poll_dialog_content">Haluatko varmasti poistaa tämän kyselyn\? Et voi palauttaa sitä poistamisen jälkeen.</string>
+    <string name="labs_enable_thread_messages_desc">Huomaa: sovellus käynnistetään uudelleen</string>
+    <string name="dev_tools_event_content_hint">Tapahtuman sisältö</string>
+    <string name="dev_tools_form_hint_event_content">Tapahtuman sisältö</string>
+    <string name="dev_tools_send_custom_event">Lähetä mukautettu tapahtuma</string>
+    <string name="a11y_trust_level_default">Oletusluottamustaso</string>
+    <string name="error_opening_banned_room">Huonetta, johon olet saanut porttikiellon ei voi avata.</string>
+    <string name="loading_contact_book">Noudetaan yhteystietojasi…</string>
+    <string name="command_snow">Lähettää viestin lumisateen kera</string>
+    <string name="command_confetti">Lähettää viestin konfetin kera</string>
+    <string name="app_ios_android">${app_name} iOS
+\n${app_name} Android</string>
+    <string name="command_description_plain">Lähettää viestin pelkkänä tekstinä, tulkitsematta sitä markdowniksi</string>
+    <string name="contact_admin_to_restore_encryption">Ota yhteyttä ylläpitäjään salauksen palauttamiseksi kelvolliseen tilaan.</string>
+    <string name="verification_scan_self_notice">Lue koodi toisella laitteellasi tai vaihda ja lue tällä laitteella</string>
+    <string name="verification_conclusion_warning">Ei-luotettu kirjautuminen</string>
+    <string name="direct_room_join_rules_invite_by_you">Teit tästä kutsua edellyttävän.</string>
+    <string name="attachment_type_location">Sijainti</string>
+    <string name="attachment_type_poll">Kysely</string>
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s ja yksi muu lukivat</item>
+        <item quantity="other">%1$s, %2$s ja %3$d muuta lukivat</item>
+    </plurals>
+    <string name="identity_server_consent_dialog_content_question">Hyväksytkö näiden tietojen lähettämisen\?</string>
+    <string name="preference_versions">Versiot</string>
+    <string name="preference_help_title">Ohje ja tuki</string>
+    <string name="preference_help">Ohje</string>
+    <string name="create_room_federation_error">Huone on luotu, mutta joitakin kutsuja ei ole lähetetty seuraavasta syystä:
+\n
+\n%s</string>
+    <string name="room_preview_not_found">Tähän huoneeseen ei pääse tällä hetkellä.
+\nYritä myöhemmin uudelleen tai kysy huoneen ylläpitäjältä onko sinulla pääsyä.</string>
+    <string name="view_in_room">Näytä huoneessa</string>
+    <string name="room_settings_room_access_entry_unknown">Tuntematon pääsyasetus (%s)</string>
+    <string name="room_alias_local_address_subtitle">Aseta osoitteita tälle huoneelle, jotta käyttäjät voivat löytää tämän huoneen kotipalvelimesi (%1$s) kautta</string>
+    <string name="room_alias_address_hint">Uusi julkaistu osoite (esim. #alias:palvelin)</string>
+    <string name="room_alias_published_alias_subtitle">Kuka hyvänsä millä hyvänsä palvelimella voi käyttää julkaistua osoitetta huoneeseesi liittymiseen. Osoitteen julkaisemiseksi se täytyy ensin asettaa paikalliseksi osoitteeksi.</string>
+    <string name="legals_third_party_notices">Kolmansien osapuolten kirjastot</string>
+    <string name="analytics_opt_in_list_item_3">Voit poistaa tämän käytöstä koska tahansa asetuksista</string>
+    <string name="analytics_opt_in_list_item_2"><b>Emme</b> jaa tietoa kolmansien tahojen kanssa</string>
+    <string name="analytics_opt_in_list_item_1"><b>Emme</b> tallenna tai profiloi mitään tilin tietoja</string>
+    <string name="shortcut_disabled_reason_room_left">Huoneesta on poistuttu!</string>
+    <string name="room_permissions_notice_read_only">Sinulla ei ole lupaa päivittää rooleja, jotka vaaditaan huoneen eri osien muuttamiseen</string>
+    <string name="room_permissions_notice">Valitse roolit, jotka vaaditaan huoneen eri osien muuttamiseen</string>
+    <string name="room_settings_permissions_subtitle">Tarkastele ja päivitä rooleja, jotka vaaditaan huoneen eri osien muuttamiseen.</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s ja muita</string>
+    <string name="room_notification_two_users_are_typing">%1$s ja %2$s</string>
+    <string name="login_error_homeserver_from_url_not_found">Kotipalvelinta URL-osoitteesta %s ei tavoiteta. Tarkista linkki tai valitse kotipalvelin manuaalisesti.</string>
+    <string name="action_thread_view_in_room">Näytä huoneessa</string>
+    <string name="action_enable">Ota käyttöön</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Poistit tältä huoneelta vaihtoehtoisen osoitteen %1$s.</item>
+        <item quantity="other">Poistit tältä huoneelta vaihtoehtoiset osoitteet %1$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s poisti tältä huoneelta vaihtoehtoisen osoitteen %2$s.</item>
+        <item quantity="other">%1$s poisti tältä huoneelta vaihtoehtoiset osoitteet %2$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Lisäsit tälle huoneelle vaihtoehtoisen osoitteen %1$s.</item>
+        <item quantity="other">Lisäsit tälle huoneelle vaihtoehtoiset osoitteet %1$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s lisäsi tälle huoneelle vaihtoehtoisen osoitteen %2$s.</item>
+        <item quantity="other">%1$s lisäsi tälle huoneelle vaihtoehtoiset osoitteet %2$s.</item>
+    </plurals>
+    <string name="room_error_access_unauthorized">Sinulla ei ole lupaa liittyä tähän huoneeseen</string>
 </resources>

@@ -34,7 +34,7 @@ import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 
-private typealias ThreadSummary = Pair<Int, TimelineEventEntity>?
+private typealias Summary = Pair<Int, TimelineEventEntity>?
 
 /**
  * Finds the root thread event and update it with the latest message summary along with the number
@@ -93,11 +93,12 @@ internal fun EventEntity.markEventAsRoot(
  * @param rootThreadEventId The root eventId that will find the number of threads
  * @return A ThreadSummary containing the counted threads and the latest event message
  */
-internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String, chunkEntity: ChunkEntity?): ThreadSummary {
+internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String, chunkEntity: ChunkEntity?): Summary {
     // Number of messages
     val messages = TimelineEventEntity
             .whereRoomId(realm, roomId = roomId)
             .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+            .distinct(TimelineEventEntityFields.ROOT.EVENT_ID)
             .count()
             .toInt()
 
@@ -123,7 +124,7 @@ internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: 
 
     result ?: return null
 
-    return ThreadSummary(messages, result)
+    return Summary(messages, result)
 }
 
 /**
@@ -156,6 +157,7 @@ internal fun TimelineEventEntity.Companion.findAllThreadsForRoomId(realm: Realm,
         TimelineEventEntity
                 .whereRoomId(realm, roomId = roomId)
                 .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD, true)
+                .equalTo(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, false)
                 .sort("${TimelineEventEntityFields.ROOT.THREAD_SUMMARY_LATEST_MESSAGE}.${TimelineEventEntityFields.ROOT.ORIGIN_SERVER_TS}", Sort.DESCENDING)
 
 /**
