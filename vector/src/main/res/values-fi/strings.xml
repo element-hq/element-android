@@ -46,7 +46,8 @@
     <string name="initial_sync_start_importing_account_rooms">Alkusynkronointi:
 \nTuodaan huoneita</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Alkusynkronointi:
-\nTuodaan liityttyjä huoneita</string>
+\nLadataan keskustelujasi
+\nMikäli olet liittynyt moniin huoneisiin, tässä voi mennä tovi</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Alkusynkronointi:
 \nTuodaan kutsuttuja huoneita</string>
     <string name="initial_sync_start_importing_account_left_rooms">Alkusynkronointi:
@@ -365,7 +366,7 @@
     <string name="room_settings_labs_pref_title">Kokeelliset</string>
     <string name="room_settings_labs_warning_message">Nämä ovat kokeellisia ominaisuuksia, jotka voivat mennä rikki. Käytä varoen.</string>
     <string name="room_settings_set_main_address">Aseta pääosoitteeksi</string>
-    <string name="room_settings_unset_main_address">Poista pääosoite</string>
+    <string name="room_settings_unset_main_address">Kumoa pääosoitteeksi asettaminen</string>
     <string name="encryption_information_decryption_error">Salauksenpurkuvirhe</string>
     <string name="encryption_information_device_name">Julkinen nimi</string>
     <string name="encryption_information_device_id">Istunnon tunnus</string>
@@ -520,7 +521,7 @@
         <item quantity="one">yksi jäsen</item>
         <item quantity="other">%d jäsentä</item>
     </plurals>
-    <string name="room_participants_action_remove">Poista huoneesta</string>
+    <string name="room_participants_action_remove">Poista keskustelusta</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">yksi uusi viesti</item>
         <item quantity="other">%d uutta viestiä</item>
@@ -628,7 +629,7 @@
     <string name="command_description_op_user">Määritä käyttäjän oikeuksien taso</string>
     <string name="command_description_deop_user">Poistaa käyttäjän operaattorioikeudet</string>
     <string name="command_description_invite_user">Kutsuu käyttäjän nykyiseen huoneeseen</string>
-    <string name="command_description_join_room">Liittyy annettuun huoneeseen</string>
+    <string name="command_description_join_room">Liittyy osoitteen mukaiseen huoneeseen</string>
     <string name="command_description_part_room">Poistu huoneesta</string>
     <string name="command_description_topic">Aseta huoneen aihe</string>
     <string name="command_description_remove_user">Potkaisee käyttäjän pois</string>
@@ -646,7 +647,7 @@
 \nViestien näkyvyys Matrixissa on samantapainen kuin sähköpostissa. Viestiesi unohtaminen tarkoittaa, että lähettämiäsi viestejä ei näytetä uusille tai rekisteröitymättömille käyttäjille. Ne rekisteröityneet käyttäjät, joilla viestisi jo on, pääsevät kuitenkin näkemään oman kopionsa niistä jatkossakin.</string>
     <string name="deactivate_account_delete_checkbox">Unohda kaikki viestit, jotka olen lähettänyt, kun tilini on poistettu (Varoitus: tästä seuraa, että tulevat käyttäjät näkevät vanhat keskustelut epätäydellisinä)</string>
     <string name="error_empty_field_enter_user_name">Syötä käyttäjätunnus.</string>
-    <string name="room_tombstone_versioned_description">Tämä huone on korvattu toisella huoneella</string>
+    <string name="room_tombstone_versioned_description">Tämä huone on korvattu toisella eikä ole enää aktiivinen.</string>
     <string name="room_tombstone_continuation_link">Keskustelu jatkuu täällä</string>
     <string name="room_tombstone_continuation_description">Tämä huone on jatkoa toiselle keskustelulle</string>
     <string name="room_tombstone_predecessor_link">Paina tästä nähdäksesi vanhemmat viestit</string>
@@ -801,9 +802,9 @@
     <string name="invited_by">%s kutsui</string>
     <string name="room_list_catchup_empty_body">Sinulla ei ole enempää lukemattomia viestejä</string>
     <string name="room_list_people_empty_title">Keskustelut</string>
-    <string name="room_list_people_empty_body">Yksityisviestisi näytetään tässä. Napsauta + oikeasta alakulmasta aloittaaksesi.</string>
+    <string name="room_list_people_empty_body">Yksityisviestisi näytetään tässä. Napauta + oikeasta alakulmasta aloittaaksesi keskustelun.</string>
     <string name="room_list_rooms_empty_title">Huoneet</string>
-    <string name="room_list_rooms_empty_body">Huoneesi näytetään tässä. Napsauta + oikeasta alakulmasta aloittaaksesi.</string>
+    <string name="room_list_rooms_empty_body">Huoneesi näytetään tässä. Napauta + oikeasta alakulmasta löytääksesi olemassa olevia tai perustaaksesi omiasi.</string>
     <string name="title_activity_emoji_reaction_picker">Reaktiot</string>
     <string name="action_agree">Samaa mieltä</string>
     <string name="message_add_reaction">Lisää reaktio</string>
@@ -1405,7 +1406,7 @@
     <string name="settings_category_composer">Viestieditori</string>
     <string name="choose_locale_other_locales_title">Muut kielet</string>
     <string name="settings_show_redacted_summary">Näytä merkki poistettujen viestien paikalla</string>
-    <string name="settings_chat_effects_description">Käytä /snow kometoa tai lähetä viesti jossa on ❄️ tai 🎉</string>
+    <string name="settings_chat_effects_description">Käytä /confetti-komentoa tai lähetä viesti jossa on ❄️ tai 🎉</string>
     <string name="settings_chat_effects_title">Näytä keskustelujen tehosteet</string>
     <string name="settings_show_redacted">Näytä poistetut viestit</string>
     <string name="room_participants_unban_prompt_msg">Jos poistat käyttäjän porttikiellon, hän voi liittyä huoneeseen uudelleen.</string>
@@ -1507,7 +1508,7 @@
     <string name="initial_sync_start_downloading">Ensimmäinen synkronointi:
 \nLadataan tietoja…</string>
     <string name="initial_sync_start_server_computing">Ensimmäinen synkronointi:
-\nOdotetaan palvelimen vastausta. . .</string>
+\nOdotetaan palvelimen vastausta…</string>
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="one">%1$s, %2$s, %3$s ja %4$d muu</item>
         <item quantity="other">%1$s, %2$s, %3$s ja %4$d muuta</item>
@@ -1983,4 +1984,73 @@
     <string name="ftue_auth_use_case_connect_to_server">Yhdistä palvelimeen</string>
     <string name="login_splash_already_have_account">Minulla on jo tili</string>
     <string name="login_splash_create_account">Luo tili</string>
+    <string name="location_not_available_dialog_content">${app_name} ei voinut käyttää sijaintiasi. Yritä myöhemmin uudelleen.</string>
+    <string name="location_not_available_dialog_title">${app_name} ei voinut käyttää sijaintiasi</string>
+    <string name="delete_poll_dialog_content">Haluatko varmasti poistaa tämän kyselyn\? Et voi palauttaa sitä poistamisen jälkeen.</string>
+    <string name="labs_enable_thread_messages_desc">Huomaa: sovellus käynnistetään uudelleen</string>
+    <string name="dev_tools_event_content_hint">Tapahtuman sisältö</string>
+    <string name="dev_tools_form_hint_event_content">Tapahtuman sisältö</string>
+    <string name="dev_tools_send_custom_event">Lähetä mukautettu tapahtuma</string>
+    <string name="a11y_trust_level_default">Oletusluottamustaso</string>
+    <string name="error_opening_banned_room">Huonetta, johon olet saanut porttikiellon ei voi avata.</string>
+    <string name="loading_contact_book">Noudetaan yhteystietojasi…</string>
+    <string name="command_snow">Lähettää viestin lumisateen kera</string>
+    <string name="command_confetti">Lähettää viestin konfetin kera</string>
+    <string name="app_ios_android">${app_name} iOS
+\n${app_name} Android</string>
+    <string name="command_description_plain">Lähettää viestin pelkkänä tekstinä, tulkitsematta sitä markdowniksi</string>
+    <string name="contact_admin_to_restore_encryption">Ota yhteyttä ylläpitäjään salauksen palauttamiseksi kelvolliseen tilaan.</string>
+    <string name="verification_scan_self_notice">Lue koodi toisella laitteellasi tai vaihda ja lue tällä laitteella</string>
+    <string name="verification_conclusion_warning">Ei-luotettu kirjautuminen</string>
+    <string name="direct_room_join_rules_invite_by_you">Teit tästä kutsua edellyttävän.</string>
+    <string name="attachment_type_location">Sijainti</string>
+    <string name="attachment_type_poll">Kysely</string>
+    <plurals name="two_and_some_others_read">
+        <item quantity="one">%1$s, %2$s ja yksi muu lukivat</item>
+        <item quantity="other">%1$s, %2$s ja %3$d muuta lukivat</item>
+    </plurals>
+    <string name="identity_server_consent_dialog_content_question">Hyväksytkö näiden tietojen lähettämisen\?</string>
+    <string name="preference_versions">Versiot</string>
+    <string name="preference_help_title">Ohje ja tuki</string>
+    <string name="preference_help">Ohje</string>
+    <string name="create_room_federation_error">Huone on luotu, mutta joitakin kutsuja ei ole lähetetty seuraavasta syystä:
+\n
+\n%s</string>
+    <string name="room_preview_not_found">Tähän huoneeseen ei pääse tällä hetkellä.
+\nYritä myöhemmin uudelleen tai kysy huoneen ylläpitäjältä onko sinulla pääsyä.</string>
+    <string name="view_in_room">Näytä huoneessa</string>
+    <string name="room_settings_room_access_entry_unknown">Tuntematon pääsyasetus (%s)</string>
+    <string name="room_alias_local_address_subtitle">Aseta osoitteita tälle huoneelle, jotta käyttäjät voivat löytää tämän huoneen kotipalvelimesi (%1$s) kautta</string>
+    <string name="room_alias_address_hint">Uusi julkaistu osoite (esim. #alias:palvelin)</string>
+    <string name="room_alias_published_alias_subtitle">Kuka hyvänsä millä hyvänsä palvelimella voi käyttää julkaistua osoitetta huoneeseesi liittymiseen. Osoitteen julkaisemiseksi se täytyy ensin asettaa paikalliseksi osoitteeksi.</string>
+    <string name="legals_third_party_notices">Kolmansien osapuolten kirjastot</string>
+    <string name="analytics_opt_in_list_item_3">Voit poistaa tämän käytöstä koska tahansa asetuksista</string>
+    <string name="analytics_opt_in_list_item_2"><b>Emme</b> jaa tietoa kolmansien tahojen kanssa</string>
+    <string name="analytics_opt_in_list_item_1"><b>Emme</b> tallenna tai profiloi mitään tilin tietoja</string>
+    <string name="shortcut_disabled_reason_room_left">Huoneesta on poistuttu!</string>
+    <string name="room_permissions_notice_read_only">Sinulla ei ole lupaa päivittää rooleja, jotka vaaditaan huoneen eri osien muuttamiseen</string>
+    <string name="room_permissions_notice">Valitse roolit, jotka vaaditaan huoneen eri osien muuttamiseen</string>
+    <string name="room_settings_permissions_subtitle">Tarkastele ja päivitä rooleja, jotka vaaditaan huoneen eri osien muuttamiseen.</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s ja muita</string>
+    <string name="room_notification_two_users_are_typing">%1$s ja %2$s</string>
+    <string name="login_error_homeserver_from_url_not_found">Kotipalvelinta URL-osoitteesta %s ei tavoiteta. Tarkista linkki tai valitse kotipalvelin manuaalisesti.</string>
+    <string name="action_thread_view_in_room">Näytä huoneessa</string>
+    <string name="action_enable">Ota käyttöön</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Poistit tältä huoneelta vaihtoehtoisen osoitteen %1$s.</item>
+        <item quantity="other">Poistit tältä huoneelta vaihtoehtoiset osoitteet %1$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s poisti tältä huoneelta vaihtoehtoisen osoitteen %2$s.</item>
+        <item quantity="other">%1$s poisti tältä huoneelta vaihtoehtoiset osoitteet %2$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Lisäsit tälle huoneelle vaihtoehtoisen osoitteen %1$s.</item>
+        <item quantity="other">Lisäsit tälle huoneelle vaihtoehtoiset osoitteet %1$s.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s lisäsi tälle huoneelle vaihtoehtoisen osoitteen %2$s.</item>
+        <item quantity="other">%1$s lisäsi tälle huoneelle vaihtoehtoiset osoitteet %2$s.</item>
+    </plurals>
+    <string name="room_error_access_unauthorized">Sinulla ei ole lupaa liittyä tähän huoneeseen</string>
 </resources>
