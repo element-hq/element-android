@@ -1463,7 +1463,7 @@ class TimelineFragment @Inject constructor(
 
         views.composerLayout.views.composerEmojiButton.isVisible = vectorPreferences.showEmojiKeyboard()
 
-        if(isThreadTimeLine() && timelineArgs.threadTimelineArgs?.startsThread == true){
+        if (isThreadTimeLine() && timelineArgs.threadTimelineArgs?.startsThread == true) {
             // Show keyboard when the user started a thread
             views.composerLayout.views.composerEditText.showKeyboard(andRequestFocus = true)
         }
