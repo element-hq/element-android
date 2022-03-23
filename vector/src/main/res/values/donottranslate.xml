@@ -10,4 +10,11 @@
     <string name="cut_the_slack_from_teams" translatable="false">Cut the slack from teams.</string>
 
     <!--  WIP -->
+    <string name="ftue_auth_create_account_title">Create your account</string>
+    <string name="ftue_auth_create_account_subtitle">We\'ll need some info to get you set up.</string>
+    <string name="ftue_auth_create_account_username_entry_footer">You can\'t change this later</string>
+    <string name="ftue_auth_create_account_password_entry_footer">Must be 8 characters or more</string>
+    <string name="ftue_auth_create_account_choose_server_header">Choose your server to store your data</string>
+    <string name="ftue_auth_create_account_sso_section_header">Or</string>
+
 </resources>

@@ -356,7 +356,13 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         setState { copy(useCase = action.useCase) }
-        _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+        when (vectorFeatures.isOnboardingCombinedChooseServerEnabled()) {
+            true  -> {
+                handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
+                OnboardingViewEvents.OpenCombinedServerSelection
+            }
+            false -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+        }
     }
 
     private fun resetUseCase() {

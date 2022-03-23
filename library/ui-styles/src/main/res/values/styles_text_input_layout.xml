@@ -9,6 +9,11 @@
         <item name="endIconTint">?vctr_content_secondary</item>
     </style>
 
+    <style name="Widget.Vector.TextInputLayout.Username">
+        <item name="endIconMode">clear_text</item>
+        <item name="endIconTint">?vctr_content_secondary</item>
+    </style>
+
     <style name="Widget.Vector.TextInputLayout.Form">
         <item name="boxStrokeColor">@color/form_edit_text_stroke_color_selector</item>
         <item name="android:textColorHint">@color/form_edit_text_hint_color_selector</item>

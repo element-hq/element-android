@@ -137,10 +137,14 @@ class FtueAuthVariant(
                         // Go on with registration flow
                         handleRegistrationNavigation(viewEvents.flowResult)
                     } else {
-                        // First ask for login and password
-                        // I add a tag to indicate that this fragment is a registration stage.
-                        // This way it will be automatically popped in when starting the next registration stage
-                        openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
+                        if (vectorFeatures.isOnboardingCombinedChooseServerEnabled()) {
+                            openCombinedServerSelection()
+                        } else {
+                            // First ask for login and password
+                            // I add a tag to indicate that this fragment is a registration stage.
+                            // This way it will be automatically popped in when starting the next registration stage
+                            openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
+                        }
                     }
                 }
             }
@@ -221,6 +225,7 @@ class FtueAuthVariant(
                         FtueAuthUseCaseFragment::class.java,
                         option = commonOption)
             }
+            OnboardingViewEvents.OpenCombinedServerSelection                   -> openCombinedServerSelection()
             is OnboardingViewEvents.OnAccountCreated                           -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
             OnboardingViewEvents.OnChooseDisplayName                           -> onChooseDisplayName()
@@ -229,6 +234,14 @@ class FtueAuthVariant(
             OnboardingViewEvents.OnPersonalizationComplete                     -> onPersonalizationComplete()
             OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
         }
+    }
+
+    private fun openCombinedServerSelection() {
+        activity.addFragmentToBackstack(
+                views.loginFragmentContainer,
+                FtueAuthCombinedSignUpFragment::class.java,
+                option = commonOption
+        )
     }
 
     private fun registrationShouldFallback(registrationFlowResult: OnboardingViewEvents.RegistrationFlowResult) =
