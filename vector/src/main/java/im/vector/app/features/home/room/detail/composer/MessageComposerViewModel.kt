@@ -110,7 +110,7 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.OnEntersBackground             -> handleEntersBackground(action.composerText)
             is MessageComposerAction.VoiceWaveformTouchedUp         -> handleVoiceWaveformTouchedUp(action)
             is MessageComposerAction.VoiceWaveformMovedTo           -> handleVoiceWaveformMovedTo(action)
-        }.exhaustive
+        }
     }
 
     private fun handleOnVoiceRecordingUiStateChanged(action: MessageComposerAction.OnVoiceRecordingUiStateChanged) = setState {
