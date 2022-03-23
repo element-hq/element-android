@@ -17,7 +17,6 @@
 package im.vector.app.features.home.room.list
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -40,8 +39,7 @@ class SectionHeaderAdapter constructor(
             val isHighlighted: Boolean = false,
             val isHidden: Boolean = true,
             // This will be false until real data has been submitted once
-            val isLoading: Boolean = true,
-            val shouldShowExpandedArrow: Boolean = false
+            val isLoading: Boolean = true
     )
 
     lateinit var roomsSectionData: RoomsSectionData
@@ -84,16 +82,11 @@ class SectionHeaderAdapter constructor(
         fun bind(roomsSectionData: RoomsSectionData) {
             binding.roomCategoryTitleView.text = roomsSectionData.name
             val tintColor = ThemeUtils.getColor(binding.root.context, R.attr.vctr_content_secondary)
-            if (roomsSectionData.shouldShowExpandedArrow) {
-                binding.roomCategoryCounterView.visibility = View.VISIBLE
-                val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
-                val expandedArrowDrawable = ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
-                    DrawableCompat.setTint(it, tintColor)
-                }
-                binding.roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
-            } else {
-                binding.roomCategoryCounterView.visibility = View.GONE
+            val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
+            val expandedArrowDrawable = ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
+                DrawableCompat.setTint(it, tintColor)
             }
+            binding.roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
             binding.roomCategoryCounterView.text = roomsSectionData.itemCount.takeIf { it > 0 }?.toString().orEmpty()
             binding.roomCategoryUnreadCounterBadgeView.render(UnreadCounterBadgeView.State(roomsSectionData.notificationCount, roomsSectionData.isHighlighted))
         }
