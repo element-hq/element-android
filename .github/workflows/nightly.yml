@@ -293,7 +293,7 @@ jobs:
   sonarqube:
     name: Sonarqube upload
     runs-on: macos-latest
-    if: always()
+    if: always() && github.event_name == "schedule"
     needs:
       - codecov-units
     steps:
@@ -319,7 +319,7 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
 
-# Notify the channel about scheduled runs, do not notify for manually triggered runs
+# Notify the channel about scheduled runs, or pushes to the release branches, do not notify for manually triggered runs
   notify:
     name: Notify matrix
     runs-on: ubuntu-latest
