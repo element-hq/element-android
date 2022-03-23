@@ -783,6 +783,18 @@ class TimelineFragment @Inject constructor(
                 updateRecordingUiState(RecordingUiState.Draft)
             }
 
+            override fun onVoiceWaveformTouchedUp(percentage: Float, duration: Int) {
+                messageComposerViewModel.handle(
+                        MessageComposerAction.VoiceWaveformTouchedUp(VoiceMessagePlaybackTracker.RECORDING_ID, duration, percentage)
+                )
+            }
+
+            override fun onVoiceWaveformMoved(percentage: Float, duration: Int) {
+                messageComposerViewModel.handle(
+                        MessageComposerAction.VoiceWaveformTouchedUp(VoiceMessagePlaybackTracker.RECORDING_ID, duration, percentage)
+                )
+            }
+
             private fun updateRecordingUiState(state: RecordingUiState) {
                 messageComposerViewModel.handle(
                         MessageComposerAction.OnVoiceRecordingUiStateChanged(state))
@@ -2049,6 +2061,14 @@ class TimelineFragment @Inject constructor(
 
     override fun onVoiceControlButtonClicked(eventId: String, messageAudioContent: MessageAudioContent) {
         messageComposerViewModel.handle(MessageComposerAction.PlayOrPauseVoicePlayback(eventId, messageAudioContent))
+    }
+
+    override fun onVoiceWaveformTouchedUp(eventId: String, duration: Int, percentage: Float) {
+        messageComposerViewModel.handle(MessageComposerAction.VoiceWaveformTouchedUp(eventId, duration, percentage))
+    }
+
+    override fun onVoiceWaveformMovedTo(eventId: String, duration: Int, percentage: Float) {
+        messageComposerViewModel.handle(MessageComposerAction.VoiceWaveformMovedTo(eventId, duration, percentage))
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
