@@ -90,6 +90,15 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         }
     }
 
+    override fun onLocationUpdate(locationData: LocationData) {
+        Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
+    }
+
+    override fun onLocationProviderIsNotAvailable() {
+        stopForeground(true)
+        stopSelf()
+    }
+
     private fun destroyMe() {
         locationTracker.removeCallback(this)
         stopSelf()
@@ -107,14 +116,5 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     companion object {
         const val EXTRA_ROOM_ARGS = "EXTRA_ROOM_ARGS"
-    }
-
-    override fun onLocationUpdate(locationData: LocationData) {
-        Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
-    }
-
-    override fun onLocationProviderIsNotAvailable() {
-        stopForeground(true)
-        stopSelf()
     }
 }
