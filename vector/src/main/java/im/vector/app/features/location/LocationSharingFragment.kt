@@ -31,7 +31,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.mapboxsdk.maps.MapView
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
@@ -89,7 +88,7 @@ class LocationSharingFragment @Inject constructor(
                 LocationSharingViewEvents.LocationNotAvailableError   -> handleLocationNotAvailableError()
                 is LocationSharingViewEvents.ZoomToUserLocation       -> handleZoomToUserLocationEvent(it)
                 is LocationSharingViewEvents.StartLiveLocationService -> handleStartLiveLocationService(it)
-            }.exhaustive
+            }
         }
     }
 

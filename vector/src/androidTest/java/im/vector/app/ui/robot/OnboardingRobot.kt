@@ -21,6 +21,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertDisabled
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertEnabled
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
@@ -55,6 +56,8 @@ class OnboardingRobot {
 
     fun createAccount(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {
         initSession(true, userId, password, homeServerUrl)
+        waitUntilViewVisible(withText(R.string.ftue_account_created_congratulations_title))
+        clickOn(R.string.ftue_account_created_take_me_home)
     }
 
     fun login(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {

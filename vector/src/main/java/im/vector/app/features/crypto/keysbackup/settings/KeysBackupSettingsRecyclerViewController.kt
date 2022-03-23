@@ -140,6 +140,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
 
                 isBackupAlreadySetup = true
             }
+            null                                       -> Unit
         }
 
         if (isBackupAlreadySetup) {

@@ -23,7 +23,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
@@ -181,7 +180,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         when (action) {
             is RoomMemberListAction.RevokeThreePidInvite -> handleRevokeThreePidInvite(action)
             is RoomMemberListAction.FilterMemberList     -> handleFilterMemberList(action)
-        }.exhaustive
+        }
     }
 
     private fun handleRevokeThreePidInvite(action: RoomMemberListAction.RevokeThreePidInvite) {

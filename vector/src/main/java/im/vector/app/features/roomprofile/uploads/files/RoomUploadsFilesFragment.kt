@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -91,6 +92,7 @@ class RoomUploadsFilesFragment @Inject constructor(
     override fun invalidate() = withState(uploadsViewModel) { state ->
         if (state.fileEvents.isEmpty()) {
             when (state.asyncEventsRequest) {
+                Uninitialized,
                 is Loading -> {
                     views.genericStateViewListStateView.state = StateView.State.Loading
                 }

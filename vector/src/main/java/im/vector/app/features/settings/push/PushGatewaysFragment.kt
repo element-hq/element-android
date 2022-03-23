@@ -28,7 +28,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import org.matrix.android.sdk.api.session.pushers.Pusher
@@ -78,7 +77,7 @@ class PushGatewaysFragment @Inject constructor(
                             .setPositiveButton(android.R.string.ok, null)
                             .show()
                 }
-            }.exhaustive
+            }
         }
     }
 

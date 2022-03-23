@@ -27,7 +27,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentCreatePollBinding
 import im.vector.app.features.poll.create.CreatePollViewModel.Companion.MAX_OPTIONS_COUNT
@@ -68,7 +67,7 @@ class CreatePollFragment @Inject constructor(
                 views.createPollToolbar.title = getString(R.string.edit_poll_title)
                 views.createPollButton.text = getString(R.string.edit_poll_title)
             }
-        }.exhaustive
+        }
 
         views.createPollRecyclerView.configureWith(controller, disableItemAnimation = true)
         // workaround for https://github.com/vector-im/element-android/issues/4735

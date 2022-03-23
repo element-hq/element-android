@@ -150,7 +150,6 @@
 \nVos messages sont sécurisés avec des verrous et seuls vous et le destinataire avez les clés uniques pour les déverrouiller.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Les messages ici ne sont pas chiffrés de bout en bout.</string>
     <string name="room_profile_not_encrypted_subtitle">Les messages dans ce salon ne sont pas chiffrés de bout en bout.</string>
-
     <string name="verification_request_waiting_for">Nous attendons %s…</string>
     <string name="verification_verified_user">%s a été vérifié</string>
     <string name="verification_verify_user">Vérifier %s</string>
@@ -396,7 +395,6 @@
 \nLes gestionnaires d’intégrations reçoivent des données de configuration et peuvent modifier des gadgets logiciels, envoyer des invitations de salon et définir des rangs à votre place.</string>
     <string name="settings_server_upload_size_title">Taille maximum pour des téléversements sur ce serveur</string>
     <string name="room_profile_section_more_uploads">Téléversements</string>
-
     <string name="auth_forgot_password">Mot de passe oublié\?</string>
     <string name="no_sticker_application_dialog_content">Vous n’avez aucun jeu d\'autocollants activé pour le moment.
 \n
@@ -422,8 +420,6 @@
     <string name="create_pin_confirm_failure">Impossible de valider le NIP, veillez en composer un nouveau.</string>
     <string name="create_pin_confirm_title">Confirmez le NIP</string>
     <string name="create_pin_title">Choisissez un NIP par sécurité</string>
-
-
     <plurals name="entries">
         <item quantity="one">%d entrée</item>
         <item quantity="other">%d entrées</item>
@@ -476,8 +472,6 @@
         <item quantity="one">Sauvegarde restaurée avec %d clé.</item>
         <item quantity="other">Sauvegarde restaurée avec %d clés.</item>
     </plurals>
-
-
     <plurals name="active_widgets">
         <item quantity="one">%d gadget logiciel actif</item>
         <item quantity="other">%d gadgets logiciels actifs</item>
@@ -498,7 +492,6 @@
         <item quantity="one">%d salon</item>
         <item quantity="other">%d salons</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d message notifié non lu</item>
         <item quantity="other">%d messages notifiés non lu</item>
@@ -515,8 +508,6 @@
         <item quantity="one">%d seconde</item>
         <item quantity="other">%d secondes</item>
     </plurals>
-
-
     <string name="dev_tools_event_content_hint">Contenu de l’évènement</string>
     <string name="dev_tools_form_hint_event_content">Contenu d’évènement</string>
     <string name="dev_tools_send_custom_state_event">Envoyer des évènements d’état personnalisés</string>
@@ -532,21 +523,15 @@
         <item quantity="one">%d nouveau message</item>
         <item quantity="other">%d nouveaux messages</item>
     </plurals>
-
-
-
-
     <plurals name="room_title_members">
         <item quantity="one">%d membre</item>
         <item quantity="other">%d membres</item>
     </plurals>
     <string name="room_participants_leave_prompt_msg">Voulez-vous vraiment quitter le salon\?</string>
-
     <plurals name="membership_changes">
         <item quantity="one">%d changement de statut</item>
         <item quantity="other">%d changements de statut</item>
     </plurals>
-
     <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
         <item quantity="one">Vous avez supprimé l’adresse alternative %1$s de ce salon.</item>
         <item quantity="other">Vous avez supprimé les adresses alternatives %1$s de ce salon.</item>
@@ -582,11 +567,9 @@
 \nDésactiver votre compte <b>ne nous fait pas oublier les messages que vous avez envoyés par défaut</b>. Si vous souhaitez que nous oubliions vos messages, cochez la case ci-dessous.
 \n
 \nLa visibilité des messages dans Matrix est identique à celle des courriels. Si nous oublions vos messages, cela signifie que les messages que vous avez envoyés ne seront plus partagés avec les nouveaux utilisateurs ou les utilisateurs non enregistrés, mais les utilisateurs enregistrés qui ont déjà accès à ces messages en conserveront leur copie.</string>
-
     <string name="auth_reset_password_error_unauthorized">Impossible de vérifier l’adresse courriel : assurez-vous d’avoir cliqué sur le lien dans l’courriel</string>
     <string name="settings_emails_empty">Aucune adresse courriel n’a été ajoutée à votre compte</string>
     <string name="auth_email_already_defined">Cette adresse courriel est déjà utilisée.</string>
-
     <string name="auth_reset_password_missing_email">L’adresse courriel liée à votre compte doit être saisie.</string>
     <string name="notice_crypto_unable_to_decrypt_final">Vous n’avez pas accès à ce message</string>
     <string name="room_settings_set_avatar">Définir l’avatar</string>
@@ -739,7 +722,6 @@
     <string name="bootstrap_cancel_text">Si vous annulez maintenant, vous pourrez perdre les messages et données chiffrés si vous perdez accès à vos identifiants.
 \n
 \nVous pouvez aussi activer la sauvegarde sécurisée et gérer vos clés dans les paramètres.</string>
-
     <string name="bootstrap_crosssigning_save_cloud">Copiez-le sur votre stockage dans le cloud personnel</string>
     <string name="bootstrap_crosssigning_save_usb">Sauvegardez-le sur une clé USB ou un disque de sauvegarde</string>
     <string name="bootstrap_crosssigning_print_it">Imprimez-le et conservez-le en lieu sûr</string>
@@ -765,8 +747,6 @@
     <string name="recovery_passphrase">Phrase de récupération</string>
     <string name="sas_incoming_request_notif_content">%s veut vérifier votre session</string>
     <string name="sas_incoming_request_notif_title">Demande de vérification</string>
-
-
     <string name="sas_got_it">Compris</string>
     <string name="sas_verified">Vérifié !</string>
     <string name="notification_new_invitation">Nouvelle invitation</string>
@@ -780,7 +760,6 @@
     <string name="directory_server_all_rooms_on_server">Tous les salons sur le serveur %s</string>
     <string name="directory_server_placeholder">URL du serveur d’accueil</string>
     <string name="select_room_directory">Sélectionner un répertoire de salons</string>
-
     <string name="encryption_information_verify_device_warning2">Si elles ne correspondent pas, la sécurité de votre communication est peut-être compromise.</string>
     <string name="encryption_information_verify_device_warning">Confirmez en comparant les informations suivantes avec les paramètres utilisateur dans votre autre session :</string>
     <string name="encryption_information_verify">Vérifier</string>
@@ -796,7 +775,6 @@
     <string name="encryption_settings_manage_message_recovery_summary">Gérer la sauvegarde de clés</string>
     <string name="encryption_message_recovery">Récupération des messages chiffrés</string>
     <string name="encryption_exported_successfully">Les clés ont bien été exportées</string>
-
     <string name="encryption_export_notice">Veuillez créer une phrase secrète pour chiffrer les clés exportées. Vous devrez saisir cette même phrase secrète afin de pouvoir importer les clés.</string>
     <string name="encryption_export_export">Exporter</string>
     <string name="encryption_export_room_keys_summary">Exporter les clés vers un fichier local</string>
@@ -807,7 +785,6 @@
     <string name="encryption_information_device_name">Nom public</string>
     <string name="encryption_information_decryption_error">Erreur de déchiffrement</string>
     <string name="settings_theme">Thème</string>
-
     <string name="room_settings_unset_main_address">Désactiver comme adresse principale</string>
     <string name="room_settings_set_main_address">Définir comme adresse principale</string>
     <string name="room_settings_labs_warning_message">Ce sont des fonctionnalités expérimentales qui peuvent se comporter de façon inattendue. À utiliser avec précaution.</string>
@@ -1014,7 +991,6 @@
     <string name="room_list_quick_actions_notifications_all">Tous les messages</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Tous les messages (sonore)</string>
     <string name="message_ignore_user">Bloquer l’utilisateur</string>
-
     <string name="content_reported_as_inappropriate_content">Ce contenu a été signalé comme inapproprié.
 \n
 \nSi vous ne voulez plus voir de contenu de cet utilisateur, vous pouvez l’ignorer pour masquer ses messages.</string>
@@ -1045,7 +1021,6 @@
     <string name="settings_home_server">Serveur d’accueil</string>
     <string name="settings_logged_in">Connecté en tant que</string>
     <string name="devices_delete_dialog_title">Authentification</string>
-
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_last_seen_title">Vu la dernière fois</string>
     <string name="devices_details_device_name">Mettre à jour le nom public</string>
@@ -1139,7 +1114,6 @@
     <string name="search_banned_user_hint">Filtrer les utilisateurs exclus</string>
     <string name="search_members_hint">Filtrer les membres du salon</string>
     <string name="search_hint">Rechercher</string>
-
     <string name="room_permissions_change_topic">Changer le sujet</string>
     <string name="room_permissions_upgrade_the_room">Mettre à niveau le salon</string>
     <string name="room_permissions_change_permissions">Changer les permissions</string>
@@ -1188,7 +1162,6 @@
     <string name="settings_discovery_confirm_mail_not_clicked">Nous vous avons envoyé un courriel de confirmation à %s, consultez vos courriels et cliquez sur le lien de confirmation</string>
     <string name="settings_discovery_consent_title">Envoyer des courriels et des numéros de téléphone</string>
     <string name="settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des courriels et des numéros de téléphone à ce serveur d’identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
-
     <string name="settings_discovery_disconnect_with_bound_pid">Vous partagez actuellement des adresse courriels et des numéros de téléphone sur le serveur d’identité %1$s. Vous devrez vous reconnecter à %2$s pour arrêter de les partager.</string>
     <string name="settings_agree_to_terms">Acceptez les conditions de service du serveur d’identité (%s) pour vous permettre d’être découvrable avec une adresse courriel ou un numéro de téléphone.</string>
     <string name="login_reset_password_notice">Un courriel de vérification sera envoyé à votre adresse pour confirmer la configuration de votre nouveau mot de passe.</string>
@@ -1221,7 +1194,6 @@
         <item quantity="one">%1$s a ajouté %2$s comme adresse pour ce salon.</item>
         <item quantity="other">%1$s a ajouté %2$s comme adresses pour ce salon.</item>
     </plurals>
-
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="one">%1$s, %2$s, %3$s et %4$d autre</item>
         <item quantity="other">%1$s, %2$s, %3$s et %4$d autres</item>
@@ -1289,7 +1261,6 @@
     <string name="share_by_text">Partager par SMS</string>
     <string name="room_error_not_found">Impossible de trouver ce salon. Assurez-vous qu’il existe.</string>
     <string name="error_opening_banned_room">Impossible d’ouvrir un salon dont vous êtes banni.</string>
-
     <string name="keys_backup_info_title_signature">Signature</string>
     <string name="keys_backup_info_title_algorithm">Algorithme</string>
     <string name="keys_backup_info_title_version">Version</string>
@@ -1298,7 +1269,6 @@
     <string name="keys_backup_setup_override_backup_prompt_description">On dirait que vous avez déjà configuré une sauvegarde de clé depuis une autre session. Voulez-vous la remplacer par celle que vous êtes en train de créer \?</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">Une sauvegarde est déjà disponible sur votre serveur d’accueil</string>
     <string name="recovery_key_export_saved">La clé de récupération a été enregistrée.</string>
-
     <string name="keys_backup_setup_step3_save_button_title">Enregistrer dans un fichier</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Partager</string>
     <string name="keys_backup_setup_step3_copy_button_title">Sauvegarder la clé de récupération</string>
@@ -1479,7 +1449,6 @@
     <string name="call_failed_no_connection_description">Impossible d\'établir une connexion en temps réel.
 \nVeuillez demander à l’administrateur de votre serveur d’accueil de configurer un serveur TURN afin que les appels fonctionnent de manière fiable.</string>
     <string name="call_failed_no_connection">Appel échoué</string>
-
     <string name="option_send_voice">Envoyer un message vocal</string>
     <string name="start_video_call">Nouvel appel vidéo</string>
     <string name="start_voice_call">Nouvel appel audio</string>
@@ -1554,7 +1523,6 @@
     <string name="no_permissions_to_start_webrtc_call">Vous n\'avez pas la permission de lancer un appel dans ce salon</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Vous n’avez pas la permission de lancer une téléconférence</string>
     <string name="no_permissions_to_start_conf_call">Vous n’avez pas la permission de lancer une téléconférence dans ce salon</string>
-
     <string name="start_chatting">Commencer une conversation</string>
     <string name="action_reset">Réinitialiser</string>
     <string name="action_dismiss">Ignorer</string>
@@ -1588,7 +1556,6 @@
     <string name="keys_backup_banner_recover_line1">Ne perdez jamais vos messages chiffrés</string>
     <string name="secure_backup_banner_setup_line2">Sécurité contre la perte d’accès aux messages et données chiffrées</string>
     <string name="secure_backup_banner_setup_line1">Sauvegarde sécurisée</string>
-
     <string name="keys_backup_settings_delete_confirm_message">Supprimer les clés de chiffrement sauvegardées sur le serveur \? Vous ne pourrez plus utiliser votre clé de récupération pour lire l’historique des messages chiffrés.</string>
     <string name="keys_backup_settings_delete_confirm_title">Supprimer la sauvegarde</string>
     <string name="keys_backup_settings_checking_backup_state">Vérification de l’état de la sauvegarde</string>
@@ -1631,7 +1598,6 @@
     <string name="keys_backup_setup_step3_please_make_copy">Veuillez en faire une copie</string>
     <string name="keys_backup_setup_override_stop">Arrêter</string>
     <string name="keys_backup_setup_override_replace">Remplacer</string>
-
     <string name="settings_discovery_manage">Gérer vos paramètres de découverte.</string>
     <string name="settings_discovery_category">Découverte</string>
     <string name="settings_deactivate_my_account">Désactiver mon compte</string>
@@ -1689,7 +1655,6 @@
     <string name="settings_olm_version">Version de olm</string>
     <string name="settings_version">Version</string>
     <string name="settings_set_sync_delay">Délai entre chaque synchronisation</string>
-
     <string name="settings_set_sync_timeout">Délai d’attente de la requête de synchronisation</string>
     <string name="settings_start_on_boot">Lancer au démarrage</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Vous ne serez pas notifié des messages entrants quand l’application est en arrière-plan.</string>
@@ -1843,7 +1808,7 @@
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Les serveurs correspondant à des IP littérales sont maintenant interdits.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Les serveurs correspondants à des IP littérales sont maintenant autorisés.</string>
     <string name="notice_room_server_acl_updated_was_allowed">• Les serveurs correspondant à %s sont supprimés de la liste autorisée.</string>
-    <string name="notice_room_server_acl_updated_allowed">• les serveur correspondant à %s sont maintenant autorisés.</string>
+    <string name="notice_room_server_acl_updated_allowed">• les serveurs correspondant à %s sont maintenant autorisés.</string>
     <string name="notice_room_server_acl_updated_was_banned">• Les serveurs correspondant à %s étaient supprimés de la liste des interdits.</string>
     <string name="notice_room_server_acl_updated_banned">• Les serveurs correspondant à %s sont maintenant interdits.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Vous avez changé les droits ACL du serveur pour ce salon.</string>
@@ -1927,10 +1892,7 @@
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} a besoin d’accéder à votre appareil photo et à votre microphone pour passer des appels vidéo.
 \n
 \nVeuillez autoriser l’accès dans les prochaines fenêtres pour pouvoir effectuer l’appel.</string>
-
     <string name="permissions_rationale_msg_record_audio">${app_name} a besoin d’accéder à votre microphone pour passer des appels audio.</string>
-
-
     <string name="permissions_rationale_popup_title">Information</string>
     <string name="call_error_user_not_responding">Le correspondant n’a pas décroché.</string>
     <string name="call_held_by_you">Vous avez mis l’appel en attente</string>
@@ -1966,7 +1928,6 @@
     <string name="login_error_no_homeserver_found">Ce n’est pas une adresse de serveur Matrix valide</string>
     <string name="login_error_invalid_home_server">Veuillez saisir une URL valide</string>
     <string name="auth_accept_policies">Veuillez lire et accepter les politiques de ce serveur d’accueil :</string>
-
     <string name="auth_recaptcha_message">Ce serveur d’accueil souhaite s’assurer que vous n’êtes pas un robot</string>
     <string name="auth_msisdn_already_defined">Le numéro de téléphone est déjà défini.</string>
     <string name="auth_invalid_login_param">Nom d’utilisateur et/ou mot de passe incorrect</string>
@@ -2100,4 +2061,17 @@
     <string name="feedback">Remarques</string>
     <string name="send_feedback_space_title">Remarques sur les espaces</string>
     <string name="error_jitsi_join_conf">Désolé, une erreur s’est produite en essayant d’entrer dans la conférence</string>
+    <string name="denied_permission_generic">Certaines permissions manquent pour effectuer cette action, veuillez autoriser ces permissions depuis les réglages système.</string>
+    <string name="spaces">Espaces</string>
+    <string name="notification_listening_for_notifications">Écoute des notifications</string>
+    <string name="room_error_access_unauthorized">Vous n’êtes pas autorisé(e) à rejoindre ce salon</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d changement des ACL du serveur</item>
+        <item quantity="other">%d changements des ACL du serveur</item>
+    </plurals>
+    <string name="action_enable">Activer</string>
+    <string name="action_view_threads">Voir les fils de discussions</string>
+    <string name="missing_permissions_title">Permissions manquantes</string>
+    <string name="denied_permission_voice_message">Pour envoyer des messages vocaux, veuillez accorder la permission Microphone.</string>
+    <string name="denied_permission_camera">Pour effectuer cette action, veuillez autoriser la permission Caméra depuis les réglages système.</string>
 </resources>

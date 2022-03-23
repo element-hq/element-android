@@ -39,7 +39,6 @@
     <string name="room_displayname_room_invite">Приглашение в комнату</string>
     <string name="room_displayname_two_members">%1$s и %2$s</string>
     <string name="room_displayname_empty_room">Пустая комната</string>
-
     <string name="initial_sync_start_importing_account">Начальная синхронизация:
 \nИмпорт учетной записи…</string>
     <string name="initial_sync_start_importing_account_crypto">Начальная синхронизация:
@@ -258,7 +257,6 @@
     <string name="action_delete">Удалить</string>
     <string name="action_rename">Переименовать</string>
     <string name="report_content">Пожаловаться на содержимое</string>
-
     <string name="or">или</string>
     <string name="action_invite">Приглашение</string>
     <string name="action_sign_out">Выйти из учётной записи</string>
@@ -281,7 +279,6 @@
     <string name="matrix_only_filter">Только Matrix контакты</string>
     <string name="no_result_placeholder">Нет результатов</string>
     <string name="rooms_header">Комнаты</string>
-
     <string name="send_bug_report_include_logs">Отправить логи</string>
     <string name="send_bug_report_include_crash_logs">Отправить журналы ошибок</string>
     <string name="send_bug_report_include_screenshot">Отправить снимок экрана</string>
@@ -309,11 +306,9 @@
     <string name="auth_invalid_email">Это не похоже на действительный адрес электронной почты</string>
     <string name="auth_email_already_defined">Этот адрес электронной почты уже используется.</string>
     <string name="auth_forgot_password">Забыли пароль?</string>
-
     <string name="auth_recaptcha_message">Этот домашний сервер хочет убедиться, что вы не робот</string>
     <string name="auth_reset_password_missing_email">Должен быть введен адрес электронной почты привязанный к учетной записи.</string>
     <string name="auth_reset_password_error_unauthorized">Не удалось проверить адрес электронной почты: убедитесь, что вы перешли по ссылке из сообщения</string>
-
     <string name="login_error_invalid_home_server">Пожалуйста, введите корректный URL</string>
     <string name="login_error_bad_json">Неверный формат JSON</string>
     <string name="login_error_not_json">Не содержит допустимого JSON</string>
@@ -329,12 +324,10 @@
     <string name="call_in_progress">Идёт разговор…</string>
     <string name="call_error_user_not_responding">Вызываемый абонент не смог ответить.</string>
     <string name="permissions_rationale_popup_title">Информация</string>
-
     <string name="permissions_rationale_msg_record_audio">${app_name} необходимы разрешения на доступ к микрофону, чтобы выполнять звонки.</string>
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} необходимы разрешения на доступ к камере и микрофону для видеовызовов.
 \n
 \nПожалуйста дайте разрешение в следующем окне для звонка.</string>
-
     <string name="yes">ДА</string>
     <string name="no">НЕТ</string>
     <string name="_continue">Продолжить</string>
@@ -342,7 +335,6 @@
     <string name="action_join">Присоединиться</string>
     <string name="action_reject">Отклонить</string>
     <string name="room_jump_to_first_unread">Перейти к непрочитанному</string>
-
     <string name="room_participants_leave_prompt_title">Покинуть комнату</string>
     <string name="room_participants_leave_prompt_msg">Вы уверены, что хотите выйти из комнаты\?</string>
     <string name="room_participants_header_direct_chats">ПРЯМЫЕ СООБЩЕНИЯ</string>
@@ -369,7 +361,6 @@
     <string name="ssl_unexpected_existing_expl">Сертификат был изменен с того, которому доверял ваш телефон. Это ОЧЕНЬ НЕОБЫЧНО. Рекомендуется НЕ ПРИНИМАТЬ этот новый сертификат.</string>
     <string name="ssl_expected_existing_expl">Сертификат изменился с ранее доверенного на недействительный. Возможно, сервер обновил свой сертификат. Свяжитесь с администратором сервера для получения ожидаемого отпечатка сертификата.</string>
     <string name="ssl_only_accept">Примите сертификат только если администратор сервера опубликовал отпечаток сертификата, который соответствует указанному выше.</string>
-
     <string name="search_hint">Поиск</string>
     <string name="search_members_hint">Фильтр списка пользователей</string>
     <string name="search_no_results">Нет результатов</string>
@@ -414,7 +405,6 @@
     <string name="devices_details_device_name">Обновить публичное имя</string>
     <string name="devices_details_last_seen_title">Недавно</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-
     <string name="devices_delete_dialog_title">Аутентификация</string>
     <string name="settings_logged_in">Авторизован как</string>
     <string name="settings_home_server">Домашний сервер</string>
@@ -445,7 +435,6 @@
     <string name="room_settings_labs_warning_message">Это экспериментальные функции, которые могут повести себя неожиданным образом. Используйте с осторожностью.</string>
     <string name="room_settings_set_main_address">Установить как основной адрес</string>
     <string name="room_settings_unset_main_address">Сбросить основной адрес</string>
-
     <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
     <string name="encryption_information_device_name">Публичное имя</string>
     <string name="encryption_information_device_id">ID сессии</string>
@@ -456,7 +445,6 @@
     <string name="encryption_export_export">Экспорт</string>
     <string name="passphrase_enter_passphrase">Введите парольную фразу</string>
     <string name="passphrase_confirm_passphrase">Подтвердите парольную фразу</string>
-
     <string name="encryption_import_e2e_room_keys">Импорт E2E ключей комнаты</string>
     <string name="encryption_import_room_keys">Импорт ключей комнаты</string>
     <string name="encryption_import_room_keys_summary">Импортировать ключи из локального файла</string>
@@ -468,7 +456,6 @@
     <string name="encryption_information_verify">Подтвердить</string>
     <string name="encryption_information_verify_device_warning">Чтобы убедиться, что этой сессии можно доверять, обратитесь к ее владельцу, используя другие способы (например, лично или по телефону), и спросите, соответствует ли ключ, который он видит в настройках для этой сессии:</string>
     <string name="encryption_information_verify_device_warning2">Если они не совпадают, безопасность вашего общения может быть поставлена под угрозу.</string>
-
     <string name="select_room_directory">Выбор каталога комнат</string>
     <string name="directory_server_placeholder">Имя сервера</string>
     <string name="directory_server_all_rooms_on_server">Все комнаты на сервере %s</string>
@@ -545,7 +532,6 @@
     <string name="reason_colon">Причина: %1$s</string>
     <string name="send_bug_report_rage_shake">Встряхните устройство, чтобы сообщить об ошибке</string>
     <string name="list_members">Список участников</string>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d комната</item>
         <item quantity="few">%d комнаты</item>
@@ -560,7 +546,6 @@
         <item quantity="other"/>
     </plurals>
     <string name="avatar">Аватар</string>
-
     <plurals name="room_title_members">
         <item quantity="one">%d участник</item>
         <item quantity="few">%d участника</item>
@@ -573,7 +558,6 @@
         <item quantity="many">%d новых сообщений</item>
         <item quantity="other"/>
     </plurals>
-
     <plurals name="membership_changes">
         <item quantity="one">%d изменение членства</item>
         <item quantity="few">%d изменения членства</item>
@@ -586,7 +570,6 @@
         <item quantity="many">%d непрочитанных уведомлений</item>
         <item quantity="other"/>
     </plurals>
-
     <string name="settings_flair">Чутье</string>
     <string name="title_activity_choose_sticker">Отправить стикер</string>
     <string name="option_send_sticker">Отправить стикер</string>
@@ -633,18 +616,12 @@
     <string name="room_tombstone_predecessor_link">Нажмите здесь для просмотра старых сообщений</string>
     <string name="command_description_join_room">Присоединиться к комнате с указанным адресом</string>
     <string name="command_description_clear_scalar_token">Для исправления управления приложениями Matrix</string>
-
-
-
-
     <plurals name="room_details_selected">
         <item quantity="one">%d выбран</item>
         <item quantity="few">%d выбрано</item>
         <item quantity="many">%d выбраны</item>
         <item quantity="other"/>
     </plurals>
-
-
     <string name="system_alerts_header">Системные оповещения</string>
     <string name="dialog_title_error">Ошибка</string>
     <string name="passphrase_create_passphrase">Создать парольную фразу</string>
@@ -733,7 +710,6 @@
     <string name="settings_show_join_leave_messages">Показывать события о вступлении/выходе</string>
     <string name="settings_show_avatar_display_name_changes_messages">Показывать события аккаунта</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включает изменения аватара и отображаемого имени.</string>
-
     <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Element.</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="x_plus">%d+</string>
@@ -814,7 +790,6 @@
     <string name="keys_backup_recovery_code_error_decrypt">Невозможно расшифровать резервную копию с помощью этого ключа восстановления: убедитесь, что вы ввели правильный ключ.</string>
     <string name="keys_backup_passphrase_error_decrypt">Невозможно расшифровать резервную копию с помощью этого пароля: убедитесь, что вы ввели правильный пароль.</string>
     <string name="keys_backup_setup_step3_generating_key_status">Генерация ключей восстановления с использованием парольной фразы может занять несколько секунд.</string>
-
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nЭта ошибка вне контроля ${app_name}. На телефоне нет учетной записи Google. Пожалуйста, добавьте аккаунт Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
@@ -855,7 +830,6 @@
     <string name="keys_backup_banner_recover_line2">Использовать резервное копирование ключей</string>
     <string name="keys_backup_banner_update_line2">Управление резервным копированием ключей</string>
     <string name="keys_backup_banner_update_line1">Новые ключи зашифрованных сообщений</string>
-
     <string name="keys_backup_setup_step3_text_line1">Ваши ключи копируются.</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Дополнительно) Настройка с ключом восстановления</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">Или защитите резервную копию с помощью ключа восстановления, сохранив его в безопасном месте.</string>
@@ -910,11 +884,8 @@
     <string name="share_without_verifying_short_label">Поделиться</string>
     <string name="key_share_request">Запрос поделится ключом</string>
     <string name="ignore_request_short_label">Игнорировать</string>
-
     <string name="sas_verified">Проверено!</string>
     <string name="sas_got_it">Понял</string>
-
-
     <string name="sas_incoming_request_notif_title">Запрос на подтверждение</string>
     <string name="sas_incoming_request_notif_content">%s желает подтвердить вашу сессию</string>
     <string name="sas_error_unknown">Неизвестная ошибка</string>
@@ -1011,7 +982,6 @@
     <string name="none">Никто</string>
     <string name="action_revoke">Отмена</string>
     <string name="action_disconnect">Отключить</string>
-
     <string name="login_error_homeserver_not_found">Не удается связаться с домашним сервером по этому URL, пожалуйста, проверьте его</string>
     <string name="settings_background_fdroid_sync_mode_battery">Оптимизирован для батареи</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Оптимизирован для работы в реальном времени</string>
@@ -1023,7 +993,6 @@
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} будет синхронизироваться в фоновом режиме периодически в точное время (настраивается).
 \nЭто повлияет на использование радио и батареи, появится постоянное уведомление о том, что ${app_name} прислушивается к событиям.</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Вы не будете уведомлены о входящих сообщениях, когда приложение находится в фоновом режиме.</string>
-
     <string name="settings_discovery_manage">Изменить настройки обнаружения.</string>
     <string name="identity_server_not_defined">Вы не используете какой-либо сервер обнаружения</string>
     <string name="error_user_already_logged_in">Похоже, вы пытаетесь подключиться к другому домашнему серверу. Вы хотите выйти\?</string>
@@ -1090,7 +1059,7 @@
     <string name="room_list_quick_actions_leave">Покинуть комнату</string>
     <string name="room_join_rules_public">%1$s сделал(а) комнату доступной для всех, у кого есть ссылка.</string>
     <string name="room_join_rules_invite">%1$s сделал(а) комнату доступной только по приглашению.</string>
-    <string name="labs_allow_extended_logging_summary">Подробные логи помогут разработчикам, предоставив больше информации, когда вы отправляете ВзмахЯрости. Даже когда они разрешены, приложение не записывает ваши сообщения и другие приватные данные.</string>
+    <string name="labs_allow_extended_logging_summary">Подробные логи помогут разработчикам, предоставив больше информации, когда вы отправляете \"Яростное встряхивание\". Даже когда они разрешены, приложение не записывает ваши сообщения и другие приватные данные.</string>
     <string name="a11y_create_menu_close">Закройте меню создание комнаты…</string>
     <string name="a11y_jump_to_bottom">Вниз</string>
     <string name="attachment_type_contact">Контакт</string>
@@ -1276,7 +1245,6 @@
     <string name="settings_category_timeline">Лента сообщений</string>
     <string name="message_key">Ключ сообщения</string>
     <string name="bootstrap_crosssigning_print_it">Распечатайте его и храните в безопасном месте</string>
-
     <string name="encryption_enabled">Шифрование включено</string>
     <string name="encryption_not_enabled">Шифрование не включено</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
@@ -1311,7 +1279,6 @@
     <string name="a11y_close_keys_backup_banner">Закрыть окно резервного копирования ключей</string>
     <string name="one_user_read">%s прочитано</string>
     <string name="error_handling_incoming_share">Не удалось обработать данные</string>
-
     <string name="action_play">Воспроизвести</string>
     <string name="action_copy">Копировать</string>
     <string name="dialog_title_success">Удачно</string>
@@ -1405,10 +1372,10 @@
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Это недопустимый идентификатор пользователя. Ожидаемый формат: \'@user:homeserver.org\'</string>
     <string name="autodiscover_well_known_error">Не удалось найти действительный домашний сервер. Пожалуйста, проверьте свой идентификатор</string>
     <string name="notification_initial_sync">Начальная синхронизация…</string>
-    <string name="settings_rageshake">СотрясениеЯрости</string>
+    <string name="settings_rageshake">Яростное встряхивание</string>
     <string name="settings_rageshake_detection_threshold">Порог обнаружения</string>
     <string name="settings_rageshake_detection_threshold_summary">Встряхните телефон, чтобы проверить порог обнаружения</string>
-    <string name="rageshake_detected">Обнаружено потрясение!</string>
+    <string name="rageshake_detected">Обнаружено встряхивание!</string>
     <string name="autocomplete_limited_results">Показываем только первые результаты, наберите больше букв…</string>
     <string name="settings_developer_mode_fail_fast_title">Раннее падение</string>
     <string name="settings_developer_mode_fail_fast_summary">${app_name} может падать чаще, когда происходит непредвиденная ошибка</string>
@@ -1443,7 +1410,6 @@
     <string name="verification_verify_user">Подтверждено %s</string>
     <string name="verification_verified_user">Подтверждённых %s</string>
     <string name="verification_request_waiting_for">Ожидаем %s…</string>
-
     <string name="room_profile_not_encrypted_subtitle">Сообщения в этой комнате не защищены сквозным шифрованием.</string>
     <string name="room_profile_encrypted_subtitle">Сообщения в этой комнате защищены сквозным шифрованием.
 \n
@@ -1871,7 +1837,6 @@
     <string name="hide_advanced">Скрыть дополнительные настройки</string>
     <string name="show_advanced">Показать дополнительные настройки</string>
     <string name="attachment_viewer_item_x_of_y">%1$d из %2$d</string>
-
     <string name="settings_discovery_consent_action_give_consent">Дать согласие</string>
     <string name="settings_discovery_consent_action_revoke">Отозвать моё согласие</string>
     <string name="no_more_results">Больше никаких результатов</string>
@@ -1973,8 +1938,6 @@
     <string name="call_transfer_title">Перевод</string>
     <string name="call_transfer_connect_action">Подключиться</string>
     <string name="call_transfer_consult_first">Сначала посоветуйтесь</string>
-
-
     <string name="error_unauthorized">Нет учётных данных, неправильная учётная запись пользователя и/или пароль</string>
     <string name="event_status_delete_all_failed_dialog_message">Вы уверены, что хотите удалить все неотправленные сообщения в этой комнате\?</string>
     <string name="event_status_delete_all_failed_dialog_title">Удалить неотправленные сообщения</string>
@@ -2061,7 +2024,6 @@
     <string name="upgrade">Обновление</string>
     <string name="it_may_take_some_time">Пожалуйста, будьте терпеливы, это может занять некоторое время.</string>
     <string name="joining_replacement_room">Присоединиться к замещенной комнате</string>
-
     <string name="unnamed_room">Безымянная Комната</string>
     <string name="this_space_has_no_rooms_admin">Некоторые комнаты могут быть скрыты, потому что они приватные, и вам нужно приглашение.</string>
     <string name="this_space_has_no_rooms_not_admin">Некоторые комнаты могут быть скрыты, потому что они приватные, и вам нужно приглашение.
@@ -2130,7 +2092,7 @@
     <string name="create_spaces_organise_rooms">Приватное пространство для организации ваших комнат</string>
     <string name="create_spaces_me_and_teammates">Я и члены команды</string>
     <string name="create_spaces_just_me">Только я</string>
-    <string name="create_spaces_make_sure_access">Убедитесь, что нужные люди имеют доступ к %s. Вы сможете изменить это позже.</string>
+    <string name="create_spaces_make_sure_access">Убедитесь, что нужные люди имеют доступ к %s.</string>
     <string name="create_spaces_who_are_you_working_with">С кем вы работаете\?</string>
     <string name="create_spaces_join_info_help">Чтобы присоединиться к существующему пространству, вам необходимо получить приглашение.</string>
     <string name="create_spaces_you_can_change_later">Вы сможете изменить это позже</string>
@@ -2453,7 +2415,6 @@
     <string name="attachment_type_location">Местоположение</string>
     <string name="identity_server_consent_dialog_content_question">Вы согласны отправить эту информацию\?</string>
     <string name="identity_server_consent_dialog_content_3">Чтобы обнаружить существующие контакты, необходимо отправить контактную информацию (электронную почту и номера телефонов) на сервер обнаружения. Мы хешируем ваши данные перед отправкой для обеспечения конфиденциальности.</string>
-
     <string name="identity_server_consent_dialog_title_2">Отправить электронные адреса и номера телефонов %s</string>
     <string name="settings_discovery_consent_notice_off_2">Ваши контакты приватны. Чтобы обнаружить пользователей из ваших контактов, нам необходимо ваше разрешение на отправку контактной информации на ваш сервер обнаружения.</string>
     <string name="preference_system_settings">Системные настройки</string>
@@ -2485,16 +2446,16 @@
     <string name="action_enable">Включить</string>
     <string name="notification_listening_for_notifications">Слежка за уведомлениями</string>
     <string name="room_error_access_unauthorized">Вам не разрешено подключаться к этой комнате</string>
-    <string name="thread_list_empty_title">Организуйте обсуждение в потоках</string>
-    <string name="thread_list_modal_my_threads_subtitle">Показать все потоки в которых вы участвуете</string>
-    <string name="thread_list_modal_all_threads_title">Все Потоки</string>
-    <string name="action_view_threads">Просмотр Потоков</string>
+    <string name="thread_list_empty_title">Организуйте обсуждение с помощью веток</string>
+    <string name="thread_list_modal_my_threads_subtitle">Показать все ветки, в которых вы участвуете</string>
+    <string name="thread_list_modal_all_threads_title">Все ветки</string>
+    <string name="action_view_threads">Посмотреть ветки</string>
     <string name="action_thread_view_in_room">Посмотреть в комнате</string>
-    <string name="message_bubbles">Показать всплывающие сообщения</string>
+    <string name="message_bubbles">Показывать сообщения в пузырях</string>
     <string name="location_timeline_failed_to_load_map">Не удалось загрузить карту</string>
     <string name="a11y_static_map_image">Карта</string>
     <string name="labs_enable_thread_messages_desc">Примечание: приложение будет перезапущено</string>
-    <string name="labs_enable_thread_messages">Включить Сообщения Потока</string>
+    <string name="labs_enable_thread_messages">Включить ветки сообщений</string>
     <string name="ftue_auth_use_case_connect_to_server">Подключиться к серверу</string>
     <string name="ftue_auth_use_case_join_existing_server">Хотите присоединиться к существующему серверу\?</string>
     <string name="ftue_auth_use_case_skip_partial">пропустить вопрос</string>
@@ -2504,18 +2465,36 @@
     <string name="ftue_auth_use_case_option_one">Друзья и семья</string>
     <string name="ftue_auth_use_case_subtitle">Мы поможем вам подключится.</string>
     <string name="ftue_auth_use_case_title">С кем вы будете общаться больше всего\?</string>
-    <string name="navigate_to_thread_when_already_in_the_thread">Вы уже просматриваете этот Поток!</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Вы уже просматриваете эту ветку!</string>
     <string name="view_in_room">Просмотр в Комнате</string>
-    <string name="reply_in_thread">Ответить в Поток</string>
-    <string name="command_not_supported_in_threads">Команда «%s» распознается, но не поддерживается в потоках.</string>
-    <string name="search_thread_from_a_thread">Из Потока</string>
+    <string name="reply_in_thread">Ответить в ветке</string>
+    <string name="command_not_supported_in_threads">Команда «%s» распознается, но не поддерживается в ветках.</string>
+    <string name="search_thread_from_a_thread">Из ветки</string>
     <string name="thread_list_empty_notice">Совет: нажмите и удерживайте сообщение и используйте «%s».</string>
-    <string name="thread_list_empty_subtitle">Потоки помогают хранить ваши разговоры по темам и легко отслеживать их.</string>
-    <string name="thread_list_modal_my_threads_title">Мои Потоки</string>
-    <string name="thread_list_modal_all_threads_subtitle">Показать все потоки в текущей комнате</string>
+    <string name="thread_list_empty_subtitle">Ветки помогают хранить ваши разговоры по темам и легко отслеживать их.</string>
+    <string name="thread_list_modal_my_threads_title">Мои ветки</string>
+    <string name="thread_list_modal_all_threads_subtitle">Показать все ветки этой комнаты</string>
     <string name="thread_list_modal_title">Фильтр</string>
-    <string name="thread_list_title">Потоки</string>
-    <string name="thread_timeline_title">Поток</string>
-    <string name="room_threads_filter">Фильтровать Потоки в комнате</string>
-    <string name="action_thread_copy_link_to_thread">Скопировать ссылку в поток</string>
+    <string name="thread_list_title">Ветки</string>
+    <string name="thread_timeline_title">Ветка</string>
+    <string name="room_threads_filter">Фильтровать ветки в комнате</string>
+    <string name="action_thread_copy_link_to_thread">Скопировать ссылку в ветку</string>
+    <string name="room_message_autocomplete_notification">Уведомления комнаты</string>
+    <string name="room_message_autocomplete_users">Пользователи</string>
+    <string name="room_message_notify_everyone">Оповестить всю комнату</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">И ещё %1$d</item>
+        <item quantity="few">И ещё %1$d</item>
+        <item quantity="many">И ещё %1$d</item>
+        <item quantity="other">И ещё %1$d</item>
+    </plurals>
+    <string name="message_reaction_show_less">Свернуть</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s и другие</string>
+    <string name="room_notification_two_users_are_typing">%1$s и %2$s</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d изменение ACL сервера</item>
+        <item quantity="few">%d изменения ACL сервера</item>
+        <item quantity="many">%d изменений ACL сервера</item>
+        <item quantity="other">%d изменений ACL сервера</item>
+    </plurals>
 </resources>

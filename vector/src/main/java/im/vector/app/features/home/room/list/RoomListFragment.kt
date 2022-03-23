@@ -38,7 +38,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
@@ -128,7 +127,7 @@ class RoomListFragment @Inject constructor(
                 is RoomListViewEvents.SelectRoom                -> handleSelectRoom(it, it.isInviteAlreadyAccepted)
                 is RoomListViewEvents.Done                      -> Unit
                 is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
-            }.exhaustive
+            }
         }
 
         views.createChatFabMenu.listener = this
@@ -295,7 +294,8 @@ class RoomListFragment @Inject constructor(
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
-                                                    isHighlighted = counts.isHighlight
+                                                    isHighlighted = counts.isHighlight,
+                                                    shouldShowExpandedArrow = shouldShowExpendedArrow()
                                             ))
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
@@ -329,14 +329,17 @@ class RoomListFragment @Inject constructor(
                                             controller.setData(list)
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     isHidden = list.isEmpty(),
-                                                    isLoading = false))
+                                                    isLoading = false,
+                                                    shouldShowExpandedArrow = shouldShowExpendedArrow()
+                                            ))
                                             checkEmptyState()
                                         }
                                         observeItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
-                                                    isHighlighted = counts.isHighlight
+                                                    isHighlighted = counts.isHighlight,
+                                                    shouldShowExpandedArrow = shouldShowExpendedArrow()
                                             ))
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
@@ -418,7 +421,7 @@ class RoomListFragment @Inject constructor(
             is RoomListQuickActionsSharedAction.Leave                     -> {
                 promptLeaveRoom(quickAction.roomId)
             }
-        }.exhaustive
+        }
     }
 
     private fun promptLeaveRoom(roomId: String) {
@@ -442,6 +445,10 @@ class RoomListFragment @Inject constructor(
 
     override fun invalidate() = withState(roomListViewModel) { state ->
         footerController.setData(state)
+    }
+
+    private fun shouldShowExpendedArrow(): Boolean {
+        return adapterInfosList.filter { !it.sectionHeaderAdapter.roomsSectionData.isHidden }.size >= 2
     }
 
     private fun checkEmptyState() {

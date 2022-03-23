@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.AppBarLayout
@@ -188,6 +189,7 @@ class RoomUploadsMediaFragment @Inject constructor(
     override fun invalidate() = withState(uploadsViewModel) { state ->
         if (state.mediaEvents.isEmpty()) {
             when (state.asyncEventsRequest) {
+                Uninitialized,
                 is Loading -> {
                     views.genericStateViewListStateView.state = StateView.State.Loading
                 }

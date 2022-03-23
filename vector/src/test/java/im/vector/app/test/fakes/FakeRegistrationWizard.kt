@@ -22,9 +22,9 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.session.Session
 
-class FakeRegistrationWizard : RegistrationWizard by mockk() {
+class FakeRegistrationWizard : RegistrationWizard by mockk(relaxed = false) {
 
-    fun givenSuccessfulDummy(session: Session) {
-        coEvery { dummy() } returns RegistrationResult.Success(session)
+    fun givenSuccessFor(result: Session, expect: suspend RegistrationWizard.() -> RegistrationResult) {
+        coEvery { expect(this@FakeRegistrationWizard) } returns RegistrationResult.Success(result)
     }
 }

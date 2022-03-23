@@ -731,6 +731,8 @@
     <!-- Parameter %s will be replaced by the value of string reply_in_thread -->
     <string name="thread_list_empty_notice">Tip: Long tap a message and use “%s”.</string>
     <string name="search_thread_from_a_thread">From a Thread</string>
+    <string name="threads_notice_migration_title">Threads Approaching Beta 🎉</string>
+    <string name="threads_notice_migration_message">We’re getting closer to releasing a public Beta for Threads.\n\nAs we prepare for it, we need to make some changes: threads created before this point will be displayed as regular replies.\n\nThis will be a one-off transition as Threads are now part of the Matrix specification.</string>
 
     <!-- Search -->
     <string name="search_hint">Search</string>
@@ -2946,6 +2948,8 @@
     <string name="settings_enable_location_sharing_summary">Once enabled you will be able to send your location to any room</string>
     <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
+    <string name="location_share_live_enabled">Live location enabled</string>
+    <string name="location_share_live_stop">Stop</string>
     <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
 
