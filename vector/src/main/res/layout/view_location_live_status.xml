@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/locationLiveStatusContainer"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:background="?colorPrimary"
+        android:duplicateParentState="true"
+        android:paddingStart="9dp"
+        android:paddingEnd="12dp"
+        app:constraint_referenced_ids="locationLiveStatusIcon,locationLiveStatusTitle"
+        app:flow_horizontalBias="0"
+        app:flow_horizontalGap="8dp"
+        app:flow_horizontalStyle="packed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/locationLiveStatusIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="13dp"
+        app:srcCompat="@drawable/ic_attachment_location_live_white"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/locationLiveStatusTitle"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/location_share_live_enabled"
+        android:textColor="?colorOnPrimary" />
+
+    <Button
+        android:id="@+id/locationLiveStatusStop"
+        style="@style/Widget.Vector.Button.Text.OnPrimary.LocationLive"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:text="@string/location_share_live_stop"
+        app:layout_constraintBottom_toBottomOf="@id/locationLiveStatusContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/locationLiveStatusContainer" />
+</merge>

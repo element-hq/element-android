@@ -122,16 +122,8 @@ class FtueAuthVariant(
 
     private fun updateWithState(viewState: OnboardingViewState) {
         isForceLoginFallbackEnabled = viewState.isForceLoginFallbackEnabled
-        views.loginLoading.isVisible = shouldShowLoading(viewState)
+        views.loginLoading.isVisible = viewState.isLoading()
     }
-
-    private fun shouldShowLoading(viewState: OnboardingViewState) =
-            if (vectorFeatures.isOnboardingPersonalizeEnabled()) {
-                viewState.isLoading()
-            } else {
-                // Keep loading when during success because of the delay when switching to the next Activity
-                viewState.isLoading() || viewState.isAuthTaskCompleted()
-            }
 
     override fun setIsLoading(isLoading: Boolean) = Unit
 
@@ -230,13 +222,12 @@ class FtueAuthVariant(
                         FtueAuthUseCaseFragment::class.java,
                         option = commonOption)
             }
-            OnboardingViewEvents.OnAccountCreated                              -> onAccountCreated()
+            is OnboardingViewEvents.OnAccountCreated                           -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
-            OnboardingViewEvents.OnPersonalizeProfile                          -> onPersonalizeProfile()
+            OnboardingViewEvents.OnChooseDisplayName                           -> onChooseDisplayName()
             OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
-            OnboardingViewEvents.OnDisplayNameUpdated                          -> onDisplayNameUpdated()
-            OnboardingViewEvents.OnDisplayNameSkipped                          -> onDisplayNameUpdated()
-            OnboardingViewEvents.OnPersonalizationComplete                     -> navigateToHome(createdAccount = true)
+            OnboardingViewEvents.OnChooseProfilePicture                        -> onChooseProfilePicture()
+            OnboardingViewEvents.OnPersonalizationComplete                     -> onPersonalizationComplete()
             OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
         }.exhaustive
     }
@@ -399,15 +390,12 @@ class FtueAuthVariant(
     }
 
     private fun onAccountCreated() {
-        if (vectorFeatures.isOnboardingPersonalizeEnabled()) {
-            activity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            activity.replaceFragment(
-                    views.loginFragmentContainer,
-                    FtueAuthAccountCreatedFragment::class.java,
-            )
-        } else {
-            navigateToHome(createdAccount = true)
-        }
+        activity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        activity.replaceFragment(
+                views.loginFragmentContainer,
+                FtueAuthAccountCreatedFragment::class.java,
+                useCustomAnimation = true
+        )
     }
 
     private fun navigateToHome(createdAccount: Boolean) {
@@ -416,17 +404,26 @@ class FtueAuthVariant(
         activity.finish()
     }
 
-    private fun onPersonalizeProfile() {
+    private fun onChooseDisplayName() {
         activity.addFragmentToBackstack(views.loginFragmentContainer,
                 FtueAuthChooseDisplayNameFragment::class.java,
                 option = commonOption
         )
     }
 
-    private fun onDisplayNameUpdated() {
+    private fun onChooseProfilePicture() {
         activity.addFragmentToBackstack(views.loginFragmentContainer,
                 FtueAuthChooseProfilePictureFragment::class.java,
                 option = commonOption
+        )
+    }
+
+    private fun onPersonalizationComplete() {
+        activity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        activity.replaceFragment(
+                views.loginFragmentContainer,
+                FtueAuthPersonalizationCompleteFragment::class.java,
+                useCustomAnimation = true
         )
     }
 }

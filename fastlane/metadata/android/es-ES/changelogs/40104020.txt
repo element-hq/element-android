@@ -1,0 +1,2 @@
+Principales cambios de esta versión: añadir @room, encuestas cerradas y muchos cambios menores más.
+Todos los cambios en: https://github.com/vector-im/element-android/releases/tag/v1.4.2

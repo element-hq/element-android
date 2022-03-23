@@ -57,6 +57,7 @@ import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryE
 import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.ReferencesAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
@@ -86,11 +87,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             // TODO Add ?
             // EventType.KEY_VERIFICATION_READY,
             EventType.KEY_VERIFICATION_KEY,
-            EventType.ENCRYPTED,
-            EventType.POLL_START,
-            EventType.POLL_RESPONSE,
-            EventType.POLL_END
-    )
+            EventType.ENCRYPTED
+    ) + EventType.POLL_START + EventType.POLL_RESPONSE + EventType.POLL_END
 
     override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
         return allowedTypes.contains(eventType)
@@ -117,8 +115,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
 
                         EventAnnotationsSummaryEntity.where(realm, roomId, event.eventId ?: "").findFirst()
                                 ?.let {
-                                    TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId ?: "").findFirst()
-                                            ?.let { tet -> tet.annotations = it }
+                                    TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId ?: "").findAll()
+                                            ?.forEach { tet -> tet.annotations = it }
                                 }
                     }
 
@@ -156,7 +154,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                                 Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
                                 // A replace!
                                 handleReplace(realm, event, it, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
-                            } else if (event.getClearType() == EventType.POLL_RESPONSE) {
+                            } else if (event.getClearType() in EventType.POLL_RESPONSE) {
                                 event.getClearContent().toModel<MessagePollResponseContent>(catchError = true)?.let { pollResponseContent ->
                                     Timber.v("###RESPONSE in room $roomId for event ${event.eventId}")
                                     handleResponse(realm, event, pollResponseContent, roomId, isLocalEcho, encryptedEventContent.relatesTo.eventId)
@@ -177,12 +175,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                                     handleVerification(realm, event, roomId, isLocalEcho, it)
                                 }
                             }
-                            EventType.POLL_RESPONSE        -> {
+                            in EventType.POLL_RESPONSE     -> {
                                 event.getClearContent().toModel<MessagePollResponseContent>(catchError = true)?.let {
                                     handleResponse(realm, event, it, roomId, isLocalEcho, event.getRelationContent()?.eventId)
                                 }
                             }
-                            EventType.POLL_END             -> {
+                            in EventType.POLL_END          -> {
                                 event.content.toModel<MessageEndPollContent>(catchError = true)?.let {
                                     handleEndPoll(realm, event, it, roomId, isLocalEcho)
                                 }
@@ -196,6 +194,16 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             handleReaction(realm, event, roomId, isLocalEcho)
                         }
                     }
+                    // HandleInitialAggregatedRelations should also be applied in encrypted messages with annotations
+//                    else if (event.unsignedData?.relations?.annotations != null) {
+//                        Timber.v("###REACTION e2e Aggregation in room $roomId for event ${event.eventId}")
+//                        handleInitialAggregatedRelations(realm, event, roomId, event.unsignedData.relations.annotations)
+//                         EventAnnotationsSummaryEntity.where(realm, roomId, event.eventId ?: "").findFirst()
+//                                 ?.let {
+//                                     TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId ?: "").findAll()
+//                                             ?.forEach { tet -> tet.annotations = it }
+//                                 }
+//                    }
                 }
                 EventType.REDACTION            -> {
                     val eventToPrune = event.redacts?.let { EventEntity.where(realm, eventId = it).findFirst() }
@@ -217,7 +225,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         }
                     }
                 }
-                EventType.POLL_START           -> {
+                in EventType.POLL_START        -> {
                     val content: MessagePollContent? = event.content.toModel()
                     if (content?.relatesTo?.type == RelationType.REPLACE) {
                         Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
@@ -225,12 +233,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         handleReplace(realm, event, content, roomId, isLocalEcho)
                     }
                 }
-                EventType.POLL_RESPONSE        -> {
+                in EventType.POLL_RESPONSE     -> {
                     event.content.toModel<MessagePollResponseContent>(catchError = true)?.let {
                         handleResponse(realm, event, it, roomId, isLocalEcho)
                     }
                 }
-                EventType.POLL_END             -> {
+                in EventType.POLL_END          -> {
                     event.content.toModel<MessageEndPollContent>(catchError = true)?.let {
                         handleEndPoll(realm, event, it, roomId, isLocalEcho)
                     }
@@ -243,7 +251,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     }
 
     // OPT OUT serer aggregation until API mature enough
-    private val SHOULD_HANDLE_SERVER_AGREGGATION = false
+    private val SHOULD_HANDLE_SERVER_AGREGGATION = false // should be true to work with e2e
 
     private fun handleReplace(realm: Realm,
                               event: Event,
@@ -335,13 +343,18 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
 
         if (!isLocalEcho) {
-            val replaceEvent = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
+            val replaceEvent = TimelineEventEntity
+                    .where(realm, roomId, eventId)
+                    .equalTo(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, false)
+                    .findFirst()
             handleThreadSummaryEdition(editedEvent, replaceEvent, existingSummary?.editions)
         }
     }
 
     /**
      * Check if the edition is on the latest thread event, and update it accordingly
+     * @param editedEvent The event that will be changed
+     * @param replaceEvent The new event
      */
     private fun handleThreadSummaryEdition(editedEvent: EventEntity?,
                                            replaceEvent: TimelineEventEntity?,
@@ -407,12 +420,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             return
         }
 
-        val option = content.response?.answers?.first() ?: return Unit.also {
+        val option = content.getBestResponse()?.answers?.first() ?: return Unit.also {
             Timber.d("## POLL Ignoring malformed response no option eventId:$eventId content: ${event.content}")
         }
 
         // Check if this option is in available options
-        if (!targetPollContent.pollCreationInfo?.answers?.map { it.id }?.contains(option).orFalse()) {
+        if (!targetPollContent.getBestPollCreationInfo()?.answers?.map { it.id }?.contains(option).orFalse()) {
             Timber.v("## POLL $targetEventId doesn't contain option $option")
             return
         }

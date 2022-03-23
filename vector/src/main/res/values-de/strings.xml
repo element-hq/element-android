@@ -1079,7 +1079,7 @@
     <string name="login_splash_text3">Erweitere und individualisiere dein Benutzererlebnis</string>
     <string name="login_connect_to">Mit %1$s verbinden</string>
     <string name="login_connect_to_modular">Mit Element Matrix Services verbinden</string>
-    <string name="login_connect_to_a_custom_server">Mit einem individuellen Server verbinden</string>
+    <string name="login_connect_to_a_custom_server">Mit einem anderen Server verbinden</string>
     <string name="login_signin_to">Bei %1$s anmelden</string>
     <string name="login_signup">Registrieren</string>
     <string name="login_signin">Anmelden</string>
@@ -1257,7 +1257,7 @@
     <string name="room_profile_section_more_leave">Raum verlassen</string>
     <string name="room_profile_leaving_room">Verlasse den Raum…</string>
     <string name="room_member_power_level_admins">Administratoren</string>
-    <string name="room_member_power_level_moderators">Moderationen</string>
+    <string name="room_member_power_level_moderators">Moderatoren</string>
     <string name="room_member_power_level_custom">Benutzerdefiniert</string>
     <string name="room_member_power_level_invites">Eingeladen</string>
     <string name="room_member_power_level_users">Nutzer</string>
@@ -2380,7 +2380,7 @@
     <string name="thread_list_empty_title">Organisiere Diskussionen mit Threads</string>
     <string name="room_threads_filter">Threads im Raum filtern</string>
     <string name="ftue_auth_use_case_join_existing_server">Möchtest du einem existierenden Server beitreten\?</string>
-    <string name="ftue_auth_use_case_option_three">Communities</string>
+    <string name="ftue_auth_use_case_option_three">Gemeinschaften</string>
     <string name="ftue_auth_use_case_option_two">Teams</string>
     <string name="ftue_auth_use_case_subtitle">Wir helfen dir, in Verbindung zu kommen.</string>
     <string name="ftue_auth_use_case_title">Mit wem wirst du am meisten chatten\?</string>

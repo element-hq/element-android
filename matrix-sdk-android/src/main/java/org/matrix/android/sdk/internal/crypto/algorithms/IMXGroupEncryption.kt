@@ -45,7 +45,7 @@ internal interface IMXGroupEncryption {
      *
      * @return true in case of success
      */
-    suspend fun reshareKey(sessionId: String,
+    suspend fun reshareKey(groupSessionId: String,
                            userId: String,
                            deviceId: String,
                            senderKey: String): Boolean

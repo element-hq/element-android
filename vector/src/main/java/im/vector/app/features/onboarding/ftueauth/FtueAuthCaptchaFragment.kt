@@ -39,6 +39,7 @@ import im.vector.app.databinding.FragmentLoginCaptchaBinding
 import im.vector.app.features.login.JavascriptResponse
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
@@ -181,7 +182,7 @@ class FtueAuthCaptchaFragment @Inject constructor(
 
                     val response = javascriptResponse?.response
                     if (javascriptResponse?.action == "verifyCallback" && response != null) {
-                        viewModel.handle(OnboardingAction.CaptchaDone(response))
+                        viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.CaptchaDone(response)))
                     }
                 }
                 return true

@@ -22,62 +22,49 @@ import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
-sealed class OnboardingAction : VectorViewModelAction {
-    data class OnGetStarted(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction()
-    data class OnIAlreadyHaveAnAccount(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction()
+sealed interface OnboardingAction : VectorViewModelAction {
+    data class OnGetStarted(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction
+    data class OnIAlreadyHaveAnAccount(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction
 
-    data class UpdateServerType(val serverType: ServerType) : OnboardingAction()
-    data class UpdateHomeServer(val homeServerUrl: String) : OnboardingAction()
-    data class UpdateUseCase(val useCase: FtueUseCase) : OnboardingAction()
-    object ResetUseCase : OnboardingAction()
-    data class UpdateSignMode(val signMode: SignMode) : OnboardingAction()
-    data class LoginWithToken(val loginToken: String) : OnboardingAction()
-    data class WebLoginSuccess(val credentials: Credentials) : OnboardingAction()
-    data class InitWith(val loginConfig: LoginConfig?) : OnboardingAction()
-    data class ResetPassword(val email: String, val newPassword: String) : OnboardingAction()
-    object ResetPasswordMailConfirmed : OnboardingAction()
+    data class UpdateServerType(val serverType: ServerType) : OnboardingAction
+    data class UpdateHomeServer(val homeServerUrl: String) : OnboardingAction
+    data class UpdateUseCase(val useCase: FtueUseCase) : OnboardingAction
+    object ResetUseCase : OnboardingAction
+    data class UpdateSignMode(val signMode: SignMode) : OnboardingAction
+    data class LoginWithToken(val loginToken: String) : OnboardingAction
+    data class WebLoginSuccess(val credentials: Credentials) : OnboardingAction
+    data class InitWith(val loginConfig: LoginConfig?) : OnboardingAction
+    data class ResetPassword(val email: String, val newPassword: String) : OnboardingAction
+    object ResetPasswordMailConfirmed : OnboardingAction
 
     // Login or Register, depending on the signMode
-    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction()
+    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
+    object StopEmailValidationCheck : OnboardingAction
 
-    // Register actions
-    open class RegisterAction : OnboardingAction()
-
-    data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
-    object SendAgainThreePid : RegisterAction()
-
-    // TODO Confirm Email (from link in the email, open in the phone, intercepted by the app)
-    data class ValidateThreePid(val code: String) : RegisterAction()
-
-    data class CheckIfEmailHasBeenValidated(val delayMillis: Long) : RegisterAction()
-    object StopEmailValidationCheck : RegisterAction()
-
-    data class CaptchaDone(val captchaResponse: String) : RegisterAction()
-    object AcceptTerms : RegisterAction()
-    object RegisterDummy : RegisterAction()
+    data class PostRegisterAction(val registerAction: RegisterAction) : OnboardingAction
 
     // Reset actions
-    open class ResetAction : OnboardingAction()
+    sealed interface ResetAction : OnboardingAction
 
-    object ResetHomeServerType : ResetAction()
-    object ResetHomeServerUrl : ResetAction()
-    object ResetSignMode : ResetAction()
-    object ResetLogin : ResetAction()
-    object ResetResetPassword : ResetAction()
+    object ResetHomeServerType : ResetAction
+    object ResetHomeServerUrl : ResetAction
+    object ResetSignMode : ResetAction
+    object ResetLogin : ResetAction
+    object ResetResetPassword : ResetAction
 
     // Homeserver history
-    object ClearHomeServerHistory : OnboardingAction()
+    object ClearHomeServerHistory : OnboardingAction
 
-    data class PostViewEvent(val viewEvent: OnboardingViewEvents) : OnboardingAction()
+    data class PostViewEvent(val viewEvent: OnboardingViewEvents) : OnboardingAction
 
-    data class UserAcceptCertificate(val fingerprint: Fingerprint) : OnboardingAction()
+    data class UserAcceptCertificate(val fingerprint: Fingerprint) : OnboardingAction
 
-    data class UpdateDisplayName(val displayName: String) : OnboardingAction()
-    object UpdateDisplayNameSkipped : OnboardingAction()
-    data class ProfilePictureSelected(val uri: Uri) : OnboardingAction()
-    object SaveSelectedProfilePicture : OnboardingAction()
-    object UpdateProfilePictureSkipped : OnboardingAction()
+    object PersonalizeProfile : OnboardingAction
+    data class UpdateDisplayName(val displayName: String) : OnboardingAction
+    object UpdateDisplayNameSkipped : OnboardingAction
+    data class ProfilePictureSelected(val uri: Uri) : OnboardingAction
+    object SaveSelectedProfilePicture : OnboardingAction
+    object UpdateProfilePictureSkipped : OnboardingAction
 }

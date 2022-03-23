@@ -11,8 +11,6 @@
         <item name="vctr_fab_label_stroke">@color/vctr_fab_label_stroke_black</item>
         <item name="vctr_fab_label_color">@color/vctr_fab_label_color_black</item>
         <item name="vctr_touch_guard_bg">@color/vctr_touch_guard_bg_black</item>
-        <item name="vctr_attachment_selector_background">@color/vctr_attachment_selector_background_black</item>
-        <item name="vctr_attachment_selector_border">@color/vctr_attachment_selector_border_black</item>
         <item name="vctr_room_active_widgets_banner_bg">@color/vctr_room_active_widgets_banner_bg_black</item>
         <item name="vctr_room_active_widgets_banner_text">@color/vctr_room_active_widgets_banner_text_black</item>
         <item name="vctr_reaction_background_off">@color/vctr_reaction_background_off_black</item>

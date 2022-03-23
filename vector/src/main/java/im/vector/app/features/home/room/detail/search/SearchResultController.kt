@@ -32,6 +32,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.ui.list.GenericHeaderItem_
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Content
@@ -45,6 +46,7 @@ class SearchResultController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
         private val dateFormatter: VectorDateFormatter,
+        private val displayableEventFormatter: DisplayableEventFormatter,
         private val userPreferencesProvider: UserPreferencesProvider
 ) : TypedEpoxyController<SearchViewState>() {
 
@@ -125,6 +127,7 @@ class SearchResultController @Inject constructor(
                     .sender(eventAndSender.sender
                             ?: eventAndSender.event.senderId?.let { session.getRoomMember(it, data.roomId) }?.toMatrixItem())
                     .threadDetails(event.threadDetails)
+                    .threadSummaryFormatted(displayableEventFormatter.formatThreadSummary(event.threadDetails?.threadSummaryLatestEvent).toString())
                     .areThreadMessagesEnabled(userPreferencesProvider.areThreadMessagesEnabled())
                     .listener { listener?.onItemClicked(eventAndSender.event) }
                     .let { result.add(it) }

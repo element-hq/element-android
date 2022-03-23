@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="debug_screen" translatable="false">Debug screen</string>
-
     <string name="ellipsis" translatable="false">…</string>
-    <string name="plus_sign" translatable="false">+</string>
-    <string name="semicolon_sign" translatable="false">:</string>
-
-    <string name="password_hint" translatable="false">********</string>
-
-    <string name="matrix_room_alias_prefix" translatable="false">#</string>
 
     <!-- Temporary string -->
     <string name="not_implemented" translatable="false">Not implemented yet in ${app_name}</string>
@@ -30,7 +22,9 @@
 
     <string name="ftue_profile_picture_title" translatable="false">Add a profile picture</string>
     <string name="ftue_profile_picture_subtitle" translatable="false">You can change this anytime.</string>
-
+    <string name="ftue_personalize_lets_go" translatable="false">Let\'s go</string>
+    <string name="ftue_personalize_complete_title" translatable="false">You\'re all set!</string>
+    <string name="ftue_personalize_complete_subtitle" translatable="false">Your preferences have been saved.</string>
 
     <string name="ftue_personalize_submit" translatable="false">Save and continue</string>
     <string name="ftue_personalize_skip_this_step" translatable="false">Skip this step</string>

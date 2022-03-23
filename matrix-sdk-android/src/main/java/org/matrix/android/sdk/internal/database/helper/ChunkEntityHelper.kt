@@ -82,17 +82,18 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
 internal fun ChunkEntity.addTimelineEvent(roomId: String,
                                           eventEntity: EventEntity,
                                           direction: PaginationDirection,
-                                          roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null) {
+                                          ownedByThreadChunk: Boolean = false,
+                                          roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null): TimelineEventEntity? {
     val eventId = eventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
-        return
+        return null
     }
     val displayIndex = nextDisplayIndex(direction)
     val localId = TimelineEventEntity.nextId(realm)
     val senderId = eventEntity.sender ?: ""
 
     // Update RR for the sender of a new message with a dummy one
-    val readReceiptsSummaryEntity = handleReadReceipts(realm, roomId, eventEntity, senderId)
+    val readReceiptsSummaryEntity = if (!ownedByThreadChunk) handleReadReceipts(realm, roomId, eventEntity, senderId) else null
     val timelineEventEntity = realm.createObject<TimelineEventEntity>().apply {
         this.localId = localId
         this.root = eventEntity
@@ -102,6 +103,7 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
                 ?.also { it.cleanUp(eventEntity.sender) }
         this.readReceipts = readReceiptsSummaryEntity
         this.displayIndex = displayIndex
+        this.ownedByThreadChunk = ownedByThreadChunk
         val roomMemberContent = roomMemberContentsByUser?.get(senderId)
         this.senderAvatar = roomMemberContent?.avatarUrl
         this.senderName = roomMemberContent?.displayName
@@ -113,9 +115,10 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
     }
     // numberOfTimelineEvents++
     timelineEvents.add(timelineEventEntity)
+    return timelineEventEntity
 }
 
-private fun computeIsUnique(
+fun computeIsUnique(
         realm: Realm,
         roomId: String,
         isLastForward: Boolean,

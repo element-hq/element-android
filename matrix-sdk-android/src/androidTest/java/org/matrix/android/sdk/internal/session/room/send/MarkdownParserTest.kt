@@ -60,7 +60,9 @@ class MarkdownParserTest : InstrumentedTest {
                                     applicationFlavor = "TestFlavor",
                                     roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
                             )
-                    ))
+                    ),
+                    TestPermalinkService()
+            )
     )
 
     @Test

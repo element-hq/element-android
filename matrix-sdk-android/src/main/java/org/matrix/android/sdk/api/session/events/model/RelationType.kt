@@ -30,7 +30,6 @@ object RelationType {
 
     /** Lets you define an event which is a thread reply to an existing event.*/
     const val THREAD = "m.thread"
-    const val IO_THREAD = "io.element.thread"
 
     /** Lets you define an event which adds a response to an existing event.*/
     const val RESPONSE = "org.matrix.response"

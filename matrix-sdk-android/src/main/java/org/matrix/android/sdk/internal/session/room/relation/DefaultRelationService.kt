@@ -34,7 +34,6 @@ import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineEventDataSource
@@ -48,7 +47,6 @@ internal class DefaultRelationService @AssistedInject constructor(
         private val eventFactory: LocalEchoEventFactory,
         private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
         private val fetchEditHistoryTask: FetchEditHistoryTask,
-        private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val timelineEventDataSource: TimelineEventDataSource,
         @SessionDatabase private val monarchy: Monarchy
 ) : RelationService {
@@ -194,10 +192,6 @@ internal class DefaultRelationService @AssistedInject constructor(
                     }
         }
         return eventSenderProcessor.postEvent(event)
-    }
-
-    override suspend fun fetchThreadTimeline(rootThreadEventId: String): Boolean {
-        return fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(roomId, rootThreadEventId))
     }
 
     /**

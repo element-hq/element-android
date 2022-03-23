@@ -55,6 +55,7 @@ internal class RealmSendingEventsDataSource(
         roomEntity = RoomEntity.where(safeRealm, roomId = roomId).findFirst()
         sendingTimelineEvents = roomEntity?.sendingTimelineEvents
         sendingTimelineEvents?.addChangeListener(sendingTimelineEventsListener)
+        updateFrozenResults(sendingTimelineEvents)
     }
 
     override fun stop() {

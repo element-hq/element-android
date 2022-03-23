@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,12 @@ import io.realm.Realm
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
-import org.matrix.android.sdk.internal.database.helper.updateThreadSummaryIfNeeded
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -36,8 +34,10 @@ import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEnt
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.ReactionAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
-import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
+import org.matrix.android.sdk.internal.database.query.find
+import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThread
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
@@ -47,16 +47,38 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.room.RoomAPI
+import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 
-internal interface FetchThreadTimelineTask : Task<FetchThreadTimelineTask.Params, Boolean> {
+/***
+ * This class is responsible to Fetch paginated chunks of the thread timeline using the /relations API
+ *
+ * How it works
+ *
+ * The problem?
+ *  - We cannot use the existing timeline architecture to paginate through the timeline
+ *  - We want our new events to be live, so any interactions with them like reactions will continue to work. We should
+ *    handle appropriately the existing events from /messages api with the new events from /relations.
+ *  - Handling edge cases like receiving an event from /messages while you have already created a new one from the /relations response
+ *
+ * The solution
+ * We generate a temporarily thread chunk that will be used to store any new paginated results from the /relations api
+ * We bind the timeline events from that chunk with the already existing ones. So we will have one common instance, and
+ * all reactions, edits etc will continue to work. If the events do not exists we create them
+ * and we will reuse the same EventEntity instance when (and if) the same event will be fetched from the main (/messages) timeline
+ *
+ */
+internal interface FetchThreadTimelineTask : Task<FetchThreadTimelineTask.Params, DefaultFetchThreadTimelineTask.Result> {
     data class Params(
             val roomId: String,
-            val rootThreadEventId: String
+            val rootThreadEventId: String,
+            val from: String?,
+            val limit: Int
+
     )
 }
 
@@ -69,94 +91,130 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         private val cryptoService: DefaultCryptoService
 ) : FetchThreadTimelineTask {
 
-    override suspend fun execute(params: FetchThreadTimelineTask.Params): Boolean {
-        val isRoomEncrypted = cryptoSessionInfoProvider.isRoomEncrypted(params.roomId)
+    enum class Result {
+        SHOULD_FETCH_MORE,
+        REACHED_END,
+        SUCCESS
+    }
+
+    override suspend fun execute(params: FetchThreadTimelineTask.Params): Result {
         val response = executeRequest(globalErrorReceiver) {
-            roomAPI.getRelations(
+            roomAPI.getThreadsRelations(
                     roomId = params.roomId,
                     eventId = params.rootThreadEventId,
-                    relationType = RelationType.IO_THREAD,
-                    eventType = if (isRoomEncrypted) EventType.ENCRYPTED else EventType.MESSAGE,
-                    limit = 2000
+                    from = params.from,
+                    limit = params.limit
             )
         }
 
-        val threadList = response.chunks + listOfNotNull(response.originalEvent)
+        Timber.i("###THREADS FetchThreadTimelineTask Fetched size:${response.chunks.size} nextBatch:${response.nextBatch} ")
+        return handleRelationsResponse(response, params)
+    }
 
-        return storeNewEventsIfNeeded(threadList, params.roomId)
+    private suspend fun handleRelationsResponse(response: RelationsResponse,
+                                                params: FetchThreadTimelineTask.Params): Result {
+        val threadList = response.chunks
+        val threadRootEvent = response.originalEvent
+        val hasReachEnd = response.nextBatch == null
+
+        monarchy.awaitTransaction { realm ->
+
+            val threadChunk = ChunkEntity.findLastForwardChunkOfThread(realm, params.roomId, params.rootThreadEventId)
+                    ?: run {
+                        return@awaitTransaction
+                    }
+
+            threadChunk.prevToken = response.nextBatch
+            val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
+
+            for (event in threadList) {
+                if (event.eventId == null || event.senderId == null || event.type == null) {
+                    continue
+                }
+
+                if (threadChunk.timelineEvents.find(event.eventId) != null) {
+                    // Event already exists in thread chunk, skip it
+                    Timber.i("###THREADS FetchThreadTimelineTask event: ${event.eventId} already exists in thread chunk, skip it")
+                    continue
+                }
+
+                val timelineEvent = TimelineEventEntity
+                        .where(realm, roomId = params.roomId, event.eventId)
+                        .findFirst()
+
+                if (timelineEvent != null) {
+                    // Event already exists but not in the thread chunk
+                    // Lets added there
+                    Timber.i("###THREADS FetchThreadTimelineTask event: ${event.eventId} exists but not in the thread chunk, add it at the end")
+                    threadChunk.timelineEvents.add(timelineEvent)
+                } else {
+                    Timber.i("###THREADS FetchThreadTimelineTask event: ${event.eventId} is brand NEW create an entity and add it!")
+                    val eventEntity = createEventEntity(params.roomId, event, realm)
+                    roomMemberContentsByUser.addSenderState(realm, params.roomId, event.senderId)
+                    threadChunk.addTimelineEvent(
+                            roomId = params.roomId,
+                            eventEntity = eventEntity,
+                            direction = PaginationDirection.FORWARDS,
+                            ownedByThreadChunk = true,
+                            roomMemberContentsByUser = roomMemberContentsByUser)
+                }
+            }
+
+            if (hasReachEnd) {
+                val rootThread = TimelineEventEntity
+                        .where(realm, roomId = params.roomId, params.rootThreadEventId)
+                        .findFirst()
+                if (rootThread != null) {
+                    // If root thread event already exists add it to our chunk
+                    threadChunk.timelineEvents.add(rootThread)
+                    Timber.i("###THREADS FetchThreadTimelineTask root thread event: ${params.rootThreadEventId} found and added!")
+                } else if (threadRootEvent?.senderId != null) {
+                    // Case when thread event is not in the device
+                    Timber.i("###THREADS FetchThreadTimelineTask root thread event: ${params.rootThreadEventId} NOT FOUND! Lets create a temp one")
+                    val eventEntity = createEventEntity(params.roomId, threadRootEvent, realm)
+                    roomMemberContentsByUser.addSenderState(realm, params.roomId, threadRootEvent.senderId)
+                    threadChunk.addTimelineEvent(
+                            roomId = params.roomId,
+                            eventEntity = eventEntity,
+                            direction = PaginationDirection.FORWARDS,
+                            ownedByThreadChunk = true,
+                            roomMemberContentsByUser = roomMemberContentsByUser)
+                }
+            }
+        }
+
+        return if (hasReachEnd) {
+            Result.REACHED_END
+        } else {
+            Result.SHOULD_FETCH_MORE
+        }
+    }
+
+    // TODO Reuse this function to all the app
+    /**
+     * If we don't have any new state on this user, get it from db
+     */
+    private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roomId: String, senderId: String) {
+        getOrPut(senderId) {
+            CurrentStateEventEntity
+                    .getOrNull(realm, roomId, senderId, EventType.STATE_ROOM_MEMBER)
+                    ?.root?.asDomain()
+                    ?.getFixedRoomMemberContent()
+        }
     }
 
     /**
-     * Store new events if they are not already received, and returns weather or not,
-     * a timeline update should be made
-     * @param threadList is the list containing the thread replies
-     * @param roomId the roomId of the the thread
-     * @return
+     * Create an EventEntity to be added in the TimelineEventEntity
      */
-    private suspend fun storeNewEventsIfNeeded(threadList: List<Event>, roomId: String): Boolean {
-        var eventsSkipped = 0
-        monarchy
-                .awaitTransaction { realm ->
-                    val chunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)
-
-                    val optimizedThreadSummaryMap = hashMapOf<String, EventEntity>()
-                    val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
-
-                    for (event in threadList.reversed()) {
-                        if (event.eventId == null || event.senderId == null || event.type == null) {
-                            eventsSkipped++
-                            continue
-                        }
-
-                        if (EventEntity.where(realm, event.eventId).findFirst() != null) {
-                            //  Skip if event already exists
-                            eventsSkipped++
-                            continue
-                        }
-                        if (event.isEncrypted()) {
-                            // Decrypt events that will be stored
-                            decryptIfNeeded(event, roomId)
-                        }
-
-                        handleReaction(realm, event, roomId)
-
-                        val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
-                        val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
-
-                        // Sender info
-                        roomMemberContentsByUser.getOrPut(event.senderId) {
-                            // If we don't have any new state on this user, get it from db
-                            val rootStateEvent = CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root
-                            rootStateEvent?.asDomain()?.getFixedRoomMemberContent()
-                        }
-
-                        chunk?.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
-                        eventEntity.rootThreadEventId?.let {
-                            // This is a thread event
-                            optimizedThreadSummaryMap[it] = eventEntity
-                        } ?: run {
-                            // This is a normal event or a root thread one
-                            optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
-                        }
-                    }
-
-                    optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
-                            roomId = roomId,
-                            realm = realm,
-                            currentUserId = userId,
-                            shouldUpdateNotifications = false
-                    )
-                }
-        Timber.i("----> size: ${threadList.size} | skipped: $eventsSkipped | threads: ${threadList.map { it.eventId }}")
-
-        return eventsSkipped == threadList.size
+    private fun createEventEntity(roomId: String, event: Event, realm: Realm): EventEntity {
+        val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
+        return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
     }
 
     /**
      * Invoke the event decryption mechanism for a specific event
      */
-
-    private fun decryptIfNeeded(event: Event, roomId: String) {
+    private suspend fun decryptIfNeeded(event: Event, roomId: String) {
         try {
             // Event from sync does not have roomId, so add it to the event first
             val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")

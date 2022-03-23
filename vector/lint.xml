@@ -15,24 +15,14 @@
     <issue id="IconExpectedSize" severity="error" />
     <issue id="LocaleFolder" severity="error" />
 
-    <!-- String resource has to be used, for the rest we can ignore for now
-    TODO: stop ignoring warning at all those locations -->
+    <issue id="TooManyViews" severity="warning">
+        <!-- Ignore TooManyViews in debug build type -->
+        <ignore path="**/src/debug/**" />
+    </issue>
+
     <issue id="UnusedResources" severity="error">
-        <ignore path="**/build.gradle" />
-        <ignore path="**/anim/**" />
-        <ignore path="**/color/**" />
-        <ignore path="**/drawable*/**" />
-        <ignore path="**/layout/**" />
-        <ignore path="**/menu/**" />
-        <ignore path="**/raw/**" />
-        <ignore path="**/values/dimens.xml" />
-        <ignore path="**/values/colors.xml" />
-        <ignore path="**/values/palette.xml" />
-        <ignore path="**/values/palette_mobile.xml" />
-        <ignore path="**/values/donottranslate.xml" />
-        <ignore path="**/values/strings_login_v2.xml" />
-        <ignore path="**/library/ui-styles/src/main/res/values/**" />
-        <ignore path="**/xml/**" />
+        <!-- Ignore unused resource in debug build type -->
+        <ignore path="**/src/debug/**" />
 
         <!-- Following resources are for F-Droid variant only, so ignore for GPlay -->
         <ignore regexp="settings_troubleshoot_test_service_boot_*" />

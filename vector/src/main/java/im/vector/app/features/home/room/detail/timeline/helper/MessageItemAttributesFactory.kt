@@ -22,6 +22,7 @@ import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryEvents
@@ -33,6 +34,7 @@ class MessageItemAttributesFactory @Inject constructor(
         private val messageColorProvider: MessageColorProvider,
         private val avatarSizeProvider: AvatarSizeProvider,
         private val stringProvider: StringProvider,
+        private val displayableEventFormatter: DisplayableEventFormatter,
         private val preferencesProvider: UserPreferencesProvider,
         private val emojiCompatFontProvider: EmojiCompatFontProvider) {
 
@@ -61,6 +63,7 @@ class MessageItemAttributesFactory @Inject constructor(
                 readReceiptsCallback = callback,
                 emojiTypeFace = emojiCompatFontProvider.typeface,
                 decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message),
+                threadSummaryFormatted = displayableEventFormatter.formatThreadSummary(threadDetails?.threadSummaryLatestEvent).toString(),
                 threadDetails = threadDetails,
                 reactionsSummaryEvents = reactionsSummaryEvents,
                 areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled()

@@ -27,6 +27,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -39,7 +40,8 @@ class RoomMemberListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
-        private val roomMemberSummaryFilter: RoomMemberSummaryFilter
+        private val roomMemberSummaryFilter: RoomMemberSummaryFilter,
+        private val matrixConfiguration: MatrixConfiguration
 ) : TypedEpoxyController<RoomMemberListViewState>() {
 
     interface Callback {
@@ -122,6 +124,7 @@ class RoomMemberListController @Inject constructor(
                                 host: RoomMemberListController,
                                 data: RoomMemberListViewState) {
         val powerLabel = stringProvider.getString(powerLevelCategory.titleRes)
+        val presenceSyncEnabled = matrixConfiguration.presenceSyncEnabled
 
         profileMatrixItemWithPowerLevelWithPresence {
             id(roomMember.userId)
@@ -131,6 +134,7 @@ class RoomMemberListController @Inject constructor(
             clickListener {
                 host.callback?.onRoomMemberClicked(roomMember)
             }
+            showPresence(presenceSyncEnabled)
             userPresence(roomMember.userPresence)
             powerLevelLabel(
                     span {

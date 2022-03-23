@@ -21,14 +21,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXOlmSessionResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -40,6 +39,8 @@ import javax.inject.Inject
 
 private const val SEND_TO_DEVICE_RETRY_COUNT = 3
 
+private val loggerTag = LoggerTag("CryptoSyncHandler", LoggerTag.CRYPTO)
+
 @SessionScope
 internal class EventDecryptor @Inject constructor(
         private val cryptoCoroutineScope: CoroutineScope,
@@ -47,13 +48,22 @@ internal class EventDecryptor @Inject constructor(
         private val roomDecryptorProvider: RoomDecryptorProvider,
         private val messageEncrypter: MessageEncrypter,
         private val sendToDeviceTask: SendToDeviceTask,
+        private val deviceListManager: DeviceListManager,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
         private val cryptoStore: IMXCryptoStore
 ) {
 
-    // The date of the last time we forced establishment
-    // of a new session for each user:device.
-    private val lastNewSessionForcedDates = MXUsersDevicesMap<Long>()
+    /**
+     * Rate limit unwedge attempt, should we persist that?
+     */
+    private val lastNewSessionForcedDates = mutableMapOf<WedgedDeviceInfo, Long>()
+
+    data class WedgedDeviceInfo(
+            val userId: String,
+            val senderKey: String?
+    )
+
+    private val wedgedDevices = mutableListOf<WedgedDeviceInfo>()
 
     /**
      * Decrypt an event
@@ -63,7 +73,7 @@ internal class EventDecryptor @Inject constructor(
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
     @Throws(MXCryptoError::class)
-    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return internalDecryptEvent(event, timeline)
     }
 
@@ -91,38 +101,32 @@ internal class EventDecryptor @Inject constructor(
      * @return the MXEventDecryptionResult data, or null in case of error
      */
     @Throws(MXCryptoError::class)
-    private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    private suspend fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         val eventContent = event.content
         if (eventContent == null) {
-            Timber.e("## CRYPTO | decryptEvent : empty event content")
+            Timber.tag(loggerTag.value).e("decryptEvent : empty event content")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON)
         } else {
             val algorithm = eventContent["algorithm"]?.toString()
             val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, algorithm)
             if (alg == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, algorithm)
-                Timber.e("## CRYPTO | decryptEvent() : $reason")
+                Timber.tag(loggerTag.value).e("decryptEvent() : $reason")
                 throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
             } else {
                 try {
                     return alg.decryptEvent(event, timeline)
                 } catch (mxCryptoError: MXCryptoError) {
-                    Timber.v("## CRYPTO | internalDecryptEvent : Failed to decrypt ${event.eventId} reason: $mxCryptoError")
+                    Timber.tag(loggerTag.value).d("internalDecryptEvent : Failed to decrypt ${event.eventId} reason: $mxCryptoError")
                     if (algorithm == MXCRYPTO_ALGORITHM_OLM) {
                         if (mxCryptoError is MXCryptoError.Base &&
                                 mxCryptoError.errorType == MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE) {
                             // need to find sending device
-                            cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-                                val olmContent = event.content.toModel<OlmEventContent>()
-                                cryptoStore.getUserDevices(event.senderId ?: "")
-                                        ?.values
-                                        ?.firstOrNull { it.identityKey() == olmContent?.senderKey }
-                                        ?.let {
-                                            markOlmSessionForUnwedging(event.senderId ?: "", it)
-                                        }
-                                        ?: run {
-                                            Timber.i("## CRYPTO | internalDecryptEvent() : Failed to find sender crypto device for unwedging")
-                                        }
+                            val olmContent = event.content.toModel<OlmEventContent>()
+                            if (event.senderId != null && olmContent?.senderKey != null) {
+                                markOlmSessionForUnwedging(event.senderId, olmContent.senderKey)
+                            } else {
+                                Timber.tag(loggerTag.value).d("Can't mark as wedge malformed")
                             }
                         }
                     }
@@ -132,53 +136,91 @@ internal class EventDecryptor @Inject constructor(
         }
     }
 
-    // coroutineDispatchers.crypto scope
-    private fun markOlmSessionForUnwedging(senderId: String, deviceInfo: CryptoDeviceInfo) {
-        val deviceKey = deviceInfo.identityKey()
-
-        val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
-        val now = System.currentTimeMillis()
-        if (now - lastForcedDate < DefaultCryptoService.CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
-            Timber.w("## CRYPTO | markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
-            return
-        }
-
-        Timber.i("## CRYPTO | markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
-        lastNewSessionForcedDates.setObject(senderId, deviceKey, now)
-
-        // offload this from crypto thread (?)
-        cryptoCoroutineScope.launch(coroutineDispatchers.computation) {
-            runCatching { ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true) }.fold(
-                    onSuccess = { sendDummyToDevice(ensured = it, deviceInfo, senderId) },
-                    onFailure = {
-                        Timber.e("## CRYPTO | markOlmSessionForUnwedging() : failed to ensure device info ${senderId}${deviceInfo.deviceId}")
-                    }
-            )
+    private fun markOlmSessionForUnwedging(senderId: String, senderKey: String) {
+        val info = WedgedDeviceInfo(senderId, senderKey)
+        if (!wedgedDevices.contains(info)) {
+            Timber.tag(loggerTag.value).d("Marking device from $senderId key:$senderKey as wedged")
+            wedgedDevices.add(info)
         }
     }
 
-    private suspend fun sendDummyToDevice(ensured: MXUsersDevicesMap<MXOlmSessionResult>, deviceInfo: CryptoDeviceInfo, senderId: String) {
-        Timber.i("## CRYPTO | markOlmSessionForUnwedging() : ensureOlmSessionsForDevicesAction isEmpty:${ensured.isEmpty}")
-
-        // Now send a blank message on that session so the other side knows about it.
-        // (The keyshare request is sent in the clear so that won't do)
-        // We send this first such that, as long as the toDevice messages arrive in the
-        // same order we sent them, the other end will get this first, set up the new session,
-        // then get the keyshare request and send the key over this new session (because it
-        // is the session it has most recently received a message on).
-        val payloadJson = mapOf<String, Any>("type" to EventType.DUMMY)
-
-        val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
-        val sendToDeviceMap = MXUsersDevicesMap<Any>()
-        sendToDeviceMap.setObject(senderId, deviceInfo.deviceId, encodedPayload)
-        Timber.i("## CRYPTO | markOlmSessionForUnwedging() : sending dummy to $senderId:${deviceInfo.deviceId}")
-        withContext(coroutineDispatchers.io) {
-            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-            try {
-                sendToDeviceTask.executeRetry(sendToDeviceParams, remainingRetry = SEND_TO_DEVICE_RETRY_COUNT)
-            } catch (failure: Throwable) {
-                Timber.e(failure, "## CRYPTO | markOlmSessionForUnwedging() : failed to send dummy to $senderId:${deviceInfo.deviceId}")
+    // coroutineDispatchers.crypto scope
+    suspend fun unwedgeDevicesIfNeeded() {
+        // handle wedged devices
+        // Some olm decryption have failed and some device are wedged
+        // we should force start a new session for those
+        Timber.tag(loggerTag.value).v("Unwedging:  ${wedgedDevices.size} are wedged")
+        // get the one that should be retried according to rate limit
+        val now = System.currentTimeMillis()
+        val toUnwedge = wedgedDevices.filter {
+            val lastForcedDate = lastNewSessionForcedDates[it] ?: 0
+            if (now - lastForcedDate < DefaultCryptoService.CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
+                Timber.tag(loggerTag.value).d("Unwedging, New session for $it already forced with device at $lastForcedDate")
+                return@filter false
             }
+            // let's already mark that we tried now
+            lastNewSessionForcedDates[it] = now
+            true
         }
+
+        if (toUnwedge.isEmpty()) {
+            Timber.tag(loggerTag.value).v("Nothing to unwedge")
+            return
+        }
+        Timber.tag(loggerTag.value).d("Unwedging, trying to create new session for ${toUnwedge.size} devices")
+
+        toUnwedge
+                .chunked(100) // safer to chunk if we ever have lots of wedged devices
+                .forEach { wedgedList ->
+                    val groupedByUserId = wedgedList.groupBy { it.userId }
+                    // lets download keys if needed
+                    withContext(coroutineDispatchers.io) {
+                        deviceListManager.downloadKeys(groupedByUserId.keys.toList(), false)
+                    }
+
+                    // find the matching devices
+                    groupedByUserId
+                            .map { groupedByUser ->
+                                val userId = groupedByUser.key
+                                val wedgeSenderKeysForUser = groupedByUser.value.map { it.senderKey }
+                                val knownDevices = cryptoStore.getUserDevices(userId)?.values.orEmpty()
+                                userId to wedgeSenderKeysForUser.mapNotNull { senderKey ->
+                                    knownDevices.firstOrNull { it.identityKey() == senderKey }
+                                }
+                            }
+                            .toMap()
+                            .let { deviceList ->
+                                try {
+                                    // force creating new outbound session and mark them as most recent to
+                                    // be used for next encryption (dummy)
+                                    val sessionToUse = ensureOlmSessionsForDevicesAction.handle(deviceList, true)
+                                    Timber.tag(loggerTag.value).d("Unwedging, found ${sessionToUse.map.size} to send dummy to")
+
+                                    // Now send a dummy message on that session so the other side knows about it.
+                                    val payloadJson = mapOf(
+                                            "type" to EventType.DUMMY
+                                    )
+                                    val sendToDeviceMap = MXUsersDevicesMap<Any>()
+                                    sessionToUse.map.values
+                                            .flatMap { it.values }
+                                            .map { it.deviceInfo }
+                                            .forEach { deviceInfo ->
+                                                Timber.tag(loggerTag.value).v("encrypting dummy to ${deviceInfo.deviceId}")
+                                                val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
+                                                sendToDeviceMap.setObject(deviceInfo.userId, deviceInfo.deviceId, encodedPayload)
+                                            }
+
+                                    // now let's send that
+                                    val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
+                                    withContext(coroutineDispatchers.io) {
+                                        sendToDeviceTask.executeRetry(sendToDeviceParams, remainingRetry = SEND_TO_DEVICE_RETRY_COUNT)
+                                    }
+                                } catch (failure: Throwable) {
+                                    deviceList.flatMap { it.value }.joinToString { it.shortDebugString() }.let {
+                                        Timber.tag(loggerTag.value).e(failure, "## Failed to unwedge devices: $it}")
+                                    }
+                                }
+                            }
+                }
     }
 }

@@ -21,8 +21,6 @@
         <item name="vctr_fab_label_color">@color/vctr_fab_label_color_dark</item>
         <item name="vctr_touch_guard_bg">@color/vctr_touch_guard_bg_dark</item>
         <item name="vctr_keys_backup_banner_accent_color">@color/vctr_keys_backup_banner_accent_color_dark</item>
-        <item name="vctr_attachment_selector_background">@color/vctr_attachment_selector_background_dark</item>
-        <item name="vctr_attachment_selector_border">@color/vctr_attachment_selector_border_dark</item>
         <item name="vctr_room_active_widgets_banner_bg">@color/vctr_room_active_widgets_banner_bg_dark</item>
         <item name="vctr_room_active_widgets_banner_text">@color/vctr_room_active_widgets_banner_text_dark</item>
         <item name="vctr_reaction_background_off">@color/vctr_reaction_background_off_dark</item>
@@ -45,6 +43,7 @@
 
         <!-- Presence Indicator colors -->
         <item name="vctr_presence_indicator_offline">@color/vctr_presence_indicator_offline_dark</item>
+        <item name="vctr_presence_indicator_online">@color/vctr_presence_indicator_online_dark</item>
 
         <!-- Some aliases -->
         <item name="vctr_header_background">?vctr_system</item>
@@ -145,6 +144,8 @@
 
         <item name="android:actionButtonStyle">@style/Widget.Vector.ActionButton</item>
 
+        <!-- Location sharing -->
+        <item name="vctr_live_location">@color/vctr_live_location_dark</item>
     </style>
 
     <style name="Theme.Vector.Dark" parent="Base.Theme.Vector.Dark" />
