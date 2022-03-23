@@ -45,7 +45,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     override fun onCreate() {
         super.onCreate()
-        Timber.d("### LocationSharingService.onCreate")
+        Timber.i("### LocationSharingService.onCreate")
 
         // Start tracking location
         locationTracker.addCallback(this)
@@ -55,7 +55,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val roomArgs = intent?.getParcelableExtra(EXTRA_ROOM_ARGS) as? RoomArgs
 
-        Timber.d("### LocationSharingService.onStartCommand. sessionId - roomId ${roomArgs?.sessionId} - ${roomArgs?.roomId}")
+        Timber.i("### LocationSharingService.onStartCommand. sessionId - roomId ${roomArgs?.sessionId} - ${roomArgs?.roomId}")
 
         if (roomArgs != null) {
             roomArgsList.add(roomArgs)
@@ -80,11 +80,11 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     private fun stopSharingLocation(roomId: String) {
-        Timber.d("### LocationSharingService.stopSharingLocation for $roomId")
+        Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
         synchronized(roomArgsList) {
             roomArgsList.removeAll { it.roomId == roomId }
             if (roomArgsList.isEmpty()) {
-                Timber.d("### LocationSharingService. Destroying self, time is up for all rooms")
+                Timber.i("### LocationSharingService. Destroying self, time is up for all rooms")
                 destroyMe()
             }
         }
@@ -97,7 +97,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.d("### LocationSharingService.onDestroy")
+        Timber.i("### LocationSharingService.onDestroy")
         destroyMe()
     }
 
@@ -110,7 +110,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     override fun onLocationUpdate(locationData: LocationData) {
-        Timber.d("### LocationSharingService.onLocationUpdate. Lat - lon: ${locationData.latitude} - ${locationData.longitude}")
+        Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
     }
 
     override fun onLocationProviderIsNotAvailable() {

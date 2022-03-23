@@ -531,6 +531,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .setSmallIcon(R.drawable.ic_attachment_location_live_white)
                 .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
                 .setCategory(NotificationCompat.CATEGORY_LOCATION_SHARING)
+                .setContentIntent(buildOpenHomePendingIntentForSummary())
                 .build()
     }
 
