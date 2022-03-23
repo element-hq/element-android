@@ -1,0 +1,2 @@
+Perubahan utama dalam versi ini: pembaruan UI indikator pengetikan. Beberapa perbaikan kutu dan perbaikan stabilitas.
+Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases/tag/v1.4.4
