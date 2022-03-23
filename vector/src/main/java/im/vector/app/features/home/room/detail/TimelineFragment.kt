@@ -72,7 +72,6 @@ import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
 import im.vector.app.core.extensions.cleanup
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
@@ -446,7 +445,7 @@ class TimelineFragment @Inject constructor(
                     }
                     showErrorInSnackbar(it.throwable)
                 }
-            }.exhaustive
+            }
         }
 
         timelineViewModel.observeViewEvents {
@@ -483,7 +482,7 @@ class TimelineFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
-            }.exhaustive
+            }
         }
 
         if (savedInstanceState == null) {
@@ -875,7 +874,7 @@ class TimelineFragment @Inject constructor(
                 onContentAttachmentsReady(sharedData.attachmentData)
             }
             null                      -> Timber.v("No share data to process")
-        }.exhaustive
+        }
     }
 
     private fun handleSpaceShare() {
@@ -1241,7 +1240,7 @@ class TimelineFragment @Inject constructor(
                 insertUserDisplayNameInTextEditor(roomDetailPendingAction.userId)
             is RoomDetailPendingAction.OpenRoom          ->
                 handleOpenRoom(RoomDetailViewEvents.OpenRoom(roomDetailPendingAction.roomId, roomDetailPendingAction.closeCurrentRoom))
-        }.exhaustive
+        }
     }
 
     override fun onPause() {
@@ -1658,7 +1657,7 @@ class TimelineFragment @Inject constructor(
             is MessageComposerViewEvents.SlashCommandNotSupportedInThreads -> {
                 displayCommandError(getString(R.string.command_not_supported_in_threads, sendMessageResult.command.command))
             }
-        } // .exhaustive
+        } // 
 
         lockSendButton = false
     }
@@ -1782,6 +1781,7 @@ class TimelineFragment @Inject constructor(
                         transactionId = data.transactionId,
                 ).show(parentFragmentManager, "REQ")
             }
+            else                                          -> Unit
         }
     }
 
@@ -2236,6 +2236,8 @@ class TimelineFragment @Inject constructor(
             is EventSharedAction.EndPoll                    -> {
                 askConfirmationToEndPoll(action.eventId)
             }
+            is EventSharedAction.ReportContent              -> Unit /* Not clickable */
+            EventSharedAction.Separator                     -> Unit /* Not clickable */
         }
     }
 
@@ -2434,7 +2436,7 @@ class TimelineFragment @Inject constructor(
                                 locationOwnerId = session.myUserId
                         )
             }
-        }.exhaustive
+        }
     }
 
     // AttachmentsHelper.Callback

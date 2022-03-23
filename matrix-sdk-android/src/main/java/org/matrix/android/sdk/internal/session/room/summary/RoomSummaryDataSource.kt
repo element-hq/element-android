@@ -314,6 +314,7 @@ internal class RoomSummaryDataSource @Inject constructor(
             RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
             RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
             RoomCategoryFilter.ALL                     -> Unit // nop
+            null                                       -> Unit
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")

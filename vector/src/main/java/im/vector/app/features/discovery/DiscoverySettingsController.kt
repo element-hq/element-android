@@ -50,6 +50,7 @@ class DiscoverySettingsController @Inject constructor(
 
     override fun buildModels(data: DiscoverySettingsState) {
         when (data.identityServer) {
+            Uninitialized,
             is Loading -> {
                 loadingItem {
                     id("identityServerLoading")
@@ -209,18 +210,19 @@ class DiscoverySettingsController @Inject constructor(
             titleResId(R.string.settings_discovery_emails_title)
         }
         when (emails) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 loadingItem {
                     id("emailsLoading")
                 }
             }
-            is Fail       -> {
+            is Fail    -> {
                 settingsInfoItem {
                     id("emailsError")
                     helperText(emails.error.message)
                 }
             }
-            is Success    -> {
+            is Success -> {
                 if (emails().isEmpty()) {
                     settingsInfoItem {
                         id("emailsEmpty")
@@ -277,18 +279,19 @@ class DiscoverySettingsController @Inject constructor(
         }
 
         when (msisdns) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 loadingItem {
                     id("msisdnLoading")
                 }
             }
-            is Fail       -> {
+            is Fail    -> {
                 settingsInfoItem {
                     id("msisdnListError")
                     helperText(msisdns.error.message)
                 }
             }
-            is Success    -> {
+            is Success -> {
                 if (msisdns().isEmpty()) {
                     settingsInfoItem {
                         id("no_msisdn")
@@ -353,6 +356,7 @@ class DiscoverySettingsController @Inject constructor(
             colorProvider(host.colorProvider)
             stringProvider(host.stringProvider)
             when (pidInfo.isShared) {
+                Uninitialized,
                 is Loading -> {
                     buttonIndeterminate(true)
                 }
@@ -384,6 +388,7 @@ class DiscoverySettingsController @Inject constructor(
                             else          -> iconMode(IconMode.NONE)
                         }
                     }
+                    null                            -> Unit
                 }
             }
         }

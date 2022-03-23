@@ -199,12 +199,13 @@ class RoomAliasController @Inject constructor(
         }
 
         when (val localAliases = data.localAliases) {
-            is Uninitialized -> {
+            Uninitialized,
+            is Loading -> {
                 loadingItem {
                     id("loadingAliases")
                 }
             }
-            is Success       -> {
+            is Success -> {
                 if (localAliases().isEmpty()) {
                     settingsInfoItem {
                         id("locEmpty")
@@ -220,7 +221,7 @@ class RoomAliasController @Inject constructor(
                     }
                 }
             }
-            is Fail          -> {
+            is Fail    -> {
                 errorWithRetryItem {
                     id("alt_error")
                     text(host.errorFormatter.toHumanReadable(localAliases.error))

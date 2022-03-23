@@ -65,18 +65,17 @@ class MatrixToBottomSheet :
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         when (state.linkType) {
-            is PermalinkData.RoomLink     -> {
+            is PermalinkData.RoomLink            -> {
                 views.matrixToCardContentLoading.isVisible = state.roomPeekResult is Incomplete
                 showFragment(MatrixToRoomSpaceFragment::class, Bundle())
             }
-            is PermalinkData.UserLink     -> {
+            is PermalinkData.UserLink            -> {
                 views.matrixToCardContentLoading.isVisible = state.matrixItem is Incomplete
                 showFragment(MatrixToUserFragment::class, Bundle())
             }
-            is PermalinkData.GroupLink    -> {
-            }
-            is PermalinkData.FallbackLink -> {
-            }
+            is PermalinkData.GroupLink           -> Unit
+            is PermalinkData.FallbackLink        -> Unit
+            is PermalinkData.RoomEmailInviteLink -> Unit
         }
     }
 

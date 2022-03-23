@@ -21,11 +21,11 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -78,6 +78,7 @@ class ThreePidsSettingsController @Inject constructor(
         }
 
         when (data.threePids) {
+            Uninitialized,
             is Loading -> {
                 loadingItem {
                     id("loading")
@@ -160,7 +161,7 @@ class ThreePidsSettingsController @Inject constructor(
                 }
             }
             is ThreePidsSettingsUiState.AddingPhoneNumber -> Unit
-        }.exhaustive
+        }
 
         settingsSectionTitleItem {
             id("msisdn")
@@ -223,7 +224,7 @@ class ThreePidsSettingsController @Inject constructor(
                     cancelOnClick { host.interactionListener?.cancelAdding() }
                 }
             }
-        }.exhaustive
+        }
     }
 
     private fun buildThreePid(idPrefix: String, threePid: ThreePid) {

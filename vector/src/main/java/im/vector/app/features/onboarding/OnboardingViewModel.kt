@@ -31,7 +31,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -166,7 +165,7 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
             is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
             OnboardingAction.StopEmailValidationCheck      -> cancelWaitForEmailValidation()
-        }.exhaustive
+        }
     }
 
     private fun handleSplashAction(resetConfig: Boolean, onboardingFlow: OnboardingFlow) {
@@ -222,6 +221,7 @@ class OnboardingViewModel @AssistedInject constructor(
                                 .withAllowedFingerPrints(listOf(action.fingerprint))
                                 .build()
                 )
+            else                                 -> Unit
         }
     }
 
@@ -403,7 +403,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
             ServerType.EMS,
             ServerType.Other     -> _viewEvents.post(OnboardingViewEvents.OnServerSelectionDone(action.serverType))
-        }.exhaustive
+        }
     }
 
     private fun handleInitWith(action: OnboardingAction.InitWith) {
@@ -511,7 +511,7 @@ class OnboardingViewModel @AssistedInject constructor(
             SignMode.SignIn             -> handleLogin(action)
             SignMode.SignUp             -> handleRegisterWith(action)
             SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
-        }.exhaustive
+        }
     }
 
     private fun handleDirectLogin(action: OnboardingAction.LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?) {
@@ -541,7 +541,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 else                          -> {
                     onWellKnownError()
                 }
-            }.exhaustive
+            }
         }
     }
 

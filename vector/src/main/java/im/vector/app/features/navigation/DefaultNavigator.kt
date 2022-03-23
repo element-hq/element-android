@@ -320,6 +320,7 @@ class DefaultNavigator @Inject constructor(
                     }
                 }
             }
+            null                                -> Unit
         }
     }
 
@@ -376,6 +377,7 @@ class DefaultNavigator @Inject constructor(
                     context.startActivity(intent)
                 }
             }
+            null                                -> Unit
         }
     }
 

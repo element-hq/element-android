@@ -37,7 +37,6 @@ import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.copyOnLongClick
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.copyToClipboard
@@ -127,7 +126,7 @@ class RoomProfileFragment @Inject constructor(
                 is RoomProfileViewEvents.ShareRoomProfile -> onShareRoomProfile(it.permalink)
                 is RoomProfileViewEvents.OnShortcutReady  -> addShortcut(it)
                 RoomProfileViewEvents.DismissLoading      -> dismissLoadingDialog()
-            }.exhaustive
+            }
         }
         roomListQuickActionsSharedActionViewModel
                 .stream()

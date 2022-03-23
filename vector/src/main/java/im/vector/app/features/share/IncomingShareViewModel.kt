@@ -22,7 +22,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.attachments.isPreviewable
@@ -96,7 +95,7 @@ class IncomingShareViewModel @AssistedInject constructor(
             is IncomingShareAction.ShareMedia           -> handleShareMediaToSelectedRooms(action)
             is IncomingShareAction.FilterWith           -> handleFilter(action)
             is IncomingShareAction.UpdateSharedData     -> handleUpdateSharedData(action)
-        }.exhaustive
+        }
     }
 
     private fun handleUpdateSharedData(action: IncomingShareAction.UpdateSharedData) {
@@ -127,7 +126,7 @@ class IncomingShareViewModel @AssistedInject constructor(
                 is SharedData.Attachments -> {
                     shareAttachments(sharedData.attachmentData, state.selectedRoomIds, proposeMediaEdition = true, compressMediaBeforeSending = false)
                 }
-            }.exhaustive
+            }
         }
     }
 

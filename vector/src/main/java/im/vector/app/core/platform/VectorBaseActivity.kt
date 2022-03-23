@@ -54,7 +54,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.dialogs.DialogLocker
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.observeNotNull
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -267,7 +266,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             is GlobalError.CertificateError     ->
                 handleCertificateError(globalError)
             GlobalError.ExpiredAccount          -> Unit // TODO Handle account expiration
-        }.exhaustive
+        }
     }
 
     private fun handleCertificateError(certificateError: GlobalError.CertificateError) {

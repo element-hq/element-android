@@ -96,9 +96,10 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : VoiceMessagePlaybackTracker.Listener {
             override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
                 when (state) {
-                    is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder)
-                    is VoiceMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state)
-                    is VoiceMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state)
+                    is VoiceMessagePlaybackTracker.Listener.State.Idle      -> renderIdleState(holder)
+                    is VoiceMessagePlaybackTracker.Listener.State.Playing   -> renderPlayingState(holder, state)
+                    is VoiceMessagePlaybackTracker.Listener.State.Paused    -> renderPausedState(holder, state)
+                    is VoiceMessagePlaybackTracker.Listener.State.Recording -> Unit
                 }
             }
         })

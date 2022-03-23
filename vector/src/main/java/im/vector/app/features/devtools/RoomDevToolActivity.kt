@@ -34,7 +34,6 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.resources.ColorProvider
@@ -79,7 +78,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
                     Unit
                 }
                 is DevToolsViewEvents.ShowSnackMessage -> showSnackbar(it.message)
-            }.exhaustive
+            }
         }
         supportFragmentManager.addOnBackStackChangedListener(this)
     }

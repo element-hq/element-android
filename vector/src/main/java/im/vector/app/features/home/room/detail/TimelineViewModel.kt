@@ -33,7 +33,6 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -440,7 +439,7 @@ class TimelineViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
             is RoomDetailAction.EndPoll                          -> handleEndPoll(action.eventId)
-        }.exhaustive
+        }
     }
 
     private fun handleJitsiCallJoinStatus(action: RoomDetailAction.UpdateJoinJitsiCallStatus) = withState { state ->
