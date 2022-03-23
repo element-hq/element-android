@@ -378,7 +378,7 @@
     <string name="action_remove">Ta bort</string>
     <string name="action_join">Gå med</string>
     <string name="action_reject">Avslå</string>
-    <string name="list_members">Lista medlemmar</string>
+    <string name="list_members">Medlemmar</string>
     <string name="room_jump_to_first_unread">Hoppa till oläst</string>
     <plurals name="room_title_members">
         <item quantity="one">%d medlem</item>
@@ -2419,4 +2419,5 @@
         <item quantity="one">%d server-ACL-ändring</item>
         <item quantity="other">%d server-ACL-ändringar</item>
     </plurals>
+    <string name="threads_notice_migration_title">Trådar närmar sig beta 🎉</string>
 </resources>
