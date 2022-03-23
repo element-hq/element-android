@@ -1,1 +1,0 @@
-Poll Integration Tests

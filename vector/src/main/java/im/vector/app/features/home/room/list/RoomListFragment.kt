@@ -294,8 +294,7 @@ class RoomListFragment @Inject constructor(
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
-                                                    isHighlighted = counts.isHighlight,
-                                                    shouldShowExpandedArrow = shouldShowExpendedArrow()
+                                                    isHighlighted = counts.isHighlight
                                             ))
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
@@ -329,17 +328,14 @@ class RoomListFragment @Inject constructor(
                                             controller.setData(list)
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     isHidden = list.isEmpty(),
-                                                    isLoading = false,
-                                                    shouldShowExpandedArrow = shouldShowExpendedArrow()
-                                            ))
+                                                    isLoading = false))
                                             checkEmptyState()
                                         }
                                         observeItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
-                                                    isHighlighted = counts.isHighlight,
-                                                    shouldShowExpandedArrow = shouldShowExpendedArrow()
+                                                    isHighlighted = counts.isHighlight
                                             ))
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
@@ -445,10 +441,6 @@ class RoomListFragment @Inject constructor(
 
     override fun invalidate() = withState(roomListViewModel) { state ->
         footerController.setData(state)
-    }
-
-    private fun shouldShowExpendedArrow(): Boolean {
-        return adapterInfosList.filter { !it.sectionHeaderAdapter.roomsSectionData.isHidden }.size >= 2
     }
 
     private fun checkEmptyState() {
