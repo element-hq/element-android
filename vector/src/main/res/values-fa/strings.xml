@@ -282,7 +282,7 @@
     <string name="action_remove">برداشتن</string>
     <string name="action_join">پیوستن</string>
     <string name="action_reject">رد کردن</string>
-    <string name="list_members">فهرست اعضا</string>
+    <string name="list_members">اعضا</string>
     <string name="call_connecting">در حال برقراری تماس…</string>
     <string name="call_ended">تماس پایان یافت</string>
     <string name="incoming_video_call">تماس ویدئویی ورودی</string>
@@ -1957,7 +1957,7 @@
     <string name="you_are_invited">دعوت شده‌اید</string>
     <string name="spaces_beta_welcome_to_spaces_desc">فضاها شیوه‌ای جدید برای گروه‌بندی اتاق‌ها و افراد است.</string>
     <string name="space_add_existing_rooms">افزودن فضا و اتاق‌های موجود</string>
-    <string name="leave_space">ترک فضا</string>
+    <string name="leave_space">ترک</string>
     <string name="space_add_child_title">افزودن اتاق</string>
     <string name="space_explore_activity_title">کاوش در اتاق‌ها</string>
     <plurals name="space_people_you_know">
@@ -2419,4 +2419,15 @@
     <string name="message_reaction_show_less">نمایش کم‌تر</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s، %2$s و دیگران</string>
     <string name="room_notification_two_users_are_typing">%1$s و %2$s</string>
+    <string name="location_share_live_stop">توقّف</string>
+    <string name="location_share_live_enabled">مکان زنده به کار افتاد</string>
+    <string name="location_in_background_missing_permission_dialog_title">اجازهٔ دسترسی</string>
+    <string name="a11y_location_share_option_pinned_icon">هم‌رسانی این مکان</string>
+    <string name="location_share_option_pinned">هم‌رسانی این مکان</string>
+    <string name="a11y_location_share_option_user_live_icon">هم‌رسانی مکان زنده</string>
+    <string name="location_share_option_user_live">هم‌رسانی مکان زنده</string>
+    <string name="a11y_location_share_option_user_current_icon">هم‌رسانی مکان کنونیم</string>
+    <string name="location_share_option_user_current">هم‌رسانی مکان کنونیم</string>
+    <string name="a11y_location_share_locate_button">بزرگ‌نمایی به مکان کنونی</string>
+    <string name="a11y_location_share_pin_on_map">سنجاق مکان گزیده روی نقشه</string>
 </resources>
