@@ -84,7 +84,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     val spaceCountFlow: Flow<Int> by lazy {
         spaceUpdatableLivePageResult.livePagedList.asFlow()
-                .flatMapLatest { session.getRoomCountFlow(spaceUpdatableLivePageResult.queryParams) }
+                .flatMapLatest { session.getRoomCountLive(spaceUpdatableLivePageResult.queryParams).asFlow() }
                 .distinctUntilChanged()
     }
 
@@ -110,7 +110,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     val roomCountFlow: Flow<Int> by lazy {
         roomUpdatableLivePageResult.livePagedList.asFlow()
-                .flatMapLatest { session.getRoomCountFlow(roomUpdatableLivePageResult.queryParams) }
+                .flatMapLatest { session.getRoomCountLive(roomUpdatableLivePageResult.queryParams).asFlow() }
                 .distinctUntilChanged()
     }
 
@@ -136,7 +136,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     val dmCountFlow: Flow<Int> by lazy {
         dmUpdatableLivePageResult.livePagedList.asFlow()
-                .flatMapLatest { session.getRoomCountFlow(dmUpdatableLivePageResult.queryParams) }
+                .flatMapLatest { session.getRoomCountLive(dmUpdatableLivePageResult.queryParams).asFlow() }
                 .distinctUntilChanged()
     }
 

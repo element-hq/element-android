@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.poll.create
+package im.vector.app.features.poll
 
 enum class PollMode {
     CREATE,

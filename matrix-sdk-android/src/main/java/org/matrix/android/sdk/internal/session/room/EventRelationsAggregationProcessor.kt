@@ -482,46 +482,39 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                               roomId: String,
                               isLocalEcho: Boolean) {
         val pollEventId = content.relatesTo?.eventId ?: return
-
         val pollOwnerId = getPollEvent(roomId, pollEventId)?.root?.senderId
         val isPollOwner = pollOwnerId == event.senderId
-
         val powerLevelsHelper = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                 ?.content?.toModel<PowerLevelsContent>()
                 ?.let { PowerLevelsHelper(it) }
+
         if (!isPollOwner && !powerLevelsHelper?.isUserAbleToRedact(event.senderId ?: "").orFalse()) {
             Timber.v("## Received poll.end event $pollEventId but user ${event.senderId} doesn't have enough power level in room $roomId")
             return
         }
 
-        var existing = EventAnnotationsSummaryEntity.where(realm, roomId, pollEventId).findFirst()
-        if (existing == null) {
+        var existingPoll = EventAnnotationsSummaryEntity.where(realm, roomId, pollEventId).findFirst()
+        if (existingPoll == null) {
             Timber.v("## POLL creating new relation summary for $pollEventId")
-            existing = EventAnnotationsSummaryEntity.create(realm, roomId, pollEventId)
+            existingPoll = EventAnnotationsSummaryEntity.create(realm, roomId, pollEventId)
         }
 
         // we have it
-        val existingPollSummary = existing.pollResponseSummary
+        val existingPollSummary = existingPoll.pollResponseSummary
                 ?: realm.createObject(PollResponseAggregatedSummaryEntity::class.java).also {
-                    existing.pollResponseSummary = it
+                    existingPoll.pollResponseSummary = it
                 }
 
-        if (existingPollSummary.closedTime != null) {
-            Timber.v("## Received poll.end event for already ended poll $pollEventId")
-            return
-        }
-
         val txId = event.unsignedData?.transactionId
+        existingPollSummary.closedTime = event.originServerTs
+
         // is it a remote echo?
         if (!isLocalEcho && existingPollSummary.sourceLocalEchoEvents.contains(txId)) {
             // ok it has already been managed
             Timber.v("## POLL  Receiving remote echo of response eventId:$pollEventId")
             existingPollSummary.sourceLocalEchoEvents.remove(txId)
             existingPollSummary.sourceEvents.add(event.eventId)
-            return
         }
-
-        existingPollSummary.closedTime = event.originServerTs
     }
 
     private fun getPollEvent(roomId: String, eventId: String): TimelineEvent? {
