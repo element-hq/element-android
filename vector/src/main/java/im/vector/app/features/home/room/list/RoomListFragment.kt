@@ -162,12 +162,12 @@ class RoomListFragment @Inject constructor(
             actualBlock.section = actualBlock.section.copy(
                     isExpanded = isRoomSectionExpanded
             )
-            actualBlock.sectionHeaderAdapter.updateSection(
-                    actualBlock.sectionHeaderAdapter.roomsSectionData.copy(
-                            isExpanded = isRoomSectionExpanded,
-                            shouldShowExpandedArrow = sectionsCount > 1
-                    )
-            )
+            actualBlock.sectionHeaderAdapter.updateSection {
+                it.copy(
+                        isExpanded = isRoomSectionExpanded,
+                        shouldShowExpandedArrow = sectionsCount > 1
+                )
+            }
         }
     }
 
@@ -276,32 +276,34 @@ class RoomListFragment @Inject constructor(
         val concatAdapter = ConcatAdapter()
 
         roomListViewModel.sections.forEach { section ->
-            val sectionAdapter = SectionHeaderAdapter {
+            val sectionAdapter = SectionHeaderAdapter(SectionHeaderAdapter.RoomsSectionData(section.sectionName)) {
                 roomListViewModel.handle(RoomListAction.ToggleSection(section))
-            }.also {
-                it.updateSection(SectionHeaderAdapter.RoomsSectionData(section.sectionName))
             }
 
             val contentAdapter =
                     when {
-                        section.livePages != null     -> {
+                        section.livePages != null -> {
                             pagedControllerFactory.createRoomSummaryPagedController()
                                     .also { controller ->
                                         section.livePages.observe(viewLifecycleOwner) { pl ->
                                             controller.submitList(pl)
-                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
-                                                    isHidden = pl.isEmpty(),
-                                                    isLoading = false
-                                            ))
+                                            sectionAdapter.updateSection {
+                                                it.copy(
+                                                        isHidden = pl.isEmpty(),
+                                                        isLoading = false
+                                                )
+                                            }
                                             refreshCollapseStates()
                                             checkEmptyState()
                                         }
                                         observeItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
-                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
-                                                    notificationCount = counts.totalCount,
-                                                    isHighlighted = counts.isHighlight,
-                                            ))
+                                            sectionAdapter.updateSection {
+                                                it.copy(
+                                                        notificationCount = counts.totalCount,
+                                                        isHighlighted = counts.isHighlight,
+                                                )
+                                            }
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
                                             refreshCollapseStates()
@@ -314,10 +316,12 @@ class RoomListFragment @Inject constructor(
                                     .also { controller ->
                                         section.liveSuggested.observe(viewLifecycleOwner) { info ->
                                             controller.setData(info)
-                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
-                                                    isHidden = info.rooms.isEmpty(),
-                                                    isLoading = false
-                                            ))
+                                            sectionAdapter.updateSection {
+                                                it.copy(
+                                                        isHidden = info.rooms.isEmpty(),
+                                                        isLoading = false
+                                                )
+                                            }
                                             refreshCollapseStates()
                                             checkEmptyState()
                                         }
@@ -333,19 +337,23 @@ class RoomListFragment @Inject constructor(
                                     .also { controller ->
                                         section.liveList?.observe(viewLifecycleOwner) { list ->
                                             controller.setData(list)
-                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
-                                                    isHidden = list.isEmpty(),
-                                                    isLoading = false,
-                                            ))
+                                            sectionAdapter.updateSection {
+                                                it.copy(
+                                                        isHidden = list.isEmpty(),
+                                                        isLoading = false,
+                                                )
+                                            }
                                             refreshCollapseStates()
                                             checkEmptyState()
                                         }
                                         observeItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
-                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
-                                                    notificationCount = counts.totalCount,
-                                                    isHighlighted = counts.isHighlight
-                                            ))
+                                            sectionAdapter.updateSection {
+                                                it.copy(
+                                                        notificationCount = counts.totalCount,
+                                                        isHighlighted = counts.isHighlight
+                                                )
+                                            }
                                         }
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
                                             refreshCollapseStates()
@@ -393,9 +401,9 @@ class RoomListFragment @Inject constructor(
             section.itemCount
                     .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                     .collect { count ->
-                        sectionAdapter.updateSection(
-                                sectionAdapter.roomsSectionData.copy(itemCount = count)
-                        )
+                        sectionAdapter.updateSection {
+                            it.copy(itemCount = count)
+                        }
                     }
         }
     }

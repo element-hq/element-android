@@ -29,6 +29,7 @@ import im.vector.app.databinding.ItemRoomCategoryBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class SectionHeaderAdapter constructor(
+        roomsSectionData: RoomsSectionData,
         private val onClickAction: ClickListener
 ) : RecyclerView.Adapter<SectionHeaderAdapter.VH>() {
 
@@ -44,11 +45,12 @@ class SectionHeaderAdapter constructor(
             val shouldShowExpandedArrow: Boolean = false
     )
 
-    lateinit var roomsSectionData: RoomsSectionData
+    var roomsSectionData: RoomsSectionData = roomsSectionData
         private set
 
-    fun updateSection(newRoomsSectionData: RoomsSectionData) {
-        if (!::roomsSectionData.isInitialized || newRoomsSectionData != roomsSectionData) {
+    fun updateSection(block: (RoomsSectionData) -> RoomsSectionData) {
+        val newRoomsSectionData = block(roomsSectionData)
+        if (roomsSectionData != newRoomsSectionData) {
             roomsSectionData = newRoomsSectionData
             notifyDataSetChanged()
         }
