@@ -24,6 +24,7 @@ import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAnalyticsTracker
 import im.vector.app.test.fakes.FakeAuthenticationService
 import im.vector.app.test.fakes.FakeContext
+import im.vector.app.test.fakes.FakeDirectLoginUseCase
 import im.vector.app.test.fakes.FakeHomeServerConnectionConfigFactory
 import im.vector.app.test.fakes.FakeHomeServerHistoryService
 import im.vector.app.test.fakes.FakeRegisterActionHandler
@@ -44,6 +45,7 @@ import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.Stage
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
 private const val A_DISPLAY_NAME = "a display name"
@@ -55,6 +57,7 @@ private val A_RESULT_IGNORED_REGISTER_ACTION = RegisterAction.AddThreePid(Regist
 private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
 private val AN_IGNORED_FLOW_RESULT = FlowResult(missingStages = emptyList(), completedStages = emptyList())
 private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationResult.FlowResponse(AN_IGNORED_FLOW_RESULT)
+private val A_LOGIN_OR_REGISTER_ACTION = OnboardingAction.LoginOrRegister("@a-user:id.org", "a-password", "a-device-name")
 
 class OnboardingViewModelTest {
 
@@ -69,6 +72,7 @@ class OnboardingViewModelTest {
     private val fakeActiveSessionHolder = FakeActiveSessionHolder(fakeSession)
     private val fakeAuthenticationService = FakeAuthenticationService()
     private val fakeRegisterActionHandler = FakeRegisterActionHandler()
+    private val fakeDirectLoginUseCase = FakeDirectLoginUseCase()
 
     lateinit var viewModel: OnboardingViewModel
 
@@ -111,6 +115,26 @@ class OnboardingViewModelTest {
 
         test
                 .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
+                .finish()
+    }
+
+    @Test
+    fun `given has sign in with matrix id sign mode, when handling login or register action, then logs in directly`() = runTest {
+        val initialState = initialState.copy(signMode = SignMode.SignInWithMatrixId)
+        viewModel = createViewModel(initialState)
+        fakeDirectLoginUseCase.givenSuccessResult(A_LOGIN_OR_REGISTER_ACTION, config = null, result = fakeSession)
+        givenInitialisesSession(fakeSession)
+        val test = viewModel.test()
+
+        viewModel.handle(A_LOGIN_OR_REGISTER_ACTION)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
                 .finish()
     }
 
@@ -344,6 +368,7 @@ class OnboardingViewModelTest {
                 FakeAnalyticsTracker(),
                 fakeUriFilenameResolver.instance,
                 fakeRegisterActionHandler.instance,
+                fakeDirectLoginUseCase.instance,
                 FakeVectorOverrides()
         )
     }
@@ -384,7 +409,11 @@ class OnboardingViewModelTest {
 
     private fun givenSuccessfullyCreatesAccount(homeServerCapabilities: HomeServerCapabilities) {
         fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(homeServerCapabilities)
-        fakeActiveSessionHolder.expectSetsActiveSession(fakeSession)
+        givenInitialisesSession(fakeSession)
+    }
+
+    private fun givenInitialisesSession(session: Session) {
+        fakeActiveSessionHolder.expectSetsActiveSession(session)
         fakeAuthenticationService.expectReset()
         fakeSession.expectStartsSyncing()
     }
