@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentCreatePollBinding
+import im.vector.app.features.poll.PollMode
 import im.vector.app.features.poll.create.CreatePollViewModel.Companion.MAX_OPTIONS_COUNT
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.room.model.message.PollType
