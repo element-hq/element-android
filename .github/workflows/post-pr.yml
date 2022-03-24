@@ -49,14 +49,8 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: 3.8
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Configure gradle 
+        uses: gradle/gradle-build-action@v2
       - name: Start synapse server
         uses: michaelkaye/setup-matrix-synapse@v1.0.3
         with:
@@ -238,14 +232,12 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: 3.8
-      - uses: actions/cache@v3
+      - uses: actions/setup-java@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          distribution: 'adopt'
+          java-version: '11'
+      - name: Configure gradle 
+        uses: gradle/gradle-build-action@v2
       - name: Start synapse server
         uses: michaelkaye/setup-matrix-synapse@v1.0.3
         with:
@@ -253,10 +245,6 @@ jobs:
           httpPort: 8080
           disableRateLimiting: true
           public_baseurl: "http://10.0.2.2:8080/"
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'adopt'
-          java-version: '11'
       - name: Run sanity tests on API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -292,14 +280,8 @@ jobs:
         with: 
           distribution: 'adopt'
           java-version: '11'
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Configure gradle 
+        uses: gradle/gradle-build-action@v2
       - run: ./gradlew allCodeCoverageReport $CI_GRADLE_ARG_PROPERTIES
       - name: Upload Codecov data
         uses: actions/upload-artifact@v3
