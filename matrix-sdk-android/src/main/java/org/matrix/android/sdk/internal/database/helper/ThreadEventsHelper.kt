@@ -16,9 +16,12 @@
 
 package org.matrix.android.sdk.internal.database.helper
 
+import com.squareup.moshi.JsonDataException
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
+import org.matrix.android.sdk.api.session.events.model.UnsignedData
+import org.matrix.android.sdk.api.session.events.model.isRedacted
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -33,6 +36,8 @@ import org.matrix.android.sdk.internal.database.query.findIncludingEvent
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
+import org.matrix.android.sdk.internal.di.MoshiProvider
+import timber.log.Timber
 
 private typealias Summary = Pair<Int, TimelineEventEntity>?
 
@@ -90,19 +95,18 @@ internal fun EventEntity.markEventAsRoot(
 
 /**
  * Count the number of threads for the provided root thread eventId, and finds the latest event message
+ * note: Redactions are handled by RedactionEventProcessor
  * @param rootThreadEventId The root eventId that will find the number of threads
  * @return A ThreadSummary containing the counted threads and the latest event message
  */
 internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String, chunkEntity: ChunkEntity?): Summary {
-    // Number of messages
-    val messages = TimelineEventEntity
-            .whereRoomId(realm, roomId = roomId)
-            .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-            .distinct(TimelineEventEntityFields.ROOT.EVENT_ID)
-            .count()
-            .toInt()
+    val numberOfThread = countThreads(
+            realm = realm,
+            roomId = roomId,
+            rootThreadEventId = rootThreadEventId
+    ) ?: return null
 
-    if (messages <= 0) return null
+    if (numberOfThread <= 0) return null
 
     // Find latest thread event, we know it exists
     var chunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: chunkEntity ?: return null
@@ -124,8 +128,37 @@ internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: 
 
     result ?: return null
 
-    return Summary(messages, result)
+    return Summary(numberOfThread, result)
 }
+
+/**
+ * Counts the number of threads in the main timeline thread summary,
+ * with respect to redactions.
+ */
+internal fun countThreads(realm: Realm, roomId: String, rootThreadEventId: String): Int? =
+        TimelineEventEntity
+                .whereRoomId(realm, roomId = roomId)
+                .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+                .distinct(TimelineEventEntityFields.ROOT.EVENT_ID)
+                .findAll()
+                ?.filterNot { timelineEvent ->
+                    timelineEvent.root
+                            ?.unsignedData
+                            ?.takeIf { it.isNotBlank() }
+                            ?.toUnsignedData()
+                            .isRedacted()
+                }?.size
+
+/**
+ * Mapping string to UnsignedData using Moshi
+ */
+private fun String.toUnsignedData(): UnsignedData? =
+        try {
+            MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(this)
+        } catch (ex: JsonDataException) {
+            Timber.e(ex, "Failed to parse UnsignedData")
+            null
+        }
 
 /**
  * Lets compare them in case user is moving forward in the timeline and we cannot know the
