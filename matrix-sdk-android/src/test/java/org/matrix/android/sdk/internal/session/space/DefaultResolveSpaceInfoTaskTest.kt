@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.space
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
@@ -35,7 +35,7 @@ internal class DefaultResolveSpaceInfoTaskTest {
     private val resolveSpaceInfoTask = DefaultResolveSpaceInfoTask(spaceApi.instance, globalErrorReceiver)
 
     @Test
-    fun `given stable endpoint works, when execute, then return stable api data`() = runBlockingTest {
+    fun `given stable endpoint works, when execute, then return stable api data`() = runTest {
         spaceApi.givenStableEndpointReturns(response)
 
         val result = resolveSpaceInfoTask.execute(spaceApi.params)
@@ -44,7 +44,7 @@ internal class DefaultResolveSpaceInfoTaskTest {
     }
 
     @Test
-    fun `given stable endpoint fails, when execute, then fallback to unstable endpoint`() = runBlockingTest {
+    fun `given stable endpoint fails, when execute, then fallback to unstable endpoint`() = runTest {
         spaceApi.givenStableEndpointThrows(httpException)
         spaceApi.givenUnstableEndpointReturns(response)
 

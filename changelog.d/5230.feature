@@ -1,1 +1,0 @@
-Thread timeline is now live and much faster especially for large or old threads

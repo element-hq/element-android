@@ -24,7 +24,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -56,7 +55,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
         when (action) {
             is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
             is CreateDirectRoomAction.QrScannedAction                  -> onCodeParsed(action)
-        }.exhaustive
+        }
     }
 
     private fun onCodeParsed(action: CreateDirectRoomAction.QrScannedAction) {
@@ -108,7 +107,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                             when (it) {
                                 is PendingSelection.UserPendingSelection     -> invitedUserIds.add(it.user.userId)
                                 is PendingSelection.ThreePidPendingSelection -> invite3pids.add(it.threePid)
-                            }.exhaustive
+                            }
                         }
                         setDirectMessage()
                         enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault

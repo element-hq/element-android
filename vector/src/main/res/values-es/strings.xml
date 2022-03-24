@@ -39,7 +39,6 @@
     <string name="room_displayname_room_invite">Invitación a Sala</string>
     <string name="room_displayname_two_members">%1$s y %2$s</string>
     <string name="room_displayname_empty_room">Sala vacía</string>
-
     <string name="notice_room_third_party_revoked_invite">%1$s ha revocado la invitación a unirse a la sala para %2$s</string>
     <string name="initial_sync_start_importing_account">Sincronización inicial
 \nImportando cuenta…</string>
@@ -241,7 +240,6 @@
     <string name="action_delete">Eliminar</string>
     <string name="action_rename">Renombrar</string>
     <string name="report_content">Reportar contenido</string>
-
     <string name="or">o</string>
     <string name="action_invite">Invitar</string>
     <string name="action_sign_out">Cerrar sesión</string>
@@ -264,7 +262,6 @@
     <string name="matrix_only_filter">Solo contactos de Matrix</string>
     <string name="no_result_placeholder">No hay resultados</string>
     <string name="rooms_header">Salas</string>
-
     <string name="send_bug_report_include_logs">Enviar registros</string>
     <string name="send_bug_report_include_crash_logs">Enviar registros de fallas</string>
     <string name="send_bug_report_include_screenshot">Enviar captura de pantalla</string>
@@ -292,11 +289,9 @@
     <string name="auth_invalid_email">Esto no parece ser una dirección de correo electrónico válida</string>
     <string name="auth_email_already_defined">Esta dirección de correo electrónico ya está definida.</string>
     <string name="auth_forgot_password">¿Olvidaste tu contraseña?</string>
-
     <string name="auth_recaptcha_message">Este Servidor Doméstico quiere asegurarse de que no eres un robot</string>
     <string name="auth_reset_password_missing_email">Debes ingresar la dirección de correo electrónico vinculada a tu cuenta.</string>
     <string name="auth_reset_password_error_unauthorized">No se pudo verificar la dirección de correo electrónico: asegúrate de hacer clic en el enlace del correo electrónico</string>
-
     <string name="login_error_invalid_home_server">Por favor introduce una URL válida</string>
     <string name="login_error_bad_json">JSON mal formado</string>
     <string name="login_error_not_json">No contenía un JSON válido</string>
@@ -312,15 +307,10 @@
     <string name="call_in_progress">Llamada En Curso…</string>
     <string name="call_error_user_not_responding">El lado remoto no contestó.</string>
     <string name="permissions_rationale_popup_title">Información</string>
-
-
     <string name="permissions_rationale_msg_record_audio">${app_name} necesita permiso para acceder a tu micrófono para realizar llamadas de voz.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} necesita permiso para acceder a tu cámara y micrófono para realizar llamadas de vídeo.
 \n
 \nPor favor permite el acceso en las próximas ventanas emergentes para poder realizar la llamada.</string>
-
-
     <string name="yes">SÍ</string>
     <string name="no">NO</string>
     <string name="_continue">Continuar</string>
@@ -328,7 +318,6 @@
     <string name="action_join">Unirse</string>
     <string name="action_reject">Rechazar</string>
     <string name="room_jump_to_first_unread">Mensajes no leídos.</string>
-
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Seguro que quieres salir de la sala?</string>
     <string name="room_participants_header_direct_chats">CONVERSACIONES DIRECTAS</string>
@@ -355,7 +344,6 @@
     <string name="ssl_unexpected_existing_expl">El certificado cambió de uno que era confiable para tu teléfono. Esto es MUY INUSUAL. Se recomienda NO ACEPTAR este nuevo certificado.</string>
     <string name="ssl_expected_existing_expl">El certificado cambió de uno que era confiable a uno que no es confiable. El servidor puede haber renovado su certificado. Contacta al administrador del servidor para obtener la huella digital.</string>
     <string name="ssl_only_accept">Solo acepta el certificado si el administrador del servidor ha publicado una huella digital que coincide con la anterior.</string>
-
     <string name="search_hint">Buscar</string>
     <string name="search_members_hint">Filtrar miembros de la sala</string>
     <string name="search_no_results">No hay resultados</string>
@@ -400,7 +388,6 @@
     <string name="devices_details_device_name">Actualizar Nombre Público</string>
     <string name="devices_details_last_seen_title">Visto por última vez</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-
     <string name="devices_delete_dialog_title">Autenticación</string>
     <string name="settings_logged_in">Sesión iniciada como</string>
     <string name="settings_home_server">Servidor Doméstico</string>
@@ -431,7 +418,6 @@
     <string name="room_settings_labs_warning_message">Estas son funcionalidades experimentales que pueden romperse de maneras inesperadas. Utilizar con precaución.</string>
     <string name="room_settings_set_main_address">Establecer como dirección principal</string>
     <string name="room_settings_unset_main_address">Dejar de Establecer como dirección principal</string>
-
     <string name="encryption_information_decryption_error">Error de descifrado</string>
     <string name="encryption_information_device_name">Nombre público</string>
     <string name="encryption_information_device_id">ID de sesión</string>
@@ -442,7 +428,6 @@
     <string name="encryption_export_export">Exportar</string>
     <string name="passphrase_enter_passphrase">Ingresar frase de contraseña</string>
     <string name="passphrase_confirm_passphrase">Confirmar frase de contraseña</string>
-
     <string name="encryption_import_e2e_room_keys">Importar claves de salas con cifrado Extremo-a-Extremo</string>
     <string name="encryption_import_room_keys">Importar claves de sala</string>
     <string name="encryption_import_room_keys_summary">Importar las claves desde un archivo local</string>
@@ -454,7 +439,6 @@
     <string name="encryption_information_verify">Verificar</string>
     <string name="encryption_information_verify_device_warning">Para verificar que esta sesión es confiable, por favor contacta a su dueño por algún otro medio (ej. cara a cara o por teléfono) y pregúntale si la clave que ve en sus Ajustes de Usuario para esta sesión coincide con la clave a continuación:</string>
     <string name="encryption_information_verify_device_warning2">Si coincide, presione el botón de verificar a continuación. Si no coincide, entonces alguien está interceptando esta sesión y probablemente debería prohibirlo. En el futuro, este proceso de verificación será más sofisticado.</string>
-
     <string name="select_room_directory">Selecciona un directorio de salas</string>
     <string name="directory_server_placeholder">Nombre del servidor</string>
     <string name="directory_server_all_rooms_on_server">Todas las salas en el servidor %s</string>
@@ -540,8 +524,6 @@
         <item quantity="one">%d mensaje nuevo</item>
         <item quantity="other">%d mensajes nuevos</item>
     </plurals>
-
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d sala</item>
         <item quantity="other">%d salas</item>
@@ -550,12 +532,10 @@
         <item quantity="one">%d cambio de membresía</item>
         <item quantity="other">%d cambios de membresía</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d mensaje sin leer</item>
         <item quantity="other">%d mensajes sin leer</item>
     </plurals>
-
     <string name="notification_unread_notified_messages_in_room">%1$s en %2$s</string>
     <plurals name="active_widgets">
         <item quantity="one">%d componente activo</item>
@@ -608,16 +588,10 @@
     <string name="room_tombstone_predecessor_link">Haz clic aquí para ver mensajes más antiguos</string>
     <string name="command_description_deop_user">Degrada al usuario con la ID dada</string>
     <string name="system_alerts_header">Alertas de Sistema</string>
-
-
-
-
     <plurals name="room_details_selected">
         <item quantity="one">$d seleccionado</item>
         <item quantity="other">%d seleccionados</item>
     </plurals>
-
-
     <string name="resource_limit_contact_admin">contacta al administrador de tu servicio</string>
     <string name="resource_limit_soft_default">Este servidor doméstico ha excedido uno de sus límites de recursos, por lo que <b>algunos usuarios no podrán iniciar sesión</b>.</string>
     <string name="resource_limit_hard_default">Este servidor doméstico ha excedido uno de sus límites de recursos.</string>
@@ -741,7 +715,6 @@
     <string name="settings_show_avatar_display_name_changes_messages_summary">Incluye cambios en el avatar y en el nombre.</string>
     <string name="settings_send_message_with_enter">Enviar mensaje con intro</string>
     <string name="settings_send_message_with_enter_summary">La tecla Intro enviará el mensaje en vez de añadir un salto de línea</string>
-
     <string name="settings_password">Contraseña</string>
     <string name="settings_fail_to_update_password_invalid_current_password">La contraseña no es válida</string>
     <string name="settings_media">Media</string>
@@ -801,7 +774,6 @@
     <string name="keys_backup_setup_step3_copy_button_title">Guardar clave de recuperación</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Compartir</string>
     <string name="keys_backup_setup_step3_save_button_title">Guardar como archivo</string>
-
     <string name="keys_backup_setup_step3_please_make_copy">Por favor, haga una copia</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Compartir clave de recuperación con…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Generando clave de recuperación usando una contraseña, este proceso puede tardar varios segundos.</string>
@@ -848,7 +820,6 @@
         <item quantity="other">Cargando %d de las claves…</item>
     </plurals>
     <string name="keys_backup_info_title_signature">Firma</string>
-
     <string name="settings_default_media_source">Origen predeterminado de medios</string>
     <string name="keys_backup_setup">Configurar copia de seguridad de las claves de cifrado</string>
     <string name="keys_backup_restore_is_getting_backup_version">Obteniendo una versión de copia de seguridad…</string>
@@ -857,7 +828,6 @@
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">La copia de seguridad tiene una firma inválida de la sesión no verificada %s</string>
     <string name="keys_backup_settings_untrusted_backup">Para usar la copia de seguridad de la clave en esta sesión introduzca su contraseña o su clave de recuperación ahora.</string>
     <string name="keys_backup_settings_delete_confirm_message">¿Deseas borrar tus claves de cifrado guardadas en el servidor\? No podrás usar tu clave de recuperación para leer el historial de mensajes cifrados.</string>
-
     <string name="settings_play_shutter_sound">Reproducir sonido de cámara</string>
     <string name="encryption_information_unknown_ip">ip desconocida</string>
     <string name="you_added_a_new_device_with_info">Una nueva sesión solicita claves de cifrado.
@@ -878,8 +848,6 @@
     <string name="keys_backup_settings_checking_backup_state">Comprobando copias de respaldo</string>
     <string name="sas_verified">¡Verificado!</string>
     <string name="sas_got_it">Ok</string>
-
-
     <string name="sas_incoming_request_notif_title">Solicitud de verificación</string>
     <string name="sas_incoming_request_notif_content">%s quiere verificar tu sesión</string>
     <string name="sas_error_unknown">Error desconocido</string>
@@ -933,7 +901,6 @@
     <string name="settings_integrations">Integraciones</string>
     <string name="settings_discovery_category">Descubrimiento</string>
     <string name="settings_discovery_manage">Gestione sus preferencias de descubrimiento.</string>
-
     <string name="login_error_no_homeserver_found">Esta no es una dirección de servidor Matrix válida</string>
     <string name="login_error_homeserver_not_found">No se puede acceder al servidor en esta URL, por favor, compruébelo</string>
     <string name="settings_background_fdroid_sync_mode">Modo Sincronización en segundo plano</string>
@@ -942,7 +909,6 @@
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} se sincronizará en segundo plano periódicamente en un momento preciso (configurable).
 \nEsto afectará al uso de la radio y la batería, se mostrará una notificación permanente que indica que ${app_name} está escuchando a nuevos acontecimientos.</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">No se le notificará de los mensajes entrantes cuando la aplicación esté en segundo plano.</string>
-
     <string name="settings_integrations_summary">Utiliza un Gestor de Integración para gestionar los bots, puentes, widgets y paquetes de pegatinas.
 \nLos Gestores de Integración reciben los datos de configuración y pueden modificar los widgets, enviar invitaciones a salas y establecer niveles de poder en su nombre.</string>
     <string name="settings_integration_allow">Permitir integraciones</string>
@@ -1078,7 +1044,6 @@
     <string name="content_reported_as_inappropriate_content">Este contenido fue reportado como inapropiado.
 \n
 \nSi no quieres ver más contenido de este usuario, puedes bloquearlo para ocultar sus mensajes.</string>
-
     <string name="message_ignore_user">Ignorar usuario</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Todos los mensajes (sonido)</string>
     <string name="room_list_quick_actions_notifications_all">Todos los mensajes</string>
@@ -1508,7 +1473,6 @@
 \n- El servidor privado al que está conectado el usuario que estás verificando
 \n- Su conexión a internet o la de otros usuarios
 \n- Su dispositivo o el de otros usuarios</string>
-
     <string name="room_profile_encrypted_subtitle">Los mensajes de esta sala están cifrados Extremo-a-Extremo.
 \n
 \nSus mensajes están protegidos y sólo usted y el destinatario tienen las claves únicas para descifrarlos.</string>
@@ -1589,7 +1553,6 @@
     <string name="bootstrap_crosssigning_print_it">Imprímelo y guárdalo en un lugar seguro</string>
     <string name="bootstrap_crosssigning_save_usb">Guárdelo en una llave USB o unidad de respaldo</string>
     <string name="bootstrap_crosssigning_save_cloud">Cópielo en su almacenamiento personal en la nube</string>
-
     <string name="bootstrap_cancel_text">Si cancela ahora, puede perder mensajes y datos cifrados si pierde el acceso a sus inicios de sesión.
 \n
 \nTambién puede configurar la Copia de Seguridad Segura y administrar sus claves en Configuración.</string>
@@ -1937,7 +1900,6 @@
     <string name="call_transfer_title">Transferir</string>
     <string name="call_transfer_connect_action">Conectar</string>
     <string name="call_transfer_consult_first">Preguntar primero</string>
-
     <string name="call_only_active">Llamada activa (%1$s)</string>
     <string name="call_dial_pad_title">Pad de marcado</string>
     <string name="call_tile_ended">Esta llamada ha terminado</string>
@@ -2062,7 +2024,6 @@
     <string name="denied_permission_camera">Para llevar a cabo esta acción has de otorgar el permiso de Cámara en las preferencias del sistema.</string>
     <string name="denied_permission_generic">Se requieren permisos para llevar a cabo esta acción. Por favor, otórgalos desde las preferencias del sistema.</string>
     <string name="create_room_disable_federation_title">Impedir a cualquiera que no forme parte de %s unirse a este sala</string>
-
     <string name="settings_discovery_consent_action_give_consent">Dar consentimiento</string>
     <string name="settings_discovery_consent_action_revoke">Revocar consentimiento</string>
     <string name="settings_discovery_consent_notice_on">Has dado tu consentimiento para enviar emails y números de teléfono a este servidor identidad para descubrir a otros usuarios desde tus contactos.</string>
@@ -2087,7 +2048,6 @@
     <string name="upgrade_required">Actualización requerida</string>
     <string name="upgrade">Actualizar</string>
     <string name="it_may_take_some_time">Por favor, se paciente. Ésto puede llevar algo de tiempo.</string>
-
     <string name="unnamed_room">Sala sin nombre</string>
     <string name="spaces_no_server_support_description">Por favor, contacta con el administrador de tu homeserver para más información</string>
     <string name="spaces_no_server_support_title">Parece que tu homeserver no soporta Espacios todavía</string>
@@ -2143,7 +2103,6 @@
     <string name="call_transfer_transfer_to_title">Transferir a %1$s</string>
     <string name="call_transfer_consulting_with">Consultando con %1$s</string>
     <string name="call_transfer_failure">Ocurrió un error al transferir la llamada</string>
-
     <string name="call_dial_pad_lookup_error">Hubo un error al buscar el número de teléfono</string>
     <string name="call_tile_call_back">Devolver la llamada</string>
     <string name="phone_book_perform_lookup">Buscar contactos en Matrix</string>
@@ -2312,4 +2271,37 @@
     <string name="action_thread_view_in_room">Ver en la sala</string>
     <string name="action_enable">Habilitar</string>
     <string name="room_error_access_unauthorized">No estás autorizado a unirte a esta sala</string>
+    <string name="ftue_auth_use_case_skip">¿No lo sabes todavía\? Puedes %s</string>
+    <string name="ftue_auth_use_case_skip_partial">saltar esta pregunta</string>
+    <string name="ftue_auth_use_case_option_three">Comunidades</string>
+    <string name="ftue_auth_use_case_option_two">Equipos</string>
+    <string name="ftue_auth_use_case_option_one">Familia y amigos</string>
+    <string name="ftue_auth_use_case_subtitle">Te vamos a ayudar a conectarte.</string>
+    <string name="ftue_auth_use_case_title">¿Con quién hablarás más\?</string>
+    <string name="ftue_auth_carousel_workplace_title">Mensajería para tu equipo.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Mensajería segura.</string>
+    <string name="ftue_auth_carousel_control_title">Tú mandas.</string>
+    <string name="ftue_auth_carousel_secure_title">Toma el control de tus conversaciones.</string>
+    <string name="attachment_type_location">Ubicación</string>
+    <string name="attachment_type_poll">Encuesta</string>
+    <string name="identity_server_consent_dialog_content_question">¿Aceptas enviar esta información\?</string>
+    <string name="preference_system_settings">Ajustes del sistema</string>
+    <string name="preference_versions">Versiones</string>
+    <string name="preference_help_summary">Obtén ayuda sobre cómo usar ${app_name}</string>
+    <string name="preference_help_title">Ayuda</string>
+    <string name="preference_help">Ayuda</string>
+    <string name="preference_root_legals">Asuntos legales</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">¡Ya estás viendo este hilo!</string>
+    <string name="view_in_room">Ver en la sala</string>
+    <string name="reply_in_thread">Responder en un hilo</string>
+    <string name="command_not_supported_in_threads">El comando «%s» existe, pero no funciona dentro de hilos.</string>
+    <string name="legals_no_policy_provided">Este servidor no ha devuelto ninguna política.</string>
+    <string name="legals_third_party_notices">Bibliotecas de terceros</string>
+    <string name="legals_identity_server_title">Política de tu servidor de identidad</string>
+    <string name="legals_home_server_title">Política de tu servidor base</string>
+    <string name="legals_application_title">Política de ${app_name}</string>
+    <string name="room_notification_two_users_are_typing">%1$s y %2$s</string>
+    <string name="thread_list_modal_title">Filtrar</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s y otros</string>
+    <string name="action_thread_copy_link_to_thread">Copiar enlace al hilo</string>
 </resources>

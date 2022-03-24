@@ -731,6 +731,8 @@
     <!-- Parameter %s will be replaced by the value of string reply_in_thread -->
     <string name="thread_list_empty_notice">Tip: Long tap a message and use “%s”.</string>
     <string name="search_thread_from_a_thread">From a Thread</string>
+    <string name="threads_notice_migration_title">Threads Approaching Beta 🎉</string>
+    <string name="threads_notice_migration_message">We’re getting closer to releasing a public Beta for Threads.\n\nAs we prepare for it, we need to make some changes: threads created before this point will be displayed as regular replies.\n\nThis will be a one-off transition as Threads are now part of the Matrix specification.</string>
 
     <!-- Search -->
     <string name="search_hint">Search</string>

@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
@@ -129,7 +128,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
             is Fail    -> {
                 views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
-            is Success -> Unit
+            else       -> Unit
         }
     }
 }

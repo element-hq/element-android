@@ -64,7 +64,11 @@ data class MatrixConfiguration(
         /**
          * True to enable presence information sync (if available). False to disable regardless of server setting.
          */
-        val presenceSyncEnabled: Boolean = true
+        val presenceSyncEnabled: Boolean = true,
+        /**
+         * Thread messages default enable/disabled value
+         */
+        val threadMessagesEnabledDefault: Boolean = false,
 ) {
 
     /**

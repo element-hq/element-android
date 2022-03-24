@@ -74,8 +74,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
                         is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
                         UserListSharedAction.OpenPhoneBook         -> openPhoneBook()
                         // not exhaustive because it's a sharedAction
-                        else                                       -> {
-                        }
+                        else                                       -> Unit
                     }
                 }
                 .launchIn(lifecycleScope)

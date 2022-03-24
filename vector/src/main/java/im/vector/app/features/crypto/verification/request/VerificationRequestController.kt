@@ -18,6 +18,7 @@ package im.vector.app.features.crypto.verification.request
 
 import androidx.core.text.toSpannable
 import com.airbnb.epoxy.EpoxyController
+import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -153,6 +154,7 @@ class VerificationRequestController @Inject constructor(
                         }
                     }
                 }
+                is Fail          -> Unit
             }
         }
 

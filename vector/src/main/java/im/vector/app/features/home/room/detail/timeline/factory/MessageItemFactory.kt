@@ -76,6 +76,7 @@ import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voice.AudioWaveformView
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -358,11 +359,24 @@ class MessageItemFactory @Inject constructor(
         val fileUrl = getAudioFileUrl(messageContent, informationData)
         val playbackControlButtonClickListener = createOnPlaybackButtonClickListener(messageContent, informationData, params)
 
+        val waveformTouchListener: MessageVoiceItem.WaveformTouchListener = object : MessageVoiceItem.WaveformTouchListener {
+            override fun onWaveformTouchedUp(percentage: Float) {
+                val duration = messageContent.audioInfo?.duration ?: 0
+                params.callback?.onVoiceWaveformTouchedUp(informationData.eventId, duration, percentage)
+            }
+
+            override fun onWaveformMovedTo(percentage: Float) {
+                val duration = messageContent.audioInfo?.duration ?: 0
+                params.callback?.onVoiceWaveformMovedTo(informationData.eventId, duration, percentage)
+            }
+        }
+
         return MessageVoiceItem_()
                 .attributes(attributes)
                 .duration(messageContent.audioWaveformInfo?.duration ?: 0)
                 .waveform(messageContent.audioWaveformInfo?.waveform?.toFft().orEmpty())
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
+                .waveformTouchListener(waveformTouchListener)
                 .voiceMessagePlaybackTracker(audioMessagePlaybackTracker)
                 .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .mxcUrl(fileUrl)
@@ -698,8 +712,8 @@ class MessageItemFactory @Inject constructor(
         return this
                 ?.filterNotNull()
                 ?.map {
-                    // Value comes from AudioRecordView.maxReportableAmp, and 1024 is the max value in the Matrix spec
-                    it * 22760 / 1024
+                    // Value comes from AudioWaveformView.MAX_FFT, and 1024 is the max value in the Matrix spec
+                    it * AudioWaveformView.MAX_FFT / 1024
                 }
     }
 

@@ -28,7 +28,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -170,7 +169,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             RoomMemberProfileAction.InviteUser                -> handleInviteAction()
             is RoomMemberProfileAction.SetUserColorOverride   -> handleSetUserColorOverride(action)
             is RoomMemberProfileAction.OpenOrCreateDm         -> handleOpenOrCreateDm(action)
-        }.exhaustive
+        }
     }
 
     private fun handleOpenOrCreateDm(action: RoomMemberProfileAction.OpenOrCreateDm) {

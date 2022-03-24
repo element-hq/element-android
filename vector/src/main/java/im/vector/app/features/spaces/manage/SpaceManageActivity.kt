@@ -85,6 +85,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
                     when (sharedAction) {
                         is RoomDirectorySharedAction.Back,
                         is RoomDirectorySharedAction.Close -> finish()
+                        else                               -> Unit
                     }
                 }
                 .launchIn(lifecycleScope)

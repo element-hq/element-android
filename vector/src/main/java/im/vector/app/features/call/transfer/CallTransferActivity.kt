@@ -26,7 +26,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityCallTransferBinding
 import kotlinx.parcelize.Parcelize
@@ -57,7 +56,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
         callTransferViewModel.observeViewEvents {
             when (it) {
                 is CallTransferViewEvents.Complete -> handleComplete()
-            }.exhaustive
+            }
         }
 
         sectionsPagerAdapter = CallTransferPagerAdapter(this)

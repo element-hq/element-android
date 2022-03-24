@@ -18,7 +18,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 6
+ext.versionPatch = 8
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -411,7 +411,6 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
     implementation 'com.github.hyuwah:DraggableView:1.0.0'
-    implementation 'com.github.Armen101:AudioRecordView:1.0.5'
 
     // Custom Tab
     implementation 'androidx.browser:browser:1.4.0'

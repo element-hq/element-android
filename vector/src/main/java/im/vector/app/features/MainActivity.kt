@@ -241,7 +241,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 // We have a session.
                 // Check it can be opened
                 if (sessionHolder.getActiveSession().isOpenable) {
-                    HomeActivity.newIntent(this)
+                    HomeActivity.newIntent(this, existingSession = true)
                 } else {
                     // The token is still invalid
                     navigator.softLogout(this)
