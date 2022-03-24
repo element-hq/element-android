@@ -28,4 +28,8 @@ class FakeDirectLoginUseCase {
     fun givenSuccessResult(action: OnboardingAction.LoginOrRegister, config: HomeServerConnectionConfig?, result: FakeSession) {
         coEvery { instance.execute(action, config) } returns Result.success(result)
     }
+
+    fun givenFailureResult(action: OnboardingAction.LoginOrRegister, config: HomeServerConnectionConfig?, cause: Throwable) {
+        coEvery { instance.execute(action, config) } returns Result.failure(cause)
+    }
 }

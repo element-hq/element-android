@@ -43,7 +43,15 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
         coEvery { getWellKnownData(matrixId, config) } returns result
     }
 
+    fun givenWellKnownThrows(matrixId: String, config: HomeServerConnectionConfig?, cause: Throwable) {
+        coEvery { getWellKnownData(matrixId, config) } throws cause
+    }
+
     fun givenDirectAuthentication(config: HomeServerConnectionConfig, matrixId: String, password: String, deviceName: String, result: FakeSession) {
         coEvery { directAuthentication(config, matrixId, password, deviceName) } returns result
+    }
+
+    fun givenDirectAuthenticationThrows(config: HomeServerConnectionConfig, matrixId: String, password: String, deviceName: String, cause: Throwable) {
+        coEvery { directAuthentication(config, matrixId, password, deviceName) } throws  cause
     }
 }

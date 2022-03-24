@@ -139,6 +139,26 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given has sign in with matrix id sign mode, when handling login or register action fails, then emits error`() = runTest {
+        val initialState = initialState.copy(signMode = SignMode.SignInWithMatrixId)
+        viewModel = createViewModel(initialState)
+        fakeDirectLoginUseCase.givenFailureResult(A_LOGIN_OR_REGISTER_ACTION, config = null, cause = AN_ERROR)
+        givenInitialisesSession(fakeSession)
+        val test = viewModel.test()
+
+        viewModel.handle(A_LOGIN_OR_REGISTER_ACTION)
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
+                )
+                .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
+                .finish()
+    }
+
+    @Test
     fun `when handling SignUp then sets sign mode to sign up and starts registration`() = runTest {
         givenRegistrationResultFor(RegisterAction.StartRegistration, ANY_CONTINUING_REGISTRATION_RESULT)
         val test = viewModel.test()
