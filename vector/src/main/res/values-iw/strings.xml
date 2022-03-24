@@ -2158,10 +2158,10 @@
     <string name="create_poll_button">צור משאל</string>
     <string name="create_poll_add_option">הוסף אפשרות</string>
     <string name="create_poll_options_hint">אפשרות %1$d</string>
-    <string name="create_poll_options_title">צור אפשריות</string>
+    <string name="create_poll_options_title">צור אפשרויות</string>
     <string name="create_poll_question_hint">שאלה או נושא</string>
-    <string name="create_poll_question_title">שאלה או נושא המשאל</string>
-    <string name="create_poll_title">צור משאל</string>
+    <string name="create_poll_question_title">שאלה או נושא הסקר</string>
+    <string name="create_poll_title">צור סקר</string>
     <string name="restart_the_application_to_apply_changes">אתחל את הישומון כדי שהשינויים יכנסו לתוקף.</string>
     <string name="join_anyway">הצטרף בכל מקרה</string>
     <string name="join_space">הצטרף למרחב</string>
@@ -2518,4 +2518,7 @@
     <string name="location_share_live_enabled">מיקום בזמן אמת מופעל</string>
     <string name="upgrade_room_warning">שדרוג חדר הוא פעולה מתקדמת ומומלץ לרוב כאשר החדר אינו יציב עקב באגים, תכונות חסרות או פרצות אבטחה.
 \nזה בדרך כלל משפיע רק על אופן עיבוד החדר בשרת.</string>
+    <string name="upgrade_room_for_restricted">כל מי שנמצא ב%s יוכל למצוא או להצטרף לחדר- אין צורך להזמין משתתפים. ניתן לשנות את הגדרת החדר בכל זמן.</string>
+    <string name="labs_enable_latex_maths">אפשר LaTeX mathematics</string>
+    <string name="link_this_email_settings_link">שייך את הדואר האלקטרוני לחשבונך</string>
 </resources>
