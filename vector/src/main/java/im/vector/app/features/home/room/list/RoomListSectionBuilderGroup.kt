@@ -75,7 +75,7 @@ class RoomListSectionBuilderGroup(
                                         onUpdatable(updatableFilterLivePageResult)
 
                                         val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
-                                                .flatMapLatest { session.getRoomCountFlow(updatableFilterLivePageResult.queryParams) }
+                                                .flatMapLatest { session.getRoomCountLive(updatableFilterLivePageResult.queryParams).asFlow() }
                                                 .distinctUntilChanged()
 
                                         sections.add(
@@ -276,7 +276,7 @@ class RoomListSectionBuilderGroup(
                                                 sectionName = name,
                                                 livePages = livePagedList,
                                                 notifyOfLocalEcho = notifyOfLocalEcho,
-                                                itemCount = session.getRoomCountFlow(roomQueryParams)
+                                                itemCount = session.getRoomCountLive(roomQueryParams).asFlow()
                                         )
                                 )
                             }

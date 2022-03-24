@@ -94,7 +94,7 @@ class RoomListSectionBuilderSpace(
                                         onUpdatable(updatableFilterLivePageResult)
 
                                         val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
-                                                .flatMapLatest { session.getRoomCountFlow(updatableFilterLivePageResult.queryParams) }
+                                                .flatMapLatest { session.getRoomCountLive(updatableFilterLivePageResult.queryParams).asFlow() }
                                                 .distinctUntilChanged()
 
                                         sections.add(
@@ -400,7 +400,7 @@ class RoomListSectionBuilderSpace(
                                 val itemCountFlow = livePagedList.asFlow()
                                         .flatMapLatest {
                                             val queryParams = roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
-                                            session.getRoomCountFlow(queryParams)
+                                            session.getRoomCountLive(queryParams).asFlow()
                                         }
                                         .distinctUntilChanged()
 
