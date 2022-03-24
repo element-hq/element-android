@@ -578,7 +578,7 @@ class OnboardingViewModel @AssistedInject constructor(
             onDirectLoginError(failure)
             return
         }
-        onSessionCreated(data, isAccountCreated = true)
+        onSessionCreated(data, isAccountCreated = false)
     }
 
     private fun onDirectLoginError(failure: Throwable) {
