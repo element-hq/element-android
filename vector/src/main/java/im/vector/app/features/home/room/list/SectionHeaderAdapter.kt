@@ -16,8 +16,8 @@
 
 package im.vector.app.features.home.room.list
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -86,16 +86,16 @@ class SectionHeaderAdapter constructor(
         fun bind(roomsSectionData: RoomsSectionData) {
             binding.roomCategoryTitleView.text = roomsSectionData.name
             val tintColor = ThemeUtils.getColor(binding.root.context, R.attr.vctr_content_secondary)
-            if (roomsSectionData.isCollapsable) {
-                binding.roomCategoryCounterView.visibility = View.VISIBLE
+            val collapsableArrowDrawable: Drawable? = if (roomsSectionData.isCollapsable) {
                 val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
-                val expandedArrowDrawable = ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
+                ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
                     DrawableCompat.setTint(it, tintColor)
                 }
-                binding.roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
             } else {
-                binding.roomCategoryCounterView.visibility = View.GONE
+                null
             }
+            binding.root.isClickable = roomsSectionData.isCollapsable
+            binding.roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, collapsableArrowDrawable, null)
             binding.roomCategoryCounterView.text = roomsSectionData.itemCount.takeIf { it > 0 }?.toString().orEmpty()
             binding.roomCategoryUnreadCounterBadgeView.render(UnreadCounterBadgeView.State(roomsSectionData.notificationCount, roomsSectionData.isHighlighted))
         }
