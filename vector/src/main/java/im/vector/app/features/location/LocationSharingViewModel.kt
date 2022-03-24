@@ -37,7 +37,6 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
-import timber.log.Timber
 
 /**
  * Sampling period to compare target location and user location.
