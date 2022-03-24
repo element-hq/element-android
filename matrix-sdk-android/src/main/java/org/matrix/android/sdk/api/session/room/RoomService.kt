@@ -18,7 +18,6 @@ package org.matrix.android.sdk.api.session.room
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -218,9 +217,10 @@ interface RoomService {
                                           sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): UpdatableLivePageResult
 
     /**
-     * Retrieve a flow on the number of rooms.
+     * Return a LiveData on the number of rooms
+     * @param queryParams parameters to query the room summaries. It can be use to keep only joined rooms, for instance.
      */
-    fun getRoomCountFlow(queryParams: RoomSummaryQueryParams): Flow<Int>
+    fun getRoomCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int>
 
     /**
      * TODO Doc

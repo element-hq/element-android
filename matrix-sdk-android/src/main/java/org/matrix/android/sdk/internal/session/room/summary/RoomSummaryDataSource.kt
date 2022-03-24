@@ -25,12 +25,7 @@ import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
-import io.realm.kotlin.toFlow
 import io.realm.kotlin.where
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -241,15 +236,14 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
     }
 
-    fun getCountFlow(queryParams: RoomSummaryQueryParams): Flow<Int> =
-            realmSessionProvider
-                    .withRealm { realm -> roomSummariesQuery(realm, queryParams).findAllAsync() }
-                    .toFlow()
-                    // need to create the flow on a context dispatcher with a thread with attached Looper
-                    .flowOn(coroutineDispatchers.main)
-                    .map { it.size }
-                    .flowOn(coroutineDispatchers.io)
-                    .distinctUntilChanged()
+    fun getCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {
+        val liveRooms = monarchy.findAllManagedWithChanges {
+            roomSummariesQuery(it, queryParams)
+        }
+        return Transformations.map(liveRooms) {
+            it.realmResults.where().count().toInt()
+        }
+    }
 
     fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
         var notificationCount: RoomAggregateNotificationCount? = null
