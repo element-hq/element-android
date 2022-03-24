@@ -1521,7 +1521,7 @@
     <string name="this_is_the_beginning_of_dm">זוהי ההתחלה של היסטוריית ההודעות הישירות שלך עם%s.</string>
     <string name="this_is_the_beginning_of_room_no_name">זו תחילתה של השיחה הזו.</string>
     <string name="this_is_the_beginning_of_room">זו ההתחלה ש ל%s.</string>
-    <string name="direct_room_created_summary_item_by_you">הצתרפתם.</string>
+    <string name="direct_room_created_summary_item_by_you">הצטרפתם.</string>
     <string name="direct_room_created_summary_item">%s הצטרף.</string>
     <string name="room_created_summary_item_by_you">יצרת ותגדרת את החדר.</string>
     <string name="room_created_summary_item">%s יצר את החדר והגדיר אותו.</string>
@@ -2361,9 +2361,9 @@
 \n ניתן לקרוא את כל התנאים %s.</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">התוצאה הסופית מתבססת על הצבעה %1$d</item>
-        <item quantity="two"></item>
+        <item quantity="two"/>
         <item quantity="many">התוצאה הסופית מתבססת על הצבעות %1$d</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="decide_which_spaces_can_access">בחר אילו מרחבים יכולים לגשת לחדר זה. בבחירת מרחב החברים יוכלו למצוא ולהצטרף לחדר.</string>
     <string name="room_create_member_of_space_name_can_join">חברים במרחב %s יכולים למצוא , לצפות ולהצטרף.</string>
@@ -2417,4 +2417,60 @@
     <string name="settings_mentions_at_room">חדר@</string>
     <string name="settings_group_messages">הודעות קבוצתיות</string>
     <string name="settings_encrypted_direct_messages">הודעות ישירות מוצפנות</string>
+    <string name="this_invite_to_this_space_was_sent">ההזמנה למרחב זה נשלחה מ%s אשר אינו משוייך לחשבונך</string>
+    <string name="this_invite_to_this_room_was_sent">ההזמנה לחדר זה נשלחה מ%s אשר אינו משוייך לחשבונך</string>
+    <string name="voice_message_reply_content">הודעה קולית (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">לא ניתן להשיב או לערוך במהלך הודעה קולית</string>
+    <string name="error_voice_message_unable_to_record">לא ניתן להקליט את ההודעה הקולית</string>
+    <string name="error_voice_message_unable_to_play">לא ניתן לנגן את ההודעה הקולית</string>
+    <string name="voice_message_tap_to_stop_toast">לחץ על הקלטה כדי לעצור או להאזין</string>
+    <string name="voice_message_n_seconds_warning_toast">נשארו עוד %1$d שניות</string>
+    <string name="voice_message_release_to_send_toast">החזק להקלטה, שחרר לשיחה</string>
+    <string name="a11y_play_voice_message">נגן הודעה קולית</string>
+    <string name="a11y_pause_voice_message">השהה הודעה קולית</string>
+    <string name="a11y_delete_recorded_voice_message">מחיקת הקלטה</string>
+    <string name="a11y_recording_voice_message">מקליט הודעה קולית</string>
+    <string name="a11y_stop_voice_message">עצור הקלטה</string>
+    <string name="voice_message_slide_to_cancel">החלק לביטול</string>
+    <string name="a11y_start_voice_message">הקלט שיחה קולית</string>
+    <string name="error_failed_to_join_room">סליחה , אירעה שגיאה בזמן נסיון ההצטרפות לחדר:%s</string>
+    <string name="room_upgrade_to_recommended_version">שדרג לגרסת החדר המומלצת</string>
+    <string name="room_using_unstable_room_version">חדר זה נמצא בשדרוג גרסה %s , לכן הוא לא יציב .</string>
+    <string name="upgrade_room_no_power_to_manage">נדרשת הרשאה לשדרוג החדר</string>
+    <string name="upgrade_room_update_parent_space">אחראי המרחב מעודכן אוטומטית</string>
+    <string name="upgrade_room_auto_invite">הזמן משתמשים אוטומטית</string>
+    <string name="upgrade_public_room_from_to">תשדרג את החדר מ%1$s ל%2$s.</string>
+    <string name="upgrade_private_room">שדרג חדר פרטי</string>
+    <string name="upgrade_public_room">שדרג חדר ציבורי</string>
+    <string name="upgrade_required">נדרש שדרוג</string>
+    <string name="upgrade">שדרוג</string>
+    <string name="it_may_take_some_time">אנא המתן, זה יכול לקחת קצת זמן.</string>
+    <string name="joining_replacement_room">הצטרפו לחדר שהוחלף</string>
+    <plurals name="entries">
+        <item quantity="one">כניסה %d</item>
+        <item quantity="two">שתי כניסות %d</item>
+        <item quantity="many">%d כניסות</item>
+        <item quantity="other">%d כניסות</item>
+    </plurals>
+    <string name="encryption_misconfigured">ההצפנה מוגדרת בצורה שגויה</string>
+    <string name="threads_notice_migration_title">שרשורים מתקרבים לבטא 🎉</string>
+    <string name="send_images_and_video_with_original_size">שלח את המדיה בגודלה המקורי</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">שלח סרט וידאו בגודל המקורי</item>
+        <item quantity="two">שלח שני סרטי וידאו בגודל המקורי</item>
+        <item quantity="many">שלח סרטי וידאו בגודלם המקורי</item>
+        <item quantity="other">שלח סרט וידאו בגודל המקורי</item>
+    </plurals>
+    <string name="settings_server_room_version_unstable">לא יציב</string>
+    <string name="settings_server_room_version_stable">יציב</string>
+    <string name="settings_server_default_room_version">גרסת ברירת מחדל</string>
+    <string name="settings_server_room_versions">גרסאות חדר 👓</string>
+    <string name="settings_server_upload_size_unknown">המגבלה אינה ידועה.</string>
+    <string name="settings_server_upload_size_content">שרת הבית שלך מקבל קבצים מצורפים (קבצים, מדיה וכו\') בגודל של עד %s.</string>
+    <string name="settings_server_upload_size_title">מגבלת העלאת קובץ לשרת</string>
+    <string name="settings_server_version">גרסת שרת</string>
+    <string name="settings_server_name">שם שרת</string>
+    <string name="room_member_override_nick_color">ביטול צבע</string>
+    <string name="room_profile_section_restore_security">שחזור הצפנה</string>
+    <string name="contact_admin_to_restore_encryption">אנא צור קשר עם מנהל המערכת לשחזור ההצפנה למצב תקין .</string>
 </resources>
