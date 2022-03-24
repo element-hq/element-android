@@ -280,7 +280,8 @@ class RoomListSectionBuilderSpace(
         }
     }
 
-    private fun buildNotificationsSection(sections: MutableList<RoomsSection>, activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
+    private fun buildNotificationsSection(sections: MutableList<RoomsSection>,
+                                          activeSpaceAwareQueries: MutableList<RoomListViewModel.ActiveSpaceQueryUpdater>) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections = sections,
