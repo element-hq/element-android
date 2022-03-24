@@ -241,7 +241,7 @@ internal class RoomSummaryDataSource @Inject constructor(
             roomSummariesQuery(it, queryParams)
         }
         return Transformations.map(liveRooms) {
-            it.realmResults.count()
+            it.realmResults.where().count().toInt()
         }
     }
 

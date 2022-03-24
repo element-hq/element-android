@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -287,7 +288,7 @@ class RoomListFragment @Inject constructor(
             }
             val contentAdapter =
                     when {
-                        section.livePages != null -> {
+                        section.livePages != null     -> {
                             pagedControllerFactory.createRoomSummaryPagedController()
                                     .also { controller ->
                                         section.livePages.observe(viewLifecycleOwner) { pl ->
@@ -405,6 +406,7 @@ class RoomListFragment @Inject constructor(
         lifecycleScope.launch {
             section.itemCount
                     .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                    .filter { it > 0 }
                     .collect { count ->
                         sectionAdapter.updateSection {
                             it.copy(itemCount = count)
