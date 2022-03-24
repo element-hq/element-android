@@ -121,8 +121,8 @@ interface RegistrationWizard {
     val isRegistrationStarted: Boolean
 
     /**
-     * True when login and password have been sent with success to the homeserver, i.e. [createAccount] has been
-     * called successfully.
+     * This is a session identifier that the client must pass back to the homeserver,
+     * if one is provided, in subsequent attempts to authenticate in the same API call.
      */
     val currentRegistrationSessionId: String?
 }
