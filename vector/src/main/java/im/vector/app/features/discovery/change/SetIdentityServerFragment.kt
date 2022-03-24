@@ -29,7 +29,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.platform.VectorBaseFragment
@@ -132,7 +131,7 @@ class SetIdentityServerFragment @Inject constructor(
                             it.identityServerUrl,
                             null)
                 }
-            }.exhaustive
+            }
         }
     }
 

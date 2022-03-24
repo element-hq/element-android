@@ -34,7 +34,6 @@ import im.vector.app.core.epoxy.attributes.ButtonStyle
 import im.vector.app.core.epoxy.attributes.ButtonType
 import im.vector.app.core.epoxy.attributes.IconMode
 import im.vector.app.core.epoxy.onClick
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -122,7 +121,7 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
                         ButtonStyle.DESTRUCTIVE -> {
                             holder.mainButton.setTextColor(colorProvider.getColorFromAttribute(R.attr.colorError))
                         }
-                    }.exhaustive
+                    }
                     holder.mainButton.onClick(buttonClickListener)
                 }
                 ButtonType.SWITCH    -> {
@@ -133,7 +132,7 @@ abstract class SettingsTextButtonSingleLineItem : EpoxyModelWithHolder<SettingsT
                     checked?.let { holder.switchButton.isChecked = it }
                     holder.switchButton.setOnCheckedChangeListener(switchChangeListener)
                 }
-            }.exhaustive
+            }
         }
 
         when (iconMode) {

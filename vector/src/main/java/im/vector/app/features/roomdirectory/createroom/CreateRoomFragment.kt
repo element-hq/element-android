@@ -34,7 +34,6 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
@@ -94,7 +93,7 @@ class CreateRoomFragment @Inject constructor(
             when (it) {
                 CreateRoomViewEvents.Quit       -> vectorBaseActivity.onBackPressed()
                 is CreateRoomViewEvents.Failure -> showFailure(it.throwable)
-            }.exhaustive
+            }
         }
     }
 

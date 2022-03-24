@@ -23,7 +23,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
@@ -84,7 +83,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
             is RoomBannedMemberListAction.QueryInfo -> onQueryBanInfo(action.roomMemberSummary)
             is RoomBannedMemberListAction.UnBanUser -> unBanUser(action.roomMemberSummary)
             is RoomBannedMemberListAction.Filter    -> handleFilter(action)
-        }.exhaustive
+        }
     }
 
     private fun handleFilter(action: RoomBannedMemberListAction.Filter) {

@@ -40,4 +40,6 @@ sealed class MessageComposerAction : VectorViewModelAction {
     data class PlayOrPauseVoicePlayback(val eventId: String, val messageAudioContent: MessageAudioContent) : MessageComposerAction()
     object PlayOrPauseRecordingPlayback : MessageComposerAction()
     data class EndAllVoiceActions(val deleteRecord: Boolean = true) : MessageComposerAction()
+    data class VoiceWaveformTouchedUp(val eventId: String, val duration: Int, val percentage: Float) : MessageComposerAction()
+    data class VoiceWaveformMovedTo(val eventId: String, val duration: Int, val percentage: Float) : MessageComposerAction()
 }

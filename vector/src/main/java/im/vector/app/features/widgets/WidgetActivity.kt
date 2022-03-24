@@ -80,6 +80,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
         viewModel.observeViewEvents {
             when (it) {
                 is WidgetViewEvents.Close -> handleClose(it)
+                else                      -> Unit
             }
         }
 

@@ -34,7 +34,7 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: 3.8
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -43,7 +43,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Start synapse server
-        uses: michaelkaye/setup-matrix-synapse@v0.3.0
+        uses: michaelkaye/setup-matrix-synapse@v0.4.0
         with:
           uploadLogs: true
           httpPort: 8080
@@ -221,7 +221,7 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: 3.8
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -230,7 +230,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Start synapse server
-        uses: michaelkaye/setup-matrix-synapse@v0.3.0
+        uses: michaelkaye/setup-matrix-synapse@v0.4.0
         with:
           uploadLogs: true
           httpPort: 8080
@@ -273,7 +273,7 @@ jobs:
         with: 
           distribution: 'adopt'
           java-version: '11'
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -302,7 +302,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '11'
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
