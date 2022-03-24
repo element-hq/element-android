@@ -151,7 +151,8 @@ class RoomListFragment @Inject constructor(
         val sectionsCount = adapterInfosList.count { !it.sectionHeaderAdapter.roomsSectionData.isHidden }
         roomListViewModel.sections.forEachIndexed { index, roomsSection ->
             val actualBlock = adapterInfosList[index]
-            val isRoomSectionExpanded = roomsSection.isExpanded.value.orTrue() || sectionsCount == 1
+            val isRoomSectionCollapsable = sectionsCount > 1
+            val isRoomSectionExpanded = roomsSection.isExpanded.value.orTrue()
             if (actualBlock.section.isExpanded && !isRoomSectionExpanded) {
                 // mark controller as collapsed
                 actualBlock.contentEpoxyController.setCollapsed(true)
@@ -159,14 +160,17 @@ class RoomListFragment @Inject constructor(
                 // we must expand!
                 actualBlock.contentEpoxyController.setCollapsed(false)
             }
-            actualBlock.section = actualBlock.section.copy(
-                    isExpanded = isRoomSectionExpanded
-            )
+            actualBlock.section = actualBlock.section.copy(isExpanded = isRoomSectionExpanded)
             actualBlock.sectionHeaderAdapter.updateSection {
                 it.copy(
                         isExpanded = isRoomSectionExpanded,
-                        shouldShowExpandedArrow = sectionsCount > 1
+                        isCollapsable = isRoomSectionCollapsable
                 )
+            }
+
+            if (!isRoomSectionExpanded && !isRoomSectionCollapsable) {
+                // force expand if the section is not collapsable
+                roomListViewModel.handle(RoomListAction.ToggleSection(roomsSection))
             }
         }
     }
@@ -275,11 +279,12 @@ class RoomListFragment @Inject constructor(
 
         val concatAdapter = ConcatAdapter()
 
-        roomListViewModel.sections.forEach { section ->
+        roomListViewModel.sections.forEachIndexed { index, section ->
             val sectionAdapter = SectionHeaderAdapter(SectionHeaderAdapter.RoomsSectionData(section.sectionName)) {
-                roomListViewModel.handle(RoomListAction.ToggleSection(section))
+                if (adapterInfosList[index].sectionHeaderAdapter.roomsSectionData.isCollapsable) {
+                    roomListViewModel.handle(RoomListAction.ToggleSection(section))
+                }
             }
-
             val contentAdapter =
                     when {
                         section.livePages != null -> {
