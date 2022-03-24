@@ -76,9 +76,11 @@ interface RegistrationWizard {
     suspend fun dummy(): RegistrationResult
 
     /**
-     * Perform the other stage.
+     * Perform custom registration stage by sending a custom JsonDict
+     * with included current registration "session" param.
+     * The authParams should contain at least one entry "type" with a String value.
      */
-    suspend fun registrationOther(authParams: JsonDict): RegistrationResult
+    suspend fun registrationCustom(authParams: JsonDict): RegistrationResult
 
     /**
      * Perform the "m.login.email.identity" or "m.login.msisdn" stage.

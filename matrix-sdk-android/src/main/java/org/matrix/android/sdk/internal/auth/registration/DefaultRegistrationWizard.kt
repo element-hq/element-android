@@ -193,7 +193,7 @@ internal class DefaultRegistrationWizard(
         return performRegistrationRequest(params)
     }
 
-    override suspend fun registrationOther(
+    override suspend fun registrationCustom(
             authParams: JsonDict
     ): RegistrationResult {
         val safeSession = pendingSessionData.currentSession
