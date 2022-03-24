@@ -107,14 +107,8 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Configure gradle 
+        uses: gradle/gradle-build-action@v2
       - name: Lint analysis
         run: ./gradlew clean :vector:lint --stacktrace
       - name: Upload reports
@@ -140,14 +134,8 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Configure gradle 
+        uses: gradle/gradle-build-action@v2
       - name: Lint ${{ matrix.target }} release
         run: ./gradlew clean lint${{ matrix.target }}Release --stacktrace
       - name: Upload ${{ matrix.target }} linting report

@@ -25,14 +25,8 @@ jobs:
         with: 
           distribution: 'adopt' 
           java-version: 11 
-      - uses: actions/cache@v3 
-        with: 
-          path: | 
-            ~/.gradle/caches 
-            ~/.gradle/wrapper 
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }} 
-          restore-keys: | 
-            ${{ runner.os }}-gradle- 
+      - name: Configure gradle 
+        uses: gradle/gradle-build-action@v2
       - name: Build Android Tests  
         run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace 
  
@@ -45,14 +39,8 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      - name: Configure gradle 
+        uses: gradle/gradle-build-action@v2
       - name: Run unit tests
         run: ./gradlew clean test $CI_GRADLE_ARG_PROPERTIES --stacktrace
       - name: Format unit test results
