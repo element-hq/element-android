@@ -2473,4 +2473,8 @@
     <string name="room_member_override_nick_color">ביטול צבע</string>
     <string name="room_profile_section_restore_security">שחזור הצפנה</string>
     <string name="contact_admin_to_restore_encryption">אנא צור קשר עם מנהל המערכת לשחזור ההצפנה למצב תקין .</string>
+    <string name="unnamed_room">חדר ללא שם</string>
+    <string name="this_space_has_no_rooms_admin">חלק מהחדרים עשויים להיות מוסתרים כי הם פרטיים ואתה זקוק להזמנה.</string>
+    <string name="this_space_has_no_rooms_not_admin">חלק מהחדרים עשויים להיות מוסתרים כי הם פרטיים ואתה זקוק להזמנה.
+\nאין לך הרשאה להוסיף חדרים.</string>
 </resources>
