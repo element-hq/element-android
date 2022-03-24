@@ -1,3 +1,11 @@
+Changes in Element v1.4.7 (2022-03-24)
+======================================
+
+Bugfixes 🐛
+----------
+ - Fix inconsistencies between the arrow visibility and the collapse action on the room sections ([#5616](https://github.com/vector-im/element-android/issues/5616))
+ - Fix room list header count flickering
+
 Changes in Element v1.4.6 (2022-03-23)
 ======================================
 
@@ -37,6 +45,7 @@ SDK API changes ⚠️
 
 Other changes
 -------------
+ - Refactoring for safer olm and megolm session usage ([#5380](https://github.com/vector-im/element-android/issues/5380))
  - Improve headers UI in Rooms/Messages lists ([#4533](https://github.com/vector-im/element-android/issues/4533))
  - Number of unread messages on space badge now include number of unread DMs ([#5260](https://github.com/vector-im/element-android/issues/5260))
  - Amend spaces menu to be consistent with iOS version ([#5270](https://github.com/vector-im/element-android/issues/5270))
