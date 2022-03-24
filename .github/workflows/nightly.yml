@@ -293,7 +293,7 @@ jobs:
   sonarqube:
     name: Sonarqube upload
     runs-on: macos-latest
-    if: always() && github.event_name == "schedule"
+    if: always() && github.event_name == 'schedule'
     needs:
       - codecov-units
     steps:
