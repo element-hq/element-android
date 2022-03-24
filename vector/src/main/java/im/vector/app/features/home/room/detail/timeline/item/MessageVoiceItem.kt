@@ -75,7 +75,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     var waveformTouchListener: WaveformTouchListener? = null
 
     @EpoxyAttribute
-    lateinit var voiceMessagePlaybackTracker: AudioMessagePlaybackTracker
+    lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -127,12 +127,12 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
             true
         }
 
-        voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : AudioMessagePlaybackTracker.Listener {
+        audioMessagePlaybackTracker.track(attributes.informationData.eventId, object : AudioMessagePlaybackTracker.Listener {
             override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
                 when (state) {
-                    is AudioMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder)
-                    is AudioMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state)
-                    is AudioMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state)
+                    is AudioMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder, waveformColorIdle, waveformColorPlayed)
+                    is AudioMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state, waveformColorIdle, waveformColorPlayed)
+                    is AudioMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state, waveformColorIdle, waveformColorPlayed)
                     is AudioMessagePlaybackTracker.Listener.State.Recording -> Unit
                 }
             }
@@ -168,7 +168,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         super.unbind(holder)
         contentUploadStateTrackerBinder.unbind(attributes.informationData.eventId)
         contentDownloadStateTrackerBinder.unbind(mxcUrl)
-        voiceMessagePlaybackTracker.untrack(attributes.informationData.eventId)
+        audioMessagePlaybackTracker.untrack(attributes.informationData.eventId)
     }
 
     override fun getViewStubId() = STUB_ID

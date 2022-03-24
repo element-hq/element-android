@@ -377,7 +377,7 @@ class MessageItemFactory @Inject constructor(
                 .waveform(messageContent.audioWaveformInfo?.waveform?.toFft().orEmpty())
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
                 .waveformTouchListener(waveformTouchListener)
-                .voiceMessagePlaybackTracker(audioMessagePlaybackTracker)
+                .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
                 .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)

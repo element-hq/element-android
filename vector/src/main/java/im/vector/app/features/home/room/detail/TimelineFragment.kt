@@ -786,13 +786,13 @@ class TimelineFragment @Inject constructor(
 
             override fun onVoiceWaveformTouchedUp(percentage: Float, duration: Int) {
                 messageComposerViewModel.handle(
-                        MessageComposerAction.VoiceWaveformTouchedUp(VoiceMessagePlaybackTracker.RECORDING_ID, duration, percentage)
+                        MessageComposerAction.VoiceWaveformTouchedUp(AudioMessagePlaybackTracker.RECORDING_ID, duration, percentage)
                 )
             }
 
             override fun onVoiceWaveformMoved(percentage: Float, duration: Int) {
                 messageComposerViewModel.handle(
-                        MessageComposerAction.VoiceWaveformTouchedUp(VoiceMessagePlaybackTracker.RECORDING_ID, duration, percentage)
+                        MessageComposerAction.VoiceWaveformTouchedUp(AudioMessagePlaybackTracker.RECORDING_ID, duration, percentage)
                 )
             }
 
