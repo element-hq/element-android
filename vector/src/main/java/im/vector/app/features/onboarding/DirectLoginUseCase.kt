@@ -16,7 +16,6 @@
 
 package im.vector.app.features.onboarding
 
-import android.net.Uri
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.onboarding.OnboardingAction.LoginOrRegister
@@ -25,11 +24,13 @@ import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.internal.extensions.andThen
 import javax.inject.Inject
 
 class DirectLoginUseCase @Inject constructor(
         private val authenticationService: AuthenticationService,
         private val stringProvider: StringProvider,
+        private val uriFactory: UriFactory
 ) {
 
     suspend fun execute(action: LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?): Result<Session> {
@@ -69,23 +70,15 @@ class DirectLoginUseCase @Inject constructor(
     }
 
     private fun HomeServerConnectionConfig.updateWith(wellKnownPrompt: WellknownResult.Prompt) = copy(
-            homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
-            identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
+            homeServerUriBase = uriFactory.parse(wellKnownPrompt.homeServerUrl),
+            identityServerUri = wellKnownPrompt.identityServerUrl?.let { uriFactory.parse(it) }
     )
 
     private fun fallbackConfig(action: LoginOrRegister, wellKnownPrompt: WellknownResult.Prompt) = HomeServerConnectionConfig(
-            homeServerUri = Uri.parse("https://${action.username.getDomain()}"),
-            homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
-            identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
+            homeServerUri = uriFactory.parse("https://${action.username.getDomain()}"),
+            homeServerUriBase = uriFactory.parse(wellKnownPrompt.homeServerUrl),
+            identityServerUri = wellKnownPrompt.identityServerUrl?.let { uriFactory.parse(it) }
     )
 
     private fun onWellKnownError() = Result.failure<Session>(Exception(stringProvider.getString(R.string.autodiscover_well_known_error)))
-}
-
-@Suppress("UNCHECKED_CAST") // We're casting null failure results to R
-private inline fun <T, R> Result<T>.andThen(block: (T) -> Result<R>): Result<R> {
-    return when (val result = getOrNull()) {
-        null -> this as Result<R>
-        else -> block(result)
-    }
 }
