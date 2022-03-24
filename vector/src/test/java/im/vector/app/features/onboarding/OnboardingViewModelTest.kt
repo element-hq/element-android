@@ -17,10 +17,6 @@
 package im.vector.app.features.onboarding
 
 import android.net.Uri
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.SignMode
@@ -129,8 +125,8 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(signMode = SignMode.SignUp) },
-                        { copy(asyncRegistration = Loading()) },
-                        { copy(asyncRegistration = Uninitialized) }
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
                 )
                 .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
                 .finish()
@@ -146,8 +142,8 @@ class OnboardingViewModelTest {
         test
                 .assertStatesChanges(
                         initialState,
-                        { copy(asyncRegistration = Loading()) },
-                        { copy(asyncRegistration = Uninitialized) }
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
                 )
                 .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
                 .finish()
@@ -176,8 +172,8 @@ class OnboardingViewModelTest {
         test
                 .assertStatesChanges(
                         initialState,
-                        { copy(asyncRegistration = Loading()) },
-                        { copy(asyncRegistration = Uninitialized) }
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
                 )
                 .assertNoEvents()
                 .finish()
@@ -194,9 +190,8 @@ class OnboardingViewModelTest {
         test
                 .assertStatesChanges(
                         initialState,
-                        { copy(asyncRegistration = Loading()) },
-                        { copy(asyncLoginAction = Success(Unit), personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) },
-                        { copy(asyncLoginAction = Success(Unit), asyncRegistration = Uninitialized) }
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
@@ -212,9 +207,8 @@ class OnboardingViewModelTest {
         test
                 .assertStatesChanges(
                         initialState,
-                        { copy(asyncRegistration = Loading()) },
-                        { copy(asyncLoginAction = Success(Unit), personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) },
-                        { copy(asyncRegistration = Uninitialized) }
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
@@ -260,8 +254,8 @@ class OnboardingViewModelTest {
         test
                 .assertStatesChanges(
                         initialState,
-                        { copy(asyncDisplayName = Loading()) },
-                        { copy(asyncDisplayName = Fail(AN_ERROR)) },
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) },
                 )
                 .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
                 .finish()
@@ -307,7 +301,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.SaveSelectedProfilePicture)
 
         test
-                .assertStates(expectedProfilePictureFailureStates(initialStateWithPicture, AN_ERROR))
+                .assertStates(expectedProfilePictureFailureStates(initialStateWithPicture))
                 .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
                 .finish()
     }
@@ -362,20 +356,20 @@ class OnboardingViewModelTest {
 
     private fun expectedProfilePictureSuccessStates(state: OnboardingViewState) = listOf(
             state,
-            state.copy(asyncProfilePicture = Loading()),
-            state.copy(asyncProfilePicture = Success(Unit))
+            state.copy(isLoading = true),
+            state.copy(isLoading = false)
     )
 
-    private fun expectedProfilePictureFailureStates(state: OnboardingViewState, cause: Exception) = listOf(
+    private fun expectedProfilePictureFailureStates(state: OnboardingViewState) = listOf(
             state,
-            state.copy(asyncProfilePicture = Loading()),
-            state.copy(asyncProfilePicture = Fail(cause))
+            state.copy(isLoading = true),
+            state.copy(isLoading = false)
     )
 
     private fun expectedSuccessfulDisplayNameUpdateStates(): List<OnboardingViewState.() -> OnboardingViewState> {
         return listOf(
-                { copy(asyncDisplayName = Loading()) },
-                { copy(asyncDisplayName = Success(Unit), personalizationState = personalizationState.copy(displayName = A_DISPLAY_NAME)) }
+                { copy(isLoading = true) },
+                { copy(isLoading = false, personalizationState = personalizationState.copy(displayName = A_DISPLAY_NAME)) }
         )
     }
 
