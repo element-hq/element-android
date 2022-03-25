@@ -42,6 +42,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     @Inject lateinit var locationTracker: LocationTracker
 
     private var roomArgsList = mutableListOf<RoomArgs>()
+    private var timers = mutableListOf<Timer>()
 
     override fun onCreate() {
         super.onCreate()
@@ -72,11 +73,18 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     private fun scheduleTimer(roomId: String, durationMillis: Long) {
-        Timer().schedule(object : TimerTask() {
-            override fun run() {
-                stopSharingLocation(roomId)
-            }
-        }, durationMillis)
+        Timer()
+                .apply {
+                    schedule(object : TimerTask() {
+                        override fun run() {
+                            stopSharingLocation(roomId)
+                            timers.remove(this@apply)
+                        }
+                    }, durationMillis)
+                }
+                .also {
+                    timers.add(it)
+                }
     }
 
     private fun stopSharingLocation(roomId: String) {
@@ -101,6 +109,8 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     private fun destroyMe() {
         locationTracker.removeCallback(this)
+        timers.forEach { it.cancel() }
+        timers.clear()
         stopSelf()
     }
 
