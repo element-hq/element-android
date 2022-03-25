@@ -70,8 +70,8 @@ class AutoRageShaker @Inject constructor(
 
     private val e2eDetectedFlow = MutableSharedFlow<E2EMessageDetected>(replay = 0)
     private val matchingRSRequestFlow = MutableSharedFlow<Event>(replay = 0)
-    var hasSynced = false
-    var preferenceEnabled = false
+    private var hasSynced = false
+    private var preferenceEnabled = false
     fun initialize() {
         observeActiveSession()
         preferenceEnabled = vectorPreferences.labsAutoReportUISI()

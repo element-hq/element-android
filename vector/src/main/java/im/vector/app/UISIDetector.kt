@@ -67,7 +67,7 @@ class UISIDetector : LiveEventListener {
     private val executor = Executors.newSingleThreadExecutor()
     private val timer = Timer()
     private val timeoutMillis = 30_000L
-    val enabled: Boolean get() = callback?.enabled.orFalse()
+    private val enabled: Boolean get() = callback?.enabled.orFalse()
 
     override fun onEventDecrypted(event: Event) {
         val eventId = event.eventId
