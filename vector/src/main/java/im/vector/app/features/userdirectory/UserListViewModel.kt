@@ -213,7 +213,7 @@ class UserListViewModel @AssistedInject constructor(
                 ThreePidUser(email = search, user = null)
             } else {
                 try {
-                    val user = tryOrNull { session.getProfileAsUser(search) } ?: User(search)
+                    val user = tryOrNull { session.getProfileAsUser(foundThreePid.matrixId) } ?: User(foundThreePid.matrixId)
                     ThreePidUser(
                             email = search,
                             user = user
