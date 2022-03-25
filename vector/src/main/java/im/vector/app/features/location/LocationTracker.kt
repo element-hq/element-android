@@ -93,19 +93,15 @@ class LocationTracker @Inject constructor(
     }
 
     fun addCallback(callback: Callback) {
-        synchronized(callbacks) {
-            if (!callbacks.contains(callback)) {
-                callbacks.add(callback)
-            }
+        if (!callbacks.contains(callback)) {
+            callbacks.add(callback)
         }
     }
 
     fun removeCallback(callback: Callback) {
-        synchronized(callbacks) {
-            callbacks.remove(callback)
-            if (callbacks.size == 0) {
-                stop()
-            }
+        callbacks.remove(callback)
+        if (callbacks.size == 0) {
+            stop()
         }
     }
 
