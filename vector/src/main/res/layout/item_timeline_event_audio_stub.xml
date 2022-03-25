@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/messageMainInnerLayout"
         style="@style/TimelineContentMediaPillStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:viewBindingIgnore="true">
 
@@ -31,18 +31,17 @@
         <TextView
             android:id="@+id/messageFilenameView"
             style="@style/Widget.Vector.TextView.Body"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:autoLink="none"
             android:maxLines="1"
             android:ellipsize="end"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/audioPlaybackControlButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/audioPlaybackTime"
-            tools:text="A filename here" />
+            tools:text="A filename here that is really long that I dont even wanna even like ugh can I keep talkin like this eventually its gotta end right get ready get your psyche up mob" />
 
         <TextView
             android:id="@+id/audioPlaybackTime"
