@@ -121,7 +121,7 @@ interface ProfileService {
     suspend fun deleteThreePid(threePid: ThreePid)
 
     /**
-     * Return an User object from an userId
+     * Return a User object from a userId
      */
     suspend fun getProfileAsUser(userId: String): User {
         return getProfile(userId).let { dict ->
