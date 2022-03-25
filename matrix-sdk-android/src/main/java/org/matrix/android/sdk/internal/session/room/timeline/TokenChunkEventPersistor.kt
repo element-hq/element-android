@@ -186,7 +186,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     }
                     roomMemberContentsByUser[event.stateKey] = contentToUse.toModel<RoomMemberContent>()
                 }
-                liveEventManager.get().dispatchPaginatedEventReceived(event, roomId)
+
                 currentChunk.addTimelineEvent(
                         roomId = roomId,
                         eventEntity = eventEntity,

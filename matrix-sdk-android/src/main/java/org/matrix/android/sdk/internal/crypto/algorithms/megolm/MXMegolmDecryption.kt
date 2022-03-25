@@ -113,7 +113,7 @@ internal class MXMegolmDecryption(private val userId: String,
                                         forwardingCurve25519KeyChain = olmDecryptionResult.forwardingCurve25519KeyChain
                                                 .orEmpty()
                                 ).also {
-                                    liveEventManager.get().dispatchLiveEventDecrypted(event, it)
+                                    liveEventManager.get().dispatchLiveEventDecrypted(event)
                                 }
                             } else {
                                 throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)

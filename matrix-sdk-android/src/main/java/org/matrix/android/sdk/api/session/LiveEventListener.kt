@@ -21,13 +21,9 @@ import org.matrix.android.sdk.api.util.JsonDict
 
 interface LiveEventListener {
 
-    fun onLiveEvent(roomId: String, event: Event)
+    fun onEventDecrypted(event: Event)
 
-    fun onPaginatedEvent(roomId: String, event: Event)
-
-    fun onEventDecrypted(eventId: String, roomId: String, clearEvent: JsonDict)
-
-    fun onEventDecryptionError(eventId: String, roomId: String, throwable: Throwable)
+    fun onEventDecryptionError(event: Event, throwable: Throwable)
 
     fun onLiveToDeviceEvent(event: Event)
 

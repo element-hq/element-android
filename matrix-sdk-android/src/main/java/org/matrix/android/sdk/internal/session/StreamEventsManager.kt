@@ -42,36 +42,12 @@ internal class StreamEventsManager @Inject constructor() {
         listeners.remove(listener)
     }
 
-    fun dispatchLiveEventReceived(event: Event, roomId: String, initialSync: Boolean) {
-        Timber.v("## dispatchLiveEventReceived ${event.eventId}")
-        coroutineScope.launch {
-            if (!initialSync) {
-                listeners.forEach {
-                    tryOrNull {
-                        it.onLiveEvent(roomId, event)
-                    }
-                }
-            }
-        }
-    }
-
-    fun dispatchPaginatedEventReceived(event: Event, roomId: String) {
-        Timber.v("## dispatchPaginatedEventReceived ${event.eventId}")
-        coroutineScope.launch {
-            listeners.forEach {
-                tryOrNull {
-                    it.onPaginatedEvent(roomId, event)
-                }
-            }
-        }
-    }
-
-    fun dispatchLiveEventDecrypted(event: Event, result: MXEventDecryptionResult) {
+    fun dispatchLiveEventDecrypted(event: Event) {
         Timber.v("## dispatchLiveEventDecrypted ${event.eventId}")
         coroutineScope.launch {
             listeners.forEach {
                 tryOrNull {
-                    it.onEventDecrypted(event.eventId ?: "", event.roomId ?: "", result.clearEvent)
+                    it.onEventDecrypted(event)
                 }
             }
         }
@@ -82,7 +58,7 @@ internal class StreamEventsManager @Inject constructor() {
         coroutineScope.launch {
             listeners.forEach {
                 tryOrNull {
-                    it.onEventDecryptionError(event.eventId ?: "", event.roomId ?: "", error)
+                    it.onEventDecryptionError(event, error)
                 }
             }
         }
