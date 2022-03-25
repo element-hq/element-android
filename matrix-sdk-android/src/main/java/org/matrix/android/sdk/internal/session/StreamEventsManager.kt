@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.LiveEventListener
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import timber.log.Timber
 import javax.inject.Inject
 

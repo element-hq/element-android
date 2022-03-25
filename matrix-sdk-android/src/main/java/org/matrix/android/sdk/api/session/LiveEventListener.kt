@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.api.session
 
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.util.JsonDict
 
 interface LiveEventListener {
 
