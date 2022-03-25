@@ -106,11 +106,11 @@ internal class DefaultSyncTask @Inject constructor(
         val isInitialSync = token == null
         if (isInitialSync) {
             // We might want to get the user information in parallel too
-            val user = tryOrNull { session.getProfile(userId) }
+            val user = tryOrNull { session.getProfileAsUser(userId) }
             userStore.createOrUpdate(
                     userId = userId,
-                    displayName = user?.get(ProfileService.DISPLAY_NAME_KEY) as? String,
-                    avatarUrl = user?.get(ProfileService.AVATAR_URL_KEY) as? String)
+                    displayName = user?.displayName,
+                    avatarUrl = user?.avatarUrl)
             defaultSyncStatusService.startRoot(InitSyncStep.ImportingAccount, 100)
         }
         // Maybe refresh the homeserver capabilities data we know

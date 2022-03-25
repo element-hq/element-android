@@ -214,13 +214,13 @@ class UserListViewModel @AssistedInject constructor(
                 ThreePidUser(email = search, user = null)
             } else {
                 try {
-                    val json = session.getProfile(foundThreePid.matrixId)
+                    val user = session.getProfileAsUser(foundThreePid.matrixId)
                     ThreePidUser(
                             email = search,
                             user = User(
                                     userId = foundThreePid.matrixId,
-                                    displayName = json[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                    avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
+                                    displayName = user.displayName,
+                                    avatarUrl = user.avatarUrl
                             )
                     )
                 } catch (failure: Throwable) {
@@ -241,11 +241,11 @@ class UserListViewModel @AssistedInject constructor(
                         .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
                         .sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                 val userProfile = if (MatrixPatterns.isUserId(search)) {
-                    val json = tryOrNull { session.getProfile(search) }
+                    val user = tryOrNull { session.getProfileAsUser(search) }
                     User(
                             userId = search,
-                            displayName = json?.get(ProfileService.DISPLAY_NAME_KEY) as? String,
-                            avatarUrl = json?.get(ProfileService.AVATAR_URL_KEY) as? String
+                            displayName = user?.displayName,
+                            avatarUrl = user?.avatarUrl
                     )
                 } else {
                     null
