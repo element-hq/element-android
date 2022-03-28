@@ -881,7 +881,6 @@ class MessageComposerViewModel @AssistedInject constructor(
     private fun handleEntersBackground(composerText: String) {
         // Always stop all voice actions. It may be playing in timeline or active recording
         val playingAudioContent = voiceMessageHelper.stopAllVoiceActions(deleteRecord = false)
-        voiceMessageHelper.clearTracker()
 
         val isVoiceRecording = com.airbnb.mvrx.withState(this) { it.isVoiceRecording }
         if (isVoiceRecording) {

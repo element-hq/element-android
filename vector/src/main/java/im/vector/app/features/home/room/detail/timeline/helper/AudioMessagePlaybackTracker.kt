@@ -50,6 +50,12 @@ class AudioMessagePlaybackTracker @Inject constructor() {
         listeners.remove(id)
     }
 
+    fun pauseAllPlaybacks() {
+        listeners.keys.forEach { key ->
+            pausePlayback(key)
+        }
+    }
+
     fun makeAllPlaybacksIdle() {
         listeners.keys.forEach { key ->
             setState(key, Listener.State.Idle)

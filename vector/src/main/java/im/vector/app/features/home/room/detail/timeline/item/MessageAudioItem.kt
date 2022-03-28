@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Paint
 import android.text.format.DateUtils
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -27,6 +28,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
@@ -64,8 +66,8 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.rootLayout, null)
+        bindFilenameViewAttributes(holder)
         bindUploadState(holder)
-        holder.filenameView.text = filename
         applyLayoutTint(holder)
         holder.audioPlaybackControlButton.setOnClickListener { playbackControlButtonClickListener?.invoke(it) }
         renderStateBasedOnAudioPlayback(holder)
@@ -89,6 +91,12 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
             ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_quinary)
         }
         holder.mainLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
+    }
+
+    private fun bindFilenameViewAttributes(holder: Holder) {
+        holder.filenameView.text = filename
+        holder.filenameView.onClick(attributes.itemClickListener)
+        holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
     }
 
     private fun renderStateBasedOnAudioPlayback(holder: Holder) {
