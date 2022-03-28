@@ -46,6 +46,7 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
@@ -76,20 +77,25 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
         }
     }
 
-    private fun setupAutoFill() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            views.createAccountInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
-            views.createAccountPasswordInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
-        }
+    private fun setupSubmitButton() {
+        views.createAccountSubmit.setOnClickListener { submit() }
+        observeInputFields()
+                .onEach {
+                    views.createAccountPasswordInput.error = null
+                    views.createAccountInput.error = null
+                    views.createAccountSubmit.isEnabled = it
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun setupSocialLoginButtons() {
-        views.ssoButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
-    }
+    private fun observeInputFields() = combine(
+            views.createAccountInput.hasContentFlow { it.trim() },
+            views.createAccountPasswordInput.hasContentFlow(),
+            transform = { isLoginNotEmpty, isPasswordNotEmpty -> isLoginNotEmpty && isPasswordNotEmpty }
+    )
 
     private fun submit() {
         withState(viewModel) { state ->
-
             cleanupUi()
 
             val login = views.createAccountInput.content()
@@ -121,43 +127,6 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
         views.createAccountInput.error = null
         views.createAccountPasswordInput.error = null
     }
-
-    private fun setupUi(state: OnboardingViewState) {
-        if (state.loginMode is LoginMode.SsoAndPassword) {
-            views.ssoGroup.isVisible = state.loginMode.ssoIdentityProviders?.isNotEmpty() == true
-            views.ssoButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders?.sorted()
-            views.ssoButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                override fun onProviderSelected(id: String?) {
-                    viewModel.getSsoUrl(
-                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                            deviceId = state.deviceId,
-                            providerId = id
-                    )
-                            ?.let { openInCustomTab(it) }
-                }
-            }
-        } else {
-            views.ssoGroup.isVisible = false
-            views.ssoButtons.ssoIdentityProviders = null
-        }
-    }
-
-    private fun setupSubmitButton() {
-        views.createAccountSubmit.setOnClickListener { submit() }
-        observeInputFields()
-                .onEach {
-                    views.createAccountPasswordInput.error = null
-                    views.createAccountInput.error = null
-                    views.createAccountSubmit.isEnabled = it
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-
-    private fun observeInputFields() = combine(
-            views.createAccountInput.hasContentFlow { it.trim() },
-            views.createAccountPasswordInput.hasContentFlow(),
-            transform = { isLoginNotEmpty, isPasswordNotEmpty -> isLoginNotEmpty && isPasswordNotEmpty }
-    )
 
     override fun resetViewModel() {
         viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
@@ -195,11 +164,42 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
     override fun updateWithState(state: OnboardingViewState) {
         setupUi(state)
         setupAutoFill()
-        setupSocialLoginButtons()
 
         if (state.isLoading) {
             // Ensure password is hidden
             views.createAccountPasswordInput.editText().hidePassword()
+        }
+    }
+
+    private fun setupUi(state: OnboardingViewState) {
+        when (state.loginMode) {
+            is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.loginMode.ssoIdentityProviders)
+            else                        -> hideSsoProviders()
+        }
+    }
+
+    private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
+        views.ssoButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
+        views.ssoButtons.ssoIdentityProviders = ssoProviders?.sorted()
+        views.ssoButtons.listener = SocialLoginButtonsView.InteractionListener { id ->
+            views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
+            viewModel.getSsoUrl(
+                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                    deviceId = deviceId,
+                    providerId = id
+            )?.let { openInCustomTab(it) }
+        }
+    }
+
+    private fun hideSsoProviders() {
+        views.ssoGroup.isVisible = false
+        views.ssoButtons.ssoIdentityProviders = null
+    }
+
+    private fun setupAutoFill() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            views.createAccountInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
+            views.createAccountPasswordInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
         }
     }
 }
