@@ -48,7 +48,6 @@ import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -328,12 +327,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
 
     private suspend fun fetchProfileInfo() {
         val result = runCatchingToAsync {
-            session.getProfile(initialState.userId)
+            session.getProfileAsUser(initialState.userId)
                     .let {
                         MatrixItem.UserItem(
                                 id = initialState.userId,
-                                displayName = it[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                avatarUrl = it[ProfileService.AVATAR_URL_KEY] as? String
+                                displayName = it.displayName,
+                                avatarUrl = it.avatarUrl
                         )
                     }
         }
