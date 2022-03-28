@@ -1,3 +1,11 @@
+Changes in Element v1.4.8 (2022-03-28)
+======================================
+
+Other changes
+-------------
+ - Moving live location sharing permission to debug only builds whilst it is WIP ([#5636](https://github.com/vector-im/element-android/issues/5636))
+
+
 Changes in Element v1.4.7 (2022-03-24)
 ======================================
 
