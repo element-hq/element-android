@@ -160,7 +160,7 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
     )
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetLogin)
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
 
     override fun onError(throwable: Throwable) {

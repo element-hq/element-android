@@ -52,7 +52,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
     object ResetHomeServerType : ResetAction
     object ResetHomeServerUrl : ResetAction
     object ResetSignMode : ResetAction
-    object ResetLogin : ResetAction
+    object ResetAuthenticationAttempt : ResetAction
     object ResetResetPassword : ResetAction
 
     // Homeserver history
