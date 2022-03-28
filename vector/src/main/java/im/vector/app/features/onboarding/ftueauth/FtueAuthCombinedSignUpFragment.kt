@@ -179,7 +179,7 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
 
     private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
         views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
-        views.ssoButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
+        views.ssoButtons.mode = SocialLoginButtonsView.Mode.MODE_CONTINUE
         views.ssoButtons.ssoIdentityProviders = ssoProviders?.sorted()
         views.ssoButtons.listener = SocialLoginButtonsView.InteractionListener { id ->
             viewModel.getSsoUrl(
