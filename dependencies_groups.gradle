@@ -39,6 +39,7 @@ ext.groups = [
                 regex: [
                 ],
                 group: [
+                        'ch.qos.logback',
                         'com.adevinta.android',
                         'com.airbnb.android',
                         'com.almworks.sqlite4java',
@@ -113,6 +114,7 @@ ext.groups = [
                         'info.picocli',
                         'io.arrow-kt',
                         'io.github.detekt.sarif4k',
+                        'io.github.microutils',
                         'io.github.reactivecircus.flowbinding',
                         'io.grpc',
                         'io.jsonwebtoken',

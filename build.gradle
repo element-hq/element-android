@@ -90,6 +90,8 @@ allprojects {
 
     // See https://github.com/JLLeitschuh/ktlint-gradle#configuration
     ktlint {
+        // See https://github.com/pinterest/ktlint/releases/
+        version = "0.45.1"
         android = true
         ignoreFailures = false
         enableExperimentalRules = true
