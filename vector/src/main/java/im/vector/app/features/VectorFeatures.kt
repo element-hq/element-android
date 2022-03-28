@@ -38,5 +38,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = true
     override fun isOnboardingUseCaseEnabled() = true
-    override fun isOnboardingPersonalizeEnabled() = true
+    override fun isOnboardingPersonalizeEnabled() = false
 }

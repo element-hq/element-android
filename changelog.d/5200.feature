@@ -1,1 +1,0 @@
-Enabling the FTUE onboarding account creation personalization steps (updating display name and profile picture)
