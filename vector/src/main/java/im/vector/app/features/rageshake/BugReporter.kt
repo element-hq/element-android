@@ -255,11 +255,12 @@ class BugReporter @Inject constructor(
 
                 if (!mIsCancelled) {
                     val text = when (reportType) {
-                        ReportType.BUG_REPORT          -> "[Element] $bugDescription"
-                        ReportType.SUGGESTION          -> "[Element] [Suggestion] $bugDescription"
-                        ReportType.SPACE_BETA_FEEDBACK -> "[Element] [spaces-feedback] $bugDescription"
+                        ReportType.BUG_REPORT            -> "[Element] $bugDescription"
+                        ReportType.SUGGESTION            -> "[Element] [Suggestion] $bugDescription"
+                        ReportType.SPACE_BETA_FEEDBACK   -> "[Element] [spaces-feedback] $bugDescription"
                         ReportType.AUTO_UISI_SENDER,
-                        ReportType.AUTO_UISI           -> bugDescription
+                        ReportType.AUTO_UISI             -> bugDescription
+                        ReportType.THREADS_BETA_FEEDBACK -> "[Element] [threads-feedback] $bugDescription"
                     }
 
                     // build the multi part request
@@ -350,6 +351,7 @@ class BugReporter @Inject constructor(
                             builder.addFormDataPart("label", "android")
                             builder.addFormDataPart("label", "uisi-sender")
                         }
+                        ReportType.THREADS_BETA_FEEDBACK -> builder.addFormDataPart("label", "threads-feedback")
                     }
 
                     if (getCrashFile().exists()) {
