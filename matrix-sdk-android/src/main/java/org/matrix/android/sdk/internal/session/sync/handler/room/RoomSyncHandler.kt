@@ -382,6 +382,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
 
             eventIds.add(event.eventId)
+            liveEventService.get().dispatchLiveEventReceived(event, roomId, insertType == EventInsertType.INITIAL_SYNC)
 
             val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 

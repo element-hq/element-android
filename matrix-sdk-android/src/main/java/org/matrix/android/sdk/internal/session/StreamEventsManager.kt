@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.LiveEventListener
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,12 +42,36 @@ internal class StreamEventsManager @Inject constructor() {
         listeners.remove(listener)
     }
 
-    fun dispatchLiveEventDecrypted(event: Event) {
+    fun dispatchLiveEventReceived(event: Event, roomId: String, initialSync: Boolean) {
+        Timber.v("## dispatchLiveEventReceived ${event.eventId}")
+        coroutineScope.launch {
+            if (!initialSync) {
+                listeners.forEach {
+                    tryOrNull {
+                        it.onLiveEvent(roomId, event)
+                    }
+                }
+            }
+        }
+    }
+
+    fun dispatchPaginatedEventReceived(event: Event, roomId: String) {
+        Timber.v("## dispatchPaginatedEventReceived ${event.eventId}")
+        coroutineScope.launch {
+            listeners.forEach {
+                tryOrNull {
+                    it.onPaginatedEvent(roomId, event)
+                }
+            }
+        }
+    }
+
+    fun dispatchLiveEventDecrypted(event: Event, result: MXEventDecryptionResult) {
         Timber.v("## dispatchLiveEventDecrypted ${event.eventId}")
         coroutineScope.launch {
             listeners.forEach {
                 tryOrNull {
-                    it.onEventDecrypted(event)
+                    it.onEventDecrypted(event, result.clearEvent)
                 }
             }
         }

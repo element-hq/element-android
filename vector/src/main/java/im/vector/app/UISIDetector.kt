@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.LiveEventListener
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import timber.log.Timber
 import java.util.Timer
@@ -68,7 +69,7 @@ class UISIDetector : LiveEventListener {
     private val timeoutMillis = 30_000L
     private val enabled: Boolean get() = callback?.enabled.orFalse()
 
-    override fun onEventDecrypted(event: Event) {
+    override fun onEventDecrypted(event: Event, clearEvent: JsonDict) {
         val eventId = event.eventId
         val roomId = event.roomId
         if (!enabled || eventId == null || roomId == null) return
@@ -107,6 +108,10 @@ class UISIDetector : LiveEventListener {
         trackedEvents[trackerId] = timeoutTask
         timer.schedule(timeoutTask, timeoutMillis)
     }
+
+    override fun onLiveEvent(roomId: String, event: Event) { }
+
+    override fun onPaginatedEvent(roomId: String, event: Event) { }
 
     private fun trackerId(eventId: String, roomId: String): String = "$roomId-$eventId"
 
