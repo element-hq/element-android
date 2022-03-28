@@ -33,7 +33,10 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
                                 var timelineEvents: RealmList<TimelineEventEntity> = RealmList(),
         // Only one chunk will have isLastForward == true
                                 @Index var isLastForward: Boolean = false,
-                                @Index var isLastBackward: Boolean = false
+                                @Index var isLastBackward: Boolean = false,
+        // Threads
+                                @Index var rootThreadEventId: String? = null,
+                                @Index var isLastForwardThread: Boolean = false,
 ) : RealmObject() {
 
     fun identifier() = "${prevToken}_$nextToken"
@@ -47,14 +50,32 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
     companion object
 }
 
-internal fun ChunkEntity.deleteOnCascade(deleteStateEvents: Boolean, canDeleteRoot: Boolean) {
+internal fun ChunkEntity.deleteOnCascade(
+        deleteStateEvents: Boolean,
+        canDeleteRoot: Boolean) {
     assertIsManaged()
     if (deleteStateEvents) {
         stateEvents.deleteAllFromRealm()
     }
     timelineEvents.clearWith {
         val deleteRoot = canDeleteRoot && (it.root?.stateKey == null || deleteStateEvents)
+        if (deleteRoot) {
+            room?.firstOrNull()?.removeThreadSummaryIfNeeded(it.eventId)
+        }
         it.deleteOnCascade(deleteRoot)
     }
+    deleteFromRealm()
+}
+
+/**
+ * Delete the chunk along with the thread events that were temporarily created
+ */
+internal fun ChunkEntity.deleteAndClearThreadEvents() {
+    assertIsManaged()
+    timelineEvents
+            .filter { it.ownedByThreadChunk }
+            .forEach {
+                it.deleteOnCascade(false)
+            }
     deleteFromRealm()
 }

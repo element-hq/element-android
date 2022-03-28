@@ -217,6 +217,12 @@ interface RoomService {
                                           sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): UpdatableLivePageResult
 
     /**
+     * Return a LiveData on the number of rooms
+     * @param queryParams parameters to query the room summaries. It can be use to keep only joined rooms, for instance.
+     */
+    fun getRoomCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int>
+
+    /**
      * TODO Doc
      */
     fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount

@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.room.timeline
 
 import org.matrix.android.sdk.BuildConfig
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -54,6 +55,7 @@ data class TimelineEvent(
          * It's not unique on the timeline as it's reset on each chunk.
          */
         val displayIndex: Int,
+        var ownedByThreadChunk: Boolean = false,
         val senderInfo: SenderInfo,
         val annotations: EventAnnotationsSummary? = null,
         val readReceipts: List<ReadReceipt> = emptyList()
@@ -134,9 +136,9 @@ fun TimelineEvent.getEditedEventId(): String? {
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return when (root.getClearType()) {
-        EventType.STICKER    -> root.getClearContent().toModel<MessageStickerContent>()
-        EventType.POLL_START -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
-        else                 -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
+        EventType.STICKER       -> root.getClearContent().toModel<MessageStickerContent>()
+        in EventType.POLL_START -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
+        else                    -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
 }
 
@@ -156,6 +158,13 @@ fun TimelineEvent.isPoll(): Boolean =
 
 fun TimelineEvent.isSticker(): Boolean {
     return root.isSticker()
+}
+
+/**
+ * Returns whether or not the event is a root thread event
+ */
+fun TimelineEvent.isRootThread(): Boolean {
+    return root.threadDetails?.isRootThread.orFalse()
 }
 
 /**

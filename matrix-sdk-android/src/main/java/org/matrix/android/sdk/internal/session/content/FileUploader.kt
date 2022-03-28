@@ -30,6 +30,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okio.BufferedSink
 import okio.source
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
@@ -53,6 +54,7 @@ internal class FileUploader @Inject constructor(
         private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
         private val context: Context,
         private val temporaryFileCreator: TemporaryFileCreator,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         contentUrlResolver: ContentUrlResolver,
         moshi: Moshi
 ) {
@@ -146,14 +148,16 @@ internal class FileUploader @Inject constructor(
                 .post(requestBody)
                 .build()
 
-        return okHttpClient.newCall(request).awaitResponse().use { response ->
-            if (!response.isSuccessful) {
-                throw response.toFailure(globalErrorReceiver)
-            } else {
-                response.body?.source()?.let {
-                    responseAdapter.fromJson(it)
+       return withContext(coroutineDispatchers.io) {
+             okHttpClient.newCall(request).awaitResponse().use { response ->
+                if (!response.isSuccessful) {
+                    throw response.toFailure(globalErrorReceiver)
+                } else {
+                    response.body?.source()?.let {
+                        responseAdapter.fromJson(it)
+                    }
+                            ?: throw IOException()
                 }
-                        ?: throw IOException()
             }
         }
     }

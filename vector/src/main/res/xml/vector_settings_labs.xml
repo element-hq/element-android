@@ -52,8 +52,8 @@
     <!--</im.vector.app.core.preference.VectorPreferenceCategory>-->
 
     <im.vector.app.core.preference.VectorSwitchPreference
-        android:defaultValue="false"
-        android:key="SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
+        android:defaultValue="@bool/settings_labs_thread_messages_default"
+        android:key="SETTINGS_LABS_ENABLE_THREAD_MESSAGES_FINAL"
         android:summary="@string/labs_enable_thread_messages_desc"
         android:title="@string/labs_enable_thread_messages" />
 

@@ -22,13 +22,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.epoxy.EpoxyTouchHelper
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGroupListBinding
@@ -109,7 +109,7 @@ class SpaceListFragment @Inject constructor(
                 is SpaceListViewEvents.AddSpace         -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
                 is SpaceListViewEvents.OpenGroup        -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
                 is SpaceListViewEvents.OpenSpaceInvite  -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
-            }.exhaustive
+            }
         }
     }
 
@@ -121,8 +121,10 @@ class SpaceListFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) { state ->
         when (state.asyncSpaces) {
-            is Incomplete -> views.stateView.state = StateView.State.Loading
-            is Success    -> views.stateView.state = StateView.State.Content
+            Uninitialized,
+            is Loading -> views.stateView.state = StateView.State.Loading
+            is Success -> views.stateView.state = StateView.State.Content
+            else       -> Unit
         }
         spaceController.update(state)
     }

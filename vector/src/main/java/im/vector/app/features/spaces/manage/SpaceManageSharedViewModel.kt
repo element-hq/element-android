@@ -22,7 +22,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 
@@ -51,6 +50,6 @@ class SpaceManageSharedViewModel @AssistedInject constructor(
             SpaceManagedSharedAction.ManageRooms                 -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToManageRooms)
             SpaceManagedSharedAction.OpenSpaceAliasesSettings    -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToAliasSettings)
             SpaceManagedSharedAction.OpenSpacePermissionSettings -> _viewEvents.post(SpaceManagedSharedViewEvents.NavigateToPermissionSettings)
-        }.exhaustive
+        }
     }
 }

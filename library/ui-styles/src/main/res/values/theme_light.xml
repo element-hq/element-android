@@ -21,8 +21,6 @@
         <item name="vctr_fab_label_color">@color/vctr_fab_label_color_light</item>
         <item name="vctr_touch_guard_bg">@color/vctr_touch_guard_bg_light</item>
         <item name="vctr_keys_backup_banner_accent_color">@color/vctr_keys_backup_banner_accent_color_light</item>
-        <item name="vctr_attachment_selector_background">@color/vctr_attachment_selector_background_light</item>
-        <item name="vctr_attachment_selector_border">@color/vctr_attachment_selector_border_light</item>
         <item name="vctr_room_active_widgets_banner_bg">@color/vctr_room_active_widgets_banner_bg_light</item>
         <item name="vctr_room_active_widgets_banner_text">@color/vctr_room_active_widgets_banner_text_light</item>
         <item name="vctr_reaction_background_off">@color/vctr_reaction_background_off_light</item>
@@ -45,12 +43,14 @@
 
         <!-- Presence Indicator colors -->
         <item name="vctr_presence_indicator_offline">@color/vctr_presence_indicator_offline_light</item>
+        <item name="vctr_presence_indicator_online">@color/vctr_presence_indicator_online_light</item>
 
-        <!-- Some alias -->
+        <!-- Some aliases -->
         <item name="vctr_header_background">?vctr_system</item>
         <item name="vctr_list_separator">?vctr_content_quinary</item>
         <item name="vctr_list_separator_system">?vctr_system</item>
         <item name="vctr_list_separator_on_surface">?vctr_system</item>
+        <item name="vctr_unread_background">?vctr_content_tertiary</item>
 
         <!-- Material color -->
         <item name="colorPrimary">@color/element_accent_light</item>
@@ -142,6 +142,11 @@
         <item name="vctr_keyword_style">@style/Widget.Vector.Keyword</item>
 
         <item name="vctr_toast_background">@color/vctr_toast_background_light</item>
+
+        <item name="android:actionButtonStyle">@style/Widget.Vector.ActionButton</item>
+
+        <!-- Location sharing -->
+        <item name="vctr_live_location">@color/vctr_live_location_light</item>
     </style>
 
     <style name="Theme.Vector.Light" parent="Base.Theme.Vector.Light" />

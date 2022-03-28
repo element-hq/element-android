@@ -29,7 +29,6 @@ import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
@@ -259,7 +258,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     copy(step = BootstrapStep.AccountReAuth(stringProvider.getString(R.string.authentication_error)))
                 }
             }
-        }.exhaustive
+        }
     }
 
     private fun handleStart(action: BootstrapActions.Start) = withState {
@@ -344,7 +343,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             )
                         }
                     }
-                }.exhaustive
+                }
             }
         }
     }
@@ -449,7 +448,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                             }
                         }
                     }
-                }.exhaustive
+                }
             }
         }
     }
@@ -533,7 +532,7 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                     )
                 }
             }
-        }.exhaustive
+        }
     }
 
     private fun BackupToQuadSMigrationTask.Result.Failure.toHumanReadable(): String {

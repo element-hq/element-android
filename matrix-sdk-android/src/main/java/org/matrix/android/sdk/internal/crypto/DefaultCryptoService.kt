@@ -434,6 +434,14 @@ internal class DefaultCryptoService @Inject constructor(
                     val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
                     oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
                 }
+
+                // unwedge if needed
+                try {
+                    eventDecryptor.unwedgeDevicesIfNeeded()
+                } catch (failure: Throwable) {
+                    Timber.tag(loggerTag.value).w("unwedgeDevicesIfNeeded failed")
+                }
+
                 // There is a limit of to_device events returned per sync.
                 // If we are in a case of such limited to_device sync we can't try to generate/upload
                 // new otk now, because there might be some pending olm pre-key to_device messages that would fail if we rotate
@@ -723,7 +731,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
     @Throws(MXCryptoError::class)
-    override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return internalDecryptEvent(event, timeline)
     }
 
@@ -746,7 +754,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @return the MXEventDecryptionResult data, or null in case of error
      */
     @Throws(MXCryptoError::class)
-    private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    private suspend fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return eventDecryptor.decryptEvent(event, timeline)
     }
 
@@ -1363,6 +1371,9 @@ internal class DefaultCryptoService @Inject constructor(
 
     @VisibleForTesting
     val cryptoStoreForTesting = cryptoStore
+
+    @VisibleForTesting
+    val olmDeviceForTest = olmDevice
 
     companion object {
         const val CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS = 3_600_000 // one hour

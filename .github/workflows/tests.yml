@@ -12,6 +12,30 @@ env:
     -Porg.gradle.parallel=false
 
 jobs:
+  # Build Android Tests
+  build-android-tests: 
+    name: Build Android Tests 
+    runs-on: ubuntu-latest 
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('build-android-tests-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps: 
+      - uses: actions/checkout@v3 
+      - uses: actions/setup-java@v2 
+        with: 
+          distribution: 'adopt' 
+          java-version: 11 
+      - uses: actions/cache@v3 
+        with: 
+          path: | 
+            ~/.gradle/caches 
+            ~/.gradle/wrapper 
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }} 
+          restore-keys: | 
+            ${{ runner.os }}-gradle- 
+      - name: Build Android Tests  
+        run: ./gradlew clean assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace 
+ 
   unit-tests:
     name: Run Unit Tests
     runs-on: ubuntu-latest
@@ -20,8 +44,8 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -30,7 +54,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run unit tests
-        run: ./gradlew clean test $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false --stacktrace
+        run: ./gradlew clean test $CI_GRADLE_ARG_PROPERTIES --stacktrace
+      - name: Format unit test results
+        if: always()
+        run: python3 ./tools/ci/render_test_output.py unit ./**/build/test-results/**/*.xml
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always() &&
@@ -38,3 +65,20 @@ jobs:
           ( github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository )
         with:
           files: ./**/build/test-results/**/*.xml
+
+# Notify the channel about runs against develop or main that have failures, as PRs should have caught these first.
+  notify:
+    runs-on: ubuntu-latest
+    needs:
+      - unit-tests
+      - build-android-tests
+    if: ${{ (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' ) && failure() }}
+    steps:
+      - uses: michaelkaye/matrix-hookshot-action@v0.3.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
+          matrix_room_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
+          text_template: "Build is broken for ${{ github.ref }}: {{#each job_statuses }}{{#with this }}{{#if completed }}{{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
+          html_template: "Build is broken for ${{ github.ref }}: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion }} {{name}} <font color='{{color conclusion }}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"
+

@@ -9,13 +9,13 @@ ext.versions = [
 
 def gradle = "7.0.4"
 // Ref: https://kotlinlang.org/releases.html
-def kotlin = "1.5.31"
-def kotlinCoroutines = "1.5.2"
+def kotlin = "1.6.0"
+def kotlinCoroutines = "1.6.0"
 def dagger = "2.40.5"
 def retrofit = "2.9.0"
 def arrow = "0.8.2"
 def markwon = "4.6.2"
-def moshi = "1.12.0"
+def moshi = "1.13.0"
 def lifecycle = "2.4.0"
 def flowBinding = "1.2.0"
 def epoxy = "4.6.2"
@@ -58,6 +58,7 @@ ext.libs = [
                 'lifecycleCommon'         : "androidx.lifecycle:lifecycle-common:$lifecycle",
                 'lifecycleLivedata'       : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle",
                 'lifecycleProcess'        : "androidx.lifecycle:lifecycle-process:$lifecycle",
+                'lifecycleRuntimeKtx'     : "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle",
                 'datastore'               : "androidx.datastore:datastore:1.0.0",
                 'datastorepreferences'    : "androidx.datastore:datastore-preferences:1.0.0",
                 'pagingRuntimeKtx'        : "androidx.paging:paging-runtime-ktx:2.1.2",

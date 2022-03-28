@@ -70,7 +70,8 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
 
     fun startPlayback(id: String) {
         val currentPlaybackTime = getPlaybackTime(id)
-        val currentState = Listener.State.Playing(currentPlaybackTime)
+        val currentPercentage = getPercentage(id)
+        val currentState = Listener.State.Playing(currentPlaybackTime, currentPercentage)
         setState(id, currentState)
         // Pause any active playback
         states
@@ -87,15 +88,16 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
 
     fun pausePlayback(id: String) {
         val currentPlaybackTime = getPlaybackTime(id)
-        setState(id, Listener.State.Paused(currentPlaybackTime))
+        val currentPercentage = getPercentage(id)
+        setState(id, Listener.State.Paused(currentPlaybackTime, currentPercentage))
     }
 
     fun stopPlayback(id: String) {
         setState(id, Listener.State.Idle)
     }
 
-    fun updateCurrentPlaybackTime(id: String, time: Int) {
-        setState(id, Listener.State.Playing(time))
+    fun updateCurrentPlaybackTime(id: String, time: Int, percentage: Float) {
+        setState(id, Listener.State.Playing(time, percentage))
     }
 
     fun updateCurrentRecording(id: String, amplitudeList: List<Int>) {
@@ -110,6 +112,15 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
             is Listener.State.Paused  -> state.playbackTime
             /* Listener.State.Idle, */
             else                      -> 0
+        }
+    }
+
+    private fun getPercentage(id: String): Float {
+        return when (val state = states[id]) {
+            is Listener.State.Playing -> state.percentage
+            is Listener.State.Paused  -> state.percentage
+            /* Listener.State.Idle, */
+            else                      -> 0f
         }
     }
 
@@ -131,8 +142,8 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
 
         sealed class State {
             object Idle : State()
-            data class Playing(val playbackTime: Int) : State()
-            data class Paused(val playbackTime: Int) : State()
+            data class Playing(val playbackTime: Int, val percentage: Float) : State()
+            data class Paused(val playbackTime: Int, val percentage: Float) : State()
             data class Recording(val amplitudeList: List<Int>) : State()
         }
     }

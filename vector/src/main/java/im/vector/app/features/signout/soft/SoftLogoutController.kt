@@ -90,10 +90,10 @@ class SoftLogoutController @Inject constructor(
     }
 
     private fun buildForm(state: SoftLogoutViewState) = when (state.asyncHomeServerLoginFlowRequest) {
-        is Incomplete -> buildLoadingItem()
         is Fail -> buildLoginErrorWithRetryItem(state.asyncHomeServerLoginFlowRequest.error)
         is Success -> buildLoginSuccessItem(state)
-        is Loading, Uninitialized -> Unit
+        is Loading, Uninitialized -> buildLoadingItem()
+        is Incomplete -> Unit
     }
 
     private fun buildLoadingItem() {

@@ -26,7 +26,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.internal.assertFailsWith
 import org.junit.Before
 import org.junit.Test
@@ -55,7 +55,7 @@ class KeysExporterTest {
         givenFileDescriptorWithSize(size = A_ROOM_KEYS_EXPORT.size.toLong())
         val outputStream = context.givenOutputStreamFor(A_URI)
 
-        runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+        runTest { keysExporter.export(A_PASSWORD, A_URI) }
 
         verify { outputStream.write(A_ROOM_KEYS_EXPORT) }
     }
@@ -66,7 +66,7 @@ class KeysExporterTest {
         context.givenOutputStreamFor(A_URI)
 
         assertFailsWith<UnexpectedExportKeysFileSizeException> {
-            runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+            runTest { keysExporter.export(A_PASSWORD, A_URI) }
         }
     }
 
@@ -75,7 +75,7 @@ class KeysExporterTest {
         context.givenMissingOutputStreamFor(A_URI)
 
         assertFailsWith<IllegalStateException>(message = "Unable to open file for writing") {
-            runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+            runTest { keysExporter.export(A_PASSWORD, A_URI) }
         }
     }
 
@@ -85,7 +85,7 @@ class KeysExporterTest {
         context.givenOutputStreamFor(A_URI)
 
         assertFailsWith<IllegalStateException>(message = "Exported file not found") {
-            runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+            runTest { keysExporter.export(A_PASSWORD, A_URI) }
         }
     }
 

@@ -38,7 +38,7 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import io.mockk.verifyAll
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -77,7 +77,7 @@ class DownloadMediaUseCaseTest {
     }
 
     @Test
-    fun `given a file when calling execute then save the file in local with success`() = runBlockingTest {
+    fun `given a file when calling execute then save the file in local with success`() = runTest {
         // Given
         val uri = mockk<Uri>()
         val mimeType = "mimeType"
@@ -105,7 +105,7 @@ class DownloadMediaUseCaseTest {
     }
 
     @Test
-    fun `given a file when calling execute then save the file in local with error`() = runBlockingTest {
+    fun `given a file when calling execute then save the file in local with error`() = runTest {
         // Given
         val uri = mockk<Uri>()
         val mimeType = "mimeType"

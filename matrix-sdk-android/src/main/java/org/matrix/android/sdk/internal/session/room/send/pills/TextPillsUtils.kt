@@ -16,6 +16,7 @@
 package org.matrix.android.sdk.internal.session.room.send.pills
 
 import android.text.SpannableString
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.session.displayname.DisplayNameResolver
@@ -28,7 +29,8 @@ import javax.inject.Inject
  */
 internal class TextPillsUtils @Inject constructor(
         private val mentionLinkSpecComparator: MentionLinkSpecComparator,
-        private val displayNameResolver: DisplayNameResolver
+        private val displayNameResolver: DisplayNameResolver,
+        private val permalinkService: PermalinkService
 ) {
 
     /**
@@ -36,7 +38,7 @@ internal class TextPillsUtils @Inject constructor(
      * @return the transformed String or null if no Span found
      */
     fun processSpecialSpansToHtml(text: CharSequence): String? {
-        return transformPills(text, MENTION_SPAN_TO_HTML_TEMPLATE)
+        return transformPills(text, permalinkService.createMentionSpanTemplate(PermalinkService.SpanTemplateType.HTML))
     }
 
     /**
@@ -44,7 +46,7 @@ internal class TextPillsUtils @Inject constructor(
      * @return the transformed String or null if no Span found
      */
     fun processSpecialSpansToMarkdown(text: CharSequence): String? {
-        return transformPills(text, MENTION_SPAN_TO_MD_TEMPLATE)
+        return transformPills(text, permalinkService.createMentionSpanTemplate(PermalinkService.SpanTemplateType.MARKDOWN))
     }
 
     private fun transformPills(text: CharSequence, template: String): String? {
@@ -107,11 +109,5 @@ internal class TextPillsUtils @Inject constructor(
             }
             i++
         }
-    }
-
-    companion object {
-        private const val MENTION_SPAN_TO_HTML_TEMPLATE = "<a href=\"https://matrix.to/#/%1\$s\">%2\$s</a>"
-
-        private const val MENTION_SPAN_TO_MD_TEMPLATE = "[%2\$s](https://matrix.to/#/%1\$s)"
     }
 }

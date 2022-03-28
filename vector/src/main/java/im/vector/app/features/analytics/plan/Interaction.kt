@@ -51,6 +51,26 @@ data class Interaction(
         MobileRoomLeave,
 
         /**
+         * User tapped on Threads button on Room screen.
+         */
+        MobileRoomThreadListButton,
+
+        /**
+         * User tapped on a thread summary item on Room screen.
+         */
+        MobileRoomThreadSummaryItem,
+
+        /**
+         * User tapped on the filter button on ThreadList screen.
+         */
+        MobileThreadListFilterItem,
+
+        /**
+         * User selected a thread on ThreadList screen.
+         */
+        MobileThreadListThreadItem,
+
+        /**
          * User tapped the already selected space from the space list.
          */
         SpacePanelSelectedSpace,
@@ -116,10 +136,22 @@ data class Interaction(
         WebRightPanelRoomUserInfoInviteButton,
 
         /**
+         * User clicked the threads 'show' filter dropdown in the threads panel
+         * in Element Web/Desktop.
+         */
+        WebRightPanelThreadPanelFilterDropdown,
+
+        /**
          * User clicked the create room button in the room directory of Element
          * Web/Desktop.
          */
         WebRoomDirectoryCreateRoomButton,
+
+        /**
+         * User clicked the Threads button in the top right of a room in Element
+         * Web/Desktop.
+         */
+        WebRoomHeaderButtonsThreadsButton,
 
         /**
          * User adjusted their favourites using the context menu on the header
@@ -207,7 +239,7 @@ data class Interaction(
 
         /**
          * User clicked the explore rooms button in the + context menu of the
-         * rooms sublist in  Element Web/Desktop.
+         * rooms sublist in Element Web/Desktop.
          */
         WebRoomListRoomsSublistPlusMenuExploreRoomsItem,
 
@@ -222,6 +254,12 @@ data class Interaction(
          * security settings in an existing room in Element Web/Desktop.
          */
         WebRoomSettingsSecurityTabCreateNewRoomButton,
+
+        /**
+         * User clicked a thread summary in the timeline of a room in Element
+         * Web/Desktop.
+         */
+        WebRoomTimelineThreadSummaryButton,
 
         /**
          * User interacted with the theme radio selector in the Appearance tab
@@ -258,6 +296,17 @@ data class Interaction(
          * home in Element Web/Desktop.
          */
         WebSpaceHomeCreateRoomButton,
+
+        /**
+         * User clicked the back button on a Thread view going back to the
+         * Threads Panel of Element Web/Desktop.
+         */
+        WebThreadViewBackButton,
+
+        /**
+         * User selected a thread in the Threads panel in Element Web/Desktop.
+         */
+        WebThreadsPanelThreadItem,
 
         /**
          * User clicked the theme toggle button in the user menu of Element

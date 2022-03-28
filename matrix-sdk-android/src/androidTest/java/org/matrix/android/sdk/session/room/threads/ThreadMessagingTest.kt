@@ -22,6 +22,7 @@ import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -38,6 +39,7 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
+@Ignore("Remaining Integration tests are unstable if run with this test. Issue #5439")
 class ThreadMessagingTest : InstrumentedTest {
 
     @Test

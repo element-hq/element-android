@@ -38,7 +38,7 @@ interface TimelineService {
 
     /**
      * Returns a snapshot of TimelineEvent event with eventId.
-     * At the opposite of getTimeLineEventLive which will be updated when local echo event is synced, it will return null in this case.
+     * At the opposite of getTimelineEventLive which will be updated when local echo event is synced, it will return null in this case.
      * @param eventId the eventId to get the TimelineEvent
      */
     fun getTimelineEvent(eventId: String): TimelineEvent?

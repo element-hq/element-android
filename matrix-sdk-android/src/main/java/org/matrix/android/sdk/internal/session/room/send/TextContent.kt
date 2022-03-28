@@ -58,8 +58,9 @@ fun TextContent.toThreadTextContent(
             format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
             body = text,
             relatesTo = RelationDefaultContent(
-                    type = RelationType.IO_THREAD,
+                    type = RelationType.THREAD,
                     eventId = rootThreadEventId,
+                    isFallingBack = true,
                     inReplyTo = ReplyToContent(
                             eventId = latestThreadEventId
                     )),

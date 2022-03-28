@@ -43,10 +43,9 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         // Can be rendered in bubbles, other types will fallback to default
         private val EVENT_TYPES_WITH_BUBBLE_LAYOUT = setOf(
                 EventType.MESSAGE,
-                EventType.POLL_START,
                 EventType.ENCRYPTED,
                 EventType.STICKER
-        )
+        ) + EventType.POLL_START
 
         // Can't be rendered in bubbles, so get back to default layout
         private val MSG_TYPES_WITHOUT_BUBBLE_LAYOUT = setOf(
@@ -118,6 +117,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                     TimelineMessageLayout.Bubble(
                             showAvatar = showInformation && !isSentByMe,
                             showDisplayName = showInformation && !isSentByMe,
+                            addTopMargin = isFirstFromThisSender && isSentByMe,
                             isIncoming = !isSentByMe,
                             cornersRadius = cornersRadius,
                             isPseudoBubble = messageContent.isPseudoBubble(),

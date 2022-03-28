@@ -29,7 +29,6 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64Safe
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationTransaction
 import org.matrix.android.sdk.internal.crypto.verification.ValidVerificationInfoStart
-import org.matrix.android.sdk.internal.util.exhaustive
 import timber.log.Timber
 
 internal class DefaultQrCodeVerificationTransaction(
@@ -129,7 +128,7 @@ internal class DefaultQrCodeVerificationTransaction(
                     // Nothing special here, we will send a reciprocate start event, and then the other session will trust it's view of the MSK
                 }
             }
-        }.exhaustive
+        }
 
         val toVerifyDeviceIds = mutableListOf<String>()
 
@@ -174,7 +173,7 @@ internal class DefaultQrCodeVerificationTransaction(
                     Unit
                 }
             }
-        }.exhaustive
+        }
 
         if (!canTrustOtherUserMasterKey && toVerifyDeviceIds.isEmpty()) {
             // Nothing to verify
@@ -272,6 +271,7 @@ internal class DefaultQrCodeVerificationTransaction(
                 // I now know that i can trust my MSK
                 trust(true, emptyList(), true)
             }
+            null                                           -> Unit
         }
     }
 

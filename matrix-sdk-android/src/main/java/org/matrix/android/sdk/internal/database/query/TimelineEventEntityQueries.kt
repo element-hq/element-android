@@ -97,6 +97,7 @@ internal fun RealmQuery<TimelineEventEntity>.filterEvents(filters: TimelineEvent
     if (filters.filterEdits) {
         not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.EDIT)
         not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.RESPONSE)
+        not().like(TimelineEventEntityFields.ROOT.CONTENT, TimelineEventFilter.Content.REFERENCE)
     }
     if (filters.filterRedacted) {
         not().like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, TimelineEventFilter.Unsigned.REDACTED)

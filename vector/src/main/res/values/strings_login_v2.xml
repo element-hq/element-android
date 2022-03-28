@@ -19,7 +19,6 @@
     <string name="login_enter_your_email">Enter an email associated to your Matrix account</string>
     <string name="login_choose_a_new_password">Choose a new password</string>
     <string name="login_please_choose_a_user_name">Please choose an identifier</string>
-    <string name="login_please_choose_a_user_name_help">Your identifier will be used to connect to your Matrix account</string>
     <string name="login_please_choose_a_user_name_help_2">Once your account is created, your identifier cannot be modified. However you will be able to change your display name.</string>
     <string name="login_if_you_re_not_sure_select_this_option">If you\'re not sure, select this option</string>
     <string name="login_element_matrix_server_and_others">Element Matrix Server and others</string>

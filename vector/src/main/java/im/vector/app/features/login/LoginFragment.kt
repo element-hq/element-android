@@ -29,8 +29,8 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
@@ -97,7 +97,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -107,7 +107,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
             SignMode.SignUp             -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
             SignMode.SignIn,
             SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
-        }.exhaustive
+        }
     }
 
     private fun submit() {
@@ -269,6 +269,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
         setupButtons(state)
 
         when (state.asyncLoginAction) {
+            Uninitialized,
             is Loading -> {
                 // Ensure password is hidden
                 views.passwordField.hidePassword()
@@ -300,7 +301,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 views.passwordField.hidePassword()
             }
             // Success is handled by the LoginActivity
-            is Success -> Unit
+            else       -> Unit
         }
     }
 

@@ -77,6 +77,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
                 is SharedSecureStorageViewEvent.KeyInlineError -> {
                     views.ssssKeyEnterTil.error = it.message
                 }
+                else                                           -> Unit
             }
         }
 

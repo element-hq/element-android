@@ -53,9 +53,11 @@ import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem
 import im.vector.app.features.home.room.detail.timeline.item.DaySeparatorItem_
 import im.vector.app.features.home.room.detail.timeline.item.ItemWithEvents
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryEvents
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptData
 import im.vector.app.features.home.room.detail.timeline.item.ReadReceiptsItem
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
+import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
@@ -126,7 +128,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun onEventVisible(event: TimelineEvent)
         fun onRoomCreateLinkClicked(url: String)
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
-        fun onImageMessageClicked(messageImageContent: MessageImageInfoContent, mediaData: ImageContentRenderer.Data, view: View)
+        fun onImageMessageClicked(messageImageContent: MessageImageInfoContent,
+                                  mediaData: ImageContentRenderer.Data,
+                                  view: View,
+                                  inMemory: List<AttachmentData>)
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
 
         //        fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)
@@ -140,6 +145,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun getPreviewUrlRetriever(): PreviewUrlRetriever
 
         fun onVoiceControlButtonClicked(eventId: String, messageAudioContent: MessageAudioContent)
+        fun onVoiceWaveformTouchedUp(eventId: String, duration: Int, percentage: Float)
+        fun onVoiceWaveformMovedTo(eventId: String, duration: Int, percentage: Float)
 
         fun onAddMoreReaction(event: TimelineEvent)
     }
@@ -415,7 +422,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                         partialState = partialState,
                         lastSentEventIdWithoutReadReceipts = lastSentEventWithoutReadReceipts,
                         callback = callback,
-                        eventsGroup = timelineEventsGroup
+                        eventsGroup = timelineEventsGroup,
+                        reactionsSummaryEvents = ReactionsSummaryEvents(
+                                onAddMoreClicked = { reactionListFactory.onAddMoreClicked(callback, event) },
+                                onShowLessClicked = { reactionListFactory.onShowLessClicked(event.eventId) },
+                                onShowMoreClicked = { reactionListFactory.onShowMoreClicked(event.eventId) }
+                        )
                 )
                 modelCache[position] = buildCacheItem(params)
                 numberOfEventsToBuild++

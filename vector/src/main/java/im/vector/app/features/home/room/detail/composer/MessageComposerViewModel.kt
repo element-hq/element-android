@@ -23,10 +23,10 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsComposer
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.command.CommandParser
@@ -108,6 +108,8 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.EndAllVoiceActions             -> handleEndAllVoiceActions(action.deleteRecord)
             is MessageComposerAction.InitializeVoiceRecorder        -> handleInitializeVoiceRecorder(action.attachmentData)
             is MessageComposerAction.OnEntersBackground             -> handleEntersBackground(action.composerText)
+            is MessageComposerAction.VoiceWaveformTouchedUp         -> handleVoiceWaveformTouchedUp(action)
+            is MessageComposerAction.VoiceWaveformMovedTo           -> handleVoiceWaveformMovedTo(action)
         }
     }
 
@@ -188,6 +190,9 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleSendMessage(action: MessageComposerAction.SendMessage) {
         withState { state ->
+            analyticsTracker.capture(state.toAnalyticsComposer()).also {
+                setState { copy(startsThread = false) }
+            }
             when (state.sendMode) {
                 is SendMode.Regular -> {
                     when (val slashCommandResult = commandParser.parseSlashCommand(
@@ -459,13 +464,14 @@ class MessageComposerViewModel @AssistedInject constructor(
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
                             popDraft()
                         }
-                    }.exhaustive
+                    }
                 }
                 is SendMode.Edit    -> {
                     // is original event a reply?
                     val relationContent = state.sendMode.timelineEvent.getRelationContent()
                     val inReplyTo = if (state.rootThreadEventId != null) {
-                        if (relationContent?.inReplyTo?.shouldRenderInThread() == true) {
+                        // Thread event
+                        if (relationContent?.shouldRenderInThread() == true) {
                             // Reply within a thread event
                             relationContent.inReplyTo?.eventId
                         } else {
@@ -509,6 +515,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 is SendMode.Reply   -> {
                     val timelineEvent = state.sendMode.timelineEvent
                     val showInThread = state.sendMode.timelineEvent.root.isThread() && state.rootThreadEventId == null
+                    // If threads are disabled this will make the fallback replies visible to clients with threads enabled
                     val rootThreadEventId = if (showInThread) timelineEvent.root.getRootThreadEventId() else null
                     state.rootThreadEventId?.let {
                         room.replyInThread(
@@ -530,7 +537,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 is SendMode.Voice   -> {
                     // do nothing
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -863,12 +870,23 @@ class MessageComposerViewModel @AssistedInject constructor(
         voiceMessageHelper.pauseRecording()
     }
 
+    private fun handleVoiceWaveformTouchedUp(action: MessageComposerAction.VoiceWaveformTouchedUp) {
+        voiceMessageHelper.movePlaybackTo(action.eventId, action.percentage, action.duration)
+    }
+
+    private fun handleVoiceWaveformMovedTo(action: MessageComposerAction.VoiceWaveformMovedTo) {
+        voiceMessageHelper.movePlaybackTo(action.eventId, action.percentage, action.duration)
+    }
+
     private fun handleEntersBackground(composerText: String) {
+        // Always stop all voice actions. It may be playing in timeline or active recording
+        val playingAudioContent = voiceMessageHelper.stopAllVoiceActions(deleteRecord = false)
+        voiceMessageHelper.clearTracker()
+
         val isVoiceRecording = com.airbnb.mvrx.withState(this) { it.isVoiceRecording }
         if (isVoiceRecording) {
-            voiceMessageHelper.clearTracker()
             viewModelScope.launch {
-                voiceMessageHelper.stopAllVoiceActions(deleteRecord = false)?.toContentAttachmentData()?.let { voiceDraft ->
+                playingAudioContent?.toContentAttachmentData()?.let { voiceDraft ->
                     val content = voiceDraft.toJsonString()
                     room.saveDraft(UserDraft.Voice(content))
                     setState { copy(sendMode = SendMode.Voice(content)) }

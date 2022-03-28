@@ -21,6 +21,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
@@ -45,6 +46,7 @@ class AccountDataEpoxyController @Inject constructor(
         if (data == null) return
         val host = this
         when (data.accountData) {
+            Uninitialized,
             is Loading -> {
                 loadingItem {
                     id("loading")

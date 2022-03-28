@@ -26,5 +26,6 @@ data class ThreadTimelineArgs(
         val displayName: String?,
         val avatarUrl: String?,
         val roomEncryptionTrustLevel: RoomEncryptionTrustLevel?,
-        val rootThreadEventId: String? = null
+        val rootThreadEventId: String? = null,
+        val startsThread: Boolean = false
 ) : Parcelable

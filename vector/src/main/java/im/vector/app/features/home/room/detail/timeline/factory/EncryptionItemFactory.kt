@@ -46,7 +46,7 @@ class EncryptionItemFactory @Inject constructor(
         }
         val algorithm = event.root.content.toModel<EncryptionEventContent>()?.algorithm
         val informationData = informationDataFactory.create(params)
-        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback, params.reactionsSummaryEvents)
 
         val isSafeAlgorithm = algorithm == MXCRYPTO_ALGORITHM_MEGOLM
         val title: String
@@ -80,7 +80,8 @@ class EncryptionItemFactory @Inject constructor(
                                 itemClickListener = attributes.itemClickListener,
                                 itemLongClickListener = attributes.itemLongClickListener,
                                 reactionPillCallback = attributes.reactionPillCallback,
-                                readReceiptsCallback = attributes.readReceiptsCallback
+                                readReceiptsCallback = attributes.readReceiptsCallback,
+                                reactionsSummaryEvents = attributes.reactionsSummaryEvents
                         )
                 )
                 .highlighted(params.isHighlighted)

@@ -83,6 +83,7 @@ class PushRulePreference : VectorPreference {
             NotificationIndex.NOISY  -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleNoisy)
             }
+            null                     -> Unit
         }
 
         radioGroup?.setOnCheckedChangeListener { _, checkedId ->

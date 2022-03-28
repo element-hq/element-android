@@ -61,6 +61,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import org.matrix.android.sdk.api.session.room.timeline.isPoll
+import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import org.matrix.android.sdk.api.session.room.timeline.isSticker
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
@@ -181,7 +182,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             } else {
                 when (timelineEvent.root.getClearType()) {
                     EventType.MESSAGE,
-                    EventType.STICKER     -> {
+                    EventType.STICKER       -> {
                         val messageContent: MessageContent? = timelineEvent.getLastMessageContent()
                         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
                             val html = messageContent.formattedBody
@@ -207,13 +208,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     EventType.CALL_INVITE,
                     EventType.CALL_CANDIDATES,
                     EventType.CALL_HANGUP,
-                    EventType.CALL_ANSWER -> {
+                    EventType.CALL_ANSWER   -> {
                         noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
                     }
-                    EventType.POLL_START  -> {
-                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question ?: ""
+                    in EventType.POLL_START -> {
+                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)
+                                ?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: ""
                     }
-                    else                  -> null
+                    else                    -> null
                 }
             }
         } catch (failure: Throwable) {
@@ -328,7 +330,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
 
             if (canReplyInThread(timelineEvent, messageContent, actionPermissions)) {
-                add(EventSharedAction.ReplyInThread(eventId))
+                add(EventSharedAction.ReplyInThread(eventId, !timelineEvent.isRootThread()))
             }
 
             if (canViewInRoom(timelineEvent, messageContent, actionPermissions)) {
@@ -373,7 +375,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
 
             if (canRedact(timelineEvent, actionPermissions)) {
-                if (timelineEvent.root.getClearType() == EventType.POLL_START) {
+                if (timelineEvent.root.getClearType() in EventType.POLL_START) {
                     add(EventSharedAction.Redact(
                             eventId,
                             askForReason = informationData.senderId != session.myUserId,
@@ -425,7 +427,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
         // Only EventType.MESSAGE and EventType.POLL_START event types are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.POLL_START)) return false
+        if (event.root.getClearType() !in EventType.POLL_START + EventType.MESSAGE) return false
         if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
             MessageType.MSGTYPE_TEXT,
@@ -511,7 +513,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.POLL_START)) return false
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START) return false
         // Message sent by the current user can always be redacted
         if (event.root.senderId == session.myUserId) return true
         // Check permission for messages sent by other users
@@ -526,13 +528,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
         // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.POLL_START)) return false
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER) + EventType.POLL_START) return false
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
     private fun canEdit(event: TimelineEvent, myUserId: String, actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE and EventType.POLL_START are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.POLL_START)) return false
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE) + EventType.POLL_START) return false
         if (!actionPermissions.canSendMessage) return false
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
@@ -578,13 +580,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canEndPoll(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        return event.root.getClearType() == EventType.POLL_START &&
+        return event.root.getClearType() in EventType.POLL_START &&
                 canRedact(event, actionPermissions) &&
                 event.annotations?.pollResponseSummary?.closedTime == null
     }
 
     private fun canEditPoll(event: TimelineEvent): Boolean {
-        return event.root.getClearType() == EventType.POLL_START &&
+        return event.root.getClearType() in EventType.POLL_START &&
                 event.annotations?.pollResponseSummary?.closedTime == null &&
                 event.annotations?.pollResponseSummary?.aggregatedContent?.totalVotes ?: 0 == 0
     }

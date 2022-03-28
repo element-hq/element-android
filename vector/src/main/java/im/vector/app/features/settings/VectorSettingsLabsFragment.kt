@@ -42,6 +42,8 @@ class VectorSettingsLabsFragment @Inject constructor(
         // clear cache
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_ENABLE_THREAD_MESSAGES)?.let {
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                // We should migrate threads only if threads are disabled
+                vectorPreferences.setShouldMigrateThreads(!vectorPreferences.areThreadMessagesEnabled())
                 lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
                 displayLoadingView()
                 MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))

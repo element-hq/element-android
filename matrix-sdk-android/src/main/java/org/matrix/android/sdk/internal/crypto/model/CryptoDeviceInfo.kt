@@ -70,6 +70,8 @@ data class CryptoDeviceInfo(
         keys?.let { map["keys"] = it }
         return map
     }
+
+    fun shortDebugString() = "$userId|$deviceId"
 }
 
 internal fun CryptoDeviceInfo.toRest(): DeviceKeys {

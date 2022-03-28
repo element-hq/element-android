@@ -7,54 +7,49 @@
 
     <im.vector.app.features.location.MapTilerMapView
         android:id="@+id/mapView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/shareLocationContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:mapbox_renderTextureMode="true"
+        app:showLocateButton="true"
         tools:background="#4F00" />
 
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/shareLocationContainer"
+    <ImageView
+        android:id="@+id/shareLocationPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/a11y_location_share_pin_on_map"
+        app:layout_constraintBottom_toTopOf="@id/shareLocationMapCenter"
+        app:layout_constraintEnd_toEndOf="@id/mapView"
+        app:layout_constraintStart_toStartOf="@id/mapView" />
+
+    <ViewStub
+        android:id="@+id/shareLocationMapCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/mapView"
+        app:layout_constraintEnd_toEndOf="@id/mapView"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toTopOf="@id/mapView" />
+
+    <im.vector.app.features.location.option.LocationSharingOptionPickerView
+        android:id="@+id/shareLocationOptionsPicker"
         android:layout_width="0dp"
-        android:layout_height="72dp"
-        android:background="?android:colorBackground"
-        android:paddingStart="@dimen/layout_horizontal_margin"
-        android:paddingEnd="@dimen/layout_horizontal_margin"
-        app:constraint_referenced_ids="shareLocationImageView,shareLocationText"
-        app:flow_horizontalBias="0"
-        app:flow_horizontalGap="8dp"
-        app:flow_horizontalStyle="packed"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/shareLocationImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/circle"
-        android:backgroundTint="?colorPrimary"
-        android:contentDescription="@string/a11y_location_share_icon"
-        android:padding="10dp"
-        android:src="@drawable/ic_attachment_location_white" />
-
-    <TextView
-        android:id="@+id/shareLocationText"
-        style="@style/TextAppearance.Vector.Subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/location_share"
-        android:textColor="?colorPrimary"
-        android:textStyle="bold" />
 
     <ProgressBar
         android:id="@+id/shareLocationGpsLoading"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        app:layout_constraintBottom_toBottomOf="@id/shareLocationContainer"
-        app:layout_constraintEnd_toEndOf="@id/shareLocationContainer"
-        app:layout_constraintTop_toTopOf="@id/shareLocationContainer" />
+        android:layout_marginBottom="@dimen/layout_vertical_margin"
+        app:layout_constraintBottom_toBottomOf="@id/shareLocationOptionsPicker"
+        app:layout_constraintEnd_toEndOf="@id/shareLocationOptionsPicker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

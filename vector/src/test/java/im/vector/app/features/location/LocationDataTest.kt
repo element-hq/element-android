@@ -22,6 +22,7 @@ import org.amshove.kluent.shouldBeTrue
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
 import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
+import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 
 class LocationDataTest {
@@ -64,13 +65,24 @@ class LocationDataTest {
 
     @Test
     fun selfLocationTest() {
-        val contentWithNullAsset = MessageLocationContent(body = "", geoUri = "", locationAsset = null)
+        val contentWithNullAsset = MessageLocationContent(body = "", geoUri = "")
         contentWithNullAsset.isSelfLocation().shouldBeTrue()
 
-        val contentWithNullAssetType = MessageLocationContent(body = "", geoUri = "", locationAsset = LocationAsset(type = null))
+        val contentWithNullAssetType = MessageLocationContent(body = "", geoUri = "", unstableLocationAsset = LocationAsset(type = null))
         contentWithNullAssetType.isSelfLocation().shouldBeTrue()
 
-        val contentWithSelfAssetType = MessageLocationContent(body = "", geoUri = "", locationAsset = LocationAsset(type = LocationAssetType.SELF))
+        val contentWithSelfAssetType = MessageLocationContent(body = "", geoUri = "", unstableLocationAsset = LocationAsset(type = LocationAssetType.SELF))
         contentWithSelfAssetType.isSelfLocation().shouldBeTrue()
+    }
+
+    @Test
+    fun unstablePrefixTest() {
+        val geoUri = "geo :12.34,56.78;13.56"
+
+        val contentWithUnstablePrefixes = MessageLocationContent(body = "", geoUri = "", unstableLocationInfo = LocationInfo(geoUri = geoUri))
+        contentWithUnstablePrefixes.getBestLocationInfo()?.geoUri.shouldBeEqualTo(geoUri)
+
+        val contentWithStablePrefixes = MessageLocationContent(body = "", geoUri = "", locationInfo = LocationInfo(geoUri = geoUri))
+        contentWithStablePrefixes.getBestLocationInfo()?.geoUri.shouldBeEqualTo(geoUri)
     }
 }

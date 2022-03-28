@@ -27,6 +27,7 @@ import im.vector.app.espresso.tools.ScreenshotFailureRule
 import im.vector.app.features.MainActivity
 import im.vector.app.getString
 import im.vector.app.ui.robot.ElementRobot
+import im.vector.app.ui.robot.settings.labs.LabFeature
 import im.vector.app.ui.robot.withDeveloperMode
 import org.junit.Rule
 import org.junit.Test
@@ -97,6 +98,8 @@ class UiAllScreensSanityTest {
             }
         }
 
+        testThreadScreens()
+
         elementRobot.space {
             createSpace {
                 crawl()
@@ -147,5 +150,26 @@ class UiAllScreensSanityTest {
         elementRobot.dismissVerificationIfPresent()
         // TODO Deactivate account instead of logout?
         elementRobot.signout(expectSignOutWarning = false)
+    }
+
+    /**
+     * Testing multiple threads screens
+     */
+    private fun testThreadScreens() {
+        elementRobot.toggleLabFeature(LabFeature.THREAD_MESSAGES)
+        elementRobot.newRoom {
+            createNewRoom {
+                crawl()
+                createRoom {
+                    val message = "Hello This message will be a thread!"
+                    postMessage(message)
+                    replyToThread(message)
+                    viewInRoom(message)
+                    openThreadSummaries()
+                    selectThreadSummariesFilter()
+                }
+            }
+        }
+        elementRobot.toggleLabFeature(LabFeature.THREAD_MESSAGES)
     }
 }

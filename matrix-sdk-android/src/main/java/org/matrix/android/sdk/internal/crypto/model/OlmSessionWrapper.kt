@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.model
 
+import kotlinx.coroutines.sync.Mutex
 import org.matrix.olm.OlmSession
 
 /**
@@ -25,7 +26,10 @@ data class OlmSessionWrapper(
         // The associated olm session.
         val olmSession: OlmSession,
         // Timestamp at which the session last received a message.
-        var lastReceivedMessageTs: Long = 0) {
+        var lastReceivedMessageTs: Long = 0,
+
+        val mutex: Mutex = Mutex()
+) {
 
     /**
      * Notify that a message has been received on this olm session so that it updates `lastReceivedMessageTs`

@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +36,6 @@ import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.utils.PERMISSIONS_FOR_MEMBERS_SEARCH
@@ -84,7 +84,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                         is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(action)
                         UserListSharedAction.OpenPhoneBook         -> openPhoneBook()
                         UserListSharedAction.AddByQrCode           -> openAddByQrCode()
-                    }.exhaustive
+                    }
                 }
                 .launchIn(lifecycleScope)
         if (isFirstCreation()) {
@@ -111,7 +111,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     Toast.makeText(this, R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-            }.exhaustive
+            }
         }
 
         qrViewModel.observeViewEvents {
@@ -124,7 +124,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     finish()
                 }
                 else                               -> Unit
-            }.exhaustive
+            }
         }
     }
 
@@ -167,6 +167,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private fun renderCreateAndInviteState(state: Async<String>) {
         when (state) {
+            Uninitialized,
             is Loading -> renderCreationLoading()
             is Success -> renderCreationSuccess(state())
             is Fail    -> renderCreationFailure(state.error)

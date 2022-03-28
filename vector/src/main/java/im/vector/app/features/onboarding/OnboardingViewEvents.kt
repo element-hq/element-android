@@ -51,5 +51,8 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     object OnAccountCreated : OnboardingViewEvents()
     object OnAccountSignedIn : OnboardingViewEvents()
     object OnTakeMeHome : OnboardingViewEvents()
-    object OnPersonalizeProfile : OnboardingViewEvents()
+    object OnChooseDisplayName : OnboardingViewEvents()
+    object OnChooseProfilePicture : OnboardingViewEvents()
+    object OnPersonalizationComplete : OnboardingViewEvents()
+    object OnBack : OnboardingViewEvents()
 }
