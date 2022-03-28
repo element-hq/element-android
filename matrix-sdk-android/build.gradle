@@ -86,20 +86,6 @@ android {
     }
 }
 
-android.libraryVariants.all { variant ->
-    def t = tasks.register("generate${variant.name.capitalize()}UniffiBindings", Exec) {
-        // Runs the bindings generation, note that you must have uniffi-bindgen installed 
-        // and in your PATH environment variable
-        commandLine 'uniffi-bindgen', 'generate', '../rust-sdk/src/olm.udl',
-                    '--language', 'kotlin',
-                    '--out-dir', "${buildDir}/generated/source/uniffi/${variant.name}/java"
-    }
-
-    variant.javaCompileProvider.get().dependsOn(t)
-    def sourceSet = variant.sourceSets.find { it.name == variant.name }
-    sourceSet.java.srcDir new File(buildDir, "generated/source/uniffi/${variant.name}/java")
-}
-
 static def gitRevision() {
     def cmd = "git rev-parse --short=8 HEAD"
     return cmd.execute().text.trim()
@@ -115,10 +101,15 @@ static def gitRevisionDate() {
     return cmd.execute().text.trim()
 }
 
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 dependencies {
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
+    implementation 'org.matrix.rustcomponents:crypto-android:0.1.1-SNAPSHOT'
     implementation 'net.java.dev.jna:jna:5.10.0@aar'
 
     implementation libs.androidx.appCompat
