@@ -358,6 +358,7 @@
     <string name="action_switch">Switch</string>
     <string name="action_unpublish">Unpublish</string>
     <string name="action_enable">Enable</string>
+    <string name="action_disable">Disable</string>
     <string name="action_not_now">Not now</string>
     <string name="action_agree">Agree</string>
     <string name="action_change">"Change"</string>
