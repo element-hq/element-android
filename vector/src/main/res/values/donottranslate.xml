@@ -16,5 +16,8 @@
     <string name="ftue_auth_create_account_password_entry_footer">Must be 8 characters or more</string>
     <string name="ftue_auth_create_account_choose_server_header">Choose your server to store your data</string>
     <string name="ftue_auth_create_account_sso_section_header">Or</string>
+    <string name="ftue_auth_create_account_matrix_dot_org_server_description">Join millions for free on the largest public server</string>
+    <string name="ftue_auth_create_account_matrix_dot_org_server_name">matrix.org</string>
+    <string name="ftue_auth_create_account_edit_server_selection">Edit</string>
 
 </resources>

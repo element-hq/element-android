@@ -53,14 +53,6 @@ import org.matrix.android.sdk.api.failure.isWeakPassword
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
-/**
- * In this screen:
- * In signin mode:
- * - the user is asked for login (or email) and password to sign in to a homeserver.
- * - He also can reset his password
- * In signup mode:
- * - the user is asked for login and password
- */
 class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueSignUpCombinedBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSignUpCombinedBinding {
