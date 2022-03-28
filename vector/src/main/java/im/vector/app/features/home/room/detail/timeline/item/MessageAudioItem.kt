@@ -76,7 +76,8 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
             contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
         } else {
             holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_cross)
-            holder.audioPlaybackControlButton.contentDescription = holder.view.context.getString(R.string.error_audio_message_unable_to_play)
+            holder.audioPlaybackControlButton.contentDescription =
+                    holder.view.context.getString(R.string.error_audio_message_unable_to_play, filename)
             holder.progressLayout.isVisible = false
         }
     }
@@ -105,19 +106,22 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
 
     private fun renderIdleState(holder: Holder) {
         holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
-        holder.audioPlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_audio_message)
+        holder.audioPlaybackControlButton.contentDescription =
+                holder.view.context.getString(R.string.a11y_play_audio_message, filename)
         holder.audioPlaybackTime.text = formatPlaybackTime(duration)
     }
 
     private fun renderPlayingState(holder: Holder, state: AudioMessagePlaybackTracker.Listener.State.Playing) {
         holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
-        holder.audioPlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_pause_audio_message)
+        holder.audioPlaybackControlButton.contentDescription =
+                holder.view.context.getString(R.string.a11y_pause_audio_message, filename)
         holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 
     private fun renderPausedState(holder: Holder, state: AudioMessagePlaybackTracker.Listener.State.Paused) {
         holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
-        holder.audioPlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_audio_message)
+        holder.audioPlaybackControlButton.contentDescription =
+                holder.view.context.getString(R.string.a11y_play_audio_message, filename)
         holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
     }
 
