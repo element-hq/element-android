@@ -1,1 +1,1 @@
-Live Location Sharing - Foreground Service
+Live Location Sharing - Foreground Service and Notification
