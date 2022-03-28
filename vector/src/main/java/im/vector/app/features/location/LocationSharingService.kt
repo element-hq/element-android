@@ -22,7 +22,14 @@ import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.services.VectorService
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.model.BeaconInfo
+import org.matrix.android.sdk.api.session.room.model.LiveLocationBeaconContent
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
@@ -40,6 +47,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var locationTracker: LocationTracker
+    @Inject lateinit var session: Session
 
     private var roomArgsList = mutableListOf<RoomArgs>()
     private var timers = mutableListOf<Timer>()
@@ -67,9 +75,34 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
             // Schedule a timer to stop sharing
             scheduleTimer(roomArgs.roomId, roomArgs.durationMillis)
+
+            // Send beacon info state event
+            session.coroutineScope.launch {
+                sendBeaconInfo(roomArgs)
+            }
         }
 
         return START_STICKY
+    }
+
+    private suspend fun sendBeaconInfo(roomArgs: RoomArgs) {
+        val beaconContent = LiveLocationBeaconContent(
+                beaconInfo = BeaconInfo(
+                        timeout = roomArgs.durationMillis,
+                        isLive = true
+                ),
+                ts = System.currentTimeMillis()
+        ).toContent()
+
+        // This format is not yet finalized
+        val stateKey = session.myUserId
+        session
+                .getRoom(roomArgs.roomId)
+                ?.sendStateEvent(
+                        eventType = EventType.STATE_ROOM_BEACON_INFO,
+                        stateKey = stateKey,
+                        body = beaconContent
+                )
     }
 
     private fun scheduleTimer(roomId: String, durationMillis: Long) {
