@@ -1,12 +1,4 @@
-Changes in Element v1.4.7 (2022-03-24)
-======================================
-
-Bugfixes 🐛
-----------
- - Fix inconsistencies between the arrow visibility and the collapse action on the room sections ([#5616](https://github.com/vector-im/element-android/issues/5616))
- - Fix room list header count flickering
-
-Changes in Element v1.4.6 (2022-03-23)
+Changes in Element v1.4.8 (2022-03-28)
 ======================================
 
 Features ✨
@@ -59,6 +51,7 @@ Other changes
  - Added online presence indicator attribute online to match offline styling ([#5513](https://github.com/vector-im/element-android/issues/5513))
  - Add a presence sync enabling build config ([#5563](https://github.com/vector-im/element-android/issues/5563))
  - Show stickers on click ([#5572](https://github.com/vector-im/element-android/issues/5572))
+ - Moving live location sharing permission to debug only builds whilst it is WIP ([#5636](https://github.com/vector-im/element-android/issues/5636))
 
 
 Changes in Element v1.4.4 (2022-03-09)
