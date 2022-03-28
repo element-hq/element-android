@@ -16,11 +16,13 @@
 
 package im.vector.app.features.location
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
@@ -82,9 +84,10 @@ class LocationSharingFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                LocationSharingViewEvents.Close                     -> locationSharingNavigator.quit()
-                LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
-                is LocationSharingViewEvents.ZoomToUserLocation     -> handleZoomToUserLocationEvent(it)
+                LocationSharingViewEvents.Close                       -> locationSharingNavigator.quit()
+                LocationSharingViewEvents.LocationNotAvailableError   -> handleLocationNotAvailableError()
+                is LocationSharingViewEvents.ZoomToUserLocation       -> handleZoomToUserLocationEvent(it)
+                is LocationSharingViewEvents.StartLiveLocationService -> handleStartLiveLocationService(it)
             }
         }
     }
@@ -176,6 +179,16 @@ class LocationSharingFragment @Inject constructor(
         views.mapView.zoomToLocation(event.userLocation.latitude, event.userLocation.longitude)
     }
 
+    private fun handleStartLiveLocationService(event: LocationSharingViewEvents.StartLiveLocationService) {
+        val args = LocationSharingService.RoomArgs(event.sessionId, event.roomId, event.duration)
+
+        Intent(requireContext(), LocationSharingService::class.java)
+                .putExtra(LocationSharingService.EXTRA_ROOM_ARGS, args)
+                .also {
+                    ContextCompat.startForegroundService(requireContext(), it)
+                }
+    }
+
     private fun initOptionsPicker() {
         // set no option at start
         views.shareLocationOptionsPicker.render()
@@ -221,7 +234,9 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun startLiveLocationSharing() {
-        viewModel.handle(LocationSharingAction.StartLiveLocationSharing)
+        // TODO. Get duration from user
+        val duration = 30 * 1000L
+        viewModel.handle(LocationSharingAction.StartLiveLocationSharing(duration))
     }
 
     private fun updateMap(state: LocationSharingViewState) {

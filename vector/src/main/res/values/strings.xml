@@ -2950,6 +2950,8 @@
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
     <string name="location_share_live_stop">Stop</string>
+    <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
+    <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
 
