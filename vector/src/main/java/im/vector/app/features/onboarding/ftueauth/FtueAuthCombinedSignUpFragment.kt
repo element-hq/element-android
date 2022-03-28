@@ -63,7 +63,6 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.createAccountPasswordInput.editText().hidePassword()
         setupSubmitButton()
 
         views.createAccountRoot.realignPercentagesToParent()
@@ -179,10 +178,10 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
     }
 
     private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
+        views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
         views.ssoButtons.mode = SocialLoginButtonsView.Mode.MODE_SIGN_UP
         views.ssoButtons.ssoIdentityProviders = ssoProviders?.sorted()
         views.ssoButtons.listener = SocialLoginButtonsView.InteractionListener { id ->
-            views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
             viewModel.getSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
