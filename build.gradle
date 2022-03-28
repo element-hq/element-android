@@ -101,7 +101,16 @@ allprojects {
                 "spacing-between-declarations-with-comments",
                 "no-multi-spaces",
                 "experimental:spacing-between-declarations-with-annotations",
-                "experimental:annotation"
+                "experimental:annotation",
+                // - Missing newline after "("
+                // - Missing newline before ")"
+                "wrapping",
+                // - Unnecessary trailing comma before ")"
+                "experimental:trailing-comma",
+                // - A block comment in between other elements on the same line is disallowed
+                "experimental:comment-wrapping",
+                // - A KDoc comment after any other element on the same line must be separated by a new line
+                "experimental:kdoc-wrapping",
         ]
     }
 }

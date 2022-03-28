@@ -1669,7 +1669,7 @@ class TimelineFragment @Inject constructor(
             is MessageComposerViewEvents.SlashCommandNotSupportedInThreads -> {
                 displayCommandError(getString(R.string.command_not_supported_in_threads, sendMessageResult.command.command))
             }
-        } // 
+        }
 
         lockSendButton = false
     }

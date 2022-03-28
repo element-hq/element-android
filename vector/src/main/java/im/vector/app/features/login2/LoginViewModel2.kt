@@ -771,7 +771,7 @@ class LoginViewModel2 @AssistedInject constructor(
                                             ),
                                             httpCode = 403
                                     )
-                                     */
+                                 */
 
                                 LoginViewEvents2.OpenSignUpChooseUsernameScreen
                             } catch (throwable: Throwable) {
