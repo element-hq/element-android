@@ -21,7 +21,6 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
@@ -78,7 +77,6 @@ class ThreePidsSettingsController @Inject constructor(
         }
 
         when (data.threePids) {
-            Uninitialized,
             is Loading -> {
                 loadingItem {
                     id("loading")
@@ -95,6 +93,7 @@ class ThreePidsSettingsController @Inject constructor(
                 val dataList = data.threePids.invoke()
                 buildThreePids(dataList, data)
             }
+            else       -> Unit
         }
     }
 

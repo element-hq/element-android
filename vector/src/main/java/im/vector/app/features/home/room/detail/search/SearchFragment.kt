@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -89,7 +88,6 @@ class SearchFragment @Inject constructor(
     override fun invalidate() = withState(searchViewModel) { state ->
         if (state.searchResult.isNullOrEmpty()) {
             when (state.asyncSearchRequest) {
-                Uninitialized,
                 is Loading -> {
                     views.stateView.state = StateView.State.Loading
                 }
@@ -101,6 +99,7 @@ class SearchFragment @Inject constructor(
                             title = getString(R.string.search_no_results),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results))
                 }
+                else       -> Unit
             }
         } else {
             controller.setData(state)
