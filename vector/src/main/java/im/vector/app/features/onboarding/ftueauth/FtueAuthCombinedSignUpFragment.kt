@@ -28,8 +28,11 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.extensions.content
+import im.vector.app.core.extensions.editText
+import im.vector.app.core.extensions.hasContentFlow
+import im.vector.app.core.extensions.hasSurroundingSpaces
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
@@ -42,7 +45,6 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
@@ -50,7 +52,6 @@ import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
 import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
-import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueSignUpCombinedBinding>() {
@@ -91,8 +92,8 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
 
             cleanupUi()
 
-            val login = views.createAccountInput.editText.toString()
-            val password = views.createAccountPasswordInput.editText.toString()
+            val login = views.createAccountInput.content()
+            val password = views.createAccountPasswordInput.content()
 
             // This can be called by the IME action, so deal with empty cases
             var error = 0
@@ -110,7 +111,7 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
             }
 
             if (error == 0) {
-                viewModel.handle(OnboardingAction.LoginOrRegister(login, password, getString(R.string.login_default_session_public_name)))
+                viewModel.handle(OnboardingAction.Register(login, password, getString(R.string.login_default_session_public_name)))
             }
         }
     }
@@ -143,12 +144,7 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
 
     private fun setupSubmitButton() {
         views.createAccountSubmit.setOnClickListener { submit() }
-        combine(
-                views.createAccountInput.editText().textChanges().map { it.trim().isNotEmpty() },
-                views.createAccountPasswordInput.editText().textChanges().map { it.isNotEmpty() }
-        ) { isLoginNotEmpty, isPasswordNotEmpty ->
-            isLoginNotEmpty && isPasswordNotEmpty
-        }
+        observeInputFields()
                 .onEach {
                     views.createAccountPasswordInput.error = null
                     views.createAccountInput.error = null
@@ -156,6 +152,12 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
+
+    private fun observeInputFields() = combine(
+            views.createAccountInput.hasContentFlow { it.trim() },
+            views.createAccountPasswordInput.hasContentFlow(),
+            transform = { isLoginNotEmpty, isPasswordNotEmpty -> isLoginNotEmpty && isPasswordNotEmpty }
+    )
 
     override fun resetViewModel() {
         viewModel.handle(OnboardingAction.ResetLogin)
@@ -165,26 +167,26 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
         // Trick to display the error without text.
         views.createAccountInput.error = " "
         when {
-            throwable.isUsernameInUse() || throwable.isInvalidUsername() -> {
+            throwable.isUsernameInUse() || throwable.isInvalidUsername()                             -> {
                 views.createAccountInput.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isLoginEmailUnknown()                              -> {
+            throwable.isLoginEmailUnknown()                                                          -> {
                 views.createAccountInput.error = getString(R.string.login_login_with_email_error)
             }
-            throwable.isInvalidPassword() && spaceInPassword()           -> {
+            throwable.isInvalidPassword() && views.createAccountPasswordInput.hasSurroundingSpaces() -> {
                 views.createAccountPasswordInput.error = getString(R.string.auth_invalid_login_param_space_in_password)
             }
-            throwable.isWeakPassword() || throwable.isInvalidPassword()  -> {
+            throwable.isWeakPassword() || throwable.isInvalidPassword()                              -> {
                 views.createAccountPasswordInput.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isRegistrationDisabled()                           -> {
+            throwable.isRegistrationDisabled()                                                       -> {
                 MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.dialog_title_error)
                         .setMessage(getString(R.string.login_registration_disabled))
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            else                                                         -> {
+            else                                                                                     -> {
                 super.onError(throwable)
             }
         }
@@ -200,13 +202,6 @@ class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuth
             views.createAccountPasswordInput.editText().hidePassword()
         }
     }
-
-    /**
-     * Detect if password ends or starts with spaces
-     */
-    private fun spaceInPassword() = views.createAccountPasswordInput.editText().text.toString().let { it.trim() != it }
 }
 
 private fun OnboardingViewState.isNumericOnlyUserIdForbidden() = serverType == ServerType.MatrixOrg
-
-private fun TextInputLayout.editText() = this.editText!!
