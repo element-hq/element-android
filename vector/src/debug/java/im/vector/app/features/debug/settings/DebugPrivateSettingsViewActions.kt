@@ -23,5 +23,4 @@ sealed interface DebugPrivateSettingsViewActions : VectorViewModelAction {
     data class SetForceLoginFallbackEnabled(val force: Boolean) : DebugPrivateSettingsViewActions
     data class SetDisplayNameCapabilityOverride(val option: BooleanHomeserverCapabilitiesOverride?) : DebugPrivateSettingsViewActions
     data class SetAvatarCapabilityOverride(val option: BooleanHomeserverCapabilitiesOverride?) : DebugPrivateSettingsViewActions
-    data class SetEnableLiveLocationSharing(val force: Boolean) : DebugPrivateSettingsViewActions
 }
