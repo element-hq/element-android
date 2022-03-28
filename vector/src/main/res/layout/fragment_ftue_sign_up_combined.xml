@@ -139,6 +139,7 @@
             android:paddingEnd="12dp"
             android:text="@string/ftue_auth_create_account_edit_server_selection"
             android:textAllCaps="true"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/selectedServerDescription"
             app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
             app:layout_constraintTop_toTopOf="@id/chooseYourServerHeader" />
