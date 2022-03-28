@@ -1651,6 +1651,7 @@
     <string name="give_feedback_threads">Give Feedback on threads</string>
     <string name="send_feedback_threads_title">Threads Beta feedback</string>
     <string name="send_feedback_threads_info">Threads are a work in progress with new, exciting upcoming features, such as improved notifications. We’d love to hear your feedback!</string>
+    <string name="beta">BETA</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">"Show complete history in encrypted rooms"</string>

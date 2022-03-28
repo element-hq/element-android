@@ -144,7 +144,7 @@
             android:paddingTop="3dp"
             android:paddingEnd="10dp"
             android:paddingBottom="3dp"
-            android:text="BETA"
+            android:text="@string/beta"
             android:textColor="@color/palette_white"
             app:layout_constraintBottom_toBottomOf="@id/threadsBetaFeedbackButton"
             app:layout_constraintEnd_toStartOf="@id/threadsBetaFeedbackButton"
