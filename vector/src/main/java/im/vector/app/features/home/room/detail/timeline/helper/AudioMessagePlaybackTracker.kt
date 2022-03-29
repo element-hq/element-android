@@ -93,9 +93,11 @@ class AudioMessagePlaybackTracker @Inject constructor() {
     }
 
     fun pausePlayback(id: String) {
-        val currentPlaybackTime = getPlaybackTime(id)
-        val currentPercentage = getPercentage(id)
-        setState(id, Listener.State.Paused(currentPlaybackTime, currentPercentage))
+        if (getPlaybackState(id) is Listener.State.Playing) {
+            val currentPlaybackTime = getPlaybackTime(id)
+            val currentPercentage = getPercentage(id)
+            setState(id, Listener.State.Paused(currentPlaybackTime, currentPercentage))
+        }
     }
 
     fun stopPlayback(id: String) {
