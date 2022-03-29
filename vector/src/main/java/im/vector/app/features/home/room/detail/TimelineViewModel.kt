@@ -713,10 +713,10 @@ class TimelineViewModel @AssistedInject constructor(
                 R.id.timeline_setting          -> true
                 R.id.invite                    -> state.canInvite
                 R.id.open_matrix_apps          -> true
-                R.id.voice_call                -> state.isWebRTCCallOptionAvailable()
-                R.id.video_call                -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+                R.id.voice_call                -> state.isCallOptionAvailable()
+                R.id.video_call                -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
                 // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-                R.id.join_conference           -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
+                R.id.join_conference           -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
                 R.id.search                    -> state.isSearchAvailable()
                 R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()
                 R.id.dev_tools                 -> vectorPreferences.developerMode()
