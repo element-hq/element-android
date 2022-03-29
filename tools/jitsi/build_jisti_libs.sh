@@ -17,6 +17,9 @@ cd ..
 rm -rf jitsi-meet
 git clone https://github.com/jitsi/jitsi-meet
 
+# Android SDK
+export ANDROID_SDK_ROOT=~/Library/Android/sdk
+
 # We want a libre build!
 export LIBRE_BUILD=true
 
@@ -27,7 +30,7 @@ cd jitsi-meet
 
 # Changelog: https://github.com/jitsi/jitsi-meet-release-notes/blob/master/CHANGELOG-MOBILE-SDKS.md
 
-git checkout android-sdk-5.0.1
+git checkout android-sdk-5.0.2
 
 echo
 echo "##################################################"
