@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
@@ -167,6 +168,11 @@ internal class OutgoingKeyRequestManager @Inject constructor(
             outgoingRequestScope.launch {
                 sequencer.post {
                     cryptoStore.deleteOutgoingRoomKeyRequestInState(OutgoingRoomKeyRequestState.SENT)
+                }
+
+                sequencer.post {
+                    delay(1000)
+                    perSessionBackupQueryRateLimiter.refreshBackupInfoIfNeeded(true)
                 }
             }
         }

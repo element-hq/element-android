@@ -740,14 +740,23 @@ internal class RealmCryptoStore @Inject constructor(
                 if (sessionIdentifier != null) {
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, session.senderKey)
 
-                    val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
-                        primaryKey = key
-                        sessionId = sessionIdentifier
-                        senderKey = session.senderKey
-                        putInboundGroupSession(session)
-                    }
+                    val existing =  realm.where<OlmInboundGroupSessionEntity>()
+                            .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
+                            .findFirst()
 
-                    realm.insertOrUpdate(realmOlmInboundGroupSession)
+                    if (existing != null) {
+                        // we want to keep the existing backup status
+                        existing.putInboundGroupSession(session)
+                    } else {
+                        val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
+                            primaryKey = key
+                            sessionId = sessionIdentifier
+                            senderKey = session.senderKey
+                            putInboundGroupSession(session)
+                        }
+
+                        realm.insertOrUpdate(realmOlmInboundGroupSession)
+                    }
                 }
             }
         }
@@ -876,17 +885,32 @@ internal class RealmCryptoStore @Inject constructor(
             return
         }
 
-        doRealmTransaction(realmConfiguration) {
+        doRealmTransaction(realmConfiguration) { realm ->
             olmInboundGroupSessionWrappers.forEach { olmInboundGroupSessionWrapper ->
                 try {
+                    val sessionIdentifier = olmInboundGroupSessionWrapper.olmInboundGroupSession?.sessionIdentifier()
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(
-                            olmInboundGroupSessionWrapper.olmInboundGroupSession?.sessionIdentifier(),
+                            sessionIdentifier,
                             olmInboundGroupSessionWrapper.senderKey)
 
-                    it.where<OlmInboundGroupSessionEntity>()
+                    val existing =  realm.where<OlmInboundGroupSessionEntity>()
                             .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
                             .findFirst()
-                            ?.backedUp = true
+
+                    if (existing != null) {
+                        existing.backedUp = true
+                    } else {
+                        // ... might be in cache but not yet persisted, create a record to persist backedup state
+                        val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
+                            primaryKey = key
+                            sessionId = sessionIdentifier
+                            senderKey = olmInboundGroupSessionWrapper.senderKey
+                            putInboundGroupSession(olmInboundGroupSessionWrapper)
+                            backedUp = true
+                        }
+
+                        realm.insertOrUpdate(realmOlmInboundGroupSession)
+                    }
                 } catch (e: OlmException) {
                     Timber.e(e, "OlmException")
                 }

@@ -68,7 +68,7 @@ internal class PerSessionBackupQueryRateLimiter @Inject constructor(
     var backupWasCheckedFromServer: Boolean = false
     var now = System.currentTimeMillis()
 
-    private fun refreshBackupInfoIfNeeded(force: Boolean = false) {
+    fun refreshBackupInfoIfNeeded(force: Boolean = false) {
         if (backupWasCheckedFromServer && !force) return
         Timber.tag(loggerTag.value).v("Checking if can access a backup")
         backupWasCheckedFromServer = true

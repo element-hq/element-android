@@ -68,6 +68,9 @@ class KeyRequestHandler @Inject constructor(
 
     var session: Session? = null
 
+    // This functionality is disabled in element for now. As it could be prone to social attacks
+    var enablePromptingForRequest = false
+
     fun start(session: Session) {
         this.session = session
         session.cryptoService().verificationService().addListener(this)
@@ -92,6 +95,8 @@ class KeyRequestHandler @Inject constructor(
      * @param request the key request.
      */
     override fun onRoomKeyRequest(request: IncomingRoomKeyRequest) {
+        if (!enablePromptingForRequest) return
+
         val userId = request.userId
         val deviceId = request.deviceId
         val requestId = request.requestId
