@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Context
 import android.widget.CheckedTextView
 import androidx.core.view.children
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
@@ -34,11 +35,16 @@ import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.themes.ThemeUtils
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import javax.inject.Inject
+
 
 class VectorSettingsPreferencesFragment @Inject constructor(
         private val vectorConfiguration: VectorConfiguration,
-        private val vectorPreferences: VectorPreferences
+        private val vectorPreferences: VectorPreferences,
+        private val lightweightSettingsStorage: LightweightSettingsStorage
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_preferences
@@ -71,10 +77,14 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             }
         }
 
-        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_SHOW_PRESENCE)!!.let { pref ->
-            pref.isChecked = vectorPreferences.showPresence()
-            pref.setOnPreferenceChangeListener { _, _ ->
-                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_PRESENCE_OFFLINE_MODE)!!.let { pref ->
+            pref.isChecked = vectorPreferences.presenceOfflineModeEnabled()
+            pref.setOnPreferenceChangeListener { _, newValue ->
+                val presenceOfflineModeEnabled = newValue as? Boolean ?: false
+                lightweightSettingsStorage.setPresenceOfflineModeEnabled(presenceOfflineModeEnabled)
+                lifecycleScope.launch {
+                    session.setMyPresence(if (presenceOfflineModeEnabled) PresenceEnum.OFFLINE else PresenceEnum.ONLINE )
+                }
                 true
             }
         }

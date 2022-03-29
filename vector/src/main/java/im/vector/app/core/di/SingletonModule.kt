@@ -120,7 +120,8 @@ object VectorStaticModule {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
-                threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled()
+                threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
+                presenceOfflineModeEnabledDefault = vectorPreferences.presenceOfflineModeEnabled()
         )
     }
 

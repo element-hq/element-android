@@ -124,7 +124,6 @@ class RoomMemberListController @Inject constructor(
                                 host: RoomMemberListController,
                                 data: RoomMemberListViewState) {
         val powerLabel = stringProvider.getString(powerLevelCategory.titleRes)
-        val showPresence = vectorPreferences.showPresence()
 
         profileMatrixItemWithPowerLevelWithPresence {
             id(roomMember.userId)
@@ -134,7 +133,7 @@ class RoomMemberListController @Inject constructor(
             clickListener {
                 host.callback?.onRoomMemberClicked(roomMember)
             }
-            showPresence(showPresence)
+            showPresence(true)
             userPresence(roomMember.userPresence)
             powerLevelLabel(
                     span {

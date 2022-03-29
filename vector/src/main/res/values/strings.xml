@@ -1051,8 +1051,8 @@
 
     <!-- Presence settings -->
     <string name="settings_presence">Presence</string>
-    <string name="settings_show_presence">Show presence</string>
-    <string name="settings_show_presence_summary">If available, presence will be shown on other users avatars</string>
+    <string name="settings_presence_offline_mode">Offline mode</string>
+    <string name="settings_presence_offline_mode_summary">If enabled, this client won\'t send presence online status on sync</string>
 
     <!-- Room Settings -->
 

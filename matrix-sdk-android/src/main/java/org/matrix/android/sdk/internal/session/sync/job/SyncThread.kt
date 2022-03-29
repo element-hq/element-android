@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.call.ActiveCallHandler
 import org.matrix.android.sdk.internal.session.sync.SyncPresence
@@ -59,7 +60,8 @@ private val loggerTag = LoggerTag("SyncThread", LoggerTag.SYNC)
 internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
                                               private val backgroundDetectionObserver: BackgroundDetectionObserver,
-                                              private val activeCallHandler: ActiveCallHandler
+                                              private val activeCallHandler: ActiveCallHandler,
+                                              private val lightweightSettingsStorage: LightweightSettingsStorage
 ) : Thread("SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle
@@ -180,7 +182,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                     else                            -> DEFAULT_LONG_POOL_TIMEOUT
                 }
                 Timber.tag(loggerTag.value).d("Execute sync request with timeout $timeout")
-                val params = SyncTask.Params(timeout, SyncPresence.Online, afterPause = afterPause)
+                val presence =  if (lightweightSettingsStorage.getPresenceOfflineModeEnabled()) { SyncPresence.Offline } else { SyncPresence.Online }
+                val params = SyncTask.Params(timeout, presence, afterPause = afterPause)
                 val sync = syncScope.launch {
                     previousSyncResponseHasToDevice = doSync(params)
                 }

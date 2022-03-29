@@ -262,8 +262,7 @@ class TimelineFragment @Inject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
-        private val clock: Clock,
-        private val matrixConfiguration: MatrixConfiguration
+        private val clock: Clock
 ) :
         VectorBaseFragment<FragmentTimelineBinding>(),
         TimelineEventController.Callback,
@@ -1613,7 +1612,7 @@ class TimelineFragment @Inject constructor(
                 views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
                 views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
                 avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
-                val showPresence = roomSummary.isDirect && vectorPreferences.showPresence()
+                val showPresence = roomSummary.isDirect
                 views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
                 val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
                 shieldView.render(roomSummary.roomEncryptionTrustLevel)

@@ -198,13 +198,15 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
-    <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_presence">
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:title="@string/settings_presence"
+        app:isPreferenceVisible="@bool/settings_presence_visible">
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:title="@string/settings_show_presence"
-            android:summary="@string/settings_show_presence_summary"
-            android:key="SETTINGS_SHOW_PRESENCE"
-            android:defaultValue="@bool/settings_show_presence" />
+            android:title="@string/settings_presence_offline_mode"
+            android:summary="@string/settings_presence_offline_mode_summary"
+            android:key="SETTINGS_PRESENCE_OFFLINE_MODE"
+            android:defaultValue="@bool/settings_presence_offline_mode_default" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
