@@ -100,6 +100,8 @@ import im.vector.app.features.terms.ReviewTermsActivity
 import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
 import im.vector.app.space
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
@@ -116,7 +118,8 @@ class DefaultNavigator @Inject constructor(
         private val widgetArgsBuilder: WidgetArgsBuilder,
         private val appStateHandler: AppStateHandler,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val features: VectorFeatures
+        private val features: VectorFeatures,
+        private val coroutineScope: CoroutineScope
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
@@ -210,38 +213,42 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun requestSessionVerification(context: Context, otherSessionId: String) {
-        val session = sessionHolder.getSafeActiveSession() ?: return
-        val pr = session.cryptoService().verificationService().requestKeyVerification(
-                supportedVerificationMethodsProvider.provide(),
-                session.myUserId,
-                listOf(otherSessionId)
-        )
-        if (context is AppCompatActivity) {
-            VerificationBottomSheet.withArgs(
-                    roomId = null,
-                    otherUserId = session.myUserId,
-                    transactionId = pr.transactionId
-            ).show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+        coroutineScope.launch {
+            val session = sessionHolder.getSafeActiveSession() ?: return@launch
+            val pr = session.cryptoService().verificationService().requestKeyVerification(
+                    supportedVerificationMethodsProvider.provide(),
+                    session.myUserId,
+                    listOf(otherSessionId)
+            )
+            if (context is AppCompatActivity) {
+                VerificationBottomSheet.withArgs(
+                        roomId = null,
+                        otherUserId = session.myUserId,
+                        transactionId = pr.transactionId
+                ).show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+            }
         }
     }
 
     override fun requestSelfSessionVerification(context: Context) {
-        val session = sessionHolder.getSafeActiveSession() ?: return
-        val otherSessions = session.cryptoService()
-                .getCryptoDeviceInfo(session.myUserId)
-                .filter { it.deviceId != session.sessionParams.deviceId }
-                .map { it.deviceId }
-        if (context is AppCompatActivity) {
-            if (otherSessions.isNotEmpty()) {
-                val pr = session.cryptoService().verificationService().requestKeyVerification(
-                        supportedVerificationMethodsProvider.provide(),
-                        session.myUserId,
-                        otherSessions)
-                VerificationBottomSheet.forSelfVerification(session, pr.transactionId ?: pr.localId)
-                        .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
-            } else {
-                VerificationBottomSheet.forSelfVerification(session)
-                        .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+        coroutineScope.launch {
+            val session = sessionHolder.getSafeActiveSession() ?: return@launch
+            val otherSessions = session.cryptoService()
+                    .getCryptoDeviceInfo(session.myUserId)
+                    .filter { it.deviceId != session.sessionParams.deviceId }
+                    .map { it.deviceId }
+            if (context is AppCompatActivity) {
+                if (otherSessions.isNotEmpty()) {
+                    val pr = session.cryptoService().verificationService().requestKeyVerification(
+                            supportedVerificationMethodsProvider.provide(),
+                            session.myUserId,
+                            otherSessions)
+                    VerificationBottomSheet.forSelfVerification(session, pr.transactionId ?: pr.localId)
+                            .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+                } else {
+                    VerificationBottomSheet.forSelfVerification(session)
+                            .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+                }
             }
         }
     }

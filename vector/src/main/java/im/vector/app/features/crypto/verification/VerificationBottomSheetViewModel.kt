@@ -152,13 +152,15 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         }
 
         if (autoReady) {
-            // TODO, can I be here in DM mode? in this case should test if roomID is null?
-            session.cryptoService().verificationService()
-                    .readyPendingVerification(
-                            supportedVerificationMethodsProvider.provide(),
-                            pr!!.otherUserId,
-                            pr.transactionId ?: ""
-                    )
+            viewModelScope.launch {
+                // TODO, can I be here in DM mode? in this case should test if roomID is null?
+                session.cryptoService().verificationService()
+                        .readyPendingVerification(
+                                supportedVerificationMethodsProvider.provide(),
+                                pr!!.otherUserId,
+                                pr.transactionId ?: ""
+                        )
+            }
         }
     }
 
@@ -192,14 +194,16 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     }
 
     private fun cancelAllPendingVerifications(state: VerificationBottomSheetViewState) {
-        session.cryptoService()
-                .verificationService().getExistingVerificationRequest(state.otherUserMxItem?.id ?: "", state.transactionId)?.let {
-                    session.cryptoService().verificationService().cancelVerificationRequest(it)
-                }
-        session.cryptoService()
-                .verificationService()
-                .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
-                ?.cancel(CancelCode.User)
+        viewModelScope.launch {
+            session.cryptoService()
+                    .verificationService().getExistingVerificationRequest(state.otherUserMxItem?.id ?: "", state.transactionId)?.let {
+                        session.cryptoService().verificationService().cancelVerificationRequest(it)
+                    }
+            session.cryptoService()
+                    .verificationService()
+                    .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
+                    ?.cancel(CancelCode.User)
+        }
     }
 
     fun continueFromCancel() {
@@ -232,74 +236,29 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
         when (action) {
             is VerificationAction.RequestVerificationByDM      -> {
-                if (roomId == null) {
-                    val localId = LocalEcho.createLocalEchoId()
-                    setState {
-                        copy(
-                                pendingLocalId = localId,
-                                pendingRequest = Loading()
-                        )
-                    }
-                    viewModelScope.launch {
-                        val result = runCatching { session.createDirectRoom(otherUserId) }
-                        result.fold(
-                                { data ->
-                                    setState {
-                                        copy(
-                                                roomId = data,
-                                                pendingRequest = Success(
-                                                        session
-                                                                .cryptoService()
-                                                                .verificationService()
-                                                                .requestKeyVerificationInDMs(
-                                                                        supportedVerificationMethodsProvider.provide(),
-                                                                        otherUserId,
-                                                                        data,
-                                                                        pendingLocalId
-                                                                )
-                                                )
-                                        )
-                                    }
-                                },
-                                { failure ->
-                                    setState {
-                                        copy(pendingRequest = Fail(failure))
-                                    }
-                                }
-                        )
-                    }
-                } else {
-                    setState {
-                        copy(
-                                pendingRequest = Success(session
-                                        .cryptoService()
-                                        .verificationService()
-                                        .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
-                                )
-                        )
-                    }
-                }
-                Unit
+                handleRequestVerificationByDM(roomId, otherUserId)
             }
             is VerificationAction.StartSASVerification         -> {
                 val request = session.cryptoService().verificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
                         ?: return@withState
                 val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
-                if (roomId == null) {
-                    session.cryptoService().verificationService().beginKeyVerification(
-                            VerificationMethod.SAS,
-                            otherUserId = request.otherUserId,
-                            otherDeviceId = otherDevice ?: "",
-                            transactionId = action.pendingRequestTransactionId
-                    )
-                } else {
-                    session.cryptoService().verificationService().beginKeyVerificationInDMs(
-                            VerificationMethod.SAS,
-                            transactionId = action.pendingRequestTransactionId,
-                            roomId = roomId,
-                            otherUserId = request.otherUserId,
-                            otherDeviceId = otherDevice ?: ""
-                    )
+                viewModelScope.launch {
+                    if (roomId == null) {
+                        session.cryptoService().verificationService().beginKeyVerification(
+                                VerificationMethod.SAS,
+                                otherUserId = request.otherUserId,
+                                otherDeviceId = otherDevice ?: "",
+                                transactionId = action.pendingRequestTransactionId
+                        )
+                    } else {
+                        session.cryptoService().verificationService().beginKeyVerificationInDMs(
+                                VerificationMethod.SAS,
+                                transactionId = action.pendingRequestTransactionId,
+                                roomId = roomId,
+                                otherUserId = request.otherUserId,
+                                otherDeviceId = otherDevice ?: ""
+                        )
+                    }
                 }
                 Unit
             }
@@ -363,6 +322,50 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 }
             }
         }.exhaustive
+    }
+
+    private fun handleRequestVerificationByDM(roomId: String?, otherUserId: String) {
+        viewModelScope.launch {
+            if (roomId == null) {
+                val localId = LocalEcho.createLocalEchoId()
+                setState {
+                    copy(
+                            pendingLocalId = localId,
+                            pendingRequest = Loading()
+                    )
+                }
+                try {
+                    val dmRoomId = session.createDirectRoom(otherUserId)
+                    val pendingRequest = session
+                            .cryptoService()
+                            .verificationService()
+                            .requestKeyVerificationInDMs(
+                                    supportedVerificationMethodsProvider.provide(),
+                                    otherUserId,
+                                    dmRoomId,
+                                    localId
+                            )
+                    setState {
+                        copy(
+                                roomId = dmRoomId,
+                                pendingRequest = Success(pendingRequest)
+                        )
+                    }
+                } catch (failure: Throwable) {
+                    setState {
+                        copy(pendingRequest = Fail(failure))
+                    }
+                }
+            } else {
+                val pendingRequest = session
+                        .cryptoService()
+                        .verificationService()
+                        .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
+                setState {
+                    copy(pendingRequest = Success(pendingRequest))
+                }
+            }
+        }
     }
 
     private fun handleSecretBackFromSSSS(action: VerificationAction.GotResultFromSsss) {
@@ -514,12 +517,14 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 if (!pr.isReady) {
                     // auto ready in this case, as we are waiting
                     // TODO, can I be here in DM mode? in this case should test if roomID is null?
-                    session.cryptoService().verificationService()
-                            .readyPendingVerification(
-                                    supportedVerificationMethodsProvider.provide(),
-                                    pr.otherUserId,
-                                    pr.transactionId ?: ""
-                            )
+                    viewModelScope.launch {
+                        session.cryptoService().verificationService()
+                                .readyPendingVerification(
+                                        supportedVerificationMethodsProvider.provide(),
+                                        pr.otherUserId,
+                                        pr.transactionId ?: ""
+                                )
+                    }
                 }
 
                 // Use this one!

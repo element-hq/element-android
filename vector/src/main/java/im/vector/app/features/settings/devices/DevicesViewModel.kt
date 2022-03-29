@@ -240,13 +240,15 @@ class DevicesViewModel @AssistedInject constructor(
     }
 
     private fun handleInteractiveVerification(action: DevicesAction.VerifyMyDevice) {
-        val txID = session.cryptoService()
-                .verificationService()
-                .beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId, null)
-        _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
-                session.myUserId,
-                txID
-        ))
+        viewModelScope.launch {
+            val txID = session.cryptoService()
+                    .verificationService()
+                    .beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId, null)
+            _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
+                    session.myUserId,
+                    txID
+            ))
+        }
     }
 
     private fun handleShowDeviceCryptoInfo(action: DevicesAction.VerifyMyDeviceManually) = withState { state ->

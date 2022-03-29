@@ -36,7 +36,7 @@ interface VerificationService {
     /**
      * Mark this device as verified manually
      */
-    fun markedLocallyAsManuallyVerified(userId: String, deviceID: String)
+    suspend fun markedLocallyAsManuallyVerified(userId: String, deviceID: String)
 
     fun getExistingTransaction(otherUserId: String, tid: String): VerificationTransaction?
 
@@ -46,7 +46,7 @@ interface VerificationService {
 
     fun getExistingVerificationRequestInRoom(roomId: String, tid: String?): PendingVerificationRequest?
 
-    fun beginKeyVerification(method: VerificationMethod,
+    suspend fun beginKeyVerification(method: VerificationMethod,
                              otherUserId: String,
                              otherDeviceId: String,
                              transactionId: String?): String?
@@ -54,27 +54,27 @@ interface VerificationService {
     /**
      * Request key verification with another user via room events (instead of the to-device API)
      */
-    fun requestKeyVerificationInDMs(methods: List<VerificationMethod>,
+    suspend fun requestKeyVerificationInDMs(methods: List<VerificationMethod>,
                                     otherUserId: String,
                                     roomId: String,
                                     localId: String? = LocalEcho.createLocalEchoId()): PendingVerificationRequest
 
-    fun cancelVerificationRequest(request: PendingVerificationRequest)
+    suspend fun cancelVerificationRequest(request: PendingVerificationRequest)
 
     /**
      * Request a key verification from another user using toDevice events.
      */
-    fun requestKeyVerification(methods: List<VerificationMethod>,
+    suspend fun requestKeyVerification(methods: List<VerificationMethod>,
                                otherUserId: String,
                                otherDevices: List<String>?): PendingVerificationRequest
 
-    fun declineVerificationRequestInDMs(otherUserId: String,
+    suspend fun declineVerificationRequestInDMs(otherUserId: String,
                                         transactionId: String,
                                         roomId: String)
 
     // Only SAS method is supported for the moment
     // TODO Parameter otherDeviceId should be removed in this case
-    fun beginKeyVerificationInDMs(method: VerificationMethod,
+    suspend fun beginKeyVerificationInDMs(method: VerificationMethod,
                                   transactionId: String,
                                   roomId: String,
                                   otherUserId: String,
@@ -83,7 +83,7 @@ interface VerificationService {
     /**
      * Returns false if the request is unknown
      */
-    fun readyPendingVerificationInDMs(methods: List<VerificationMethod>,
+    suspend fun readyPendingVerificationInDMs(methods: List<VerificationMethod>,
                                       otherUserId: String,
                                       roomId: String,
                                       transactionId: String): Boolean
@@ -91,7 +91,7 @@ interface VerificationService {
     /**
      * Returns false if the request is unknown
      */
-    fun readyPendingVerification(methods: List<VerificationMethod>,
+    suspend fun readyPendingVerification(methods: List<VerificationMethod>,
                                  otherUserId: String,
                                  transactionId: String): Boolean
 

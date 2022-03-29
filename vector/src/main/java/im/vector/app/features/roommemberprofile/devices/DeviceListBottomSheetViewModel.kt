@@ -30,6 +30,7 @@ import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
@@ -124,8 +125,14 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
 
     private fun manuallyVerify(action: DeviceListAction.ManuallyVerify) {
         if (!initialState.allowDeviceAction) return
-        session.cryptoService().verificationService().beginKeyVerification(VerificationMethod.SAS, initialState.userId, action.deviceId, null)?.let { txID ->
-            _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(initialState.userId, txID))
+        viewModelScope.launch {
+            session.cryptoService().verificationService().beginKeyVerification(
+                    method = VerificationMethod.SAS,
+                    otherUserId = initialState.userId,
+                    otherDeviceId = action.deviceId,
+                    transactionId = null)?.let { txID ->
+                _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(initialState.userId, txID))
+            }
         }
     }
 }
