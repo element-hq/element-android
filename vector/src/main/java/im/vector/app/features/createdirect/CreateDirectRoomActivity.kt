@@ -28,7 +28,6 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -167,10 +166,10 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private fun renderCreateAndInviteState(state: Async<String>) {
         when (state) {
-            Uninitialized,
             is Loading -> renderCreationLoading()
             is Success -> renderCreationSuccess(state())
             is Fail    -> renderCreationFailure(state.error)
+            else       -> Unit
         }
     }
 
