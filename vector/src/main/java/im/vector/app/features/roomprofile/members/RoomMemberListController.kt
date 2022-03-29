@@ -40,8 +40,7 @@ class RoomMemberListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
-        private val roomMemberSummaryFilter: RoomMemberSummaryFilter,
-        private val vectorPreferences: VectorPreferences
+        private val roomMemberSummaryFilter: RoomMemberSummaryFilter
 ) : TypedEpoxyController<RoomMemberListViewState>() {
 
     interface Callback {

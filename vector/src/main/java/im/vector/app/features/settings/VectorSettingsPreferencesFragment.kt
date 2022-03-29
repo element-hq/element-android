@@ -40,7 +40,6 @@ import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import javax.inject.Inject
 
-
 class VectorSettingsPreferencesFragment @Inject constructor(
         private val vectorConfiguration: VectorConfiguration,
         private val vectorPreferences: VectorPreferences,
