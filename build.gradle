@@ -35,6 +35,13 @@ plugins {
 // https://github.com/jeremylong/DependencyCheck
 apply plugin: 'org.owasp.dependencycheck'
 
+dependencyCheck {
+    // See https://jeremylong.github.io/DependencyCheck/general/suppression.html
+    suppressionFiles = [
+            "./tools/dependencycheck/suppressions.xml"
+    ]
+}
+
 allprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
 
