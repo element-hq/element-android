@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
-import org.matrix.android.sdk.internal.database.helper.countThreadReplies
+import org.matrix.android.sdk.internal.database.helper.countInThreadMessages
 import org.matrix.android.sdk.internal.database.helper.findRootThreadEvent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
@@ -123,14 +123,14 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
             val rootThreadEvent = eventToPrune.findRootThreadEvent() ?: return
             val rootThreadEventId = eventToPrune.rootThreadEventId ?: return
 
-            val numberOfThreads = countThreadReplies(
+            val inThreadMessages = countInThreadMessages(
                     realm = realm,
                     roomId = roomId,
                     rootThreadEventId = rootThreadEventId
-            ) ?: return
+            )
 
-            rootThreadEvent.numberOfThreads = numberOfThreads
-            if (numberOfThreads == 0) {
+            rootThreadEvent.numberOfThreads = inThreadMessages
+            if (inThreadMessages == 0) {
                 // We should also clear the thread summary list
                 rootThreadEvent.isRootThread = false
                 rootThreadEvent.threadSummaryLatestMessage = null

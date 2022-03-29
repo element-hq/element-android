@@ -53,14 +53,14 @@ internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
     for ((rootThreadEventId, eventEntity) in this) {
         eventEntity.threadSummaryInThread(eventEntity.realm, rootThreadEventId, chunkEntity)?.let { threadSummary ->
 
-            val numberOfMessages = threadSummary.first
+            val inThreadMessages = threadSummary.first
             val latestEventInThread = threadSummary.second
 
             // If this is a thread message, find its root event if exists
             val rootThreadEvent = if (eventEntity.isThread()) eventEntity.findRootThreadEvent() else eventEntity
 
             rootThreadEvent?.markEventAsRoot(
-                    threadsCounted = numberOfMessages,
+                    inThreadMessages = inThreadMessages,
                     latestMessageTimelineEventEntity = latestEventInThread
             )
         }
@@ -86,10 +86,10 @@ internal fun EventEntity.findRootThreadEvent(): EventEntity? =
  * Mark or update the current event a root thread event
  */
 internal fun EventEntity.markEventAsRoot(
-        threadsCounted: Int,
+        inThreadMessages: Int,
         latestMessageTimelineEventEntity: TimelineEventEntity?) {
     isRootThread = true
-    numberOfThreads = threadsCounted
+    numberOfThreads = inThreadMessages
     threadSummaryLatestMessage = latestMessageTimelineEventEntity
 }
 
@@ -100,13 +100,13 @@ internal fun EventEntity.markEventAsRoot(
  * @return A ThreadSummary containing the counted threads and the latest event message
  */
 internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String, chunkEntity: ChunkEntity?): Summary {
-    val numberOfThread = countThreadReplies(
+    val inThreadMessages = countInThreadMessages(
             realm = realm,
             roomId = roomId,
             rootThreadEventId = rootThreadEventId
-    ) ?: return null
+    )
 
-    if (numberOfThread <= 0) return null
+    if (inThreadMessages <= 0) return null
 
     // Find latest thread event, we know it exists
     var chunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: chunkEntity ?: return null
@@ -128,26 +128,26 @@ internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: 
 
     result ?: return null
 
-    return Summary(numberOfThread, result)
+    return Summary(inThreadMessages, result)
 }
 
 /**
- * Counts the number of threads in the main timeline thread summary,
+ * Counts the number of thread replies in the main timeline thread summary,
  * with respect to redactions.
  */
-internal fun countThreadReplies(realm: Realm, roomId: String, rootThreadEventId: String): Int? =
+internal fun countInThreadMessages(realm: Realm, roomId: String, rootThreadEventId: String): Int =
         TimelineEventEntity
                 .whereRoomId(realm, roomId = roomId)
                 .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
                 .distinct(TimelineEventEntityFields.ROOT.EVENT_ID)
                 .findAll()
-                ?.filterNot { timelineEvent ->
+                .filterNot { timelineEvent ->
                     timelineEvent.root
                             ?.unsignedData
                             ?.takeIf { it.isNotBlank() }
                             ?.toUnsignedData()
                             .isRedacted()
-                }?.size
+                }.size
 
 /**
  * Mapping string to UnsignedData using Moshi
