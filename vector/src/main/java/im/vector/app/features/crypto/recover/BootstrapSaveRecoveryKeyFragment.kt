@@ -81,7 +81,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
             val uri = activityResult.data?.data ?: return@registerStartForActivityResult
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    sharedViewModel.handle(BootstrapActions.SaveKeyToUri(requireContext().contentResolver!!.openOutputStream(uri)!!))
+                    sharedViewModel.handle(BootstrapActions.SaveKeyToUri(requireContext().contentResolver!!.openOutputStream(uri, "wt")!!))
                 } catch (failure: Throwable) {
                     sharedViewModel.handle(BootstrapActions.SaveReqFailed)
                 }

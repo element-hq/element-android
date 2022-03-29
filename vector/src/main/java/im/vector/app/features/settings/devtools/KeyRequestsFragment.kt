@@ -106,7 +106,7 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDev
             when (it) {
                 is KeyRequestEvents.SaveAudit -> {
                     tryOrNull {
-                        requireContext().contentResolver?.openOutputStream(it.uri)
+                        requireContext().contentResolver?.openOutputStream(it.uri, "wt")
                                 ?.use { os -> os.write(it.raw.toByteArray()) }
                     }
                 }

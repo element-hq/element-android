@@ -165,7 +165,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
         lifecycleScope.launch(Dispatchers.Main) {
             Try {
                 withContext(Dispatchers.IO) {
-                    requireContext().contentResolver.openOutputStream(uri)
+                    requireContext().contentResolver.openOutputStream(uri, "wt")
                             ?.use { os ->
                                 os.write(data.toByteArray())
                                 os.flush()

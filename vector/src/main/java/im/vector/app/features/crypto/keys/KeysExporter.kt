@@ -34,7 +34,7 @@ class KeysExporter @Inject constructor(
     suspend fun export(password: String, uri: Uri) {
         withContext(dispatchers.io) {
             val data = session.cryptoService().exportRoomKeys(password)
-            context.contentResolver.openOutputStream(uri)
+            context.contentResolver.openOutputStream(uri, "wt")
                     ?.use { it.write(data) }
                     ?: throw IllegalStateException("Unable to open file for writing")
             verifyExportedKeysOutputFileSize(uri, expectedSize = data.size.toLong())
