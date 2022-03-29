@@ -182,7 +182,7 @@ jobs:
           body-includes: Integration Tests Results
       - name: Publish results to PR
         if: always() && github.event_name == 'pull_request'
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
