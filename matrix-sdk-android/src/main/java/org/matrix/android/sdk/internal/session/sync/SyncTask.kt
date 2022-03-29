@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.sync
 
 import android.os.SystemClock
 import okhttp3.ResponseBody
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
@@ -104,7 +105,11 @@ internal class DefaultSyncTask @Inject constructor(
         val isInitialSync = token == null
         if (isInitialSync) {
             // We might want to get the user information in parallel too
-            userStore.createOrUpdate(userId)
+            val user = tryOrNull { session.getProfileAsUser(userId) }
+            userStore.createOrUpdate(
+                    userId = userId,
+                    displayName = user?.displayName,
+                    avatarUrl = user?.avatarUrl)
             defaultSyncStatusService.startRoot(InitSyncStep.ImportingAccount, 100)
         }
         // Maybe refresh the homeserver capabilities data we know

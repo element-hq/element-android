@@ -2,14 +2,14 @@
 <resources>
 
     <style name="VoicePlaybackWaveform">
-        <item name="chunkColor">?vctr_content_secondary</item>
-        <item name="chunkAlignTo">center</item>
-        <item name="chunkMinHeight">1dp</item>
-        <item name="chunkRoundedCorners">true</item>
-        <item name="chunkSoftTransition">true</item>
-        <item name="chunkSpace">2dp</item>
-        <item name="chunkWidth">2dp</item>
-        <item name="direction">rightToLeft</item>
+        <item name="alignment">center</item>
+        <item name="flow">leftToRight</item>
+        <item name="verticalPadding">4dp</item>
+        <item name="horizontalPadding">4dp</item>
+        <item name="barWidth">2dp</item>
+        <item name="barSpace">2dp</item>
+        <item name="barMinHeight">1dp</item>
+        <item name="isBarRounded">true</item>
     </style>
 
 </resources>

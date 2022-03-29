@@ -17,8 +17,9 @@ package im.vector.app.features.terms
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
@@ -38,19 +39,20 @@ class TermsController @Inject constructor(
         val host = this
 
         when (data.termsList) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 loadingItem {
                     id("loading")
                 }
             }
-            is Fail       -> {
+            is Fail    -> {
                 errorWithRetryItem {
                     id("errorRetry")
                     text(host.errorFormatter.toHumanReadable(data.termsList.error))
                     listener { host.listener?.retry() }
                 }
             }
-            is Success    -> buildTerms(data.termsList.invoke())
+            is Success -> buildTerms(data.termsList.invoke())
         }
     }
 
@@ -67,7 +69,7 @@ class TermsController @Inject constructor(
                 description(host.description)
                 checked(term.accepted)
 
-                clickListener  { host.listener?.review(term) }
+                clickListener { host.listener?.review(term) }
                 checkChangeListener { _, isChecked ->
                     host.listener?.setChecked(term, isChecked)
                 }

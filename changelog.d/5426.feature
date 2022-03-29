@@ -1,0 +1,1 @@
+Allow scrolling position of Voice Message playback

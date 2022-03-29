@@ -33,7 +33,6 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.selectTxtFileToWrite
@@ -111,7 +110,7 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDev
                                 ?.use { os -> os.write(it.raw.toByteArray()) }
                     }
                 }
-            }.exhaustive
+            }
         }
     }
 

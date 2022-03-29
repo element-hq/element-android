@@ -21,7 +21,7 @@ import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.matrix.android.sdk.MatrixTest
@@ -51,7 +51,7 @@ class CoroutineSequencersTest : MatrixTest {
                             .also { results.add(it) }
                 }
         )
-        runBlocking {
+        runTest {
             jobs.joinAll()
         }
         assertEquals(3, results.size)
@@ -81,7 +81,7 @@ class CoroutineSequencersTest : MatrixTest {
                             .also { results.add(it) }
                 }
         )
-        runBlocking {
+        runTest {
             jobs.joinAll()
         }
         assertEquals(3, results.size)
@@ -109,7 +109,7 @@ class CoroutineSequencersTest : MatrixTest {
         )
         // We are canceling the second job
         jobs[1].cancel()
-        runBlocking {
+        runTest {
             jobs.joinAll()
         }
         assertEquals(2, results.size)

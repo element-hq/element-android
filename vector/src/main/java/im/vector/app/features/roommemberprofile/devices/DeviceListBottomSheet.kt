@@ -29,7 +29,6 @@ import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetWithFragmentsBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
@@ -57,7 +56,7 @@ class DeviceListBottomSheet :
                             transactionId = it.txID
                     ).show(requireActivity().supportFragmentManager, "REQPOP")
                 }
-            }.exhaustive
+            }
         }
     }
 

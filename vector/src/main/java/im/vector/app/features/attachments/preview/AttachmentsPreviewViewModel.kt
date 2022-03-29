@@ -17,7 +17,6 @@
 
 package im.vector.app.features.attachments.preview
 
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 
 class AttachmentsPreviewViewModel(initialState: AttachmentsPreviewViewState) :
@@ -28,7 +27,7 @@ class AttachmentsPreviewViewModel(initialState: AttachmentsPreviewViewState) :
             is AttachmentsPreviewAction.SetCurrentAttachment          -> handleSetCurrentAttachment(action)
             is AttachmentsPreviewAction.UpdatePathOfCurrentAttachment -> handleUpdatePathOfCurrentAttachment(action)
             AttachmentsPreviewAction.RemoveCurrentAttachment          -> handleRemoveCurrentAttachment()
-        }.exhaustive
+        }
     }
 
     private fun handleRemoveCurrentAttachment() = withState {

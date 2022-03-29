@@ -77,13 +77,10 @@ class KeysBackupBanner @JvmOverloads constructor(
 
     override fun onClick(v: View?) {
         when (state) {
-            is State.Setup   -> {
-                delegate?.setupKeysBackup()
-            }
+            is State.Setup   -> delegate?.setupKeysBackup()
             is State.Update,
-            is State.Recover -> {
-                delegate?.recoverKeysBackup()
-            }
+            is State.Recover -> delegate?.recoverKeysBackup()
+            else             -> Unit
         }
     }
 

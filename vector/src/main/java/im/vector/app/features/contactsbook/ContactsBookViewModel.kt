@@ -27,7 +27,6 @@ import im.vector.app.core.contacts.ContactsDataSource
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.fetchIdentityServerWithTerms
@@ -165,7 +164,7 @@ class ContactsBookViewModel @AssistedInject constructor(
             is ContactsBookAction.OnlyBoundContacts -> handleOnlyBoundContacts(action)
             ContactsBookAction.UserConsentGranted   -> handleUserConsentGranted()
             ContactsBookAction.UserConsentRequest   -> handleUserConsentRequest()
-        }.exhaustive
+        }
     }
 
     private fun handleUserConsentRequest() {

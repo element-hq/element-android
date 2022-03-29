@@ -132,9 +132,11 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     fun startOrPausePlayback(id: String, file: File) {
-        stopPlayback()
+        val playbackState = playbackTracker.getPlaybackState(id)
+        mediaPlayer?.stop()
+        stopPlaybackTicker()
         stopRecordingAmplitudes()
-        if (playbackTracker.getPlaybackState(id) is VoiceMessagePlaybackTracker.Listener.State.Playing) {
+        if (playbackState is VoiceMessagePlaybackTracker.Listener.State.Playing) {
             playbackTracker.pausePlayback(id)
         } else {
             startPlayback(id, file)
@@ -169,9 +171,17 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     fun stopPlayback() {
-        playbackTracker.stopPlayback(VoiceMessagePlaybackTracker.RECORDING_ID)
+        playbackTracker.pausePlayback(VoiceMessagePlaybackTracker.RECORDING_ID)
         mediaPlayer?.stop()
         stopPlaybackTicker()
+    }
+
+    fun movePlaybackTo(id: String, percentage: Float, totalDuration: Int) {
+        val toMillisecond = (totalDuration * percentage).toInt()
+        playbackTracker.updateCurrentPlaybackTime(id, toMillisecond, percentage)
+
+        stopPlayback()
+        playbackTracker.pausePlayback(id)
     }
 
     private fun startRecordingAmplitudes() {
@@ -221,7 +231,9 @@ class VoiceMessageHelper @Inject constructor(
     private fun onPlaybackTick(id: String) {
         if (mediaPlayer?.isPlaying.orFalse()) {
             val currentPosition = mediaPlayer?.currentPosition ?: 0
-            playbackTracker.updateCurrentPlaybackTime(id, currentPosition)
+            val totalDuration = mediaPlayer?.duration ?: 0
+            val percentage = currentPosition.toFloat() / totalDuration
+            playbackTracker.updateCurrentPlaybackTime(id, currentPosition, percentage)
         } else {
             playbackTracker.stopPlayback(id)
             stopPlaybackTicker()
