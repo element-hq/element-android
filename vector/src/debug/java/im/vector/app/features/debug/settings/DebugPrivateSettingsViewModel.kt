@@ -68,8 +68,8 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         when (action) {
             is DebugPrivateSettingsViewActions.SetDialPadVisibility         -> handleSetDialPadVisibility(action)
             is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
-            is SetDisplayNameCapabilityOverride                             -> handSetDisplayNameCapabilityOverride(action)
-            is SetAvatarCapabilityOverride                                  -> handSetAvatarCapabilityOverride(action)
+            is SetDisplayNameCapabilityOverride                             -> handleSetDisplayNameCapabilityOverride(action)
+            is SetAvatarCapabilityOverride                                  -> handleSetAvatarCapabilityOverride(action)
         }
     }
 
