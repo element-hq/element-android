@@ -100,7 +100,7 @@ internal fun EventEntity.markEventAsRoot(
  * @return A ThreadSummary containing the counted threads and the latest event message
  */
 internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String, chunkEntity: ChunkEntity?): Summary {
-    val numberOfThread = countThreads(
+    val numberOfThread = countThreadReplies(
             realm = realm,
             roomId = roomId,
             rootThreadEventId = rootThreadEventId
@@ -135,7 +135,7 @@ internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: 
  * Counts the number of threads in the main timeline thread summary,
  * with respect to redactions.
  */
-internal fun countThreads(realm: Realm, roomId: String, rootThreadEventId: String): Int? =
+internal fun countThreadReplies(realm: Realm, roomId: String, rootThreadEventId: String): Int? =
         TimelineEventEntity
                 .whereRoomId(realm, roomId = roomId)
                 .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
