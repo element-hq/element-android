@@ -82,7 +82,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 val presenceOfflineModeEnabled = newValue as? Boolean ?: false
                 lightweightSettingsStorage.setPresenceOfflineModeEnabled(presenceOfflineModeEnabled)
                 lifecycleScope.launch {
-                    session.setMyPresence(if (presenceOfflineModeEnabled) PresenceEnum.OFFLINE else PresenceEnum.ONLINE )
+                    session.setMyPresence(if (presenceOfflineModeEnabled) PresenceEnum.OFFLINE else PresenceEnum.ONLINE)
                 }
                 true
             }
