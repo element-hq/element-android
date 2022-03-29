@@ -1193,7 +1193,7 @@ class TimelineFragment @Inject constructor(
         val nonFormattedBody = when (messageContent) {
             is MessageAudioContent -> getAudioContentBodyText(messageContent)
             is MessagePollContent  -> messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
-            else                   -> messageContent?.body ?: ""
+            else                   -> messageContent?.body.orEmpty()
         }
         var formattedBody: CharSequence? = null
         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {

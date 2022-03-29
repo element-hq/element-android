@@ -74,13 +74,13 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     }
 
     private fun bindUploadState(holder: Holder) {
-        if (!attributes.informationData.sendState.hasFailed()) {
-            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
-        } else {
+        if (attributes.informationData.sendState.hasFailed()) {
             holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_cross)
             holder.audioPlaybackControlButton.contentDescription =
                     holder.view.context.getString(R.string.error_audio_message_unable_to_play, filename)
             holder.progressLayout.isVisible = false
+        } else {
+            contentUploadStateTrackerBinder.bind(attributes.informationData.eventId, isLocalFile, holder.progressLayout)
         }
     }
 

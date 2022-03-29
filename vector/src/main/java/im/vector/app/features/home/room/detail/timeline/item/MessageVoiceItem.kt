@@ -59,10 +59,6 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
     var isLocalFile = false
 
     @EpoxyAttribute
-    @JvmField
-    var isDownloaded = false
-
-    @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
 
     @EpoxyAttribute
