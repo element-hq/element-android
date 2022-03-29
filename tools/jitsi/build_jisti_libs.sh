@@ -25,6 +25,8 @@ cd jitsi-meet
 # This is commit after version 2.2.2, which does not compile
 # git checkout 5a934c071a5cbe64de275a25d0ed62d8193cdd03
 
+# Changelog: https://github.com/jitsi/jitsi-meet-release-notes/blob/master/CHANGELOG-MOBILE-SDKS.md
+
 # Version android-sdk-3.10.0, commit 99e56e229dfa3c490096e37c3e5b76d2a3f23e32
 git checkout android-sdk-3.10.0
 
