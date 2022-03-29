@@ -27,8 +27,7 @@ cd jitsi-meet
 
 # Changelog: https://github.com/jitsi/jitsi-meet-release-notes/blob/master/CHANGELOG-MOBILE-SDKS.md
 
-# Version android-sdk-3.10.0, commit 99e56e229dfa3c490096e37c3e5b76d2a3f23e32
-git checkout android-sdk-3.10.0
+git checkout android-sdk-5.0.1
 
 echo
 echo "##################################################"
