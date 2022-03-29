@@ -29,7 +29,7 @@ data class LiveLocationBeaconContent(
         /**
          * Beacon creation timestamp.
          */
-        @Json(name = "m.ts") val ts: Long? = null,
+        @Json(name = "m.ts") val timestampAsMillisecond: Long? = null,
         /**
          * Live location asset type.
          */

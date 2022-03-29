@@ -20,7 +20,9 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorService
+import im.vector.app.core.time.Clock
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
@@ -47,7 +49,8 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var locationTracker: LocationTracker
-    @Inject lateinit var session: Session
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var clock: Clock
 
     private var roomArgsList = mutableListOf<RoomArgs>()
     private var timers = mutableListOf<Timer>()
@@ -77,21 +80,25 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
             scheduleTimer(roomArgs.roomId, roomArgs.durationMillis)
 
             // Send beacon info state event
-            session.coroutineScope.launch {
-                sendBeaconInfo(roomArgs)
-            }
+            activeSessionHolder
+                    .getSafeActiveSession()
+                    ?.let { session ->
+                        session.coroutineScope.launch {
+                            sendBeaconInfo(session, roomArgs)
+                        }
+                    }
         }
 
         return START_STICKY
     }
 
-    private suspend fun sendBeaconInfo(roomArgs: RoomArgs) {
+    private suspend fun sendBeaconInfo(session: Session, roomArgs: RoomArgs) {
         val beaconContent = LiveLocationBeaconContent(
                 beaconInfo = BeaconInfo(
                         timeout = roomArgs.durationMillis,
                         isLive = true
                 ),
-                ts = System.currentTimeMillis()
+                timestampAsMillisecond = clock.epochMillis()
         ).toContent()
 
         // This format is not yet finalized
