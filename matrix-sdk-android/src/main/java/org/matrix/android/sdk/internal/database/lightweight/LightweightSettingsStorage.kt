@@ -45,12 +45,6 @@ class LightweightSettingsStorage  @Inject constructor(
         return sdkDefaultPrefs.getBoolean(MATRIX_SDK_SETTINGS_THREAD_MESSAGES_ENABLED, matrixConfiguration.threadMessagesEnabledDefault)
     }
 
-    fun setPresenceOfflineModeEnabled(enabled: Boolean) {
-        sdkDefaultPrefs.edit {
-            putBoolean(MATRIX_SDK_SETTINGS_PRESENCE_OFFLINE_MODE_ENABLED, enabled)
-        }
-    }
-
     fun getPresenceOfflineModeEnabled(): Boolean {
         return sdkDefaultPrefs.getBoolean(MATRIX_SDK_SETTINGS_PRESENCE_OFFLINE_MODE_ENABLED, matrixConfiguration.presenceOfflineModeEnabledDefault)
     }

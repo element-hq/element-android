@@ -205,7 +205,7 @@
         <im.vector.app.core.preference.VectorSwitchPreference
             android:title="@string/settings_presence_offline_mode"
             android:summary="@string/settings_presence_offline_mode_summary"
-            android:key="SETTINGS_PRESENCE_OFFLINE_MODE"
+            android:key="MATRIX_SDK_SETTINGS_PRESENCE_OFFLINE_MODE_ENABLED"
             android:defaultValue="@bool/settings_presence_offline_mode_default" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>

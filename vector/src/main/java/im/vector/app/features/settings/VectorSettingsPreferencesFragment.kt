@@ -76,11 +76,10 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             }
         }
 
-        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_PRESENCE_OFFLINE_MODE)!!.let { pref ->
-            pref.isChecked = vectorPreferences.presenceOfflineModeEnabled()
+        findPreference<VectorSwitchPreference>(LightweightSettingsStorage.MATRIX_SDK_SETTINGS_PRESENCE_OFFLINE_MODE_ENABLED)!!.let { pref ->
+            pref.isChecked = lightweightSettingsStorage.getPresenceOfflineModeEnabled()
             pref.setOnPreferenceChangeListener { _, newValue ->
                 val presenceOfflineModeEnabled = newValue as? Boolean ?: false
-                lightweightSettingsStorage.setPresenceOfflineModeEnabled(presenceOfflineModeEnabled)
                 lifecycleScope.launch {
                     session.setMyPresence(if (presenceOfflineModeEnabled) PresenceEnum.OFFLINE else PresenceEnum.ONLINE)
                 }
