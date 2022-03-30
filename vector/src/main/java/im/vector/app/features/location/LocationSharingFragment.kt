@@ -182,7 +182,7 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun handleStartLiveLocationService(event: LocationSharingViewEvents.StartLiveLocationService) {
-        val args = LocationSharingService.RoomArgs(event.sessionId, event.roomId, event.duration)
+        val args = LocationSharingService.RoomArgs(event.sessionId, event.roomId, event.durationMillis)
 
         Intent(requireContext(), LocationSharingService::class.java)
                 .putExtra(LocationSharingService.EXTRA_ROOM_ARGS, args)
