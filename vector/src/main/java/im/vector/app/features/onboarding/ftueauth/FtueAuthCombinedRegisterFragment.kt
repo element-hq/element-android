@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AppCompatActivity
 import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
@@ -29,6 +30,8 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.core.extensions.addFragment
+import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.hasContentFlow
@@ -36,6 +39,7 @@ import im.vector.app.core.extensions.hasSurroundingSpaces
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.databinding.FragmentFtueSignUpCombinedBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
@@ -66,6 +70,12 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         setupSubmitButton()
 
         views.createAccountRoot.realignPercentagesToParent()
+
+        views.editServerButton.debouncedClicks {
+            requireActivity().supportFragmentManager.commitTransaction(true) {
+                add(R.id.loginFragmentContainer, FtueAuthCombinedServerSelectionFragment(), null)
+            }
+        }
 
         views.createAccountPasswordInput.editText().setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
