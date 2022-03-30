@@ -26,28 +26,28 @@
             android:id="@+id/liveLocShareChooseDurationOption1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="22dp"
+            android:layout_marginHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
             android:checked="true"
+            android:paddingHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:paddingVertical="@dimen/location_sharing_live_duration_choice_margin_vertical"
             android:text="@string/location_share_live_select_duration_option_1" />
 
         <RadioButton
             android:id="@+id/liveLocShareChooseDurationOption2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="22dp"
+            android:layout_marginHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:paddingHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:paddingVertical="@dimen/location_sharing_live_duration_choice_margin_vertical"
             android:text="@string/location_share_live_select_duration_option_2" />
 
         <RadioButton
             android:id="@+id/liveLocShareChooseDurationOption3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="22dp"
+            android:layout_marginHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:paddingHorizontal="@dimen/location_sharing_live_duration_choice_margin_horizontal"
+            android:paddingVertical="@dimen/location_sharing_live_duration_choice_margin_vertical"
             android:text="@string/location_share_live_select_duration_option_3" />
     </RadioGroup>
 
