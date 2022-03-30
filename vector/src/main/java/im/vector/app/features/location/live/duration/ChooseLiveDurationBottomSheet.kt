@@ -16,12 +16,29 @@
 
 package im.vector.app.features.location.live.duration
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetChooseLiveLocationShareDurationBinding
-import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
+
+/**
+ * 15 minutes.
+ */
+private const val DURATION_IN_MS_OPTION_1 = 15 * 60_000L
+
+/**
+ * 1 hour.
+ */
+private const val DURATION_IN_MS_OPTION_2 = 60 * 60_000L
+
+/**
+ * 8 hours.
+ */
+private const val DURATION_IN_MS_OPTION_3 = 8 * 60 * 60_000L
 
 /**
  * Bottom sheet displaying list of options to choose the duration of the live sharing.
@@ -30,13 +47,17 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActi
 class ChooseLiveDurationBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetChooseLiveLocationShareDurationBinding>() {
 
-    // TODO show same UI as in Figma
-    // TODO handle choice of user
+    // TODO fix text color problem of button in dqrk mode
 
     var durationChoiceListener: DurationChoiceListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetChooseLiveLocationShareDurationBinding {
         return BottomSheetChooseLiveLocationShareDurationBinding.inflate(inflater, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initConfirmButton()
     }
 
     override fun onDestroyView() {
@@ -45,6 +66,23 @@ class ChooseLiveDurationBottomSheet :
     }
 
     // we are not using state for this one as it's static, so no need to override invalidate()
+
+    private fun initConfirmButton() {
+        views.liveLocShareChooseDurationConfirm.setOnClickListener {
+            val currentChoice = getCurrentChoice()
+            durationChoiceListener?.onDurationChoice(currentChoice)
+            dismiss()
+        }
+    }
+
+    private fun getCurrentChoice(): Long {
+        return when (views.liveLocShareChooseDurationOptions.checkedRadioButtonId) {
+            R.id.liveLocShareChooseDurationOption1 -> DURATION_IN_MS_OPTION_1
+            R.id.liveLocShareChooseDurationOption2 -> DURATION_IN_MS_OPTION_2
+            R.id.liveLocShareChooseDurationOption3 -> DURATION_IN_MS_OPTION_3
+            else                                   -> DURATION_IN_MS_OPTION_1
+        }
+    }
 
     companion object {
         fun newInstance(durationChoiceListener: DurationChoiceListener): ChooseLiveDurationBottomSheet {
