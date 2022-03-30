@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.crypto.crosssigning
 
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
@@ -29,31 +30,30 @@ interface CrossSigningService {
     /**
      * Is our own device signed by our own cross signing identity
      */
-    fun isCrossSigningVerified(): Boolean
+    suspend fun isCrossSigningVerified(): Boolean
 
     // TODO this isn't used anywhere besides in tests?
     //  Is this the local trust concept that we have for devices?
-    fun isUserTrusted(otherUserId: String): Boolean
+    suspend fun isUserTrusted(otherUserId: String): Boolean
 
     /**
      * Will not force a download of the key, but will verify signatures trust chain.
      * Checks that my trusted user key has signed the other user UserKey
      */
-    fun checkUserTrust(otherUserId: String): UserTrustResult
+    suspend fun checkUserTrust(otherUserId: String): UserTrustResult
 
     /**
      * Initialize cross signing for this user.
      * Users needs to enter credentials
      */
-    fun initializeCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?,
-                               callback: MatrixCallback<Unit>)
+    suspend fun initializeCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?)
 
     /**
      * Does our own user have a valid cross signing identity uploaded.
      *
      * In other words has any of our devices uploaded public cross signing keys to the server.
      */
-    fun isCrossSigningInitialized(): Boolean = getMyCrossSigningKeys() != null
+    suspend fun isCrossSigningInitialized(): Boolean = getMyCrossSigningKeys() != null
 
     /**
      * Inject the private cross signing keys, likely from backup, into our store.
@@ -70,17 +70,17 @@ interface CrossSigningService {
      *
      * @param otherUserId The ID of the user for which we would like to fetch the cross signing keys.
      */
-    fun getUserCrossSigningKeys(otherUserId: String): MXCrossSigningInfo?
+    suspend fun getUserCrossSigningKeys(otherUserId: String): MXCrossSigningInfo?
 
-    fun getLiveCrossSigningKeys(userId: String): LiveData<Optional<MXCrossSigningInfo>>
+    fun getLiveCrossSigningKeys(userId: String): Flow<Optional<MXCrossSigningInfo>>
 
     /** Get our own public cross signing keys */
-    fun getMyCrossSigningKeys(): MXCrossSigningInfo?
+    suspend fun getMyCrossSigningKeys(): MXCrossSigningInfo?
 
     /** Get our own private cross signing keys */
-    fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
+    suspend fun getCrossSigningPrivateKeys(): PrivateKeysInfo?
 
-    fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>>
+    fun getLiveCrossSigningPrivateKeys(): Flow<Optional<PrivateKeysInfo>>
 
     /**
      * Can we sign our other devices or other users?
@@ -93,11 +93,11 @@ interface CrossSigningService {
     fun allPrivateKeysKnown(): Boolean
 
     /** Mark a user identity as trusted and sign and upload signatures of our user-signing key to the server */
-    fun trustUser(otherUserId: String,
+    suspend fun trustUser(otherUserId: String,
                   callback: MatrixCallback<Unit>)
 
     /** Mark our own master key as trusted */
-    fun markMyMasterKeyAsTrusted()
+    suspend fun markMyMasterKeyAsTrusted()
 
     /**
      * Sign one of your devices and upload the signature
@@ -114,7 +114,7 @@ interface CrossSigningService {
      * using the self-signing key for our own devices or using the user-signing key and the master
      * key of another user.
      */
-    fun checkDeviceTrust(otherUserId: String,
+    suspend fun checkDeviceTrust(otherUserId: String,
                          otherDeviceId: String,
                          // TODO what is locallyTrusted used for?
                          locallyTrusted: Boolean?): DeviceTrustResult

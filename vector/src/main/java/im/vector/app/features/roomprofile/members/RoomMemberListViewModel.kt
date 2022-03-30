@@ -95,7 +95,6 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
             room.flow().liveRoomMembers(roomMemberQueryParams)
                     .flatMapLatest { membersSummary ->
                         session.cryptoService().getLiveCryptoDeviceInfo(membersSummary.map { it.userId })
-                                .asFlow()
                                 .catch { Timber.e(it) }
                                 .map { deviceList ->
                                     // If any key change, emit the userIds list

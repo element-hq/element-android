@@ -106,15 +106,7 @@ class DevicesViewModel @AssistedInject constructor(
     private val refreshSource = PublishDataSource<Unit>()
 
     init {
-
-        setState {
-            copy(
-                    hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized(),
-                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
-                    myDeviceId = session.sessionParams.deviceId ?: ""
-            )
-        }
-
+        initState()
         combine(
                 session.flow().liveUserCryptoDevices(session.myUserId),
                 session.flow().liveMyDevicesInfo()
@@ -174,6 +166,21 @@ class DevicesViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
         // then force download
         queryRefreshDevicesList()
+    }
+
+    private fun initState() {
+        viewModelScope.launch {
+            val hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized()
+            val accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
+            val myDeviceId = session.sessionParams.deviceId ?: ""
+            setState {
+                copy(
+                        hasAccountCrossSigning = hasAccountCrossSigning,
+                        accountCrossSigningIsTrusted = accountCrossSigningIsTrusted,
+                        myDeviceId = myDeviceId
+                )
+            }
+        }
     }
 
     override fun onCleared() {

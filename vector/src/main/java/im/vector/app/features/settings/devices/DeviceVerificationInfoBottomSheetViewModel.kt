@@ -15,7 +15,6 @@
  */
 package im.vector.app.features.settings.devices
 
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -26,6 +25,7 @@ import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
@@ -43,14 +43,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
     by hiltMavericksViewModelFactory()
 
     init {
-
-        setState {
-            copy(
-                    hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized(),
-                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
-                    isRecoverySetup = session.sharedSecretStorageService.isRecoverySetup()
-            )
-        }
+        initState()
         session.flow().liveCrossSigningInfo(session.myUserId)
                 .execute {
                     copy(
@@ -78,10 +71,6 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                     )
                 }
 
-        setState {
-            copy(deviceInfo = Loading())
-        }
-
         session.flow().liveMyDevicesInfo()
                 .map { devices ->
                     devices.firstOrNull { it.deviceId == initialState.deviceId } ?: DeviceInfo(deviceId = initialState.deviceId)
@@ -89,6 +78,21 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
                 .execute {
                     copy(deviceInfo = it)
                 }
+    }
+
+    private fun initState() {
+        viewModelScope.launch {
+            val hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized()
+            val accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
+            val isRecoverySetup = session.sharedSecretStorageService.isRecoverySetup()
+            setState {
+                copy(
+                        hasAccountCrossSigning = hasAccountCrossSigning,
+                        accountCrossSigningIsTrusted = accountCrossSigningIsTrusted,
+                        isRecoverySetup = isRecoverySetup
+                )
+            }
+        }
     }
 
     override fun handle(action: EmptyAction) {

@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api.session.crypto
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
+import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.listeners.ProgressListener
@@ -123,9 +124,9 @@ interface CryptoService {
 
     fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
 
-    fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>>
+    fun getLiveCryptoDeviceInfo(userId: String): Flow<List<CryptoDeviceInfo>>
 
-    fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
+    fun getLiveCryptoDeviceInfo(userIds: List<String>): Flow<List<CryptoDeviceInfo>>
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
 

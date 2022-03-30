@@ -34,7 +34,6 @@ import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.session.securestorage.SsssKeySpec
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -91,12 +90,7 @@ class BootstrapCrossSigningTask @Inject constructor(
             )
 
             try {
-                awaitCallback<Unit> {
-                    crossSigningService.initializeCrossSigning(
-                            params.userInteractiveAuthInterceptor,
-                            it
-                    )
-                }
+                crossSigningService.initializeCrossSigning(params.userInteractiveAuthInterceptor)
                 if (params.setupMode == SetupMode.CROSS_SIGNING_ONLY) {
                     return BootstrapResult.SuccessCrossSigningOnly
                 }

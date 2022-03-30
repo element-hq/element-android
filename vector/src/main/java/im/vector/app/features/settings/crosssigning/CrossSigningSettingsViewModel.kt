@@ -29,6 +29,7 @@ import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -41,7 +42,6 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -55,25 +55,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
 ) : VectorViewModel<CrossSigningSettingsViewState, CrossSigningSettingsAction, CrossSigningSettingsViewEvents>(initialState) {
 
     init {
-        combine(
-                session.flow().liveMyDevicesInfo(),
-                session.flow().liveCrossSigningInfo(session.myUserId)
-        ) { myDevicesInfo, mxCrossSigningInfo ->
-            myDevicesInfo to mxCrossSigningInfo
-        }
-                .execute { data ->
-                    val crossSigningKeys = data.invoke()?.second?.getOrNull()
-                    val xSigningIsEnableInAccount = crossSigningKeys != null
-                    val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
-                    val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
-
-                    copy(
-                            crossSigningInfo = crossSigningKeys,
-                            xSigningIsEnableInAccount = xSigningIsEnableInAccount,
-                            xSigningKeysAreTrusted = xSigningKeysAreTrusted,
-                            xSigningKeyCanSign = xSigningKeyCanSign
-                    )
-                }
+        observeCrossSigning()
     }
 
     var uiaContinuation: Continuation<UIABaseAuth>? = null
@@ -90,29 +72,27 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
                 viewModelScope.launch(Dispatchers.IO) {
                     try {
-                        awaitCallback<Unit> {
-                            session.cryptoService().crossSigningService().initializeCrossSigning(
-                                    object : UserInteractiveAuthInterceptor {
-                                        override fun performStage(flowResponse: RegistrationFlowResponse,
-                                                                  errCode: String?,
-                                                                  promise: Continuation<UIABaseAuth>) {
-                                            Timber.d("## UIA : initializeCrossSigning UIA")
-                                            if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
-                                                    reAuthHelper.data != null && errCode == null) {
-                                                UserPasswordAuth(
-                                                        session = null,
-                                                        user = session.myUserId,
-                                                        password = reAuthHelper.data
-                                                ).let { promise.resume(it) }
-                                            } else {
-                                                Timber.d("## UIA : initializeCrossSigning UIA > start reauth activity")
-                                                _viewEvents.post(CrossSigningSettingsViewEvents.RequestReAuth(flowResponse, errCode))
-                                                pendingAuth = DefaultBaseAuth(session = flowResponse.session)
-                                                uiaContinuation = promise
-                                            }
+                        session.cryptoService().crossSigningService().initializeCrossSigning(
+                                object : UserInteractiveAuthInterceptor {
+                                    override fun performStage(flowResponse: RegistrationFlowResponse,
+                                                              errCode: String?,
+                                                              promise: Continuation<UIABaseAuth>) {
+                                        Timber.d("## UIA : initializeCrossSigning UIA")
+                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                                reAuthHelper.data != null && errCode == null) {
+                                            UserPasswordAuth(
+                                                    session = null,
+                                                    user = session.myUserId,
+                                                    password = reAuthHelper.data
+                                            ).let { promise.resume(it) }
+                                        } else {
+                                            Timber.d("## UIA : initializeCrossSigning UIA > start reauth activity")
+                                            _viewEvents.post(CrossSigningSettingsViewEvents.RequestReAuth(flowResponse, errCode))
+                                            pendingAuth = DefaultBaseAuth(session = flowResponse.session)
+                                            uiaContinuation = promise
                                         }
-                                    }, it)
-                        }
+                                    }
+                                })
                     } catch (failure: Throwable) {
                         handleInitializeXSigningError(failure)
                     } finally {
@@ -147,6 +127,28 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 pendingAuth = null
             }
         }.exhaustive
+    }
+
+    private fun observeCrossSigning() {
+        combine(
+                session.flow().liveMyDevicesInfo(),
+                session.flow().liveCrossSigningInfo(session.myUserId)
+        ) { myDevicesInfo, mxCrossSigningInfo ->
+            myDevicesInfo to mxCrossSigningInfo
+        }.onEach { data ->
+            val crossSigningKeys = data.second.getOrNull()
+            val xSigningIsEnableInAccount = crossSigningKeys != null
+            val xSigningKeysAreTrusted = session.cryptoService().crossSigningService().checkUserTrust(session.myUserId).isVerified()
+            val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
+            setState {
+                copy(
+                        crossSigningInfo = crossSigningKeys,
+                        xSigningIsEnableInAccount = xSigningIsEnableInAccount,
+                        xSigningKeysAreTrusted = xSigningKeysAreTrusted,
+                        xSigningKeyCanSign = xSigningKeyCanSign
+                )
+            }
+        }
     }
 
     private fun handleInitializeXSigningError(failure: Throwable) {

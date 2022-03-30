@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -426,14 +427,12 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    override fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>> {
+    override fun getLiveCryptoDeviceInfo(userId: String): Flow<List<CryptoDeviceInfo>> {
         return getLiveCryptoDeviceInfo(listOf(userId))
     }
 
-    override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
-        return runBlocking {
-            this@DefaultCryptoService.olmMachine.getLiveDevices(userIds) // ?: LiveDevice(userIds, deviceObserver)
-        }
+    override fun getLiveCryptoDeviceInfo(userIds: List<String>): Flow<List<CryptoDeviceInfo>> {
+        return olmMachine.getLiveDevices(userIds)
     }
 
     /**

@@ -31,7 +31,5 @@ internal class OlmMachineProvider @Inject constructor(
         requestSender: RequestSender
 ) {
 
-    private val deviceObserver: DeviceUpdateObserver = DeviceUpdateObserver()
-
-    var olmMachine: OlmMachine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver, requestSender)
+    var olmMachine: OlmMachine = OlmMachine(userId, deviceId!!, dataDir, requestSender)
 }

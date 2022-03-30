@@ -16,9 +16,11 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -64,7 +66,7 @@ import uniffi.olm.setLogger
 import java.io.File
 import java.nio.charset.Charset
 import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import uniffi.olm.OlmMachine as InnerMachine
 import uniffi.olm.ProgressListener as RustProgressListener
 import uniffi.olm.UserIdentity as RustUserIdentity
@@ -81,98 +83,29 @@ private class CryptoProgressListener(private val listener: ProgressListener?) : 
     }
 }
 
-internal class LiveDevice(
-        internal var userIds: List<String>,
-        private var observer: DeviceUpdateObserver
-) : MutableLiveData<List<CryptoDeviceInfo>>() {
+private data class UserIdentityCollector(val userId: String, val collector: SendChannel<Optional<MXCrossSigningInfo>>) : SendChannel<Optional<MXCrossSigningInfo>> by collector
+private data class DevicesCollector(val userIds: List<String>, val collector: SendChannel<List<CryptoDeviceInfo>>) : SendChannel<List<CryptoDeviceInfo>> by collector
+private typealias PrivateKeysCollector = SendChannel<Optional<PrivateKeysInfo>>
 
-    override fun onActive() {
-        observer.addDeviceUpdateListener(this)
-    }
-
-    override fun onInactive() {
-        observer.removeDeviceUpdateListener(this)
-    }
-}
-
-internal class LiveUserIdentity(
-        internal var userId: String,
-        private var observer: UserIdentityUpdateObserver
-) : MutableLiveData<Optional<MXCrossSigningInfo>>() {
-    override fun onActive() {
-        observer.addUserIdentityUpdateListener(this)
-    }
-
-    override fun onInactive() {
-        observer.removeUserIdentityUpdateListener(this)
-    }
-}
-
-internal class LivePrivateCrossSigningKeys(
-        private var observer: PrivateCrossSigningKeysUpdateObserver,
-) : MutableLiveData<Optional<PrivateKeysInfo>>() {
-
-    override fun onActive() {
-        observer.addUserIdentityUpdateListener(this)
-    }
-
-    override fun onInactive() {
-        observer.removeUserIdentityUpdateListener(this)
-    }
+private class FlowCollectors {
+    val userIdentityCollectors = CopyOnWriteArrayList<UserIdentityCollector>()
+    val privateKeyCollectors = CopyOnWriteArrayList<PrivateKeysCollector>()
+    val deviceCollectors = CopyOnWriteArrayList<DevicesCollector>()
 }
 
 fun setRustLogger() {
     setLogger(CryptoLogger() as Logger)
 }
 
-internal class DeviceUpdateObserver {
-    internal val listeners = ConcurrentHashMap<LiveDevice, List<String>>()
-
-    fun addDeviceUpdateListener(device: LiveDevice) {
-        listeners[device] = device.userIds
-    }
-
-    fun removeDeviceUpdateListener(device: LiveDevice) {
-        listeners.remove(device)
-    }
-}
-
-internal class UserIdentityUpdateObserver {
-    internal val listeners = ConcurrentHashMap<LiveUserIdentity, String>()
-
-    fun addUserIdentityUpdateListener(userIdentity: LiveUserIdentity) {
-        listeners[userIdentity] = userIdentity.userId
-    }
-
-    fun removeUserIdentityUpdateListener(userIdentity: LiveUserIdentity) {
-        listeners.remove(userIdentity)
-    }
-}
-
-internal class PrivateCrossSigningKeysUpdateObserver {
-    internal val listeners = ConcurrentHashMap<LivePrivateCrossSigningKeys, Unit>()
-
-    fun addUserIdentityUpdateListener(liveKeys: LivePrivateCrossSigningKeys) {
-        listeners[liveKeys] = Unit
-    }
-
-    fun removeUserIdentityUpdateListener(liveKeys: LivePrivateCrossSigningKeys) {
-        listeners.remove(liveKeys)
-    }
-}
-
 internal class OlmMachine(
         user_id: String,
         device_id: String,
         path: File,
-        deviceObserver: DeviceUpdateObserver,
         private val requestSender: RequestSender,
 ) {
     private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
-    private val deviceUpdateObserver = deviceObserver
-    private val userIdentityUpdateObserver = UserIdentityUpdateObserver()
-    private val privateKeysUpdateObserver = PrivateCrossSigningKeysUpdateObserver()
     internal val verificationListeners = ArrayList<VerificationService.Listener>()
+    private val flowCollectors = FlowCollectors()
 
     /** Get our own user ID. */
     fun userId(): String {
@@ -193,26 +126,24 @@ internal class OlmMachine(
         return this.inner
     }
 
-    /** Update all of our live device listeners. */
     private suspend fun updateLiveDevices() {
-        for ((liveDevice, users) in deviceUpdateObserver.listeners) {
-            val devices = getCryptoDeviceInfo(users)
-            liveDevice.postValue(devices)
+        for (deviceCollector in flowCollectors.deviceCollectors) {
+            val devices = getCryptoDeviceInfo(deviceCollector.userIds)
+            deviceCollector.send(devices)
         }
     }
 
     private suspend fun updateLiveUserIdentities() {
-        for ((liveIdentity, userId) in userIdentityUpdateObserver.listeners) {
-            val identity = getIdentity(userId)?.toMxCrossSigningInfo().toOptional()
-            liveIdentity.postValue(identity)
+        for (userIdentityCollector in flowCollectors.userIdentityCollectors) {
+            val identity = getIdentity(userIdentityCollector.userId)?.toMxCrossSigningInfo()
+            userIdentityCollector.send(identity.toOptional())
         }
     }
 
     private suspend fun updateLivePrivateKeys() {
         val keys = this.exportCrossSigningKeys().toOptional()
-
-        for (liveKeys in privateKeysUpdateObserver.listeners.keys()) {
-            liveKeys.postValue(keys)
+        for (privateKeyCollector in flowCollectors.privateKeyCollectors) {
+            privateKeyCollector.send(keys)
         }
     }
 
@@ -712,20 +643,27 @@ internal class OlmMachine(
         return getUserDevicesMap(userIds)
     }
 
-    suspend fun getLiveUserIdentity(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
-        val identity = this.getIdentity(userId)?.toMxCrossSigningInfo().toOptional()
-        val liveIdentity = LiveUserIdentity(userId, this.userIdentityUpdateObserver)
-        liveIdentity.value = identity
-
-        return liveIdentity
+    fun getLiveUserIdentity(userId: String): Flow<Optional<MXCrossSigningInfo>> {
+        return channelFlow {
+            val userIdentityCollector = UserIdentityCollector(userId, this)
+            flowCollectors.userIdentityCollectors.add(userIdentityCollector)
+            val identity = getIdentity(userId)?.toMxCrossSigningInfo().toOptional()
+            send(identity)
+            awaitClose {
+                flowCollectors.userIdentityCollectors.remove(userIdentityCollector)
+            }
+        }
     }
 
-    suspend fun getLivePrivateCrossSigningKeys(): LiveData<Optional<PrivateKeysInfo>> {
-        val keys = this.exportCrossSigningKeys().toOptional()
-        val liveKeys = LivePrivateCrossSigningKeys(this.privateKeysUpdateObserver)
-        liveKeys.value = keys
-
-        return liveKeys
+    fun getLivePrivateCrossSigningKeys(): Flow<Optional<PrivateKeysInfo>> {
+        return channelFlow {
+            flowCollectors.privateKeyCollectors.add(this)
+            val keys = this@OlmMachine.exportCrossSigningKeys().toOptional()
+            send(keys)
+            awaitClose {
+                flowCollectors.privateKeyCollectors.remove(this)
+            }
+        }
     }
 
     /**
@@ -738,12 +676,16 @@ internal class OlmMachine(
      *
      * @return The list of Devices or an empty list if there aren't any.
      */
-    suspend fun getLiveDevices(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
-        val plainDevices = getCryptoDeviceInfo(userIds)
-        val devices = LiveDevice(userIds, deviceUpdateObserver)
-        devices.value = plainDevices
-
-        return devices
+    fun getLiveDevices(userIds: List<String>): Flow<List<CryptoDeviceInfo>> {
+        return channelFlow {
+            val devicesCollector = DevicesCollector(userIds, this)
+            flowCollectors.deviceCollectors.add(devicesCollector)
+            val devices = getCryptoDeviceInfo(userIds)
+            send(devices)
+            awaitClose {
+                flowCollectors.deviceCollectors.remove(devicesCollector)
+            }
+        }
     }
 
     /** Discard the currently active room key for the given room if there is one. */

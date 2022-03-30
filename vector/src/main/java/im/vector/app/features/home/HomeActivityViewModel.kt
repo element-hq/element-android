@@ -49,7 +49,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -220,30 +219,27 @@ class HomeActivityViewModel @AssistedInject constructor(
                 // Try to initialize cross signing in background if possible
                 Timber.d("Initialize cross signing...")
                 try {
-                    awaitCallback<Unit> {
-                        session.cryptoService().crossSigningService().initializeCrossSigning(
-                                object : UserInteractiveAuthInterceptor {
-                                    override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                        // We missed server grace period or it's not setup, see if we remember locally password
-                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
-                                                errCode == null &&
-                                                reAuthHelper.data != null) {
-                                            promise.resume(
-                                                    UserPasswordAuth(
-                                                            session = flowResponse.session,
-                                                            user = session.myUserId,
-                                                            password = reAuthHelper.data
-                                                    )
-                                            )
-                                        } else {
-                                            promise.resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
-                                        }
+                    session.cryptoService().crossSigningService().initializeCrossSigning(
+                            object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    // We missed server grace period or it's not setup, see if we remember locally password
+                                    if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                            errCode == null &&
+                                            reAuthHelper.data != null) {
+                                        promise.resume(
+                                                UserPasswordAuth(
+                                                        session = flowResponse.session,
+                                                        user = session.myUserId,
+                                                        password = reAuthHelper.data
+                                                )
+                                        )
+                                    } else {
+                                        promise.resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
                                     }
-                                },
-                                callback = it
-                        )
-                        Timber.d("Initialize cross signing SUCCESS")
-                    }
+                                }
+                            },
+                    )
+                    Timber.d("Initialize cross signing SUCCESS")
                 } catch (failure: Throwable) {
                     Timber.e(failure, "Failed to initialize cross signing")
                 }
