@@ -35,7 +35,7 @@ Also, draft PR should not stay indefinitely in this state. It may be removed if 
 We use automatic assignment for PR reviews. A PR is automatically routed by GitHub to a team member using the round robin algorithm. The process is the following:
 
 - The PR creator assigns the [element-android](https://github.com/orgs/vector-im/teams/element-android) team as a reviewer. They can skip this process and assign directly a specific member if they think they should take a look at it.
-- GitHub automatically assigns one reviewer. If the chosen reviewer is not available (holiday, etc.), remove them and manually add another reviewer.
+- GitHub automatically assigns one reviewer. If the chosen reviewer is not available (holiday, etc.), remove them and set again the team, GitHub will select another reviewer.
 - The reviewer gets a notification to make the review: they review the code following the good practice (see the rest of this document).
 - After making their own review, if they feel not confident enough, they can ask another person for a full review, or they can tag someone within a PR comment to check specific lines.
 
@@ -55,6 +55,10 @@ It is hard to define a deadline for a review. It depends on the PR size and the 
 
 After this time, the submitter can ping the reviewer to get a status of the review.
 
+##### Re-request PR review
+
+Once all the remarks have been handled, it's possible to re-request a review from the (same) reviewer to let them know that the PR has been updated the PR is ready to be reviewed again. Use the double arrow next to the reviewer name to do that.
+
 ##### When create split PR?
 
 To implement big new feature, it may be efficient to split the work into several smaller and scoped PRs. They will be easier to review, and they can be merged on `develop` faster.
@@ -71,7 +75,7 @@ Each PR should focus on a single task. If other issues may be fixed when working
 
 It will have the advantage to be reviewed and merged faster, and not interfere with the main PR.
 
-It's also applicable for code rework, or code formatting. Sometimes, it is more efficient to extract that work to a dedicated PR, and rebase your branch once this "rework" PR has been merged.
+It's also applicable for code rework (such as renaming for instance), or code formatting. Sometimes, it is more efficient to extract that work to a dedicated PR, and rebase your branch once this "rework" PR has been merged.
 
 #### Bots
 
@@ -120,6 +124,20 @@ But comment in PR from the community are always appreciated!
 ### Rules
 
 #### Check the form
+
+##### PR title
+
+PR title should describe in one line what's brought by the PR. Reviewer can edit the title if it's not clear enough, or to add suffix like `[BLOCKED]` or similar. Fixing typo is also a good practice, since GitHub search is quite not efficient, so the words must be spelled without any issue. Adding suffix will help when viewing the PR list.
+
+It's free form, but prefix tags could also be used to help understand what's in the PR.
+
+Examples of prefixes:
+- `[Refacto]`
+- `[Feature]`
+- `[Bugfix]`
+- etc.
+
+Also, it's still possible to add labels to the PRs, such as `A-` or `T-` labels, even if this is not a string requirement. We prefer to spend time to add labels on issues.
 
 ##### PR description
 
@@ -194,12 +212,22 @@ We prefer to merge such PR after a release so that it can be tested during sever
 
 PR from bots will always be merged by the reviewer, right after approving the changes, or in case of critical changes, right after a release.
 
+#### Merge type
+
+Generally we use "Create a merge commit", which has the advantage to keep the branch visible.
+
+If git history is noisy (code added, then removed, etc.), it's possible to use "Squash and merge". But the branch will not be visible anymore, a commit will be added on top of develop. Git commit message can (and probably must) be edited from the GitHub web app. It's better if the submitter do the work to cleanup the git history by using a git interactive rebase of their branch.
+
 ### Resolve conversation
 
 Generally we do not close conversation added during PR review and update by clicking on "Resolve conversation"
 If the submitter or the reviewer do so, it will more difficult for further readers to see again the content. They will have to open the conversation to see it again. it's a waste of time.
 
 When remarks are handled, a small comment like "done" is enough, commit hash can also be added to the conversation.
+
+Exception: for big PRs with lots of conversations, using "Resolve conversation" may help to see the remaining remarks.
+
+Also "Resolve conversation" should probably be hit by the creator of the conversation.
 
 ## Responsibility
 
