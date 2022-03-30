@@ -330,10 +330,9 @@ jobs:
     if: always() && github.event_name != 'workflow_dispatch'
     # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: michaelkaye/matrix-hookshot-action@v0.3.0
+      - uses: michaelkaye/matrix-hookshot-action@v1.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
-          matrix_room_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
+          hookshot_url: ${{ secrets.ELEMENT_ANDROID_HOOKSHOT_URL }}
           text_template: "{{#if '${{ github.event_name }}' == 'schedule' }}Nightly test run{{else}}Test run (on ${{ github.ref }}){{/if }}: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
           html_template: "{{#if '${{ github.event_name }}' == 'schedule' }}Nightly test run{{else}}Test run (on ${{ github.ref }}){{/if }}: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion}} {{name}} <font color='{{color conclusion}}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"
