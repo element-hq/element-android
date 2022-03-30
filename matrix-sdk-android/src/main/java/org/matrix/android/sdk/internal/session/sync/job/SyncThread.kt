@@ -182,7 +182,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                     else                            -> DEFAULT_LONG_POOL_TIMEOUT
                 }
                 Timber.tag(loggerTag.value).d("Execute sync request with timeout $timeout")
-                val presence =  if (lightweightSettingsStorage.getPresenceOfflineModeEnabled()) { SyncPresence.Offline } else { SyncPresence.Online }
+                val presence =  if (lightweightSettingsStorage.getPresenceOfflineModeEnabled()) SyncPresence.Offline else SyncPresence.Online
                 val params = SyncTask.Params(timeout, presence, afterPause = afterPause)
                 val sync = syncScope.launch {
                     previousSyncResponseHasToDevice = doSync(params)
