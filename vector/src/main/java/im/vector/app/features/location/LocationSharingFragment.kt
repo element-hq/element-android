@@ -53,7 +53,9 @@ class LocationSharingFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val vectorFeatures: VectorFeatures,
-) : VectorBaseFragment<FragmentLocationSharingBinding>(), LocationTargetChangeListener {
+) : VectorBaseFragment<FragmentLocationSharingBinding>(),
+        LocationTargetChangeListener,
+        ChooseLiveDurationBottomSheet.DurationChoiceListener {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
@@ -236,11 +238,12 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun startLiveLocationSharing() {
-        // TODO. Get duration from user
-        ChooseLiveDurationBottomSheet.newInstance()
+        ChooseLiveDurationBottomSheet.newInstance(this)
                 .show(requireActivity().supportFragmentManager, "DISPLAY_CHOOSE_DURATION_OPTIONS")
-        //val duration = 30 * 1000L
-        //viewModel.handle(LocationSharingAction.StartLiveLocationSharing(duration))
+    }
+
+    override fun onDurationChoice(durationMillis: Long) {
+        viewModel.handle(LocationSharingAction.StartLiveLocationSharing(durationMillis))
     }
 
     private fun updateMap(state: LocationSharingViewState) {

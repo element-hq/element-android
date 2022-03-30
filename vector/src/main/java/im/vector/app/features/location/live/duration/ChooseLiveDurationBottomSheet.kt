@@ -30,19 +30,31 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActi
 class ChooseLiveDurationBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetChooseLiveLocationShareDurationBinding>() {
 
-    // TODO create interface callback to set the chosen duration
     // TODO show same UI as in Figma
     // TODO handle choice of user
+
+    var durationChoiceListener: DurationChoiceListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetChooseLiveLocationShareDurationBinding {
         return BottomSheetChooseLiveLocationShareDurationBinding.inflate(inflater, container, false)
     }
 
+    override fun onDestroyView() {
+        durationChoiceListener = null
+        super.onDestroyView()
+    }
+
     // we are not using state for this one as it's static, so no need to override invalidate()
 
     companion object {
-        fun newInstance(): ChooseLiveDurationBottomSheet {
-            return ChooseLiveDurationBottomSheet()
+        fun newInstance(durationChoiceListener: DurationChoiceListener): ChooseLiveDurationBottomSheet {
+            val bottomSheet = ChooseLiveDurationBottomSheet()
+            bottomSheet.durationChoiceListener = durationChoiceListener
+            return bottomSheet
         }
+    }
+
+    interface DurationChoiceListener {
+        fun onDurationChoice(durationMillis: Long)
     }
 }
