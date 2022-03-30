@@ -1,0 +1,1 @@
+Improving build speed after committing or changes branches by removing git sha information from debug builds
