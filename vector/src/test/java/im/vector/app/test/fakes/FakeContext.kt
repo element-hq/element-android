@@ -39,13 +39,13 @@ class FakeContext(
         every { contentResolver.openFileDescriptor(uri, mode, null) } returns fileDescriptor
     }
 
-    fun givenOutputStreamFor(uri: Uri, mode: String): OutputStream {
+    fun givenSafeOutputStreamFor(uri: Uri): OutputStream {
         val outputStream = mockk<OutputStream>(relaxed = true)
-        every { contentResolver.openOutputStream(uri, mode) } returns outputStream
+        every { contentResolver.openOutputStream(uri, "wt") } returns outputStream
         return outputStream
     }
 
-    fun givenMissingOutputStreamFor(uri: Uri, mode: String) {
-        every { contentResolver.openOutputStream(uri, mode) } returns null
+    fun givenMissingSafeOutputStreamFor(uri: Uri) {
+        every { contentResolver.openOutputStream(uri, "wt") } returns null
     }
 }
