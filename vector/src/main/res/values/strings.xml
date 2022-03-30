@@ -1863,6 +1863,25 @@
     <string name="ftue_auth_use_case_join_existing_server">Looking to join an existing server?</string>
     <string name="ftue_auth_use_case_connect_to_server">Connect to server</string>
 
+    <string name="ftue_account_created_personalize">Personalize profile</string>
+    <string name="ftue_account_created_take_me_home">Take me home</string>
+    <string name="ftue_account_created_congratulations_title">Congratulations!</string>
+    <string name="ftue_account_created_subtitle">Your account %s has been created.</string>
+
+    <string name="ftue_display_name_title">Choose a display name</string>
+    <string name="ftue_display_name_subtitle">This will be shown when you send messages.</string>
+    <string name="ftue_display_name_entry_title">Display Name</string>
+    <string name="ftue_display_name_entry_footer">You can change this later</string>
+
+    <string name="ftue_profile_picture_title">Add a profile picture</string>
+    <string name="ftue_profile_picture_subtitle">You can change this anytime.</string>
+    <string name="ftue_personalize_lets_go">Let\'s go</string>
+    <string name="ftue_personalize_complete_title">You\'re all set!</string>
+    <string name="ftue_personalize_complete_subtitle">Your preferences have been saved.</string>
+
+    <string name="ftue_personalize_submit">Save and continue</string>
+    <string name="ftue_personalize_skip_this_step">Skip this step</string>
+
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
     <string name="login_splash_text2">Keep conversations private with encryption</string>
