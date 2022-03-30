@@ -192,6 +192,8 @@ class LocationSharingFragment @Inject constructor(
                 .also {
                     ContextCompat.startForegroundService(requireContext(), it)
                 }
+
+        vectorBaseActivity.finish()
     }
 
     private fun initOptionsPicker() {
