@@ -131,14 +131,6 @@ android {
         // Required for sonar analysis
         versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
 
-        // Generate a random app task affinity
-        manifestPlaceholders = [appTaskAffinitySuffix:"H_${gitRevision()}"]
-
-        buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
-        buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
-        buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
-        buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
-
         buildConfigField "im.vector.app.features.VectorFeatures.OnboardingVariant", "ONBOARDING_VARIANT", "im.vector.app.features.VectorFeatures.OnboardingVariant.FTUE_AUTH"
 
         buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
@@ -232,6 +224,13 @@ android {
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
             buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "true"
 
+            // using static values to avoid cache misses on new commits
+            manifestPlaceholders = [appTaskAffinitySuffix: "H_aaaaaa"]
+            buildConfigField "String", "GIT_REVISION", "\"dev\""
+            buildConfigField "String", "GIT_REVISION_DATE", "\"dev\""
+            buildConfigField "String", "GIT_BRANCH_NAME", "\"dev\""
+            buildConfigField "String", "BUILD_NUMBER", "\"dev\""
+
             signingConfig signingConfigs.debug
         }
 
@@ -241,6 +240,13 @@ android {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
             buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "false"
+
+            manifestPlaceholders = [appTaskAffinitySuffix:"H_${gitRevision()}"]
+
+            buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
+            buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
+            buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
+            buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
 
             postprocessing {
                 removeUnusedCode true
