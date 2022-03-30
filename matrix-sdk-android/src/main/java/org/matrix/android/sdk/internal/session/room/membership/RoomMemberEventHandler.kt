@@ -77,8 +77,8 @@ internal class RoomMemberEventHandler @Inject constructor(
                                                  roomMember: RoomMemberContent,
                                                  prevContent: Map<String, Any>?) {
         val previousDisplayName = prevContent?.get("displayname")
-        val shouldLocallySaveUser = roomMember.membership.isActive()
-                && (previousDisplayName == null || previousDisplayName == roomMember.displayName)
+        val shouldLocallySaveUser = roomMember.membership.isActive() &&
+                (previousDisplayName == null || previousDisplayName == roomMember.displayName)
 
         if (shouldLocallySaveUser) {
             saveUserLocally(realm, userId, roomMember)
