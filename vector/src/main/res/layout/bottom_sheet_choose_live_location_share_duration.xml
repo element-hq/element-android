@@ -53,6 +53,7 @@
 
     <Button
         android:id="@+id/liveLocShareChooseDurationConfirm"
+        style="@style/Widget.Vector.Button.CallToAction"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginHorizontal="16dp"
