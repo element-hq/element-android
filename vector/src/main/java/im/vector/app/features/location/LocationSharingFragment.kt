@@ -30,6 +30,7 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.mapboxsdk.maps.MapView
 import im.vector.app.R
+import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
@@ -55,7 +56,7 @@ class LocationSharingFragment @Inject constructor(
         private val vectorFeatures: VectorFeatures,
 ) : VectorBaseFragment<FragmentLocationSharingBinding>(),
         LocationTargetChangeListener,
-        ChooseLiveDurationBottomSheet.DurationChoiceListener {
+        VectorBaseBottomSheetDialogFragment.ResultListener {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
@@ -242,8 +243,10 @@ class LocationSharingFragment @Inject constructor(
                 .show(requireActivity().supportFragmentManager, "DISPLAY_CHOOSE_DURATION_OPTIONS")
     }
 
-    override fun onDurationChoice(durationMillis: Long) {
-        viewModel.handle(LocationSharingAction.StartLiveLocationSharing(durationMillis))
+    override fun onBottomSheetResult(resultCode: Int, data: Any?) {
+        if (resultCode == VectorBaseBottomSheetDialogFragment.ResultListener.RESULT_OK) {
+            (data as? Long)?.let { viewModel.handle(LocationSharingAction.StartLiveLocationSharing(it)) }
+        }
     }
 
     private fun updateMap(state: LocationSharingViewState) {

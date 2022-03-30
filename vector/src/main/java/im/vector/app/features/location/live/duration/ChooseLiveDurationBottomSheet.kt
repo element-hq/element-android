@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
+import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment.ResultListener.Companion.RESULT_OK
 import im.vector.app.databinding.BottomSheetChooseLiveLocationShareDurationBinding
 
 /**
@@ -41,15 +42,11 @@ private const val DURATION_IN_MS_OPTION_2 = 60 * 60_000L
 private const val DURATION_IN_MS_OPTION_3 = 8 * 60 * 60_000L
 
 /**
- * Bottom sheet displaying list of options to choose the duration of the live sharing.
+ * Bottom sheet displaying list of options to choose the duration of the location live sharing.
  */
 @AndroidEntryPoint
 class ChooseLiveDurationBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetChooseLiveLocationShareDurationBinding>() {
-
-    // TODO fix text color problem of button in dqrk mode
-
-    var durationChoiceListener: DurationChoiceListener? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetChooseLiveLocationShareDurationBinding {
         return BottomSheetChooseLiveLocationShareDurationBinding.inflate(inflater, container, false)
@@ -60,17 +57,12 @@ class ChooseLiveDurationBottomSheet :
         initConfirmButton()
     }
 
-    override fun onDestroyView() {
-        durationChoiceListener = null
-        super.onDestroyView()
-    }
-
     // we are not using state for this one as it's static, so no need to override invalidate()
 
     private fun initConfirmButton() {
         views.liveLocShareChooseDurationConfirm.setOnClickListener {
             val currentChoice = getCurrentChoice()
-            durationChoiceListener?.onDurationChoice(currentChoice)
+            resultListener?.onBottomSheetResult(RESULT_OK, currentChoice)
             dismiss()
         }
     }
@@ -85,9 +77,9 @@ class ChooseLiveDurationBottomSheet :
     }
 
     companion object {
-        fun newInstance(durationChoiceListener: DurationChoiceListener): ChooseLiveDurationBottomSheet {
+        fun newInstance(resultListener: ResultListener): ChooseLiveDurationBottomSheet {
             val bottomSheet = ChooseLiveDurationBottomSheet()
-            bottomSheet.durationChoiceListener = durationChoiceListener
+            bottomSheet.resultListener = resultListener
             return bottomSheet
         }
     }
