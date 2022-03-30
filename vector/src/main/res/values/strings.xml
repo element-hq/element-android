@@ -2959,6 +2959,10 @@
     <string name="a11y_location_share_option_user_live_icon">Share live location</string>
     <string name="location_share_option_pinned">Share this location</string>
     <string name="a11y_location_share_option_pinned_icon">Share this location</string>
+    <string name="location_share_live_select_duration_title">Share your live location for</string>
+    <string name="location_share_live_select_duration_option_1">15 minutes</string>
+    <string name="location_share_live_select_duration_option_2">1 hour</string>
+    <string name="location_share_live_select_duration_option_3">8 hours</string>
     <string name="location_in_background_missing_permission_dialog_title">Allow access</string>
     <string name="location_in_background_missing_permission_dialog_content">If you’d like to share your Live location, ${app_name} needs location access all the time when the app is in the background.\nWe will only access your location for the duration that you choose.</string>
     <string name="location_not_available_dialog_title">${app_name} could not access your location</string>
