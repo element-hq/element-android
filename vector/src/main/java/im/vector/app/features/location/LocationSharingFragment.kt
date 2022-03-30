@@ -39,6 +39,7 @@ import im.vector.app.databinding.FragmentLocationSharingBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.location.live.duration.ChooseLiveDurationBottomSheet
 import im.vector.app.features.location.option.LocationSharingOption
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
@@ -236,8 +237,10 @@ class LocationSharingFragment @Inject constructor(
 
     private fun startLiveLocationSharing() {
         // TODO. Get duration from user
-        val duration = 30 * 1000L
-        viewModel.handle(LocationSharingAction.StartLiveLocationSharing(duration))
+        ChooseLiveDurationBottomSheet.newInstance()
+                .show(requireActivity().supportFragmentManager, "DISPLAY_CHOOSE_DURATION_OPTIONS")
+        //val duration = 30 * 1000L
+        //viewModel.handle(LocationSharingAction.StartLiveLocationSharing(duration))
     }
 
     private fun updateMap(state: LocationSharingViewState) {
