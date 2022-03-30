@@ -869,6 +869,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.getBoolean(SETTINGS_INTERFACE_BUBBLE_KEY, getDefault(R.bool.settings_interface_bubble_default))
     }
 
+    /**
+     * Tells if Presence offline mode is currently enabled or not.
+     *
+     * @return true if offline mode is enabled
+     */
     fun presenceOfflineModeEnabled(): Boolean {
         return  defaultPrefs.getBoolean(SETTINGS_PRESENCE_OFFLINE_MODE, getDefault(R.bool.settings_presence_offline_mode_default))
     }
