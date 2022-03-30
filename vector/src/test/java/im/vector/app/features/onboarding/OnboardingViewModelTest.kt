@@ -227,7 +227,6 @@ class OnboardingViewModelTest {
     @Test
     fun `given personalisation enabled, when registering account, then updates state and emits account created event`() = runTest {
         fakeVectorFeatures.givenPersonalisationEnabled()
-        fakeVectorFeatures.givenLiveLocationSharingEnabled()
         givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationResult.Success(fakeSession))
         givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
         val test = viewModel.test()
@@ -247,7 +246,6 @@ class OnboardingViewModelTest {
     @Test
     fun `given personalisation enabled and registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() = runTest {
         fakeVectorFeatures.givenPersonalisationEnabled()
-        fakeVectorFeatures.givenLiveLocationSharingEnabled()
         givenSuccessfulRegistrationForStartAndDummySteps(missingStages = listOf(Stage.Dummy(mandatory = true)))
         val test = viewModel.test()
 

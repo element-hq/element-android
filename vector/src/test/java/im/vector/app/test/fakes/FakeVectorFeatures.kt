@@ -26,8 +26,4 @@ class FakeVectorFeatures : VectorFeatures by spyk<DefaultVectorFeatures>() {
     fun givenPersonalisationEnabled() {
         every { isOnboardingPersonalizeEnabled() } returns true
     }
-
-    fun givenLiveLocationSharingEnabled() {
-        every { isLiveLocationEnabled() } returns true
-    }
 }
