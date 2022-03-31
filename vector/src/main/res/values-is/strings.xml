@@ -82,7 +82,7 @@
     <string name="send_bug_report_include_logs">Senda atvikaskrá</string>
     <string name="send_bug_report_include_crash_logs">Senda hrunskrár</string>
     <string name="send_bug_report_include_screenshot">Senda skjámynd</string>
-    <string name="send_bug_report">Villuskýrsla</string>
+    <string name="send_bug_report">Tilkynna galla</string>
     <string name="send_bug_report_placeholder">Lýstu vandamálinu þínu hér</string>
     <string name="join_room">Taka þátt í spjallrás</string>
     <string name="username">Notandanafn</string>
@@ -124,7 +124,7 @@
         <item quantity="other">%d meðlimir</item>
     </plurals>
     <string name="room_participants_leave_prompt_title">Fara af spjallrás</string>
-    <string name="room_participants_leave_prompt_msg">Ertu viss um að þú viljir fara úr spjallrásinni\?</string>
+    <string name="room_participants_leave_prompt_msg">Ertu viss um að þú viljir fara út úr spjallrásinni\?</string>
     <string name="room_participants_header_direct_chats">Bein skilaboð</string>
     <string name="room_participants_action_invite">Bjóða</string>
     <string name="room_one_user_is_typing">%s er að skrifa…</string>
@@ -172,7 +172,7 @@
     <string name="devices_delete_dialog_title">Auðkenning</string>
     <string name="settings_logged_in">Skráð inn sem</string>
     <string name="settings_user_interface">Notandaviðmót</string>
-    <string name="settings_interface_language">Tungumál notandaviðmóts</string>
+    <string name="settings_interface_language">Tungumál</string>
     <string name="settings_select_language">Veldu tungumál</string>
     <string name="settings_change_password">Breyta lykilorði</string>
     <string name="settings_old_password">Núverandi lykilorð</string>
@@ -230,7 +230,7 @@
     <string name="notification_noisy">Hávært</string>
     <string name="encrypted_message">Dulrituð skilaboð</string>
     <string name="create">Búa til</string>
-    <string name="group_details_home">Upphafssíða</string>
+    <string name="group_details_home">Forsíða</string>
     <string name="rooms">Spjallrásir</string>
     <string name="reason_colon">Ástæða: %1$s</string>
     <string name="avatar">Auðkennismynd</string>
@@ -575,7 +575,7 @@
     <string name="notice_room_name_removed_by_you">Þú fjarlægðir heiti spjallrásar</string>
     <plurals name="notice_room_server_acl_changes">
         <item quantity="one">Breyting á ACL á %d netþjóni</item>
-        <item quantity="other">Breyting á ACL á %d netþjóni</item>
+        <item quantity="other">Breyting á ACL á %d netþjónum</item>
     </plurals>
     <string name="notice_made_future_direct_room_visibility_by_you">Þú gerðir skilaboð héðan í frá sýnileg fyrir %1$s</string>
     <string name="add_people">Bæta við fólki</string>
@@ -1948,6 +1948,35 @@
     <string name="error_unauthorized">Óheimilt, vantar gild auðkenni sannvottunar</string>
     <string name="login_error_ssl_peer_unverified">SSL-villa: auðkenni jafningjans hefur ekki verið sannreynt.</string>
     <string name="login_error_homeserver_from_url_not_found">Næ ekki að tengjast heimaþjóni á slóðinni %s. Athugaðu slóðina eða veldu heimaþjón handvirkt..</string>
-    <string name="auth_accept_policies">Yfirfarðu reglur þessa heimaþjóns:</string>
+    <string name="auth_accept_policies">Yfirfarðu og samþykktu reglur þessa heimaþjóns:</string>
     <string name="send_bug_report_include_key_share_history">Senda feril beiðna um deilingu lykla</string>
+    <string name="verification_scan_self_emoji_subtitle">Sannprófaðu í staðinn með því að bera saman táknmyndir</string>
+    <string name="space_leave_prompt_msg_only_you">Þú ert eini eintaklingurinn hérna. Ef þú ferð út, mun enginn framar geta tekið þátt, að þér meðtöldum.</string>
+    <string name="auth_invalid_login_deactivated_account">Þessi notandaaðgangur hefur verið gerður óvirkur.</string>
+    <string name="qr_code_scanned_verif_waiting">Bíð eftir %s…</string>
+    <string name="settings_dev_tools">Forritunartól</string>
+    <string name="settings_server_room_versions">Útgáfur spjallrása 👓</string>
+    <string name="settings_active_sessions_manage">Sýsla með setur</string>
+    <string name="settings_active_sessions_show_all">Birta allar setur</string>
+    <string name="settings_category_composer">Skilaboðaritill</string>
+    <string name="room_profile_leaving_room">Yfirgef spjallrásina…</string>
+    <string name="room_profile_section_restore_security">Endurheimta dulritun</string>
+    <string name="verification_request_waiting_for">Bíð eftir %s…</string>
+    <string name="verification_verified_user">Sannreyndi %s</string>
+    <string name="verification_verify_user">Sannprófa %s</string>
+    <string name="verification_no_scan_emoji_title">Sannprófaðu með því að bera saman táknmyndir</string>
+    <string name="verification_scan_emoji_title">Get ekki skannað</string>
+    <string name="verification_request">Beiðni um sannvottun</string>
+    <string name="verification_sent">Sannvottun send</string>
+    <string name="verification_request_other_accepted">%s samþykkti</string>
+    <string name="verification_request_other_cancelled">%s hætti við</string>
+    <string name="sent_verification_conclusion">Niðurstaða sannvottunar</string>
+    <string name="sent_a_reaction">Brást við með: %s</string>
+    <string name="create_room_in_progress">Bý til spjallrás…</string>
+    <string name="rageshake_detected">Hristingur fannst!</string>
+    <string name="signed_out_submit">Skráðu þig inn aftur</string>
+    <string name="settings_discovery_consent_title">Senda tölvupóstföng og símanúmer</string>
+    <string name="secure_backup_banner_setup_line2">Tryggðu þig gegn því að missa aðgang að dulrituðum skilaboðum og gögnum</string>
+    <string name="settings_secure_backup_section_info">Tryggðu þig gegn því að missa aðgang að dulrituðum skilaboðum og gögnum með því að taka öryggisafrit af dulritunarlyklunum á netþjóninum þinum.</string>
+    <string name="threads_notice_migration_title">Spjallþræðir í bráðlegri Beta-útgáfu 🎉</string>
 </resources>
