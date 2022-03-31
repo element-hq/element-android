@@ -16,10 +16,15 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
+import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.session.profile.ProfileService
+import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
+import org.matrix.android.sdk.internal.session.user.UserEntityFactory
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import javax.inject.Inject
@@ -27,11 +32,14 @@ import javax.inject.Inject
 internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
-        private val updateUserAccountDataTask: UpdateUserAccountDataTask
+        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+        private val profileService: ProfileService,
+        @SessionDatabase private val monarchy: Monarchy,
 ) {
-    suspend fun handle(synResHaResponsePostTreatmentAggregator: SyncResponsePostTreatmentAggregator) {
-        cleanupEphemeralFiles(synResHaResponsePostTreatmentAggregator.ephemeralFilesToDelete)
-        updateDirectUserIds(synResHaResponsePostTreatmentAggregator.directChatsToCheck)
+    suspend fun handle(aggregator: SyncResponsePostTreatmentAggregator) {
+        cleanupEphemeralFiles(aggregator.ephemeralFilesToDelete)
+        updateDirectUserIds(aggregator.directChatsToCheck)
+        fetchAndUpdateUsers(aggregator.usersToFetch)
     }
 
     private fun cleanupEphemeralFiles(ephemeralFilesToDelete: List<String>) {
@@ -67,5 +75,28 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         if (hasUpdate) {
             updateUserAccountDataTask.execute(UpdateUserAccountDataTask.DirectChatParams(directMessages = directChats))
         }
+    }
+
+    private suspend fun fetchAndUpdateUsers(usersToFetch: MutableList<String>) {
+        val userProfiles = fetchUsers(usersToFetch)
+        userProfiles.forEach { saveUserLocally(monarchy, it) }
+        usersToFetch.clear()
+    }
+
+    private fun saveUserLocally(monarchy: Monarchy, userItem: MatrixItem.UserItem) {
+        val userEntity = UserEntityFactory.create(userItem)
+        monarchy.doWithRealm {
+            it.insertOrUpdate(userEntity)
+        }
+    }
+
+    private suspend fun fetchUsers(usersToFetch: MutableList<String>) = usersToFetch.map {
+        val profileJson = profileService.getProfile(it)
+
+        MatrixItem.UserItem(
+                id = it,
+                displayName = profileJson[ProfileService.DISPLAY_NAME_KEY] as? String,
+                avatarUrl = profileJson[ProfileService.AVATAR_URL_KEY] as? String
+        )
     }
 }

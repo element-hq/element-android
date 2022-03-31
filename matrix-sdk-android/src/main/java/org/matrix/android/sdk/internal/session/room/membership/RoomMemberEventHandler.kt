@@ -33,27 +33,31 @@ internal class RoomMemberEventHandler @Inject constructor(
         @UserId private val myUserId: String
 ) {
 
-    fun handle(realm: Realm,
-               roomId: String,
-               event: Event,
-               aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
+    fun handleInitialSync(realm: Realm,
+                          roomId: String,
+                          currentUserId: String,
+                          event: Event,
+                          aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
         if (event.type != EventType.STATE_ROOM_MEMBER) {
             return false
         }
         val roomMember = event.getFixedRoomMemberContent() ?: return false
-        val userId = event.stateKey ?: return false
+        val eventUserId = event.stateKey ?: return false
 
-        return handle(realm, roomId, userId, roomMember, event.resolvedPrevContent(), aggregator)
+        return handleInitialSync(realm, roomId, currentUserId, eventUserId, roomMember, aggregator)
     }
 
-    private fun handle(realm: Realm,
-                       roomId: String,
-                       userId: String,
-                       roomMember: RoomMemberContent,
-                       prevContent: Map<String, Any>?,
-                       aggregator: SyncResponsePostTreatmentAggregator?): Boolean {
-        saveRoomMemberEntityLocally(realm, roomId, userId, roomMember)
-        saveUserEntityLocallyIfNecessary(realm, userId, roomMember, prevContent)
+    private fun handleInitialSync(realm: Realm,
+                                  roomId: String,
+                                  currentUserId: String,
+                                  eventUserId: String,
+                                  roomMember: RoomMemberContent,
+                                  aggregator: SyncResponsePostTreatmentAggregator?): Boolean {
+        if (currentUserId != eventUserId) {
+            saveRoomMemberEntityLocally(realm, roomId, eventUserId, roomMember)
+            saveUserEntityLocallyIfNecessary(realm, eventUserId, roomMember)
+        }
+
         updateDirectChatsIfNecessary(roomId, roomMember, aggregator)
         return true
     }
@@ -72,15 +76,18 @@ internal class RoomMemberEventHandler @Inject constructor(
         realm.insertOrUpdate(roomMemberEntity)
     }
 
+    /**
+     * Get the already existing presence state for a specific user & room in order NOT to be replaced in RoomMemberSummaryEntity
+     * by NULL value.
+     */
+    private fun getExistingPresenceState(realm: Realm, roomId: String, userId: String): UserPresenceEntity? {
+        return RoomMemberSummaryEntity.where(realm, roomId, userId).findFirst()?.userPresenceEntity
+    }
+
     private fun saveUserEntityLocallyIfNecessary(realm: Realm,
                                                  userId: String,
-                                                 roomMember: RoomMemberContent,
-                                                 prevContent: Map<String, Any>?) {
-        val previousDisplayName = prevContent?.get("displayname")
-        val shouldLocallySaveUser = roomMember.membership.isActive() &&
-                (previousDisplayName == null || previousDisplayName == roomMember.displayName)
-
-        if (shouldLocallySaveUser) {
+                                                 roomMember: RoomMemberContent) {
+        if (roomMember.membership.isActive()) {
             saveUserLocally(realm, userId, roomMember)
         }
     }
@@ -101,12 +108,38 @@ internal class RoomMemberEventHandler @Inject constructor(
         }
     }
 
-    /**
-     * Get the already existing presence state for a specific user & room in order NOT to be replaced in RoomMemberSummaryEntity
-     * by NULL value.
-     */
+    fun handleIncrementalSync(roomId: String,
+                              event: Event,
+                              aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
+        if (event.type != EventType.STATE_ROOM_MEMBER) {
+            return false
+        }
+        val roomMember = event.getFixedRoomMemberContent() ?: return false
+        val eventUserId = event.stateKey ?: return false
 
-    private fun getExistingPresenceState(realm: Realm, roomId: String, userId: String): UserPresenceEntity? {
-        return RoomMemberSummaryEntity.where(realm, roomId, userId).findFirst()?.userPresenceEntity
+        return handleIncrementalSync(roomId, eventUserId, roomMember, event.resolvedPrevContent(), aggregator)
+    }
+
+    private fun handleIncrementalSync(roomId: String,
+                                      eventUserId: String,
+                                      roomMember: RoomMemberContent,
+                                      prevContent: Map<String, Any>?,
+                                      aggregator: SyncResponsePostTreatmentAggregator?): Boolean {
+        val previousDisplayName = prevContent?.get("displayname")
+        val previousAvatar = prevContent?.get("avatar_url")
+
+        if (previousDisplayName.isDifferentFrom(roomMember.displayName) ||
+                previousAvatar.isDifferentFrom(roomMember.avatarUrl)) {
+                    aggregator?.usersToFetch?.add(eventUserId)
+        }
+
+        // At the end of the sync, fetch all the profiles from the aggregator
+        updateDirectChatsIfNecessary(roomId, roomMember, aggregator)
+        return true
+    }
+
+    private fun Any?.isDifferentFrom(value: Any?) = when {
+        this == null || this == value -> false
+        else                  -> true
     }
 }
