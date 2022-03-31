@@ -69,16 +69,16 @@ import org.matrix.android.sdk.flow.unwrap
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
  */
-class MessageActionsViewModel @AssistedInject constructor(@Assisted
-                                                          private val initialState: MessageActionState,
-                                                          private val eventHtmlRenderer: Lazy<EventHtmlRenderer>,
-                                                          private val htmlCompressor: VectorHtmlCompressor,
-                                                          private val session: Session,
-                                                          private val noticeEventFormatter: NoticeEventFormatter,
-                                                          private val errorFormatter: ErrorFormatter,
-                                                          private val stringProvider: StringProvider,
-                                                          private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-                                                          private val vectorPreferences: VectorPreferences
+class MessageActionsViewModel @AssistedInject constructor(
+        @Assisted private val initialState: MessageActionState,
+        private val eventHtmlRenderer: Lazy<EventHtmlRenderer>,
+        private val htmlCompressor: VectorHtmlCompressor,
+        private val session: Session,
+        private val noticeEventFormatter: NoticeEventFormatter,
+        private val errorFormatter: ErrorFormatter,
+        private val stringProvider: StringProvider,
+        private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
+        private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val informationData = initialState.informationData

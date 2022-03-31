@@ -1041,7 +1041,8 @@
     <string name="media_source_choose">Choose</string>
     <string name="settings_play_shutter_sound">Play shutter sound</string>
 
-    <string name="settings_flair">Flair</string>
+    <!-- TODO Remove -->
+    <string name="settings_flair" tools:ignore="MissingTranslation">Flair</string>
 
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>

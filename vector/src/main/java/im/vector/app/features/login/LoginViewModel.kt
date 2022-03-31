@@ -275,7 +275,7 @@ class LoginViewModel @AssistedInject constructor(
                            code = MatrixError.FORBIDDEN,
                            message = "Registration is disabled"
                    ), 403))
-                */
+                 */
             } catch (failure: Throwable) {
                 if (failure !is CancellationException) {
                     _viewEvents.post(LoginViewEvents.Failure(failure))
