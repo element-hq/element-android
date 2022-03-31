@@ -244,7 +244,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 if (isInitialSync) {
                     roomMemberEventHandler.handleInitialSync(realm, roomId, userId, event, aggregator)
                 } else {
-                    roomMemberEventHandler.handleIncrementalSync(roomId, event, aggregator)
+                    roomMemberEventHandler.handleIncrementalSync(realm, roomId, event, aggregator)
                 }
             }
         }
@@ -303,7 +303,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 if (isInitialSync) {
                     roomMemberEventHandler.handleInitialSync(realm, roomId, userId, event)
                 } else {
-                    roomMemberEventHandler.handleIncrementalSync(roomId, event)
+                    roomMemberEventHandler.handleIncrementalSync(realm, roomId, event)
                 }
             }
         }
@@ -335,7 +335,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             if (isInitialSync) {
                 roomMemberEventHandler.handleInitialSync(realm, roomId, userId, event)
             } else {
-                roomMemberEventHandler.handleIncrementalSync(roomId, event)
+                roomMemberEventHandler.handleIncrementalSync(realm, roomId, event)
             }
         }
         for (event in roomSync.timeline?.events.orEmpty()) {
@@ -353,7 +353,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     if (isInitialSync) {
                         roomMemberEventHandler.handleInitialSync(realm, roomEntity.roomId, userId, event)
                     } else {
-                        roomMemberEventHandler.handleIncrementalSync(roomEntity.roomId, event)
+                        roomMemberEventHandler.handleIncrementalSync(realm, roomEntity.roomId, event)
                     }
                 }
             }
@@ -425,7 +425,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     if (isInitialSync) {
                         roomMemberEventHandler.handleInitialSync(realm, roomEntity.roomId, userId, event, aggregator)
                     } else {
-                        roomMemberEventHandler.handleIncrementalSync(roomEntity.roomId, event, aggregator)
+                        roomMemberEventHandler.handleIncrementalSync(realm, roomEntity.roomId, event, aggregator)
                     }
                 }
             }

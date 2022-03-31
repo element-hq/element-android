@@ -108,7 +108,8 @@ internal class RoomMemberEventHandler @Inject constructor(
         }
     }
 
-    fun handleIncrementalSync(roomId: String,
+    fun handleIncrementalSync(realm: Realm,
+                              roomId: String,
                               event: Event,
                               aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
         if (event.type != EventType.STATE_ROOM_MEMBER) {
@@ -117,10 +118,18 @@ internal class RoomMemberEventHandler @Inject constructor(
         val roomMember = event.getFixedRoomMemberContent() ?: return false
         val eventUserId = event.stateKey ?: return false
 
-        return handleIncrementalSync(roomId, eventUserId, roomMember, event.resolvedPrevContent(), aggregator)
+        return handleIncrementalSync(
+                realm,
+                roomId,
+                eventUserId,
+                roomMember,
+                event.resolvedPrevContent(),
+                aggregator
+        )
     }
 
-    private fun handleIncrementalSync(roomId: String,
+    private fun handleIncrementalSync(realm: Realm,
+                                      roomId: String,
                                       eventUserId: String,
                                       roomMember: RoomMemberContent,
                                       prevContent: Map<String, Any>?,
@@ -130,9 +139,10 @@ internal class RoomMemberEventHandler @Inject constructor(
 
         if (previousDisplayName.isDifferentFrom(roomMember.displayName) ||
                 previousAvatar.isDifferentFrom(roomMember.avatarUrl)) {
-                    aggregator?.usersToFetch?.add(eventUserId)
+            aggregator?.usersToFetch?.add(eventUserId)
         }
 
+        saveRoomMemberEntityLocally(realm, roomId, eventUserId, roomMember)
         // At the end of the sync, fetch all the profiles from the aggregator
         updateDirectChatsIfNecessary(roomId, roomMember, aggregator)
         return true
@@ -140,6 +150,6 @@ internal class RoomMemberEventHandler @Inject constructor(
 
     private fun Any?.isDifferentFrom(value: Any?) = when {
         this == null || this == value -> false
-        else                  -> true
+        else                          -> true
     }
 }
