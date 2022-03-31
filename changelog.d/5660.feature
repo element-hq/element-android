@@ -1,0 +1,1 @@
+Show a banner in timeline while location sharing service is running
