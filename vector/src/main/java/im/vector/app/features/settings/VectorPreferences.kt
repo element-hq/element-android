@@ -875,7 +875,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true if user should always appear offline
      */
     fun userAlwaysAppearsOffline(): Boolean {
-        return  defaultPrefs.getBoolean(SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE, getDefault(R.bool.settings_presence_user_always_appears_offline_default))
+        return  defaultPrefs.getBoolean(SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE,
+                getDefault(R.bool.settings_presence_user_always_appears_offline_default))
     }
 
     /**
