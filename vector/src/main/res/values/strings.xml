@@ -1051,8 +1051,8 @@
 
     <!-- Presence settings -->
     <string name="settings_presence">Presence</string>
-    <string name="settings_presence_offline_mode">Offline mode</string>
-    <string name="settings_presence_offline_mode_summary">If enabled, this client won\'t send presence online status on sync</string>
+    <string name="settings_presence_user_always_appears_offline">Offline mode</string>
+    <string name="settings_presence_user_always_appears_offline_summary">If enabled, you will always appear offline to other users, even when using the application.</string>
 
     <!-- Room Settings -->
 

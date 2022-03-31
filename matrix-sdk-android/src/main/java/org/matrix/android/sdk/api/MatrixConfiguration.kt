@@ -65,10 +65,6 @@ data class MatrixConfiguration(
          * Thread messages default enable/disabled value
          */
         val threadMessagesEnabledDefault: Boolean = false,
-        /**
-         * Presence offline mode default enabled/disabled value
-         */
-        val presenceOfflineModeEnabledDefault: Boolean = false,
 ) {
 
     /**

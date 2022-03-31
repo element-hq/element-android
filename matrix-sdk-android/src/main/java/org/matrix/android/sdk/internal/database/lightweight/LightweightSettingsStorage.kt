@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import javax.inject.Inject
 
 /**
@@ -45,12 +46,29 @@ class LightweightSettingsStorage  @Inject constructor(
         return sdkDefaultPrefs.getBoolean(MATRIX_SDK_SETTINGS_THREAD_MESSAGES_ENABLED, matrixConfiguration.threadMessagesEnabledDefault)
     }
 
-    fun getPresenceOfflineModeEnabled(): Boolean {
-        return sdkDefaultPrefs.getBoolean(MATRIX_SDK_SETTINGS_PRESENCE_OFFLINE_MODE_ENABLED, matrixConfiguration.presenceOfflineModeEnabledDefault)
+    /**
+     * Set the presence status sent on syncs when the application is in foreground.
+     *
+     * @param presence the presence status that should be sent on sync
+     */
+    internal fun setSyncPresenceStatus(presence: SyncPresence) {
+        sdkDefaultPrefs.edit {
+            putString(MATRIX_SDK_SETTINGS_FOREGROUND_PRESENCE_STATUS, presence.value)
+        }
+    }
+
+    /**
+     * Get the presence status that should be sent on syncs when the application is in foreground.
+     *
+     * @return the presence status that should be sent on sync
+     */
+    internal fun getSyncPresenceStatus(): SyncPresence {
+        val presenceString = sdkDefaultPrefs.getString(MATRIX_SDK_SETTINGS_FOREGROUND_PRESENCE_STATUS, SyncPresence.Online.value)
+        return SyncPresence.from(presenceString) ?: SyncPresence.Online
     }
 
     companion object {
         const val MATRIX_SDK_SETTINGS_THREAD_MESSAGES_ENABLED = "MATRIX_SDK_SETTINGS_THREAD_MESSAGES_ENABLED"
-        const val MATRIX_SDK_SETTINGS_PRESENCE_OFFLINE_MODE_ENABLED = "MATRIX_SDK_SETTINGS_PRESENCE_OFFLINE_MODE_ENABLED"
+        private const val MATRIX_SDK_SETTINGS_FOREGROUND_PRESENCE_STATUS = "MATRIX_SDK_SETTINGS_FOREGROUND_PRESENCE_STATUS"
     }
 }

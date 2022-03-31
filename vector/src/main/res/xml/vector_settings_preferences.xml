@@ -203,10 +203,10 @@
         app:isPreferenceVisible="@bool/settings_presence_visible">
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:title="@string/settings_presence_offline_mode"
-            android:summary="@string/settings_presence_offline_mode_summary"
-            android:key="MATRIX_SDK_SETTINGS_PRESENCE_OFFLINE_MODE_ENABLED"
-            android:defaultValue="@bool/settings_presence_offline_mode_default" />
+            android:title="@string/settings_presence_user_always_appears_offline"
+            android:summary="@string/settings_presence_user_always_appears_offline_summary"
+            android:key="SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE"
+            android:defaultValue="@bool/settings_presence_user_always_appears_offline_default" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
