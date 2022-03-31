@@ -40,12 +40,6 @@ data class OnboardingViewState(
         val signMode: SignMode = SignMode.Unknown,
         @PersistState
         val resetPasswordEmail: String? = null,
-        @PersistState
-        val homeServerUrlFromUser: String? = null,
-
-        // Can be modified after a Wellknown request
-        @PersistState
-        val homeServerUrl: String? = null,
 
         // For SSO session recovery
         @PersistState
@@ -61,6 +55,9 @@ data class OnboardingViewState(
         val isForceLoginFallbackEnabled: Boolean = false,
 
         @PersistState
+        val serverSelectionState: ServerSelectionState = ServerSelectionState(),
+
+        @PersistState
         val personalizationState: PersonalizationState = PersonalizationState()
 ) : MavericksState
 
@@ -69,6 +66,13 @@ enum class OnboardingFlow {
     SignUp,
     SignInSignUp
 }
+
+@Parcelize
+data class ServerSelectionState(
+        val description: String? = null,
+        val userUrlInput: String? = null,
+        val hostedUrl: String? = null,
+) : Parcelable
 
 @Parcelize
 data class PersonalizationState(

@@ -291,21 +291,20 @@ class OnboardingViewModel @AssistedInject constructor(
         currentJob = null
 
         when (action) {
-            OnboardingAction.ResetHomeServerType -> {
+            OnboardingAction.ResetHomeServerType        -> {
                 setState {
                     copy(
                             serverType = ServerType.Unknown
                     )
                 }
             }
-            OnboardingAction.ResetHomeServerUrl  -> {
+            OnboardingAction.ResetHomeServerUrl         -> {
                 viewModelScope.launch {
                     authenticationService.reset()
                     setState {
                         copy(
                                 isLoading = false,
-                                homeServerUrlFromUser = null,
-                                homeServerUrl = null,
+                                serverSelectionState = ServerSelectionState(),
                                 loginMode = LoginMode.Unknown,
                                 serverType = ServerType.Unknown,
                                 loginModeSupportedTypes = emptyList()
@@ -571,7 +570,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleWebLoginSuccess(action: OnboardingAction.WebLoginSuccess) = withState { state ->
-        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(state.homeServerUrl)
+        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(state.serverSelectionState.hostedUrl)
 
         if (homeServerConnectionConfigFinal == null) {
             // Should not happen
@@ -647,11 +646,19 @@ class OnboardingViewModel @AssistedInject constructor(
                 else                                                               -> LoginMode.Unsupported
             }
 
+            val serverSelection = ServerSelectionState(
+                    description = when (data.homeServerUrl) {
+                        matrixOrgUrl -> stringProvider.getString(R.string.ftue_auth_create_account_matrix_dot_org_server_description)
+                        else         -> null
+                    },
+                    userUrlInput = homeServerConnectionConfig.homeServerUri.toString(),
+                    hostedUrl = data.homeServerUrl
+            )
+
             setState {
                 copy(
                         isLoading = false,
-                        homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
-                        homeServerUrl = data.homeServerUrl,
+                        serverSelectionState = serverSelection,
                         loginMode = loginMode,
                         loginModeSupportedTypes = data.supportedLoginTypes.toList()
                 )

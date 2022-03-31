@@ -40,6 +40,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
 import im.vector.app.core.extensions.toMvRxBundle
+import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueSignUpCombinedBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
@@ -173,6 +174,9 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
     override fun updateWithState(state: OnboardingViewState) {
         setupUi(state)
         setupAutoFill()
+
+        views.selectedServerName.text = state.serverSelectionState.userUrlInput.toReducedUrl()
+        views.selectedServerDescription.text = state.serverSelectionState.description
 
         if (state.isLoading) {
             // Ensure password is hidden
