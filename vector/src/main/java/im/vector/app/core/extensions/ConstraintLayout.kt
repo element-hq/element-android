@@ -31,6 +31,11 @@ fun ConstraintLayout.updateConstraintSet(block: (ConstraintSet) -> Unit) {
     }
 }
 
+/**
+ * Helper to recalculate all ConstraintLayout child views with percentage based height against the parent's height.
+ * This is helpful when using a ConstraintLayout within a ScrollView as any percentages will use the total scrolling size
+ * instead of the viewport/ScrollView height
+ */
 fun ConstraintLayout.realignPercentagesToParent() {
     doOnLayout {
         val rootHeight = (parent as View).height
