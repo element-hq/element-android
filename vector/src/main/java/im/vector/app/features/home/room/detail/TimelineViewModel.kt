@@ -1229,6 +1229,8 @@ class TimelineViewModel @AssistedInject constructor(
 
     override fun onLocationServiceStopped() {
         _viewEvents.post(RoomDetailViewEvents.HideLocationSharingIndicator)
+        // Bind again in case user decides to share live location without leaving the room
+        locationSharingServiceConnection.bind(this)
     }
 
     override fun onCleared() {
