@@ -138,7 +138,7 @@ class FtueAuthVariant(
                         handleRegistrationNavigation(viewEvents.flowResult)
                     } else {
                         if (vectorFeatures.isOnboardingCombinedChooseServerEnabled()) {
-                            openCombinedSelectionSignUp()
+                            openCombinedRegister()
                         } else {
                             // First ask for login and password
                             // I add a tag to indicate that this fragment is a registration stage.
@@ -225,7 +225,7 @@ class FtueAuthVariant(
                         FtueAuthUseCaseFragment::class.java,
                         option = commonOption)
             }
-            OnboardingViewEvents.OpenCombinedServerSelection                   -> openCombinedSelectionSignUp()
+            OnboardingViewEvents.OpenCombinedRegister                          -> openCombinedRegister()
             is OnboardingViewEvents.OnAccountCreated                           -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
             OnboardingViewEvents.OnChooseDisplayName                           -> onChooseDisplayName()
@@ -236,10 +236,11 @@ class FtueAuthVariant(
         }
     }
 
-    private fun openCombinedSelectionSignUp() {
+    private fun openCombinedRegister() {
         activity.addFragmentToBackstack(
                 views.loginFragmentContainer,
-                FtueAuthCombinedSignUpFragment::class.java,
+                FtueAuthCombinedRegisterFragment::class.java,
+                tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                 option = commonOption
         )
     }

@@ -55,7 +55,7 @@ import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import javax.inject.Inject
 
-class FtueAuthCombinedSignUpFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueSignUpCombinedBinding>() {
+class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueSignUpCombinedBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSignUpCombinedBinding {
         return FragmentFtueSignUpCombinedBinding.inflate(inflater, container, false)

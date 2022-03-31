@@ -360,7 +360,7 @@ class OnboardingViewModel @AssistedInject constructor(
         when (vectorFeatures.isOnboardingCombinedChooseServerEnabled()) {
             true  -> {
                 handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
-                OnboardingViewEvents.OpenCombinedServerSelection
+                OnboardingViewEvents.OpenCombinedRegister
             }
             false -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
         }
