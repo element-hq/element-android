@@ -76,8 +76,8 @@ interface RegistrationWizard {
     suspend fun dummy(): RegistrationResult
 
     /**
-     * Perform custom registration stage by sending a custom JsonDict
-     * with included current registration "session" param.
+     * Perform custom registration stage by sending a custom JsonDict.
+     * Current registration "session" param will be included into authParams by default.
      * The authParams should contain at least one entry "type" with a String value.
      */
     suspend fun registrationCustom(authParams: JsonDict): RegistrationResult
@@ -119,10 +119,4 @@ interface RegistrationWizard {
      * called successfully.
      */
     val isRegistrationStarted: Boolean
-
-    /**
-     * This is a session identifier that the client must pass back to the homeserver,
-     * if one is provided, in subsequent attempts to authenticate in the same API call.
-     */
-    val currentRegistrationSessionId: String?
 }
