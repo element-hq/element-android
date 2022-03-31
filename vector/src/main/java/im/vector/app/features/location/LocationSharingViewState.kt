@@ -19,7 +19,6 @@ package im.vector.app.features.location
 import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
 import com.airbnb.mvrx.MavericksState
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -32,7 +31,6 @@ enum class LocationSharingMode(@StringRes val titleRes: Int) {
 data class LocationSharingViewState(
         val roomId: String,
         val mode: LocationSharingMode,
-        val isLiveLocationSharingEnabled: Boolean,
         val userItem: MatrixItem.UserItem? = null,
         val areTargetAndUserLocationEqual: Boolean? = null,
         val lastKnownUserLocation: LocationData? = null,
@@ -42,7 +40,6 @@ data class LocationSharingViewState(
     constructor(locationSharingArgs: LocationSharingArgs) : this(
             roomId = locationSharingArgs.roomId,
             mode = locationSharingArgs.mode,
-            isLiveLocationSharingEnabled = BuildConfig.ENABLE_LIVE_LOCATION_SHARING
     )
 }
 

@@ -36,6 +36,7 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentLocationSharingBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.location.option.LocationSharingOption
@@ -49,7 +50,8 @@ import javax.inject.Inject
 class LocationSharingFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val matrixItemColorProvider: MatrixItemColorProvider
+        private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val vectorFeatures: VectorFeatures,
 ) : VectorBaseFragment<FragmentLocationSharingBinding>(), LocationTargetChangeListener {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
@@ -242,7 +244,7 @@ class LocationSharingFragment @Inject constructor(
         // first, update the options view
         val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
             true  -> {
-                if (state.isLiveLocationSharingEnabled) {
+                if (vectorFeatures.isLiveLocationEnabled()) {
                     setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
                 } else {
                     setOf(LocationSharingOption.USER_CURRENT)
