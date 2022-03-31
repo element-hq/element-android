@@ -54,6 +54,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                         key = DebugFeatureKeys.onboardingPersonalize,
                         factory = VectorFeatures::isOnboardingPersonalizeEnabled
                 ),
+                createBooleanFeature(
+                        label = "Live location sharing",
+                        key = DebugFeatureKeys.liveLocationSharing,
+                        factory = VectorFeatures::isLiveLocationEnabled
+                ),
         ))
     }
 

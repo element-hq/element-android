@@ -48,7 +48,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         private val locationTracker: LocationTracker,
         private val locationPinProvider: LocationPinProvider,
         private val session: Session,
-        private val compareLocationsUseCase: CompareLocationsUseCase
+        private val compareLocationsUseCase: CompareLocationsUseCase,
 ) : VectorViewModel<LocationSharingViewState, LocationSharingAction, LocationSharingViewEvents>(initialState), LocationTracker.Callback {
 
     private val room = session.getRoom(initialState.roomId)!!
