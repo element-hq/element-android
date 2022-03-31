@@ -18,6 +18,7 @@ package im.vector.app.core.extensions
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ImageSpan
@@ -31,6 +32,7 @@ import androidx.datastore.preferences.core.Preferences
 import dagger.hilt.EntryPoints
 import im.vector.app.core.datastore.dataStoreProvider
 import im.vector.app.core.di.SingletonEntryPoint
+import java.io.OutputStream
 import kotlin.math.roundToInt
 
 fun Context.singletonEntryPoint(): SingletonEntryPoint {
@@ -68,3 +70,10 @@ private fun Float.toAndroidAlpha(): Int {
 }
 
 val Context.dataStoreProvider: (String) -> DataStore<Preferences> by dataStoreProvider()
+
+/**
+ * Open Uri in truncate mode to make sure we don't partially overwrite content when we get passed a Uri to an existing file.
+ */
+fun Context.safeOpenOutputStream(uri: Uri): OutputStream? {
+    return contentResolver.openOutputStream(uri, "wt")
+}

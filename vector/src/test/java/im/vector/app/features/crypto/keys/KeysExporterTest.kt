@@ -53,7 +53,7 @@ class KeysExporterTest {
     @Test
     fun `when exporting then writes exported keys to context output stream`() {
         givenFileDescriptorWithSize(size = A_ROOM_KEYS_EXPORT.size.toLong())
-        val outputStream = context.givenOutputStreamFor(A_URI)
+        val outputStream = context.givenSafeOutputStreamFor(A_URI)
 
         runTest { keysExporter.export(A_PASSWORD, A_URI) }
 
@@ -63,7 +63,7 @@ class KeysExporterTest {
     @Test
     fun `given different file size returned for export when exporting then throws UnexpectedExportKeysFileSizeException`() {
         givenFileDescriptorWithSize(size = 110)
-        context.givenOutputStreamFor(A_URI)
+        context.givenSafeOutputStreamFor(A_URI)
 
         assertFailsWith<UnexpectedExportKeysFileSizeException> {
             runTest { keysExporter.export(A_PASSWORD, A_URI) }
@@ -72,7 +72,7 @@ class KeysExporterTest {
 
     @Test
     fun `given output stream is unavailable for exporting to when exporting then throws IllegalStateException`() {
-        context.givenMissingOutputStreamFor(A_URI)
+        context.givenMissingSafeOutputStreamFor(A_URI)
 
         assertFailsWith<IllegalStateException>(message = "Unable to open file for writing") {
             runTest { keysExporter.export(A_PASSWORD, A_URI) }
@@ -82,7 +82,7 @@ class KeysExporterTest {
     @Test
     fun `given exported file is missing after export when exporting then throws IllegalStateException`() {
         context.givenFileDescriptor(A_URI, mode = "r") { null }
-        context.givenOutputStreamFor(A_URI)
+        context.givenSafeOutputStreamFor(A_URI)
 
         assertFailsWith<IllegalStateException>(message = "Exported file not found") {
             runTest { keysExporter.export(A_PASSWORD, A_URI) }
