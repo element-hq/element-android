@@ -83,8 +83,4 @@ class ChooseLiveDurationBottomSheet :
             return bottomSheet
         }
     }
-
-    interface DurationChoiceListener {
-        fun onDurationChoice(durationMillis: Long)
-    }
 }
