@@ -46,6 +46,7 @@
             android:layout_gravity="center_vertical"
             android:indeterminate="true"
             android:visibility="gone"
+            tools:ignore="NegativeMargin"
             android:layout_marginTop="-6dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
