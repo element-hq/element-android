@@ -107,7 +107,7 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
                 error++
             }
             if (state.isNumericOnlyUserIdForbidden() && login.isDigitsOnly()) {
-                views.createAccountInput.error = "The homeserver does not accept username with only digits."
+                views.createAccountInput.error = getString(R.string.error_forbidden_digits_only_username)
                 error++
             }
             if (password.isEmpty()) {
