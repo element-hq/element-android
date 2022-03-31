@@ -233,6 +233,13 @@ class FtueAuthVariant(
             OnboardingViewEvents.OnChooseProfilePicture                        -> onChooseProfilePicture()
             OnboardingViewEvents.OnPersonalizationComplete                     -> onPersonalizationComplete()
             OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
+            OnboardingViewEvents.EditServerSelection                           -> {
+                activity.addFragmentToBackstack(
+                        views.loginFragmentContainer,
+                        FtueAuthCombinedServerSelectionFragment::class.java,
+                        option = commonOption
+                )
+            }
         }
     }
 

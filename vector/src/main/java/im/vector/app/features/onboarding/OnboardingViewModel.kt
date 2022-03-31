@@ -646,19 +646,17 @@ class OnboardingViewModel @AssistedInject constructor(
                 else                                                               -> LoginMode.Unsupported
             }
 
-            val serverSelection = ServerSelectionState(
-                    description = when (data.homeServerUrl) {
-                        matrixOrgUrl -> stringProvider.getString(R.string.ftue_auth_create_account_matrix_dot_org_server_description)
-                        else         -> null
-                    },
-                    userUrlInput = homeServerConnectionConfig.homeServerUri.toString(),
-                    hostedUrl = data.homeServerUrl
-            )
-
             setState {
                 copy(
+                        serverSelectionState = serverSelectionState.copy(
+                                description = when (data.homeServerUrl) {
+                                    matrixOrgUrl -> stringProvider.getString(R.string.ftue_auth_create_account_matrix_dot_org_server_description)
+                                    else         -> null
+                                },
+                                userUrlInput = homeServerConnectionConfig.homeServerUri.toString(),
+                                hostedUrl = data.homeServerUrl
+                        ),
                         isLoading = false,
-                        serverSelectionState = serverSelection,
                         loginMode = loginMode,
                         loginModeSupportedTypes = data.supportedLoginTypes.toList()
                 )

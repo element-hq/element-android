@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.realignPercentagesToParent
 import im.vector.app.core.extensions.toReducedUrl
@@ -29,7 +30,7 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import javax.inject.Inject
 
-class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueServerSelectionCombinedBinding>() {
+class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueServerSelectionCombinedBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueServerSelectionCombinedBinding {
         return FragmentFtueServerSelectionCombinedBinding.inflate(inflater, container, false)
@@ -41,6 +42,10 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractSS
 
         views.chooseServerToolbar.setNavigationOnClickListener {
             viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnBack))
+        }
+
+        views.chooseServerSubmit.debouncedClicks {
+            viewModel.handle(OnboardingAction.UpdateHomeServer(views.chooseServerInput.content()))
         }
     }
 
