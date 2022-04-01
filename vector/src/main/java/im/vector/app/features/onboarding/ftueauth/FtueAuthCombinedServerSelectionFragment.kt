@@ -54,7 +54,7 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        val userUrlInput = state.serverSelectionState.userUrlInput?.toReducedUrlKeepingSchemaIfInsecure()
+        val userUrlInput = state.selectedHomeserver.sourceUrl?.toReducedUrlKeepingSchemaIfInsecure()
         views.chooseServerInput.editText().setText(userUrlInput)
     }
 

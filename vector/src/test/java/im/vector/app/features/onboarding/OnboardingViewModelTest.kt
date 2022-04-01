@@ -392,6 +392,7 @@ class OnboardingViewModelTest {
                 fakeUriFilenameResolver.instance,
                 fakeRegisterActionHandler.instance,
                 fakeDirectLoginUseCase.instance,
+                StartAuthenticationFlowUseCase(fakeAuthenticationService, FakeStringProvider().instance),
                 FakeVectorOverrides()
         )
     }

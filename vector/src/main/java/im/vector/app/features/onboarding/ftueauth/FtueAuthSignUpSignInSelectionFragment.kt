@@ -60,27 +60,27 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
             ServerType.MatrixOrg -> {
                 views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
                 views.loginSignupSigninServerIcon.isVisible = true
-                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.serverSelectionState.userUrlInput.toReducedUrl())
+                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.selectedHomeserver.sourceUrl.toReducedUrl())
                 views.loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.EMS       -> {
                 views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                 views.loginSignupSigninServerIcon.isVisible = true
                 views.loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
-                views.loginSignupSigninText.text = state.serverSelectionState.userUrlInput.toReducedUrl()
+                views.loginSignupSigninText.text = state.selectedHomeserver.sourceUrl.toReducedUrl()
             }
             ServerType.Other     -> {
                 views.loginSignupSigninServerIcon.isVisible = false
                 views.loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.serverSelectionState.userUrlInput.toReducedUrl())
+                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.selectedHomeserver.sourceUrl.toReducedUrl())
             }
             ServerType.Unknown   -> Unit /* Should not happen */
         }
 
-        when (state.loginMode) {
+        when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.SsoAndPassword -> {
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
-                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()?.sorted()
+                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders()?.sorted()
                 views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
                         viewModel.getSsoUrl(
@@ -101,7 +101,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
     }
 
     private fun setupButtons(state: OnboardingViewState) {
-        when (state.loginMode) {
+        when (state.selectedHomeserver.preferredLoginMode) {
             is LoginMode.Sso -> {
                 // change to only one button that is sign in with sso
                 views.loginSignupSigninSubmit.text = getString(R.string.login_signin_sso)
@@ -115,7 +115,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
     }
 
     private fun submit() = withState(viewModel) { state ->
-        if (state.loginMode is LoginMode.Sso) {
+        if (state.selectedHomeserver.preferredLoginMode is LoginMode.Sso) {
             viewModel.getSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,

@@ -40,7 +40,6 @@ import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueSignUpCombinedBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
-import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
@@ -168,8 +167,8 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         setupUi(state)
         setupAutoFill()
 
-        views.selectedServerName.text = state.serverSelectionState.userUrlInput.toReducedUrl()
-        views.selectedServerDescription.text = state.serverSelectionState.description
+        views.selectedServerName.text = state.selectedHomeserver.sourceUrl.toReducedUrl()
+        views.selectedServerDescription.text = state.selectedHomeserver.description
 
         if (state.isLoading) {
             // Ensure password is hidden
@@ -178,8 +177,8 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
     }
 
     private fun setupUi(state: OnboardingViewState) {
-        when (state.loginMode) {
-            is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.loginMode.ssoIdentityProviders)
+        when (state.selectedHomeserver.preferredLoginMode) {
+            is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
             else                        -> hideSsoProviders()
         }
     }
@@ -208,6 +207,6 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
             views.createAccountPasswordInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
         }
     }
-}
 
-private fun OnboardingViewState.isNumericOnlyUserIdForbidden() = serverType == ServerType.MatrixOrg
+    private fun OnboardingViewState.isNumericOnlyUserIdForbidden() = selectedHomeserver.sourceUrl == getString(R.string.matrix_org_server_url)
+}

@@ -45,17 +45,11 @@ data class OnboardingViewState(
         @PersistState
         val deviceId: String? = null,
 
-        // Network result
-        @PersistState
-        val loginMode: LoginMode = LoginMode.Unknown,
-        // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
-        @PersistState
-        val loginModeSupportedTypes: List<String> = emptyList(),
         val knownCustomHomeServersUrls: List<String> = emptyList(),
         val isForceLoginFallbackEnabled: Boolean = false,
 
         @PersistState
-        val serverSelectionState: ServerSelectionState = ServerSelectionState(),
+        val selectedHomeserver: SelectedHomeserverState = SelectedHomeserverState(),
 
         @PersistState
         val personalizationState: PersonalizationState = PersonalizationState()
@@ -68,10 +62,13 @@ enum class OnboardingFlow {
 }
 
 @Parcelize
-data class ServerSelectionState(
+data class SelectedHomeserverState(
         val description: String? = null,
-        val userUrlInput: String? = null,
-        val hostedUrl: String? = null,
+        val sourceUrl: String? = null,
+        val declaredUrl: String? = null,
+        val preferredLoginMode: LoginMode = LoginMode.Unknown,
+        // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
+        val loginModeSupportedTypes: List<String> = emptyList(),
 ) : Parcelable
 
 @Parcelize
