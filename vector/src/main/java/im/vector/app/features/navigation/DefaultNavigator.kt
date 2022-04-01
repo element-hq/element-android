@@ -196,19 +196,21 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String) {
-        val session = sessionHolder.getSafeActiveSession() ?: return
-        val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId)
-                ?: return
-        if (tx is SasVerificationTransaction && tx.isIncoming) {
-            tx.acceptVerification()
-        }
+        coroutineScope.launch {
+            val session = sessionHolder.getSafeActiveSession() ?: return@launch
+            val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId)
+                    ?: return@launch
+            if (tx is SasVerificationTransaction && tx.isIncoming) {
+                tx.acceptVerification()
+            }
 
-        if (context is AppCompatActivity) {
-            VerificationBottomSheet.withArgs(
-                    roomId = null,
-                    otherUserId = otherUserId,
-                    transactionId = sasTransactionId
-            ).show(context.supportFragmentManager, "REQPOP")
+            if (context is AppCompatActivity) {
+                VerificationBottomSheet.withArgs(
+                        roomId = null,
+                        otherUserId = otherUserId,
+                        transactionId = sasTransactionId
+                ).show(context.supportFragmentManager, "REQPOP")
+            }
         }
     }
 

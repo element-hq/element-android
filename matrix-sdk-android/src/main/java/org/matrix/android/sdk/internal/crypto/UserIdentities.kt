@@ -65,7 +65,7 @@ sealed class UserIdentities {
     /**
      * Convert the identity into a MxCrossSigningInfo class.
      */
-    abstract fun toMxCrossSigningInfo(): MXCrossSigningInfo
+    abstract suspend fun toMxCrossSigningInfo(): MXCrossSigningInfo
 }
 
 /**
@@ -147,11 +147,11 @@ internal class OwnUserIdentity(
     /**
      * Convert the identity into a MxCrossSigningInfo class.
      */
-    override fun toMxCrossSigningInfo(): MXCrossSigningInfo {
+    override suspend fun toMxCrossSigningInfo(): MXCrossSigningInfo {
         val masterKey = this.masterKey
         val selfSigningKey = this.selfSigningKey
         val userSigningKey = this.userSigningKey
-        val trustLevel = DeviceTrustLevel(runBlocking { verified() }, false)
+        val trustLevel = DeviceTrustLevel(verified(), false)
         // TODO remove this, this is silly, we have way too many methods to check if a user is verified
         masterKey.trustLevel = trustLevel
         selfSigningKey.trustLevel = trustLevel
@@ -249,9 +249,9 @@ internal class UserIdentity(
     /**
      * Convert the identity into a MxCrossSigningInfo class.
      */
-    override fun toMxCrossSigningInfo(): MXCrossSigningInfo {
+    override suspend fun toMxCrossSigningInfo(): MXCrossSigningInfo {
 //        val crossSigningKeys = listOf(this.masterKey, this.selfSigningKey)
-        val trustLevel = DeviceTrustLevel(runBlocking { verified() }, false)
+        val trustLevel = DeviceTrustLevel(verified(), false)
         // TODO remove this, this is silly, we have way too many methods to check if a user is verified
         masterKey.trustLevel = trustLevel
         selfSigningKey.trustLevel = trustLevel

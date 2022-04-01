@@ -30,9 +30,9 @@ interface VerificationTransaction {
     /**
      * User wants to cancel the transaction
      */
-    fun cancel()
+    suspend fun cancel()
 
-    fun cancel(code: CancelCode)
+    suspend fun cancel(code: CancelCode)
 
     fun isToDeviceTransport(): Boolean
 }

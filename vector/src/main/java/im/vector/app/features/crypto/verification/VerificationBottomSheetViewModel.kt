@@ -239,61 +239,22 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 handleRequestVerificationByDM(roomId, otherUserId)
             }
             is VerificationAction.StartSASVerification         -> {
-                val request = session.cryptoService().verificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
-                        ?: return@withState
-                val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
-                viewModelScope.launch {
-                    if (roomId == null) {
-                        session.cryptoService().verificationService().beginKeyVerification(
-                                VerificationMethod.SAS,
-                                otherUserId = request.otherUserId,
-                                otherDeviceId = otherDevice ?: "",
-                                transactionId = action.pendingRequestTransactionId
-                        )
-                    } else {
-                        session.cryptoService().verificationService().beginKeyVerificationInDMs(
-                                VerificationMethod.SAS,
-                                transactionId = action.pendingRequestTransactionId,
-                                roomId = roomId,
-                                otherUserId = request.otherUserId,
-                                otherDeviceId = otherDevice ?: ""
-                        )
-                    }
-                }
-                Unit
+                handleStartSASVerification(roomId, otherUserId, action)
             }
             is VerificationAction.RemoteQrCodeScanned          -> {
-                val existingTransaction = session.cryptoService().verificationService()
-                        .getExistingTransaction(action.otherUserId, action.transactionId) as? QrCodeVerificationTransaction
-                existingTransaction
-                        ?.userHasScannedOtherQrCode(action.scannedData)
+                handleRemoteQrCodeScanned(action)
             }
             is VerificationAction.OtherUserScannedSuccessfully -> {
-                val transactionId = state.transactionId ?: return@withState
-
-                val existingTransaction = session.cryptoService().verificationService()
-                        .getExistingTransaction(otherUserId, transactionId) as? QrCodeVerificationTransaction
-                existingTransaction
-                        ?.otherUserScannedMyQrCode()
+                handleOtherUserScannedSuccessfully(state.transactionId, otherUserId)
             }
             is VerificationAction.OtherUserDidNotScanned       -> {
-                val transactionId = state.transactionId ?: return@withState
-
-                val existingTransaction = session.cryptoService().verificationService()
-                        .getExistingTransaction(otherUserId, transactionId) as? QrCodeVerificationTransaction
-                existingTransaction
-                        ?.otherUserDidNotScannedMyQrCode()
+                handleOtherUserDidNotScanned(state.transactionId, otherUserId)
             }
             is VerificationAction.SASMatchAction               -> {
-                (session.cryptoService().verificationService()
-                        .getExistingTransaction(action.otherUserId, action.sasTransactionId)
-                        as? SasVerificationTransaction)?.userHasVerifiedShortCode()
+                handleSASMatchAction(action)
             }
             is VerificationAction.SASDoNotMatchAction          -> {
-                (session.cryptoService().verificationService()
-                        .getExistingTransaction(action.otherUserId, action.sasTransactionId)
-                        as? SasVerificationTransaction)
-                        ?.shortCodeDoesNotMatch()
+                handleSASDoNotMatchAction(action)
             }
             is VerificationAction.GotItConclusion              -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
@@ -322,6 +283,76 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 }
             }
         }.exhaustive
+    }
+
+    private fun handleStartSASVerification(roomId: String?, otherUserId: String, action: VerificationAction.StartSASVerification) {
+        val request = session.cryptoService().verificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
+                ?: return
+        val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
+        viewModelScope.launch {
+            if (roomId == null) {
+                session.cryptoService().verificationService().beginKeyVerification(
+                        VerificationMethod.SAS,
+                        otherUserId = request.otherUserId,
+                        otherDeviceId = otherDevice ?: "",
+                        transactionId = action.pendingRequestTransactionId
+                )
+            } else {
+                session.cryptoService().verificationService().beginKeyVerificationInDMs(
+                        VerificationMethod.SAS,
+                        transactionId = action.pendingRequestTransactionId,
+                        roomId = roomId,
+                        otherUserId = request.otherUserId,
+                        otherDeviceId = otherDevice ?: ""
+                )
+            }
+        }
+    }
+
+    private fun handleSASDoNotMatchAction(action: VerificationAction.SASDoNotMatchAction) {
+        viewModelScope.launch {
+            (session.cryptoService().verificationService()
+                    .getExistingTransaction(action.otherUserId, action.sasTransactionId)
+                    as? SasVerificationTransaction)
+                    ?.shortCodeDoesNotMatch()
+        }
+    }
+
+    private fun handleSASMatchAction(action: VerificationAction.SASMatchAction) {
+        viewModelScope.launch {
+            (session.cryptoService().verificationService()
+                    .getExistingTransaction(action.otherUserId, action.sasTransactionId)
+                    as? SasVerificationTransaction)?.userHasVerifiedShortCode()
+        }
+    }
+
+    private fun handleOtherUserDidNotScanned(transactionId: String?, otherUserId: String) {
+        transactionId ?: return
+        viewModelScope.launch {
+            val existingTransaction = session.cryptoService().verificationService()
+                    .getExistingTransaction(otherUserId, transactionId) as? QrCodeVerificationTransaction
+            existingTransaction
+                    ?.otherUserDidNotScannedMyQrCode()
+        }
+    }
+
+    private fun handleOtherUserScannedSuccessfully(transactionId: String?, otherUserId: String) {
+        transactionId ?: return
+        viewModelScope.launch {
+            val existingTransaction = session.cryptoService().verificationService()
+                    .getExistingTransaction(otherUserId, transactionId) as? QrCodeVerificationTransaction
+            existingTransaction
+                    ?.otherUserScannedMyQrCode()
+        }
+    }
+
+    private fun handleRemoteQrCodeScanned(action: VerificationAction.RemoteQrCodeScanned) {
+        viewModelScope.launch {
+            val existingTransaction = session.cryptoService().verificationService()
+                    .getExistingTransaction(action.otherUserId, action.transactionId) as? QrCodeVerificationTransaction
+            existingTransaction
+                    ?.userHasScannedOtherQrCode(action.scannedData)
+        }
     }
 
     private fun handleRequestVerificationByDM(roomId: String?, otherUserId: String) {
@@ -449,60 +480,66 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         }
     }
 
+    private fun handleTransactionUpdate(state: VerificationBottomSheetViewState, tx: VerificationTransaction){
+        viewModelScope.launch {
+            if (state.selfVerificationMode && state.transactionId == null) {
+                // is this an incoming with that user
+                if (tx.isIncoming && tx.otherUserId == state.otherUserMxItem?.id) {
+                    // Also auto accept incoming if needed!
+                    // TODO is state.transactionId ever null for self verifications, doesn't seem
+                    // like this will ever trigger
+                    if (tx is SasVerificationTransaction && tx.state == VerificationTxState.OnStarted) {
+                        tx.acceptVerification()
+                    }
+                    /*
+                    if (tx is IncomingSasVerificationTransaction) {
+                        if (tx.uxState == IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
+                            tx.performAccept()
+                        }
+                    }
+                    */
+                    // Use this one!
+                    setState {
+                        copy(
+                                transactionId = tx.transactionId,
+                                sasTransactionState = tx.state.takeIf { tx is SasVerificationTransaction },
+                                qrTransactionState = tx.state.takeIf { tx is QrCodeVerificationTransaction }
+                        )
+                    }
+                }
+            }
+
+            when (tx) {
+                is SasVerificationTransaction    -> {
+                    if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
+                        // A SAS tx has been started following this request
+                        setState {
+                            copy(
+                                    sasTransactionState = tx.state
+                            )
+                        }
+                    }
+                }
+                is QrCodeVerificationTransaction -> {
+                    if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
+                        // A QR tx has been started following this request
+                        setState {
+                            copy(
+                                    qrTransactionState = tx.state
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     override fun transactionCreated(tx: VerificationTransaction) {
         transactionUpdated(tx)
     }
 
     override fun transactionUpdated(tx: VerificationTransaction) = withState { state ->
-        if (state.selfVerificationMode && state.transactionId == null) {
-            // is this an incoming with that user
-            if (tx.isIncoming && tx.otherUserId == state.otherUserMxItem?.id) {
-                // Also auto accept incoming if needed!
-                // TODO is state.transactionId ever null for self verifications, doesn't seem
-                // like this will ever trigger
-                if (tx is SasVerificationTransaction && tx.state == VerificationTxState.OnStarted) {
-                    tx.acceptVerification()
-                }
-                /*
-                if (tx is IncomingSasVerificationTransaction) {
-                    if (tx.uxState == IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT) {
-                        tx.performAccept()
-                    }
-                }
-                */
-                // Use this one!
-                setState {
-                    copy(
-                            transactionId = tx.transactionId,
-                            sasTransactionState = tx.state.takeIf { tx is SasVerificationTransaction },
-                            qrTransactionState = tx.state.takeIf { tx is QrCodeVerificationTransaction }
-                    )
-                }
-            }
-        }
-
-        when (tx) {
-            is SasVerificationTransaction    -> {
-                if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
-                    // A SAS tx has been started following this request
-                    setState {
-                        copy(
-                                sasTransactionState = tx.state
-                        )
-                    }
-                }
-            }
-            is QrCodeVerificationTransaction -> {
-                if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
-                    // A QR tx has been started following this request
-                    setState {
-                        copy(
-                                qrTransactionState = tx.state
-                        )
-                    }
-                }
-            }
-        }
+        handleTransactionUpdate(state, tx)
     }
 
     override fun verificationRequestCreated(pr: PendingVerificationRequest) {

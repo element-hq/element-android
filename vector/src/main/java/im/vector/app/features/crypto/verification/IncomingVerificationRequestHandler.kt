@@ -91,12 +91,14 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                     it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
                                 }
                             }
-                            dismissedAction = Runnable {
+                            dismissedAction = LaunchCoroutineRunnable(coroutineScope) {
                                 tx.cancel()
                             }
                             addButton(
                                     context.getString(R.string.action_ignore),
-                                    { tx.cancel() }
+                                    LaunchCoroutineRunnable(coroutineScope) {
+                                        tx.cancel()
+                                    }
                             )
                             addButton(
                                     context.getString(R.string.action_open),
@@ -163,13 +165,11 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 }
                             }
                         }
-                        dismissedAction = Runnable {
-                            coroutineScope.launch {
-                                session?.cryptoService()?.verificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
-                                        pr.transactionId ?: "",
-                                        pr.roomId ?: ""
-                                )
-                            }
+                        dismissedAction = LaunchCoroutineRunnable(coroutineScope) {
+                            session?.cryptoService()?.verificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
+                                    pr.transactionId ?: "",
+                                    pr.roomId ?: ""
+                            )
                         }
                         colorAttribute = R.attr.vctr_notice_secondary
                         // 5mn expiration
@@ -183,6 +183,14 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // If an incoming request is readied (by another device?) we should discard the alert
         if (pr.isIncoming && (pr.isReady || pr.handledByOtherSession || pr.cancelConclusion != null)) {
             popupAlertManager.cancelAlert(uniqueIdForVerificationRequest(pr))
+        }
+    }
+
+    private class LaunchCoroutineRunnable(private val coroutineScope: CoroutineScope, private val block: suspend () -> Unit) : Runnable {
+        override fun run() {
+            coroutineScope.launch {
+                block()
+            }
         }
     }
 

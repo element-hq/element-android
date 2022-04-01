@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
@@ -95,7 +94,7 @@ internal class SasVerification(
      *
      * The method turns into a noop, if the verification flow has already been cancelled.
      * */
-    override fun cancel() {
+    override suspend fun cancel() {
         this.cancelHelper(CancelCode.User)
     }
 
@@ -110,7 +109,7 @@ internal class SasVerification(
      *
      * @param code The cancel code that should be given as the reason for the cancellation.
      * */
-    override fun cancel(code: CancelCode) {
+    override suspend fun cancel(code: CancelCode) {
         this.cancelHelper(code)
     }
 
@@ -123,7 +122,7 @@ internal class SasVerification(
      *
      * The method turns into a noop, if the verification flow has already been cancelled.
      */
-    override fun shortCodeDoesNotMatch() {
+    override suspend fun shortCodeDoesNotMatch() {
         this.cancelHelper(CancelCode.MismatchedSas)
     }
 
@@ -153,8 +152,8 @@ internal class SasVerification(
      * This method is a noop if we're not yet in a presentable state, i.e. we didn't receive
      * a m.key.verification.key event from the other side or we're cancelled.
      */
-    override fun userHasVerifiedShortCode() {
-        runBlocking { confirm() }
+    override suspend fun userHasVerifiedShortCode() {
+        confirm()
     }
 
     /** Accept the verification flow, signaling the other side that we do want to verify
@@ -165,8 +164,8 @@ internal class SasVerification(
      * This method is a noop if we send the start event out or if the verification has already
      * been accepted.
      */
-    override fun acceptVerification() {
-        runBlocking { accept() }
+    override suspend fun acceptVerification() {
+        accept()
     }
 
     /** Get the decimal representation of the short auth string
@@ -220,11 +219,11 @@ internal class SasVerification(
         }
     }
 
-    private fun cancelHelper(code: CancelCode) {
+    private suspend fun cancelHelper(code: CancelCode) {
         val request = this.machine.cancelVerification(this.inner.otherUserId, inner.flowId, code.value)
 
         if (request != null) {
-            runBlocking { sender.sendVerificationRequest(request) }
+            sender.sendVerificationRequest(request)
             dispatchTxUpdated()
         }
     }
