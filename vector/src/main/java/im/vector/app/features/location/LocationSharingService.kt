@@ -30,8 +30,8 @@ import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType.generateBeaconInfoStateEventType
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.room.model.BeaconInfo
-import org.matrix.android.sdk.api.session.room.model.LiveLocationBeaconContent
+import org.matrix.android.sdk.api.session.room.model.livelocation.BeaconInfo
+import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
@@ -83,7 +83,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
             activeSessionHolder
                     .getSafeActiveSession()
                     ?.let { session ->
-                        session.coroutineScope.launch {
+                        session.coroutineScope.launch(session.coroutineDispatchers.io) {
                             sendBeaconInfo(session, roomArgs)
                         }
                     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model
+package org.matrix.android.sdk.api.session.room.model.livelocation
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
+import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
 
 @JsonClass(generateAdapter = true)
 data class LiveLocationBeaconContent(
@@ -31,17 +32,17 @@ data class LiveLocationBeaconContent(
          * Beacon creation timestamp.
          */
         @Json(name = "org.matrix.msc3488.ts") val unstableTimestampAsMilliseconds: Long? = null,
-        @Json(name = "m.ts") val timestampAsMillisecond: Long? = null,
+        @Json(name = "m.ts") val timestampAsMilliseconds: Long? = null,
         /**
          * Live location asset type.
          */
-        @Json(name = "org.matrix.msc3488.asset") val unstableLocationAsset: LocationAsset = LocationAsset("m.self"),
+        @Json(name = "org.matrix.msc3488.asset") val unstableLocationAsset: LocationAsset = LocationAsset(LocationAssetType.SELF),
         @Json(name = "m.asset") val locationAsset: LocationAsset? = null
 ) {
 
     fun getBestBeaconInfo() = beaconInfo ?: unstableBeaconInfo
 
-    fun getBestTimestampAsMilliseconds() = timestampAsMillisecond ?: unstableTimestampAsMilliseconds
+    fun getBestTimestampAsMilliseconds() = timestampAsMilliseconds ?: unstableTimestampAsMilliseconds
 
     fun getBestLocationAsset() = locationAsset ?: unstableLocationAsset
 }
