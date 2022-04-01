@@ -83,6 +83,5 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     object StopChatEffects : RoomDetailViewEvents()
     object RoomReplacementStarted : RoomDetailViewEvents()
 
-    object ShowLocationSharingIndicator : RoomDetailViewEvents()
-    object HideLocationSharingIndicator : RoomDetailViewEvents()
+    data class ChangeLocationIndicator(val isVisible: Boolean) : RoomDetailViewEvents()
 }

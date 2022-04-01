@@ -482,8 +482,7 @@ class TimelineFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
-                RoomDetailViewEvents.ShowLocationSharingIndicator        -> handleShowLocationSharingIndicator()
-                RoomDetailViewEvents.HideLocationSharingIndicator        -> handleHideLocationSharingIndicator()
+                is RoomDetailViewEvents.ChangeLocationIndicator          -> handleChangeLocationIndicator(it)
             }
         }
 
@@ -618,12 +617,8 @@ class TimelineFragment @Inject constructor(
                 )
     }
 
-    private fun handleShowLocationSharingIndicator() {
-        views.locationLiveStatusIndicator.isVisible = true
-    }
-
-    private fun handleHideLocationSharingIndicator() {
-        views.locationLiveStatusIndicator.isVisible = false
+    private fun handleChangeLocationIndicator(event: RoomDetailViewEvents.ChangeLocationIndicator) {
+        views.locationLiveStatusIndicator.isVisible = event.isVisible
     }
 
     private fun displayErrorMessage(error: RoomDetailViewEvents.Failure) {
