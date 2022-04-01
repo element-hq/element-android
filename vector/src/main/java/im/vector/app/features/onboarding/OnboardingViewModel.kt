@@ -107,6 +107,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
+    private val defaultHomeserverUrl = matrixOrgUrl
 
     private val registrationWizard: RegistrationWizard
         get() = authenticationService.getRegistrationWizard()
@@ -139,7 +140,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
-            is OnboardingAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
+            is OnboardingAction.SelectHomeServer           -> handleSelectHomeserver(action).also { lastAction = action }
             is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
             is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
@@ -167,19 +168,19 @@ class OnboardingViewModel @AssistedInject constructor(
         }
         setState { copy(onboardingFlow = onboardingFlow) }
 
-        val configUrl = loginConfig?.homeServerUrl?.takeIf { it.isNotEmpty() }
-        if (configUrl != null) {
-            // Use config from uri
-            val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(configUrl)
-            if (homeServerConnectionConfig == null) {
-                // Url is invalid, in this case, just use the regular flow
-                Timber.w("Url from config url was invalid: $configUrl")
-                continueToPageAfterSplash(onboardingFlow)
-            } else {
-                startAuthenticationFlow(homeServerConnectionConfig, ServerType.Other)
+        return when (val config = loginConfig.toHomeserverConfig()) {
+            null -> continueToPageAfterSplash(onboardingFlow)
+            else -> startAuthenticationFlow(config, ServerType.Other)
+        }
+    }
+
+    private fun LoginConfig?.toHomeserverConfig(): HomeServerConnectionConfig? {
+        return this?.homeServerUrl?.takeIf { it.isNotEmpty() }?.let { url ->
+            homeServerConnectionConfigFactory.create(url).also {
+                if (it == null) {
+                    Timber.w("Url from config url was invalid: $url")
+                }
             }
-        } else {
-            continueToPageAfterSplash(onboardingFlow)
         }
     }
 
@@ -200,7 +201,7 @@ class OnboardingViewModel @AssistedInject constructor(
         // It happens when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
         when (val finalLastAction = lastAction) {
-            is OnboardingAction.UpdateHomeServer -> {
+            is OnboardingAction.SelectHomeServer -> {
                 currentHomeServerConnectionConfig
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
                         ?.let { startAuthenticationFlow(it) }
@@ -348,10 +349,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         setState { copy(useCase = action.useCase) }
         when (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
-            true  -> {
-                handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
-                OnboardingViewEvents.OpenCombinedRegister
-            }
+            true  -> handle(OnboardingAction.SelectHomeServer(defaultHomeserverUrl))
             false -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
         }
     }
@@ -371,7 +369,7 @@ class OnboardingViewModel @AssistedInject constructor(
             ServerType.Unknown   -> Unit /* Should not happen */
             ServerType.MatrixOrg ->
                 // Request login flow here
-                handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
+                handle(OnboardingAction.SelectHomeServer(matrixOrgUrl))
             ServerType.EMS,
             ServerType.Other     -> _viewEvents.post(OnboardingViewEvents.OnServerSelectionDone(action.serverType))
         }
@@ -578,7 +576,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleUpdateHomeserver(action: OnboardingAction.UpdateHomeServer) {
+    private fun handleSelectHomeserver(action: OnboardingAction.SelectHomeServer) {
         val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
         if (homeServerConnectionConfig == null) {
             // This is invalid
@@ -603,14 +601,8 @@ class OnboardingViewModel @AssistedInject constructor(
 
                         setState {
                             copy(
-                                    // If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
-                                    // It is also useful to set the value again in the case of a certificate error on matrix.org
-                                    serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) {
-                                        ServerType.MatrixOrg
-                                    } else {
-                                        serverTypeOverride ?: serverType
-                                    },
-                                    selectedHomeserver = it.serverSelectionState,
+                                    serverType = alignServerTypeAfterSubmission(homeServerConnectionConfig, serverTypeOverride),
+                                    selectedHomeserver = it.selectedHomeserverState,
                                     isLoading = false,
                             )
                         }
@@ -621,6 +613,18 @@ class OnboardingViewModel @AssistedInject constructor(
                         _viewEvents.post(OnboardingViewEvents.Failure(it))
                     }
             )
+        }
+    }
+
+    /**
+     * If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
+     * It is also useful to set the value again in the case of a certificate error on matrix.org
+     **/
+    private fun OnboardingViewState.alignServerTypeAfterSubmission(config: HomeServerConnectionConfig, serverTypeOverride: ServerType?): ServerType {
+        return if (config.homeServerUri.toString() == matrixOrgUrl) {
+            ServerType.MatrixOrg
+        } else {
+            serverTypeOverride ?: serverType
         }
     }
 

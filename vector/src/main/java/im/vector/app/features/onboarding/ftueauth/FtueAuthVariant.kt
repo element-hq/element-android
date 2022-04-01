@@ -306,7 +306,7 @@ class FtueAuthVariant(
 
     private fun handleSignInSelected(state: OnboardingViewState) {
         if (isForceLoginFallbackEnabled) {
-            onLoginModeNotSupported(state.selectedHomeserver.loginModeSupportedTypes)
+            onLoginModeNotSupported(state.selectedHomeserver.supportedLoginTypes)
         } else {
             disambiguateLoginMode(state)
         }
@@ -317,7 +317,7 @@ class FtueAuthVariant(
         is LoginMode.Sso      -> error("Developer error")
         is LoginMode.SsoAndPassword,
         LoginMode.Password    -> openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
-        LoginMode.Unsupported -> onLoginModeNotSupported(state.selectedHomeserver.loginModeSupportedTypes)
+        LoginMode.Unsupported -> onLoginModeNotSupported(state.selectedHomeserver.supportedLoginTypes)
     }
 
     private fun openAuthLoginFragmentWithTag(tag: String) {
@@ -338,7 +338,7 @@ class FtueAuthVariant(
 
     private fun handleSignInWithMatrixId(state: OnboardingViewState) {
         if (isForceLoginFallbackEnabled) {
-            onLoginModeNotSupported(state.selectedHomeserver.loginModeSupportedTypes)
+            onLoginModeNotSupported(state.selectedHomeserver.supportedLoginTypes)
         } else {
             openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
         }

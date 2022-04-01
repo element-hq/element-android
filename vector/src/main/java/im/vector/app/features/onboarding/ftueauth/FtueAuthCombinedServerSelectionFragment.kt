@@ -45,7 +45,7 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
         }
 
         views.chooseServerSubmit.debouncedClicks {
-            viewModel.handle(OnboardingAction.UpdateHomeServer(views.chooseServerInput.content()))
+            viewModel.handle(OnboardingAction.SelectHomeServer(views.chooseServerInput.content()))
         }
     }
 
