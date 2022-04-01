@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?colorSurface"
     android:orientation="vertical">
 
     <TextView
@@ -19,8 +20,8 @@
         android:id="@+id/liveLocShareChooseDurationOptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@drawable/divider_horizontal_system"
-        android:showDividers="beginning|middle|end">
+        android:divider="@drawable/divider_horizontal"
+        android:showDividers="beginning">
 
         <RadioButton
             android:id="@+id/liveLocShareChooseDurationOption1"
