@@ -866,6 +866,17 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
+     * Update the rage shake enabled status.
+     *
+     * @param isEnabled true to enable rage shake.
+     */
+    fun setRageshakeEnabled(isEnabled: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled)
+        }
+    }
+
+    /**
      * Tells if the rage shake is used.
      *
      * @return true if the rage shake is used
