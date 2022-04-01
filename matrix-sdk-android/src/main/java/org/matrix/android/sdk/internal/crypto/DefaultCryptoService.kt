@@ -167,14 +167,15 @@ internal class DefaultCryptoService @Inject constructor(
 
     fun onLiveEvent(roomId: String, event: Event) {
         if (event.isStateEvent()) {
-        when (event.getClearType()) {
-            EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
-            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
-            else                                    -> cryptoCoroutineScope.launch {
-                this@DefaultCryptoService.verificationService.onEvent(event)
+            when (event.getClearType()) {
+                EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
+                EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+                EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
             }
-        }
+        } else {
+            cryptoCoroutineScope.launch {
+                verificationService.onEvent(event)
+            }
         }
     }
 
