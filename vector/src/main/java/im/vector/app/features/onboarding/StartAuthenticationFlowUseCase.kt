@@ -43,7 +43,7 @@ class StartAuthenticationFlowUseCase @Inject constructor(
     private fun createSelectedHomeserverState(authFlow: LoginFlowResult, config: HomeServerConnectionConfig, preferredLoginMode: LoginMode): SelectedHomeserverState {
         val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
         return SelectedHomeserverState(
-                description = when (authFlow.homeServerUrl) {
+                description = when (config.homeServerUri.toString()) {
                     matrixOrgUrl -> stringProvider.getString(R.string.ftue_auth_create_account_matrix_dot_org_server_description)
                     else         -> null
                 },

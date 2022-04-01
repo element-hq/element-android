@@ -30,6 +30,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
 
     data class UpdateServerType(val serverType: ServerType) : OnboardingAction
     data class SelectHomeServer(val homeServerUrl: String) : OnboardingAction
+    data class EditHomeServer(val homeServerUrl: String) : OnboardingAction
     data class UpdateUseCase(val useCase: FtueUseCase) : OnboardingAction
     object ResetUseCase : OnboardingAction
     data class UpdateSignMode(val signMode: SignMode) : OnboardingAction

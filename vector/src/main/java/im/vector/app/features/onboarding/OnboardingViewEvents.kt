@@ -40,6 +40,7 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     object EditServerSelection : OnboardingViewEvents()
     data class OnServerSelectionDone(val serverType: ServerType) : OnboardingViewEvents()
     object OnLoginFlowRetrieved : OnboardingViewEvents()
+    object OnHomeserverEdited : OnboardingViewEvents()
     data class OnSignModeSelected(val signMode: SignMode) : OnboardingViewEvents()
     object OnForgetPasswordClicked : OnboardingViewEvents()
     object OnResetPasswordSendThreePidDone : OnboardingViewEvents()

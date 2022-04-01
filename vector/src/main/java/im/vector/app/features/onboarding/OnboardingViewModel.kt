@@ -140,7 +140,8 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
-            is OnboardingAction.SelectHomeServer           -> handleSelectHomeserver(action).also { lastAction = action }
+            is OnboardingAction.SelectHomeServer           -> handleHomeserverChange(action.homeServerUrl).also { lastAction = action }
+            is OnboardingAction.EditHomeServer             -> handleHomeserverChange(action.homeServerUrl).also { lastAction = action }
             is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
             is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
@@ -576,8 +577,8 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleSelectHomeserver(action: OnboardingAction.SelectHomeServer) {
-        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
+    private fun handleHomeserverChange(homeserverUrl: String) {
+        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(homeserverUrl)
         if (homeServerConnectionConfig == null) {
             // This is invalid
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
@@ -630,17 +631,23 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun onAuthenticationStartedSuccess() {
         withState {
-            if (it.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
-                when (it.onboardingFlow) {
-                    OnboardingFlow.SignIn -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignIn))
-                    OnboardingFlow.SignUp -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignUp))
-                    OnboardingFlow.SignInSignUp,
-                    null                  -> {
+            when (lastAction) {
+                is OnboardingAction.EditHomeServer   -> _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
+                is OnboardingAction.SelectHomeServer -> {
+                    if (it.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
+                        when (it.onboardingFlow) {
+                            OnboardingFlow.SignIn -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignIn))
+                            OnboardingFlow.SignUp -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignUp))
+                            OnboardingFlow.SignInSignUp,
+                            null                  -> {
+                                _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+                            }
+                        }
+                    } else {
                         _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
                     }
                 }
-            } else {
-                _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+                else                                 -> _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
             }
         }
     }

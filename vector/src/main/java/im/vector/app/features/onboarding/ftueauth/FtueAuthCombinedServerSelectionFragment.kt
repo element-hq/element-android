@@ -20,10 +20,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isEmpty
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.realignPercentagesToParent
 import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.core.utils.ensureProtocol
+import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.databinding.FragmentFtueServerSelectionCombinedBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
@@ -45,7 +48,7 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
         }
 
         views.chooseServerSubmit.debouncedClicks {
-            viewModel.handle(OnboardingAction.SelectHomeServer(views.chooseServerInput.content()))
+            viewModel.handle(OnboardingAction.EditHomeServer(views.chooseServerInput.content().ensureProtocol().ensureTrailingSlash()))
         }
     }
 
@@ -54,8 +57,10 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        val userUrlInput = state.selectedHomeserver.sourceUrl?.toReducedUrlKeepingSchemaIfInsecure()
-        views.chooseServerInput.editText().setText(userUrlInput)
+        if (views.chooseServerInput.isEmpty()) {
+            val userUrlInput = state.selectedHomeserver.sourceUrl?.toReducedUrlKeepingSchemaIfInsecure()
+            views.chooseServerInput.editText().setText(userUrlInput)
+        }
     }
 
     private fun String.toReducedUrlKeepingSchemaIfInsecure() = toReducedUrl(keepSchema = this.startsWith("http://"))

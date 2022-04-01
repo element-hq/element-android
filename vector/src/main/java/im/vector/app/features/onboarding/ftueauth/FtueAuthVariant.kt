@@ -240,6 +240,7 @@ class FtueAuthVariant(
                         option = commonOption
                 )
             }
+            OnboardingViewEvents.OnHomeserverEdited                            -> activity.popBackstack()
         }
     }
 
