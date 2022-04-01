@@ -137,7 +137,7 @@ class FtueAuthVariant(
                         // Go on with registration flow
                         handleRegistrationNavigation(viewEvents.flowResult)
                     } else {
-                        if (vectorFeatures.isOnboardingCombinedChooseServerEnabled()) {
+                        if (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
                             openCombinedRegister()
                         } else {
                             // First ask for login and password

@@ -357,7 +357,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         setState { copy(useCase = action.useCase) }
-        when (vectorFeatures.isOnboardingCombinedChooseServerEnabled()) {
+        when (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
             true  -> {
                 handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
                 OnboardingViewEvents.OpenCombinedRegister
