@@ -54,6 +54,9 @@ class DebugVectorFeatures(
     override fun isOnboardingPersonalizeEnabled(): Boolean = read(DebugFeatureKeys.onboardingPersonalize)
             ?: vectorFeatures.isOnboardingPersonalizeEnabled()
 
+    override fun isOnboardingCombinedRegisterEnabled(): Boolean = read(DebugFeatureKeys.onboardingCombinedRegister)
+            ?: vectorFeatures.isOnboardingCombinedRegisterEnabled()
+
     override fun isLiveLocationEnabled(): Boolean = read(DebugFeatureKeys.liveLocationSharing)
             ?: vectorFeatures.isLiveLocationEnabled()
 
@@ -107,7 +110,8 @@ private fun <T : Enum<T>> enumPreferencesKey(type: KClass<T>) = stringPreference
 object DebugFeatureKeys {
     val onboardingAlreadyHaveAnAccount = booleanPreferencesKey("onboarding-already-have-an-account")
     val onboardingSplashCarousel = booleanPreferencesKey("onboarding-splash-carousel")
-    val onboardingUseCase = booleanPreferencesKey("onbboarding-splash-carousel")
-    val onboardingPersonalize = booleanPreferencesKey("onbboarding-personalize")
+    val onboardingUseCase = booleanPreferencesKey("onboarding-splash-carousel")
+    val onboardingPersonalize = booleanPreferencesKey("onboarding-personalize")
+    val onboardingCombinedRegister = booleanPreferencesKey("onboarding-combined-register")
     val liveLocationSharing = booleanPreferencesKey("live-location-sharing")
 }

@@ -141,6 +141,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.InitWith                   -> handleInitWith(action)
             is OnboardingAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
             is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
+            is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword              -> handleResetPassword(action)
@@ -276,7 +277,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRegisterWith(action: OnboardingAction.LoginOrRegister) {
+    private fun handleRegisterWith(action: OnboardingAction.Register) {
         reAuthHelper.data = action.password
         handleRegisterAction(RegisterAction.CreateAccount(
                 action.username,
@@ -312,7 +313,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     }
                 }
             }
-            OnboardingAction.ResetSignMode       -> {
+            OnboardingAction.ResetSignMode              -> {
                 setState {
                     copy(
                             isLoading = false,
@@ -322,13 +323,13 @@ class OnboardingViewModel @AssistedInject constructor(
                     )
                 }
             }
-            OnboardingAction.ResetLogin          -> {
+            OnboardingAction.ResetAuthenticationAttempt -> {
                 viewModelScope.launch {
                     authenticationService.cancelPendingLoginOrRegistration()
                     setState { copy(isLoading = false) }
                 }
             }
-            OnboardingAction.ResetResetPassword  -> {
+            OnboardingAction.ResetResetPassword         -> {
                 setState {
                     copy(
                             isLoading = false,
@@ -356,7 +357,13 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         setState { copy(useCase = action.useCase) }
-        _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+        when (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
+            true  -> {
+                handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
+                OnboardingViewEvents.OpenCombinedRegister
+            }
+            false -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+        }
     }
 
     private fun resetUseCase() {
@@ -459,7 +466,7 @@ class OnboardingViewModel @AssistedInject constructor(
         when (state.signMode) {
             SignMode.Unknown            -> error("Developer error, invalid sign mode")
             SignMode.SignIn             -> handleLogin(action)
-            SignMode.SignUp             -> handleRegisterWith(action)
+            SignMode.SignUp             -> handleRegisterWith(OnboardingAction.Register(action.username, action.password, action.initialDeviceName))
             SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
         }
     }
