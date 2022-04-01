@@ -1979,4 +1979,6 @@
     <string name="secure_backup_banner_setup_line2">Tryggðu þig gegn því að missa aðgang að dulrituðum skilaboðum og gögnum</string>
     <string name="settings_secure_backup_section_info">Tryggðu þig gegn því að missa aðgang að dulrituðum skilaboðum og gögnum með því að taka öryggisafrit af dulritunarlyklunum á netþjóninum þinum.</string>
     <string name="threads_notice_migration_title">Spjallþræðir í bráðlegri Beta-útgáfu 🎉</string>
+    <string name="call_transfer_consulting_with">Ráðfæri við %1$s</string>
+    <string name="call_transfer_consult_first">Ráðfæra fyrst</string>
 </resources>
