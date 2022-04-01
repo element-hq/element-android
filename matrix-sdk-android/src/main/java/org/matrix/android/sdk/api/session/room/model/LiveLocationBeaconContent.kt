@@ -25,13 +25,23 @@ data class LiveLocationBeaconContent(
         /**
          * Indicates user's intent to share ephemeral location.
          */
+        @Json(name = "org.matrix.msc3489.beacon_info") val unstableBeaconInfo: BeaconInfo? = null,
         @Json(name = "m.beacon_info") val beaconInfo: BeaconInfo? = null,
         /**
          * Beacon creation timestamp.
          */
+        @Json(name = "org.matrix.msc3488.ts") val unstableTimestampAsMilliseconds: Long? = null,
         @Json(name = "m.ts") val timestampAsMillisecond: Long? = null,
         /**
          * Live location asset type.
          */
-        @Json(name = "m.asset") val locationAsset: LocationAsset = LocationAsset(type = "m.self.live")
-)
+        @Json(name = "org.matrix.msc3488.asset") val unstableLocationAsset: LocationAsset = LocationAsset("m.self"),
+        @Json(name = "m.asset") val locationAsset: LocationAsset? = null
+) {
+
+    fun getBestBeaconInfo() = beaconInfo ?: unstableBeaconInfo
+
+    fun getBestTimestampAsMilliseconds() = timestampAsMillisecond ?: unstableTimestampAsMilliseconds
+
+    fun getBestLocationAsset() = locationAsset ?: unstableLocationAsset
+}

@@ -28,7 +28,7 @@ import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.EventType.generateBeaconInfoStateEventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.BeaconInfo
 import org.matrix.android.sdk.api.session.room.model.LiveLocationBeaconContent
@@ -94,19 +94,19 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     private suspend fun sendBeaconInfo(session: Session, roomArgs: RoomArgs) {
         val beaconContent = LiveLocationBeaconContent(
-                beaconInfo = BeaconInfo(
+                unstableBeaconInfo = BeaconInfo(
                         timeout = roomArgs.durationMillis,
                         isLive = true
                 ),
-                timestampAsMillisecond = clock.epochMillis()
+                unstableTimestampAsMilliseconds = clock.epochMillis()
         ).toContent()
 
-        // This format is not yet finalized
+        val eventType = generateBeaconInfoStateEventType(session.myUserId)
         val stateKey = session.myUserId
         session
                 .getRoom(roomArgs.roomId)
                 ?.sendStateEvent(
-                        eventType = EventType.STATE_ROOM_BEACON_INFO,
+                        eventType = eventType,
                         stateKey = stateKey,
                         body = beaconContent
                 )
