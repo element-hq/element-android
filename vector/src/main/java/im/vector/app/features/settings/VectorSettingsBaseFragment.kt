@@ -148,24 +148,6 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
         }
     }
 
-    /**
-     * A request has been processed.
-     * Display a toast if there is a an error message
-     *
-     * @param errorMessage the error message
-     */
-    protected fun onCommonDone(errorMessage: String?) {
-        if (!isAdded) {
-            return
-        }
-        activity?.runOnUiThread {
-            if (errorMessage != null && errorMessage.isNotBlank()) {
-                displayErrorDialog(errorMessage)
-            }
-            hideLoadingView()
-        }
-    }
-
     protected fun displayErrorDialog(throwable: Throwable) {
         displayErrorDialog(errorFormatter.toHumanReadable(throwable))
     }

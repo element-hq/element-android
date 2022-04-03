@@ -20,10 +20,14 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
+import org.matrix.android.sdk.internal.database.query.findRootOrLatest
+import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
 internal open class RoomEntity(@PrimaryKey var roomId: String = "",
                                var chunks: RealmList<ChunkEntity> = RealmList(),
                                var sendingTimelineEvents: RealmList<TimelineEventEntity> = RealmList(),
+                               var threadSummaries: RealmList<ThreadSummaryEntity> = RealmList(),
                                var accountData: RealmList<RoomAccountDataEntity> = RealmList()
 ) : RealmObject() {
 
@@ -45,4 +49,11 @@ internal open class RoomEntity(@PrimaryKey var roomId: String = "",
             membersLoadStatusStr = value.name
         }
     companion object
+}
+internal fun RoomEntity.removeThreadSummaryIfNeeded(eventId: String) {
+    assertIsManaged()
+    threadSummaries.findRootOrLatest(eventId)?.let {
+        threadSummaries.remove(it)
+        it.deleteFromRealm()
+    }
 }

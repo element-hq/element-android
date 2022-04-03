@@ -16,22 +16,17 @@
 
 package im.vector.app.features.onboarding
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Loading
+import android.net.Uri
+import android.os.Parcelable
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.PersistState
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import kotlinx.parcelize.Parcelize
 
 data class OnboardingViewState(
-        val asyncLoginAction: Async<Unit> = Uninitialized,
-        val asyncHomeServerLoginFlowRequest: Async<Unit> = Uninitialized,
-        val asyncResetPassword: Async<Unit> = Uninitialized,
-        val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
-        val asyncRegistration: Async<Unit> = Uninitialized,
+        val isLoading: Boolean = false,
 
         @PersistState
         val onboardingFlow: OnboardingFlow? = null,
@@ -64,23 +59,24 @@ data class OnboardingViewState(
         val loginModeSupportedTypes: List<String> = emptyList(),
         val knownCustomHomeServersUrls: List<String> = emptyList(),
         val isForceLoginFallbackEnabled: Boolean = false,
-) : MavericksState {
 
-    fun isLoading(): Boolean {
-        return asyncLoginAction is Loading ||
-                asyncHomeServerLoginFlowRequest is Loading ||
-                asyncResetPassword is Loading ||
-                asyncResetMailConfirmed is Loading ||
-                asyncRegistration is Loading
-    }
-
-    fun isAuthTaskCompleted(): Boolean {
-        return asyncLoginAction is Success
-    }
-}
+        @PersistState
+        val personalizationState: PersonalizationState = PersonalizationState()
+) : MavericksState
 
 enum class OnboardingFlow {
     SignIn,
     SignUp,
     SignInSignUp
+}
+
+@Parcelize
+data class PersonalizationState(
+        val supportsChangingDisplayName: Boolean = false,
+        val supportsChangingProfilePicture: Boolean = false,
+        val displayName: String? = null,
+        val selectedPictureUri: Uri? = null
+) : Parcelable {
+
+    fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture
 }

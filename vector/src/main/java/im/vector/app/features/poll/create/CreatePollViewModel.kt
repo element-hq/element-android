@@ -23,6 +23,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.poll.PollMode
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.PollType
@@ -71,9 +72,10 @@ class CreatePollViewModel @AssistedInject constructor(
         val event = room.getTimelineEvent(eventId) ?: return
         val content = event.getLastMessageContent() as? MessagePollContent ?: return
 
-        val pollType = content.pollCreationInfo?.kind ?: PollType.DISCLOSED
-        val question = content.pollCreationInfo?.question?.question ?: ""
-        val options = content.pollCreationInfo?.answers?.mapNotNull { it.answer } ?: List(MIN_OPTIONS_COUNT) { "" }
+        val pollCreationInfo = content.getBestPollCreationInfo()
+        val pollType = pollCreationInfo?.kind ?: PollType.DISCLOSED_UNSTABLE
+        val question = pollCreationInfo?.question?.getBestQuestion() ?: ""
+        val options = pollCreationInfo?.answers?.mapNotNull { it.getBestAnswer() } ?: List(MIN_OPTIONS_COUNT) { "" }
 
         setState {
             copy(

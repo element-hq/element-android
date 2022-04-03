@@ -2056,7 +2056,9 @@
                 "disappear",
                 "dissolve",
                 "liquid",
-                "melt"
+                "melt",
+                "hot",
+                "heat"
             ]
         },
         "winking-face": {
@@ -2351,7 +2353,10 @@
                 "disbelief",
                 "embarrass",
                 "scared",
-                "surprise"
+                "surprise",
+                "silence",
+                "secret",
+                "shock"
             ]
         },
         "face-with-peeking-eye": {
@@ -2360,7 +2365,10 @@
             "j": [
                 "captivated",
                 "peep",
-                "stare"
+                "stare",
+                "scared",
+                "frightening",
+                "embarrassing"
             ]
         },
         "shushing-face": {
@@ -2392,7 +2400,8 @@
                 "salute",
                 "sunny",
                 "troops",
-                "yes"
+                "yes",
+                "respect"
             ]
         },
         "zippermouth-face": {
@@ -2467,7 +2476,10 @@
                 "disappear",
                 "hide",
                 "introvert",
-                "invisible"
+                "invisible",
+                "lonely",
+                "isolation",
+                "depression"
             ]
         },
         "face-in-clouds": {
@@ -2863,7 +2875,11 @@
                 "disappointed",
                 "meh",
                 "skeptical",
-                "unsure"
+                "unsure",
+                "skeptic",
+                "confuse",
+                "frustrated",
+                "indifferent"
             ]
         },
         "worried-face": {
@@ -2969,7 +2985,9 @@
                 "cry",
                 "proud",
                 "resist",
-                "sad"
+                "sad",
+                "touched",
+                "gratitude"
             ]
         },
         "frowning-face-with-open-mouth": {
@@ -4065,7 +4083,9 @@
             "j": [
                 "hand",
                 "right",
-                "rightward"
+                "rightward",
+                "palm",
+                "offer"
             ]
         },
         "leftwards-hand": {
@@ -4074,7 +4094,9 @@
             "j": [
                 "hand",
                 "left",
-                "leftward"
+                "leftward",
+                "palm",
+                "offer"
             ]
         },
         "palm-down-hand": {
@@ -4083,7 +4105,8 @@
             "j": [
                 "dismiss",
                 "drop",
-                "shoo"
+                "shoo",
+                "palm"
             ]
         },
         "palm-up-hand": {
@@ -4093,7 +4116,9 @@
                 "beckon",
                 "catch",
                 "come",
-                "offer"
+                "offer",
+                "lift",
+                "demand"
             ]
         },
         "ok-hand": {
@@ -4290,7 +4315,8 @@
             "b": "1FAF5",
             "j": [
                 "point",
-                "you"
+                "you",
+                "recruit"
             ]
         },
         "thumbs-up": {
@@ -4404,7 +4430,9 @@
             "a": "⊛ Heart Hands",
             "b": "1FAF6",
             "j": [
-                "love"
+                "love",
+                "appreciation",
+                "support"
             ]
         },
         "open-hands": {
@@ -4662,7 +4690,11 @@
                 "flirting",
                 "nervous",
                 "uncomfortable",
-                "worried"
+                "worried",
+                "flirt",
+                "sexy",
+                "pain",
+                "worry"
             ]
         },
         "baby": {
@@ -6058,7 +6090,8 @@
                 "monarch",
                 "noble",
                 "regal",
-                "royalty"
+                "royalty",
+                "power"
             ]
         },
         "prince": {
@@ -6231,7 +6264,8 @@
                 "belly",
                 "bloated",
                 "full",
-                "pregnant"
+                "pregnant",
+                "baby"
             ]
         },
         "pregnant-person": {
@@ -6241,7 +6275,8 @@
                 "belly",
                 "bloated",
                 "full",
-                "pregnant"
+                "pregnant",
+                "baby"
             ]
         },
         "breastfeeding": {
@@ -6635,7 +6670,8 @@
             "j": [
                 "fairy tale",
                 "fantasy",
-                "monster"
+                "monster",
+                "mystical"
             ]
         },
         "person-getting-massage": {
@@ -9374,7 +9410,8 @@
             "b": "1FAB8",
             "j": [
                 "ocean",
-                "reef"
+                "reef",
+                "sea"
             ]
         },
         "snail": {
@@ -9587,7 +9624,9 @@
                 "Hinduism",
                 "India",
                 "purity",
-                "Vietnam"
+                "Vietnam",
+                "calm",
+                "meditation"
             ]
         },
         "rosette": {
@@ -9832,14 +9871,16 @@
             "a": "⊛ Empty Nest",
             "b": "1FAB9",
             "j": [
-                "nesting"
+                "nesting",
+                "bird"
             ]
         },
         "nest-with-eggs": {
             "a": "⊛ Nest with Eggs",
             "b": "1FABA",
             "j": [
-                "nesting"
+                "nesting",
+                "bird"
             ]
         },
         "grapes": {
@@ -11187,7 +11228,9 @@
                 "drink",
                 "empty",
                 "glass",
-                "spill"
+                "spill",
+                "cup",
+                "water"
             ]
         },
         "cup-with-straw": {
@@ -12003,7 +12046,9 @@
             "b": "1F6DD",
             "j": [
                 "amusement park",
-                "play"
+                "play",
+                "fun",
+                "park"
             ]
         },
         "ferris-wheel": {
@@ -12533,7 +12578,9 @@
             "j": [
                 "circle",
                 "tire",
-                "turn"
+                "turn",
+                "car",
+                "transport"
             ]
         },
         "police-car-light": {
@@ -14666,7 +14713,8 @@
                 "hand",
                 "Mary",
                 "Miriam",
-                "protection"
+                "protection",
+                "religion"
             ]
         },
         "video-game": {
@@ -15864,7 +15912,9 @@
             "b": "1FAAB",
             "j": [
                 "electronic",
-                "low energy"
+                "low energy",
+                "drained",
+                "dead"
             ]
         },
         "electric-plug": {
@@ -17508,7 +17558,9 @@
                 "disability",
                 "hurt",
                 "mobility aid",
-                "stick"
+                "stick",
+                "accessibility",
+                "assist"
             ]
         },
         "stethoscope": {
@@ -17528,7 +17580,9 @@
                 "bones",
                 "doctor",
                 "medical",
-                "skeleton"
+                "skeleton",
+                "x-ray",
+                "medicine"
             ]
         },
         "door": {
@@ -17733,7 +17787,10 @@
                 "burp",
                 "clean",
                 "soap",
-                "underwater"
+                "underwater",
+                "fun",
+                "carbonation",
+                "sparkling"
             ]
         },
         "toothbrush": {
@@ -17856,7 +17913,8 @@
                 "credentials",
                 "ID",
                 "license",
-                "security"
+                "security",
+                "document"
             ]
         },
         "atm-sign": {

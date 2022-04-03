@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.database.model
 
 import io.realm.annotations.RealmModule
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
+import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 
 /**
  * Realm module for Session
@@ -66,6 +67,7 @@ import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntit
             RoomAccountDataEntity::class,
             SpaceChildSummaryEntity::class,
             SpaceParentSummaryEntity::class,
-            UserPresenceEntity::class
+            UserPresenceEntity::class,
+            ThreadSummaryEntity::class
         ])
 internal class SessionRealmModule

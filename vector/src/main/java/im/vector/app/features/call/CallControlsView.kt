@@ -111,6 +111,7 @@ class CallControlsView @JvmOverloads constructor(
                 views.ringingControls.isVisible = false
                 views.connectedControls.isVisible = false
             }
+            null                      -> Unit
         }
     }
 

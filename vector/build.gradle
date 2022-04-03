@@ -18,7 +18,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 4
+ext.versionPatch = 10
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -131,6 +131,9 @@ android {
         // Required for sonar analysis
         versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
 
+        // Generate a random app task affinity
+        manifestPlaceholders = [appTaskAffinitySuffix:"H_${gitRevision()}"]
+
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
         buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
@@ -148,6 +151,7 @@ android {
 
         buildConfigField "Boolean", "enableLocationSharing", "true"
         buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
+        buildConfigField "Boolean", "PRESENCE_SYNC_ENABLED", "true"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -226,6 +230,7 @@ android {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             // Set to true if you want to enable strict mode in debug
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+            buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "true"
 
             signingConfig signingConfigs.debug
         }
@@ -235,6 +240,7 @@ android {
 
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+            buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "false"
 
             postprocessing {
                 removeUnusedCode true
@@ -352,6 +358,7 @@ dependencies {
     // Lifecycle
     implementation libs.androidx.lifecycleLivedata
     implementation libs.androidx.lifecycleProcess
+    implementation libs.androidx.lifecycleRuntimeKtx
 
     implementation libs.androidx.datastore
     implementation libs.androidx.datastorepreferences
@@ -364,7 +371,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.44'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.46'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -404,7 +411,6 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
     implementation 'com.github.hyuwah:DraggableView:1.0.0'
-    implementation 'com.github.Armen101:AudioRecordView:1.0.5'
 
     // Custom Tab
     implementation 'androidx.browser:browser:1.4.0'
@@ -464,10 +470,10 @@ dependencies {
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:1.92.1-jitsi-9093212@aar')
+    implementation('com.facebook.react:react-native-webrtc:1.94.2-jitsi-10227332@aar')
 
     // Jitsi
-    implementation('org.jitsi.react:jitsi-meet-sdk:3.10.0') {
+    implementation('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'

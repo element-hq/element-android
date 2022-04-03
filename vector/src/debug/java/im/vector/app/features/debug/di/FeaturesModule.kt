@@ -23,8 +23,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import im.vector.app.features.DefaultVectorFeatures
+import im.vector.app.features.DefaultVectorOverrides
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.VectorOverrides
 import im.vector.app.features.debug.features.DebugVectorFeatures
+import im.vector.app.features.debug.features.DebugVectorOverrides
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -32,6 +35,9 @@ interface FeaturesModule {
 
     @Binds
     fun bindFeatures(debugFeatures: DebugVectorFeatures): VectorFeatures
+
+    @Binds
+    fun bindOverrides(debugOverrides: DebugVectorOverrides): VectorOverrides
 
     companion object {
 
@@ -43,6 +49,16 @@ interface FeaturesModule {
         @Provides
         fun providesDebugVectorFeatures(context: Context, defaultVectorFeatures: DefaultVectorFeatures): DebugVectorFeatures {
             return DebugVectorFeatures(context, defaultVectorFeatures)
+        }
+
+        @Provides
+        fun providesDefaultVectorOverrides(): DefaultVectorOverrides {
+            return DefaultVectorOverrides()
+        }
+
+        @Provides
+        fun providesDebugVectorOverrides(context: Context): DebugVectorOverrides {
+            return DebugVectorOverrides(context)
         }
     }
 }

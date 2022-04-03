@@ -24,7 +24,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -42,11 +41,12 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.user.model.User
 
-class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
-                                                            initialState: CreateDirectRoomViewState,
-                                                            private val rawService: RawService,
-                                                            val session: Session,
-                                                            val analyticsTracker: AnalyticsTracker) :
+class CreateDirectRoomViewModel @AssistedInject constructor(
+        @Assisted initialState: CreateDirectRoomViewState,
+        private val rawService: RawService,
+        val session: Session,
+        val analyticsTracker: AnalyticsTracker
+) :
         VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedFactory
@@ -60,7 +60,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
         when (action) {
             is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
             is CreateDirectRoomAction.QrScannedAction                  -> onCodeParsed(action)
-        }.exhaustive
+        }
     }
 
     private fun onCodeParsed(action: CreateDirectRoomAction.QrScannedAction) {
@@ -112,7 +112,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                             when (it) {
                                 is PendingSelection.UserPendingSelection     -> invitedUserIds.add(it.user.userId)
                                 is PendingSelection.ThreePidPendingSelection -> invite3pids.add(it.threePid)
-                            }.exhaustive
+                            }
                         }
                         setDirectMessage()
                         enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault

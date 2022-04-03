@@ -235,7 +235,7 @@ class FtueAuthWebFragment @Inject constructor(
     }
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetLogin)
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

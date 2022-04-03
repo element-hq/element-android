@@ -521,6 +521,20 @@ class NotificationUtils @Inject constructor(private val context: Context,
         return builder.build()
     }
 
+    /**
+     * Creates a notification that indicates the application is retrieving location even if it is in background or killed.
+     */
+    fun buildLiveLocationSharingNotification(): Notification {
+        return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(stringProvider.getString(R.string.live_location_sharing_notification_title))
+                .setContentText(stringProvider.getString(R.string.live_location_sharing_notification_description))
+                .setSmallIcon(R.drawable.ic_attachment_location_live_white)
+                .setColor(ThemeUtils.getColor(context, android.R.attr.colorPrimary))
+                .setCategory(NotificationCompat.CATEGORY_LOCATION_SHARING)
+                .setContentIntent(buildOpenHomePendingIntentForSummary())
+                .build()
+    }
+
     fun buildDownloadFileNotification(uri: Uri, fileName: String, mimeType: String): Notification {
         return NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setGroup(stringProvider.getString(R.string.app_name))

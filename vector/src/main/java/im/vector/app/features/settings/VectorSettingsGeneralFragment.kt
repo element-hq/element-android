@@ -335,7 +335,14 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString())
             }
             if (!isAdded) return@launch
-            onCommonDone(result.fold({ null }, { it.localizedMessage }))
+
+            result.fold(
+                    onSuccess = { hideLoadingView() },
+                    onFailure = {
+                        hideLoadingView()
+                        displayErrorDialog(it)
+                    }
+            )
         }
     }
 
@@ -358,7 +365,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
             startActivityForResult(intent, REQUEST_PHONEBOOK_COUNTRY)
             true
         }
-        */
+         */
     }
 
     // ==============================================================================================================
@@ -472,14 +479,15 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 val result = runCatching { session.setDisplayName(session.myUserId, value) }
                 if (!isAdded) return@launch
                 result.fold(
-                        {
+                        onSuccess = {
                             // refresh the settings value
                             mDisplayNamePreference.summary = value
                             mDisplayNamePreference.text = value
-                            onCommonDone(null)
+                            hideLoadingView()
                         },
-                        {
-                            onCommonDone(it.localizedMessage)
+                        onFailure = {
+                            hideLoadingView()
+                            displayErrorDialog(it)
                         }
                 )
             }

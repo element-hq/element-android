@@ -17,12 +17,16 @@
 package im.vector.app.features.settings.locale
 
 import com.airbnb.epoxy.TypedEpoxyController
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
+import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.epoxy.profiles.profileSectionItem
+import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.safeCapitalize
 import im.vector.app.features.settings.VectorLocale
@@ -32,7 +36,8 @@ import javax.inject.Inject
 
 class LocalePickerController @Inject constructor(
         private val vectorPreferences: VectorPreferences,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<LocalePickerViewState>() {
 
     var listener: Listener? = null
@@ -58,13 +63,14 @@ class LocalePickerController @Inject constructor(
             title(host.stringProvider.getString(R.string.choose_locale_other_locales_title))
         }
         when (list) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 loadingItem {
                     id("loading")
                     loadingText(host.stringProvider.getString(R.string.choose_locale_loading_locales))
                 }
             }
-            is Success    ->
+            is Success ->
                 if (list().isEmpty()) {
                     noResultItem {
                         id("noResult")
@@ -83,6 +89,11 @@ class LocalePickerController @Inject constructor(
                                     clickListener { host.listener?.onLocaleClicked(locale) }
                                 }
                             }
+                }
+            is Fail    ->
+                errorWithRetryItem {
+                    id("error")
+                    text(host.errorFormatter.toHumanReadable(list.error))
                 }
         }
     }

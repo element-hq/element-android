@@ -94,7 +94,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 when (event.root.getClearType()) {
                     // Message itemsX
                     EventType.STICKER,
-                    EventType.POLL_START,
+                    in EventType.POLL_START,
                     EventType.MESSAGE               -> messageItemFactory.create(params)
                     EventType.REDACTION,
                     EventType.KEY_VERIFICATION_ACCEPT,
@@ -107,8 +107,8 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                     EventType.CALL_SELECT_ANSWER,
                     EventType.CALL_NEGOTIATE,
                     EventType.REACTION,
-                    EventType.POLL_RESPONSE,
-                    EventType.POLL_END              -> noticeItemFactory.create(params)
+                    in EventType.POLL_RESPONSE,
+                    in EventType.POLL_END           -> noticeItemFactory.create(params)
                     // Calls
                     EventType.CALL_INVITE,
                     EventType.CALL_HANGUP,

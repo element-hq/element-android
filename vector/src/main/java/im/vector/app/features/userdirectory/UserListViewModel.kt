@@ -26,7 +26,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
@@ -46,7 +45,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 
@@ -113,7 +111,7 @@ class UserListViewModel @AssistedInject constructor(
             UserListAction.UserConsentRequest            -> handleUserConsentRequest()
             is UserListAction.UpdateUserConsent          -> handleISUpdateConsent(action)
             UserListAction.Resumed                       -> handleResumed()
-        }.exhaustive
+        }
     }
 
     private fun handleUserConsentRequest() {
@@ -214,14 +212,10 @@ class UserListViewModel @AssistedInject constructor(
                 ThreePidUser(email = search, user = null)
             } else {
                 try {
-                    val json = session.getProfile(foundThreePid.matrixId)
+                    val user = tryOrNull { session.getProfileAsUser(foundThreePid.matrixId) } ?: User(foundThreePid.matrixId)
                     ThreePidUser(
                             email = search,
-                            user = User(
-                                    userId = foundThreePid.matrixId,
-                                    displayName = json[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                    avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
-                            )
+                            user = user
                     )
                 } catch (failure: Throwable) {
                     ThreePidUser(email = search, user = User(foundThreePid.matrixId))
@@ -241,11 +235,11 @@ class UserListViewModel @AssistedInject constructor(
                         .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
                         .sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                 val userProfile = if (MatrixPatterns.isUserId(search)) {
-                    val json = tryOrNull { session.getProfile(search) }
+                    val user = tryOrNull { session.getProfileAsUser(search) }
                     User(
                             userId = search,
-                            displayName = json?.get(ProfileService.DISPLAY_NAME_KEY) as? String,
-                            avatarUrl = json?.get(ProfileService.AVATAR_URL_KEY) as? String
+                            displayName = user?.displayName,
+                            avatarUrl = user?.avatarUrl
                     )
                 } else {
                     null

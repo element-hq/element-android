@@ -25,11 +25,17 @@ enum class PollType {
      * Voters should see results as soon as they have voted.
      */
     @Json(name = "org.matrix.msc3381.poll.disclosed")
+    DISCLOSED_UNSTABLE,
+
+    @Json(name = "m.poll.disclosed")
     DISCLOSED,
 
     /**
      * Results should be only revealed when the poll is ended.
      */
     @Json(name = "org.matrix.msc3381.poll.undisclosed")
+    UNDISCLOSED_UNSTABLE,
+
+    @Json(name = "m.poll.undisclosed")
     UNDISCLOSED
 }

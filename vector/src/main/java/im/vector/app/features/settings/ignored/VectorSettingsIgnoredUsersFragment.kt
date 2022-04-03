@@ -30,7 +30,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -63,7 +62,7 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
             when (it) {
                 is IgnoredUsersViewEvents.Loading -> showLoading(it.message)
                 is IgnoredUsersViewEvents.Failure -> showFailure(it.throwable)
-            }.exhaustive
+            }
         }
     }
 

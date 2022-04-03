@@ -30,6 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.extensions.safeOpenOutputStream
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.core.utils.copyToClipboard
@@ -165,7 +166,7 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
         lifecycleScope.launch(Dispatchers.Main) {
             Try {
                 withContext(Dispatchers.IO) {
-                    requireContext().contentResolver.openOutputStream(uri)
+                    requireContext().safeOpenOutputStream(uri)
                             ?.use { os ->
                                 os.write(data.toByteArray())
                                 os.flush()

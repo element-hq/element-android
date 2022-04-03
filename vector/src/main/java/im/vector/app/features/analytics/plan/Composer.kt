@@ -39,6 +39,10 @@ data class Composer(
          * sent event.
          */
         val isReply: Boolean,
+        /**
+         * Whether this message begins a new thread or not.
+         */
+        val startsThread: Boolean? = null,
 ) : VectorAnalyticsEvent {
 
     override fun getName() = "Composer"
@@ -48,6 +52,7 @@ data class Composer(
             put("inThread", inThread)
             put("isEditing", isEditing)
             put("isReply", isReply)
+            startsThread?.let { put("startsThread", it) }
         }.takeIf { it.isNotEmpty() }
     }
 }

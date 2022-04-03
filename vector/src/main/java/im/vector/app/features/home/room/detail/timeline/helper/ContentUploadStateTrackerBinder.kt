@@ -26,7 +26,6 @@ import dagger.hilt.android.scopes.ActivityScoped
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
@@ -86,7 +85,7 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
             is ContentUploadStateTracker.State.Success             -> handleSuccess()
             is ContentUploadStateTracker.State.CompressingImage    -> handleCompressingImage()
             is ContentUploadStateTracker.State.CompressingVideo    -> handleCompressingVideo(state)
-        }.exhaustive
+        }
     }
 
     private fun handleIdle() {

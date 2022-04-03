@@ -4,5 +4,5 @@
 
     <corners android:radius="40dp" />
 
-    <solid android:color="?vctr_content_secondary" />
+    <solid android:color="?vctr_unread_background" />
 </shape>

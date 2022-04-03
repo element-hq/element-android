@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isEdition
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
+import org.matrix.android.sdk.api.session.events.model.supportsNotification
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -94,7 +95,7 @@ class NotifiableEventResolver @Inject constructor(
     }
 
     suspend fun resolveInMemoryEvent(session: Session, event: Event, canBeReplaced: Boolean): NotifiableEvent? {
-        if (event.getClearType() != EventType.MESSAGE) return null
+        if (!event.supportsNotification()) return null
 
         // Ignore message edition
         if (event.isEdition()) return null
@@ -153,7 +154,8 @@ class NotifiableEventResolver @Inject constructor(
             event.attemptToDecryptIfNeeded(session)
             // only convert encrypted messages to NotifiableMessageEvents
             when (event.root.getClearType()) {
-                EventType.MESSAGE -> {
+                EventType.MESSAGE,
+                in EventType.POLL_START -> {
                     val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
                     val roomName = room.roomSummary()?.displayName ?: ""
                     val senderDisplayName = event.senderInfo.disambiguatedDisplayName
@@ -185,12 +187,12 @@ class NotifiableEventResolver @Inject constructor(
                             soundName = null
                     )
                 }
-                else              -> null
+                else                    -> null
             }
         }
     }
 
-    private fun TimelineEvent.attemptToDecryptIfNeeded(session: Session) {
+    private suspend fun TimelineEvent.attemptToDecryptIfNeeded(session: Session) {
         if (root.isEncrypted() && root.mxDecryptionResult == null) {
             // TODO use a global event decryptor? attache to session and that listen to new sessionId?
             // for now decrypt sync

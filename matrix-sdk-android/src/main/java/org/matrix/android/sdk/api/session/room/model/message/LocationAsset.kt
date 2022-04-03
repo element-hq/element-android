@@ -21,5 +21,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class LocationAsset(
-        @Json(name = "type") val type: LocationAssetType? = null
+        @Json(name = "type") val type: String? = null
 )

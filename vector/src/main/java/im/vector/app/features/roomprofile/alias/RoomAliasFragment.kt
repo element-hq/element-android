@@ -29,7 +29,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.shareText
 import im.vector.app.core.utils.toast
@@ -83,7 +82,7 @@ class RoomAliasFragment @Inject constructor(
             when (it) {
                 is RoomAliasViewEvents.Failure -> showFailure(it.throwable)
                 RoomAliasViewEvents.Success    -> showSuccess()
-            }.exhaustive
+            }
         }
 
         sharedActionViewModel

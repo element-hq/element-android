@@ -121,7 +121,7 @@ interface CryptoService {
     fun discardOutboundSession(roomId: String)
 
     @Throws(MXCryptoError::class)
-    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
+    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
     fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>)
 
@@ -140,7 +140,6 @@ interface CryptoService {
     fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
-
     fun removeSessionListener(listener: NewSessionListener)
 
     fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>

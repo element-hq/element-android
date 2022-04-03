@@ -208,7 +208,7 @@
                 app:layout_goneMarginStart="24dp"
                 tools:text="0:23" />
 
-            <com.visualizer.amplitude.AudioRecordView
+            <im.vector.app.features.voice.AudioWaveformView
                 android:id="@+id/voicePlaybackWaveform"
                 style="@style/VoicePlaybackWaveform"
                 android:layout_width="0dp"

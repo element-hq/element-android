@@ -24,12 +24,14 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.settings.VectorDataStore
+import im.vector.app.features.debug.features.DebugVectorOverrides
+import im.vector.app.features.debug.settings.DebugPrivateSettingsViewActions.SetAvatarCapabilityOverride
+import im.vector.app.features.debug.settings.DebugPrivateSettingsViewActions.SetDisplayNameCapabilityOverride
 import kotlinx.coroutines.launch
 
 class DebugPrivateSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: DebugPrivateSettingsViewState,
-        private val vectorDataStore: VectorDataStore
+        private val debugVectorOverrides: DebugVectorOverrides
 ) : VectorViewModel<DebugPrivateSettingsViewState, DebugPrivateSettingsViewActions, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -40,16 +42,25 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<DebugPrivateSettingsViewModel, DebugPrivateSettingsViewState> by hiltMavericksViewModelFactory()
 
     init {
-        observeVectorDataStore()
+        observeVectorOverrides()
     }
 
-    private fun observeVectorDataStore() {
-        vectorDataStore.forceDialPadDisplayFlow.setOnEach {
-            copy(dialPadVisible = it)
+    private fun observeVectorOverrides() {
+        debugVectorOverrides.forceDialPad.setOnEach {
+            copy(
+                    dialPadVisible = it
+            )
         }
-
-        vectorDataStore.forceLoginFallbackFlow.setOnEach {
+        debugVectorOverrides.forceLoginFallback.setOnEach {
             copy(forceLoginFallback = it)
+        }
+        debugVectorOverrides.forceHomeserverCapabilities.setOnEach {
+            val activeDisplayNameOption = BooleanHomeserverCapabilitiesOverride.from(it.canChangeDisplayName)
+            val activeAvatarOption = BooleanHomeserverCapabilitiesOverride.from(it.canChangeAvatar)
+            copy(homeserverCapabilityOverrides = homeserverCapabilityOverrides.copy(
+                    displayName = homeserverCapabilityOverrides.displayName.copy(activeOption = activeDisplayNameOption),
+                    avatar = homeserverCapabilityOverrides.avatar.copy(activeOption = activeAvatarOption),
+            ))
         }
     }
 
@@ -57,18 +68,34 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         when (action) {
             is DebugPrivateSettingsViewActions.SetDialPadVisibility         -> handleSetDialPadVisibility(action)
             is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
+            is SetDisplayNameCapabilityOverride                             -> handleSetDisplayNameCapabilityOverride(action)
+            is SetAvatarCapabilityOverride                                  -> handleSetAvatarCapabilityOverride(action)
         }
     }
 
     private fun handleSetDialPadVisibility(action: DebugPrivateSettingsViewActions.SetDialPadVisibility) {
         viewModelScope.launch {
-            vectorDataStore.setForceDialPadDisplay(action.force)
+            debugVectorOverrides.setForceDialPadDisplay(action.force)
         }
     }
 
     private fun handleSetForceLoginFallbackEnabled(action: DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled) {
         viewModelScope.launch {
-            vectorDataStore.setForceLoginFallbackFlow(action.force)
+            debugVectorOverrides.setForceLoginFallback(action.force)
+        }
+    }
+
+    private fun handleSetDisplayNameCapabilityOverride(action: SetDisplayNameCapabilityOverride) {
+        viewModelScope.launch {
+            val forceDisplayName = action.option.toBoolean()
+            debugVectorOverrides.setHomeserverCapabilities { copy(canChangeDisplayName = forceDisplayName) }
+        }
+    }
+
+    private fun handleSetAvatarCapabilityOverride(action: SetAvatarCapabilityOverride) {
+        viewModelScope.launch {
+            val forceAvatar = action.option.toBoolean()
+            debugVectorOverrides.setHomeserverCapabilities { copy(canChangeAvatar = forceAvatar) }
         }
     }
 }

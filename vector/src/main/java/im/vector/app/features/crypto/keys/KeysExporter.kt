@@ -19,6 +19,7 @@ package im.vector.app.features.crypto.keys
 import android.content.Context
 import android.net.Uri
 import im.vector.app.core.dispatchers.CoroutineDispatchers
+import im.vector.app.core.extensions.safeOpenOutputStream
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class KeysExporter @Inject constructor(
     suspend fun export(password: String, uri: Uri) {
         withContext(dispatchers.io) {
             val data = session.cryptoService().exportRoomKeys(password)
-            context.contentResolver.openOutputStream(uri)
+            context.safeOpenOutputStream(uri)
                     ?.use { it.write(data) }
                     ?: throw IllegalStateException("Unable to open file for writing")
             verifyExportedKeysOutputFileSize(uri, expectedSize = data.size.toLong())

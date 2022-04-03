@@ -33,7 +33,6 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -158,6 +157,9 @@ class TimelineViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<TimelineViewModel, RoomDetailViewState> by hiltMavericksViewModelFactory() {
         const val PAGINATION_COUNT = 50
+
+        // The larger the number the faster the results, COUNT=200 for 500 thread messages its x4 faster than COUNT=50
+        const val PAGINATION_COUNT_THREADS_PERMALINK = 200
     }
 
     init {
@@ -437,7 +439,7 @@ class TimelineViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
             is RoomDetailAction.EndPoll                          -> handleEndPoll(action.eventId)
-        }.exhaustive
+        }
     }
 
     private fun handleJitsiCallJoinStatus(action: RoomDetailAction.UpdateJoinJitsiCallStatus) = withState { state ->
@@ -503,7 +505,10 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
         val content = initialState.rootThreadEventId?.let {
-            action.stickerContent.copy(relatesTo = RelationDefaultContent(RelationType.IO_THREAD, it))
+            action.stickerContent.copy(relatesTo = RelationDefaultContent(
+                    type = RelationType.THREAD,
+                    isFallingBack = true,
+                    eventId = it))
         } ?: action.stickerContent
 
         room.sendEvent(EventType.STICKER, content.toContent())
@@ -708,10 +713,10 @@ class TimelineViewModel @AssistedInject constructor(
                 R.id.timeline_setting          -> true
                 R.id.invite                    -> state.canInvite
                 R.id.open_matrix_apps          -> true
-                R.id.voice_call                -> state.isWebRTCCallOptionAvailable()
-                R.id.video_call                -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+                R.id.voice_call                -> state.isCallOptionAvailable()
+                R.id.video_call                -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
                 // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-                R.id.join_conference           -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
+                R.id.join_conference           -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
                 R.id.search                    -> state.isSearchAvailable()
                 R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()
                 R.id.dev_tools                 -> vectorPreferences.developerMode()
@@ -1175,10 +1180,30 @@ class TimelineViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Navigates to the appropriate event (by paginating the thread timeline until the event is found
+     * in the snapshot. The main reason for this function is to support the /relations api
+     */
+    private var threadPermalinkHandled = false
+    private fun navigateToThreadEventIfNeeded(snapshot: List<TimelineEvent>) {
+        if (eventId != null && initialState.rootThreadEventId != null) {
+            // When we have a permalink and we are in a thread timeline
+            if (snapshot.firstOrNull { it.eventId == eventId } != null && !threadPermalinkHandled) {
+                // Permalink event found lets navigate there
+                handleNavigateToEvent(RoomDetailAction.NavigateToEvent(eventId, true))
+                threadPermalinkHandled = true
+            } else {
+                // Permalink event not found yet continue paginating
+                timeline.paginate(Timeline.Direction.BACKWARDS, PAGINATION_COUNT_THREADS_PERMALINK)
+            }
+        }
+    }
+
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
         viewModelScope.launch {
             // tryEmit doesn't work with SharedFlow without cache
             timelineEvents.emit(snapshot)
+            navigateToThreadEventIfNeeded(snapshot)
         }
     }
 

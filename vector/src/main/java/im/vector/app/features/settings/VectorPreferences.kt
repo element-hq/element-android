@@ -111,9 +111,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY"
         private const val SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
 
-        // flair
-        const val SETTINGS_GROUPS_FLAIR_KEY = "SETTINGS_GROUPS_FLAIR_KEY"
-
         // notifications
         const val SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY = "SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
         const val SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY = "SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
@@ -201,7 +198,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
         private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
-        const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
+
+        // This key will be used to identify clients with the old thread support enabled io.element.thread
+        const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
+
+        // This key will be used to identify clients with the new thread support enabled m.thread
+        const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES_FINAL"
+        const val SETTINGS_THREAD_MESSAGES_SYNCED = "SETTINGS_THREAD_MESSAGES_SYNCED"
 
         // Possible values for TAKE_PHOTO_VIDEO_MODE
         const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
@@ -863,6 +866,17 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
+     * Update the rage shake enabled status.
+     *
+     * @param isEnabled true to enable rage shake.
+     */
+    fun setRageshakeEnabled(isEnabled: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled)
+        }
+    }
+
+    /**
      * Tells if the rage shake is used.
      *
      * @return true if the rage shake is used
@@ -1006,7 +1020,56 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
     }
 
+    /**
+     * Indicates whether or not thread messages are enabled
+     */
     fun areThreadMessagesEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, false)
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, getDefault(R.bool.settings_labs_thread_messages_default))
+    }
+
+    /**
+     * Manually sets thread messages enabled, useful for migrating users from io.element.thread
+     */
+    fun setThreadMessagesEnabled() {
+        defaultPrefs
+                .edit()
+                .putBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, true)
+                .apply()
+    }
+
+    /**
+     * Indicates whether or not the user will be notified about the new thread support
+     * We should notify the user only if he had old thread support enabled
+     */
+    fun shouldNotifyUserAboutThreads(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS, false)
+    }
+
+    /**
+     * Indicates that the user have been notified about threads migration
+     */
+    fun userNotifiedAboutThreads() {
+        defaultPrefs
+                .edit()
+                .putBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS, false)
+                .apply()
+    }
+
+    /**
+     * Indicates whether or not we should clear cache for threads migration.
+     * Default value is true, for fresh installs and updates
+     */
+    fun shouldMigrateThreads(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_THREAD_MESSAGES_SYNCED, true)
+    }
+
+    /**
+     * Indicates that there no longer threads migration needed
+     */
+    fun setShouldMigrateThreads(shouldMigrate: Boolean) {
+        defaultPrefs
+                .edit()
+                .putBoolean(SETTINGS_THREAD_MESSAGES_SYNCED, shouldMigrate)
+                .apply()
     }
 }

@@ -9,10 +9,6 @@
     <color name="soft_resource_limit_exceeded">#2f9edb</color>
     <color name="hard_resource_limit_exceeded">?colorError</color>
 
-    <!-- Button color -->
-    <color name="button_bot_background_color">#14368BD6</color>
-    <color name="button_bot_enabled_text_color">@color/palette_azure</color>
-
     <!-- Notification (do not depends on theme) -->
     <color name="notification_accent_color">@color/palette_azure</color>
     <color name="key_share_req_accent_color">@color/palette_melon</color>
@@ -22,7 +18,6 @@
     <color name="bg_call_screen_blur">#99000000</color>
     <color name="bg_call_screen">#27303A</color>
 
-    <color name="vctr_notice_secondary">#FF61708B</color>
     <color name="vctr_notice_secondary_alpha12">#1E61708B</color>
 
     <!-- Other useful color -->
@@ -56,6 +51,12 @@
     <!-- Used for item separators in list, on surface -->
     <attr name="vctr_list_separator_on_surface" format="color" />
 
+    <!-- Background color used for:
+          - unread badge background for a room item in the room list
+          - start unread indicator for a room item in the room list
+          - Background for unread badge background in the bottom navigation -->
+    <attr name="vctr_unread_background" format="color" />
+
     <!-- Other colors, which are not in the palette -->
     <attr name="vctr_fab_label_bg" format="color" />
     <color name="vctr_fab_label_bg_light">@android:color/white</color>
@@ -77,16 +78,6 @@
     <color name="vctr_touch_guard_bg_dark">#BF000000</color>
     <color name="vctr_touch_guard_bg_black">#BF000000</color>
 
-    <attr name="vctr_attachment_selector_background" format="color" />
-    <color name="vctr_attachment_selector_background_light">#FFFFFFFF</color>
-    <color name="vctr_attachment_selector_background_dark">#FF22262E</color>
-    <color name="vctr_attachment_selector_background_black">#FF090A0C</color>
-
-    <attr name="vctr_attachment_selector_border" format="color" />
-    <color name="vctr_attachment_selector_border_light">#FFE9EDF1</color>
-    <color name="vctr_attachment_selector_border_dark">#FF22262E</color>
-    <color name="vctr_attachment_selector_border_black">#FF090A0C</color>
-
     <attr name="vctr_room_active_widgets_banner_bg" format="color" />
     <color name="vctr_room_active_widgets_banner_bg_light">#EBEFF5</color>
     <color name="vctr_room_active_widgets_banner_bg_dark">#27303A</color>
@@ -101,9 +92,7 @@
     <color name="vctr_waiting_background_color_light">#AAAAAAAA</color>
     <color name="vctr_waiting_background_color_dark">#55555555</color>
 
-    <attr name="vctr_disabled_view_color" format="color" />
     <color name="vctr_disabled_view_color_light">#EEEEEE</color>
-    <color name="vctr_disabled_view_color_dark">#61708B</color>
 
     <attr name="vctr_reaction_background_off" format="color" />
     <color name="vctr_reaction_background_off_light">#FFF3F8FD</color>
@@ -132,5 +121,19 @@
     <attr name="vctr_presence_indicator_offline" format="color" />
     <color name="vctr_presence_indicator_offline_light">@color/palette_gray_100</color>
     <color name="vctr_presence_indicator_offline_dark">@color/palette_gray_450</color>
+
+    <attr name="vctr_presence_indicator_online" format="color" />
+    <color name="vctr_presence_indicator_online_light">@color/palette_element_green</color>
+    <color name="vctr_presence_indicator_online_dark">@color/palette_element_green</color>
+
+    <!-- Location sharing colors -->
+    <attr name="vctr_live_location" format="color" />
+    <color name="vctr_live_location_light">@color/palette_prune</color>
+    <color name="vctr_live_location_dark">@color/palette_prune</color>
+
+    <!-- Shield colors -->
+    <color name="shield_color_trust">#0DBD8B</color>
+    <color name="shield_color_black">#17191C</color>
+    <color name="shield_color_warning">#FF4B55</color>
 
 </resources>

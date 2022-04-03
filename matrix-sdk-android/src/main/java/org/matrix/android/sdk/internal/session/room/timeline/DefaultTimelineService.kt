@@ -31,6 +31,7 @@ import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsS
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 
@@ -42,6 +43,7 @@ internal class DefaultTimelineService @AssistedInject constructor(
         private val eventDecryptor: TimelineEventDecryptor,
         private val paginationTask: PaginationTask,
         private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+        private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val timelineEventMapper: TimelineEventMapper,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
@@ -64,10 +66,11 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 realmConfiguration = monarchy.realmConfiguration,
                 coroutineDispatchers = coroutineDispatchers,
                 paginationTask = paginationTask,
+                fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,
                 timelineInput = timelineInput,
                 eventDecryptor = eventDecryptor,
-                fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+                fetchThreadTimelineTask = fetchThreadTimelineTask,
                 loadRoomMembersTask = loadRoomMembersTask,
                 readReceiptHandler = readReceiptHandler,
                 getEventTask = contextOfEventTask,

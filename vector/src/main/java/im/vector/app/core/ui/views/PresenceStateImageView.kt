@@ -49,6 +49,7 @@ class PresenceStateImageView @JvmOverloads constructor(
                 setImageResource(R.drawable.ic_presence_offline)
                 contentDescription = context.getString(R.string.a11y_presence_offline)
             }
+            null                     -> Unit
         }
     }
 }

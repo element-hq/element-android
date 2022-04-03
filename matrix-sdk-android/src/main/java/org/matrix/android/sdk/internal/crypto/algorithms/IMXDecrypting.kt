@@ -36,7 +36,7 @@ internal interface IMXDecrypting {
      * @return the decryption information, or an error
      */
     @Throws(MXCryptoError::class)
-    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
+    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
     /**
      * Handle a key event.
@@ -44,14 +44,6 @@ internal interface IMXDecrypting {
      * @param event the key event.
      */
     fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {}
-
-    /**
-     * Check if the some messages can be decrypted with a new session
-     *
-     * @param senderKey the session sender key
-     * @param sessionId the session id
-     */
-    fun onNewSession(senderKey: String, sessionId: String) {}
 
     /**
      * Determine if we have the keys necessary to respond to a room key request

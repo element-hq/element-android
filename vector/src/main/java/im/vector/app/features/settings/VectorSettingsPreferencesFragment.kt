@@ -124,7 +124,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 false
             }
         }
-        */
+         */
 
         // update keep medias period
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY)!!.let {

@@ -28,7 +28,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
@@ -365,7 +364,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     copy(verifyingFrom4S = false)
                 }
             }
-        }.exhaustive
+        }
     }
 
     private fun handleSecretBackFromSSSS(action: VerificationAction.GotResultFromSsss) {
