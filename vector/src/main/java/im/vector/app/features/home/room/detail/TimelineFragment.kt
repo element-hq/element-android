@@ -105,7 +105,6 @@ import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.onPermissionDeniedDialog
-import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.openLocation
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
@@ -2078,6 +2077,10 @@ class TimelineFragment @Inject constructor(
 
     override fun onVoiceWaveformMovedTo(eventId: String, duration: Int, percentage: Float) {
         messageComposerViewModel.handle(MessageComposerAction.VoiceWaveformMovedTo(eventId, duration, percentage))
+    }
+
+    override fun onAudioSeekBarMovedTo(eventId: String, duration: Int, percentage: Float) {
+        messageComposerViewModel.handle(MessageComposerAction.AudioSeekBarMovedTo(eventId, duration, percentage))
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {

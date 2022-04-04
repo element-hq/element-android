@@ -104,8 +104,12 @@ class AudioMessagePlaybackTracker @Inject constructor() {
         setState(id, Listener.State.Idle)
     }
 
-    fun updateCurrentPlaybackTime(id: String, time: Int, percentage: Float) {
+    fun updatePlayingAtPlaybackTime(id: String, time: Int, percentage: Float) {
         setState(id, Listener.State.Playing(time, percentage))
+    }
+
+    fun updatePausedAtPlaybackTime(id: String, time: Int, percentage: Float) {
+        setState(id, Listener.State.Paused(time, percentage))
     }
 
     fun updateCurrentRecording(id: String, amplitudeList: List<Int>) {

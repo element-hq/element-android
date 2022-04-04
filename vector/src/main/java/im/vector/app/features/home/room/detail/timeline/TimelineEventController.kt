@@ -148,6 +148,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun onVoiceWaveformTouchedUp(eventId: String, duration: Int, percentage: Float)
         fun onVoiceWaveformMovedTo(eventId: String, duration: Int, percentage: Float)
 
+        fun onAudioSeekBarMovedTo(eventId: String, duration: Int, percentage: Float)
+
         fun onAddMoreReaction(event: TimelineEvent)
     }
 

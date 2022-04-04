@@ -341,6 +341,7 @@ class MessageItemFactory @Inject constructor(
     ): MessageAudioItem {
         val fileUrl = getAudioFileUrl(messageContent, informationData)
         val playbackControlButtonClickListener = createOnPlaybackButtonClickListener(messageContent, informationData, params)
+        val duration = messageContent.audioInfo?.duration ?: 0
 
         return MessageAudioItem_()
                 .attributes(attributes)
@@ -349,6 +350,8 @@ class MessageItemFactory @Inject constructor(
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
                 .audioMessagePlaybackTracker(audioMessagePlaybackTracker)
                 .isLocalFile(localFilesHelper.isLocalFile(fileUrl))
+                .fileSize(messageContent.audioInfo?.size ?: 0L)
+                .onSeek { params.callback?.onAudioSeekBarMovedTo(informationData.eventId, duration, it) }
                 .mxcUrl(fileUrl)
                 .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
                 .contentDownloadStateTrackerBinder(contentDownloadStateTrackerBinder)

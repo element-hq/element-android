@@ -45,10 +45,11 @@
             tools:text="Filename.mp3" />
 
         <TextView
-            android:id="@+id/audioPlaybackTime"
+            android:id="@+id/audioPlaybackDuration"
             style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintStart_toStartOf="@id/messageFilenameView"
             app:layout_constraintTop_toBottomOf="@id/messageFilenameView"
@@ -61,8 +62,8 @@
             android:layout_height="wrap_content"
             android:textColor="?vctr_content_secondary"
             android:layout_marginStart="4dp"
-            app:layout_constraintStart_toEndOf="@id/audioPlaybackTime"
-            app:layout_constraintBottom_toBottomOf="@id/audioPlaybackTime"
+            app:layout_constraintStart_toEndOf="@id/audioPlaybackDuration"
+            app:layout_constraintBottom_toBottomOf="@id/audioPlaybackDuration"
             tools:text="(2MB)" />
 
         <SeekBar
@@ -74,13 +75,13 @@
             android:progressDrawable="@drawable/bg_seek_bar"
             android:thumbTint="?vctr_content_tertiary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/audioPlaybackDuration"
+            app:layout_constraintEnd_toStartOf="@id/audioPlaybackTime"
             app:layout_constraintTop_toBottomOf="@id/audioPlaybackControlButton"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:progress="40" />
 
         <TextView
-            android:id="@+id/audioPlaybackDuration"
+            android:id="@+id/audioPlaybackTime"
             style="@style/Widget.Vector.TextView.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

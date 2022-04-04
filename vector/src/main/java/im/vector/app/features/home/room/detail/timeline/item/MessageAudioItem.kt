@@ -22,6 +22,7 @@ import android.graphics.Paint
 import android.text.format.DateUtils
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
@@ -29,6 +30,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.utils.TextUtils
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
@@ -48,8 +50,14 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     var duration: Int = 0
 
     @EpoxyAttribute
+    var fileSize: Long = 0
+
+    @EpoxyAttribute
     @JvmField
     var isLocalFile = false
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var onSeek: ((percentage: Float) -> Unit)? = null
 
     @EpoxyAttribute
     lateinit var contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder
@@ -63,12 +71,15 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     @EpoxyAttribute
     lateinit var audioMessagePlaybackTracker: AudioMessagePlaybackTracker
 
+    private var isUserSeeking = false
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.rootLayout, null)
-        bindFilenameViewAttributes(holder)
+        bindViewAttributes(holder)
         bindUploadState(holder)
         applyLayoutTint(holder)
+        bindSeekBar(holder)
         holder.audioPlaybackControlButton.setOnClickListener { playbackControlButtonClickListener?.invoke(it) }
         renderStateBasedOnAudioPlayback(holder)
     }
@@ -93,10 +104,30 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         holder.mainLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
     }
 
-    private fun bindFilenameViewAttributes(holder: Holder) {
+    private fun bindViewAttributes(holder: Holder) {
         holder.filenameView.text = filename
         holder.filenameView.onClick(attributes.itemClickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
+        holder.audioPlaybackDuration.text = formatPlaybackTime(duration)
+        holder.fileSize.text = TextUtils.formatFileSize(holder.rootLayout.context, fileSize, true)
+    }
+
+    private fun bindSeekBar(holder: Holder) {
+        holder.audioSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                holder.audioPlaybackTime.text = formatPlaybackTime(
+                        (duration * (progress.toFloat() / 100)).toInt()
+                )
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                isUserSeeking = true
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                isUserSeeking = false
+                val percentage = seekBar.progress.toFloat() / 100
+                onSeek?.invoke(percentage)
+            }
+        })
     }
 
     private fun renderStateBasedOnAudioPlayback(holder: Holder) {
@@ -117,13 +148,18 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         holder.audioPlaybackControlButton.contentDescription =
                 holder.view.context.getString(R.string.a11y_play_audio_message, filename)
         holder.audioPlaybackTime.text = formatPlaybackTime(duration)
+        holder.audioSeekBar.progress = 0
     }
 
     private fun renderPlayingState(holder: Holder, state: AudioMessagePlaybackTracker.Listener.State.Playing) {
         holder.audioPlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
         holder.audioPlaybackControlButton.contentDescription =
                 holder.view.context.getString(R.string.a11y_pause_audio_message, filename)
-        holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
+
+        if (!isUserSeeking) {
+            holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
+            holder.audioSeekBar.progress = (state.percentage * 100).toInt()
+        }
     }
 
     private fun renderPausedState(holder: Holder, state: AudioMessagePlaybackTracker.Listener.State.Paused) {
@@ -131,6 +167,7 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         holder.audioPlaybackControlButton.contentDescription =
                 holder.view.context.getString(R.string.a11y_play_audio_message, filename)
         holder.audioPlaybackTime.text = formatPlaybackTime(state.playbackTime)
+        holder.audioSeekBar.progress = (state.percentage * 100).toInt()
     }
 
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
@@ -151,6 +188,9 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
         val audioPlaybackControlButton by bind<ImageButton>(R.id.audioPlaybackControlButton)
         val audioPlaybackTime by bind<TextView>(R.id.audioPlaybackTime)
         val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
+        val fileSize by bind<TextView>(R.id.fileSize)
+        val audioPlaybackDuration by bind<TextView>(R.id.audioPlaybackDuration)
+        val audioSeekBar by bind<SeekBar>(R.id.audioSeekBar)
     }
 
     companion object {
