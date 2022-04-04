@@ -25,6 +25,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.format.DateUtils
+import android.text.method.LinkMovementMethod
 import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -169,6 +170,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.detail.views.RoomDetailLazyLoadedViews
 import im.vector.app.features.home.room.detail.widget.RoomWidgetsBottomSheet
+import im.vector.app.features.home.room.threads.ThreadsManager
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
@@ -251,6 +253,7 @@ class TimelineFragment @Inject constructor(
         private val notificationDrawerManager: NotificationDrawerManager,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
+        private val threadsManager: ThreadsManager,
         private val colorProvider: ColorProvider,
         private val dimensionConverter: DimensionConverter,
         private val userPreferencesProvider: UserPreferencesProvider,
@@ -2199,7 +2202,7 @@ class TimelineFragment @Inject constructor(
             }
             is EventSharedAction.ReplyInThread              -> {
                 if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
-                    navigateToThreadTimeline(action.eventId, action.startsThread)
+                    onReplyInThreadClicked(action)
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }
@@ -2355,6 +2358,14 @@ class TimelineFragment @Inject constructor(
                 .show()
     }
 
+    private fun onReplyInThreadClicked(action: EventSharedAction.ReplyInThread) {
+        if (vectorPreferences.areThreadMessagesEnabled()) {
+            navigateToThreadTimeline(action.eventId, action.startsThread)
+        } else {
+            displayThreadsBetaNotice()
+        }
+    }
+
     /**
      * Navigate to Threads timeline for the specified rootThreadEventId
      * using the ThreadsActivity
@@ -2373,6 +2384,29 @@ class TimelineFragment @Inject constructor(
             navigator.openThread(it, roomThreadDetailArgs)
         }
     }
+
+    /**
+     * Display a dialog that will let the user to enable threads
+     */
+
+    private fun displayThreadsBetaNotice() =
+            activity?.let {
+                MaterialAlertDialogBuilder(it)
+                        .setTitle(R.string.threads_beta_enable_notice_title)
+                        .setMessage(threadsManager.getBetaEnableThreadsMessage())
+                        .setCancelable(true)
+                        .setNegativeButton(R.string.action_not_now) { _, _ -> }
+                        .setPositiveButton(R.string.action_try_it_out) { _, _ ->
+                            timelineViewModel.onCleared() // We should first clear our viewModel
+                            threadsManager.enableThreadsAndRestart(it)
+                        }
+                        .show()
+                        ?.findViewById<TextView>(android.R.id.message)
+                        ?.apply {
+                            linksClickable = true
+                            movementMethod = LinkMovementMethod.getInstance()
+                        }
+            }
 
     /**
      * Navigate to Threads list for the current room

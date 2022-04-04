@@ -27,7 +27,6 @@ import javax.inject.Inject
 class VectorSettingsLabsFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val lightweightSettingsStorage: LightweightSettingsStorage
-
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.room_settings_labs_pref_title
