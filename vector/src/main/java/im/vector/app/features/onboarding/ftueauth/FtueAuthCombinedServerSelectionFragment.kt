@@ -21,12 +21,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import im.vector.app.R
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.realignPercentagesToParent
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
+import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentFtueServerSelectionCombinedBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
@@ -55,6 +57,8 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
             }
             false
         }
+
+        views.chooseServerGetInTouch.debouncedClicks { openUrlInExternalBrowser(requireContext(), getString(R.string.ftue_ems_url)) }
 
         views.chooseServerSubmit.debouncedClicks {
             updateServerUrl()
