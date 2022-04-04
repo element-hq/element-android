@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <View
+        android:id="@+id/locationLiveMessageBannerBackground"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:alpha="0.85"
+        android:background="?colorSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/locationLiveMessageBannerIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="?vctr_live_location"
+        android:padding="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/locationLiveMessageBannerBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_attachment_location_live_white"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/locationLiveMessageBannerTitle"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:text="@string/location_share_live_enabled"
+        android:textColor="?colorOnSurface"
+        app:layout_constraintBottom_toTopOf="@id/locationLiveMessageBannerSubTitle"
+        app:layout_constraintStart_toEndOf="@id/locationLiveMessageBannerIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/locationLiveMessageBannerSubTitle"
+        style="@style/Widget.Vector.TextView.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/locationLiveMessageBannerTitle"
+        app:layout_constraintTop_toBottomOf="@id/locationLiveMessageBannerTitle"
+        tools:text="9min left" />
+
+    <Button
+        android:id="@+id/locationLiveMessageBannerStop"
+        style="@style/Widget.Vector.Button.Text.LocationLive"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="8dp"
+        android:text="@string/location_share_live_stop_long_version"
+        app:layout_constraintBottom_toBottomOf="@id/locationLiveMessageBannerBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/locationLiveMessageBannerBackground" />
+</merge>
