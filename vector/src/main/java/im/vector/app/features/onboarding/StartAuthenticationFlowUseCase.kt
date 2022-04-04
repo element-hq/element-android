@@ -17,6 +17,7 @@
 package im.vector.app.features.onboarding
 
 import im.vector.app.R
+import im.vector.app.core.extensions.containsAll
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.login.LoginMode
@@ -37,7 +38,7 @@ class StartAuthenticationFlowUseCase @Inject constructor(
         val preferredLoginMode = authFlow.findPreferredLoginMode()
         val selection = createSelectedHomeserverState(authFlow, config, preferredLoginMode)
         val isOutdated = (preferredLoginMode == LoginMode.Password && !authFlow.isLoginAndRegistrationSupported) || authFlow.isOutdatedHomeserver
-        return StartAuthenticationResult(isOutdated, selection, preferredLoginMode, authFlow.supportedLoginTypes.toList())
+        return StartAuthenticationResult(isOutdated, selection)
     }
 
     private fun createSelectedHomeserverState(authFlow: LoginFlowResult, config: HomeServerConnectionConfig, preferredLoginMode: LoginMode): SelectedHomeserverState {
@@ -55,18 +56,14 @@ class StartAuthenticationFlowUseCase @Inject constructor(
     }
 
     private fun LoginFlowResult.findPreferredLoginMode() = when {
-        // SSO login is taken first
-        supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
-                supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders)
-        supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(ssoIdentityProviders)
-        supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
-        else                                                          -> LoginMode.Unsupported
+        supportedLoginTypes.containsAll(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders)
+        supportedLoginTypes.contains(LoginFlowTypes.SSO)                             -> LoginMode.Sso(ssoIdentityProviders)
+        supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)                        -> LoginMode.Password
+        else                                                                         -> LoginMode.Unsupported
     }
 
     data class StartAuthenticationResult(
             val isHomeserverOutdated: Boolean,
-            val selectedHomeserverState: SelectedHomeserverState,
-            val loginMode: LoginMode,
-            val supportedLoginTypes: List<String>,
+            val selectedHomeserverState: SelectedHomeserverState
     )
 }

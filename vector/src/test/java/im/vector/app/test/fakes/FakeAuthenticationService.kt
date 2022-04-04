@@ -22,6 +22,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 
@@ -35,8 +36,16 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
         every { isRegistrationStarted } returns started
     }
 
+    fun givenLoginFlow(config: HomeServerConnectionConfig, result: LoginFlowResult) {
+        coEvery { getLoginFlow(config) } returns result
+    }
+
     fun expectReset() {
         coJustRun { reset() }
+    }
+
+    fun expectedCancelsPendingLogin() {
+        coJustRun { cancelPendingLoginOrRegistration() }
     }
 
     fun givenWellKnown(matrixId: String, config: HomeServerConnectionConfig?, result: WellknownResult) {
@@ -52,6 +61,6 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
     }
 
     fun givenDirectAuthenticationThrows(config: HomeServerConnectionConfig, matrixId: String, password: String, deviceName: String, cause: Throwable) {
-        coEvery { directAuthentication(config, matrixId, password, deviceName) } throws  cause
+        coEvery { directAuthentication(config, matrixId, password, deviceName) } throws cause
     }
 }

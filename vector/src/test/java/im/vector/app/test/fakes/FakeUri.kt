@@ -25,7 +25,10 @@ class FakeUri(contentEquals: String? = null) {
     val instance = mockk<Uri>()
 
     init {
-        contentEquals?.let { givenEquals(it) }
+        contentEquals?.let {
+            givenEquals(it)
+            every { instance.toString() } returns it
+        }
     }
 
     fun givenNonHierarchical() {

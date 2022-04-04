@@ -67,7 +67,6 @@ data class SelectedHomeserverState(
         val sourceUrl: String? = null,
         val declaredUrl: String? = null,
         val preferredLoginMode: LoginMode = LoginMode.Unknown,
-        // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
         val supportedLoginTypes: List<String> = emptyList(),
 ) : Parcelable
 

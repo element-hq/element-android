@@ -140,8 +140,8 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
-            is OnboardingAction.SelectHomeServer           -> handleHomeserverChange(action.homeServerUrl).also { lastAction = action }
-            is OnboardingAction.EditHomeServer             -> handleHomeserverChange(action.homeServerUrl).also { lastAction = action }
+            is OnboardingAction.SelectHomeServer           -> run { lastAction = action }.also { handleHomeserverChange(action.homeServerUrl) }
+            is OnboardingAction.EditHomeServer             -> run { lastAction = action }.also { handleHomeserverChange(action.homeServerUrl) }
             is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
             is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
