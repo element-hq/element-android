@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isEmpty
+import android.view.inputmethod.EditorInfo
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.realignPercentagesToParent
@@ -47,9 +47,22 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
             viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnBack))
         }
 
-        views.chooseServerSubmit.debouncedClicks {
-            viewModel.handle(OnboardingAction.EditHomeServer(views.chooseServerInput.content().ensureProtocol().ensureTrailingSlash()))
+        views.chooseServerInput.editText?.setOnEditorActionListener { _, actionId, _ ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    updateServerUrl()
+                }
+            }
+            false
         }
+
+        views.chooseServerSubmit.debouncedClicks {
+            updateServerUrl()
+        }
+    }
+
+    private fun updateServerUrl() {
+        viewModel.handle(OnboardingAction.EditHomeServer(views.chooseServerInput.content().ensureProtocol().ensureTrailingSlash()))
     }
 
     override fun resetViewModel() {
