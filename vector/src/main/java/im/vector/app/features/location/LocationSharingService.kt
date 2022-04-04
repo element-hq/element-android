@@ -17,6 +17,7 @@
 package im.vector.app.features.location
 
 import android.content.Intent
+import android.os.Binder
 import android.os.IBinder
 import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +52,8 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     @Inject lateinit var locationTracker: LocationTracker
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var clock: Clock
+
+    private val binder = LocalBinder()
 
     private var roomArgsList = mutableListOf<RoomArgs>()
     private var timers = mutableListOf<Timer>()
@@ -160,8 +163,12 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         destroyMe()
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
+    override fun onBind(intent: Intent?): IBinder {
+        return binder
+    }
+
+    inner class LocalBinder : Binder() {
+        fun getService(): LocationSharingService = this@LocationSharingService
     }
 
     companion object {
