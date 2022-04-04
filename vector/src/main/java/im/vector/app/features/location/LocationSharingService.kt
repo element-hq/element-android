@@ -20,9 +20,18 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorService
+import im.vector.app.core.time.Clock
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType.generateBeaconInfoStateEventType
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.model.livelocation.BeaconInfo
+import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
@@ -40,6 +49,8 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var locationTracker: LocationTracker
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var clock: Clock
 
     private var roomArgsList = mutableListOf<RoomArgs>()
     private var timers = mutableListOf<Timer>()
@@ -67,9 +78,38 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
             // Schedule a timer to stop sharing
             scheduleTimer(roomArgs.roomId, roomArgs.durationMillis)
+
+            // Send beacon info state event
+            activeSessionHolder
+                    .getSafeActiveSession()
+                    ?.let { session ->
+                        session.coroutineScope.launch(session.coroutineDispatchers.io) {
+                            sendBeaconInfo(session, roomArgs)
+                        }
+                    }
         }
 
         return START_STICKY
+    }
+
+    private suspend fun sendBeaconInfo(session: Session, roomArgs: RoomArgs) {
+        val beaconContent = LiveLocationBeaconContent(
+                unstableBeaconInfo = BeaconInfo(
+                        timeout = roomArgs.durationMillis,
+                        isLive = true
+                ),
+                unstableTimestampAsMilliseconds = clock.epochMillis()
+        ).toContent()
+
+        val eventType = generateBeaconInfoStateEventType(session.myUserId)
+        val stateKey = session.myUserId
+        session
+                .getRoom(roomArgs.roomId)
+                ?.sendStateEvent(
+                        eventType = eventType,
+                        stateKey = stateKey,
+                        body = beaconContent
+                )
     }
 
     private fun scheduleTimer(roomId: String, durationMillis: Long) {
