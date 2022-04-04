@@ -300,11 +300,6 @@ class RoomProfileFragment @Inject constructor(
                 }
                 .setNegativeButton(R.string.action_cancel, null)
                 .show()
-        analyticsTracker.capture(Interaction(
-                index = null,
-                interactionType = null,
-                name = Interaction.Name.MobileRoomLeave
-        ))
     }
 
     override fun onRoomAliasesClicked() {

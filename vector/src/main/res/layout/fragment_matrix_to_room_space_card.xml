@@ -234,8 +234,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/knownMember1"
-            app:layout_constraintWidth_max="400dp"
-            tools:visibility="gone"/>
+            app:layout_constraintWidth_max="400dp" />
 
         <!--        <Button-->
         <!--            android:id="@+id/matrixToCardMainButton"-->
@@ -276,8 +275,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/matrixToCardMainButton"
-            app:layout_constraintWidth_max="400dp"
-            tools:visibility="gone"/>
+            app:layout_constraintWidth_max="400dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
