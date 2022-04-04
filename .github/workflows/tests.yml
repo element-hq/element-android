@@ -74,7 +74,7 @@ jobs:
       - build-android-tests
     if: ${{ (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' ) && failure() }}
     steps:
-      - uses: michaelkaye/matrix-hookshot-action@v0.3.0
+      - uses: michaelkaye/matrix-hookshot-action@v1.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
