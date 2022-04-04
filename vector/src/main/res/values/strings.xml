@@ -358,6 +358,7 @@
     <string name="action_switch">Switch</string>
     <string name="action_unpublish">Unpublish</string>
     <string name="action_enable">Enable</string>
+    <string name="action_disable">Disable</string>
     <string name="action_not_now">Not now</string>
     <string name="action_agree">Agree</string>
     <string name="action_change">"Change"</string>
@@ -1041,7 +1042,8 @@
     <string name="media_source_choose">Choose</string>
     <string name="settings_play_shutter_sound">Play shutter sound</string>
 
-    <string name="settings_flair">Flair</string>
+    <!-- TODO Remove -->
+    <string name="settings_flair" tools:ignore="MissingTranslation">Flair</string>
 
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>
@@ -1868,6 +1870,25 @@
     <string name="ftue_auth_use_case_join_existing_server">Looking to join an existing server?</string>
     <string name="ftue_auth_use_case_connect_to_server">Connect to server</string>
 
+    <string name="ftue_account_created_personalize">Personalize profile</string>
+    <string name="ftue_account_created_take_me_home">Take me home</string>
+    <string name="ftue_account_created_congratulations_title">Congratulations!</string>
+    <string name="ftue_account_created_subtitle">Your account %s has been created.</string>
+
+    <string name="ftue_display_name_title">Choose a display name</string>
+    <string name="ftue_display_name_subtitle">This will be shown when you send messages.</string>
+    <string name="ftue_display_name_entry_title">Display Name</string>
+    <string name="ftue_display_name_entry_footer">You can change this later</string>
+
+    <string name="ftue_profile_picture_title">Add a profile picture</string>
+    <string name="ftue_profile_picture_subtitle">You can change this anytime.</string>
+    <string name="ftue_personalize_lets_go">Let\'s go</string>
+    <string name="ftue_personalize_complete_title">You\'re all set!</string>
+    <string name="ftue_personalize_complete_subtitle">Your preferences have been saved.</string>
+
+    <string name="ftue_personalize_submit">Save and continue</string>
+    <string name="ftue_personalize_skip_this_step">Skip this step</string>
+
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
     <string name="login_splash_text2">Keep conversations private with encryption</string>
@@ -2455,6 +2476,7 @@
 
     <string name="error_empty_field_choose_user_name">Please choose a username.</string>
     <string name="error_empty_field_choose_password">Please choose a password.</string>
+    <string name="error_forbidden_digits_only_username">"The homeserver does not accept username with only digits."</string>
     <string name="external_link_confirmation_title">Double-check this link</string>
     <string name="external_link_confirmation_message">The link %1$s is taking you to another site: %2$s.\n\nAre you sure you want to continue?</string>
 

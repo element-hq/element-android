@@ -135,7 +135,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
             error++
         }
         if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
-            views.loginFieldTil.error = "The homeserver does not accept username with only digits."
+            views.loginFieldTil.error = getString(R.string.error_forbidden_digits_only_username)
             error++
         }
         if (password.isEmpty()) {
@@ -254,7 +254,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     }
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetLogin)
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
 
     override fun onError(throwable: Throwable) {

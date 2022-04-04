@@ -28,16 +28,15 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 
-class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
-                                                             initialState: InviteUsersToRoomViewState,
-                                                             session: Session,
-                                                             val stringProvider: StringProvider) :
-    VectorViewModel<InviteUsersToRoomViewState, InviteUsersToRoomAction, InviteUsersToRoomViewEvents>(initialState) {
+class InviteUsersToRoomViewModel @AssistedInject constructor(
+        @Assisted initialState: InviteUsersToRoomViewState,
+        session: Session,
+        val stringProvider: StringProvider
+) : VectorViewModel<InviteUsersToRoomViewState, InviteUsersToRoomAction, InviteUsersToRoomViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
 

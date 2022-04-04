@@ -242,4 +242,12 @@ interface RoomService {
      */
     fun getFlattenRoomSummaryChildrenOfLive(spaceId: String?,
                                             memberships: List<Membership> = Membership.activeMemberships()): LiveData<List<RoomSummary>>
+
+    /**
+     * Refreshes the RoomSummary LatestPreviewContent for the given @param roomId
+     * If the roomId is null, all rooms are updated
+     *
+     * This is useful for refreshing summary content with encrypted messages after receiving new room keys
+     */
+    fun refreshJoinedRoomSummaryPreviews(roomId: String?)
 }

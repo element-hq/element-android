@@ -52,7 +52,7 @@ class KeysBackupRestoreActivity : SimpleFragmentActivity() {
         super.onBackPressed()
     }
 
-    @Inject  lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
     override fun initUiAndData() {
         super.initUiAndData()

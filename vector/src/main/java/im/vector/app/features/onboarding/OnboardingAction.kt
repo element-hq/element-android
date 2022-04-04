@@ -41,6 +41,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
 
     // Login or Register, depending on the signMode
     data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
+    data class Register(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
     object StopEmailValidationCheck : OnboardingAction
 
     data class PostRegisterAction(val registerAction: RegisterAction) : OnboardingAction
@@ -51,7 +52,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
     object ResetHomeServerType : ResetAction
     object ResetHomeServerUrl : ResetAction
     object ResetSignMode : ResetAction
-    object ResetLogin : ResetAction
+    object ResetAuthenticationAttempt : ResetAction
     object ResetResetPassword : ResetAction
 
     // Homeserver history

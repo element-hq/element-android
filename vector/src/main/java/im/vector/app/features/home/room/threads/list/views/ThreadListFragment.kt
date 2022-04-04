@@ -104,6 +104,11 @@ class ThreadListFragment @Inject constructor(
     override fun invalidate() = withState(threadListViewModel) { state ->
         renderEmptyStateIfNeeded(state)
         threadListController.update(state)
+        renderLoaderIfNeeded(state)
+    }
+
+    private fun renderLoaderIfNeeded(state: ThreadListViewState) {
+        views.threadListProgressBar.isVisible = state.isLoading
     }
 
     private fun renderToolbar() {

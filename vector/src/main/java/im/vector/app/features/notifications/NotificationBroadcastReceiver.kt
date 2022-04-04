@@ -202,7 +202,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
         })
-        */
+         */
     }
 
     private fun getReplyMessage(intent: Intent?): String? {

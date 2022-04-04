@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    <suppress until="2023-01-01Z">
+        <notes><![CDATA[
+      file name: ktlint-reporter-checkstyle-0.45.1.jar
+      ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.pinterest\.ktlint/ktlint\-reporter\-checkstyle@.*$</packageUrl>
+        <cve>CVE-2019-10782</cve>
+    </suppress>
+    <suppress until="2023-01-01Z">
+        <notes><![CDATA[
+   file name: ktlint-reporter-checkstyle-0.45.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.pinterest\.ktlint/ktlint\-reporter\-checkstyle@.*$</packageUrl>
+        <cve>CVE-2019-9658</cve>
+    </suppress>
+</suppressions>

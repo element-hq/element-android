@@ -68,8 +68,8 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         when (action) {
             is DebugPrivateSettingsViewActions.SetDialPadVisibility         -> handleSetDialPadVisibility(action)
             is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
-            is SetDisplayNameCapabilityOverride                             -> handSetDisplayNameCapabilityOverride(action)
-            is SetAvatarCapabilityOverride                                  -> handSetAvatarCapabilityOverride(action)
+            is SetDisplayNameCapabilityOverride                             -> handleSetDisplayNameCapabilityOverride(action)
+            is SetAvatarCapabilityOverride                                  -> handleSetAvatarCapabilityOverride(action)
         }
     }
 
@@ -85,14 +85,14 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handSetDisplayNameCapabilityOverride(action: SetDisplayNameCapabilityOverride) {
+    private fun handleSetDisplayNameCapabilityOverride(action: SetDisplayNameCapabilityOverride) {
         viewModelScope.launch {
             val forceDisplayName = action.option.toBoolean()
             debugVectorOverrides.setHomeserverCapabilities { copy(canChangeDisplayName = forceDisplayName) }
         }
     }
 
-    private fun handSetAvatarCapabilityOverride(action: SetAvatarCapabilityOverride) {
+    private fun handleSetAvatarCapabilityOverride(action: SetAvatarCapabilityOverride) {
         viewModelScope.launch {
             val forceAvatar = action.option.toBoolean()
             debugVectorOverrides.setHomeserverCapabilities { copy(canChangeAvatar = forceAvatar) }

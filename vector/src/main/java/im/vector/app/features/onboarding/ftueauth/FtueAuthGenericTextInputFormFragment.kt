@@ -254,6 +254,6 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
     }
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetLogin)
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
 }

@@ -370,7 +370,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.45'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.46'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -469,10 +469,10 @@ dependencies {
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:1.92.1-jitsi-9093212@aar')
+    implementation('com.facebook.react:react-native-webrtc:1.94.2-jitsi-10227332@aar')
 
     // Jitsi
-    implementation('org.jitsi.react:jitsi-meet-sdk:3.10.0') {
+    implementation('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'

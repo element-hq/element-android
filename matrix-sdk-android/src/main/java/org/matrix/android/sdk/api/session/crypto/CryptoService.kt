@@ -140,7 +140,6 @@ interface CryptoService {
     fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>>
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
-
     fun removeSessionListener(listener: NewSessionListener)
 
     fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest>
