@@ -382,26 +382,34 @@ class FtueAuthVariant(
         supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         when (stage) {
-            is Stage.ReCaptcha -> activity.addFragmentToBackstack(views.loginFragmentContainer,
+            is Stage.ReCaptcha -> activity.addFragmentToBackstack(
+                    views.loginFragmentContainer,
                     FtueAuthCaptchaFragment::class.java,
                     FtueAuthCaptchaFragmentArgument(stage.publicKey),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                    option = commonOption)
-            is Stage.Email     -> activity.addFragmentToBackstack(views.loginFragmentContainer,
+                    option = commonOption
+            )
+            is Stage.Email     -> activity.addFragmentToBackstack(
+                    views.loginFragmentContainer,
                     FtueAuthGenericTextInputFormFragment::class.java,
                     FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                    option = commonOption)
-            is Stage.Msisdn    -> activity.addFragmentToBackstack(views.loginFragmentContainer,
+                    option = commonOption
+            )
+            is Stage.Msisdn    -> activity.addFragmentToBackstack(
+                    views.loginFragmentContainer,
                     FtueAuthGenericTextInputFormFragment::class.java,
                     FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                    option = commonOption)
-            is Stage.Terms     -> activity.addFragmentToBackstack(views.loginFragmentContainer,
+                    option = commonOption
+            )
+            is Stage.Terms     -> activity.addFragmentToBackstack(
+                    views.loginFragmentContainer,
                     FtueAuthTermsFragment::class.java,
                     FtueAuthTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(R.string.resources_language))),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                    option = commonOption)
+                    option = commonOption
+            )
             else               -> Unit // Should not happen
         }
     }
