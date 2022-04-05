@@ -109,7 +109,7 @@ abstract class BottomSheetActionItem : VectorEpoxyModel<BottomSheetActionItem.Ho
         } else {
             holder.text.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
         }
-        holder.betaLabel.isVisible =  showBetaLabel
+        holder.betaLabel.isVisible = showBetaLabel
     }
 
     class Holder : VectorEpoxyHolder() {
