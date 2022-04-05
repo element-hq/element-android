@@ -40,6 +40,8 @@ import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListController
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewModel
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewState
+import im.vector.app.features.rageshake.BugReporter
+import im.vector.app.features.rageshake.ReportType
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -47,6 +49,7 @@ import javax.inject.Inject
 
 class ThreadListFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
+        private val bugReporter: BugReporter,
         private val threadListController: ThreadListController,
         val threadListViewModelFactory: ThreadListViewModel.Factory
 ) : VectorBaseFragment<FragmentThreadListBinding>(),
@@ -90,6 +93,7 @@ class ThreadListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initTextConstants()
+        initBetaFeedback()
         views.threadListRecyclerView.configureWith(threadListController, TimelineItemAnimator(), hasFixedSize = false)
         threadListController.listener = this
     }
@@ -111,6 +115,13 @@ class ThreadListFragment @Inject constructor(
                 resources.getString(R.string.reply_in_thread))
     }
 
+    private fun initBetaFeedback() {
+        views.threadsFeedBackConstraintLayout.isVisible = resources.getBoolean(R.bool.feature_threads_beta_feedback_enabled)
+        views.threadFeedbackDivider.isVisible = resources.getBoolean(R.bool.feature_threads_beta_feedback_enabled)
+        views.threadsFeedBackConstraintLayout.debouncedClicks {
+            bugReporter.openBugReportScreen(requireActivity(), reportType = ReportType.THREADS_BETA_FEEDBACK)
+        }
+    }
     override fun invalidate() = withState(threadListViewModel) { state ->
         invalidateOptionsMenu()
         renderEmptyStateIfNeeded(state)

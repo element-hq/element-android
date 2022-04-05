@@ -85,6 +85,15 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
                 hideBugReportOptions()
             }
+            ReportType.THREADS_BETA_FEEDBACK -> {
+                supportActionBar?.setTitle(R.string.send_feedback_threads_title)
+
+                views.bugReportFirstText.setText(R.string.send_feedback_threads_info)
+                views.bugReportTextInputLayout.hint = getString(R.string.feedback)
+                views.bugReportButtonContactMe.isVisible = true
+
+                hideBugReportOptions()
+            }
             else                           -> {
                 // other types not supported here
             }
