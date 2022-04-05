@@ -54,7 +54,8 @@ class ThreadsManager @Inject constructor(
      * Generates and return an Html spanned string to be rendered especially in dialogs
      */
     fun getBetaEnableThreadsMessage(): Spanned {
-        val href = "<a href='$learnMoreUrl'>Learn more</a>.<br><br>"
+        val learnMore = context.getString(R.string.action_learn_more)
+        val href = "<a href='$learnMoreUrl'>$learnMore</a>.<br><br>"
         val message = context.getString(R.string.threads_beta_enable_notice_message, href)
         return HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
