@@ -33,6 +33,7 @@ import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -60,9 +61,11 @@ abstract class ThreadListItem : VectorEpoxyModel<ThreadListItem.Holder>() {
         holder.dateTextView.text = date
         if (rootMessageDeleted) {
             holder.rootMessageTextView.text = holder.view.context.getString(R.string.event_redacted)
+            holder.rootMessageTextView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary))
             holder.rootMessageTextView.setLeftDrawable(R.drawable.ic_trash_16, R.attr.vctr_content_tertiary)
             holder.rootMessageTextView.compoundDrawablePadding = DimensionConverter(holder.view.context.resources).dpToPx(10)
         } else {
+            holder.rootMessageTextView.setTextColor(ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_primary))
             holder.rootMessageTextView.text = rootMessage
             holder.rootMessageTextView.clearDrawables()
         }

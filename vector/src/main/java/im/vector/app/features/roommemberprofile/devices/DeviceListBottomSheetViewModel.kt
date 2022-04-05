@@ -28,7 +28,6 @@ import dagger.hilt.EntryPoints
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
@@ -94,7 +93,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
             is DeviceListAction.SelectDevice   -> selectDevice(action)
             is DeviceListAction.DeselectDevice -> deselectDevice()
             is DeviceListAction.ManuallyVerify -> manuallyVerify(action)
-        }.exhaustive
+        }
     }
 
     private fun refreshSelectedId() = withState { state ->

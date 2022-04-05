@@ -33,13 +33,13 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
@@ -78,6 +78,11 @@ class RoomSettingsFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.vector_room_settings
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomSettings
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
@@ -98,7 +103,7 @@ class RoomSettingsFragment @Inject constructor(
                     ignoreChanges = true
                     vectorBaseActivity.onBackPressed()
                 }
-            }.exhaustive
+            }
         }
     }
 

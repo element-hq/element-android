@@ -70,7 +70,7 @@ object HkdfSha256 {
            T(2) = HMAC-Hash(PRK, T(1) | info | 0x02)
            T(3) = HMAC-Hash(PRK, T(2) | info | 0x03)
            ...
-        */
+         */
         val n = ceil(outputLength.toDouble() / HASH_LEN.toDouble()).toInt()
 
         var stepHash = ByteArray(0) // T(0) empty string (zero length)

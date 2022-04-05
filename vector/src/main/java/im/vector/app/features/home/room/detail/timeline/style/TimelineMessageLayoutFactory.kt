@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.isEdition
+import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import javax.inject.Inject
 
 class TimelineMessageLayoutFactory @Inject constructor(private val session: Session,
@@ -43,10 +44,9 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         // Can be rendered in bubbles, other types will fallback to default
         private val EVENT_TYPES_WITH_BUBBLE_LAYOUT = setOf(
                 EventType.MESSAGE,
-                EventType.POLL_START,
                 EventType.ENCRYPTED,
                 EventType.STICKER
-        )
+        ) + EventType.POLL_START
 
         // Can't be rendered in bubbles, so get back to default layout
         private val MSG_TYPES_WITHOUT_BUBBLE_LAYOUT = setOf(
@@ -92,6 +92,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
                 isNextMessageReceivedMoreThanOneHourAgo ||
                 isTileTypeMessage(nextDisplayableEvent) ||
+                event.isRootThread() ||
                 nextDisplayableEvent.isEdition()
 
         val messageLayout = when (layoutSettingsProvider.getLayoutSettings()) {
@@ -118,6 +119,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                     TimelineMessageLayout.Bubble(
                             showAvatar = showInformation && !isSentByMe,
                             showDisplayName = showInformation && !isSentByMe,
+                            addTopMargin = isFirstFromThisSender && isSentByMe,
                             isIncoming = !isSentByMe,
                             cornersRadius = cornersRadius,
                             isPseudoBubble = messageContent.isPseudoBubble(),

@@ -93,7 +93,8 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
             override val itemClickListener: ClickListener? = null,
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val emojiTypeFace: Typeface? = null
+            val emojiTypeFace: Typeface? = null,
+            override val reactionsSummaryEvents: ReactionsSummaryEvents? = null
     ) : AbsBaseMessageItem.Attributes
 
     enum class ShieldUIState {

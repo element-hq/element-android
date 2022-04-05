@@ -5,7 +5,7 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'placeholder-resolver'
+apply plugin: 'com.likethesalad.stem'
 apply plugin: 'dagger.hilt.android.plugin'
 
 kapt {
@@ -18,7 +18,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 2
+ext.versionPatch = 10
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -131,17 +131,13 @@ android {
         // Required for sonar analysis
         versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
 
+        // Generate a random app task affinity
+        manifestPlaceholders = [appTaskAffinitySuffix:"H_${gitRevision()}"]
+
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
-        resValue "string", "git_revision", "\"${gitRevision()}\""
-
         buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
-        resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
-
         buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
-        resValue "string", "git_branch_name", "\"${gitBranchName()}\""
-
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
-        resValue "string", "build_number", "\"${buildNumber}\""
 
         buildConfigField "im.vector.app.features.VectorFeatures.OnboardingVariant", "ONBOARDING_VARIANT", "im.vector.app.features.VectorFeatures.OnboardingVariant.FTUE_AUTH"
 
@@ -153,11 +149,9 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
-        // Indicates whether or not threading support is enabled
-        buildConfigField "Boolean", "THREADING_ENABLED", "${isThreadingEnabled}"
-
         buildConfigField "Boolean", "enableLocationSharing", "true"
         buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
+        buildConfigField "Boolean", "PRESENCE_SYNC_ENABLED", "true"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -233,10 +227,10 @@ android {
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "Element dbg"
 
-            resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             // Set to true if you want to enable strict mode in debug
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+            buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "true"
 
             signingConfig signingConfigs.debug
         }
@@ -244,9 +238,9 @@ android {
         release {
             resValue "string", "app_name", "Element"
 
-            resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
+            buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "false"
 
             postprocessing {
                 removeUnusedCode true
@@ -332,15 +326,15 @@ android {
 }
 
 dependencies {
-
+    implementation project(":vector-config")
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
-    implementation project(":diff-match-patch")
-    implementation project(":multipicker")
-    implementation project(":attachment-viewer")
     implementation project(":library:jsonviewer")
     implementation project(":library:ui-styles")
     implementation project(":library:core-utils")
+    implementation project(":library:attachment-viewer")
+    implementation project(":library:diff-match-patch")
+    implementation project(":library:multipicker")
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation libs.jetbrains.coroutinesCore
@@ -364,6 +358,7 @@ dependencies {
     // Lifecycle
     implementation libs.androidx.lifecycleLivedata
     implementation libs.androidx.lifecycleProcess
+    implementation libs.androidx.lifecycleRuntimeKtx
 
     implementation libs.androidx.datastore
     implementation libs.androidx.datastorepreferences
@@ -376,7 +371,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.43'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.46'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -416,7 +411,6 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
     implementation 'com.github.hyuwah:DraggableView:1.0.0'
-    implementation 'com.github.Armen101:AudioRecordView:1.0.5'
 
     // Custom Tab
     implementation 'androidx.browser:browser:1.4.0'
@@ -476,10 +470,10 @@ dependencies {
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
     // implementation 'org.webrtc:google-webrtc:1.0.+'
-    implementation('com.facebook.react:react-native-webrtc:1.92.1-jitsi-9093212@aar')
+    implementation('com.facebook.react:react-native-webrtc:1.94.2-jitsi-10227332@aar')
 
     // Jitsi
-    implementation('org.jitsi.react:jitsi-meet-sdk:3.10.0') {
+    implementation('org.jitsi.react:jitsi-meet-sdk:5.0.2') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'

@@ -30,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceSettingsBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.rageshake.BugReporter
@@ -69,6 +70,11 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetSpaceSettingsBinding {
         return BottomSheetSpaceSettingsBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SpaceMenu
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

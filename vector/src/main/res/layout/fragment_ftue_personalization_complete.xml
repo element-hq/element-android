@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/viewKonfetti"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/ftueAuthGutterStart"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/ftueAuthGutterEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
+
+    <Space
+        android:id="@+id/personalizationCompleteSpace1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/personalizationCompleteLogo"
+        app:layout_constraintHeight_percent="0.10"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <ImageView
+        android:id="@+id/personalizationCompleteLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/circle"
+        android:backgroundTint="?colorSecondary"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_celebration"
+        app:layout_constraintBottom_toTopOf="@id/personalizationCompleteSpace2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/personalizationCompleteSpace1"
+        app:tint="@color/palette_white" />
+
+    <Space
+        android:id="@+id/personalizationCompleteSpace2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/personalizationCompleteTitle"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toBottomOf="@id/personalizationCompleteLogo" />
+
+    <TextView
+        android:id="@+id/personalizationCompleteTitle"
+        style="@style/Widget.Vector.TextView.Title.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/ftue_personalize_complete_title"
+        android:textColor="?vctr_content_primary"
+        android:transitionName="loginTitleTransition"
+        app:layout_constraintBottom_toTopOf="@id/personalizationCompleteSubtitle"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/personalizationCompleteSpace2" />
+
+    <TextView
+        android:id="@+id/personalizationCompleteSubtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/ftue_personalize_complete_subtitle"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toTopOf="@id/personalizationCompleteSpace4"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/personalizationCompleteTitle" />
+
+    <Space
+        android:id="@+id/personalizationCompleteSpace4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/personalizationCompleteCta"
+        app:layout_constraintTop_toBottomOf="@id/personalizationCompleteSubtitle" />
+
+    <Button
+        android:id="@+id/personalizationCompleteCta"
+        style="@style/Widget.Vector.Button.Login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/ftue_personalize_lets_go"
+        android:textAllCaps="true"
+        app:layout_constraintBottom_toTopOf="@id/personalizationCompleteSpace5"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/personalizationCompleteSpace4" />
+
+    <Space
+        android:id="@+id/personalizationCompleteSpace5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toBottomOf="@id/personalizationCompleteCta" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

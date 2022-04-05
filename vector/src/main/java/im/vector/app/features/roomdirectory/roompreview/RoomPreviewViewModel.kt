@@ -24,7 +24,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -204,7 +203,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
         when (action) {
             is RoomPreviewAction.Join        -> handleJoinRoom()
             RoomPreviewAction.JoinThirdParty -> handleJoinRoomThirdParty()
-        }.exhaustive
+        }
     }
 
     private fun handleJoinRoomThirdParty() = withState { state ->
@@ -252,7 +251,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
                         // Always false in this case (?)
                         isDM = false,
                         isSpace = false,
-                        roomSize = state.numJoinMembers.toAnalyticsRoomSize()
+                        roomSize = state.numJoinMembers.toAnalyticsRoomSize(),
                 ))
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined

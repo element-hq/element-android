@@ -83,9 +83,10 @@
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_timeline">
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="@bool/settings_interface_bubble_default"
             android:key="SETTINGS_INTERFACE_BUBBLE_KEY"
-            android:title="@string/message_bubbles" />
+            android:title="@string/message_bubbles"
+            app:isPreferenceVisible="@bool/settings_interface_bubble_visible" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"

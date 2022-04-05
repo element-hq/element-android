@@ -3,12 +3,9 @@
     <string name="create_room_name_hint">Ime</string>
     <string name="send_bug_report">Prijava hrošča</string>
     <string name="send_bug_report_include_screenshot">Pošlji ekransko sliko</string>
-    <string name="action_resend">Ponovno pošlji</string>
     <string name="action_send">Pošlji</string>
-    <string name="notification_sync_in_progress">Sinhroniziram…</string>
     <string name="notice_room_join_by_you">Pridružil si se v sobi</string>
     <string name="notice_room_invite_you">%1$s te je povabil</string>
-    <string name="summary_message">%1$s: %2$s</string>
     <string name="notice_answered_call_by_you">Odgovoril si na klic.</string>
     <string name="notice_answered_call">%s je odgovoril na klic.</string>
     <string name="notice_room_name_changed_by_you">Spremenil si ime sobe v: %1$s</string>
@@ -23,8 +20,6 @@
     <string name="notice_room_join">%1$s se je pridružil v sobi</string>
     <string name="notice_room_created_by_you">Ustvaril si sobo</string>
     <string name="notice_room_created">%1$s je ustvaril sobo</string>
-    <string name="summary_you_sent_image">Poslal si sliko.</string>
-    <string name="summary_user_sent_image">%1$s je poslal sliko.</string>
     <string name="error_no_network">Ni omrežja. Preveri internetno povezavo.</string>
     <string name="create_new_room">Ustvari novo sobo</string>
 </resources>

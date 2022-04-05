@@ -56,7 +56,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
 
         val allEvents = (newJoinEvents + inviteEvents).filter { event ->
             when (event.type) {
-                EventType.POLL_START,
+                in EventType.POLL_START,
                 EventType.MESSAGE,
                 EventType.REDACTION,
                 EventType.ENCRYPTED,

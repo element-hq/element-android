@@ -97,9 +97,13 @@ import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.terms.LoginTermsFragment2
 import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
 import im.vector.app.features.matrixto.MatrixToUserFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthAccountCreatedFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseDisplayNameFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseProfilePictureFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLoginFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthPersonalizationCompleteFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordMailConfirmationFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordSuccessFragment
@@ -472,6 +476,26 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthTermsFragment::class)
     fun bindFtueAuthTermsFragment(fragment: FtueAuthTermsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthAccountCreatedFragment::class)
+    fun bindFtueAuthAccountCreatedFragment(fragment: FtueAuthAccountCreatedFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthChooseDisplayNameFragment::class)
+    fun bindFtueAuthChooseDisplayNameFragment(fragment: FtueAuthChooseDisplayNameFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthChooseProfilePictureFragment::class)
+    fun bindFtueAuthChooseProfilePictureFragment(fragment: FtueAuthChooseProfilePictureFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthPersonalizationCompleteFragment::class)
+    fun bindFtueAuthPersonalizationCompleteFragment(fragment: FtueAuthPersonalizationCompleteFragment): Fragment
 
     @Binds
     @IntoMap

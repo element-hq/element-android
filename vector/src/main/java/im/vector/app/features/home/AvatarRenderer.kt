@@ -18,6 +18,7 @@ package im.vector.app.features.home
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.AnyThread
 import androidx.annotation.ColorInt
@@ -48,6 +49,7 @@ import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.util.MatrixItem
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -98,6 +100,16 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
         render(glideRequests,
                 matrixItem,
                 DrawableImageViewTarget(imageView))
+    }
+
+    @UiThread
+    fun render(matrixItem: MatrixItem, localUri: Uri?, imageView: ImageView) {
+        val placeholder = getPlaceholderDrawable(matrixItem)
+        GlideApp.with(imageView)
+                .load(localUri?.let { File(localUri.path!!) })
+                .apply(RequestOptions.circleCropTransform())
+                .placeholder(placeholder)
+                .into(imageView)
     }
 
     @UiThread

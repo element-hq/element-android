@@ -28,10 +28,10 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
@@ -48,7 +48,6 @@ import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -66,6 +65,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomMemberProfileViewState,
         private val stringProvider: StringProvider,
         private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val directRoomHelper: DirectRoomHelper,
         private val session: Session
 ) : VectorViewModel<RoomMemberProfileViewState, RoomMemberProfileAction, RoomMemberProfileViewEvents>(initialState) {
 
@@ -167,7 +167,23 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             is RoomMemberProfileAction.KickUser               -> handleKickAction(action)
             RoomMemberProfileAction.InviteUser                -> handleInviteAction()
             is RoomMemberProfileAction.SetUserColorOverride   -> handleSetUserColorOverride(action)
-        }.exhaustive
+            is RoomMemberProfileAction.OpenOrCreateDm         -> handleOpenOrCreateDm(action)
+        }
+    }
+
+    private fun handleOpenOrCreateDm(action: RoomMemberProfileAction.OpenOrCreateDm) {
+        viewModelScope.launch {
+            _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+            val roomId = try {
+                directRoomHelper.ensureDMExists(action.userId)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+                return@launch
+            }
+            if (roomId != initialState.roomId) {
+                _viewEvents.post(RoomMemberProfileViewEvents.OpenRoom(roomId = roomId))
+            }
+        }
     }
 
     private fun handleSetUserColorOverride(action: RoomMemberProfileAction.SetUserColorOverride) {
@@ -311,12 +327,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
 
     private suspend fun fetchProfileInfo() {
         val result = runCatchingToAsync {
-            session.getProfile(initialState.userId)
+            session.getProfileAsUser(initialState.userId)
                     .let {
                         MatrixItem.UserItem(
                                 id = initialState.userId,
-                                displayName = it[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                avatarUrl = it[ProfileService.AVATAR_URL_KEY] as? String
+                                displayName = it.displayName,
+                                avatarUrl = it.avatarUrl
                         )
                     }
         }

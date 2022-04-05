@@ -36,6 +36,7 @@ sealed class OnboardingViewEvents : VectorViewEvents {
 
     object OpenUseCaseSelection : OnboardingViewEvents()
     object OpenServerSelection : OnboardingViewEvents()
+    object OpenCombinedRegister : OnboardingViewEvents()
     data class OnServerSelectionDone(val serverType: ServerType) : OnboardingViewEvents()
     object OnLoginFlowRetrieved : OnboardingViewEvents()
     data class OnSignModeSelected(val signMode: SignMode) : OnboardingViewEvents()
@@ -48,4 +49,11 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     data class OnSendMsisdnSuccess(val msisdn: String) : OnboardingViewEvents()
 
     data class OnWebLoginError(val errorCode: Int, val description: String, val failingUrl: String) : OnboardingViewEvents()
+    object OnAccountCreated : OnboardingViewEvents()
+    object OnAccountSignedIn : OnboardingViewEvents()
+    object OnTakeMeHome : OnboardingViewEvents()
+    object OnChooseDisplayName : OnboardingViewEvents()
+    object OnChooseProfilePicture : OnboardingViewEvents()
+    object OnPersonalizationComplete : OnboardingViewEvents()
+    object OnBack : OnboardingViewEvents()
 }

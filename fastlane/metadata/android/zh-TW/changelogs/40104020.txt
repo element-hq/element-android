@@ -1,0 +1,2 @@
+此版本中的主要變動：新增對 @room 的支援與未公開的投票，以及其他許多小變動。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.4.2

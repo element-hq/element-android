@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ import im.vector.app.databinding.FragmentLoginCaptchaBinding
 import im.vector.app.features.login.JavascriptResponse
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
+import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
@@ -181,7 +182,7 @@ class FtueAuthCaptchaFragment @Inject constructor(
 
                     val response = javascriptResponse?.response
                     if (javascriptResponse?.action == "verifyCallback" && response != null) {
-                        viewModel.handle(OnboardingAction.CaptchaDone(response))
+                        viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.CaptchaDone(response)))
                     }
                 }
                 return true
@@ -190,7 +191,7 @@ class FtueAuthCaptchaFragment @Inject constructor(
     }
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetLogin)
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
 
     override fun updateWithState(state: OnboardingViewState) {

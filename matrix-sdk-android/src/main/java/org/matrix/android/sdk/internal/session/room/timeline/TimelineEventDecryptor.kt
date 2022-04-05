@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -99,7 +100,13 @@ internal class TimelineEventDecryptor @Inject constructor(
         }
         executor?.execute {
             Realm.getInstance(realmConfiguration).use { realm ->
-                processDecryptRequest(request, realm)
+                try {
+                    runBlocking {
+                        processDecryptRequest(request, realm)
+                    }
+                } catch (e: InterruptedException) {
+                    Timber.i("Decryption got interrupted")
+                }
             }
         }
     }
@@ -115,7 +122,7 @@ internal class TimelineEventDecryptor @Inject constructor(
                 threadsAwarenessHandler.makeEventThreadAware(realm, event.roomId, decryptedEvent, eventEntity)
         }
     }
-    private fun processDecryptRequest(request: DecryptionRequest, realm: Realm) {
+    private suspend fun processDecryptRequest(request: DecryptionRequest, realm: Realm) {
         val event = request.event
         val timelineId = request.timelineId
 

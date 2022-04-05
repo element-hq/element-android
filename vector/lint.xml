@@ -6,6 +6,7 @@
     <issue id="MissingTranslation" severity="ignore" />
     <issue id="TypographyEllipsis" severity="error" />
     <issue id="ImpliedQuantity" severity="warning" />
+    <issue id="MissingQuantity" severity="warning" />
     <issue id="UnusedQuantity" severity="error" />
     <issue id="IconXmlAndPng" severity="error" />
     <issue id="IconDipSize" severity="error" />
@@ -13,6 +14,29 @@
     <issue id="IconDuplicates" severity="error" />
     <issue id="IconExpectedSize" severity="error" />
     <issue id="LocaleFolder" severity="error" />
+
+    <issue id="TooManyViews" severity="warning">
+        <!-- Ignore TooManyViews in debug build type -->
+        <ignore path="**/src/debug/**" />
+    </issue>
+
+    <issue id="UnusedResources" severity="error">
+        <!-- Ignore unused resource in debug build type -->
+        <ignore path="**/src/debug/**" />
+
+        <!-- Following resources are for F-Droid variant only, so ignore for GPlay -->
+        <ignore regexp="settings_troubleshoot_test_service_boot_*" />
+        <ignore regexp="settings_troubleshoot_test_bg_restricted_*" />
+        <ignore regexp="settings_troubleshoot_test_battery_*" />
+
+        <!-- Following resources are for GPlay variant only, so ignore for F-Droid -->
+        <ignore regexp="settings_troubleshoot_test_play_services_" />
+        <ignore regexp="settings_troubleshoot_test_push_loop_" />
+        <ignore regexp="settings_troubleshoot_test_token_registration_" />
+        <ignore regexp="settings_troubleshoot_test_fcm_" />
+        <ignore regexp="no_valid_google_play_services_apk" />
+        <ignore regexp="sas_error_unknown" />
+    </issue>
 
     <!-- UX -->
     <issue id="ButtonOrder" severity="error" />
@@ -74,14 +98,6 @@
     <!-- Wording -->
     <issue id="Typos" severity="error" />
     <issue id="TypographyDashes" severity="error" />
-
-    <!-- Ignore lint issue in generated resource file from templates.
-     https://github.com/LikeTheSalad/android-string-reference generates string from the default language
-     if the translation is missing, and it can lead to typos. Lint should only check the string from the
-     original file, so with id starting by `template_`. -->
-    <issue id="all">
-        <ignore path="**/generated/resolved/**/resolved.xml" />
-    </issue>
 
     <!-- DI -->
     <issue id="JvmStaticProvidesInObjectDetector" severity="error" />

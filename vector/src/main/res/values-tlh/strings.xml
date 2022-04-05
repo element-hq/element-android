@@ -4,16 +4,10 @@
     <string name="dark_theme">tu\'qom Hurgh</string>
     <string name="black_theme">tu\'qom qIj</string>
 
-    <string name="notification_sync_in_progress">vIrapmoHltaH</string>
     <string name="notification_listening_for_events">wanI\' vInejtaH</string>
     <string name="notification_noisy_notifications">vep chuS</string>
     <string name="notification_silent_notifications">vep tam</string>
 
-    <string name="title_activity_home">QInmey</string>
-    <string name="title_activity_room">pa\'</string>
-    <string name="title_activity_member_details">chuD De\'</string>
-    <string name="title_activity_historical">pa\'mey qun</string>
-    <string name="title_activity_group_details">tuq De\'</string>
     <string name="title_activity_choose_sticker">ngamwI\' ngeH</string>
 
     <string name="title_activity_settings">DuHmey\'</string>
@@ -24,33 +18,18 @@
     <string name="action_save">choq</string>
     <string name="action_leave">mej</string>
     <string name="action_send">ngeH</string>
-    <string name="action_resend">ngeHqa\'</string>
     <string name="action_quote">jatlhqa\'</string>
     <string name="action_download">lI\'</string>
     <string name="action_share">bon</string>
-    <string name="action_speak">jatlh</string>
-    <string name="action_clear">HuvmoH</string>
     <string name="later">SIbI\'Ha\'</string>
     <string name="view_source">Hal legh</string>
     <string name="view_decrypted_source">So\'be\'lu\'bogh Hal legh</string>
     <string name="action_delete">Qaw\'</string>
     <string name="action_rename">pongqa\'</string>
-    <string name="active_call">QumchuqtaH</string>
-    <string name="ongoing_conference_call_voice">ghogh</string>
-    <string name="ongoing_conference_call_video">mIllogh</string>
-    <string name="cannot_start_call">jIrI\'laHbe\', SIbI\'Ha\' yInIdqa\'!</string>
-    <string name="missing_permissions_warning">chaw\' Dachmo\', chaq Qapbe\' Doch…</string>
-    <string name="missing_permissions_error">chaw\' Dachmo\', qItbe\' Qu\'vam.</string>
-    <string name="missing_permissions_to_start_conf_call">pa\'vamDaq vIrI\'meH, chaw\' DaghajnIs</string>
-    <string name="missing_permissions_title_to_start_conf_call">jIrI\'laHbe\'</string>
-    <string name="device_information">jan De\'</string>
     <string name="or">ghap</string>
     <string name="action_invite">ruSvep ngeH</string>
-    <string name="actions">Qu\'</string>
     <string name="title_activity_bug_report">Qagh ja\'</string>
-    <string name="dialog_title_third_party_licences" />
 
-    <string name="action_historical">qun</string>
     <string name="action_quick_reply">nom jang</string>
     <string name="action_open">poSmoH</string>
     <string name="action_close">SoQmoH</string>
@@ -58,45 +37,24 @@
     <string name="dialog_title_confirmation">woq</string>
     <string name="dialog_title_warning">yIghuH!</string>
 
-    <string name="bottom_action_home">juH</string>
     <string name="permalink">ratlhqu\'bogh rarwI\'</string>
-    <string name="room_no_conference_call_in_encrypted_rooms" />
-    <string name="send_anyway">SaHbe\' \'ej ngeH</string>
-    <string name="offline" />
 
-    <string name="action_exit">mejchu\'</string>
-    <string name="action_global_search">Dat nej</string>
-    <string name="action_disable">Qotlh</string>
 
     <string name="bottom_action_people">nuvpu\'</string>
     <string name="bottom_action_rooms">pa\'mey</string>
-    <string name="bottom_action_groups">tuqmey</string>
 
     <string name="home_filter_placeholder_home">pa\' nej</string>
-    <string name="home_filter_placeholder_people">nuv nej</string>
-    <string name="home_filter_placeholder_rooms">pa\' nej</string>
-    <string name="home_filter_placeholder_groups">tuq nej</string>
 
     <string name="invitations_header">ruSvepmey</string>
     <string name="low_priority_header">patlh \'eS</string>
     <string name="system_alerts_header">pat ghuH</string>
 
-    <string name="local_address_book_header">janDaq jup tetlh</string>
-    <string name="user_directory_header">lo\'wI\' tetlh</string>
     <string name="no_result_placeholder">gher\'ID tu\'lu\'be\'</string>
 
     <string name="rooms_header">pa\'mey</string>
-    <string name="rooms_directory_header">pa\' tetlh</string>
-    <string name="no_room_placeholder">pa\' tu\'lu\'be\'</string>
-    <string name="no_public_room_placeholder">tlhopDaq pa\' tu\'lu\'be\'</string>
-    <plurals name="public_room_nb_users">
-        <item quantity="one">%d lo\'wI\'</item>
-        <item quantity="other" />
-    </plurals>
 
-    <string name="groups_invite_header">rIt</string>
+
     <string name="groups_header">tuqmey</string>
-    <string name="no_group_placeholder">ghom tu\'lu\'be\'</string>
 
     <string name="send_bug_report_include_logs">QonoS ngeH</string>
     <string name="send_bug_report_include_crash_logs">vonlu\' QonoS ngeH</string>
@@ -105,49 +63,24 @@
     <string name="send_bug_report_placeholder">naDev qay\'wI\' yIDel!</string>
     <string name="send_bug_report_progress">Ser (%s%%)</string>
 
-    <string name="read_receipt">laDta\'bogh</string>
 
     <string name="join_room">pa\' muv</string>
     <string name="username">lo\'wI\' pong</string>
     <string name="hs_url">juH turwI\' URL</string>
-    <string name="identity_url">ngu\'bogh turwI\' URL</string>
     <string name="search">nej</string>
 
     <string name="option_send_voice">ghogh ngeH</string>
 
     <string name="option_send_sticker">ngamwI\' ngeH</string>
-    <string name="go_on_with">taH…</string>
     <string name="auth_submit">ngeH</string>
-    <string name="auth_skip">buSHa\'</string>
-    <string name="auth_user_id_placeholder">\'emeyIl, lo\'wI\' pong ghap</string>
-    <string name="auth_password_placeholder">chaw\' ngoq</string>
-    <string name="auth_new_password_placeholder">chaw\' ngoq chu\'</string>
-    <string name="auth_user_name_placeholder">lo\'wI\' pong</string>
-    <string name="auth_repeat_password_placeholder">chaw\' ngoq yIghItlhqa\'!</string>
-    <string name="auth_repeat_new_password_placeholder">chaw\' ngoq chu\'lIj yIwoq!</string>
     <string name="auth_invalid_login_param">lughbe\' lo\'wI\' pong, chaw\' ngoq joq</string>
-    <string name="auth_invalid_password">tlhoy run chaw\' ngoq (rav; 6)</string>
-    <string name="auth_missing_password">SaHbe\' chaw\' ngoq</string>
-    <string name="auth_password_dont_match">rapbe\' chaw\' ngoqmey</string>
     <string name="auth_forgot_password">chaw\' ngoqlIj DalIj\'a\'?</string>
-    <string name="auth_use_server_options">turwI\' motlhbe\'bogh DuHmey\' lo\' (\'Itlh)</string>
-    <string name="auth_email_validation_message" />
     <string name="auth_recaptcha_message">qoq SoHbe\' \'e\' \'ol neH juH turwI\'vam</string>
-    <string name="auth_username_in_use">lo\'wI\' pong lo\'lu\'taH vay\' latlh</string>
-    <string name="auth_home_server">juH turwI\':</string>
-    <string name="auth_identity_server">ngu\'bogh turwI\':</string>
-    <string name="auth_reset_password_missing_password">chaw\' ngoq chu\' ghItlhnISlu\'</string>
-    <string name="login_error_must_start_http">bI\'reSDaq http[s]:// ghajnIS URL</string>
     <string name="login_error_invalid_home_server">URL mub yIghItlh!</string>
 
-    <string name="login_error_forbidden">mubbe\' lo\'wI\' pong, chaw\' ngoq joq</string>
-    <string name="auth_send_reset_email">cherqa\'bogh emayIl ngeH</string>
     <string name="direct_chats_header">ja\'chuq</string>
-    <string name="no_conversation_placeholder">ja\'chuqbe\'</string>
-    <string name="room_settings_leave_conversation">ja\'chuq \'e\' mev</string>
     <string name="room_tombstone_continuation_link">naDev ja\'chuqqa\'</string>
     <string name="room_tombstone_continuation_description">pa\'vamDaq ja\'chuqqa\'</string>
-    <string name="action_redact">Qaw\'</string>
     <string name="send_bug_report">Qagh ja\'</string>
     <string name="send_bug_report_description">Qagh yIDel! nuq DanID? nuq DapIH? qaS nuq?</string>
     <string name="send_bug_report_logs_description">Qagh tu\'meH, janvamvo\' Qagh De\' ghajboghQonoSmey ngeHlu\'. Qaghvam De\', QonoS, jIH mIllogh je leghlaHbe\' vay\'. Dung ngutlhmey neH ngeH DaneHchugh, \'aplo\'vam yISIj:</string>
@@ -156,14 +89,12 @@
 
     <string name="send_bug_report_sent">Qagh ja\'lu\'chu\'!</string>
     <string name="send_bug_report_failed">Qagh ja\'lu\'be\' (%s)</string>
-    <string name="start_new_chat_prompt_msg">%svaD DajatlhchoHtaH DaneHchu\'\'a\'?</string>
     <string name="option_send_files">De\'\'ay\' ngeH</string>
     <string name="no_sticker_application_dialog_content">DaH ngamwI\' vey Dalo\'taHbe\'.
 
 \'op chal.</string>
 
     <string name="bottom_action_favourites">parHa\'qu\'bogh</string>
-    <string name="home_filter_placeholder_favorites">Doch parHa\'qu\'bogh nej</string>
     <string name="unknown_error">qaSpu\' Qagh</string>
 
 </resources>

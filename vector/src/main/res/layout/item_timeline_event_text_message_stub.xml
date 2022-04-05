@@ -12,6 +12,7 @@
         style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
         android:textColor="?vctr_content_primary"
         tools:text="@sample/messages.json/data/message" />
 

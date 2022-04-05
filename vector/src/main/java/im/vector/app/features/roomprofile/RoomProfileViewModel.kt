@@ -24,9 +24,10 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
@@ -53,7 +54,8 @@ class RoomProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomProfileViewState,
         private val stringProvider: StringProvider,
         private val shortcutCreator: ShortcutCreator,
-        private val session: Session
+        private val session: Session,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<RoomProfileViewState, RoomProfileAction, RoomProfileViewEvents>(initialState) {
 
     @AssistedFactory
@@ -137,7 +139,7 @@ class RoomProfileViewModel @AssistedInject constructor(
             is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
             RoomProfileAction.CreateShortcut                 -> handleCreateShortcut()
             RoomProfileAction.RestoreEncryptionState         -> restoreEncryptionState()
-        }.exhaustive
+        }
     }
 
     fun isPublicRoom(): Boolean {
@@ -187,6 +189,11 @@ class RoomProfileViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.leaveRoom(room.roomId)
+                analyticsTracker.capture(Interaction(
+                        index = null,
+                        interactionType = null,
+                        name = Interaction.Name.MobileRoomLeave
+                ))
                 // Do nothing, we will be closing the room automatically when it will get back from sync
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))

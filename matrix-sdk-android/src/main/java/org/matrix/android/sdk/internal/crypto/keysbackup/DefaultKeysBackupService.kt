@@ -671,7 +671,6 @@ internal class DefaultKeysBackupService @Inject constructor(
                         Timber.e("restoreKeysWithRecoveryKey: Invalid recovery key for this keys version")
                         throw InvalidParameterException("Invalid recovery key")
                     }
-
                     // Get a PK decryption instance
                     pkDecryptionFromRecoveryKey(recoveryKey)
                 }
@@ -680,6 +679,10 @@ internal class DefaultKeysBackupService @Inject constructor(
                     Timber.e("restoreKeysWithRecoveryKey: Invalid recovery key. Error")
                     throw InvalidParameterException("Invalid recovery key")
                 }
+
+                // Save for next time and for gossiping
+                // Save now as it's valid, don't wait for the import as it could take long.
+                saveBackupRecoveryKey(recoveryKey, keysVersionResult.version)
 
                 stepProgressListener?.onStepProgress(StepProgressListener.Step.DownloadingKey)
 
@@ -729,8 +732,6 @@ internal class DefaultKeysBackupService @Inject constructor(
                     if (backUp) {
                         maybeBackupKeys()
                     }
-                    // Save for next time and for gossiping
-                    saveBackupRecoveryKey(recoveryKey, keysVersionResult.version)
                     result
                 }
             }.foldToCallback(callback)

@@ -26,6 +26,18 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
  */
 data class ViewRoom(
         /**
+         * active space when user navigated to the room.
+         */
+        val activeSpace: ActiveSpace? = null,
+        /**
+         * Whether the room is a DM.
+         */
+        val isDM: Boolean? = null,
+        /**
+         * Whether the room is a Space.
+         */
+        val isSpace: Boolean? = null,
+        /**
          * The reason for the room change if known.
          */
         val trigger: Trigger? = null,
@@ -50,6 +62,74 @@ data class ViewRoom(
          * Room switched due to user selecting a user to go to a DM with.
          */
         MessageUser,
+
+        /**
+         * Room accessed via space explore
+         */
+        MobileExploreRooms,
+
+        /**
+         * Room switched due to user interacting with a file search result.
+         */
+        MobileFileSearch,
+
+        /**
+         * Room accessed via interacting with the incall screen.
+         */
+        MobileInCall,
+
+        /**
+         * Room accessed during external sharing
+         */
+        MobileLinkShare,
+
+        /**
+         * Room accessed via link
+         */
+        MobilePermalink,
+
+        /**
+         * Room accessed via interacting with direct chat item in the room
+         * contact detail screen.
+         */
+        MobileRoomMemberDetail,
+
+        /**
+         * Room accessed via preview
+         */
+        MobileRoomPreview,
+
+        /**
+         * Room switched due to user interacting with a room search result.
+         */
+        MobileRoomSearch,
+
+        /**
+         * Room accessed via interacting with direct chat item in the search
+         * contact detail screen.
+         */
+        MobileSearchContactDetail,
+
+        /**
+         * Room accessed via interacting with direct chat item in the space
+         * contact detail screen.
+         */
+        MobileSpaceMemberDetail,
+
+        /**
+         * Room accessed via space members list
+         */
+        MobileSpaceMembers,
+
+        /**
+         * Space accessed via interacting with the space menu.
+         */
+        MobileSpaceMenu,
+
+        /**
+         * Space accessed via interacting with a space settings menu item.
+         */
+        MobileSpaceSettings,
 
         /**
          * Room accessed via a push/desktop notification.
@@ -179,10 +259,36 @@ data class ViewRoom(
         Widget,
     }
 
+    enum class ActiveSpace {
+
+        /**
+         * Active space is Home.
+         */
+        Home,
+
+        /**
+         * Active space is a meta space.
+         */
+        Meta,
+
+        /**
+         * Active space is a private space.
+         */
+        Private,
+
+        /**
+         * Active space is a public space.
+         */
+        Public,
+    }
+
     override fun getName() = "ViewRoom"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
+            activeSpace?.let { put("activeSpace", it.name) }
+            isDM?.let { put("isDM", it) }
+            isSpace?.let { put("isSpace", it) }
             trigger?.let { put("trigger", it.name) }
             viaKeyboard?.let { put("viaKeyboard", it) }
         }.takeIf { it.isNotEmpty() }

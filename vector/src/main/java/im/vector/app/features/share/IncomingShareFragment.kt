@@ -34,7 +34,6 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentIncomingShareBinding
@@ -81,7 +80,7 @@ class IncomingShareFragment @Inject constructor(
                 is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
                 is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
                 is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
-            }.exhaustive
+            }
         }
 
         val intent = vectorBaseActivity.intent

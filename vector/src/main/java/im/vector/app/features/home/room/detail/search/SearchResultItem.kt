@@ -42,6 +42,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
     @EpoxyAttribute lateinit var spannable: EpoxyCharSequence
     @EpoxyAttribute var sender: MatrixItem? = null
     @EpoxyAttribute var threadDetails: ThreadDetails? = null
+    @EpoxyAttribute var threadSummaryFormatted: String? = null
     @EpoxyAttribute var areThreadMessagesEnabled: Boolean = false
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
@@ -60,8 +61,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
                 if (it.isRootThread) {
                     showThreadSummary(holder)
                     holder.threadSummaryCounterTextView.text = it.numberOfThreads.toString()
-                    holder.threadSummaryInfoTextView.text = it.threadSummaryLatestTextMessage.orEmpty()
-
+                    holder.threadSummaryInfoTextView.text = threadSummaryFormatted.orEmpty()
                     val userId = it.threadSummarySenderInfo?.userId ?: return@let
                     val displayName = it.threadSummarySenderInfo?.displayName
                     val avatarUrl = it.threadSummarySenderInfo?.avatarUrl

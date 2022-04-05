@@ -51,6 +51,7 @@ import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.discovery.DiscoverySettingsFragment
 import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.workers.signout.SignOutUiWorker
@@ -115,6 +116,11 @@ class VectorSettingsGeneralFragment @Inject constructor(
         override fun onIsEnabledChanged(enabled: Boolean) {
             refreshIntegrationManagerSettings()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SettingsGeneral
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -251,7 +257,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     Glide.get(requireContext()).clearMemory()
                     session.fileService().clearCache()
 
-                    var newSize: Int
+                    var newSize: Long
 
                     withContext(Dispatchers.IO) {
                         // On BG thread
@@ -261,7 +267,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                         newSize += session.fileService().getCacheSize()
                     }
 
-                    it.summary = TextUtils.formatFileSize(requireContext(), newSize.toLong())
+                    it.summary = TextUtils.formatFileSize(requireContext(), newSize)
 
                     hideLoadingView()
                 }
@@ -329,7 +335,14 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString())
             }
             if (!isAdded) return@launch
-            onCommonDone(result.fold({ null }, { it.localizedMessage }))
+
+            result.fold(
+                    onSuccess = { hideLoadingView() },
+                    onFailure = {
+                        hideLoadingView()
+                        displayErrorDialog(it)
+                    }
+            )
         }
     }
 
@@ -352,7 +365,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
             startActivityForResult(intent, REQUEST_PHONEBOOK_COUNTRY)
             true
         }
-        */
+         */
     }
 
     // ==============================================================================================================
@@ -466,14 +479,15 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 val result = runCatching { session.setDisplayName(session.myUserId, value) }
                 if (!isAdded) return@launch
                 result.fold(
-                        {
+                        onSuccess = {
                             // refresh the settings value
                             mDisplayNamePreference.summary = value
                             mDisplayNamePreference.text = value
-                            onCommonDone(null)
+                            hideLoadingView()
                         },
-                        {
-                            onCommonDone(it.localizedMessage)
+                        onFailure = {
+                            hideLoadingView()
+                            displayErrorDialog(it)
                         }
                 )
             }

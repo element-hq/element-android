@@ -24,6 +24,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.internal.viewaction.ClickChildAction
 import im.vector.app.R
+import im.vector.app.clickOnSheet
 import im.vector.app.espresso.tools.waitUntilActivityVisible
 import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
@@ -49,7 +50,7 @@ class SpaceMenuRobot {
     }
 
     fun invitePeople() = apply {
-        clickOn(R.id.invitePeople)
+        clickOnSheet(R.id.invitePeople)
         waitUntilDialogVisible(ViewMatchers.withId(R.id.inviteByMxidButton))
         clickOn(R.id.inviteByMxidButton)
         waitUntilActivityVisible<InviteUsersToRoomActivity> {
@@ -62,7 +63,7 @@ class SpaceMenuRobot {
     }
 
     fun spaceMembers() {
-        clickOn(R.id.showMemberList)
+        clickOnSheet(R.id.showMemberList)
         waitUntilActivityVisible<RoomProfileActivity> {
             waitUntilViewVisible(ViewMatchers.withId(R.id.roomSettingsRecyclerView))
         }
@@ -70,7 +71,7 @@ class SpaceMenuRobot {
     }
 
     fun spaceSettings(block: SpaceSettingsRobot.() -> Unit) {
-        clickOn(R.id.spaceSettings)
+        clickOnSheet(R.id.spaceSettings)
         waitUntilActivityVisible<SpaceManageActivity> {
             waitUntilViewVisible(ViewMatchers.withId(R.id.roomSettingsRecyclerView))
         }
@@ -78,7 +79,7 @@ class SpaceMenuRobot {
     }
 
     fun exploreRooms() {
-        clickOn(R.id.exploreRooms)
+        clickOnSheet(R.id.exploreRooms)
         waitUntilActivityVisible<SpaceExploreActivity> {
             waitUntilViewVisible(ViewMatchers.withId(R.id.spaceDirectoryList))
         }
@@ -86,7 +87,7 @@ class SpaceMenuRobot {
     }
 
     fun addRoom() = apply {
-        clickOn(R.id.addRooms)
+        clickOnSheet(R.id.addRooms)
         waitUntilActivityVisible<SpaceManageActivity> {
             waitUntilViewVisible(ViewMatchers.withId(R.id.roomList))
         }
@@ -94,7 +95,7 @@ class SpaceMenuRobot {
     }
 
     fun addSpace() = apply {
-        clickOn(R.id.addSpaces)
+        clickOnSheet(R.id.addSpaces)
         waitUntilActivityVisible<SpaceManageActivity> {
             waitUntilViewVisible(ViewMatchers.withId(R.id.roomList))
         }
@@ -102,7 +103,7 @@ class SpaceMenuRobot {
     }
 
     fun leaveSpace() {
-        clickOn(R.id.leaveSpace)
+        clickOnSheet(R.id.leaveSpace)
         waitUntilDialogVisible(ViewMatchers.withId(R.id.leaveButton))
         clickOn(R.id.leave_selected)
         waitUntilActivityVisible<SpaceLeaveAdvancedActivity> {

@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Success
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginResetPasswordMailConfirmationBinding
@@ -59,7 +58,7 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
         setupUi(state)
 
         when (state.asyncResetMailConfirmed) {
-            is Fail    -> {
+            is Fail -> {
                 // Link in email not yet clicked ?
                 val message = if (state.asyncResetMailConfirmed.error.is401()) {
                     getString(R.string.auth_reset_password_error_unauthorized)
@@ -73,7 +72,7 @@ class LoginResetPasswordMailConfirmationFragment @Inject constructor() : Abstrac
                         .setPositiveButton(R.string.ok, null)
                         .show()
             }
-            is Success -> Unit
+            else    -> Unit
         }
     }
 }

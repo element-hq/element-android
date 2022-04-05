@@ -18,8 +18,9 @@ package im.vector.app.features.home.room.detail.timeline.reactions
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import im.vector.app.EmojiSpanify
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -41,18 +42,19 @@ class ViewReactionsEpoxyController @Inject constructor(
     override fun buildModels(state: DisplayReactionsViewState) {
         val host = this
         when (state.mapReactionKeyToMemberList) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 genericLoaderItem {
                     id("Spinner")
                 }
             }
-            is Fail       -> {
+            is Fail    -> {
                 genericFooterItem {
                     id("failure")
                     text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
                 }
             }
-            is Success    -> {
+            is Success -> {
                 state.mapReactionKeyToMemberList()?.forEach { reactionInfo ->
                     reactionInfoSimpleItem {
                         id(reactionInfo.eventId)

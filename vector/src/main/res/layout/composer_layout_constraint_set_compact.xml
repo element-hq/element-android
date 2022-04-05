@@ -138,7 +138,7 @@
         style="@style/Widget.Vector.EditText.Composer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/room_message_placeholder_not_encrypted"
+        android:hint="@string/room_message_placeholder"
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
         app:layout_constraintBottom_toBottomOf="parent"

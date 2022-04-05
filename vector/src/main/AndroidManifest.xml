@@ -45,9 +45,11 @@
     <!-- Location Sharing -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--  Debug only whilst live location sharing is WIP -->
+    <!--<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
 
     <!-- Jitsi SDK is now API23+ -->
-    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react" />
+    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react,com.reactnativecommunity.clipboard,com.swmansion.gesturehandler.react,org.linusu,org.reactnative.maskedview,com.reactnativepagerview,com.swmansion.reanimated,com.th3rdwave.safeareacontext,com.swmansion.rnscreens,org.devio.rn.splashscreen,com.reactnativecommunity.webview" />
 
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
     <!-- Tell that the Camera is not mandatory to install the application -->
@@ -83,6 +85,7 @@
         android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:taskAffinity="${applicationId}.${appTaskAffinitySuffix}"
         android:theme="@style/Theme.Vector.Light"
         tools:replace="android:allowBackup">
 
@@ -294,7 +297,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true"
-            android:taskAffinity=".features.call.VectorCallActivity" />
+            android:taskAffinity=".features.call.VectorCallActivity.${appTaskAffinitySuffix}" />
         <!-- PIP Support https://developer.android.com/guide/topics/ui/picture-in-picture -->
         <activity
             android:name=".features.call.conference.VectorJitsiActivity"
@@ -366,6 +369,11 @@
                 <action android:name="android.telecom.ConnectionService" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".features.location.LocationSharingService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
 
         <!-- Receivers -->
 

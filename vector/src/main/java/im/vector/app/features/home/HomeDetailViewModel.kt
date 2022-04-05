@@ -28,6 +28,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.VectorOverrides
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -53,6 +54,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.internal.crypto.NewSessionListener
 import timber.log.Timber
 
 /**
@@ -67,7 +69,8 @@ class HomeDetailViewModel @AssistedInject constructor(
         private val callManager: WebRtcCallManager,
         private val directRoomHelper: DirectRoomHelper,
         private val appStateHandler: AppStateHandler,
-        private val autoAcceptInvites: AutoAcceptInvites
+        private val autoAcceptInvites: AutoAcceptInvites,
+        private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
@@ -86,9 +89,16 @@ class HomeDetailViewModel @AssistedInject constructor(
         }
     }
 
+    private val refreshRoomSummariesOnCryptoSessionChange = object : NewSessionListener {
+        override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
+            session.refreshJoinedRoomSummaryPreviews(roomId)
+        }
+    }
+
     init {
         observeSyncState()
         observeRoomGroupingMethod()
+        session.cryptoService().addNewSessionListener(refreshRoomSummariesOnCryptoSessionChange)
         observeRoomSummaries()
         updatePstnSupportFlag()
         observeDataStore()
@@ -106,8 +116,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                     pushCounter = nbOfPush
             )
         }
-
-        vectorDataStore.forceDialPadDisplayFlow.setOnEach { force ->
+        vectorOverrides.forceDialPad.setOnEach { force ->
             copy(
                     forceDialPadTab = force
             )
@@ -149,6 +158,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     override fun onCleared() {
         super.onCleared()
         callManager.removeProtocolsCheckerListener(this)
+        session.cryptoService().removeSessionListener(refreshRoomSummariesOnCryptoSessionChange)
     }
 
     override fun onPSTNSupportUpdated() {
@@ -272,6 +282,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                                 )
                             }
                         }
+                        null                                -> Unit
                     }
                 }
                 .launchIn(viewModelScope)

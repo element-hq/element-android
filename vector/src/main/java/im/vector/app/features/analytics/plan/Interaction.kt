@@ -41,6 +41,36 @@ data class Interaction(
 
     enum class Name {
         /**
+         * User tapped on Add to Home button on Room Details screen.
+         */
+        MobileRoomAddHome,
+
+        /**
+         * User tapped on Leave Room button on Room Details screen.
+         */
+        MobileRoomLeave,
+
+        /**
+         * User tapped on Threads button on Room screen.
+         */
+        MobileRoomThreadListButton,
+
+        /**
+         * User tapped on a thread summary item on Room screen.
+         */
+        MobileRoomThreadSummaryItem,
+
+        /**
+         * User tapped on the filter button on ThreadList screen.
+         */
+        MobileThreadListFilterItem,
+
+        /**
+         * User selected a thread on ThreadList screen.
+         */
+        MobileThreadListThreadItem,
+
+        /**
          * User tapped the already selected space from the space list.
          */
         SpacePanelSelectedSpace,
@@ -52,8 +82,8 @@ data class Interaction(
         SpacePanelSwitchSpace,
 
         /**
-         * User clicked the create room button in the + context menu of the room
-         * list header in Element Web/Desktop.
+         * User clicked the create room button in the add existing room to space
+         * dialog in Element Web/Desktop.
          */
         WebAddExistingToSpaceDialogCreateRoomButton,
 
@@ -106,10 +136,22 @@ data class Interaction(
         WebRightPanelRoomUserInfoInviteButton,
 
         /**
+         * User clicked the threads 'show' filter dropdown in the threads panel
+         * in Element Web/Desktop.
+         */
+        WebRightPanelThreadPanelFilterDropdown,
+
+        /**
          * User clicked the create room button in the room directory of Element
          * Web/Desktop.
          */
         WebRoomDirectoryCreateRoomButton,
+
+        /**
+         * User clicked the Threads button in the top right of a room in Element
+         * Web/Desktop.
+         */
+        WebRoomHeaderButtonsThreadsButton,
 
         /**
          * User adjusted their favourites using the context menu on the header
@@ -154,6 +196,12 @@ data class Interaction(
         WebRoomListHeaderPlusMenuCreateRoomItem,
 
         /**
+         * User clicked the explore rooms button in the + context menu of the
+         * room list header in Element Web/Desktop.
+         */
+        WebRoomListHeaderPlusMenuExploreRoomsItem,
+
+        /**
          * User adjusted their favourites using the context menu on a room tile
          * in the room list in Element Web/Desktop.
          */
@@ -190,6 +238,12 @@ data class Interaction(
         WebRoomListRoomsSublistPlusMenuCreateRoomItem,
 
         /**
+         * User clicked the explore rooms button in the + context menu of the
+         * rooms sublist in Element Web/Desktop.
+         */
+        WebRoomListRoomsSublistPlusMenuExploreRoomsItem,
+
+        /**
          * User interacted with leave action in the general tab of the room
          * settings dialog in Element Web/Desktop.
          */
@@ -200,6 +254,12 @@ data class Interaction(
          * security settings in an existing room in Element Web/Desktop.
          */
         WebRoomSettingsSecurityTabCreateNewRoomButton,
+
+        /**
+         * User clicked a thread summary in the timeline of a room in Element
+         * Web/Desktop.
+         */
+        WebRoomTimelineThreadSummaryButton,
 
         /**
          * User interacted with the theme radio selector in the Appearance tab
@@ -214,16 +274,39 @@ data class Interaction(
         WebSettingsSidebarTabSpacesCheckbox,
 
         /**
-         * User clicked the create room button in the + context menu of the room
-         * list header in Element Web/Desktop.
+         * User clicked the explore rooms button in the context menu of a space
+         * in Element Web/Desktop.
+         */
+        WebSpaceContextMenuExploreRoomsItem,
+
+        /**
+         * User clicked the home button in the context menu of a space in
+         * Element Web/Desktop.
+         */
+        WebSpaceContextMenuHomeItem,
+
+        /**
+         * User clicked the new room button in the context menu of a space in
+         * Element Web/Desktop.
          */
         WebSpaceContextMenuNewRoomItem,
 
         /**
-         * User clicked the create room button in the + context menu of the room
-         * list header in Element Web/Desktop.
+         * User clicked the new room button in the context menu on the space
+         * home in Element Web/Desktop.
          */
         WebSpaceHomeCreateRoomButton,
+
+        /**
+         * User clicked the back button on a Thread view going back to the
+         * Threads Panel of Element Web/Desktop.
+         */
+        WebThreadViewBackButton,
+
+        /**
+         * User selected a thread in the Threads panel in Element Web/Desktop.
+         */
+        WebThreadsPanelThreadItem,
 
         /**
          * User clicked the theme toggle button in the user menu of Element

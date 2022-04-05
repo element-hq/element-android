@@ -27,7 +27,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.flow.launchIn
@@ -113,7 +112,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             is DiscoverySettingsAction.FinalizeBind3pid       -> finalizeBind3pid(action, true)
             is DiscoverySettingsAction.SubmitMsisdnToken      -> submitMsisdnToken(action)
             is DiscoverySettingsAction.CancelBinding          -> cancelBinding(action)
-        }.exhaustive
+        }
     }
 
     private fun handleUpdateUserConsent(action: DiscoverySettingsAction.UpdateUserConsent) {
@@ -235,7 +234,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         when (action.threePid) {
             is ThreePid.Email  -> revokeEmail(action.threePid)
             is ThreePid.Msisdn -> revokeMsisdn(action.threePid)
-        }.exhaustive
+        }
     }
 
     private fun revokeEmail(threePid: ThreePid.Email) = withState { state ->

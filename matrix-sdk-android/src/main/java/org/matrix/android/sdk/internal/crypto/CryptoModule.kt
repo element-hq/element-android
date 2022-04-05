@@ -137,8 +137,7 @@ internal abstract class CryptoModule {
         @JvmStatic
         @Provides
         @CryptoDatabase
-        fun providesClearCacheTask(@CryptoDatabase
-                                   realmConfiguration: RealmConfiguration): ClearCacheTask {
+        fun providesClearCacheTask(@CryptoDatabase realmConfiguration: RealmConfiguration): ClearCacheTask {
             return RealmClearCacheTask(realmConfiguration)
         }
 

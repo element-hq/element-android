@@ -24,9 +24,10 @@ import io.mockk.every
 import io.mockk.mockk
 import java.io.OutputStream
 
-class FakeContext {
+class FakeContext(
+        private val contentResolver: ContentResolver = mockk()
+) {
 
-    private val contentResolver = mockk<ContentResolver>()
     val instance = mockk<Context>()
 
     init {
@@ -38,13 +39,13 @@ class FakeContext {
         every { contentResolver.openFileDescriptor(uri, mode, null) } returns fileDescriptor
     }
 
-    fun givenOutputStreamFor(uri: Uri): OutputStream {
+    fun givenSafeOutputStreamFor(uri: Uri): OutputStream {
         val outputStream = mockk<OutputStream>(relaxed = true)
-        every { contentResolver.openOutputStream(uri) } returns outputStream
+        every { contentResolver.openOutputStream(uri, "wt") } returns outputStream
         return outputStream
     }
 
-    fun givenMissingOutputStreamFor(uri: Uri) {
-        every { contentResolver.openOutputStream(uri) } returns null
+    fun givenMissingSafeOutputStreamFor(uri: Uri) {
+        every { contentResolver.openOutputStream(uri, "wt") } returns null
     }
 }

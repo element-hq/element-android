@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -63,7 +64,6 @@ import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataD
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.relationship.RoomChildRelationInfo
-import org.matrix.android.sdk.internal.util.Normalizer
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
@@ -74,8 +74,16 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomAvatarResolver: RoomAvatarResolver,
         private val eventDecryptor: EventDecryptor,
         private val crossSigningService: DefaultCrossSigningService,
-        private val roomAccountDataDataSource: RoomAccountDataDataSource,
-        private val normalizer: Normalizer) {
+        private val roomAccountDataDataSource: RoomAccountDataDataSource
+) {
+
+    fun refreshLatestPreviewContent(realm: Realm, roomId: String) {
+        val roomSummaryEntity = RoomSummaryEntity.getOrNull(realm, roomId)
+        if (roomSummaryEntity != null) {
+            val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+            latestPreviewableEvent?.attemptToDecrypt()
+        }
+    }
 
     fun update(realm: Realm,
                roomId: String,
@@ -127,6 +135,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val lastActivityFromEvent = latestPreviewableEvent?.root?.originServerTs
         if (lastActivityFromEvent != null) {
             roomSummaryEntity.lastActivityTime = lastActivityFromEvent
+            latestPreviewableEvent.attemptToDecrypt()
         }
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0 ||
@@ -160,16 +169,6 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
         roomSummaryEntity.updateHasFailedSending()
 
-        val root = latestPreviewableEvent?.root
-        if (root?.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
-            Timber.v("Should decrypt ${latestPreviewableEvent.eventId}")
-            // mmm i want to decrypt now or is it ok to do it async?
-            tryOrNull {
-                eventDecryptor.decryptEvent(root.asDomain(), "")
-            }
-                    ?.let { root.setDecryptionResult(it) }
-        }
-
         if (updateMembers) {
             val otherRoomMembers = RoomMemberHelper(realm, roomId)
                     .queryActiveRoomMembersEvent()
@@ -182,6 +181,22 @@ internal class RoomSummaryUpdater @Inject constructor(
             if (roomSummaryEntity.isEncrypted && otherRoomMembers.isNotEmpty()) {
                 // mmm maybe we could only refresh shield instead of checking trust also?
                 crossSigningService.onUsersDeviceUpdate(otherRoomMembers)
+            }
+        }
+    }
+
+    private fun TimelineEventEntity.attemptToDecrypt() {
+        when (val root = this.root) {
+            null -> {
+                Timber.v("Decryption skipped due to missing root event $eventId")
+            }
+            else -> {
+                if (root.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
+                    Timber.v("Should decrypt $eventId")
+                    tryOrNull {
+                        runBlocking { eventDecryptor.decryptEvent(root.asDomain(), "") }
+                    }?.let { root.setDecryptionResult(it) }
+                }
             }
         }
     }
@@ -411,8 +426,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                         realm.where(RoomSummaryEntity::class.java)
                                 .process(RoomSummaryEntityFields.MEMBERSHIP_STR, listOf(Membership.JOIN))
                                 .notEqualTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
-                                // also we do not count DM in here, because home space will already show them
-                                .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                                 .contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, space.roomId)
                                 .findAll().forEach {
                                     highlightCount += it.highlightCount

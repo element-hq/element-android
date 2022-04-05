@@ -76,8 +76,19 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/invite_people_menu"
         app:leftIcon="@drawable/ic_invite_people"
-        app:tint="?vctr_content_primary"
+        app:tint="?vctr_content_secondary"
         app:titleTextColor="?vctr_content_primary" />
+
+    <im.vector.app.core.ui.views.BottomSheetActionButton
+        android:id="@+id/exploreRooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/space_explore_activity_title"
+        app:leftIcon="@drawable/ic_explore"
+        app:tint="?vctr_content_secondary"
+        app:titleTextColor="?vctr_content_primary"
+        tools:actionDescription="" />
+
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/showMemberList"
@@ -85,7 +96,7 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/list_members"
         app:leftIcon="@drawable/ic_room_profile_member_list"
-        app:tint="?vctr_content_primary"
+        app:tint="?vctr_content_secondary"
         app:titleTextColor="?vctr_content_primary" />
 
     <!-- Only visible when in developer mode -->
@@ -95,18 +106,8 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/settings"
         app:leftIcon="@drawable/ic_settings_root_general"
-        app:tint="?vctr_content_primary"
+        app:tint="?vctr_content_secondary"
         app:titleTextColor="?vctr_content_primary" />
-
-    <im.vector.app.core.ui.views.BottomSheetActionButton
-        android:id="@+id/exploreRooms"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:actionTitle="@string/space_explore_activity_title"
-        app:leftIcon="@drawable/ic_explore"
-        app:tint="?vctr_content_primary"
-        app:titleTextColor="?vctr_content_primary"
-        tools:actionDescription="" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/addRooms"
@@ -114,7 +115,7 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/space_add_child_title"
         app:leftIcon="@drawable/ic_fab_add"
-        app:tint="?vctr_content_primary"
+        app:tint="?vctr_content_secondary"
         app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="" />
 
@@ -124,7 +125,7 @@
         android:layout_height="wrap_content"
         app:actionTitle="@string/add_space"
         app:leftIcon="@drawable/ic_fab_add"
-        app:tint="?vctr_content_primary"
+        app:tint="?vctr_content_secondary"
         app:titleTextColor="?vctr_content_primary"
         app:betaAction="true"
         tools:actionDescription="" />

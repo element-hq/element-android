@@ -123,7 +123,7 @@ class LocationPreviewFragment @Inject constructor(
                 views.mapView.render(
                         MapState(
                                 zoomOnlyOnce = true,
-                                pinLocationData = location,
+                                userLocationData = location,
                                 pinId = args.locationOwnerId ?: DEFAULT_PIN_ID,
                                 pinDrawable = pinDrawable
                         )

@@ -81,7 +81,7 @@ internal data class SpaceChildSummaryResponse(
          * Required. Whether the room may be viewed by guest users without joining.
          */
         @Json(name = "world_readable")
-        val worldReadable: Boolean = false,
+        val isWorldReadable: Boolean = false,
 
         /**
          * Required. Whether guest users may join the room and participate in it. If they can,

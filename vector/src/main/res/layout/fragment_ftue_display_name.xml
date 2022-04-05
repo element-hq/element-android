@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LoginFormScrollView"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:fillViewport="true"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/displayNameGutterStart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/displayNameGutterEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
+
+        <Space
+            android:id="@+id/headerSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            app:layout_constraintBottom_toTopOf="@id/displayNameHeaderIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/displayNameHeaderIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:background="@drawable/circle"
+            android:backgroundTint="?colorSecondary"
+            android:src="@drawable/ic_user_fg"
+            app:layout_constraintBottom_toTopOf="@id/displayNameHeaderTitle"
+            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
+            app:layout_constraintHeight_percent="0.12"
+            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/palette_white" />
+
+        <TextView
+            android:id="@+id/displayNameHeaderTitle"
+            style="@style/Widget.Vector.TextView.Title.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/ftue_display_name_title"
+            android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@id/displayNameHeaderSubtitle"
+            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderIcon" />
+
+        <TextView
+            android:id="@+id/displayNameHeaderSubtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/ftue_display_name_subtitle"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
+            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderTitle" />
+
+        <Space
+            android:id="@+id/titleContentSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/displayNameInput"
+            app:layout_constraintHeight_percent="0.03"
+            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderSubtitle" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/displayNameInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/ftue_display_name_entry_title"
+            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/titleContentSpacing">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeOptions="actionDone"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/displayNameEntryFooter"
+            style="@style/Widget.Vector.TextView.Micro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/ftue_display_name_entry_footer"
+            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/displayNameInput" />
+
+        <Space
+            android:id="@+id/entrySpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/displayNameSubmit"
+            app:layout_constraintHeight_percent="0.03"
+            app:layout_constraintTop_toBottomOf="@id/displayNameEntryFooter"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <Button
+            android:id="@+id/displayNameSubmit"
+            style="@style/Widget.Vector.Button.Login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ftue_personalize_submit"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toTopOf="@id/displayNameSkip"
+            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/entrySpacing" />
+
+        <Button
+            android:id="@+id/displayNameSkip"
+            style="@style/Widget.Vector.Button.Text.Login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ftue_personalize_skip_this_step"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/displayNameSubmit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+

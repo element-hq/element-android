@@ -30,3 +30,5 @@ class FakeStringProvider {
         }
     }
 }
+
+fun Int.toTestString() = "test-$this"

@@ -52,12 +52,13 @@ data class RoomEventFilter(
          * A list of relation types which must be exist pointing to the event being filtered.
          * If this list is absent then no filtering is done on relation types.
          */
-        @Json(name = "relation_types") val relationTypes: List<String>? = null,
+        @Json(name = "related_by_rel_types") val relationTypes: List<String>? = null,
         /**
          *  A list of senders of relations which must exist pointing to the event being filtered.
          *  If this list is absent then no filtering is done on relation types.
          */
-        @Json(name = "relation_senders") val relationSenders: List<String>? = null,
+        @Json(name = "related_by_senders") val relationSenders: List<String>? = null,
+
         /**
          * A list of room IDs to include. If this list is absent then all rooms are included.
          */

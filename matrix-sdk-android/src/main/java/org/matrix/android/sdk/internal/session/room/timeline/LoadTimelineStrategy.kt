@@ -19,20 +19,28 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import io.realm.RealmResults
+import io.realm.kotlin.createObject
 import kotlinx.coroutines.CompletableDeferred
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
+import org.matrix.android.sdk.internal.database.model.RoomEntity
+import org.matrix.android.sdk.internal.database.model.deleteAndClearThreadEvents
 import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
+import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThread
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -76,6 +84,8 @@ internal class LoadTimelineStrategy(
             val realm: AtomicReference<Realm>,
             val eventDecryptor: TimelineEventDecryptor,
             val paginationTask: PaginationTask,
+            val realmConfiguration: RealmConfiguration,
+            val fetchThreadTimelineTask: FetchThreadTimelineTask,
             val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
             val getContextOfEventTask: GetContextOfEventTask,
             val timelineInput: TimelineInput,
@@ -90,7 +100,6 @@ internal class LoadTimelineStrategy(
     private var getContextLatch: CompletableDeferred<Unit>? = null
     private var chunkEntity: RealmResults<ChunkEntity>? = null
     private var timelineChunk: TimelineChunk? = null
-
     private val chunkEntityListener = OrderedRealmCollectionChangeListener { _: RealmResults<ChunkEntity>, changeSet: OrderedCollectionChangeSet ->
         // Can be call either when you open a permalink on an unknown event
         // or when there is a gap in the timeline.
@@ -170,6 +179,9 @@ internal class LoadTimelineStrategy(
         getContextLatch?.cancel()
         chunkEntity = null
         timelineChunk = null
+        if (mode is Mode.Thread) {
+            clearThreadChunkEntity(dependencies.realm.get(), mode.rootThreadEventId)
+        }
     }
 
     suspend fun loadMore(count: Int, direction: Timeline.Direction, fetchOnServerIfNeeded: Boolean = true): LoadMoreResult {
@@ -184,6 +196,9 @@ internal class LoadTimelineStrategy(
             } catch (failure: Throwable) {
                 return LoadMoreResult.FAILURE
             }
+        }
+        if (mode is Mode.Thread) {
+            return timelineChunk?.loadMoreThread(count) ?: LoadMoreResult.FAILURE
         }
         return timelineChunk?.loadMore(count, direction, fetchOnServerIfNeeded) ?: LoadMoreResult.FAILURE
     }
@@ -201,7 +216,7 @@ internal class LoadTimelineStrategy(
     }
 
     private fun buildSendingEvents(): List<TimelineEvent> {
-        return if (hasReachedLastForward()) {
+        return if (hasReachedLastForward() || mode is Mode.Thread) {
             sendingEventsDataSource.buildSendingEvents()
         } else {
             emptyList()
@@ -219,9 +234,43 @@ internal class LoadTimelineStrategy(
                 ChunkEntity.findAllIncludingEvents(realm, listOf(mode.originEventId))
             }
             is Mode.Thread    -> {
+                recreateThreadChunkEntity(realm, mode.rootThreadEventId)
                 ChunkEntity.where(realm, roomId)
-                        .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
+                        .equalTo(ChunkEntityFields.ROOT_THREAD_EVENT_ID, mode.rootThreadEventId)
+                        .equalTo(ChunkEntityFields.IS_LAST_FORWARD_THREAD, true)
                         .findAll()
+            }
+        }
+    }
+
+    /**
+     * Clear any existing thread chunk entity and create a new one, with the
+     * rootThreadEventId included
+     */
+    private fun recreateThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
+        realm.executeTransaction {
+            // Lets delete the chunk and start a new one
+            ChunkEntity.findLastForwardChunkOfThread(it, roomId, rootThreadEventId)?.deleteAndClearThreadEvents()?.let {
+                Timber.i("###THREADS LoadTimelineStrategy [onStart] thread chunk cleared..")
+            }
+            val threadChunk = it.createObject<ChunkEntity>().apply {
+                Timber.i("###THREADS LoadTimelineStrategy [onStart] Created new thread chunk with rootThreadEventId: $rootThreadEventId")
+                this.rootThreadEventId = rootThreadEventId
+                this.isLastForwardThread = true
+            }
+            if (threadChunk.isValid) {
+                RoomEntity.where(it, roomId).findFirst()?.addIfNecessary(threadChunk)
+            }
+        }
+    }
+
+    /**
+     * Clear any existing thread chunk
+     */
+    private fun clearThreadChunkEntity(realm: Realm, rootThreadEventId: String) {
+        realm.executeTransaction {
+            ChunkEntity.findLastForwardChunkOfThread(it, roomId, rootThreadEventId)?.deleteAndClearThreadEvents()?.let {
+                Timber.i("###THREADS LoadTimelineStrategy [onStop] thread chunk cleared..")
             }
         }
     }
@@ -237,8 +286,10 @@ internal class LoadTimelineStrategy(
                     timelineSettings = dependencies.timelineSettings,
                     roomId = roomId,
                     timelineId = timelineId,
+                    fetchThreadTimelineTask = dependencies.fetchThreadTimelineTask,
                     eventDecryptor = dependencies.eventDecryptor,
                     paginationTask = dependencies.paginationTask,
+                    realmConfiguration = dependencies.realmConfiguration,
                     fetchTokenAndPaginateTask = dependencies.fetchTokenAndPaginateTask,
                     timelineEventMapper = dependencies.timelineEventMapper,
                     uiEchoManager = uiEchoManager,

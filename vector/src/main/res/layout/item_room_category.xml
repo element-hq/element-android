@@ -1,35 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/roomCategoryRootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:colorBackground"
+    android:background="?attr/vctr_header_background"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingStart="8dp"
-    android:paddingTop="12dp"
-    android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="4dp">
+    android:paddingHorizontal="@dimen/layout_horizontal_margin"
+    android:paddingVertical="8dp">
 
     <TextView
         android:id="@+id/roomCategoryTitleView"
-        style="@style/Widget.Vector.TextView.Body"
-        android:layout_width="wrap_content"
+        style="@style/Widget.Vector.TextView.Subtitle.Medium"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:textColor="?vctr_content_secondary"
-        android:textStyle="bold"
-        app:drawableTint="?vctr_content_secondary"
-        tools:drawableEnd="@drawable/ic_expand_more"
+        android:textAllCaps="true"
+        android:textColor="?vctr_content_primary"
+        app:layout_constraintEnd_toStartOf="@id/roomCategoryCounterView"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth="wrap_content_constrained"
         tools:text="@string/room_participants_header_direct_chats" />
+
+    <TextView
+        android:id="@+id/roomCategoryCounterView"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="2dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="?vctr_content_secondary"
+        app:drawableTint="?vctr_content_secondary"
+        app:layout_constraintBottom_toBottomOf="@id/roomCategoryTitleView"
+        app:layout_constraintEnd_toStartOf="@id/roomCategoryUnreadCounterBadgeView"
+        app:layout_constraintStart_toEndOf="@id/roomCategoryTitleView"
+        app:layout_constraintTop_toTopOf="@id/roomCategoryTitleView"
+        app:layout_constraintWidth="wrap_content_constrained"
+        tools:drawableEnd="@drawable/ic_expand_more"
+        tools:text="14" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomCategoryUnreadCounterBadgeView"
@@ -39,10 +59,12 @@
         android:gravity="center"
         android:minWidth="16dp"
         android:minHeight="16dp"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
+        android:paddingHorizontal="4dp"
         android:textColor="?colorOnError"
+        app:layout_constraintBottom_toBottomOf="@id/roomCategoryTitleView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/roomCategoryTitleView"
         tools:background="@drawable/bg_unread_highlight"
         tools:text="24" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

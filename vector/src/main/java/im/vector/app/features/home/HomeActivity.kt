@@ -38,10 +38,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
+import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
@@ -89,6 +89,7 @@ import javax.inject.Inject
 data class HomeActivityArgs(
         val clearNotification: Boolean,
         val accountCreation: Boolean,
+        val hasExistingSession: Boolean = false,
         val inviteNotificationRoomId: String? = null
 ) : Parcelable
 
@@ -105,6 +106,7 @@ class HomeActivity :
 
     @Suppress("UNUSED")
     private val analyticsAccountDataViewModel: AnalyticsAccountDataViewModel by viewModel()
+
     @Suppress("UNUSED")
     private val userColorAccountDataViewModel: UserColorAccountDataViewModel by viewModel()
 
@@ -230,7 +232,7 @@ class HomeActivity :
                         HomeActivitySharedAction.SendSpaceFeedBack    -> {
                             bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
                         }
-                    }.exhaustive
+                    }
                 }
                 .launchIn(lifecycleScope)
 
@@ -252,7 +254,9 @@ class HomeActivity :
                 HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
                 is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn               -> handleShowAnalyticsOptIn()
-            }.exhaustive
+                HomeActivityViewEvents.NotifyUserForThreadsMigration    -> handleNotifyUserForThreadsMigration()
+                is HomeActivityViewEvents.MigrateThreads                -> migrateThreadsIfNeeded(it.checkSession)
+            }
         }
         homeActivityViewModel.onEach { renderState(it) }
 
@@ -266,6 +270,48 @@ class HomeActivity :
 
     private fun handleShowAnalyticsOptIn() {
         navigator.openAnalyticsOptIn(this)
+    }
+
+    /**
+     * Migrating from old threads io.element.thread to new m.thread needs an initial sync to
+     * sync and display existing messages appropriately
+     */
+    private fun migrateThreadsIfNeeded(checkSession: Boolean) {
+        if (checkSession) {
+            // We should check session to ensure we will only clear cache if needed
+            val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+            if (args?.hasExistingSession == true) {
+                // existingSession --> Will be true only if we came from an existing active session
+                Timber.i("----> Migrating threads from an existing session..")
+                handleThreadsMigration()
+            } else {
+                // We came from a new session and not an existing one,
+                // so there is no need to migrate threads while an initial synced performed
+                Timber.i("----> No thread migration needed, we are ok")
+                vectorPreferences.setShouldMigrateThreads(shouldMigrate = false)
+            }
+        } else {
+            // Proceed with migration
+            handleThreadsMigration()
+        }
+    }
+
+    /**
+     * Clear cache and restart to invoke an initial sync for threads migration
+     */
+    private fun handleThreadsMigration() {
+        Timber.i("----> Threads Migration detected, clearing cache and sync...")
+        vectorPreferences.setShouldMigrateThreads(shouldMigrate = false)
+        MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+    }
+
+    private fun handleNotifyUserForThreadsMigration() {
+        MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.threads_notice_migration_title)
+                .setMessage(R.string.threads_notice_migration_message)
+                .setCancelable(true)
+                .setPositiveButton(R.string.sas_got_it) { _, _ -> }
+                .show()
     }
 
     private fun handleIntent(intent: Intent?) {
@@ -328,7 +374,7 @@ class HomeActivity :
                 // Idle or Incremental sync status
                 views.waitingView.root.isVisible = false
             }
-        }.exhaustive
+        }
     }
 
     private fun handleAskPasswordToInitCrossSigning(events: HomeActivityViewEvents.AskPasswordToInitCrossSigning) {
@@ -515,7 +561,7 @@ class HomeActivity :
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            validateBackPressed { super.onBackPressed() }
         }
     }
 
@@ -545,11 +591,13 @@ class HomeActivity :
         fun newIntent(context: Context,
                       clearNotification: Boolean = false,
                       accountCreation: Boolean = false,
+                      existingSession: Boolean = false,
                       inviteNotificationRoomId: String? = null
         ): Intent {
             val args = HomeActivityArgs(
                     clearNotification = clearNotification,
                     accountCreation = accountCreation,
+                    hasExistingSession = existingSession,
                     inviteNotificationRoomId = inviteNotificationRoomId
             )
 

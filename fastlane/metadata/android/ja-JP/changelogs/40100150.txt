@@ -1,2 +1,2 @@
-このバージョンの主な変更点: ソーシャルログインに対応しました。
-全ての変更履歴はこちら: https://github.com/vector-im/element-android/releases/tag/v1.0.15
+このバージョンの主な変更点：ソーシャルログインに対応しました。
+更新履歴：https://github.com/vector-im/element-android/releases/tag/v1.0.15
