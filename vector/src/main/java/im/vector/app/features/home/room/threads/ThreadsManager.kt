@@ -36,10 +36,6 @@ class ThreadsManager @Inject constructor(
         private val context: Context
 ) {
 
-    companion object {
-        const val learnMoreUrl = "https://element.io/help#threads"
-    }
-
     /**
      * Enable threads and invoke an initial sync. The initial sync is mandatory in order to change
      * the already saved DB schema for already received messages
@@ -55,6 +51,7 @@ class ThreadsManager @Inject constructor(
      */
     fun getBetaEnableThreadsMessage(): Spanned {
         val learnMore = context.getString(R.string.action_learn_more)
+        val learnMoreUrl = context.getString(R.string.threads_learn_more_url)
         val href = "<a href='$learnMoreUrl'>$learnMore</a>.<br><br>"
         val message = context.getString(R.string.threads_beta_enable_notice_message, href)
         return HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
