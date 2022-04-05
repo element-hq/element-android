@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: agg.mento indicatore scrittura. Correzioni errori e miglioramenti stabilità.
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.4.4

@@ -1,0 +1,2 @@
+Neuer Tippindikator und Bugfixes
+Alle Änderungen: https://github.com/vector-im/element-android/releases/tag/v1.4.4

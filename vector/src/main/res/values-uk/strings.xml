@@ -424,7 +424,7 @@
         <item quantity="many">%d змін членства</item>
         <item quantity="other"/>
     </plurals>
-    <string name="list_members">Список учасників</string>
+    <string name="list_members">Учасники</string>
     <string name="room_settings_all_messages">Усі повідомлення</string>
     <string name="room_settings_add_homescreen_shortcut">Додати ярлик на головний екран</string>
     <string name="title_activity_choose_sticker">Надіслати наліпку</string>
@@ -1496,7 +1496,7 @@
     <string name="invite_by_email">Запросити електронним листом</string>
     <string name="voice_message_slide_to_cancel">Проведіть пальцем, щоб скасувати</string>
     <string name="a11y_start_voice_message">Записати голосове повідомлення</string>
-    <string name="leave_space">Вийти з простору</string>
+    <string name="leave_space">Вийти</string>
     <string name="space_settings_manage_rooms">Керувати кімнатами</string>
     <string name="user_invites_you">%s запрошує вас</string>
     <string name="you_are_invited">Вас запрошено</string>
@@ -2511,4 +2511,23 @@
     <string name="message_reaction_show_less">Згорнути</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s та інші</string>
     <string name="room_notification_two_users_are_typing">%1$s і %2$s</string>
+    <string name="location_share_live_stop">Зупинити</string>
+    <string name="location_share_live_enabled">Місцеперебування поширюється наживо</string>
+    <string name="location_in_background_missing_permission_dialog_content">Якщо бажаєте поширювати місцеперебування наживо, ${app_name} потребує доступу до місцеперебування протягом усієї фонової роботи застосунку.
+\nМи отримуватимемо ваше місцеперебування лише протягом обраного вами терміну.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Дозвольте доступ</string>
+    <string name="a11y_location_share_option_pinned_icon">Поширити ці координати</string>
+    <string name="location_share_option_pinned">Поширити ці координати</string>
+    <string name="a11y_location_share_pin_on_map">Маркер обраних координат на карті</string>
+    <string name="a11y_location_share_option_user_live_icon">Поширити місцеперебування наживо</string>
+    <string name="location_share_option_user_live">Поширити місцеперебування наживо</string>
+    <string name="a11y_location_share_option_user_current_icon">Поширити моє поточне місцеперебування</string>
+    <string name="location_share_option_user_current">Поширити моє поточне місцеперебування</string>
+    <string name="a11y_location_share_locate_button">Перейти до поточного місцеперебування</string>
+    <string name="threads_notice_migration_message">Наближаємось до випуску тредів у загальнодоступну бета-версію.
+\n
+\nГотуючись, маємо дещо змінити: раніше створені треди буде показано як звичайні відповіді.
+\n
+\nЦе буде одноразовий перехід, оскільки треди — тепер частина специфікації Matrix.</string>
+    <string name="threads_notice_migration_title">Незабаром бета-версія тредів 🎉</string>
 </resources>
