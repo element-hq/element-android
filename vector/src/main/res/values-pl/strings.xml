@@ -2339,7 +2339,7 @@
     <string name="discovery_section">Odkrywanie (%s)</string>
     <string name="finish_setting_up_discovery">Dokończ konfigurację odkrywania.</string>
     <string name="event_status_a11y_delete_all">Usuń wszystkie nieudane wiadomości</string>
-    <string name="bootstrap_migration_with_passphrase_helper_with_link">Nie znasz swojego hasła zapasowego klucza\? Możesz %s</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Nie znasz hasła swojego zapasowego klucza\? Możesz %s.</string>
     <plurals name="entries">
         <item quantity="one">wpis</item>
         <item quantity="few">wpisów</item>
