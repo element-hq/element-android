@@ -2335,16 +2335,16 @@
     <string name="dev_tools_form_hint_type">Typ</string>
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
-    <string name="a11y_view_read_receipts">Pokaż znaczniki odczytania</string>
+    <string name="a11y_view_read_receipts">Wyświetl znaczniki odczytania</string>
     <string name="discovery_section">Odkrywanie (%s)</string>
     <string name="finish_setting_up_discovery">Dokończ konfigurację odkrywania.</string>
     <string name="event_status_a11y_delete_all">Usuń wszystkie nieudane wiadomości</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Nie znasz hasła swojego zapasowego klucza\? Możesz %s.</string>
     <plurals name="entries">
-        <item quantity="one">wpis</item>
-        <item quantity="few">wpisów</item>
-        <item quantity="many">wpisy</item>
-        <item quantity="other">wpisy</item>
+        <item quantity="one">%d wpis</item>
+        <item quantity="few">%d wpisy</item>
+        <item quantity="many">%d wpisów</item>
+        <item quantity="other">%d wpisów</item>
     </plurals>
     <plurals name="space_people_you_know">
         <item quantity="one">%d osoba którą znasz już dołączyła</item>
@@ -2357,4 +2357,6 @@
     <string name="dev_tools_send_custom_event">Wyślij wydarzenie niestandardowe</string>
     <string name="a11y_trust_level_warning">Ostrzegawczy poziom zaufania</string>
     <string name="call_transfer_consult_first">Upewnij się najpierw</string>
+    <string name="a11y_unchecked">Nie sprawdzono</string>
+    <string name="a11y_checked">Sprawdzono</string>
 </resources>
