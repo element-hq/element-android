@@ -6,15 +6,16 @@
     android:layout_height="wrap_content"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-    <View
+    <ImageView
         android:id="@+id/locationLiveMessageBannerBackground"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="50dp"
         android:alpha="0.85"
-        android:background="?colorSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="?colorSurface"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/locationLiveMessageBannerIcon"
@@ -36,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
-        android:text="@string/location_share_live_enabled"
+        tools:text="@string/location_share_live_enabled"
         android:textColor="?colorOnSurface"
         app:layout_constraintBottom_toTopOf="@id/locationLiveMessageBannerSubTitle"
         app:layout_constraintStart_toEndOf="@id/locationLiveMessageBannerIcon"
@@ -57,11 +58,10 @@
     <Button
         android:id="@+id/locationLiveMessageBannerStop"
         style="@style/Widget.Vector.Button.Text.LocationLive"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="8dp"
-        android:text="@string/location_share_live_stop_long_version"
-        app:layout_constraintBottom_toBottomOf="@id/locationLiveMessageBannerBackground"
+        android:layout_width="45dp"
+        android:layout_height="30dp"
+        android:text="@string/location_share_live_stop"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/locationLiveMessageBannerBackground"
         app:layout_constraintTop_toTopOf="@id/locationLiveMessageBannerBackground" />
 </merge>

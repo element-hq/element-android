@@ -45,4 +45,12 @@
         app:layout_constraintTop_toBottomOf="@id/staticMapPinImageView"
         tools:visibility="visible" />
 
+    <im.vector.app.features.location.live.LocationLiveMessageBannerView
+        android:id="@+id/locationLiveMessageBanner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/staticMapImageView"
+        app:layout_constraintEnd_toEndOf="@id/staticMapImageView"
+        app:layout_constraintBottom_toBottomOf="@id/staticMapImageView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
