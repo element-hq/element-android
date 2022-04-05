@@ -17,10 +17,10 @@
 package im.vector.app.features.home.room.threads
 
 import android.app.Activity
-import android.content.Context
 import android.text.Spanned
 import androidx.core.text.HtmlCompat
 import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.settings.VectorPreferences
@@ -33,7 +33,7 @@ import javax.inject.Inject
 class ThreadsManager @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val context: Context
+        private val stringProvider: StringProvider
 ) {
 
     /**
@@ -50,10 +50,10 @@ class ThreadsManager @Inject constructor(
      * Generates and return an Html spanned string to be rendered especially in dialogs
      */
     fun getBetaEnableThreadsMessage(): Spanned {
-        val learnMore = context.getString(R.string.action_learn_more)
-        val learnMoreUrl = context.getString(R.string.threads_learn_more_url)
+        val learnMore = stringProvider.getString(R.string.action_learn_more)
+        val learnMoreUrl = stringProvider.getString(R.string.threads_learn_more_url)
         val href = "<a href='$learnMoreUrl'>$learnMore</a>.<br><br>"
-        val message = context.getString(R.string.threads_beta_enable_notice_message, href)
+        val message = stringProvider.getString(R.string.threads_beta_enable_notice_message, href)
         return HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 }
