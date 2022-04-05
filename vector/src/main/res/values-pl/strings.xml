@@ -2333,8 +2333,8 @@
     <string name="preference_help_summary">Uzyskaj pomoc w korzystaniu z ${app_name}</string>
     <string name="room_error_access_unauthorized">Nie masz uprawnień by dołączyć do tego pokoju</string>
     <string name="dev_tools_form_hint_type">Typ</string>
-    <string name="a11y_presence_offline">Niedostępny</string>
-    <string name="a11y_presence_online">Dostępny</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
     <string name="a11y_view_read_receipts">Pokaż znaczniki odczytania</string>
     <string name="discovery_section">Odkrywanie (%s)</string>
     <string name="finish_setting_up_discovery">Dokończ konfigurację odkrywania.</string>
@@ -2354,4 +2354,7 @@
     </plurals>
     <string name="dev_tools_error_no_message_type">Brakujący typ wiadomości</string>
     <string name="dev_tools_error_no_content">Brak zawartości</string>
+    <string name="dev_tools_send_custom_event">Wyślij wydarzenie niestandardowe</string>
+    <string name="a11y_trust_level_warning">Ostrzegawczy poziom zaufania</string>
+    <string name="call_transfer_consult_first">Upewnij się najpierw</string>
 </resources>
