@@ -287,22 +287,21 @@
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} wymaga dostępu do kamery i mikrofonu, aby przeprowadzać rozmowy wideo.
 \n
 \nPrzyznaj dostęp w następnym oknie.</string>
-    <string name="list_members">Lista uczestników</string>
+    <string name="list_members">Członkowie</string>
     <plurals name="room_title_members">
-        <item quantity="one">1 członek</item>
-        <item quantity="few">kilku członków</item>
+        <item quantity="one">%d członek</item>
+        <item quantity="few">%d członków</item>
         <item quantity="many">%d członków</item>
-        <item quantity="other"/>
+        <item quantity="other">%d członków</item>
     </plurals>
     <string name="room_participants_power_level_prompt">Nie będziesz w stanie cofnąć tej zmiany, ponieważ przyznajesz użytkownikowi uprawnienia równe swoim.
-\n
 \nJesteś pewien\?</string>
-    <string name="room_participants_ban_prompt_msg">Zbanowanie użytkownika usunie go z tego pokoju i uniemożliwi ponowne dołączenie.</string>
+    <string name="room_participants_ban_prompt_msg">Zablokowanie użytkownika usunie go z tego pokoju i uniemożliwi ponowne dołączenie.</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">Nowa wiadomość</item>
-        <item quantity="few">Kilka nowych wiadomości</item>
+        <item quantity="one">%d nowa wiadomość</item>
+        <item quantity="few">%d nowe wiadomości</item>
         <item quantity="many">%d nowych wiadomości</item>
-        <item quantity="other"/>
+        <item quantity="other">%d nowych wiadomości</item>
     </plurals>
     <string name="ssl_cert_not_trust">Może to oznaczać że ktoś zakłóca twoje połączenie, lub Twój telefon nie ufa certyfikatowi dostarczonemu przez zdalny serwer.</string>
     <string name="ssl_cert_new_account_expl">Jeśli administrator serwera oświadczył, że jest to oczekiwane, upewnij się, że poniższy odcisk palca odpowiada odciskowi palca dostarczonemu przez niego.</string>
@@ -539,7 +538,8 @@
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Przywrócono kopię zapasową z %d kluczem.</item>
         <item quantity="few">Przywrócono kopię zapasową z %d kluczami.</item>
-        <item quantity="many"/>
+        <item quantity="many">Przywrócono kopię zapasową z %d kluczami.</item>
+        <item quantity="other">Przywrócono kopię zapasową z %d kluczami.</item>
     </plurals>
     <string name="title_activity_keys_backup_restore">Użyj kopii zapasowej klucza</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Uruchamianie… (%1$d z %2$d)</string>
@@ -736,7 +736,7 @@
 \nMenedżerzy integracji odbierają dane konfiguracji, modyfikują widżety, wysyłają zaproszenia do pokojów i ustawiają poziomy uprawnień w Twoim imieniu.</string>
     <string name="settings_inline_url_preview_summary">Pokaż podgląd linków wewnątrz czatu jeśli twój serwer wspiera tę funkcję.</string>
     <string name="settings_send_markdown_summary">Formatuj wiadomości używając składni Markdown zanim zostaną wysłane. Pozwala to na zaawansowane formatowanie takie jak używanie asterysków do wyświetlania tekstu w kursywie.</string>
-    <string name="settings_show_join_leave_messages_summary">Nie wpływa to na zaproszenia, wyrzucenia oraz bany.</string>
+    <string name="settings_show_join_leave_messages_summary">Zaproszenia, usunięcia i bany pozostają nienaruszone.</string>
     <string name="settings_send_message_with_enter">Wysyłaj wiadomości za pomocą klawisza enter</string>
     <string name="settings_send_message_with_enter_summary">Przycisk enter na klawiaturze programowej wyśle wiadomość zamiast wprowadzania łamanania linii</string>
     <string name="settings_discovery_category">Znajdź</string>
@@ -747,13 +747,14 @@
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: %2$d wiadomość</item>
         <item quantity="few">%1$s: %2$d wiadomości</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="many">%1$s: %2$d wiadomości</item>
+        <item quantity="other">%1$s: %2$d wiadomości</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
         <item quantity="one">%d powiadomienie</item>
-        <item quantity="few">%d powiadomień</item>
-        <item quantity="many"/>
+        <item quantity="few">%d powiadomienia</item>
+        <item quantity="many">%d powiadomień</item>
+        <item quantity="other">%d powiadomień</item>
     </plurals>
     <string name="notification_unknown_new_event">Nowe wydarzenie</string>
     <string name="notification_new_messages">Nowe wiadomości</string>
@@ -825,9 +826,10 @@
     <string name="keys_backup_banner_update_line2">Zarządzaj w Kopii Zapasowej Kluczy</string>
     <string name="keys_backup_banner_in_progress">Tworzenei kopii zapasowej kluczy…</string>
     <plurals name="keys_backup_info_keys_backing_up">
-        <item quantity="one">Kopiowanie %d klucza…</item>
-        <item quantity="few">Kopiowanie %d kluczy…</item>
-        <item quantity="many"/>
+        <item quantity="one">Tworzenie kopii zapasowej %d klucza…</item>
+        <item quantity="few">Tworzenie kopii zapasowej %d kluczy…</item>
+        <item quantity="many">Tworzenie kopii zapasowej %d kluczy…</item>
+        <item quantity="other">Tworzenie kopii zapasowej %d kluczy…</item>
     </plurals>
     <string name="settings_troubleshoot_test_bing_settings_failed">Niektóre powiadomienia są wyłączone w osobistej konfiguracji.</string>
     <string name="settings_troubleshoot_test_play_services_success">Usługi Google Play są aktualne.</string>
@@ -888,8 +890,8 @@
     <plurals name="fallback_users_read">
         <item quantity="one">%d użytkownik odczytał</item>
         <item quantity="few">%d użytkowników odczytało</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="many">%d użytkowników odczytało</item>
+        <item quantity="other">%d użytkowników odczytało</item>
     </plurals>
     <string name="error_attachment">Wystąpił błąd poczas otrzymywania załącznika.</string>
     <string name="error_handling_incoming_share">Nie można obsłużyć otrzymanych danych</string>
@@ -999,9 +1001,10 @@
     <string name="login_validation_code_is_not_correct">Wprowadzony kod jest nieprawidłowy. Sprawdź.</string>
     <string name="login_error_outdated_homeserver_title">Nieaktualny serwer domowy</string>
     <plurals name="login_error_limit_exceeded_retry_after">
-        <item quantity="one">Zostało wysłane zbyt wiele żądań. Możesz spróbować ponownie za %1$d sekundę…</item>
-        <item quantity="few">Zostało wysłane zbyt wiele żądań. Możesz spróbować ponownie za %1$d sekundy…</item>
-        <item quantity="many"/>
+        <item quantity="one">Wysłano zbyt wiele próśb. Możesz spróbować ponownie za %1$d sekundę…</item>
+        <item quantity="few">Wysłano zbyt wiele próśb. Możesz spróbować ponownie za %1$d sekundy…</item>
+        <item quantity="many">Wysłano zbyt wiele próśb. Możesz spróbować ponownie za %1$d sekund…</item>
+        <item quantity="other">Wysłano zbyt wiele próśb. Możesz spróbować ponownie za %1$d sekund…</item>
     </plurals>
     <string name="signed_out_title">Wylogowałeś(-łaś) się</string>
     <string name="signed_out_notice">Mogło to się stać z wielu powodów:
@@ -1081,8 +1084,9 @@
     <string name="room_profile_section_security_learn_more">Dowiedz się więcej</string>
     <plurals name="room_profile_section_more_member_list">
         <item quantity="one">Jedna osoba</item>
-        <item quantity="few">%1$d osób</item>
-        <item quantity="many"/>
+        <item quantity="few">%1$d osoby</item>
+        <item quantity="many">%1$d osób</item>
+        <item quantity="other">%1$d osób</item>
     </plurals>
     <string name="room_profile_leaving_room">Opuszczanie pokoju…</string>
     <string name="room_member_power_level_admins">Administratorzy</string>
@@ -1104,8 +1108,7 @@
     <string name="settings_category_timeline">Oś czasu</string>
     <string name="settings_category_composer">Edycja wiadomości</string>
     <string name="room_settings_enable_encryption_dialog_title">Aktywować szyfrowanie\?</string>
-    <string name="room_settings_enable_encryption_dialog_content">Raz włączone szyfrowanie w pokoju nie może zostać wyłączone. Wiadomości wysłane w zaszyfrowanym pokoju nie są widziane przez serwer, a jedynie przez uczestników w pokoju.
-\nAktywowanie szyfrowania może uniemożliwić wielu botom i mostom prawidłowe działanie.</string>
+    <string name="room_settings_enable_encryption_dialog_content">Raz włączone szyfrowanie w pokoju nie może zostać wyłączone. Wiadomości wysłane w zaszyfrowanym pokoju nie są widziane przez serwer, a jedynie przez uczestników w pokoju. Aktywowanie szyfrowania może uniemożliwić wielu botom i mostkom prawidłowe działanie.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Aktywuj szyfrowanie</string>
     <string name="verification_request_notice">Aby być bezpiecznym, zweryfikuj %s poprzez sprawdzenie jednorazowego kodu.</string>
     <string name="verification_request_start_notice">Aby być bezpiecznym, zrób to osobiście lub użyj innej metody komunikacji.</string>
@@ -1131,8 +1134,9 @@
     <string name="settings_active_sessions_unverified_device_desc">Zweryfikuj tą sesję aby oznaczyć ją jako zaufaną i przyznać jej dostęp do zaszyfrowanych wiadomości. Jeżeli nie logowałeś(-łaś) się do tej sesji, twoje konto mogło zostać naruszone:</string>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">%d aktywna sesja</item>
-        <item quantity="few">%d aktywnych sesji</item>
-        <item quantity="many"/>
+        <item quantity="few">%d aktywne sesje</item>
+        <item quantity="many">%d aktywnych sesji</item>
+        <item quantity="other">%d aktywnych sesji</item>
     </plurals>
     <string name="crosssigning_verify_this_session">Zweryfikuj tą sesję</string>
     <string name="verification_open_other_to_verify">Otwórz obecną sesję i użyj jej do zweryfikowania obecnej, przyznając jej dostęp do zaszyfrowanych wiadomości.</string>
@@ -1161,7 +1165,8 @@
     <plurals name="send_images_with_original_size">
         <item quantity="one">Wyślij obraz w oryginalnym rozmiarze</item>
         <item quantity="few">Wyślij obrazy w oryginalnym rozmiarze</item>
-        <item quantity="many"/>
+        <item quantity="many">Wyślij obrazów w oryginalnym rozmiarze</item>
+        <item quantity="other">Wyślij obrazów w oryginalnym rozmiarze</item>
     </plurals>
     <string name="delete_event_dialog_title">Potwierdź Usunięcie</string>
     <string name="delete_event_dialog_content">Jesteś pewny(-na), że chcesz usunąć to wydarzenie\? Jeżeli usuniesz nazwę pokoju lub zmienisz temat, wciąż będzie możliwe cofnięcie zmiany.</string>
@@ -1354,9 +1359,9 @@
     <string name="active_widget_view_action">WIDOK</string>
     <plurals name="seconds">
         <item quantity="one">%d sekunda</item>
-        <item quantity="few">%d sek.</item>
-        <item quantity="many">%d sek.</item>
-        <item quantity="other">%d sek.</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
+        <item quantity="other">%d sekund</item>
     </plurals>
     <string name="settings_troubleshoot_test_push_loop_success">Aplikacja odebrała PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Przetestuj powiadomienia push</string>
@@ -1581,10 +1586,10 @@
     <string name="send_a_sticker">Naklejka</string>
     <string name="direct_room_join_rules_invite">%1$s wymaga otrzymania zaproszenia do dołączenia.</string>
     <plurals name="two_and_some_others_read">
-        <item quantity="one">%1$s, %2$s i %3$d czyta</item>
-        <item quantity="few">%1$s, %2$s i %3$d czytają</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="one">%1$s, %2$s i %3$d inny czyta</item>
+        <item quantity="few">%1$s, %2$s i %3$d innych czyta</item>
+        <item quantity="many">%1$s, %2$s i %3$d innych czyta</item>
+        <item quantity="other">%1$s, %2$s i %3$d innych czyta</item>
     </plurals>
     <string name="room_alias_publish_to_directory_error">Nie udało się uzyskać widoczności katalogu bieżącego pokoju (%1$s).</string>
     <string name="settings_secure_backup_enter_to_setup">Skonfiguruj na tym urządzeniu</string>
@@ -1825,7 +1830,7 @@
     <string name="space_settings_permissions_title">Uprawnienia Przestrzeni</string>
     <string name="room_settings_permissions_title">Uprawnienia pokoju</string>
     <string name="space_participants_unban_prompt_msg">Odblokowanie użytkownika pozwoli mu na ponowne dołączenie do tej przestrzeni.</string>
-    <string name="space_participants_ban_prompt_msg">Blokowanie użytkowników wyrzuci ich z tej przestrzeni i uniemożliwi im dołączenie ponownie.</string>
+    <string name="space_participants_ban_prompt_msg">Zablokowanie użytkownika usunie go z tego miejsca i uniemożliwi ponowne dołączenie.</string>
     <string name="room_participants_leave_private_warning">Ten pokój jest prywatny. Nie będziesz w stanie dołączyć bez zaproszenia.</string>
     <string name="call_remove_jitsi_widget_progress">Zakańczanie połączenia…</string>
     <string name="call_ended_invite_timeout_title">Brak odpowiedzi</string>
@@ -1975,7 +1980,7 @@
     <string name="space_leave_prompt_msg_private">Nie będziesz w stanie ponownie dołączyć, do momentu kiedy nie zostaniesz ponownie zaproszony.</string>
     <string name="space_leave_prompt_msg_only_you">Jesteś jedyną osoba tutaj. Jeśli wyjdziesz, nikt nie będzie w stanie dołączyć w przyszłości, włączając Ciebie.</string>
     <string name="space_leave_prompt_msg_with_name">Czy jesteś pewny, że chcesz opuścić %s\?</string>
-    <string name="leave_space">Opuść przestrzeń</string>
+    <string name="leave_space">Opuść</string>
     <string name="space_add_child_title">Dodawaj pokoje</string>
     <string name="space_explore_activity_title">Przeglądaj pokoje</string>
     <string name="finish_setup">Ukończ konfigurację</string>
@@ -1985,7 +1990,7 @@
 \nSpróbuj ponownie później lub zapytaj administratora tego pokoju czy masz dostęp.</string>
     <string name="join_anyway">Dołącz pomimo to</string>
     <string name="join_space">Dołącz do przestrzeni</string>
-    <string name="create_space">Stwórz przestrzeń</string>
+    <string name="create_space">Utwórz przestrzeń</string>
     <string name="skip_for_now">Na razie pomiń</string>
     <string name="share_space_link_message">Dołącz do mojej przestrzeni %1$s %2$s</string>
     <string name="invite_just_to_this_room_desc">Nie będą częścią %s</string>
@@ -2016,7 +2021,7 @@
     <string name="create_spaces_me_and_teammates">Ja i moi znajomi</string>
     <string name="create_spaces_organise_rooms">Prywatna przestrzeń do organizacji Twoich pokojów</string>
     <string name="create_spaces_just_me">Tylko ja</string>
-    <string name="create_spaces_make_sure_access">Upewnij się, że odpowiednie osoby mają dostęp do %s. Możesz zmienić to później.</string>
+    <string name="create_spaces_make_sure_access">Upewnij się, że odpowiednie osoby mają dostęp do %s.</string>
     <string name="create_spaces_who_are_you_working_with">Z kim pracujesz\?</string>
     <string name="create_spaces_join_info_help">Aby dołączyć do istniejącej przestrzeni, potrzebujesz zaproszenia.</string>
     <string name="create_spaces_you_can_change_later">Możesz zmienić to później</string>
@@ -2028,10 +2033,10 @@
 \nCzekanie na odpowiedź serwera…</string>
     <string name="room_displayname_empty_room_was">Pusty pokój (było %s)</string>
     <plurals name="room_displayname_four_and_more_members">
-        <item quantity="one">%1$s, %2$s, %3$s i %4$d innych</item>
+        <item quantity="one">%1$s, %2$s, %3$s i %4$d inny</item>
         <item quantity="few">%1$s, %2$s, %3$s i %4$d innych</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="many">%1$s, %2$s, %3$s i %4$d innych</item>
+        <item quantity="other">%1$s, %2$s, %3$s i %4$d innych</item>
     </plurals>
     <string name="room_displayname_4_members">%1$s, %2$s, %3$s i %4$s</string>
     <string name="power_level_custom_no_value">Niestandardowe</string>
@@ -2208,7 +2213,7 @@
         <item quantity="other">Dodano %1$s jako adresy dla tego pokoju.</item>
     </plurals>
     <string name="login_social_sso">pojedyncze logowanie</string>
-    <string name="shortcut_disabled_reason_room_left">Pokój opuszczony!</string>
+    <string name="shortcut_disabled_reason_room_left">Pokój został opuszczony!</string>
     <string name="call_dial_pad_lookup_error">Błąd podczas wyszukiwania numeru telefonu</string>
     <string name="call_transfer_title">Przekaż</string>
     <string name="call_tap_to_return">%1$s dotknij by powrócić</string>
