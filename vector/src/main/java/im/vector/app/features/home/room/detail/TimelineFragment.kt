@@ -2385,7 +2385,7 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    private fun displayThreadsBetaOptInDialog() =
+    private fun displayThreadsBetaOptInDialog() {
             activity?.let {
                 MaterialAlertDialogBuilder(it)
                         .setTitle(R.string.threads_beta_enable_notice_title)
@@ -2403,6 +2403,7 @@ class TimelineFragment @Inject constructor(
                             movementMethod = LinkMovementMethod.getInstance()
                         }
             }
+        }
 
     /**
      * Navigate to Threads list for the current room
