@@ -89,20 +89,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginEnd="1dp"
         android:background="@drawable/notification_badge"
         android:backgroundTint="@color/palette_azure"
         android:gravity="center"
         android:paddingStart="10dp"
         android:paddingTop="3dp"
         android:paddingEnd="10dp"
-        android:layout_marginEnd="1dp"
         android:paddingBottom="3dp"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:text="@string/beta_title_bottom_sheet_action"
         android:textColor="@color/palette_white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/actionSelected"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

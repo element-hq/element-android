@@ -737,6 +737,7 @@
     <string name="threads_notice_migration_title">Threads Approaching Beta 🎉</string>
     <string name="threads_notice_migration_message">We’re getting closer to releasing a public Beta for Threads.\n\nAs we prepare for it, we need to make some changes: threads created before this point will be displayed as regular replies.\n\nThis will be a one-off transition as Threads are now part of the Matrix specification.</string>
     <string name="threads_beta_enable_notice_title">Threads Beta</string>
+    <!-- %s will be replaced with action_learn_more string resource that will be clickable(url redirection)  -->
     <string name="threads_beta_enable_notice_message">Threads help keep your conversations on-topic and easy to track. %sEnabling threads will refresh the app. This may take longer for some accounts.</string>
 
     <!-- Search -->
@@ -1901,7 +1902,6 @@
     <string name="login_server_text">Just like email, accounts have one home, although you can talk to anyone</string>
     <string name="login_server_matrix_org_text">Join millions for free on the largest public server</string>
     <string name="login_server_modular_text">Premium hosting for organisations</string>
-    <string name="login_server_modular_learn_more">Learn more</string>
     <string name="login_server_other_title">Other</string>
     <string name="login_server_other_text">Custom &amp; advanced settings</string>
 
@@ -2142,7 +2142,6 @@
     <string name="direct_room_profile_encrypted_subtitle">Messages here are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
     <string name="room_profile_section_security">Security</string>
     <string name="room_profile_section_restore_security">Restore Encryption</string>
-    <string name="room_profile_section_security_learn_more">Learn more</string>
     <string name="room_profile_section_more">More</string>
     <string name="room_profile_section_admin">Admin Actions</string>
     <string name="room_profile_section_more_settings">Room settings</string>
