@@ -360,6 +360,7 @@
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
     <string name="action_not_now">Not now</string>
+    <string name="action_try_it_out">Try it out</string>
     <string name="action_agree">Agree</string>
     <string name="action_change">"Change"</string>
     <string name="action_remove">Remove</string>
@@ -384,6 +385,7 @@
     <string name="action_play">Play</string>
     <string name="action_dismiss">Dismiss</string>
     <string name="action_reset">Reset</string>
+    <string name="action_learn_more">Learn more</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -734,6 +736,9 @@
     <string name="search_thread_from_a_thread">From a Thread</string>
     <string name="threads_notice_migration_title">Threads Approaching Beta 🎉</string>
     <string name="threads_notice_migration_message">We’re getting closer to releasing a public Beta for Threads.\n\nAs we prepare for it, we need to make some changes: threads created before this point will be displayed as regular replies.\n\nThis will be a one-off transition as Threads are now part of the Matrix specification.</string>
+    <string name="threads_beta_enable_notice_title">Threads Beta</string>
+    <!-- %s will be replaced with action_learn_more string resource that will be clickable(url redirection)  -->
+    <string name="threads_beta_enable_notice_message">Threads help keep your conversations on-topic and easy to track. %sEnabling threads will refresh the app. This may take longer for some accounts.</string>
 
     <!-- Search -->
     <string name="search_hint">Search</string>
@@ -1643,6 +1648,7 @@
     <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
     <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
 
+    <string name="beta_title_bottom_sheet_action">BETA</string>
     <string name="send_feedback_space_title">Spaces feedback</string>
     <string name="feedback">Feedback</string>
     <string name="send_feedback_space_info">You’re using a beta version of spaces. Your feedback will help inform the next versions. Your platform and username will be noted to help us use your feedback as much as we can.</string>
