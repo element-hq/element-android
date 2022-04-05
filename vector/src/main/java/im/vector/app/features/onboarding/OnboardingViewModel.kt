@@ -560,7 +560,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleWebLoginSuccess(action: OnboardingAction.WebLoginSuccess) = withState { state ->
-        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(state.selectedHomeserver.declaredUrl)
+        val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(state.selectedHomeserver.upstreamUrl)
 
         if (homeServerConnectionConfigFinal == null) {
             // Should not happen
@@ -603,7 +603,7 @@ class OnboardingViewModel @AssistedInject constructor(
                         setState {
                             copy(
                                     serverType = alignServerTypeAfterSubmission(homeServerConnectionConfig, serverTypeOverride),
-                                    selectedHomeserver = it.selectedHomeserverState,
+                                    selectedHomeserver = it.selectedHomeserver,
                                     isLoading = false,
                             )
                         }

@@ -141,8 +141,8 @@ class StartAuthenticationFlowUseCaseTest {
             isHomeserverOutdated,
             SelectedHomeserverState(
                     description = description,
-                    sourceUrl = homeserverSourceUrl,
-                    declaredUrl = A_DECLARED_HOMESERVER_URL,
+                    userFacingUrl = homeserverSourceUrl,
+                    upstreamUrl = A_DECLARED_HOMESERVER_URL,
                     preferredLoginMode = preferredLoginMode,
                     supportedLoginTypes = supportedLoginTypes
             )

@@ -167,7 +167,7 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         setupUi(state)
         setupAutoFill()
 
-        views.selectedServerName.text = state.selectedHomeserver.sourceUrl.toReducedUrl()
+        views.selectedServerName.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
         views.selectedServerDescription.text = state.selectedHomeserver.description
 
         if (state.isLoading) {
@@ -208,5 +208,5 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         }
     }
 
-    private fun OnboardingViewState.isNumericOnlyUserIdForbidden() = selectedHomeserver.sourceUrl == getString(R.string.matrix_org_server_url)
+    private fun OnboardingViewState.isNumericOnlyUserIdForbidden() = selectedHomeserver.userFacingUrl == getString(R.string.matrix_org_server_url)
 }

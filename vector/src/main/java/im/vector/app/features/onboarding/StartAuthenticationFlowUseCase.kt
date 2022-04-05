@@ -36,28 +36,27 @@ class StartAuthenticationFlowUseCase @Inject constructor(
         authenticationService.cancelPendingLoginOrRegistration()
         val authFlow = authenticationService.getLoginFlow(config)
         val preferredLoginMode = authFlow.findPreferredLoginMode()
-        val selection = createSelectedHomeserverState(authFlow, config, preferredLoginMode)
+        val selection = createSelectedHomeserver(authFlow, config, preferredLoginMode)
         val isOutdated = (preferredLoginMode == LoginMode.Password && !authFlow.isLoginAndRegistrationSupported) || authFlow.isOutdatedHomeserver
         return StartAuthenticationResult(isOutdated, selection)
     }
 
-    private fun createSelectedHomeserverState(
+    private fun createSelectedHomeserver(
             authFlow: LoginFlowResult,
             config: HomeServerConnectionConfig,
             preferredLoginMode: LoginMode
-    ): SelectedHomeserverState {
-        val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
-        return SelectedHomeserverState(
-                description = when (config.homeServerUri.toString()) {
-                    matrixOrgUrl -> stringProvider.getString(R.string.ftue_auth_create_account_matrix_dot_org_server_description)
-                    else         -> null
-                },
-                sourceUrl = config.homeServerUri.toString(),
-                declaredUrl = authFlow.homeServerUrl,
-                preferredLoginMode = preferredLoginMode,
-                supportedLoginTypes = authFlow.supportedLoginTypes
-        )
-    }
+    ) = SelectedHomeserverState(
+            description = when (config.homeServerUri.toString()) {
+                matrixOrgUrl() -> stringProvider.getString(R.string.ftue_auth_create_account_matrix_dot_org_server_description)
+                else           -> null
+            },
+            userFacingUrl = config.homeServerUri.toString(),
+            upstreamUrl = authFlow.homeServerUrl,
+            preferredLoginMode = preferredLoginMode,
+            supportedLoginTypes = authFlow.supportedLoginTypes
+    )
+
+    private fun matrixOrgUrl() = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
     private fun LoginFlowResult.findPreferredLoginMode() = when {
         supportedLoginTypes.containsAll(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders)
@@ -68,6 +67,6 @@ class StartAuthenticationFlowUseCase @Inject constructor(
 
     data class StartAuthenticationResult(
             val isHomeserverOutdated: Boolean,
-            val selectedHomeserverState: SelectedHomeserverState
+            val selectedHomeserver: SelectedHomeserverState
     )
 }

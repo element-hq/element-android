@@ -60,19 +60,19 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
             ServerType.MatrixOrg -> {
                 views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
                 views.loginSignupSigninServerIcon.isVisible = true
-                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.selectedHomeserver.sourceUrl.toReducedUrl())
+                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl())
                 views.loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
             }
             ServerType.EMS       -> {
                 views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
                 views.loginSignupSigninServerIcon.isVisible = true
                 views.loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
-                views.loginSignupSigninText.text = state.selectedHomeserver.sourceUrl.toReducedUrl()
+                views.loginSignupSigninText.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
             }
             ServerType.Other     -> {
                 views.loginSignupSigninServerIcon.isVisible = false
                 views.loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.selectedHomeserver.sourceUrl.toReducedUrl())
+                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl())
             }
             ServerType.Unknown   -> Unit /* Should not happen */
         }

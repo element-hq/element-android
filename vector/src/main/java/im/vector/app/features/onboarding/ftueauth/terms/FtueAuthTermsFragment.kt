@@ -116,7 +116,7 @@ class FtueAuthTermsFragment @Inject constructor(
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        policyController.homeServer = state.selectedHomeserver.sourceUrl.toReducedUrl()
+        policyController.homeServer = state.selectedHomeserver.userFacingUrl.toReducedUrl()
         renderState()
     }
 
