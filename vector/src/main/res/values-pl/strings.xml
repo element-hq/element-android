@@ -2346,4 +2346,12 @@
         <item quantity="many">wpisy</item>
         <item quantity="other">wpisy</item>
     </plurals>
+    <plurals name="space_people_you_know">
+        <item quantity="one">%d osoba którą znasz już dołączyła</item>
+        <item quantity="few">%d osoby które znasz już dołączyły</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="dev_tools_error_no_message_type">Brakujący typ wiadomości</string>
+    <string name="dev_tools_error_no_content">Brak zawartości</string>
 </resources>
