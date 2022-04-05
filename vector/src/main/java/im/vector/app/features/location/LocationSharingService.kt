@@ -142,17 +142,26 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     override fun onLocationUpdate(locationData: LocationData) {
         Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
+
+        // Emit location update to all rooms in which live location sharing is active
         roomArgsList.forEach { roomArg ->
-            val room = activeSessionHolder.getSafeActiveSession()?.getRoom(roomArg.roomId)
-            room?.getStateEvent(EventType.STATE_ROOM_BEACON_INFO.first())?.let { beaconInfoEvent ->
-                room.sendLiveLocation(
-                        beaconInfoEventId = beaconInfoEvent.eventId!!,
-                        latitude = locationData.latitude,
-                        longitude = locationData.longitude,
-                        uncertainty = locationData.uncertainty
-                )
-            }
+            sendLiveLocation(roomArg.roomId, locationData)
         }
+    }
+
+    private fun sendLiveLocation(roomId: String, locationData: LocationData) {
+        val room = activeSessionHolder.getSafeActiveSession()?.getRoom(roomId)
+        room
+                ?.getStateEvent(EventType.STATE_ROOM_BEACON_INFO.first())
+                ?.eventId
+                ?.let {
+                    room.sendLiveLocation(
+                            beaconInfoEventId = it,
+                            latitude = locationData.latitude,
+                            longitude = locationData.longitude,
+                            uncertainty = locationData.uncertainty
+                    )
+                }
     }
 
     override fun onLocationProviderIsNotAvailable() {
