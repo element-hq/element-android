@@ -90,7 +90,6 @@ object TextUtils {
         val minutes = getMinutes(duration)
         val seconds = getSeconds(duration)
         val builder = StringBuilder()
-        // TODO do we need Locale ? test with different language setting
         when {
             hours > 0   -> {
                 appendHours(context, builder, hours)
@@ -108,11 +107,11 @@ object TextUtils {
                 appendSeconds(context, builder, seconds)
             }
         }
-
         return builder.toString()
     }
 
     private fun appendHours(context: Context, builder: StringBuilder, hours: Int) {
+        builder.append(hours)
         builder.append(context.resources.getQuantityString(R.plurals.time_unit_hour_short, hours))
     }
 
