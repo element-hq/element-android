@@ -40,6 +40,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.net.toUri
@@ -998,7 +999,11 @@ class TimelineFragment @Inject constructor(
         }
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if (isThreadTimeLine()) {
+            if (menu is MenuBuilder) menu.setOptionalIconsVisible(true)
+        }
         super.onCreateOptionsMenu(menu, inflater)
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
@@ -1474,6 +1479,10 @@ class TimelineFragment @Inject constructor(
 
         views.composerLayout.views.composerEmojiButton.isVisible = vectorPreferences.showEmojiKeyboard()
 
+        if (isThreadTimeLine() && timelineArgs.threadTimelineArgs?.startsThread == true) {
+            // Show keyboard when the user started a thread
+            views.composerLayout.views.composerEditText.showKeyboard(andRequestFocus = true)
+        }
         views.composerLayout.callback = object : MessageComposerView.Callback {
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {

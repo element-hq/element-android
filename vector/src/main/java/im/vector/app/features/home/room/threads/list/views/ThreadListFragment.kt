@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.threads.list.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -76,6 +77,15 @@ class ThreadListFragment @Inject constructor(
         }
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        withState(threadListViewModel) { state ->
+            when (threadListViewModel.canHomeserverUseThreading()) {
+                true  -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.threadSummaryList.invoke().isNullOrEmpty()
+                false -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.rootThreadEventList.invoke().isNullOrEmpty()
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
@@ -102,6 +112,7 @@ class ThreadListFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(threadListViewModel) { state ->
+        invalidateOptionsMenu()
         renderEmptyStateIfNeeded(state)
         threadListController.update(state)
         renderLoaderIfNeeded(state)
