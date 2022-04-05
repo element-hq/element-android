@@ -120,6 +120,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/bg_shadow_divider"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/threadsFeedBackConstraintLayout"
         />
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -128,6 +129,7 @@
         android:layout_height="wrap_content"
         android:elevation="30dp"
         android:padding="6dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
