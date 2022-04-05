@@ -143,6 +143,7 @@ class AppStateHandler @Inject constructor(
         session.getSyncStatusLive()
                 .asFlow()
                 .filterIsInstance<SyncStatusService.Status.IncrementalSyncDone>()
+                .distinctUntilChanged()
                 .onEach {
                     handleJoinedSpaceStatistics(session.spaceService().getRootSpaceSummaries().size)
                 }.launchIn(session.coroutineScope)
