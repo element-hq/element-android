@@ -24,8 +24,9 @@
     <string name="ftue_auth_choose_server_entry_hint">Server URL</string>
     <string name="ftue_auth_choose_server_entry_footer">You can only connect to a server that has already been set up</string>
     <string name="ftue_auth_choose_server_ems_title">Want to host your own server?</string>
-    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) is a robust and reliable hosting service for fast, secure and real time communication. Find out how on element.io.ems</string>
-    <string name="ftue_auth_choose_server_ems_cta">Get in touch</string>
+
     <string name="ftue_ems_url">https://element.io/ems</string>
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) is a robust and reliable hosting service for fast, secure and real time communication. Find out how on <a href="${ftue_ems_url}">element.io/ems</a></string>
+    <string name="ftue_auth_choose_server_ems_cta">Get in touch</string>
 
 </resources>
