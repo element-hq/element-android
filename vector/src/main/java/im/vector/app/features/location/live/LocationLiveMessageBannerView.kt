@@ -20,9 +20,18 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
+import im.vector.app.R
+import im.vector.app.core.utils.TextUtils
 import im.vector.app.databinding.ViewLocationLiveMessageBannerBinding
-import im.vector.app.databinding.ViewLocationLiveStatusBinding
+import org.threeten.bp.Duration
+
+data class LocationLiveMessageBannerViewState(
+        val isStopButtonVisible: Boolean,
+        val remainingTimeInMillis: Long
+)
 
 class LocationLiveMessageBannerView @JvmOverloads constructor(
         context: Context,
@@ -37,4 +46,13 @@ class LocationLiveMessageBannerView @JvmOverloads constructor(
 
     val stopButton: Button
         get() = binding.locationLiveMessageBannerStop
+
+    private val subTitle: TextView
+        get() = binding.locationLiveMessageBannerSubTitle
+
+    fun render(viewState: LocationLiveMessageBannerViewState) {
+        stopButton.isVisible = viewState.isStopButtonVisible
+        val duration = Duration.ofMillis(viewState.remainingTimeInMillis.coerceAtLeast(0L))
+        subTitle.text = context.getString(R.string.location_share_live_remaining_time, TextUtils.formatDurationWithUnits(context, duration))
+    }
 }

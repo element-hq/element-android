@@ -322,6 +322,14 @@
     <string name="start_chatting">Start Chatting</string>
     <string name="spaces">Spaces</string>
 
+    <!-- Time units -->
+    <plurals name="time_unit_hour_short">
+        <item quantity="one">hour</item>
+        <item quantity="other">hours</item>
+    </plurals>
+    <string name="time_unit_minute_short">min</string>
+    <string name="time_unit_second_short">sec</string>
+
     <!-- Permissions denied forever -->
     <string name="denied_permission_generic">Some permissions are missing to perform this action, please grant the permissions from the system settings.</string>
     <string name="denied_permission_camera">To perform this action, please grant the Camera permission from the system settings.</string>
@@ -3012,6 +3020,7 @@
     <string name="location_share_live_started">Loading live location…</string>
     <string name="location_share_live_stop">Stop</string>
     <string name="location_share_live_stop_long_version">Stop sharing</string>
+    <string name="location_share_live_remaining_time">%1$s left</string>
     <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
 
