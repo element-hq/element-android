@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Paint
@@ -105,11 +106,20 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     }
 
     private fun bindViewAttributes(holder: Holder) {
+        val formattedDuration = formatPlaybackTime(duration)
+        val formattedFileSize = TextUtils.formatFileSize(holder.rootLayout.context, fileSize, true)
+        val durationContentDescription = getPlaybackTimeContentDescription(holder.rootLayout.context, duration)
+
         holder.filenameView.text = filename
         holder.filenameView.onClick(attributes.itemClickListener)
         holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
-        holder.audioPlaybackDuration.text = formatPlaybackTime(duration)
-        holder.fileSize.text = TextUtils.formatFileSize(holder.rootLayout.context, fileSize, true)
+        holder.audioPlaybackDuration.text = formattedDuration
+        holder.fileSize.text = holder.rootLayout.context.getString(
+                R.string.audio_message_file_size, formattedFileSize
+        )
+        holder.mainLayout.contentDescription = holder.rootLayout.context.getString(
+                R.string.a11y_audio_message_item, filename, durationContentDescription, formattedFileSize
+        )
     }
 
     private fun bindSeekBar(holder: Holder) {
@@ -171,6 +181,12 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
     }
 
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
+
+    private fun getPlaybackTimeContentDescription(context: Context, time: Int): String {
+        val formattedPlaybackTime = formatPlaybackTime(time)
+        val (minutes, seconds) = formattedPlaybackTime.split(":").map { it.toIntOrNull() ?: 0 }
+        return context.getString(R.string.a11y_audio_playback_duration, minutes, seconds)
+    }
 
     override fun unbind(holder: Holder) {
         super.unbind(holder)
