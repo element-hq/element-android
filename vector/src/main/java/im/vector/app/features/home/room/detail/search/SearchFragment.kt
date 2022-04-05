@@ -99,6 +99,7 @@ class SearchFragment @Inject constructor(
                             title = getString(R.string.search_no_results),
                             image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results))
                 }
+                else       -> Unit
             }
         } else {
             controller.setData(state)

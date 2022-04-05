@@ -22,7 +22,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.debug.features.DebugVectorOverrides
@@ -69,9 +68,9 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         when (action) {
             is DebugPrivateSettingsViewActions.SetDialPadVisibility         -> handleSetDialPadVisibility(action)
             is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
-            is SetDisplayNameCapabilityOverride                             -> handSetDisplayNameCapabilityOverride(action)
-            is SetAvatarCapabilityOverride                                  -> handSetAvatarCapabilityOverride(action)
-        }.exhaustive
+            is SetDisplayNameCapabilityOverride                             -> handleSetDisplayNameCapabilityOverride(action)
+            is SetAvatarCapabilityOverride                                  -> handleSetAvatarCapabilityOverride(action)
+        }
     }
 
     private fun handleSetDialPadVisibility(action: DebugPrivateSettingsViewActions.SetDialPadVisibility) {
@@ -86,14 +85,14 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handSetDisplayNameCapabilityOverride(action: SetDisplayNameCapabilityOverride) {
+    private fun handleSetDisplayNameCapabilityOverride(action: SetDisplayNameCapabilityOverride) {
         viewModelScope.launch {
             val forceDisplayName = action.option.toBoolean()
             debugVectorOverrides.setHomeserverCapabilities { copy(canChangeDisplayName = forceDisplayName) }
         }
     }
 
-    private fun handSetAvatarCapabilityOverride(action: SetAvatarCapabilityOverride) {
+    private fun handleSetAvatarCapabilityOverride(action: SetAvatarCapabilityOverride) {
         viewModelScope.launch {
             val forceAvatar = action.option.toBoolean()
             debugVectorOverrides.setHomeserverCapabilities { copy(canChangeAvatar = forceAvatar) }

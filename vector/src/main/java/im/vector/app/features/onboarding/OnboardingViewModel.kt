@@ -17,12 +17,7 @@
 package im.vector.app.features.onboarding
 
 import android.content.Context
-import android.net.Uri
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,7 +26,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -50,7 +44,6 @@ import im.vector.app.features.login.SignMode
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
@@ -60,9 +53,6 @@ import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
-import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
-import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixIdFailure
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import java.util.UUID
@@ -84,6 +74,7 @@ class OnboardingViewModel @AssistedInject constructor(
         private val analyticsTracker: AnalyticsTracker,
         private val uriFilenameResolver: UriFilenameResolver,
         private val registrationActionHandler: RegistrationActionHandler,
+        private val directLoginUseCase: DirectLoginUseCase,
         private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
@@ -150,6 +141,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.InitWith                   -> handleInitWith(action)
             is OnboardingAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
             is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
+            is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword              -> handleResetPassword(action)
@@ -166,7 +158,7 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
             is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
             OnboardingAction.StopEmailValidationCheck      -> cancelWaitForEmailValidation()
-        }.exhaustive
+        }
     }
 
     private fun handleSplashAction(resetConfig: Boolean, onboardingFlow: OnboardingFlow) {
@@ -222,6 +214,7 @@ class OnboardingViewModel @AssistedInject constructor(
                                 .withAllowedFingerPrints(listOf(action.fingerprint))
                                 .build()
                 )
+            else                                 -> Unit
         }
     }
 
@@ -239,31 +232,19 @@ class OnboardingViewModel @AssistedInject constructor(
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
-            setState {
-                copy(
-                        asyncLoginAction = Fail(Throwable("Bad configuration"))
-                )
-            }
+            setState { copy(isLoading = false) }
+            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
         } else {
-            setState {
-                copy(
-                        asyncLoginAction = Loading()
-                )
-            }
+            setState { copy(isLoading = true) }
 
             currentJob = viewModelScope.launch {
                 try {
-                    safeLoginWizard.loginWithToken(action.loginToken)
+                    val result = safeLoginWizard.loginWithToken(action.loginToken)
+                    onSessionCreated(result, isAccountCreated = false)
                 } catch (failure: Throwable) {
+                    setState { copy(isLoading = false) }
                     _viewEvents.post(OnboardingViewEvents.Failure(failure))
-                    setState {
-                        copy(
-                                asyncLoginAction = Fail(failure)
-                        )
-                    }
-                    null
                 }
-                        ?.let { onSessionCreated(it, isAccountCreated = false) }
             }
         }
     }
@@ -271,7 +252,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleRegisterAction(action: RegisterAction) {
         currentJob = viewModelScope.launch {
             if (action.hasLoadingState()) {
-                setState { copy(asyncRegistration = Loading()) }
+                setState { copy(isLoading = true) }
             }
             runCatching { registrationActionHandler.handleRegisterAction(registrationWizard, action) }
                     .fold(
@@ -292,11 +273,11 @@ class OnboardingViewModel @AssistedInject constructor(
                                 }
                             }
                     )
-            setState { copy(asyncRegistration = Uninitialized) }
+            setState { copy(isLoading = false) }
         }
     }
 
-    private fun handleRegisterWith(action: OnboardingAction.LoginOrRegister) {
+    private fun handleRegisterWith(action: OnboardingAction.Register) {
         reAuthHelper.data = action.password
         handleRegisterAction(RegisterAction.CreateAccount(
                 action.username,
@@ -322,7 +303,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     authenticationService.reset()
                     setState {
                         copy(
-                                asyncHomeServerLoginFlowRequest = Uninitialized,
+                                isLoading = false,
                                 homeServerUrlFromUser = null,
                                 homeServerUrl = null,
                                 loginMode = LoginMode.Unknown,
@@ -332,32 +313,26 @@ class OnboardingViewModel @AssistedInject constructor(
                     }
                 }
             }
-            OnboardingAction.ResetSignMode       -> {
+            OnboardingAction.ResetSignMode              -> {
                 setState {
                     copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized,
+                            isLoading = false,
                             signMode = SignMode.Unknown,
                             loginMode = LoginMode.Unknown,
                             loginModeSupportedTypes = emptyList()
                     )
                 }
             }
-            OnboardingAction.ResetLogin          -> {
+            OnboardingAction.ResetAuthenticationAttempt -> {
                 viewModelScope.launch {
                     authenticationService.cancelPendingLoginOrRegistration()
-                    setState {
-                        copy(
-                                asyncLoginAction = Uninitialized,
-                                asyncRegistration = Uninitialized
-                        )
-                    }
+                    setState { copy(isLoading = false) }
                 }
             }
-            OnboardingAction.ResetResetPassword  -> {
+            OnboardingAction.ResetResetPassword         -> {
                 setState {
                     copy(
-                            asyncResetPassword = Uninitialized,
-                            asyncResetMailConfirmed = Uninitialized,
+                            isLoading = false,
                             resetPasswordEmail = null
                     )
                 }
@@ -382,7 +357,13 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         setState { copy(useCase = action.useCase) }
-        _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+        when (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
+            true  -> {
+                handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
+                OnboardingViewEvents.OpenCombinedRegister
+            }
+            false -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+        }
     }
 
     private fun resetUseCase() {
@@ -403,7 +384,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
             ServerType.EMS,
             ServerType.Other     -> _viewEvents.post(OnboardingViewEvents.OnServerSelectionDone(action.serverType))
-        }.exhaustive
+        }
     }
 
     private fun handleInitWith(action: OnboardingAction.InitWith) {
@@ -426,35 +407,23 @@ class OnboardingViewModel @AssistedInject constructor(
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
-            setState {
-                copy(
-                        asyncResetPassword = Fail(Throwable("Bad configuration")),
-                        asyncResetMailConfirmed = Uninitialized
-                )
-            }
+            setState { copy(isLoading = false) }
+            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
         } else {
-            setState {
-                copy(
-                        asyncResetPassword = Loading(),
-                        asyncResetMailConfirmed = Uninitialized
-                )
-            }
+            setState { copy(isLoading = true) }
 
             currentJob = viewModelScope.launch {
                 try {
                     safeLoginWizard.resetPassword(action.email, action.newPassword)
                 } catch (failure: Throwable) {
-                    setState {
-                        copy(
-                                asyncResetPassword = Fail(failure)
-                        )
-                    }
+                    setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
                     return@launch
                 }
 
                 setState {
                     copy(
-                            asyncResetPassword = Success(Unit),
+                            isLoading = false,
                             resetPasswordEmail = action.email
                     )
                 }
@@ -468,34 +437,22 @@ class OnboardingViewModel @AssistedInject constructor(
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
-            setState {
-                copy(
-                        asyncResetPassword = Uninitialized,
-                        asyncResetMailConfirmed = Fail(Throwable("Bad configuration"))
-                )
-            }
+            setState { copy(isLoading = false) }
+            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
         } else {
-            setState {
-                copy(
-                        asyncResetPassword = Uninitialized,
-                        asyncResetMailConfirmed = Loading()
-                )
-            }
+            setState { copy(isLoading = false) }
 
             currentJob = viewModelScope.launch {
                 try {
                     safeLoginWizard.resetPasswordMailConfirmed()
                 } catch (failure: Throwable) {
-                    setState {
-                        copy(
-                                asyncResetMailConfirmed = Fail(failure)
-                        )
-                    }
+                    setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
                     return@launch
                 }
                 setState {
                     copy(
-                            asyncResetMailConfirmed = Success(Unit),
+                            isLoading = false,
                             resetPasswordEmail = null
                     )
                 }
@@ -509,97 +466,21 @@ class OnboardingViewModel @AssistedInject constructor(
         when (state.signMode) {
             SignMode.Unknown            -> error("Developer error, invalid sign mode")
             SignMode.SignIn             -> handleLogin(action)
-            SignMode.SignUp             -> handleRegisterWith(action)
+            SignMode.SignUp             -> handleRegisterWith(OnboardingAction.Register(action.username, action.password, action.initialDeviceName))
             SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
-        }.exhaustive
+        }
     }
 
     private fun handleDirectLogin(action: OnboardingAction.LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?) {
-        setState {
-            copy(
-                    asyncLoginAction = Loading()
-            )
-        }
-
+        setState { copy(isLoading = true) }
         currentJob = viewModelScope.launch {
-            val data = try {
-                authenticationService.getWellKnownData(action.username, homeServerConnectionConfig)
-            } catch (failure: Throwable) {
-                onDirectLoginError(failure)
-                return@launch
-            }
-            when (data) {
-                is WellknownResult.Prompt     ->
-                    directLoginOnWellknownSuccess(action, data, homeServerConnectionConfig)
-                is WellknownResult.FailPrompt ->
-                    // Relax on IS discovery if homeserver is valid
-                    if (data.homeServerUrl != null && data.wellKnown != null) {
-                        directLoginOnWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
-                    } else {
-                        onWellKnownError()
+            directLoginUseCase.execute(action, homeServerConnectionConfig).fold(
+                    onSuccess = { onSessionCreated(it, isAccountCreated = false) },
+                    onFailure = {
+                        setState { copy(isLoading = false) }
+                        _viewEvents.post(OnboardingViewEvents.Failure(it))
                     }
-                else                          -> {
-                    onWellKnownError()
-                }
-            }.exhaustive
-        }
-    }
-
-    private fun onWellKnownError() {
-        setState {
-            copy(
-                    asyncLoginAction = Uninitialized
             )
-        }
-        _viewEvents.post(OnboardingViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
-    }
-
-    private suspend fun directLoginOnWellknownSuccess(action: OnboardingAction.LoginOrRegister,
-                                                      wellKnownPrompt: WellknownResult.Prompt,
-                                                      homeServerConnectionConfig: HomeServerConnectionConfig?) {
-        val alteredHomeServerConnectionConfig = homeServerConnectionConfig
-                ?.copy(
-                        homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
-                        identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
-                )
-                ?: HomeServerConnectionConfig(
-                        homeServerUri = Uri.parse("https://${action.username.getDomain()}"),
-                        homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
-                        identityServerUri = wellKnownPrompt.identityServerUrl?.let { Uri.parse(it) }
-                )
-
-        val data = try {
-            authenticationService.directAuthentication(
-                    alteredHomeServerConnectionConfig,
-                    action.username,
-                    action.password,
-                    action.initialDeviceName)
-        } catch (failure: Throwable) {
-            onDirectLoginError(failure)
-            return
-        }
-        onSessionCreated(data, isAccountCreated = true)
-    }
-
-    private fun onDirectLoginError(failure: Throwable) {
-        when (failure) {
-            is MatrixIdFailure.InvalidMatrixId,
-            is Failure.UnrecognizedCertificateFailure -> {
-                // Display this error in a dialog
-                _viewEvents.post(OnboardingViewEvents.Failure(failure))
-                setState {
-                    copy(
-                            asyncLoginAction = Uninitialized
-                    )
-                }
-            }
-            else                                      -> {
-                setState {
-                    copy(
-                            asyncLoginAction = Fail(failure)
-                    )
-                }
-            }
         }
     }
 
@@ -607,37 +488,23 @@ class OnboardingViewModel @AssistedInject constructor(
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
-            setState {
-                copy(
-                        asyncLoginAction = Fail(Throwable("Bad configuration"))
-                )
-            }
+            setState { copy(isLoading = false) }
+            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
         } else {
-            setState {
-                copy(
-                        asyncLoginAction = Loading()
-                )
-            }
-
+            setState { copy(isLoading = true) }
             currentJob = viewModelScope.launch {
                 try {
-                    safeLoginWizard.login(
+                    val result = safeLoginWizard.login(
                             action.username,
                             action.password,
                             action.initialDeviceName
                     )
+                    reAuthHelper.data = action.password
+                    onSessionCreated(result, isAccountCreated = false)
                 } catch (failure: Throwable) {
-                    setState {
-                        copy(
-                                asyncLoginAction = Fail(failure)
-                        )
-                    }
-                    null
+                    setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
                 }
-                        ?.let {
-                            reAuthHelper.data = action.password
-                            onSessionCreated(it, isAccountCreated = false)
-                        }
             }
         }
     }
@@ -678,12 +545,12 @@ class OnboardingViewModel @AssistedInject constructor(
             true  -> {
                 val personalizationState = createPersonalizationState(session, state)
                 setState {
-                    copy(asyncLoginAction = Success(Unit), personalizationState = personalizationState)
+                    copy(isLoading = false, personalizationState = personalizationState)
                 }
                 _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
             }
             false -> {
-                setState { copy(asyncLoginAction = Success(Unit)) }
+                setState { copy(isLoading = false) }
                 _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
             }
         }
@@ -712,14 +579,11 @@ class OnboardingViewModel @AssistedInject constructor(
         } else {
             currentJob = viewModelScope.launch {
                 try {
-                    authenticationService.createSessionFromSso(homeServerConnectionConfigFinal, action.credentials)
+                    val result = authenticationService.createSessionFromSso(homeServerConnectionConfigFinal, action.credentials)
+                    onSessionCreated(result, isAccountCreated = false)
                 } catch (failure: Throwable) {
-                    setState {
-                        copy(asyncLoginAction = Fail(failure))
-                    }
-                    null
+                    setState { copy(isLoading = false) }
                 }
-                        ?.let { onSessionCreated(it, isAccountCreated = false) }
             }
         }
     }
@@ -743,7 +607,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
             setState {
                 copy(
-                        asyncHomeServerLoginFlowRequest = Loading(),
+                        isLoading = true,
                         // If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
                         // It is also useful to set the value again in the case of a certificate error on matrix.org
                         serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) {
@@ -757,14 +621,14 @@ class OnboardingViewModel @AssistedInject constructor(
             val data = try {
                 authenticationService.getLoginFlow(homeServerConnectionConfig)
             } catch (failure: Throwable) {
-                _viewEvents.post(OnboardingViewEvents.Failure(failure))
                 setState {
                     copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized,
+                            isLoading = false,
                             // If we were trying to retrieve matrix.org login flow, also reset the serverType
                             serverType = if (serverType == ServerType.MatrixOrg) ServerType.Unknown else serverType
                     )
                 }
+                _viewEvents.post(OnboardingViewEvents.Failure(failure))
                 null
             }
 
@@ -785,7 +649,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
             setState {
                 copy(
-                        asyncHomeServerLoginFlowRequest = Uninitialized,
+                        isLoading = false,
                         homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
                         homeServerUrl = data.homeServerUrl,
                         loginMode = loginMode,
@@ -828,20 +692,20 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun updateDisplayName(displayName: String) {
-        setState { copy(asyncDisplayName = Loading()) }
+        setState { copy(isLoading = true) }
         viewModelScope.launch {
             val activeSession = activeSessionHolder.getActiveSession()
             try {
                 activeSession.setDisplayName(activeSession.myUserId, displayName)
                 setState {
                     copy(
-                            asyncDisplayName = Success(Unit),
+                            isLoading = false,
                             personalizationState = personalizationState.copy(displayName = displayName)
                     )
                 }
                 handleDisplayNameStepComplete()
             } catch (error: Throwable) {
-                setState { copy(asyncDisplayName = Fail(error)) }
+                setState { copy(isLoading = false) }
                 _viewEvents.post(OnboardingViewEvents.Failure(error))
             }
         }
@@ -883,7 +747,7 @@ class OnboardingViewModel @AssistedInject constructor(
             when (val pictureUri = state.personalizationState.selectedPictureUri) {
                 null -> _viewEvents.post(OnboardingViewEvents.Failure(NullPointerException("picture uri is missing from state")))
                 else -> {
-                    setState { copy(asyncProfilePicture = Loading()) }
+                    setState { copy(isLoading = true) }
                     viewModelScope.launch {
                         val activeSession = activeSessionHolder.getActiveSession()
                         try {
@@ -894,12 +758,12 @@ class OnboardingViewModel @AssistedInject constructor(
                             )
                             setState {
                                 copy(
-                                        asyncProfilePicture = Success(Unit),
+                                        isLoading = false,
                                 )
                             }
                             onProfilePictureSaved()
                         } catch (error: Throwable) {
-                            setState { copy(asyncProfilePicture = Fail(error)) }
+                            setState { copy(isLoading = false) }
                             _viewEvents.post(OnboardingViewEvents.Failure(error))
                         }
                     }

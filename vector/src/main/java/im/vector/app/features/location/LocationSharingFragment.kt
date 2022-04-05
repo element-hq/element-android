@@ -16,26 +16,27 @@
 
 package im.vector.app.features.location
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.mapboxsdk.maps.MapView
-import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentLocationSharingBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.location.option.LocationSharingOption
@@ -49,7 +50,8 @@ import javax.inject.Inject
 class LocationSharingFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val matrixItemColorProvider: MatrixItemColorProvider
+        private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val vectorFeatures: VectorFeatures,
 ) : VectorBaseFragment<FragmentLocationSharingBinding>(), LocationTargetChangeListener {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
@@ -83,10 +85,11 @@ class LocationSharingFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                LocationSharingViewEvents.Close                     -> locationSharingNavigator.quit()
-                LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
-                is LocationSharingViewEvents.ZoomToUserLocation     -> handleZoomToUserLocationEvent(it)
-            }.exhaustive
+                LocationSharingViewEvents.Close                       -> locationSharingNavigator.quit()
+                LocationSharingViewEvents.LocationNotAvailableError   -> handleLocationNotAvailableError()
+                is LocationSharingViewEvents.ZoomToUserLocation       -> handleZoomToUserLocationEvent(it)
+                is LocationSharingViewEvents.StartLiveLocationService -> handleStartLiveLocationService(it)
+            }
         }
     }
 
@@ -177,6 +180,16 @@ class LocationSharingFragment @Inject constructor(
         views.mapView.zoomToLocation(event.userLocation.latitude, event.userLocation.longitude)
     }
 
+    private fun handleStartLiveLocationService(event: LocationSharingViewEvents.StartLiveLocationService) {
+        val args = LocationSharingService.RoomArgs(event.sessionId, event.roomId, event.duration)
+
+        Intent(requireContext(), LocationSharingService::class.java)
+                .putExtra(LocationSharingService.EXTRA_ROOM_ARGS, args)
+                .also {
+                    ContextCompat.startForegroundService(requireContext(), it)
+                }
+    }
+
     private fun initOptionsPicker() {
         // set no option at start
         views.shareLocationOptionsPicker.render()
@@ -222,14 +235,16 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun startLiveLocationSharing() {
-        viewModel.handle(LocationSharingAction.StartLiveLocationSharing)
+        // TODO. Get duration from user
+        val duration = 30 * 1000L
+        viewModel.handle(LocationSharingAction.StartLiveLocationSharing(duration))
     }
 
     private fun updateMap(state: LocationSharingViewState) {
         // first, update the options view
         val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
             true  -> {
-                if (BuildConfig.ENABLE_LIVE_LOCATION_SHARING) {
+                if (vectorFeatures.isLiveLocationEnabled()) {
                     setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
                 } else {
                     setOf(LocationSharingOption.USER_CURRENT)

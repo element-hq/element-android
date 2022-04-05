@@ -205,6 +205,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                         )
                     }
                 }
+                else       -> Unit
             }
         } else {
             views.genericStateViewListStateView.state = StateView.State.Content

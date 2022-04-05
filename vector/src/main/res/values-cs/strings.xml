@@ -932,7 +932,7 @@
     <string name="global_retry">Opakovat</string>
     <string name="send_you_invite">Poslali Vám pozvánku</string>
     <string name="invited_by">%s Vás pozval</string>
-    <string name="room_list_catchup_empty_title">Vše jste dohnali!</string>
+    <string name="room_list_catchup_empty_title">To je všechno!</string>
     <string name="room_list_catchup_empty_body">Nemáte již žádné nepřečtené zprávy</string>
     <string name="room_list_people_empty_title">Konverzace</string>
     <string name="room_list_people_empty_body">Tady budou zobrazeny Vaše přímé konverzace. Pro novou zprávu klepněte na + vpravo dole.</string>

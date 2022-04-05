@@ -90,7 +90,7 @@ object BadgeProxy {
                 }
             }
         }
-        */
+         */
     }
 
     /**
@@ -124,6 +124,6 @@ object BadgeProxy {
             Timber.v("## updateBadgeCount(): badge update count=$unreadRoomsCount")
             updateBadgeCount(aContext, unreadRoomsCount)
         }
-        */
+         */
     }
 }

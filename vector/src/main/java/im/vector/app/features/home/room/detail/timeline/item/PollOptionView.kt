@@ -23,7 +23,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.databinding.ItemPollOptionBinding
 
@@ -49,7 +48,7 @@ class PollOptionView @JvmOverloads constructor(
             is PollOptionViewState.PollReady       -> renderPollReady()
             is PollOptionViewState.PollVoted       -> renderPollVoted(state)
             is PollOptionViewState.PollUndisclosed -> renderPollUndisclosed(state)
-        }.exhaustive
+        }
     }
 
     private fun renderPollSending() {

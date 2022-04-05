@@ -33,8 +33,8 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.extensions.safeOpenOutputStream
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.selectTxtFileToWrite
 import im.vector.app.databinding.FragmentDevtoolKeyrequestsBinding
@@ -107,11 +107,11 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDev
             when (it) {
                 is KeyRequestEvents.SaveAudit -> {
                     tryOrNull {
-                        requireContext().contentResolver?.openOutputStream(it.uri)
+                        requireContext().safeOpenOutputStream(it.uri)
                                 ?.use { os -> os.write(it.raw.toByteArray()) }
                     }
                 }
-            }.exhaustive
+            }
         }
     }
 

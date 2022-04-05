@@ -25,7 +25,7 @@
         android:title="@string/action_video_call"
         android:visible="false"
         app:iconTint="?colorPrimary"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         tools:visible="true" />
 
     <item
@@ -34,7 +34,7 @@
         android:title="@string/call"
         android:visible="false"
         app:iconTint="?colorPrimary"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         tools:visible="true" />
 
     <item

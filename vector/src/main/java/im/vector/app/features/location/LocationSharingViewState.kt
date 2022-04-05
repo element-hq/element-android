@@ -39,7 +39,7 @@ data class LocationSharingViewState(
 
     constructor(locationSharingArgs: LocationSharingArgs) : this(
             roomId = locationSharingArgs.roomId,
-            mode = locationSharingArgs.mode
+            mode = locationSharingArgs.mode,
     )
 }
 

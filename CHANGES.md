@@ -1,3 +1,74 @@
+Changes in Element v1.4.8 (2022-03-28)
+======================================
+
+Other changes
+-------------
+ - Moving live location sharing permission to debug only builds whilst it is WIP ([#5636](https://github.com/vector-im/element-android/issues/5636))
+
+
+Changes in Element v1.4.7 (2022-03-24)
+======================================
+
+Bugfixes 🐛
+----------
+ - Fix inconsistencies between the arrow visibility and the collapse action on the room sections ([#5616](https://github.com/vector-im/element-android/issues/5616))
+ - Fix room list header count flickering
+
+Changes in Element v1.4.6 (2022-03-23)
+======================================
+
+Features ✨
+----------
+ - Thread timeline is now live and much faster especially for large or old threads ([#5230](https://github.com/vector-im/element-android/issues/5230))
+ - View all threads per room screen is now live when the home server supports threads ([#5232](https://github.com/vector-im/element-android/issues/5232))
+ - Add a custom view to display a picker for share location options ([#5395](https://github.com/vector-im/element-android/issues/5395))
+ - Add ability to pin a location on map for sharing ([#5417](https://github.com/vector-im/element-android/issues/5417))
+ - Poll Integration Tests ([#5522](https://github.com/vector-im/element-android/issues/5522))
+ - Live location sharing: adding build config field and show permission dialog ([#5536](https://github.com/vector-im/element-android/issues/5536))
+ - Live location sharing: Adding indicator view when enabled ([#5571](https://github.com/vector-im/element-android/issues/5571))
+
+Bugfixes 🐛
+----------
+ - Poll system notifications on Android are not user friendly ([#4780](https://github.com/vector-im/element-android/issues/4780))
+ - Add colors for shield vector drawable ([#4860](https://github.com/vector-im/element-android/issues/4860))
+ - Support both stable and unstable prefixes for Events about Polls and Location ([#5340](https://github.com/vector-im/element-android/issues/5340))
+ - Fix missing messages when loading messages forwards ([#5448](https://github.com/vector-im/element-android/issues/5448))
+ - Fix presence indicator being aligned to the center of the room image ([#5489](https://github.com/vector-im/element-android/issues/5489))
+ - Read receipt in wrong order ([#5514](https://github.com/vector-im/element-android/issues/5514))
+ - Fix mentions using matrix.to rather than client defined permalink base url ([#5521](https://github.com/vector-im/element-android/issues/5521))
+ - Fixes crash when tapping the timeline verification surround box instead of the buttons ([#5540](https://github.com/vector-im/element-android/issues/5540))
+ - [Notification mode] Wrong mode is displayed when the mention only is selected on the web client ([#5547](https://github.com/vector-im/element-android/issues/5547))
+ - Fix local echos not being shown when re-opening rooms ([#5551](https://github.com/vector-im/element-android/issues/5551))
+ - Fix crash when closing a room while decrypting timeline events ([#5552](https://github.com/vector-im/element-android/issues/5552))
+ - Fix sometimes read marker not properly updating ([#5564](https://github.com/vector-im/element-android/issues/5564))
+
+In development 🚧
+----------------
+ - Dynamically showing/hiding onboarding personalisation screens based on the users homeserver capabilities ([#5375](https://github.com/vector-im/element-android/issues/5375))
+ - Introduces FTUE personalisation complete screen along with confetti celebration ([#5389](https://github.com/vector-im/element-android/issues/5389))
+
+SDK API changes ⚠️
+------------------
+ - Adds support for MSC3440, additional threads homeserver capabilities ([#5271](https://github.com/vector-im/element-android/issues/5271))
+
+Other changes
+-------------
+ - Refactoring for safer olm and megolm session usage ([#5380](https://github.com/vector-im/element-android/issues/5380))
+ - Improve headers UI in Rooms/Messages lists ([#4533](https://github.com/vector-im/element-android/issues/4533))
+ - Number of unread messages on space badge now include number of unread DMs ([#5260](https://github.com/vector-im/element-android/issues/5260))
+ - Amend spaces menu to be consistent with iOS version ([#5270](https://github.com/vector-im/element-android/issues/5270))
+ - Selected space highlight changed in left panel ([#5346](https://github.com/vector-im/element-android/issues/5346))
+ - [Rooms list] Do not suggest collapse the unique section ([#5347](https://github.com/vector-im/element-android/issues/5347))
+ - Add analytics support for threads ([#5378](https://github.com/vector-im/element-android/issues/5378))
+ - Add top margin before our first message ([#5384](https://github.com/vector-im/element-android/issues/5384))
+ - Improved onboarding registration unit test coverage ([#5408](https://github.com/vector-im/element-android/issues/5408))
+ - Adds stable room hierarchy endpoint with a fallback to the unstable one ([#5443](https://github.com/vector-im/element-android/issues/5443))
+ - Use ColorPrimary for attachmentGalleryButton tint ([#5501](https://github.com/vector-im/element-android/issues/5501))
+ - Added online presence indicator attribute online to match offline styling ([#5513](https://github.com/vector-im/element-android/issues/5513))
+ - Add a presence sync enabling build config ([#5563](https://github.com/vector-im/element-android/issues/5563))
+ - Show stickers on click ([#5572](https://github.com/vector-im/element-android/issues/5572))
+
+
 Changes in Element v1.4.4 (2022-03-09)
 ======================================
 

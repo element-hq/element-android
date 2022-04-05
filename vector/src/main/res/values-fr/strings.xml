@@ -34,7 +34,7 @@
     <string name="notice_crypto_error_unknown_inbound_session_id">L’appareil de l’expéditeur ne nous a pas envoyé les clés pour ce message.</string>
     <string name="unable_to_send_message">Envoi du message impossible</string>
     <string name="matrix_error">Erreur de Matrix</string>
-    <string name="medium_email">Adresse e-mail</string>
+    <string name="medium_email">Adresse électronique</string>
     <string name="medium_phone_number">Numéro de téléphone</string>
     <string name="room_displayname_room_invite">Invitation au salon</string>
     <string name="room_displayname_empty_room">Salon vide</string>
@@ -290,7 +290,7 @@
     <string name="search_no_results">Aucun résultat</string>
     <string name="settings_profile_picture">Image de profil</string>
     <string name="settings_display_name">Nom affiché</string>
-    <string name="settings_add_email_address">Ajouter une adresse e-mail</string>
+    <string name="settings_add_email_address">Ajouter une adresse électronique</string>
     <string name="settings_add_phone_number">Ajouter un numéro de téléphone</string>
     <string name="settings_app_info_link_summary">Affiche les informations de l’application dans les paramètres système.</string>
     <string name="settings_app_info_link_title">Informations sur l’application</string>
@@ -372,11 +372,11 @@
     <string name="send_bug_report_app_crashed">L’application s’est arrêtée anormalement la dernière fois. Souhaitez-vous ouvrir l’écran de rapport d’anomalie \?</string>
     <string name="send_bug_report_sent">Le rapport d’anomalie a bien été envoyé</string>
     <string name="send_bug_report_failed">L’envoi du rapport d’anomalie a échoué (%s)</string>
-    <string name="auth_invalid_email">Ceci ne ressemble pas à une adresse e-mail valide</string>
-    <string name="auth_email_already_defined">Cette adresse e-mail est déjà utilisée.</string>
+    <string name="auth_invalid_email">Ceci ne ressemble pas à une adresse électronique valide</string>
+    <string name="auth_email_already_defined">Cette adresse électronique est déjà utilisée.</string>
     <string name="auth_recaptcha_message">Ce serveur d’accueil souhaite s’assurer que vous n’êtes pas un robot</string>
-    <string name="auth_reset_password_missing_email">L’adresse e-mail liée à votre compte doit être saisie.</string>
-    <string name="auth_reset_password_error_unauthorized">Impossible de vérifier l’adresse e-mail : assurez-vous d’avoir cliqué sur le lien dans l’e-mail</string>
+    <string name="auth_reset_password_missing_email">L’adresse électronique liée à votre compte doit être saisie.</string>
+    <string name="auth_reset_password_error_unauthorized">Impossible de vérifier l’adresse électronique : assurez-vous d’avoir cliqué sur le lien dans le courriel</string>
     <string name="login_error_limit_exceeded">Trop de requêtes ont été envoyées</string>
     <string name="action_leave">Quitter</string>
     <string name="action_quote">Citer</string>
@@ -406,7 +406,7 @@
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
     <string name="settings_user_settings">Paramètres utilisateur</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="account_email_validation_message">Vérifiez votre e-mail et cliquez sur le lien qu’il contient. Une fois cela fait, cliquez sur continuer.</string>
+    <string name="account_email_validation_message">Vérifiez votre courriel et cliquez sur le lien qu’il contient. Une fois ceci fait, cliquez sur continuer.</string>
     <string name="settings_unignore_user">Afficher tous les messages de %s \?
 \n
 \nVeuillez noter que cette action redémarrera l’application et pourra prendre un certain temps.</string>
@@ -422,7 +422,7 @@
     <string name="settings_user_interface">Interface utilisateur</string>
     <string name="settings_interface_language">Langue</string>
     <string name="settings_select_language">Choisissez une langue</string>
-    <string name="account_email_already_used_error">Cette adresse e-mail est déjà utilisée.</string>
+    <string name="account_email_already_used_error">Cette adresse électronique est déjà utilisée.</string>
     <string name="account_phone_number_already_used_error">Ce numéro de téléphone est déjà utilisé.</string>
     <string name="settings_start_on_boot">Lancer au démarrage</string>
     <string name="settings_clear_media_cache">Vider le cache des médias</string>
@@ -533,11 +533,11 @@
     <string name="dialog_user_consent_content">Pour continuer à utiliser le serveur d’accueil %1$s, vous devez lire et accepter les conditions générales.</string>
     <string name="dialog_user_consent_submit">Voir maintenant</string>
     <string name="deactivate_account_title">Désactiver le compte</string>
-    <string name="deactivate_account_content">Votre compte sera inutilisable de façon permanente. Vous ne pourrez plus vous connecter et personne ne pourra se réenregistrer avec le même identifiant d’utilisateur. Le compte quittera tous les salons auxquels il participe et tous ses détails seront supprimés du serveur d’identité. <b>Cette action est irréversible.</b> 
-\n 
-\nDésactiver votre compte <b>ne nous fait pas oublier les messages que vous avez envoyés par défaut</b>. Si vous souhaitez que nous oubliions vos messages, cochez la case ci-dessous. 
-\n 
-\nLa visibilité des messages dans Matrix est identique à celle des e-mails. Si nous oublions vos messages, cela signifie que les messages que vous avez envoyés ne seront plus partagés avec les nouveaux utilisateurs ou les utilisateurs non enregistrés, mais les utilisateurs enregistrés qui ont déjà accès à ces messages en conserveront leur copie.</string>
+    <string name="deactivate_account_content">Votre compte sera inutilisable de façon permanente. Vous ne pourrez plus vous connecter et personne ne pourra se réenregistrer avec le même identifiant d’utilisateur. Le compte quittera tous les salons auxquels il participe et tous ses détails seront supprimés du serveur d’identité. <b>Cette action est irréversible.</b>
+\n
+\nDésactiver votre compte <b>ne nous fait pas oublier les messages que vous avez envoyés par défaut</b>. Si vous souhaitez que nous oubliions vos messages, cochez la case ci-dessous.
+\n
+\nLa visibilité des messages dans Matrix est identique à celle des courriels. Si nous oublions vos messages, cela signifie que les messages que vous avez envoyés ne seront plus partagés avec les nouveaux utilisateurs ou les utilisateurs non enregistrés, mais les utilisateurs enregistrés qui ont déjà accès à ces messages en conserveront leur copie.</string>
     <string name="deactivate_account_delete_checkbox">Veuillez oublier tous les messages que j’ai envoyé quand mon compte sera désactivé (Avertissement : les futurs utilisateurs verront une version incomplète des conversations)</string>
     <string name="deactivate_account_submit">Désactiver le compte</string>
     <string name="action_download">Télécharger</string>
@@ -941,20 +941,20 @@
     <string name="change_identity_server">Modifier le serveur d’identité</string>
     <string name="settings_discovery_identity_server_info">Vous utilisez actuellement %1$s pour découvrir et être découvrable par les contacts existants que vous connaissez.</string>
     <string name="settings_discovery_identity_server_info_none">Vous n’utilisez actuellement aucun serveur d’identité. Pour découvrir et être découvrable par les contacts existants que vous connaissez, configurez-en un ci-dessous.</string>
-    <string name="settings_discovery_emails_title">Adresses e-mail découvrables</string>
-    <string name="settings_discovery_no_mails">Les options de découverte apparaîtront quand vous aurez ajouté un e-mail.</string>
+    <string name="settings_discovery_emails_title">Adresses électronique découvrables</string>
+    <string name="settings_discovery_no_mails">Les options de découverte apparaîtront quand vous aurez ajouté un courriel.</string>
     <string name="settings_discovery_no_msisdn">Les options de découverte apparaîtront quand vous aurez ajouté un numéro de téléphone.</string>
-    <string name="settings_discovery_disconnect_identity_server_info">La déconnexion du serveur d’identité signifie que vous ne pourrez plus être découvrable par les autres utilisateurs et que vous ne pourrez plus inviter d’autres personnes par e-mail ou par téléphone.</string>
+    <string name="settings_discovery_disconnect_identity_server_info">La déconnexion du serveur d’identité signifie que vous ne pourrez plus être découvrable par les autres utilisateurs et que vous ne pourrez plus inviter d’autres personnes par courriel ou par téléphone.</string>
     <string name="settings_discovery_msisdn_title">Numéros de téléphone découvrables</string>
-    <string name="settings_discovery_confirm_mail">Nous vous avons envoyé un e-mail de confirmation à %s, consultez vos e-mails et cliquez sur le lien de confirmation</string>
+    <string name="settings_discovery_confirm_mail">Nous vous avons envoyé un courriel de confirmation à %s, consultez vos courriels et cliquez sur le lien de confirmation</string>
     <string name="settings_discovery_enter_identity_server">Renseignez l’URL d’un serveur d’identité</string>
     <string name="settings_discovery_bad_identity_server">Impossible de se connecter au serveur d’identité</string>
     <string name="settings_discovery_please_enter_server">Veuillez renseigner l’URL du serveur d’identité</string>
     <string name="settings_discovery_no_terms_title">Le serveur d’identité n’a pas de conditions de service</string>
     <string name="settings_discovery_no_terms">Le serveur d’identité qui vous avez choisi n’a pas de conditions de service. Continuez uniquement si vous faites confiance au propriétaire de ce service</string>
     <string name="settings_text_message_sent">Un SMS a été envoyé à %s. Saisissez le code de vérification qu’il contient.</string>
-    <string name="settings_discovery_disconnect_with_bound_pid">Vous partagez actuellement des adresse e-mails et des numéros de téléphone sur le serveur d’identité %1$s. Vous devrez vous reconnecter à %2$s pour arrêter de les partager.</string>
-    <string name="settings_agree_to_terms">Acceptez les conditions de service du serveur d’identité (%s) pour vous permettre d’être découvrable avec une adresse e-mail ou un numéro de téléphone.</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">Vous partagez actuellement des adresses électroniques et des numéros de téléphone sur le serveur d’identité %1$s. Vous devrez vous reconnecter à %2$s pour arrêter de les partager.</string>
+    <string name="settings_agree_to_terms">Acceptez les conditions de service du serveur d’identité (%s) pour vous permettre d’être découvrable avec une adresse électronique ou un numéro de téléphone.</string>
     <string name="labs_allow_extended_logging">Activer les journaux verbeux.</string>
     <string name="labs_allow_extended_logging_summary">Les journaux verbeux aideront les développeurs en fournissant plus de journaux quand vous envoyez un rapport d’anomalie. Même si cette option est activée, l’application n’envoie pas le contenu des messages ou toute autre donnée personnelle.</string>
     <string name="error_terms_not_accepted">Réessayez quand vous aurez accepté les termes et conditions de votre serveur d’accueil.</string>
@@ -1049,7 +1049,7 @@
     <string name="login_splash_text3">Étendez et personnalisez votre expérience</string>
     <string name="login_splash_submit">Démarrer</string>
     <string name="login_server_title">Sélectionner un serveur</string>
-    <string name="login_server_text">Tout comme les e-mails, les comptes ont un serveur d’accueil, même si vous pouvez parler à tout le monde</string>
+    <string name="login_server_text">Tout comme les courriels, les comptes ont un serveur d’accueil, même si vous pouvez parler à tout le monde</string>
     <string name="login_server_matrix_org_text">Rejoignez des millions de personnes gratuitement sur le plus grand serveur public</string>
     <string name="login_server_modular_text">Hébergement premium pour les organisations</string>
     <string name="login_server_modular_learn_more">En savoir plus</string>
@@ -1075,20 +1075,20 @@
     <string name="login_registration_not_supported">L’application ne peut pas créer de compte sur ce serveur d’accueil.
 \n
 \nVoulez-vous vous inscrire en utilisant un client web \?</string>
-    <string name="login_login_with_email_error">Cet e-mail n’est associé à aucun compte.</string>
+    <string name="login_login_with_email_error">Ce courriel n’est associé à aucun compte.</string>
     <string name="login_reset_password_on">Réinitialiser le mot de passe sur %1$s</string>
-    <string name="login_reset_password_notice">Un e-mail de vérification sera envoyé à votre adresse pour confirmer la configuration de votre nouveau mot de passe.</string>
+    <string name="login_reset_password_notice">Un courriel de vérification sera envoyé à votre adresse pour confirmer la configuration de votre nouveau mot de passe.</string>
     <string name="login_reset_password_submit">Suivant</string>
-    <string name="login_reset_password_email_hint">E-mail</string>
+    <string name="login_reset_password_email_hint">Courriel</string>
     <string name="login_reset_password_password_hint">Nouveau mot de passe</string>
     <string name="login_reset_password_warning_title">Attention !</string>
     <string name="login_reset_password_warning_content">Le changement de mot de passe réinitialisera toutes les clés de chiffrement sur toutes vos sessions, rendant l’historique des discussions chiffrées illisible. Configurez la sauvegarde de clés ou exportez vos clés de salon depuis une autre session avant de réinitialiser votre mot de passe.</string>
     <string name="login_reset_password_warning_submit">Poursuivre</string>
-    <string name="login_reset_password_error_not_found">Cet e-mail n’est lié à aucun compte</string>
+    <string name="login_reset_password_error_not_found">Ce courriel n’est lié à aucun compte</string>
     <string name="login_reset_password_mail_confirmation_title">Vérifiez votre boîte de réception</string>
-    <string name="login_reset_password_mail_confirmation_notice">Un e-mail de vérification a été envoyé à %1$s.</string>
+    <string name="login_reset_password_mail_confirmation_notice">Un courriel de vérification a été envoyé à %1$s.</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Touchez le lien pour confirmer votre nouveau mot de passe. Après avoir suivi le lien qu’il contient, cliquez ci-dessous.</string>
-    <string name="login_reset_password_mail_confirmation_submit">J’ai vérifié mon adresse e-mail</string>
+    <string name="login_reset_password_mail_confirmation_submit">J’ai vérifié mon adresse électronique</string>
     <string name="login_reset_password_success_title">Succès !</string>
     <string name="login_reset_password_success_notice">Votre mot de passe a été réinitialisé.</string>
     <string name="login_reset_password_success_notice_2">Vous avez été déconnecté de toutes les sessions et ne recevrez plus de notification. Pour réactiver les notifications, reconnectez-vous sur chaque appareil.</string>
@@ -1097,10 +1097,10 @@
     <string name="login_reset_password_cancel_confirmation_content">Votre mot de passe n’a pas encore été changé.
 \n
 \nArrêter le processus de changement \?</string>
-    <string name="login_set_email_title">Définir l’adresse e-mail</string>
-    <string name="login_set_email_notice">Définir une adresse e-mail pour récupérer votre compte. Plus tard, vous pourrez éventuellement autoriser des personnes à vous retrouver avec votre adresse e-mail.</string>
-    <string name="login_set_email_mandatory_hint">E-mail</string>
-    <string name="login_set_email_optional_hint">E-mail (facultatif)</string>
+    <string name="login_set_email_title">Définir l’adresse électronique</string>
+    <string name="login_set_email_notice">Définir une adresse électronique pour récupérer votre compte. Plus tard, vous pourrez éventuellement autoriser des personnes à vous retrouver avec votre adresse électronique.</string>
+    <string name="login_set_email_mandatory_hint">Courriel</string>
+    <string name="login_set_email_optional_hint">Courriel (facultatif)</string>
     <string name="login_set_email_submit">Suivant</string>
     <string name="login_set_msisdn_title">Définir le numéro de téléphone</string>
     <string name="login_set_msisdn_notice">Définir un numéro de téléphone pour autoriser éventuellement des personnes à vous découvrir.</string>
@@ -1116,7 +1116,7 @@
     <string name="login_msisdn_error_not_international">Les numéros de téléphone internationaux doivent commencer par « + »</string>
     <string name="login_msisdn_error_other">Le numéro de téléphone n’a pas l’air d’être valide. Veuillez le vérifier</string>
     <string name="login_signup_to">S’inscrire sur %1$s</string>
-    <string name="login_signin_username_hint">Nom d’utilisateur ou e-mail</string>
+    <string name="login_signin_username_hint">Nom d’utilisateur ou courriel</string>
     <string name="login_signup_password_hint">Mot de passe</string>
     <string name="login_signup_submit">Suivant</string>
     <string name="login_signup_error_user_in_use">Ce nom d’utilisateur est déjà pris</string>
@@ -1129,8 +1129,8 @@
     <string name="login_a11y_choose_other">Sélectionner un serveur d’accueil personnalisé</string>
     <string name="login_a11y_captcha_container">Veuillez compléter le captcha</string>
     <string name="login_terms_title">Acceptez les termes pour continuer</string>
-    <string name="login_wait_for_email_title">Vérifiez vos e-mails</string>
-    <string name="login_wait_for_email_notice">Nous avons envoyé un e-mail à %1$s.
+    <string name="login_wait_for_email_title">Vérifiez vos courriels</string>
+    <string name="login_wait_for_email_notice">Nous avons envoyé un courriel à %1$s.
 \nCliquez sur le lien qu’il contient pour continuer la création du compte.</string>
     <string name="login_validation_code_is_not_correct">Le code saisi n’est pas correct. Veuillez vérifier.</string>
     <string name="login_error_outdated_homeserver_title">Serveur d’accueil obsolète</string>
@@ -1184,7 +1184,7 @@
     <string name="command_description_shrug">Préfixe ¯\\_(ツ)_/¯ à un message en texte brut</string>
     <string name="create_room_encryption_title">Activer le chiffrement</string>
     <string name="create_room_encryption_description">Une fois qu’il est activé, le chiffrement ne peut pas être désactivé.</string>
-    <string name="login_error_threepid_denied">Le domaine de votre adresse e-mail n’est pas autorisé à s’inscrire sur ce serveur</string>
+    <string name="login_error_threepid_denied">Le domaine de votre adresse électronique n’est pas autorisé à s’inscrire sur ce serveur</string>
     <string name="verification_conclusion_warning">Connexion non fiable</string>
     <string name="verification_sas_match">Ils correspondent</string>
     <string name="verification_sas_do_not_match">Ils ne correspondent pas</string>
@@ -1443,7 +1443,7 @@
     <string name="event_redacted">Message supprimé</string>
     <string name="settings_show_redacted">Afficher les messages supprimés</string>
     <string name="settings_show_redacted_summary">Afficher un remplaçant pour les messages supprimés</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">Nous vous avons envoyé un e-mail de confirmation à %s, consultez vos e-mails et cliquez sur le lien de confirmation</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">Nous vous avons envoyé un courriel de confirmation à %s, consultez vos courriels et cliquez sur le lien de confirmation</string>
     <string name="settings_text_message_sent_wrong_code">Le code de vérification n’est pas correct.</string>
     <string name="uploads_media_title">MÉDIA</string>
     <string name="uploads_media_no_result">Il n’y a aucun média dans ce salon</string>
@@ -1466,7 +1466,7 @@
     <string name="identity_server_error_outdated_home_server">Cette opération n’est pas possible. Le serveur d’accueil est obsolète.</string>
     <string name="identity_server_error_no_identity_server_configured">Veuillez d’abord configurer un serveur d’identité.</string>
     <string name="identity_server_error_terms_not_signed">Veuillez d’abord accepter les termes du serveur d’identité dans les paramètres.</string>
-    <string name="identity_server_error_bulk_sha256_not_supported">Pour votre vie privée, ${app_name} prend uniquement en charge l’envoi des adresses e-mail et des numéros de téléphone hachés.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Pour votre vie privée, ${app_name} prend uniquement en charge l’envoi des adresses électronique et des numéros de téléphone hachés.</string>
     <string name="identity_server_error_binding_error">L’association a échoué.</string>
     <string name="identity_server_error_no_current_binding_error">Il n’y a actuellement aucune association avec cet identifiant.</string>
     <string name="identity_server_set_default_notice">Votre serveur d’accueil (%1$s) propose d’utiliser %2$s comme serveur d’identité</string>
@@ -1653,8 +1653,8 @@
         <item quantity="one">%d utilisateur banni</item>
         <item quantity="other">%d utilisateurs bannis</item>
     </plurals>
-    <string name="settings_emails_and_phone_numbers_summary">Gérer les e-mails et numéros de téléphone liés à votre compte Matrix</string>
-    <string name="settings_emails_and_phone_numbers_title">E-mails et numéros de téléphone</string>
+    <string name="settings_emails_and_phone_numbers_summary">Gérer les courriels et numéros de téléphone liés à votre compte Matrix</string>
+    <string name="settings_emails_and_phone_numbers_title">Courriels et numéros de téléphone</string>
     <string name="bottom_sheet_setup_secure_backup_title">Sauvegarde sécurisée</string>
     <string name="a11y_start_camera">Démarrer la caméra</string>
     <string name="a11y_open_chat">Ouvrir la discussion</string>
@@ -1677,11 +1677,11 @@
         <item quantity="one">%d seconde</item>
         <item quantity="other">%d secondes</item>
     </plurals>
-    <string name="error_threepid_auth_failed">Assurez-vous d\'avoir cliqué sur le lien envoyé par e-mail.</string>
+    <string name="error_threepid_auth_failed">Assurez-vous d\'avoir cliqué sur le lien envoyé par courriel.</string>
     <string name="settings_remove_three_pid_confirmation_content">Supprimer %s \?</string>
     <string name="settings_phone_numbers">Numéros de téléphone</string>
-    <string name="settings_emails_empty">Aucune adresse e-mail n’a été ajoutée à votre compte</string>
-    <string name="settings_emails">Adresses e-mail</string>
+    <string name="settings_emails_empty">Aucune adresse électronique n’a été ajoutée à votre compte</string>
+    <string name="settings_emails">Adresses électroniques</string>
     <string name="settings_phone_number_empty">Aucun numéro de téléphone n’a été ajouté à votre compte</string>
     <string name="search_banned_user_hint">Filtrer les utilisateurs exclus</string>
     <string name="room_participants_action_unignore_prompt_msg">Ne plus ignorer cet utilisateur aura pour effet de ré-afficher ses messages.</string>
@@ -1745,8 +1745,8 @@
     <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
     <string name="settings_discovery_consent_action_give_consent">Autoriser</string>
     <string name="settings_discovery_consent_action_revoke">Révoquer mon autorisation</string>
-    <string name="settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des e-mails et des numéros de téléphone à ce serveur d’identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
-    <string name="settings_discovery_consent_title">Envoyer des e-mails et des numéros de téléphone</string>
+    <string name="settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des courriels et des numéros de téléphone à ce serveur d’identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
+    <string name="settings_discovery_consent_title">Envoyer des courriels et des numéros de téléphone</string>
     <string name="direct_room_user_list_suggestions_title">Suggestions</string>
     <string name="direct_room_user_list_known_title">Utilisateurs connus</string>
     <string name="qr_code">code QR</string>
@@ -1997,7 +1997,7 @@
     <string name="invite_to_space_with_name_desc">Permettra de parcourir les salons de %s</string>
     <string name="invite_to_space_with_name">Inviter dans %s</string>
     <string name="invite_by_link">Partager le lien</string>
-    <string name="invite_by_email">Inviter par e-mail</string>
+    <string name="invite_by_email">Inviter par courriel</string>
     <string name="invite_people_to_your_space_desc">Vous êtes seul pour l’instant. %s sera plus agréable avec de la compagnie.</string>
     <string name="invite_people_to_your_space">Invitez des personnes dans votre espace</string>
     <string name="invite_people_menu">Inviter des personnes</string>
@@ -2153,7 +2153,7 @@
     <string name="settings_notification_mentions_and_keywords">Mentions et mots-clés</string>
     <string name="settings_notification_default">Notifications par défaut</string>
     <string name="link_this_email_with_your_account">%s dans les paramètres pour recevoir les invitations directement dans ${app_name}.</string>
-    <string name="link_this_email_settings_link">Lier cet e-mail à votre compte</string>
+    <string name="link_this_email_settings_link">Lier ce courriel à votre compte</string>
     <string name="this_invite_to_this_space_was_sent">Cette invitation à cette espace a été envoyée à %s qui n’est pas associé à votre compte</string>
     <string name="this_invite_to_this_room_was_sent">Cette invitation à ce salon a été envoyée à %s qui n’est pas associé à votre compte</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Tous les salons dans lesquels vous vous trouvez seront affichés sur l’Accueil.</string>
@@ -2415,4 +2415,8 @@
     <string name="action_thread_copy_link_to_thread">Copier le lien du fil de discussion</string>
     <string name="action_thread_view_in_room">Voir dans le salon</string>
     <string name="action_view_threads">Voir les fils de discussions</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d changement des ACL du serveur</item>
+        <item quantity="other">%d changements des ACL du serveur</item>
+    </plurals>
 </resources>

@@ -525,8 +525,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
             is VectorCallViewEvents.FailToTransfer         -> showSnackbar(getString(R.string.call_transfer_failure))
-            null                                           -> {
-            }
+            else                                           -> Unit
         }
     }
 

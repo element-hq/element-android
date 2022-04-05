@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <im.vector.app.core.preference.VectorPreferenceCategory
-        android:key="SETTINGS_GROUPS_FLAIR_KEY"
-        android:title="@string/settings_flair" />
-
-</androidx.preference.PreferenceScreen>

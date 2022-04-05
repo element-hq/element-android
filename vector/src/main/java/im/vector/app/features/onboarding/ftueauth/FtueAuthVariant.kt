@@ -31,7 +31,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.popBackstack
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ScreenOrientationLocker
@@ -122,7 +121,7 @@ class FtueAuthVariant(
 
     private fun updateWithState(viewState: OnboardingViewState) {
         isForceLoginFallbackEnabled = viewState.isForceLoginFallbackEnabled
-        views.loginLoading.isVisible = viewState.isLoading()
+        views.loginLoading.isVisible = viewState.isLoading
     }
 
     override fun setIsLoading(isLoading: Boolean) = Unit
@@ -138,10 +137,14 @@ class FtueAuthVariant(
                         // Go on with registration flow
                         handleRegistrationNavigation(viewEvents.flowResult)
                     } else {
-                        // First ask for login and password
-                        // I add a tag to indicate that this fragment is a registration stage.
-                        // This way it will be automatically popped in when starting the next registration stage
-                        openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
+                        if (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
+                            openCombinedRegister()
+                        } else {
+                            // First ask for login and password
+                            // I add a tag to indicate that this fragment is a registration stage.
+                            // This way it will be automatically popped in when starting the next registration stage
+                            openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
+                        }
                     }
                 }
             }
@@ -222,6 +225,7 @@ class FtueAuthVariant(
                         FtueAuthUseCaseFragment::class.java,
                         option = commonOption)
             }
+            OnboardingViewEvents.OpenCombinedRegister                          -> openCombinedRegister()
             is OnboardingViewEvents.OnAccountCreated                           -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
             OnboardingViewEvents.OnChooseDisplayName                           -> onChooseDisplayName()
@@ -229,7 +233,16 @@ class FtueAuthVariant(
             OnboardingViewEvents.OnChooseProfilePicture                        -> onChooseProfilePicture()
             OnboardingViewEvents.OnPersonalizationComplete                     -> onPersonalizationComplete()
             OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
-        }.exhaustive
+        }
+    }
+
+    private fun openCombinedRegister() {
+        activity.addFragmentToBackstack(
+                views.loginFragmentContainer,
+                FtueAuthCombinedRegisterFragment::class.java,
+                tag = FRAGMENT_REGISTRATION_STAGE_TAG,
+                option = commonOption
+        )
     }
 
     private fun registrationShouldFallback(registrationFlowResult: OnboardingViewEvents.RegistrationFlowResult) =
@@ -281,7 +294,7 @@ class FtueAuthVariant(
             SignMode.SignUp             -> Unit // This case is processed in handleOnboardingViewEvents
             SignMode.SignIn             -> handleSignInSelected(state)
             SignMode.SignInWithMatrixId -> handleSignInWithMatrixId(state)
-        }.exhaustive
+        }
     }
 
     private fun handleSignInSelected(state: OnboardingViewState) {

@@ -26,11 +26,8 @@ import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
@@ -47,9 +44,12 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.failure.isInvalidUsername
+import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
+import org.matrix.android.sdk.api.failure.isRegistrationDisabled
+import org.matrix.android.sdk.api.failure.isUsernameInUse
+import org.matrix.android.sdk.api.failure.isWeakPassword
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
@@ -105,7 +105,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                     views.loginField.setAutofillHints(HintConstants.AUTOFILL_HINT_USERNAME)
                     views.passwordField.setAutofillHints(HintConstants.AUTOFILL_HINT_PASSWORD)
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -115,7 +115,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
             SignMode.SignUp             -> SocialLoginButtonsView.Mode.MODE_SIGN_UP
             SignMode.SignIn,
             SignMode.SignInWithMatrixId -> SocialLoginButtonsView.Mode.MODE_SIGN_IN
-        }.exhaustive
+        }
     }
 
     private fun submit() {
@@ -135,7 +135,7 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
             error++
         }
         if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
-            views.loginFieldTil.error = "The homeserver does not accept username with only digits."
+            views.loginFieldTil.error = getString(R.string.error_forbidden_digits_only_username)
             error++
         }
         if (password.isEmpty()) {
@@ -254,16 +254,35 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     }
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetLogin)
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
 
     override fun onError(throwable: Throwable) {
-        // Show M_WEAK_PASSWORD error in the password field
-        if (throwable is Failure.ServerError &&
-                throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
-            views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
-        } else {
-            views.loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
+        // Trick to display the error without text.
+        views.loginFieldTil.error = " "
+        when {
+            throwable.isUsernameInUse() || throwable.isInvalidUsername() -> {
+                views.loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
+            }
+            throwable.isLoginEmailUnknown()                              -> {
+                views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
+            }
+            throwable.isInvalidPassword() && spaceInPassword()           -> {
+                views.passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
+            }
+            throwable.isWeakPassword() || throwable.isInvalidPassword()  -> {
+                views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
+            }
+            throwable.isRegistrationDisabled()                           -> {
+                MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(getString(R.string.login_registration_disabled))
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
+            }
+            else                                                         -> {
+                super.onError(throwable)
+            }
         }
     }
 
@@ -276,39 +295,9 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         setupSocialLoginButtons(state)
         setupButtons(state)
 
-        when (state.asyncLoginAction) {
-            is Loading -> {
-                // Ensure password is hidden
-                views.passwordField.hidePassword()
-            }
-            is Fail    -> {
-                val error = state.asyncLoginAction.error
-                if (error is Failure.ServerError &&
-                        error.error.code == MatrixError.M_FORBIDDEN &&
-                        error.error.message.isEmpty()) {
-                    // Login with email, but email unknown
-                    views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
-                } else {
-                    // Trick to display the error without text.
-                    views.loginFieldTil.error = " "
-                    if (error.isInvalidPassword() && spaceInPassword()) {
-                        views.passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
-                    } else {
-                        views.passwordFieldTil.error = errorFormatter.toHumanReadable(error)
-                    }
-                }
-            }
-            // Success is handled by the LoginActivity
-            is Success -> Unit
-        }
-
-        when (state.asyncRegistration) {
-            is Loading -> {
-                // Ensure password is hidden
-                views.passwordField.hidePassword()
-            }
-            // Success is handled by the LoginActivity
-            is Success -> Unit
+        if (state.isLoading) {
+            // Ensure password is hidden
+            views.passwordField.hidePassword()
         }
     }
 

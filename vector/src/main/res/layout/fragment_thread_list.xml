@@ -37,6 +37,22 @@
         tools:listitem="@layout/item_thread"
         tools:visibility="gone" />
 
+
+        <ProgressBar
+            android:id="@+id/threadListProgressBar"
+            style="@style/Widget.Vector.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:ignore="NegativeMargin"
+            android:layout_marginTop="-6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/threadListAppBarLayout"
+            tools:visibility="visible" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/threadListEmptyConstraintLayout"
         android:layout_width="0dp"
@@ -54,7 +70,6 @@
             android:id="@+id/threadListEmptyImageView"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/bg_rounded_button"
@@ -75,13 +90,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:text="@string/thread_list_empty_title"
             android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@id/threadListEmptySubtitleTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/threadListEmptyImageView"
-            android:text="@string/thread_list_empty_title" />
+            app:layout_constraintTop_toBottomOf="@id/threadListEmptyImageView" />
 
         <TextView
             android:id="@+id/threadListEmptySubtitleTextView"
@@ -90,12 +105,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:gravity="center"
+            android:text="@string/thread_list_empty_subtitle"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/threadListEmptyNoticeTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/threadListEmptyTitleTextView"
-            android:text="@string/thread_list_empty_subtitle" />
+            app:layout_constraintTop_toBottomOf="@id/threadListEmptyTitleTextView" />
 
         <TextView
             android:id="@+id/threadListEmptyNoticeTextView"

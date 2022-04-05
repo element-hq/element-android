@@ -364,14 +364,14 @@ internal class DefaultVerificationService @Inject constructor(
         dispatchRequestAdded(pendingVerificationRequest)
 
         /*
-        * After the m.key.verification.ready event is sent, either party can send an m.key.verification.start event
-        * to begin the verification.
-        * If both parties send an m.key.verification.start event, and they both specify the same verification method,
-        * then the event sent by the user whose user ID is the smallest is used, and the other m.key.verification.start
-        * event is ignored.
-        * In the case of a single user verifying two of their devices, the device ID is compared instead.
-        * If both parties send an m.key.verification.start event, but they specify different verification methods,
-        * the verification should be cancelled with a code of m.unexpected_message.
+         * After the m.key.verification.ready event is sent, either party can send an m.key.verification.start event
+         * to begin the verification.
+         * If both parties send an m.key.verification.start event, and they both specify the same verification method,
+         * then the event sent by the user whose user ID is the smallest is used, and the other m.key.verification.start
+         * event is ignored.
+         * In the case of a single user verifying two of their devices, the device ID is compared instead.
+         * If both parties send an m.key.verification.start event, but they specify different verification methods,
+         * the verification should be cancelled with a code of m.unexpected_message.
          */
     }
 

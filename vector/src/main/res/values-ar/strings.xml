@@ -822,4 +822,54 @@
     <string name="failed_to_remove_widget">فشلت إزالة الودجة</string>
     <string name="failed_to_add_widget">فشلت إضافة الودجة</string>
     <string name="notification_listening_for_notifications">يستمع للإشعارات</string>
+    <string name="verification_request_waiting">ينتظر…</string>
+    <string name="sent_a_reaction">تفاعلَ بـ: %s</string>
+    <string name="sent_a_poll">استبيان</string>
+    <string name="send_a_sticker">ملصق</string>
+    <string name="sent_a_file">ملف</string>
+    <string name="sent_a_voice_message">تسجيل صوتي</string>
+    <string name="sent_an_audio_file">صوت</string>
+    <string name="sent_an_image">صورة.</string>
+    <string name="sent_a_video">فيديو.</string>
+    <string name="verification_conclusion_not_secure">ليس آمن</string>
+    <string name="create_space_in_progress">ينشئ فضاءً…</string>
+    <string name="send_suggestion_failed">فشل إرسال الاقتراح (%s)</string>
+    <string name="send_suggestion_sent">شكرًا، أُرسل اقتراحك</string>
+    <string name="send_suggestion_report_placeholder">صِف اقتراحك</string>
+    <string name="send_suggestion_content">اكتب اقتراحك أدناه.</string>
+    <string name="preference_system_settings">إعدادات النظام</string>
+    <string name="preference_help_summary">احصل على المساعدة باستخدام ${app_name}</string>
+    <string name="preference_voice_and_video">الصوت والفيديو</string>
+    <string name="settings_security_and_privacy">الأمان والخصوصية</string>
+    <string name="settings_preferences">الخيارات</string>
+    <string name="settings_general_title">عام</string>
+    <string name="create_room_federation_error">"أُنشئت  الغرفة، لكن فشل إرسال بعض الدعوات بسبب:
+\n
+\n%s"</string>
+    <string name="create_room_public_description">يمكن لأي شخص الإنضمام لهذه الغرفة</string>
+    <string name="create_room_public_title">علنية</string>
+    <string name="create_room_settings_section">إعدادات الغرفة</string>
+    <string name="create_room_topic_hint">الموضوع</string>
+    <string name="create_room_topic_section">موضوع الغرفة (اختياري)</string>
+    <string name="create_room_name_hint">الاسم</string>
+    <string name="create_room_name_section">اسم الغرفة</string>
+    <string name="create_room_action_create">أنشئ</string>
+    <string name="fab_menu_create_chat">رسالة مباشرة</string>
+    <string name="fab_menu_create_room">الغرف</string>
+    <string name="room_preview_no_preview_join">لا يمكنك معاينة هذه الغرفة، هل تريد الإنضمام إليها؟</string>
+    <string name="room_preview_not_found">لا يمكنك الوصول إلى هذه الغرفة حاليًا.
+\nحاول لاحقًا، أو اسأل مدير الغرفة إن كان لديك نفاذ لها.</string>
+    <string name="room_preview_no_preview">تتعذر معاية هذه الغرفة</string>
+    <string name="group_all_communities">كل المجتمعات</string>
+    <string name="please_wait">رجاء انتظر…</string>
+    <string name="change_room_directory_network">غيّر الشبكة</string>
+    <string name="create_new_space">أنشئ فضاء جديد</string>
+    <string name="create_new_room">أنشئ غرفة جديدة</string>
+    <string name="event_redacted_by_user_reason">حدث حذفه مستخدم</string>
+    <string name="settings_show_redacted">اعرض الرسائل المحذوفة</string>
+    <string name="event_redacted">حُذفت الرسالة</string>
+    <string name="reactions">الانفعالات</string>
+    <string name="message_view_reaction">اعرض الانفعالات</string>
+    <string name="message_add_reaction">أضف انفعالًا</string>
+    <string name="title_activity_emoji_reaction_picker">الانفعالات</string>
 </resources>

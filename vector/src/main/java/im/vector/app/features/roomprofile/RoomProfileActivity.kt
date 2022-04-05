@@ -26,7 +26,6 @@ import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
@@ -102,7 +101,7 @@ class RoomProfileActivity :
                         RoomProfileSharedAction.OpenRoomUploads                 -> openRoomUploads()
                         RoomProfileSharedAction.OpenBannedRoomMembers        -> openBannedRoomMembers()
                         RoomProfileSharedAction.OpenRoomNotificationSettings -> openRoomNotificationSettings()
-                    }.exhaustive
+                    }
                 }
                 .launchIn(lifecycleScope)
 

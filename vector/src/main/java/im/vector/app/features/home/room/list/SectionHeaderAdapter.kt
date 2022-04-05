@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.list
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -28,6 +29,7 @@ import im.vector.app.databinding.ItemRoomCategoryBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class SectionHeaderAdapter constructor(
+        roomsSectionData: RoomsSectionData,
         private val onClickAction: ClickListener
 ) : RecyclerView.Adapter<SectionHeaderAdapter.VH>() {
 
@@ -39,14 +41,16 @@ class SectionHeaderAdapter constructor(
             val isHighlighted: Boolean = false,
             val isHidden: Boolean = true,
             // This will be false until real data has been submitted once
-            val isLoading: Boolean = true
+            val isLoading: Boolean = true,
+            val isCollapsable: Boolean = false
     )
 
-    lateinit var roomsSectionData: RoomsSectionData
+    var roomsSectionData: RoomsSectionData = roomsSectionData
         private set
 
-    fun updateSection(newRoomsSectionData: RoomsSectionData) {
-        if (!::roomsSectionData.isInitialized || newRoomsSectionData != roomsSectionData) {
+    fun updateSection(block: (RoomsSectionData) -> RoomsSectionData) {
+        val newRoomsSectionData = block(roomsSectionData)
+        if (roomsSectionData != newRoomsSectionData) {
             roomsSectionData = newRoomsSectionData
             notifyDataSetChanged()
         }
@@ -82,11 +86,16 @@ class SectionHeaderAdapter constructor(
         fun bind(roomsSectionData: RoomsSectionData) {
             binding.roomCategoryTitleView.text = roomsSectionData.name
             val tintColor = ThemeUtils.getColor(binding.root.context, R.attr.vctr_content_secondary)
-            val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
-            val expandedArrowDrawable = ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
-                DrawableCompat.setTint(it, tintColor)
+            val collapsableArrowDrawable: Drawable? = if (roomsSectionData.isCollapsable) {
+                val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
+                ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
+                    DrawableCompat.setTint(it, tintColor)
+                }
+            } else {
+                null
             }
-            binding.roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
+            binding.root.isClickable = roomsSectionData.isCollapsable
+            binding.roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, collapsableArrowDrawable, null)
             binding.roomCategoryCounterView.text = roomsSectionData.itemCount.takeIf { it > 0 }?.toString().orEmpty()
             binding.roomCategoryUnreadCounterBadgeView.render(UnreadCounterBadgeView.State(roomsSectionData.notificationCount, roomsSectionData.isHighlighted))
         }
