@@ -49,7 +49,8 @@ object EventType {
     const val STATE_ROOM_JOIN_RULES = "m.room.join_rules"
     const val STATE_ROOM_GUEST_ACCESS = "m.room.guest_access"
     const val STATE_ROOM_POWER_LEVELS = "m.room.power_levels"
-    private const val STATE_ROOM_BEACON_INFO_PREFIX = "org.matrix.msc3489.beacon_info."
+    val STATE_ROOM_BEACON_INFO = listOf("org.matrix.msc3672.beacon_info", "m.beacon_info")
+    val BEACON_LOCATION_DATA = listOf("org.matrix.msc3672.beacon", "m.beacon")
 
     const val STATE_SPACE_CHILD = "m.space.child"
 
@@ -120,13 +121,5 @@ object EventType {
                 type == CALL_NEGOTIATE ||
                 type == CALL_REJECT ||
                 type == CALL_REPLACES
-    }
-
-    /**
-     * Returns an event type like org.matrix.msc3489.beacon_info.@userid:matrix.org.1648814272273
-     */
-    fun generateBeaconInfoStateEventType(userId: String): String {
-        val uniqueId = System.currentTimeMillis()
-        return "$STATE_ROOM_BEACON_INFO_PREFIX$userId.$uniqueId"
     }
 }

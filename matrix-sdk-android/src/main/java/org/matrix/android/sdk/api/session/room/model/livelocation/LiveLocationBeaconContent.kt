@@ -26,7 +26,7 @@ data class LiveLocationBeaconContent(
         /**
          * Indicates user's intent to share ephemeral location.
          */
-        @Json(name = "org.matrix.msc3489.beacon_info") val unstableBeaconInfo: BeaconInfo? = null,
+        @Json(name = "org.matrix.msc3672.beacon_info") val unstableBeaconInfo: BeaconInfo? = null,
         @Json(name = "m.beacon_info") val beaconInfo: BeaconInfo? = null,
         /**
          * Beacon creation timestamp.

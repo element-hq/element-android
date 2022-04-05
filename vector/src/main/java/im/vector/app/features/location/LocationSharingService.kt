@@ -29,8 +29,9 @@ import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.EventType.generateBeaconInfoStateEventType
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.livelocation.BeaconInfo
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import timber.log.Timber
@@ -104,12 +105,11 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 unstableTimestampAsMilliseconds = clock.epochMillis()
         ).toContent()
 
-        val eventType = generateBeaconInfoStateEventType(session.myUserId)
         val stateKey = session.myUserId
         session
                 .getRoom(roomArgs.roomId)
                 ?.sendStateEvent(
-                        eventType = eventType,
+                        eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
                         stateKey = stateKey,
                         body = beaconContent
                 )
@@ -143,6 +143,17 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     override fun onLocationUpdate(locationData: LocationData) {
         Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
+        roomArgsList.forEach { roomArg ->
+            val room = activeSessionHolder.getSafeActiveSession()?.getRoom(roomArg.roomId)
+            room?.getStateEvent(EventType.STATE_ROOM_BEACON_INFO.first())?.let { beaconInfoEvent ->
+                room.sendLiveLocation(
+                        beaconInfoEventId = beaconInfoEvent.eventId!!,
+                        latitude = locationData.latitude,
+                        longitude = locationData.longitude,
+                        uncertainty = locationData.uncertainty
+                )
+            }
+        }
     }
 
     override fun onLocationProviderIsNotAvailable() {
