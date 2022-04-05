@@ -2393,7 +2393,6 @@ class TimelineFragment @Inject constructor(
                         .setCancelable(true)
                         .setNegativeButton(R.string.action_not_now) { _, _ -> }
                         .setPositiveButton(R.string.action_try_it_out) { _, _ ->
-                            timelineViewModel.onCleared() // We should first clear our viewModel
                             threadsManager.enableThreadsAndRestart(it)
                         }
                         .show()
