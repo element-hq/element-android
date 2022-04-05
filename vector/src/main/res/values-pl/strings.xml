@@ -2361,4 +2361,5 @@
     <string name="a11y_checked">Sprawdzono</string>
     <string name="restart_the_application_to_apply_changes">Aby zmiany weszły w życie, należy uruchomić ponownie aplikację.</string>
     <string name="labs_enable_latex_maths">Włącz matematykę LaTeX</string>
+    <string name="poll_end_action">Zakończ ankietę.</string>
 </resources>
