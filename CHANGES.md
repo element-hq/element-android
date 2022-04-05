@@ -4,12 +4,8 @@ Changes in Element v1.4.10 (2022-04-05)
 Features ✨
 ----------
  - Allow scrolling position of Voice Message playback ([#5426](https://github.com/vector-im/element-android/issues/5426))
- - Live Location Sharing - Foreground Service and Notification ([#5595](https://github.com/vector-im/element-android/issues/5595))
  - Users will be able to provide feedback for threads ([#5647](https://github.com/vector-im/element-android/issues/5647))
- - Send beacon info state event when live location sharing started ([#5651](https://github.com/vector-im/element-android/issues/5651))
  - Update Jitsi lib from 3.10.0 to 5.0.2 ([#5654](https://github.com/vector-im/element-android/issues/5654))
- - Show a banner in timeline while location sharing service is running ([#5660](https://github.com/vector-im/element-android/issues/5660))
- - Location sharing: adding possibility to choose duration of live sharing ([#5667](https://github.com/vector-im/element-android/issues/5667))
 
 Bugfixes 🐛
 ----------
@@ -25,6 +21,10 @@ In development 🚧
 ----------------
  - Adding combined account creation and server selection screen as part of the new FTUE ([#5277](https://github.com/vector-im/element-android/issues/5277))
  - Finalising FTUE onboarding account creation personalization steps but keeping feature disabled until other parts are complete ([#5519](https://github.com/vector-im/element-android/issues/5519))
+ - Live Location Sharing - Foreground Service and Notification ([#5595](https://github.com/vector-im/element-android/issues/5595))
+ - Send beacon info state event when live location sharing started ([#5651](https://github.com/vector-im/element-android/issues/5651))
+ - Show a banner in timeline while location sharing service is running ([#5660](https://github.com/vector-im/element-android/issues/5660))
+ - Location sharing: adding possibility to choose duration of live sharing ([#5667](https://github.com/vector-im/element-android/issues/5667))
 
 Other changes
 -------------
