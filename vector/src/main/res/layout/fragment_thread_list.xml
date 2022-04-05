@@ -127,7 +127,6 @@
         android:id="@+id/threadsFeedBackConstraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:elevation="30dp"
         android:padding="6dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
