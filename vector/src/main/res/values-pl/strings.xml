@@ -2347,10 +2347,10 @@
         <item quantity="other">%d wpisów</item>
     </plurals>
     <plurals name="space_people_you_know">
-        <item quantity="one">%d osoba którą znasz już dołączyła</item>
-        <item quantity="few">%d osoby które znasz już dołączyły</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="one">%d osoba, którą znasz, już dołączyła</item>
+        <item quantity="few">%d osoby, które znasz, już dołączyły</item>
+        <item quantity="many">%d osób, które znasz, już dołączyły</item>
+        <item quantity="other">%d osób, które znasz, już dołączyły</item>
     </plurals>
     <string name="dev_tools_error_no_message_type">Brakujący typ wiadomości</string>
     <string name="dev_tools_error_no_content">Brak zawartości</string>
@@ -2360,4 +2360,5 @@
     <string name="a11y_unchecked">Nie sprawdzono</string>
     <string name="a11y_checked">Sprawdzono</string>
     <string name="restart_the_application_to_apply_changes">Aby zmiany weszły w życie, należy uruchomić ponownie aplikację.</string>
+    <string name="labs_enable_latex_maths">Włącz matematykę LaTeX</string>
 </resources>
