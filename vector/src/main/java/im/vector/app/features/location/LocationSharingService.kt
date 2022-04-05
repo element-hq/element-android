@@ -144,7 +144,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
 
         // Emit location update to all rooms in which live location sharing is active
-        roomArgsList.forEach { roomArg ->
+        roomArgsList.toList().forEach { roomArg ->
             sendLiveLocation(roomArg.roomId, locationData)
         }
     }
