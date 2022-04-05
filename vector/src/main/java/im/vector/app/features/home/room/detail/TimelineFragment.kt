@@ -2362,7 +2362,7 @@ class TimelineFragment @Inject constructor(
         if (vectorPreferences.areThreadMessagesEnabled()) {
             navigateToThreadTimeline(action.eventId, action.startsThread)
         } else {
-            displayThreadsBetaNotice()
+            displayThreadsBetaOptInDialog()
         }
     }
 
@@ -2385,11 +2385,7 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    /**
-     * Display a dialog that will let the user to enable threads
-     */
-
-    private fun displayThreadsBetaNotice() =
+    private fun displayThreadsBetaOptInDialog() =
             activity?.let {
                 MaterialAlertDialogBuilder(it)
                         .setTitle(R.string.threads_beta_enable_notice_title)
