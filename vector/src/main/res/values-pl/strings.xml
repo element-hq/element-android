@@ -2363,4 +2363,5 @@
     <string name="labs_enable_latex_maths">Włącz matematykę LaTeX</string>
     <string name="poll_end_action">Zakończ ankietę</string>
     <string name="end_poll_confirmation_title">Zakończyć ankietę\?</string>
+    <string name="end_poll_confirmation_description">To powstrzyma użytkowników od głosowania i wyświetli finalny wynik ankiety.</string>
 </resources>
