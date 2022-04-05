@@ -33,6 +33,7 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -68,8 +69,6 @@ class AppStateHandler @Inject constructor(
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
 
     val selectedRoomGroupingFlow = selectedSpaceDataSource.stream()
-
-    private var joinedSpacesNumber: Int? = null
 
     fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? {
         // XXX we should somehow make it live :/ just a work around
@@ -143,17 +142,11 @@ class AppStateHandler @Inject constructor(
         session.getSyncStatusLive()
                 .asFlow()
                 .filterIsInstance<SyncStatusService.Status.IncrementalSyncDone>()
+                .map { session.spaceService().getRootSpaceSummaries().size }
                 .distinctUntilChanged()
-                .onEach {
-                    handleJoinedSpaceStatistics(session.spaceService().getRootSpaceSummaries().size)
+                .onEach { spacesNumber ->
+                    analyticsTracker.updateUserProperties(UserProperties(numSpaces = spacesNumber))
                 }.launchIn(session.coroutineScope)
-    }
-
-    private fun handleJoinedSpaceStatistics(newSpaceNumber: Int) {
-        if (joinedSpacesNumber != newSpaceNumber) {
-            joinedSpacesNumber = newSpaceNumber
-            analyticsTracker.updateUserProperties(UserProperties(numSpaces = joinedSpacesNumber))
-        }
     }
 
     fun safeActiveSpaceId(): String? {
