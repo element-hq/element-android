@@ -46,21 +46,21 @@
 
         <TextView
             android:id="@+id/audioPlaybackDuration"
-            style="@style/Widget.Vector.TextView.Body"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textColor="?vctr_content_secondary"
+            android:textColor="?vctr_content_tertiary"
             app:layout_constraintStart_toStartOf="@id/messageFilenameView"
             app:layout_constraintTop_toBottomOf="@id/messageFilenameView"
             tools:text="0:23" />
 
         <TextView
             android:id="@+id/fileSize"
-            style="@style/Widget.Vector.TextView.Body"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?vctr_content_secondary"
+            android:textColor="?vctr_content_tertiary"
             android:layout_marginStart="4dp"
             app:layout_constraintStart_toEndOf="@id/audioPlaybackDuration"
             app:layout_constraintBottom_toBottomOf="@id/audioPlaybackDuration"
@@ -82,10 +82,10 @@
 
         <TextView
             android:id="@+id/audioPlaybackTime"
-            style="@style/Widget.Vector.TextView.Body"
+            style="@style/Widget.Vector.TextView.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?vctr_content_secondary"
+            android:textColor="?vctr_content_tertiary"
             android:layout_marginEnd="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/audioSeekBar"
