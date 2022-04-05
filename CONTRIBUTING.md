@@ -144,6 +144,8 @@ Instead, please comment the original string with:
 ```xml
 <!-- TODO TO BE REMOVED -->
 ```
+And add `tools:ignore="UnusedResources"` to the string, to let lint ignore that the string is not used.
+
 The string will be removed during the next sync with Weblate.
 
 ### Accessibility
