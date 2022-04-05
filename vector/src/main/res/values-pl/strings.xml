@@ -2445,4 +2445,14 @@
     <string name="action_thread_view_in_room">Zobacz w pokoju</string>
     <string name="action_disable">Wyłącz</string>
     <string name="action_view_threads">Wyświetl wątki</string>
+    <string name="tooltip_attachment_poll">Utwórz ankietę</string>
+    <string name="tooltip_attachment_contact">Otwórz kontakty</string>
+    <string name="tooltip_attachment_sticker">Wyślij naklejkę</string>
+    <string name="tooltip_attachment_file">Prześlij plik</string>
+    <string name="tooltip_attachment_gallery">Wyślij obrazy oraz wideo</string>
+    <string name="tooltip_attachment_photo">Otwórz kamerę</string>
+    <string name="delete_poll_dialog_title">Usuń ankietę</string>
+    <string name="poll_end_room_list_preview">Ankieta zakończona</string>
+    <string name="poll_response_room_list_preview">Oddano głos</string>
+    <string name="end_poll_confirmation_approve_button">Zakończ ankietę</string>
 </resources>
