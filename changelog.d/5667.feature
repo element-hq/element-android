@@ -1,1 +1,0 @@
-Location sharing: adding possibility to choose duration of live sharing
