@@ -2110,7 +2110,7 @@
     <string name="decide_who_can_find_and_join">Zdecyduj kto może odnaleźć i dołączyć do tego pokoju.</string>
     <string name="tap_to_edit_spaces">Dotknij, aby edytować przestrzenie</string>
     <string name="select_spaces">Wybierz przestrzenie</string>
-    <string name="decide_which_spaces_can_access">Zdecyduj które przestrzenie mogą mieć dostęp do tego pokoju. Członkowie wybranej przestrzeni będą mogli ją odnaleźć i dołączyć do Pokoju przez nazwę.</string>
+    <string name="decide_which_spaces_can_access">Zdecyduj, które przestrzenie mogą mieć dostęp do tego pokoju. Członkowie zaznaczonej przestrzeni będą mogli odnaleźć i dołączyć do nazwy pokoju.</string>
     <string name="spaces_which_can_access">Przestrzenie mogące uzyskać dostęp</string>
     <string name="allow_space_member_to_find_and_access">Zezwól użytkownikom przestrzeni na znalezienie i dostęp.</string>
     <string name="settings_room_upgrades">Ulepszenia pokoju</string>
