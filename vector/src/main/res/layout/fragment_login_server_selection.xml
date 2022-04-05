@@ -134,7 +134,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:text="@string/action_learn_more"
+                    android:text="@string/login_server_modular_learn_more"
                     android:textColor="?colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/loginServerChoiceEmsText"
                     app:layout_constraintEnd_toEndOf="parent"

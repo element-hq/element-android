@@ -61,7 +61,7 @@ class FtueAuthServerSelectionFragment @Inject constructor() : AbstractFtueAuthFr
 
     private fun initTextViews() {
         views.loginServerChoiceEmsLearnMore.text = span {
-            text = getString(R.string.action_learn_more)
+            text = getString(R.string.login_server_modular_learn_more)
             textDecorationLine = "underline"
         }
     }

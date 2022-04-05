@@ -47,7 +47,7 @@
         app:layout_constraintStart_toEndOf="@id/actionIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginStart="0dp"
-        tools:text="@string/action_learn_more" />
+        tools:text="@string/room_profile_section_security_learn_more" />
 
     <TextView
         android:id="@+id/actionSubtitle"

@@ -142,7 +142,7 @@ class RoomMemberProfileController @Inject constructor(
                     } else {
                         buildProfileAction(
                                 id = "learn_more",
-                                title = stringProvider.getString(R.string.action_learn_more),
+                                title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
                                 editable = false,
                                 divider = false,
                                 action = { callback?.onShowDeviceListNoCrossSigning() }
@@ -160,7 +160,7 @@ class RoomMemberProfileController @Inject constructor(
 
                 buildProfileAction(
                         id = "learn_more",
-                        title = stringProvider.getString(R.string.action_learn_more),
+                        title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
                         editable = false,
                         divider = false,
                         subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle),

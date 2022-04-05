@@ -48,7 +48,7 @@ class LoginServerSelectionFragment2 @Inject constructor() : AbstractLoginFragmen
 
         views.loginServerChoiceEmsLearnMore.setTextWithColoredPart(
                 fullTextRes = R.string.login_server_modular_learn_more_about_ems,
-                coloredTextRes = R.string.action_learn_more,
+                coloredTextRes = R.string.login_server_modular_learn_more,
                 underline = true
         )
         views.loginServerChoiceEmsLearnMore.setOnClickListener {
