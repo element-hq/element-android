@@ -52,6 +52,7 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthLegacyStyleTermsFragment
+import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsLegacyStyleFragmentArgument
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
@@ -397,14 +398,27 @@ class FtueAuthVariant(
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            is Stage.Terms     -> activity.addFragmentToBackstack(
+            is Stage.Terms     -> onTerms(stage)
+            else               -> Unit // Should not happen
+        }
+    }
+
+    private fun onTerms(stage: Stage.Terms) {
+        when {
+            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> activity.addFragmentToBackstack(
+                    views.loginFragmentContainer,
+                    FtueAuthTermsFragment::class.java,
+                    FtueAuthTermsLegacyStyleFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(R.string.resources_language))),
+                    tag = FRAGMENT_REGISTRATION_STAGE_TAG,
+                    option = commonOption
+            )
+            else                                                 -> activity.addFragmentToBackstack(
                     views.loginFragmentContainer,
                     FtueAuthLegacyStyleTermsFragment::class.java,
                     FtueAuthTermsLegacyStyleFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(R.string.resources_language))),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )
-            else               -> Unit // Should not happen
         }
     }
 
