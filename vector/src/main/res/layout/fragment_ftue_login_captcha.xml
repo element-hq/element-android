@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
+
+    <!-- No scroll view in the screen, but use the style -->
+    <LinearLayout
+        style="@style/LoginFormScrollView"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
+
+        <ImageView
+            style="@style/LoginLogo"
+            android:layout_marginBottom="8dp"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/loginCaptchaNotice"
+            style="@style/Widget.Vector.TextView.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/auth_recaptcha_message"
+            android:textColor="?vctr_content_secondary" />
+
+        <!-- contentDescription does not work on WebView? -->
+        <WebView
+            android:id="@+id/loginCaptchaWevView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/login_a11y_captcha_container" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/loginCaptchaProgress"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        tools:ignore="UnknownId,NotSibling" />
+
+</FrameLayout>
+

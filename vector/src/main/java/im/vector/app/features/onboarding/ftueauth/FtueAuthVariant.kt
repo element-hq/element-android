@@ -384,7 +384,7 @@ class FtueAuthVariant(
         when (stage) {
             is Stage.ReCaptcha -> activity.addFragmentToBackstack(
                     views.loginFragmentContainer,
-                    FtueAuthCaptchaFragment::class.java,
+                    FtueAuthLegacyStyleCaptchaFragment::class.java,
                     FtueAuthCaptchaFragmentArgument(stage.publicKey),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
