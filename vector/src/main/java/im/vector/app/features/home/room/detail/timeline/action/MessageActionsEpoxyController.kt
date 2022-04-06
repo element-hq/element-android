@@ -46,10 +46,9 @@ import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.events.model.getMsgType
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -218,11 +217,9 @@ class MessageActionsEpoxyController @Inject constructor(
     }
 
     private fun buildLocationUiData(state: MessageActionState): LocationUiData? {
-        val clearContent = state.timelineEvent()?.root?.getClearContent()
-        val isLocationEvent = clearContent?.get(MessageContent.MSG_TYPE_JSON_KEY) == MessageType.MSGTYPE_LOCATION
-        if (!isLocationEvent) return null
+        if (state.timelineEvent()?.root?.getMsgType() != MessageType.MSGTYPE_LOCATION) return null
 
-        val locationContent = clearContent.toModel<MessageLocationContent>(catchError = true)
+        val locationContent = state.timelineEvent()?.root?.getClearContent().toModel<MessageLocationContent>(catchError = true)
                 ?: return null
         val locationUrl = locationContent.toLocationData()
                 ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
