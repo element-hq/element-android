@@ -28,7 +28,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 @Parcelize
-data class FtueAuthCaptchaFragmentArgument(
+data class FtueAuthLegacyStyleCaptchaFragmentArgument(
         val siteKey: String
 ) : Parcelable
 
@@ -39,7 +39,7 @@ class FtueAuthLegacyStyleCaptchaFragment @Inject constructor(
         private val captchaWebview: CaptchaWebview
 ) : AbstractFtueAuthFragment<FragmentLoginCaptchaBinding>() {
 
-    private val params: FtueAuthCaptchaFragmentArgument by args()
+    private val params: FtueAuthLegacyStyleCaptchaFragmentArgument by args()
     private var isWebViewLoaded = false
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginCaptchaBinding {

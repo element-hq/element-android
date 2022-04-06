@@ -382,13 +382,7 @@ class FtueAuthVariant(
         supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         when (stage) {
-            is Stage.ReCaptcha -> activity.addFragmentToBackstack(
-                    views.loginFragmentContainer,
-                    FtueAuthLegacyStyleCaptchaFragment::class.java,
-                    FtueAuthCaptchaFragmentArgument(stage.publicKey),
-                    tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                    option = commonOption
-            )
+            is Stage.ReCaptcha -> onCaptcha(stage)
             is Stage.Email     -> activity.addFragmentToBackstack(
                     views.loginFragmentContainer,
                     FtueAuthGenericTextInputFormFragment::class.java,
@@ -411,6 +405,25 @@ class FtueAuthVariant(
                     option = commonOption
             )
             else               -> Unit // Should not happen
+        }
+    }
+
+    private fun onCaptcha(stage: Stage.ReCaptcha) {
+        when {
+            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> activity.addFragmentToBackstack(
+                    views.loginFragmentContainer,
+                    FtueAuthCaptchaFragment::class.java,
+                    FtueAuthCaptchaFragmentArgument(stage.publicKey),
+                    tag = FRAGMENT_REGISTRATION_STAGE_TAG,
+                    option = commonOption
+            )
+            else                                                 -> activity.addFragmentToBackstack(
+                    views.loginFragmentContainer,
+                    FtueAuthLegacyStyleCaptchaFragment::class.java,
+                    FtueAuthLegacyStyleCaptchaFragmentArgument(stage.publicKey),
+                    tag = FRAGMENT_REGISTRATION_STAGE_TAG,
+                    option = commonOption
+            )
         }
     }
 
