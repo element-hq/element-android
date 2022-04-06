@@ -27,9 +27,10 @@ import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupLastVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -150,9 +151,9 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
 
         creatingBackupError.value = null
 
-        keysBackup.getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
-            override fun onSuccess(data: KeysVersionResult?) {
-                if (data?.version.isNullOrBlank() || forceOverride) {
+        keysBackup.getCurrentVersion(object : MatrixCallback<KeysBackupLastVersionResult> {
+            override fun onSuccess(data: KeysBackupLastVersionResult) {
+                if (data.toKeysVersionResult()?.version.isNullOrBlank() || forceOverride) {
                     processOnCreate()
                 } else {
                     loadingStatus.value = null

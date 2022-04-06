@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.flow
+package im.vector.app.features.home.room.detail.timeline.action
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
-import org.matrix.android.sdk.api.util.Optional
+import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 
-fun <T : Any> Flow<Optional<T>>.unwrap(): Flow<T> {
-    return filter { it.hasValue() }.map { it.get() }
-}
-
-fun <T : Any, U : Any> Flow<Optional<T>>.mapOptional(fn: (T) -> U?): Flow<Optional<U>> {
-    return map {
-        it.map(fn)
-    }
-}
+/**
+ * Data used to display Location data in the message bottom sheet
+ */
+data class LocationUiData(
+        val locationUrl: String,
+        val locationOwnerId: String?,
+        val locationPinProvider: LocationPinProvider,
+)
