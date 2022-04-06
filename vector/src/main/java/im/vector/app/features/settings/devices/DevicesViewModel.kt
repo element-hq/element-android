@@ -147,7 +147,7 @@ class DevicesViewModel @AssistedInject constructor(
                 .sample(5_000)
                 .onEach {
                     // If we have a new crypto device change, we might want to trigger refresh of device info
-                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                    session.cryptoService().fetchDevicesList()
                 }
                 .launchIn(viewModelScope)
 
@@ -160,7 +160,7 @@ class DevicesViewModel @AssistedInject constructor(
 
         refreshSource.stream().throttleFirst(4_000)
                 .onEach {
-                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                    session.cryptoService().fetchDevicesList()
                     session.cryptoService().downloadKeys(listOf(session.myUserId), true)
                 }
                 .launchIn(viewModelScope)

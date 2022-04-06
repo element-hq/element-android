@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.sync.handler.room
 import dagger.Lazy
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -343,7 +344,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         return roomEntity
     }
 
-    private suspend fun handleTimelineEvents(realm: Realm,
+    private fun handleTimelineEvents(realm: Realm,
                                      roomId: String,
                                      roomEntity: RoomEntity,
                                      eventList: List<Event>,
@@ -458,7 +459,9 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
     private fun decryptIfNeeded(event: Event, roomId: String) {
         try {
             // Event from sync does not have roomId, so add it to the event first
-            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
+            val result = runBlocking {
+                cryptoService.decryptEvent(event.copy(roomId = roomId), "")
+            }
             event.mxDecryptionResult = OlmDecryptionResult(
                     payload = result.clearEvent,
                     senderKey = result.senderCurve25519Key,

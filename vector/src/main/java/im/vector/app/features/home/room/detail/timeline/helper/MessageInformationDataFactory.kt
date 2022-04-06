@@ -139,20 +139,18 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         }
     }
 
-    private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration {
+    private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration  = runBlocking{
         if (event.root.sendState != SendState.SYNCED)
-            return E2EDecoration.NONE
+            return@runBlocking E2EDecoration.NONE
         if (!roomSummary?.isEncrypted.orFalse())
-            return E2EDecoration.NONE
-        val isUserVerified = runBlocking {
-            session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted().orFalse()
-        }
+            return@runBlocking E2EDecoration.NONE
+        val isUserVerified = session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted().orFalse()
         if (!isUserVerified) {
-            return E2EDecoration.NONE
+            return@runBlocking E2EDecoration.NONE
         }
         val ts = roomSummary?.encryptionEventTs ?: 0
         val eventTs = event.root.originServerTs ?: 0
-        return if (event.isEncrypted()) {
+        return@runBlocking if (event.isEncrypted()) {
             // Do not decorate failed to decrypt, or redaction (we lost sender device info)
             if (event.root.getClearType() == EventType.ENCRYPTED || event.root.isRedacted()) {
                 E2EDecoration.NONE

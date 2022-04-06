@@ -64,7 +64,7 @@ interface CryptoService {
 
     fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String)
 
-    fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo>
+    suspend fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo>
 
     fun getMyDevice(): CryptoDeviceInfo
 
@@ -84,7 +84,7 @@ interface CryptoService {
 
     fun setRoomBlacklistUnverifiedDevices(roomId: String)
 
-    fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
+    suspend fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 
     fun reRequestRoomKeyForEvent(event: Event)
 
@@ -92,7 +92,7 @@ interface CryptoService {
 
     fun removeRoomKeysRequestListener(listener: GossipingRequestListener)
 
-    fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>)
+    suspend fun fetchDevicesList(): List<DeviceInfo>
 
     fun getMyDevicesInfo(): List<DeviceInfo>
 
@@ -112,7 +112,7 @@ interface CryptoService {
     fun discardOutboundSession(roomId: String)
 
     @Throws(MXCryptoError::class)
-    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
+    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
     fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>)
 
@@ -122,7 +122,7 @@ interface CryptoService {
 
     suspend fun downloadKeys(userIds: List<String>, forceDownload: Boolean = false): MXUsersDevicesMap<CryptoDeviceInfo>
 
-    fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
+    suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
 
     fun getLiveCryptoDeviceInfo(userId: String): Flow<List<CryptoDeviceInfo>>
 

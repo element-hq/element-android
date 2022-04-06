@@ -70,12 +70,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.gujun.android.span.span
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
@@ -524,7 +522,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     /**
      * Build the cryptography preference section.
      */
-    private fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
+    private suspend fun refreshCryptographyPreference(devices: List<DeviceInfo>) {
         showDeviceListPref.isEnabled = devices.isNotEmpty()
         showDeviceListPref.summary = resources.getQuantityString(R.plurals.settings_active_sessions_count, devices.size, devices.size)
 
@@ -580,28 +578,19 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     // ==============================================================================================================
 
     private fun refreshMyDevice() {
-        session.cryptoService().getUserDevices(session.myUserId).map {
-            DeviceInfo(
-                    userId = session.myUserId,
-                    deviceId = it.deviceId,
-                    displayName = it.displayName()
-            )
-        }.let {
-            refreshCryptographyPreference(it)
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+            session.cryptoService().getUserDevices(session.myUserId).map {
+                DeviceInfo(
+                        userId = session.myUserId,
+                        deviceId = it.deviceId,
+                        displayName = it.displayName()
+                )
+            }.let {
+                refreshCryptographyPreference(it)
+            }
+            // TODO Move to a ViewModel...
+            val devicesList = session.cryptoService().fetchDevicesList()
+            refreshCryptographyPreference(devicesList)
         }
-        // TODO Move to a ViewModel...
-        session.cryptoService().fetchDevicesList(object : MatrixCallback<DevicesListResponse> {
-            override fun onSuccess(data: DevicesListResponse) {
-                if (isAdded) {
-                    refreshCryptographyPreference(data.devices.orEmpty())
-                }
-            }
-
-            override fun onFailure(failure: Throwable) {
-                if (isAdded) {
-                    refreshCryptographyPreference(emptyList())
-                }
-            }
-        })
     }
 }

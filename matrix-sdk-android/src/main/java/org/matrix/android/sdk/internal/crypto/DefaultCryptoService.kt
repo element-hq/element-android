@@ -66,7 +66,6 @@ import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -224,23 +223,12 @@ internal class DefaultCryptoService @Inject constructor(
         return runBlocking { olmMachine.ownDevice() }
     }
 
-    override fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>) {
-        getDevicesTask
-                .configureWith {
-                    //                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = object : MatrixCallback<DevicesListResponse> {
-                        override fun onFailure(failure: Throwable) {
-                            callback.onFailure(failure)
-                        }
-
-                        override fun onSuccess(data: DevicesListResponse) {
-                            // Save in local DB
-                            cryptoStore.saveMyDevicesInfo(data.devices.orEmpty())
-                            callback.onSuccess(data)
-                        }
-                    }
-                }
-                .executeBy(taskExecutor)
+    override suspend fun fetchDevicesList(): List<DeviceInfo> {
+        val devicesList = tryOrNull {
+            getDevicesTask.execute(Unit).devices
+        }.orEmpty()
+        cryptoStore.saveMyDevicesInfo(devicesList)
+        return devicesList
     }
 
     override fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>> {
@@ -301,10 +289,9 @@ internal class DefaultCryptoService @Inject constructor(
      */
     fun start() {
         internalStart()
-        // Just update
-        fetchDevicesList(NoOpMatrixCallback())
-
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            // Just update
+            fetchDevicesList()
             cryptoStore.tidyUpDataBase()
         }
     }
@@ -412,20 +399,13 @@ internal class DefaultCryptoService @Inject constructor(
      * @param userId   the user id
      * @param deviceId the device id
      */
-    override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
-        return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
-            runBlocking {
-                this@DefaultCryptoService.olmMachine.getCryptoDeviceInfo(userId, deviceId)
-            }
-        } else {
-            null
-        }
+    override suspend fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
+        if (userId.isEmpty() || deviceId.isNullOrEmpty()) return null
+        return olmMachine.getCryptoDeviceInfo(userId, deviceId)
     }
 
-    override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        return runBlocking {
-            this@DefaultCryptoService.olmMachine.getCryptoDeviceInfo(userId)
-        }
+    override suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
+        return olmMachine.getCryptoDeviceInfo(userId)
     }
 
     override fun getLiveCryptoDeviceInfo(userId: String): Flow<List<CryptoDeviceInfo>> {
@@ -503,7 +483,7 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * @return the stored device keys for a user.
      */
-    override fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo> {
+    override suspend fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo> {
         return this.getCryptoDeviceInfo(userId).toMutableList()
     }
 
@@ -577,10 +557,8 @@ internal class DefaultCryptoService @Inject constructor(
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
     @Throws(MXCryptoError::class)
-    override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-        return runBlocking {
-            olmMachine.decryptRoomEvent(event)
-        }
+    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+        return olmMachine.decryptRoomEvent(event)
     }
 
     /**

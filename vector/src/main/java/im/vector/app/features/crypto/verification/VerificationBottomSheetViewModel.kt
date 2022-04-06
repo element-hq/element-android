@@ -131,28 +131,29 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             session.cryptoService().verificationService().getExistingTransaction(initialState.otherUserId, it) as? QrCodeVerificationTransaction
         }
 
-        val hasAnyOtherSession = session.cryptoService()
-                .getCryptoDeviceInfo(session.myUserId)
-                .any {
-                    it.deviceId != session.sessionParams.deviceId
-                }
+        viewModelScope.launch {
 
-        setState {
-            copy(
-                    otherUserMxItem = userItem?.toMatrixItem(),
-                    sasTransactionState = sasTx?.state,
-                    qrTransactionState = qrTx?.state,
-                    transactionId = pr?.transactionId ?: initialState.verificationId,
-                    pendingRequest = if (pr != null) Success(pr) else Uninitialized,
-                    isMe = initialState.otherUserId == session.myUserId,
-                    currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
-                    quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
-                    hasAnyOtherSession = hasAnyOtherSession
-            )
-        }
+            val hasAnyOtherSession = session.cryptoService()
+                    .getCryptoDeviceInfo(session.myUserId)
+                    .any {
+                        it.deviceId != session.sessionParams.deviceId
+                    }
 
-        if (autoReady) {
-            viewModelScope.launch {
+            setState {
+                copy(
+                        otherUserMxItem = userItem?.toMatrixItem(),
+                        sasTransactionState = sasTx?.state,
+                        qrTransactionState = qrTx?.state,
+                        transactionId = pr?.transactionId ?: initialState.verificationId,
+                        pendingRequest = if (pr != null) Success(pr) else Uninitialized,
+                        isMe = initialState.otherUserId == session.myUserId,
+                        currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
+                        quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
+                        hasAnyOtherSession = hasAnyOtherSession
+                )
+            }
+
+            if (autoReady) {
                 // TODO, can I be here in DM mode? in this case should test if roomID is null?
                 session.cryptoService().verificationService()
                         .readyPendingVerification(
@@ -480,7 +481,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleTransactionUpdate(state: VerificationBottomSheetViewState, tx: VerificationTransaction){
+    private fun handleTransactionUpdate(state: VerificationBottomSheetViewState, tx: VerificationTransaction) {
         viewModelScope.launch {
             if (state.selfVerificationMode && state.transactionId == null) {
                 // is this an incoming with that user

@@ -362,11 +362,11 @@ internal class OlmMachine(
     suspend fun decryptRoomEvent(event: Event): MXEventDecryptionResult =
             withContext(Dispatchers.IO) {
                 val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
-                val serializedEvent = adapter.toJson(event)
                 try {
                     if (event.roomId.isNullOrBlank()) {
                         throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
                     }
+                    val serializedEvent = adapter.toJson(event)
                     val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId)
 
                     val deserializationAdapter =
