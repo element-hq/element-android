@@ -552,7 +552,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                                    content: MessageLiveLocationContent,
                                    roomId: String,
                                    isLocalEcho: Boolean) {
-        val beaconInfoEventId = event.getRelationContent()?.eventId ?: return
         val locationSenderId = event.senderId ?: return
 
         // We shouldn't process local echos
@@ -577,6 +576,10 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             Timber.v("## LIVE LOCATION. Beacon info content is invalid")
             return
         }
+
+        // Update last location info of the beacon state event
+        beaconInfoContent.lastLocationContent = content
+        beaconInfoEntity.root?.content = ContentMapper.map(beaconInfoContent.toContent())
     }
 
     private fun isBeaconInfoOutdated(beaconInfoContent: LiveLocationBeaconContent,

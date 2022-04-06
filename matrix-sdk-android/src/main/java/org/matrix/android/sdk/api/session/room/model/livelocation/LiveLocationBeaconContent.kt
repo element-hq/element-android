@@ -43,8 +43,7 @@ data class LiveLocationBeaconContent(
         /**
          * Client side tracking of the last location
          */
-        @Transient
-        val lastLocationContent: MessageLiveLocationContent? = null
+        var lastLocationContent: MessageLiveLocationContent? = null
 ) {
 
     fun getBestBeaconInfo() = beaconInfo ?: unstableBeaconInfo
