@@ -39,19 +39,19 @@ import org.matrix.android.sdk.api.auth.data.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
 
 @Parcelize
-data class FtueAuthTermsFragmentArgument(
+data class FtueAuthTermsLegacyStyleFragmentArgument(
         val localizedFlowDataLoginTerms: List<LocalizedFlowDataLoginTerms>
 ) : Parcelable
 
 /**
  * LoginTermsFragment displays the list of policies the user has to accept
  */
-class FtueAuthTermsFragment @Inject constructor(
+class FtueAuthLegacyStyleTermsFragment @Inject constructor(
         private val policyController: PolicyController
 ) : AbstractFtueAuthFragment<FragmentLoginTermsBinding>(),
         PolicyController.PolicyControllerListener {
 
-    private val params: FtueAuthTermsFragmentArgument by args()
+    private val params: FtueAuthTermsLegacyStyleFragmentArgument by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginTermsBinding {
         return FragmentLoginTermsBinding.inflate(inflater, container, false)

@@ -51,8 +51,8 @@ import im.vector.app.features.onboarding.OnboardingVariant
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.onboarding.OnboardingViewState
-import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
-import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragmentArgument
+import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthLegacyStyleTermsFragment
+import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsLegacyStyleFragmentArgument
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -399,8 +399,8 @@ class FtueAuthVariant(
             )
             is Stage.Terms     -> activity.addFragmentToBackstack(
                     views.loginFragmentContainer,
-                    FtueAuthTermsFragment::class.java,
-                    FtueAuthTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(R.string.resources_language))),
+                    FtueAuthLegacyStyleTermsFragment::class.java,
+                    FtueAuthTermsLegacyStyleFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(R.string.resources_language))),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption
             )

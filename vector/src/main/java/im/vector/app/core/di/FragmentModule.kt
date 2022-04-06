@@ -115,7 +115,7 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthSplashFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthUseCaseFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthWaitForEmailFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthWebFragment
-import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
+import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthLegacyStyleTermsFragment
 import im.vector.app.features.pin.PinFragment
 import im.vector.app.features.poll.create.CreatePollFragment
 import im.vector.app.features.qrcode.QrCodeScannerFragment
@@ -480,8 +480,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(FtueAuthTermsFragment::class)
-    fun bindFtueAuthTermsFragment(fragment: FtueAuthTermsFragment): Fragment
+    @FragmentKey(FtueAuthLegacyStyleTermsFragment::class)
+    fun bindFtueAuthTermsFragment(fragment: FtueAuthLegacyStyleTermsFragment): Fragment
 
     @Binds
     @IntoMap
