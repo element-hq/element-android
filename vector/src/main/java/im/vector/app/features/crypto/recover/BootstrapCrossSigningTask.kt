@@ -33,9 +33,10 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.session.securestorage.SsssKeySpec
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupLastVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
@@ -221,10 +222,9 @@ class BootstrapCrossSigningTask @Inject constructor(
             Timber.d("## BootstrapCrossSigningTask: Creating 4S - Checking megolm backup")
 
             // First ensure that in sync
-            var serverVersion = awaitCallback<KeysVersionResult?> {
+            var serverVersion = awaitCallback<KeysBackupLastVersionResult> {
                 session.cryptoService().keysBackupService().getCurrentVersion(it)
-            }
-
+            }.toKeysVersionResult()
             val knownMegolmSecret = session.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()
             val isMegolmBackupSecretKnown = knownMegolmSecret != null && knownMegolmSecret.version == serverVersion?.version
             val shouldCreateKeyBackup = serverVersion == null ||
@@ -236,9 +236,9 @@ class BootstrapCrossSigningTask @Inject constructor(
                     awaitCallback<Unit> {
                         session.cryptoService().keysBackupService().deleteBackup(serverVersion!!.version, it)
                     }
-                    serverVersion = awaitCallback {
+                    serverVersion = awaitCallback<KeysBackupLastVersionResult> {
                         session.cryptoService().keysBackupService().getCurrentVersion(it)
-                    }
+                    }.toKeysVersionResult()
                 }
 
                 Timber.d("## BootstrapCrossSigningTask: Creating 4S - Create megolm backup")
