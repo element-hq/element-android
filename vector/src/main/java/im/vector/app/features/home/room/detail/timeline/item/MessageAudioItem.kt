@@ -19,7 +19,6 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.Paint
 import android.text.format.DateUtils
 import android.view.ViewGroup
 import android.widget.ImageButton
