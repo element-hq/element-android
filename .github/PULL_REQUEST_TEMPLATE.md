@@ -17,7 +17,17 @@
 
 ## Screenshots / GIFs
 
-<!-- Only if UI have been changed -->
+<!-- Only if UI have been changed
+You can use a table like this to show screenshots comparison.
+Uncomment this markdown table below and edit the last line `|||`:
+|copy screenshot of before here|copy screenshot of after here|
+-->
+
+<!--
+|Before|After|
+|-|-|
+|||
+ -->
 
 ## Tests
 
