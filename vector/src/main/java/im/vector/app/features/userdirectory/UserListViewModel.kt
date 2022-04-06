@@ -216,11 +216,7 @@ class UserListViewModel @AssistedInject constructor(
                     val json = session.getProfile(foundThreePid.matrixId)
                     ThreePidUser(
                             email = search,
-                            user = User(
-                                    userId = foundThreePid.matrixId,
-                                    displayName = json[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                    avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
-                            )
+                            user = User.fromJson(foundThreePid.matrixId, json)
                     )
                 } catch (failure: Throwable) {
                     ThreePidUser(email = search, user = User(foundThreePid.matrixId))

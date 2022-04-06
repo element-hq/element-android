@@ -35,7 +35,6 @@ internal class RoomMemberEventHandler @Inject constructor(
 
     fun handleInitialSync(realm: Realm,
                           roomId: String,
-                          currentUserId: String,
                           event: Event,
                           aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
         if (event.type != EventType.STATE_ROOM_MEMBER) {
@@ -44,7 +43,7 @@ internal class RoomMemberEventHandler @Inject constructor(
         val roomMember = event.getFixedRoomMemberContent() ?: return false
         val eventUserId = event.stateKey ?: return false
 
-        return handleInitialSync(realm, roomId, currentUserId, eventUserId, roomMember, aggregator)
+        return handleInitialSync(realm, roomId, myUserId, eventUserId, roomMember, aggregator)
     }
 
     private fun handleInitialSync(realm: Realm,
@@ -54,10 +53,9 @@ internal class RoomMemberEventHandler @Inject constructor(
                                   roomMember: RoomMemberContent,
                                   aggregator: SyncResponsePostTreatmentAggregator?): Boolean {
         if (currentUserId != eventUserId) {
-            saveRoomMemberEntityLocally(realm, roomId, eventUserId, roomMember)
             saveUserEntityLocallyIfNecessary(realm, eventUserId, roomMember)
         }
-
+        saveRoomMemberEntityLocally(realm, roomId, eventUserId, roomMember)
         updateDirectChatsIfNecessary(roomId, roomMember, aggregator)
         return true
     }

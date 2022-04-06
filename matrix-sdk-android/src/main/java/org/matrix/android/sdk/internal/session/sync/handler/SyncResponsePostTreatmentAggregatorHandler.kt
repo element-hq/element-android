@@ -92,11 +92,6 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
 
     private suspend fun fetchUsers(usersToFetch: MutableList<String>) = usersToFetch.map {
         val profileJson = profileService.getProfile(it)
-
-        MatrixItem.UserItem(
-                id = it,
-                displayName = profileJson[ProfileService.DISPLAY_NAME_KEY] as? String,
-                avatarUrl = profileJson[ProfileService.AVATAR_URL_KEY] as? String
-        )
+        MatrixItem.UserItem.fromJson(it, profileJson)
     }
 }

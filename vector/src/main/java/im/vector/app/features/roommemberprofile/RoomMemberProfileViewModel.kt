@@ -48,7 +48,6 @@ import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -113,8 +112,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         session.flow().liveUserCryptoDevices(initialState.userId)
                 .map {
                     Pair(
-                            it.fold(true, { prev, dev -> prev && dev.isVerified }),
-                            it.fold(true, { prev, dev -> prev && (dev.trustLevel?.crossSigningVerified == true) })
+                            it.fold(true) { prev, dev -> prev && dev.isVerified },
+                            it.fold(true) { prev, dev -> prev && (dev.trustLevel?.crossSigningVerified == true) }
                     )
                 }
                 .execute { it ->
@@ -329,13 +328,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
     private suspend fun fetchProfileInfo() {
         val result = runCatchingToAsync {
             session.getProfile(initialState.userId)
-                    .let {
-                        MatrixItem.UserItem(
-                                id = initialState.userId,
-                                displayName = it[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                avatarUrl = it[ProfileService.AVATAR_URL_KEY] as? String
-                        )
-                    }
+                    .let { MatrixItem.UserItem.fromJson(initialState.userId, it) }
         }
 
         setState {
