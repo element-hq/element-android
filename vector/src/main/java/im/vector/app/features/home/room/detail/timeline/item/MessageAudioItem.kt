@@ -112,7 +112,6 @@ abstract class MessageAudioItem : AbsMessageItem<MessageAudioItem.Holder>() {
 
         holder.filenameView.text = filename
         holder.filenameView.onClick(attributes.itemClickListener)
-        holder.filenameView.paintFlags = (holder.filenameView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
         holder.audioPlaybackDuration.text = formattedDuration
         holder.fileSize.text = holder.rootLayout.context.getString(
                 R.string.audio_message_file_size, formattedFileSize
