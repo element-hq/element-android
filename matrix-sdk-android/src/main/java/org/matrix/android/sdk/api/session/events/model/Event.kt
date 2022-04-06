@@ -356,6 +356,13 @@ fun Event.isAttachmentMessage(): Boolean {
     }
 }
 
+fun Event.isLocationMessage(): Boolean {
+    return when (getMsgType()) {
+        MessageType.MSGTYPE_LOCATION -> true
+        else                         -> false
+    }
+}
+
 fun Event.isPoll(): Boolean = getClearType() in EventType.POLL_START || getClearType() in EventType.POLL_END
 
 fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER

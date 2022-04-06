@@ -47,10 +47,9 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.session.events.model.getMsgType
+import org.matrix.android.sdk.api.session.events.model.isLocationMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
 
@@ -217,7 +216,7 @@ class MessageActionsEpoxyController @Inject constructor(
     }
 
     private fun buildLocationUiData(state: MessageActionState): LocationUiData? {
-        if (state.timelineEvent()?.root?.getMsgType() != MessageType.MSGTYPE_LOCATION) return null
+        if (state.timelineEvent()?.root?.isLocationMessage() != true) return null
 
         val locationContent = state.timelineEvent()?.root?.getClearContent().toModel<MessageLocationContent>(catchError = true)
                 ?: return null
