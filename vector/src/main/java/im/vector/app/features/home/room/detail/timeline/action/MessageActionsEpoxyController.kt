@@ -223,10 +223,11 @@ class MessageActionsEpoxyController @Inject constructor(
         if (!isLocationEvent) return null
 
         val locationContent = clearContent.toModel<MessageLocationContent>(catchError = true)
-        val locationUrl = locationContent?.toLocationData()
+                ?: return null
+        val locationUrl = locationContent.toLocationData()
                 ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
                 ?: return null
-        val locationOwnerId = if (locationContent.isSelfLocation().orTrue()) state.informationData.matrixItem.id else null
+        val locationOwnerId = if (locationContent.isSelfLocation()) state.informationData.matrixItem.id else null
 
         return LocationUiData(
                 locationUrl = locationUrl,
