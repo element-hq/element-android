@@ -605,7 +605,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                             withContext(coroutineDispatchers.crypto) {
                                 cryptoStore.saveBackupRecoveryKey(recoveryKey, keysBackupVersion.version)
                             }
-                            Timber.i("onSecretKeyGossip: Recovered keys ${importResult.successfullyNumberOfImportedKeys} out of ${importResult.totalNumberOfKeys}")
+                            Timber.i("onSecretKeyGossip: Recovered keys $importResult")
                         } else {
                             Timber.e("onSecretKeyGossip: Recovery key is not valid ${keysBackupVersion.version}")
                         }
