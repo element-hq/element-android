@@ -33,17 +33,29 @@ internal class RoomMemberEventHandler @Inject constructor(
         @UserId private val myUserId: String
 ) {
 
-    fun handleInitialSync(realm: Realm,
-                          roomId: String,
-                          event: Event,
-                          aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
+    fun handle(realm: Realm,
+               roomId: String,
+               event: Event,
+               isInitialSync: Boolean,
+               aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
         if (event.type != EventType.STATE_ROOM_MEMBER) {
             return false
         }
         val roomMember = event.getFixedRoomMemberContent() ?: return false
         val eventUserId = event.stateKey ?: return false
 
-        return handleInitialSync(realm, roomId, myUserId, eventUserId, roomMember, aggregator)
+        return if (isInitialSync) {
+            handleInitialSync(realm, roomId, myUserId, eventUserId, roomMember, aggregator)
+        } else {
+            handleIncrementalSync(
+                    realm,
+                    roomId,
+                    eventUserId,
+                    roomMember,
+                    event.resolvedPrevContent(),
+                    aggregator
+            )
+        }
     }
 
     private fun handleInitialSync(realm: Realm,
@@ -104,26 +116,6 @@ internal class RoomMemberEventHandler @Inject constructor(
         if (mxId != null && mxId != myUserId) {
             aggregator?.directChatsToCheck?.put(roomId, mxId)
         }
-    }
-
-    fun handleIncrementalSync(realm: Realm,
-                              roomId: String,
-                              event: Event,
-                              aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
-        if (event.type != EventType.STATE_ROOM_MEMBER) {
-            return false
-        }
-        val roomMember = event.getFixedRoomMemberContent() ?: return false
-        val eventUserId = event.stateKey ?: return false
-
-        return handleIncrementalSync(
-                realm,
-                roomId,
-                eventUserId,
-                roomMember,
-                event.resolvedPrevContent(),
-                aggregator
-        )
     }
 
     private fun handleIncrementalSync(realm: Realm,
