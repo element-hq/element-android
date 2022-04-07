@@ -59,6 +59,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
             is DeactivateAccountAction.DeactivateAccount -> handleDeactivateAccount(action)
             DeactivateAccountAction.SsoAuthDone -> {
                 Timber.d("## UIA - FallBack success")
+                _viewEvents.post(DeactivateAccountViewEvents.Loading())
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
                 } else {
@@ -66,6 +67,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
                 }
             }
             is DeactivateAccountAction.PasswordAuthDone -> {
+                _viewEvents.post(DeactivateAccountViewEvents.Loading())
                 val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
