@@ -50,7 +50,6 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
@@ -147,6 +146,7 @@ class MessageItemFactory @Inject constructor(
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
         private val urlMapProvider: UrlMapProvider,
+        private val liveLocationMessageItemFactory: LiveLocationMessageItemFactory,
 ) {
 
     // TODO inject this properly?
@@ -214,19 +214,7 @@ class MessageItemFactory @Inject constructor(
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
             }
-            is LiveLocationBeaconContent         -> {
-                // TODO extract in method and in a dedicated factory class
-                // TODO check if it is still live and that the timeout has not elapsed
-                val width = timelineMediaSizeProvider.getMaxSize().first
-                val height = dimensionConverter.dpToPx(200)
-
-                return MessageLiveLocationStartItem_()
-                        .attributes(attributes)
-                        .mapWidth(width)
-                        .mapHeight(height)
-                        .highlighted(highlight)
-                        .leftGuideline(avatarSizeProvider.leftGuideline)
-            }
+            is LiveLocationBeaconContent         -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
