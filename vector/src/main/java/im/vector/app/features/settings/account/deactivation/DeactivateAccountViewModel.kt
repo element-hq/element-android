@@ -100,7 +100,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
                         }
                 )
                 DeactivateAccountViewEvents.Done
-            } catch (failure: Exception) {
+            } catch (failure: Throwable) {
                 if (failure.isInvalidUIAAuth()) {
                     DeactivateAccountViewEvents.InvalidAuth
                 } else {
