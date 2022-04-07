@@ -104,10 +104,12 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
 
     fun pause() = synchronized(lock) {
         if (isStarted) {
-            Timber.tag(loggerTag.value).d("Pause sync...")
+            Timber.tag(loggerTag.value).d("Pause sync... Not cancelling incremental sync")
             isStarted = false
             retryNoNetworkTask?.cancel()
-            syncScope.coroutineContext.cancelChildren()
+            // Do not cancel the current incremental sync.
+            // Incremental sync can be long and it requires the user to wait for the treatment to end,
+            // else all is restarted from the beginning each time the user moves the app to foreground.
         }
     }
 
