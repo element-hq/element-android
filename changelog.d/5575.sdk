@@ -1,3 +1,3 @@
 - Added currentRegistrationSessionId into RegistrationWizard to add possibility to perform custom sign up stage
-- Added registrationOther into RegistrationWizard to send custom auth params for sign up
+- Added registrationCustom into RegistrationWizard to send custom auth params for sign up
 - Moved terms converter into api package to make it accessible in sdk
