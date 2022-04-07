@@ -21,7 +21,7 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.core.content.FileProvider
 import im.vector.app.BuildConfig
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voice.VoiceRecorder
 import im.vector.app.features.voice.VoiceRecorderProvider
@@ -40,12 +40,13 @@ import javax.inject.Inject
 /**
  * Helper class to record audio for voice messages.
  */
-class VoiceMessageHelper @Inject constructor(
+class AudioMessageHelper @Inject constructor(
         private val context: Context,
-        private val playbackTracker: VoiceMessagePlaybackTracker,
+        private val playbackTracker: AudioMessagePlaybackTracker,
         voiceRecorderProvider: VoiceRecorderProvider
 ) {
     private var mediaPlayer: MediaPlayer? = null
+    private var currentPlayingId: String? = null
     private var voiceRecorder: VoiceRecorder = voiceRecorderProvider.provideVoiceRecorder()
 
     private val amplitudeList = mutableListOf<Int>()
@@ -58,7 +59,7 @@ class VoiceMessageHelper @Inject constructor(
         amplitudeList.clear()
         attachmentData.waveform?.let {
             amplitudeList.addAll(it)
-            playbackTracker.updateCurrentRecording(VoiceMessagePlaybackTracker.RECORDING_ID, amplitudeList)
+            playbackTracker.updateCurrentRecording(AudioMessagePlaybackTracker.RECORDING_ID, amplitudeList)
         }
     }
 
@@ -127,7 +128,7 @@ class VoiceMessageHelper @Inject constructor(
 
     fun startOrPauseRecordingPlayback() {
         voiceRecorder.getCurrentRecord()?.let {
-            startOrPausePlayback(VoiceMessagePlaybackTracker.RECORDING_ID, it)
+            startOrPausePlayback(AudioMessagePlaybackTracker.RECORDING_ID, it)
         }
     }
 
@@ -136,7 +137,8 @@ class VoiceMessageHelper @Inject constructor(
         mediaPlayer?.stop()
         stopPlaybackTicker()
         stopRecordingAmplitudes()
-        if (playbackState is VoiceMessagePlaybackTracker.Listener.State.Playing) {
+        currentPlayingId = null
+        if (playbackState is AudioMessagePlaybackTracker.Listener.State.Playing) {
             playbackTracker.pausePlayback(id)
         } else {
             startPlayback(id, file)
@@ -163,6 +165,7 @@ class VoiceMessageHelper @Inject constructor(
                     seekTo(currentPlaybackTime)
                 }
             }
+            currentPlayingId = id
         } catch (failure: Throwable) {
             Timber.e(failure, "Unable to start playback")
             throw VoiceFailure.UnableToPlay(failure)
@@ -171,17 +174,24 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     fun stopPlayback() {
-        playbackTracker.pausePlayback(VoiceMessagePlaybackTracker.RECORDING_ID)
+        playbackTracker.pausePlayback(AudioMessagePlaybackTracker.RECORDING_ID)
         mediaPlayer?.stop()
         stopPlaybackTicker()
+        currentPlayingId = null
     }
 
     fun movePlaybackTo(id: String, percentage: Float, totalDuration: Int) {
         val toMillisecond = (totalDuration * percentage).toInt()
-        playbackTracker.updateCurrentPlaybackTime(id, toMillisecond, percentage)
+        playbackTracker.pauseAllPlaybacks()
 
-        stopPlayback()
-        playbackTracker.pausePlayback(id)
+        if (currentPlayingId == id) {
+            mediaPlayer?.seekTo(toMillisecond)
+            playbackTracker.updatePlayingAtPlaybackTime(id, toMillisecond, percentage)
+        } else {
+            mediaPlayer?.pause()
+            playbackTracker.updatePausedAtPlaybackTime(id, toMillisecond, percentage)
+            stopPlaybackTicker()
+        }
     }
 
     private fun startRecordingAmplitudes() {
@@ -200,7 +210,7 @@ class VoiceMessageHelper @Inject constructor(
         try {
             val maxAmplitude = voiceRecorder.getMaxAmplitude()
             amplitudeList.add(maxAmplitude)
-            playbackTracker.updateCurrentRecording(VoiceMessagePlaybackTracker.RECORDING_ID, amplitudeList)
+            playbackTracker.updateCurrentRecording(AudioMessagePlaybackTracker.RECORDING_ID, amplitudeList)
         } catch (e: IllegalStateException) {
             Timber.e(e, "Cannot get max amplitude. Amplitude recording timer will be stopped.")
             stopRecordingAmplitudes()
@@ -233,7 +243,7 @@ class VoiceMessageHelper @Inject constructor(
             val currentPosition = mediaPlayer?.currentPosition ?: 0
             val totalDuration = mediaPlayer?.duration ?: 0
             val percentage = currentPosition.toFloat() / totalDuration
-            playbackTracker.updateCurrentPlaybackTime(id, currentPosition, percentage)
+            playbackTracker.updatePlayingAtPlaybackTime(id, currentPosition, percentage)
         } else {
             playbackTracker.stopPlayback(id)
             stopPlaybackTicker()

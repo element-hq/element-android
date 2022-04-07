@@ -41,6 +41,13 @@
         tools:visibility="gone" />
 
     <ViewStub
+        android:id="@+id/messageContentAudioStub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout="@layout/item_timeline_event_audio_stub"
+        tools:visibility="gone" />
+
+    <ViewStub
         android:id="@+id/messageContentPollStub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

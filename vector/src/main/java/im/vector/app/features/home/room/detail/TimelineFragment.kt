@@ -156,10 +156,11 @@ import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.image.buildImageContentRendererData
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageAudioItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
@@ -264,7 +265,7 @@ class TimelineFragment @Inject constructor(
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
-        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
+        private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val clock: Clock,
         private val matrixConfiguration: MatrixConfiguration
 ) :
@@ -737,7 +738,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun setupVoiceMessageView() {
-        voiceMessagePlaybackTracker.track(VoiceMessagePlaybackTracker.RECORDING_ID, views.voiceMessageRecorderView)
+        audioMessagePlaybackTracker.track(AudioMessagePlaybackTracker.RECORDING_ID, views.voiceMessageRecorderView)
         views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
 
             override fun onVoiceRecordingStarted() {
@@ -794,13 +795,13 @@ class TimelineFragment @Inject constructor(
 
             override fun onVoiceWaveformTouchedUp(percentage: Float, duration: Int) {
                 messageComposerViewModel.handle(
-                        MessageComposerAction.VoiceWaveformTouchedUp(VoiceMessagePlaybackTracker.RECORDING_ID, duration, percentage)
+                        MessageComposerAction.VoiceWaveformTouchedUp(AudioMessagePlaybackTracker.RECORDING_ID, duration, percentage)
                 )
             }
 
             override fun onVoiceWaveformMoved(percentage: Float, duration: Int) {
                 messageComposerViewModel.handle(
-                        MessageComposerAction.VoiceWaveformTouchedUp(VoiceMessagePlaybackTracker.RECORDING_ID, duration, percentage)
+                        MessageComposerAction.VoiceWaveformTouchedUp(AudioMessagePlaybackTracker.RECORDING_ID, duration, percentage)
                 )
             }
 
@@ -908,6 +909,7 @@ class TimelineFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
+        audioMessagePlaybackTracker.makeAllPlaybacksIdle()
         lazyLoadedViews.unBind()
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
@@ -1202,13 +1204,10 @@ class TimelineFragment @Inject constructor(
         }
 
         val messageContent: MessageContent? = event.getLastMessageContent()
-        val nonFormattedBody = if (messageContent is MessageAudioContent && messageContent.voiceMessageIndicator != null) {
-            val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
-            getString(R.string.voice_message_reply_content, formattedDuration)
-        } else if (messageContent is MessagePollContent) {
-            messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
-        } else {
-            messageContent?.body ?: ""
+        val nonFormattedBody = when (messageContent) {
+            is MessageAudioContent -> getAudioContentBodyText(messageContent)
+            is MessagePollContent  -> messageContent.getBestPollCreationInfo()?.question?.getBestQuestion()
+            else                   -> messageContent?.body.orEmpty()
         }
         var formattedBody: CharSequence? = null
         if (messageContent is MessageTextContent && messageContent.format == MessageFormat.FORMAT_MATRIX_HTML) {
@@ -1247,6 +1246,15 @@ class TimelineFragment @Inject constructor(
         focusComposerAndShowKeyboard()
     }
 
+    private fun getAudioContentBodyText(messageContent: MessageAudioContent): String {
+        val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
+        return if (messageContent.voiceMessageIndicator != null) {
+            getString(R.string.voice_message_reply_content, formattedDuration)
+        } else {
+            getString(R.string.audio_message_reply_content, messageContent.body, formattedDuration)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         notificationDrawerManager.setCurrentRoom(timelineArgs.roomId)
@@ -1271,7 +1279,7 @@ class TimelineFragment @Inject constructor(
     override fun onPause() {
         super.onPause()
         notificationDrawerManager.setCurrentRoom(null)
-        voiceMessagePlaybackTracker.unTrack(VoiceMessagePlaybackTracker.RECORDING_ID)
+        audioMessagePlaybackTracker.pauseAllPlaybacks()
 
         if (withState(messageComposerViewModel) { it.isVoiceRecording } && requireActivity().isChangingConfigurations) {
             // we're rotating, maintain any active recordings
@@ -1399,6 +1407,7 @@ class TimelineFragment @Inject constructor(
                     }
                     return when (model) {
                         is MessageFileItem,
+                        is MessageAudioItem,
                         is MessageVoiceItem,
                         is MessageImageVideoItem,
                         is MessageTextItem -> {
@@ -2086,6 +2095,10 @@ class TimelineFragment @Inject constructor(
 
     override fun onVoiceWaveformMovedTo(eventId: String, duration: Int, percentage: Float) {
         messageComposerViewModel.handle(MessageComposerAction.VoiceWaveformMovedTo(eventId, duration, percentage))
+    }
+
+    override fun onAudioSeekBarMovedTo(eventId: String, duration: Int, percentage: Float) {
+        messageComposerViewModel.handle(MessageComposerAction.AudioSeekBarMovedTo(eventId, duration, percentage))
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {

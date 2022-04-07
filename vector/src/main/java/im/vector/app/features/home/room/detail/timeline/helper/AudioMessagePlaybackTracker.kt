@@ -22,7 +22,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class VoiceMessagePlaybackTracker @Inject constructor() {
+class AudioMessagePlaybackTracker @Inject constructor() {
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private val listeners = mutableMapOf<String, Listener>()
@@ -33,7 +33,7 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
         activityListeners.add(listener)
     }
 
-    fun unTrackActivity(listener: ActivityListener) {
+    fun untrackActivity(listener: ActivityListener) {
         activityListeners.remove(listener)
     }
 
@@ -46,8 +46,14 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
         }
     }
 
-    fun unTrack(id: String) {
+    fun untrack(id: String) {
         listeners.remove(id)
+    }
+
+    fun pauseAllPlaybacks() {
+        listeners.keys.forEach { key ->
+            pausePlayback(key)
+        }
     }
 
     fun makeAllPlaybacksIdle() {
@@ -87,17 +93,23 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
     }
 
     fun pausePlayback(id: String) {
-        val currentPlaybackTime = getPlaybackTime(id)
-        val currentPercentage = getPercentage(id)
-        setState(id, Listener.State.Paused(currentPlaybackTime, currentPercentage))
+        if (getPlaybackState(id) is Listener.State.Playing) {
+            val currentPlaybackTime = getPlaybackTime(id)
+            val currentPercentage = getPercentage(id)
+            setState(id, Listener.State.Paused(currentPlaybackTime, currentPercentage))
+        }
     }
 
     fun stopPlayback(id: String) {
         setState(id, Listener.State.Idle)
     }
 
-    fun updateCurrentPlaybackTime(id: String, time: Int, percentage: Float) {
+    fun updatePlayingAtPlaybackTime(id: String, time: Int, percentage: Float) {
         setState(id, Listener.State.Playing(time, percentage))
+    }
+
+    fun updatePausedAtPlaybackTime(id: String, time: Int, percentage: Float) {
+        setState(id, Listener.State.Paused(time, percentage))
     }
 
     fun updateCurrentRecording(id: String, amplitudeList: List<Int>) {

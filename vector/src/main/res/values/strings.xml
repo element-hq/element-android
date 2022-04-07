@@ -2892,6 +2892,14 @@
     <string name="error_voice_message_cannot_reply_or_edit">Cannot reply or edit while voice message is active</string>
     <string name="voice_message_reply_content">Voice Message (%1$s)</string>
 
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string> <!-- filename, duration, file size -->
+    <string name="a11y_audio_playback_duration">%1$d minutes %2$d seconds</string>
+    <string name="a11y_play_audio_message">Play %1$s</string>
+    <string name="a11y_pause_audio_message">Pause %1$s</string>
+    <string name="error_audio_message_unable_to_play">Unable to play %1$s</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
 
