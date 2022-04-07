@@ -206,6 +206,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                          insertType: EventInsertType,
                                          syncLocalTimestampMillis: Long,
                                          aggregator: SyncResponsePostTreatmentAggregator): RoomEntity {
+        Timber.v("Handle join sync for room $roomId")
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
         val ephemeralResult = (roomSync.ephemeral as? LazyRoomSyncEphemeral.Parsed)

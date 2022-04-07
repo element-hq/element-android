@@ -35,10 +35,12 @@ internal class DefaultUserService @Inject constructor(private val userDataSource
         return userDataSource.getUser(userId)
     }
 
-    override suspend fun resolveUser(userId: String) = getUser(userId) ?: run {
-        val params = GetProfileInfoTask.Params(userId)
-        val json = getProfileInfoTask.execute(params)
-        User.fromJson(userId, json)
+    override suspend fun resolveUser(userId: String): User {
+        return getUser(userId) ?: run {
+            val params = GetProfileInfoTask.Params(userId)
+            val json = getProfileInfoTask.execute(params)
+            User.fromJson(userId, json)
+        }
     }
 
     override fun getUserLive(userId: String): LiveData<Optional<User>> {
