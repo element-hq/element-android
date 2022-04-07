@@ -34,8 +34,6 @@ import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.CancellationException
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
-import javax.net.ssl.HttpsURLConnection
 
 /**
  * Parent Fragment for all the login/registration screens
@@ -85,21 +83,8 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
             is CancellationException                  ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
-            is Failure.ServerError                    ->
-                if (throwable.error.code == MatrixError.M_FORBIDDEN &&
-                        throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
-                    MaterialAlertDialogBuilder(requireActivity())
-                            .setTitle(R.string.dialog_title_error)
-                            .setMessage(getString(R.string.login_registration_disabled))
-                            .setPositiveButton(R.string.ok, null)
-                            .show()
-                } else {
-                    onError(throwable)
-                }
-            is Failure.UnrecognizedCertificateFailure ->
-                showUnrecognizedCertificateFailure(throwable)
-            else                                      ->
-                onError(throwable)
+            is Failure.UnrecognizedCertificateFailure -> showUnrecognizedCertificateFailure(throwable)
+            else                                      -> onError(throwable)
         }
     }
 

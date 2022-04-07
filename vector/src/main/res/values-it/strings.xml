@@ -494,7 +494,7 @@
     <string name="send_bug_report_rage_shake">Per segnalare un errore agita il dispositivo con rabbia</string>
     <string name="start_voice_call_prompt_msg">Sicuro di voler fare una chiamata audio\?</string>
     <string name="start_video_call_prompt_msg">Sicuro di voler fare una videochiamata\?</string>
-    <string name="list_members">Elenco dei membri</string>
+    <string name="list_members">Membri</string>
     <plurals name="room_title_members">
         <item quantity="one">%d utente</item>
         <item quantity="other">%d utenti</item>
@@ -1948,7 +1948,7 @@
     <string name="you_are_invited">Sei stato invitato</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Gli Spazi sono un nuovo modo per raggruppare stanze e contatti.</string>
     <string name="space_add_existing_rooms">Aggiungi stanze e Spazi esistenti</string>
-    <string name="leave_space">Esci dallo Spazio</string>
+    <string name="leave_space">Esci</string>
     <string name="space_add_child_title">Aggiungi stanze</string>
     <string name="space_explore_activity_title">Guarda le stanze</string>
     <plurals name="space_people_you_know">
@@ -2410,4 +2410,23 @@
     </plurals>
     <string name="room_notification_two_users_are_typing">%1$s e %2$s</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s e altri</string>
+    <string name="location_share_live_stop">Ferma</string>
+    <string name="location_share_live_enabled">Posizione in tempo reale attivata</string>
+    <string name="location_in_background_missing_permission_dialog_content">Se vuoi condividere la tua posizione in tempo reale, ${app_name} richiede l\'accesso alla posizione costantemente quando l\'app è in secondo piano.
+\nAccederemo alla tua posizione solo per la durata che scegli.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Permetti accesso</string>
+    <string name="a11y_location_share_option_pinned_icon">Condividi questa posizione</string>
+    <string name="location_share_option_pinned">Condividi questa posizione</string>
+    <string name="a11y_location_share_option_user_live_icon">Condividi posizione in tempo reale</string>
+    <string name="location_share_option_user_live">Condividi posizione in tempo reale</string>
+    <string name="a11y_location_share_option_user_current_icon">Condividi la mia posizione attuale</string>
+    <string name="location_share_option_user_current">Condividi la mia posizione attuale</string>
+    <string name="a11y_location_share_locate_button">Ingrandisci alla posizione attuale</string>
+    <string name="a11y_location_share_pin_on_map">Puntina della posizione selezionata sulla mappa</string>
+    <string name="threads_notice_migration_message">Siamo vicini ad iniziare una beta pubblica delle conversazioni.
+\n
+\nMentre ci prepariamo, dobbiamo fare alcune modifiche: le conversazioni create prima di questo momento saranno mostrate come normali risposte.
+\n
+\nSarà una transizione una-tantum, dato che le conversazioni ora sono parte delle specifiche di Matrix.</string>
+    <string name="threads_notice_migration_title">I messaggi in conversazioni entrano in beta 🎉</string>
 </resources>

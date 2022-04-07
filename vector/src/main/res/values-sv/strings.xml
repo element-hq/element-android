@@ -378,7 +378,7 @@
     <string name="action_remove">Ta bort</string>
     <string name="action_join">Gå med</string>
     <string name="action_reject">Avslå</string>
-    <string name="list_members">Lista medlemmar</string>
+    <string name="list_members">Medlemmar</string>
     <string name="room_jump_to_first_unread">Hoppa till oläst</string>
     <plurals name="room_title_members">
         <item quantity="one">%d medlem</item>
@@ -2012,7 +2012,7 @@
     <string name="you_are_invited">Du är inbjuden</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Utrymmen är ett nytt sätt att gruppera rum och personer.</string>
     <string name="space_add_existing_rooms">Lägg till existerande rum och utrymme</string>
-    <string name="leave_space">Lämna utrymme</string>
+    <string name="leave_space">Lämna</string>
     <string name="space_add_child_title">Lägg till rum</string>
     <string name="space_explore_activity_title">Utforska rum</string>
     <plurals name="space_people_you_know">
@@ -2419,4 +2419,23 @@
         <item quantity="one">%d server-ACL-ändring</item>
         <item quantity="other">%d server-ACL-ändringar</item>
     </plurals>
+    <string name="threads_notice_migration_title">Trådar närmar sig beta 🎉</string>
+    <string name="location_share_live_stop">Stoppa</string>
+    <string name="location_share_live_enabled">Kontinuerligt plats aktiverad</string>
+    <string name="location_in_background_missing_permission_dialog_content">Om du vill dela din plats kontinuerligt så behöver ${app_name} åtkomst till din plats hela tiden när appen är i bakgrunden.
+\nVi kommer bara använda din plats under tiden du väljer.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Tillåt åtkomst</string>
+    <string name="a11y_location_share_option_pinned_icon">Dela den här platsen</string>
+    <string name="location_share_option_pinned">Dela den här platsen</string>
+    <string name="a11y_location_share_option_user_live_icon">Dela plats kontinuerligt</string>
+    <string name="location_share_option_user_live">Dela plats kontinuerligt</string>
+    <string name="a11y_location_share_option_user_current_icon">Dela min nuvarande plats</string>
+    <string name="location_share_option_user_current">Dela min nuvarande plats</string>
+    <string name="a11y_location_share_locate_button">Zooma in till nuvarande plats</string>
+    <string name="a11y_location_share_pin_on_map">Nål för vald plats på kartan</string>
+    <string name="threads_notice_migration_message">Vi kommer närmare att släppa en offentlig beta för trådar.
+\n
+\nMedan vi förbereder den så behöver vi göra några ändringar: trådar skapade innan den här tidpunkten kommer att visas som vanliga svar.
+\n
+\nDet kommer att vara en engångshändelse, eftersom trådar nu är en del av Matrixspecifikationen.</string>
 </resources>

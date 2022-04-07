@@ -111,9 +111,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY"
         private const val SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
 
-        // flair
-        const val SETTINGS_GROUPS_FLAIR_KEY = "SETTINGS_GROUPS_FLAIR_KEY"
-
         // notifications
         const val SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY = "SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
         const val SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY = "SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
@@ -866,6 +863,17 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun useMessageBubblesLayout(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_INTERFACE_BUBBLE_KEY, getDefault(R.bool.settings_interface_bubble_default))
+    }
+
+    /**
+     * Update the rage shake enabled status.
+     *
+     * @param isEnabled true to enable rage shake.
+     */
+    fun setRageshakeEnabled(isEnabled: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled)
+        }
     }
 
     /**

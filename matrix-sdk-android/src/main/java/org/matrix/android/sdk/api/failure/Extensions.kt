@@ -29,6 +29,11 @@ fun Throwable.is401() =
                 httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED && /* 401 */
                 error.code == MatrixError.M_UNAUTHORIZED
 
+fun Throwable.is404() =
+        this is Failure.ServerError &&
+                httpCode == HttpsURLConnection.HTTP_NOT_FOUND && /* 404 */
+                error.code == MatrixError.M_NOT_FOUND
+
 fun Throwable.isTokenError() =
         this is Failure.ServerError &&
                 (error.code == MatrixError.M_UNKNOWN_TOKEN ||
@@ -58,10 +63,34 @@ fun Throwable.getRetryDelay(defaultValue: Long): Long {
             ?: defaultValue
 }
 
+fun Throwable.isUsernameInUse(): Boolean {
+    return this is Failure.ServerError && error.code == MatrixError.M_USER_IN_USE
+}
+
+fun Throwable.isInvalidUsername(): Boolean {
+    return this is Failure.ServerError &&
+            error.code == MatrixError.M_INVALID_USERNAME
+}
+
 fun Throwable.isInvalidPassword(): Boolean {
     return this is Failure.ServerError &&
             error.code == MatrixError.M_FORBIDDEN &&
             error.message == "Invalid password"
+}
+
+fun Throwable.isRegistrationDisabled(): Boolean {
+    return this is Failure.ServerError && error.code == MatrixError.M_FORBIDDEN &&
+            httpCode == HttpsURLConnection.HTTP_FORBIDDEN
+}
+
+fun Throwable.isWeakPassword(): Boolean {
+    return this is Failure.ServerError && error.code == MatrixError.M_WEAK_PASSWORD
+}
+
+fun Throwable.isLoginEmailUnknown(): Boolean {
+    return this is Failure.ServerError &&
+            error.code == MatrixError.M_FORBIDDEN &&
+            error.message.isEmpty()
 }
 
 fun Throwable.isInvalidUIAAuth(): Boolean {
@@ -104,8 +133,8 @@ fun Throwable.isRegistrationAvailabilityError(): Boolean {
     return this is Failure.ServerError &&
             httpCode == HttpsURLConnection.HTTP_BAD_REQUEST && /* 400 */
             (error.code == MatrixError.M_USER_IN_USE ||
-            error.code == MatrixError.M_INVALID_USERNAME ||
-            error.code == MatrixError.M_EXCLUSIVE)
+                    error.code == MatrixError.M_INVALID_USERNAME ||
+                    error.code == MatrixError.M_EXCLUSIVE)
 }
 
 /**

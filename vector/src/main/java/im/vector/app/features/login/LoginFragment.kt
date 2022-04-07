@@ -28,8 +28,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
@@ -127,7 +125,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
             error++
         }
         if (isSignupMode && isNumericOnlyUserIdForbidden && login.isDigitsOnly()) {
-            views.loginFieldTil.error = "The homeserver does not accept username with only digits."
+            views.loginFieldTil.error = getString(R.string.error_forbidden_digits_only_username)
             error++
         }
         if (password.isEmpty()) {
@@ -269,7 +267,6 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
         setupButtons(state)
 
         when (state.asyncLoginAction) {
-            Uninitialized,
             is Loading -> {
                 // Ensure password is hidden
                 views.passwordField.hidePassword()
@@ -292,7 +289,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 }
             }
             // Success is handled by the LoginActivity
-            is Success -> Unit
+            else       -> Unit
         }
 
         when (state.asyncRegistration) {

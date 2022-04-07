@@ -134,7 +134,7 @@
         <item quantity="other">%d perubahan keanggotaan</item>
     </plurals>
     <string name="call">Panggilan</string>
-    <string name="list_members">Daftar Anggota</string>
+    <string name="list_members">Anggota</string>
     <string name="room_jump_to_first_unread">Arahkan ke pesan yang belum dibaca</string>
     <plurals name="room_title_members">
         <item quantity="other">%d anggota</item>
@@ -1727,7 +1727,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_leave_prompt_msg_private">Anda tidak akan dapat bergabung lagi kecuali jika Anda diundang lagi.</string>
     <string name="space_leave_prompt_msg_only_you">Anda orang satu-satunya di sini. Jika Anda tinggalkan, siapa saja tidak dapat bergabung di masa depan, termasuk Anda.</string>
     <string name="space_leave_prompt_msg_with_name">Apakah Anda yakin untuk meninggalkan %s\?</string>
-    <string name="leave_space">Tinggalkan Space</string>
+    <string name="leave_space">Tinggalkan</string>
     <string name="space_add_child_title">Tambahkan ruangan</string>
     <string name="space_explore_activity_title">Jelajah ruangan</string>
     <plurals name="space_people_you_know">
@@ -2374,4 +2374,23 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s dan lainnya</string>
     <string name="room_notification_two_users_are_typing">%1$s dan %2$s</string>
+    <string name="location_share_live_stop">Berhenti</string>
+    <string name="location_share_live_enabled">Lokasi langsung diaktifkan</string>
+    <string name="location_in_background_missing_permission_dialog_content">Jika Anda ingin membagikan lokasi langsung Anda, ${app_name} membutuhkan akses ke lokasi selama aplikasinya di latar belakang.
+\nKami hanya akan mengakses lokasi Anda untuk durasi yang Anda pilih.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Perbolehkan akses</string>
+    <string name="a11y_location_share_option_pinned_icon">Bagikan lokasi ini</string>
+    <string name="location_share_option_pinned">Bagikan lokasi ini</string>
+    <string name="a11y_location_share_option_user_live_icon">Bagikan lokasi langsung</string>
+    <string name="location_share_option_user_live">Bagikan lokasi langsung</string>
+    <string name="a11y_location_share_option_user_current_icon">Bagikan lokasi saya saat ini</string>
+    <string name="location_share_option_user_current">Bagikan lokasi saya saat ini</string>
+    <string name="a11y_location_share_locate_button">Perbesar ke lokasi saat ini</string>
+    <string name="a11y_location_share_pin_on_map">Pin dari lokasi yang terpilih pada peta</string>
+    <string name="threads_notice_migration_message">Kami hampir dekat untuk meriliskan sebuah Beta publik untuk Utasan.
+\n
+\nSaat kami mempersiapkan, kami harus membuat beberapa perubahan: utasan dibuat sebelum titik ini akan <strong>ditampilkan sebagai balasan biasa</strong>.
+\n
+\nIni hanya transisi sekali, utasan sekarang sebagai bagian dari spesifikasi Matrix.</string>
+    <string name="threads_notice_migration_title">Utasan Mencapai Beta 🎉</string>
 </resources>

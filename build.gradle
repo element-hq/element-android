@@ -21,7 +21,7 @@ buildscript {
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
         classpath "com.likethesalad.android:stem-plugin:2.0.0"
-
+        classpath 'org.owasp:dependency-check-gradle:7.0.4.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -30,6 +30,16 @@ buildscript {
 // ktlint Plugin
 plugins {
     id "org.jlleitschuh.gradle.ktlint" version "10.2.1"
+}
+
+// https://github.com/jeremylong/DependencyCheck
+apply plugin: 'org.owasp.dependencycheck'
+
+dependencyCheck {
+    // See https://jeremylong.github.io/DependencyCheck/general/suppression.html
+    suppressionFiles = [
+            "./tools/dependencycheck/suppressions.xml"
+    ]
 }
 
 allprojects {
@@ -51,7 +61,7 @@ allprojects {
         }
         // Jitsi repo
         maven {
-            url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-3.10.0"
+            url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-5.0.2"
             // Note: to test Jitsi release you can use a local file like this:
             // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-3.10.0"
             content {
@@ -87,6 +97,8 @@ allprojects {
 
     // See https://github.com/JLLeitschuh/ktlint-gradle#configuration
     ktlint {
+        // See https://github.com/pinterest/ktlint/releases/
+        version = "0.45.1"
         android = true
         ignoreFailures = false
         enableExperimentalRules = true
@@ -96,7 +108,16 @@ allprojects {
                 "spacing-between-declarations-with-comments",
                 "no-multi-spaces",
                 "experimental:spacing-between-declarations-with-annotations",
-                "experimental:annotation"
+                "experimental:annotation",
+                // - Missing newline after "("
+                // - Missing newline before ")"
+                "wrapping",
+                // - Unnecessary trailing comma before ")"
+                "experimental:trailing-comma",
+                // - A block comment in between other elements on the same line is disallowed
+                "experimental:comment-wrapping",
+                // - A KDoc comment after any other element on the same line must be separated by a new line
+                "experimental:kdoc-wrapping",
         ]
     }
 }

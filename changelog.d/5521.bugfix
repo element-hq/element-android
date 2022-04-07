@@ -1,1 +1,0 @@
-Fix mentions using matrix.to rather than client defined permalink base url

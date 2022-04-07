@@ -18,6 +18,7 @@ package im.vector.app.features.settings
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.widget.CheckedTextView
 import androidx.core.view.children
 import androidx.preference.Preference
@@ -32,6 +33,7 @@ import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.databinding.DialogSelectTextSizeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
@@ -52,6 +54,11 @@ class VectorSettingsPreferencesFragment @Inject constructor(
     }
     private val takePhotoOrVideoPreference by lazy {
         findPreference<VectorPreference>("SETTINGS_INTERFACE_TAKE_PHOTO_VIDEO")!!
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SettingsPreferences
     }
 
     override fun bindPref() {
@@ -117,7 +124,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 false
             }
         }
-        */
+         */
 
         // update keep medias period
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_MEDIA_SAVING_PERIOD_KEY)!!.let {

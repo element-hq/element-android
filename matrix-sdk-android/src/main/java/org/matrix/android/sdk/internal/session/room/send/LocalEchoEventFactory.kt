@@ -43,6 +43,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollConte
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
@@ -240,6 +241,32 @@ internal class LocalEchoEventFactory @Inject constructor(
                 unstableText = geoUri
         )
         return createMessageEvent(roomId, content)
+    }
+
+    fun createLiveLocationEvent(beaconInfoEventId: String,
+                                roomId: String,
+                                latitude: Double,
+                                longitude: Double,
+                                uncertainty: Double?): Event {
+        val geoUri = buildGeoUri(latitude, longitude, uncertainty)
+        val content = MessageLiveLocationContent(
+                body = geoUri,
+                relatesTo = RelationDefaultContent(
+                        type = RelationType.REFERENCE,
+                        eventId = beaconInfoEventId
+                ),
+                unstableLocationInfo = LocationInfo(geoUri = geoUri, description = geoUri),
+                unstableTs = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()),
+        )
+        val localId = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localId,
+                type = EventType.BEACON_LOCATION_DATA.first(),
+                content = content.toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localId))
     }
 
     fun createReplaceTextOfReply(roomId: String,

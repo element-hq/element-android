@@ -43,7 +43,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Start synapse server
-        uses: michaelkaye/setup-matrix-synapse@v0.4.0
+        uses: michaelkaye/setup-matrix-synapse@v1.0.1
         with:
           uploadLogs: true
           httpPort: 8080
@@ -174,7 +174,7 @@ jobs:
       # package: class PermalinkParserTest
       - name: Find Comment
         if: always() && github.event_name == 'pull_request'
-        uses: peter-evans/find-comment@v1
+        uses: peter-evans/find-comment@v2
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -182,7 +182,7 @@ jobs:
           body-includes: Integration Tests Results
       - name: Publish results to PR
         if: always() && github.event_name == 'pull_request'
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
@@ -230,7 +230,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Start synapse server
-        uses: michaelkaye/setup-matrix-synapse@v0.4.0
+        uses: michaelkaye/setup-matrix-synapse@v1.0.1
         with:
           uploadLogs: true
           httpPort: 8080
@@ -293,7 +293,7 @@ jobs:
   sonarqube:
     name: Sonarqube upload
     runs-on: macos-latest
-    if: always()
+    if: always() && github.event_name == 'schedule'
     needs:
       - codecov-units
     steps:
@@ -319,7 +319,7 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
 
-# Notify the channel about scheduled runs, do not notify for manually triggered runs
+# Notify the channel about scheduled runs, or pushes to the release branches, do not notify for manually triggered runs
   notify:
     name: Notify matrix
     runs-on: ubuntu-latest
@@ -335,5 +335,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
           matrix_room_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
-          text_template: "Nightly test run: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
-          html_template: "Nightly test run results: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion}} {{name}} <font color='{{color conclusion}}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"
+          text_template: "{{#if '${{ github.event_name }}' == 'schedule' }}Nightly test run{{else}}Test run (on ${{ github.ref }}){{/if }}: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
+          html_template: "{{#if '${{ github.event_name }}' == 'schedule' }}Nightly test run{{else}}Test run (on ${{ github.ref }}){{/if }}: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion}} {{name}} <font color='{{color conclusion}}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"

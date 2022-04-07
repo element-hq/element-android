@@ -123,8 +123,8 @@
     <string name="notice_widget_removed_by_you">Du hast das %1$s Widget entfernt</string>
     <string name="notice_widget_modified">%1$s hat das %2$s Widget modifiziert</string>
     <string name="notice_widget_modified_by_you">Du hast das %1$s Widget modifiziert</string>
-    <string name="power_level_admin">Admin</string>
-    <string name="power_level_moderator">Moderation</string>
+    <string name="power_level_admin">Administrator</string>
+    <string name="power_level_moderator">Moderator</string>
     <string name="power_level_default">Standard</string>
     <string name="power_level_custom">Benutzerdefiniert (%1$d)</string>
     <string name="power_level_custom_no_value">Benutzerdefiniert</string>
@@ -1261,8 +1261,8 @@
     <string name="room_member_power_level_custom">Benutzerdefiniert</string>
     <string name="room_member_power_level_invites">Eingeladen</string>
     <string name="room_member_power_level_users">Nutzer</string>
-    <string name="room_member_power_level_admin_in">Admin in %1$s</string>
-    <string name="room_member_power_level_moderator_in">Moderation in %1$s</string>
+    <string name="room_member_power_level_admin_in">Administrator in %1$s</string>
+    <string name="room_member_power_level_moderator_in">Moderator in %1$s</string>
     <string name="room_member_jump_to_read_receipt">Springen und als gelesen markieren</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} kann keine Ereignisse vom Typ \'%1$s\'</string>
     <string name="rendering_event_error_exception">${app_name} ist beim Verarbeiten des Ereignisinhalts mit der ID \'%1$s\' auf ein Problem gestoßen</string>
@@ -2418,4 +2418,14 @@
         <item quantity="one">%d Server-ACL geändert</item>
         <item quantity="other">%d Server-ACLs geändert</item>
     </plurals>
+    <string name="location_share_live_stop">Beenden</string>
+    <string name="location_share_live_enabled">Live-Standort aktiviert</string>
+    <string name="location_in_background_missing_permission_dialog_title">Zugriff erlauben</string>
+    <string name="a11y_location_share_option_pinned_icon">Standort teilen</string>
+    <string name="location_share_option_pinned">Standort teilen</string>
+    <string name="location_share_option_user_current">Meinen Standort teilen</string>
+    <string name="a11y_location_share_option_user_current_icon">Meinen Standort teilen</string>
+    <string name="a11y_location_share_option_user_live_icon">Live-Standort teilen</string>
+    <string name="location_share_option_user_live">Live-Standort teilen</string>
+    <string name="threads_notice_migration_title">Threads nähern sich der Beta 🎉</string>
 </resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- This file contains url values-->
+
+    <string name="threads_learn_more_url" translatable="false">https://element.io/help#threads</string>
+</resources>

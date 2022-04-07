@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/messageThreadSummaryImageView"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:layout_marginTop="2dp"
         android:contentDescription="@string/room_threads_filter"
         android:src="@drawable/ic_thread_summary"

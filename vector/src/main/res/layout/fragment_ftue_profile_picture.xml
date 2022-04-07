@@ -122,13 +122,13 @@
             android:gravity="center"
             android:text="@string/ftue_profile_picture_subtitle"
             android:textColor="?vctr_content_secondary"
-            app:layout_constraintBottom_toTopOf="@id/actionsSpacing"
+            app:layout_constraintBottom_toTopOf="@id/entrySpacing"
             app:layout_constraintEnd_toEndOf="@id/profilePictureGutterEnd"
             app:layout_constraintStart_toStartOf="@id/profilePictureGutterStart"
             app:layout_constraintTop_toBottomOf="@id/profilePictureHeaderTitle" />
 
         <Space
-            android:id="@+id/actionsSpacing"
+            android:id="@+id/entrySpacing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/profilePictureSubmit"
@@ -145,7 +145,7 @@
             app:layout_constraintBottom_toTopOf="@id/profilePictureSkip"
             app:layout_constraintEnd_toEndOf="@id/profilePictureGutterEnd"
             app:layout_constraintStart_toStartOf="@id/profilePictureGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/actionsSpacing" />
+            app:layout_constraintTop_toBottomOf="@id/entrySpacing" />
 
         <Button
             android:id="@+id/profilePictureSkip"

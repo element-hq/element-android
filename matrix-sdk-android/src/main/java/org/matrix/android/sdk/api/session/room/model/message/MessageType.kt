@@ -33,10 +33,13 @@ object MessageType {
     const val MSGTYPE_STICKER_LOCAL = "org.matrix.android.sdk.sticker"
 
     // Fake message types for poll events to be able to inherit them from MessageContent
-    // Because poll events are not message events and they don't hanve msgtype field
+    // Because poll events are not message events and they don't have msgtype field
     const val MSGTYPE_POLL_START = "org.matrix.android.sdk.poll.start"
     const val MSGTYPE_POLL_RESPONSE = "org.matrix.android.sdk.poll.response"
 
     const val MSGTYPE_CONFETTI = "nic.custom.confetti"
     const val MSGTYPE_SNOWFALL = "io.element.effect.snowfall"
+
+    // Fake message types for live location events to be able to inherit them from MessageContent
+    const val MSGTYPE_LIVE_LOCATION = "org.matrix.android.sdk.livelocation"
 }

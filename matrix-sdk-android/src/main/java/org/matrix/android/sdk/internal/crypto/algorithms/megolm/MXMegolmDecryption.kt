@@ -318,19 +318,20 @@ internal class MXMegolmDecryption(private val userId: String,
 
             outgoingGossipingRequestManager.cancelRoomKeyRequest(content)
 
-            onNewSession(senderKey, roomKeyContent.sessionId)
+            onNewSession(roomKeyContent.roomId, senderKey, roomKeyContent.sessionId)
         }
     }
 
     /**
      * Check if the some messages can be decrypted with a new session
      *
+     * @param roomId the room id where the new Megolm session has been created for, may be null when importing from external sessions
      * @param senderKey the session sender key
      * @param sessionId the session id
      */
-    override fun onNewSession(senderKey: String, sessionId: String) {
+    fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
         Timber.tag(loggerTag.value).v("ON NEW SESSION $sessionId - $senderKey")
-        newSessionListener?.onNewSession(null, senderKey, sessionId)
+        newSessionListener?.onNewSession(roomId, senderKey, sessionId)
     }
 
     override fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean {

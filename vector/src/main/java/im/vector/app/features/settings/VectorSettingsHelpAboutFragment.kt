@@ -16,6 +16,7 @@
 
 package im.vector.app.features.settings
 
+import android.os.Bundle
 import androidx.preference.Preference
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -24,6 +25,7 @@ import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openAppSettingsPage
 import im.vector.app.core.utils.openUrlInChromeCustomTab
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.version.VersionProvider
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
@@ -36,6 +38,11 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
     override val preferenceXmlRes = R.xml.vector_settings_help_about
 
     private val firstThrottler = FirstThrottler(1000)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SettingsHelp
+    }
 
     override fun bindPref() {
         // Help
