@@ -55,6 +55,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
@@ -328,7 +329,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
     private suspend fun fetchProfileInfo() {
         val result = runCatchingToAsync {
             session.getProfile(initialState.userId)
-                    .let { MatrixItem.UserItem.fromJson(initialState.userId, it) }
+                    .let { User.fromJson(initialState.userId, it).toMatrixItem() }
         }
 
         setState {

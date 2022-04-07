@@ -19,7 +19,6 @@ package org.matrix.android.sdk.api.util
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
-import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
@@ -44,14 +43,6 @@ sealed class MatrixItem(
         }
 
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
-
-        companion object {
-            fun fromJson(userId: String, profileJson: JsonDict) = UserItem(
-                    id = userId,
-                    displayName = profileJson[ProfileService.DISPLAY_NAME_KEY] as? String,
-                    avatarUrl = profileJson[ProfileService.AVATAR_URL_KEY] as? String
-            )
-        }
     }
 
     data class EveryoneInRoomItem(override val id: String,

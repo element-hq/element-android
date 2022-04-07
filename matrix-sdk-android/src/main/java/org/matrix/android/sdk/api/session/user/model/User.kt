@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.user.model
 
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.MatrixItem
 
 /**
  * Data class which holds information about a user.
@@ -31,6 +32,8 @@ data class User(
         val displayName: String? = null,
         val avatarUrl: String? = null
 ) {
+
+    fun toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)
 
     companion object {
 

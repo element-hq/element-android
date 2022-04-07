@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.sync.handler
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.profile.ProfileService
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
@@ -92,6 +93,6 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
 
     private suspend fun fetchUsers(usersToFetch: MutableList<String>) = usersToFetch.map {
         val profileJson = profileService.getProfile(it)
-        MatrixItem.UserItem.fromJson(it, profileJson)
+        User.fromJson(it, profileJson).toMatrixItem()
     }
 }
