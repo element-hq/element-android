@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
