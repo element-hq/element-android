@@ -46,7 +46,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 EventType.MESSAGE,
                 EventType.ENCRYPTED,
                 EventType.STICKER
-        ) + EventType.POLL_START
+        ) + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
 
         // Can't be rendered in bubbles, so get back to default layout
         private val MSG_TYPES_WITHOUT_BUBBLE_LAYOUT = setOf(
@@ -58,10 +58,13 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 MessageType.MSGTYPE_IMAGE,
                 MessageType.MSGTYPE_VIDEO,
                 MessageType.MSGTYPE_STICKER_LOCAL,
-                MessageType.MSGTYPE_EMOTE
+                MessageType.MSGTYPE_EMOTE,
+                MessageType.MSGTYPE_LIVE_LOCATION_STATE,
         )
         private val MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY = setOf(
-                MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_VIDEO
+                MessageType.MSGTYPE_IMAGE,
+                MessageType.MSGTYPE_VIDEO,
+                MessageType.MSGTYPE_LIVE_LOCATION_STATE,
         )
     }
 
@@ -70,7 +73,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
     }
 
     private val isRTL: Boolean by lazy {
-       localeProvider.isRTL()
+        localeProvider.isRTL()
     }
 
     fun create(params: TimelineItemFactoryParams): TimelineMessageLayout {
