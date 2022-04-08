@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.withState
 import im.vector.app.R
@@ -55,25 +56,23 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
         views.loginSignupSigninSignIn.setOnClickListener { signIn() }
     }
 
-    private fun setupUi(state: OnboardingViewState) {
+    private fun render(state: OnboardingViewState) {
         when (state.serverType) {
-            ServerType.MatrixOrg -> {
-                views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
-                views.loginSignupSigninServerIcon.isVisible = true
-                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl())
-                views.loginSignupSigninText.text = getString(R.string.login_server_matrix_org_text)
-            }
-            ServerType.EMS       -> {
-                views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_element_matrix_services)
-                views.loginSignupSigninServerIcon.isVisible = true
-                views.loginSignupSigninTitle.text = getString(R.string.login_connect_to_modular)
-                views.loginSignupSigninText.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
-            }
-            ServerType.Other     -> {
-                views.loginSignupSigninServerIcon.isVisible = false
-                views.loginSignupSigninTitle.text = getString(R.string.login_server_other_title)
-                views.loginSignupSigninText.text = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl())
-            }
+            ServerType.MatrixOrg -> renderServerInformation(
+                    icon = R.drawable.ic_logo_matrix_org,
+                    title = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl()),
+                    subtitle = getString(R.string.login_server_matrix_org_text)
+            )
+            ServerType.EMS       -> renderServerInformation(
+                    icon = R.drawable.ic_logo_element_matrix_services,
+                    title = getString(R.string.login_connect_to_modular),
+                    subtitle = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+            )
+            ServerType.Other     -> renderServerInformation(
+                    icon = null,
+                    title = getString(R.string.login_server_other_title),
+                    subtitle = getString(R.string.login_connect_to, state.selectedHomeserver.userFacingUrl.toReducedUrl())
+            )
             ServerType.Unknown   -> Unit /* Should not happen */
         }
 
@@ -98,6 +97,14 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                 views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = null
             }
         }
+    }
+
+    private fun renderServerInformation(@DrawableRes icon: Int?, title: String, subtitle: String) {
+        icon?.let { views.loginSignupSigninServerIcon.setImageResource(it) }
+        views.loginSignupSigninServerIcon.isVisible = icon != null
+        views.loginSignupSigninServerIcon.setImageResource(R.drawable.ic_logo_matrix_org)
+        views.loginSignupSigninTitle.text = title
+        views.loginSignupSigninText.text = subtitle
     }
 
     private fun setupButtons(state: OnboardingViewState) {
@@ -136,7 +143,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        setupUi(state)
+        render(state)
         setupButtons(state)
     }
 }
