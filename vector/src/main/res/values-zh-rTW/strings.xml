@@ -326,7 +326,7 @@
     <string name="action_remove">移除</string>
     <string name="action_join">加入</string>
     <string name="action_reject">拒絕</string>
-    <string name="list_members">列出成員</string>
+    <string name="list_members">成員</string>
     <string name="room_jump_to_first_unread">跳到未讀</string>
     <plurals name="room_title_members">
         <item quantity="other">%d 個成員</item>
@@ -1922,7 +1922,7 @@
     <string name="you_are_invited">您被邀請了</string>
     <string name="spaces_beta_welcome_to_spaces_desc">空間是將聊天室與人們分組的新方式。</string>
     <string name="space_add_existing_rooms">新增既有的聊天室與空間</string>
-    <string name="leave_space">離開空間</string>
+    <string name="leave_space">離開</string>
     <string name="space_add_child_title">新增聊天室</string>
     <string name="space_explore_activity_title">探索聊天室</string>
     <plurals name="space_people_you_know">
@@ -2372,4 +2372,23 @@
     </plurals>
     <string name="room_notification_two_users_are_typing">%1$s 與 %2$s</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s、%2$s 與其他人</string>
+    <string name="location_share_live_stop">停止</string>
+    <string name="location_share_live_enabled">即時位置已啟用</string>
+    <string name="location_in_background_missing_permission_dialog_content">若您想要分享您的即時位置，${app_name} 需要當應用程式在背景時隨時存取位置的權限。
+\n我們將只會在您選擇的期間內存取您的位置。</string>
+    <string name="location_in_background_missing_permission_dialog_title">允許存取</string>
+    <string name="a11y_location_share_option_pinned_icon">分享此位置</string>
+    <string name="location_share_option_pinned">分享此位置</string>
+    <string name="a11y_location_share_option_user_live_icon">分享即時位置</string>
+    <string name="location_share_option_user_live">分享即時位置</string>
+    <string name="a11y_location_share_option_user_current_icon">分享我目前的位置</string>
+    <string name="location_share_option_user_current">分享我目前的位置</string>
+    <string name="a11y_location_share_locate_button">縮放至目前位置</string>
+    <string name="a11y_location_share_pin_on_map">地圖上選定位置的圖釘</string>
+    <string name="threads_notice_migration_message">我們愈來愈接近將討論串釋出為公開測試版。
+\n
+\n在我們為此做準備時，我們需要做出一些變動：先前建立的討論串將會顯示為一般回覆。
+\n
+\n這會是一次性的過渡，因為討論串現在是 Matrix 規範的一部分了。</string>
+    <string name="threads_notice_migration_title">討論串接近測試版了 🎉</string>
 </resources>

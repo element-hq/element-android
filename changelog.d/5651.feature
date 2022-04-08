@@ -1,1 +1,0 @@
-Send beacon info state event when live location sharing started

@@ -450,7 +450,8 @@ class MessageActionsViewModel @AssistedInject constructor(
     private fun canReplyInThread(event: TimelineEvent,
                                  messageContent: MessageContent?,
                                  actionPermissions: ActionPermissions): Boolean {
-        if (!vectorPreferences.areThreadMessagesEnabled()) return false
+        // We let reply in thread visible even if threads are not enabled, with an enhanced flow to attract users
+//        if (!vectorPreferences.areThreadMessagesEnabled()) return false
         if (initialState.isFromThreadTimeline) return false
         if (event.root.isThread()) return false
         if (event.root.getClearType() != EventType.MESSAGE &&

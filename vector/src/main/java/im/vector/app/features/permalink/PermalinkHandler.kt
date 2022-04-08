@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import javax.inject.Inject
 
 class PermalinkHandler @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
@@ -89,7 +90,13 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
 
                 val rootThreadEventId = permalinkData.eventId?.let { eventId ->
                     val room = roomId?.let { session?.getRoom(it) }
-                    room?.getTimelineEvent(eventId)?.root?.getRootThreadEventId()
+
+                    val rootThreadEventId = room?.getTimelineEvent(eventId)?.root?.getRootThreadEventId()
+                    rootThreadEventId ?: if (room?.getTimelineEvent(eventId)?.isRootThread() == true) {
+                        eventId
+                    } else {
+                        null
+                    }
                 }
                 openRoom(
                         navigationInterceptor,

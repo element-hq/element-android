@@ -360,6 +360,7 @@
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
     <string name="action_not_now">Not now</string>
+    <string name="action_try_it_out">Try it out</string>
     <string name="action_agree">Agree</string>
     <string name="action_change">"Change"</string>
     <string name="action_remove">Remove</string>
@@ -384,6 +385,7 @@
     <string name="action_play">Play</string>
     <string name="action_dismiss">Dismiss</string>
     <string name="action_reset">Reset</string>
+    <string name="action_learn_more">Learn more</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -734,6 +736,9 @@
     <string name="search_thread_from_a_thread">From a Thread</string>
     <string name="threads_notice_migration_title">Threads Approaching Beta 🎉</string>
     <string name="threads_notice_migration_message">We’re getting closer to releasing a public Beta for Threads.\n\nAs we prepare for it, we need to make some changes: threads created before this point will be displayed as regular replies.\n\nThis will be a one-off transition as Threads are now part of the Matrix specification.</string>
+    <string name="threads_beta_enable_notice_title">Threads Beta</string>
+    <!-- %s will be replaced with action_learn_more string resource that will be clickable(url redirection)  -->
+    <string name="threads_beta_enable_notice_message">Threads help keep your conversations on-topic and easy to track. %sEnabling threads will refresh the app. This may take longer for some accounts.</string>
 
     <!-- Search -->
     <string name="search_hint">Search</string>
@@ -1555,7 +1560,7 @@
 
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>
-    <string name="reply_in_thread">Reply In Thread</string>
+    <string name="reply_in_thread">Reply in thread</string>
     <string name="view_in_room">View In Room</string>
 
     <string name="global_retry">Retry</string>
@@ -1648,6 +1653,7 @@
     <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
     <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
 
+    <string name="beta_title_bottom_sheet_action">BETA</string>
     <string name="send_feedback_space_title">Spaces feedback</string>
     <string name="feedback">Feedback</string>
     <string name="send_feedback_space_info">You’re using a beta version of spaces. Your feedback will help inform the next versions. Your platform and username will be noted to help us use your feedback as much as we can.</string>
@@ -1655,6 +1661,10 @@
     <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
     <string name="feedback_failed">The feedback failed to be sent (%s)</string>
     <string name="give_feedback">Give Feedback</string>
+    <string name="give_feedback_threads">Give Feedback</string>
+    <string name="send_feedback_threads_title">Threads Beta feedback</string>
+    <string name="send_feedback_threads_info">Threads are a work in progress with new, exciting upcoming features, such as improved notifications. We’d love to hear your feedback!</string>
+    <string name="beta">BETA</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">"Show complete history in encrypted rooms"</string>
@@ -1857,7 +1867,7 @@
     <string name="ftue_auth_carousel_control_body">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
     <string name="ftue_auth_carousel_encrypted_body">End-to-end encrypted and no phone number required. No ads or datamining.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="ftue_auth_carousel_workplace_body" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 
     <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
     <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected.</string>
@@ -2744,7 +2754,7 @@
 
     <string name="public_space">Public space</string>
     <string name="private_space">Private space</string>
-    <string name="add_space">Add Space</string>
+    <string name="add_space">Add space</string>
     <string name="your_public_space">Your public space</string>
     <string name="your_private_space">Your private space</string>
     <string name="create_spaces_choose_type_label">What type of space do you want to create?</string>
@@ -2788,7 +2798,7 @@
     <!-- First one is the space name, and the second one is the matrix.to link -->
     <string name="share_space_link_message">Join my space %1$s %2$s</string>
     <string name="skip_for_now">Skip for now</string>
-    <string name="create_space">Create Space</string>
+    <string name="create_space">Create space</string>
     <string name="join_space">Join Space</string>
     <string name="join_anyway">Join Anyway</string>
     <string name="room_alias_preview_not_found">This alias is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
@@ -2887,6 +2897,14 @@
     <string name="error_voice_message_cannot_reply_or_edit">Cannot reply or edit while voice message is active</string>
     <string name="voice_message_reply_content">Voice Message (%1$s)</string>
 
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string> <!-- filename, duration, file size -->
+    <string name="a11y_audio_playback_duration">%1$d minutes %2$d seconds</string>
+    <string name="a11y_play_audio_message">Play %1$s</string>
+    <string name="a11y_pause_audio_message">Pause %1$s</string>
+    <string name="error_audio_message_unable_to_play">Unable to play %1$s</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
 
@@ -2966,6 +2984,10 @@
     <string name="a11y_location_share_option_user_live_icon">Share live location</string>
     <string name="location_share_option_pinned">Share this location</string>
     <string name="a11y_location_share_option_pinned_icon">Share this location</string>
+    <string name="location_share_live_select_duration_title">Share your live location for</string>
+    <string name="location_share_live_select_duration_option_1">15 minutes</string>
+    <string name="location_share_live_select_duration_option_2">1 hour</string>
+    <string name="location_share_live_select_duration_option_3">8 hours</string>
     <string name="location_in_background_missing_permission_dialog_title">Allow access</string>
     <string name="location_in_background_missing_permission_dialog_content">If you’d like to share your Live location, ${app_name} needs location access all the time when the app is in the background.\nWe will only access your location for the duration that you choose.</string>
     <string name="location_not_available_dialog_title">${app_name} could not access your location</string>

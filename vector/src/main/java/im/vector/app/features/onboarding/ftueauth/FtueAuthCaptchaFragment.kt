@@ -77,7 +77,7 @@ class FtueAuthCaptchaFragment @Inject constructor(
         val mime = "text/html"
         val encoding = "utf-8"
 
-        val homeServerUrl = state.homeServerUrl ?: error("missing url of homeserver")
+        val homeServerUrl = state.selectedHomeserver.upstreamUrl ?: error("missing url of homeserver")
         views.loginCaptchaWevView.loadDataWithBaseURL(homeServerUrl, html, mime, encoding, null)
         views.loginCaptchaWevView.requestLayout()
 

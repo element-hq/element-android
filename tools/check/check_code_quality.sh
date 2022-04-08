@@ -66,7 +66,7 @@ echo "Search for forbidden patterns in code..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt \
     ./matrix-sdk-android/src/main/java \
-    ./matrix-sdk-android-rx/src/main/java \
+    ./matrix-sdk-android-flow/src/main/java \
     ./vector/src/main/java \
     ./vector/src/debug/java \
     ./vector/src/release/java \
@@ -80,7 +80,7 @@ echo "Search for forbidden patterns specific for SDK code..."
 
 ${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code_sdk.txt \
     ./matrix-sdk-android/src \
-    ./matrix-sdk-android-rx/src
+    ./matrix-sdk-android-flow/src
 
 resultForbiddenStringInCodeSdk=$?
 
@@ -131,7 +131,7 @@ echo "Search for kotlin files with more than ${maxLines} lines..."
 
 ${checkLongFilesScript} ${maxLines} \
     ./matrix-sdk-android/src/main/java \
-    ./matrix-sdk-android-rx/src/main/java \
+    ./matrix-sdk-android-flow/src/main/java \
     ./vector/src/androidTest/java \
     ./vector/src/debug/java \
     ./vector/src/fdroid/java \

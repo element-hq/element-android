@@ -45,7 +45,9 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupLastVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.util.awaitCallback
@@ -103,9 +105,9 @@ class BootstrapSharedViewModel @AssistedInject constructor(
 
                 // We need to check if there is an existing backup
                 viewModelScope.launch(Dispatchers.IO) {
-                    val version = awaitCallback<KeysVersionResult?> {
+                    val version = awaitCallback<KeysBackupLastVersionResult> {
                         session.cryptoService().keysBackupService().getCurrentVersion(it)
-                    }
+                    }.toKeysVersionResult()
                     if (version == null) {
                         // we just resume plain bootstrap
                         doesKeyBackupExist = false

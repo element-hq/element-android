@@ -41,6 +41,7 @@ import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.ObjectSigner
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupLastVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrustSignature
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
@@ -54,6 +55,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteBackupTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteRoomSessionDataTask
@@ -586,21 +588,28 @@ internal class DefaultKeysBackupService @Inject constructor(
 
         cryptoCoroutineScope.launch(coroutineDispatchers.main) {
             try {
-                val keysBackupVersion = getKeysBackupLastVersionTask.execute(Unit)
-                val recoveryKey = computeRecoveryKey(secret.fromBase64())
-                if (isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)) {
-                    awaitCallback<Unit> {
-                        trustKeysBackupVersion(keysBackupVersion, true, it)
+                when (val keysBackupLastVersionResult = getKeysBackupLastVersionTask.execute(Unit)) {
+                    KeysBackupLastVersionResult.NoKeysBackup  -> {
+                        Timber.d("No keys backup found")
                     }
-                    val importResult = awaitCallback<ImportRoomKeysResult> {
-                        restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, null, null, null, it)
+                    is KeysBackupLastVersionResult.KeysBackup -> {
+                        val keysBackupVersion = keysBackupLastVersionResult.keysVersionResult
+                        val recoveryKey = computeRecoveryKey(secret.fromBase64())
+                        if (isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)) {
+                            awaitCallback<Unit> {
+                                trustKeysBackupVersion(keysBackupVersion, true, it)
+                            }
+                            val importResult = awaitCallback<ImportRoomKeysResult> {
+                                restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, null, null, null, it)
+                            }
+                            withContext(coroutineDispatchers.crypto) {
+                                cryptoStore.saveBackupRecoveryKey(recoveryKey, keysBackupVersion.version)
+                            }
+                            Timber.i("onSecretKeyGossip: Recovered keys $importResult")
+                        } else {
+                            Timber.e("onSecretKeyGossip: Recovery key is not valid ${keysBackupVersion.version}")
+                        }
                     }
-                    withContext(coroutineDispatchers.crypto) {
-                        cryptoStore.saveBackupRecoveryKey(recoveryKey, keysBackupVersion.version)
-                    }
-                    Timber.i("onSecretKeyGossip: Recovered keys ${importResult.successfullyNumberOfImportedKeys} out of ${importResult.totalNumberOfKeys}")
-                } else {
-                    Timber.e("onSecretKeyGossip: Recovery key is not valid ${keysBackupVersion.version}")
                 }
             } catch (failure: Throwable) {
                 Timber.e("onSecretKeyGossip: failed to trust key backup version ${keysBackupVersion?.version}")
@@ -875,63 +884,49 @@ internal class DefaultKeysBackupService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun getCurrentVersion(callback: MatrixCallback<KeysVersionResult?>) {
+    override fun getCurrentVersion(callback: MatrixCallback<KeysBackupLastVersionResult>) {
         getKeysBackupLastVersionTask
                 .configureWith {
-                    this.callback = object : MatrixCallback<KeysVersionResult> {
-                        override fun onSuccess(data: KeysVersionResult) {
-                            callback.onSuccess(data)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            if (failure is Failure.ServerError &&
-                                    failure.error.code == MatrixError.M_NOT_FOUND) {
-                                // Workaround because the homeserver currently returns M_NOT_FOUND when there is no key backup
-                                callback.onSuccess(null)
-                            } else {
-                                // Transmit the error
-                                callback.onFailure(failure)
-                            }
-                        }
-                    }
+                    this.callback = callback
                 }
                 .executeBy(taskExecutor)
     }
 
     override fun forceUsingLastVersion(callback: MatrixCallback<Boolean>) {
-        getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
-            override fun onSuccess(data: KeysVersionResult?) {
+        getCurrentVersion(object : MatrixCallback<KeysBackupLastVersionResult> {
+            override fun onSuccess(data: KeysBackupLastVersionResult) {
                 val localBackupVersion = keysBackupVersion?.version
-                val serverBackupVersion = data?.version
-
-                if (serverBackupVersion == null) {
-                    if (localBackupVersion == null) {
-                        // No backup on the server, and backup is not active
-                        callback.onSuccess(true)
-                    } else {
-                        // No backup on the server, and we are currently backing up, so stop backing up
-                        callback.onSuccess(false)
-                        resetKeysBackupData()
-                        keysBackupVersion = null
-                        keysBackupStateManager.state = KeysBackupState.Disabled
-                    }
-                } else {
-                    if (localBackupVersion == null) {
-                        // backup on the server, and backup is not active
-                        callback.onSuccess(false)
-                        // Do a check
-                        checkAndStartWithKeysBackupVersion(data)
-                    } else {
-                        // Backup on the server, and we are currently backing up, compare version
-                        if (localBackupVersion == serverBackupVersion) {
-                            // We are already using the last version of the backup
+                when (data) {
+                    KeysBackupLastVersionResult.NoKeysBackup  -> {
+                        if (localBackupVersion == null) {
+                            // No backup on the server, and backup is not active
                             callback.onSuccess(true)
                         } else {
-                            // We are not using the last version, so delete the current version we are using on the server
+                            // No backup on the server, and we are currently backing up, so stop backing up
                             callback.onSuccess(false)
+                            resetKeysBackupData()
+                            keysBackupVersion = null
+                            keysBackupStateManager.state = KeysBackupState.Disabled
+                        }
+                    }
+                    is KeysBackupLastVersionResult.KeysBackup -> {
+                        if (localBackupVersion == null) {
+                            // backup on the server, and backup is not active
+                            callback.onSuccess(false)
+                            // Do a check
+                            checkAndStartWithKeysBackupVersion(data.keysVersionResult)
+                        } else {
+                            // Backup on the server, and we are currently backing up, compare version
+                            if (localBackupVersion == data.keysVersionResult.version) {
+                                // We are already using the last version of the backup
+                                callback.onSuccess(true)
+                            } else {
+                                // We are not using the last version, so delete the current version we are using on the server
+                                callback.onSuccess(false)
 
-                            // This will automatically check for the last version then
-                            deleteBackup(localBackupVersion, null)
+                                // This will automatically check for the last version then
+                                deleteBackup(localBackupVersion, null)
+                            }
                         }
                     }
                 }
@@ -954,9 +949,9 @@ internal class DefaultKeysBackupService @Inject constructor(
         keysBackupVersion = null
         keysBackupStateManager.state = KeysBackupState.CheckingBackUpOnHomeserver
 
-        getCurrentVersion(object : MatrixCallback<KeysVersionResult?> {
-            override fun onSuccess(data: KeysVersionResult?) {
-                checkAndStartWithKeysBackupVersion(data)
+        getCurrentVersion(object : MatrixCallback<KeysBackupLastVersionResult> {
+            override fun onSuccess(data: KeysBackupLastVersionResult) {
+                checkAndStartWithKeysBackupVersion(data.toKeysVersionResult())
             }
 
             override fun onFailure(failure: Throwable) {

@@ -27,7 +27,7 @@ import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.lib.core.utils.timer.CountUpTimer
 import javax.inject.Inject
 import kotlin.math.floor
@@ -40,7 +40,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), VoiceMessagePlaybackTracker.Listener {
+) : ConstraintLayout(context, attrs, defStyleAttr), AudioMessagePlaybackTracker.Listener {
 
     interface Callback {
         fun onVoiceRecordingStarted()
@@ -222,16 +222,16 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         recordingTicker = null
     }
 
-    override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
+    override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
         when (state) {
-            is VoiceMessagePlaybackTracker.Listener.State.Recording -> {
+            is AudioMessagePlaybackTracker.Listener.State.Recording -> {
                 voiceMessageViews.renderRecordingWaveform(state.amplitudeList.toTypedArray())
             }
-            is VoiceMessagePlaybackTracker.Listener.State.Playing   -> {
+            is AudioMessagePlaybackTracker.Listener.State.Playing   -> {
                 voiceMessageViews.renderPlaying(state)
             }
-            is VoiceMessagePlaybackTracker.Listener.State.Paused,
-            is VoiceMessagePlaybackTracker.Listener.State.Idle      -> {
+            is AudioMessagePlaybackTracker.Listener.State.Paused,
+            is AudioMessagePlaybackTracker.Listener.State.Idle      -> {
                 voiceMessageViews.renderIdle()
             }
         }

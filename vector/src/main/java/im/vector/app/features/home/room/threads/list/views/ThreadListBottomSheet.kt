@@ -61,11 +61,11 @@ class ThreadListBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetThr
         val radioOnDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_radio_on)
 
         if (state.shouldFilterThreads) {
-            setRightIconDrawableAllThreads(radioOffDrawable, R.attr.vctr_content_primary)
+            setRightIconDrawableAllThreads(radioOffDrawable, R.attr.vctr_content_secondary)
             setRightIconDrawableMyThreads(radioOnDrawable, R.attr.colorPrimary)
         } else {
             setRightIconDrawableAllThreads(radioOnDrawable, R.attr.colorPrimary)
-            setRightIconDrawableMyThreads(radioOffDrawable, R.attr.vctr_content_primary)
+            setRightIconDrawableMyThreads(radioOffDrawable, R.attr.vctr_content_secondary)
         }
     }
 

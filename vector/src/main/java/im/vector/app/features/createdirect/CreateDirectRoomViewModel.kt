@@ -26,11 +26,14 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.CreatedRoom
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -41,7 +44,8 @@ import org.matrix.android.sdk.api.session.user.model.User
 class CreateDirectRoomViewModel @AssistedInject constructor(
         @Assisted initialState: CreateDirectRoomViewState,
         private val rawService: RawService,
-        val session: Session
+        val session: Session,
+        val analyticsTracker: AnalyticsTracker
 ) :
         VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
@@ -117,6 +121,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
             val result = runCatchingToAsync {
                 session.createRoom(roomParams)
             }
+            analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
 
             setState {
                 copy(
