@@ -43,12 +43,14 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.chooseServerRoot.realignPercentagesToParent()
+        setupViews()
+    }
 
+    private fun setupViews() {
+        views.chooseServerRoot.realignPercentagesToParent()
         views.chooseServerToolbar.setNavigationOnClickListener {
             viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnBack))
         }
-
         views.chooseServerInput.editText?.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
@@ -57,12 +59,8 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
             }
             false
         }
-
         views.chooseServerGetInTouch.debouncedClicks { openUrlInExternalBrowser(requireContext(), getString(R.string.ftue_ems_url)) }
-
-        views.chooseServerSubmit.debouncedClicks {
-            updateServerUrl()
-        }
+        views.chooseServerSubmit.debouncedClicks { updateServerUrl() }
     }
 
     private fun updateServerUrl() {
