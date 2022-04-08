@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="notice_room_invite_no_invitee">Zaproszenie od %s</string>
     <string name="notice_room_invite">%1$s zaprosił(a) %2$s</string>
     <string name="notice_room_invite_you">%1$s zaprosił(a) Cię</string>
@@ -1952,7 +1952,7 @@
     <string name="this_space_has_no_rooms_admin">Niektóre pokoje mogą być ukryte, gdyż są prywatne i wymagają od Ciebie zaproszenia.</string>
     <string name="this_space_has_no_rooms_not_admin">Niektóre pokoje mogą być ukryte, gdyż są prywatne i wymagają od Ciebie zaproszenia. 
 \nNie masz uprawnień aby dodawać pokoje.</string>
-    <string name="this_space_has_no_rooms">W tej Przestrzeni nie ma żadnych pokojów</string>
+    <string name="this_space_has_no_rooms">W tej przestrzeni nie ma żadnych pokojów</string>
     <string name="spaces_no_server_support_description">Proszę skontaktować się z administratorem Twojego serwera domowego aby uzyskać więcej informacji</string>
     <string name="spaces_no_server_support_title">Wygląda na to, że Twój serwer domowy jeszcze nie obsługuje Przestrzeni</string>
     <string name="spaces_feeling_experimental_subspace">Lubisz eksperymentować\?
@@ -2455,4 +2455,99 @@
     <string name="poll_end_room_list_preview">Ankieta zakończona</string>
     <string name="poll_response_room_list_preview">Oddano głos</string>
     <string name="end_poll_confirmation_approve_button">Zakończ ankietę</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">I jeszcze %1$d</item>
+        <item quantity="few">I jeszcze %1$d</item>
+        <item quantity="many">I jeszcze %1$d</item>
+        <item quantity="other">I jeszcze %1$d</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Wynik końcowy na podstawie %1$d głosu</item>
+        <item quantity="few">Wynik końcowy na podstawie %1$d głosów</item>
+        <item quantity="many">Wynik końcowy na podstawie %1$d głosów</item>
+        <item quantity="other">Wynik końcowy na podstawie %1$d głosów</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">Oddano %1$d głos. Głosuj, aby zobaczyć wyniki</item>
+        <item quantity="few">Oddano %1$d głosy. Głosuj, aby zobaczyć wyniki</item>
+        <item quantity="many">Oddano %1$d głosów. Głosuj, aby zobaczyć wyniki</item>
+        <item quantity="other">Oddano %1$d głosów. Głosuj, aby zobaczyć wyniki</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">W oparciu o %1$d głos</item>
+        <item quantity="few">W oparciu o %1$d głosy</item>
+        <item quantity="many">W oparciu o %1$d głosów</item>
+        <item quantity="other">W oparciu o %1$d głosów</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d głos</item>
+        <item quantity="few">%1$d głosy</item>
+        <item quantity="many">%1$d głosów</item>
+        <item quantity="other">%1$d głosów</item>
+    </plurals>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Wymagana jest co najmniej %1$s opcja</item>
+        <item quantity="few">Wymagane są co najmniej %1$s opcje</item>
+        <item quantity="many">Wymaganych jest co najmniej %1$s opcji</item>
+        <item quantity="other">Wymaganych jest co najmniej %1$s opcji</item>
+    </plurals>
+    <string name="threads_notice_migration_message">Zbliżamy się do udostępnienia publicznej wersji beta dla wątków.
+\n
+\nPrzygotowując się do tego, musimy wprowadzić pewne zmiany: wątki utworzone przed tym punktem będą wyświetlane jako zwykłe odpowiedzi.
+\n
+\nBędzie to jednorazowe przejście, ponieważ wątki są teraz częścią specyfikacji Matrix.</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d zmieniony ACL serwera</item>
+        <item quantity="few">%d zmienione ACL serwera</item>
+        <item quantity="many">%d zmienionych ACL serwera</item>
+        <item quantity="other">%d zmienionych ACL serwera</item>
+    </plurals>
+    <string name="message_reaction_show_less">Pokaż mniej</string>
+    <string name="tooltip_attachment_location">Udostępnij lokalizację</string>
+    <string name="message_bubbles">Pokaż dymki wiadomości</string>
+    <string name="live_location_sharing_notification_description">Trwa udostępnianie lokalizacji</string>
+    <string name="live_location_sharing_notification_title">Lokalizacja na żywo ${app_name}</string>
+    <string name="location_share_live_stop">Zatrzymaj</string>
+    <string name="location_share_live_enabled">Włączona lokalizacja na żywo</string>
+    <string name="location_timeline_failed_to_load_map">Nie udało się wczytać mapy</string>
+    <string name="labs_render_locations_in_timeline">Renderuj lokalizacje użytkowników na osi czasu</string>
+    <string name="settings_enable_location_sharing_summary">Po włączeniu będziesz mógł wysłać swoją lokalizację do dowolnego pokoju</string>
+    <string name="settings_enable_location_sharing">Włącz udostępnianie lokalizacji</string>
+    <string name="location_share_external">Otwórz za pomocą</string>
+    <string name="location_not_available_dialog_content">${app_name} nie może uzyskać dostępu do Twojej lokalizacji. Spróbuj ponownie później.</string>
+    <string name="location_not_available_dialog_title">${app_name} nie może uzyskać dostępu do Twojej lokalizacji</string>
+    <string name="location_in_background_missing_permission_dialog_content">Jeśli chcesz udostępniać swoją lokalizację na żywo, ${app_name} potrzebuje dostępu do lokalizacji przez cały czas, gdy aplikacja działa w tle.
+\n Będziemy mieć dostęp do Twojej lokalizacji tylko przez wybrany przez Ciebie okres.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Zgoda na dostęp</string>
+    <string name="a11y_location_share_option_pinned_icon">Udostępnij tę lokalizację</string>
+    <string name="location_share_option_pinned">Udostępnij tę lokalizację</string>
+    <string name="a11y_location_share_option_user_live_icon">Udostępnij lokalizację na żywo</string>
+    <string name="location_share_option_user_live">Udostępnij lokalizację na żywo</string>
+    <string name="a11y_location_share_option_user_current_icon">Udostępnij moją aktualną lokalizację</string>
+    <string name="location_share_option_user_current">Udostępnij moją aktualną lokalizację</string>
+    <string name="a11y_location_share_locate_button">Powiększ do bieżącej lokalizacji</string>
+    <string name="a11y_location_share_pin_on_map">Przypnij na mapie wybraną lokalizację</string>
+    <string name="location_share" tools:ignore="UnusedResources">Udostępnij lokalizację</string>
+    <string name="a11y_static_map_image">Mapa</string>
+    <string name="a11y_location_share_icon" tools:ignore="UnusedResources">Udostępnij lokalizację</string>
+    <string name="location_activity_title_preview">Lokalizacja</string>
+    <string name="location_activity_title_static_sharing">Udostępnij lokalizację</string>
+    <string name="closed_poll_option_description">Wyniki są ujawniane dopiero po zakończeniu ankiety</string>
+    <string name="closed_poll_option_title">Ankieta zamknięta</string>
+    <string name="open_poll_option_description">Głosujący widzą wyniki zaraz po oddaniu głosu</string>
+    <string name="open_poll_option_title">Otwarta ankieta</string>
+    <string name="poll_type_title">Rodzaj ankiety</string>
+    <string name="edit_poll_title">Modyfikacja ankiety</string>
+    <string name="a11y_poll_winner_option">opcja zwyciężająca</string>
+    <string name="poll_no_votes_cast">Brak głosów</string>
+    <string name="this_invite_to_this_space_was_sent">Zaproszenie do tej przestrzeni zostało wysłane do %s, które nie jest powiązane z Twoim kontem</string>
+    <string name="this_invite_to_this_room_was_sent">Zaproszenie do tego pokoju zostało wysłane do %s, które nie jest powiązane z Twoim kontem</string>
+    <string name="upgrade_room_for_restricted_no_param">Każdy w przestrzeni nadrzędnej będzie mógł znaleźć ten pokój i dołączyć do niego — nie ma potrzeby ręcznego zapraszania wszystkich. W każdej chwili możesz to zmienić w ustawieniach pokoju.</string>
+    <string name="upgrade_room_update_parent_space">Automatycznie aktualizuj nadrzędną przestrzeń</string>
+    <string name="labs_auto_report_uisi_desc">Twój system automatycznie wyśle dzienniki, gdy wystąpi błąd niemożności odszyfrowania</string>
+    <string name="labs_auto_report_uisi">Błędy automatycznego deszyfrowania raportów.</string>
+    <string name="command_description_leave_room">Opuść pokój o podanym identyfikatorze (lub aktualny pokój, jeśli null)</string>
+    <string name="sent_location">Udostępnili swoją lokalizację</string>
+    <string name="room_message_notify_everyone">Powiadom cały pokój</string>
+    <string name="room_message_autocomplete_users">Użytkownicy</string>
 </resources>
