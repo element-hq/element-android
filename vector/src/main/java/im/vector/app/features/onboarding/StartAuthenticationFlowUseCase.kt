@@ -17,7 +17,7 @@
 package im.vector.app.features.onboarding
 
 import im.vector.app.R
-import im.vector.app.core.extensions.containsAll
+import im.vector.app.core.extensions.containsAllItems
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.login.LoginMode
@@ -59,10 +59,10 @@ class StartAuthenticationFlowUseCase @Inject constructor(
     private fun matrixOrgUrl() = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
     private fun LoginFlowResult.findPreferredLoginMode() = when {
-        supportedLoginTypes.containsAll(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders)
-        supportedLoginTypes.contains(LoginFlowTypes.SSO)                             -> LoginMode.Sso(ssoIdentityProviders)
-        supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)                        -> LoginMode.Password
-        else                                                                         -> LoginMode.Unsupported
+        supportedLoginTypes.containsAllItems(LoginFlowTypes.SSO, LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(ssoIdentityProviders)
+        supportedLoginTypes.contains(LoginFlowTypes.SSO)                                  -> LoginMode.Sso(ssoIdentityProviders)
+        supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)                             -> LoginMode.Password
+        else                                                                              -> LoginMode.Unsupported
     }
 
     data class StartAuthenticationResult(
