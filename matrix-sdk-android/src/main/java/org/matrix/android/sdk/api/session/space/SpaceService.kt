@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
+import org.matrix.android.sdk.api.session.space.peeking.SpacePeekResult
 
 typealias SpaceSummaryQueryParams = RoomSummaryQueryParams
 
