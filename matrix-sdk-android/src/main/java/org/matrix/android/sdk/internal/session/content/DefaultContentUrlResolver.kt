@@ -19,9 +19,9 @@ package org.matrix.android.sdk.internal.session.content
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.MatrixUrls.removeMxcPrefix
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.session.contentscanner.ScanEncryptorUtils
 import org.matrix.android.sdk.internal.session.contentscanner.model.toJson

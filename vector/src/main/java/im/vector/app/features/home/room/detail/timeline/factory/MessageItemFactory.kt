@@ -91,6 +91,7 @@ import im.vector.app.features.voice.AudioWaveformView
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
+import org.matrix.android.sdk.api.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
@@ -115,7 +116,6 @@ import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.MimeTypes
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import javax.inject.Inject
