@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'realm-android'
+apply plugin: "org.jetbrains.dokka"
 
 buildscript {
     repositories {
@@ -10,6 +11,7 @@ buildscript {
     }
     dependencies {
         classpath "io.realm:realm-gradle-plugin:10.9.0"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.10"
     }
 }
 
