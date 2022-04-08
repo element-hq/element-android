@@ -29,8 +29,14 @@ sealed interface OnboardingAction : VectorViewModelAction {
     data class OnIAlreadyHaveAnAccount(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction
 
     data class UpdateServerType(val serverType: ServerType) : OnboardingAction
-    data class SelectHomeServer(val homeServerUrl: String) : OnboardingAction
-    data class EditHomeServer(val homeServerUrl: String) : OnboardingAction
+
+    sealed interface HomeServerChange : OnboardingAction {
+        val homeServerUrl: String
+
+        data class SelectHomeServer(override val homeServerUrl: String) : HomeServerChange
+        data class EditHomeServer(override val homeServerUrl: String) : HomeServerChange
+    }
+
     data class UpdateUseCase(val useCase: FtueUseCase) : OnboardingAction
     object ResetUseCase : OnboardingAction
     data class UpdateSignMode(val signMode: SignMode) : OnboardingAction

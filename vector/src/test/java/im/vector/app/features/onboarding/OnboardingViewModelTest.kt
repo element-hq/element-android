@@ -241,7 +241,7 @@ class OnboardingViewModelTest {
         fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(false, SELECTED_HOMESERVER_STATE))
         fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
 
-        viewModel.handle(OnboardingAction.EditHomeServer(A_HOMESERVER_URL))
+        viewModel.handle(OnboardingAction.HomeServerChange.EditHomeServer(A_HOMESERVER_URL))
 
         test
                 .assertStatesChanges(

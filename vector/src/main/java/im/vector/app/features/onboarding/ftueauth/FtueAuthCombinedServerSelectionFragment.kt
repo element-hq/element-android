@@ -66,7 +66,7 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
     }
 
     private fun updateServerUrl() {
-        viewModel.handle(OnboardingAction.EditHomeServer(views.chooseServerInput.content().ensureProtocol().ensureTrailingSlash()))
+        viewModel.handle(OnboardingAction.HomeServerChange.EditHomeServer(views.chooseServerInput.content().ensureProtocol().ensureTrailingSlash()))
     }
 
     override fun resetViewModel() {

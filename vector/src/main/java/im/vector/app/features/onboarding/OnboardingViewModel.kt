@@ -140,8 +140,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
-            is OnboardingAction.SelectHomeServer           -> run { lastAction = action }.also { handleHomeserverChange(action.homeServerUrl) }
-            is OnboardingAction.EditHomeServer             -> run { lastAction = action }.also { handleHomeserverChange(action.homeServerUrl) }
+            is OnboardingAction.HomeServerChange           -> withAction(action) { handleHomeserverChange(action.homeServerUrl) }
             is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
             is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
@@ -161,6 +160,11 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
             OnboardingAction.StopEmailValidationCheck      -> cancelWaitForEmailValidation()
         }
+    }
+
+    private fun withAction(action: OnboardingAction, block: (OnboardingAction) -> Unit) {
+        lastAction = action
+        block(action)
     }
 
     private fun handleSplashAction(resetConfig: Boolean, onboardingFlow: OnboardingFlow) {
@@ -202,7 +206,7 @@ class OnboardingViewModel @AssistedInject constructor(
         // It happens when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
         when (val finalLastAction = lastAction) {
-            is OnboardingAction.SelectHomeServer -> {
+            is OnboardingAction.HomeServerChange.SelectHomeServer -> {
                 currentHomeServerConnectionConfig
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
                         ?.let { startAuthenticationFlow(it) }
@@ -350,7 +354,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         setState { copy(useCase = action.useCase) }
         when (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
-            true  -> handle(OnboardingAction.SelectHomeServer(defaultHomeserverUrl))
+            true  -> handle(OnboardingAction.HomeServerChange.SelectHomeServer(defaultHomeserverUrl))
             false -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
         }
     }
@@ -370,7 +374,7 @@ class OnboardingViewModel @AssistedInject constructor(
             ServerType.Unknown   -> Unit /* Should not happen */
             ServerType.MatrixOrg ->
                 // Request login flow here
-                handle(OnboardingAction.SelectHomeServer(matrixOrgUrl))
+                handle(OnboardingAction.HomeServerChange.SelectHomeServer(matrixOrgUrl))
             ServerType.EMS,
             ServerType.Other     -> _viewEvents.post(OnboardingViewEvents.OnServerSelectionDone(action.serverType))
         }
@@ -632,8 +636,8 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun onAuthenticationStartedSuccess() {
         withState {
             when (lastAction) {
-                is OnboardingAction.EditHomeServer   -> _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
-                is OnboardingAction.SelectHomeServer -> {
+                is OnboardingAction.HomeServerChange.EditHomeServer   -> _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
+                is OnboardingAction.HomeServerChange.SelectHomeServer -> {
                     if (it.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
                         when (it.onboardingFlow) {
                             OnboardingFlow.SignIn -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignIn))
