@@ -38,6 +38,9 @@ abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
     @EpoxyAttribute
     var subtitle: String? = null
 
+    @EpoxyAttribute
+    var horizontalPadding: Int? = null
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var checkChangeListener: CompoundButton.OnCheckedChangeListener? = null
 
@@ -47,6 +50,12 @@ abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.let {
+            it.view.setPadding(
+                    horizontalPadding ?: it.view.paddingLeft,
+                    it.view.paddingTop,
+                    horizontalPadding ?: it.view.paddingRight,
+                    it.view.paddingBottom
+            )
             it.checkbox.isChecked = checked
             it.checkbox.setOnCheckedChangeListener(checkChangeListener)
             it.title.text = title

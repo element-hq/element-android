@@ -20,7 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.doOnLayout
 import com.airbnb.mvrx.args
+import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.toReducedUrl
@@ -35,6 +38,7 @@ import im.vector.app.features.onboarding.RegisterAction
 import im.vector.app.features.onboarding.ftueauth.AbstractFtueAuthFragment
 import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 /**
  * LoginTermsFragment displays the list of policies the user has to accept
@@ -54,24 +58,24 @@ class FtueAuthTermsFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupViews()
-        views.loginTermsPolicyList.configureWith(policyController, hasFixedSize = false)
-        policyController.listener = this
-
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()
-
         params.localizedFlowDataLoginTerms
                 .forEach {
                     list.add(LocalizedFlowDataLoginTermsChecked(it))
                 }
-
         loginTermsViewState = LoginTermsViewState(list)
     }
 
     private fun setupViews() {
         views.displayNameSubmit.setOnClickListener { submit() }
         views.loginTermsPolicyList.setHasFixedSize(false)
+        views.loginTermsPolicyList.configureWith(policyController, hasFixedSize = false, dividerDrawable = R.drawable.divider_horizontal)
+        views.displayNameGutterStart.doOnLayout {
+            val gutterSize = views.contentRoot.width * (views.displayNameGutterStart.layoutParams as ConstraintLayout.LayoutParams).guidePercent
+            policyController.horizontalPadding = gutterSize.roundToInt()
+        }
+        policyController.listener = this
     }
 
     override fun onDestroyView() {
