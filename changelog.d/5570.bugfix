@@ -1,1 +1,1 @@
-[MergedRoomCreationItem] DM: RoomDescriptionText use the roomName instead of memberName
+Use member name instead of room name in DM creation item
