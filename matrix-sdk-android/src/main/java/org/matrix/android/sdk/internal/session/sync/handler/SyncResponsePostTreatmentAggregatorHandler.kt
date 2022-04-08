@@ -20,8 +20,6 @@ import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
@@ -85,15 +83,15 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         usersToFetch.clear()
     }
 
-    private fun saveUserLocally(monarchy: Monarchy, userItem: MatrixItem.UserItem) {
-        val userEntity = UserEntityFactory.create(userItem)
+    private suspend fun fetchUsers(usersToFetch: MutableList<String>) = usersToFetch.map {
+        val profileJson = profileService.getProfile(it)
+        User.fromJson(it, profileJson)
+    }
+
+    private fun saveUserLocally(monarchy: Monarchy, user: User) {
+        val userEntity = UserEntityFactory.create(user)
         monarchy.doWithRealm {
             it.insertOrUpdate(userEntity)
         }
-    }
-
-    private suspend fun fetchUsers(usersToFetch: MutableList<String>) = usersToFetch.map {
-        val profileJson = profileService.getProfile(it)
-        User.fromJson(it, profileJson).toMatrixItem()
     }
 }

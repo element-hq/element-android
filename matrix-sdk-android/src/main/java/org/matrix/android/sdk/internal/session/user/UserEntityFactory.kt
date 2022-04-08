@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.session.user
 
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
-import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.database.model.UserEntity
 
 internal object UserEntityFactory {
@@ -30,11 +30,11 @@ internal object UserEntityFactory {
         )
     }
 
-    fun create(userItem: MatrixItem.UserItem): UserEntity {
+    fun create(user: User): UserEntity {
         return UserEntity(
-                userId = userItem.id,
-                displayName = userItem.displayName.orEmpty(),
-                avatarUrl = userItem.avatarUrl.orEmpty()
+                userId = user.userId,
+                displayName = user.displayName.orEmpty(),
+                avatarUrl = user.avatarUrl.orEmpty()
         )
     }
 }
