@@ -12,6 +12,7 @@
         android:id="@+id/adapter_item_policy_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:buttonTint="@color/checkbox_tint_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -47,9 +48,9 @@
     <ImageView
         android:id="@+id/adapter_item_policy_arrow"
         android:layout_width="wrap_content"
-        android:layout_height="22dp"
-        android:importantForAccessibility="no"
+        android:layout_height="16dp"
         android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
         android:rotationY="@integer/rtl_mirror_flip"
         android:src="@drawable/ic_arrow_right"
         app:layout_constraintBottom_toBottomOf="parent"

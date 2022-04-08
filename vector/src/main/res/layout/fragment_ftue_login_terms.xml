@@ -14,14 +14,14 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/displayNameGutterStart"
+            android:id="@+id/termsGutterStart"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/displayNameGutterEnd"
+            android:id="@+id/termsGutterEnd"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -31,29 +31,29 @@
             android:id="@+id/headerSpacing"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            app:layout_constraintBottom_toTopOf="@id/displayNameHeaderIcon"
+            app:layout_constraintBottom_toTopOf="@id/termsHeaderIcon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <ImageView
-            android:id="@+id/displayNameHeaderIcon"
+            android:id="@+id/termsHeaderIcon"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:background="@drawable/circle"
             android:backgroundTint="?colorSecondary"
             android:contentDescription="@null"
-            android:src="@drawable/ic_user_fg"
-            app:layout_constraintBottom_toTopOf="@id/displayNameHeaderTitle"
-            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
+            android:src="@drawable/ic_privacy_policy"
+            app:layout_constraintBottom_toTopOf="@id/termsHeaderTitle"
+            app:layout_constraintEnd_toEndOf="@id/termsGutterEnd"
             app:layout_constraintHeight_percent="0.12"
-            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
+            app:layout_constraintStart_toStartOf="@id/termsGutterStart"
             app:layout_constraintTop_toBottomOf="@id/headerSpacing"
             app:tint="@color/palette_white" />
 
         <TextView
-            android:id="@+id/displayNameHeaderTitle"
+            android:id="@+id/termsHeaderTitle"
             style="@style/Widget.Vector.TextView.Title.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -61,13 +61,13 @@
             android:gravity="center"
             android:text="@string/ftue_auth_terms_title"
             android:textColor="?vctr_content_primary"
-            app:layout_constraintBottom_toTopOf="@id/displayNameHeaderSubtitle"
-            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderIcon" />
+            app:layout_constraintBottom_toTopOf="@id/termsHeaderSubtitle"
+            app:layout_constraintEnd_toEndOf="@id/termsGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/termsGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/termsHeaderIcon" />
 
         <TextView
-            android:id="@+id/displayNameHeaderSubtitle"
+            android:id="@+id/termsHeaderSubtitle"
             style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -76,9 +76,9 @@
             android:text="@string/ftue_auth_terms_subtitle"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
-            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderTitle" />
+            app:layout_constraintEnd_toEndOf="@id/termsGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/termsGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/termsHeaderTitle" />
 
         <Space
             android:id="@+id/titleContentSpacing"
@@ -86,7 +86,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/loginTermsPolicyList"
             app:layout_constraintHeight_percent="0.03"
-            app:layout_constraintTop_toBottomOf="@id/displayNameHeaderSubtitle" />
+            app:layout_constraintTop_toBottomOf="@id/termsHeaderSubtitle" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/loginTermsPolicyList"
@@ -101,20 +101,20 @@
             android:id="@+id/entrySpacing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/displayNameSubmit"
+            app:layout_constraintBottom_toTopOf="@id/termsSubmit"
             app:layout_constraintHeight_percent="0.05"
             app:layout_constraintTop_toBottomOf="@id/loginTermsPolicyList" />
 
         <Button
-            android:id="@+id/displayNameSubmit"
+            android:id="@+id/termsSubmit"
             style="@style/Widget.Vector.Button.Login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/login_signup_submit"
             android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
+            app:layout_constraintEnd_toEndOf="@id/termsGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/termsGutterStart"
             app:layout_constraintTop_toBottomOf="@id/entrySpacing" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

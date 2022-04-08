@@ -68,11 +68,11 @@ class FtueAuthTermsFragment @Inject constructor(
     }
 
     private fun setupViews() {
-        views.displayNameSubmit.setOnClickListener { submit() }
+        views.termsSubmit.setOnClickListener { submit() }
         views.loginTermsPolicyList.setHasFixedSize(false)
         views.loginTermsPolicyList.configureWith(policyController, hasFixedSize = false, dividerDrawable = R.drawable.divider_horizontal)
-        views.displayNameGutterStart.doOnLayout {
-            val gutterSize = views.contentRoot.width * (views.displayNameGutterStart.layoutParams as ConstraintLayout.LayoutParams).guidePercent
+        views.termsGutterStart.doOnLayout {
+            val gutterSize = views.contentRoot.width * (views.termsGutterStart.layoutParams as ConstraintLayout.LayoutParams).guidePercent
             policyController.horizontalPadding = gutterSize.roundToInt()
         }
         policyController.listener = this
@@ -88,7 +88,7 @@ class FtueAuthTermsFragment @Inject constructor(
         policyController.setData(loginTermsViewState.localizedFlowDataLoginTermsChecked)
 
         // Button is enabled only if all checkboxes are checked
-        views.displayNameSubmit.isEnabled = loginTermsViewState.allChecked()
+        views.termsSubmit.isEnabled = loginTermsViewState.allChecked()
     }
 
     override fun setChecked(localizedFlowDataLoginTerms: LocalizedFlowDataLoginTerms, isChecked: Boolean) {
