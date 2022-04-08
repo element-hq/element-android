@@ -32,7 +32,6 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.VoteInfo
 import org.matrix.android.sdk.api.session.room.model.VoteSummary
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
@@ -49,7 +48,6 @@ import org.matrix.android.sdk.internal.crypto.verification.toState
 import org.matrix.android.sdk.internal.database.helper.findRootThreadEvent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
-import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EditionOfEvent
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
@@ -63,11 +61,11 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.getOrCreate
-import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import timber.log.Timber
 import javax.inject.Inject
@@ -76,7 +74,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         @UserId private val userId: String,
         private val stateEventDataSource: StateEventDataSource,
         @SessionId private val sessionId: String,
-        private val sessionManager: SessionManager
+        private val sessionManager: SessionManager,
+        private val liveLocationAggregationProcessor: LiveLocationAggregationProcessor
 ) : EventInsertLiveProcessor {
 
     private val allowedTypes = listOf(
@@ -191,7 +190,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             }
                             in EventType.BEACON_LOCATION_DATA -> {
                                 event.content.toModel<MessageLiveLocationContent>(catchError = true)?.let {
-                                    handleLiveLocation(realm, event, it, roomId, isLocalEcho)
+                                    liveLocationAggregationProcessor.handleLiveLocation(realm, event, it, roomId, isLocalEcho)
                                 }
                             }
                         }
@@ -254,7 +253,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 }
                 in EventType.BEACON_LOCATION_DATA -> {
                     event.content.toModel<MessageLiveLocationContent>(catchError = true)?.let {
-                        handleLiveLocation(realm, event, it, roomId, isLocalEcho)
+                        liveLocationAggregationProcessor.handleLiveLocation(realm, event, it, roomId, isLocalEcho)
                     }
                 }
                 else                              -> Timber.v("UnHandled event ${event.eventId}")
@@ -544,49 +543,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         return pollEvent.getLastMessageContent() as? MessagePollContent ?: return null.also {
             Timber.v("## POLL target poll event $eventId content is malformed")
         }
-    }
-
-    private fun handleLiveLocation(realm: Realm,
-                                   event: Event,
-                                   content: MessageLiveLocationContent,
-                                   roomId: String,
-                                   isLocalEcho: Boolean) {
-        val locationSenderId = event.senderId ?: return
-
-        // We shouldn't process local echos
-        if (isLocalEcho) {
-            return
-        }
-
-        // A beacon info state event has to be sent before sending location
-        val beaconInfoEntity = CurrentStateEventEntity.getOrNull(realm, roomId, locationSenderId, EventType.STATE_ROOM_BEACON_INFO.first())
-        if (beaconInfoEntity == null) {
-            Timber.v("## LIVE LOCATION. There is not any beacon info which should be emitted before sending location updates")
-            return
-        }
-        val beaconInfoContent = ContentMapper.map(beaconInfoEntity.root?.content)?.toModel<LiveLocationBeaconContent>(catchError = true)
-        if (beaconInfoContent == null) {
-            Timber.v("## LIVE LOCATION. Beacon info content is invalid")
-            return
-        }
-
-        // Check if beacon info is outdated
-        if (isBeaconInfoOutdated(beaconInfoContent, content)) {
-            Timber.v("## LIVE LOCATION. Beacon info content is invalid")
-            return
-        }
-
-        // Update last location info of the beacon state event
-        beaconInfoContent.lastLocationContent = content
-        beaconInfoEntity.root?.content = ContentMapper.map(beaconInfoContent.toContent())
-    }
-
-    private fun isBeaconInfoOutdated(beaconInfoContent: LiveLocationBeaconContent,
-                                     liveLocationContent: MessageLiveLocationContent): Boolean {
-        val beaconInfoStartTime = beaconInfoContent.getBestTimestampAsMilliseconds() ?: 0
-        val liveLocationEventTime = liveLocationContent.getBestTs() ?: 0
-        val timeout = beaconInfoContent.getBestBeaconInfo()?.timeout ?: 0
-        return liveLocationEventTime - beaconInfoStartTime > timeout
     }
 
     private fun handleInitialAggregatedRelations(realm: Realm,
