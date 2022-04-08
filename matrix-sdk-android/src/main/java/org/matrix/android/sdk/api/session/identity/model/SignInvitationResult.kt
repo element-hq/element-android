@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.identity.model
+package org.matrix.android.sdk.api.session.identity.model
 
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class SignInvitationResult(
-        /** The Matrix user ID of the user accepting the invitation.*/
+        /**
+         * The Matrix user ID of the user accepting the invitation.
+         */
         val mxid: String,
-        /** The Matrix user ID of the user who sent the invitation.*/
+        /**
+         * The Matrix user ID of the user who sent the invitation.
+         */
         val sender: String,
-        /**The token from the call to store- invite..*/
+        /**
+         * The token from the call to store- invite..
+         */
         val signatures: Map<String, *>,
-        /** The token for the invitation */
+        /**
+         * The token for the invitation
+         */
         val token: String
 )
