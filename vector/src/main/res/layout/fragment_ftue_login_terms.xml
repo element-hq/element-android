@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="Our privacy policy"
+            android:text="@string/ftue_auth_terms_title"
             android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@id/displayNameHeaderSubtitle"
             app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="@string/auth_accept_policies"
+            android:text="@string/ftue_auth_terms_subtitle"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
             app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
@@ -93,8 +93,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/entrySpacing"
-            app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleContentSpacing" />
 
         <Space
@@ -102,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/displayNameSubmit"
-            app:layout_constraintHeight_percent="0.03"
+            app:layout_constraintHeight_percent="0.05"
             app:layout_constraintTop_toBottomOf="@id/loginTermsPolicyList" />
 
         <Button
