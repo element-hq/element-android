@@ -73,7 +73,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
     private fun isBeaconInfoOutdated(beaconInfoContent: LiveLocationBeaconContent,
                                      liveLocationContent: MessageLiveLocationContent): Boolean {
         val beaconInfoStartTime = beaconInfoContent.getBestTimestampAsMilliseconds() ?: 0
-        val liveLocationEventTime = liveLocationContent.getBestTs() ?: 0
+        val liveLocationEventTime = liveLocationContent.getBestTimestampAsMilliseconds() ?: 0
         val timeout = beaconInfoContent.getBestBeaconInfo()?.timeout ?: 0
         return liveLocationEventTime - beaconInfoStartTime > timeout
     }
