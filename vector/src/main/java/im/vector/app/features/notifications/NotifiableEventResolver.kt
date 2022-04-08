@@ -155,7 +155,8 @@ class NotifiableEventResolver @Inject constructor(
             // only convert encrypted messages to NotifiableMessageEvents
             when (event.root.getClearType()) {
                 EventType.MESSAGE,
-                in EventType.POLL_START -> {
+                in EventType.POLL_START,
+                in EventType.STATE_ROOM_BEACON_INFO -> {
                     val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
                     val roomName = room.roomSummary()?.displayName ?: ""
                     val senderDisplayName = event.senderInfo.disambiguatedDisplayName
@@ -187,7 +188,7 @@ class NotifiableEventResolver @Inject constructor(
                             soundName = null
                     )
                 }
-                else                    -> null
+                else                                -> null
             }
         }
     }

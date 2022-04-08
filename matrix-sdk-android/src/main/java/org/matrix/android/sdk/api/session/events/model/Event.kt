@@ -423,4 +423,5 @@ fun Event.getPollContent(): MessagePollContent? {
     return content.toModel<MessagePollContent>()
 }
 
-fun Event.supportsNotification() = this.getClearType() in EventType.MESSAGE + EventType.POLL_START
+fun Event.supportsNotification() =
+        this.getClearType() in EventType.MESSAGE + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
