@@ -28,7 +28,6 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
 
 @JsonClass(generateAdapter = true)
 data class LiveLocationBeaconContent(
-        // TODO check if there is a better way than implementing MessageContent
         /**
          * Local message type, not from server
          */
