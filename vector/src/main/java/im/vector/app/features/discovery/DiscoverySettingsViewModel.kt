@@ -40,9 +40,9 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.flow.flow
 
 class DiscoverySettingsViewModel @AssistedInject constructor(
-        @Assisted initialState: DiscoverySettingsState,
-        private val session: Session,
-        private val stringProvider: StringProvider
+    @Assisted initialState: DiscoverySettingsState,
+    private val session: Session,
+    private val stringProvider: StringProvider
 ) : VectorViewModel<DiscoverySettingsState, DiscoverySettingsAction, DiscoverySettingsViewEvents>(initialState) {
 
     @AssistedFactory
@@ -58,17 +58,17 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         override fun onIdentityServerChange() = withState { state ->
             viewModelScope.launch {
                 runCatching { fetchIdentityServerWithTerms() }.fold(
-                        onSuccess = {
-                            val currentIS = state.identityServer()
-                            setState {
-                                copy(
-                                        identityServer = Success(it),
-                                        userConsent = identityService.getUserConsent()
-                                )
-                            }
-                            if (currentIS != it) retrieveBinding()
-                        },
-                        onFailure = { _viewEvents.post(DiscoverySettingsViewEvents.Failure(it)) }
+                    onSuccess = {
+                        val currentIS = state.identityServer()
+                        setState {
+                            copy(
+                                identityServer = Success(it),
+                                userConsent = identityService.getUserConsent()
+                            )
+                        }
+                        if (currentIS != it) retrieveBinding()
+                    },
+                    onFailure = { _viewEvents.post(DiscoverySettingsViewEvents.Failure(it)) }
                 )
             }
         }
@@ -77,8 +77,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     init {
         setState {
             copy(
-                    identityServer = Success(identityService.getCurrentIdentityServerUrl()?.let { ServerAndPolicies(it, emptyList()) }),
-                    userConsent = identityService.getUserConsent()
+                identityServer = Success(identityService.getCurrentIdentityServerUrl()?.let { ServerAndPolicies(it, emptyList()) }),
+                userConsent = identityService.getUserConsent()
             )
         }
         startListenToIdentityManager()
@@ -87,11 +87,11 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     private fun observeThreePids() {
         session.flow()
-                .liveThreePIds(true)
-                .onEach {
-                    retrieveBinding(it)
-                }
-                .launchIn(viewModelScope)
+            .liveThreePIds(true)
+            .onEach {
+                retrieveBinding(it)
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun onCleared() {
@@ -101,17 +101,17 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     override fun handle(action: DiscoverySettingsAction) {
         when (action) {
-            DiscoverySettingsAction.Refresh                   -> fetchContent()
-            DiscoverySettingsAction.RetrieveBinding           -> retrieveBinding()
-            DiscoverySettingsAction.DisconnectIdentityServer  -> disconnectIdentityServer()
+            DiscoverySettingsAction.Refresh -> fetchContent()
+            DiscoverySettingsAction.RetrieveBinding -> retrieveBinding()
+            DiscoverySettingsAction.DisconnectIdentityServer -> disconnectIdentityServer()
             is DiscoverySettingsAction.SetPoliciesExpandState -> updatePolicyUrlsExpandedState(action.expanded)
-            is DiscoverySettingsAction.ChangeIdentityServer   -> changeIdentityServer(action)
-            is DiscoverySettingsAction.UpdateUserConsent      -> handleUpdateUserConsent(action)
-            is DiscoverySettingsAction.RevokeThreePid         -> revokeThreePid(action)
-            is DiscoverySettingsAction.ShareThreePid          -> shareThreePid(action)
-            is DiscoverySettingsAction.FinalizeBind3pid       -> finalizeBind3pid(action, true)
-            is DiscoverySettingsAction.SubmitMsisdnToken      -> submitMsisdnToken(action)
-            is DiscoverySettingsAction.CancelBinding          -> cancelBinding(action)
+            is DiscoverySettingsAction.ChangeIdentityServer -> changeIdentityServer(action)
+            is DiscoverySettingsAction.UpdateUserConsent -> handleUpdateUserConsent(action)
+            is DiscoverySettingsAction.RevokeThreePid -> revokeThreePid(action)
+            is DiscoverySettingsAction.ShareThreePid -> shareThreePid(action)
+            is DiscoverySettingsAction.FinalizeBind3pid -> finalizeBind3pid(action, true)
+            is DiscoverySettingsAction.SubmitMsisdnToken -> submitMsisdnToken(action)
+            is DiscoverySettingsAction.CancelBinding -> cancelBinding(action)
         }
     }
 
@@ -128,8 +128,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 session.identityService().disconnect()
                 setState {
                     copy(
-                            identityServer = Success(null),
-                            userConsent = false
+                        identityServer = Success(null),
+                        userConsent = false
                     )
                 }
             } catch (failure: Throwable) {
@@ -150,8 +150,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 val data = session.identityService().setNewIdentityServer(action.url)
                 setState {
                     copy(
-                            identityServer = Success(ServerAndPolicies(data, emptyList())),
-                            userConsent = false
+                        identityServer = Success(ServerAndPolicies(data, emptyList())),
+                        userConsent = false
                     )
                 }
                 retrieveBinding()
@@ -181,24 +181,24 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             val currentMails = emailList().orEmpty()
             val phones = phoneNumbersList().orEmpty()
             copy(
-                    emailList = Success(
-                            currentMails.map {
-                                if (it.threePid == threePid) {
-                                    it.copy(isShared = state)
-                                } else {
-                                    it
-                                }
-                            }
-                    ),
-                    phoneNumbersList = Success(
-                            phones.map {
-                                if (it.threePid == threePid) {
-                                    it.copy(isShared = state)
-                                } else {
-                                    it
-                                }
-                            }
-                    )
+                emailList = Success(
+                    currentMails.map {
+                        if (it.threePid == threePid) {
+                            it.copy(isShared = state)
+                        } else {
+                            it
+                        }
+                    }
+                ),
+                phoneNumbersList = Success(
+                    phones.map {
+                        if (it.threePid == threePid) {
+                            it.copy(isShared = state)
+                        } else {
+                            it
+                        }
+                    }
+                )
             )
         }
     }
@@ -208,31 +208,31 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             val currentMails = emailList().orEmpty()
             val phones = phoneNumbersList().orEmpty()
             copy(
-                    emailList = Success(
-                            currentMails.map {
-                                if (it.threePid == threePid) {
-                                    it.copy(finalRequest = submitState)
-                                } else {
-                                    it
-                                }
-                            }
-                    ),
-                    phoneNumbersList = Success(
-                            phones.map {
-                                if (it.threePid == threePid) {
-                                    it.copy(finalRequest = submitState)
-                                } else {
-                                    it
-                                }
-                            }
-                    )
+                emailList = Success(
+                    currentMails.map {
+                        if (it.threePid == threePid) {
+                            it.copy(finalRequest = submitState)
+                        } else {
+                            it
+                        }
+                    }
+                ),
+                phoneNumbersList = Success(
+                    phones.map {
+                        if (it.threePid == threePid) {
+                            it.copy(finalRequest = submitState)
+                        } else {
+                            it
+                        }
+                    }
+                )
             )
         }
     }
 
     private fun revokeThreePid(action: DiscoverySettingsAction.RevokeThreePid) {
         when (action.threePid) {
-            is ThreePid.Email  -> revokeEmail(action.threePid)
+            is ThreePid.Email -> revokeEmail(action.threePid)
             is ThreePid.Msisdn -> revokeMsisdn(action.threePid)
         }
     }
@@ -301,8 +301,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    emailList = Success(emails.map { PidInfo(it, Loading()) }),
-                    phoneNumbersList = Success(msisdns.map { PidInfo(it, Loading()) })
+                emailList = Success(emails.map { PidInfo(it, Loading()) }),
+                phoneNumbersList = Success(msisdns.map { PidInfo(it, Loading()) })
             )
         }
 
@@ -311,9 +311,9 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 val data = identityService.getShareStatus(threePids)
                 setState {
                     copy(
-                            emailList = Success(data.filter { it.key is ThreePid.Email }.toPidInfoList()),
-                            phoneNumbersList = Success(data.filter { it.key is ThreePid.Msisdn }.toPidInfoList()),
-                            termsNotSigned = false
+                        emailList = Success(data.filter { it.key is ThreePid.Email }.toPidInfoList()),
+                        phoneNumbersList = Success(data.filter { it.key is ThreePid.Msisdn }.toPidInfoList()),
+                        termsNotSigned = false
                     )
                 }
             } catch (failure: Throwable) {
@@ -323,9 +323,9 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
                 setState {
                     copy(
-                            emailList = Success(emails.map { PidInfo(it, Fail(failure)) }),
-                            phoneNumbersList = Success(msisdns.map { PidInfo(it, Fail(failure)) }),
-                            termsNotSigned = failure is IdentityServiceError.TermsNotSignedException
+                        emailList = Success(emails.map { PidInfo(it, Fail(failure)) }),
+                        phoneNumbersList = Success(msisdns.map { PidInfo(it, Fail(failure)) }),
+                        termsNotSigned = failure is IdentityServiceError.TermsNotSignedException
                     )
                 }
             }
@@ -335,8 +335,8 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     private fun Map<ThreePid, SharedState>.toPidInfoList(): List<PidInfo> {
         return map { threePidStatus ->
             PidInfo(
-                    threePid = threePidStatus.key,
-                    isShared = Success(threePidStatus.value)
+                threePid = threePidStatus.key,
+                isShared = Success(threePidStatus.value)
             )
         }
     }
@@ -359,7 +359,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
 
     private fun finalizeBind3pid(action: DiscoverySettingsAction.FinalizeBind3pid, fromUser: Boolean) = withState { state ->
         val threePid = when (action.threePid) {
-            is ThreePid.Email  -> {
+            is ThreePid.Email -> {
                 state.emailList()?.find { it.threePid.value == action.threePid.email }?.threePid ?: return@withState
             }
             is ThreePid.Msisdn -> {
@@ -389,13 +389,13 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         state.emailList()?.forEach { info ->
             when (info.isShared()) {
                 SharedState.BINDING_IN_PROGRESS -> finalizeBind3pid(DiscoverySettingsAction.FinalizeBind3pid(info.threePid), false)
-                else                            -> Unit
+                else -> Unit
             }
         }
         viewModelScope.launch {
             runCatching { session.fetchIdentityServerWithTerms(stringProvider.getString(R.string.resources_language)) }.fold(
-                    onSuccess = { setState { copy(identityServer = Success(it)) } },
-                    onFailure = { _viewEvents.post(DiscoverySettingsViewEvents.Failure(it)) }
+                onSuccess = { setState { copy(identityServer = Success(it)) } },
+                onFailure = { _viewEvents.post(DiscoverySettingsViewEvents.Failure(it)) }
             )
         }
     }

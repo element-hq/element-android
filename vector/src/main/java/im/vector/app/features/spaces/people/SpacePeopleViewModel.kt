@@ -38,10 +38,10 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 
 class SpacePeopleViewModel @AssistedInject constructor(
-        @Assisted val initialState: SpacePeopleViewState,
-        private val rawService: RawService,
-        private val session: Session,
-        private val analyticsTracker: AnalyticsTracker
+    @Assisted val initialState: SpacePeopleViewState,
+    private val rawService: RawService,
+    private val session: Session,
+    private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<SpacePeopleViewState, SpacePeopleViewAction, SpacePeopleViewEvents>(initialState) {
 
     @AssistedFactory
@@ -53,7 +53,7 @@ class SpacePeopleViewModel @AssistedInject constructor(
 
     override fun handle(action: SpacePeopleViewAction) {
         when (action) {
-            is SpacePeopleViewAction.ChatWith   -> handleChatWith(action)
+            is SpacePeopleViewAction.ChatWith -> handleChatWith(action)
             SpacePeopleViewAction.InviteToSpace -> handleInviteToSpace()
         }
     }
@@ -75,15 +75,15 @@ class SpacePeopleViewModel @AssistedInject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             val adminE2EByDefault = rawService.getElementWellknown(session.sessionParams)
-                    ?.isE2EByDefault()
-                    ?: true
+                ?.isE2EByDefault()
+                ?: true
 
             val roomParams = CreateRoomParams()
-                    .apply {
-                        invitedUserIds.add(otherUserId)
-                        setDirectMessage()
-                        enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
-                    }
+                .apply {
+                    invitedUserIds.add(otherUserId)
+                    setDirectMessage()
+                    enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
+                }
 
             try {
                 val roomId = session.createRoom(roomParams)

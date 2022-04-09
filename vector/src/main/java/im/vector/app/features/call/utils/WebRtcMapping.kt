@@ -23,9 +23,9 @@ import org.webrtc.SessionDescription
 
 fun List<IceCandidate>.mapToCallCandidate() = map {
     CallCandidate(
-            sdpMid = it.sdpMid,
-            sdpMLineIndex = it.sdpMLineIndex,
-            candidate = it.sdp
+        sdpMid = it.sdpMid,
+        sdpMLineIndex = it.sdpMLineIndex,
+        candidate = it.sdp
     )
 }
 

@@ -70,12 +70,12 @@ abstract class PublicRoomItem : VectorEpoxyModel<PublicRoomItem.Holder>() {
         holder.counterView.text = nbOfMembers.toString()
 
         holder.buttonState.render(
-                when (joinState) {
-                    JoinState.NOT_JOINED    -> ButtonStateView.State.Button
-                    JoinState.JOINING       -> ButtonStateView.State.Loading
-                    JoinState.JOINED        -> ButtonStateView.State.Loaded
-                    JoinState.JOINING_ERROR -> ButtonStateView.State.Error
-                }
+            when (joinState) {
+                JoinState.NOT_JOINED -> ButtonStateView.State.Button
+                JoinState.JOINING -> ButtonStateView.State.Loading
+                JoinState.JOINED -> ButtonStateView.State.Loaded
+                JoinState.JOINING_ERROR -> ButtonStateView.State.Error
+            }
         )
 
         holder.buttonState.commonClicked = { joinListener?.invoke(it) }

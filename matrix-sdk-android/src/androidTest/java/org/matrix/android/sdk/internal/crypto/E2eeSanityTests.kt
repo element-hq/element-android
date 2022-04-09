@@ -77,9 +77,9 @@ class E2eeSanityTests : InstrumentedTest {
 
         // add some more users and invite them
         val otherAccounts = listOf("benoit", "valere", "ganfra") // , "adam", "manu")
-                .map {
-                    testHelper.createAccount(it, SessionTestParams(true))
-                }
+            .map {
+                testHelper.createAccount(it, SessionTestParams(true))
+            }
 
         Log.v("#E2E TEST", "All accounts created")
         // we want to invite them in the room
@@ -121,9 +121,9 @@ class E2eeSanityTests : InstrumentedTest {
 
         // Add a new user to the room, and check that he can't decrypt
         val newAccount = listOf("adam") // , "adam", "manu")
-                .map {
-                    testHelper.createAccount(it, SessionTestParams(true))
-                }
+            .map {
+                testHelper.createAccount(it, SessionTestParams(true))
+            }
 
         newAccount.forEach {
             testHelper.runBlockingTest {
@@ -250,8 +250,8 @@ class E2eeSanityTests : InstrumentedTest {
         Log.v("#E2E TEST", "Force key backup for Bob...")
         testHelper.waitWithLatch { latch ->
             bobKeysBackupService.backupAllGroupSessions(
-                    null,
-                    TestMatrixCallback(latch, true)
+                null,
+                TestMatrixCallback(latch, true)
             )
         }
         Log.v("#E2E TEST", "... Key backup done for Bob")
@@ -296,11 +296,13 @@ class E2eeSanityTests : InstrumentedTest {
             }
 
             val importedResult = testHelper.doSync<ImportRoomKeysResult> {
-                keysBackupService.restoreKeyBackupWithPassword(keyVersionResult!!,
-                        keyBackupPassword,
-                        null,
-                        null,
-                        null, it)
+                keysBackupService.restoreKeyBackupWithPassword(
+                    keyVersionResult!!,
+                    keyBackupPassword,
+                    null,
+                    null,
+                    null, it
+                )
             }
 
             assertEquals(3, importedResult.totalNumberOfKeys)
@@ -486,12 +488,12 @@ class E2eeSanityTests : InstrumentedTest {
 
         // Now let's verify bobs session, and re-request keys
         bobSessionWithBetterKey.cryptoService()
-                .verificationService()
-                .markedLocallyAsManuallyVerified(newBobSession.myUserId, newBobSession.sessionParams.deviceId!!)
+            .verificationService()
+            .markedLocallyAsManuallyVerified(newBobSession.myUserId, newBobSession.sessionParams.deviceId!!)
 
         newBobSession.cryptoService()
-                .verificationService()
-                .markedLocallyAsManuallyVerified(bobSessionWithBetterKey.myUserId, bobSessionWithBetterKey.sessionParams.deviceId!!)
+            .verificationService()
+            .markedLocallyAsManuallyVerified(bobSessionWithBetterKey.myUserId, bobSessionWithBetterKey.sessionParams.deviceId!!)
 
         // now let new session request
         newBobSession.cryptoService().requestRoomKeyForEvent(firstEventNewBobPov.root)
@@ -531,13 +533,13 @@ class E2eeSanityTests : InstrumentedTest {
 
             testHelper.retryPeriodicallyWithLatch(latch) {
                 val decryptedMsg = timeline.getSnapshot()
-                        .filter { it.root.getClearType() == EventType.MESSAGE }
-                        .also { list ->
-                            val message = list.joinToString(",", "[", "]") { "${it.root.type}|${it.root.sendState}" }
-                            Log.v("#E2E TEST", "Timeline snapshot is $message")
-                        }
-                        .filter { it.root.sendState == SendState.SYNCED }
-                        .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
+                    .filter { it.root.getClearType() == EventType.MESSAGE }
+                    .also { list ->
+                        val message = list.joinToString(",", "[", "]") { "${it.root.type}|${it.root.sendState}" }
+                        Log.v("#E2E TEST", "Timeline snapshot is $message")
+                    }
+                    .filter { it.root.sendState == SendState.SYNCED }
+                    .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
                 sentEventId = decryptedMsg?.eventId
                 decryptedMsg != null
             }
@@ -598,10 +600,10 @@ class E2eeSanityTests : InstrumentedTest {
                         try {
                             session.cryptoService().decryptEvent(event, "").let { result ->
                                 event.mxDecryptionResult = OlmDecryptionResult(
-                                        payload = result.clearEvent,
-                                        senderKey = result.senderCurve25519Key,
-                                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                                    payload = result.clearEvent,
+                                    senderKey = result.senderCurve25519Key,
+                                    keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                                 )
                             }
                         } catch (error: MXCryptoError) {

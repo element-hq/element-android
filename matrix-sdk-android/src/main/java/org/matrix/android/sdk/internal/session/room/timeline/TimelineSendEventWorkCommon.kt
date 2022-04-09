@@ -34,24 +34,24 @@ import javax.inject.Inject
  * if not the chain will be doomed in failed state.
  */
 internal class TimelineSendEventWorkCommon @Inject constructor(
-        private val workManagerProvider: WorkManagerProvider
+    private val workManagerProvider: WorkManagerProvider
 ) {
 
     fun postWork(roomId: String, workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND_OR_REPLACE): Cancelable {
         workManagerProvider.workManager
-                .beginUniqueWork(buildWorkName(roomId), policy, workRequest)
-                .enqueue()
+            .beginUniqueWork(buildWorkName(roomId), policy, workRequest)
+            .enqueue()
 
         return CancelableWork(workManagerProvider.workManager, workRequest.id)
     }
 
     inline fun <reified W : ListenableWorker> createWork(data: Data, startChain: Boolean): OneTimeWorkRequest {
         return workManagerProvider.matrixOneTimeWorkRequestBuilder<W>()
-                .setConstraints(WorkManagerProvider.workConstraints)
-                .startChain(startChain)
-                .setInputData(data)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                .build()
+            .setConstraints(WorkManagerProvider.workConstraints)
+            .startChain(startChain)
+            .setInputData(data)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+            .build()
     }
 
     private fun buildWorkName(roomId: String): String {

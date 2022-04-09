@@ -24,8 +24,8 @@ import im.vector.app.features.analytics.plan.UserProperties
 import javax.inject.Inject
 
 class LateInitUserPropertiesFactory @Inject constructor(
-        private val activeSessionDataSource: ActiveSessionDataSource,
-        private val context: Context,
+    private val activeSessionDataSource: ActiveSessionDataSource,
+    private val context: Context,
 ) {
     suspend fun createUserProperties(): UserProperties? {
         val useCase = activeSessionDataSource.currentValue?.orNull()?.vectorStore(context)?.readUseCase()

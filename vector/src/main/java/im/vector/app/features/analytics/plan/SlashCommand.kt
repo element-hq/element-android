@@ -25,10 +25,10 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
  * Triggered when the user runs a slash command in their composer.
  */
 data class SlashCommand(
-        /**
-         * The name of this command.
-         */
-        val command: Command,
+    /**
+     * The name of this command.
+     */
+    val command: Command,
 ) : VectorAnalyticsEvent {
 
     enum class Command {

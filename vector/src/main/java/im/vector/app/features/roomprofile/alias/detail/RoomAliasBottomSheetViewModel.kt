@@ -27,8 +27,8 @@ import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 
 class RoomAliasBottomSheetViewModel @AssistedInject constructor(
-        @Assisted initialState: RoomAliasBottomSheetState,
-        session: Session
+    @Assisted initialState: RoomAliasBottomSheetState,
+    session: Session
 ) : VectorViewModel<RoomAliasBottomSheetState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -41,7 +41,7 @@ class RoomAliasBottomSheetViewModel @AssistedInject constructor(
     init {
         setState {
             copy(
-                    matrixToLink = session.permalinkService().createPermalink(alias)
+                matrixToLink = session.permalinkService().createPermalink(alias)
             )
         }
     }

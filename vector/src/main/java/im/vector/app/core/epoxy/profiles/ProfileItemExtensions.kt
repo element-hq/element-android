@@ -32,19 +32,19 @@ fun EpoxyController.buildProfileSection(title: String) {
 }
 
 fun EpoxyController.buildProfileAction(
-        id: String,
-        title: String,
-        subtitle: String? = null,
-        editable: Boolean = true,
-        @DrawableRes icon: Int = 0,
-        tintIcon: Boolean = true,
-        @DrawableRes editableRes: Int? = null,
-        destructive: Boolean = false,
-        divider: Boolean = true,
-        action: ClickListener? = null,
-        @DrawableRes accessory: Int = 0,
-        accessoryMatrixItem: MatrixItem? = null,
-        avatarRenderer: AvatarRenderer? = null
+    id: String,
+    title: String,
+    subtitle: String? = null,
+    editable: Boolean = true,
+    @DrawableRes icon: Int = 0,
+    tintIcon: Boolean = true,
+    @DrawableRes editableRes: Int? = null,
+    destructive: Boolean = false,
+    divider: Boolean = true,
+    action: ClickListener? = null,
+    @DrawableRes accessory: Int = 0,
+    accessoryMatrixItem: MatrixItem? = null,
+    avatarRenderer: AvatarRenderer? = null
 ) {
     profileActionItem {
         iconRes(icon)

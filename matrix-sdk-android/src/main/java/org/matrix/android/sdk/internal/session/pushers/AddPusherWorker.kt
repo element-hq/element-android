@@ -30,9 +30,9 @@ internal class AddPusherWorker(context: Context, params: WorkerParameters, sessi
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val sessionId: String,
-            val pusher: JsonPusher,
-            override val lastFailureMessage: String? = null
+        override val sessionId: String,
+        val pusher: JsonPusher,
+        override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var addPusherTask: AddPusherTask
@@ -53,7 +53,7 @@ internal class AddPusherWorker(context: Context, params: WorkerParameters, sessi
         } catch (exception: Throwable) {
             when (exception) {
                 is Failure.NetworkConnection -> Result.retry()
-                else                         -> Result.failure()
+                else -> Result.failure()
             }
         }
     }

@@ -38,8 +38,8 @@ private const val PERIOD_OF_GRACE_IN_MS = 2 * 60 * 1000L
  */
 @Singleton
 class PinLocker @Inject constructor(
-        private val pinCodeStore: PinCodeStore,
-        private val vectorPreferences: VectorPreferences
+    private val pinCodeStore: PinCodeStore,
+    private val vectorPreferences: VectorPreferences
 ) : DefaultLifecycleObserver {
 
     enum class State {
@@ -67,7 +67,7 @@ class PinLocker @Inject constructor(
             } else {
                 State.UNLOCKED
             }
-                    .also { Timber.v("New state: $it") }
+                .also { Timber.v("New state: $it") }
 
             if (liveState.value != state) {
                 liveState.postValue(state)

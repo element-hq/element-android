@@ -56,10 +56,11 @@ private const val DEFAULT_LONG_POOL_TIMEOUT = 30_000L
 
 private val loggerTag = LoggerTag("SyncThread", LoggerTag.SYNC)
 
-internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
-                                              private val networkConnectivityChecker: NetworkConnectivityChecker,
-                                              private val backgroundDetectionObserver: BackgroundDetectionObserver,
-                                              private val activeCallHandler: ActiveCallHandler
+internal class SyncThread @Inject constructor(
+    private val syncTask: SyncTask,
+    private val networkConnectivityChecker: NetworkConnectivityChecker,
+    private val backgroundDetectionObserver: BackgroundDetectionObserver,
+    private val activeCallHandler: ActiveCallHandler
 ) : Thread("SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle
@@ -176,8 +177,8 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 val afterPause = state.let { it is SyncState.Running && it.afterPause }
                 val timeout = when {
                     previousSyncResponseHasToDevice -> 0L /* Force timeout to 0 */
-                    afterPause                      -> 0L /* No timeout after a pause */
-                    else                            -> DEFAULT_LONG_POOL_TIMEOUT
+                    afterPause -> 0L /* No timeout after a pause */
+                    else -> DEFAULT_LONG_POOL_TIMEOUT
                 }
                 Timber.tag(loggerTag.value).d("Execute sync request with timeout $timeout")
                 val params = SyncTask.Params(timeout, SyncPresence.Online, afterPause = afterPause)

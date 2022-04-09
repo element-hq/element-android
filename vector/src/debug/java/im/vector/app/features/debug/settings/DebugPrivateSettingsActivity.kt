@@ -29,8 +29,8 @@ class DebugPrivateSettingsActivity : VectorBaseActivity<ActivitySimpleBinding>()
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFragment(
-                    views.simpleFragmentContainer,
-                    DebugPrivateSettingsFragment::class.java
+                views.simpleFragmentContainer,
+                DebugPrivateSettingsFragment::class.java
             )
         }
     }

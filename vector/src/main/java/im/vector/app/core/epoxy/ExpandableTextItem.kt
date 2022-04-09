@@ -70,9 +70,9 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
 
     private fun expand(holder: Holder) {
         ObjectAnimator
-                .ofInt(holder.content, "maxLines", expandedLines)
-                .setDuration(200)
-                .start()
+            .ofInt(holder.content, "maxLines", expandedLines)
+            .setDuration(200)
+            .start()
 
         holder.content.ellipsize = null
         holder.arrow.setImageResource(R.drawable.ic_expand_less)
@@ -82,9 +82,9 @@ abstract class ExpandableTextItem : VectorEpoxyModel<ExpandableTextItem.Holder>(
 
     private fun collapse(holder: Holder) {
         ObjectAnimator
-                .ofInt(holder.content, "maxLines", maxLines)
-                .setDuration(200)
-                .start()
+            .ofInt(holder.content, "maxLines", maxLines)
+            .setDuration(200)
+            .start()
 
         holder.content.ellipsize = TextUtils.TruncateAt.END
         holder.arrow.setImageResource(R.drawable.ic_expand_more)

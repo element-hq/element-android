@@ -21,5 +21,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ReplyToContent(
-        @Json(name = "event_id") val eventId: String? = null
+    @Json(name = "event_id") val eventId: String? = null
 )

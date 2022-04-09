@@ -36,10 +36,12 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
 
-class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState: ThreadListViewState,
-                                                      private val analyticsTracker: AnalyticsTracker,
-                                                      private val session: Session) :
-        VectorViewModel<ThreadListViewState, EmptyAction, EmptyViewEvents>(initialState) {
+class ThreadListViewModel @AssistedInject constructor(
+    @Assisted val initialState: ThreadListViewState,
+    private val analyticsTracker: AnalyticsTracker,
+    private val session: Session
+) :
+    VectorViewModel<ThreadListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
 
@@ -69,7 +71,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
      */
     private fun fetchAndObserveThreads() {
         when (session.getHomeServerCapabilities().canUseThreading) {
-            true  -> {
+            true -> {
                 fetchThreadList()
                 observeThreadSummaries()
             }
@@ -83,12 +85,12 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
      */
     private fun observeThreadSummaries() {
         room?.flow()
-                ?.liveThreadSummaries()
-                ?.map { room.enhanceThreadWithEditions(it) }
-                ?.flowOn(room.coroutineDispatchers.io)
-                ?.execute { asyncThreads ->
-                    copy(threadSummaryList = asyncThreads)
-                }
+            ?.liveThreadSummaries()
+            ?.map { room.enhanceThreadWithEditions(it) }
+            ?.flowOn(room.coroutineDispatchers.io)
+            ?.execute { asyncThreads ->
+                copy(threadSummaryList = asyncThreads)
+            }
     }
 
     /**
@@ -97,18 +99,18 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
      */
     private fun observeThreadsList() {
         room?.flow()
-                ?.liveThreadList()
-                ?.map { room.mapEventsWithEdition(it) }
-                ?.map {
-                    it.map { threadRootEvent ->
-                        val isParticipating = room.isUserParticipatingInThread(threadRootEvent.eventId)
-                        ThreadTimelineEvent(threadRootEvent, isParticipating)
-                    }
+            ?.liveThreadList()
+            ?.map { room.mapEventsWithEdition(it) }
+            ?.map {
+                it.map { threadRootEvent ->
+                    val isParticipating = room.isUserParticipatingInThread(threadRootEvent.eventId)
+                    ThreadTimelineEvent(threadRootEvent, isParticipating)
                 }
-                ?.flowOn(room.coroutineDispatchers.io)
-                ?.execute { asyncThreads ->
-                    copy(rootThreadEventList = asyncThreads)
-                }
+            }
+            ?.flowOn(room.coroutineDispatchers.io)
+            ?.execute { asyncThreads ->
+                copy(rootThreadEventList = asyncThreads)
+            }
     }
 
     private fun fetchThreadList() {

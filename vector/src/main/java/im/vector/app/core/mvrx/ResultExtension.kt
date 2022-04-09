@@ -27,7 +27,7 @@ suspend fun <A> runCatchingToAsync(block: suspend () -> A): Async<A> {
     return runCatching {
         block.invoke()
     }.fold(
-            { Success(it) },
-            { Fail(it) }
+        { Success(it) },
+        { Fail(it) }
     )
 }

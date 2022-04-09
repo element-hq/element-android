@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
  */
 fun StateService.isPublic(): Boolean {
     return getStateEvent(EventType.STATE_ROOM_JOIN_RULES, QueryStringValue.NoCondition)
-            ?.content
-            ?.toModel<RoomJoinRulesContent>()
-            ?.joinRules == RoomJoinRules.PUBLIC
+        ?.content
+        ?.toModel<RoomJoinRulesContent>()
+        ?.joinRules == RoomJoinRules.PUBLIC
 }

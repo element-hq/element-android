@@ -32,8 +32,8 @@ import org.matrix.android.sdk.api.session.securestorage.SsssPassphrase
 
 private const val IGNORED_PASSPHRASE_INTEGRITY = false
 private val KEY_INFO_WITH_PASSPHRASE = KeyInfo(
-        id = "id",
-        content = SecretStorageKeyContent(passphrase = SsssPassphrase(null, 0, null))
+    id = "id",
+    content = SecretStorageKeyContent(passphrase = SsssPassphrase(null, 0, null))
 )
 private val KEY_INFO_WITHOUT_PASSPHRASE = KeyInfo(id = "id", content = SecretStorageKeyContent(passphrase = null))
 
@@ -51,12 +51,14 @@ class SharedSecureStorageViewModelTest {
         givenKey(KEY_INFO_WITH_PASSPHRASE)
         val viewModel = createViewModel()
         viewModel
-                .test()
-                .assertState(aViewState(
-                        hasPassphrase = true,
-                        step = SharedSecureStorageViewState.Step.EnterPassphrase
-                ))
-                .finish()
+            .test()
+            .assertState(
+                aViewState(
+                    hasPassphrase = true,
+                    step = SharedSecureStorageViewState.Step.EnterPassphrase
+                )
+            )
+            .finish()
     }
 
     @Test
@@ -66,12 +68,14 @@ class SharedSecureStorageViewModelTest {
         val viewModel = createViewModel()
 
         viewModel
-                .test()
-                .assertState(aViewState(
-                        hasPassphrase = false,
-                        step = SharedSecureStorageViewState.Step.EnterKey
-                ))
-                .finish()
+            .test()
+            .assertState(
+                aViewState(
+                    hasPassphrase = false,
+                    step = SharedSecureStorageViewState.Step.EnterKey
+                )
+            )
+            .finish()
     }
 
     @Test
@@ -82,8 +86,8 @@ class SharedSecureStorageViewModelTest {
         val test = viewModel.test()
         viewModel.handle(SharedSecureStorageAction.Back)
         test
-                .assertEvents(SharedSecureStorageViewEvent.Dismiss)
-                .finish()
+            .assertEvents(SharedSecureStorageViewEvent.Dismiss)
+            .finish()
     }
 
     @Test
@@ -95,17 +99,17 @@ class SharedSecureStorageViewModelTest {
         viewModel.handle(SharedSecureStorageAction.UseKey)
 
         test
-                .assertStates(
-                        aViewState(
-                                hasPassphrase = true,
-                                step = SharedSecureStorageViewState.Step.EnterPassphrase
-                        ),
-                        aViewState(
-                                hasPassphrase = true,
-                                step = SharedSecureStorageViewState.Step.EnterKey
-                        )
+            .assertStates(
+                aViewState(
+                    hasPassphrase = true,
+                    step = SharedSecureStorageViewState.Step.EnterPassphrase
+                ),
+                aViewState(
+                    hasPassphrase = true,
+                    step = SharedSecureStorageViewState.Step.EnterKey
                 )
-                .finish()
+            )
+            .finish()
     }
 
     @Test
@@ -118,21 +122,21 @@ class SharedSecureStorageViewModelTest {
         viewModel.handle(SharedSecureStorageAction.Back)
 
         test
-                .assertStates(
-                        aViewState(
-                                hasPassphrase = true,
-                                step = SharedSecureStorageViewState.Step.EnterPassphrase
-                        ),
-                        aViewState(
-                                hasPassphrase = true,
-                                step = SharedSecureStorageViewState.Step.EnterKey
-                        ),
-                        aViewState(
-                                hasPassphrase = true,
-                                step = SharedSecureStorageViewState.Step.EnterPassphrase
-                        )
+            .assertStates(
+                aViewState(
+                    hasPassphrase = true,
+                    step = SharedSecureStorageViewState.Step.EnterPassphrase
+                ),
+                aViewState(
+                    hasPassphrase = true,
+                    step = SharedSecureStorageViewState.Step.EnterKey
+                ),
+                aViewState(
+                    hasPassphrase = true,
+                    step = SharedSecureStorageViewState.Step.EnterPassphrase
                 )
-                .finish()
+            )
+            .finish()
     }
 
     @Test
@@ -144,26 +148,26 @@ class SharedSecureStorageViewModelTest {
         viewModel.handle(SharedSecureStorageAction.Back)
 
         test
-                .assertEvents(SharedSecureStorageViewEvent.Dismiss)
-                .finish()
+            .assertEvents(SharedSecureStorageViewEvent.Dismiss)
+            .finish()
     }
 
     private fun createViewModel(): SharedSecureStorageViewModel {
         return SharedSecureStorageViewModel(
-                SharedSecureStorageViewState(args),
-                stringProvider.instance,
-                fakeSession
+            SharedSecureStorageViewState(args),
+            stringProvider.instance,
+            fakeSession
         )
     }
 
     private fun aViewState(hasPassphrase: Boolean, step: SharedSecureStorageViewState.Step) = SharedSecureStorageViewState(args).copy(
-            ready = true,
-            hasPassphrase = hasPassphrase,
-            checkingSSSSAction = Uninitialized,
-            step = step,
-            activeDeviceCount = 0,
-            showResetAllAction = false,
-            userId = fakeSession.myUserId
+        ready = true,
+        hasPassphrase = hasPassphrase,
+        checkingSSSSAction = Uninitialized,
+        step = step,
+        activeDeviceCount = 0,
+        showResetAllAction = false,
+        userId = fakeSession.myUserId
     )
 
     private fun givenKey(keyInfo: KeyInfo) {

@@ -46,10 +46,10 @@ import javax.inject.Inject
  * Epoxy controller for edit history list
  */
 class ViewEditHistoryEpoxyController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider,
-        private val eventHtmlRenderer: EventHtmlRenderer,
-        private val dateFormatter: VectorDateFormatter
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider,
+    private val eventHtmlRenderer: EventHtmlRenderer,
+    private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<ViewEditHistoryViewState>() {
 
     override fun buildModels(state: ViewEditHistoryViewState) {
@@ -61,7 +61,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
                     id("Spinner")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 genericFooterItem {
                     id("failure")
                     text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
@@ -86,7 +86,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
 
                 val evDate = Calendar.getInstance().apply {
                     timeInMillis = timelineEvent.originServerTs
-                            ?: System.currentTimeMillis()
+                        ?: System.currentTimeMillis()
                 }
                 if (lastDate?.get(Calendar.DAY_OF_YEAR) != evDate.get(Calendar.DAY_OF_YEAR)) {
                     // need to display header with day
@@ -125,7 +125,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
                                         textColor = colorProvider.getColor(R.color.palette_element_green)
                                     }
                                 }
-                                else                              -> {
+                                else -> {
                                     span {
                                         text = it.text
                                     }
@@ -146,8 +146,8 @@ class ViewEditHistoryEpoxyController @Inject constructor(
     private fun getCorrectContent(event: Event, isOriginalReply: Boolean): TextContent {
         val clearContent = event.getClearContent().toModel<MessageTextContent>()
         val newContent = clearContent
-                ?.newContent
-                ?.toModel<MessageTextContent>()
+            ?.newContent
+            ?.toModel<MessageTextContent>()
         if (isOriginalReply) {
             return TextContent(extractUsefulTextFromReply(newContent?.body ?: clearContent?.body ?: ""))
         }

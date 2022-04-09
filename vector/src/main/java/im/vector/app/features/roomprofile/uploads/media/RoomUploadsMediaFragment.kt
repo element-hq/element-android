@@ -54,11 +54,11 @@ import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import javax.inject.Inject
 
 class RoomUploadsMediaFragment @Inject constructor(
-        private val controller: UploadsMediaController,
-        private val dimensionConverter: DimensionConverter
+    private val controller: UploadsMediaController,
+    private val dimensionConverter: DimensionConverter
 ) : VectorBaseFragment<FragmentGenericStateViewRecyclerBinding>(),
-        UploadsMediaController.Listener,
-        StateView.EventCallback {
+    UploadsMediaController.Listener,
+    StateView.EventCallback {
 
     private val uploadsViewModel by parentFragmentViewModel(RoomUploadsViewModel::class)
 
@@ -100,19 +100,19 @@ class RoomUploadsMediaFragment @Inject constructor(
     // the app bar using find by id...
     private fun trickFindAppBar(): AppBarLayout? {
         return activity?.supportFragmentManager?.fragments
-                ?.filterIsInstance<RoomUploadsFragment>()
-                ?.firstOrNull()
-                ?.roomUploadsAppBar
+            ?.filterIsInstance<RoomUploadsFragment>()
+            ?.firstOrNull()
+            ?.roomUploadsAppBar
     }
 
     override fun onOpenImageClicked(view: View, mediaData: ImageContentRenderer.Data) = withState(uploadsViewModel) { state ->
         val inMemory = getItemsArgs(state)
         navigator.openMediaViewer(
-                activity = requireActivity(),
-                roomId = state.roomId,
-                mediaData = mediaData,
-                view = view,
-                inMemory = inMemory
+            activity = requireActivity(),
+            roomId = state.roomId,
+            mediaData = mediaData,
+            view = view,
+            inMemory = inMemory
         ) { pairs ->
             trickFindAppBar()?.let {
                 pairs.add(Pair(it, ViewCompat.getTransitionName(it) ?: ""))
@@ -125,39 +125,39 @@ class RoomUploadsMediaFragment @Inject constructor(
             when (val content = it.contentWithAttachmentContent) {
                 is MessageImageContent -> {
                     ImageContentRenderer.Data(
-                            eventId = it.eventId,
-                            filename = content.body,
-                            mimeType = content.mimeType,
-                            url = content.getFileUrl(),
-                            elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
-                            maxHeight = -1,
-                            maxWidth = -1,
-                            width = null,
-                            height = null
+                        eventId = it.eventId,
+                        filename = content.body,
+                        mimeType = content.mimeType,
+                        url = content.getFileUrl(),
+                        elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
+                        maxHeight = -1,
+                        maxWidth = -1,
+                        width = null,
+                        height = null
                     )
                 }
                 is MessageVideoContent -> {
                     val thumbnailData = ImageContentRenderer.Data(
-                            eventId = it.eventId,
-                            filename = content.body,
-                            mimeType = content.mimeType,
-                            url = content.videoInfo?.getThumbnailUrl(),
-                            elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
-                            height = content.videoInfo?.height,
-                            maxHeight = -1,
-                            width = content.videoInfo?.width,
-                            maxWidth = -1
+                        eventId = it.eventId,
+                        filename = content.body,
+                        mimeType = content.mimeType,
+                        url = content.videoInfo?.getThumbnailUrl(),
+                        elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
+                        height = content.videoInfo?.height,
+                        maxHeight = -1,
+                        width = content.videoInfo?.width,
+                        maxWidth = -1
                     )
                     VideoContentRenderer.Data(
-                            eventId = it.eventId,
-                            filename = content.body,
-                            mimeType = content.mimeType,
-                            url = content.getFileUrl(),
-                            elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
-                            thumbnailMediaData = thumbnailData
+                        eventId = it.eventId,
+                        filename = content.body,
+                        mimeType = content.mimeType,
+                        url = content.getFileUrl(),
+                        elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
+                        thumbnailMediaData = thumbnailData
                     )
                 }
-                else                   -> null
+                else -> null
             }
         }
     }
@@ -165,11 +165,11 @@ class RoomUploadsMediaFragment @Inject constructor(
     override fun onOpenVideoClicked(view: View, mediaData: VideoContentRenderer.Data) = withState(uploadsViewModel) { state ->
         val inMemory = getItemsArgs(state)
         navigator.openMediaViewer(
-                activity = requireActivity(),
-                roomId = state.roomId,
-                mediaData = mediaData,
-                view = view,
-                inMemory = inMemory
+            activity = requireActivity(),
+            roomId = state.roomId,
+            mediaData = mediaData,
+            view = view,
+            inMemory = inMemory
         ) { pairs ->
             trickFindAppBar()?.let {
                 pairs.add(Pair(it, ViewCompat.getTransitionName(it) ?: ""))
@@ -191,7 +191,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                 is Loading -> {
                     views.genericStateViewListStateView.state = StateView.State.Loading
                 }
-                is Fail    -> {
+                is Fail -> {
                     views.genericStateViewListStateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
                 }
                 is Success -> {
@@ -200,12 +200,12 @@ class RoomUploadsMediaFragment @Inject constructor(
                         loadMore()
                     } else {
                         views.genericStateViewListStateView.state = StateView.State.Empty(
-                                title = getString(R.string.uploads_media_no_result),
-                                image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_image)
+                            title = getString(R.string.uploads_media_no_result),
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_image)
                         )
                     }
                 }
-                else       -> Unit
+                else -> Unit
             }
         } else {
             views.genericStateViewListStateView.state = StateView.State.Content

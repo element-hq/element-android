@@ -20,15 +20,15 @@ import io.realm.RealmList
 import io.realm.RealmObject
 
 internal open class KeyInfoEntity(
-        var publicKeyBase64: String? = null,
-//        var isTrusted: Boolean = false,
-        var usages: RealmList<String> = RealmList(),
-        /**
-         * The signature of this MXDeviceInfo.
-         * A map from "<userId>" to a map from "<key type>:<Publickey>" to "<signature>"
-         */
-        var signatures: String? = null,
-        var trustLevelEntity: TrustLevelEntity? = null
+    var publicKeyBase64: String? = null,
+    //        var isTrusted: Boolean = false,
+    var usages: RealmList<String> = RealmList(),
+    /**
+     * The signature of this MXDeviceInfo.
+     * A map from "<userId>" to a map from "<key type>:<Publickey>" to "<signature>"
+     */
+    var signatures: String? = null,
+    var trustLevelEntity: TrustLevelEntity? = null
 ) : RealmObject()
 
 internal fun KeyInfoEntity.deleteOnCascade() {

@@ -89,34 +89,36 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome))
 
         test
-                .assertEvents(OnboardingViewEvents.OnTakeMeHome)
-                .finish()
+            .assertEvents(OnboardingViewEvents.OnTakeMeHome)
+            .finish()
     }
 
     @Test
     fun `given supports changing display name, when handling PersonalizeProfile, then emits contents choose display name`() = runTest {
-        val initialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = true, supportsChangingProfilePicture = false))
+        val initialState =
+            initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = true, supportsChangingProfilePicture = false))
         viewModel = createViewModel(initialState)
         val test = viewModel.test()
 
         viewModel.handle(OnboardingAction.PersonalizeProfile)
 
         test
-                .assertEvents(OnboardingViewEvents.OnChooseDisplayName)
-                .finish()
+            .assertEvents(OnboardingViewEvents.OnChooseDisplayName)
+            .finish()
     }
 
     @Test
     fun `given only supports changing profile picture, when handling PersonalizeProfile, then emits contents choose profile picture`() = runTest {
-        val initialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = false, supportsChangingProfilePicture = true))
+        val initialState =
+            initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = false, supportsChangingProfilePicture = true))
         viewModel = createViewModel(initialState)
         val test = viewModel.test()
 
         viewModel.handle(OnboardingAction.PersonalizeProfile)
 
         test
-                .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
-                .finish()
+            .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
+            .finish()
     }
 
     @Test
@@ -130,13 +132,13 @@ class OnboardingViewModelTest {
         viewModel.handle(A_LOGIN_OR_REGISTER_ACTION)
 
         test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
-                .finish()
+            .assertStatesChanges(
+                initialState,
+                { copy(isLoading = true) },
+                { copy(isLoading = false) }
+            )
+            .assertEvents(OnboardingViewEvents.OnAccountSignedIn)
+            .finish()
     }
 
     @Test
@@ -150,13 +152,13 @@ class OnboardingViewModelTest {
         viewModel.handle(A_LOGIN_OR_REGISTER_ACTION)
 
         test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
-                .finish()
+            .assertStatesChanges(
+                initialState,
+                { copy(isLoading = true) },
+                { copy(isLoading = false) }
+            )
+            .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
+            .finish()
     }
 
     @Test
@@ -167,14 +169,14 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.UpdateSignMode(SignMode.SignUp))
 
         test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(signMode = SignMode.SignUp) },
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
-                .finish()
+            .assertStatesChanges(
+                initialState,
+                { copy(signMode = SignMode.SignUp) },
+                { copy(isLoading = true) },
+                { copy(isLoading = false) }
+            )
+            .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
+            .finish()
     }
 
     @Test
@@ -185,13 +187,13 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
 
         test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
-                .finish()
+            .assertStatesChanges(
+                initialState,
+                { copy(isLoading = true) },
+                { copy(isLoading = false) }
+            )
+            .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
+            .finish()
     }
 
     @Test
@@ -202,9 +204,9 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.PostRegisterAction(A_NON_LOADABLE_REGISTER_ACTION))
 
         test
-                .assertState(initialState)
-                .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
-                .finish()
+            .assertState(initialState)
+            .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
+            .finish()
     }
 
     @Test
@@ -215,13 +217,13 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.PostRegisterAction(A_RESULT_IGNORED_REGISTER_ACTION))
 
         test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) }
-                )
-                .assertNoEvents()
-                .finish()
+            .assertStatesChanges(
+                initialState,
+                { copy(isLoading = true) },
+                { copy(isLoading = false) }
+            )
+            .assertNoEvents()
+            .finish()
     }
 
     @Test
@@ -234,62 +236,65 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
 
         test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
-                )
-                .assertEvents(OnboardingViewEvents.OnAccountCreated)
-                .finish()
+            .assertStatesChanges(
+                initialState,
+                { copy(isLoading = true) },
+                { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
+            )
+            .assertEvents(OnboardingViewEvents.OnAccountCreated)
+            .finish()
     }
 
     @Test
-    fun `given personalisation enabled and registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() = runTest {
-        fakeVectorFeatures.givenPersonalisationEnabled()
-        givenSuccessfulRegistrationForStartAndDummySteps(missingStages = listOf(Stage.Dummy(mandatory = true)))
-        val test = viewModel.test()
+    fun `given personalisation enabled and registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() =
+        runTest {
+            fakeVectorFeatures.givenPersonalisationEnabled()
+            givenSuccessfulRegistrationForStartAndDummySteps(missingStages = listOf(Stage.Dummy(mandatory = true)))
+            val test = viewModel.test()
 
-        viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
+            viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
 
-        test
+            test
                 .assertStatesChanges(
-                        initialState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
+                    initialState,
+                    { copy(isLoading = true) },
+                    { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
-    }
+        }
 
     @Test
-    fun `given changing profile picture is supported, when updating display name, then updates upstream user display name and moves to choose profile picture`() = runTest {
-        val personalisedInitialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = true))
-        viewModel = createViewModel(personalisedInitialState)
-        val test = viewModel.test()
+    fun `given changing profile picture is supported, when updating display name, then updates upstream user display name and moves to choose profile picture`() =
+        runTest {
+            val personalisedInitialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = true))
+            viewModel = createViewModel(personalisedInitialState)
+            val test = viewModel.test()
 
-        viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
+            viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
-        test
+            test
                 .assertStatesChanges(personalisedInitialState, expectedSuccessfulDisplayNameUpdateStates())
                 .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
                 .finish()
-        fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
-    }
+            fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
+        }
 
     @Test
-    fun `given changing profile picture is not supported, when updating display name, then updates upstream user display name and completes personalization`() = runTest {
-        val personalisedInitialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = false))
-        viewModel = createViewModel(personalisedInitialState)
-        val test = viewModel.test()
+    fun `given changing profile picture is not supported, when updating display name, then updates upstream user display name and completes personalization`() =
+        runTest {
+            val personalisedInitialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = false))
+            viewModel = createViewModel(personalisedInitialState)
+            val test = viewModel.test()
 
-        viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
+            viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
-        test
+            test
                 .assertStatesChanges(personalisedInitialState, expectedSuccessfulDisplayNameUpdateStates())
                 .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
                 .finish()
-        fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
-    }
+            fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
+        }
 
     @Test
     fun `given upstream failure, when handling display name update, then emits failure event`() = runTest {
@@ -299,13 +304,13 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
         test
-                .assertStatesChanges(
-                        initialState,
-                        { copy(isLoading = true) },
-                        { copy(isLoading = false) },
-                )
-                .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
-                .finish()
+            .assertStatesChanges(
+                initialState,
+                { copy(isLoading = true) },
+                { copy(isLoading = false) },
+            )
+            .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
+            .finish()
     }
 
     @Test
@@ -315,12 +320,12 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.ProfilePictureSelected(fakeUri.instance))
 
         test
-                .assertStates(
-                        initialState,
-                        initialState.copy(personalizationState = initialState.personalizationState.copy(selectedPictureUri = fakeUri.instance))
-                )
-                .assertNoEvents()
-                .finish()
+            .assertStates(
+                initialState,
+                initialState.copy(personalizationState = initialState.personalizationState.copy(selectedPictureUri = fakeUri.instance))
+            )
+            .assertNoEvents()
+            .finish()
     }
 
     @Test
@@ -332,9 +337,9 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.SaveSelectedProfilePicture)
 
         test
-                .assertStates(expectedProfilePictureSuccessStates(initialStateWithPicture))
-                .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
-                .finish()
+            .assertStates(expectedProfilePictureSuccessStates(initialStateWithPicture))
+            .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
+            .finish()
         fakeSession.fakeProfileService.verifyAvatarUpdated(fakeSession.myUserId, fakeUri.instance, A_PICTURE_FILENAME)
     }
 
@@ -348,9 +353,9 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.SaveSelectedProfilePicture)
 
         test
-                .assertStates(expectedProfilePictureFailureStates(initialStateWithPicture))
-                .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
-                .finish()
+            .assertStates(expectedProfilePictureFailureStates(initialStateWithPicture))
+            .assertEvents(OnboardingViewEvents.Failure(AN_ERROR))
+            .finish()
     }
 
     @Test
@@ -360,9 +365,9 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.SaveSelectedProfilePicture)
 
         test
-                .assertStates(initialState)
-                .assertEvent { it is OnboardingViewEvents.Failure && it.throwable is NullPointerException }
-                .finish()
+            .assertStates(initialState)
+            .assertEvent { it is OnboardingViewEvents.Failure && it.throwable is NullPointerException }
+            .finish()
     }
 
     @Test
@@ -372,27 +377,27 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.UpdateProfilePictureSkipped)
 
         test
-                .assertStates(initialState)
-                .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
-                .finish()
+            .assertStates(initialState)
+            .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
+            .finish()
     }
 
     private fun createViewModel(state: OnboardingViewState = initialState): OnboardingViewModel {
         return OnboardingViewModel(
-                state,
-                fakeContext.instance,
-                fakeAuthenticationService,
-                fakeActiveSessionHolder.instance,
-                FakeHomeServerConnectionConfigFactory().instance,
-                ReAuthHelper(),
-                FakeStringProvider().instance,
-                FakeHomeServerHistoryService(),
-                fakeVectorFeatures,
-                FakeAnalyticsTracker(),
-                fakeUriFilenameResolver.instance,
-                fakeRegisterActionHandler.instance,
-                fakeDirectLoginUseCase.instance,
-                FakeVectorOverrides()
+            state,
+            fakeContext.instance,
+            fakeAuthenticationService,
+            fakeActiveSessionHolder.instance,
+            FakeHomeServerConnectionConfigFactory().instance,
+            ReAuthHelper(),
+            FakeStringProvider().instance,
+            FakeHomeServerHistoryService(),
+            fakeVectorFeatures,
+            FakeAnalyticsTracker(),
+            fakeUriFilenameResolver.instance,
+            fakeRegisterActionHandler.instance,
+            fakeDirectLoginUseCase.instance,
+            FakeVectorOverrides()
         )
     }
 
@@ -403,30 +408,32 @@ class OnboardingViewModelTest {
     }
 
     private fun expectedProfilePictureSuccessStates(state: OnboardingViewState) = listOf(
-            state,
-            state.copy(isLoading = true),
-            state.copy(isLoading = false)
+        state,
+        state.copy(isLoading = true),
+        state.copy(isLoading = false)
     )
 
     private fun expectedProfilePictureFailureStates(state: OnboardingViewState) = listOf(
-            state,
-            state.copy(isLoading = true),
-            state.copy(isLoading = false)
+        state,
+        state.copy(isLoading = true),
+        state.copy(isLoading = false)
     )
 
     private fun expectedSuccessfulDisplayNameUpdateStates(): List<OnboardingViewState.() -> OnboardingViewState> {
         return listOf(
-                { copy(isLoading = true) },
-                { copy(isLoading = false, personalizationState = personalizationState.copy(displayName = A_DISPLAY_NAME)) }
+            { copy(isLoading = true) },
+            { copy(isLoading = false, personalizationState = personalizationState.copy(displayName = A_DISPLAY_NAME)) }
         )
     }
 
     private fun givenSuccessfulRegistrationForStartAndDummySteps(missingStages: List<Stage>) {
         val flowResult = FlowResult(missingStages = missingStages, completedStages = emptyList())
-        givenRegistrationResultsFor(listOf(
+        givenRegistrationResultsFor(
+            listOf(
                 A_LOADABLE_REGISTER_ACTION to RegistrationResult.FlowResponse(flowResult),
                 RegisterAction.RegisterDummy to RegistrationResult.Success(fakeSession)
-        ))
+            )
+        )
         givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
     }
 
@@ -454,6 +461,6 @@ class OnboardingViewModelTest {
 }
 
 private fun HomeServerCapabilities.toPersonalisationState() = PersonalizationState(
-        supportsChangingDisplayName = canChangeDisplayName,
-        supportsChangingProfilePicture = canChangeAvatar
+    supportsChangingDisplayName = canChangeDisplayName,
+    supportsChangingProfilePicture = canChangeAvatar
 )

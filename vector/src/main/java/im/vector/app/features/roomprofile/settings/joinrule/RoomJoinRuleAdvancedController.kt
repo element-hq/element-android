@@ -31,9 +31,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class RoomJoinRuleAdvancedController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider,
-        private val avatarRenderer: AvatarRenderer
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider,
+    private val avatarRenderer: AvatarRenderer
 ) : TypedEpoxyController<RoomJoinRuleChooseRestrictedState>() {
 
     interface InteractionListener {
@@ -64,14 +64,14 @@ class RoomJoinRuleAdvancedController @Inject constructor(
 
         // invite only
         RoomJoinRuleRadioAction(
-                roomJoinRule = RoomJoinRules.INVITE,
-                description = stringProvider.getString(R.string.room_settings_room_access_private_description),
-                title = stringProvider.getString(R.string.room_settings_room_access_private_invite_only_title),
-                isSelected = state.currentRoomJoinRules == RoomJoinRules.INVITE
+            roomJoinRule = RoomJoinRules.INVITE,
+            description = stringProvider.getString(R.string.room_settings_room_access_private_description),
+            title = stringProvider.getString(R.string.room_settings_room_access_private_invite_only_title),
+            isSelected = state.currentRoomJoinRules == RoomJoinRules.INVITE
         ).toRadioBottomSheetItem().let {
             it.listener {
                 interactionListener?.didSelectRule(RoomJoinRules.INVITE)
-//                listener?.didSelectAction(action)
+                //                listener?.didSelectAction(action)
             }
             add(it)
         }
@@ -91,10 +91,10 @@ class RoomJoinRuleAdvancedController @Inject constructor(
 
         // Public
         RoomJoinRuleRadioAction(
-                roomJoinRule = RoomJoinRules.PUBLIC,
-                description = stringProvider.getString(R.string.room_settings_room_access_public_description),
-                title = stringProvider.getString(R.string.room_settings_room_access_public_title),
-                isSelected = state.currentRoomJoinRules == RoomJoinRules.PUBLIC
+            roomJoinRule = RoomJoinRules.PUBLIC,
+            description = stringProvider.getString(R.string.room_settings_room_access_public_description),
+            title = stringProvider.getString(R.string.room_settings_room_access_public_title),
+            isSelected = state.currentRoomJoinRules == RoomJoinRules.PUBLIC
         ).toRadioBottomSheetItem().let {
             it.listener {
                 interactionListener?.didSelectRule(RoomJoinRules.PUBLIC)

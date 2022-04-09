@@ -46,12 +46,14 @@ import java.util.HashMap
 import javax.inject.Inject
 
 @SessionScope
-internal class WidgetManager @Inject constructor(private val integrationManager: IntegrationManager,
-                                                 private val userAccountDataDataSource: UserAccountDataDataSource,
-                                                 private val stateEventDataSource: StateEventDataSource,
-                                                 private val createWidgetTask: CreateWidgetTask,
-                                                 private val widgetFactory: WidgetFactory,
-                                                 @UserId private val userId: String) :
+internal class WidgetManager @Inject constructor(
+    private val integrationManager: IntegrationManager,
+    private val userAccountDataDataSource: UserAccountDataDataSource,
+    private val stateEventDataSource: StateEventDataSource,
+    private val createWidgetTask: CreateWidgetTask,
+    private val widgetFactory: WidgetFactory,
+    @UserId private val userId: String
+) :
 
     IntegrationManagerService.Listener, SessionLifecycleObserver {
 
@@ -69,16 +71,16 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
     }
 
     fun getRoomWidgetsLive(
-            roomId: String,
-            widgetId: QueryStringValue = QueryStringValue.NoCondition,
-            widgetTypes: Set<String>? = null,
-            excludedTypes: Set<String>? = null
+        roomId: String,
+        widgetId: QueryStringValue = QueryStringValue.NoCondition,
+        widgetTypes: Set<String>? = null,
+        excludedTypes: Set<String>? = null
     ): LiveData<List<Widget>> {
         // Get all im.vector.modular.widgets state events in the room
         val liveWidgetEvents = stateEventDataSource.getStateEventsLive(
-                roomId = roomId,
-                eventTypes = setOf(EventType.STATE_ROOM_WIDGET, EventType.STATE_ROOM_WIDGET_LEGACY),
-                stateKey = widgetId
+            roomId = roomId,
+            eventTypes = setOf(EventType.STATE_ROOM_WIDGET, EventType.STATE_ROOM_WIDGET_LEGACY),
+            stateKey = widgetId
         )
         return Transformations.map(liveWidgetEvents) { widgetEvents ->
             widgetEvents.mapEventsToWidgets(widgetTypes, excludedTypes)
@@ -86,16 +88,16 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
     }
 
     fun getRoomWidgets(
-            roomId: String,
-            widgetId: QueryStringValue = QueryStringValue.NoCondition,
-            widgetTypes: Set<String>? = null,
-            excludedTypes: Set<String>? = null
+        roomId: String,
+        widgetId: QueryStringValue = QueryStringValue.NoCondition,
+        widgetTypes: Set<String>? = null,
+        excludedTypes: Set<String>? = null
     ): List<Widget> {
         // Get all im.vector.modular.widgets state events in the room
         val widgetEvents: List<Event> = stateEventDataSource.getStateEvents(
-                roomId = roomId,
-                eventTypes = setOf(EventType.STATE_ROOM_WIDGET, EventType.STATE_ROOM_WIDGET_LEGACY),
-                stateKey = widgetId
+            roomId = roomId,
+            eventTypes = setOf(EventType.STATE_ROOM_WIDGET, EventType.STATE_ROOM_WIDGET_LEGACY),
+            stateKey = widgetId
         )
         return widgetEvents.mapEventsToWidgets(widgetTypes, excludedTypes)
     }
@@ -104,8 +106,10 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
         return widgetFactory.computeURL(widget, isLightTheme)
     }
 
-    private fun List<Event>.mapEventsToWidgets(widgetTypes: Set<String>? = null,
-                                               excludedTypes: Set<String>? = null): List<Widget> {
+    private fun List<Event>.mapEventsToWidgets(
+        widgetTypes: Set<String>? = null,
+        excludedTypes: Set<String>? = null
+    ): List<Widget> {
         val widgetEvents = this
         // Widget id -> widget
         val widgets: MutableMap<String, Widget> = HashMap()
@@ -133,8 +137,8 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
     }
 
     fun getUserWidgetsLive(
-            widgetTypes: Set<String>? = null,
-            excludedTypes: Set<String>? = null
+        widgetTypes: Set<String>? = null,
+        excludedTypes: Set<String>? = null
     ): LiveData<List<Widget>> {
         val widgetsAccountData = userAccountDataDataSource.getLiveAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS)
         return Transformations.map(widgetsAccountData) {
@@ -143,22 +147,24 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
     }
 
     fun getUserWidgets(
-            widgetTypes: Set<String>? = null,
-            excludedTypes: Set<String>? = null
+        widgetTypes: Set<String>? = null,
+        excludedTypes: Set<String>? = null
     ): List<Widget> {
         val widgetsAccountData = userAccountDataDataSource.getAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS) ?: return emptyList()
         return widgetsAccountData.mapToWidgets(widgetTypes, excludedTypes)
     }
 
-    private fun UserAccountDataEvent.mapToWidgets(widgetTypes: Set<String>? = null,
-                                                  excludedTypes: Set<String>? = null): List<Widget> {
+    private fun UserAccountDataEvent.mapToWidgets(
+        widgetTypes: Set<String>? = null,
+        excludedTypes: Set<String>? = null
+    ): List<Widget> {
         return extractWidgetSequence(widgetFactory)
-                .filter {
-                    val widgetType = it.widgetContent.type ?: return@filter false
-                    (widgetTypes == null || widgetTypes.contains(widgetType)) &&
-                            (excludedTypes == null || !excludedTypes.contains(widgetType))
-                }
-                .toList()
+            .filter {
+                val widgetType = it.widgetContent.type ?: return@filter false
+                (widgetTypes == null || widgetTypes.contains(widgetType)) &&
+                        (excludedTypes == null || !excludedTypes.contains(widgetType))
+            }
+            .toList()
     }
 
     suspend fun createRoomWidget(roomId: String, widgetId: String, content: Content): Widget {
@@ -166,9 +172,9 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             throw WidgetManagementFailure.NotEnoughPower
         }
         val params = CreateWidgetTask.Params(
-                roomId = roomId,
-                widgetId = widgetId,
-                content = content
+            roomId = roomId,
+            widgetId = widgetId,
+            content = content
         )
         createWidgetTask.execute(params)
         try {
@@ -183,18 +189,18 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
             throw WidgetManagementFailure.NotEnoughPower
         }
         val params = CreateWidgetTask.Params(
-                roomId = roomId,
-                widgetId = widgetId,
-                content = emptyMap()
+            roomId = roomId,
+            widgetId = widgetId,
+            content = emptyMap()
         )
         createWidgetTask.execute(params)
     }
 
     fun hasPermissionsToHandleWidgets(roomId: String): Boolean {
         val powerLevelsEvent = stateEventDataSource.getStateEvent(
-                roomId = roomId,
-                eventType = EventType.STATE_ROOM_POWER_LEVELS,
-                stateKey = QueryStringValue.NoCondition
+            roomId = roomId,
+            eventType = EventType.STATE_ROOM_POWER_LEVELS,
+            stateKey = QueryStringValue.NoCondition
         )
         val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>() ?: return false
         return PowerLevelsHelper(powerLevelsContent).isUserAllowedToSend(userId, true, EventType.STATE_ROOM_WIDGET_LEGACY)

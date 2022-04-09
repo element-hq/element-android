@@ -46,8 +46,8 @@ class DebugVectorOverrides(private val context: Context) : VectorOverrides {
 
     override val forceHomeserverCapabilities = context.dataStore.data.map { preferences ->
         HomeserverCapabilitiesOverride(
-                canChangeDisplayName = preferences[forceCanChangeDisplayName],
-                canChangeAvatar = preferences[forceCanChangeAvatar]
+            canChangeDisplayName = preferences[forceCanChangeDisplayName],
+            canChangeAvatar = preferences[forceCanChangeAvatar]
         )
     }
 

@@ -34,10 +34,10 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import javax.inject.Inject
 
 class GossipingEventsPaperTrailFragment @Inject constructor(
-        private val epoxyController: GossipingTrailPagedEpoxyController,
-        private val colorProvider: ColorProvider
+    private val epoxyController: GossipingTrailPagedEpoxyController,
+    private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
-        GossipingTrailPagedEpoxyController.InteractionListener {
+    GossipingTrailPagedEpoxyController.InteractionListener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -71,9 +71,9 @@ class GossipingEventsPaperTrailFragment @Inject constructor(
             event.toContentStringWithIndent()
         }?.let {
             JSonViewerDialog.newInstance(
-                    it,
-                    -1,
-                    createJSonViewerStyleProvider(colorProvider)
+                it,
+                -1,
+                createJSonViewerStyleProvider(colorProvider)
             ).show(childFragmentManager, "JSON_VIEWER")
         }
     }

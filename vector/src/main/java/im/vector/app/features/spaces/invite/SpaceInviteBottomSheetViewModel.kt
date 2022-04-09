@@ -39,9 +39,9 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 
 class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
-        @Assisted private val initialState: SpaceInviteBottomSheetState,
-        private val session: Session,
-        private val errorFormatter: ErrorFormatter
+    @Assisted private val initialState: SpaceInviteBottomSheetState,
+    private val session: Session,
+    private val errorFormatter: ErrorFormatter
 ) : VectorViewModel<SpaceInviteBottomSheetState, SpaceInviteBottomSheetAction, SpaceInviteBottomSheetEvents>(initialState) {
 
     init {
@@ -51,13 +51,13 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
             }.mapNotNull { session.getUser(it) }
             // put one with avatar first, and take 5
             val peopleYouKnow = (knownMembers.filter { it.avatarUrl != null } + knownMembers.filter { it.avatarUrl == null })
-                    .take(5)
+                .take(5)
 
             setState {
                 copy(
-                        summary = Success(roomSummary),
-                        inviterUser = roomSummary.inviterId?.let { session.getUser(it) }?.let { Success(it) } ?: Uninitialized,
-                        peopleYouKnow = Success(peopleYouKnow)
+                    summary = Success(roomSummary),
+                    inviterUser = roomSummary.inviterId?.let { session.getUser(it) }?.let { Success(it) } ?: Uninitialized,
+                    peopleYouKnow = Success(peopleYouKnow)
                 )
             }
             if (roomSummary.membership == Membership.INVITE) {
@@ -74,18 +74,18 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
             val peekResult = tryOrNull { session.peekRoom(roomSummary.roomId) } as? PeekResult.Success ?: return@launch
             setState {
                 copy(
-                        summary = Success(
-                                roomSummary.copy(
-                                        joinedMembersCount = peekResult.numJoinedMembers,
-                                        // it's also possible that the name/avatar did change since the invite..
-                                        // if it's null keep the old one as summary API might not be available
-                                        // and peek result could be null for other reasons (not peekable)
-                                        avatarUrl = peekResult.avatarUrl ?: roomSummary.avatarUrl,
-                                        displayName = peekResult.name ?: roomSummary.displayName,
-                                        topic = peekResult.topic ?: roomSummary.topic
-                                        // maybe use someMembers field later?
-                                )
+                    summary = Success(
+                        roomSummary.copy(
+                            joinedMembersCount = peekResult.numJoinedMembers,
+                            // it's also possible that the name/avatar did change since the invite..
+                            // if it's null keep the old one as summary API might not be available
+                            // and peek result could be null for other reasons (not peekable)
+                            avatarUrl = peekResult.avatarUrl ?: roomSummary.avatarUrl,
+                            displayName = peekResult.name ?: roomSummary.displayName,
+                            topic = peekResult.topic ?: roomSummary.topic
+                            // maybe use someMembers field later?
                         )
+                    )
                 )
             }
         }
@@ -100,7 +100,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceInviteBottomSheetAction) {
         when (action) {
-            SpaceInviteBottomSheetAction.DoJoin   -> {
+            SpaceInviteBottomSheetAction.DoJoin -> {
                 setState { copy(joinActionState = Loading()) }
                 session.coroutineScope.launch(Dispatchers.IO) {
                     try {

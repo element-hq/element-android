@@ -24,50 +24,50 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class MegolmSessionData(
-        /**
-         * The algorithm used.
-         */
-        @Json(name = "algorithm")
-        val algorithm: String? = null,
+    /**
+     * The algorithm used.
+     */
+    @Json(name = "algorithm")
+    val algorithm: String? = null,
 
-        /**
-         * Unique id for the session.
-         */
-        @Json(name = "session_id")
-        val sessionId: String? = null,
+    /**
+     * Unique id for the session.
+     */
+    @Json(name = "session_id")
+    val sessionId: String? = null,
 
-        /**
-         * Sender's Curve25519 device key.
-         */
-        @Json(name = "sender_key")
-        val senderKey: String? = null,
+    /**
+     * Sender's Curve25519 device key.
+     */
+    @Json(name = "sender_key")
+    val senderKey: String? = null,
 
-        /**
-         * Room this session is used in.
-         */
-        @Json(name = "room_id")
-        val roomId: String? = null,
+    /**
+     * Room this session is used in.
+     */
+    @Json(name = "room_id")
+    val roomId: String? = null,
 
-        /**
-         * Base64'ed key data.
-         */
-        @Json(name = "session_key")
-        val sessionKey: String? = null,
+    /**
+     * Base64'ed key data.
+     */
+    @Json(name = "session_key")
+    val sessionKey: String? = null,
 
-        /**
-         * Other keys the sender claims.
-         */
-        @Json(name = "sender_claimed_keys")
-        val senderClaimedKeys: Map<String, String>? = null,
+    /**
+     * Other keys the sender claims.
+     */
+    @Json(name = "sender_claimed_keys")
+    val senderClaimedKeys: Map<String, String>? = null,
 
-        // This is a shortcut for sender_claimed_keys.get("ed25519")
-        // Keep it for compatibility reason.
-        @Json(name = "sender_claimed_ed25519_key")
-        val senderClaimedEd25519Key: String? = null,
+    // This is a shortcut for sender_claimed_keys.get("ed25519")
+    // Keep it for compatibility reason.
+    @Json(name = "sender_claimed_ed25519_key")
+    val senderClaimedEd25519Key: String? = null,
 
-        /**
-         * Devices which forwarded this session to us (normally empty).
-         */
-        @Json(name = "forwarding_curve25519_key_chain")
-        val forwardingCurve25519KeyChain: List<String>? = null
+    /**
+     * Devices which forwarded this session to us (normally empty).
+     */
+    @Json(name = "forwarding_curve25519_key_chain")
+    val forwardingCurve25519KeyChain: List<String>? = null
 )

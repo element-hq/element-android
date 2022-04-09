@@ -24,7 +24,7 @@ internal interface SpaceGetter {
 }
 
 internal class DefaultSpaceGetter @Inject constructor(
-        private val roomGetter: RoomGetter
+    private val roomGetter: RoomGetter
 ) : SpaceGetter {
 
     override fun get(spaceId: String): Space? {

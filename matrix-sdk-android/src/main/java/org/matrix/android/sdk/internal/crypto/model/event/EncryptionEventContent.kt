@@ -23,21 +23,21 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class EncryptionEventContent(
-        /**
-         * Required. The encryption algorithm to be used to encrypt messages sent in this room. Must be 'm.megolm.v1.aes-sha2'.
-         */
-        @Json(name = "algorithm")
-        val algorithm: String?,
+    /**
+     * Required. The encryption algorithm to be used to encrypt messages sent in this room. Must be 'm.megolm.v1.aes-sha2'.
+     */
+    @Json(name = "algorithm")
+    val algorithm: String?,
 
-        /**
-         * How long the session should be used before changing it. 604800000 (a week) is the recommended default.
-         */
-        @Json(name = "rotation_period_ms")
-        val rotationPeriodMs: Long? = null,
+    /**
+     * How long the session should be used before changing it. 604800000 (a week) is the recommended default.
+     */
+    @Json(name = "rotation_period_ms")
+    val rotationPeriodMs: Long? = null,
 
-        /**
-         * How many messages should be sent before changing the session. 100 is the recommended default.
-         */
-        @Json(name = "rotation_period_msgs")
-        val rotationPeriodMsgs: Long? = null
+    /**
+     * How many messages should be sent before changing the session. 100 is the recommended default.
+     */
+    @Json(name = "rotation_period_msgs")
+    val rotationPeriodMsgs: Long? = null
 )

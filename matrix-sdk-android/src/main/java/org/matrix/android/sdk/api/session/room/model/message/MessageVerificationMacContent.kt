@@ -25,9 +25,9 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoMacFa
 
 @JsonClass(generateAdapter = true)
 internal data class MessageVerificationMacContent(
-        @Json(name = "mac") override val mac: Map<String, String>? = null,
-        @Json(name = "keys") override val keys: String? = null,
-        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
+    @Json(name = "mac") override val mac: Map<String, String>? = null,
+    @Json(name = "keys") override val keys: String? = null,
+    @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
 ) : VerificationInfoMac {
 
     override val transactionId: String?
@@ -38,12 +38,12 @@ internal data class MessageVerificationMacContent(
     companion object : VerificationInfoMacFactory {
         override fun create(tid: String, mac: Map<String, String>, keys: String): VerificationInfoMac {
             return MessageVerificationMacContent(
-                    mac,
-                    keys,
-                    RelationDefaultContent(
-                            RelationType.REFERENCE,
-                            tid
-                    )
+                mac,
+                keys,
+                RelationDefaultContent(
+                    RelationType.REFERENCE,
+                    tid
+                )
             )
         }
     }

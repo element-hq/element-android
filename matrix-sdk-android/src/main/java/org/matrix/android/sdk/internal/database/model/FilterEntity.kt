@@ -23,12 +23,12 @@ import io.realm.RealmObject
  * Currently there is only one object in this table
  */
 internal open class FilterEntity(
-        // The serialized FilterBody
-        var filterBodyJson: String = "",
-        // The serialized room event filter for pagination
-        var roomEventFilterJson: String = "",
-        // the id server side of the filterBodyJson, can be used instead of filterBodyJson if not blank
-        var filterId: String = ""
+    // The serialized FilterBody
+    var filterBodyJson: String = "",
+    // The serialized room event filter for pagination
+    var roomEventFilterJson: String = "",
+    // the id server side of the filterBodyJson, can be used instead of filterBodyJson if not blank
+    var filterId: String = ""
 
 ) : RealmObject() {
 

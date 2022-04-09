@@ -22,9 +22,9 @@ import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.session.room.alias.AliasService
 
 internal class DefaultAliasService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        private val getRoomLocalAliasesTask: GetRoomLocalAliasesTask,
-        private val addRoomAliasTask: AddRoomAliasTask
+    @Assisted private val roomId: String,
+    private val getRoomLocalAliasesTask: GetRoomLocalAliasesTask,
+    private val addRoomAliasTask: AddRoomAliasTask
 ) : AliasService {
 
     @AssistedFactory

@@ -40,12 +40,12 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 
 class RoomListSectionBuilderGroup(
-        private val coroutineScope: CoroutineScope,
-        private val session: Session,
-        private val stringProvider: StringProvider,
-        private val appStateHandler: AppStateHandler,
-        private val autoAcceptInvites: AutoAcceptInvites,
-        private val onUpdatable: (UpdatableLivePageResult) -> Unit
+    private val coroutineScope: CoroutineScope,
+    private val session: Session,
+    private val stringProvider: StringProvider,
+    private val appStateHandler: AppStateHandler,
+    private val autoAcceptInvites: AutoAcceptInvites,
+    private val onUpdatable: (UpdatableLivePageResult) -> Unit
 ) : RoomListSectionBuilder {
 
     override fun buildSections(mode: RoomListDisplayMode): List<RoomsSection> {
@@ -54,46 +54,46 @@ class RoomListSectionBuilderGroup(
         val actualGroupId = appStateHandler.safeActiveGroupId()
 
         when (mode) {
-            RoomListDisplayMode.PEOPLE        -> {
+            RoomListDisplayMode.PEOPLE -> {
                 // 4 sections Invites / Fav / Dms / Low Priority
                 buildPeopleSections(sections, activeGroupAwareQueries, actualGroupId)
             }
-            RoomListDisplayMode.ROOMS         -> {
+            RoomListDisplayMode.ROOMS -> {
                 // 5 sections invites / Fav / Rooms / Low Priority / Server notice
                 buildRoomsSections(sections, activeGroupAwareQueries, actualGroupId)
             }
-            RoomListDisplayMode.FILTERED      -> {
+            RoomListDisplayMode.FILTERED -> {
                 // Used when searching for rooms
                 withQueryParams(
-                        {
-                            it.memberships = Membership.activeMemberships()
-                        },
-                        { qpm ->
-                            val name = stringProvider.getString(R.string.bottom_action_rooms)
-                            val updatableFilterLivePageResult = session.getFilteredPagedRoomSummariesLive(qpm)
-                            onUpdatable(updatableFilterLivePageResult)
+                    {
+                        it.memberships = Membership.activeMemberships()
+                    },
+                    { qpm ->
+                        val name = stringProvider.getString(R.string.bottom_action_rooms)
+                        val updatableFilterLivePageResult = session.getFilteredPagedRoomSummariesLive(qpm)
+                        onUpdatable(updatableFilterLivePageResult)
 
-                            val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
-                                    .flatMapLatest { session.getRoomCountLive(updatableFilterLivePageResult.queryParams).asFlow() }
-                                    .distinctUntilChanged()
+                        val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
+                            .flatMapLatest { session.getRoomCountLive(updatableFilterLivePageResult.queryParams).asFlow() }
+                            .distinctUntilChanged()
 
-                            sections.add(
-                                    RoomsSection(
-                                            sectionName = name,
-                                            livePages = updatableFilterLivePageResult.livePagedList,
-                                            itemCount = itemCountFlow
-                                    )
+                        sections.add(
+                            RoomsSection(
+                                sectionName = name,
+                                livePages = updatableFilterLivePageResult.livePagedList,
+                                itemCount = itemCountFlow
                             )
-                        }
+                        )
+                    }
                 )
             }
             RoomListDisplayMode.NOTIFICATIONS -> {
                 if (autoAcceptInvites.showInvites()) {
                     addSection(
-                            sections,
-                            activeGroupAwareQueries,
-                            R.string.invitations_header,
-                            true
+                        sections,
+                        activeGroupAwareQueries,
+                        R.string.invitations_header,
+                        true
                     ) {
                         it.memberships = listOf(Membership.INVITE)
                         it.roomCategoryFilter = RoomCategoryFilter.ALL
@@ -102,10 +102,10 @@ class RoomListSectionBuilderGroup(
                 }
 
                 addSection(
-                        sections,
-                        activeGroupAwareQueries,
-                        R.string.bottom_action_rooms,
-                        false
+                    sections,
+                    activeGroupAwareQueries,
+                    R.string.bottom_action_rooms,
+                    false
                 ) {
                     it.memberships = listOf(Membership.JOIN)
                     it.roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
@@ -115,26 +115,28 @@ class RoomListSectionBuilderGroup(
         }
 
         appStateHandler.selectedRoomGroupingFlow
-                .distinctUntilChanged()
-                .onEach { groupingMethod ->
-                    val selectedGroupId = (groupingMethod.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
-                    activeGroupAwareQueries.onEach { updater ->
-                        updater.queryParams = updater.queryParams.copy(activeGroupId = selectedGroupId)
-                    }
-                }.launchIn(coroutineScope)
+            .distinctUntilChanged()
+            .onEach { groupingMethod ->
+                val selectedGroupId = (groupingMethod.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
+                activeGroupAwareQueries.onEach { updater ->
+                    updater.queryParams = updater.queryParams.copy(activeGroupId = selectedGroupId)
+                }
+            }.launchIn(coroutineScope)
 
         return sections
     }
 
-    private fun buildRoomsSections(sections: MutableList<RoomsSection>,
-                                   activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
-                                   actualGroupId: String?) {
+    private fun buildRoomsSections(
+        sections: MutableList<RoomsSection>,
+        activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
+        actualGroupId: String?
+    ) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
-                    sections,
-                    activeSpaceAwareQueries,
-                    R.string.invitations_header,
-                    true
+                sections,
+                activeSpaceAwareQueries,
+                R.string.invitations_header,
+                true
             ) {
                 it.memberships = listOf(Membership.INVITE)
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -143,10 +145,10 @@ class RoomListSectionBuilderGroup(
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.bottom_action_favourites,
-                false
+            sections,
+            activeSpaceAwareQueries,
+            R.string.bottom_action_favourites,
+            false
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -155,10 +157,10 @@ class RoomListSectionBuilderGroup(
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.bottom_action_rooms,
-                false
+            sections,
+            activeSpaceAwareQueries,
+            R.string.bottom_action_rooms,
+            false
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -167,10 +169,10 @@ class RoomListSectionBuilderGroup(
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.low_priority_header,
-                false
+            sections,
+            activeSpaceAwareQueries,
+            R.string.low_priority_header,
+            false
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -179,10 +181,10 @@ class RoomListSectionBuilderGroup(
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.system_alerts_header,
-                false
+            sections,
+            activeSpaceAwareQueries,
+            R.string.system_alerts_header,
+            false
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
@@ -192,15 +194,16 @@ class RoomListSectionBuilderGroup(
     }
 
     private fun buildPeopleSections(
-            sections: MutableList<RoomsSection>,
-            activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
-            actualGroupId: String?
+        sections: MutableList<RoomsSection>,
+        activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
+        actualGroupId: String?
     ) {
         if (autoAcceptInvites.showInvites()) {
-            addSection(sections,
-                    activeSpaceAwareQueries,
-                    R.string.invitations_header,
-                    true
+            addSection(
+                sections,
+                activeSpaceAwareQueries,
+                R.string.invitations_header,
+                true
             ) {
                 it.memberships = listOf(Membership.INVITE)
                 it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
@@ -209,10 +212,10 @@ class RoomListSectionBuilderGroup(
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.bottom_action_favourites,
-                false
+            sections,
+            activeSpaceAwareQueries,
+            R.string.bottom_action_favourites,
+            false
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
@@ -221,10 +224,10 @@ class RoomListSectionBuilderGroup(
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.bottom_action_people_x,
-                false
+            sections,
+            activeSpaceAwareQueries,
+            R.string.bottom_action_people_x,
+            false
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
@@ -233,10 +236,10 @@ class RoomListSectionBuilderGroup(
         }
 
         addSection(
-                sections,
-                activeSpaceAwareQueries,
-                R.string.low_priority_header,
-                false
+            sections,
+            activeSpaceAwareQueries,
+            R.string.low_priority_header,
+            false
         ) {
             it.memberships = listOf(Membership.JOIN)
             it.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
@@ -245,44 +248,46 @@ class RoomListSectionBuilderGroup(
         }
     }
 
-    private fun addSection(sections: MutableList<RoomsSection>,
-                           activeSpaceUpdaters: MutableList<UpdatableLivePageResult>,
-                           @StringRes nameRes: Int,
-                           notifyOfLocalEcho: Boolean = false,
-                           query: (RoomSummaryQueryParams.Builder) -> Unit) {
+    private fun addSection(
+        sections: MutableList<RoomsSection>,
+        activeSpaceUpdaters: MutableList<UpdatableLivePageResult>,
+        @StringRes nameRes: Int,
+        notifyOfLocalEcho: Boolean = false,
+        query: (RoomSummaryQueryParams.Builder) -> Unit
+    ) {
         withQueryParams(query) { roomQueryParams ->
             val name = stringProvider.getString(nameRes)
             session.getFilteredPagedRoomSummariesLive(roomQueryParams)
-                    .also {
-                        activeSpaceUpdaters.add(it)
-                    }.livePagedList
-                    .let { livePagedList ->
-                        // use it also as a source to update count
-                        livePagedList.asFlow()
-                                .onEach {
-                                    sections.find { it.sectionName == name }
-                                            ?.notificationCount
-                                            ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
-                                }
-                                .flowOn(Dispatchers.Default)
-                                .launchIn(coroutineScope)
+                .also {
+                    activeSpaceUpdaters.add(it)
+                }.livePagedList
+                .let { livePagedList ->
+                    // use it also as a source to update count
+                    livePagedList.asFlow()
+                        .onEach {
+                            sections.find { it.sectionName == name }
+                                ?.notificationCount
+                                ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
+                        }
+                        .flowOn(Dispatchers.Default)
+                        .launchIn(coroutineScope)
 
-                        sections.add(
-                                RoomsSection(
-                                        sectionName = name,
-                                        livePages = livePagedList,
-                                        notifyOfLocalEcho = notifyOfLocalEcho,
-                                        itemCount = session.getRoomCountLive(roomQueryParams).asFlow()
-                                )
+                    sections.add(
+                        RoomsSection(
+                            sectionName = name,
+                            livePages = livePagedList,
+                            notifyOfLocalEcho = notifyOfLocalEcho,
+                            itemCount = session.getRoomCountLive(roomQueryParams).asFlow()
                         )
-                    }
+                    )
+                }
         }
     }
 
     private fun withQueryParams(builder: (RoomSummaryQueryParams.Builder) -> Unit, block: (RoomSummaryQueryParams) -> Unit) {
         RoomSummaryQueryParams.Builder()
-                .apply { builder.invoke(this) }
-                .build()
-                .let { block(it) }
+            .apply { builder.invoke(this) }
+            .build()
+            .let { block(it) }
     }
 }

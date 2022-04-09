@@ -27,15 +27,15 @@ import javax.inject.Inject
 
 internal abstract class SetPresenceTask : Task<SetPresenceTask.Params, Any> {
     data class Params(
-            val userId: String,
-            val presence: PresenceEnum,
-            val statusMsg: String?
+        val userId: String,
+        val presence: PresenceEnum,
+        val statusMsg: String?
     )
 }
 
 internal class DefaultSetPresenceTask @Inject constructor(
-        private val presenceAPI: PresenceAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val presenceAPI: PresenceAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : SetPresenceTask() {
 
     override suspend fun execute(params: Params): Any {

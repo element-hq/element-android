@@ -42,9 +42,11 @@ import timber.log.Timber
 import java.util.ArrayList
 import java.util.HashMap
 
-class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roomId: String,
-                                                       private val stringProvider: StringProvider,
-                                                       private val session: Session) : WidgetPostAPIMediator.Handler {
+class WidgetPostAPIHandler @AssistedInject constructor(
+    @Assisted private val roomId: String,
+    private val stringProvider: StringProvider,
+    private val session: Session
+) : WidgetPostAPIMediator.Handler {
 
     @AssistedFactory
     interface Factory {
@@ -63,20 +65,20 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
     override fun handleWidgetRequest(mediator: WidgetPostAPIMediator, eventData: JsonDict): Boolean {
         return when (eventData["action"] as String?) {
             "integration_manager_open" -> handleIntegrationManagerOpenAction(eventData).run { true }
-            "bot_options"              -> getBotOptions(mediator, eventData).run { true }
-            "can_send_event"           -> canSendEvent(mediator, eventData).run { true }
-            "close_scalar"             -> handleCloseScalar().run { true }
-            "get_membership_count"     -> getMembershipCount(mediator, eventData).run { true }
-            "get_widgets"              -> getWidgets(mediator, eventData).run { true }
-            "invite"                   -> inviteUser(mediator, eventData).run { true }
-            "join_rules_state"         -> getJoinRules(mediator, eventData).run { true }
-            "membership_state"         -> getMembershipState(mediator, eventData).run { true }
-            "set_bot_options"          -> setBotOptions(mediator, eventData).run { true }
-            "set_bot_power"            -> setBotPower(mediator, eventData).run { true }
-            "set_plumbing_state"       -> setPlumbingState(mediator, eventData).run { true }
-            "set_widget"               -> setWidget(mediator, eventData).run { true }
-            "m.sticker"                -> pickStickerData(mediator, eventData).run { true }
-            else                       -> false
+            "bot_options" -> getBotOptions(mediator, eventData).run { true }
+            "can_send_event" -> canSendEvent(mediator, eventData).run { true }
+            "close_scalar" -> handleCloseScalar().run { true }
+            "get_membership_count" -> getMembershipCount(mediator, eventData).run { true }
+            "get_widgets" -> getWidgets(mediator, eventData).run { true }
+            "invite" -> inviteUser(mediator, eventData).run { true }
+            "join_rules_state" -> getJoinRules(mediator, eventData).run { true }
+            "membership_state" -> getMembershipState(mediator, eventData).run { true }
+            "set_bot_options" -> setBotOptions(mediator, eventData).run { true }
+            "set_bot_power" -> setBotPower(mediator, eventData).run { true }
+            "set_plumbing_state" -> setPlumbingState(mediator, eventData).run { true }
+            "set_widget" -> setWidget(mediator, eventData).run { true }
+            "m.sticker" -> pickStickerData(mediator, eventData).run { true }
+            else -> false
         }
     }
 
@@ -89,21 +91,21 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         var integId: String? = null
         val data = eventData["data"]
         data
-                .takeIf { it is Map<*, *> }
-                ?.let {
-                    val dict = data as Map<*, *>
+            .takeIf { it is Map<*, *> }
+            ?.let {
+                val dict = data as Map<*, *>
 
-                    dict["integType"]
-                            .takeIf { it is String }
-                            ?.let { integType = it as String }
+                dict["integType"]
+                    .takeIf { it is String }
+                    ?.let { integType = it as String }
 
-                    dict["integId"]
-                            .takeIf { it is String }
-                            ?.let { integId = it as String }
+                dict["integId"]
+                    .takeIf { it is String }
+                    ?.let { integId = it as String }
 
-                    // Add "type_" as a prefix
-                    integType?.let { integType = "type_$integType" }
-                }
+                // Add "type_" as a prefix
+                integType?.let { integType = "type_$integType" }
+            }
         navigationCallback?.openIntegrationManager(integId, integType)
     }
 
@@ -275,26 +277,26 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
 
         if (userWidget == true) {
             val addUserWidgetBody = mapOf(
-                    widgetId to mapOf(
-                            "content" to widgetEventContent,
-                            "state_key" to widgetId,
-                            "id" to widgetId,
-                            "sender" to session.myUserId,
-                            "type" to "m.widget"
-                    )
+                widgetId to mapOf(
+                    "content" to widgetEventContent,
+                    "state_key" to widgetId,
+                    "id" to widgetId,
+                    "sender" to session.myUserId,
+                    "type" to "m.widget"
+                )
             )
             launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
                 session.accountDataService().updateUserAccountData(
-                        type = UserAccountDataTypes.TYPE_WIDGETS,
-                        content = addUserWidgetBody
+                    type = UserAccountDataTypes.TYPE_WIDGETS,
+                    content = addUserWidgetBody
                 )
             }
         } else {
             launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
                 session.widgetService().createRoomWidget(
-                        roomId = roomId,
-                        widgetId = widgetId,
-                        content = widgetEventContent
+                    roomId = roomId,
+                    widgetId = widgetId,
+                    content = widgetEventContent
                 )
             }
         }
@@ -318,9 +320,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         params["status"] = status
         launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
             room.sendStateEvent(
-                    eventType = EventType.PLUMBING,
-                    stateKey = "",
-                    body = params
+                eventType = EventType.PLUMBING,
+                stateKey = "",
+                body = params
             )
         }
     }
@@ -343,9 +345,9 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
 
         launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
             room.sendStateEvent(
-                    eventType = EventType.BOT_OPTIONS,
-                    stateKey = stateKey,
-                    body = content
+                eventType = EventType.BOT_OPTIONS,
+                stateKey = stateKey,
+                body = content
             )
         }
     }
@@ -470,12 +472,12 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
             kotlin.runCatching {
                 block()
             }.fold(
-                    onSuccess = {
-                        widgetPostAPIMediator.sendSuccess(eventData)
-                    },
-                    onFailure = {
-                        widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
-                    }
+                onSuccess = {
+                    widgetPostAPIMediator.sendSuccess(eventData)
+                },
+                onFailure = {
+                    widgetPostAPIMediator.sendError(stringProvider.getString(R.string.widget_integration_failed_to_send_request), eventData)
+                }
             )
         }
     }

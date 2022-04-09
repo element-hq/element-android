@@ -58,8 +58,8 @@ abstract class RoomChildItem : VectorEpoxyModel<RoomChildItem.Holder>() {
         holder.memberCountText.text = memberCount
 
         avatarRenderer.render(
-                MatrixItem.RoomItem(roomId, title, avatarUrl),
-                holder.avatarImageView
+            MatrixItem.RoomItem(roomId, title, avatarUrl),
+            holder.avatarImageView
         )
         holder.tabView.tabDepth = depth
     }

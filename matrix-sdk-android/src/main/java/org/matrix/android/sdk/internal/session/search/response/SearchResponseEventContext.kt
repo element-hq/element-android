@@ -23,19 +23,19 @@ import org.matrix.android.sdk.api.util.JsonDict
 
 @JsonClass(generateAdapter = true)
 internal data class SearchResponseEventContext(
-        // Events just before the result.
-        @Json(name = "events_before")
-        val eventsBefore: List<Event>,
-        // Events just after the result.
-        @Json(name = "events_after")
-        val eventsAfter: List<Event>,
-        // Pagination token for the start of the chunk
-        @Json(name = "start")
-        val start: String? = null,
-        // Pagination token for the end of the chunk
-        @Json(name = "end")
-        val end: String? = null,
-        // The historic profile information of the users that sent the events returned. The string key is the user ID for which the profile belongs to.
-        @Json(name = "profile_info")
-        val profileInfo: Map<String, JsonDict>? = null
+    // Events just before the result.
+    @Json(name = "events_before")
+    val eventsBefore: List<Event>,
+    // Events just after the result.
+    @Json(name = "events_after")
+    val eventsAfter: List<Event>,
+    // Pagination token for the start of the chunk
+    @Json(name = "start")
+    val start: String? = null,
+    // Pagination token for the end of the chunk
+    @Json(name = "end")
+    val end: String? = null,
+    // The historic profile information of the users that sent the events returned. The string key is the user ID for which the profile belongs to.
+    @Json(name = "profile_info")
+    val profileInfo: Map<String, JsonDict>? = null
 )

@@ -25,9 +25,9 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoCance
 
 @JsonClass(generateAdapter = true)
 data class MessageVerificationCancelContent(
-        @Json(name = "code") override val code: String? = null,
-        @Json(name = "reason") override val reason: String? = null,
-        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
+    @Json(name = "code") override val code: String? = null,
+    @Json(name = "reason") override val reason: String? = null,
+    @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
 ) : VerificationInfoCancel {
 
     override val transactionId: String?
@@ -38,12 +38,12 @@ data class MessageVerificationCancelContent(
     companion object {
         fun create(transactionId: String, reason: CancelCode): MessageVerificationCancelContent {
             return MessageVerificationCancelContent(
-                    reason.value,
-                    reason.humanReadable,
-                    RelationDefaultContent(
-                            RelationType.REFERENCE,
-                            transactionId
-                    )
+                reason.value,
+                reason.humanReadable,
+                RelationDefaultContent(
+                    RelationType.REFERENCE,
+                    transactionId
+                )
             )
         }
     }

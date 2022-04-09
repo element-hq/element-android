@@ -41,11 +41,11 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
         }
 
         // Not sure why this should be needed
-//        val it = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-//        context.sendBroadcast(it)
+        //        val it = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+        //        context.sendBroadcast(it)
 
         // Close the notification after the click action is performed.
-//        context.stopService(Intent(context, CallHeadsUpService::class.java))
+        //        context.stopService(Intent(context, CallHeadsUpService::class.java))
     }
 
     private fun onCallRejectClicked(callManager: WebRtcCallManager, callId: String) {
@@ -53,8 +53,8 @@ class CallHeadsUpActionReceiver : BroadcastReceiver() {
         callManager.getCallById(callId)?.endCall()
     }
 
-//    private fun onCallAnswerClicked(context: Context) {
-//        Timber.d("onCallAnswerClicked")
-//        peerConnectionManager.answerCall(context)
-//    }
+    //    private fun onCallAnswerClicked(context: Context) {
+    //        Timber.d("onCallAnswerClicked")
+    //        peerConnectionManager.answerCall(context)
+    //    }
 }

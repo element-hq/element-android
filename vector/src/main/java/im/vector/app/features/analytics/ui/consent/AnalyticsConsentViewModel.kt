@@ -27,8 +27,8 @@ import im.vector.app.features.analytics.VectorAnalytics
 import kotlinx.coroutines.launch
 
 class AnalyticsConsentViewModel @AssistedInject constructor(
-        @Assisted initialState: AnalyticsConsentViewState,
-        private val analytics: VectorAnalytics
+    @Assisted initialState: AnalyticsConsentViewState,
+    private val analytics: VectorAnalytics
 ) : VectorViewModel<AnalyticsConsentViewState, AnalyticsConsentViewActions, AnalyticsOptInViewEvents>(initialState) {
 
     @AssistedFactory

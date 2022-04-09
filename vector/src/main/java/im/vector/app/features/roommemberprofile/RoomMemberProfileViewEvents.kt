@@ -34,8 +34,8 @@ sealed class RoomMemberProfileViewEvents : VectorViewEvents {
     data class ShowPowerLevelDemoteWarning(val currentValue: Int, val newValue: Int) : RoomMemberProfileViewEvents()
 
     data class StartVerification(
-            val userId: String,
-            val canCrossSign: Boolean
+        val userId: String,
+        val canCrossSign: Boolean
     ) : RoomMemberProfileViewEvents()
 
     data class ShareRoomMemberProfile(val permalink: String) : RoomMemberProfileViewEvents()

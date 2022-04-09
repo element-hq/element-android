@@ -29,25 +29,25 @@ enum class LocationSharingMode(@StringRes val titleRes: Int) {
 }
 
 data class LocationSharingViewState(
-        val roomId: String,
-        val mode: LocationSharingMode,
-        val userItem: MatrixItem.UserItem? = null,
-        val areTargetAndUserLocationEqual: Boolean? = null,
-        val lastKnownUserLocation: LocationData? = null,
-        val locationTargetDrawable: Drawable? = null
+    val roomId: String,
+    val mode: LocationSharingMode,
+    val userItem: MatrixItem.UserItem? = null,
+    val areTargetAndUserLocationEqual: Boolean? = null,
+    val lastKnownUserLocation: LocationData? = null,
+    val locationTargetDrawable: Drawable? = null
 ) : MavericksState {
 
     constructor(locationSharingArgs: LocationSharingArgs) : this(
-            roomId = locationSharingArgs.roomId,
-            mode = locationSharingArgs.mode,
+        roomId = locationSharingArgs.roomId,
+        mode = locationSharingArgs.mode,
     )
 }
 
 fun LocationSharingViewState.toMapState() = MapState(
-        zoomOnlyOnce = true,
-        userLocationData = lastKnownUserLocation,
-        pinId = DEFAULT_PIN_ID,
-        pinDrawable = null,
-        // show the map pin only when target location and user location are not equal
-        showPin = areTargetAndUserLocationEqual.orTrue().not()
+    zoomOnlyOnce = true,
+    userLocationData = lastKnownUserLocation,
+    pinId = DEFAULT_PIN_ID,
+    pinDrawable = null,
+    // show the map pin only when target location and user location are not equal
+    showPin = areTargetAndUserLocationEqual.orTrue().not()
 )

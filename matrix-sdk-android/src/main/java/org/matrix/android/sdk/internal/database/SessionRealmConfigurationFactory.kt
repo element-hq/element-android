@@ -39,12 +39,13 @@ private const val REALM_NAME = "disk_store.realm"
  * It's clearly not perfect but there is no way to catch the native crash.
  */
 internal class SessionRealmConfigurationFactory @Inject constructor(
-        private val realmKeysUtils: RealmKeysUtils,
-        private val realmSessionStoreMigration: RealmSessionStoreMigration,
-        @SessionFilesDirectory val directory: File,
-        @SessionId val sessionId: String,
-        @UserMd5 val userMd5: String,
-        context: Context) {
+    private val realmKeysUtils: RealmKeysUtils,
+    private val realmSessionStoreMigration: RealmSessionStoreMigration,
+    @SessionFilesDirectory val directory: File,
+    @SessionId val sessionId: String,
+    @UserMd5 val userMd5: String,
+    context: Context
+) {
 
     // Keep legacy preferences name for compatibility reason
     private val sharedPreferences = context.getSharedPreferences("im.vector.matrix.android.realm", Context.MODE_PRIVATE)
@@ -63,17 +64,17 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
         }
 
         val realmConfiguration = RealmConfiguration.Builder()
-                .compactOnLaunch()
-                .directory(directory)
-                .name(REALM_NAME)
-                .apply {
-                    realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
-                }
-                .allowWritesOnUiThread(true)
-                .modules(SessionRealmModule())
-                .schemaVersion(realmSessionStoreMigration.schemaVersion)
-                .migration(realmSessionStoreMigration)
-                .build()
+            .compactOnLaunch()
+            .directory(directory)
+            .name(REALM_NAME)
+            .apply {
+                realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
+            }
+            .allowWritesOnUiThread(true)
+            .modules(SessionRealmModule())
+            .schemaVersion(realmSessionStoreMigration.schemaVersion)
+            .migration(realmSessionStoreMigration)
+            .build()
 
         // Try creating a realm instance and if it succeeds we can clear the flag
         Realm.getInstance(realmConfiguration).use {

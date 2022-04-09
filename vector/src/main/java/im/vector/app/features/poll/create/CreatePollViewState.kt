@@ -32,8 +32,8 @@ data class CreatePollViewState(
 ) : MavericksState {
 
     constructor(args: CreatePollArgs) : this(
-            roomId = args.roomId,
-            editedEventId = args.editedEventId,
-            mode = args.mode
+        roomId = args.roomId,
+        editedEventId = args.editedEventId,
+        mode = args.mode
     )
 }

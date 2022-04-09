@@ -33,11 +33,13 @@ import org.matrix.android.sdk.internal.session.user.UserDataSource
 import java.net.URLEncoder
 import javax.inject.Inject
 
-internal class WidgetFactory @Inject constructor(private val userDataSource: UserDataSource,
-                                                 private val realmSessionProvider: RealmSessionProvider,
-                                                 private val displayNameResolver: DisplayNameResolver,
-                                                 private val urlResolver: ContentUrlResolver,
-                                                 @UserId private val userId: String) {
+internal class WidgetFactory @Inject constructor(
+    private val userDataSource: UserDataSource,
+    private val realmSessionProvider: RealmSessionProvider,
+    private val displayNameResolver: DisplayNameResolver,
+    private val urlResolver: ContentUrlResolver,
+    @UserId private val userId: String
+) {
 
     fun create(widgetEvent: Event): Widget? {
         val widgetContent = widgetEvent.content.toModel<WidgetContent>()
@@ -51,21 +53,21 @@ internal class WidgetFactory @Inject constructor(private val userDataSource: Use
                 val roomMemberHelper = RoomMemberHelper(it, widgetEvent.roomId)
                 val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(widgetEvent.senderId)
                 SenderInfo(
-                        userId = widgetEvent.senderId,
-                        displayName = roomMemberSummaryEntity?.displayName,
-                        isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(roomMemberSummaryEntity?.displayName),
-                        avatarUrl = roomMemberSummaryEntity?.avatarUrl
+                    userId = widgetEvent.senderId,
+                    displayName = roomMemberSummaryEntity?.displayName,
+                    isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(roomMemberSummaryEntity?.displayName),
+                    avatarUrl = roomMemberSummaryEntity?.avatarUrl
                 )
             }
         }
         val isAddedByMe = widgetEvent.senderId == userId
         return Widget(
-                widgetContent = widgetContent,
-                event = widgetEvent,
-                widgetId = widgetId,
-                senderInfo = senderInfo,
-                isAddedByMe = isAddedByMe,
-                type = WidgetType.fromString(type)
+            widgetContent = widgetContent,
+            event = widgetEvent,
+            widgetId = widgetId,
+            senderInfo = senderInfo,
+            isAddedByMe = isAddedByMe,
+            type = WidgetType.fromString(type)
         )
     }
 

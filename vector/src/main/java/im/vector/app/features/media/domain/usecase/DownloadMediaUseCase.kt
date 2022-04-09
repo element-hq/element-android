@@ -28,19 +28,19 @@ import java.io.File
 import javax.inject.Inject
 
 class DownloadMediaUseCase @Inject constructor(
-        @ApplicationContext private val appContext: Context,
-        private val session: Session,
-        private val notificationUtils: NotificationUtils
+    @ApplicationContext private val appContext: Context,
+    private val session: Session,
+    private val notificationUtils: NotificationUtils
 ) {
 
     suspend fun execute(input: File): Result<Unit> = withContext(session.coroutineDispatchers.io) {
         runCatching {
             saveMedia(
-                    context = appContext,
-                    file = input,
-                    title = input.name,
-                    mediaMimeType = getMimeTypeFromUri(appContext, input.toUri()),
-                    notificationUtils = notificationUtils
+                context = appContext,
+                file = input,
+                title = input.name,
+                mediaMimeType = getMimeTypeFromUri(appContext, input.toUri()),
+                notificationUtils = notificationUtils
             )
         }
     }

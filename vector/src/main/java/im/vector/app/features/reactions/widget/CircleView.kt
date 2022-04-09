@@ -32,8 +32,10 @@ import kotlin.math.min
  * This view is responsible for drawing big circle that will pulse when clicked
  * As describe in http://frogermcs.github.io/twitters-like-animation-in-android-alternative/
  */
-class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                           defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+class CircleView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     var startColor = -0xa8de
     var endColor = -0x3ef9
@@ -80,20 +82,20 @@ class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         canvas.drawBitmap(tempBitmap, 0f, 0f, null)
     }
 
-//    fun setInnerCircleRadiusProgress(innerCircleRadiusProgress: Float) {
-//        this.innerCircleRadiusProgress = innerCircleRadiusProgress
-//        postInvalidate()
-//    }
+    //    fun setInnerCircleRadiusProgress(innerCircleRadiusProgress: Float) {
+    //        this.innerCircleRadiusProgress = innerCircleRadiusProgress
+    //        postInvalidate()
+    //    }
 
-//    fun getInnerCircleRadiusProgress(): Float {
-//        return innerCircleRadiusProgress
-//    }
+    //    fun getInnerCircleRadiusProgress(): Float {
+    //        return innerCircleRadiusProgress
+    //    }
 
-//    fun setOuterCircleRadiusProgress(outerCircleRadiusProgress: Float) {
-//        this.outerCircleRadiusProgress = outerCircleRadiusProgress
-//        updateCircleColor()
-//        postInvalidate()
-//    }
+    //    fun setOuterCircleRadiusProgress(outerCircleRadiusProgress: Float) {
+    //        this.outerCircleRadiusProgress = outerCircleRadiusProgress
+    //        updateCircleColor()
+    //        postInvalidate()
+    //    }
 
     private fun updateCircleColor() {
         var colorProgress = clamp(outerCircleRadiusProgress, 0.5f, 1f)
@@ -101,9 +103,9 @@ class CircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         this.circlePaint.color = argbEvaluator.evaluate(colorProgress, startColor, endColor) as Int
     }
 
-//    fun getOuterCircleRadiusProgress(): Float {
-//        return outerCircleRadiusProgress
-//    }
+    //    fun getOuterCircleRadiusProgress(): Float {
+    //        return outerCircleRadiusProgress
+    //    }
 
     companion object {
 

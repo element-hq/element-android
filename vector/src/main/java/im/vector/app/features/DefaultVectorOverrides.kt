@@ -26,8 +26,8 @@ interface VectorOverrides {
 }
 
 data class HomeserverCapabilitiesOverride(
-        val canChangeDisplayName: Boolean?,
-        val canChangeAvatar: Boolean?
+    val canChangeDisplayName: Boolean?,
+    val canChangeAvatar: Boolean?
 )
 
 class DefaultVectorOverrides : VectorOverrides {

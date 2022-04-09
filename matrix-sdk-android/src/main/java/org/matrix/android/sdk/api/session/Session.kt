@@ -69,25 +69,25 @@ import org.matrix.android.sdk.api.session.widgets.WidgetService
  * An instance of a session will be provided by the SDK.
  */
 interface Session :
-        RoomService,
-        RoomDirectoryService,
-        GroupService,
-        UserService,
-        CacheService,
-        SignOutService,
-        FilterService,
-        TermsService,
-        EventService,
-        ProfileService,
-        PresenceService,
-        PushRuleService,
-        PushersService,
-        SyncStatusService,
-        HomeServerCapabilitiesService,
-        SecureStorageService,
-        AccountService,
-        ToDeviceService,
-        EventStreamService {
+    RoomService,
+    RoomDirectoryService,
+    GroupService,
+    UserService,
+    CacheService,
+    SignOutService,
+    FilterService,
+    TermsService,
+    EventService,
+    ProfileService,
+    PresenceService,
+    PushRuleService,
+    PushersService,
+    SyncStatusService,
+    HomeServerCapabilitiesService,
+    SecureStorageService,
+    AccountService,
+    ToDeviceService,
+    EventStreamService {
 
     val coroutineDispatchers: MatrixCoroutineDispatchers
 

@@ -35,10 +35,10 @@ import im.vector.app.features.discovery.settingsSectionTitleItem
 import javax.inject.Inject
 
 class LegalsController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val resources: Resources,
-        private val elementLegals: ElementLegals,
-        private val errorFormatter: ErrorFormatter
+    private val stringProvider: StringProvider,
+    private val resources: Resources,
+    private val elementLegals: ElementLegals,
+    private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<LegalsState>() {
 
     var listener: Listener? = null
@@ -98,7 +98,7 @@ class LegalsController @Inject constructor(
                     buildPolicies(tag, policies)
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("errorRetry_$tag")
                     text(host.errorFormatter.toHumanReadable(serverAndPolicies.error))

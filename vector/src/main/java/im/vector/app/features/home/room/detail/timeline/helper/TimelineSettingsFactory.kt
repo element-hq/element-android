@@ -24,9 +24,9 @@ class TimelineSettingsFactory @Inject constructor(private val userPreferencesPro
 
     fun create(rootThreadEventId: String?): TimelineSettings {
         return TimelineSettings(
-                initialSize = 30,
-                buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts(),
-                rootThreadEventId = rootThreadEventId
+            initialSize = 30,
+            buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts(),
+            rootThreadEventId = rootThreadEventId
         )
     }
 }

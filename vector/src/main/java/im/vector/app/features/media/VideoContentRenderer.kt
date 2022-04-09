@@ -36,30 +36,34 @@ import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject
 
-class VideoContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
-                                               private val activeSessionHolder: ActiveSessionHolder,
-                                               private val errorFormatter: ErrorFormatter) {
+class VideoContentRenderer @Inject constructor(
+    private val localFilesHelper: LocalFilesHelper,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val errorFormatter: ErrorFormatter
+) {
 
     private val sessionScope: CoroutineScope
         get() = activeSessionHolder.getActiveSession().coroutineScope
 
     @Parcelize
     data class Data(
-            override val eventId: String,
-            override val filename: String,
-            override val mimeType: String?,
-            override val url: String?,
-            override val elementToDecrypt: ElementToDecrypt?,
-            val thumbnailMediaData: ImageContentRenderer.Data,
-            // If true will load non mxc url, be careful to set it only for video sent by you
-            override val allowNonMxcUrls: Boolean = false
+        override val eventId: String,
+        override val filename: String,
+        override val mimeType: String?,
+        override val url: String?,
+        override val elementToDecrypt: ElementToDecrypt?,
+        val thumbnailMediaData: ImageContentRenderer.Data,
+        // If true will load non mxc url, be careful to set it only for video sent by you
+        override val allowNonMxcUrls: Boolean = false
     ) : AttachmentData
 
-    fun render(data: Data,
-               thumbnailView: ImageView,
-               loadingView: ProgressBar,
-               videoView: VideoView,
-               errorView: TextView) {
+    fun render(
+        data: Data,
+        thumbnailView: ImageView,
+        loadingView: ProgressBar,
+        videoView: VideoView,
+        errorView: TextView
+    ) {
         val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
 
         if (data.elementToDecrypt != null) {
@@ -83,34 +87,35 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 sessionScope.launch {
                     val result = runCatching {
                         activeSessionHolder.getActiveSession().fileService()
-                                .downloadFile(
-                                        fileName = data.filename,
-                                        mimeType = data.mimeType,
-                                        url = data.url,
-                                        elementToDecrypt = data.elementToDecrypt)
+                            .downloadFile(
+                                fileName = data.filename,
+                                mimeType = data.mimeType,
+                                url = data.url,
+                                elementToDecrypt = data.elementToDecrypt
+                            )
                     }
                     withContext(Dispatchers.Main) {
                         result.fold(
-                                { data ->
-                                    thumbnailView.isVisible = false
-                                    loadingView.isVisible = false
-                                    videoView.isVisible = true
+                            { data ->
+                                thumbnailView.isVisible = false
+                                loadingView.isVisible = false
+                                videoView.isVisible = true
 
-                                    videoView.setVideoPath(data.path)
-                                    videoView.start()
-                                },
-                                {
-                                    loadingView.isVisible = false
-                                    errorView.isVisible = true
-                                    errorView.text = errorFormatter.toHumanReadable(it)
-                                }
+                                videoView.setVideoPath(data.path)
+                                videoView.start()
+                            },
+                            {
+                                loadingView.isVisible = false
+                                errorView.isVisible = true
+                                errorView.text = errorFormatter.toHumanReadable(it)
+                            }
                         )
                     }
                 }
             }
         } else {
             val resolvedUrl = contentUrlResolver.resolveFullSize(data.url)
-                    ?: data.url?.takeIf { localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls }
+                ?: data.url?.takeIf { localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls }
 
             if (resolvedUrl == null) {
                 thumbnailView.isVisible = false
@@ -126,27 +131,28 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 sessionScope.launch {
                     val result = runCatching {
                         activeSessionHolder.getActiveSession().fileService()
-                                .downloadFile(
-                                        fileName = data.filename,
-                                        mimeType = data.mimeType,
-                                        url = data.url,
-                                        elementToDecrypt = null)
+                            .downloadFile(
+                                fileName = data.filename,
+                                mimeType = data.mimeType,
+                                url = data.url,
+                                elementToDecrypt = null
+                            )
                     }
                     withContext(Dispatchers.Main) {
                         result.fold(
-                                { data ->
-                                    thumbnailView.isVisible = false
-                                    loadingView.isVisible = false
-                                    videoView.isVisible = true
+                            { data ->
+                                thumbnailView.isVisible = false
+                                loadingView.isVisible = false
+                                videoView.isVisible = true
 
-                                    videoView.setVideoPath(data.path)
-                                    videoView.start()
-                                },
-                                {
-                                    loadingView.isVisible = false
-                                    errorView.isVisible = true
-                                    errorView.text = errorFormatter.toHumanReadable(it)
-                                }
+                                videoView.setVideoPath(data.path)
+                                videoView.start()
+                            },
+                            {
+                                loadingView.isVisible = false
+                                errorView.isVisible = true
+                                errorView.text = errorFormatter.toHumanReadable(it)
+                            }
                         )
                     }
                 }

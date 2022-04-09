@@ -24,15 +24,15 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class GetPushRulesResponse(
-        /**
-         * Global rules, account level applying to all devices
-         */
-        @Json(name = "global")
-        val global: RuleSet,
+    /**
+     * Global rules, account level applying to all devices
+     */
+    @Json(name = "global")
+    val global: RuleSet,
 
-        /**
-         * Device specific rules, apply only to current device
-         */
-        @Json(name = "device")
-        val device: RuleSet? = null
+    /**
+     * Device specific rules, apply only to current device
+     */
+    @Json(name = "device")
+    val device: RuleSet? = null
 )

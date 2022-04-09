@@ -38,11 +38,12 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
 import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 
-internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                               private val stateEventDataSource: StateEventDataSource,
-                                                               private val sendStateTask: SendStateTask,
-                                                               private val fileUploader: FileUploader,
-                                                               private val viaParameterFinder: ViaParameterFinder
+internal class DefaultStateService @AssistedInject constructor(
+    @Assisted private val roomId: String,
+    private val stateEventDataSource: StateEventDataSource,
+    private val sendStateTask: SendStateTask,
+    private val fileUploader: FileUploader,
+    private val viaParameterFinder: ViaParameterFinder
 ) : StateService {
 
     @AssistedFactory
@@ -67,15 +68,15 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
     }
 
     override suspend fun sendStateEvent(
-            eventType: String,
-            stateKey: String,
-            body: JsonDict
+        eventType: String,
+        stateKey: String,
+        body: JsonDict
     ) {
         val params = SendStateTask.Params(
-                roomId = roomId,
-                stateKey = stateKey,
-                eventType = eventType,
-                body = body.toSafeJson(eventType)
+            roomId = roomId,
+            stateKey = stateKey,
+            eventType = eventType,
+            body = body.toSafeJson(eventType)
         )
         sendStateTask.executeRetry(params, 3)
     }
@@ -84,48 +85,48 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         // Safe treatment for PowerLevelContent
         return when (eventType) {
             EventType.STATE_ROOM_POWER_LEVELS -> toSafePowerLevelsContentDict()
-            else                              -> this
+            else -> this
         }
     }
 
     override suspend fun updateTopic(topic: String) {
         sendStateEvent(
-                eventType = EventType.STATE_ROOM_TOPIC,
-                body = mapOf("topic" to topic),
-                stateKey = ""
+            eventType = EventType.STATE_ROOM_TOPIC,
+            body = mapOf("topic" to topic),
+            stateKey = ""
         )
     }
 
     override suspend fun updateName(name: String) {
         sendStateEvent(
-                eventType = EventType.STATE_ROOM_NAME,
-                body = mapOf("name" to name),
-                stateKey = ""
+            eventType = EventType.STATE_ROOM_NAME,
+            body = mapOf("name" to name),
+            stateKey = ""
         )
     }
 
     override suspend fun updateCanonicalAlias(alias: String?, altAliases: List<String>) {
         sendStateEvent(
-                eventType = EventType.STATE_ROOM_CANONICAL_ALIAS,
-                body = RoomCanonicalAliasContent(
-                        canonicalAlias = alias,
-                        alternativeAliases = altAliases
-                                // Ensure there is no duplicate
-                                .distinct()
-                                // Ensure the canonical alias is not also included in the alt alias
-                                .minus(listOfNotNull(alias))
-                                // Sort for the cleanup
-                                .sorted()
-                ).toContent(),
-                stateKey = ""
+            eventType = EventType.STATE_ROOM_CANONICAL_ALIAS,
+            body = RoomCanonicalAliasContent(
+                canonicalAlias = alias,
+                alternativeAliases = altAliases
+                    // Ensure there is no duplicate
+                    .distinct()
+                    // Ensure the canonical alias is not also included in the alt alias
+                    .minus(listOfNotNull(alias))
+                    // Sort for the cleanup
+                    .sorted()
+            ).toContent(),
+            stateKey = ""
         )
     }
 
     override suspend fun updateHistoryReadability(readability: RoomHistoryVisibility) {
         sendStateEvent(
-                eventType = EventType.STATE_ROOM_HISTORY_VISIBILITY,
-                body = mapOf("history_visibility" to readability),
-                stateKey = ""
+            eventType = EventType.STATE_ROOM_HISTORY_VISIBILITY,
+            body = mapOf("history_visibility" to readability),
+            stateKey = ""
         )
     }
 
@@ -133,23 +134,23 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
         if (joinRules != null) {
             val body = if (joinRules == RoomJoinRules.RESTRICTED) {
                 RoomJoinRulesContent(
-                        _joinRules = RoomJoinRules.RESTRICTED.value,
-                        allowList = allowList
+                    _joinRules = RoomJoinRules.RESTRICTED.value,
+                    allowList = allowList
                 ).toContent()
             } else {
                 mapOf("join_rule" to joinRules)
             }
             sendStateEvent(
-                    eventType = EventType.STATE_ROOM_JOIN_RULES,
-                    body = body,
-                    stateKey = ""
+                eventType = EventType.STATE_ROOM_JOIN_RULES,
+                body = body,
+                stateKey = ""
             )
         }
         if (guestAccess != null) {
             sendStateEvent(
-                    eventType = EventType.STATE_ROOM_GUEST_ACCESS,
-                    body = mapOf("guest_access" to guestAccess),
-                    stateKey = ""
+                eventType = EventType.STATE_ROOM_GUEST_ACCESS,
+                body = mapOf("guest_access" to guestAccess),
+                stateKey = ""
             )
         }
     }
@@ -157,17 +158,17 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
     override suspend fun updateAvatar(avatarUri: Uri, fileName: String) {
         val response = fileUploader.uploadFromUri(avatarUri, fileName, MimeTypes.Jpeg)
         sendStateEvent(
-                eventType = EventType.STATE_ROOM_AVATAR,
-                body = mapOf("url" to response.contentUri),
-                stateKey = ""
+            eventType = EventType.STATE_ROOM_AVATAR,
+            body = mapOf("url" to response.contentUri),
+            stateKey = ""
         )
     }
 
     override suspend fun deleteAvatar() {
         sendStateEvent(
-                eventType = EventType.STATE_ROOM_AVATAR,
-                body = emptyMap(),
-                stateKey = ""
+            eventType = EventType.STATE_ROOM_AVATAR,
+            body = emptyMap(),
+            stateKey = ""
         )
     }
 

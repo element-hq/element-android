@@ -24,9 +24,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class SetDeviceVerificationAction @Inject constructor(
-        private val cryptoStore: IMXCryptoStore,
-        @UserId private val userId: String,
-        private val defaultKeysBackupService: DefaultKeysBackupService) {
+    private val cryptoStore: IMXCryptoStore,
+    @UserId private val userId: String,
+    private val defaultKeysBackupService: DefaultKeysBackupService
+) {
 
     fun handle(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
         val device = cryptoStore.getUserDevice(userId, deviceId)

@@ -30,17 +30,17 @@ internal object ScanEncryptorUtils {
         // TODO, upstream refactoring changed the object model here...
         // it's bad we have to recreate and use hardcoded values
         val encryptedInfo = EncryptedFileInfo(
-                url = mxcUrl,
-                iv = elementToDecrypt.iv,
-                hashes = mapOf("sha256" to elementToDecrypt.sha256),
-                key = EncryptedFileKey(
-                        k = elementToDecrypt.k,
-                        alg = "A256CTR",
-                        keyOps = listOf("encrypt", "decrypt"),
-                        kty = "oct",
-                        ext = true
-                ),
-                v = "v2"
+            url = mxcUrl,
+            iv = elementToDecrypt.iv,
+            hashes = mapOf("sha256" to elementToDecrypt.sha256),
+            key = EncryptedFileKey(
+                k = elementToDecrypt.k,
+                alg = "A256CTR",
+                keyOps = listOf("encrypt", "decrypt"),
+                kty = "oct",
+                ext = true
+            ),
+            v = "v2"
         )
         return if (publicServerKey != null) {
             // We should encrypt
@@ -49,11 +49,11 @@ internal object ScanEncryptorUtils {
 
                 val olmResult = olm.encrypt(DownloadBody(encryptedInfo).toCanonicalJson())
                 DownloadBody(
-                        encryptedBody = EncryptedBody(
-                                cipherText = olmResult.mCipherText,
-                                ephemeral = olmResult.mEphemeralKey,
-                                mac = olmResult.mMac
-                        )
+                    encryptedBody = EncryptedBody(
+                        cipherText = olmResult.mCipherText,
+                        ephemeral = olmResult.mEphemeralKey,
+                        mac = olmResult.mMac
+                    )
                 )
             }
         } else {

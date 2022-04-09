@@ -19,12 +19,12 @@ package org.matrix.android.sdk.internal.session.room.summary
 import java.util.LinkedList
 
 data class GraphNode(
-        val name: String
+    val name: String
 )
 
 data class GraphEdge(
-        val source: GraphNode,
-        val destination: GraphNode
+    val source: GraphNode,
+    val destination: GraphNode
 )
 
 class Graph {
@@ -33,22 +33,22 @@ class Graph {
 
     fun getOrCreateNode(name: String): GraphNode {
         return adjacencyList.entries.firstOrNull { it.key.name == name }?.key
-                ?: GraphNode(name).also {
-                    adjacencyList[it] = ArrayList()
-                }
+            ?: GraphNode(name).also {
+                adjacencyList[it] = ArrayList()
+            }
     }
 
     fun addEdge(sourceName: String, destinationName: String) {
         val source = getOrCreateNode(sourceName)
         val destination = getOrCreateNode(destinationName)
         adjacencyList.getOrPut(source) { ArrayList() }.add(
-                GraphEdge(source, destination)
+            GraphEdge(source, destination)
         )
     }
 
     fun addEdge(source: GraphNode, destination: GraphNode) {
         adjacencyList.getOrPut(source) { ArrayList() }.add(
-                GraphEdge(source, destination)
+            GraphEdge(source, destination)
         )
     }
 
@@ -85,13 +85,13 @@ class Graph {
         val stack = LinkedList<GraphNode>()
 
         (startFrom ?: adjacencyList.entries.firstOrNull { visited[it.key] == notVisited }?.key)
-                ?.let {
-                    stack.push(it)
-                    visited[it] = inPath
-                }
+            ?.let {
+                stack.push(it)
+                visited[it] = inPath
+            }
 
         while (stack.isNotEmpty()) {
-//            Timber.w("VAL: current stack: ${stack.reversed().joinToString { it.name }}")
+            //            Timber.w("VAL: current stack: ${stack.reversed().joinToString { it.name }}")
             val vertex = stack.peek() ?: break
             // peek a path to follow
             var destination: GraphNode? = null

@@ -91,20 +91,20 @@ import kotlin.collections.set
 
 @SessionScope
 internal class DefaultVerificationService @Inject constructor(
-        @UserId private val userId: String,
-        @DeviceId private val deviceId: String?,
-        private val cryptoStore: IMXCryptoStore,
-        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
-        private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
-        private val deviceListManager: DeviceListManager,
-        private val setDeviceVerificationAction: SetDeviceVerificationAction,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val verificationTransportRoomMessageFactory: VerificationTransportRoomMessageFactory,
-        private val verificationTransportToDeviceFactory: VerificationTransportToDeviceFactory,
-        private val crossSigningService: CrossSigningService,
-        private val cryptoCoroutineScope: CoroutineScope,
-        private val taskExecutor: TaskExecutor
+    @UserId private val userId: String,
+    @DeviceId private val deviceId: String?,
+    private val cryptoStore: IMXCryptoStore,
+    private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+    private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
+    private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
+    private val deviceListManager: DeviceListManager,
+    private val setDeviceVerificationAction: SetDeviceVerificationAction,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+    private val verificationTransportRoomMessageFactory: VerificationTransportRoomMessageFactory,
+    private val verificationTransportToDeviceFactory: VerificationTransportToDeviceFactory,
+    private val crossSigningService: CrossSigningService,
+    private val cryptoCoroutineScope: CoroutineScope,
+    private val taskExecutor: TaskExecutor
 ) : DefaultVerificationTransaction.Listener, VerificationService {
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -127,31 +127,31 @@ internal class DefaultVerificationService @Inject constructor(
         Timber.d("## SAS onToDeviceEvent ${event.getClearType()}")
         cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START         -> {
+                EventType.KEY_VERIFICATION_START -> {
                     onStartRequestReceived(event)
                 }
-                EventType.KEY_VERIFICATION_CANCEL        -> {
+                EventType.KEY_VERIFICATION_CANCEL -> {
                     onCancelReceived(event)
                 }
-                EventType.KEY_VERIFICATION_ACCEPT        -> {
+                EventType.KEY_VERIFICATION_ACCEPT -> {
                     onAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY           -> {
+                EventType.KEY_VERIFICATION_KEY -> {
                     onKeyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC           -> {
+                EventType.KEY_VERIFICATION_MAC -> {
                     onMacReceived(event)
                 }
-                EventType.KEY_VERIFICATION_READY         -> {
+                EventType.KEY_VERIFICATION_READY -> {
                     onReadyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_DONE          -> {
+                EventType.KEY_VERIFICATION_DONE -> {
                     onDoneReceived(event)
                 }
                 MessageType.MSGTYPE_VERIFICATION_REQUEST -> {
                     onRequestReceived(event)
                 }
-                else                                     -> {
+                else -> {
                     // ignore
                 }
             }
@@ -161,7 +161,7 @@ internal class DefaultVerificationService @Inject constructor(
     fun onRoomEvent(event: Event) {
         cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
             when (event.getClearType()) {
-                EventType.KEY_VERIFICATION_START  -> {
+                EventType.KEY_VERIFICATION_START -> {
                     onRoomStartRequestReceived(event)
                 }
                 EventType.KEY_VERIFICATION_CANCEL -> {
@@ -171,24 +171,24 @@ internal class DefaultVerificationService @Inject constructor(
                 EventType.KEY_VERIFICATION_ACCEPT -> {
                     onRoomAcceptReceived(event)
                 }
-                EventType.KEY_VERIFICATION_KEY    -> {
+                EventType.KEY_VERIFICATION_KEY -> {
                     onRoomKeyRequestReceived(event)
                 }
-                EventType.KEY_VERIFICATION_MAC    -> {
+                EventType.KEY_VERIFICATION_MAC -> {
                     onRoomMacReceived(event)
                 }
-                EventType.KEY_VERIFICATION_READY  -> {
+                EventType.KEY_VERIFICATION_READY -> {
                     onRoomReadyReceived(event)
                 }
-                EventType.KEY_VERIFICATION_DONE   -> {
+                EventType.KEY_VERIFICATION_DONE -> {
                     onRoomDoneReceived(event)
                 }
-                EventType.MESSAGE                 -> {
+                EventType.MESSAGE -> {
                     if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.msgType) {
                         onRoomRequestReceived(event)
                     }
                 }
-                else                              -> {
+                else -> {
                     // ignore
                 }
             }
@@ -261,9 +261,11 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     override fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
-        setDeviceVerificationAction.handle(DeviceTrustLevel(false, true),
-                userId,
-                deviceID)
+        setDeviceVerificationAction.handle(
+            DeviceTrustLevel(false, true),
+            userId,
+            deviceID
+        )
 
         listeners.forEach {
             try {
@@ -276,13 +278,13 @@ internal class DefaultVerificationService @Inject constructor(
 
     fun onRoomRequestHandledByOtherDevice(event: Event) {
         val requestInfo = event.content.toModel<MessageRelationContent>()
-                ?: return
+            ?: return
         val requestId = requestInfo.relatesTo?.eventId ?: return
         getExistingVerificationRequestInRoom(event.roomId ?: "", requestId)?.let {
             updatePendingRequest(
-                    it.copy(
-                            handledByOtherSession = true
-                    )
+                it.copy(
+                    handledByOtherSession = true
+                )
             )
         }
     }
@@ -313,13 +315,13 @@ internal class DefaultVerificationService @Inject constructor(
         val requestsForUser = pendingRequests.getOrPut(senderId) { mutableListOf() }
 
         val pendingVerificationRequest = PendingVerificationRequest(
-                ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
-                isIncoming = true,
-                otherUserId = senderId, // requestInfo.toUserId,
-                roomId = null,
-                transactionId = validRequestInfo.transactionId,
-                localId = validRequestInfo.transactionId,
-                requestInfo = validRequestInfo
+            ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
+            isIncoming = true,
+            otherUserId = senderId, // requestInfo.toUserId,
+            roomId = null,
+            transactionId = validRequestInfo.transactionId,
+            localId = validRequestInfo.transactionId,
+            requestInfo = validRequestInfo
         )
         requestsForUser.add(pendingVerificationRequest)
         dispatchRequestAdded(pendingVerificationRequest)
@@ -329,9 +331,9 @@ internal class DefaultVerificationService @Inject constructor(
         Timber.v("## SAS Verification request from ${event.senderId} in room ${event.roomId}")
         val requestInfo = event.getClearContent().toModel<MessageVerificationRequestContent>() ?: return
         val validRequestInfo = requestInfo
-                // copy the EventId to the transactionId
-                .copy(transactionId = event.eventId)
-                .asValidObject() ?: return
+            // copy the EventId to the transactionId
+            .copy(transactionId = event.eventId)
+            .asValidObject() ?: return
 
         val senderId = event.senderId ?: return
 
@@ -352,13 +354,13 @@ internal class DefaultVerificationService @Inject constructor(
         val requestsForUser = pendingRequests.getOrPut(senderId) { mutableListOf() }
 
         val pendingVerificationRequest = PendingVerificationRequest(
-                ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
-                isIncoming = true,
-                otherUserId = senderId, // requestInfo.toUserId,
-                roomId = event.roomId,
-                transactionId = event.eventId,
-                localId = event.eventId!!,
-                requestInfo = validRequestInfo
+            ageLocalTs = event.ageLocalTs ?: System.currentTimeMillis(),
+            isIncoming = true,
+            otherUserId = senderId, // requestInfo.toUserId,
+            roomId = event.roomId,
+            transactionId = event.eventId,
+            localId = event.eventId!!,
+            requestInfo = validRequestInfo
         )
         requestsForUser.add(pendingVerificationRequest)
         dispatchRequestAdded(pendingVerificationRequest)
@@ -385,12 +387,12 @@ internal class DefaultVerificationService @Inject constructor(
                 it.transactionId == relatedId && !it.isIncoming
             }?.let { pr ->
                 verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
-                        .cancelTransaction(
-                                relatedId,
-                                event.senderId ?: "",
-                                event.getSenderKey() ?: "",
-                                CancelCode.InvalidMessage
-                        )
+                    .cancelTransaction(
+                        relatedId,
+                        event.senderId ?: "",
+                        event.getSenderKey() ?: "",
+                        CancelCode.InvalidMessage
+                    )
                 updatePendingRequest(pr.copy(cancelConclusion = CancelCode.InvalidMessage))
             }
         }
@@ -398,10 +400,10 @@ internal class DefaultVerificationService @Inject constructor(
 
     private suspend fun onRoomStartRequestReceived(event: Event) {
         val startReq = event.getClearContent().toModel<MessageVerificationStartContent>()
-                ?.copy(
-                        // relates_to is in clear in encrypted payload
-                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
-                )
+            ?.copy(
+                // relates_to is in clear in encrypted payload
+                relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+            )
 
         val validStartReq = startReq?.asValidObject()
 
@@ -410,12 +412,12 @@ internal class DefaultVerificationService @Inject constructor(
             Timber.e("## received invalid verification request")
             if (startReq?.transactionId != null) {
                 verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
-                        .cancelTransaction(
-                                startReq.transactionId ?: "",
-                                otherUserId!!,
-                                startReq.fromDevice ?: event.getSenderKey()!!,
-                                CancelCode.UnknownMethod
-                        )
+                    .cancelTransaction(
+                        startReq.transactionId ?: "",
+                        otherUserId!!,
+                        startReq.fromDevice ?: event.getSenderKey()!!,
+                        CancelCode.UnknownMethod
+                    )
             }
             return
         }
@@ -424,12 +426,12 @@ internal class DefaultVerificationService @Inject constructor(
             it.transport = verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", it)
         }?.let {
             verificationTransportRoomMessageFactory.createTransport(event.roomId ?: "", null)
-                    .cancelTransaction(
-                            validStartReq.transactionId,
-                            otherUserId!!,
-                            validStartReq.fromDevice,
-                            it
-                    )
+                .cancelTransaction(
+                    validStartReq.transactionId,
+                    otherUserId!!,
+                    validStartReq.fromDevice,
+                    it
+                )
         }
     }
 
@@ -444,10 +446,10 @@ internal class DefaultVerificationService @Inject constructor(
             Timber.e("## SAS received invalid verification request")
             if (startReq?.transactionId != null) {
                 verificationTransportToDeviceFactory.createTransport(null).cancelTransaction(
-                        startReq.transactionId,
-                        otherUserId,
-                        startReq.fromDevice ?: event.getSenderKey()!!,
-                        CancelCode.UnknownMethod
+                    startReq.transactionId,
+                    otherUserId,
+                    startReq.fromDevice ?: event.getSenderKey()!!,
+                    CancelCode.UnknownMethod
                 )
             }
             return
@@ -457,10 +459,10 @@ internal class DefaultVerificationService @Inject constructor(
             it.transport = verificationTransportToDeviceFactory.createTransport(it)
         }?.let {
             verificationTransportToDeviceFactory.createTransport(null).cancelTransaction(
-                    validStartReq.transactionId,
-                    otherUserId,
-                    validStartReq.fromDevice,
-                    it
+                validStartReq.transactionId,
+                otherUserId,
+                validStartReq.fromDevice,
+                it
             )
         }
     }
@@ -468,9 +470,11 @@ internal class DefaultVerificationService @Inject constructor(
     /**
      * Return a CancelCode to make the caller cancel the verification. Else return null
      */
-    private suspend fun handleStart(otherUserId: String?,
-                                    startReq: ValidVerificationInfoStart,
-                                    txConfigure: (DefaultVerificationTransaction) -> Unit): CancelCode? {
+    private suspend fun handleStart(
+        otherUserId: String?,
+        startReq: ValidVerificationInfoStart,
+        txConfigure: (DefaultVerificationTransaction) -> Unit
+    ): CancelCode? {
         Timber.d("## SAS onStartRequestReceived $startReq")
         if (otherUserId?.let { checkKeysAreDownloaded(it, startReq.fromDevice) } != null) {
             val tid = startReq.transactionId
@@ -501,9 +505,9 @@ internal class DefaultVerificationService @Inject constructor(
             }
 
             when (startReq) {
-                is ValidVerificationInfoStart.SasVerificationInfoStart         -> {
+                is ValidVerificationInfoStart.SasVerificationInfoStart -> {
                     when (existing) {
-                        is SasVerificationTransaction    -> {
+                        is SasVerificationTransaction -> {
                             // should cancel both!
                             Timber.v("## SAS onStartRequestReceived - Request exist with same id ${startReq.transactionId}")
                             existing.cancel(CancelCode.UnexpectedMessage)
@@ -513,21 +517,21 @@ internal class DefaultVerificationService @Inject constructor(
                         is QrCodeVerificationTransaction -> {
                             // Nothing to do?
                         }
-                        null                             -> {
+                        null -> {
                             getExistingTransactionsForUser(otherUserId)
-                                    ?.filterIsInstance(SasVerificationTransaction::class.java)
-                                    ?.takeIf { it.isNotEmpty() }
-                                    ?.also {
-                                        // Multiple keyshares between two devices:
-                                        // any two devices may only have at most one key verification in flight at a time.
-                                        Timber.v("## SAS onStartRequestReceived - Already a transaction with this user ${startReq.transactionId}")
-                                    }
-                                    ?.forEach {
-                                        it.cancel(CancelCode.UnexpectedMessage)
-                                    }
-                                    ?.also {
-                                        return CancelCode.UnexpectedMessage
-                                    }
+                                ?.filterIsInstance(SasVerificationTransaction::class.java)
+                                ?.takeIf { it.isNotEmpty() }
+                                ?.also {
+                                    // Multiple keyshares between two devices:
+                                    // any two devices may only have at most one key verification in flight at a time.
+                                    Timber.v("## SAS onStartRequestReceived - Already a transaction with this user ${startReq.transactionId}")
+                                }
+                                ?.forEach {
+                                    it.cancel(CancelCode.UnexpectedMessage)
+                                }
+                                ?.also {
+                                    return CancelCode.UnexpectedMessage
+                                }
                         }
                     }
 
@@ -541,18 +545,19 @@ internal class DefaultVerificationService @Inject constructor(
                                 (it.requestInfo?.fromDevice == this.deviceId || it.readyInfo?.fromDevice == this.deviceId)
                     }
                     val tx = DefaultIncomingSASDefaultVerificationTransaction(
-//                            this,
-                            setDeviceVerificationAction,
-                            userId,
-                            deviceId,
-                            cryptoStore,
-                            crossSigningService,
-                            outgoingGossipingRequestManager,
-                            incomingGossipingRequestManager,
-                            myDeviceInfoHolder.get().myDevice.fingerprint()!!,
-                            startReq.transactionId,
-                            otherUserId,
-                            autoAccept).also { txConfigure(it) }
+                        //                            this,
+                        setDeviceVerificationAction,
+                        userId,
+                        deviceId,
+                        cryptoStore,
+                        crossSigningService,
+                        outgoingGossipingRequestManager,
+                        incomingGossipingRequestManager,
+                        myDeviceInfoHolder.get().myDevice.fingerprint()!!,
+                        startReq.transactionId,
+                        otherUserId,
+                        autoAccept
+                    ).also { txConfigure(it) }
                     addTransaction(tx)
                     tx.onVerificationStart(startReq)
                     return null
@@ -584,8 +589,10 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     // TODO Refacto: It could just return a boolean
-    private suspend fun checkKeysAreDownloaded(otherUserId: String,
-                                               otherDeviceId: String): MXUsersDevicesMap<CryptoDeviceInfo>? {
+    private suspend fun checkKeysAreDownloaded(
+        otherUserId: String,
+        otherDeviceId: String
+    ): MXUsersDevicesMap<CryptoDeviceInfo>? {
         return try {
             var keys = deviceListManager.downloadKeys(listOf(otherUserId), false)
             if (keys.getUserDeviceIds(otherUserId)?.contains(otherDeviceId) == true) {
@@ -602,10 +609,10 @@ internal class DefaultVerificationService @Inject constructor(
 
     private fun onRoomCancelReceived(event: Event) {
         val cancelReq = event.getClearContent().toModel<MessageVerificationCancelContent>()
-                ?.copy(
-                        // relates_to is in clear in encrypted payload
-                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
-                )
+            ?.copy(
+                // relates_to is in clear in encrypted payload
+                relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+            )
 
         val validCancelReq = cancelReq?.asValidObject()
 
@@ -644,9 +651,11 @@ internal class DefaultVerificationService @Inject constructor(
 
         if (existingRequest != null) {
             // Mark this request as cancelled
-            updatePendingRequest(existingRequest.copy(
+            updatePendingRequest(
+                existingRequest.copy(
                     cancelConclusion = safeValueOf(cancelReq.code)
-            ))
+                )
+            )
         }
 
         existingTransaction?.state = VerificationTxState.Cancelled(safeValueOf(cancelReq.code), false)
@@ -655,11 +664,11 @@ internal class DefaultVerificationService @Inject constructor(
     private fun onRoomAcceptReceived(event: Event) {
         Timber.d("##  SAS Received Accept via DM $event")
         val accept = event.getClearContent().toModel<MessageVerificationAcceptContent>()
-                ?.copy(
-                        // relates_to is in clear in encrypted payload
-                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
-                )
-                ?: return
+            ?.copy(
+                // relates_to is in clear in encrypted payload
+                relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+            )
+            ?: return
 
         val validAccept = accept.asValidObject() ?: return
 
@@ -689,11 +698,11 @@ internal class DefaultVerificationService @Inject constructor(
 
     private fun onRoomKeyRequestReceived(event: Event) {
         val keyReq = event.getClearContent().toModel<MessageVerificationKeyContent>()
-                ?.copy(
-                        // relates_to is in clear in encrypted payload
-                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
-                )
-                ?.asValidObject()
+            ?.copy(
+                // relates_to is in clear in encrypted payload
+                relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+            )
+            ?.asValidObject()
         if (keyReq == null) {
             // ignore
             Timber.e("## SAS Received invalid key request")
@@ -731,11 +740,11 @@ internal class DefaultVerificationService @Inject constructor(
 
     private fun onRoomMacReceived(event: Event) {
         val macReq = event.getClearContent().toModel<MessageVerificationMacContent>()
-                ?.copy(
-                        // relates_to is in clear in encrypted payload
-                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
-                )
-                ?.asValidObject()
+            ?.copy(
+                // relates_to is in clear in encrypted payload
+                relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+            )
+            ?.asValidObject()
         if (macReq == null || event.senderId == null) {
             // ignore
             Timber.e("## SAS Received invalid mac request")
@@ -747,11 +756,11 @@ internal class DefaultVerificationService @Inject constructor(
 
     private suspend fun onRoomReadyReceived(event: Event) {
         val readyReq = event.getClearContent().toModel<MessageVerificationReadyContent>()
-                ?.copy(
-                        // relates_to is in clear in encrypted payload
-                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
-                )
-                ?.asValidObject()
+            ?.copy(
+                // relates_to is in clear in encrypted payload
+                relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+            )
+            ?.asValidObject()
         if (readyReq == null || event.senderId == null) {
             // ignore
             Timber.e("## SAS Received invalid ready request")
@@ -805,20 +814,44 @@ internal class DefaultVerificationService @Inject constructor(
             // We only send gossiping request when the other sent us a done
             // We can ask without checking too much thinks (like trust), because we will check validity of secret on reception
             getExistingTransaction(userId, doneReq.transactionId)
-                    ?: getOldTransaction(userId, doneReq.transactionId)
-                            ?.let { vt ->
-                                val otherDeviceId = vt.otherDeviceId
-                                if (!crossSigningService.canCrossSign()) {
-                                    outgoingGossipingRequestManager.sendSecretShareRequest(MASTER_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                            ?: "*")))
-                                    outgoingGossipingRequestManager.sendSecretShareRequest(SELF_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                            ?: "*")))
-                                    outgoingGossipingRequestManager.sendSecretShareRequest(USER_SIGNING_KEY_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                            ?: "*")))
-                                }
-                                outgoingGossipingRequestManager.sendSecretShareRequest(KEYBACKUP_SECRET_SSSS_NAME, mapOf(userId to listOf(otherDeviceId
-                                        ?: "*")))
-                            }
+                ?: getOldTransaction(userId, doneReq.transactionId)
+                    ?.let { vt ->
+                        val otherDeviceId = vt.otherDeviceId
+                        if (!crossSigningService.canCrossSign()) {
+                            outgoingGossipingRequestManager.sendSecretShareRequest(
+                                MASTER_KEY_SSSS_NAME, mapOf(
+                                    userId to listOf(
+                                        otherDeviceId
+                                            ?: "*"
+                                    )
+                                )
+                            )
+                            outgoingGossipingRequestManager.sendSecretShareRequest(
+                                SELF_SIGNING_KEY_SSSS_NAME, mapOf(
+                                    userId to listOf(
+                                        otherDeviceId
+                                            ?: "*"
+                                    )
+                                )
+                            )
+                            outgoingGossipingRequestManager.sendSecretShareRequest(
+                                USER_SIGNING_KEY_SSSS_NAME, mapOf(
+                                    userId to listOf(
+                                        otherDeviceId
+                                            ?: "*"
+                                    )
+                                )
+                            )
+                        }
+                        outgoingGossipingRequestManager.sendSecretShareRequest(
+                            KEYBACKUP_SECRET_SSSS_NAME, mapOf(
+                                userId to listOf(
+                                    otherDeviceId
+                                        ?: "*"
+                                )
+                            )
+                        )
+                    }
         }
     }
 
@@ -846,11 +879,11 @@ internal class DefaultVerificationService @Inject constructor(
 
     private fun onRoomDoneReceived(event: Event) {
         val doneReq = event.getClearContent().toModel<MessageVerificationDoneContent>()
-                ?.copy(
-                        // relates_to is in clear in encrypted payload
-                        relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
-                )
-                ?.asValidObject()
+            ?.copy(
+                // relates_to is in clear in encrypted payload
+                relatesTo = event.content.toModel<MessageRelationContent>()?.relatesTo
+            )
+            ?.asValidObject()
 
         if (doneReq == null || event.senderId == null) {
             // ignore
@@ -887,9 +920,11 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    private fun handleReadyReceived(senderId: String,
-                                    readyReq: ValidVerificationInfoReady,
-                                    transportCreator: (DefaultVerificationTransaction) -> VerificationTransport) {
+    private fun handleReadyReceived(
+        senderId: String,
+        readyReq: ValidVerificationInfoReady,
+        transportCreator: (DefaultVerificationTransaction) -> VerificationTransport
+    ) {
         val existingRequest = getExistingVerificationRequests(senderId).find { it.transactionId == readyReq.transactionId }
         if (existingRequest == null) {
             Timber.e("## SAS Received Ready for unknown request txId:${readyReq.transactionId} fromDevice ${readyReq.fromDevice}")
@@ -897,36 +932,39 @@ internal class DefaultVerificationService @Inject constructor(
         }
 
         val qrCodeData = readyReq.methods
-                // Check if other user is able to scan QR code
-                .takeIf { it.contains(VERIFICATION_METHOD_QR_CODE_SCAN) }
-                ?.let {
-                    createQrCodeData(existingRequest.transactionId, existingRequest.otherUserId, readyReq.fromDevice)
-                }
+            // Check if other user is able to scan QR code
+            .takeIf { it.contains(VERIFICATION_METHOD_QR_CODE_SCAN) }
+            ?.let {
+                createQrCodeData(existingRequest.transactionId, existingRequest.otherUserId, readyReq.fromDevice)
+            }
 
         if (readyReq.methods.contains(VERIFICATION_METHOD_RECIPROCATE)) {
             // Create the pending transaction
             val tx = DefaultQrCodeVerificationTransaction(
-                    setDeviceVerificationAction = setDeviceVerificationAction,
-                    transactionId = readyReq.transactionId,
-                    otherUserId = senderId,
-                    otherDeviceId = readyReq.fromDevice,
-                    crossSigningService = crossSigningService,
-                    outgoingGossipingRequestManager = outgoingGossipingRequestManager,
-                    incomingGossipingRequestManager = incomingGossipingRequestManager,
-                    cryptoStore = cryptoStore,
-                    qrCodeData = qrCodeData,
-                    userId = userId,
-                    deviceId = deviceId ?: "",
-                    isIncoming = false)
+                setDeviceVerificationAction = setDeviceVerificationAction,
+                transactionId = readyReq.transactionId,
+                otherUserId = senderId,
+                otherDeviceId = readyReq.fromDevice,
+                crossSigningService = crossSigningService,
+                outgoingGossipingRequestManager = outgoingGossipingRequestManager,
+                incomingGossipingRequestManager = incomingGossipingRequestManager,
+                cryptoStore = cryptoStore,
+                qrCodeData = qrCodeData,
+                userId = userId,
+                deviceId = deviceId ?: "",
+                isIncoming = false
+            )
 
             tx.transport = transportCreator.invoke(tx)
 
             addTransaction(tx)
         }
 
-        updatePendingRequest(existingRequest.copy(
+        updatePendingRequest(
+            existingRequest.copy(
                 readyInfo = readyReq
-        ))
+            )
+        )
     }
 
     private fun createQrCodeData(requestId: String?, otherUserId: String, otherDeviceId: String?): QrCodeData? {
@@ -936,12 +974,12 @@ internal class DefaultVerificationService @Inject constructor(
         }
 
         return when {
-            userId != otherUserId                        ->
+            userId != otherUserId ->
                 createQrCodeDataForDistinctUser(requestId, otherUserId)
             crossSigningService.isCrossSigningVerified() ->
                 // This is a self verification and I am the old device (Osborne2)
                 createQrCodeDataForVerifiedDevice(requestId, otherDeviceId)
-            else                                         ->
+            else ->
                 // This is a self verification and I am the new device (Dynabook)
                 createQrCodeDataForUnVerifiedDevice(requestId)
         }
@@ -949,88 +987,88 @@ internal class DefaultVerificationService @Inject constructor(
 
     private fun createQrCodeDataForDistinctUser(requestId: String, otherUserId: String): QrCodeData.VerifyingAnotherUser? {
         val myMasterKey = crossSigningService.getMyCrossSigningKeys()
-                ?.masterKey()
-                ?.unpaddedBase64PublicKey
-                ?: run {
-                    Timber.w("## Unable to get my master key")
-                    return null
-                }
+            ?.masterKey()
+            ?.unpaddedBase64PublicKey
+            ?: run {
+                Timber.w("## Unable to get my master key")
+                return null
+            }
 
         val otherUserMasterKey = crossSigningService.getUserCrossSigningKeys(otherUserId)
-                ?.masterKey()
-                ?.unpaddedBase64PublicKey
-                ?: run {
-                    Timber.w("## Unable to get other user master key")
-                    return null
-                }
+            ?.masterKey()
+            ?.unpaddedBase64PublicKey
+            ?: run {
+                Timber.w("## Unable to get other user master key")
+                return null
+            }
 
         return QrCodeData.VerifyingAnotherUser(
-                transactionId = requestId,
-                userMasterCrossSigningPublicKey = myMasterKey,
-                otherUserMasterCrossSigningPublicKey = otherUserMasterKey,
-                sharedSecret = generateSharedSecretV2()
+            transactionId = requestId,
+            userMasterCrossSigningPublicKey = myMasterKey,
+            otherUserMasterCrossSigningPublicKey = otherUserMasterKey,
+            sharedSecret = generateSharedSecretV2()
         )
     }
 
     // Create a QR code to display on the old device (Osborne2)
     private fun createQrCodeDataForVerifiedDevice(requestId: String, otherDeviceId: String?): QrCodeData.SelfVerifyingMasterKeyTrusted? {
         val myMasterKey = crossSigningService.getMyCrossSigningKeys()
-                ?.masterKey()
-                ?.unpaddedBase64PublicKey
-                ?: run {
-                    Timber.w("## Unable to get my master key")
-                    return null
-                }
+            ?.masterKey()
+            ?.unpaddedBase64PublicKey
+            ?: run {
+                Timber.w("## Unable to get my master key")
+                return null
+            }
 
         val otherDeviceKey = otherDeviceId
-                ?.let {
-                    cryptoStore.getUserDevice(userId, otherDeviceId)?.fingerprint()
-                }
-                ?: run {
-                    Timber.w("## Unable to get other device data")
-                    return null
-                }
+            ?.let {
+                cryptoStore.getUserDevice(userId, otherDeviceId)?.fingerprint()
+            }
+            ?: run {
+                Timber.w("## Unable to get other device data")
+                return null
+            }
 
         return QrCodeData.SelfVerifyingMasterKeyTrusted(
-                transactionId = requestId,
-                userMasterCrossSigningPublicKey = myMasterKey,
-                otherDeviceKey = otherDeviceKey,
-                sharedSecret = generateSharedSecretV2()
+            transactionId = requestId,
+            userMasterCrossSigningPublicKey = myMasterKey,
+            otherDeviceKey = otherDeviceKey,
+            sharedSecret = generateSharedSecretV2()
         )
     }
 
     // Create a QR code to display on the new device (Dynabook)
     private fun createQrCodeDataForUnVerifiedDevice(requestId: String): QrCodeData.SelfVerifyingMasterKeyNotTrusted? {
         val myMasterKey = crossSigningService.getMyCrossSigningKeys()
-                ?.masterKey()
-                ?.unpaddedBase64PublicKey
-                ?: run {
-                    Timber.w("## Unable to get my master key")
-                    return null
-                }
+            ?.masterKey()
+            ?.unpaddedBase64PublicKey
+            ?: run {
+                Timber.w("## Unable to get my master key")
+                return null
+            }
 
         val myDeviceKey = myDeviceInfoHolder.get().myDevice.fingerprint()
-                ?: run {
-                    Timber.w("## Unable to get my fingerprint")
-                    return null
-                }
+            ?: run {
+                Timber.w("## Unable to get my fingerprint")
+                return null
+            }
 
         return QrCodeData.SelfVerifyingMasterKeyNotTrusted(
-                transactionId = requestId,
-                deviceKey = myDeviceKey,
-                userMasterCrossSigningPublicKey = myMasterKey,
-                sharedSecret = generateSharedSecretV2()
+            transactionId = requestId,
+            deviceKey = myDeviceKey,
+            userMasterCrossSigningPublicKey = myMasterKey,
+            sharedSecret = generateSharedSecretV2()
         )
     }
 
-//    private fun handleDoneReceived(senderId: String, doneInfo: ValidVerificationDone) {
-//        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == doneInfo.transactionId }
-//        if (existingRequest == null) {
-//            Timber.e("## SAS Received Done for unknown request txId:${doneInfo.transactionId}")
-//            return
-//        }
-//        updatePendingRequest(existingRequest.copy(isSuccessful = true))
-//    }
+    //    private fun handleDoneReceived(senderId: String, doneInfo: ValidVerificationDone) {
+    //        val existingRequest = getExistingVerificationRequest(senderId)?.find { it.transactionId == doneInfo.transactionId }
+    //        if (existingRequest == null) {
+    //            Timber.e("## SAS Received Done for unknown request txId:${doneInfo.transactionId}")
+    //            return
+    //        }
+    //        updatePendingRequest(existingRequest.copy(isSuccessful = true))
+    //    }
 
     // TODO All this methods should be delegated to a TransactionStore
     override fun getExistingTransaction(otherUserId: String, tid: String): VerificationTransaction? {
@@ -1105,17 +1143,18 @@ internal class DefaultVerificationService @Inject constructor(
         // should check if already one (and cancel it)
         if (method == VerificationMethod.SAS) {
             val tx = DefaultOutgoingSASDefaultVerificationTransaction(
-                    setDeviceVerificationAction,
-                    userId,
-                    deviceId,
-                    cryptoStore,
-                    crossSigningService,
-                    outgoingGossipingRequestManager,
-                    incomingGossipingRequestManager,
-                    myDeviceInfoHolder.get().myDevice.fingerprint()!!,
-                    txID,
-                    otherUserId,
-                    otherDeviceId)
+                setDeviceVerificationAction,
+                userId,
+                deviceId,
+                cryptoStore,
+                crossSigningService,
+                outgoingGossipingRequestManager,
+                incomingGossipingRequestManager,
+                myDeviceInfoHolder.get().myDevice.fingerprint()!!,
+                txID,
+                otherUserId,
+                otherDeviceId
+            )
             tx.transport = verificationTransportToDeviceFactory.createTransport(tx)
             addTransaction(tx)
 
@@ -1126,10 +1165,12 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun requestKeyVerificationInDMs(methods: List<VerificationMethod>,
-                                             otherUserId: String,
-                                             roomId: String,
-                                             localId: String?): PendingVerificationRequest {
+    override fun requestKeyVerificationInDMs(
+        methods: List<VerificationMethod>,
+        otherUserId: String,
+        roomId: String,
+        localId: String?
+    ): PendingVerificationRequest {
         Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
 
         val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
@@ -1150,11 +1191,11 @@ internal class DefaultVerificationService @Inject constructor(
         val validLocalId = localId ?: LocalEcho.createLocalEchoId()
 
         val verificationRequest = PendingVerificationRequest(
-                ageLocalTs = System.currentTimeMillis(),
-                isIncoming = false,
-                roomId = roomId,
-                localId = validLocalId,
-                otherUserId = otherUserId
+            ageLocalTs = System.currentTimeMillis(),
+            isIncoming = false,
+            roomId = roomId,
+            localId = validLocalId,
+            otherUserId = otherUserId
         )
 
         // We can SCAN or SHOW QR codes only if cross-signing is verified
@@ -1162,24 +1203,26 @@ internal class DefaultVerificationService @Inject constructor(
             // Add reciprocate method if application declares it can scan or show QR codes
             // Not sure if it ok to do that (?)
             val reciprocateMethod = methods
-                    .firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }
-                    ?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
+                .firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }
+                ?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
             methods.map { it.toValue() } + reciprocateMethod
         } else {
             // Filter out SCAN and SHOW qr code method
             methods
-                    .filter { it != VerificationMethod.QR_CODE_SHOW && it != VerificationMethod.QR_CODE_SCAN }
-                    .map { it.toValue() }
+                .filter { it != VerificationMethod.QR_CODE_SHOW && it != VerificationMethod.QR_CODE_SCAN }
+                .map { it.toValue() }
         }
-                .distinct()
+            .distinct()
 
         transport.sendVerificationRequest(methodValues, validLocalId, otherUserId, roomId, null) { syncedId, info ->
             // We need to update with the syncedID
-            updatePendingRequest(verificationRequest.copy(
+            updatePendingRequest(
+                verificationRequest.copy(
                     transactionId = syncedId,
                     // localId stays different
                     requestInfo = info
-            ))
+                )
+            )
         }
 
         requestsForUser.add(verificationRequest)
@@ -1205,7 +1248,7 @@ internal class DefaultVerificationService @Inject constructor(
         Timber.i("## Requesting verification to user: $otherUserId with device list $otherDevices")
 
         val targetDevices = otherDevices ?: cryptoStore.getUserDevices(otherUserId)
-                ?.values?.map { it.deviceId }.orEmpty()
+            ?.values?.map { it.deviceId }.orEmpty()
 
         val requestsForUser = pendingRequests.getOrPut(otherUserId) { mutableListOf() }
 
@@ -1227,13 +1270,13 @@ internal class DefaultVerificationService @Inject constructor(
         val localId = LocalEcho.createLocalEchoId()
 
         val verificationRequest = PendingVerificationRequest(
-                transactionId = localId,
-                ageLocalTs = System.currentTimeMillis(),
-                isIncoming = false,
-                roomId = null,
-                localId = localId,
-                otherUserId = otherUserId,
-                targetDevices = targetDevices
+            transactionId = localId,
+            ageLocalTs = System.currentTimeMillis(),
+            isIncoming = false,
+            roomId = null,
+            localId = localId,
+            otherUserId = otherUserId,
+            targetDevices = targetDevices
         )
 
         // We can SCAN or SHOW QR codes only if cross-signing is enabled
@@ -1241,23 +1284,25 @@ internal class DefaultVerificationService @Inject constructor(
             // Add reciprocate method if application declares it can scan or show QR codes
             // Not sure if it ok to do that (?)
             val reciprocateMethod = methods
-                    .firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }
-                    ?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
+                .firstOrNull { it == VerificationMethod.QR_CODE_SCAN || it == VerificationMethod.QR_CODE_SHOW }
+                ?.let { listOf(VERIFICATION_METHOD_RECIPROCATE) }.orEmpty()
             methods.map { it.toValue() } + reciprocateMethod
         } else {
             // Filter out SCAN and SHOW qr code method
             methods
-                    .filter { it != VerificationMethod.QR_CODE_SHOW && it != VerificationMethod.QR_CODE_SCAN }
-                    .map { it.toValue() }
+                .filter { it != VerificationMethod.QR_CODE_SHOW && it != VerificationMethod.QR_CODE_SCAN }
+                .map { it.toValue() }
         }
-                .distinct()
+            .distinct()
 
         transport.sendVerificationRequest(methodValues, localId, otherUserId, null, targetDevices) { _, info ->
             // Nothing special to do in to device mode
-            updatePendingRequest(verificationRequest.copy(
+            updatePendingRequest(
+                verificationRequest.copy(
                     // localId stays different
                     requestInfo = info
-            ))
+                )
+            )
         }
 
         requestsForUser.add(verificationRequest)
@@ -1268,12 +1313,14 @@ internal class DefaultVerificationService @Inject constructor(
 
     override fun declineVerificationRequestInDMs(otherUserId: String, transactionId: String, roomId: String) {
         verificationTransportRoomMessageFactory.createTransport(roomId, null)
-                .cancelTransaction(transactionId, otherUserId, null, CancelCode.User)
+            .cancelTransaction(transactionId, otherUserId, null, CancelCode.User)
 
         getExistingVerificationRequest(otherUserId, transactionId)?.let {
-            updatePendingRequest(it.copy(
+            updatePendingRequest(
+                it.copy(
                     cancelConclusion = CancelCode.User
-            ))
+                )
+            )
         }
     }
 
@@ -1290,24 +1337,27 @@ internal class DefaultVerificationService @Inject constructor(
         dispatchRequestUpdated(updated)
     }
 
-    override fun beginKeyVerificationInDMs(method: VerificationMethod,
-                                           transactionId: String,
-                                           roomId: String,
-                                           otherUserId: String,
-                                           otherDeviceId: String): String {
+    override fun beginKeyVerificationInDMs(
+        method: VerificationMethod,
+        transactionId: String,
+        roomId: String,
+        otherUserId: String,
+        otherDeviceId: String
+    ): String {
         if (method == VerificationMethod.SAS) {
             val tx = DefaultOutgoingSASDefaultVerificationTransaction(
-                    setDeviceVerificationAction,
-                    userId,
-                    deviceId,
-                    cryptoStore,
-                    crossSigningService,
-                    outgoingGossipingRequestManager,
-                    incomingGossipingRequestManager,
-                    myDeviceInfoHolder.get().myDevice.fingerprint()!!,
-                    transactionId,
-                    otherUserId,
-                    otherDeviceId)
+                setDeviceVerificationAction,
+                userId,
+                deviceId,
+                cryptoStore,
+                crossSigningService,
+                outgoingGossipingRequestManager,
+                incomingGossipingRequestManager,
+                myDeviceInfoHolder.get().myDevice.fingerprint()!!,
+                transactionId,
+                otherUserId,
+                otherDeviceId
+            )
             tx.transport = verificationTransportRoomMessageFactory.createTransport(roomId, tx)
             addTransaction(tx)
 
@@ -1318,10 +1368,12 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun readyPendingVerificationInDMs(methods: List<VerificationMethod>,
-                                               otherUserId: String,
-                                               roomId: String,
-                                               transactionId: String): Boolean {
+    override fun readyPendingVerificationInDMs(
+        methods: List<VerificationMethod>,
+        otherUserId: String,
+        roomId: String,
+        transactionId: String
+    ): Boolean {
         Timber.v("## SAS readyPendingVerificationInDMs $otherUserId room:$roomId tx:$transactionId")
         // Let's find the related request
         val existingRequest = getExistingVerificationRequest(otherUserId, transactionId)
@@ -1329,11 +1381,12 @@ internal class DefaultVerificationService @Inject constructor(
             // we need to send a ready event, with matching methods
             val transport = verificationTransportRoomMessageFactory.createTransport(roomId, null)
             val computedMethods = computeReadyMethods(
-                    transactionId,
-                    otherUserId,
-                    existingRequest.requestInfo?.fromDevice ?: "",
-                    existingRequest.requestInfo?.methods,
-                    methods) {
+                transactionId,
+                otherUserId,
+                existingRequest.requestInfo?.fromDevice ?: "",
+                existingRequest.requestInfo?.methods,
+                methods
+            ) {
                 verificationTransportRoomMessageFactory.createTransport(roomId, it)
             }
             if (methods.isNullOrEmpty()) {
@@ -1343,11 +1396,12 @@ internal class DefaultVerificationService @Inject constructor(
             }
             // TODO this is not yet related to a transaction, maybe we should use another method like for cancel?
             val readyMsg = transport.createReady(transactionId, deviceId ?: "", computedMethods)
-            transport.sendToOther(EventType.KEY_VERIFICATION_READY,
-                    readyMsg,
-                    VerificationTxState.None,
-                    CancelCode.User,
-                    null // TODO handle error?
+            transport.sendToOther(
+                EventType.KEY_VERIFICATION_READY,
+                readyMsg,
+                VerificationTxState.None,
+                CancelCode.User,
+                null // TODO handle error?
             )
             updatePendingRequest(existingRequest.copy(readyInfo = readyMsg.asValidObject()))
             return true
@@ -1358,9 +1412,11 @@ internal class DefaultVerificationService @Inject constructor(
         }
     }
 
-    override fun readyPendingVerification(methods: List<VerificationMethod>,
-                                          otherUserId: String,
-                                          transactionId: String): Boolean {
+    override fun readyPendingVerification(
+        methods: List<VerificationMethod>,
+        otherUserId: String,
+        transactionId: String
+    ): Boolean {
         Timber.v("## SAS readyPendingVerification $otherUserId tx:$transactionId")
         // Let's find the related request
         val existingRequest = getExistingVerificationRequest(otherUserId, transactionId)
@@ -1368,11 +1424,12 @@ internal class DefaultVerificationService @Inject constructor(
             // we need to send a ready event, with matching methods
             val transport = verificationTransportToDeviceFactory.createTransport(null)
             val computedMethods = computeReadyMethods(
-                    transactionId,
-                    otherUserId,
-                    existingRequest.requestInfo?.fromDevice ?: "",
-                    existingRequest.requestInfo?.methods,
-                    methods) {
+                transactionId,
+                otherUserId,
+                existingRequest.requestInfo?.fromDevice ?: "",
+                existingRequest.requestInfo?.methods,
+                methods
+            ) {
                 verificationTransportToDeviceFactory.createTransport(it)
             }
             if (methods.isNullOrEmpty()) {
@@ -1383,10 +1440,10 @@ internal class DefaultVerificationService @Inject constructor(
             // TODO this is not yet related to a transaction, maybe we should use another method like for cancel?
             val readyMsg = transport.createReady(transactionId, deviceId ?: "", computedMethods)
             transport.sendVerificationReady(
-                    readyMsg,
-                    otherUserId,
-                    existingRequest.requestInfo?.fromDevice ?: "",
-                    null // TODO handle error?
+                readyMsg,
+                otherUserId,
+                existingRequest.requestInfo?.fromDevice ?: "",
+                null // TODO handle error?
             )
             updatePendingRequest(existingRequest.copy(readyInfo = readyMsg.asValidObject()))
             return true
@@ -1398,12 +1455,13 @@ internal class DefaultVerificationService @Inject constructor(
     }
 
     private fun computeReadyMethods(
-            transactionId: String,
-            otherUserId: String,
-            otherDeviceId: String,
-            otherUserMethods: List<String>?,
-            methods: List<VerificationMethod>,
-            transportCreator: (DefaultVerificationTransaction) -> VerificationTransport): List<String> {
+        transactionId: String,
+        otherUserId: String,
+        otherDeviceId: String,
+        otherUserMethods: List<String>?,
+        methods: List<VerificationMethod>,
+        transportCreator: (DefaultVerificationTransaction) -> VerificationTransport
+    ): List<String> {
         if (otherUserMethods.isNullOrEmpty()) {
             return emptyList()
         }
@@ -1435,18 +1493,19 @@ internal class DefaultVerificationService @Inject constructor(
             if (VERIFICATION_METHOD_RECIPROCATE in result) {
                 // Create the pending transaction
                 val tx = DefaultQrCodeVerificationTransaction(
-                        setDeviceVerificationAction = setDeviceVerificationAction,
-                        transactionId = transactionId,
-                        otherUserId = otherUserId,
-                        otherDeviceId = otherDeviceId,
-                        crossSigningService = crossSigningService,
-                        outgoingGossipingRequestManager = outgoingGossipingRequestManager,
-                        incomingGossipingRequestManager = incomingGossipingRequestManager,
-                        cryptoStore = cryptoStore,
-                        qrCodeData = qrCodeData,
-                        userId = userId,
-                        deviceId = deviceId ?: "",
-                        isIncoming = false)
+                    setDeviceVerificationAction = setDeviceVerificationAction,
+                    transactionId = transactionId,
+                    otherUserId = otherUserId,
+                    otherDeviceId = otherDeviceId,
+                    crossSigningService = crossSigningService,
+                    outgoingGossipingRequestManager = outgoingGossipingRequestManager,
+                    incomingGossipingRequestManager = incomingGossipingRequestManager,
+                    cryptoStore = cryptoStore,
+                    qrCodeData = qrCodeData,
+                    userId = userId,
+                    deviceId = deviceId ?: "",
+                    isIncoming = false
+                )
 
                 tx.transport = transportCreator.invoke(tx)
 

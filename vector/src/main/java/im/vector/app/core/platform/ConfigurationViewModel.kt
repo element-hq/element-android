@@ -26,7 +26,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class ConfigurationViewModel @Inject constructor(
-        private val vectorConfiguration: VectorConfiguration
+    private val vectorConfiguration: VectorConfiguration
 ) : ViewModel() {
 
     private var currentConfigurationValue: String? = null

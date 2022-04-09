@@ -21,9 +21,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class IdentityAccountResponse(
-        /**
-         * Required. The user ID which registered the token.
-         */
-        @Json(name = "user_id")
-        val userId: String
+    /**
+     * Required. The user ID which registered the token.
+     */
+    @Json(name = "user_id")
+    val userId: String
 )

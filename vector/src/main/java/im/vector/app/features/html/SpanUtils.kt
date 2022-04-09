@@ -25,7 +25,7 @@ import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import javax.inject.Inject
 
 class SpanUtils @Inject constructor(
-        private val emojiSpanify: EmojiSpanify
+    private val emojiSpanify: EmojiSpanify
 ) {
     fun getBindingOptions(charSequence: CharSequence): BindingOptions {
         val emojiCharSequence = emojiSpanify.spanify(charSequence)
@@ -35,7 +35,7 @@ class SpanUtils @Inject constructor(
         }
 
         return BindingOptions(
-                canUseTextFuture = canUseTextFuture(emojiCharSequence)
+            canUseTextFuture = canUseTextFuture(emojiCharSequence)
         )
     }
 
@@ -45,7 +45,7 @@ class SpanUtils @Inject constructor(
      */
     private fun canUseTextFuture(spanned: Spanned): Boolean {
         return spanned
-                .getSpans(0, spanned.length, Any::class.java)
-                .all { it !is StrikethroughSpan && it !is UnderlineSpan && it !is MetricAffectingSpan }
+            .getSpans(0, spanned.length, Any::class.java)
+            .all { it !is StrikethroughSpan && it !is UnderlineSpan && it !is MetricAffectingSpan }
     }
 }

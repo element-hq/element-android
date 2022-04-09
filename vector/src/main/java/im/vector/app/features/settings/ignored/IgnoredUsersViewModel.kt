@@ -36,16 +36,18 @@ import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.flow.flow
 
 data class IgnoredUsersViewState(
-        val ignoredUsers: List<User> = emptyList(),
-        val unIgnoreRequest: Async<Unit> = Uninitialized
+    val ignoredUsers: List<User> = emptyList(),
+    val unIgnoreRequest: Async<Unit> = Uninitialized
 ) : MavericksState
 
 sealed class IgnoredUsersAction : VectorViewModelAction {
     data class UnIgnore(val userId: String) : IgnoredUsersAction()
 }
 
-class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: IgnoredUsersViewState,
-                                                        private val session: Session) :
+class IgnoredUsersViewModel @AssistedInject constructor(
+    @Assisted initialState: IgnoredUsersViewState,
+    private val session: Session
+) :
     VectorViewModel<IgnoredUsersViewState, IgnoredUsersAction, IgnoredUsersViewEvents>(initialState) {
 
     @AssistedFactory
@@ -61,12 +63,12 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
 
     private fun observeIgnoredUsers() {
         session.flow()
-                .liveIgnoredUsers()
-                .execute { async ->
-                    copy(
-                            ignoredUsers = async.invoke().orEmpty()
-                    )
-                }
+            .liveIgnoredUsers()
+            .execute { async ->
+                copy(
+                    ignoredUsers = async.invoke().orEmpty()
+                )
+            }
     }
 
     override fun handle(action: IgnoredUsersAction) {
@@ -78,7 +80,7 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
     private fun handleUnIgnore(action: IgnoredUsersAction.UnIgnore) {
         setState {
             copy(
-                    unIgnoreRequest = Loading()
+                unIgnoreRequest = Loading()
             )
         }
 
@@ -86,7 +88,7 @@ class IgnoredUsersViewModel @AssistedInject constructor(@Assisted initialState: 
             val result = runCatching { session.unIgnoreUserIds(listOf(action.userId)) }
             setState {
                 copy(
-                        unIgnoreRequest = result.fold(::Success, ::Fail)
+                    unIgnoreRequest = result.fold(::Success, ::Fail)
                 )
             }
             result.onFailure { _viewEvents.post(IgnoredUsersViewEvents.Failure(it)) }

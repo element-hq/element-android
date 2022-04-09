@@ -34,8 +34,8 @@ import timber.log.Timber
  * - user empty the text composer or quit the timeline screen: notify the homeserver (false)
  */
 internal class DefaultTypingService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        private val sendTypingTask: SendTypingTask
+    @Assisted private val roomId: String,
+    private val sendTypingTask: SendTypingTask
 ) : TypingService {
 
     @AssistedFactory

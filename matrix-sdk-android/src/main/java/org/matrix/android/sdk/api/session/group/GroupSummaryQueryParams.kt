@@ -27,8 +27,8 @@ fun groupSummaryQueryParams(init: (GroupSummaryQueryParams.Builder.() -> Unit) =
  * This class can be used to filter group summaries
  */
 data class GroupSummaryQueryParams(
-        val displayName: QueryStringValue,
-        val memberships: List<Membership>
+    val displayName: QueryStringValue,
+    val memberships: List<Membership>
 ) {
 
     class Builder {
@@ -37,8 +37,8 @@ data class GroupSummaryQueryParams(
         var memberships: List<Membership> = Membership.all()
 
         fun build() = GroupSummaryQueryParams(
-                displayName = displayName,
-                memberships = memberships
+            displayName = displayName,
+            memberships = memberships
         )
     }
 }

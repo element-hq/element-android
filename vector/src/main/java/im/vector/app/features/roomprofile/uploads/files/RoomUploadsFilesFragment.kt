@@ -39,10 +39,10 @@ import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import javax.inject.Inject
 
 class RoomUploadsFilesFragment @Inject constructor(
-        private val controller: UploadsFileController
+    private val controller: UploadsFileController
 ) : VectorBaseFragment<FragmentGenericStateViewRecyclerBinding>(),
-        UploadsFileController.Listener,
-        StateView.EventCallback {
+    UploadsFileController.Listener,
+    StateView.EventCallback {
 
     private val uploadsViewModel by parentFragmentViewModel(RoomUploadsViewModel::class)
 
@@ -94,7 +94,7 @@ class RoomUploadsFilesFragment @Inject constructor(
                 is Loading -> {
                     views.genericStateViewListStateView.state = StateView.State.Loading
                 }
-                is Fail    -> {
+                is Fail -> {
                     views.genericStateViewListStateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncEventsRequest.error))
                 }
                 is Success -> {
@@ -103,12 +103,12 @@ class RoomUploadsFilesFragment @Inject constructor(
                         loadMore()
                     } else {
                         views.genericStateViewListStateView.state = StateView.State.Empty(
-                                title = getString(R.string.uploads_files_no_result),
-                                image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_file)
+                            title = getString(R.string.uploads_files_no_result),
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_file)
                         )
                     }
                 }
-                else       -> Unit
+                else -> Unit
             }
         } else {
             views.genericStateViewListStateView.state = StateView.State.Content

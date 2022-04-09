@@ -19,6 +19,6 @@ package org.matrix.android.sdk.internal.crypto.model
 import org.matrix.olm.OlmOutboundGroupSession
 
 data class OutboundGroupSessionWrapper(
-        val outboundGroupSession: OlmOutboundGroupSession,
-        val creationTime: Long
+    val outboundGroupSession: OlmOutboundGroupSession,
+    val creationTime: Long
 )

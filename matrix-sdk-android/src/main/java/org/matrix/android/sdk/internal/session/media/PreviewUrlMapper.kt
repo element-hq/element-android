@@ -23,11 +23,11 @@ import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntity
  * PreviewUrlCacheEntity -> PreviewUrlData
  */
 internal fun PreviewUrlCacheEntity.toDomain() = PreviewUrlData(
-        url = urlFromServer ?: url,
-        siteName = siteName,
-        title = title,
-        description = description,
-        mxcUrl = mxcUrl,
-        imageWidth = imageWidth,
-        imageHeight = imageHeight
+    url = urlFromServer ?: url,
+    siteName = siteName,
+    title = title,
+    description = description,
+    mxcUrl = mxcUrl,
+    imageWidth = imageWidth,
+    imageHeight = imageHeight
 )

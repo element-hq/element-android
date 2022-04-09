@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import javax.inject.Inject
 
 internal class DefaultPermalinkService @Inject constructor(
-        private val permalinkFactory: PermalinkFactory
+    private val permalinkFactory: PermalinkFactory
 ) : PermalinkService {
 
     override fun createPermalink(event: Event, forceMatrixTo: Boolean): String? {

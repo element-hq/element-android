@@ -68,9 +68,9 @@ class FtueAuthResetPasswordMailConfirmationFragment @Inject constructor() : Abst
         }
 
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(message)
-                .setPositiveButton(R.string.ok, null)
-                .show()
+            .setTitle(R.string.dialog_title_error)
+            .setMessage(message)
+            .setPositiveButton(R.string.ok, null)
+            .show()
     }
 }

@@ -31,8 +31,8 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationCancelController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -65,11 +65,11 @@ class VerificationCancelController @Inject constructor(
             bottomSheetVerificationNoticeItem {
                 id("notice")
                 notice(
-                        EpoxyCharSequence(
-                                host.stringProvider.getString(R.string.verify_cancel_other, otherDisplayName, otherUserID)
-                                        .toSpannable()
-                                        .colorizeMatchingText(otherUserID, host.colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
-                        )
+                    EpoxyCharSequence(
+                        host.stringProvider.getString(R.string.verify_cancel_other, otherDisplayName, otherUserID)
+                            .toSpannable()
+                            .colorizeMatchingText(otherUserID, host.colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
+                    )
                 )
             }
         }

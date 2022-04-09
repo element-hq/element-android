@@ -44,9 +44,9 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class DiscoverySettingsFragment @Inject constructor(
-        private val controller: DiscoverySettingsController
+    private val controller: DiscoverySettingsController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
-        DiscoverySettingsController.Listener {
+    DiscoverySettingsController.Listener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -113,11 +113,12 @@ class DiscoverySettingsFragment @Inject constructor(
     override fun openIdentityServerTerms() = withState(viewModel) { state ->
         if (state.termsNotSigned) {
             navigator.openTerms(
-                    requireContext(),
-                    termsActivityResultLauncher,
-                    TermsService.ServiceType.IdentityService,
-                    state.identityServer()?.serverUrl?.ensureProtocol() ?: "",
-                    null)
+                requireContext(),
+                termsActivityResultLauncher,
+                TermsService.ServiceType.IdentityService,
+                state.identityServer()?.serverUrl?.ensureProtocol() ?: "",
+                null
+            )
         }
     }
 
@@ -149,11 +150,11 @@ class DiscoverySettingsFragment @Inject constructor(
         if (hasBoundIds) {
             // we should prompt
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.change_identity_server)
-                    .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
-                    .setPositiveButton(R.string._continue) { _, _ -> navigateToChangeIdentityServerFragment() }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.change_identity_server)
+                .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
+                .setPositiveButton(R.string._continue) { _, _ -> navigateToChangeIdentityServerFragment() }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
             Unit
         } else {
             navigateToChangeIdentityServerFragment()
@@ -174,11 +175,11 @@ class DiscoverySettingsFragment @Inject constructor(
             }
 
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.disconnect_identity_server)
-                    .setMessage(message)
-                    .setPositiveButton(R.string.action_disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.disconnect_identity_server)
+                .setMessage(message)
+                .setPositiveButton(R.string.action_disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
     }
 
@@ -186,8 +187,8 @@ class DiscoverySettingsFragment @Inject constructor(
         if (newValue) {
             withState(viewModel) { state ->
                 requireContext().showIdentityServerConsentDialog(
-                        state.identityServer.invoke(),
-                        consentCallBack = { viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true)) }
+                    state.identityServer.invoke(),
+                    consentCallBack = { viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true)) }
                 )
             }
         } else {

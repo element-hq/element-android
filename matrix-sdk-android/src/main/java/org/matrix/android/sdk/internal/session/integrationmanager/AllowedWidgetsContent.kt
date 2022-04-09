@@ -21,19 +21,19 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class AllowedWidgetsContent(
-        /**
-         * Map of stateEventId to Allowed
-         */
-        @Json(name = "widgets") val widgets: Map<String, Boolean> = emptyMap(),
+    /**
+     * Map of stateEventId to Allowed
+     */
+    @Json(name = "widgets") val widgets: Map<String, Boolean> = emptyMap(),
 
-        /**
-         * Map of native widgetType to a map of domain to Allowed
-         * {
-         *      "jitsi" : {
-         *            "jitsi.domain.org"  : true,
-         *            "jitsi.other.org"  : false
-         *      }
-         * }
-         */
-        @Json(name = "native_widgets") val native: Map<String, Map<String, Boolean>> = emptyMap()
+    /**
+     * Map of native widgetType to a map of domain to Allowed
+     * {
+     *      "jitsi" : {
+     *            "jitsi.domain.org"  : true,
+     *            "jitsi.other.org"  : false
+     *      }
+     * }
+     */
+    @Json(name = "native_widgets") val native: Map<String, Map<String, Boolean>> = emptyMap()
 )

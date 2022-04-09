@@ -180,34 +180,34 @@ class PopupAlertManager @Inject constructor() {
     private fun clearLightStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             weakCurrentActivity?.get()
-                    // Do not change anything on Dark themes
-                    ?.takeIf { ThemeUtils.isLightTheme(it) }
-                    ?.window?.decorView
-                    ?.let { view ->
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            view.windowInsetsController?.setSystemBarsAppearance(0, APPEARANCE_LIGHT_STATUS_BARS)
-                        } else {
-                            @Suppress("DEPRECATION")
-                            view.systemUiVisibility = view.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-                        }
+                // Do not change anything on Dark themes
+                ?.takeIf { ThemeUtils.isLightTheme(it) }
+                ?.window?.decorView
+                ?.let { view ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        view.windowInsetsController?.setSystemBarsAppearance(0, APPEARANCE_LIGHT_STATUS_BARS)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        view.systemUiVisibility = view.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
                     }
+                }
         }
     }
 
     private fun setLightStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             weakCurrentActivity?.get()
-                    // Do not change anything on Dark themes
-                    ?.takeIf { ThemeUtils.isLightTheme(it) }
-                    ?.window?.decorView
-                    ?.let { view ->
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            view.windowInsetsController?.setSystemBarsAppearance(APPEARANCE_LIGHT_STATUS_BARS, APPEARANCE_LIGHT_STATUS_BARS)
-                        } else {
-                            @Suppress("DEPRECATION")
-                            view.systemUiVisibility = view.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                        }
+                // Do not change anything on Dark themes
+                ?.takeIf { ThemeUtils.isLightTheme(it) }
+                ?.window?.decorView
+                ?.let { view ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        view.windowInsetsController?.setSystemBarsAppearance(APPEARANCE_LIGHT_STATUS_BARS, APPEARANCE_LIGHT_STATUS_BARS)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        view.systemUiVisibility = view.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                     }
+                }
         }
     }
 
@@ -221,69 +221,69 @@ class PopupAlertManager @Inject constructor() {
         val alerter = Alerter.create(activity, alert.layoutRes)
 
         alerter.setTitle(alert.title)
-                .setText(alert.description)
-                .also { al ->
-                    al.getLayoutContainer()?.also {
-                        alert.viewBinder?.bind(it)
-                    }
+            .setText(alert.description)
+            .also { al ->
+                al.getLayoutContainer()?.also {
+                    alert.viewBinder?.bind(it)
                 }
-                .apply {
-                    if (noAnimation) {
-                        setEnterAnimation(R.anim.anim_alerter_no_anim)
-                    }
+            }
+            .apply {
+                if (noAnimation) {
+                    setEnterAnimation(R.anim.anim_alerter_no_anim)
+                }
 
-                    alert.iconId?.let {
-                        setIcon(it)
-                    }
-                    alert.actions.forEach { action ->
-                        addButton(action.title, R.style.Widget_Vector_Button_Text_Alerter) {
-                            if (action.autoClose) {
-                                currentIsDismissed()
-                                Alerter.hide()
-                            }
-                            try {
-                                action.action.run()
-                            } catch (e: java.lang.Exception) {
-                                Timber.e("## failed to perform action")
-                            }
+                alert.iconId?.let {
+                    setIcon(it)
+                }
+                alert.actions.forEach { action ->
+                    addButton(action.title, R.style.Widget_Vector_Button_Text_Alerter) {
+                        if (action.autoClose) {
+                            currentIsDismissed()
+                            Alerter.hide()
                         }
-                    }
-                    setOnClickListener { _ ->
-                        alert.contentAction?.let {
-                            if (alert.dismissOnClick) {
-                                currentIsDismissed()
-                                Alerter.hide()
-                            }
-                            try {
-                                it.run()
-                            } catch (e: java.lang.Exception) {
-                                Timber.e("## failed to perform action")
-                            }
+                        try {
+                            action.action.run()
+                        } catch (e: java.lang.Exception) {
+                            Timber.e("## failed to perform action")
                         }
                     }
                 }
-                .setOnHideListener {
-                    // called when dismissed on swipe
-                    try {
-                        alert.dismissedAction?.run()
-                    } catch (e: java.lang.Exception) {
-                        Timber.e("## failed to perform action")
-                    }
-                    currentIsDismissed()
-                }
-                .enableSwipeToDismiss()
-                .enableInfiniteDuration(true)
-                .apply {
-                    if (alert.colorInt != null) {
-                        setBackgroundColorInt(alert.colorInt!!)
-                    } else if (alert.colorAttribute != null) {
-                        setBackgroundColorInt(ThemeUtils.getColor(activity, alert.colorAttribute!!))
-                    } else {
-                        setBackgroundColorRes(alert.colorRes ?: R.color.notification_accent_color)
+                setOnClickListener { _ ->
+                    alert.contentAction?.let {
+                        if (alert.dismissOnClick) {
+                            currentIsDismissed()
+                            Alerter.hide()
+                        }
+                        try {
+                            it.run()
+                        } catch (e: java.lang.Exception) {
+                            Timber.e("## failed to perform action")
+                        }
                     }
                 }
-                .enableIconPulse(!noAnimation)
-                .show()
+            }
+            .setOnHideListener {
+                // called when dismissed on swipe
+                try {
+                    alert.dismissedAction?.run()
+                } catch (e: java.lang.Exception) {
+                    Timber.e("## failed to perform action")
+                }
+                currentIsDismissed()
+            }
+            .enableSwipeToDismiss()
+            .enableInfiniteDuration(true)
+            .apply {
+                if (alert.colorInt != null) {
+                    setBackgroundColorInt(alert.colorInt!!)
+                } else if (alert.colorAttribute != null) {
+                    setBackgroundColorInt(ThemeUtils.getColor(activity, alert.colorAttribute!!))
+                } else {
+                    setBackgroundColorRes(alert.colorRes ?: R.color.notification_accent_color)
+                }
+            }
+            .enableIconPulse(!noAnimation)
+            .show()
     }
 
     private fun currentIsDismissed() {

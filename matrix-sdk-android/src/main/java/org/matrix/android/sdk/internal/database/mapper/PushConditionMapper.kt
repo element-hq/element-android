@@ -23,19 +23,19 @@ internal object PushConditionMapper {
 
     fun map(entity: PushConditionEntity): PushCondition {
         return PushCondition(
-                kind = entity.kind,
-                iz = entity.iz,
-                key = entity.key,
-                pattern = entity.pattern
+            kind = entity.kind,
+            iz = entity.iz,
+            key = entity.key,
+            pattern = entity.pattern
         )
     }
 
     fun map(domain: PushCondition): PushConditionEntity {
         return PushConditionEntity(
-                kind = domain.kind,
-                iz = domain.iz,
-                key = domain.key,
-                pattern = domain.pattern
+            kind = domain.kind,
+            iz = domain.iz,
+            key = domain.key,
+            pattern = domain.pattern
         )
     }
 }

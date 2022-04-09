@@ -37,29 +37,30 @@ import java.util.Locale
  * Represents an ongoing short code interactive key verification between two devices.
  */
 internal abstract class SASDefaultVerificationTransaction(
-        setDeviceVerificationAction: SetDeviceVerificationAction,
-        open val userId: String,
-        open val deviceId: String?,
-        private val cryptoStore: IMXCryptoStore,
-        crossSigningService: CrossSigningService,
-        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        incomingGossipingRequestManager: IncomingGossipingRequestManager,
-        private val deviceFingerprint: String,
-        transactionId: String,
-        otherUserId: String,
-        otherDeviceId: String?,
-        isIncoming: Boolean
+    setDeviceVerificationAction: SetDeviceVerificationAction,
+    open val userId: String,
+    open val deviceId: String?,
+    private val cryptoStore: IMXCryptoStore,
+    crossSigningService: CrossSigningService,
+    outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+    incomingGossipingRequestManager: IncomingGossipingRequestManager,
+    private val deviceFingerprint: String,
+    transactionId: String,
+    otherUserId: String,
+    otherDeviceId: String?,
+    isIncoming: Boolean
 ) : DefaultVerificationTransaction(
-        setDeviceVerificationAction,
-        crossSigningService,
-        outgoingGossipingRequestManager,
-        incomingGossipingRequestManager,
-        userId,
-        transactionId,
-        otherUserId,
-        otherDeviceId,
-        isIncoming),
-        SasVerificationTransaction {
+    setDeviceVerificationAction,
+    crossSigningService,
+    outgoingGossipingRequestManager,
+    incomingGossipingRequestManager,
+    userId,
+    transactionId,
+    otherUserId,
+    otherDeviceId,
+    isIncoming
+),
+    SasVerificationTransaction {
 
     companion object {
         const val SAS_MAC_SHA256_LONGKDF = "hmac-sha256"
@@ -174,14 +175,14 @@ internal abstract class SASDefaultVerificationTransaction(
         keyMap[keyId] = macString
 
         cryptoStore.getMyCrossSigningInfo()?.takeIf { it.isTrusted() }
-                ?.masterKey()
-                ?.unpaddedBase64PublicKey
-                ?.let { masterPublicKey ->
-                    val crossSigningKeyId = "ed25519:$masterPublicKey"
-                    macUsingAgreedMethod(masterPublicKey, baseInfo + crossSigningKeyId)?.let { mskMacString ->
-                        keyMap[crossSigningKeyId] = mskMacString
-                    }
+            ?.masterKey()
+            ?.unpaddedBase64PublicKey
+            ?.let { masterPublicKey ->
+                val crossSigningKeyId = "ed25519:$masterPublicKey"
+                macUsingAgreedMethod(masterPublicKey, baseInfo + crossSigningKeyId)?.let { mskMacString ->
+                    keyMap[crossSigningKeyId] = mskMacString
                 }
+            }
 
         val keyStrings = macUsingAgreedMethod(keyMap.keys.sorted().joinToString(","), baseInfo + "KEY_IDS")
 
@@ -297,9 +298,11 @@ internal abstract class SASDefaultVerificationTransaction(
             return
         }
 
-        trust(otherMasterKeyIsVerified,
-                verifiedDevices,
-                eventuallyMarkMyMasterKeyAsTrusted = otherMasterKey?.trustLevel?.isVerified() == false)
+        trust(
+            otherMasterKeyIsVerified,
+            verifiedDevices,
+            eventuallyMarkMyMasterKeyAsTrusted = otherMasterKey?.trustLevel?.isVerified() == false
+        )
     }
 
     override fun cancel() {
@@ -311,11 +314,13 @@ internal abstract class SASDefaultVerificationTransaction(
         transport.cancelTransaction(transactionId, otherUserId, otherDeviceId ?: "", code)
     }
 
-    protected fun <T> sendToOther(type: String,
-                                  keyToDevice: VerificationInfo<T>,
-                                  nextState: VerificationTxState,
-                                  onErrorReason: CancelCode,
-                                  onDone: (() -> Unit)?) {
+    protected fun <T> sendToOther(
+        type: String,
+        keyToDevice: VerificationInfo<T>,
+        nextState: VerificationTxState,
+        onErrorReason: CancelCode,
+        onDone: (() -> Unit)?
+    ) {
         transport.sendToOther(type, keyToDevice, nextState, onErrorReason, onDone)
     }
 
@@ -328,11 +333,11 @@ internal abstract class SASDefaultVerificationTransaction(
                 if (shortCodeBytes!!.size < 5) return null
                 return getDecimalCodeRepresentation(shortCodeBytes!!)
             }
-            SasMode.EMOJI   -> {
+            SasMode.EMOJI -> {
                 if (shortCodeBytes!!.size < 6) return null
                 return getEmojiCodeRepresentation(shortCodeBytes!!).joinToString(" ") { it.emoji }
             }
-            else            -> return null
+            else -> return null
         }
     }
 
@@ -357,8 +362,8 @@ internal abstract class SASDefaultVerificationTransaction(
     private fun macUsingAgreedMethod(message: String, info: String): String? {
         return when (accepted?.messageAuthenticationCode?.lowercase(Locale.ROOT)) {
             SAS_MAC_SHA256_LONGKDF -> getSAS().calculateMacLongKdf(message, info)
-            SAS_MAC_SHA256         -> getSAS().calculateMac(message, info)
-            else                   -> null
+            SAS_MAC_SHA256 -> getSAS().calculateMac(message, info)
+            else -> null
         }
     }
 
@@ -411,13 +416,13 @@ internal abstract class SASDefaultVerificationTransaction(
         val b4 = byteArray[4].toUnsignedInt()
         val b5 = byteArray[5].toUnsignedInt()
         return listOf(
-                getEmojiForCode((b0 and 0xFC).shr(2)),
-                getEmojiForCode((b0 and 0x3).shl(4) or (b1 and 0xF0).shr(4)),
-                getEmojiForCode((b1 and 0xF).shl(2) or (b2 and 0xC0).shr(6)),
-                getEmojiForCode((b2 and 0x3F)),
-                getEmojiForCode((b3 and 0xFC).shr(2)),
-                getEmojiForCode((b3 and 0x3).shl(4) or (b4 and 0xF0).shr(4)),
-                getEmojiForCode((b4 and 0xF).shl(2) or (b5 and 0xC0).shr(6))
+            getEmojiForCode((b0 and 0xFC).shr(2)),
+            getEmojiForCode((b0 and 0x3).shl(4) or (b1 and 0xF0).shr(4)),
+            getEmojiForCode((b1 and 0xF).shl(2) or (b2 and 0xC0).shr(6)),
+            getEmojiForCode((b2 and 0x3F)),
+            getEmojiForCode((b3 and 0xFC).shr(2)),
+            getEmojiForCode((b3 and 0x3).shl(4) or (b4 and 0xF0).shr(4)),
+            getEmojiForCode((b4 and 0xF).shl(2) or (b5 and 0xC0).shr(6))
         )
     }
 }

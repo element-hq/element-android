@@ -64,10 +64,10 @@ object EspressoHelper {
 
     inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> getBottomSheetDialog(): BottomSheetDialogFragment? {
         return (getCurrentActivity() as? FragmentActivity)
-                ?.supportFragmentManager
-                ?.fragments
-                ?.filterIsInstance<T>()
-                ?.firstOrNull()
+            ?.supportFragmentManager
+            ?.fragments
+            ?.filterIsInstance<T>()
+            ?.firstOrNull()
     }
 }
 
@@ -111,7 +111,7 @@ fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10_000, waitForDispl
             do {
                 println("*** waitForView loop $view end:$endTime current:${System.currentTimeMillis()}")
                 val viewVisible = TreeIterables.breadthFirstViewTraversal(view)
-                        .any { viewMatcher.matches(it) && visibleMatcher.matches(it) }
+                    .any { viewMatcher.matches(it) && visibleMatcher.matches(it) }
 
                 println("*** waitForView loop viewVisible:$viewVisible")
                 if (viewVisible == waitForDisplayed) return
@@ -123,10 +123,10 @@ fun waitForView(viewMatcher: Matcher<View>, timeout: Long = 10_000, waitForDispl
             println("*** waitForView timeout $view")
             // Timeout happens.
             throw PerformException.Builder()
-                    .withActionDescription(this.description)
-                    .withViewDescription(HumanReadables.describe(view))
-                    .withCause(TimeoutException())
-                    .build()
+                .withActionDescription(this.description)
+                .withViewDescription(HumanReadables.describe(view))
+                .withCause(TimeoutException())
+                .build()
         }
     }
 }
@@ -265,10 +265,10 @@ fun clickOnSheet(id: Int) {
 }
 
 inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> interactWithSheet(
-        contentMatcher: Matcher<View>,
-        @BottomSheetBehavior.State openState: Int = BottomSheetBehavior.STATE_EXPANDED,
-        @BottomSheetBehavior.State exitState: Int = BottomSheetBehavior.STATE_HIDDEN,
-        noinline block: () -> Unit = {}
+    contentMatcher: Matcher<View>,
+    @BottomSheetBehavior.State openState: Int = BottomSheetBehavior.STATE_EXPANDED,
+    @BottomSheetBehavior.State exitState: Int = BottomSheetBehavior.STATE_HIDDEN,
+    noinline block: () -> Unit = {}
 ) {
     waitUntilViewVisible(contentMatcher)
     val behaviour = (EspressoHelper.getBottomSheetDialog<T>()!!.dialog as BottomSheetDialog).behavior
@@ -277,8 +277,8 @@ inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> interactWithShee
 }
 
 class BottomSheetResource(
-        private val bottomSheetBehavior: BottomSheetBehavior<*>,
-        @BottomSheetBehavior.State private val wantedState: Int
+    private val bottomSheetBehavior: BottomSheetBehavior<*>,
+    @BottomSheetBehavior.State private val wantedState: Int
 ) : IdlingResource, BottomSheetBehavior.BottomSheetCallback() {
 
     private var isIdle: Boolean = false

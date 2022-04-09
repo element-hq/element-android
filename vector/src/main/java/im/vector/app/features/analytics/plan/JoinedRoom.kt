@@ -25,22 +25,22 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
  * Triggered when the user joins a room.
  */
 data class JoinedRoom(
-        /**
-         * Whether the room is a DM.
-         */
-        val isDM: Boolean,
-        /**
-         * Whether the room is a Space.
-         */
-        val isSpace: Boolean,
-        /**
-         * The size of the room.
-         */
-        val roomSize: RoomSize,
-        /**
-         * The trigger for a room being joined if known.
-         */
-        val trigger: Trigger? = null,
+    /**
+     * Whether the room is a DM.
+     */
+    val isDM: Boolean,
+    /**
+     * Whether the room is a Space.
+     */
+    val isSpace: Boolean,
+    /**
+     * The size of the room.
+     */
+    val roomSize: RoomSize,
+    /**
+     * The trigger for a room being joined if known.
+     */
+    val trigger: Trigger? = null,
 ) : VectorAnalyticsEvent {
 
     enum class Trigger {

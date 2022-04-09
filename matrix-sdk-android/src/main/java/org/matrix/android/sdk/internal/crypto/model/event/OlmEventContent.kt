@@ -23,15 +23,15 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class OlmEventContent(
-        /**
-         *
-         */
-        @Json(name = "ciphertext")
-        val ciphertext: Map<String, Any>? = null,
+    /**
+     *
+     */
+    @Json(name = "ciphertext")
+    val ciphertext: Map<String, Any>? = null,
 
-        /**
-         * the sender key
-         */
-        @Json(name = "sender_key")
-        val senderKey: String? = null
+    /**
+     * the sender key
+     */
+    @Json(name = "sender_key")
+    val senderKey: String? = null
 )

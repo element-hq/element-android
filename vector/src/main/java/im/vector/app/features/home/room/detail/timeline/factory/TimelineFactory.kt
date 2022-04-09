@@ -27,19 +27,19 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import javax.inject.Inject
 
 private val secondaryTimelineAllowedTypes = listOf(
-        EventType.CALL_HANGUP,
-        EventType.CALL_INVITE,
-        EventType.CALL_REJECT,
-        EventType.CALL_ANSWER
+    EventType.CALL_HANGUP,
+    EventType.CALL_INVITE,
+    EventType.CALL_REJECT,
+    EventType.CALL_ANSWER
 )
 
 class TimelineFactory @Inject constructor(private val session: Session, private val timelineSettingsFactory: TimelineSettingsFactory) {
 
     fun createTimeline(
-            coroutineScope: CoroutineScope,
-            mainRoom: Room,
-            eventId: String?,
-            rootThreadEventId: String?
+        coroutineScope: CoroutineScope,
+        mainRoom: Room,
+        eventId: String?,
+        rootThreadEventId: String?
     ): Timeline {
         val settings = timelineSettingsFactory.create(rootThreadEventId)
 
@@ -52,13 +52,13 @@ class TimelineFactory @Inject constructor(private val session: Session, private 
         } else {
             val virtualRoom = session.getRoom(virtualRoomId)!!
             MergedTimelines(
-                    coroutineScope = coroutineScope,
-                    mainTimeline = mainRoom.createTimeline(eventId, settings),
-                    secondaryTimelineParams = MergedTimelines.SecondaryTimelineParams(
-                            timeline = virtualRoom.createTimeline(null, settings),
-                            shouldFilterTypes = true,
-                            allowedTypes = secondaryTimelineAllowedTypes
-                    )
+                coroutineScope = coroutineScope,
+                mainTimeline = mainRoom.createTimeline(eventId, settings),
+                secondaryTimelineParams = MergedTimelines.SecondaryTimelineParams(
+                    timeline = virtualRoom.createTimeline(null, settings),
+                    shouldFilterTypes = true,
+                    allowedTypes = secondaryTimelineAllowedTypes
+                )
             )
         }
     }

@@ -24,10 +24,10 @@ import org.matrix.android.sdk.api.util.JsonDict
 
 internal fun UserAccountDataEvent.extractWidgetSequence(widgetFactory: WidgetFactory): Sequence<Widget> {
     return content.asSequence()
-            .mapNotNull {
-                @Suppress("UNCHECKED_CAST")
-                (it.value as? JsonDict)?.toModel<Event>()
-            }.mapNotNull { event ->
-                widgetFactory.create(event)
-            }
+        .mapNotNull {
+            @Suppress("UNCHECKED_CAST")
+            (it.value as? JsonDict)?.toModel<Event>()
+        }.mapNotNull { event ->
+            widgetFactory.create(event)
+        }
 }

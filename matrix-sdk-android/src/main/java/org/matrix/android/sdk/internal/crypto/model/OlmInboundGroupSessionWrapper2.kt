@@ -89,11 +89,11 @@ class OlmInboundGroupSessionWrapper2 : Serializable {
         try {
             val safeSessionKey = megolmSessionData.sessionKey ?: throw Exception("invalid data")
             olmInboundGroupSession = OlmInboundGroupSession.importSession(safeSessionKey)
-                    .also {
-                        if (it.sessionIdentifier() != megolmSessionData.sessionId) {
-                            throw Exception("Mismatched group session Id")
-                        }
+                .also {
+                    if (it.sessionIdentifier() != megolmSessionData.sessionId) {
+                        throw Exception("Mismatched group session Id")
                     }
+                }
 
             senderKey = megolmSessionData.senderKey
             keysClaimed = megolmSessionData.senderClaimedKeys
@@ -124,14 +124,14 @@ class OlmInboundGroupSessionWrapper2 : Serializable {
             val wantedIndex = index ?: safeOlmInboundGroupSession.firstKnownIndex
 
             MegolmSessionData(
-                    senderClaimedEd25519Key = keysClaimed?.get("ed25519"),
-                    forwardingCurve25519KeyChain = forwardingCurve25519KeyChain?.toList().orEmpty(),
-                    senderKey = senderKey,
-                    senderClaimedKeys = keysClaimed,
-                    roomId = roomId,
-                    sessionId = safeOlmInboundGroupSession.sessionIdentifier(),
-                    sessionKey = safeOlmInboundGroupSession.export(wantedIndex),
-                    algorithm = MXCRYPTO_ALGORITHM_MEGOLM
+                senderClaimedEd25519Key = keysClaimed?.get("ed25519"),
+                forwardingCurve25519KeyChain = forwardingCurve25519KeyChain?.toList().orEmpty(),
+                senderKey = senderKey,
+                senderClaimedKeys = keysClaimed,
+                roomId = roomId,
+                sessionId = safeOlmInboundGroupSession.sessionIdentifier(),
+                sessionKey = safeOlmInboundGroupSession.export(wantedIndex),
+                algorithm = MXCRYPTO_ALGORITHM_MEGOLM
             )
         } catch (e: Exception) {
             Timber.e(e, "## export() : senderKey $senderKey failed")

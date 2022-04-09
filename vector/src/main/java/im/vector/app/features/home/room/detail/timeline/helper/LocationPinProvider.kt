@@ -36,11 +36,11 @@ import javax.inject.Singleton
 
 @Singleton
 class LocationPinProvider @Inject constructor(
-        private val context: Context,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val dimensionConverter: DimensionConverter,
-        private val avatarRenderer: AvatarRenderer,
-        private val matrixItemColorProvider: MatrixItemColorProvider
+    private val context: Context,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val dimensionConverter: DimensionConverter,
+    private val avatarRenderer: AvatarRenderer,
+    private val matrixItemColorProvider: MatrixItemColorProvider
 ) {
     private val cache = mutableMapOf<String, Drawable>()
 
@@ -65,35 +65,35 @@ class LocationPinProvider @Inject constructor(
         }
 
         activeSessionHolder
-                .getActiveSession()
-                .getUser(userId)
-                ?.toMatrixItem()
-                ?.let { userItem ->
-                    val size = dimensionConverter.dpToPx(44)
-                    val bgTintColor = matrixItemColorProvider.getColor(userItem)
-                    avatarRenderer.render(glideRequests, userItem, object : CustomTarget<Drawable>(size, size) {
-                        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                            Timber.d("## Location: onResourceReady")
-                            val pinDrawable = createPinDrawable(resource, bgTintColor)
-                            cache[userId] = pinDrawable
-                            callback(pinDrawable)
-                        }
+            .getActiveSession()
+            .getUser(userId)
+            ?.toMatrixItem()
+            ?.let { userItem ->
+                val size = dimensionConverter.dpToPx(44)
+                val bgTintColor = matrixItemColorProvider.getColor(userItem)
+                avatarRenderer.render(glideRequests, userItem, object : CustomTarget<Drawable>(size, size) {
+                    override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                        Timber.d("## Location: onResourceReady")
+                        val pinDrawable = createPinDrawable(resource, bgTintColor)
+                        cache[userId] = pinDrawable
+                        callback(pinDrawable)
+                    }
 
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                            // Is it possible? Put placeholder instead?
-                            // FIXME The doc says it has to be implemented and should free resources
-                            Timber.d("## Location: onLoadCleared")
-                        }
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                        // Is it possible? Put placeholder instead?
+                        // FIXME The doc says it has to be implemented and should free resources
+                        Timber.d("## Location: onLoadCleared")
+                    }
 
-                        override fun onLoadFailed(errorDrawable: Drawable?) {
-                            Timber.w("## Location: onLoadFailed")
-                            errorDrawable ?: return
-                            val pinDrawable = createPinDrawable(errorDrawable, bgTintColor)
-                            cache[userId] = pinDrawable
-                            callback(pinDrawable)
-                        }
-                    })
-                }
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        Timber.w("## Location: onLoadFailed")
+                        errorDrawable ?: return
+                        val pinDrawable = createPinDrawable(errorDrawable, bgTintColor)
+                        cache[userId] = pinDrawable
+                        callback(pinDrawable)
+                    }
+                })
+            }
     }
 
     private fun createPinDrawable(drawable: Drawable, @ColorInt bgTintColor: Int): Drawable {

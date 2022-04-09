@@ -70,34 +70,38 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
             height = mapHeight
         }
         GlideApp.with(holder.staticMapImageView)
-                .load(location)
-                .apply(RequestOptions.centerCropTransform())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(e: GlideException?,
-                                              model: Any?,
-                                              target: Target<Drawable>?,
-                                              isFirstResource: Boolean): Boolean {
-                        holder.staticMapPinImageView.setImageResource(R.drawable.ic_location_pin_failed)
-                        holder.staticMapErrorTextView.isVisible = true
-                        return false
-                    }
+            .load(location)
+            .apply(RequestOptions.centerCropTransform())
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.staticMapPinImageView.setImageResource(R.drawable.ic_location_pin_failed)
+                    holder.staticMapErrorTextView.isVisible = true
+                    return false
+                }
 
-                    override fun onResourceReady(resource: Drawable?,
-                                                 model: Any?,
-                                                 target: Target<Drawable>?,
-                                                 dataSource: DataSource?,
-                                                 isFirstResource: Boolean): Boolean {
-                        locationPinProvider?.create(userId) { pinDrawable ->
-                            GlideApp.with(holder.staticMapPinImageView)
-                                    .load(pinDrawable)
-                                    .into(holder.staticMapPinImageView)
-                        }
-                        holder.staticMapErrorTextView.isVisible = false
-                        return false
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    locationPinProvider?.create(userId) { pinDrawable ->
+                        GlideApp.with(holder.staticMapPinImageView)
+                            .load(pinDrawable)
+                            .into(holder.staticMapPinImageView)
                     }
-                })
-                .transform(imageCornerTransformation)
-                .into(holder.staticMapImageView)
+                    holder.staticMapErrorTextView.isVisible = false
+                    return false
+                }
+            })
+            .transform(imageCornerTransformation)
+            .into(holder.staticMapImageView)
     }
 
     override fun getViewStubId() = STUB_ID

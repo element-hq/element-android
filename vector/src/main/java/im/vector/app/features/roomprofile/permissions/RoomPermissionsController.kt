@@ -38,8 +38,8 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import javax.inject.Inject
 
 class RoomPermissionsController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val roleFormatter: RoleFormatter
+    private val stringProvider: StringProvider,
+    private val roleFormatter: RoleFormatter
 ) : TypedEpoxyController<RoomPermissionsViewState>() {
 
     interface Callback {
@@ -53,70 +53,70 @@ class RoomPermissionsController @Inject constructor(
     // Element Web order is not really nice, try to put the settings which are more likely to be updated first
     // And a second section, hidden by default
     private val usefulEditablePermissions = listOf(
-            EditablePermission.ChangeRoomAvatar(),
-            EditablePermission.ChangeRoomName(),
-            EditablePermission.ChangeTopic()
+        EditablePermission.ChangeRoomAvatar(),
+        EditablePermission.ChangeRoomName(),
+        EditablePermission.ChangeTopic()
     )
 
     private val usefulEditablePermissionsForSpace = listOf(
-            EditablePermission.ChangeRoomAvatar(),
-            EditablePermission.ChangeRoomName(),
-            EditablePermission.ChangeTopic(),
-            EditablePermission.InviteUsers()
+        EditablePermission.ChangeRoomAvatar(),
+        EditablePermission.ChangeRoomName(),
+        EditablePermission.ChangeTopic(),
+        EditablePermission.InviteUsers()
     )
 
     private val advancedEditablePermissions = listOf(
-            EditablePermission.ChangeMainAddressForTheRoom(),
+        EditablePermission.ChangeMainAddressForTheRoom(),
 
-            EditablePermission.DefaultRole(),
-            EditablePermission.InviteUsers(),
-            EditablePermission.KickUsers(),
-            EditablePermission.BanUsers(),
+        EditablePermission.DefaultRole(),
+        EditablePermission.InviteUsers(),
+        EditablePermission.KickUsers(),
+        EditablePermission.BanUsers(),
 
-            EditablePermission.SendMessages(),
+        EditablePermission.SendMessages(),
 
-            EditablePermission.RemoveMessagesSentByOthers(),
-            EditablePermission.NotifyEveryone(),
+        EditablePermission.RemoveMessagesSentByOthers(),
+        EditablePermission.NotifyEveryone(),
 
-            EditablePermission.ChangeSettings(),
-            EditablePermission.ModifyWidgets(),
-            EditablePermission.ChangeHistoryVisibility(),
-            EditablePermission.ChangePermissions(),
-            EditablePermission.SendRoomServerAclEvents(),
-            EditablePermission.EnableRoomEncryption(),
-            EditablePermission.UpgradeTheRoom()
+        EditablePermission.ChangeSettings(),
+        EditablePermission.ModifyWidgets(),
+        EditablePermission.ChangeHistoryVisibility(),
+        EditablePermission.ChangePermissions(),
+        EditablePermission.SendRoomServerAclEvents(),
+        EditablePermission.EnableRoomEncryption(),
+        EditablePermission.UpgradeTheRoom()
     )
 
     private val advancedEditablePermissionsForSpace = listOf(
-            EditablePermission.ChangeMainAddressForTheRoom(),
+        EditablePermission.ChangeMainAddressForTheRoom(),
 
-            EditablePermission.DefaultRole(),
-            EditablePermission.KickUsers(),
-            EditablePermission.BanUsers(),
+        EditablePermission.DefaultRole(),
+        EditablePermission.KickUsers(),
+        EditablePermission.BanUsers(),
 
-            EditablePermission.SendMessages(),
+        EditablePermission.SendMessages(),
 
-            EditablePermission.RemoveMessagesSentByOthers(),
-            EditablePermission.NotifyEveryone(),
+        EditablePermission.RemoveMessagesSentByOthers(),
+        EditablePermission.NotifyEveryone(),
 
-            EditablePermission.ChangeSettings(),
-//            EditablePermission.ModifyWidgets(),
-            EditablePermission.ChangeHistoryVisibility(),
-            EditablePermission.ChangePermissions(),
-            EditablePermission.SendRoomServerAclEvents(),
-//            EditablePermission.EnableRoomEncryption(),
-            EditablePermission.UpgradeTheRoom()
+        EditablePermission.ChangeSettings(),
+        //            EditablePermission.ModifyWidgets(),
+        EditablePermission.ChangeHistoryVisibility(),
+        EditablePermission.ChangePermissions(),
+        EditablePermission.SendRoomServerAclEvents(),
+        //            EditablePermission.EnableRoomEncryption(),
+        EditablePermission.UpgradeTheRoom()
     )
 
     override fun buildModels(data: RoomPermissionsViewState?) {
         val host = this
         buildProfileSection(
-                stringProvider.getString(R.string.room_permissions_title)
+            stringProvider.getString(R.string.room_permissions_title)
         )
 
         when (val content = data?.currentPowerLevelsContent) {
             is Success -> buildPermissions(data, content())
-            else       -> {
+            else -> {
                 loadingItem {
                     id("loading")
                     loadingText(host.stringProvider.getString(R.string.loading))
@@ -132,12 +132,15 @@ class RoomPermissionsController @Inject constructor(
 
         settingsInfoItem {
             id("notice")
-            helperText(host.stringProvider.getString(
+            helperText(
+                host.stringProvider.getString(
                     if (editable) {
                         if (isSpace) R.string.space_permissions_notice else R.string.room_permissions_notice
                     } else {
                         if (isSpace) R.string.space_permissions_notice_read_only else R.string.room_permissions_notice_read_only
-                    }))
+                    }
+                )
+            )
         }
 
         // Useful permissions
@@ -165,53 +168,55 @@ class RoomPermissionsController @Inject constructor(
         }
     }
 
-    private fun buildPermission(editablePermission: EditablePermission,
-                                content: PowerLevelsContent,
-                                editable: Boolean,
-                                isSpace: Boolean) {
+    private fun buildPermission(
+        editablePermission: EditablePermission,
+        content: PowerLevelsContent,
+        editable: Boolean,
+        isSpace: Boolean
+    ) {
         val currentRole = getCurrentRole(editablePermission, content)
         buildProfileAction(
-                id = editablePermission.labelResId.toString(),
-                title = stringProvider.getString(
-                        if (isSpace) editablePermission.spaceLabelResId else editablePermission.labelResId
-                ),
-                subtitle = roleFormatter.format(currentRole),
-                divider = true,
-                editable = editable,
-                action = {
-                    callback
-                            ?.takeIf { editable }
-                            ?.onEditPermission(editablePermission, currentRole)
-                }
+            id = editablePermission.labelResId.toString(),
+            title = stringProvider.getString(
+                if (isSpace) editablePermission.spaceLabelResId else editablePermission.labelResId
+            ),
+            subtitle = roleFormatter.format(currentRole),
+            divider = true,
+            editable = editable,
+            action = {
+                callback
+                    ?.takeIf { editable }
+                    ?.onEditPermission(editablePermission, currentRole)
+            }
         )
     }
 
     private fun getCurrentRole(editablePermission: EditablePermission, content: PowerLevelsContent): Role {
         val value = when (editablePermission) {
             is EditablePermission.EventTypeEditablePermission -> content.events?.get(editablePermission.eventType) ?: content.stateDefaultOrDefault()
-            is EditablePermission.DefaultRole                 -> content.usersDefaultOrDefault()
-            is EditablePermission.SendMessages                -> content.eventsDefaultOrDefault()
-            is EditablePermission.InviteUsers                 -> content.inviteOrDefault()
-            is EditablePermission.ChangeSettings              -> content.stateDefaultOrDefault()
-            is EditablePermission.KickUsers                   -> content.kickOrDefault()
-            is EditablePermission.BanUsers                    -> content.banOrDefault()
-            is EditablePermission.RemoveMessagesSentByOthers  -> content.redactOrDefault()
-            is EditablePermission.NotifyEveryone              -> content.notificationLevel(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY)
+            is EditablePermission.DefaultRole -> content.usersDefaultOrDefault()
+            is EditablePermission.SendMessages -> content.eventsDefaultOrDefault()
+            is EditablePermission.InviteUsers -> content.inviteOrDefault()
+            is EditablePermission.ChangeSettings -> content.stateDefaultOrDefault()
+            is EditablePermission.KickUsers -> content.kickOrDefault()
+            is EditablePermission.BanUsers -> content.banOrDefault()
+            is EditablePermission.RemoveMessagesSentByOthers -> content.redactOrDefault()
+            is EditablePermission.NotifyEveryone -> content.notificationLevel(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY)
         }
 
         return Role.fromValue(
-                value,
-                when (editablePermission) {
-                    is EditablePermission.EventTypeEditablePermission -> content.stateDefaultOrDefault()
-                    is EditablePermission.DefaultRole                 -> Role.Default.value
-                    is EditablePermission.SendMessages                -> Role.Default.value
-                    is EditablePermission.InviteUsers                 -> Role.Moderator.value
-                    is EditablePermission.ChangeSettings              -> Role.Moderator.value
-                    is EditablePermission.KickUsers                   -> Role.Moderator.value
-                    is EditablePermission.BanUsers                    -> Role.Moderator.value
-                    is EditablePermission.RemoveMessagesSentByOthers  -> Role.Moderator.value
-                    is EditablePermission.NotifyEveryone              -> Role.Moderator.value
-                }
+            value,
+            when (editablePermission) {
+                is EditablePermission.EventTypeEditablePermission -> content.stateDefaultOrDefault()
+                is EditablePermission.DefaultRole -> Role.Default.value
+                is EditablePermission.SendMessages -> Role.Default.value
+                is EditablePermission.InviteUsers -> Role.Moderator.value
+                is EditablePermission.ChangeSettings -> Role.Moderator.value
+                is EditablePermission.KickUsers -> Role.Moderator.value
+                is EditablePermission.BanUsers -> Role.Moderator.value
+                is EditablePermission.RemoveMessagesSentByOthers -> Role.Moderator.value
+                is EditablePermission.NotifyEveryone -> Role.Moderator.value
+            }
         )
     }
 }

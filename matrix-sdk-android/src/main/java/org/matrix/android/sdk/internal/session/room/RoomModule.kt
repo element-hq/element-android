@@ -156,18 +156,18 @@ internal abstract class RoomModule {
             // The simple parser disables all blocks but quotes.
             // Inline parsing(bold, italic, etc) is also enabled and is not easy to disable in commonmark currently.
             return Parser.builder()
-                    .enabledBlockTypes(setOf(BlockQuote::class.java))
-                    .build()
+                .enabledBlockTypes(setOf(BlockQuote::class.java))
+                .build()
         }
 
         @Provides
         @JvmStatic
         fun providesHtmlRenderer(): HtmlRenderer {
             return HtmlRenderer
-                    .builder()
-                    .extensions(extensions)
-                    .softbreak("<br />")
-                    .build()
+                .builder()
+                .extensions(extensions)
+                .softbreak("<br />")
+                .build()
         }
     }
 

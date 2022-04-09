@@ -49,15 +49,15 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toRoomAliasMatrixItem
 
 class AutoCompleter @AssistedInject constructor(
-        @Assisted val roomId: String,
-        @Assisted val isInThreadTimeline: Boolean,
-        private val avatarRenderer: AvatarRenderer,
-        private val commandAutocompletePolicy: CommandAutocompletePolicy,
-        AutocompleteCommandPresenterFactory: AutocompleteCommandPresenter.Factory,
-        private val autocompleteMemberPresenterFactory: AutocompleteMemberPresenter.Factory,
-        private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
-        private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
-        private val autocompleteEmojiPresenter: AutocompleteEmojiPresenter
+    @Assisted val roomId: String,
+    @Assisted val isInThreadTimeline: Boolean,
+    private val avatarRenderer: AvatarRenderer,
+    private val commandAutocompletePolicy: CommandAutocompletePolicy,
+    AutocompleteCommandPresenterFactory: AutocompleteCommandPresenter.Factory,
+    private val autocompleteMemberPresenterFactory: AutocompleteMemberPresenter.Factory,
+    private val autocompleteRoomPresenter: AutocompleteRoomPresenter,
+    private val autocompleteGroupPresenter: AutocompleteGroupPresenter,
+    private val autocompleteEmojiPresenter: AutocompleteEmojiPresenter
 ) {
 
     private lateinit var autocompleteMemberPresenter: AutocompleteMemberPresenter
@@ -105,119 +105,119 @@ class AutoCompleter @AssistedInject constructor(
 
     private fun setupCommands(backgroundDrawable: Drawable, editText: EditText) {
         Autocomplete.on<Command>(editText)
-                .with(commandAutocompletePolicy)
-                .with(autocompleteCommandPresenter)
-                .with(ELEVATION_DP)
-                .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<Command> {
-                    override fun onPopupItemClicked(editable: Editable, item: Command): Boolean {
-                        editable.clear()
-                        editable
-                                .append(item.command)
-                                .append(" ")
-                        return true
-                    }
+            .with(commandAutocompletePolicy)
+            .with(autocompleteCommandPresenter)
+            .with(ELEVATION_DP)
+            .with(backgroundDrawable)
+            .with(object : AutocompleteCallback<Command> {
+                override fun onPopupItemClicked(editable: Editable, item: Command): Boolean {
+                    editable.clear()
+                    editable
+                        .append(item.command)
+                        .append(" ")
+                    return true
+                }
 
-                    override fun onPopupVisibilityChanged(shown: Boolean) {
-                    }
-                })
-                .build()
+                override fun onPopupVisibilityChanged(shown: Boolean) {
+                }
+            })
+            .build()
     }
 
     private fun setupMembers(backgroundDrawable: ColorDrawable, editText: EditText) {
         autocompleteMemberPresenter = autocompleteMemberPresenterFactory.create(roomId)
         Autocomplete.on<AutocompleteMemberItem>(editText)
-                .with(CharPolicy(TRIGGER_AUTO_COMPLETE_MEMBERS, true))
-                .with(autocompleteMemberPresenter)
-                .with(ELEVATION_DP)
-                .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<AutocompleteMemberItem> {
-                    override fun onPopupItemClicked(editable: Editable, item: AutocompleteMemberItem): Boolean {
-                        return when (item) {
-                            is AutocompleteMemberItem.Header     -> false // do nothing header is not clickable
-                            is AutocompleteMemberItem.RoomMember -> {
-                                insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomMemberSummary.toMatrixItem())
-                                true
-                            }
-                            is AutocompleteMemberItem.Everyone   -> {
-                                insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomSummary.toEveryoneInRoomMatrixItem())
-                                true
-                            }
+            .with(CharPolicy(TRIGGER_AUTO_COMPLETE_MEMBERS, true))
+            .with(autocompleteMemberPresenter)
+            .with(ELEVATION_DP)
+            .with(backgroundDrawable)
+            .with(object : AutocompleteCallback<AutocompleteMemberItem> {
+                override fun onPopupItemClicked(editable: Editable, item: AutocompleteMemberItem): Boolean {
+                    return when (item) {
+                        is AutocompleteMemberItem.Header -> false // do nothing header is not clickable
+                        is AutocompleteMemberItem.RoomMember -> {
+                            insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomMemberSummary.toMatrixItem())
+                            true
+                        }
+                        is AutocompleteMemberItem.Everyone -> {
+                            insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_MEMBERS, item.roomSummary.toEveryoneInRoomMatrixItem())
+                            true
                         }
                     }
+                }
 
-                    override fun onPopupVisibilityChanged(shown: Boolean) {
-                    }
-                })
-                .build()
+                override fun onPopupVisibilityChanged(shown: Boolean) {
+                }
+            })
+            .build()
     }
 
     private fun setupRooms(backgroundDrawable: ColorDrawable, editText: EditText) {
         Autocomplete.on<RoomSummary>(editText)
-                .with(CharPolicy(TRIGGER_AUTO_COMPLETE_ROOMS, true))
-                .with(autocompleteRoomPresenter)
-                .with(ELEVATION_DP)
-                .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<RoomSummary> {
-                    override fun onPopupItemClicked(editable: Editable, item: RoomSummary): Boolean {
-                        insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_ROOMS, item.toRoomAliasMatrixItem())
-                        return true
-                    }
+            .with(CharPolicy(TRIGGER_AUTO_COMPLETE_ROOMS, true))
+            .with(autocompleteRoomPresenter)
+            .with(ELEVATION_DP)
+            .with(backgroundDrawable)
+            .with(object : AutocompleteCallback<RoomSummary> {
+                override fun onPopupItemClicked(editable: Editable, item: RoomSummary): Boolean {
+                    insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_ROOMS, item.toRoomAliasMatrixItem())
+                    return true
+                }
 
-                    override fun onPopupVisibilityChanged(shown: Boolean) {
-                    }
-                })
-                .build()
+                override fun onPopupVisibilityChanged(shown: Boolean) {
+                }
+            })
+            .build()
     }
 
     private fun setupGroups(backgroundDrawable: ColorDrawable, editText: EditText) {
         Autocomplete.on<GroupSummary>(editText)
-                .with(CharPolicy(TRIGGER_AUTO_COMPLETE_GROUPS, true))
-                .with(autocompleteGroupPresenter)
-                .with(ELEVATION_DP)
-                .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<GroupSummary> {
-                    override fun onPopupItemClicked(editable: Editable, item: GroupSummary): Boolean {
-                        insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_GROUPS, item.toMatrixItem())
-                        return true
-                    }
+            .with(CharPolicy(TRIGGER_AUTO_COMPLETE_GROUPS, true))
+            .with(autocompleteGroupPresenter)
+            .with(ELEVATION_DP)
+            .with(backgroundDrawable)
+            .with(object : AutocompleteCallback<GroupSummary> {
+                override fun onPopupItemClicked(editable: Editable, item: GroupSummary): Boolean {
+                    insertMatrixItem(editText, editable, TRIGGER_AUTO_COMPLETE_GROUPS, item.toMatrixItem())
+                    return true
+                }
 
-                    override fun onPopupVisibilityChanged(shown: Boolean) {
-                    }
-                })
-                .build()
+                override fun onPopupVisibilityChanged(shown: Boolean) {
+                }
+            })
+            .build()
     }
 
     private fun setupEmojis(backgroundDrawable: Drawable, editText: EditText) {
         Autocomplete.on<String>(editText)
-                .with(CharPolicy(TRIGGER_AUTO_COMPLETE_EMOJIS, false))
-                .with(autocompleteEmojiPresenter)
-                .with(ELEVATION_DP)
-                .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<String> {
-                    override fun onPopupItemClicked(editable: Editable, item: String): Boolean {
-                        // Infer that the last ":" before the current cursor position is the original popup trigger
-                        var startIndex = editable.subSequence(0, editText.selectionStart).lastIndexOf(":")
-                        if (startIndex == -1) {
-                            startIndex = 0
-                        }
-
-                        // Detect next word separator
-                        var endIndex = editable.indexOf(" ", startIndex)
-                        if (endIndex == -1) {
-                            endIndex = editable.length
-                        }
-
-                        // Replace the word by its completion
-                        editable.delete(startIndex, endIndex)
-                        editable.insert(startIndex, item)
-                        return true
+            .with(CharPolicy(TRIGGER_AUTO_COMPLETE_EMOJIS, false))
+            .with(autocompleteEmojiPresenter)
+            .with(ELEVATION_DP)
+            .with(backgroundDrawable)
+            .with(object : AutocompleteCallback<String> {
+                override fun onPopupItemClicked(editable: Editable, item: String): Boolean {
+                    // Infer that the last ":" before the current cursor position is the original popup trigger
+                    var startIndex = editable.subSequence(0, editText.selectionStart).lastIndexOf(":")
+                    if (startIndex == -1) {
+                        startIndex = 0
                     }
 
-                    override fun onPopupVisibilityChanged(shown: Boolean) {
+                    // Detect next word separator
+                    var endIndex = editable.indexOf(" ", startIndex)
+                    if (endIndex == -1) {
+                        endIndex = editable.length
                     }
-                })
-                .build()
+
+                    // Replace the word by its completion
+                    editable.delete(startIndex, endIndex)
+                    editable.insert(startIndex, item)
+                    return true
+                }
+
+                override fun onPopupVisibilityChanged(shown: Boolean) {
+                }
+            })
+            .build()
     }
 
     private fun insertMatrixItem(editText: EditText, editable: Editable, firstChar: Char, matrixItem: MatrixItem) {
@@ -238,20 +238,20 @@ class AutoCompleter @AssistedInject constructor(
 
         // Adding trailing space " " or ": " if the user started mention someone
         val displayNameSuffix =
-                if (matrixItem is MatrixItem.UserItem) {
-                    ": "
-                } else {
-                    " "
-                }
+            if (matrixItem is MatrixItem.UserItem) {
+                ": "
+            } else {
+                " "
+            }
 
         editable.replace(startIndex, endIndex, "$displayName$displayNameSuffix")
 
         // Add the span
         val span = PillImageSpan(
-                glideRequests,
-                avatarRenderer,
-                editText.context,
-                matrixItem
+            glideRequests,
+            avatarRenderer,
+            editText.context,
+            matrixItem
         )
         span.bind(editText)
 

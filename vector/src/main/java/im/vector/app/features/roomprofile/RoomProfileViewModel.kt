@@ -51,11 +51,11 @@ import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class RoomProfileViewModel @AssistedInject constructor(
-        @Assisted private val initialState: RoomProfileViewState,
-        private val stringProvider: StringProvider,
-        private val shortcutCreator: ShortcutCreator,
-        private val session: Session,
-        private val analyticsTracker: AnalyticsTracker
+    @Assisted private val initialState: RoomProfileViewState,
+    private val stringProvider: StringProvider,
+    private val shortcutCreator: ShortcutCreator,
+    private val session: Session,
+    private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<RoomProfileViewState, RoomProfileAction, RoomProfileViewEvents>(initialState) {
 
     @AssistedFactory
@@ -79,66 +79,66 @@ class RoomProfileViewModel @AssistedInject constructor(
     private fun observePowerLevels() {
         val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
         powerLevelsContentLive
-                .onEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    val canUpdateRoomState = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
-                    setState {
-                        copy(canUpdateRoomState = canUpdateRoomState)
-                    }
-                }.launchIn(viewModelScope)
+            .onEach {
+                val powerLevelsHelper = PowerLevelsHelper(it)
+                val canUpdateRoomState = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                setState {
+                    copy(canUpdateRoomState = canUpdateRoomState)
+                }
+            }.launchIn(viewModelScope)
     }
 
     private fun observeRoomCreateContent(flowRoom: FlowRoom) {
         flowRoom.liveStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.NoCondition)
-                .mapOptional { it.content.toModel<RoomCreateContent>() }
-                .unwrap()
-                .execute { async ->
-                    copy(
-                            roomCreateContent = async,
-                            // This is a shortcut, we should do the next lines elsewhere, but keep it like that for the moment.
-                            recommendedRoomVersion = room.getRecommendedVersion(),
-                            isUsingUnstableRoomVersion = room.isUsingUnstableRoomVersion(),
-                            canUpgradeRoom = room.userMayUpgradeRoom(session.myUserId),
-                            isTombstoned = room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE) != null
-                    )
-                }
+            .mapOptional { it.content.toModel<RoomCreateContent>() }
+            .unwrap()
+            .execute { async ->
+                copy(
+                    roomCreateContent = async,
+                    // This is a shortcut, we should do the next lines elsewhere, but keep it like that for the moment.
+                    recommendedRoomVersion = room.getRecommendedVersion(),
+                    isUsingUnstableRoomVersion = room.isUsingUnstableRoomVersion(),
+                    canUpgradeRoom = room.userMayUpgradeRoom(session.myUserId),
+                    isTombstoned = room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE) != null
+                )
+            }
     }
 
     private fun observeRoomSummary(flowRoom: FlowRoom) {
         flowRoom.liveRoomSummary()
-                .unwrap()
-                .execute {
-                    copy(roomSummary = it)
-                }
+            .unwrap()
+            .execute {
+                copy(roomSummary = it)
+            }
     }
 
     private fun observeBannedRoomMembers(flowRoom: FlowRoom) {
         flowRoom.liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
-                .execute {
-                    copy(bannedMembership = it)
-                }
+            .execute {
+                copy(bannedMembership = it)
+            }
     }
 
     private fun observePermissions() {
         PowerLevelsFlowFactory(room)
-                .createFlow()
-                .setOnEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    val permissions = RoomProfileViewState.ActionPermissions(
-                            canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
-                    )
-                    copy(actionPermissions = permissions)
-                }
+            .createFlow()
+            .setOnEach {
+                val powerLevelsHelper = PowerLevelsHelper(it)
+                val permissions = RoomProfileViewState.ActionPermissions(
+                    canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                )
+                copy(actionPermissions = permissions)
+            }
     }
 
     override fun handle(action: RoomProfileAction) {
         when (action) {
-            is RoomProfileAction.EnableEncryption            -> handleEnableEncryption()
-            RoomProfileAction.LeaveRoom                      -> handleLeaveRoom()
+            is RoomProfileAction.EnableEncryption -> handleEnableEncryption()
+            RoomProfileAction.LeaveRoom -> handleLeaveRoom()
             is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
-            RoomProfileAction.CreateShortcut                 -> handleCreateShortcut()
-            RoomProfileAction.RestoreEncryptionState         -> restoreEncryptionState()
+            is RoomProfileAction.ShareRoomProfile -> handleShareRoomProfile()
+            RoomProfileAction.CreateShortcut -> handleCreateShortcut()
+            RoomProfileAction.RestoreEncryptionState -> restoreEncryptionState()
         }
     }
 
@@ -168,8 +168,8 @@ class RoomProfileViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             withState { state ->
                 state.roomSummary()
-                        ?.let { shortcutCreator.create(it) }
-                        ?.let { _viewEvents.post(RoomProfileViewEvents.OnShortcutReady(it)) }
+                    ?.let { shortcutCreator.create(it) }
+                    ?.let { _viewEvents.post(RoomProfileViewEvents.OnShortcutReady(it)) }
             }
         }
     }
@@ -189,11 +189,13 @@ class RoomProfileViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.leaveRoom(room.roomId)
-                analyticsTracker.capture(Interaction(
+                analyticsTracker.capture(
+                    Interaction(
                         index = null,
                         interactionType = null,
                         name = Interaction.Name.MobileRoomLeave
-                ))
+                    )
+                )
                 // Do nothing, we will be closing the room automatically when it will get back from sync
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))
@@ -203,9 +205,9 @@ class RoomProfileViewModel @AssistedInject constructor(
 
     private fun handleShareRoomProfile() {
         session.permalinkService().createRoomPermalink(initialState.roomId)
-                ?.let { permalink ->
-                    _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
-                }
+            ?.let { permalink ->
+                _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
+            }
     }
 
     private fun restoreEncryptionState() {

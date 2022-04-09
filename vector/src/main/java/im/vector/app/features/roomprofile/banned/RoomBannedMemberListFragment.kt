@@ -39,10 +39,10 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomBannedMemberListFragment @Inject constructor(
-        private val roomMemberListController: RoomBannedMemberListController,
-        private val avatarRenderer: AvatarRenderer
+    private val roomMemberListController: RoomBannedMemberListController,
+    private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
-        RoomBannedMemberListController.Callback {
+    RoomBannedMemberListController.Callback {
 
     private val viewModel: RoomBannedMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
@@ -59,7 +59,7 @@ class RoomBannedMemberListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(views.roomSettingsToolbar)
-                .allowBack()
+            .allowBack()
         setupSearchView()
         views.roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
 
@@ -68,19 +68,19 @@ class RoomBannedMemberListFragment @Inject constructor(
                 is RoomBannedMemberListViewEvents.ShowBannedInfo -> {
                     val canBan = withState(viewModel) { state -> state.canUserBan }
                     MaterialAlertDialogBuilder(requireActivity())
-                            .setTitle(getString(R.string.member_banned_by, it.bannedByUserId))
-                            .setMessage(getString(R.string.reason_colon, it.banReason))
-                            .setPositiveButton(R.string.ok, null)
-                            .apply {
-                                if (canBan) {
-                                    setNegativeButton(R.string.room_participants_action_unban) { _, _ ->
-                                        viewModel.handle(RoomBannedMemberListAction.UnBanUser(it.roomMemberSummary))
-                                    }
+                        .setTitle(getString(R.string.member_banned_by, it.bannedByUserId))
+                        .setMessage(getString(R.string.reason_colon, it.banReason))
+                        .setPositiveButton(R.string.ok, null)
+                        .apply {
+                            if (canBan) {
+                                setNegativeButton(R.string.room_participants_action_unban) { _, _ ->
+                                    viewModel.handle(RoomBannedMemberListAction.UnBanUser(it.roomMemberSummary))
                                 }
                             }
-                            .show()
+                        }
+                        .show()
                 }
-                is RoomBannedMemberListViewEvents.ToastError     -> {
+                is RoomBannedMemberListViewEvents.ToastError -> {
                     requireActivity().toast(it.info)
                 }
             }

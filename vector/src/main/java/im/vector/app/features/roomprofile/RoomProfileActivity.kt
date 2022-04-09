@@ -44,7 +44,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RoomProfileActivity :
-        VectorBaseActivity<ActivitySimpleBinding>() {
+    VectorBaseActivity<ActivitySimpleBinding>() {
 
     companion object {
 
@@ -91,19 +91,19 @@ class RoomProfileActivity :
             }
         }
         sharedActionViewModel
-                .stream()
-                .onEach { sharedAction ->
-                    when (sharedAction) {
-                        RoomProfileSharedAction.OpenRoomMembers                 -> openRoomMembers()
-                        RoomProfileSharedAction.OpenRoomSettings                -> openRoomSettings()
-                        RoomProfileSharedAction.OpenRoomAliasesSettings         -> openRoomAlias()
-                        RoomProfileSharedAction.OpenRoomPermissionsSettings     -> openRoomPermissions()
-                        RoomProfileSharedAction.OpenRoomUploads                 -> openRoomUploads()
-                        RoomProfileSharedAction.OpenBannedRoomMembers        -> openBannedRoomMembers()
-                        RoomProfileSharedAction.OpenRoomNotificationSettings -> openRoomNotificationSettings()
-                    }
+            .stream()
+            .onEach { sharedAction ->
+                when (sharedAction) {
+                    RoomProfileSharedAction.OpenRoomMembers -> openRoomMembers()
+                    RoomProfileSharedAction.OpenRoomSettings -> openRoomSettings()
+                    RoomProfileSharedAction.OpenRoomAliasesSettings -> openRoomAlias()
+                    RoomProfileSharedAction.OpenRoomPermissionsSettings -> openRoomPermissions()
+                    RoomProfileSharedAction.OpenRoomUploads -> openRoomUploads()
+                    RoomProfileSharedAction.OpenBannedRoomMembers -> openBannedRoomMembers()
+                    RoomProfileSharedAction.OpenRoomNotificationSettings -> openRoomNotificationSettings()
                 }
-                .launchIn(lifecycleScope)
+            }
+            .launchIn(lifecycleScope)
 
         requireActiveMembershipViewModel.observeViewEvents {
             when (it) {

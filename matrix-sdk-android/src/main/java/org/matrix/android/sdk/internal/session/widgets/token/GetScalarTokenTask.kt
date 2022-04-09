@@ -30,16 +30,18 @@ import javax.net.ssl.HttpsURLConnection
 internal interface GetScalarTokenTask : Task<GetScalarTokenTask.Params, String> {
 
     data class Params(
-            val serverUrl: String,
-            val forceRefresh: Boolean = false
+        val serverUrl: String,
+        val forceRefresh: Boolean = false
     )
 }
 
 private const val WIDGET_API_VERSION = "1.1"
 
-internal class DefaultGetScalarTokenTask @Inject constructor(private val widgetsAPIProvider: WidgetsAPIProvider,
-                                                             private val scalarTokenStore: ScalarTokenStore,
-                                                             private val getOpenIdTokenTask: GetOpenIdTokenTask) : GetScalarTokenTask {
+internal class DefaultGetScalarTokenTask @Inject constructor(
+    private val widgetsAPIProvider: WidgetsAPIProvider,
+    private val scalarTokenStore: ScalarTokenStore,
+    private val getOpenIdTokenTask: GetOpenIdTokenTask
+) : GetScalarTokenTask {
 
     override suspend fun execute(params: GetScalarTokenTask.Params): String {
         val widgetsAPI = widgetsAPIProvider.get(params.serverUrl)

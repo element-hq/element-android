@@ -40,9 +40,9 @@ class KeysExporterTest {
     private val cryptoService = FakeCryptoService()
     private val context = FakeContext()
     private val keysExporter = KeysExporter(
-            session = FakeSession(fakeCryptoService = cryptoService),
-            context = context.instance,
-            dispatchers = CoroutineDispatchers(Dispatchers.Unconfined, Dispatchers.Unconfined)
+        session = FakeSession(fakeCryptoService = cryptoService),
+        context = context.instance,
+        dispatchers = CoroutineDispatchers(Dispatchers.Unconfined, Dispatchers.Unconfined)
     )
 
     @Before

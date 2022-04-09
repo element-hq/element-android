@@ -23,13 +23,13 @@ internal object GroupSummaryMapper {
 
     fun map(groupSummaryEntity: GroupSummaryEntity): GroupSummary {
         return GroupSummary(
-                groupSummaryEntity.groupId,
-                groupSummaryEntity.membership,
-                groupSummaryEntity.displayName,
-                groupSummaryEntity.shortDescription,
-                groupSummaryEntity.avatarUrl,
-                groupSummaryEntity.roomIds.toList(),
-                groupSummaryEntity.userIds.toList()
+            groupSummaryEntity.groupId,
+            groupSummaryEntity.membership,
+            groupSummaryEntity.displayName,
+            groupSummaryEntity.shortDescription,
+            groupSummaryEntity.avatarUrl,
+            groupSummaryEntity.roomIds.toList(),
+            groupSummaryEntity.userIds.toList()
         )
     }
 }

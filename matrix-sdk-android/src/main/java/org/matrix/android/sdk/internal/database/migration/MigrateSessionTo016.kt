@@ -25,7 +25,7 @@ class MigrateSessionTo016(realm: DynamicRealm) : RealmMigrator(realm, 16) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField(HomeServerCapabilitiesEntityFields.ROOM_VERSIONS_JSON, String::class.java)
-                ?.forceRefreshOfHomeServerCapabilities()
+            ?.addField(HomeServerCapabilitiesEntityFields.ROOM_VERSIONS_JSON, String::class.java)
+            ?.forceRefreshOfHomeServerCapabilities()
     }
 }

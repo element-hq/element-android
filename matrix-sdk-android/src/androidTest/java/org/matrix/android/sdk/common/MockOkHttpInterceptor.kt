@@ -73,18 +73,20 @@ class MockOkHttpInterceptor : TestInterceptor {
     /**
      * Simple rule that reply with the given body for any request that matches the match param
      */
-    class SimpleRule(match: String,
-                     private val code: Int = HttpsURLConnection.HTTP_OK,
-                     private val body: String = "{}") : Rule(match) {
+    class SimpleRule(
+        match: String,
+        private val code: Int = HttpsURLConnection.HTTP_OK,
+        private val body: String = "{}"
+    ) : Rule(match) {
 
         override fun process(originalRequest: Request): Response? {
             return Response.Builder()
-                    .protocol(Protocol.HTTP_1_1)
-                    .request(originalRequest)
-                    .message("mocked answer")
-                    .body(body.toResponseBody(null))
-                    .code(code)
-                    .build()
+                .protocol(Protocol.HTTP_1_1)
+                .request(originalRequest)
+                .message("mocked answer")
+                .body(body.toResponseBody(null))
+                .code(code)
+                .build()
         }
     }
 }

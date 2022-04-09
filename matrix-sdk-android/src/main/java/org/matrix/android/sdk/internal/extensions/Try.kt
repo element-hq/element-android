@@ -23,13 +23,13 @@ import arrow.core.TryOf
 import arrow.core.fix
 
 inline fun <A> TryOf<A>.onError(f: (Throwable) -> Unit): Try<A> = fix()
-        .fold(
-                {
-                    f(it)
-                    Failure(it)
-                },
-                { Success(it) }
-        )
+    .fold(
+        {
+            f(it)
+            Failure(it)
+        },
+        { Success(it) }
+    )
 
 /**
  * Same as doOnNext for Observables

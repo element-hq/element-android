@@ -34,31 +34,33 @@ import javax.inject.Inject
 internal interface CreateWidgetTask : Task<CreateWidgetTask.Params, Unit> {
 
     data class Params(
-            val roomId: String,
-            val widgetId: String,
-            val content: Content
+        val roomId: String,
+        val widgetId: String,
+        val content: Content
     )
 }
 
-internal class DefaultCreateWidgetTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                           private val roomAPI: RoomAPI,
-                                                           @UserId private val userId: String,
-                                                           private val globalErrorReceiver: GlobalErrorReceiver) : CreateWidgetTask {
+internal class DefaultCreateWidgetTask @Inject constructor(
+    @SessionDatabase private val monarchy: Monarchy,
+    private val roomAPI: RoomAPI,
+    @UserId private val userId: String,
+    private val globalErrorReceiver: GlobalErrorReceiver
+) : CreateWidgetTask {
 
     override suspend fun execute(params: CreateWidgetTask.Params) {
         executeRequest(globalErrorReceiver) {
             roomAPI.sendStateEvent(
-                    roomId = params.roomId,
-                    stateEventType = EventType.STATE_ROOM_WIDGET_LEGACY,
-                    stateKey = params.widgetId,
-                    params = params.content
+                roomId = params.roomId,
+                stateEventType = EventType.STATE_ROOM_WIDGET_LEGACY,
+                stateKey = params.widgetId,
+                params = params.content
             )
         }
         awaitNotEmptyResult(monarchy.realmConfiguration, 30_000L) {
             CurrentStateEventEntity
-                    .whereStateKey(it, params.roomId, type = EventType.STATE_ROOM_WIDGET_LEGACY, stateKey = params.widgetId)
-                    .and()
-                    .equalTo(CurrentStateEventEntityFields.ROOT.SENDER, userId)
+                .whereStateKey(it, params.roomId, type = EventType.STATE_ROOM_WIDGET_LEGACY, stateKey = params.widgetId)
+                .and()
+                .equalTo(CurrentStateEventEntityFields.ROOT.SENDER, userId)
         }
     }
 }

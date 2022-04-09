@@ -24,10 +24,10 @@ import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntityF
 
 internal fun ReadReceiptsSummaryEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<ReadReceiptsSummaryEntity> {
     return realm.where<ReadReceiptsSummaryEntity>()
-            .equalTo(ReadReceiptsSummaryEntityFields.EVENT_ID, eventId)
+        .equalTo(ReadReceiptsSummaryEntityFields.EVENT_ID, eventId)
 }
 
 internal fun ReadReceiptsSummaryEntity.Companion.whereInRoom(realm: Realm, roomId: String): RealmQuery<ReadReceiptsSummaryEntity> {
     return realm.where<ReadReceiptsSummaryEntity>()
-            .equalTo(ReadReceiptsSummaryEntityFields.ROOM_ID, roomId)
+        .equalTo(ReadReceiptsSummaryEntityFields.ROOM_ID, roomId)
 }

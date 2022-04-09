@@ -46,7 +46,7 @@ private const val DURATION_IN_MS_OPTION_3 = 8 * 60 * 60_000L
  */
 @AndroidEntryPoint
 class ChooseLiveDurationBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetChooseLiveLocationShareDurationBinding>() {
+    VectorBaseBottomSheetDialogFragment<BottomSheetChooseLiveLocationShareDurationBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetChooseLiveLocationShareDurationBinding {
         return BottomSheetChooseLiveLocationShareDurationBinding.inflate(inflater, container, false)
@@ -72,7 +72,7 @@ class ChooseLiveDurationBottomSheet :
             R.id.liveLocShareChooseDurationOption1 -> DURATION_IN_MS_OPTION_1
             R.id.liveLocShareChooseDurationOption2 -> DURATION_IN_MS_OPTION_2
             R.id.liveLocShareChooseDurationOption3 -> DURATION_IN_MS_OPTION_3
-            else                                   -> DURATION_IN_MS_OPTION_1
+            else -> DURATION_IN_MS_OPTION_1
         }
     }
 

@@ -32,9 +32,9 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomBannedMemberListController @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val stringProvider: StringProvider,
-        private val roomMemberSummaryFilter: RoomMemberSummaryFilter
+    private val avatarRenderer: AvatarRenderer,
+    private val stringProvider: StringProvider,
+    private val roomMemberSummaryFilter: RoomMemberSummaryFilter
 ) : TypedEpoxyController<RoomBannedMemberListViewState>() {
 
     interface Callback {
@@ -61,34 +61,34 @@ class RoomBannedMemberListController @Inject constructor(
 
             roomMemberSummaryFilter.filter = data.filter
             bannedList
-                    .filter { roomMemberSummaryFilter.test(it) }
-                    .join(
-                            each = { _, roomMember ->
-                                val actionInProgress = data.onGoingModerationAction.contains(roomMember.userId)
-                                profileMatrixItemWithProgress {
-                                    id(roomMember.userId)
-                                    matrixItem(roomMember.toMatrixItem())
-                                    avatarRenderer(host.avatarRenderer)
-                                    apply {
-                                        if (actionInProgress) {
-                                            inProgress(true)
-                                            editable(false)
-                                        } else {
-                                            inProgress(false)
-                                            editable(true)
-                                            clickListener {
-                                                host.callback?.onUnbanClicked(roomMember)
-                                            }
-                                        }
+                .filter { roomMemberSummaryFilter.test(it) }
+                .join(
+                    each = { _, roomMember ->
+                        val actionInProgress = data.onGoingModerationAction.contains(roomMember.userId)
+                        profileMatrixItemWithProgress {
+                            id(roomMember.userId)
+                            matrixItem(roomMember.toMatrixItem())
+                            avatarRenderer(host.avatarRenderer)
+                            apply {
+                                if (actionInProgress) {
+                                    inProgress(true)
+                                    editable(false)
+                                } else {
+                                    inProgress(false)
+                                    editable(true)
+                                    clickListener {
+                                        host.callback?.onUnbanClicked(roomMember)
                                     }
                                 }
-                            },
-                            between = { _, roomMemberBefore ->
-                                dividerItem {
-                                    id("divider_${roomMemberBefore.userId}")
-                                }
                             }
-                    )
+                        }
+                    },
+                    between = { _, roomMemberBefore ->
+                        dividerItem {
+                            id("divider_${roomMemberBefore.userId}")
+                        }
+                    }
+                )
         }
     }
 }

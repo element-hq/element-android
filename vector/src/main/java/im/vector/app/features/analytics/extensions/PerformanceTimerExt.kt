@@ -23,25 +23,25 @@ fun StatisticEvent.toListOfPerformanceTimer(): List<PerformanceTimer> {
     return when (this) {
         is StatisticEvent.InitialSyncRequest ->
             listOf(
-                    PerformanceTimer(
-                            name = PerformanceTimer.Name.InitialSyncRequest,
-                            timeMs = requestDurationMs + downloadDurationMs,
-                            itemCount = nbOfJoinedRooms
-                    ),
-                    PerformanceTimer(
-                            name = PerformanceTimer.Name.InitialSyncParsing,
-                            timeMs = treatmentDurationMs,
-                            itemCount = nbOfJoinedRooms
-                    )
+                PerformanceTimer(
+                    name = PerformanceTimer.Name.InitialSyncRequest,
+                    timeMs = requestDurationMs + downloadDurationMs,
+                    itemCount = nbOfJoinedRooms
+                ),
+                PerformanceTimer(
+                    name = PerformanceTimer.Name.InitialSyncParsing,
+                    timeMs = treatmentDurationMs,
+                    itemCount = nbOfJoinedRooms
+                )
             )
-        is StatisticEvent.SyncTreatment      ->
+        is StatisticEvent.SyncTreatment ->
             if (afterPause) {
                 listOf(
-                        PerformanceTimer(
-                                name = PerformanceTimer.Name.StartupIncrementalSync,
-                                timeMs = durationMs,
-                                itemCount = nbOfJoinedRooms
-                        )
+                    PerformanceTimer(
+                        name = PerformanceTimer.Name.StartupIncrementalSync,
+                        timeMs = durationMs,
+                        itemCount = nbOfJoinedRooms
+                    )
                 )
             } else {
                 // We do not report

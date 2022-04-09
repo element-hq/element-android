@@ -36,14 +36,14 @@ import javax.inject.Inject
 
 internal interface IdentityBulkLookupTask : Task<IdentityBulkLookupTask.Params, List<FoundThreePid>> {
     data class Params(
-            val threePids: List<ThreePid>
+        val threePids: List<ThreePid>
     )
 }
 
 internal class DefaultIdentityBulkLookupTask @Inject constructor(
-        private val identityApiProvider: IdentityApiProvider,
-        private val identityStore: IdentityStore,
-        @UserId private val userId: String
+    private val identityApiProvider: IdentityApiProvider,
+    private val identityStore: IdentityStore,
+    @UserId private val userId: String
 ) : IdentityBulkLookupTask {
 
     override suspend fun execute(params: IdentityBulkLookupTask.Params): List<FoundThreePid> {
@@ -53,7 +53,7 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         val hashDetailResponse = if (pepper == null) {
             // We need to fetch the hash details first
             fetchHashDetails(identityAPI)
-                    .also { identityStore.setHashDetails(it) }
+                .also { identityStore.setHashDetails(it) }
         } else {
             IdentityHashDetailResponse(pepper, identityData.hashLookupAlgorithm)
         }
@@ -71,24 +71,28 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
     }
 
     data class LookUpData(
-            val hashedAddresses: List<String>,
-            val identityLookUpResponse: IdentityLookUpResponse
+        val hashedAddresses: List<String>,
+        val identityLookUpResponse: IdentityLookUpResponse
     )
 
-    private suspend fun lookUpInternal(identityAPI: IdentityAPI,
-                                       threePids: List<ThreePid>,
-                                       hashDetailResponse: IdentityHashDetailResponse,
-                                       canRetry: Boolean): LookUpData {
+    private suspend fun lookUpInternal(
+        identityAPI: IdentityAPI,
+        threePids: List<ThreePid>,
+        hashDetailResponse: IdentityHashDetailResponse,
+        canRetry: Boolean
+    ): LookUpData {
         val hashedAddresses = getHashedAddresses(threePids, hashDetailResponse.pepper)
         return try {
             LookUpData(hashedAddresses,
-                    executeRequest(null) {
-                        identityAPI.lookup(IdentityLookUpParams(
-                                hashedAddresses,
-                                IdentityHashDetailResponse.ALGORITHM_SHA256,
-                                hashDetailResponse.pepper
-                        ))
-                    })
+                executeRequest(null) {
+                    identityAPI.lookup(
+                        IdentityLookUpParams(
+                            hashedAddresses,
+                            IdentityHashDetailResponse.ALGORITHM_SHA256,
+                            hashDetailResponse.pepper
+                        )
+                    )
+                })
         } catch (failure: Throwable) {
             // Catch invalid hash pepper and retry
             if (canRetry && failure is Failure.ServerError && failure.error.code == MatrixError.M_INVALID_PEPPER) {
@@ -100,7 +104,7 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
                     // Retrieve the new hash details
                     fetchHashDetails(identityAPI)
                 }
-                        .also { identityStore.setHashDetails(it) }
+                    .also { identityStore.setHashDetails(it) }
                 if (newHashDetailResponse.algorithms.contains(IdentityHashDetailResponse.ALGORITHM_SHA256).not()) {
                     // TODO We should ask the user if he is ok to send their 3Pid in clear, but for the moment we do not do it
                     throw IdentityServiceError.BulkLookupSha256NotSupported
@@ -117,8 +121,10 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         return withOlmUtility { olmUtility ->
             threePids.map { threePid ->
                 base64ToBase64Url(
-                        olmUtility.sha256(threePid.value.lowercase(Locale.ROOT) +
-                                " " + threePid.toMedium() + " " + pepper)
+                    olmUtility.sha256(
+                        threePid.value.lowercase(Locale.ROOT) +
+                                " " + threePid.toMedium() + " " + pepper
+                    )
                 )
             }
         }
@@ -133,8 +139,8 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
     private fun handleSuccess(threePids: List<ThreePid>, lookupData: LookUpData): List<FoundThreePid> {
         return lookupData.identityLookUpResponse.mappings.keys.map { hashedAddress ->
             FoundThreePid(
-                    threePids[lookupData.hashedAddresses.indexOf(hashedAddress)],
-                    lookupData.identityLookUpResponse.mappings[hashedAddress] ?: error("")
+                threePids[lookupData.hashedAddresses.indexOf(hashedAddress)],
+                lookupData.identityLookUpResponse.mappings[hashedAddress] ?: error("")
             )
         }
     }

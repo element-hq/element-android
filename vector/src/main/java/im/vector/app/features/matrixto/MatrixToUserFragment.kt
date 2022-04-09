@@ -35,7 +35,7 @@ import im.vector.app.features.home.AvatarRenderer
 import javax.inject.Inject
 
 class MatrixToUserFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+    private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentMatrixToUserCardBinding>() {
 
     private val sharedViewModel: MatrixToBottomSheetViewModel by parentFragmentViewModel()

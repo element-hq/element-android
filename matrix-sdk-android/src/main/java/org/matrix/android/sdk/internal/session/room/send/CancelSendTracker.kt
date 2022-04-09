@@ -31,8 +31,8 @@ import javax.inject.Inject
 internal class CancelSendTracker @Inject constructor() {
 
     data class Request(
-            val localId: String,
-            val roomId: String
+        val localId: String,
+        val roomId: String
     )
 
     private val cancellingRequests = ArrayList<Request>()

@@ -37,13 +37,13 @@ import javax.inject.Inject
 
 @Parcelize
 data class CreatePollArgs(
-        val roomId: String,
-        val editedEventId: String?,
-        val mode: PollMode
+    val roomId: String,
+    val editedEventId: String?,
+    val mode: PollMode
 ) : Parcelable
 
 class CreatePollFragment @Inject constructor(
-        private val controller: CreatePollController
+    private val controller: CreatePollController
 ) : VectorBaseFragment<FragmentCreatePollBinding>(), CreatePollController.Callback {
 
     private val viewModel: CreatePollViewModel by activityViewModel()
@@ -57,14 +57,14 @@ class CreatePollFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.createPollToolbar)
-                .allowBack(useCross = true)
+            .allowBack(useCross = true)
 
         when (args.mode) {
             PollMode.CREATE -> {
                 views.createPollToolbar.title = getString(R.string.create_poll_title)
                 views.createPollButton.text = getString(R.string.create_poll_title)
             }
-            PollMode.EDIT   -> {
+            PollMode.EDIT -> {
                 views.createPollToolbar.title = getString(R.string.edit_poll_title)
                 views.createPollButton.text = getString(R.string.edit_poll_title)
             }
@@ -85,8 +85,8 @@ class CreatePollFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                CreatePollViewEvents.Success                  -> handleSuccess()
-                CreatePollViewEvents.EmptyQuestionError       -> handleEmptyQuestionError()
+                CreatePollViewEvents.Success -> handleSuccess()
+                CreatePollViewEvents.EmptyQuestionError -> handleEmptyQuestionError()
                 is CreatePollViewEvents.NotEnoughOptionsError -> handleNotEnoughOptionsError(it.requiredOptionsCount)
             }
         }
@@ -132,11 +132,11 @@ class CreatePollFragment @Inject constructor(
 
     private fun handleNotEnoughOptionsError(requiredOptionsCount: Int) {
         renderToast(
-                resources.getQuantityString(
-                        R.plurals.create_poll_not_enough_options_error,
-                        requiredOptionsCount,
-                        requiredOptionsCount
-                )
+            resources.getQuantityString(
+                R.plurals.create_poll_not_enough_options_error,
+                requiredOptionsCount,
+                requiredOptionsCount
+            )
         )
     }
 

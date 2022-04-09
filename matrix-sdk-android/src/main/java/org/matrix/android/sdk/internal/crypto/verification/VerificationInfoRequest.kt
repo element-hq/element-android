@@ -43,10 +43,10 @@ internal interface VerificationInfoRequest : VerificationInfo<ValidVerificationI
         val validMethods = methods?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationInfoRequest(
-                validTransactionId,
-                validFromDevice,
-                validMethods,
-                timestamp
+            validTransactionId,
+            validFromDevice,
+            validMethods,
+            timestamp
         )
     }
 }

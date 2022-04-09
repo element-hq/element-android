@@ -21,8 +21,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ContentScannerError(
-        @Json(name = "info") val info: String? = null,
-        @Json(name = "reason") val reason: String? = null
+    @Json(name = "info") val info: String? = null,
+    @Json(name = "reason") val reason: String? = null
 ) {
     companion object {
         // 502 The server failed to request media from the media repo.

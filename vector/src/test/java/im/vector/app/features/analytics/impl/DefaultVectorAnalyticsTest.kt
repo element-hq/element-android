@@ -47,11 +47,11 @@ class DefaultVectorAnalyticsTest {
     private val fakeLateInitUserPropertiesFactory = FakeLateInitUserPropertiesFactory()
 
     private val defaultVectorAnalytics = DefaultVectorAnalytics(
-            postHogFactory = FakePostHogFactory(fakePostHog.instance).instance,
-            analyticsStore = fakeAnalyticsStore.instance,
-            globalScope = CoroutineScope(Dispatchers.Unconfined),
-            analyticsConfig = anAnalyticsConfig(isEnabled = true),
-            lateInitUserPropertiesFactory = fakeLateInitUserPropertiesFactory.instance
+        postHogFactory = FakePostHogFactory(fakePostHog.instance).instance,
+        analyticsStore = fakeAnalyticsStore.instance,
+        globalScope = CoroutineScope(Dispatchers.Unconfined),
+        analyticsConfig = anAnalyticsConfig(isEnabled = true),
+        lateInitUserPropertiesFactory = fakeLateInitUserPropertiesFactory.instance
     )
 
     @Before

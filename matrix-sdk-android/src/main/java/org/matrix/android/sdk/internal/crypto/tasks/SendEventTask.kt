@@ -28,36 +28,37 @@ import javax.inject.Inject
 
 internal interface SendEventTask : Task<SendEventTask.Params, String> {
     data class Params(
-            val event: Event,
-            val encrypt: Boolean
+        val event: Event,
+        val encrypt: Boolean
     )
 }
 
 internal class DefaultSendEventTask @Inject constructor(
-        private val localEchoRepository: LocalEchoRepository,
-        private val encryptEventTask: EncryptEventTask,
-        private val loadRoomMembersTask: LoadRoomMembersTask,
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SendEventTask {
+    private val localEchoRepository: LocalEchoRepository,
+    private val encryptEventTask: EncryptEventTask,
+    private val loadRoomMembersTask: LoadRoomMembersTask,
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
+) : SendEventTask {
 
     override suspend fun execute(params: SendEventTask.Params): String {
         try {
             // Make sure to load all members in the room before sending the event.
             params.event.roomId
-                    ?.takeIf { params.encrypt }
-                    ?.let { roomId ->
-                        loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
-                    }
+                ?.takeIf { params.encrypt }
+                ?.let { roomId ->
+                    loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                }
 
             val event = handleEncryption(params)
             val localId = event.eventId!!
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENDING)
             val response = executeRequest(globalErrorReceiver) {
                 roomAPI.send(
-                        localId,
-                        roomId = event.roomId ?: "",
-                        content = event.content,
-                        eventType = event.type ?: ""
+                    localId,
+                    roomId = event.roomId ?: "",
+                    content = event.content,
+                    eventType = event.type ?: ""
                 )
             }
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENT)
@@ -65,7 +66,7 @@ internal class DefaultSendEventTask @Inject constructor(
                 Timber.d("Event: $it just sent in ${params.event.roomId}")
             }
         } catch (e: Throwable) {
-//            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
+            //            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
             throw e
         }
     }
@@ -73,11 +74,13 @@ internal class DefaultSendEventTask @Inject constructor(
     @Throws
     private suspend fun handleEncryption(params: SendEventTask.Params): Event {
         if (params.encrypt && !params.event.isEncrypted()) {
-            return encryptEventTask.execute(EncryptEventTask.Params(
+            return encryptEventTask.execute(
+                EncryptEventTask.Params(
                     params.event.roomId ?: "",
                     params.event,
                     listOf("m.relates_to")
-            ))
+                )
+            )
         }
         return params.event
     }

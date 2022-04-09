@@ -32,10 +32,10 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
  */
 sealed interface SendMode {
     data class Regular(
-            val text: String,
-            val fromSharing: Boolean,
-            // This is necessary for forcing refresh on selectSubscribe
-            private val ts: Long = System.currentTimeMillis()
+        val text: String,
+        val fromSharing: Boolean,
+        // This is necessary for forcing refresh on selectSubscribe
+        private val ts: Long = System.currentTimeMillis()
     ) : SendMode
 
     data class Quote(val timelineEvent: TimelineEvent, val text: String) : SendMode
@@ -52,24 +52,24 @@ sealed interface CanSendStatus {
 
 fun CanSendStatus.boolean(): Boolean {
     return when (this) {
-        CanSendStatus.Allowed                    -> true
-        CanSendStatus.NoPermission               -> false
+        CanSendStatus.Allowed -> true
+        CanSendStatus.NoPermission -> false
         is CanSendStatus.UnSupportedE2eAlgorithm -> false
     }
 }
 
 data class MessageComposerViewState(
-        val roomId: String,
-        val canSendMessage: CanSendStatus = CanSendStatus.Allowed,
-        val isSendButtonVisible: Boolean = false,
-        val rootThreadEventId: String? = null,
-        val startsThread: Boolean = false,
-        val sendMode: SendMode = SendMode.Regular("", false),
-        val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle
+    val roomId: String,
+    val canSendMessage: CanSendStatus = CanSendStatus.Allowed,
+    val isSendButtonVisible: Boolean = false,
+    val rootThreadEventId: String? = null,
+    val startsThread: Boolean = false,
+    val sendMode: SendMode = SendMode.Regular("", false),
+    val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle
 ) : MavericksState {
 
     val isVoiceRecording = when (voiceRecordingUiState) {
-        VoiceMessageRecorderView.RecordingUiState.Idle         -> false
+        VoiceMessageRecorderView.RecordingUiState.Idle -> false
         is VoiceMessageRecorderView.RecordingUiState.Locked,
         VoiceMessageRecorderView.RecordingUiState.Draft,
         is VoiceMessageRecorderView.RecordingUiState.Recording -> true
@@ -81,9 +81,10 @@ data class MessageComposerViewState(
     val isVoiceMessageRecorderVisible = canSendMessage.boolean() && !isSendButtonVisible
 
     constructor(args: TimelineArgs) : this(
-            roomId = args.roomId,
-            startsThread = args.threadTimelineArgs?.startsThread.orFalse(),
-            rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId)
+        roomId = args.roomId,
+        startsThread = args.threadTimelineArgs?.startsThread.orFalse(),
+        rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
+    )
 
     fun isInThreadTimeline(): Boolean = rootThreadEventId != null
 }

@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 internal interface MarkAllRoomsReadTask : Task<MarkAllRoomsReadTask.Params, Unit> {
     data class Params(
-            val roomIds: List<String>
+        val roomIds: List<String>
     )
 }
 

@@ -24,24 +24,24 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class SignatureUploadResponse(
-        /**
-         * The response contains a failures property, which is a map of user ID to device ID to failure reason,
-         * if any of the uploaded keys failed.
-         * The homeserver should verify that the signatures on the uploaded keys are valid.
-         * If a signature is not valid, the homeserver should set the corresponding entry in failures to a JSON object
-         * with the errcode property set to M_INVALID_SIGNATURE.
-         */
-        val failures: Map<String, Map<String, UploadResponseFailure>>? = null
+    /**
+     * The response contains a failures property, which is a map of user ID to device ID to failure reason,
+     * if any of the uploaded keys failed.
+     * The homeserver should verify that the signatures on the uploaded keys are valid.
+     * If a signature is not valid, the homeserver should set the corresponding entry in failures to a JSON object
+     * with the errcode property set to M_INVALID_SIGNATURE.
+     */
+    val failures: Map<String, Map<String, UploadResponseFailure>>? = null
 )
 
 @JsonClass(generateAdapter = true)
 internal data class UploadResponseFailure(
-        @Json(name = "status")
-        val status: Int,
+    @Json(name = "status")
+    val status: Int,
 
-        @Json(name = "errcode")
-        val errCode: String,
+    @Json(name = "errcode")
+    val errCode: String,
 
-        @Json(name = "message")
-        val message: String
+    @Json(name = "message")
+    val message: String
 )

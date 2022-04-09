@@ -27,24 +27,24 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 
 data class RoomJoinRuleChooseRestrictedState(
-        // the currentRoomId
-        val roomId: String,
-        val roomSummary: Async<RoomSummary> = Uninitialized,
-        val initialRoomJoinRules: RoomJoinRules? = null,
-        val currentRoomJoinRules: RoomJoinRules? = null,
-        val updatedAllowList: List<MatrixItem> = emptyList(),
-        val choices: List<JoinRulesOptionSupport>? = null,
-        val initialAllowList: List<RoomJoinRulesAllowEntry> = emptyList(),
-        val possibleSpaceCandidate: List<MatrixItem> = emptyList(),
-        val unknownRestricted: List<MatrixItem> = emptyList(),
-        val filter: String = "",
-        val filteredResults: Async<List<MatrixItem>> = Uninitialized,
-        val hasUnsavedChanges: Boolean = false,
-        val updatingStatus: Async<Unit> = Uninitialized,
-        val upgradeNeededForRestricted: Boolean = false,
-        val restrictedSupportedByThisVersion: Boolean = false,
-        val restrictedVersionNeeded: String? = null,
-        val didSwitchToReplacementRoom: Boolean = false
+    // the currentRoomId
+    val roomId: String,
+    val roomSummary: Async<RoomSummary> = Uninitialized,
+    val initialRoomJoinRules: RoomJoinRules? = null,
+    val currentRoomJoinRules: RoomJoinRules? = null,
+    val updatedAllowList: List<MatrixItem> = emptyList(),
+    val choices: List<JoinRulesOptionSupport>? = null,
+    val initialAllowList: List<RoomJoinRulesAllowEntry> = emptyList(),
+    val possibleSpaceCandidate: List<MatrixItem> = emptyList(),
+    val unknownRestricted: List<MatrixItem> = emptyList(),
+    val filter: String = "",
+    val filteredResults: Async<List<MatrixItem>> = Uninitialized,
+    val hasUnsavedChanges: Boolean = false,
+    val updatingStatus: Async<Unit> = Uninitialized,
+    val upgradeNeededForRestricted: Boolean = false,
+    val restrictedSupportedByThisVersion: Boolean = false,
+    val restrictedVersionNeeded: String? = null,
+    val didSwitchToReplacementRoom: Boolean = false
 ) : MavericksState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 }

@@ -40,9 +40,9 @@ import org.matrix.android.sdk.internal.session.space.peeking.SpaceSubChildPeekRe
 import timber.log.Timber
 
 class SpacePreviewViewModel @AssistedInject constructor(
-        @Assisted private val initialState: SpacePreviewState,
-        private val errorFormatter: ErrorFormatter,
-        private val session: Session
+    @Assisted private val initialState: SpacePreviewState,
+    private val errorFormatter: ErrorFormatter,
+    private val session: Session
 ) : VectorViewModel<SpacePreviewState, SpacePreviewViewAction, SpacePreviewViewEvents>(initialState) {
 
     private var initialized = false
@@ -122,8 +122,8 @@ class SpacePreviewViewModel @AssistedInject constructor(
             // peek for the room
             setState {
                 copy(
-                        spaceInfo = Loading(),
-                        childInfoList = Loading()
+                    spaceInfo = Loading(),
+                    childInfoList = Loading()
                 )
             }
             viewModelScope.launch(Dispatchers.IO) {
@@ -141,34 +141,34 @@ class SpacePreviewViewModel @AssistedInject constructor(
         val resolveResult = session.spaceService().querySpaceChildren(initialState.idOrAlias)
         setState {
             copy(
-                    spaceInfo = Success(
-                            resolveResult.rootSummary.let {
-                                ChildInfo(
-                                        roomId = it.roomId,
-                                        avatarUrl = it.avatarUrl,
-                                        name = it.name,
-                                        topic = it.topic,
-                                        memberCount = it.joinedMembersCount,
-                                        isSubSpace = it.roomType == RoomType.SPACE,
-                                        children = Uninitialized,
-                                        viaServers = null
-                                )
-                            }
-                    ),
-                    childInfoList = Success(
-                            resolveResult.children.map {
-                                ChildInfo(
-                                        roomId = it.childRoomId,
-                                        avatarUrl = it.avatarUrl,
-                                        name = it.name,
-                                        topic = it.topic,
-                                        memberCount = it.activeMemberCount,
-                                        isSubSpace = it.roomType == RoomType.SPACE,
-                                        children = Uninitialized,
-                                        viaServers = null
-                                )
-                            }
-                    )
+                spaceInfo = Success(
+                    resolveResult.rootSummary.let {
+                        ChildInfo(
+                            roomId = it.roomId,
+                            avatarUrl = it.avatarUrl,
+                            name = it.name,
+                            topic = it.topic,
+                            memberCount = it.joinedMembersCount,
+                            isSubSpace = it.roomType == RoomType.SPACE,
+                            children = Uninitialized,
+                            viaServers = null
+                        )
+                    }
+                ),
+                childInfoList = Success(
+                    resolveResult.children.map {
+                        ChildInfo(
+                            roomId = it.childRoomId,
+                            avatarUrl = it.avatarUrl,
+                            name = it.name,
+                            topic = it.topic,
+                            memberCount = it.activeMemberCount,
+                            isSubSpace = it.roomType == RoomType.SPACE,
+                            children = Uninitialized,
+                            viaServers = null
+                        )
+                    }
+                )
             )
         }
     }
@@ -179,65 +179,65 @@ class SpacePreviewViewModel @AssistedInject constructor(
             val spaceInfo = (resolveResult as? SpacePeekResult.Success)?.summary?.roomPeekResult
             setState {
                 copy(
-                        spaceInfo = Success(
-                                ChildInfo(
-                                        roomId = spaceInfo?.roomId ?: initialState.idOrAlias,
-                                        avatarUrl = spaceInfo?.avatarUrl,
-                                        name = spaceInfo?.name,
-                                        topic = spaceInfo?.topic,
-                                        memberCount = spaceInfo?.numJoinedMembers,
-                                        isSubSpace = true,
-                                        children = Uninitialized,
-                                        viaServers = spaceInfo?.viaServers
+                    spaceInfo = Success(
+                        ChildInfo(
+                            roomId = spaceInfo?.roomId ?: initialState.idOrAlias,
+                            avatarUrl = spaceInfo?.avatarUrl,
+                            name = spaceInfo?.name,
+                            topic = spaceInfo?.topic,
+                            memberCount = spaceInfo?.numJoinedMembers,
+                            isSubSpace = true,
+                            children = Uninitialized,
+                            viaServers = spaceInfo?.viaServers
 
-                                )
-                        ),
-                        childInfoList = resolveResult.let {
-                            when (it) {
-                                is SpacePeekResult.Success -> {
-                                    (resolveResult as SpacePeekResult.Success).summary.children.mapNotNull { spaceChild ->
-                                        val roomPeekResult = spaceChild.roomPeekResult
-                                        if (roomPeekResult is PeekResult.Success) {
-                                            ChildInfo(
-                                                    roomId = spaceChild.id,
-                                                    avatarUrl = roomPeekResult.avatarUrl,
-                                                    name = roomPeekResult.name,
-                                                    topic = roomPeekResult.topic,
-                                                    memberCount = roomPeekResult.numJoinedMembers,
-                                                    isSubSpace = spaceChild is SpaceSubChildPeekResult,
-                                                    children = Uninitialized,
-                                                    viaServers = roomPeekResult.viaServers
+                        )
+                    ),
+                    childInfoList = resolveResult.let {
+                        when (it) {
+                            is SpacePeekResult.Success -> {
+                                (resolveResult as SpacePeekResult.Success).summary.children.mapNotNull { spaceChild ->
+                                    val roomPeekResult = spaceChild.roomPeekResult
+                                    if (roomPeekResult is PeekResult.Success) {
+                                        ChildInfo(
+                                            roomId = spaceChild.id,
+                                            avatarUrl = roomPeekResult.avatarUrl,
+                                            name = roomPeekResult.name,
+                                            topic = roomPeekResult.topic,
+                                            memberCount = roomPeekResult.numJoinedMembers,
+                                            isSubSpace = spaceChild is SpaceSubChildPeekResult,
+                                            children = Uninitialized,
+                                            viaServers = roomPeekResult.viaServers
 
-                                            )
-                                        } else {
-                                            null
-                                        }
+                                        )
+                                    } else {
+                                        null
                                     }
-                                    Success(emptyList())
                                 }
-                                else                       -> {
-                                    Fail(Exception("Failed to get info"))
-                                }
+                                Success(emptyList())
                             }
-                        })
+                            else -> {
+                                Fail(Exception("Failed to get info"))
+                            }
+                        }
+                    })
             }
         } catch (failure: Throwable) {
             setState {
                 copy(
-                        spaceInfo = session.getRoomSummary(initialState.idOrAlias)?.let {
-                            Success(
-                                    ChildInfo(
-                                            roomId = it.roomId,
-                                            avatarUrl = it.avatarUrl,
-                                            name = it.displayName,
-                                            topic = it.topic,
-                                            memberCount = it.joinedMembersCount,
-                                            isSubSpace = false,
-                                            viaServers = null,
-                                            children = Uninitialized
-                                    )
+                    spaceInfo = session.getRoomSummary(initialState.idOrAlias)?.let {
+                        Success(
+                            ChildInfo(
+                                roomId = it.roomId,
+                                avatarUrl = it.avatarUrl,
+                                name = it.displayName,
+                                topic = it.topic,
+                                memberCount = it.joinedMembersCount,
+                                isSubSpace = false,
+                                viaServers = null,
+                                children = Uninitialized
                             )
-                        } ?: Fail(failure), childInfoList = Fail(failure))
+                        )
+                    } ?: Fail(failure), childInfoList = Fail(failure))
             }
         }
     }

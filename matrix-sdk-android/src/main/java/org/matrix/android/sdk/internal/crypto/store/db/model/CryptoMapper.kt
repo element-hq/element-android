@@ -27,25 +27,31 @@ import timber.log.Timber
 object CryptoMapper {
 
     private val moshi = Moshi.Builder().add(SerializeNulls.JSON_ADAPTER_FACTORY).build()
-    private val listMigrationAdapter = moshi.adapter<List<String>>(Types.newParameterizedType(
+    private val listMigrationAdapter = moshi.adapter<List<String>>(
+        Types.newParameterizedType(
             List::class.java,
             String::class.java,
             Any::class.java
-    ))
-    private val mapMigrationAdapter = moshi.adapter<JsonDict>(Types.newParameterizedType(
+        )
+    )
+    private val mapMigrationAdapter = moshi.adapter<JsonDict>(
+        Types.newParameterizedType(
             Map::class.java,
             String::class.java,
             Any::class.java
-    ))
-    private val mapOfStringMigrationAdapter = moshi.adapter<Map<String, Map<String, String>>>(Types.newParameterizedType(
+        )
+    )
+    private val mapOfStringMigrationAdapter = moshi.adapter<Map<String, Map<String, String>>>(
+        Types.newParameterizedType(
             Map::class.java,
             String::class.java,
             Any::class.java
-    ))
+        )
+    )
 
     internal fun mapToEntity(deviceInfo: CryptoDeviceInfo): DeviceInfoEntity {
         return DeviceInfoEntity(primaryKey = DeviceInfoEntity.createPrimaryKey(deviceInfo.userId, deviceInfo.deviceId))
-                .also { updateDeviceInfoEntity(it, deviceInfo) }
+            .also { updateDeviceInfoEntity(it, deviceInfo) }
     }
 
     internal fun updateDeviceInfoEntity(entity: DeviceInfoEntity, deviceInfo: CryptoDeviceInfo) {
@@ -74,42 +80,44 @@ object CryptoMapper {
 
     internal fun mapToModel(deviceInfoEntity: DeviceInfoEntity): CryptoDeviceInfo {
         return CryptoDeviceInfo(
-                userId = deviceInfoEntity.userId ?: "",
-                deviceId = deviceInfoEntity.deviceId ?: "",
-                isBlocked = deviceInfoEntity.isBlocked ?: false,
-                trustLevel = deviceInfoEntity.trustLevelEntity?.let {
-                    DeviceTrustLevel(it.crossSignedVerified ?: false, it.locallyVerified)
-                },
-                unsigned = deviceInfoEntity.unsignedMapJson?.let { UnsignedDeviceInfo(deviceDisplayName = it) },
-                signatures = deviceInfoEntity.signatureMapJson?.let {
-                    try {
-                        mapOfStringMigrationAdapter.fromJson(it)
-                    } catch (failure: Throwable) {
-                        Timber.e(failure)
-                        null
-                    }
-                },
-                keys = deviceInfoEntity.keysMapJson?.let {
-                    try {
-                        moshi.adapter<Map<String, String>>(Types.newParameterizedType(
-                                Map::class.java,
-                                String::class.java,
-                                Any::class.java
-                        )).fromJson(it)
-                    } catch (failure: Throwable) {
-                        Timber.e(failure)
-                        null
-                    }
-                },
-                algorithms = deviceInfoEntity.algorithmListJson?.let {
-                    try {
-                        listMigrationAdapter.fromJson(it)
-                    } catch (failure: Throwable) {
-                        Timber.e(failure)
-                        null
-                    }
-                },
-                firstTimeSeenLocalTs = deviceInfoEntity.firstTimeSeenLocalTs
+            userId = deviceInfoEntity.userId ?: "",
+            deviceId = deviceInfoEntity.deviceId ?: "",
+            isBlocked = deviceInfoEntity.isBlocked ?: false,
+            trustLevel = deviceInfoEntity.trustLevelEntity?.let {
+                DeviceTrustLevel(it.crossSignedVerified ?: false, it.locallyVerified)
+            },
+            unsigned = deviceInfoEntity.unsignedMapJson?.let { UnsignedDeviceInfo(deviceDisplayName = it) },
+            signatures = deviceInfoEntity.signatureMapJson?.let {
+                try {
+                    mapOfStringMigrationAdapter.fromJson(it)
+                } catch (failure: Throwable) {
+                    Timber.e(failure)
+                    null
+                }
+            },
+            keys = deviceInfoEntity.keysMapJson?.let {
+                try {
+                    moshi.adapter<Map<String, String>>(
+                        Types.newParameterizedType(
+                            Map::class.java,
+                            String::class.java,
+                            Any::class.java
+                        )
+                    ).fromJson(it)
+                } catch (failure: Throwable) {
+                    Timber.e(failure)
+                    null
+                }
+            },
+            algorithms = deviceInfoEntity.algorithmListJson?.let {
+                try {
+                    listMigrationAdapter.fromJson(it)
+                } catch (failure: Throwable) {
+                    Timber.e(failure)
+                    null
+                }
+            },
+            firstTimeSeenLocalTs = deviceInfoEntity.firstTimeSeenLocalTs
         )
     }
 }

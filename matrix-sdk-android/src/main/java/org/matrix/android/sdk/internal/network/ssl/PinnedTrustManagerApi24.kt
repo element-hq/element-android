@@ -35,8 +35,10 @@ import javax.net.ssl.X509ExtendedTrustManager
  * any of the fingerprints. Can be null.
  */
 @RequiresApi(Build.VERSION_CODES.N)
-internal class PinnedTrustManagerApi24(private val fingerprints: List<Fingerprint>,
-                                       private val defaultTrustManager: X509ExtendedTrustManager?) : X509ExtendedTrustManager() {
+internal class PinnedTrustManagerApi24(
+    private val fingerprints: List<Fingerprint>,
+    private val defaultTrustManager: X509ExtendedTrustManager?
+) : X509ExtendedTrustManager() {
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, engine: SSLEngine?) {

@@ -19,12 +19,12 @@ package org.matrix.android.sdk.internal.crypto.model
 import org.matrix.android.sdk.api.session.events.model.Content
 
 data class MXEncryptEventContentResult(
-        /**
-         * The encrypted event content
-         */
-        val eventContent: Content,
-        /**
-         * the event type
-         */
-        val eventType: String
+    /**
+     * The encrypted event content
+     */
+    val eventContent: Content,
+    /**
+     * the event type
+     */
+    val eventType: String
 )

@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 
 internal fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ChunkEntity> {
     return realm.where<ChunkEntity>()
-            .equalTo(ChunkEntityFields.ROOM.ROOM_ID, roomId)
+        .equalTo(ChunkEntityFields.ROOM.ROOM_ID, roomId)
 }
 
 internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken: String? = null, nextToken: String? = null): ChunkEntity? {
@@ -42,26 +42,29 @@ internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken:
 
 internal fun ChunkEntity.Companion.findLastForwardChunkOfRoom(realm: Realm, roomId: String): ChunkEntity? {
     return where(realm, roomId)
-            .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
-            .findFirst()
+        .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
+        .findFirst()
 }
+
 internal fun ChunkEntity.Companion.findLastForwardChunkOfThread(realm: Realm, roomId: String, rootThreadEventId: String): ChunkEntity? {
     return where(realm, roomId)
-            .equalTo(ChunkEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-            .equalTo(ChunkEntityFields.IS_LAST_FORWARD_THREAD, true)
-            .findFirst()
+        .equalTo(ChunkEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+        .equalTo(ChunkEntityFields.IS_LAST_FORWARD_THREAD, true)
+        .findFirst()
 }
+
 internal fun ChunkEntity.Companion.findEventInThreadChunk(realm: Realm, roomId: String, event: String): ChunkEntity? {
     return where(realm, roomId)
-            .`in`(ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID, arrayListOf(event).toTypedArray())
-            .equalTo(ChunkEntityFields.IS_LAST_FORWARD_THREAD, true)
-            .findFirst()
+        .`in`(ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID, arrayListOf(event).toTypedArray())
+        .equalTo(ChunkEntityFields.IS_LAST_FORWARD_THREAD, true)
+        .findFirst()
 }
+
 internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds: List<String>): RealmResults<ChunkEntity> {
     return realm.where<ChunkEntity>()
-            .`in`(ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID, eventIds.toTypedArray())
-            .isNull(ChunkEntityFields.ROOT_THREAD_EVENT_ID)
-            .findAll()
+        .`in`(ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID, eventIds.toTypedArray())
+        .isNull(ChunkEntityFields.ROOT_THREAD_EVENT_ID)
+        .findAll()
 }
 
 internal fun ChunkEntity.Companion.findIncludingEvent(realm: Realm, eventId: String): ChunkEntity? {
@@ -69,9 +72,9 @@ internal fun ChunkEntity.Companion.findIncludingEvent(realm: Realm, eventId: Str
 }
 
 internal fun ChunkEntity.Companion.create(
-        realm: Realm,
-        prevToken: String?,
-        nextToken: String?
+    realm: Realm,
+    prevToken: String?,
+    nextToken: String?
 ): ChunkEntity {
     return realm.createObject<ChunkEntity>().apply {
         this.prevToken = prevToken

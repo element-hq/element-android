@@ -30,13 +30,13 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 class VerificationQRWaitingFragment @Inject constructor(
-        val controller: VerificationQRWaitingController
+    val controller: VerificationQRWaitingController
 ) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>() {
 
     @Parcelize
     data class Args(
-            val isMe: Boolean,
-            val otherUserName: String
+        val isMe: Boolean,
+        val otherUserName: String
     ) : Parcelable
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetVerificationChildFragmentBinding {

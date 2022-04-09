@@ -28,13 +28,13 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class SpaceDefaultRoomEpoxyController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider
 ) : TypedEpoxyController<CreateSpaceState>() {
 
     var listener: Listener? = null
 
-//    var shouldForceFocusOnce = true
+    //    var shouldForceFocusOnce = true
 
     override fun buildModels(data: CreateSpaceState?) {
         val host = this
@@ -42,11 +42,11 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             id("info_help_header")
             style(ItemStyle.TITLE)
             text(
-                    if (data?.spaceType == SpaceType.Public) {
-                        host.stringProvider.getString(R.string.create_spaces_room_public_header, data.name)
-                    } else {
-                        host.stringProvider.getString(R.string.create_spaces_room_private_header)
-                    }.toEpoxyCharSequence()
+                if (data?.spaceType == SpaceType.Public) {
+                    host.stringProvider.getString(R.string.create_spaces_room_public_header, data.name)
+                } else {
+                    host.stringProvider.getString(R.string.create_spaces_room_private_header)
+                }.toEpoxyCharSequence()
             )
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
         }
@@ -54,13 +54,13 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
         genericFooterItem {
             id("info_help")
             text(
-                    host.stringProvider.getString(
-                            if (data?.spaceType == SpaceType.Public) {
-                                R.string.create_spaces_room_public_header_desc
-                            } else {
-                                R.string.create_spaces_room_private_header_desc
-                            }
-                    ).toEpoxyCharSequence()
+                host.stringProvider.getString(
+                    if (data?.spaceType == SpaceType.Public) {
+                        R.string.create_spaces_room_public_header_desc
+                    } else {
+                        R.string.create_spaces_room_private_header_desc
+                    }
+                ).toEpoxyCharSequence()
             )
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary))
         }
@@ -99,19 +99,19 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
             onTextChange { text ->
                 host.listener?.onNameChange(2, text)
             }
-//            onBind { _, view, _ ->
-//                if (shouldForceFocusOnce
-//                        && thirdRoomName.isNullOrBlank()
-//                        && firstRoomName.isNullOrBlank().not()
-//                        && secondRoomName.isNullOrBlank().not()
-//                ) {
-//                    shouldForceFocusOnce = false
-//                    // sad face :(
-//                    view.textInputEditText.post {
-//                        view.textInputEditText.showKeyboard(true)
-//                    }
-//                }
-//            }
+            //            onBind { _, view, _ ->
+            //                if (shouldForceFocusOnce
+            //                        && thirdRoomName.isNullOrBlank()
+            //                        && firstRoomName.isNullOrBlank().not()
+            //                        && secondRoomName.isNullOrBlank().not()
+            //                ) {
+            //                    shouldForceFocusOnce = false
+            //                    // sad face :(
+            //                    view.textInputEditText.post {
+            //                        view.textInputEditText.showKeyboard(true)
+            //                    }
+            //                }
+            //            }
         }
     }
 

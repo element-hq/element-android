@@ -22,7 +22,7 @@ import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
 
 class RoomUploadsPagerAdapter(
-        private val fragment: Fragment
+    private val fragment: Fragment
 ) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount() = 2

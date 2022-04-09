@@ -24,14 +24,14 @@ import im.vector.app.R
 import javax.inject.Inject
 
 class ScreenOrientationLocker @Inject constructor(
-        private val resources: Resources
+    private val resources: Resources
 ) {
 
     // Some screens do not provide enough value for us to provide phone landscape experiences
     @SuppressLint("SourceLockedOrientationActivity")
     fun lockPhonesToPortrait(activity: AppCompatActivity) {
         when (resources.getBoolean(R.bool.is_tablet)) {
-            true  -> {
+            true -> {
                 // do nothing
             }
             false -> {

@@ -39,8 +39,8 @@ import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
 
 class VectorSettingsPreferencesFragment @Inject constructor(
-        private val vectorConfiguration: VectorConfiguration,
-        private val vectorPreferences: VectorPreferences
+    private val vectorConfiguration: VectorConfiguration,
+    private val vectorPreferences: VectorPreferences
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_preferences
@@ -67,7 +67,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
         // Themes
         findPreference<VectorListPreference>(ThemeUtils.APPLICATION_THEME_KEY)!!
-                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
                 ThemeUtils.setApplicationTheme(requireContext().applicationContext, newValue)
                 // Restart the Activity
@@ -133,14 +133,16 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 context?.let { context: Context ->
                     MaterialAlertDialogBuilder(context)
-                            .setSingleChoiceItems(R.array.media_saving_choice,
-                                    vectorPreferences.getSelectedMediasSavingPeriod()) { d, n ->
-                                vectorPreferences.setSelectedMediasSavingPeriod(n)
-                                d.cancel()
+                        .setSingleChoiceItems(
+                            R.array.media_saving_choice,
+                            vectorPreferences.getSelectedMediasSavingPeriod()
+                        ) { d, n ->
+                            vectorPreferences.setSelectedMediasSavingPeriod(n)
+                            d.cancel()
 
-                                it.summary = vectorPreferences.getSelectedMediasSavingPeriodString()
-                            }
-                            .show()
+                            it.summary = vectorPreferences.getSelectedMediasSavingPeriodString()
+                        }
+                        .show()
                 }
 
                 false
@@ -163,12 +165,12 @@ class VectorSettingsPreferencesFragment @Inject constructor(
 
     private fun updateTakePhotoOrVideoPreferenceSummary() {
         takePhotoOrVideoPreference.summary = getString(
-                when (vectorPreferences.getTakePhotoVideoMode()) {
-                    VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO -> R.string.option_take_photo
-                    VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO -> R.string.option_take_video
-                    /* VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK */
-                    else                                          -> R.string.option_always_ask
-                }
+            when (vectorPreferences.getTakePhotoVideoMode()) {
+                VectorPreferences.TAKE_PHOTO_VIDEO_MODE_PHOTO -> R.string.option_take_photo
+                VectorPreferences.TAKE_PHOTO_VIDEO_MODE_VIDEO -> R.string.option_take_video
+                /* VectorPreferences.TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK */
+                else -> R.string.option_always_ask
+            }
         )
     }
 
@@ -194,25 +196,25 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         val views = DialogSelectTextSizeBinding.bind(layout)
 
         val dialog = MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.font_size)
-                .setView(layout)
-                .setPositiveButton(R.string.ok, null)
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
+            .setTitle(R.string.font_size)
+            .setView(layout)
+            .setPositiveButton(R.string.ok, null)
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
 
         val index = FontScale.getFontScaleValue(activity).index
 
         views.textSelectionGroupView.children
-                .filterIsInstance(CheckedTextView::class.java)
-                .forEachIndexed { i, v ->
-                    v.isChecked = i == index
+            .filterIsInstance(CheckedTextView::class.java)
+            .forEachIndexed { i, v ->
+                v.isChecked = i == index
 
-                    v.debouncedClicks {
-                        dialog.dismiss()
-                        FontScale.updateFontScale(activity, i)
-                        vectorConfiguration.applyToApplicationContext()
-                        activity.restart()
-                    }
+                v.debouncedClicks {
+                    dialog.dismiss()
+                    FontScale.updateFontScale(activity, i)
+                    vectorConfiguration.applyToApplicationContext()
+                    activity.restart()
                 }
+            }
     }
 }

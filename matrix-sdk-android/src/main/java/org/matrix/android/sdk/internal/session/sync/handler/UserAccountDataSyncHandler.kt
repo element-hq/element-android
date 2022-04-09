@@ -60,12 +60,12 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class UserAccountDataSyncHandler @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        @UserId private val userId: String,
-        private val directChatsHelper: DirectChatsHelper,
-        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val roomAvatarResolver: RoomAvatarResolver,
-        private val roomDisplayNameResolver: RoomDisplayNameResolver
+    @SessionDatabase private val monarchy: Monarchy,
+    @UserId private val userId: String,
+    private val directChatsHelper: DirectChatsHelper,
+    private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+    private val roomAvatarResolver: RoomAvatarResolver,
+    private val roomDisplayNameResolver: RoomDisplayNameResolver
 ) {
 
     fun handle(realm: Realm, accountData: UserAccountDataSync?) {
@@ -73,10 +73,10 @@ internal class UserAccountDataSyncHandler @Inject constructor(
             // Generic handling, just save in base
             handleGenericAccountData(realm, event.type, event.content)
             when (event.type) {
-                UserAccountDataTypes.TYPE_DIRECT_MESSAGES   -> handleDirectChatRooms(realm, event)
-                UserAccountDataTypes.TYPE_PUSH_RULES        -> handlePushRules(realm, event)
+                UserAccountDataTypes.TYPE_DIRECT_MESSAGES -> handleDirectChatRooms(realm, event)
+                UserAccountDataTypes.TYPE_PUSH_RULES -> handlePushRules(realm, event)
                 UserAccountDataTypes.TYPE_IGNORED_USER_LIST -> handleIgnoredUsers(realm, event)
-                UserAccountDataTypes.TYPE_BREADCRUMBS       -> handleBreadcrumbs(realm, event)
+                UserAccountDataTypes.TYPE_BREADCRUMBS -> handleBreadcrumbs(realm, event)
             }
         }
     }
@@ -94,21 +94,21 @@ internal class UserAccountDataSyncHandler @Inject constructor(
                 val isDirect = myUserRoomMember?.isDirect
                 if (inviterId != null && inviterId != userId && isDirect == true) {
                     directChats
-                            .getOrPut(inviterId, { arrayListOf() })
-                            .apply {
-                                if (contains(roomId)) {
-                                    Timber.v("Direct chats already include room $roomId with user $inviterId")
-                                } else {
-                                    add(roomId)
-                                    hasUpdate = true
-                                }
+                        .getOrPut(inviterId, { arrayListOf() })
+                        .apply {
+                            if (contains(roomId)) {
+                                Timber.v("Direct chats already include room $roomId with user $inviterId")
+                            } else {
+                                add(roomId)
+                                hasUpdate = true
                             }
+                        }
                 }
             }
         }
         if (hasUpdate) {
             val updateUserAccountParams = UpdateUserAccountDataTask.DirectChatParams(
-                    directMessages = directChats
+                directMessages = directChats
             )
             updateUserAccountDataTask.execute(updateUserAccountParams)
         }
@@ -117,8 +117,8 @@ internal class UserAccountDataSyncHandler @Inject constructor(
     private fun handlePushRules(realm: Realm, event: UserAccountDataEvent) {
         val pushRules = event.content.toModel<GetPushRulesResponse>() ?: return
         realm.where(PushRulesEntity::class.java)
-                .findAll()
-                .forEach { it.deleteOnCascade() }
+            .findAll()
+            .forEach { it.deleteOnCascade() }
 
         // Save only global rules for the moment
         val globalRules = pushRules.global
@@ -173,20 +173,20 @@ internal class UserAccountDataSyncHandler @Inject constructor(
 
         // Handle previous direct rooms
         RoomSummaryEntity.getDirectRooms(realm, excludeRoomIds = content.values.flatten().toSet())
-                .forEach {
-                    it.isDirect = false
-                    it.directUserId = null
-                    // Also update the avatar and displayname, there was a specific treatment for DMs
-                    it.avatarUrl = roomAvatarResolver.resolve(realm, it.roomId)
-                    it.setDisplayName(roomDisplayNameResolver.resolve(realm, it.roomId))
-                }
+            .forEach {
+                it.isDirect = false
+                it.directUserId = null
+                // Also update the avatar and displayname, there was a specific treatment for DMs
+                it.avatarUrl = roomAvatarResolver.resolve(realm, it.roomId)
+                it.setDisplayName(roomDisplayNameResolver.resolve(realm, it.roomId))
+            }
     }
 
     private fun handleIgnoredUsers(realm: Realm, event: UserAccountDataEvent) {
         val userIds = event.content.toModel<IgnoredUsersContent>()?.ignoredUsers?.keys ?: return
         realm.where(IgnoredUserEntity::class.java)
-                .findAll()
-                .deleteAllFromRealm()
+            .findAll()
+            .deleteAllFromRealm()
         // And save the new received list
         userIds.forEach { realm.createObject(IgnoredUserEntity::class.java).apply { userId = it } }
         // TODO If not initial sync, we should execute a init sync
@@ -202,24 +202,24 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         // Update the room summaries
         // Reset all the indexes...
         RoomSummaryEntity.where(realm)
-                .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
-                .findAll()
-                .forEach {
-                    it.breadcrumbsIndex = RoomSummary.NOT_IN_BREADCRUMBS
-                }
+            .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
+            .findAll()
+            .forEach {
+                it.breadcrumbsIndex = RoomSummary.NOT_IN_BREADCRUMBS
+            }
 
         // ...and apply new indexes
         recentRoomIds.forEachIndexed { index, roomId ->
             RoomSummaryEntity.where(realm, roomId)
-                    .findFirst()
-                    ?.breadcrumbsIndex = index
+                .findFirst()
+                ?.breadcrumbsIndex = index
         }
     }
 
     fun handleGenericAccountData(realm: Realm, type: String, content: Content?) {
         val existing = realm.where<UserAccountDataEntity>()
-                .equalTo(UserAccountDataEntityFields.TYPE, type)
-                .findFirst()
+            .equalTo(UserAccountDataEntityFields.TYPE, type)
+            .findFirst()
         if (existing != null) {
             // Update current value
             existing.contentStr = ContentMapper.map(content)

@@ -354,11 +354,13 @@ class MessageItemFactory @Inject constructor(
         return MessageFileItem_()
             .attributes(attributes)
             .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
-            .izDownloaded(session.fileService().isFileInCache(
-                fileUrl,
-                messageContent.getFileName(),
-                messageContent.mimeType,
-                messageContent.encryptedFileInfo?.toElementToDecrypt())
+            .izDownloaded(
+                session.fileService().isFileInCache(
+                    fileUrl,
+                    messageContent.getFileName(),
+                    messageContent.mimeType,
+                    messageContent.encryptedFileInfo?.toElementToDecrypt()
+                )
             )
             .mxcUrl(fileUrl)
             .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
@@ -411,11 +413,13 @@ class MessageItemFactory @Inject constructor(
             .waveformTouchListener(waveformTouchListener)
             .voiceMessagePlaybackTracker(voiceMessagePlaybackTracker)
             .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
-            .izDownloaded(session.fileService().isFileInCache(
-                fileUrl,
-                messageContent.getFileName(),
-                messageContent.mimeType,
-                messageContent.encryptedFileInfo?.toElementToDecrypt())
+            .izDownloaded(
+                session.fileService().isFileInCache(
+                    fileUrl,
+                    messageContent.getFileName(),
+                    messageContent.mimeType,
+                    messageContent.encryptedFileInfo?.toElementToDecrypt()
+                )
             )
             .mxcUrl(fileUrl)
             .contentUploadStateTrackerBinder(contentUploadStateTrackerBinder)
@@ -656,27 +660,31 @@ class MessageItemFactory @Inject constructor(
             ForegroundColorSpan(color),
             editStart,
             editEnd,
-            Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
 
         // Note: text size is set to 14sp
         spannable.setSpan(
             AbsoluteSizeSpan(dimensionConverter.spToPx(13)),
             editStart,
             editEnd,
-            Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
 
-        spannable.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                callback?.onEditedDecorationClicked(informationData)
-            }
+        spannable.setSpan(
+            object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    callback?.onEditedDecorationClicked(informationData)
+                }
 
-            override fun updateDrawState(ds: TextPaint) {
-                // nop
-            }
-        },
+                override fun updateDrawState(ds: TextPaint) {
+                    // nop
+                }
+            },
             editStart,
             editEnd,
-            Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
         return spannable
     }
 
@@ -745,7 +753,7 @@ class MessageItemFactory @Inject constructor(
         return matrixFormattedBody
             ?.let { htmlCompressor.compress(it) }
             ?.let { htmlRenderer.get().render(it, pillsPostProcessor) }
-                ?: body
+            ?: body
     }
 
     private fun buildRedactedItem(

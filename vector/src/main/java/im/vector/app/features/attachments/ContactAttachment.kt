@@ -21,10 +21,10 @@ package im.vector.app.features.attachments
  * Can be send as a text message waiting for the protocol to handle contact.
  */
 data class ContactAttachment(
-        val displayName: String,
-        val photoUri: String?,
-        val phones: List<String> = emptyList(),
-        val emails: List<String> = emptyList()
+    val displayName: String,
+    val photoUri: String?,
+    val phones: List<String> = emptyList(),
+    val emails: List<String> = emptyList()
 ) {
 
     fun toHumanReadable(): String {

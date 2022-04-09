@@ -27,8 +27,8 @@ import org.matrix.android.sdk.internal.database.model.RawCacheEntityFields
  */
 internal fun RawCacheEntity.Companion.get(realm: Realm, url: String): RawCacheEntity? {
     return realm.where<RawCacheEntity>()
-            .equalTo(RawCacheEntityFields.URL, url)
-            .findFirst()
+        .equalTo(RawCacheEntityFields.URL, url)
+        .findFirst()
 }
 
 /**

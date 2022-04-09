@@ -46,21 +46,21 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
                 customTabsServiceConnection = object : CustomTabsServiceConnection() {
                     override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
                         customTabsClient = client
-                                .also { it.warmup(0L) }
+                            .also { it.warmup(0L) }
                         prefetchIfNeeded()
                     }
 
                     override fun onServiceDisconnected(name: ComponentName?) {
                     }
                 }
-                        .also {
-                            CustomTabsClient.bindCustomTabsService(
-                                    requireContext(),
-                                    // Despite the API, packageName cannot be null
-                                    packageName,
-                                    it
-                            )
-                        }
+                    .also {
+                        CustomTabsClient.bindCustomTabsService(
+                            requireContext(),
+                            // Despite the API, packageName cannot be null
+                            packageName,
+                            it
+                        )
+                    }
             }
         }
     }
@@ -91,11 +91,11 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
             if (state.loginMode.hasSso() && state.loginMode.ssoIdentityProviders().isNullOrEmpty()) {
                 // in this case we can prefetch (not other cases for privacy concerns)
                 viewModel.getSsoUrl(
-                        redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                        deviceId = state.deviceId,
-                        providerId = null
+                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                    deviceId = state.deviceId,
+                    providerId = null
                 )
-                        ?.let { prefetchUrl(it) }
+                    ?.let { prefetchUrl(it) }
             }
         }
     }

@@ -22,7 +22,7 @@ import im.vector.app.features.roommemberprofile.RoomMemberProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileArgs
 
 data class RequireActiveMembershipViewState(
-        val roomId: String? = null
+    val roomId: String? = null
 ) : MavericksState {
 
     constructor(args: TimelineArgs) : this(roomId = args.roomId)

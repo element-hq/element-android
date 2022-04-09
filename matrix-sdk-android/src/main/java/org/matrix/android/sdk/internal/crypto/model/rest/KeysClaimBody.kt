@@ -24,15 +24,15 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class KeysClaimBody(
-        /**
-         * The time (in milliseconds) to wait when downloading keys from remote servers. 10 seconds is the recommended default.
-         */
-        @Json(name = "timeout")
-        val timeout: Int? = null,
+    /**
+     * The time (in milliseconds) to wait when downloading keys from remote servers. 10 seconds is the recommended default.
+     */
+    @Json(name = "timeout")
+    val timeout: Int? = null,
 
-        /**
-         * Required. The keys to be claimed. A map from user ID, to a map from device ID to algorithm name.
-         */
-        @Json(name = "one_time_keys")
-        val oneTimeKeys: Map<String, Map<String, String>>
+    /**
+     * Required. The keys to be claimed. A map from user ID, to a map from device ID to algorithm name.
+     */
+    @Json(name = "one_time_keys")
+    val oneTimeKeys: Map<String, Map<String, String>>
 )

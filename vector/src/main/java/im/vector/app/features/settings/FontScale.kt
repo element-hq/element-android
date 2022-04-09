@@ -30,22 +30,22 @@ object FontScale {
     private const val APPLICATION_FONT_SCALE_KEY = "APPLICATION_FONT_SCALE_KEY"
 
     data class FontScaleValue(
-            val index: Int,
-            // Possible values for the SharedPrefs
-            val preferenceValue: String,
-            val scale: Float,
-            @StringRes
-            val nameResId: Int
+        val index: Int,
+        // Possible values for the SharedPrefs
+        val preferenceValue: String,
+        val scale: Float,
+        @StringRes
+        val nameResId: Int
     )
 
     private val fontScaleValues = listOf(
-            FontScaleValue(0, "FONT_SCALE_TINY", 0.70f, R.string.tiny),
-            FontScaleValue(1, "FONT_SCALE_SMALL", 0.85f, R.string.small),
-            FontScaleValue(2, "FONT_SCALE_NORMAL", 1.00f, R.string.normal),
-            FontScaleValue(3, "FONT_SCALE_LARGE", 1.15f, R.string.large),
-            FontScaleValue(4, "FONT_SCALE_LARGER", 1.30f, R.string.larger),
-            FontScaleValue(5, "FONT_SCALE_LARGEST", 1.45f, R.string.largest),
-            FontScaleValue(6, "FONT_SCALE_HUGE", 1.60f, R.string.huge)
+        FontScaleValue(0, "FONT_SCALE_TINY", 0.70f, R.string.tiny),
+        FontScaleValue(1, "FONT_SCALE_SMALL", 0.85f, R.string.small),
+        FontScaleValue(2, "FONT_SCALE_NORMAL", 1.00f, R.string.normal),
+        FontScaleValue(3, "FONT_SCALE_LARGE", 1.15f, R.string.large),
+        FontScaleValue(4, "FONT_SCALE_LARGER", 1.30f, R.string.larger),
+        FontScaleValue(5, "FONT_SCALE_LARGEST", 1.45f, R.string.largest),
+        FontScaleValue(6, "FONT_SCALE_HUGE", 1.60f, R.string.huge)
     )
 
     private val normalFontScaleValue = fontScaleValues[2]
@@ -62,7 +62,7 @@ object FontScale {
             val fontScale = context.resources.configuration.fontScale
 
             (fontScaleValues.firstOrNull { it.scale == fontScale } ?: normalFontScaleValue)
-                    .also { preferences.edit { putString(APPLICATION_FONT_SCALE_KEY, it.preferenceValue) } }
+                .also { preferences.edit { putString(APPLICATION_FONT_SCALE_KEY, it.preferenceValue) } }
         } else {
             val pref = preferences.getString(APPLICATION_FONT_SCALE_KEY, null)
             fontScaleValues.firstOrNull { it.preferenceValue == pref } ?: normalFontScaleValue
@@ -82,6 +82,6 @@ object FontScale {
      */
     private fun saveFontScaleValue(context: Context, fontScaleValue: FontScaleValue) {
         DefaultSharedPreferences.getInstance(context)
-                .edit { putString(APPLICATION_FONT_SCALE_KEY, fontScaleValue.preferenceValue) }
+            .edit { putString(APPLICATION_FONT_SCALE_KEY, fontScaleValue.preferenceValue) }
     }
 }

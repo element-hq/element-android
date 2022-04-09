@@ -32,11 +32,12 @@ import javax.inject.Inject
 
 @SessionScope
 internal class OutgoingGossipingRequestManager @Inject constructor(
-        @SessionId private val sessionId: String,
-        private val cryptoStore: IMXCryptoStore,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val cryptoCoroutineScope: CoroutineScope,
-        private val gossipingWorkManager: GossipingWorkManager) {
+    @SessionId private val sessionId: String,
+    private val cryptoStore: IMXCryptoStore,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+    private val cryptoCoroutineScope: CoroutineScope,
+    private val gossipingWorkManager: GossipingWorkManager
+) {
 
     /**
      * Send off a room key request, if we haven't already done so.
@@ -113,9 +114,9 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
      */
     private fun cancelRoomKeyRequest(requestBody: RoomKeyRequestBody, andResend: Boolean) {
         val req = cryptoStore.getOutgoingRoomKeyRequest(requestBody) // no request was made for this key
-                ?: return Unit.also {
-                    Timber.v("## CRYPTO - GOSSIP cancelRoomKeyRequest() Unknown request $requestBody")
-                }
+            ?: return Unit.also {
+                Timber.v("## CRYPTO - GOSSIP cancelRoomKeyRequest() Unknown request $requestBody")
+            }
 
         sendOutgoingRoomKeyRequestCancellation(req, andResend)
     }
@@ -129,10 +130,10 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
         Timber.v("## CRYPTO - GOSSIP sendOutgoingGossipingRequest() : Requesting keys $request")
 
         val params = SendGossipRequestWorker.Params(
-                sessionId = sessionId,
-                keyShareRequest = request as? OutgoingRoomKeyRequest,
-                secretShareRequest = request as? OutgoingSecretRequest,
-                txnId = createUniqueTxnId()
+            sessionId = sessionId,
+            keyShareRequest = request as? OutgoingRoomKeyRequest,
+            secretShareRequest = request as? OutgoingSecretRequest,
+            txnId = createUniqueTxnId()
         )
         cryptoStore.updateOutgoingGossipingRequestState(request.requestId, OutgoingGossipingRequestState.SENDING)
         val workRequest = gossipingWorkManager.createWork<SendGossipRequestWorker>(WorkerParamsFactory.toData(params), true)
@@ -154,9 +155,9 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
 
         if (resend) {
             val reSendParams = SendGossipRequestWorker.Params(
-                    sessionId = sessionId,
-                    keyShareRequest = request.copy(requestId = RequestIdHelper.createUniqueRequestId()),
-                    txnId = createUniqueTxnId()
+                sessionId = sessionId,
+                keyShareRequest = request.copy(requestId = RequestIdHelper.createUniqueRequestId()),
+                txnId = createUniqueTxnId()
             )
             val reSendWorkRequest = gossipingWorkManager.createWork<SendGossipRequestWorker>(WorkerParamsFactory.toData(reSendParams), true)
             gossipingWorkManager.postWork(reSendWorkRequest)

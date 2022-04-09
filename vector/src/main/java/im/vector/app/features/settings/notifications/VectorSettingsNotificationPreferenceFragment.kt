@@ -62,12 +62,12 @@ import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
 class VectorSettingsNotificationPreferenceFragment @Inject constructor(
-        private val pushManager: PushersManager,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val vectorPreferences: VectorPreferences,
-        private val guardServiceStarter: GuardServiceStarter
+    private val pushManager: PushersManager,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val vectorPreferences: VectorPreferences,
+    private val guardServiceStarter: GuardServiceStarter
 ) : VectorSettingsBaseFragment(),
-        BackgroundSyncModeChooserDialog.InteractionListener {
+    BackgroundSyncModeChooserDialog.InteractionListener {
 
     override var titleRes: Int = R.string.settings_notifications
     override val preferenceXmlRes = R.xml.vector_settings_notifications
@@ -83,7 +83,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY)!!.let { pref ->
             val pushRuleService = session
             val mRuleMaster = pushRuleService.getPushRules().getAllRules()
-                    .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
+                .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
 
             if (mRuleMaster == null) {
                 // The homeserver does not support RULE_ID_DISABLE_ALL, so hide the preference
@@ -215,9 +215,9 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     private fun refreshBackgroundSyncPrefs() {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_FDROID_BACKGROUND_SYNC_MODE)?.let {
             it.summary = when (vectorPreferences.getFdroidSyncBackgroundMode()) {
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY  -> getString(R.string.settings_background_fdroid_sync_mode_battery)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY -> getString(R.string.settings_background_fdroid_sync_mode_battery)
                 BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME -> getString(R.string.settings_background_fdroid_sync_mode_real_time)
-                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED     -> getString(R.string.settings_background_fdroid_sync_mode_disabled)
+                BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED -> getString(R.string.settings_background_fdroid_sync_mode_disabled)
             }
         }
 
@@ -236,7 +236,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
         when {
             backgroundSyncEnabled -> guardServiceStarter.start()
-            else                  -> guardServiceStarter.stop()
+            else -> guardServiceStarter.stop()
         }
     }
 
@@ -311,7 +311,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             if (null != notificationRingToneName) {
                 vectorPreferences.setNotificationRingTone(vectorPreferences.getNotificationRingTone())
                 findPreference<VectorPreference>(VectorPreferences.SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY)!!
-                        .summary = notificationRingToneName
+                    .summary = notificationRingToneName
             }
         }
     }
@@ -333,7 +333,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         // This pref may have change from troubleshoot pref fragment
         if (!FcmHelper.isPushSupported()) {
             findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_START_ON_BOOT_PREFERENCE_KEY)
-                    ?.isChecked = vectorPreferences.autoStartOnBoot()
+                ?.isChecked = vectorPreferences.autoStartOnBoot()
         }
     }
 
@@ -343,8 +343,8 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             interactionListener = context
         }
         (activity?.supportFragmentManager
-                ?.findFragmentByTag("syncDialog") as BackgroundSyncModeChooserDialog?)
-                ?.interactionListener = this
+            ?.findFragmentByTag("syncDialog") as BackgroundSyncModeChooserDialog?)
+            ?.interactionListener = this
     }
 
     override fun onDetach() {
@@ -358,7 +358,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 updateEnabledForAccount(preference)
                 true
             }
-            else                                                       -> {
+            else -> {
                 return super.onPreferenceTreeClick(preference)
             }
         }
@@ -368,26 +368,28 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         val pushRuleService = session
         val switchPref = preference as SwitchPreference
         pushRuleService.getPushRules().getAllRules()
-                .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
-                ?.let {
-                    // Trick, we must enable this room to disable notifications
-                    lifecycleScope.launch {
-                        try {
-                            pushRuleService.updatePushRuleEnableStatus(RuleKind.OVERRIDE,
-                                    it,
-                                    !switchPref.isChecked)
-                            // Push rules will be updated from the sync
-                        } catch (failure: Throwable) {
-                            if (!isAdded) {
-                                return@launch
-                            }
-
-                            // revert the check box
-                            switchPref.isChecked = !switchPref.isChecked
-                            Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
+            .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
+            ?.let {
+                // Trick, we must enable this room to disable notifications
+                lifecycleScope.launch {
+                    try {
+                        pushRuleService.updatePushRuleEnableStatus(
+                            RuleKind.OVERRIDE,
+                            it,
+                            !switchPref.isChecked
+                        )
+                        // Push rules will be updated from the sync
+                    } catch (failure: Throwable) {
+                        if (!isAdded) {
+                            return@launch
                         }
+
+                        // revert the check box
+                        switchPref.isChecked = !switchPref.isChecked
+                        Toast.makeText(activity, R.string.unknown_error, Toast.LENGTH_SHORT).show()
                     }
                 }
+            }
     }
 }
 
@@ -416,8 +418,8 @@ private fun SwitchPreference.setTransactionalSwitchChangeListener(scope: Corouti
 private fun Session.getEmailsWithPushInformation(): List<Pair<ThreePid.Email, Boolean>> {
     val emailPushers = getPushers().filter { it.kind == Pusher.KIND_EMAIL }
     return getThreePids()
-            .filterIsInstance<ThreePid.Email>()
-            .map { it to emailPushers.any { pusher -> pusher.pushKey == it.email } }
+        .filterIsInstance<ThreePid.Email>()
+        .map { it to emailPushers.any { pusher -> pusher.pushKey == it.email } }
 }
 
 private fun Session.getEmailsWithPushInformationLive(): LiveData<List<Pair<ThreePid.Email, Boolean>>> {

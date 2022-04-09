@@ -21,5 +21,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class AcceptedTermsContent(
-        @Json(name = "accepted") val acceptedTerms: List<String> = emptyList()
+    @Json(name = "accepted") val acceptedTerms: List<String> = emptyList()
 )

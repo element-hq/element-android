@@ -29,18 +29,19 @@ import kotlin.reflect.KMutableProperty0
 
 private const val DEFAULT_PREFETCH_THRESHOLD = 30
 
-class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMutableProperty0<Int?>,
-                                          private val adapterPositionMapping: MutableMap<String, Int>
+class TimelineControllerInterceptorHelper(
+    private val positionOfReadMarker: KMutableProperty0<Int?>,
+    private val adapterPositionMapping: MutableMap<String, Int>
 ) {
 
     private var previousModelsSize = 0
 
     // Update position when we are building new items
     fun intercept(
-            models: MutableList<EpoxyModel<*>>,
-            unreadState: UnreadState,
-            timeline: Timeline?,
-            callback: TimelineEventController.Callback?
+        models: MutableList<EpoxyModel<*>>,
+        unreadState: UnreadState,
+        timeline: Timeline?,
+        callback: TimelineEventController.Callback?
     ) {
         positionOfReadMarker.set(null)
         adapterPositionMapping.clear()
@@ -89,10 +90,10 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
 
     private fun MutableListIterator<EpoxyModel<*>>.addReadMarkerItem(callback: TimelineEventController.Callback?) {
         val readMarker = TimelineReadMarkerItem_()
-                .also {
-                    it.id("read_marker")
-                    it.setOnVisibilityStateChanged(ReadMarkerVisibilityStateChangedListener(callback))
-                }
+            .also {
+                it.id("read_marker")
+                it.setOnVisibilityStateChanged(ReadMarkerVisibilityStateChangedListener(callback))
+            }
         add(readMarker)
     }
 
@@ -100,13 +101,13 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         val shouldAddBackwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS) ?: false
         if (shouldAddBackwardPrefetch) {
             val indexOfPrefetchBackward = (previousModelsSize - 1)
-                    .coerceAtMost(size - DEFAULT_PREFETCH_THRESHOLD)
-                    .coerceAtLeast(0)
+                .coerceAtMost(size - DEFAULT_PREFETCH_THRESHOLD)
+                .coerceAtLeast(0)
 
             val loadingItem = LoadingItem_()
-                    .id("prefetch_backward_loading${System.currentTimeMillis()}")
-                    .showLoader(false)
-                    .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS, callback)
+                .id("prefetch_backward_loading${System.currentTimeMillis()}")
+                .showLoader(false)
+                .setVisibilityStateChangedListener(Timeline.Direction.BACKWARDS, callback)
 
             add(indexOfPrefetchBackward, loadingItem)
         }
@@ -116,20 +117,20 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         val shouldAddForwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.FORWARDS) ?: false
         if (shouldAddForwardPrefetch) {
             val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD
-                    .coerceAtMost(size - 1)
-                    .coerceAtLeast(0)
+                .coerceAtMost(size - 1)
+                .coerceAtLeast(0)
 
             val loadingItem = LoadingItem_()
-                    .id("prefetch_forward_loading${System.currentTimeMillis()}")
-                    .showLoader(false)
-                    .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS, callback)
+                .id("prefetch_forward_loading${System.currentTimeMillis()}")
+                .showLoader(false)
+                .setVisibilityStateChangedListener(Timeline.Direction.FORWARDS, callback)
             add(indexOfPrefetchForward, loadingItem)
         }
     }
 
     private fun LoadingItem_.setVisibilityStateChangedListener(
-            direction: Timeline.Direction,
-            callback: TimelineEventController.Callback?
+        direction: Timeline.Direction,
+        callback: TimelineEventController.Callback?
     ): LoadingItem_ {
         return onVisibilityStateChanged { _, _, visibilityState ->
             if (visibilityState == VisibilityState.VISIBLE) {

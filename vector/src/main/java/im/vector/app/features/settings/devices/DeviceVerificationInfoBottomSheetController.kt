@@ -33,16 +33,17 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class DeviceVerificationInfoBottomSheetController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider) :
-        TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider
+) :
+    TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
 
     var callback: Callback? = null
 
     override fun buildModels(data: DeviceVerificationInfoBottomSheetViewState?) {
         val cryptoDeviceInfo = data?.cryptoDeviceInfo?.invoke()
         when {
-            cryptoDeviceInfo != null           -> {
+            cryptoDeviceInfo != null -> {
                 // It's a E2E capable device
                 handleE2ECapableDevice(data, cryptoDeviceInfo)
             }
@@ -50,7 +51,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                 // It's a non E2E capable device
                 handleNonE2EDevice(data)
             }
-            else                               -> {
+            else -> {
                 loadingItem {
                     id("loading")
                 }
@@ -60,10 +61,10 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
 
     private fun handleE2ECapableDevice(data: DeviceVerificationInfoBottomSheetViewState, cryptoDeviceInfo: CryptoDeviceInfo) {
         val shield = TrustUtils.shieldForTrust(
-                currentDevice = data.isMine,
-                trustMSK = data.accountCrossSigningIsTrusted,
-                legacyMode = !data.hasAccountCrossSigning,
-                deviceTrustLevel = cryptoDeviceInfo.trustLevel
+            currentDevice = data.isMine,
+            trustMSK = data.accountCrossSigningIsTrusted,
+            legacyMode = !data.hasAccountCrossSigning,
+            deviceTrustLevel = cryptoDeviceInfo.trustLevel
         ).toDrawableRes()
 
         if (data.hasAccountCrossSigning) {
@@ -99,7 +100,8 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                     style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(shield)
                     title(host.stringProvider.getString(R.string.crosssigning_verify_this_session).toEpoxyCharSequence())
-                    description(host.stringProvider
+                    description(
+                        host.stringProvider
                             .getString(if (data.hasOtherSessions) R.string.confirm_your_identity else R.string.confirm_your_identity_quad_s)
                             .toEpoxyCharSequence()
                     )

@@ -25,40 +25,40 @@ import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyShareRequest
  * IncomingRoomKeyRequest class defines the incoming room keys request.
  */
 data class IncomingRoomKeyRequest(
-        /**
-         * The user id
-         */
-        override val userId: String? = null,
+    /**
+     * The user id
+     */
+    override val userId: String? = null,
 
-        /**
-         * The device id
-         */
-        override val deviceId: String? = null,
+    /**
+     * The device id
+     */
+    override val deviceId: String? = null,
 
-        /**
-         * The request id
-         */
-        override val requestId: String? = null,
+    /**
+     * The request id
+     */
+    override val requestId: String? = null,
 
-        /**
-         * The request body
-         */
-        val requestBody: RoomKeyRequestBody? = null,
+    /**
+     * The request body
+     */
+    val requestBody: RoomKeyRequestBody? = null,
 
-        val state: GossipingRequestState = GossipingRequestState.NONE,
+    val state: GossipingRequestState = GossipingRequestState.NONE,
 
-        /**
-         * The runnable to call to accept to share the keys
-         */
-        @Transient
-        var share: Runnable? = null,
+    /**
+     * The runnable to call to accept to share the keys
+     */
+    @Transient
+    var share: Runnable? = null,
 
-        /**
-         * The runnable to call to ignore the key share request.
-         */
-        @Transient
-        var ignore: Runnable? = null,
-        override val localCreationTimestamp: Long?
+    /**
+     * The runnable to call to ignore the key share request.
+     */
+    @Transient
+    var ignore: Runnable? = null,
+    override val localCreationTimestamp: Long?
 ) : IncomingShareRequestCommon {
     companion object {
         /**
@@ -68,16 +68,16 @@ data class IncomingRoomKeyRequest(
          */
         fun fromEvent(event: Event): IncomingRoomKeyRequest? {
             return event.getClearContent()
-                    .toModel<RoomKeyShareRequest>()
-                    ?.let {
-                        IncomingRoomKeyRequest(
-                                userId = event.senderId,
-                                deviceId = it.requestingDeviceId,
-                                requestId = it.requestId,
-                                requestBody = it.body ?: RoomKeyRequestBody(),
-                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
-                        )
-                    }
+                .toModel<RoomKeyShareRequest>()
+                ?.let {
+                    IncomingRoomKeyRequest(
+                        userId = event.senderId,
+                        deviceId = it.requestingDeviceId,
+                        requestId = it.requestId,
+                        requestBody = it.body ?: RoomKeyRequestBody(),
+                        localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
+                    )
+                }
         }
     }
 }

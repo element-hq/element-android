@@ -50,62 +50,62 @@ class RegistrationTest {
 
         // Check splashscreen is there
         onView(withId(R.id.loginSplashSubmit))
-                .check(matches(isDisplayed()))
-                .check(matches(withText(R.string.login_splash_submit)))
+            .check(matches(isDisplayed()))
+            .check(matches(withText(R.string.login_splash_submit)))
 
         // Click on get started
         onView(withId(R.id.loginSplashSubmit))
-                .perform(click())
+            .perform(click())
 
         // Check that homeserver options are shown
         onView(withId(R.id.loginServerTitle))
-                .check(matches(isDisplayed()))
-                .check(matches(withText(R.string.login_server_title)))
+            .check(matches(isDisplayed()))
+            .check(matches(withText(R.string.login_server_title)))
 
         // Chose custom server
         onView(withId(R.id.loginServerChoiceOther))
-                .perform(click())
+            .perform(click())
 
         // Enter local synapse
         onView(withId(R.id.loginServerUrlFormHomeServerUrl))
-                .perform(typeText(homeServerUrl))
+            .perform(typeText(homeServerUrl))
 
         // Click on continue
         onView(withId(R.id.loginServerUrlFormSubmit))
-                .check(matches(isEnabled()))
-                .perform(closeSoftKeyboard(), click())
+            .check(matches(isEnabled()))
+            .perform(closeSoftKeyboard(), click())
 
         // Click on the signup button
         onView(withId(R.id.loginSignupSigninSubmit))
-                .check(matches(isDisplayed()))
-                .perform(click())
+            .check(matches(isDisplayed()))
+            .perform(click())
 
         // Ensure password flow supported
         onView(withId(R.id.loginField))
-                .check(matches(isDisplayed()))
+            .check(matches(isDisplayed()))
         onView(withId(R.id.passwordField))
-                .check(matches(isDisplayed()))
+            .check(matches(isDisplayed()))
 
         // Ensure user id
         onView(withId(R.id.loginField))
-                .perform(typeText(userId))
+            .perform(typeText(userId))
 
         // Ensure login button not yet enabled
         onView(withId(R.id.loginSubmit))
-                .check(matches(not(isEnabled())))
+            .check(matches(not(isEnabled())))
 
         // Ensure password
         onView(withId(R.id.passwordField))
-                .perform(closeSoftKeyboard(), typeText(password))
+            .perform(closeSoftKeyboard(), typeText(password))
 
         // Submit
         onView(withId(R.id.loginSubmit))
-                .check(matches(isEnabled()))
-                .perform(closeSoftKeyboard(), click())
+            .check(matches(isEnabled()))
+            .perform(closeSoftKeyboard(), click())
 
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
             onView(withId(R.id.roomListContainer))
-                    .check(matches(isDisplayed()))
+                .check(matches(isDisplayed()))
         }
 
         val activity = EspressoHelper.getCurrentActivity()!!
@@ -114,7 +114,7 @@ class RegistrationTest {
         // Wait for initial sync and check room list is there
         withIdlingResource(initialSyncIdlingResource(uiSession)) {
             onView(withId(R.id.roomListContainer))
-                    .check(matches(isDisplayed()))
+                .check(matches(isDisplayed()))
         }
     }
 }

@@ -30,7 +30,7 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
 class RoomDevToolStateEventListFragment @Inject constructor(
-        private val epoxyController: RoomStateListController
+    private val epoxyController: RoomStateListController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(), DevToolsInteractionListener {
 
     val sharedViewModel: RoomDevToolViewModel by activityViewModel()

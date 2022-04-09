@@ -27,32 +27,32 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
     fun map(timelineEventEntity: TimelineEventEntity, buildReadReceipts: Boolean = true): TimelineEvent {
         val readReceipts = if (buildReadReceipts) {
             timelineEventEntity.readReceipts
-                    ?.let {
-                        readReceiptsSummaryMapper.map(it)
-                    }
+                ?.let {
+                    readReceiptsSummaryMapper.map(it)
+                }
         } else {
             null
         }
         return TimelineEvent(
-                root = timelineEventEntity.root?.asDomain()
-                        ?: Event("", timelineEventEntity.eventId),
-                eventId = timelineEventEntity.eventId,
-                annotations = timelineEventEntity.annotations?.asDomain(),
-                localId = timelineEventEntity.localId,
-                displayIndex = timelineEventEntity.displayIndex,
-                senderInfo = SenderInfo(
-                        userId = timelineEventEntity.root?.sender ?: "",
-                        displayName = timelineEventEntity.senderName,
-                        isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
-                        avatarUrl = timelineEventEntity.senderAvatar
-                ),
-                ownedByThreadChunk = timelineEventEntity.ownedByThreadChunk,
-                readReceipts = readReceipts
-                        ?.distinctBy {
-                            it.roomMember
-                        }?.sortedByDescending {
-                            it.originServerTs
-                        }.orEmpty()
+            root = timelineEventEntity.root?.asDomain()
+                ?: Event("", timelineEventEntity.eventId),
+            eventId = timelineEventEntity.eventId,
+            annotations = timelineEventEntity.annotations?.asDomain(),
+            localId = timelineEventEntity.localId,
+            displayIndex = timelineEventEntity.displayIndex,
+            senderInfo = SenderInfo(
+                userId = timelineEventEntity.root?.sender ?: "",
+                displayName = timelineEventEntity.senderName,
+                isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
+                avatarUrl = timelineEventEntity.senderAvatar
+            ),
+            ownedByThreadChunk = timelineEventEntity.ownedByThreadChunk,
+            readReceipts = readReceipts
+                ?.distinctBy {
+                    it.roomMember
+                }?.sortedByDescending {
+                    it.originServerTs
+                }.orEmpty()
         )
     }
 }

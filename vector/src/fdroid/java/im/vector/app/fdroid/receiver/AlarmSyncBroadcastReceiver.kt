@@ -35,27 +35,27 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Timber.d("## Sync: AlarmSyncBroadcastReceiver received intent")
         val vectorPreferences = context.singletonEntryPoint()
-                .takeIf { it.activeSessionHolder().getSafeActiveSession() != null }
-                ?.vectorPreferences()
-                ?: return Unit.also { Timber.v("No active session, so don't launch sync service.") }
+            .takeIf { it.activeSessionHolder().getSafeActiveSession() != null }
+            ?.vectorPreferences()
+            ?: return Unit.also { Timber.v("No active session, so don't launch sync service.") }
 
         val sessionId = intent.getStringExtra(SyncService.EXTRA_SESSION_ID) ?: return
         VectorSyncService.newPeriodicIntent(
-                context = context,
-                sessionId = sessionId,
-                syncTimeoutSeconds = vectorPreferences.backgroundSyncTimeOut(),
-                syncDelaySeconds = vectorPreferences.backgroundSyncDelay(),
-                isNetworkBack = false
+            context = context,
+            sessionId = sessionId,
+            syncTimeoutSeconds = vectorPreferences.backgroundSyncTimeOut(),
+            syncDelaySeconds = vectorPreferences.backgroundSyncDelay(),
+            isNetworkBack = false
         )
-                .let {
-                    try {
-                        ContextCompat.startForegroundService(context, it)
-                    } catch (ex: Throwable) {
-                        Timber.i("## Sync: Failed to start service, Alarm scheduled to restart service")
-                        scheduleAlarm(context, sessionId, vectorPreferences.backgroundSyncDelay())
-                        Timber.e(ex)
-                    }
+            .let {
+                try {
+                    ContextCompat.startForegroundService(context, it)
+                } catch (ex: Throwable) {
+                    Timber.i("## Sync: Failed to start service, Alarm scheduled to restart service")
+                    scheduleAlarm(context, sessionId, vectorPreferences.backgroundSyncDelay())
+                    Timber.e(ex)
                 }
+            }
     }
 
     companion object {
@@ -69,10 +69,10 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
                 putExtra(SyncService.EXTRA_PERIODIC, true)
             }
             val pIntent = PendingIntent.getBroadcast(
-                    context,
-                    REQUEST_CODE,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                context,
+                REQUEST_CODE,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
             )
             val firstMillis = System.currentTimeMillis() + delayInSeconds * 1000L
             val alarmMgr = context.getSystemService<AlarmManager>()!!
@@ -87,10 +87,10 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
             Timber.v("## Sync: Cancel alarm for background sync")
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java)
             val pIntent = PendingIntent.getBroadcast(
-                    context,
-                    REQUEST_CODE,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+                context,
+                REQUEST_CODE,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
             )
             val alarmMgr = context.getSystemService<AlarmManager>()!!
             alarmMgr.cancel(pIntent)

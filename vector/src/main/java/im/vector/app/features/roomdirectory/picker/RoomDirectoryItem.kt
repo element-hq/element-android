@@ -59,15 +59,15 @@ abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() 
 
         // Avatar
         GlideApp.with(holder.avatarView)
-                .load(directoryAvatarUrl)
-                .let {
-                    if (!includeAllNetworks) {
-                        it.placeholder(R.drawable.network_matrix)
-                    } else {
-                        it
-                    }
+            .load(directoryAvatarUrl)
+            .let {
+                if (!includeAllNetworks) {
+                    it.placeholder(R.drawable.network_matrix)
+                } else {
+                    it
                 }
-                .into(holder.avatarView)
+            }
+            .into(holder.avatarView)
         holder.avatarView.isInvisible = directoryAvatarUrl.isNullOrBlank() && includeAllNetworks
 
         holder.nameView.text = directoryName

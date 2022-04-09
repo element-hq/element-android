@@ -98,14 +98,14 @@ class GraphUtilsTest : MatrixTest {
         assertTrue(flattenParentsE.contains(acyclicGraph.getOrCreateNode("C")))
         assertTrue(flattenParentsE.contains(acyclicGraph.getOrCreateNode("D")))
 
-//        System.out.println(
-//                buildString {
-//                    flatten.entries.forEach {
-//                        append("${it.key.name}: [")
-//                        append(it.value.joinToString(",") { it.name })
-//                        append("]\n")
-//                    }
-//                }
-//        )
+        //        System.out.println(
+        //                buildString {
+        //                    flatten.entries.forEach {
+        //                        append("${it.key.name}: [")
+        //                        append(it.value.joinToString(",") { it.name })
+        //                        append("]\n")
+        //                    }
+        //                }
+        //        )
     }
 }

@@ -48,7 +48,7 @@ import javax.inject.Inject
  * of the homeserver, as a fallback to login or to create an account
  */
 class LoginWebFragment @Inject constructor(
-        private val assetReader: AssetReader
+    private val assetReader: AssetReader
 ) : AbstractLoginFragment<FragmentLoginWebBinding>() {
 
     private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
@@ -64,7 +64,7 @@ class LoginWebFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.loginWebToolbar)
-                .allowBack()
+            .allowBack()
     }
 
     override fun updateWithState(state: LoginViewState) {
@@ -81,7 +81,7 @@ class LoginWebFragment @Inject constructor(
     private fun setupTitle(state: LoginViewState) {
         toolbar?.title = when (state.signMode) {
             SignMode.SignIn -> getString(R.string.login_signin)
-            else            -> getString(R.string.login_signup)
+            else -> getString(R.string.login_signup)
         }
     }
 
@@ -123,22 +123,24 @@ class LoginWebFragment @Inject constructor(
         views.loginWebWebView.loadUrl(url)
 
         views.loginWebWebView.webViewClient = object : WebViewClient() {
-            override fun onReceivedSslError(view: WebView, handler: SslErrorHandler,
-                                            error: SslError) {
+            override fun onReceivedSslError(
+                view: WebView, handler: SslErrorHandler,
+                error: SslError
+            ) {
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setMessage(R.string.ssl_could_not_verify)
-                        .setPositiveButton(R.string.ssl_trust) { _, _ -> handler.proceed() }
-                        .setNegativeButton(R.string.ssl_do_not_trust) { _, _ -> handler.cancel() }
-                        .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                            if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                                handler.cancel()
-                                dialog.dismiss()
-                                return@OnKeyListener true
-                            }
-                            false
-                        })
-                        .setCancelable(false)
-                        .show()
+                    .setMessage(R.string.ssl_could_not_verify)
+                    .setPositiveButton(R.string.ssl_trust) { _, _ -> handler.proceed() }
+                    .setNegativeButton(R.string.ssl_do_not_trust) { _, _ -> handler.cancel() }
+                    .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
+                        if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                            handler.cancel()
+                            dialog.dismiss()
+                            return@OnKeyListener true
+                        }
+                        false
+                    })
+                    .setCancelable(false)
+                    .show()
             }
 
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
@@ -247,9 +249,9 @@ class LoginWebFragment @Inject constructor(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when {
-            toolbarButton                     -> super.onBackPressed(toolbarButton)
+            toolbarButton -> super.onBackPressed(toolbarButton)
             views.loginWebWebView.canGoBack() -> views.loginWebWebView.goBack().run { true }
-            else                              -> super.onBackPressed(toolbarButton)
+            else -> super.onBackPressed(toolbarButton)
         }
     }
 }

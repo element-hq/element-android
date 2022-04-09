@@ -37,9 +37,9 @@ import im.vector.app.openOssLicensesMenuActivity
 import javax.inject.Inject
 
 class LegalsFragment @Inject constructor(
-        private val controller: LegalsController
+    private val controller: LegalsController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
-        LegalsController.Listener {
+    LegalsController.Listener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)

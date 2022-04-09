@@ -28,13 +28,13 @@ import im.vector.app.R
 import im.vector.app.databinding.ViewBooleanDropdownBinding
 
 class OverrideDropdownView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null
+    context: Context,
+    attrs: AttributeSet? = null
 ) : LinearLayout(context, attrs) {
 
     private val binding = ViewBooleanDropdownBinding.inflate(
-            LayoutInflater.from(context),
-            this
+        LayoutInflater.from(context),
+        this
     )
 
     init {
@@ -58,7 +58,7 @@ class OverrideDropdownView @JvmOverloads constructor(
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position) {
-                        0    -> listener.onOverrideSelected(option = null)
+                        0 -> listener.onOverrideSelected(option = null)
                         else -> listener.onOverrideSelected(feature.options[position - 1])
                     }
                 }
@@ -75,9 +75,9 @@ class OverrideDropdownView @JvmOverloads constructor(
     }
 
     data class OverrideDropdown<T : OverrideOption>(
-            val label: String,
-            val options: List<T>,
-            val activeOption: T?,
+        val label: String,
+        val options: List<T>,
+        val activeOption: T?,
     )
 }
 

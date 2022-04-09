@@ -52,8 +52,8 @@ class AddRoomError(val errorList: Map<String, Throwable>) : Throwable() {
 }
 
 class SpaceAddRoomsViewModel @AssistedInject constructor(
-        @Assisted val initialState: SpaceAddRoomsState,
-        private val session: Session
+    @Assisted val initialState: SpaceAddRoomsState,
+    private val session: Session
 ) : VectorViewModel<SpaceAddRoomsState, SpaceAddRoomActions, SpaceAddRoomsViewEvents>(initialState) {
 
     @AssistedFactory
@@ -65,79 +65,79 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     val spaceUpdatableLivePageResult: UpdatableLivePageResult by lazy {
         session.getFilteredPagedRoomSummariesLive(
-                roomSummaryQueryParams {
-                    this.memberships = listOf(Membership.JOIN)
-                    this.excludeType = null
-                    this.includeType = listOf(RoomType.SPACE)
-                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
-                    this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
-                },
-                pagedListConfig = PagedList.Config.Builder()
-                        .setPageSize(10)
-                        .setInitialLoadSizeHint(20)
-                        .setEnablePlaceholders(true)
-                        .setPrefetchDistance(10)
-                        .build(),
-                sortOrder = RoomSortOrder.NAME
+            roomSummaryQueryParams {
+                this.memberships = listOf(Membership.JOIN)
+                this.excludeType = null
+                this.includeType = listOf(RoomType.SPACE)
+                this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
+            },
+            pagedListConfig = PagedList.Config.Builder()
+                .setPageSize(10)
+                .setInitialLoadSizeHint(20)
+                .setEnablePlaceholders(true)
+                .setPrefetchDistance(10)
+                .build(),
+            sortOrder = RoomSortOrder.NAME
         )
     }
 
     val spaceCountFlow: Flow<Int> by lazy {
         spaceUpdatableLivePageResult.livePagedList.asFlow()
-                .flatMapLatest { session.getRoomCountLive(spaceUpdatableLivePageResult.queryParams).asFlow() }
-                .distinctUntilChanged()
+            .flatMapLatest { session.getRoomCountLive(spaceUpdatableLivePageResult.queryParams).asFlow() }
+            .distinctUntilChanged()
     }
 
     val roomUpdatableLivePageResult: UpdatableLivePageResult by lazy {
         session.getFilteredPagedRoomSummariesLive(
-                roomSummaryQueryParams {
-                    this.memberships = listOf(Membership.JOIN)
-                    this.excludeType = listOf(RoomType.SPACE)
-                    this.includeType = null
-                    this.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
-                    this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
-                },
-                pagedListConfig = PagedList.Config.Builder()
-                        .setPageSize(10)
-                        .setInitialLoadSizeHint(20)
-                        .setEnablePlaceholders(true)
-                        .setPrefetchDistance(10)
-                        .build(),
-                sortOrder = RoomSortOrder.NAME
+            roomSummaryQueryParams {
+                this.memberships = listOf(Membership.JOIN)
+                this.excludeType = listOf(RoomType.SPACE)
+                this.includeType = null
+                this.roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
+            },
+            pagedListConfig = PagedList.Config.Builder()
+                .setPageSize(10)
+                .setInitialLoadSizeHint(20)
+                .setEnablePlaceholders(true)
+                .setPrefetchDistance(10)
+                .build(),
+            sortOrder = RoomSortOrder.NAME
         )
     }
 
     val roomCountFlow: Flow<Int> by lazy {
         roomUpdatableLivePageResult.livePagedList.asFlow()
-                .flatMapLatest { session.getRoomCountLive(roomUpdatableLivePageResult.queryParams).asFlow() }
-                .distinctUntilChanged()
+            .flatMapLatest { session.getRoomCountLive(roomUpdatableLivePageResult.queryParams).asFlow() }
+            .distinctUntilChanged()
     }
 
     val dmUpdatableLivePageResult: UpdatableLivePageResult by lazy {
         session.getFilteredPagedRoomSummariesLive(
-                roomSummaryQueryParams {
-                    this.memberships = listOf(Membership.JOIN)
-                    this.excludeType = listOf(RoomType.SPACE)
-                    this.includeType = null
-                    this.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                    this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
-                    this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
-                },
-                pagedListConfig = PagedList.Config.Builder()
-                        .setPageSize(10)
-                        .setInitialLoadSizeHint(20)
-                        .setEnablePlaceholders(true)
-                        .setPrefetchDistance(10)
-                        .build(),
-                sortOrder = RoomSortOrder.NAME
+            roomSummaryQueryParams {
+                this.memberships = listOf(Membership.JOIN)
+                this.excludeType = listOf(RoomType.SPACE)
+                this.includeType = null
+                this.roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                this.activeSpaceFilter = ActiveSpaceFilter.ExcludeSpace(initialState.spaceId)
+                this.displayName = QueryStringValue.Contains(initialState.currentFilter, QueryStringValue.Case.INSENSITIVE)
+            },
+            pagedListConfig = PagedList.Config.Builder()
+                .setPageSize(10)
+                .setInitialLoadSizeHint(20)
+                .setEnablePlaceholders(true)
+                .setPrefetchDistance(10)
+                .build(),
+            sortOrder = RoomSortOrder.NAME
         )
     }
 
     val dmCountFlow: Flow<Int> by lazy {
         dmUpdatableLivePageResult.livePagedList.asFlow()
-                .flatMapLatest { session.getRoomCountLive(dmUpdatableLivePageResult.queryParams).asFlow() }
-                .distinctUntilChanged()
+            .flatMapLatest { session.getRoomCountLive(dmUpdatableLivePageResult.queryParams).asFlow() }
+            .distinctUntilChanged()
     }
 
     private val selectionList = mutableMapOf<String, Boolean>()
@@ -147,9 +147,9 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
         val spaceSummary = session.getRoomSummary(initialState.spaceId)
         setState {
             copy(
-                    spaceName = spaceSummary?.displayName ?: "",
-                    ignoreRooms = (spaceSummary?.flattenParentIds ?: emptyList()) + listOf(initialState.spaceId),
-                    shouldShowDMs = !onlyShowSpaces && spaceSummary?.isPublic == false
+                spaceName = spaceSummary?.displayName ?: "",
+                ignoreRooms = (spaceSummary?.flattenParentIds ?: emptyList()) + listOf(initialState.spaceId),
+                shouldShowDMs = !onlyShowSpaces && spaceSummary?.isPublic == false
             )
         }
     }
@@ -164,16 +164,16 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceAddRoomActions) {
         when (action) {
-            is SpaceAddRoomActions.UpdateFilter    -> {
+            is SpaceAddRoomActions.UpdateFilter -> {
                 roomUpdatableLivePageResult.queryParams = roomUpdatableLivePageResult.queryParams.copy(
-                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
                 )
                 roomUpdatableLivePageResult.queryParams = roomUpdatableLivePageResult.queryParams.copy(
-                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
                 )
                 setState {
                     copy(
-                            currentFilter = action.filter
+                        currentFilter = action.filter
                     )
                 }
             }
@@ -181,7 +181,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 selectionList[action.roomSummary.roomId] = (selectionList[action.roomSummary.roomId] ?: false).not()
                 selectionListLiveData.postValue(selectionList.toMap())
             }
-            SpaceAddRoomActions.Save               -> {
+            SpaceAddRoomActions.Save -> {
                 doAddSelectedRooms()
             }
         }
@@ -193,7 +193,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    isSaving = Loading()
+                isSaving = Loading()
             )
         }
         viewModelScope.launch {
@@ -202,9 +202,9 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
             childrenToAdd.forEach { roomId ->
                 try {
                     session.spaceService().getSpace(initialState.spaceId)!!.addChildren(
-                            roomId = roomId,
-                            viaServers = null,
-                            order = null
+                        roomId = roomId,
+                        viaServers = null,
+                        order = null
                     )
                     completed.add(roomId)
                 } catch (failure: Throwable) {
@@ -216,7 +216,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 withContext(Dispatchers.Main) {
                     setState {
                         copy(
-                                isSaving = Success(childrenToAdd.toList())
+                            isSaving = Success(childrenToAdd.toList())
                         )
                     }
                     completed.forEach {
@@ -229,7 +229,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 withContext(Dispatchers.Main) {
                     setState {
                         copy(
-                                isSaving = Success(completed)
+                            isSaving = Success(completed)
                         )
                     }
                     completed.forEach {
@@ -242,7 +242,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 withContext(Dispatchers.Main) {
                     setState {
                         copy(
-                                isSaving = Fail(AddRoomError(errors))
+                            isSaving = Fail(AddRoomError(errors))
                         )
                     }
                     _viewEvents.post(SpaceAddRoomsViewEvents.SaveFailed(AddRoomError(errors)))

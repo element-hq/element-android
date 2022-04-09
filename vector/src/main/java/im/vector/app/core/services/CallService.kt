@@ -120,15 +120,15 @@ class CallService : VectorService() {
                 callRingPlayerOutgoing?.start()
                 displayOutgoingRingingCallNotification(intent)
             }
-            ACTION_ONGOING_CALL          -> {
+            ACTION_ONGOING_CALL -> {
                 callRingPlayerIncoming?.stop()
                 callRingPlayerOutgoing?.stop()
                 displayCallInProgressNotification(intent)
             }
-            ACTION_CALL_TERMINATED       -> {
+            ACTION_CALL_TERMINATED -> {
                 handleCallTerminated(intent)
             }
-            else                         -> {
+            else -> {
                 handleUnexpectedState(null)
             }
         }
@@ -156,27 +156,27 @@ class CallService : VectorService() {
         val fromBg = intent.getBooleanExtra(EXTRA_IS_IN_BG, false)
         Timber.tag(loggerTag.value).v("displayIncomingCallNotification : display the dedicated notification")
         val incomingCallAlert = IncomingCallAlert(callId,
-                shouldBeDisplayedIn = { activity ->
-                    if (activity is VectorCallActivity) {
-                        activity.intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG)?.callId != call.callId
-                    } else true
-                }
+            shouldBeDisplayedIn = { activity ->
+                if (activity is VectorCallActivity) {
+                    activity.intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG)?.callId != call.callId
+                } else true
+            }
         ).apply {
             viewBinder = IncomingCallAlert.ViewBinder(
-                    matrixItem = callInformation.opponentMatrixItem,
-                    avatarRenderer = avatarRenderer,
-                    isVideoCall = isVideoCall,
-                    onAccept = { showCallScreen(call, VectorCallActivity.INCOMING_ACCEPT) },
-                    onReject = { call.endCall() }
+                matrixItem = callInformation.opponentMatrixItem,
+                avatarRenderer = avatarRenderer,
+                isVideoCall = isVideoCall,
+                onAccept = { showCallScreen(call, VectorCallActivity.INCOMING_ACCEPT) },
+                onReject = { call.endCall() }
             )
             dismissedAction = Runnable { call.endCall() }
             contentAction = Runnable { showCallScreen(call, VectorCallActivity.INCOMING_RINGING) }
         }
         alertManager.postVectorAlert(incomingCallAlert)
         val notification = notificationUtils.buildIncomingCallNotification(
-                call = call,
-                title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId,
-                fromBg = fromBg
+            call = call,
+            title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId,
+            fromBg = fromBg
         )
         if (knownCalls.isEmpty()) {
             startForeground(callId.hashCode(), notification)
@@ -215,9 +215,9 @@ class CallService : VectorService() {
 
     private fun showCallScreen(call: WebRtcCall, mode: String) {
         val intent = VectorCallActivity.newIntent(
-                context = this,
-                call = call,
-                mode = mode
+            context = this,
+            call = call,
+            mode = mode
         )
         startActivity(intent)
     }
@@ -230,8 +230,8 @@ class CallService : VectorService() {
         val callInformation = call.toCallInformation()
         Timber.tag(loggerTag.value).v("displayOutgoingCallNotification : display the dedicated notification")
         val notification = notificationUtils.buildOutgoingRingingCallNotification(
-                call = call,
-                title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
+            call = call,
+            title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
         )
         if (knownCalls.isEmpty()) {
             startForeground(callId.hashCode(), notification)
@@ -254,8 +254,8 @@ class CallService : VectorService() {
         alertManager.cancelAlert(callId)
         val callInformation = call.toCallInformation()
         val notification = notificationUtils.buildPendingCallNotification(
-                call = call,
-                title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
+            call = call,
+            title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
         )
         if (knownCalls.isEmpty()) {
             startForeground(callId.hashCode(), notification)
@@ -287,24 +287,24 @@ class CallService : VectorService() {
 
     private fun WebRtcCall.toCallInformation(): CallInformation {
         return CallInformation(
-                callId = this.callId,
-                nativeRoomId = this.nativeRoomId,
-                opponentUserId = this.mxCall.opponentUserId,
-                opponentMatrixItem = singletonEntryPoint().activeSessionHolder().getSafeActiveSession()?.let {
-                    this.getOpponentAsMatrixItem(it)
-                },
-                isVideoCall = this.mxCall.isVideoCall,
-                isOutgoing = this.mxCall.isOutgoing
+            callId = this.callId,
+            nativeRoomId = this.nativeRoomId,
+            opponentUserId = this.mxCall.opponentUserId,
+            opponentMatrixItem = singletonEntryPoint().activeSessionHolder().getSafeActiveSession()?.let {
+                this.getOpponentAsMatrixItem(it)
+            },
+            isVideoCall = this.mxCall.isVideoCall,
+            isOutgoing = this.mxCall.isOutgoing
         )
     }
 
     data class CallInformation(
-            val callId: String,
-            val nativeRoomId: String,
-            val opponentUserId: String,
-            val opponentMatrixItem: MatrixItem?,
-            val isVideoCall: Boolean,
-            val isOutgoing: Boolean
+        val callId: String,
+        val nativeRoomId: String,
+        val opponentUserId: String,
+        val opponentMatrixItem: MatrixItem?,
+        val isVideoCall: Boolean,
+        val isOutgoing: Boolean
     )
 
     companion object {
@@ -321,49 +321,57 @@ class CallService : VectorService() {
         private const val EXTRA_END_CALL_REJECTED = "EXTRA_END_CALL_REJECTED"
         private const val EXTRA_END_CALL_REASON = "EXTRA_END_CALL_REASON"
 
-        fun onIncomingCallRinging(context: Context,
-                                  callId: String,
-                                  isInBackground: Boolean) {
+        fun onIncomingCallRinging(
+            context: Context,
+            callId: String,
+            isInBackground: Boolean
+        ) {
             val intent = Intent(context, CallService::class.java)
-                    .apply {
-                        action = ACTION_INCOMING_RINGING_CALL
-                        putExtra(EXTRA_CALL_ID, callId)
-                        putExtra(EXTRA_IS_IN_BG, isInBackground)
-                    }
+                .apply {
+                    action = ACTION_INCOMING_RINGING_CALL
+                    putExtra(EXTRA_CALL_ID, callId)
+                    putExtra(EXTRA_IS_IN_BG, isInBackground)
+                }
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun onOutgoingCallRinging(context: Context,
-                                  callId: String) {
+        fun onOutgoingCallRinging(
+            context: Context,
+            callId: String
+        ) {
             val intent = Intent(context, CallService::class.java)
-                    .apply {
-                        action = ACTION_OUTGOING_RINGING_CALL
-                        putExtra(EXTRA_CALL_ID, callId)
-                    }
+                .apply {
+                    action = ACTION_OUTGOING_RINGING_CALL
+                    putExtra(EXTRA_CALL_ID, callId)
+                }
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun onPendingCall(context: Context,
-                          callId: String) {
+        fun onPendingCall(
+            context: Context,
+            callId: String
+        ) {
             val intent = Intent(context, CallService::class.java)
-                    .apply {
-                        action = ACTION_ONGOING_CALL
-                        putExtra(EXTRA_CALL_ID, callId)
-                    }
+                .apply {
+                    action = ACTION_ONGOING_CALL
+                    putExtra(EXTRA_CALL_ID, callId)
+                }
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun onCallTerminated(context: Context,
-                             callId: String,
-                             endCallReason: EndCallReason,
-                             rejected: Boolean) {
+        fun onCallTerminated(
+            context: Context,
+            callId: String,
+            endCallReason: EndCallReason,
+            rejected: Boolean
+        ) {
             val intent = Intent(context, CallService::class.java)
-                    .apply {
-                        action = ACTION_CALL_TERMINATED
-                        putExtra(EXTRA_CALL_ID, callId)
-                        putExtra(EXTRA_END_CALL_REASON, endCallReason)
-                        putExtra(EXTRA_END_CALL_REJECTED, rejected)
-                    }
+                .apply {
+                    action = ACTION_CALL_TERMINATED
+                    putExtra(EXTRA_CALL_ID, callId)
+                    putExtra(EXTRA_END_CALL_REASON, endCallReason)
+                    putExtra(EXTRA_END_CALL_REJECTED, rejected)
+                }
             context.startService(intent)
         }
     }

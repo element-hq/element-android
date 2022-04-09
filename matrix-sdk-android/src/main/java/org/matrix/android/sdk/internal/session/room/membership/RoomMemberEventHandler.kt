@@ -30,7 +30,7 @@ import org.matrix.android.sdk.internal.session.user.UserEntityFactory
 import javax.inject.Inject
 
 internal class RoomMemberEventHandler @Inject constructor(
-        @UserId private val myUserId: String
+    @UserId private val myUserId: String
 ) {
 
     fun handle(realm: Realm, roomId: String, event: Event, aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
@@ -42,21 +42,24 @@ internal class RoomMemberEventHandler @Inject constructor(
         return handle(realm, roomId, userId, roomMember, aggregator)
     }
 
-    fun handle(realm: Realm,
-               roomId: String,
-               userId: String,
-               roomMember: RoomMemberContent?,
-               aggregator: SyncResponsePostTreatmentAggregator? = null): Boolean {
+    fun handle(
+        realm: Realm,
+        roomId: String,
+        userId: String,
+        roomMember: RoomMemberContent?,
+        aggregator: SyncResponsePostTreatmentAggregator? = null
+    ): Boolean {
         if (roomMember == null) {
             return false
         }
         val roomMemberEntity = RoomMemberEntityFactory.create(
-                roomId,
-                userId,
-                roomMember,
-                // When an update is happening, insertOrUpdate replace existing values with null if they are not provided,
-                // but we want to preserve presence record value and not replace it with null
-                getExistingPresenceState(realm, roomId, userId))
+            roomId,
+            userId,
+            roomMember,
+            // When an update is happening, insertOrUpdate replace existing values with null if they are not provided,
+            // but we want to preserve presence record value and not replace it with null
+            getExistingPresenceState(realm, roomId, userId)
+        )
         realm.insertOrUpdate(roomMemberEntity)
         if (roomMember.membership.isActive()) {
             val userEntity = UserEntityFactory.create(userId, roomMember)

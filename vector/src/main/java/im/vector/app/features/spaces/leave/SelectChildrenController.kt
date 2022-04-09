@@ -34,8 +34,8 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class SelectChildrenController @Inject constructor(
-        val avatarRenderer: AvatarRenderer,
-        val stringProvider: StringProvider
+    val avatarRenderer: AvatarRenderer,
+    val stringProvider: StringProvider
 ) : TypedEpoxyController<SpaceLeaveAdvanceViewState>() {
 
     interface Listener {
@@ -49,12 +49,12 @@ class SelectChildrenController @Inject constructor(
         val host = this
         when (children) {
             Uninitialized -> return
-            is Loading    -> {
+            is Loading -> {
                 loadingItem {
                     id("loading")
                 }
             }
-            is Success    -> {
+            is Success -> {
                 matchFilter.filter = data.currentFilter
                 val roomList = children.invoke().filter { matchFilter.test(it) }
 
@@ -77,10 +77,10 @@ class SelectChildrenController @Inject constructor(
                     }
                 }
             }
-            is Fail       -> {
-//                errorWithRetryItem {
-//                    id("failed_to_load")
-//                }
+            is Fail -> {
+                //                errorWithRetryItem {
+                //                    id("failed_to_load")
+                //                }
             }
         }
     }

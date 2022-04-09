@@ -49,16 +49,16 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
                 is ReviewTermsViewEvents.Loading -> Unit
                 is ReviewTermsViewEvents.Failure -> {
                     MaterialAlertDialogBuilder(this)
-                            .setMessage(errorFormatter.toHumanReadable(it.throwable))
-                            .setPositiveButton(R.string.ok) { _, _ ->
-                                if (it.finish) {
-                                    finish()
-                                }
+                        .setMessage(errorFormatter.toHumanReadable(it.throwable))
+                        .setPositiveButton(R.string.ok) { _, _ ->
+                            if (it.finish) {
+                                finish()
                             }
-                            .show()
+                        }
+                        .show()
                     Unit
                 }
-                ReviewTermsViewEvents.Success    -> {
+                ReviewTermsViewEvents.Success -> {
                     setResult(Activity.RESULT_OK)
                     finish()
                 }

@@ -42,8 +42,8 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
 
         views.debugShowSnackbar.setOnClickListener {
             Snackbar.make(views.coordinatorLayout, "Snackbar!", Snackbar.LENGTH_SHORT)
-                    .setAction("Action") { }
-                    .show()
+                .setAction("Action") { }
+                .show()
         }
 
         views.debugShowToast.setOnClickListener {
@@ -64,7 +64,7 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
 
         views.debugShowProgressDialog.setOnClickListener {
             MaterialProgressDialog(this)
-                    .show(message = "Progress Dialog\nLine 2", cancellable = true)
+                .show(message = "Progress Dialog\nLine 2", cancellable = true)
         }
 
         views.debugShowBottomSheet.setOnClickListener {
@@ -74,13 +74,13 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
 
     private fun showTestDialog(theme: Int) {
         MaterialAlertDialogBuilder(this, theme)
-                .setTitle("Dialog title")
-                .setMessage("Dialog content\nLine 2")
-                .setIcon(R.drawable.ic_debug_icon)
-                .setPositiveButton("Positive", null)
-                .setNegativeButton("Negative", null)
-                .setNeutralButton("Neutral", null)
-                .show()
+            .setTitle("Dialog title")
+            .setMessage("Dialog content\nLine 2")
+            .setIcon(R.drawable.ic_debug_icon)
+            .setPositiveButton("Positive", null)
+            .setNegativeButton("Negative", null)
+            .setNeutralButton("Neutral", null)
+            .show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -30,7 +30,7 @@ import im.vector.app.databinding.FragmentBootstrapReauthBinding
 import javax.inject.Inject
 
 class BootstrapReAuthFragment @Inject constructor(
-        private val colorProvider: ColorProvider
+    private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentBootstrapReauthBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapReauthBinding {

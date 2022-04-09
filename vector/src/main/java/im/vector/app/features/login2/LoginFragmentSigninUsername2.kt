@@ -85,12 +85,12 @@ class LoginFragmentSigninUsername2 @Inject constructor() : AbstractLoginFragment
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
         views.loginField.textChanges()
-                .map { it.trim().isNotEmpty() }
-                .onEach {
-                    views.loginFieldTil.error = null
-                    views.loginSubmit.isEnabled = it
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .map { it.trim().isNotEmpty() }
+            .onEach {
+                views.loginFieldTil.error = null
+                views.loginSubmit.isEnabled = it
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun resetViewModel() {
@@ -99,8 +99,9 @@ class LoginFragmentSigninUsername2 @Inject constructor() : AbstractLoginFragment
 
     override fun onError(throwable: Throwable) {
         if (throwable is Failure.ServerError &&
-                throwable.error.code == MatrixError.M_FORBIDDEN &&
-                throwable.error.message.isEmpty()) {
+            throwable.error.code == MatrixError.M_FORBIDDEN &&
+            throwable.error.message.isEmpty()
+        ) {
             // Login with email, but email unknown
             views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
         } else {

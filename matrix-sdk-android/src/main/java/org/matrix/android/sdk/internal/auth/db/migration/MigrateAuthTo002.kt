@@ -27,7 +27,7 @@ class MigrateAuthTo002(realm: DynamicRealm) : RealmMigrator(realm, 2) {
         Timber.d("Add boolean isTokenValid in SessionParamsEntity, with value true")
 
         realm.schema.get("SessionParamsEntity")
-                ?.addField(SessionParamsEntityFields.IS_TOKEN_VALID, Boolean::class.java)
-                ?.transform { it.set(SessionParamsEntityFields.IS_TOKEN_VALID, true) }
+            ?.addField(SessionParamsEntityFields.IS_TOKEN_VALID, Boolean::class.java)
+            ?.transform { it.set(SessionParamsEntityFields.IS_TOKEN_VALID, true) }
     }
 }

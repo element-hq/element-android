@@ -89,31 +89,33 @@ fun openUrlInExternalBrowser(context: Context, uri: Uri?) {
  * If several compatible browsers are installed, the user will be proposed to choose one.
  * Ref: https://developer.chrome.com/multidevice/android/customtabs
  */
-fun openUrlInChromeCustomTab(context: Context,
-                             session: CustomTabsSession?,
-                             url: String) {
+fun openUrlInChromeCustomTab(
+    context: Context,
+    session: CustomTabsSession?,
+    url: String
+) {
     try {
         CustomTabsIntent.Builder()
-                .setDefaultColorSchemeParams(
-                        CustomTabColorSchemeParams.Builder()
-                                .setToolbarColor(ThemeUtils.getColor(context, android.R.attr.colorBackground))
-                                .setNavigationBarColor(ThemeUtils.getColor(context, android.R.attr.colorBackground))
-                                .build()
-                )
-                .setColorScheme(
-                        when {
-                            ThemeUtils.isSystemTheme(context) -> CustomTabsIntent.COLOR_SCHEME_SYSTEM
-                            ThemeUtils.isLightTheme(context)  -> CustomTabsIntent.COLOR_SCHEME_LIGHT
-                            else                              -> CustomTabsIntent.COLOR_SCHEME_DARK
-                        }
-                )
-                // Note: setting close button icon does not work
-                .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_back_24dp))
-                .setStartAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
-                .setExitAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
-                .apply { session?.let { setSession(it) } }
-                .build()
-                .launchUrl(context, Uri.parse(url))
+            .setDefaultColorSchemeParams(
+                CustomTabColorSchemeParams.Builder()
+                    .setToolbarColor(ThemeUtils.getColor(context, android.R.attr.colorBackground))
+                    .setNavigationBarColor(ThemeUtils.getColor(context, android.R.attr.colorBackground))
+                    .build()
+            )
+            .setColorScheme(
+                when {
+                    ThemeUtils.isSystemTheme(context) -> CustomTabsIntent.COLOR_SCHEME_SYSTEM
+                    ThemeUtils.isLightTheme(context) -> CustomTabsIntent.COLOR_SCHEME_LIGHT
+                    else -> CustomTabsIntent.COLOR_SCHEME_DARK
+                }
+            )
+            // Note: setting close button icon does not work
+            .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_back_24dp))
+            .setStartAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
+            .setExitAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
+            .apply { session?.let { setSession(it) } }
+            .build()
+            .launchUrl(context, Uri.parse(url))
     } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(R.string.error_no_external_application_found)
     }
@@ -122,10 +124,12 @@ fun openUrlInChromeCustomTab(context: Context,
 /**
  * Open file selection activity
  */
-fun openFileSelection(activity: Activity,
-                      activityResultLauncher: ActivityResultLauncher<Intent>?,
-                      allowMultipleSelection: Boolean,
-                      requestCode: Int) {
+fun openFileSelection(
+    activity: Activity,
+    activityResultLauncher: ActivityResultLauncher<Intent>?,
+    allowMultipleSelection: Boolean,
+    requestCode: Int
+) {
     val fileIntent = Intent(Intent.ACTION_GET_CONTENT)
     fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultipleSelection)
 
@@ -147,8 +151,11 @@ fun openFileSelection(activity: Activity,
  * Send an email to address with optional subject and message
  */
 fun sendMailTo(address: String, subject: String? = null, message: String? = null, activity: Activity) {
-    val intent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-            "mailto", address, null))
+    val intent = Intent(
+        Intent.ACTION_SENDTO, Uri.fromParts(
+            "mailto", address, null
+        )
+    )
     intent.putExtra(Intent.EXTRA_SUBJECT, subject)
     intent.putExtra(Intent.EXTRA_TEXT, message)
 
@@ -212,20 +219,20 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     }
 
     val chooserIntent = ShareCompat.IntentBuilder(context)
-            .setType(mediaMimeType)
-            .setStream(mediaUri)
-            .setChooserTitle(R.string.action_share)
-            .createChooserIntent()
+        .setType(mediaMimeType)
+        .setStream(mediaUri)
+        .setChooserTitle(R.string.action_share)
+        .createChooserIntent()
 
     context.safeStartActivity(chooserIntent)
 }
 
 fun shareText(context: Context, text: String) {
     val chooserIntent = ShareCompat.IntentBuilder(context)
-            .setType("text/plain")
-            .setText(text)
-            .setChooserTitle(R.string.action_share)
-            .createChooserIntent()
+        .setType("text/plain")
+        .setText(text)
+        .setChooserTitle(R.string.action_share)
+        .createChooserIntent()
 
     context.safeStartActivity(chooserIntent)
 }
@@ -264,7 +271,7 @@ suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType
                 mediaMimeType?.isMimeTypeImage() == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 mediaMimeType?.isMimeTypeVideo() == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
                 mediaMimeType?.isMimeTypeAudio() == true -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                else                                     -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                else -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
             }
 
             val uri = context.contentResolver.insert(externalContentUri, values)
@@ -281,9 +288,9 @@ suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType
                     }
                 }
                 notificationUtils.buildDownloadFileNotification(
-                        uri,
-                        filename,
-                        mediaMimeType ?: MimeTypes.OctetStream
+                    uri,
+                    filename,
+                    mediaMimeType ?: MimeTypes.OctetStream
                 ).let { notification ->
                     notificationUtils.showNotificationMessage("DL", uri.hashCode(), notification)
                 }
@@ -295,10 +302,12 @@ suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType
 }
 
 @Suppress("DEPRECATION")
-private fun saveMediaLegacy(context: Context,
-                            mediaMimeType: String?,
-                            title: String,
-                            file: File) {
+private fun saveMediaLegacy(
+    context: Context,
+    mediaMimeType: String?,
+    title: String,
+    file: File
+) {
     val state = Environment.getExternalStorageState()
     if (Environment.MEDIA_MOUNTED != state) {
         context.toast(context.getString(R.string.error_saving_media_file))
@@ -309,7 +318,7 @@ private fun saveMediaLegacy(context: Context,
         mediaMimeType?.isMimeTypeImage() == true -> Environment.DIRECTORY_PICTURES
         mediaMimeType?.isMimeTypeVideo() == true -> Environment.DIRECTORY_MOVIES
         mediaMimeType?.isMimeTypeAudio() == true -> Environment.DIRECTORY_MUSIC
-        else                                     -> Environment.DIRECTORY_DOWNLOADS
+        else -> Environment.DIRECTORY_DOWNLOADS
     }
     val downloadDir = Environment.getExternalStoragePublicDirectory(dest)
     try {
@@ -323,13 +332,14 @@ private fun saveMediaLegacy(context: Context,
         if (savedFile != null) {
             val downloadManager = context.getSystemService<DownloadManager>()
             downloadManager?.addCompletedDownload(
-                    savedFile.name,
-                    title,
-                    true,
-                    mediaMimeType ?: MimeTypes.OctetStream,
-                    savedFile.absolutePath,
-                    savedFile.length(),
-                    true)
+                savedFile.name,
+                title,
+                true,
+                mediaMimeType ?: MimeTypes.OctetStream,
+                savedFile.absolutePath,
+                savedFile.length(),
+                true
+            )
             addToGallery(savedFile, mediaMimeType, context)
         }
     } catch (error: Throwable) {
@@ -366,11 +376,11 @@ fun openPlayStore(activity: Activity, appId: String = BuildConfig.APPLICATION_ID
 
 fun openAppSettingsPage(activity: Activity) {
     activity.safeStartActivity(
-            Intent().apply {
-                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                data = Uri.fromParts("package", activity.packageName, null)
-            }
+        Intent().apply {
+            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            data = Uri.fromParts("package", activity.packageName, null)
+        }
     )
 }
 
@@ -378,10 +388,10 @@ fun openAppSettingsPage(activity: Activity) {
  * Ask the user to select a location and a file name to write in
  */
 fun selectTxtFileToWrite(
-        activity: Activity,
-        activityResultLauncher: ActivityResultLauncher<Intent>,
-        defaultFileName: String,
-        chooserHint: String
+    activity: Activity,
+    activityResultLauncher: ActivityResultLauncher<Intent>,
+    defaultFileName: String,
+    chooserHint: String
 ) {
     val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
     intent.addCategory(Intent.CATEGORY_OPENABLE)

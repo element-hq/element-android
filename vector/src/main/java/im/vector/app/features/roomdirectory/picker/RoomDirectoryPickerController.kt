@@ -46,10 +46,10 @@ import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
 class RoomDirectoryPickerController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider,
-        private val dimensionConverter: DimensionConverter,
-        private val errorFormatter: ErrorFormatter
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider,
+    private val dimensionConverter: DimensionConverter,
+    private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<RoomDirectoryPickerViewState>() {
 
     var currentRoomDirectoryData: RoomDirectoryData? = null
@@ -61,8 +61,8 @@ class RoomDirectoryPickerController @Inject constructor(
         when (val asyncThirdPartyProtocol = data.asyncThirdPartyRequest) {
             is Success -> {
                 data.directories.join(
-                        each = { _, roomDirectoryServer -> buildDirectory(roomDirectoryServer) },
-                        between = { idx, _ -> buildDivider(idx) }
+                    each = { _, roomDirectoryServer -> buildDirectory(roomDirectoryServer) },
+                    between = { idx, _ -> buildDivider(idx) }
                 )
                 buildForm(data)
                 verticalMarginItem {
@@ -76,7 +76,7 @@ class RoomDirectoryPickerController @Inject constructor(
                     id("loading")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("error")
                     text(host.errorFormatter.toHumanReadable(asyncThirdPartyProtocol.error))
@@ -125,9 +125,9 @@ class RoomDirectoryPickerController @Inject constructor(
                 }
                 when (data.addServerAsync) {
                     Uninitialized -> enabled(true)
-                    is Loading    -> enabled(false)
-                    is Success    -> enabled(false)
-                    is Fail       -> {
+                    is Loading -> enabled(false)
+                    is Success -> enabled(false)
+                    is Fail -> {
                         enabled(true)
                         errorMessage(host.getErrorMessage(data.addServerAsync.error))
                     }
@@ -135,7 +135,7 @@ class RoomDirectoryPickerController @Inject constructor(
             }
             when (data.addServerAsync) {
                 Uninitialized,
-                is Fail    -> settingsContinueCancelItem {
+                is Fail -> settingsContinueCancelItem {
                     id("continueCancel")
                     continueText(host.stringProvider.getString(R.string.ok))
                     canContinue(data.enteredServer.isNotEmpty())
@@ -161,7 +161,7 @@ class RoomDirectoryPickerController @Inject constructor(
 
     private fun getErrorMessage(error: Throwable): String {
         return if (error is Failure.ServerError &&
-                error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
+            error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
             stringProvider.getString(R.string.directory_add_a_new_server_error)
         } else {
             errorFormatter.toHumanReadable(error)
@@ -191,15 +191,15 @@ class RoomDirectoryPickerController @Inject constructor(
             roomDirectoryItem {
                 id("server_${roomDirectoryServer}_proto_$roomDirectoryData")
                 directoryName(
-                        if (roomDirectoryData.includeAllNetworks) {
-                            host.stringProvider.getString(R.string.directory_server_all_rooms_on_server, roomDirectoryServer.serverName)
-                        } else {
-                            roomDirectoryData.displayName
-                        }
+                    if (roomDirectoryData.includeAllNetworks) {
+                        host.stringProvider.getString(R.string.directory_server_all_rooms_on_server, roomDirectoryServer.serverName)
+                    } else {
+                        roomDirectoryData.displayName
+                    }
                 )
                 if (roomDirectoryData.displayName == RoomDirectoryData.MATRIX_PROTOCOL_NAME && !roomDirectoryData.includeAllNetworks) {
                     directoryDescription(
-                            host.stringProvider.getString(R.string.directory_server_native_rooms, roomDirectoryServer.serverName)
+                        host.stringProvider.getString(R.string.directory_server_native_rooms, roomDirectoryServer.serverName)
                     )
                 }
                 directoryAvatarUrl(roomDirectoryData.avatarUrl)

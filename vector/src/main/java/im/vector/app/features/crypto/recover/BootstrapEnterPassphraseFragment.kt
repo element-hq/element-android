@@ -55,28 +55,28 @@ class BootstrapEnterPassphraseFragment @Inject constructor() :
             views.ssssPassphraseEnterEdittext.setText(it.passphrase ?: "")
         }
         views.ssssPassphraseEnterEdittext.editorActionEvents()
-                .throttleFirst(300)
-                .onEach {
-                    if (it.actionId == EditorInfo.IME_ACTION_DONE) {
-                        submit()
-                    }
+            .throttleFirst(300)
+            .onEach {
+                if (it.actionId == EditorInfo.IME_ACTION_DONE) {
+                    submit()
                 }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseEnterEdittext.textChanges()
-                .onEach {
-                    // ssss_passphrase_enter_til.error = null
-                    sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it.toString()))
-//                    ssss_passphrase_submit.isEnabled = it.isNotBlank()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                // ssss_passphrase_enter_til.error = null
+                sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it.toString()))
+                //                    ssss_passphrase_submit.isEnabled = it.isNotBlank()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         sharedViewModel.observeViewEvents {
             //            when (it) {
-//                is SharedSecureStorageViewEvent.InlineError -> {
-//                    ssss_passphrase_enter_til.error = it.message
-//                }
-//            }
+            //                is SharedSecureStorageViewEvent.InlineError -> {
+            //                    ssss_passphrase_enter_til.error = it.message
+            //                }
+            //            }
         }
 
         views.bootstrapSubmit.debouncedClicks { submit() }
@@ -104,8 +104,8 @@ class BootstrapEnterPassphraseFragment @Inject constructor() :
                 views.ssssPassphraseSecurityProgress.strength = score
                 if (score in 1..3) {
                     val hint =
-                            strength.feedback?.getWarning(VectorLocale.applicationLocale)?.takeIf { it.isNotBlank() }
-                                    ?: strength.feedback?.getSuggestions(VectorLocale.applicationLocale)?.firstOrNull()
+                        strength.feedback?.getWarning(VectorLocale.applicationLocale)?.takeIf { it.isNotBlank() }
+                            ?: strength.feedback?.getSuggestions(VectorLocale.applicationLocale)?.firstOrNull()
                     if (hint != null && hint != views.ssssPassphraseEnterTil.error.toString()) {
                         views.ssssPassphraseEnterTil.error = hint
                     }

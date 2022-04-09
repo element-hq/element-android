@@ -34,8 +34,8 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class MessageActionsBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
-        MessageActionsEpoxyController.MessageActionsEpoxyControllerListener {
+    VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
+    MessageActionsEpoxyController.MessageActionsEpoxyControllerListener {
 
     @Inject lateinit var messageActionsEpoxyController: MessageActionsEpoxyController
 
@@ -96,12 +96,12 @@ class MessageActionsBottomSheet :
         fun newInstance(roomId: String, informationData: MessageInformationData, isFromThreadTimeline: Boolean): MessageActionsBottomSheet {
             return MessageActionsBottomSheet().apply {
                 setArguments(
-                        TimelineEventFragmentArgs(
-                                informationData.eventId,
-                                roomId,
-                                informationData,
-                                isFromThreadTimeline
-                        )
+                    TimelineEventFragmentArgs(
+                        informationData.eventId,
+                        roomId,
+                        informationData,
+                        isFromThreadTimeline
+                    )
                 )
             }
         }

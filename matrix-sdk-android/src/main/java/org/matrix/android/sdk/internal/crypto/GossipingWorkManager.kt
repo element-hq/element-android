@@ -31,16 +31,16 @@ import javax.inject.Inject
 
 @SessionScope
 internal class GossipingWorkManager @Inject constructor(
-        private val workManagerProvider: WorkManagerProvider
+    private val workManagerProvider: WorkManagerProvider
 ) {
 
     inline fun <reified W : ListenableWorker> createWork(data: Data, startChain: Boolean): OneTimeWorkRequest {
         return workManagerProvider.matrixOneTimeWorkRequestBuilder<W>()
-                .setConstraints(WorkManagerProvider.workConstraints)
-                .startChain(startChain)
-                .setInputData(data)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                .build()
+            .setConstraints(WorkManagerProvider.workConstraints)
+            .startChain(startChain)
+            .setInputData(data)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+            .build()
     }
 
     // Prevent sending queue to stay broken after app restart
@@ -49,8 +49,8 @@ internal class GossipingWorkManager @Inject constructor(
 
     fun postWork(workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND): Cancelable {
         workManagerProvider.workManager
-                .beginUniqueWork(this::class.java.name + "_$queueSuffixApp", policy, workRequest)
-                .enqueue()
+            .beginUniqueWork(this::class.java.name + "_$queueSuffixApp", policy, workRequest)
+            .enqueue()
 
         return CancelableWork(workManagerProvider.workManager, workRequest.id)
     }

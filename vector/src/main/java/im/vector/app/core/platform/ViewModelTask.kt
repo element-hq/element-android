@@ -22,9 +22,9 @@ import kotlinx.coroutines.launch
 
 interface ViewModelTask<Params, Result> {
     operator fun invoke(
-            scope: CoroutineScope,
-            params: Params,
-            onResult: (Result) -> Unit = {}
+        scope: CoroutineScope,
+        params: Params,
+        onResult: (Result) -> Unit = {}
     ) {
         val backgroundJob = scope.async { execute(params) }
         scope.launch { onResult(backgroundJob.await()) }

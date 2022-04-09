@@ -25,37 +25,39 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 class AttachmentProviderFactory @Inject constructor(
-        private val imageContentRenderer: ImageContentRenderer,
-        private val vectorDateFormatter: VectorDateFormatter,
-        private val stringProvider: StringProvider,
-        private val session: Session
+    private val imageContentRenderer: ImageContentRenderer,
+    private val vectorDateFormatter: VectorDateFormatter,
+    private val stringProvider: StringProvider,
+    private val session: Session
 ) {
 
-    fun createProvider(attachments: List<TimelineEvent>,
-                       coroutineScope: CoroutineScope
+    fun createProvider(
+        attachments: List<TimelineEvent>,
+        coroutineScope: CoroutineScope
     ): RoomEventsAttachmentProvider {
         return RoomEventsAttachmentProvider(
-                attachments = attachments,
-                imageContentRenderer = imageContentRenderer,
-                dateFormatter = vectorDateFormatter,
-                fileService = session.fileService(),
-                coroutineScope = coroutineScope,
-                stringProvider = stringProvider
+            attachments = attachments,
+            imageContentRenderer = imageContentRenderer,
+            dateFormatter = vectorDateFormatter,
+            fileService = session.fileService(),
+            coroutineScope = coroutineScope,
+            stringProvider = stringProvider
         )
     }
 
-    fun createProvider(attachments: List<AttachmentData>,
-                       room: Room?,
-                       coroutineScope: CoroutineScope
+    fun createProvider(
+        attachments: List<AttachmentData>,
+        room: Room?,
+        coroutineScope: CoroutineScope
     ): DataAttachmentRoomProvider {
         return DataAttachmentRoomProvider(
-                attachments = attachments,
-                room = room,
-                imageContentRenderer = imageContentRenderer,
-                dateFormatter = vectorDateFormatter,
-                fileService = session.fileService(),
-                coroutineScope = coroutineScope,
-                stringProvider = stringProvider
+            attachments = attachments,
+            room = room,
+            imageContentRenderer = imageContentRenderer,
+            dateFormatter = vectorDateFormatter,
+            fileService = session.fileService(),
+            coroutineScope = coroutineScope,
+            stringProvider = stringProvider
         )
     }
 }

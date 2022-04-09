@@ -28,14 +28,14 @@ import org.matrix.android.sdk.internal.extensions.andThen
 import javax.inject.Inject
 
 class DirectLoginUseCase @Inject constructor(
-        private val authenticationService: AuthenticationService,
-        private val stringProvider: StringProvider,
-        private val uriFactory: UriFactory
+    private val authenticationService: AuthenticationService,
+    private val stringProvider: StringProvider,
+    private val uriFactory: UriFactory
 ) {
 
     suspend fun execute(action: LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?): Result<Session> {
         return fetchWellKnown(action.username, homeServerConnectionConfig)
-                .andThen { wellKnown -> createSessionFor(wellKnown, action, homeServerConnectionConfig) }
+            .andThen { wellKnown -> createSessionFor(wellKnown, action, homeServerConnectionConfig) }
     }
 
     private suspend fun fetchWellKnown(matrixId: String, config: HomeServerConnectionConfig?) = runCatching {
@@ -43,9 +43,9 @@ class DirectLoginUseCase @Inject constructor(
     }
 
     private suspend fun createSessionFor(data: WellknownResult, action: LoginOrRegister, config: HomeServerConnectionConfig?) = when (data) {
-        is WellknownResult.Prompt     -> loginDirect(action, data, config)
+        is WellknownResult.Prompt -> loginDirect(action, data, config)
         is WellknownResult.FailPrompt -> handleFailPrompt(data, action, config)
-        else                          -> onWellKnownError()
+        else -> onWellKnownError()
     }
 
     private suspend fun handleFailPrompt(data: WellknownResult.FailPrompt, action: LoginOrRegister, config: HomeServerConnectionConfig?): Result<Session> {
@@ -53,7 +53,7 @@ class DirectLoginUseCase @Inject constructor(
         val isMissingInformationToLogin = data.homeServerUrl == null || data.wellKnown == null
         return when {
             isMissingInformationToLogin -> onWellKnownError()
-            else                        -> loginDirect(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), config)
+            else -> loginDirect(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), config)
         }
     }
 
@@ -61,23 +61,23 @@ class DirectLoginUseCase @Inject constructor(
         val alteredHomeServerConnectionConfig = config?.updateWith(wellKnownPrompt) ?: fallbackConfig(action, wellKnownPrompt)
         return runCatching {
             authenticationService.directAuthentication(
-                    alteredHomeServerConnectionConfig,
-                    action.username,
-                    action.password,
-                    action.initialDeviceName
+                alteredHomeServerConnectionConfig,
+                action.username,
+                action.password,
+                action.initialDeviceName
             )
         }
     }
 
     private fun HomeServerConnectionConfig.updateWith(wellKnownPrompt: WellknownResult.Prompt) = copy(
-            homeServerUriBase = uriFactory.parse(wellKnownPrompt.homeServerUrl),
-            identityServerUri = wellKnownPrompt.identityServerUrl?.let { uriFactory.parse(it) }
+        homeServerUriBase = uriFactory.parse(wellKnownPrompt.homeServerUrl),
+        identityServerUri = wellKnownPrompt.identityServerUrl?.let { uriFactory.parse(it) }
     )
 
     private fun fallbackConfig(action: LoginOrRegister, wellKnownPrompt: WellknownResult.Prompt) = HomeServerConnectionConfig(
-            homeServerUri = uriFactory.parse("https://${action.username.getDomain()}"),
-            homeServerUriBase = uriFactory.parse(wellKnownPrompt.homeServerUrl),
-            identityServerUri = wellKnownPrompt.identityServerUrl?.let { uriFactory.parse(it) }
+        homeServerUri = uriFactory.parse("https://${action.username.getDomain()}"),
+        homeServerUriBase = uriFactory.parse(wellKnownPrompt.homeServerUrl),
+        identityServerUri = wellKnownPrompt.identityServerUrl?.let { uriFactory.parse(it) }
     )
 
     private fun onWellKnownError() = Result.failure<Session>(Exception(stringProvider.getString(R.string.autodiscover_well_known_error)))

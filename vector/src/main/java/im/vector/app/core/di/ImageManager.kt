@@ -31,8 +31,8 @@ import javax.inject.Inject
  * This class is used to configure the library we use for images
  */
 class ImageManager @Inject constructor(
-        private val context: Context,
-        private val activeSessionDataSource: ActiveSessionDataSource
+    private val context: Context,
+    private val activeSessionDataSource: ActiveSessionDataSource
 ) {
 
     fun onSessionStarted(session: Session) {

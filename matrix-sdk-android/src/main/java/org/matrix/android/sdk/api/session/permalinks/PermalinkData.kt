@@ -27,16 +27,16 @@ import kotlinx.parcelize.Parcelize
 sealed class PermalinkData {
 
     data class RoomLink(
-            val roomIdOrAlias: String,
-            val isRoomAlias: Boolean,
-            val eventId: String?,
-            val viaParameters: List<String>
+        val roomIdOrAlias: String,
+        val isRoomAlias: Boolean,
+        val eventId: String?,
+        val viaParameters: List<String>
     ) : PermalinkData()
 
     /**
      * &room_name=Team2
-        &room_avatar_url=mxc:
-         &inviter_name=bob
+    &room_avatar_url=mxc:
+    &inviter_name=bob
      */
     @Parcelize
     data class RoomEmailInviteLink(

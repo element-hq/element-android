@@ -23,21 +23,21 @@ import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 
 internal open class ContentScanResultEntity(
-        @Index
-        var mediaUrl: String? = null,
-        var scanStatusString: String? = null,
-        var humanReadableMessage: String? = null,
-        var scanDateTimestamp: Long? = null,
-        var scannerUrl: String? = null
+    @Index
+    var mediaUrl: String? = null,
+    var scanStatusString: String? = null,
+    var humanReadableMessage: String? = null,
+    var scanDateTimestamp: Long? = null,
+    var scannerUrl: String? = null
 ) : RealmObject() {
 
     var scanResult: ScanState
         get() {
             return scanStatusString
-                    ?.let {
-                        tryOrNull { ScanState.valueOf(it) }
-                    }
-                    ?: ScanState.UNKNOWN
+                ?.let {
+                    tryOrNull { ScanState.valueOf(it) }
+                }
+                ?: ScanState.UNKNOWN
         }
         set(result) {
             scanStatusString = result.name
@@ -45,9 +45,9 @@ internal open class ContentScanResultEntity(
 
     fun toModel(): ScanStatusInfo {
         return ScanStatusInfo(
-                state = this.scanResult,
-                humanReadableMessage = humanReadableMessage,
-                scanDateTimestamp = scanDateTimestamp
+            state = this.scanResult,
+            humanReadableMessage = humanReadableMessage,
+            scanDateTimestamp = scanDateTimestamp
         )
     }
 

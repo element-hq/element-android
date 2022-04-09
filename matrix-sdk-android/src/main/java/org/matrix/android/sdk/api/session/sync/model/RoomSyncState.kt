@@ -24,8 +24,8 @@ import org.matrix.android.sdk.api.session.events.model.Event
 @JsonClass(generateAdapter = true)
 data class RoomSyncState(
 
-        /**
-         * List of state events (array of Event). The resulting state corresponds to the *start* of the timeline.
-         */
-        @Json(name = "events") val events: List<Event>? = null
+    /**
+     * List of state events (array of Event). The resulting state corresponds to the *start* of the timeline.
+     */
+    @Json(name = "events") val events: List<Event>? = null
 )

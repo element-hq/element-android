@@ -28,8 +28,8 @@ import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class VerificationQRWaitingController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider
 ) : EpoxyController() {
 
     private var args: VerificationQRWaitingFragment.Args? = null

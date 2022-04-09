@@ -29,9 +29,9 @@ internal object WorkerParamsFactory {
         // and we lost typing information doing so.
         // We don't want this check to be done on all adapters, so we just add it here.
         MoshiProvider.providesMoshi()
-                .newBuilder()
-                .add(CheckNumberType.JSON_ADAPTER_FACTORY)
-                .build()
+            .newBuilder()
+            .add(CheckNumberType.JSON_ADAPTER_FACTORY)
+            .build()
     }
 
     private const val KEY = "WORKER_PARAMS_JSON"

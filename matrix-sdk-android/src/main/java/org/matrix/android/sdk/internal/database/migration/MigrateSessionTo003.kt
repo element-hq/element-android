@@ -24,7 +24,7 @@ class MigrateSessionTo003(realm: DynamicRealm) : RealmMigrator(realm, 3) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField("preferredJitsiDomain", String::class.java)
-                ?.forceRefreshOfHomeServerCapabilities()
+            ?.addField("preferredJitsiDomain", String::class.java)
+            ?.forceRefreshOfHomeServerCapabilities()
     }
 }

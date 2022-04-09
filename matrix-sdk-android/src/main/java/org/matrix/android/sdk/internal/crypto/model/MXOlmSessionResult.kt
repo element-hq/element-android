@@ -19,12 +19,13 @@ package org.matrix.android.sdk.internal.crypto.model
 import java.io.Serializable
 
 data class MXOlmSessionResult(
-        /**
-         * the device
-         */
-        val deviceInfo: CryptoDeviceInfo,
-        /**
-         * Base64 olm session id.
-         * null if no session could be established.
-         */
-        var sessionId: String?) : Serializable
+    /**
+     * the device
+     */
+    val deviceInfo: CryptoDeviceInfo,
+    /**
+     * Base64 olm session id.
+     * null if no session could be established.
+     */
+    var sessionId: String?
+) : Serializable

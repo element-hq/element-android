@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * Use this container to read a value only once
  */
 class ReadOnce<T>(
-        private val value: T
+    private val value: T
 ) {
     private val valueHasBeenRead = AtomicBoolean(false)
 

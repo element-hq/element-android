@@ -41,9 +41,11 @@ private val loggerTag = LoggerTag("CallSignalingHandler", LoggerTag.VOIP)
 private const val MAX_AGE_TO_RING = 40_000
 
 @SessionScope
-internal class CallSignalingHandler @Inject constructor(private val activeCallHandler: ActiveCallHandler,
-                                                        private val mxCallFactory: MxCallFactory,
-                                                        @UserId private val userId: String) {
+internal class CallSignalingHandler @Inject constructor(
+    private val activeCallHandler: ActiveCallHandler,
+    private val mxCallFactory: MxCallFactory,
+    @UserId private val userId: String
+) {
 
     private val invitedCallIds = mutableSetOf<String>()
     private val callListeners = mutableSetOf<CallListener>()
@@ -59,25 +61,25 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
 
     fun onCallEvent(event: Event) {
         when (event.getClearType()) {
-            EventType.CALL_ANSWER                   -> {
+            EventType.CALL_ANSWER -> {
                 handleCallAnswerEvent(event)
             }
-            EventType.CALL_INVITE                   -> {
+            EventType.CALL_INVITE -> {
                 handleCallInviteEvent(event)
             }
-            EventType.CALL_HANGUP                   -> {
+            EventType.CALL_HANGUP -> {
                 handleCallHangupEvent(event)
             }
-            EventType.CALL_REJECT                   -> {
+            EventType.CALL_REJECT -> {
                 handleCallRejectEvent(event)
             }
-            EventType.CALL_CANDIDATES               -> {
+            EventType.CALL_CANDIDATES -> {
                 handleCallCandidatesEvent(event)
             }
-            EventType.CALL_SELECT_ANSWER            -> {
+            EventType.CALL_SELECT_ANSWER -> {
                 handleCallSelectAnswerEvent(event)
             }
-            EventType.CALL_NEGOTIATE                -> {
+            EventType.CALL_NEGOTIATE -> {
                 handleCallNegotiateEvent(event)
             }
             EventType.CALL_ASSERTED_IDENTITY,
@@ -199,9 +201,9 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
             return
         }
         val incomingCall = mxCallFactory.createIncomingCall(
-                roomId = event.roomId,
-                opponentUserId = event.senderId,
-                content = content
+            roomId = event.roomId,
+            opponentUserId = event.senderId,
+            content = content
         ) ?: return
         invitedCallIds.add(content.callId)
         activeCallHandler.addCall(incomingCall)
@@ -225,7 +227,7 @@ internal class CallSignalingHandler @Inject constructor(private val activeCallHa
         } else {
             if (call.opponentPartyId != null) {
                 Timber.tag(loggerTag.value)
-                        .v("Ignoring answer from party ID ${content.partyId} we already have an answer from ${call.opponentPartyId}")
+                    .v("Ignoring answer from party ID ${content.partyId} we already have an answer from ${call.opponentPartyId}")
                 return
             }
             mxCallFactory.updateOutgoingCallWithOpponentData(call, event.senderId, content, content.capabilities)

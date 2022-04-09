@@ -29,9 +29,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class TypingMessageView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     val views: TypingMessageLayoutBinding
 

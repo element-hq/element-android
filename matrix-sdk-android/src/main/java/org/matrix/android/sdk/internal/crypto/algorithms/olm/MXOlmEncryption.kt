@@ -27,12 +27,13 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 
 internal class MXOlmEncryption(
-        private val roomId: String,
-        private val olmDevice: MXOlmDevice,
-        private val cryptoStore: IMXCryptoStore,
-        private val messageEncrypter: MessageEncrypter,
-        private val deviceListManager: DeviceListManager,
-        private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction) :
+    private val roomId: String,
+    private val olmDevice: MXOlmDevice,
+    private val cryptoStore: IMXCryptoStore,
+    private val messageEncrypter: MessageEncrypter,
+    private val deviceListManager: DeviceListManager,
+    private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction
+) :
     IMXEncrypting {
 
     override suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content {
@@ -58,9 +59,9 @@ internal class MXOlmEncryption(
         }
 
         val messageMap = mapOf(
-                "room_id" to roomId,
-                "type" to eventType,
-                "content" to eventContent
+            "room_id" to roomId,
+            "type" to eventType,
+            "content" to eventContent
         )
 
         messageEncrypter.encryptMessage(messageMap, deviceInfos)

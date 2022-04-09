@@ -21,5 +21,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class IntegrationProvisioningContent(
-        @Json(name = "enabled") val enabled: Boolean
+    @Json(name = "enabled") val enabled: Boolean
 )

@@ -23,11 +23,11 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class KeyChangesResponse(
-        // list of user ids which have new devices
-        @Json(name = "changed")
-        val changed: List<String>? = null,
+    // list of user ids which have new devices
+    @Json(name = "changed")
+    val changed: List<String>? = null,
 
-        //  List of user ids who are no more tracked.
-        @Json(name = "left")
-        val left: List<String>? = null
+    //  List of user ids who are no more tracked.
+    @Json(name = "left")
+    val left: List<String>? = null
 )

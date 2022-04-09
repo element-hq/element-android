@@ -36,13 +36,15 @@ import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
 
 data class KeyRequestListViewState(
-        val incomingRequests: Async<PagedList<IncomingRoomKeyRequest>> = Uninitialized,
-        val outgoingRoomKeyRequests: Async<PagedList<OutgoingRoomKeyRequest>> = Uninitialized
+    val incomingRequests: Async<PagedList<IncomingRoomKeyRequest>> = Uninitialized,
+    val outgoingRoomKeyRequests: Async<PagedList<OutgoingRoomKeyRequest>> = Uninitialized
 ) : MavericksState
 
-class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState: KeyRequestListViewState,
-                                                          private val session: Session) :
-        VectorViewModel<KeyRequestListViewState, EmptyAction, EmptyViewEvents>(initialState) {
+class KeyRequestListViewModel @AssistedInject constructor(
+    @Assisted initialState: KeyRequestListViewState,
+    private val session: Session
+) :
+    VectorViewModel<KeyRequestListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
         refresh()
@@ -51,15 +53,15 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
     fun refresh() {
         viewModelScope.launch {
             session.cryptoService().getOutgoingRoomKeyRequestsPaged().asFlow()
-                    .execute {
-                        copy(outgoingRoomKeyRequests = it)
-                    }
+                .execute {
+                    copy(outgoingRoomKeyRequests = it)
+                }
 
             session.cryptoService().getIncomingRoomKeyRequestsPaged()
-                    .asFlow()
-                    .execute {
-                        copy(incomingRequests = it)
-                    }
+                .asFlow()
+                .execute {
+                    copy(incomingRequests = it)
+                }
         }
     }
 

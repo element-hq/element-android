@@ -101,17 +101,17 @@ private const val INVITE_TIMEOUT_IN_MS = 60_000L
 private val loggerTag = LoggerTag("WebRtcCall", LoggerTag.VOIP)
 
 class WebRtcCall(
-        val mxCall: MxCall,
-        // This is where the call is placed from an ui perspective.
-        // In case of virtual room, it can differs from the signalingRoomId.
-        val nativeRoomId: String,
-        private val rootEglBase: EglBase?,
-        private val context: Context,
-        private val dispatcher: CoroutineContext,
-        private val sessionProvider: Provider<Session?>,
-        private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
-        private val onCallBecomeActive: (WebRtcCall) -> Unit,
-        private val onCallEnded: (String, EndCallReason, Boolean) -> Unit
+    val mxCall: MxCall,
+    // This is where the call is placed from an ui perspective.
+    // In case of virtual room, it can differs from the signalingRoomId.
+    val nativeRoomId: String,
+    private val rootEglBase: EglBase?,
+    private val context: Context,
+    private val dispatcher: CoroutineContext,
+    private val sessionProvider: Provider<Session?>,
+    private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
+    private val onCallBecomeActive: (WebRtcCall) -> Unit,
+    private val onCallEnded: (String, EndCallReason, Boolean) -> Unit
 ) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
@@ -214,15 +214,15 @@ class WebRtcCall(
     private fun setupLocalIceCanditate() {
         sessionScope?.let {
             localIceCandidateJob = localIceCandidateSource.stream()
-                    .chunk(300)
-                    .onEach {
-                        // omit empty :/
-                        if (it.isNotEmpty()) {
-                            Timber.tag(loggerTag.value).v("Sending local ice candidates to call")
-                            // it.forEach { peerConnection?.addIceCandidate(it) }
-                            mxCall.sendLocalCallCandidates(it.mapToCallCandidate())
-                        }
-                    }.launchIn(it)
+                .chunk(300)
+                .onEach {
+                    // omit empty :/
+                    if (it.isNotEmpty()) {
+                        Timber.tag(loggerTag.value).v("Sending local ice candidates to call")
+                        // it.forEach { peerConnection?.addIceCandidate(it) }
+                        mxCall.sendLocalCallCandidates(it.mapToCallCandidate())
+                    }
+                }.launchIn(it)
         }
     }
 
@@ -276,7 +276,7 @@ class WebRtcCall(
 
     fun formattedDuration(): String {
         return formatDuration(
-                Duration.ofMillis(timer.elapsedTime())
+            Duration.ofMillis(timer.elapsedTime())
         )
     }
 
@@ -286,12 +286,12 @@ class WebRtcCall(
             turnServerResponse?.let { server ->
                 server.uris?.forEach { uri ->
                     add(
-                            PeerConnection
-                                    .IceServer
-                                    .builder(uri)
-                                    .setUsername(server.username)
-                                    .setPassword(server.password)
-                                    .createIceServer()
+                        PeerConnection
+                            .IceServer
+                            .builder(uri)
+                            .setUsername(server.username)
+                            .setPassword(server.password)
+                            .createIceServer()
                     )
                 }
             }
@@ -309,10 +309,10 @@ class WebRtcCall(
     fun transferToUser(targetUserId: String, targetRoomId: String?) {
         sessionScope?.launch(dispatcher) {
             mxCall.transfer(
-                    targetUserId = targetUserId,
-                    targetRoomId = targetRoomId,
-                    createCallId = CallIdGenerator.generate(),
-                    awaitCallId = null
+                targetUserId = targetUserId,
+                targetRoomId = targetRoomId,
+                createCallId = CallIdGenerator.generate(),
+                awaitCallId = null
             )
             terminate(EndCallReason.REPLACED)
         }
@@ -325,16 +325,16 @@ class WebRtcCall(
         sessionScope?.launch(dispatcher) {
             val newCallId = CallIdGenerator.generate()
             transferTargetCall.mxCall.transfer(
-                    targetUserId = mxCall.opponentUserId,
-                    targetRoomId = null,
-                    createCallId = null,
-                    awaitCallId = newCallId
+                targetUserId = mxCall.opponentUserId,
+                targetRoomId = null,
+                createCallId = null,
+                awaitCallId = newCallId
             )
             mxCall.transfer(
-                    targetUserId = transferTargetCall.mxCall.opponentUserId,
-                    targetRoomId = null,
-                    createCallId = newCallId,
-                    awaitCallId = null
+                targetUserId = transferTargetCall.mxCall.opponentUserId,
+                targetRoomId = null,
+                createCallId = newCallId,
+                awaitCallId = null
             )
             terminate(EndCallReason.REPLACED)
             transferTargetCall.terminate(EndCallReason.REPLACED)
@@ -375,7 +375,7 @@ class WebRtcCall(
             localSurfaceRenderers.addIfNeeded(localViewRenderer)
             remoteSurfaceRenderers.addIfNeeded(remoteViewRenderer)
             when (mode) {
-                VectorCallActivity.INCOMING_ACCEPT  -> {
+                VectorCallActivity.INCOMING_ACCEPT -> {
                     internalAcceptIncomingCall()
                 }
                 VectorCallActivity.INCOMING_RINGING -> {
@@ -385,7 +385,7 @@ class WebRtcCall(
                 VectorCallActivity.OUTGOING_CREATED -> {
                     setupOutgoingCall()
                 }
-                else                                -> {
+                else -> {
                     // sink existing tracks (configuration change, e.g screen rotation)
                     attachViewRenderersInternal()
                 }
@@ -453,14 +453,14 @@ class WebRtcCall(
         attachViewRenderersInternal()
         Timber.tag(loggerTag.value).v("remoteCandidateSource $remoteCandidateSource")
         remoteIceCandidateJob = remoteCandidateSource
-                .onEach {
-                    Timber.tag(loggerTag.value).v("adding remote ice candidate $it")
-                    peerConnection?.addIceCandidate(it)
-                }
-                .catch {
-                    Timber.tag(loggerTag.value).v("failed to add remote ice candidate $it")
-                }
-                .launchIn(this)
+            .onEach {
+                Timber.tag(loggerTag.value).v("adding remote ice candidate $it")
+                peerConnection?.addIceCandidate(it)
+            }
+            .catch {
+                Timber.tag(loggerTag.value).v("failed to add remote ice candidate $it")
+            }
+            .launchIn(this)
         // Now we wait for negotiation callback
     }
 
@@ -472,8 +472,8 @@ class WebRtcCall(
         // Update service state
         withContext(Dispatchers.Main) {
             CallService.onPendingCall(
-                    context = context,
-                    callId = mxCall.callId
+                context = context,
+                callId = mxCall.callId
             )
         }
         // 1) create peer connection
@@ -506,12 +506,12 @@ class WebRtcCall(
         }
         Timber.tag(loggerTag.value).v("remoteCandidateSource $remoteCandidateSource")
         remoteIceCandidateJob = remoteCandidateSource
-                .onEach {
-                    Timber.tag(loggerTag.value).v("adding remote ice candidate $it")
-                    peerConnection?.addIceCandidate(it)
-                }.catch {
-                    Timber.tag(loggerTag.value).v("failed to add remote ice candidate $it")
-                }.launchIn(this)
+            .onEach {
+                Timber.tag(loggerTag.value).v("adding remote ice candidate $it")
+                peerConnection?.addIceCandidate(it)
+            }.catch {
+                Timber.tag(loggerTag.value).v("failed to add remote ice candidate $it")
+            }.launchIn(this)
     }
 
     private suspend fun getTurnServer(): TurnServerResponse? {
@@ -549,20 +549,20 @@ class WebRtcCall(
         }
         // I don't realy know how that works if there are 2 front or 2 back cameras
         val frontCamera = cameraIterator.deviceNames
-                ?.firstOrNull { cameraIterator.isFrontFacing(it) }
-                ?.let {
-                    CameraProxy(it, CameraType.FRONT).also { availableCamera.add(it) }
-                }
+            ?.firstOrNull { cameraIterator.isFrontFacing(it) }
+            ?.let {
+                CameraProxy(it, CameraType.FRONT).also { availableCamera.add(it) }
+            }
 
         val backCamera = cameraIterator.deviceNames
-                ?.firstOrNull { cameraIterator.isBackFacing(it) }
-                ?.let {
-                    CameraProxy(it, CameraType.BACK).also { availableCamera.add(it) }
-                }
+            ?.firstOrNull { cameraIterator.isBackFacing(it) }
+            ?.let {
+                CameraProxy(it, CameraType.BACK).also { availableCamera.add(it) }
+            }
 
         val camera = frontCamera?.also { cameraInUse = frontCamera }
-                ?: backCamera?.also { cameraInUse = backCamera }
-                ?: null.also { cameraInUse = null }
+            ?: backCamera?.also { cameraInUse = backCamera }
+            ?: null.also { cameraInUse = null }
 
         listeners.forEach {
             tryOrNull { it.onCameraChanged() }
@@ -723,23 +723,23 @@ class WebRtcCall(
             if (mxCall.state is CallState.Connected && mxCall.isVideoCall) {
                 val oppositeCamera = getOppositeCameraIfAny() ?: return@launch
                 videoCapturer?.switchCamera(
-                        object : CameraVideoCapturer.CameraSwitchHandler {
-                            // Invoked on success. |isFrontCamera| is true if the new camera is front facing.
-                            override fun onCameraSwitchDone(isFrontCamera: Boolean) {
-                                Timber.tag(loggerTag.value).v("onCameraSwitchDone isFront $isFrontCamera")
-                                cameraInUse = oppositeCamera
-                                localSurfaceRenderers.forEach {
-                                    it.get()?.setMirror(isFrontCamera)
-                                }
-                                listeners.forEach {
-                                    tryOrNull { it.onCameraChanged() }
-                                }
+                    object : CameraVideoCapturer.CameraSwitchHandler {
+                        // Invoked on success. |isFrontCamera| is true if the new camera is front facing.
+                        override fun onCameraSwitchDone(isFrontCamera: Boolean) {
+                            Timber.tag(loggerTag.value).v("onCameraSwitchDone isFront $isFrontCamera")
+                            cameraInUse = oppositeCamera
+                            localSurfaceRenderers.forEach {
+                                it.get()?.setMirror(isFrontCamera)
                             }
+                            listeners.forEach {
+                                tryOrNull { it.onCameraChanged() }
+                            }
+                        }
 
-                            override fun onCameraSwitchError(errorDescription: String?) {
-                                Timber.tag(loggerTag.value).v("onCameraSwitchError isFront $errorDescription")
-                            }
-                        }, oppositeCamera.name
+                        override fun onCameraSwitchError(errorDescription: String?) {
+                            Timber.tag(loggerTag.value).v("onCameraSwitchError isFront $errorDescription")
+                        }
+                    }, oppositeCamera.name
                 )
             }
         }
@@ -821,8 +821,8 @@ class WebRtcCall(
     fun onRemoveStream() {
         sessionScope?.launch(dispatcher) {
             remoteSurfaceRenderers
-                    .mapNotNull { it.get() }
-                    .forEach { remoteVideoTrack?.removeSink(it) }
+                .mapNotNull { it.get() }
+                .forEach { remoteVideoTrack?.removeSink(it) }
             remoteVideoTrack = null
             remoteAudioTrack = null
         }
@@ -985,9 +985,9 @@ class WebRtcCall(
                     }
                     if (resolvedUser != null) {
                         remoteAssertedIdentity = newAssertedIdentity.copy(
-                                id = nativeUserId,
-                                avatarUrl = resolvedUser.avatarUrl,
-                                displayName = resolvedUser.displayName
+                            id = nativeUserId,
+                            avatarUrl = resolvedUser.avatarUrl,
+                            displayName = resolvedUser.displayName
                         )
                     } else {
                         remoteAssertedIdentity = newAssertedIdentity.copy(id = nativeUserId)

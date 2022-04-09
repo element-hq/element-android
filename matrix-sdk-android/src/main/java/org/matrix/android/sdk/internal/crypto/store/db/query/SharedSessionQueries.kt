@@ -24,36 +24,40 @@ import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntityFields
 
-internal fun SharedSessionEntity.Companion.get(realm: Realm,
-                                               roomId: String?,
-                                               sessionId: String,
-                                               userId: String,
-                                               deviceId: String,
-                                               deviceIdentityKey: String?): SharedSessionEntity? {
+internal fun SharedSessionEntity.Companion.get(
+    realm: Realm,
+    roomId: String?,
+    sessionId: String,
+    userId: String,
+    deviceId: String,
+    deviceIdentityKey: String?
+): SharedSessionEntity? {
     return realm.where<SharedSessionEntity>()
-            .equalTo(SharedSessionEntityFields.ROOM_ID, roomId)
-            .equalTo(SharedSessionEntityFields.SESSION_ID, sessionId)
-            .equalTo(SharedSessionEntityFields.ALGORITHM, MXCRYPTO_ALGORITHM_MEGOLM)
-            .equalTo(SharedSessionEntityFields.USER_ID, userId)
-            .equalTo(SharedSessionEntityFields.DEVICE_ID, deviceId)
-            .equalTo(SharedSessionEntityFields.DEVICE_IDENTITY_KEY, deviceIdentityKey)
-            .findFirst()
+        .equalTo(SharedSessionEntityFields.ROOM_ID, roomId)
+        .equalTo(SharedSessionEntityFields.SESSION_ID, sessionId)
+        .equalTo(SharedSessionEntityFields.ALGORITHM, MXCRYPTO_ALGORITHM_MEGOLM)
+        .equalTo(SharedSessionEntityFields.USER_ID, userId)
+        .equalTo(SharedSessionEntityFields.DEVICE_ID, deviceId)
+        .equalTo(SharedSessionEntityFields.DEVICE_IDENTITY_KEY, deviceIdentityKey)
+        .findFirst()
 }
 
 internal fun SharedSessionEntity.Companion.get(realm: Realm, roomId: String?, sessionId: String): RealmResults<SharedSessionEntity> {
     return realm.where<SharedSessionEntity>()
-            .equalTo(SharedSessionEntityFields.ROOM_ID, roomId)
-            .equalTo(SharedSessionEntityFields.SESSION_ID, sessionId)
-            .equalTo(SharedSessionEntityFields.ALGORITHM, MXCRYPTO_ALGORITHM_MEGOLM)
-            .findAll()
+        .equalTo(SharedSessionEntityFields.ROOM_ID, roomId)
+        .equalTo(SharedSessionEntityFields.SESSION_ID, sessionId)
+        .equalTo(SharedSessionEntityFields.ALGORITHM, MXCRYPTO_ALGORITHM_MEGOLM)
+        .findAll()
 }
 
-internal fun SharedSessionEntity.Companion.create(realm: Realm, roomId: String?,
-                                                  sessionId: String,
-                                                  userId: String,
-                                                  deviceId: String,
-                                                  deviceIdentityKey: String,
-                                                  chainIndex: Int): SharedSessionEntity {
+internal fun SharedSessionEntity.Companion.create(
+    realm: Realm, roomId: String?,
+    sessionId: String,
+    userId: String,
+    deviceId: String,
+    deviceIdentityKey: String,
+    chainIndex: Int
+): SharedSessionEntity {
     return realm.createObject<SharedSessionEntity>().apply {
         this.roomId = roomId
         this.algorithm = MXCRYPTO_ALGORITHM_MEGOLM

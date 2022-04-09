@@ -36,11 +36,14 @@ import org.hamcrest.Matchers.`is`
 
 fun clickOnPreference(@StringRes textResId: Int) {
     onView(withId(R.id.recycler_view))
-            .perform(actionOnItem<RecyclerView.ViewHolder>(
-                    hasDescendant(withText(textResId)), click()))
+        .perform(
+            actionOnItem<RecyclerView.ViewHolder>(
+                hasDescendant(withText(textResId)), click()
+            )
+        )
 }
 
 fun clickOnSwitchPreference(preferenceKey: String) {
     onData(allOf(`is`(instanceOf(Preference::class.java)), withKey(preferenceKey)))
-            .onChildView(withClassName(`is`(Switch::class.java.name))).perform(click())
+        .onChildView(withClassName(`is`(Switch::class.java.name))).perform(click())
 }

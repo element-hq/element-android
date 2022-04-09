@@ -37,54 +37,62 @@ import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
-                                                 private val dateFormatter: VectorDateFormatter,
-                                                 private val stringProvider: StringProvider,
-                                                 private val typingHelper: TypingHelper,
-                                                 private val avatarRenderer: AvatarRenderer,
-                                                 private val errorFormatter: ErrorFormatter,
-                                                 private val matrixConfiguration: MatrixConfiguration) {
+class RoomSummaryItemFactory @Inject constructor(
+    private val displayableEventFormatter: DisplayableEventFormatter,
+    private val dateFormatter: VectorDateFormatter,
+    private val stringProvider: StringProvider,
+    private val typingHelper: TypingHelper,
+    private val avatarRenderer: AvatarRenderer,
+    private val errorFormatter: ErrorFormatter,
+    private val matrixConfiguration: MatrixConfiguration
+) {
 
-    fun create(roomSummary: RoomSummary,
-               roomChangeMembershipStates: Map<String, ChangeMembershipState>,
-               selectedRoomIds: Set<String>,
-               listener: RoomListListener?): VectorEpoxyModel<*> {
+    fun create(
+        roomSummary: RoomSummary,
+        roomChangeMembershipStates: Map<String, ChangeMembershipState>,
+        selectedRoomIds: Set<String>,
+        listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
                 createInvitationItem(roomSummary, changeMembershipState, listener)
             }
-            else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
+            else -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
         }
     }
 
-    fun createSuggestion(spaceChildInfo: SpaceChildInfo,
-                         suggestedRoomJoiningStates: Map<String, Async<Unit>>,
-                         listener: RoomListListener?): VectorEpoxyModel<*> {
+    fun createSuggestion(
+        spaceChildInfo: SpaceChildInfo,
+        suggestedRoomJoiningStates: Map<String, Async<Unit>>,
+        listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
         val error = (suggestedRoomJoiningStates[spaceChildInfo.childRoomId] as? Fail)?.error
         return SpaceChildInfoItem_()
-                .id("sug_${spaceChildInfo.childRoomId}")
-                .matrixItem(spaceChildInfo.toMatrixItem())
-                .avatarRenderer(avatarRenderer)
-                .topic(spaceChildInfo.topic)
-                .errorLabel(
-                        error?.let {
-                            stringProvider.getString(R.string.error_failed_to_join_room, errorFormatter.toHumanReadable(it))
-                        }
-                )
-                .buttonLabel(
-                        if (error != null) stringProvider.getString(R.string.global_retry)
-                        else stringProvider.getString(R.string.action_join)
-                )
-                .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
-                .memberCount(spaceChildInfo.activeMemberCount ?: 0)
-                .buttonClickListener { listener?.onJoinSuggestedRoom(spaceChildInfo) }
-                .itemClickListener { listener?.onSuggestedRoomClicked(spaceChildInfo) }
+            .id("sug_${spaceChildInfo.childRoomId}")
+            .matrixItem(spaceChildInfo.toMatrixItem())
+            .avatarRenderer(avatarRenderer)
+            .topic(spaceChildInfo.topic)
+            .errorLabel(
+                error?.let {
+                    stringProvider.getString(R.string.error_failed_to_join_room, errorFormatter.toHumanReadable(it))
+                }
+            )
+            .buttonLabel(
+                if (error != null) stringProvider.getString(R.string.global_retry)
+                else stringProvider.getString(R.string.action_join)
+            )
+            .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
+            .memberCount(spaceChildInfo.activeMemberCount ?: 0)
+            .buttonClickListener { listener?.onJoinSuggestedRoom(spaceChildInfo) }
+            .itemClickListener { listener?.onSuggestedRoomClicked(spaceChildInfo) }
     }
 
-    private fun createInvitationItem(roomSummary: RoomSummary,
-                                     changeMembershipState: ChangeMembershipState,
-                                     listener: RoomListListener?): VectorEpoxyModel<*> {
+    private fun createInvitationItem(
+        roomSummary: RoomSummary,
+        changeMembershipState: ChangeMembershipState,
+        listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.inviterId
         } else {
@@ -94,21 +102,21 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         }
 
         return RoomInvitationItem_()
-                .id(roomSummary.roomId)
-                .avatarRenderer(avatarRenderer)
-                .matrixItem(roomSummary.toMatrixItem())
-                .secondLine(secondLine)
-                .changeMembershipState(changeMembershipState)
-                .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
-                .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
-                .listener { listener?.onRoomClicked(roomSummary) }
+            .id(roomSummary.roomId)
+            .avatarRenderer(avatarRenderer)
+            .matrixItem(roomSummary.toMatrixItem())
+            .secondLine(secondLine)
+            .changeMembershipState(changeMembershipState)
+            .acceptListener { listener?.onAcceptRoomInvitation(roomSummary) }
+            .rejectListener { listener?.onRejectRoomInvitation(roomSummary) }
+            .listener { listener?.onRoomClicked(roomSummary) }
     }
 
     fun createRoomItem(
-            roomSummary: RoomSummary,
-            selectedRoomIds: Set<String>,
-            onClick: ((RoomSummary) -> Unit)?,
-            onLongClick: ((RoomSummary) -> Boolean)?
+        roomSummary: RoomSummary,
+        selectedRoomIds: Set<String>,
+        onClick: ((RoomSummary) -> Unit)?,
+        onLongClick: ((RoomSummary) -> Boolean)?
     ): VectorEpoxyModel<*> {
         val unreadCount = roomSummary.notificationCount
         val showHighlighted = roomSummary.highlightCount > 0
@@ -122,26 +130,26 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         }
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
         return RoomSummaryItem_()
-                .id(roomSummary.roomId)
-                .avatarRenderer(avatarRenderer)
-                // We do not display shield in the room list anymore
-                // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
-                .izPublic(roomSummary.isPublic)
-                .showPresence(roomSummary.isDirect && matrixConfiguration.presenceSyncEnabled)
-                .userPresence(roomSummary.directUserPresence)
-                .matrixItem(roomSummary.toMatrixItem())
-                .lastEventTime(latestEventTime)
-                .typingMessage(typingMessage)
-                .lastFormattedEvent(latestFormattedEvent.toEpoxyCharSequence())
-                .showHighlighted(showHighlighted)
-                .showSelected(showSelected)
-                .hasFailedSending(roomSummary.hasFailedSending)
-                .unreadNotificationCount(unreadCount)
-                .hasUnreadMessage(roomSummary.hasUnreadMessages)
-                .hasDraft(roomSummary.userDrafts.isNotEmpty())
-                .itemLongClickListener { _ ->
-                    onLongClick?.invoke(roomSummary) ?: false
-                }
-                .itemClickListener { onClick?.invoke(roomSummary) }
+            .id(roomSummary.roomId)
+            .avatarRenderer(avatarRenderer)
+            // We do not display shield in the room list anymore
+            // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+            .izPublic(roomSummary.isPublic)
+            .showPresence(roomSummary.isDirect && matrixConfiguration.presenceSyncEnabled)
+            .userPresence(roomSummary.directUserPresence)
+            .matrixItem(roomSummary.toMatrixItem())
+            .lastEventTime(latestEventTime)
+            .typingMessage(typingMessage)
+            .lastFormattedEvent(latestFormattedEvent.toEpoxyCharSequence())
+            .showHighlighted(showHighlighted)
+            .showSelected(showSelected)
+            .hasFailedSending(roomSummary.hasFailedSending)
+            .unreadNotificationCount(unreadCount)
+            .hasUnreadMessage(roomSummary.hasUnreadMessages)
+            .hasDraft(roomSummary.userDrafts.isNotEmpty())
+            .itemLongClickListener { _ ->
+                onLongClick?.invoke(roomSummary) ?: false
+            }
+            .itemClickListener { onClick?.invoke(roomSummary) }
     }
 }

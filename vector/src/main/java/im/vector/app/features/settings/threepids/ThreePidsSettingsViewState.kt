@@ -23,11 +23,11 @@ import im.vector.app.core.utils.ReadOnceTrue
 import org.matrix.android.sdk.api.session.identity.ThreePid
 
 data class ThreePidsSettingsViewState(
-        val uiState: ThreePidsSettingsUiState = ThreePidsSettingsUiState.Idle,
-        val isLoading: Boolean = false,
-        val threePids: Async<List<ThreePid>> = Uninitialized,
-        val pendingThreePids: Async<List<ThreePid>> = Uninitialized,
-        val msisdnValidationRequests: Map<String, Async<Unit>> = emptyMap(),
-        val editTextReinitiator: ReadOnceTrue = ReadOnceTrue(),
-        val msisdnValidationReinitiator: Map<ThreePid, ReadOnceTrue> = emptyMap()
+    val uiState: ThreePidsSettingsUiState = ThreePidsSettingsUiState.Idle,
+    val isLoading: Boolean = false,
+    val threePids: Async<List<ThreePid>> = Uninitialized,
+    val pendingThreePids: Async<List<ThreePid>> = Uninitialized,
+    val msisdnValidationRequests: Map<String, Async<Unit>> = emptyMap(),
+    val editTextReinitiator: ReadOnceTrue = ReadOnceTrue(),
+    val msisdnValidationReinitiator: Map<ThreePid, ReadOnceTrue> = emptyMap()
 ) : MavericksState

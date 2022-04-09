@@ -23,16 +23,17 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 class OutgoingSecretRequest(
-        // Secret Name
-        val secretName: String?,
-        // list of recipients for the request
-        override var recipients: Map<String, List<String>>,
-        // Unique id for this request. Used for both
-        // an id within the request for later pairing with a cancellation, and for
-        // the transaction id when sending the to_device messages to our local
-        override var requestId: String,
-        // current state of this request
-        override var state: OutgoingGossipingRequestState) : OutgoingGossipingRequest {
+    // Secret Name
+    val secretName: String?,
+    // list of recipients for the request
+    override var recipients: Map<String, List<String>>,
+    // Unique id for this request. Used for both
+    // an id within the request for later pairing with a cancellation, and for
+    // the transaction id when sending the to_device messages to our local
+    override var requestId: String,
+    // current state of this request
+    override var state: OutgoingGossipingRequestState
+) : OutgoingGossipingRequest {
 
     // transaction id for the cancellation, if any
 }

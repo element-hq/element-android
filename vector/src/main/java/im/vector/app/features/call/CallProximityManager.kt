@@ -31,8 +31,8 @@ import javax.inject.Inject
  * Manages the proximity sensor and turns the screen off when the proximity sensor activates.
  */
 class CallProximityManager @Inject constructor(
-        context: Context,
-        private val stringProvider: StringProvider
+    context: Context,
+    private val stringProvider: StringProvider
 ) : SensorEventListener {
 
     companion object {
@@ -66,8 +66,8 @@ class CallProximityManager @Inject constructor(
         if (isSupported) {
             sensorManager.unregisterListener(this)
             wakeLock
-                    ?.takeIf { it.isHeld }
-                    ?.release()
+                ?.takeIf { it.isHeld }
+                ?.release()
         }
     }
 
@@ -94,13 +94,13 @@ class CallProximityManager @Inject constructor(
             wakeLock = powerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, generateWakeLockTag())
         }
         wakeLock
-                ?.takeIf { !it.isHeld }
-                ?.acquire(WAKE_LOCK_TIMEOUT_MILLIS)
+            ?.takeIf { !it.isHeld }
+            ?.acquire(WAKE_LOCK_TIMEOUT_MILLIS)
     }
 
     private fun onProximityFar() {
         wakeLock
-                ?.takeIf { it.isHeld }
-                ?.release()
+            ?.takeIf { it.isHeld }
+            ?.release()
     }
 }

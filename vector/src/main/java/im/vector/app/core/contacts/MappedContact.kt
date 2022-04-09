@@ -19,8 +19,8 @@ package im.vector.app.core.contacts
 import android.net.Uri
 
 class MappedContactBuilder(
-        val id: Long,
-        val displayName: String
+    val id: Long,
+    val displayName: String
 ) {
     var photoURI: Uri? = null
     val msisdns = mutableListOf<MappedMsisdn>()
@@ -28,29 +28,29 @@ class MappedContactBuilder(
 
     fun build(): MappedContact {
         return MappedContact(
-                id = id,
-                displayName = displayName,
-                photoURI = photoURI,
-                msisdns = msisdns,
-                emails = emails
+            id = id,
+            displayName = displayName,
+            photoURI = photoURI,
+            msisdns = msisdns,
+            emails = emails
         )
     }
 }
 
 data class MappedContact(
-        val id: Long,
-        val displayName: String,
-        val photoURI: Uri? = null,
-        val msisdns: List<MappedMsisdn> = emptyList(),
-        val emails: List<MappedEmail> = emptyList()
+    val id: Long,
+    val displayName: String,
+    val photoURI: Uri? = null,
+    val msisdns: List<MappedMsisdn> = emptyList(),
+    val emails: List<MappedEmail> = emptyList()
 )
 
 data class MappedEmail(
-        val email: String,
-        val matrixId: String?
+    val email: String,
+    val matrixId: String?
 )
 
 data class MappedMsisdn(
-        val phoneNumber: String,
-        val matrixId: String?
+    val phoneNumber: String,
+    val matrixId: String?
 )

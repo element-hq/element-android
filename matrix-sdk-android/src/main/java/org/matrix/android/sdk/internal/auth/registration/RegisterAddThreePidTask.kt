@@ -23,14 +23,14 @@ import org.matrix.android.sdk.internal.task.Task
 
 internal interface RegisterAddThreePidTask : Task<RegisterAddThreePidTask.Params, AddThreePidRegistrationResponse> {
     data class Params(
-            val threePid: RegisterThreePid,
-            val clientSecret: String,
-            val sendAttempt: Int
+        val threePid: RegisterThreePid,
+        val clientSecret: String,
+        val sendAttempt: Int
     )
 }
 
 internal class DefaultRegisterAddThreePidTask(
-        private val authAPI: AuthAPI
+    private val authAPI: AuthAPI
 ) : RegisterAddThreePidTask {
 
     override suspend fun execute(params: RegisterAddThreePidTask.Params): AddThreePidRegistrationResponse {
@@ -41,7 +41,7 @@ internal class DefaultRegisterAddThreePidTask(
 
     private fun RegisterThreePid.toPath(): String {
         return when (this) {
-            is RegisterThreePid.Email  -> "email"
+            is RegisterThreePid.Email -> "email"
             is RegisterThreePid.Msisdn -> "msisdn"
         }
     }

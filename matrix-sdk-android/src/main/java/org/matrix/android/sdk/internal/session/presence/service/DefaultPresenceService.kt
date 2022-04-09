@@ -26,9 +26,9 @@ import org.matrix.android.sdk.internal.session.presence.service.task.SetPresence
 import javax.inject.Inject
 
 internal class DefaultPresenceService @Inject constructor(
-        @UserId private val userId: String,
-        private val setPresenceTask: SetPresenceTask,
-        private val getPresenceTask: GetPresenceTask
+    @UserId private val userId: String,
+    private val setPresenceTask: SetPresenceTask,
+    private val getPresenceTask: GetPresenceTask
 ) : PresenceService {
 
     override suspend fun setMyPresence(presence: PresenceEnum, statusMsg: String?) {
@@ -39,10 +39,10 @@ internal class DefaultPresenceService @Inject constructor(
         val result = getPresenceTask.execute(GetPresenceTask.Params(userId))
 
         return UserPresence(
-                lastActiveAgo = result.lastActiveAgo,
-                statusMessage = result.message,
-                isCurrentlyActive = result.isCurrentlyActive,
-                presence = result.presence
+            lastActiveAgo = result.lastActiveAgo,
+            statusMessage = result.message,
+            isCurrentlyActive = result.isCurrentlyActive,
+            presence = result.presence
         )
     }
 }

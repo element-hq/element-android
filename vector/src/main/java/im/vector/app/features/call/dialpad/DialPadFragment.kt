@@ -71,9 +71,10 @@ class DialPadFragment : Fragment(), TextWatcher {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         initArgs(savedInstanceState)
         val view = inflater.inflate(R.layout.dialpad_fragment, container, false)
         view.setBackgroundColor(ThemeUtils.getColor(requireContext(), R.attr.backgroundColor))

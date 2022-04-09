@@ -38,15 +38,15 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
 class RoomJoinRuleFragment @Inject constructor(
-        val controller: RoomJoinRuleAdvancedController,
-        val avatarRenderer: AvatarRenderer
+    val controller: RoomJoinRuleAdvancedController,
+    val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentJoinRulesRecyclerBinding>(),
-        OnBackPressed, RoomJoinRuleAdvancedController.InteractionListener {
+    OnBackPressed, RoomJoinRuleAdvancedController.InteractionListener {
 
     private val viewModel: RoomJoinRuleChooseRestrictedViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentJoinRulesRecyclerBinding.inflate(inflater, container, false)
+        FragmentJoinRulesRecyclerBinding.inflate(inflater, container, false)
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         val hasUnsavedChanges = withState(viewModel) { it.hasUnsavedChanges }
@@ -55,13 +55,13 @@ class RoomJoinRuleFragment @Inject constructor(
             requireActivity().finish()
         } else {
             MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.dialog_title_warning)
-                    .setMessage(R.string.warning_unsaved_change)
-                    .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
-                        requireActivity().finish()
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.dialog_title_warning)
+                .setMessage(R.string.warning_unsaved_change)
+                .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
+                    requireActivity().finish()
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
             return true
         }
         return true

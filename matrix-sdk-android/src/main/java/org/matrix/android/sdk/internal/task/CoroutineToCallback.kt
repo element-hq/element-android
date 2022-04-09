@@ -29,9 +29,9 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 internal fun <T> CoroutineScope.launchToCallback(
-        context: CoroutineContext = EmptyCoroutineContext,
-        callback: MatrixCallback<T>,
-        block: suspend () -> T
+    context: CoroutineContext = EmptyCoroutineContext,
+    callback: MatrixCallback<T>,
+    block: suspend () -> T
 ): Cancelable = launch(context, CoroutineStart.DEFAULT) {
     val result = runCatching {
         block()

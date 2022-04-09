@@ -25,18 +25,19 @@ import javax.inject.Inject
 
 internal abstract class DeleteThreePidTask : Task<DeleteThreePidTask.Params, Unit> {
     data class Params(
-            val threePid: ThreePid
+        val threePid: ThreePid
     )
 }
 
 internal class DefaultDeleteThreePidTask @Inject constructor(
-        private val profileAPI: ProfileAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : DeleteThreePidTask() {
+    private val profileAPI: ProfileAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
+) : DeleteThreePidTask() {
 
     override suspend fun execute(params: Params) {
         val body = DeleteThreePidBody(
-                medium = params.threePid.toMedium(),
-                address = params.threePid.value
+            medium = params.threePid.toMedium(),
+            address = params.threePid.value
         )
         executeRequest(globalErrorReceiver) {
             profileAPI.deleteThreePid(body)

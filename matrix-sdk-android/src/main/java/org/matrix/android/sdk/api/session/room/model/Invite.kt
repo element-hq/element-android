@@ -24,7 +24,7 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class Invite(
-        @Json(name = "display_name") val displayName: String,
-        @Json(name = "signed") val signed: Signed
+    @Json(name = "display_name") val displayName: String,
+    @Json(name = "signed") val signed: Signed
 
 )

@@ -24,8 +24,8 @@ import org.matrix.android.sdk.api.session.events.model.Event
 @JsonClass(generateAdapter = true)
 data class RoomInviteState(
 
-        /**
-         * List of state events (array of MXEvent).
-         */
-        @Json(name = "events") val events: List<Event> = emptyList()
+    /**
+     * List of state events (array of MXEvent).
+     */
+    @Json(name = "events") val events: List<Event> = emptyList()
 )

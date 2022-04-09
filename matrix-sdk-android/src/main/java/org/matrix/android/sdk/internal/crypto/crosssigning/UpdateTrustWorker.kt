@@ -52,17 +52,17 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class UpdateTrustWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-        SessionSafeCoroutineWorker<UpdateTrustWorker.Params>(context, params, sessionManager, Params::class.java) {
+    SessionSafeCoroutineWorker<UpdateTrustWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val sessionId: String,
-            override val lastFailureMessage: String? = null,
-            // Kept for compatibility, but not used anymore (can be used for pending Worker)
-            val updatedUserIds: List<String>? = null,
-            // Passing a long list of userId can break the Work Manager due to data size limitation.
-            // so now we use a temporary file to store the data
-            val filename: String? = null
+        override val sessionId: String,
+        override val lastFailureMessage: String? = null,
+        // Kept for compatibility, but not used anymore (can be used for pending Worker)
+        val updatedUserIds: List<String>? = null,
+        // Passing a long list of userId can break the Work Manager due to data size limitation.
+        // so now we use a temporary file to store the data
+        val filename: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var crossSigningService: DefaultCrossSigningService
@@ -88,9 +88,9 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
 
     override suspend fun doSafeWork(params: Params): Result {
         val userList = params.filename
-                ?.let { updateTrustWorkerDataRepository.getParam(it) }
-                ?.userIds
-                ?: params.updatedUserIds.orEmpty()
+            ?.let { updateTrustWorkerDataRepository.getParam(it) }
+            ?.userIds
+            ?: params.updatedUserIds.orEmpty()
 
         // List should not be empty, but let's avoid go further in case of empty list
         if (userList.isNotEmpty()) {
@@ -123,15 +123,15 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
                 // If it's my cross signing keys we should refresh all trust
                 // do it anyway ?
                 userList = cryptoRealm.where(CrossSigningInfoEntity::class.java)
-                        .findAll()
-                        .mapNotNull { it.userId }
+                    .findAll()
+                    .mapNotNull { it.userId }
 
                 // check right now my keys and mark it as trusted as other trust depends on it
                 val myDevices = cryptoRealm.where<UserEntity>()
-                        .equalTo(UserEntityFields.USER_ID, myUserId)
-                        .findFirst()
-                        ?.devices
-                        ?.map { CryptoMapper.mapToModel(it) }
+                    .equalTo(UserEntityFields.USER_ID, myUserId)
+                    .findFirst()
+                    ?.devices
+                    ?.map { CryptoMapper.mapToModel(it) }
 
                 myTrustResult = crossSigningService.checkSelfTrust(myCrossSigningInfo, myDevices)
                 updateCrossSigningKeysTrust(cryptoRealm, myUserId, myTrustResult.isVerified())
@@ -146,7 +146,7 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
             val trusts = otherInfos.mapValues { entry ->
                 when (entry.key) {
                     myUserId -> myTrustResult
-                    else     -> {
+                    else -> {
                         crossSigningService.checkOtherMSKTrusted(myCrossSigningInfo, entry.value).also {
                             Timber.v("## CrossSigning - user:${entry.key} result:$it")
                         }
@@ -165,9 +165,9 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
             Timber.v("## CrossSigning - Updating devices cross trust users: ${trusts.keys.logLimit()}")
             trusts.keys.forEach { userId ->
                 val devicesEntities = cryptoRealm.where<UserEntity>()
-                        .equalTo(UserEntityFields.USER_ID, userId)
-                        .findFirst()
-                        ?.devices
+                    .equalTo(UserEntityFields.USER_ID, userId)
+                    .findFirst()
+                    ?.devices
 
                 val trustMap = devicesEntities?.associateWith { device ->
                     // get up to date from DB has could have been updated
@@ -206,77 +206,79 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
         awaitTransaction(sessionRealmConfiguration) { sessionRealm ->
             Realm.getInstance(cryptoRealmConfiguration).use { cryptoRealm ->
                 sessionRealm.where(RoomMemberSummaryEntity::class.java)
-                        .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
-                        .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
-                        .findAll()
-                        .map { it.roomId }
-                        .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
-                        .forEach { roomId ->
-                            RoomSummaryEntity.where(sessionRealm, roomId)
-                                    .equalTo(RoomSummaryEntityFields.IS_ENCRYPTED, true)
-                                    .findFirst()
-                                    ?.let { roomSummary ->
-                                        Timber.v("## CrossSigning - Check shield state for room $roomId")
-                                        val allActiveRoomMembers = RoomMemberHelper(sessionRealm, roomId).getActiveRoomMemberIds()
-                                        try {
-                                            val updatedTrust = computeRoomShield(
-                                                    myCrossSigningInfo,
-                                                    cryptoRealm,
-                                                    allActiveRoomMembers,
-                                                    roomSummary
-                                            )
-                                            if (roomSummary.roomEncryptionTrustLevel != updatedTrust) {
-                                                Timber.d("## CrossSigning - Shield change detected for $roomId -> $updatedTrust")
-                                                roomSummary.roomEncryptionTrustLevel = updatedTrust
-                                            }
-                                        } catch (failure: Throwable) {
-                                            Timber.e(failure)
-                                        }
+                    .`in`(RoomMemberSummaryEntityFields.USER_ID, userList.toTypedArray())
+                    .distinct(RoomMemberSummaryEntityFields.ROOM_ID)
+                    .findAll()
+                    .map { it.roomId }
+                    .also { Timber.d("## CrossSigning -  ... impacted rooms ${it.logLimit()}") }
+                    .forEach { roomId ->
+                        RoomSummaryEntity.where(sessionRealm, roomId)
+                            .equalTo(RoomSummaryEntityFields.IS_ENCRYPTED, true)
+                            .findFirst()
+                            ?.let { roomSummary ->
+                                Timber.v("## CrossSigning - Check shield state for room $roomId")
+                                val allActiveRoomMembers = RoomMemberHelper(sessionRealm, roomId).getActiveRoomMemberIds()
+                                try {
+                                    val updatedTrust = computeRoomShield(
+                                        myCrossSigningInfo,
+                                        cryptoRealm,
+                                        allActiveRoomMembers,
+                                        roomSummary
+                                    )
+                                    if (roomSummary.roomEncryptionTrustLevel != updatedTrust) {
+                                        Timber.d("## CrossSigning - Shield change detected for $roomId -> $updatedTrust")
+                                        roomSummary.roomEncryptionTrustLevel = updatedTrust
                                     }
-                        }
+                                } catch (failure: Throwable) {
+                                    Timber.e(failure)
+                                }
+                            }
+                    }
             }
         }
     }
 
     private fun getCrossSigningInfo(cryptoRealm: Realm, userId: String): MXCrossSigningInfo? {
         return cryptoRealm.where(CrossSigningInfoEntity::class.java)
-                .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
-                .findFirst()
-                ?.let { mapCrossSigningInfoEntity(it) }
+            .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
+            .findFirst()
+            ?.let { mapCrossSigningInfoEntity(it) }
     }
 
     private fun cleanup(params: Params) {
         params.filename
-                ?.let { updateTrustWorkerDataRepository.delete(it) }
+            ?.let { updateTrustWorkerDataRepository.delete(it) }
     }
 
     private fun updateCrossSigningKeysTrust(cryptoRealm: Realm, userId: String, verified: Boolean) {
         cryptoRealm.where(CrossSigningInfoEntity::class.java)
-                .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
-                .findFirst()
-                ?.crossSigningKeys
-                ?.forEach { info ->
-                    // optimization to avoid trigger updates when there is no change..
-                    if (info.trustLevelEntity?.isVerified() != verified) {
-                        Timber.d("## CrossSigning - Trust change for $userId : $verified")
-                        val level = info.trustLevelEntity
-                        if (level == null) {
-                            info.trustLevelEntity = cryptoRealm.createObject(TrustLevelEntity::class.java).also {
-                                it.locallyVerified = verified
-                                it.crossSignedVerified = verified
-                            }
-                        } else {
-                            level.locallyVerified = verified
-                            level.crossSignedVerified = verified
+            .equalTo(CrossSigningInfoEntityFields.USER_ID, userId)
+            .findFirst()
+            ?.crossSigningKeys
+            ?.forEach { info ->
+                // optimization to avoid trigger updates when there is no change..
+                if (info.trustLevelEntity?.isVerified() != verified) {
+                    Timber.d("## CrossSigning - Trust change for $userId : $verified")
+                    val level = info.trustLevelEntity
+                    if (level == null) {
+                        info.trustLevelEntity = cryptoRealm.createObject(TrustLevelEntity::class.java).also {
+                            it.locallyVerified = verified
+                            it.crossSignedVerified = verified
                         }
+                    } else {
+                        level.locallyVerified = verified
+                        level.crossSignedVerified = verified
                     }
                 }
+            }
     }
 
-    private fun computeRoomShield(myCrossSigningInfo: MXCrossSigningInfo?,
-                                  cryptoRealm: Realm,
-                                  activeMemberUserIds: List<String>,
-                                  roomSummaryEntity: RoomSummaryEntity): RoomEncryptionTrustLevel {
+    private fun computeRoomShield(
+        myCrossSigningInfo: MXCrossSigningInfo?,
+        cryptoRealm: Realm,
+        activeMemberUserIds: List<String>,
+        roomSummaryEntity: RoomSummaryEntity
+    ): RoomEncryptionTrustLevel {
         Timber.v("## CrossSigning - computeRoomShield ${roomSummaryEntity.roomId} -> ${activeMemberUserIds.logLimit()}")
         // The set of “all users” depends on the type of room:
         // For regular / topic rooms which have more than 2 members (including yourself) are considered when decorating a room
@@ -288,9 +290,9 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
         }
 
         val allTrustedUserIds = listToCheck
-                .filter { userId ->
-                    getCrossSigningInfo(cryptoRealm, userId)?.isTrusted() == true
-                }
+            .filter { userId ->
+                getCrossSigningInfo(cryptoRealm, userId)?.isTrusted() == true
+            }
 
         return if (allTrustedUserIds.isEmpty()) {
             RoomEncryptionTrustLevel.Default
@@ -299,45 +301,45 @@ internal class UpdateTrustWorker(context: Context, params: WorkerParameters, ses
             // If all devices of all verified users are trusted -> green
             // else -> black
             allTrustedUserIds
-                    .mapNotNull { userId ->
-                        cryptoRealm.where<UserEntity>()
-                                .equalTo(UserEntityFields.USER_ID, userId)
-                                .findFirst()
-                                ?.devices
-                                ?.map { CryptoMapper.mapToModel(it) }
+                .mapNotNull { userId ->
+                    cryptoRealm.where<UserEntity>()
+                        .equalTo(UserEntityFields.USER_ID, userId)
+                        .findFirst()
+                        ?.devices
+                        ?.map { CryptoMapper.mapToModel(it) }
+                }
+                .flatten()
+                .let { allDevices ->
+                    Timber.v("## CrossSigning - computeRoomShield ${roomSummaryEntity.roomId} devices ${allDevices.map { it.deviceId }.logLimit()}")
+                    if (myCrossSigningInfo != null) {
+                        allDevices.any { !it.trustLevel?.crossSigningVerified.orFalse() }
+                    } else {
+                        // Legacy method
+                        allDevices.any { !it.isVerified }
                     }
-                    .flatten()
-                    .let { allDevices ->
-                        Timber.v("## CrossSigning - computeRoomShield ${roomSummaryEntity.roomId} devices ${allDevices.map { it.deviceId }.logLimit()}")
-                        if (myCrossSigningInfo != null) {
-                            allDevices.any { !it.trustLevel?.crossSigningVerified.orFalse() }
+                }
+                .let { hasWarning ->
+                    if (hasWarning) {
+                        RoomEncryptionTrustLevel.Warning
+                    } else {
+                        if (listToCheck.size == allTrustedUserIds.size) {
+                            // all users are trusted and all devices are verified
+                            RoomEncryptionTrustLevel.Trusted
                         } else {
-                            // Legacy method
-                            allDevices.any { !it.isVerified }
+                            RoomEncryptionTrustLevel.Default
                         }
                     }
-                    .let { hasWarning ->
-                        if (hasWarning) {
-                            RoomEncryptionTrustLevel.Warning
-                        } else {
-                            if (listToCheck.size == allTrustedUserIds.size) {
-                                // all users are trusted and all devices are verified
-                                RoomEncryptionTrustLevel.Trusted
-                            } else {
-                                RoomEncryptionTrustLevel.Default
-                            }
-                        }
-                    }
+                }
         }
     }
 
     private fun mapCrossSigningInfoEntity(xsignInfo: CrossSigningInfoEntity): MXCrossSigningInfo {
         val userId = xsignInfo.userId ?: ""
         return MXCrossSigningInfo(
-                userId = userId,
-                crossSigningKeys = xsignInfo.crossSigningKeys.mapNotNull {
-                    crossSigningKeysMapper.map(userId, it)
-                }
+            userId = userId,
+            crossSigningKeys = xsignInfo.crossSigningKeys.mapNotNull {
+                crossSigningKeysMapper.map(userId, it)
+            }
         )
     }
 

@@ -24,11 +24,11 @@ import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
  */
 @JsonClass(generateAdapter = true)
 internal data class ThreePidData(
-        val email: String,
-        val msisdn: String,
-        val country: String,
-        val addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
-        val registrationParams: RegistrationParams
+    val email: String,
+    val msisdn: String,
+    val country: String,
+    val addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
+    val registrationParams: RegistrationParams
 ) {
     val threePid: RegisterThreePid
         get() {
@@ -40,11 +40,13 @@ internal data class ThreePidData(
         }
 
     companion object {
-        fun from(threePid: RegisterThreePid,
-                 addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
-                 registrationParams: RegistrationParams): ThreePidData {
+        fun from(
+            threePid: RegisterThreePid,
+            addThreePidRegistrationResponse: AddThreePidRegistrationResponse,
+            registrationParams: RegistrationParams
+        ): ThreePidData {
             return when (threePid) {
-                is RegisterThreePid.Email  ->
+                is RegisterThreePid.Email ->
                     ThreePidData(threePid.email, "", "", addThreePidRegistrationResponse, registrationParams)
                 is RegisterThreePid.Msisdn ->
                     ThreePidData("", threePid.msisdn, threePid.countryCode, addThreePidRegistrationResponse, registrationParams)

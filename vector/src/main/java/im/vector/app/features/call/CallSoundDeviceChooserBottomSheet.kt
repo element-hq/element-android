@@ -45,7 +45,7 @@ class CallSoundDeviceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
                 is VectorCallViewEvents.ShowSoundDeviceChooser -> {
                     render(it.available, it.current)
                 }
-                else                                           -> {
+                else -> {
                 }
             }
         }
@@ -56,7 +56,7 @@ class CallSoundDeviceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
         val models = available.map { device ->
             val title = when (device) {
                 is CallAudioManager.Device.WirelessHeadset -> device.name ?: getString(device.titleRes)
-                else                                       -> getString(device.titleRes)
+                else -> getString(device.titleRes)
             }
             BottomSheetActionItem_().apply {
                 id(device.titleRes)

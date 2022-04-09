@@ -40,12 +40,12 @@ class SpaceMenuRobot {
     fun openMenu(spaceName: String) {
         waitUntilViewVisible(ViewMatchers.withId(R.id.groupListView))
         onView(ViewMatchers.withId(R.id.groupListView))
-                .perform(
-                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(Matchers.allOf(ViewMatchers.withId(R.id.groupNameView), ViewMatchers.withText(spaceName))),
-                                ClickChildAction.clickChildWithId(R.id.groupTmpLeave)
-                        ).atPosition(0)
-                )
+            .perform(
+                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                    ViewMatchers.hasDescendant(Matchers.allOf(ViewMatchers.withId(R.id.groupNameView), ViewMatchers.withText(spaceName))),
+                    ClickChildAction.clickChildWithId(R.id.groupTmpLeave)
+                ).atPosition(0)
+            )
         waitUntilDialogVisible(ViewMatchers.withId(R.id.spaceNameView))
     }
 

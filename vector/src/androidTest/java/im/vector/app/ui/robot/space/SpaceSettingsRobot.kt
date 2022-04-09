@@ -29,12 +29,12 @@ import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleActivity
 class SpaceSettingsRobot {
     fun crawl() {
         Espresso.onView(ViewMatchers.withId(R.id.roomSettingsRecyclerView))
-                .perform(
-                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.room_settings_space_access_title)),
-                                ViewActions.click()
-                        )
+            .perform(
+                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                    ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.room_settings_space_access_title)),
+                    ViewActions.click()
                 )
+            )
 
         waitUntilActivityVisible<RoomJoinRuleActivity> {
             waitUntilViewVisible(ViewMatchers.withId(R.id.genericRecyclerView))
@@ -43,23 +43,23 @@ class SpaceSettingsRobot {
         Espresso.pressBack()
 
         Espresso.onView(ViewMatchers.withId(R.id.roomSettingsRecyclerView))
-                .perform(
-                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.space_settings_manage_rooms)),
-                                ViewActions.click()
-                        )
+            .perform(
+                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                    ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.space_settings_manage_rooms)),
+                    ViewActions.click()
                 )
+            )
 
         waitUntilViewVisible(ViewMatchers.withId(R.id.roomList))
         Espresso.pressBack()
 
         Espresso.onView(ViewMatchers.withId(R.id.roomSettingsRecyclerView))
-                .perform(
-                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.space_settings_permissions_title)),
-                                ViewActions.click()
-                        )
+            .perform(
+                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                    ViewMatchers.hasDescendant(ViewMatchers.withText(R.string.space_settings_permissions_title)),
+                    ViewActions.click()
                 )
+            )
 
         waitUntilViewVisible(ViewMatchers.withId(R.id.roomSettingsRecyclerView))
         Espresso.pressBack()

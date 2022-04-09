@@ -44,11 +44,11 @@ internal class SendEventWorker(context: Context, params: WorkerParameters, sessi
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val sessionId: String,
-            override val lastFailureMessage: String? = null,
-            val eventId: String,
-            // use this as an override if you want to send in clear in encrypted room
-            val isEncrypted: Boolean? = null
+        override val sessionId: String,
+        override val lastFailureMessage: String? = null,
+        val eventId: String,
+        // use this as an override if you want to send in clear in encrypted room
+        val isEncrypted: Boolean? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var localEchoRepository: LocalEchoRepository
@@ -66,27 +66,27 @@ internal class SendEventWorker(context: Context, params: WorkerParameters, sessi
         if (event?.eventId == null || event.roomId == null) {
             localEchoRepository.updateSendState(params.eventId, event?.roomId, SendState.UNDELIVERED)
             return Result.success()
-                    .also { Timber.e("Work cancelled due to bad input data") }
+                .also { Timber.e("Work cancelled due to bad input data") }
         }
 
         if (cancelSendTracker.isCancelRequestedFor(params.eventId, event.roomId)) {
             return Result.success()
-                    .also {
-                        cancelSendTracker.markCancelled(event.eventId, event.roomId)
-                        Timber.e("## SendEvent: Event sending has been cancelled ${params.eventId}")
-                    }
+                .also {
+                    cancelSendTracker.markCancelled(event.eventId, event.roomId)
+                    Timber.e("## SendEvent: Event sending has been cancelled ${params.eventId}")
+                }
         }
 
         if (params.lastFailureMessage != null) {
             localEchoRepository.updateSendState(
-                    eventId = event.eventId,
-                    roomId = event.roomId,
-                    sendState = SendState.UNDELIVERED,
-                    sendStateDetails = params.lastFailureMessage
+                eventId = event.eventId,
+                roomId = event.roomId,
+                sendState = SendState.UNDELIVERED,
+                sendStateDetails = params.lastFailureMessage
             )
             // Transmit the error
             return Result.success(inputData)
-                    .also { Timber.e("Work cancelled due to input error from parent") }
+                .also { Timber.e("Work cancelled due to input error from parent") }
         }
 
         Timber.v("## SendEvent: [${System.currentTimeMillis()}] Send event ${params.eventId}")
@@ -97,10 +97,10 @@ internal class SendEventWorker(context: Context, params: WorkerParameters, sessi
             if (/*currentAttemptCount >= MAX_NUMBER_OF_RETRY_BEFORE_FAILING ||**/ !exception.shouldBeRetried()) {
                 Timber.e("## SendEvent: [${System.currentTimeMillis()}]  Send event Failed cannot retry ${params.eventId} > ${exception.localizedMessage}")
                 localEchoRepository.updateSendState(
-                        eventId = event.eventId,
-                        roomId = event.roomId,
-                        sendState = SendState.UNDELIVERED,
-                        sendStateDetails = exception.toMatrixErrorStr()
+                    eventId = event.eventId,
+                    roomId = event.roomId,
+                    sendState = SendState.UNDELIVERED,
+                    sendStateDetails = exception.toMatrixErrorStr()
                 )
                 Result.success()
             } else {

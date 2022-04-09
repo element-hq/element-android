@@ -60,27 +60,27 @@ class BootstrapConfirmPassphraseFragment @Inject constructor() :
         }
 
         views.ssssPassphraseEnterEdittext.editorActionEvents()
-                .throttleFirst(300)
-                .onEach {
-                    if (it.actionId == EditorInfo.IME_ACTION_DONE) {
-                        submit()
-                    }
+            .throttleFirst(300)
+            .onEach {
+                if (it.actionId == EditorInfo.IME_ACTION_DONE) {
+                    submit()
                 }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseEnterEdittext.textChanges()
-                .onEach {
-                    views.ssssPassphraseEnterTil.error = null
-                    sharedViewModel.handle(BootstrapActions.UpdateConfirmCandidatePassphrase(it.toString()))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                views.ssssPassphraseEnterTil.error = null
+                sharedViewModel.handle(BootstrapActions.UpdateConfirmCandidatePassphrase(it.toString()))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         sharedViewModel.observeViewEvents {
             //            when (it) {
-//                is SharedSecureStorageViewEvent.InlineError -> {
-//                    ssss_passphrase_enter_til.error = it.message
-//                }
-//            }
+            //                is SharedSecureStorageViewEvent.InlineError -> {
+            //                    ssss_passphrase_enter_til.error = it.message
+            //                }
+            //            }
         }
 
         views.bootstrapSubmit.debouncedClicks { submit() }
@@ -92,11 +92,11 @@ class BootstrapConfirmPassphraseFragment @Inject constructor() :
         }
         val passphrase = views.ssssPassphraseEnterEdittext.text?.toString()
         when {
-            passphrase.isNullOrBlank()     ->
+            passphrase.isNullOrBlank() ->
                 views.ssssPassphraseEnterTil.error = getString(R.string.passphrase_empty_error_message)
             passphrase != state.passphrase ->
                 views.ssssPassphraseEnterTil.error = getString(R.string.passphrase_passphrase_does_not_match)
-            else                           -> {
+            else -> {
                 view?.hideKeyboard()
                 sharedViewModel.handle(BootstrapActions.DoInitialize(passphrase))
             }

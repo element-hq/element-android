@@ -28,9 +28,9 @@ interface WidgetURLFormatter {
      * @param bypassWhitelist if true, the base url will be considered as whitelisted
      */
     suspend fun format(
-            baseUrl: String,
-            params: Map<String, String> = emptyMap(),
-            forceFetchScalarToken: Boolean = false,
-            bypassWhitelist: Boolean
+        baseUrl: String,
+        params: Map<String, String> = emptyMap(),
+        forceFetchScalarToken: Boolean = false,
+        bypassWhitelist: Boolean
     ): String
 }

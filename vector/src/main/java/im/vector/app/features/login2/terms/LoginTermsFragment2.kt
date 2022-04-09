@@ -40,9 +40,9 @@ import javax.inject.Inject
  * LoginTermsFragment displays the list of policies the user has to accept
  */
 class LoginTermsFragment2 @Inject constructor(
-        private val policyController: PolicyController
+    private val policyController: PolicyController
 ) : AbstractLoginFragment2<FragmentLoginTerms2Binding>(),
-        PolicyController.PolicyControllerListener {
+    PolicyController.PolicyControllerListener {
 
     private val params: LoginTermsFragmentArgument by args()
 
@@ -62,9 +62,9 @@ class LoginTermsFragment2 @Inject constructor(
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()
 
         params.localizedFlowDataLoginTerms
-                .forEach {
-                    list.add(LocalizedFlowDataLoginTermsChecked(it))
-                }
+            .forEach {
+                list.add(LocalizedFlowDataLoginTermsChecked(it))
+            }
 
         loginTermsViewState = LoginTermsViewState(list)
     }
@@ -98,10 +98,10 @@ class LoginTermsFragment2 @Inject constructor(
 
     override fun openPolicy(localizedFlowDataLoginTerms: LocalizedFlowDataLoginTerms) {
         localizedFlowDataLoginTerms.localizedUrl
-                ?.takeIf { it.isNotBlank() }
-                ?.let {
-                    openUrlInChromeCustomTab(requireContext(), null, it)
-                }
+            ?.takeIf { it.isNotBlank() }
+            ?.let {
+                openUrlInChromeCustomTab(requireContext(), null, it)
+            }
     }
 
     private fun submit() {

@@ -30,7 +30,7 @@ import javax.inject.Singleton
 
 @Singleton
 class LocationTracker @Inject constructor(
-        context: Context
+    context: Context
 ) : LocationListenerCompat {
 
     private val locationManager = context.getSystemService<LocationManager>()
@@ -56,33 +56,33 @@ class LocationTracker @Inject constructor(
         }
 
         locationManager.allProviders
-                .takeIf { it.isNotEmpty() }
-                // Take GPS first
-                ?.sortedByDescending { if (it == LocationManager.GPS_PROVIDER) 1 else 0 }
-                ?.forEach { provider ->
-                    Timber.d("## LocationTracker. track location using $provider")
+            .takeIf { it.isNotEmpty() }
+            // Take GPS first
+            ?.sortedByDescending { if (it == LocationManager.GPS_PROVIDER) 1 else 0 }
+            ?.forEach { provider ->
+                Timber.d("## LocationTracker. track location using $provider")
 
-                    // Send last known location without waiting location updates
-                    locationManager.getLastKnownLocation(provider)?.let { lastKnownLocation ->
-                        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                            Timber.d("## LocationTracker. lastKnownLocation: $lastKnownLocation")
-                        } else {
-                            Timber.d("## LocationTracker. lastKnownLocation: ${lastKnownLocation.provider}")
-                        }
-                        notifyLocation(lastKnownLocation, isLive = false)
+                // Send last known location without waiting location updates
+                locationManager.getLastKnownLocation(provider)?.let { lastKnownLocation ->
+                    if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+                        Timber.d("## LocationTracker. lastKnownLocation: $lastKnownLocation")
+                    } else {
+                        Timber.d("## LocationTracker. lastKnownLocation: ${lastKnownLocation.provider}")
                     }
+                    notifyLocation(lastKnownLocation, isLive = false)
+                }
 
-                    locationManager.requestLocationUpdates(
-                            provider,
-                            MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
-                            MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
-                            this
-                    )
-                }
-                ?: run {
-                    callbacks.forEach { it.onLocationProviderIsNotAvailable() }
-                    Timber.v("## LocationTracker. There is no location provider available")
-                }
+                locationManager.requestLocationUpdates(
+                    provider,
+                    MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
+                    MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
+                    this
+                )
+            }
+            ?: run {
+                callbacks.forEach { it.onLocationProviderIsNotAvailable() }
+                Timber.v("## LocationTracker. There is no location provider available")
+            }
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
@@ -119,7 +119,7 @@ class LocationTracker @Inject constructor(
             LocationManager.GPS_PROVIDER -> {
                 hasGpsProviderLiveLocation = isLive
             }
-            else                         -> {
+            else -> {
                 if (hasGpsProviderLiveLocation) {
                     // Ignore this update
                     Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have gps live location")

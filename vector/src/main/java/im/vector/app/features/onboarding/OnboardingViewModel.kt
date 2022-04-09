@@ -62,20 +62,20 @@ import java.util.concurrent.CancellationException
  *
  */
 class OnboardingViewModel @AssistedInject constructor(
-        @Assisted initialState: OnboardingViewState,
-        private val applicationContext: Context,
-        private val authenticationService: AuthenticationService,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
-        private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider,
-        private val homeServerHistoryService: HomeServerHistoryService,
-        private val vectorFeatures: VectorFeatures,
-        private val analyticsTracker: AnalyticsTracker,
-        private val uriFilenameResolver: UriFilenameResolver,
-        private val registrationActionHandler: RegistrationActionHandler,
-        private val directLoginUseCase: DirectLoginUseCase,
-        private val vectorOverrides: VectorOverrides
+    @Assisted initialState: OnboardingViewState,
+    private val applicationContext: Context,
+    private val authenticationService: AuthenticationService,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
+    private val reAuthHelper: ReAuthHelper,
+    private val stringProvider: StringProvider,
+    private val homeServerHistoryService: HomeServerHistoryService,
+    private val vectorFeatures: VectorFeatures,
+    private val analyticsTracker: AnalyticsTracker,
+    private val uriFilenameResolver: UriFilenameResolver,
+    private val registrationActionHandler: RegistrationActionHandler,
+    private val directLoginUseCase: DirectLoginUseCase,
+    private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -132,32 +132,32 @@ class OnboardingViewModel @AssistedInject constructor(
 
     override fun handle(action: OnboardingAction) {
         when (action) {
-            is OnboardingAction.OnGetStarted               -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
-            is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
-            is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase(action)
-            OnboardingAction.ResetUseCase                  -> resetUseCase()
-            is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
-            is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
-            is OnboardingAction.InitWith                   -> handleInitWith(action)
-            is OnboardingAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
-            is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
-            is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
-            is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
-            is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
-            is OnboardingAction.ResetPassword              -> handleResetPassword(action)
+            is OnboardingAction.OnGetStarted -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
+            is OnboardingAction.OnIAlreadyHaveAnAccount -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
+            is OnboardingAction.UpdateUseCase -> handleUpdateUseCase(action)
+            OnboardingAction.ResetUseCase -> resetUseCase()
+            is OnboardingAction.UpdateServerType -> handleUpdateServerType(action)
+            is OnboardingAction.UpdateSignMode -> handleUpdateSignMode(action)
+            is OnboardingAction.InitWith -> handleInitWith(action)
+            is OnboardingAction.UpdateHomeServer -> handleUpdateHomeserver(action).also { lastAction = action }
+            is OnboardingAction.LoginOrRegister -> handleLoginOrRegister(action).also { lastAction = action }
+            is OnboardingAction.Register -> handleRegisterWith(action).also { lastAction = action }
+            is OnboardingAction.LoginWithToken -> handleLoginWithToken(action)
+            is OnboardingAction.WebLoginSuccess -> handleWebLoginSuccess(action)
+            is OnboardingAction.ResetPassword -> handleResetPassword(action)
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
-            is OnboardingAction.PostRegisterAction         -> handleRegisterAction(action.registerAction)
-            is OnboardingAction.ResetAction                -> handleResetAction(action)
-            is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
-            OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
-            is OnboardingAction.UpdateDisplayName          -> updateDisplayName(action.displayName)
-            OnboardingAction.UpdateDisplayNameSkipped      -> handleDisplayNameStepComplete()
-            OnboardingAction.UpdateProfilePictureSkipped   -> completePersonalization()
-            OnboardingAction.PersonalizeProfile            -> handlePersonalizeProfile()
-            is OnboardingAction.ProfilePictureSelected     -> handleProfilePictureSelected(action)
-            OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
-            is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
-            OnboardingAction.StopEmailValidationCheck      -> cancelWaitForEmailValidation()
+            is OnboardingAction.PostRegisterAction -> handleRegisterAction(action.registerAction)
+            is OnboardingAction.ResetAction -> handleResetAction(action)
+            is OnboardingAction.UserAcceptCertificate -> handleUserAcceptCertificate(action)
+            OnboardingAction.ClearHomeServerHistory -> handleClearHomeServerHistory()
+            is OnboardingAction.UpdateDisplayName -> updateDisplayName(action.displayName)
+            OnboardingAction.UpdateDisplayNameSkipped -> handleDisplayNameStepComplete()
+            OnboardingAction.UpdateProfilePictureSkipped -> completePersonalization()
+            OnboardingAction.PersonalizeProfile -> handlePersonalizeProfile()
+            is OnboardingAction.ProfilePictureSelected -> handleProfilePictureSelected(action)
+            OnboardingAction.SaveSelectedProfilePicture -> updateProfilePicture()
+            is OnboardingAction.PostViewEvent -> _viewEvents.post(action.viewEvent)
+            OnboardingAction.StopEmailValidationCheck -> cancelWaitForEmailValidation()
         }
     }
 
@@ -185,7 +185,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
         val nextOnboardingStep = when (onboardingFlow) {
-            OnboardingFlow.SignUp       -> if (vectorFeatures.isOnboardingUseCaseEnabled()) {
+            OnboardingFlow.SignUp -> if (vectorFeatures.isOnboardingUseCaseEnabled()) {
                 OnboardingViewEvents.OpenUseCaseSelection
             } else {
                 OnboardingViewEvents.OpenServerSelection
@@ -202,19 +202,19 @@ class OnboardingViewModel @AssistedInject constructor(
         when (val finalLastAction = lastAction) {
             is OnboardingAction.UpdateHomeServer -> {
                 currentHomeServerConnectionConfig
-                        ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
-                        ?.let { getLoginFlow(it) }
+                    ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
+                    ?.let { getLoginFlow(it) }
             }
-            is OnboardingAction.LoginOrRegister  ->
+            is OnboardingAction.LoginOrRegister ->
                 handleDirectLogin(
-                        finalLastAction,
-                        HomeServerConnectionConfig.Builder()
-                                // Will be replaced by the task
-                                .withHomeServerUri("https://dummy.org")
-                                .withAllowedFingerPrints(listOf(action.fingerprint))
-                                .build()
+                    finalLastAction,
+                    HomeServerConnectionConfig.Builder()
+                        // Will be replaced by the task
+                        .withHomeServerUri("https://dummy.org")
+                        .withAllowedFingerPrints(listOf(action.fingerprint))
+                        .build()
                 )
-            else                                 -> Unit
+            else -> Unit
         }
     }
 
@@ -255,35 +255,37 @@ class OnboardingViewModel @AssistedInject constructor(
                 setState { copy(isLoading = true) }
             }
             runCatching { registrationActionHandler.handleRegisterAction(registrationWizard, action) }
-                    .fold(
-                            onSuccess = {
-                                when {
-                                    action.ignoresResult() -> {
-                                        // do nothing
-                                    }
-                                    else                   -> when (it) {
-                                        is RegistrationResult.Success      -> onSessionCreated(it.session, isAccountCreated = true)
-                                        is RegistrationResult.FlowResponse -> onFlowResponse(it.flowResult)
-                                    }
-                                }
-                            },
-                            onFailure = {
-                                if (it !is CancellationException) {
-                                    _viewEvents.post(OnboardingViewEvents.Failure(it))
-                                }
+                .fold(
+                    onSuccess = {
+                        when {
+                            action.ignoresResult() -> {
+                                // do nothing
                             }
-                    )
+                            else -> when (it) {
+                                is RegistrationResult.Success -> onSessionCreated(it.session, isAccountCreated = true)
+                                is RegistrationResult.FlowResponse -> onFlowResponse(it.flowResult)
+                            }
+                        }
+                    },
+                    onFailure = {
+                        if (it !is CancellationException) {
+                            _viewEvents.post(OnboardingViewEvents.Failure(it))
+                        }
+                    }
+                )
             setState { copy(isLoading = false) }
         }
     }
 
     private fun handleRegisterWith(action: OnboardingAction.Register) {
         reAuthHelper.data = action.password
-        handleRegisterAction(RegisterAction.CreateAccount(
+        handleRegisterAction(
+            RegisterAction.CreateAccount(
                 action.username,
                 action.password,
                 action.initialDeviceName
-        ))
+            )
+        )
     }
 
     private fun handleResetAction(action: OnboardingAction.ResetAction) {
@@ -294,32 +296,32 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.ResetHomeServerType -> {
                 setState {
                     copy(
-                            serverType = ServerType.Unknown
+                        serverType = ServerType.Unknown
                     )
                 }
             }
-            OnboardingAction.ResetHomeServerUrl  -> {
+            OnboardingAction.ResetHomeServerUrl -> {
                 viewModelScope.launch {
                     authenticationService.reset()
                     setState {
                         copy(
-                                isLoading = false,
-                                homeServerUrlFromUser = null,
-                                homeServerUrl = null,
-                                loginMode = LoginMode.Unknown,
-                                serverType = ServerType.Unknown,
-                                loginModeSupportedTypes = emptyList()
+                            isLoading = false,
+                            homeServerUrlFromUser = null,
+                            homeServerUrl = null,
+                            loginMode = LoginMode.Unknown,
+                            serverType = ServerType.Unknown,
+                            loginModeSupportedTypes = emptyList()
                         )
                     }
                 }
             }
-            OnboardingAction.ResetSignMode              -> {
+            OnboardingAction.ResetSignMode -> {
                 setState {
                     copy(
-                            isLoading = false,
-                            signMode = SignMode.Unknown,
-                            loginMode = LoginMode.Unknown,
-                            loginModeSupportedTypes = emptyList()
+                        isLoading = false,
+                        signMode = SignMode.Unknown,
+                        loginMode = LoginMode.Unknown,
+                        loginModeSupportedTypes = emptyList()
                     )
                 }
             }
@@ -329,11 +331,11 @@ class OnboardingViewModel @AssistedInject constructor(
                     setState { copy(isLoading = false) }
                 }
             }
-            OnboardingAction.ResetResetPassword         -> {
+            OnboardingAction.ResetResetPassword -> {
                 setState {
                     copy(
-                            isLoading = false,
-                            resetPasswordEmail = null
+                        isLoading = false,
+                        resetPasswordEmail = null
                     )
                 }
             }
@@ -343,22 +345,22 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateSignMode(action: OnboardingAction.UpdateSignMode) {
         setState {
             copy(
-                    signMode = action.signMode
+                signMode = action.signMode
             )
         }
 
         when (action.signMode) {
-            SignMode.SignUp             -> handleRegisterAction(RegisterAction.StartRegistration)
-            SignMode.SignIn             -> startAuthenticationFlow()
+            SignMode.SignUp -> handleRegisterAction(RegisterAction.StartRegistration)
+            SignMode.SignIn -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
-            SignMode.Unknown            -> Unit
+            SignMode.Unknown -> Unit
         }
     }
 
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         setState { copy(useCase = action.useCase) }
         when (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
-            true  -> {
+            true -> {
                 handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
                 OnboardingViewEvents.OpenCombinedRegister
             }
@@ -373,17 +375,17 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateServerType(action: OnboardingAction.UpdateServerType) {
         setState {
             copy(
-                    serverType = action.serverType
+                serverType = action.serverType
             )
         }
 
         when (action.serverType) {
-            ServerType.Unknown   -> Unit /* Should not happen */
+            ServerType.Unknown -> Unit /* Should not happen */
             ServerType.MatrixOrg ->
                 // Request login flow here
                 handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
             ServerType.EMS,
-            ServerType.Other     -> _viewEvents.post(OnboardingViewEvents.OnServerSelectionDone(action.serverType))
+            ServerType.Other -> _viewEvents.post(OnboardingViewEvents.OnServerSelectionDone(action.serverType))
         }
     }
 
@@ -423,8 +425,8 @@ class OnboardingViewModel @AssistedInject constructor(
 
                 setState {
                     copy(
-                            isLoading = false,
-                            resetPasswordEmail = action.email
+                        isLoading = false,
+                        resetPasswordEmail = action.email
                     )
                 }
 
@@ -452,8 +454,8 @@ class OnboardingViewModel @AssistedInject constructor(
                 }
                 setState {
                     copy(
-                            isLoading = false,
-                            resetPasswordEmail = null
+                        isLoading = false,
+                        resetPasswordEmail = null
                     )
                 }
 
@@ -464,9 +466,9 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleLoginOrRegister(action: OnboardingAction.LoginOrRegister) = withState { state ->
         when (state.signMode) {
-            SignMode.Unknown            -> error("Developer error, invalid sign mode")
-            SignMode.SignIn             -> handleLogin(action)
-            SignMode.SignUp             -> handleRegisterWith(OnboardingAction.Register(action.username, action.password, action.initialDeviceName))
+            SignMode.Unknown -> error("Developer error, invalid sign mode")
+            SignMode.SignIn -> handleLogin(action)
+            SignMode.SignUp -> handleRegisterWith(OnboardingAction.Register(action.username, action.password, action.initialDeviceName))
             SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
         }
     }
@@ -475,11 +477,11 @@ class OnboardingViewModel @AssistedInject constructor(
         setState { copy(isLoading = true) }
         currentJob = viewModelScope.launch {
             directLoginUseCase.execute(action, homeServerConnectionConfig).fold(
-                    onSuccess = { onSessionCreated(it, isAccountCreated = false) },
-                    onFailure = {
-                        setState { copy(isLoading = false) }
-                        _viewEvents.post(OnboardingViewEvents.Failure(it))
-                    }
+                onSuccess = { onSessionCreated(it, isAccountCreated = false) },
+                onFailure = {
+                    setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(it))
+                }
             )
         }
     }
@@ -495,9 +497,9 @@ class OnboardingViewModel @AssistedInject constructor(
             currentJob = viewModelScope.launch {
                 try {
                     val result = safeLoginWizard.login(
-                            action.username,
-                            action.password,
-                            action.initialDeviceName
+                        action.username,
+                        action.password,
+                        action.initialDeviceName
                     )
                     reAuthHelper.data = action.password
                     onSessionCreated(result, isAccountCreated = false)
@@ -542,7 +544,7 @@ class OnboardingViewModel @AssistedInject constructor(
         session.configureAndStart(applicationContext)
 
         when (isAccountCreated) {
-            true  -> {
+            true -> {
                 val personalizationState = createPersonalizationState(session, state)
                 setState {
                     copy(isLoading = false, personalizationState = personalizationState)
@@ -562,11 +564,11 @@ class OnboardingViewModel @AssistedInject constructor(
                 val homeServerCapabilities = session.getHomeServerCapabilities()
                 val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities?.firstOrNull()
                 state.personalizationState.copy(
-                        supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
-                        supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
+                    supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
+                    supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
                 )
             }
-            else                                            -> state.personalizationState
+            else -> state.personalizationState
         }
     }
 
@@ -598,8 +600,10 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun getLoginFlow(homeServerConnectionConfig: HomeServerConnectionConfig,
-                             serverTypeOverride: ServerType? = null) {
+    private fun getLoginFlow(
+        homeServerConnectionConfig: HomeServerConnectionConfig,
+        serverTypeOverride: ServerType? = null
+    ) {
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
         currentJob = viewModelScope.launch {
@@ -607,14 +611,14 @@ class OnboardingViewModel @AssistedInject constructor(
 
             setState {
                 copy(
-                        isLoading = true,
-                        // If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
-                        // It is also useful to set the value again in the case of a certificate error on matrix.org
-                        serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) {
-                            ServerType.MatrixOrg
-                        } else {
-                            serverTypeOverride ?: serverType
-                        }
+                    isLoading = true,
+                    // If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
+                    // It is also useful to set the value again in the case of a certificate error on matrix.org
+                    serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) {
+                        ServerType.MatrixOrg
+                    } else {
+                        serverTypeOverride ?: serverType
+                    }
                 )
             }
 
@@ -623,9 +627,9 @@ class OnboardingViewModel @AssistedInject constructor(
             } catch (failure: Throwable) {
                 setState {
                     copy(
-                            isLoading = false,
-                            // If we were trying to retrieve matrix.org login flow, also reset the serverType
-                            serverType = if (serverType == ServerType.MatrixOrg) ServerType.Unknown else serverType
+                        isLoading = false,
+                        // If we were trying to retrieve matrix.org login flow, also reset the serverType
+                        serverType = if (serverType == ServerType.MatrixOrg) ServerType.Unknown else serverType
                     )
                 }
                 _viewEvents.post(OnboardingViewEvents.Failure(failure))
@@ -642,22 +646,23 @@ class OnboardingViewModel @AssistedInject constructor(
                 // SSO login is taken first
                 data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
                         data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
-                else                                                               -> LoginMode.Unsupported
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.Password
+                else -> LoginMode.Unsupported
             }
 
             setState {
                 copy(
-                        isLoading = false,
-                        homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
-                        homeServerUrl = data.homeServerUrl,
-                        loginMode = loginMode,
-                        loginModeSupportedTypes = data.supportedLoginTypes.toList()
+                    isLoading = false,
+                    homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
+                    homeServerUrl = data.homeServerUrl,
+                    loginMode = loginMode,
+                    loginModeSupportedTypes = data.supportedLoginTypes.toList()
                 )
             }
             if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) ||
-                    data.isOutdatedHomeserver) {
+                data.isOutdatedHomeserver
+            ) {
                 // Notify the UI
                 _viewEvents.post(OnboardingViewEvents.OutdatedHomeserver)
             }
@@ -668,7 +673,7 @@ class OnboardingViewModel @AssistedInject constructor(
                         OnboardingFlow.SignIn -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignIn))
                         OnboardingFlow.SignUp -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignUp))
                         OnboardingFlow.SignInSignUp,
-                        null                  -> {
+                        null -> {
                             _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
                         }
                     }
@@ -699,8 +704,8 @@ class OnboardingViewModel @AssistedInject constructor(
                 activeSession.setDisplayName(activeSession.myUserId, displayName)
                 setState {
                     copy(
-                            isLoading = false,
-                            personalizationState = personalizationState.copy(displayName = displayName)
+                        isLoading = false,
+                        personalizationState = personalizationState.copy(displayName = displayName)
                     )
                 }
                 handleDisplayNameStepComplete()
@@ -714,9 +719,9 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handlePersonalizeProfile() {
         withPersonalisationState {
             when {
-                it.supportsChangingDisplayName    -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
+                it.supportsChangingDisplayName -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
                 it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
-                else                              -> {
+                else -> {
                     throw IllegalStateException("It should not be possible to personalize without supporting display name or avatar changing")
                 }
             }
@@ -727,7 +732,7 @@ class OnboardingViewModel @AssistedInject constructor(
         withPersonalisationState {
             when {
                 it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
-                else                              -> completePersonalization()
+                else -> completePersonalization()
             }
         }
     }
@@ -752,13 +757,13 @@ class OnboardingViewModel @AssistedInject constructor(
                         val activeSession = activeSessionHolder.getActiveSession()
                         try {
                             activeSession.updateAvatar(
-                                    activeSession.myUserId,
-                                    pictureUri,
-                                    uriFilenameResolver.getFilenameFromUri(pictureUri) ?: UUID.randomUUID().toString()
+                                activeSession.myUserId,
+                                pictureUri,
+                                uriFilenameResolver.getFilenameFromUri(pictureUri) ?: UUID.randomUUID().toString()
                             )
                             setState {
                                 copy(
-                                        isLoading = false,
+                                    isLoading = false,
                                 )
                             }
                             onProfilePictureSaved()
@@ -791,6 +796,6 @@ private fun LoginMode.supportsSignModeScreen(): Boolean {
         is LoginMode.SsoAndPassword -> true
         is LoginMode.Sso,
         LoginMode.Unknown,
-        LoginMode.Unsupported       -> false
+        LoginMode.Unsupported -> false
     }
 }

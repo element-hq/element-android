@@ -36,14 +36,16 @@ import javax.inject.Inject
 
 // Legacy name: MXDeviceList
 @SessionScope
-internal class DeviceListManager @Inject constructor(private val cryptoStore: IMXCryptoStore,
-                                                     private val olmDevice: MXOlmDevice,
-                                                     private val syncTokenStore: SyncTokenStore,
-                                                     private val credentials: Credentials,
-                                                     private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
-                                                     private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-                                                     coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                     private val taskExecutor: TaskExecutor) {
+internal class DeviceListManager @Inject constructor(
+    private val cryptoStore: IMXCryptoStore,
+    private val olmDevice: MXOlmDevice,
+    private val syncTokenStore: SyncTokenStore,
+    private val credentials: Credentials,
+    private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
+    private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+    coroutineDispatchers: MatrixCoroutineDispatchers,
+    private val taskExecutor: TaskExecutor
+) {
 
     interface UserDevicesUpdateListener {
         fun onUsersDeviceUpdate(userIds: List<String>)
@@ -228,8 +230,8 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
             for ((k, value) in failures) {
                 val statusCode = when (val status = value["status"]) {
                     is Double -> status.toInt()
-                    is Int    -> status.toInt()
-                    else      -> 0
+                    is Int -> status.toInt()
+                    else -> 0
                 }
                 if (statusCode == 503) {
                     synchronized(notReadyToRetryHS) {
@@ -392,10 +394,10 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                 Timber.v("## CRYPTO | CrossSigning : Got keys for $userId : USK ${it.unpaddedBase64PublicKey}")
             }
             cryptoStore.storeUserCrossSigningKeys(
-                    userId,
-                    masterKey,
-                    selfSigningKey,
-                    userSigningKey
+                userId,
+                masterKey,
+                selfSigningKey,
+                userSigningKey
             )
         }
 
@@ -475,8 +477,10 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         }
 
         if (!isVerified) {
-            Timber.e("## CRYPTO | validateDeviceKeys() : Unable to verify signature on device " + userId + ":" +
-                    deviceKeys.deviceId + " with error " + errorMessage)
+            Timber.e(
+                "## CRYPTO | validateDeviceKeys() : Unable to verify signature on device " + userId + ":" +
+                        deviceKeys.deviceId + " with error " + errorMessage
+            )
             return false
         }
 
@@ -486,9 +490,11 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
                 // best off sticking with the original keys.
                 //
                 // Should we warn the user about it somehow?
-                Timber.e("## CRYPTO | validateDeviceKeys() : WARNING:Ed25519 key for device " + userId + ":" +
-                        deviceKeys.deviceId + " has changed : " +
-                        previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey)
+                Timber.e(
+                    "## CRYPTO | validateDeviceKeys() : WARNING:Ed25519 key for device " + userId + ":" +
+                            deviceKeys.deviceId + " has changed : " +
+                            previouslyStoredDeviceKeys.fingerprint() + " -> " + signKey
+                )
 
                 Timber.e("## CRYPTO | validateDeviceKeys() : $previouslyStoredDeviceKeys -> $deviceKeys")
                 Timber.e("## CRYPTO | validateDeviceKeys() : ${previouslyStoredDeviceKeys.keys} -> ${deviceKeys.keys}")
@@ -523,12 +529,12 @@ internal class DeviceListManager @Inject constructor(private val cryptoStore: IM
         runCatching {
             doKeyDownloadForUsers(users)
         }.fold(
-                {
-                    Timber.v("## CRYPTO | refreshOutdatedDeviceLists() : done")
-                },
-                {
-                    Timber.e(it, "## CRYPTO | refreshOutdatedDeviceLists() : ERROR updating device keys for users $users")
-                }
+            {
+                Timber.v("## CRYPTO | refreshOutdatedDeviceLists() : done")
+            },
+            {
+                Timber.e(it, "## CRYPTO | refreshOutdatedDeviceLists() : ERROR updating device keys for users $users")
+            }
         )
     }
 

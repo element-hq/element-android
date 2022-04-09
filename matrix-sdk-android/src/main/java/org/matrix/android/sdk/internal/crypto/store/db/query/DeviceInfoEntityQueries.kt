@@ -30,10 +30,10 @@ internal fun DeviceInfoEntity.Companion.getOrCreate(realm: Realm, userId: String
     val key = DeviceInfoEntity.createPrimaryKey(userId, deviceId)
 
     return realm.where<DeviceInfoEntity>()
-            .equalTo(DeviceInfoEntityFields.PRIMARY_KEY, key)
-            .findFirst()
-            ?: realm.createObject<DeviceInfoEntity>(key)
-                    .apply {
-                        this.deviceId = deviceId
-                    }
+        .equalTo(DeviceInfoEntityFields.PRIMARY_KEY, key)
+        .findFirst()
+        ?: realm.createObject<DeviceInfoEntity>(key)
+            .apply {
+                this.deviceId = deviceId
+            }
 }

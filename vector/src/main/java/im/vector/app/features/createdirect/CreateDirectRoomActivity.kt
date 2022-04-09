@@ -75,25 +75,25 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
         sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
         sharedActionViewModel
-                .stream()
-                .onEach { action ->
-                    when (action) {
-                        UserListSharedAction.Close                 -> finish()
-                        UserListSharedAction.GoBack                -> onBackPressed()
-                        is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(action)
-                        UserListSharedAction.OpenPhoneBook         -> openPhoneBook()
-                        UserListSharedAction.AddByQrCode           -> openAddByQrCode()
-                    }
+            .stream()
+            .onEach { action ->
+                when (action) {
+                    UserListSharedAction.Close -> finish()
+                    UserListSharedAction.GoBack -> onBackPressed()
+                    is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(action)
+                    UserListSharedAction.OpenPhoneBook -> openPhoneBook()
+                    UserListSharedAction.AddByQrCode -> openAddByQrCode()
                 }
-                .launchIn(lifecycleScope)
+            }
+            .launchIn(lifecycleScope)
         if (isFirstCreation()) {
             addFragment(
-                    views.container,
-                    UserListFragment::class.java,
-                    UserListFragmentArgs(
-                            title = getString(R.string.fab_menu_create_chat),
-                            menuResId = R.menu.vector_create_direct_room
-                    )
+                views.container,
+                UserListFragment::class.java,
+                UserListFragmentArgs(
+                    title = getString(R.string.fab_menu_create_chat),
+                    menuResId = R.menu.vector_create_direct_room
+                )
             )
         }
         viewModel.onEach(CreateDirectRoomViewState::createAndInviteState) {
@@ -106,7 +106,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     Toast.makeText(this, R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-                CreateDirectRoomViewEvents.DmSelf      -> {
+                CreateDirectRoomViewEvents.DmSelf -> {
                     Toast.makeText(this, R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                     finish()
                 }
@@ -115,14 +115,14 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
         qrViewModel.observeViewEvents {
             when (it) {
-                is QrCodeScannerEvents.CodeParsed  -> {
+                is QrCodeScannerEvents.CodeParsed -> {
                     viewModel.handle(CreateDirectRoomAction.QrScannedAction(it.result))
                 }
                 is QrCodeScannerEvents.ParseFailed -> {
                     Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-                else                               -> Unit
+                else -> Unit
             }
         }
     }
@@ -168,8 +168,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         when (state) {
             is Loading -> renderCreationLoading()
             is Success -> renderCreationSuccess(state())
-            is Fail    -> renderCreationFailure(state.error)
-            else       -> Unit
+            is Fail -> renderCreationFailure(state.error)
+            else -> Unit
         }
     }
 
@@ -180,17 +180,17 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     private fun renderCreationFailure(error: Throwable) {
         hideWaitingView()
         when (error) {
-            is CreateRoomFailure.CreatedWithTimeout           -> {
+            is CreateRoomFailure.CreatedWithTimeout -> {
                 finish()
             }
             is CreateRoomFailure.CreatedWithFederationFailure -> {
                 MaterialAlertDialogBuilder(this)
-                        .setMessage(getString(R.string.create_room_federation_error, error.matrixError.message))
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.ok) { _, _ -> finish() }
-                        .show()
+                    .setMessage(getString(R.string.create_room_federation_error, error.matrixError.message))
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.ok) { _, _ -> finish() }
+                    .show()
             }
-            else                                              -> {
+            else -> {
                 val message = if (error is Failure.ServerError && error.httpCode == HttpURLConnection.HTTP_INTERNAL_ERROR /*500*/) {
                     // This error happen if the invited userId does not exist.
                     getString(R.string.create_room_dm_failure)
@@ -198,9 +198,9 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     errorFormatter.toHumanReadable(error)
                 }
                 MaterialAlertDialogBuilder(this)
-                        .setMessage(message)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
+                    .setMessage(message)
+                    .setPositiveButton(R.string.ok, null)
+                    .show()
             }
         }
     }

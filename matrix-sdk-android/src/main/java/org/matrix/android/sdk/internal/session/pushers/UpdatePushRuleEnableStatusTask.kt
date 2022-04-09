@@ -23,22 +23,24 @@ import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
 internal interface UpdatePushRuleEnableStatusTask : Task<UpdatePushRuleEnableStatusTask.Params, Unit> {
-    data class Params(val kind: RuleKind,
-                      val pushRule: PushRule,
-                      val enabled: Boolean)
+    data class Params(
+        val kind: RuleKind,
+        val pushRule: PushRule,
+        val enabled: Boolean
+    )
 }
 
 internal class DefaultUpdatePushRuleEnableStatusTask @Inject constructor(
-        private val pushRulesApi: PushRulesApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val pushRulesApi: PushRulesApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : UpdatePushRuleEnableStatusTask {
 
     override suspend fun execute(params: UpdatePushRuleEnableStatusTask.Params) {
         return executeRequest(globalErrorReceiver) {
             pushRulesApi.updateEnableRuleStatus(
-                    params.kind.value,
-                    params.pushRule.ruleId,
-                    EnabledBody(params.enabled)
+                params.kind.value,
+                params.pushRule.ruleId,
+                EnabledBody(params.enabled)
             )
         }
     }

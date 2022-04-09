@@ -29,11 +29,13 @@ import java.io.File
 import javax.inject.Inject
 
 internal class VideoCompressor @Inject constructor(
-        private val temporaryFileCreator: TemporaryFileCreator
+    private val temporaryFileCreator: TemporaryFileCreator
 ) {
 
-    suspend fun compress(videoFile: File,
-                         progressListener: ProgressListener?): VideoCompressionResult {
+    suspend fun compress(
+        videoFile: File,
+        progressListener: ProgressListener?
+    ): VideoCompressionResult {
         val destinationFile = temporaryFileCreator.create()
 
         val job = Job()
@@ -44,40 +46,40 @@ internal class VideoCompressor @Inject constructor(
         var result: Int = -1
         var failure: Throwable? = null
         Transcoder.into(destinationFile.path)
-                .addDataSource(object : FilePathDataSource(videoFile.path) {
-                    // https://github.com/natario1/Transcoder/issues/154
-                    @Suppress("SENSELESS_COMPARISON") // Source is annotated as @NonNull, but can actually be null...
-                    override fun isInitialized(): Boolean {
-                        if (source == null) {
-                            return false
-                        }
-                        return super.isInitialized()
+            .addDataSource(object : FilePathDataSource(videoFile.path) {
+                // https://github.com/natario1/Transcoder/issues/154
+                @Suppress("SENSELESS_COMPARISON") // Source is annotated as @NonNull, but can actually be null...
+                override fun isInitialized(): Boolean {
+                    if (source == null) {
+                        return false
                     }
-                })
-                .setListener(object : TranscoderListener {
-                    override fun onTranscodeProgress(progress: Double) {
-                        Timber.d("Compressing: $progress%")
-                        progressListener?.onProgress((progress * 100).toInt(), 100)
-                    }
+                    return super.isInitialized()
+                }
+            })
+            .setListener(object : TranscoderListener {
+                override fun onTranscodeProgress(progress: Double) {
+                    Timber.d("Compressing: $progress%")
+                    progressListener?.onProgress((progress * 100).toInt(), 100)
+                }
 
-                    override fun onTranscodeCompleted(successCode: Int) {
-                        Timber.d("Compressing: success: $successCode")
-                        result = successCode
-                        job.complete()
-                    }
+                override fun onTranscodeCompleted(successCode: Int) {
+                    Timber.d("Compressing: success: $successCode")
+                    result = successCode
+                    job.complete()
+                }
 
-                    override fun onTranscodeCanceled() {
-                        Timber.d("Compressing: cancel")
-                        job.cancel()
-                    }
+                override fun onTranscodeCanceled() {
+                    Timber.d("Compressing: cancel")
+                    job.cancel()
+                }
 
-                    override fun onTranscodeFailed(exception: Throwable) {
-                        Timber.w(exception, "Compressing: failure")
-                        failure = exception
-                        job.completeExceptionally(exception)
-                    }
-                })
-                .transcode()
+                override fun onTranscodeFailed(exception: Throwable) {
+                    Timber.w(exception, "Compressing: failure")
+                    failure = exception
+                    job.completeExceptionally(exception)
+                }
+            })
+            .transcode()
 
         job.join()
 
@@ -111,7 +113,7 @@ internal class VideoCompressor @Inject constructor(
                 deleteFile(destinationFile)
                 VideoCompressionResult.CompressionNotNeeded
             }
-            else                          -> {
+            else -> {
                 // Should not happen...
                 // Delete now the temporary file
                 deleteFile(destinationFile)

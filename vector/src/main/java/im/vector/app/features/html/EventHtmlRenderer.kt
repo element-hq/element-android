@@ -38,9 +38,9 @@ import javax.inject.Singleton
 
 @Singleton
 class EventHtmlRenderer @Inject constructor(
-        htmlConfigure: MatrixHtmlPluginConfigure,
-        context: Context,
-        vectorPreferences: VectorPreferences
+    htmlConfigure: MatrixHtmlPluginConfigure,
+    context: Context,
+    vectorPreferences: VectorPreferences
 ) {
 
     interface PostProcessor {
@@ -48,26 +48,26 @@ class EventHtmlRenderer @Inject constructor(
     }
 
     private val builder = Markwon.builder(context)
-            .usePlugin(HtmlPlugin.create(htmlConfigure))
+        .usePlugin(HtmlPlugin.create(htmlConfigure))
 
     private val markwon = if (vectorPreferences.latexMathsIsEnabled()) {
         builder
-                .usePlugin(object : AbstractMarkwonPlugin() { // Markwon expects maths to be in a specific format: https://noties.io/Markwon/docs/v4/ext-latex
-                    override fun processMarkdown(markdown: String): String {
-                        return markdown
-                                .replace(Regex("""<span\s+data-mx-maths="([^"]*)">.*?</span>""")) { matchResult ->
-                                    "$$" + matchResult.groupValues[1] + "$$"
-                                }
-                                .replace(Regex("""<div\s+data-mx-maths="([^"]*)">.*?</div>""")) { matchResult ->
-                                    "\n$$\n" + matchResult.groupValues[1] + "\n$$\n"
-                                }
-                    }
-                })
-                .usePlugin(MarkwonInlineParserPlugin.create())
-                .usePlugin(JLatexMathPlugin.create(44F) { builder ->
-                    builder.inlinesEnabled(true)
-                    builder.theme().inlinePadding(JLatexMathTheme.Padding.symmetric(24, 8))
-                })
+            .usePlugin(object : AbstractMarkwonPlugin() { // Markwon expects maths to be in a specific format: https://noties.io/Markwon/docs/v4/ext-latex
+                override fun processMarkdown(markdown: String): String {
+                    return markdown
+                        .replace(Regex("""<span\s+data-mx-maths="([^"]*)">.*?</span>""")) { matchResult ->
+                            "$$" + matchResult.groupValues[1] + "$$"
+                        }
+                        .replace(Regex("""<div\s+data-mx-maths="([^"]*)">.*?</div>""")) { matchResult ->
+                            "\n$$\n" + matchResult.groupValues[1] + "\n$$\n"
+                        }
+                }
+            })
+            .usePlugin(MarkwonInlineParserPlugin.create())
+            .usePlugin(JLatexMathPlugin.create(44F) { builder ->
+                builder.inlinesEnabled(true)
+                builder.theme().inlinePadding(JLatexMathTheme.Padding.symmetric(24, 8))
+            })
     } else {
         builder
     }.textSetter(PrecomputedFutureTextSetterCompat.create()).build()
@@ -118,11 +118,11 @@ class MatrixHtmlPluginConfigure @Inject constructor(private val colorProvider: C
 
     override fun configureHtml(plugin: HtmlPlugin) {
         plugin
-                .addHandler(FontTagHandler())
-                .addHandler(ParagraphHandler(DimensionConverter(resources)))
-                .addHandler(MxReplyTagHandler())
-                .addHandler(CodePreTagHandler())
-                .addHandler(CodeTagHandler())
-                .addHandler(SpanHandler(colorProvider))
+            .addHandler(FontTagHandler())
+            .addHandler(ParagraphHandler(DimensionConverter(resources)))
+            .addHandler(MxReplyTagHandler())
+            .addHandler(CodePreTagHandler())
+            .addHandler(CodeTagHandler())
+            .addHandler(SpanHandler(colorProvider))
     }
 }

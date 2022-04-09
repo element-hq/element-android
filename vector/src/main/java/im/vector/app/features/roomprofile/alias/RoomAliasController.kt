@@ -43,10 +43,10 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import javax.inject.Inject
 
 class RoomAliasController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val errorFormatter: ErrorFormatter,
-        private val colorProvider: ColorProvider,
-        private val roomAliasErrorFormatter: RoomAliasErrorFormatter
+    private val stringProvider: StringProvider,
+    private val errorFormatter: ErrorFormatter,
+    private val colorProvider: ColorProvider,
+    private val roomAliasErrorFormatter: RoomAliasErrorFormatter
 ) : TypedEpoxyController<RoomAliasViewState>() {
 
     interface Callback {
@@ -80,8 +80,8 @@ class RoomAliasController @Inject constructor(
         val host = this
         when (data.roomDirectoryVisibility) {
             Uninitialized -> Unit
-            is Loading    -> Unit
-            is Success    -> {
+            is Loading -> Unit
+            is Success -> {
                 formSwitchItem {
                     id("roomVisibility")
                     title(host.stringProvider.getString(R.string.room_alias_publish_to_directory, data.homeServerName))
@@ -95,11 +95,15 @@ class RoomAliasController @Inject constructor(
                     }
                 }
             }
-            is Fail       -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("rd_error")
-                    text(host.stringProvider.getString(R.string.room_alias_publish_to_directory_error,
-                            host.errorFormatter.toHumanReadable(data.roomDirectoryVisibility.error)))
+                    text(
+                        host.stringProvider.getString(
+                            R.string.room_alias_publish_to_directory_error,
+                            host.errorFormatter.toHumanReadable(data.roomDirectoryVisibility.error)
+                        )
+                    )
                     listener { host.callback?.retry() }
                 }
             }
@@ -109,7 +113,7 @@ class RoomAliasController @Inject constructor(
     private fun buildPublishInfo(data: RoomAliasViewState) {
         val host = this
         buildProfileSection(
-                stringProvider.getString(R.string.room_alias_published_alias_title)
+            stringProvider.getString(R.string.room_alias_published_alias_title)
         )
         settingsInfoItem {
             id("publishedInfo")
@@ -117,15 +121,15 @@ class RoomAliasController @Inject constructor(
         }
 
         data.canonicalAlias
-                ?.takeIf { it.isNotEmpty() }
-                ?.let { canonicalAlias ->
-                    profileActionItem {
-                        id("canonical")
-                        title(data.canonicalAlias)
-                        subtitle(host.stringProvider.getString(R.string.room_alias_published_alias_main))
-                        listener { host.callback?.openAliasDetail(canonicalAlias) }
-                    }
+            ?.takeIf { it.isNotEmpty() }
+            ?.let { canonicalAlias ->
+                profileActionItem {
+                    id("canonical")
+                    title(data.canonicalAlias)
+                    subtitle(host.stringProvider.getString(R.string.room_alias_published_alias_main))
+                    listener { host.callback?.openAliasDetail(canonicalAlias) }
                 }
+            }
 
         if (data.alternativeAliases.isEmpty()) {
             settingsInfoItem {
@@ -158,8 +162,8 @@ class RoomAliasController @Inject constructor(
     private fun buildPublishManuallyForm(data: RoomAliasViewState) {
         val host = this
         when (data.publishManuallyState) {
-            RoomAliasViewState.AddAliasState.Hidden     -> Unit
-            RoomAliasViewState.AddAliasState.Closed     -> {
+            RoomAliasViewState.AddAliasState.Hidden -> Unit
+            RoomAliasViewState.AddAliasState.Closed -> {
                 settingsButtonItem {
                     id("publishManually")
                     colorProvider(host.colorProvider)
@@ -191,7 +195,7 @@ class RoomAliasController @Inject constructor(
     private fun buildLocalInfo(data: RoomAliasViewState) {
         val host = this
         buildProfileSection(
-                stringProvider.getString(R.string.room_alias_local_address_title)
+            stringProvider.getString(R.string.room_alias_local_address_title)
         )
         settingsInfoItem {
             id("localInfo")
@@ -221,7 +225,7 @@ class RoomAliasController @Inject constructor(
                     }
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("alt_error")
                     text(host.errorFormatter.toHumanReadable(localAliases.error))
@@ -237,8 +241,8 @@ class RoomAliasController @Inject constructor(
     private fun buildAddLocalAlias(data: RoomAliasViewState) {
         val host = this
         when (data.newLocalAliasState) {
-            RoomAliasViewState.AddAliasState.Hidden     -> Unit
-            RoomAliasViewState.AddAliasState.Closed     -> {
+            RoomAliasViewState.AddAliasState.Hidden -> Unit
+            RoomAliasViewState.AddAliasState.Closed -> {
                 settingsButtonItem {
                     id("newLocalAliasButton")
                     colorProvider(host.colorProvider)

@@ -33,15 +33,15 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 class VerificationConclusionFragment @Inject constructor(
-        val controller: VerificationConclusionController
+    val controller: VerificationConclusionController
 ) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
-        VerificationConclusionController.Listener {
+    VerificationConclusionController.Listener {
 
     @Parcelize
     data class Args(
-            val isSuccessFull: Boolean,
-            val cancelReason: String?,
-            val isMe: Boolean
+        val isSuccessFull: Boolean,
+        val cancelReason: String?,
+        val isMe: Boolean
     ) : Parcelable
 
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)

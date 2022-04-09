@@ -30,7 +30,7 @@ class MigrateCryptoTo009(realm: DynamicRealm) : RealmMigrator(realm, 9) {
         userEntities.forEach {
             try {
                 val deviceList = it.getList(UserEntityFields.DEVICES.`$`)
-                        ?: return@forEach
+                    ?: return@forEach
                 val distinct = deviceList.distinctBy { it.getString(DeviceInfoEntityFields.DEVICE_ID) }
                 if (distinct.size != deviceList.size) {
                     deviceList.clear()

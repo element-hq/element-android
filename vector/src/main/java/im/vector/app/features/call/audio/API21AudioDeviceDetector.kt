@@ -31,9 +31,10 @@ import java.util.HashSet
 
 private val loggerTag = LoggerTag("API21AudioDeviceDetector", LoggerTag.VOIP)
 
-internal class API21AudioDeviceDetector(private val context: Context,
-                                        private val audioManager: AudioManager,
-                                        private val callAudioManager: CallAudioManager
+internal class API21AudioDeviceDetector(
+    private val context: Context,
+    private val audioManager: AudioManager,
+    private val callAudioManager: CallAudioManager
 ) : CallAudioManager.AudioDeviceDetector, WiredHeadsetStateReceiver.HeadsetEventListener, BluetoothHeadsetReceiver.EventListener {
 
     private var bluetoothAdapter: BluetoothAdapter? = null

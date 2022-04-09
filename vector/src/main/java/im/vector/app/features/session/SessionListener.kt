@@ -33,7 +33,7 @@ import javax.inject.Singleton
 
 @Singleton
 class SessionListener @Inject constructor(
-        private val analyticsTracker: AnalyticsTracker
+    private val analyticsTracker: AnalyticsTracker
 ) : Session.Listener {
 
     private val _globalErrorLiveData = MutableLiveData<LiveEvent<GlobalError>>()

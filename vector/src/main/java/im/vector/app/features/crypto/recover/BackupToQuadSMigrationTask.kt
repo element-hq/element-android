@@ -38,8 +38,8 @@ import java.util.UUID
 import javax.inject.Inject
 
 class BackupToQuadSMigrationTask @Inject constructor(
-        val session: Session,
-        val stringProvider: StringProvider
+    val session: Session,
+    val stringProvider: StringProvider
 ) : ViewModelTask<BackupToQuadSMigrationTask.Params, BackupToQuadSMigrationTask.Result> {
 
     sealed class Result {
@@ -52,9 +52,9 @@ class BackupToQuadSMigrationTask @Inject constructor(
     }
 
     data class Params(
-            val passphrase: String?,
-            val recoveryKey: String?,
-            val progressListener: BootstrapProgressListener? = null
+        val passphrase: String?,
+        val recoveryKey: String?,
+        val progressListener: BootstrapProgressListener? = null
     )
 
     override suspend fun execute(params: Params): Result {
@@ -68,21 +68,25 @@ class BackupToQuadSMigrationTask @Inject constructor(
 
             reportProgress(params, R.string.bootstrap_progress_checking_backup)
             val curveKey =
-                    (if (params.recoveryKey != null) {
-                        extractCurveKeyFromRecoveryKey(params.recoveryKey)
-                    } else if (!params.passphrase.isNullOrEmpty() && version.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null) {
-                        version.getAuthDataAsMegolmBackupAuthData()?.let { authData ->
-                            deriveKey(params.passphrase, authData.privateKeySalt!!, authData.privateKeyIterations!!, object : ProgressListener {
-                                override fun onProgress(progress: Int, total: Int) {
-                                    params.progressListener?.onProgress(WaitingViewData(
-                                            stringProvider.getString(R.string.bootstrap_progress_checking_backup_with_info,
-                                                    "$progress/$total")
-                                    ))
-                                }
-                            })
-                        }
-                    } else null)
-                            ?: return Result.IllegalParams
+                (if (params.recoveryKey != null) {
+                    extractCurveKeyFromRecoveryKey(params.recoveryKey)
+                } else if (!params.passphrase.isNullOrEmpty() && version.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null) {
+                    version.getAuthDataAsMegolmBackupAuthData()?.let { authData ->
+                        deriveKey(params.passphrase, authData.privateKeySalt!!, authData.privateKeyIterations!!, object : ProgressListener {
+                            override fun onProgress(progress: Int, total: Int) {
+                                params.progressListener?.onProgress(
+                                    WaitingViewData(
+                                        stringProvider.getString(
+                                            R.string.bootstrap_progress_checking_backup_with_info,
+                                            "$progress/$total"
+                                        )
+                                    )
+                                )
+                            }
+                        })
+                    }
+                } else null)
+                    ?: return Result.IllegalParams
 
             reportProgress(params, R.string.bootstrap_progress_compute_curve_key)
             val recoveryKey = computeRecoveryKey(curveKey)
@@ -94,47 +98,49 @@ class BackupToQuadSMigrationTask @Inject constructor(
             if (!isValid) return Result.InvalidRecoverySecret
 
             val info: SsssKeyCreationInfo =
-                    when {
-                        params.passphrase?.isNotEmpty() == true -> {
-                            reportProgress(params, R.string.bootstrap_progress_generating_ssss)
-                            quadS.generateKeyWithPassphrase(
-                                    UUID.randomUUID().toString(),
-                                    "ssss_key",
-                                    params.passphrase,
-                                    EmptyKeySigner(),
-                                    object : ProgressListener {
-                                        override fun onProgress(progress: Int, total: Int) {
-                                            params.progressListener?.onProgress(
-                                                    WaitingViewData(
-                                                            stringProvider.getString(
-                                                                    R.string.bootstrap_progress_generating_ssss_with_info,
-                                                                    "$progress/$total")
-                                                    ))
-                                        }
-                                    }
-                            )
-                        }
-                        params.recoveryKey != null              -> {
-                            reportProgress(params, R.string.bootstrap_progress_generating_ssss_recovery)
-                            quadS.generateKey(
-                                    UUID.randomUUID().toString(),
-                                    extractCurveKeyFromRecoveryKey(params.recoveryKey)?.let { RawBytesKeySpec(it) },
-                                    "ssss_key",
-                                    EmptyKeySigner()
-                            )
-                        }
-                        else                                    -> {
-                            return Result.IllegalParams
-                        }
+                when {
+                    params.passphrase?.isNotEmpty() == true -> {
+                        reportProgress(params, R.string.bootstrap_progress_generating_ssss)
+                        quadS.generateKeyWithPassphrase(
+                            UUID.randomUUID().toString(),
+                            "ssss_key",
+                            params.passphrase,
+                            EmptyKeySigner(),
+                            object : ProgressListener {
+                                override fun onProgress(progress: Int, total: Int) {
+                                    params.progressListener?.onProgress(
+                                        WaitingViewData(
+                                            stringProvider.getString(
+                                                R.string.bootstrap_progress_generating_ssss_with_info,
+                                                "$progress/$total"
+                                            )
+                                        )
+                                    )
+                                }
+                            }
+                        )
                     }
+                    params.recoveryKey != null -> {
+                        reportProgress(params, R.string.bootstrap_progress_generating_ssss_recovery)
+                        quadS.generateKey(
+                            UUID.randomUUID().toString(),
+                            extractCurveKeyFromRecoveryKey(params.recoveryKey)?.let { RawBytesKeySpec(it) },
+                            "ssss_key",
+                            EmptyKeySigner()
+                        )
+                    }
+                    else -> {
+                        return Result.IllegalParams
+                    }
+                }
 
             // Ok, so now we have migrated the old keybackup secret as the quadS key
             // Now we need to store the keybackup key in SSSS in a compatible way
             reportProgress(params, R.string.bootstrap_progress_storing_in_sss)
             quadS.storeSecret(
-                    KEYBACKUP_SECRET_SSSS_NAME,
-                    curveKey.toBase64NoPadding(),
-                    listOf(SharedSecretStorageService.KeyRef(info.keyId, info.keySpec))
+                KEYBACKUP_SECRET_SSSS_NAME,
+                curveKey.toBase64NoPadding(),
+                listOf(SharedSecretStorageService.KeyRef(info.keyId, info.keySpec))
             )
 
             // save for gossiping
@@ -142,12 +148,12 @@ class BackupToQuadSMigrationTask @Inject constructor(
 
             // while we are there let's restore, but do not block
             session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
-                    version,
-                    recoveryKey,
-                    null,
-                    null,
-                    null,
-                    NoOpMatrixCallback()
+                version,
+                recoveryKey,
+                null,
+                null,
+                null,
+                NoOpMatrixCallback()
             )
 
             return Result.Success

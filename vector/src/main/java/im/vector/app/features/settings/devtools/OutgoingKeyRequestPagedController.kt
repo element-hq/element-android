@@ -26,8 +26,8 @@ import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
 import javax.inject.Inject
 
 class OutgoingKeyRequestPagedController @Inject constructor() : PagedListEpoxyController<OutgoingRoomKeyRequest>(
-        // Important it must match the PageList builder notify Looper
-        modelBuildingHandler = createUIHandler()
+    // Important it must match the PageList builder notify Looper
+    modelBuildingHandler = createUIHandler()
 ) {
 
     interface InteractionListener {
@@ -43,21 +43,21 @@ class OutgoingKeyRequestPagedController @Inject constructor() : PagedListEpoxyCo
             id(roomKeyRequest.requestId)
             title(roomKeyRequest.requestId.toEpoxyCharSequence())
             description(
-                    span {
-                        span("roomId: ") {
-                            textStyle = "bold"
-                        }
-                        +"${roomKeyRequest.roomId}"
+                span {
+                    span("roomId: ") {
+                        textStyle = "bold"
+                    }
+                    +"${roomKeyRequest.roomId}"
 
-                        span("\nsessionId: ") {
-                            textStyle = "bold"
-                        }
-                        +"${roomKeyRequest.sessionId}"
-                        span("\nstate: ") {
-                            textStyle = "bold"
-                        }
-                        +roomKeyRequest.state.name
-                    }.toEpoxyCharSequence()
+                    span("\nsessionId: ") {
+                        textStyle = "bold"
+                    }
+                    +"${roomKeyRequest.sessionId}"
+                    span("\nstate: ") {
+                        textStyle = "bold"
+                    }
+                    +roomKeyRequest.state.name
+                }.toEpoxyCharSequence()
             )
         }
     }

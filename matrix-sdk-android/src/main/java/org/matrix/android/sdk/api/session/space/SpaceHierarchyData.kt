@@ -21,8 +21,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 
 data class SpaceHierarchyData(
-        val rootSummary: RoomSummary,
-        val children: List<SpaceChildInfo>,
-        val childrenState: List<Event>,
-        val nextToken: String? = null
+    val rootSummary: RoomSummary,
+    val children: List<SpaceChildInfo>,
+    val childrenState: List<Event>,
+    val nextToken: String? = null
 )

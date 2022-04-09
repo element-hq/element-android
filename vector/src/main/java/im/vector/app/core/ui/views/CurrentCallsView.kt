@@ -28,9 +28,9 @@ import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.call.CallState
 
 class CurrentCallsView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     interface Callback {
@@ -58,13 +58,13 @@ class CurrentCallsView @JvmOverloads constructor(
                 is CallState.Idle,
                 is CallState.CreateOffer,
                 is CallState.LocalRinging,
-                is CallState.Dialing   -> {
+                is CallState.Dialing -> {
                     resources.getString(R.string.call_ringing)
                 }
                 is CallState.Answering -> {
                     resources.getString(R.string.call_connecting)
                 }
-                else                   -> {
+                else -> {
                     resources.getString(R.string.call_one_active, formattedDuration)
                 }
             }

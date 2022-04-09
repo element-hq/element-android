@@ -39,9 +39,9 @@ import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
 class DiscoverySettingsController @Inject constructor(
-        private val colorProvider: ColorProvider,
-        private val stringProvider: StringProvider,
-        private val errorFormatter: ErrorFormatter
+    private val colorProvider: ColorProvider,
+    private val stringProvider: StringProvider,
+    private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<DiscoverySettingsState>() {
 
     var listener: Listener? = null
@@ -55,7 +55,7 @@ class DiscoverySettingsController @Inject constructor(
                     id("identityServerLoading")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 settingsInfoItem {
                     id("identityServerError")
                     helperText(data.identityServer.error.message)
@@ -70,7 +70,7 @@ class DiscoverySettingsController @Inject constructor(
                     buildMsisdnSection(data.phoneNumbersList)
                 }
             }
-            else       -> Unit
+            else -> Unit
         }
     }
 
@@ -216,7 +216,7 @@ class DiscoverySettingsController @Inject constructor(
                     id("emailsLoading")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 settingsInfoItem {
                     id("emailsError")
                     helperText(emails.error.message)
@@ -250,7 +250,7 @@ class DiscoverySettingsController @Inject constructor(
                         message(host.stringProvider.getString(R.string.settings_discovery_confirm_mail, pidInfo.threePid.value))
                         textColor(host.colorProvider.getColor(R.color.vector_info_color))
                     }
-                is Fail    ->
+                is Fail ->
                     settingsInformationItem {
                         id("info${pidInfo.threePid.value}")
                         message(host.stringProvider.getString(R.string.settings_discovery_confirm_mail_not_clicked, pidInfo.threePid.value))
@@ -260,7 +260,7 @@ class DiscoverySettingsController @Inject constructor(
             }
             when (pidInfo.finalRequest) {
                 is Uninitialized,
-                is Fail    ->
+                is Fail ->
                     buildContinueCancel(pidInfo.threePid)
                 is Loading ->
                     settingsProgressItem {
@@ -285,7 +285,7 @@ class DiscoverySettingsController @Inject constructor(
                     id("msisdnLoading")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 settingsInfoItem {
                     id("msisdnListError")
                     helperText(msisdns.error.message)
@@ -318,7 +318,7 @@ class DiscoverySettingsController @Inject constructor(
                 // Deal with error 500
                 // Ref: https://github.com/matrix-org/sydent/issues/292
                 if (error is Failure.ServerError &&
-                        error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
+                    error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
                     stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
                 } else {
                     errorFormatter.toHumanReadable(error)
@@ -359,7 +359,7 @@ class DiscoverySettingsController @Inject constructor(
                 is Loading -> {
                     buttonIndeterminate(true)
                 }
-                is Fail    -> {
+                is Fail -> {
                     buttonType(ButtonType.NORMAL)
                     buttonStyle(ButtonStyle.DESTRUCTIVE)
                     buttonTitle(host.stringProvider.getString(R.string.global_retry))
@@ -368,7 +368,7 @@ class DiscoverySettingsController @Inject constructor(
                 }
                 is Success -> when (pidInfo.isShared()) {
                     SharedState.SHARED,
-                    SharedState.NOT_SHARED          -> {
+                    SharedState.NOT_SHARED -> {
                         buttonType(ButtonType.SWITCH)
                         checked(pidInfo.isShared() == SharedState.SHARED)
                         switchChangeListener { _, checked ->
@@ -383,13 +383,13 @@ class DiscoverySettingsController @Inject constructor(
                         buttonType(ButtonType.NO_BUTTON)
                         when (pidInfo.finalRequest) {
                             is Incomplete -> iconMode(IconMode.INFO)
-                            is Fail       -> iconMode(IconMode.ERROR)
-                            else          -> iconMode(IconMode.NONE)
+                            is Fail -> iconMode(IconMode.ERROR)
+                            else -> iconMode(IconMode.NONE)
                         }
                     }
-                    null                            -> Unit
+                    null -> Unit
                 }
-                else       -> Unit
+                else -> Unit
             }
         }
     }
@@ -409,7 +409,7 @@ class DiscoverySettingsController @Inject constructor(
             id("bottom${threePid.value}")
             continueOnClick {
                 when (threePid) {
-                    is ThreePid.Email  -> {
+                    is ThreePid.Email -> {
                         host.listener?.checkEmailVerification(threePid)
                     }
                     is ThreePid.Msisdn -> {

@@ -33,11 +33,11 @@ internal interface SendingEventsDataSource {
 }
 
 internal class RealmSendingEventsDataSource(
-        private val roomId: String,
-        private val realm: AtomicReference<Realm>,
-        private val uiEchoManager: UIEchoManager,
-        private val timelineEventMapper: TimelineEventMapper,
-        private val onEventsUpdated: (Boolean) -> Unit
+    private val roomId: String,
+    private val realm: AtomicReference<Realm>,
+    private val uiEchoManager: UIEchoManager,
+    private val timelineEventMapper: TimelineEventMapper,
+    private val onEventsUpdated: (Boolean) -> Unit
 ) : SendingEventsDataSource {
 
     private var roomEntity: RoomEntity? = null
@@ -78,15 +78,15 @@ internal class RealmSendingEventsDataSource(
     override fun buildSendingEvents(): List<TimelineEvent> {
         val builtSendingEvents = mutableListOf<TimelineEvent>()
         uiEchoManager.getInMemorySendingEvents()
-                .addWithUiEcho(builtSendingEvents)
+            .addWithUiEcho(builtSendingEvents)
         if (frozenSendingTimelineEvents?.isValid == true) {
             frozenSendingTimelineEvents
-                    ?.filter { timelineEvent ->
-                        builtSendingEvents.none { it.eventId == timelineEvent.eventId }
-                    }
-                    ?.map {
-                        timelineEventMapper.map(it)
-                    }?.addWithUiEcho(builtSendingEvents)
+                ?.filter { timelineEvent ->
+                    builtSendingEvents.none { it.eventId == timelineEvent.eventId }
+                }
+                ?.map {
+                    timelineEventMapper.map(it)
+                }?.addWithUiEcho(builtSendingEvents)
         }
 
         return builtSendingEvents
@@ -94,7 +94,7 @@ internal class RealmSendingEventsDataSource(
 
     private fun List<TimelineEvent>.addWithUiEcho(target: MutableList<TimelineEvent>) {
         target.addAll(
-                map { uiEchoManager.updateSentStateWithUiEcho(it) }
+            map { uiEchoManager.updateSentStateWithUiEcho(it) }
         )
     }
 }

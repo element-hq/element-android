@@ -44,14 +44,14 @@ import kotlin.reflect.KClass
 
 @AndroidEntryPoint
 class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
-        MatrixToBottomSheet.InteractionListener {
+    MatrixToBottomSheet.InteractionListener {
 
     val sharedViewModel: UserCodeSharedViewModel by viewModel()
     private val qrViewModel: QrCodeScannerViewModel by viewModel()
 
     @Parcelize
     data class Args(
-            val userId: String
+        val userId: String
     ) : Parcelable
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
@@ -85,8 +85,8 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
 
         sharedViewModel.onEach(UserCodeState::mode) { mode ->
             when (mode) {
-                UserCodeState.Mode.SHOW      -> showFragment(ShowUserCodeFragment::class)
-                UserCodeState.Mode.SCAN      -> {
+                UserCodeState.Mode.SHOW -> showFragment(ShowUserCodeFragment::class)
+                UserCodeState.Mode.SCAN -> {
                     val args = QrScannerArgs(showExtraButtons = true, R.string.user_code_scan)
                     showFragment(QrCodeScannerFragment::class, args)
                 }
@@ -99,27 +99,27 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                UserCodeShareViewEvents.Dismiss                       -> ActivityCompat.finishAfterTransition(this)
-                UserCodeShareViewEvents.ShowWaitingScreen             -> views.simpleActivityWaitingView.isVisible = true
-                UserCodeShareViewEvents.HideWaitingScreen             -> views.simpleActivityWaitingView.isVisible = false
-                is UserCodeShareViewEvents.ToastMessage               -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                is UserCodeShareViewEvents.NavigateToRoom             -> navigator.openRoom(this, it.roomId)
+                UserCodeShareViewEvents.Dismiss -> ActivityCompat.finishAfterTransition(this)
+                UserCodeShareViewEvents.ShowWaitingScreen -> views.simpleActivityWaitingView.isVisible = true
+                UserCodeShareViewEvents.HideWaitingScreen -> views.simpleActivityWaitingView.isVisible = false
+                is UserCodeShareViewEvents.ToastMessage -> Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                is UserCodeShareViewEvents.NavigateToRoom -> navigator.openRoom(this, it.roomId)
                 is UserCodeShareViewEvents.CameraPermissionNotGranted -> {
                     if (it.deniedPermanently) {
                         onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
                     }
                 }
-                else                                                  -> {
+                else -> {
                 }
             }
         }
 
         qrViewModel.observeViewEvents {
             when (it) {
-                is QrCodeScannerEvents.CodeParsed  -> {
+                is QrCodeScannerEvents.CodeParsed -> {
                     sharedViewModel.handle(UserCodeActions.DecodedQRCode(it.result))
                 }
-                QrCodeScannerEvents.SwitchMode     -> {
+                QrCodeScannerEvents.SwitchMode -> {
                     sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
                 }
                 is QrCodeScannerEvents.ParseFailed -> {

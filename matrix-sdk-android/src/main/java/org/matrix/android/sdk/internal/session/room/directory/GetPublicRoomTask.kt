@@ -26,14 +26,14 @@ import javax.inject.Inject
 
 internal interface GetPublicRoomTask : Task<GetPublicRoomTask.Params, PublicRoomsResponse> {
     data class Params(
-            val server: String?,
-            val publicRoomsParams: PublicRoomsParams
+        val server: String?,
+        val publicRoomsParams: PublicRoomsParams
     )
 }
 
 internal class DefaultGetPublicRoomTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetPublicRoomTask {
 
     override suspend fun execute(params: GetPublicRoomTask.Params): PublicRoomsResponse {

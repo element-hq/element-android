@@ -25,40 +25,40 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.util.MatrixItem
 
 data class MatrixToBottomSheetState(
-        val deepLink: String,
-        val linkType: PermalinkData,
-        val matrixItem: Async<MatrixItem> = Uninitialized,
-        val startChattingState: Async<Unit> = Uninitialized,
-        val roomPeekResult: Async<RoomInfoResult> = Uninitialized,
-        val peopleYouKnow: Async<List<MatrixItem.UserItem>> = Uninitialized
+    val deepLink: String,
+    val linkType: PermalinkData,
+    val matrixItem: Async<MatrixItem> = Uninitialized,
+    val startChattingState: Async<Unit> = Uninitialized,
+    val roomPeekResult: Async<RoomInfoResult> = Uninitialized,
+    val peopleYouKnow: Async<List<MatrixItem.UserItem>> = Uninitialized
 ) : MavericksState {
 
     constructor(args: MatrixToBottomSheet.MatrixToArgs) : this(
-            deepLink = args.matrixToLink,
-            linkType = PermalinkParser.parse(args.matrixToLink)
+        deepLink = args.matrixToLink,
+        linkType = PermalinkParser.parse(args.matrixToLink)
     )
 }
 
 sealed class RoomInfoResult {
     data class FullInfo(
-            val roomItem: MatrixItem,
-            val name: String,
-            val topic: String,
-            val memberCount: Int?,
-            val alias: String?,
-            val membership: Membership,
-            val roomType: String?,
-            val viaServers: List<String>?,
-            val isPublic: Boolean
+        val roomItem: MatrixItem,
+        val name: String,
+        val topic: String,
+        val memberCount: Int?,
+        val alias: String?,
+        val membership: Membership,
+        val roomType: String?,
+        val viaServers: List<String>?,
+        val isPublic: Boolean
     ) : RoomInfoResult()
 
     data class PartialInfo(
-            val roomId: String?,
-            val viaServers: List<String>
+        val roomId: String?,
+        val viaServers: List<String>
     ) : RoomInfoResult()
 
     data class UnknownAlias(
-            val alias: String?
+        val alias: String?
     ) : RoomInfoResult()
 
     object NotFound : RoomInfoResult()

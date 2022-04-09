@@ -27,10 +27,10 @@ fun roomMemberQueryParams(init: (RoomMemberQueryParams.Builder.() -> Unit) = {})
  * This class can be used to filter room members
  */
 data class RoomMemberQueryParams(
-        val displayName: QueryStringValue,
-        val memberships: List<Membership>,
-        val userId: QueryStringValue,
-        val excludeSelf: Boolean
+    val displayName: QueryStringValue,
+    val memberships: List<Membership>,
+    val userId: QueryStringValue,
+    val excludeSelf: Boolean
 ) {
 
     class Builder {
@@ -41,10 +41,10 @@ data class RoomMemberQueryParams(
         var excludeSelf: Boolean = false
 
         fun build() = RoomMemberQueryParams(
-                displayName = displayName,
-                memberships = memberships,
-                userId = userId,
-                excludeSelf = excludeSelf
+            displayName = displayName,
+            memberships = memberships,
+            userId = userId,
+            excludeSelf = excludeSelf
         )
     }
 }

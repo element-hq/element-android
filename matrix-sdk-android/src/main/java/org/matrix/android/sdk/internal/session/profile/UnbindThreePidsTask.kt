@@ -28,24 +28,27 @@ import javax.inject.Inject
 
 internal abstract class UnbindThreePidsTask : Task<UnbindThreePidsTask.Params, Boolean> {
     data class Params(
-            val threePid: ThreePid
+        val threePid: ThreePid
     )
 }
 
-internal class DefaultUnbindThreePidsTask @Inject constructor(private val profileAPI: ProfileAPI,
-                                                              private val identityStore: IdentityStore,
-                                                              private val globalErrorReceiver: GlobalErrorReceiver) : UnbindThreePidsTask() {
+internal class DefaultUnbindThreePidsTask @Inject constructor(
+    private val profileAPI: ProfileAPI,
+    private val identityStore: IdentityStore,
+    private val globalErrorReceiver: GlobalErrorReceiver
+) : UnbindThreePidsTask() {
     override suspend fun execute(params: Params): Boolean {
         val identityServerUrlWithoutProtocol = identityStore.getIdentityServerUrlWithoutProtocol()
-                ?: throw IdentityServiceError.NoIdentityServerConfigured
+            ?: throw IdentityServiceError.NoIdentityServerConfigured
 
         return executeRequest(globalErrorReceiver) {
             profileAPI.unbindThreePid(
-                    UnbindThreePidBody(
-                            identityServerUrlWithoutProtocol,
-                            params.threePid.toMedium(),
-                            params.threePid.value
-                    ))
+                UnbindThreePidBody(
+                    identityServerUrlWithoutProtocol,
+                    params.threePid.toMedium(),
+                    params.threePid.value
+                )
+            )
         }.isSuccess()
     }
 }

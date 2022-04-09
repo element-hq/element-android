@@ -25,12 +25,12 @@ import org.matrix.android.sdk.internal.session.room.send.CancelSendTracker
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 
 internal class SendEventQueuedTask(
-        val event: Event,
-        val encrypt: Boolean,
-        val sendEventTask: SendEventTask,
-        val cryptoService: CryptoService,
-        val localEchoRepository: LocalEchoRepository,
-        val cancelSendTracker: CancelSendTracker
+    val event: Event,
+    val encrypt: Boolean,
+    val sendEventTask: SendEventTask,
+    val cryptoService: CryptoService,
+    val localEchoRepository: LocalEchoRepository,
+    val cancelSendTracker: CancelSendTracker
 ) : QueuedTask(queueIdentifier = event.roomId!!, taskIdentifier = event.eventId!!) {
 
     override suspend fun doExecute() {
@@ -45,7 +45,7 @@ internal class SendEventQueuedTask(
                 localEchoRepository.deleteFailedEchoAsync(eventId = event.eventId, roomId = event.roomId ?: "")
                 // TODO update aggregation :/ or it will stay locally
             }
-            else               -> {
+            else -> {
                 localEchoRepository.updateSendState(event.eventId!!, event.roomId, SendState.UNDELIVERED)
             }
         }

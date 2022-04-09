@@ -24,6 +24,6 @@ import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistration
  */
 @JsonClass(generateAdapter = true)
 internal data class ResetPasswordData(
-        val newPassword: String,
-        val addThreePidRegistrationResponse: AddThreePidRegistrationResponse
+    val newPassword: String,
+    val addThreePidRegistrationResponse: AddThreePidRegistrationResponse
 )

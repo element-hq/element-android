@@ -45,7 +45,7 @@ class FilteredRoomsActivity : VectorBaseActivity<ActivityFilteredRoomsBinding>()
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.RoomFilter
         setupToolbar(views.filteredRoomsToolbar)
-                .allowBack()
+            .allowBack()
         if (isFirstCreation()) {
             val params = RoomListParams(RoomListDisplayMode.FILTERED)
             replaceFragment(views.filteredRoomsFragmentContainer, RoomListFragment::class.java, params, FRAGMENT_TAG)

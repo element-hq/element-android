@@ -37,19 +37,19 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 
 data class VerificationChooseMethodViewState(
-        val otherUserId: String = "",
-        val transactionId: String = "",
-        val otherCanShowQrCode: Boolean = false,
-        val otherCanScanQrCode: Boolean = false,
-        val qrCodeText: String? = null,
-        val sasModeAvailable: Boolean = false,
-        val isMe: Boolean = false,
-        val canCrossSign: Boolean = false
+    val otherUserId: String = "",
+    val transactionId: String = "",
+    val otherCanShowQrCode: Boolean = false,
+    val otherCanScanQrCode: Boolean = false,
+    val qrCodeText: String? = null,
+    val sasModeAvailable: Boolean = false,
+    val isMe: Boolean = false,
+    val canCrossSign: Boolean = false
 ) : MavericksState
 
 class VerificationChooseMethodViewModel @AssistedInject constructor(
-        @Assisted initialState: VerificationChooseMethodViewState,
-        private val session: Session
+    @Assisted initialState: VerificationChooseMethodViewState,
+    private val session: Session
 ) : VectorViewModel<VerificationChooseMethodViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.Listener {
 
     init {
@@ -64,7 +64,7 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
         if (tx.transactionId == state.transactionId && tx is QrCodeVerificationTransaction) {
             setState {
                 copy(
-                        qrCodeText = tx.qrCodeText
+                    qrCodeText = tx.qrCodeText
                 )
             }
         }
@@ -79,9 +79,9 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    otherCanShowQrCode = pvr?.otherCanShowQrCode().orFalse(),
-                    otherCanScanQrCode = pvr?.otherCanScanQrCode().orFalse(),
-                    sasModeAvailable = pvr?.isSasSupported().orFalse()
+                otherCanShowQrCode = pvr?.otherCanShowQrCode().orFalse(),
+                otherCanScanQrCode = pvr?.otherCanScanQrCode().orFalse(),
+                sasModeAvailable = pvr?.isSasSupported().orFalse()
             )
         }
     }
@@ -102,14 +102,15 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
             // Get the QR code now, because transaction is already created, so transactionCreated() will not be called
             val qrCodeVerificationTransaction = verificationService.getExistingTransaction(args.otherUserId, args.verificationId ?: "")
 
-            return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
-                    isMe = session.myUserId == pvr?.otherUserId,
-                    canCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
-                    transactionId = args.verificationId ?: "",
-                    otherCanShowQrCode = pvr?.otherCanShowQrCode().orFalse(),
-                    otherCanScanQrCode = pvr?.otherCanScanQrCode().orFalse(),
-                    qrCodeText = (qrCodeVerificationTransaction as? QrCodeVerificationTransaction)?.qrCodeText,
-                    sasModeAvailable = pvr?.isSasSupported().orFalse()
+            return VerificationChooseMethodViewState(
+                otherUserId = args.otherUserId,
+                isMe = session.myUserId == pvr?.otherUserId,
+                canCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
+                transactionId = args.verificationId ?: "",
+                otherCanShowQrCode = pvr?.otherCanShowQrCode().orFalse(),
+                otherCanScanQrCode = pvr?.otherCanScanQrCode().orFalse(),
+                qrCodeText = (qrCodeVerificationTransaction as? QrCodeVerificationTransaction)?.qrCodeText,
+                sasModeAvailable = pvr?.isSasSupported().orFalse()
             )
         }
     }

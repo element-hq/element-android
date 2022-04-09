@@ -62,40 +62,42 @@ internal object NetworkModule {
     @Provides
     @JvmStatic
     @Unauthenticated
-    fun providesOkHttpClient(matrixConfiguration: MatrixConfiguration,
-                             stethoInterceptor: StethoInterceptor,
-                             timeoutInterceptor: TimeOutInterceptor,
-                             userAgentInterceptor: UserAgentInterceptor,
-                             httpLoggingInterceptor: HttpLoggingInterceptor,
-                             curlLoggingInterceptor: CurlLoggingInterceptor,
-                             apiInterceptor: ApiInterceptor): OkHttpClient {
+    fun providesOkHttpClient(
+        matrixConfiguration: MatrixConfiguration,
+        stethoInterceptor: StethoInterceptor,
+        timeoutInterceptor: TimeOutInterceptor,
+        userAgentInterceptor: UserAgentInterceptor,
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        curlLoggingInterceptor: CurlLoggingInterceptor,
+        apiInterceptor: ApiInterceptor
+    ): OkHttpClient {
         val spec = ConnectionSpec.Builder(matrixConfiguration.connectionSpec).build()
 
         return OkHttpClient.Builder()
-                // workaround for #4669
-                .protocols(listOf(Protocol.HTTP_1_1))
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .apply {
-                    if (BuildConfig.DEBUG) {
-                        addNetworkInterceptor(stethoInterceptor)
-                    }
+            // workaround for #4669
+            .protocols(listOf(Protocol.HTTP_1_1))
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addNetworkInterceptor(stethoInterceptor)
                 }
-                .addInterceptor(timeoutInterceptor)
-                .addInterceptor(userAgentInterceptor)
-                .addInterceptor(httpLoggingInterceptor)
-                .addInterceptor(apiInterceptor)
-                .apply {
-                    if (BuildConfig.LOG_PRIVATE_DATA) {
-                        addInterceptor(curlLoggingInterceptor)
-                    }
-                    matrixConfiguration.proxy?.let {
-                        proxy(it)
-                    }
+            }
+            .addInterceptor(timeoutInterceptor)
+            .addInterceptor(userAgentInterceptor)
+            .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(apiInterceptor)
+            .apply {
+                if (BuildConfig.LOG_PRIVATE_DATA) {
+                    addInterceptor(curlLoggingInterceptor)
                 }
-                .connectionSpecs(Collections.singletonList(spec))
-                .build()
+                matrixConfiguration.proxy?.let {
+                    proxy(it)
+                }
+            }
+            .connectionSpecs(Collections.singletonList(spec))
+            .build()
     }
 
     @Provides

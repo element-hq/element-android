@@ -28,15 +28,15 @@ import javax.inject.Inject
 
 internal interface IdentitySubmitTokenForBindingTask : Task<IdentitySubmitTokenForBindingTask.Params, Unit> {
     data class Params(
-            val threePid: ThreePid,
-            val token: String
+        val threePid: ThreePid,
+        val token: String
     )
 }
 
 internal class DefaultIdentitySubmitTokenForBindingTask @Inject constructor(
-        private val identityApiProvider: IdentityApiProvider,
-        private val identityStore: IdentityStore,
-        @UserId private val userId: String
+    private val identityApiProvider: IdentityApiProvider,
+    private val identityStore: IdentityStore,
+    @UserId private val userId: String
 ) : IdentitySubmitTokenForBindingTask {
 
     override suspend fun execute(params: IdentitySubmitTokenForBindingTask.Params) {
@@ -45,12 +45,13 @@ internal class DefaultIdentitySubmitTokenForBindingTask @Inject constructor(
 
         val tokenResponse = executeRequest(null) {
             identityAPI.submitToken(
-                    params.threePid.toMedium(),
-                    IdentityRequestOwnershipParams(
-                            clientSecret = identityPendingBinding.clientSecret,
-                            sid = identityPendingBinding.sid,
-                            token = params.token
-                    ))
+                params.threePid.toMedium(),
+                IdentityRequestOwnershipParams(
+                    clientSecret = identityPendingBinding.clientSecret,
+                    sid = identityPendingBinding.sid,
+                    token = params.token
+                )
+            )
         }
 
         if (!tokenResponse.isSuccess()) {

@@ -28,8 +28,8 @@ import im.vector.app.features.home.AvatarRenderer
 import javax.inject.Inject
 
 class SpacePreviewController @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val stringProvider: StringProvider
+    private val avatarRenderer: AvatarRenderer,
+    private val stringProvider: StringProvider
 ) : TypedEpoxyController<SpacePreviewState>() {
 
     interface InteractionListener
@@ -77,7 +77,7 @@ class SpacePreviewController @Inject constructor(
                     is Success -> {
                         buildChildren(child.children.invoke(), depth + 1)
                     }
-                    else       -> {
+                    else -> {
                     }
                 }
             } else {
@@ -92,46 +92,46 @@ class SpacePreviewController @Inject constructor(
                     avatarRenderer(host.avatarRenderer)
                 }
             }
-//            when (child) {
-//                is SpaceSubChildPeekResult -> {
-//                    when (val roomPeekResult = child.roomPeekResult) {
-//                        is PeekResult.Success -> {
-//                            subSpaceItem {
-//                                id(roomPeekResult.roomId)
-//                                roomId(roomPeekResult.roomId)
-//                                title(roomPeekResult.name)
-//                                depth(depth)
-//                                avatarUrl(roomPeekResult.avatarUrl)
-//                                avatarRenderer(avatarRenderer)
-//                            }
-//                            buildChildren(child.children, depth + 1)
-//                        }
-//                        else                  -> {
-//                            // ?? TODO
-//                        }
-//                    }
-//                }
-//                is SpaceChildPeekResult -> {
-//                    // We have to check if the peek result was success
-//                    when (val roomPeekResult = child.roomPeekResult) {
-//                        is PeekResult.Success -> {
-//                            roomChildItem {
-//                                id(child.id)
-//                                depth(depth)
-//                                roomId(roomPeekResult.roomId)
-//                                title(roomPeekResult.name ?: "")
-//                                topic(roomPeekResult.topic ?: "")
-//                                avatarUrl(roomPeekResult.avatarUrl)
-//                                memberCount(TextUtils.formatCountToShortDecimal(roomPeekResult.numJoinedMembers ?: 0))
-//                                avatarRenderer(avatarRenderer)
-//                            }
-//                        }
-//                        else                  -> {
-//                            // What to do here?
-//                        }
-//                    }
-//                }
-//            }
+            //            when (child) {
+            //                is SpaceSubChildPeekResult -> {
+            //                    when (val roomPeekResult = child.roomPeekResult) {
+            //                        is PeekResult.Success -> {
+            //                            subSpaceItem {
+            //                                id(roomPeekResult.roomId)
+            //                                roomId(roomPeekResult.roomId)
+            //                                title(roomPeekResult.name)
+            //                                depth(depth)
+            //                                avatarUrl(roomPeekResult.avatarUrl)
+            //                                avatarRenderer(avatarRenderer)
+            //                            }
+            //                            buildChildren(child.children, depth + 1)
+            //                        }
+            //                        else                  -> {
+            //                            // ?? TODO
+            //                        }
+            //                    }
+            //                }
+            //                is SpaceChildPeekResult -> {
+            //                    // We have to check if the peek result was success
+            //                    when (val roomPeekResult = child.roomPeekResult) {
+            //                        is PeekResult.Success -> {
+            //                            roomChildItem {
+            //                                id(child.id)
+            //                                depth(depth)
+            //                                roomId(roomPeekResult.roomId)
+            //                                title(roomPeekResult.name ?: "")
+            //                                topic(roomPeekResult.topic ?: "")
+            //                                avatarUrl(roomPeekResult.avatarUrl)
+            //                                memberCount(TextUtils.formatCountToShortDecimal(roomPeekResult.numJoinedMembers ?: 0))
+            //                                avatarRenderer(avatarRenderer)
+            //                            }
+            //                        }
+            //                        else                  -> {
+            //                            // What to do here?
+            //                        }
+            //                    }
+            //                }
+            //            }
         }
     }
 }

@@ -25,16 +25,16 @@ import javax.inject.Inject
 
 internal interface GetKeyChangesTask : Task<GetKeyChangesTask.Params, KeyChangesResponse> {
     data class Params(
-            // the start token.
-            val from: String,
-            // the up-to token.
-            val to: String
+        // the start token.
+        val from: String,
+        // the up-to token.
+        val to: String
     )
 }
 
 internal class DefaultGetKeyChangesTask @Inject constructor(
-        private val cryptoApi: CryptoApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val cryptoApi: CryptoApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetKeyChangesTask {
 
     override suspend fun execute(params: GetKeyChangesTask.Params): KeyChangesResponse {

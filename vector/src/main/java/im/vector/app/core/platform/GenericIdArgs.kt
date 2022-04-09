@@ -24,5 +24,5 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class GenericIdArgs(
-        val id: String
+    val id: String
 ) : Parcelable

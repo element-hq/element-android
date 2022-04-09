@@ -38,9 +38,9 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class EmojiItem(
-        @Json(name = "a") val name: String,
-        @Json(name = "b") val unicode: String,
-        @Json(name = "j") val keywords: List<String> = emptyList()
+    @Json(name = "a") val name: String,
+    @Json(name = "b") val unicode: String,
+    @Json(name = "j") val keywords: List<String> = emptyList()
 ) {
     // Cannot be private...
     var cache: String? = null
@@ -51,18 +51,18 @@ data class EmojiItem(
 
             // "\u0048\u0065\u006C\u006C\u006F World"
             val utf8Text = unicode
-                    .split("-")
-                    .joinToString("") { "\\u$it" }
+                .split("-")
+                .joinToString("") { "\\u$it" }
             return fromUnicode(utf8Text)
-                    .also { cache = it }
+                .also { cache = it }
         }
 
     companion object {
         private fun fromUnicode(unicode: String): String {
             val arr = unicode
-                    .replace("\\", "")
-                    .split("u".toRegex())
-                    .dropLastWhile { it.isEmpty() }
+                .replace("\\", "")
+                .split("u".toRegex())
+                .dropLastWhile { it.isEmpty() }
             return buildString {
                 for (i in 1 until arr.size) {
                     val hexVal = Integer.parseInt(arr[i], 16)

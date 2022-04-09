@@ -35,7 +35,7 @@ object JsonCanonicalizer {
 
         // Canonicalize manually
         return canonicalize(adapter.toJson(o))
-                .replace("\\/", "/")
+            .replace("\\/", "/")
     }
 
     @VisibleForTesting
@@ -58,7 +58,7 @@ object JsonCanonicalizer {
      */
     private fun canonicalizeRecursive(any: Any): String {
         when (any) {
-            is JSONArray  -> {
+            is JSONArray -> {
                 // Canonicalize each element of the array
                 return (0 until any.length()).joinToString(separator = ",", prefix = "[", postfix = "]") {
                     canonicalizeRecursive(any.get(it))
@@ -88,8 +88,8 @@ object JsonCanonicalizer {
                     append("}")
                 }
             }
-            is String     -> return JSONObject.quote(any)
-            else          -> return any.toString()
+            is String -> return JSONObject.quote(any)
+            else -> return any.toString()
         }
     }
 }

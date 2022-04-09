@@ -20,7 +20,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 
 data class SasState(
-        val emojiList: List<EmojiRepresentation>
+    val emojiList: List<EmojiRepresentation>
 )
 
 class SasEmojiController : TypedEpoxyController<SasState>() {

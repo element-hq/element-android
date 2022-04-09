@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class KeysVersion(
-        // the keys backup version
-        @Json(name = "version")
-        val version: String
+    // the keys backup version
+    @Json(name = "version")
+    val version: String
 )

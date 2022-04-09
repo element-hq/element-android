@@ -23,8 +23,8 @@ import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import javax.inject.Inject
 
 internal class DefaultEventService @Inject constructor(
-        private val getEventTask: GetEventTask,
-        private val callEventProcessor: CallEventProcessor
+    private val getEventTask: GetEventTask,
+    private val callEventProcessor: CallEventProcessor
 ) : EventService {
 
     override suspend fun getEvent(roomId: String, eventId: String): Event {

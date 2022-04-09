@@ -21,6 +21,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class RoomUpgradeBody(
-        @Json(name = "new_version")
-        val newVersion: String
+    @Json(name = "new_version")
+    val newVersion: String
 )

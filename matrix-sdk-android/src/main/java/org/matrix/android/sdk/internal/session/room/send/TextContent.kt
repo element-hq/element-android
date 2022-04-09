@@ -29,18 +29,18 @@ import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
  * Contains a text and eventually a formatted text
  */
 data class TextContent(
-        val text: String,
-        val formattedText: String? = null
+    val text: String,
+    val formattedText: String? = null
 ) {
     fun takeFormatted() = formattedText ?: text
 }
 
 fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
     return MessageTextContent(
-            msgType = msgType,
-            format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
-            body = text,
-            formattedBody = formattedText
+        msgType = msgType,
+        format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
+        body = text,
+        formattedBody = formattedText
     )
 }
 
@@ -50,27 +50,29 @@ fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT)
  * If latest event not found, we pass rootThreadEventId
  */
 fun TextContent.toThreadTextContent(
-        rootThreadEventId: String,
-        latestThreadEventId: String,
-        msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
+    rootThreadEventId: String,
+    latestThreadEventId: String,
+    msgType: String = MessageType.MSGTYPE_TEXT
+): MessageTextContent {
     return MessageTextContent(
-            msgType = msgType,
-            format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
-            body = text,
-            relatesTo = RelationDefaultContent(
-                    type = RelationType.THREAD,
-                    eventId = rootThreadEventId,
-                    isFallingBack = true,
-                    inReplyTo = ReplyToContent(
-                            eventId = latestThreadEventId
-                    )),
-            formattedBody = formattedText
+        msgType = msgType,
+        format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
+        body = text,
+        relatesTo = RelationDefaultContent(
+            type = RelationType.THREAD,
+            eventId = rootThreadEventId,
+            isFallingBack = true,
+            inReplyTo = ReplyToContent(
+                eventId = latestThreadEventId
+            )
+        ),
+        formattedBody = formattedText
     )
 }
 
 fun TextContent.removeInReplyFallbacks(): TextContent {
     return copy(
-            text = extractUsefulTextFromReply(this.text),
-            formattedText = this.formattedText?.let { extractUsefulTextFromHtmlReply(it) }
+        text = extractUsefulTextFromReply(this.text),
+        formattedText = this.formattedText?.let { extractUsefulTextFromHtmlReply(it) }
     )
 }

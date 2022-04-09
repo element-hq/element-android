@@ -51,13 +51,13 @@ import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class RoomListViewModel @AssistedInject constructor(
-        @Assisted initialState: RoomListViewState,
-        private val session: Session,
-        stringProvider: StringProvider,
-        appStateHandler: AppStateHandler,
-        vectorPreferences: VectorPreferences,
-        autoAcceptInvites: AutoAcceptInvites,
-        private val analyticsTracker: AnalyticsTracker
+    @Assisted initialState: RoomListViewState,
+    private val session: Session,
+    stringProvider: StringProvider,
+    appStateHandler: AppStateHandler,
+    vectorPreferences: VectorPreferences,
+    autoAcceptInvites: AutoAcceptInvites,
+    private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -94,53 +94,53 @@ class RoomListViewModel @AssistedInject constructor(
         observeMembershipChanges()
 
         appStateHandler.selectedRoomGroupingFlow
-                .distinctUntilChanged()
-                .execute {
-                    copy(
-                            currentRoomGrouping = it.invoke()?.orNull()?.let { Success(it) } ?: Loading()
-                    )
-                }
+            .distinctUntilChanged()
+            .execute {
+                copy(
+                    currentRoomGrouping = it.invoke()?.orNull()?.let { Success(it) } ?: Loading()
+                )
+            }
 
         session.flow().liveUser(session.myUserId)
-                .map { it.getOrNull()?.toMatrixItem()?.getBestName() }
-                .distinctUntilChanged()
-                .execute {
-                    copy(
-                            currentUserName = it.invoke() ?: session.myUserId
-                    )
-                }
+            .map { it.getOrNull()?.toMatrixItem()?.getBestName() }
+            .distinctUntilChanged()
+            .execute {
+                copy(
+                    currentUserName = it.invoke() ?: session.myUserId
+                )
+            }
     }
 
     private fun observeMembershipChanges() {
         session.flow()
-                .liveRoomChangeMembershipState()
-                .setOnEach {
-                    copy(roomMembershipChanges = it)
-                }
+            .liveRoomChangeMembershipState()
+            .setOnEach {
+                copy(roomMembershipChanges = it)
+            }
     }
 
     companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
 
     private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
         RoomListSectionBuilderSpace(
-                session,
-                stringProvider,
-                appStateHandler,
-                viewModelScope,
-                autoAcceptInvites,
-                {
-                    updatableQuery = it
-                },
-                suggestedRoomJoiningState,
-                !vectorPreferences.prefSpacesShowAllRoomInHome()
+            session,
+            stringProvider,
+            appStateHandler,
+            viewModelScope,
+            autoAcceptInvites,
+            {
+                updatableQuery = it
+            },
+            suggestedRoomJoiningState,
+            !vectorPreferences.prefSpacesShowAllRoomInHome()
         )
     } else {
         RoomListSectionBuilderGroup(
-                viewModelScope,
-                session,
-                stringProvider,
-                appStateHandler,
-                autoAcceptInvites
+            viewModelScope,
+            session,
+            stringProvider,
+            appStateHandler,
+            autoAcceptInvites
         ) {
             updatableQuery = it
         }
@@ -152,16 +152,16 @@ class RoomListViewModel @AssistedInject constructor(
 
     override fun handle(action: RoomListAction) {
         when (action) {
-            is RoomListAction.SelectRoom                  -> handleSelectRoom(action)
-            is RoomListAction.AcceptInvitation            -> handleAcceptInvitation(action)
-            is RoomListAction.RejectInvitation            -> handleRejectInvitation(action)
-            is RoomListAction.FilterWith                  -> handleFilter(action)
-            is RoomListAction.LeaveRoom                   -> handleLeaveRoom(action)
+            is RoomListAction.SelectRoom -> handleSelectRoom(action)
+            is RoomListAction.AcceptInvitation -> handleAcceptInvitation(action)
+            is RoomListAction.RejectInvitation -> handleRejectInvitation(action)
+            is RoomListAction.FilterWith -> handleFilter(action)
+            is RoomListAction.LeaveRoom -> handleLeaveRoom(action)
             is RoomListAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
-            is RoomListAction.ToggleTag                   -> handleToggleTag(action)
-            is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
-            is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
-            is RoomListAction.ShowRoomDetails             -> handleShowRoomDetails(action)
+            is RoomListAction.ToggleTag -> handleToggleTag(action)
+            is RoomListAction.ToggleSection -> handleToggleSection(action.section)
+            is RoomListAction.JoinSuggestedRoom -> handleJoinSuggestedRoom(action)
+            is RoomListAction.ShowRoomDetails -> handleShowRoomDetails(action)
         }
     }
 
@@ -188,12 +188,12 @@ class RoomListViewModel @AssistedInject constructor(
     private fun handleFilter(action: RoomListAction.FilterWith) {
         setState {
             copy(
-                    roomFilter = action.filter
+                roomFilter = action.filter
             )
         }
         updatableQuery?.apply {
             queryParams = queryParams.copy(
-                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
+                displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
             )
         }
     }
@@ -211,13 +211,13 @@ class RoomListViewModel @AssistedInject constructor(
         // quick echo
         setState {
             copy(
-                    roomMembershipChanges = roomMembershipChanges.mapValues {
-                        if (it.key == roomId) {
-                            ChangeMembershipState.Joining
-                        } else {
-                            it.value
-                        }
+                roomMembershipChanges = roomMembershipChanges.mapValues {
+                    if (it.key == roomId) {
+                        ChangeMembershipState.Joining
+                    } else {
+                        it.value
                     }
+                }
             )
         }
     }
@@ -291,10 +291,10 @@ class RoomListViewModel @AssistedInject constructor(
                     if (room.roomSummary()?.hasTag(action.tag) == false) {
                         // Favorite and low priority tags are exclusive, so maybe delete the other tag first
                         action.tag.otherTag()
-                                ?.takeIf { room.roomSummary()?.hasTag(it).orFalse() }
-                                ?.let { tagToRemove ->
-                                    room.deleteTag(tagToRemove)
-                                }
+                            ?.takeIf { room.roomSummary()?.hasTag(it).orFalse() }
+                            ?.let { tagToRemove ->
+                                room.deleteTag(tagToRemove)
+                            }
 
                         // Set the tag. We do not handle the order for the moment
                         room.addTag(action.tag, 0.5)
@@ -310,9 +310,9 @@ class RoomListViewModel @AssistedInject constructor(
 
     private fun String.otherTag(): String? {
         return when (this) {
-            RoomTag.ROOM_TAG_FAVOURITE    -> RoomTag.ROOM_TAG_LOW_PRIORITY
+            RoomTag.ROOM_TAG_FAVOURITE -> RoomTag.ROOM_TAG_LOW_PRIORITY
             RoomTag.ROOM_TAG_LOW_PRIORITY -> RoomTag.ROOM_TAG_FAVOURITE
-            else                          -> null
+            else -> null
         }
     }
 
@@ -320,7 +320,7 @@ class RoomListViewModel @AssistedInject constructor(
         _viewEvents.post(RoomListViewEvents.Loading(null))
         viewModelScope.launch {
             val value = runCatching { session.leaveRoom(action.roomId) }
-                    .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
+                .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
             _viewEvents.post(value)
         }
     }

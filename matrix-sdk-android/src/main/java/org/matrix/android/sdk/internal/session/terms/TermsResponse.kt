@@ -26,22 +26,24 @@ import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginT
  */
 @JsonClass(generateAdapter = true)
 data class TermsResponse(
-        @Json(name = "policies")
-        val policies: JsonDict? = null
+    @Json(name = "policies")
+    val policies: JsonDict? = null
 ) {
 
-    fun getLocalizedTerms(userLanguage: String,
-                          defaultLanguage: String = "en"): List<LocalizedFlowDataLoginTerms> {
+    fun getLocalizedTerms(
+        userLanguage: String,
+        defaultLanguage: String = "en"
+    ): List<LocalizedFlowDataLoginTerms> {
         return policies?.map {
             val tos = policies[it.key] as? Map<*, *> ?: return@map null
             ((tos[userLanguage] ?: tos[defaultLanguage]) as? Map<*, *>)?.let { termsMap ->
                 val name = termsMap[NAME] as? String
                 val url = termsMap[URL] as? String
                 LocalizedFlowDataLoginTerms(
-                        policyName = it.key,
-                        localizedUrl = url,
-                        localizedName = name,
-                        version = tos[VERSION] as? String
+                    policyName = it.key,
+                    localizedUrl = url,
+                    localizedName = name,
+                    version = tos[VERSION] as? String
                 )
             }
         }?.filterNotNull().orEmpty()

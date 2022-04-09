@@ -74,11 +74,11 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
                 apply {
                     val tintColor = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
                     ContextCompat.getDrawable(holder.view.context, R.drawable.ic_member_small)
-                            ?.apply {
-                                ThemeUtils.tintDrawableWithColor(this, tintColor)
-                            }?.let {
-                                image(it)
-                            }
+                        ?.apply {
+                            ThemeUtils.tintDrawableWithColor(this, tintColor)
+                        }?.let {
+                            image(it)
+                        }
                 }
                 +" $memberCount"
                 apply {

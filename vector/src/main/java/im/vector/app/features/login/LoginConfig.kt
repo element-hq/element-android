@@ -28,8 +28,8 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class LoginConfig(
-        val homeServerUrl: String?,
-        private val identityServerUrl: String?
+    val homeServerUrl: String?,
+    private val identityServerUrl: String?
 ) : Parcelable {
 
     companion object {
@@ -38,8 +38,8 @@ data class LoginConfig(
 
         fun parse(from: Uri): LoginConfig {
             return LoginConfig(
-                    homeServerUrl = from.getQueryParameter(CONFIG_HS_PARAMETER),
-                    identityServerUrl = from.getQueryParameter(CONFIG_IS_PARAMETER)
+                homeServerUrl = from.getQueryParameter(CONFIG_HS_PARAMETER),
+                identityServerUrl = from.getQueryParameter(CONFIG_IS_PARAMETER)
             )
         }
     }

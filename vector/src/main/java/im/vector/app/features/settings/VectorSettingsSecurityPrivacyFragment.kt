@@ -79,12 +79,12 @@ import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val pinCodeStore: PinCodeStore,
-        private val keysExporter: KeysExporter,
-        private val keysImporter: KeysImporter,
-        private val rawService: RawService,
-        private val navigator: Navigator
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val pinCodeStore: PinCodeStore,
+    private val keysExporter: KeysExporter,
+    private val keysImporter: KeysImporter,
+    private val rawService: RawService,
+    private val navigator: Navigator
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_and_privacy
@@ -166,17 +166,17 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         refreshMyDevice()
         refreshXSigningStatus()
         session.liveSecretSynchronisationInfo()
-                .onEach {
-                    refresh4SSection(it)
-                    refreshXSigningStatus()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                refresh4SSection(it)
+                refreshXSigningStatus()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         lifecycleScope.launchWhenResumed {
             findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
-                    rawService
-                            .getElementWellknown(session.sessionParams)
-                            ?.isE2EByDefault() == false
+                rawService
+                    .getElementWellknown(session.sessionParams)
+                    ?.isE2EByDefault() == false
         }
     }
 
@@ -186,9 +186,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private val secureBackupPreference by lazy {
         findPreference<VectorPreference>("SETTINGS_SECURE_BACKUP_RECOVERY_PREFERENCE_KEY")!!
     }
-//    private val secureBackupResetPreference by lazy {
-//        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY)
-//    }
+    //    private val secureBackupResetPreference by lazy {
+    //        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY)
+    //    }
 
     private fun refresh4SSection(info: SecretsSynchronisationInfo) {
         // it's a lot of if / else if / else
@@ -271,14 +271,16 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         refreshXSigningStatus()
 
         secureBackupPreference.icon = activity?.let {
-            ThemeUtils.tintDrawable(it,
-                    ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_content_primary)
+            ThemeUtils.tintDrawable(
+                it,
+                ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_content_primary
+            )
         }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.let {
             it.icon = ThemeUtils.tintDrawableWithColor(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_notification_privacy_warning)!!,
-                    ThemeUtils.getColor(requireContext(), R.attr.colorError)
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_notification_privacy_warning)!!,
+                ThemeUtils.getColor(requireContext(), R.attr.colorError)
             )
             it.summary = span {
                 text = getString(R.string.settings_hs_admin_e2e_disabled)
@@ -323,11 +325,11 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         val xSigningKeyCanSign = session.cryptoService().crossSigningService().canCrossSign()
 
         when {
-            xSigningKeyCanSign        -> {
+            xSigningKeyCanSign -> {
                 mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_trusted)
                 mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_complete)
             }
-            xSigningKeysAreTrusted    -> {
+            xSigningKeysAreTrusted -> {
                 mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_custom)
                 mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_trusted)
             }
@@ -335,7 +337,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 mCrossSigningStatePreference.setIcon(R.drawable.ic_shield_black)
                 mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_not_trusted)
             }
-            else                      -> {
+            else -> {
                 mCrossSigningStatePreference.setIcon(android.R.color.transparent)
                 mCrossSigningStatePreference.summary = getString(R.string.encryption_information_dg_xsigning_disabled)
             }
@@ -387,9 +389,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             val hasPinCode = pinCodeStore.hasEncodedPin()
             if (hasPinCode) {
                 navigator.openPinCode(
-                        requireContext(),
-                        pinActivityResultLauncher,
-                        PinMode.AUTH)
+                    requireContext(),
+                    pinActivityResultLauncher,
+                    PinMode.AUTH
+                )
             } else {
                 doOpenPinCodePreferenceScreen()
             }
@@ -427,10 +430,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     @SuppressLint("NewApi")
     private fun importKeys() {
         openFileSelection(
-                requireActivity(),
-                importKeysActivityResultLauncher,
-                false,
-                0
+            requireActivity(),
+            importKeysActivityResultLauncher,
+            false,
+            0
         )
     }
 
@@ -447,14 +450,14 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             val sharedDataItem = sharedDataItems[0]
 
             val uri = when (sharedDataItem) {
-                is ExternalIntentData.IntentDataUri      -> sharedDataItem.uri
+                is ExternalIntentData.IntentDataUri -> sharedDataItem.uri
                 is ExternalIntentData.IntentDataClipData -> sharedDataItem.clipDataItem.uri
-                else                                     -> null
+                else -> null
             }
 
             val mimetype = when (sharedDataItem) {
                 is ExternalIntentData.IntentDataClipData -> sharedDataItem.mimeType
-                else                                     -> null
+                else -> null
             }
 
             if (uri == null) {
@@ -476,8 +479,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
             }
 
             val builder = MaterialAlertDialogBuilder(thisActivity)
-                    .setTitle(R.string.encryption_import_room_keys)
-                    .setView(dialogLayout)
+                .setTitle(R.string.encryption_import_room_keys)
+                .setView(dialogLayout)
 
             views.dialogE2eKeysPassphraseEditText.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -503,12 +506,16 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
                     if (data != null) {
                         MaterialAlertDialogBuilder(thisActivity)
-                                .setMessage(resources.getQuantityString(R.plurals.encryption_import_room_keys_success,
-                                        data.successfullyNumberOfImportedKeys,
-                                        data.successfullyNumberOfImportedKeys,
-                                        data.totalNumberOfKeys))
-                                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-                                .show()
+                            .setMessage(
+                                resources.getQuantityString(
+                                    R.plurals.encryption_import_room_keys_success,
+                                    data.successfullyNumberOfImportedKeys,
+                                    data.successfullyNumberOfImportedKeys,
+                                    data.totalNumberOfKeys
+                                )
+                            )
+                            .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                            .show()
                     }
                 }
                 importDialog.dismiss()
@@ -581,9 +588,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private fun refreshMyDevice() {
         session.cryptoService().getUserDevices(session.myUserId).map {
             DeviceInfo(
-                    userId = session.myUserId,
-                    deviceId = it.deviceId,
-                    displayName = it.displayName()
+                userId = session.myUserId,
+                deviceId = it.deviceId,
+                displayName = it.displayName()
             )
         }.let {
             refreshCryptographyPreference(it)

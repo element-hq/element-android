@@ -43,14 +43,14 @@ class RestrictedRoomPreset(val homeServerCapabilities: HomeServerCapabilities, v
 
     override fun setupInitialStates(): List<Event>? {
         return listOf(
-                Event(
-                        type = EventType.STATE_ROOM_JOIN_RULES,
-                        stateKey = "",
-                        content = RoomJoinRulesContent(
-                                _joinRules = RoomJoinRules.RESTRICTED.value,
-                                allowList = restrictedList
-                        ).toContent()
-                )
+            Event(
+                type = EventType.STATE_ROOM_JOIN_RULES,
+                stateKey = "",
+                content = RoomJoinRulesContent(
+                    _joinRules = RoomJoinRules.RESTRICTED.value,
+                    allowList = restrictedList
+                ).toContent()
+            )
         )
     }
 }

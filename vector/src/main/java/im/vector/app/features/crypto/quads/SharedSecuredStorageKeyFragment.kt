@@ -50,21 +50,21 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
         views.ssssRestoreWithKeyText.text = getString(R.string.enter_secret_storage_input_key)
 
         views.ssssKeyEnterEdittext.editorActionEvents()
-                .throttleFirst(300)
-                .onEach {
-                    if (it.actionId == EditorInfo.IME_ACTION_DONE) {
-                        submit()
-                    }
+            .throttleFirst(300)
+            .onEach {
+                if (it.actionId == EditorInfo.IME_ACTION_DONE) {
+                    submit()
                 }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssKeyEnterEdittext.textChanges()
-                .skipInitialValue()
-                .onEach {
-                    views.ssssKeyEnterTil.error = null
-                    views.ssssKeySubmit.isEnabled = it.isNotBlank()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .skipInitialValue()
+            .onEach {
+                views.ssssKeyEnterTil.error = null
+                views.ssssKeySubmit.isEnabled = it.isNotBlank()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssKeyUseFile.debouncedClicks { startImportTextFromFileIntent(requireContext(), importFileStartForActivityResult) }
 
@@ -77,7 +77,7 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
                 is SharedSecureStorageViewEvent.KeyInlineError -> {
                     views.ssssKeyEnterTil.error = it.message
                 }
-                else                                           -> Unit
+                else -> Unit
             }
         }
 
@@ -96,11 +96,11 @@ class SharedSecuredStorageKeyFragment @Inject constructor() : VectorBaseFragment
             activityResult.data?.data?.let { dataURI ->
                 tryOrNull {
                     activity?.contentResolver?.openInputStream(dataURI)
-                            ?.bufferedReader()
-                            ?.use { it.readText() }
-                            ?.let {
-                                views.ssssKeyEnterEdittext.setText(it)
-                            }
+                        ?.bufferedReader()
+                        ?.use { it.readText() }
+                        ?.let {
+                            views.ssssKeyEnterEdittext.setText(it)
+                        }
                 }
             }
         }

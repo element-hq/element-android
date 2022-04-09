@@ -59,27 +59,27 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matri
         }
 
         sharedActionViewModel
-                .stream()
-                .onEach { sharedAction ->
-                    when (sharedAction) {
-                        is RoomDirectorySharedAction.Back              -> popBackstack()
-                        is RoomDirectorySharedAction.CreateRoom        -> {
-                            // Transmit the filter to the CreateRoomFragment
-                            withState(roomDirectoryViewModel) {
-                                addFragmentToBackstack(
-                                        views.simpleFragmentContainer,
-                                        CreateRoomFragment::class.java,
-                                        CreateRoomArgs(it.currentFilter)
-                                )
-                            }
+            .stream()
+            .onEach { sharedAction ->
+                when (sharedAction) {
+                    is RoomDirectorySharedAction.Back -> popBackstack()
+                    is RoomDirectorySharedAction.CreateRoom -> {
+                        // Transmit the filter to the CreateRoomFragment
+                        withState(roomDirectoryViewModel) {
+                            addFragmentToBackstack(
+                                views.simpleFragmentContainer,
+                                CreateRoomFragment::class.java,
+                                CreateRoomArgs(it.currentFilter)
+                            )
                         }
-                        is RoomDirectorySharedAction.ChangeProtocol    ->
-                            addFragmentToBackstack(views.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
-                        is RoomDirectorySharedAction.Close             -> finish()
-                        is RoomDirectorySharedAction.CreateRoomSuccess -> Unit
                     }
+                    is RoomDirectorySharedAction.ChangeProtocol ->
+                        addFragmentToBackstack(views.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
+                    is RoomDirectorySharedAction.Close -> finish()
+                    is RoomDirectorySharedAction.CreateRoomSuccess -> Unit
                 }
-                .launchIn(lifecycleScope)
+            }
+            .launchIn(lifecycleScope)
     }
 
     override fun initUiAndData() {

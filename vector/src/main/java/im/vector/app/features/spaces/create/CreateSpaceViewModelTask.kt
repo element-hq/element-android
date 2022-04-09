@@ -50,19 +50,19 @@ sealed class CreateSpaceTaskResult {
 }
 
 data class CreateSpaceTaskParams(
-        val spaceName: String,
-        val spaceTopic: String?,
-        val spaceAvatar: Uri? = null,
-        val spaceAlias: String? = null,
-        val isPublic: Boolean,
-        val defaultRooms: List<String> = emptyList(),
-        val defaultEmailToInvite: List<String> = emptyList()
+    val spaceName: String,
+    val spaceTopic: String?,
+    val spaceAvatar: Uri? = null,
+    val spaceAlias: String? = null,
+    val isPublic: Boolean,
+    val defaultRooms: List<String> = emptyList(),
+    val defaultEmailToInvite: List<String> = emptyList()
 )
 
 class CreateSpaceViewModelTask @Inject constructor(
-        private val session: Session,
-        private val vectorPreferences: VectorPreferences,
-        private val rawService: RawService
+    private val session: Session,
+    private val vectorPreferences: VectorPreferences,
+    private val rawService: RawService
 ) : ViewModelTask<CreateSpaceTaskParams, CreateSpaceTaskResult> {
 
     override suspend fun execute(params: CreateSpaceTaskParams): CreateSpaceTaskResult {
@@ -74,7 +74,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                 if (params.isPublic) {
                     this.roomAliasName = params.spaceAlias
                     this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
-                            invite = Role.Default.value
+                        invite = Role.Default.value
                     )
                     this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                     this.historyVisibility = RoomHistoryVisibility.WORLD_READABLE
@@ -83,12 +83,12 @@ class CreateSpaceViewModelTask @Inject constructor(
                     this.preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
                     visibility = RoomDirectoryVisibility.PRIVATE
                     this.invite3pids.addAll(
-                            params.defaultEmailToInvite.map {
-                                ThreePid.Email(it)
-                            }
+                        params.defaultEmailToInvite.map {
+                            ThreePid.Email(it)
+                        }
                     )
                     this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
-                            invite = Role.Moderator.value
+                        invite = Role.Moderator.value
                     )
                 }
             })
@@ -103,72 +103,72 @@ class CreateSpaceViewModelTask @Inject constructor(
 
         val e2eByDefault = tryOrNull {
             rawService.getElementWellknown(session.sessionParams)
-                    ?.isE2EByDefault()
-                    ?: true
+                ?.isE2EByDefault()
+                ?: true
         } ?: true
 
         params.defaultRooms
-                .filter { it.isNotBlank() }
-                .forEach { roomName ->
-                    try {
-                        val roomId = try {
-                            if (params.isPublic) {
-                                session.createRoom(
-                                        CreateRoomParams().apply {
-                                            this.name = roomName
-                                            this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
-                                        }
-                                )
-                            } else {
-                                val homeServerCapabilities = session
-                                        .getHomeServerCapabilities()
-                                val restrictedSupport = homeServerCapabilities
-                                        .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
-
-                                val createRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
-                                if (createRestricted) {
-                                    session.createRoom(CreateRoomParams().apply {
-                                        this.name = roomName
-                                        this.featurePreset = RestrictedRoomPreset(
-                                                homeServerCapabilities,
-                                                listOf(
-                                                        RoomJoinRulesAllowEntry.restrictedToRoom(spaceID)
-                                                )
-                                        )
-                                        if (e2eByDefault) {
-                                            this.enableEncryption()
-                                        }
-                                    })
-                                } else {
-                                    session.createRoom(CreateRoomParams().apply {
-                                        this.name = roomName
-                                        visibility = RoomDirectoryVisibility.PRIVATE
-                                        this.preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
-                                        if (e2eByDefault) {
-                                            this.enableEncryption()
-                                        }
-                                    })
+            .filter { it.isNotBlank() }
+            .forEach { roomName ->
+                try {
+                    val roomId = try {
+                        if (params.isPublic) {
+                            session.createRoom(
+                                CreateRoomParams().apply {
+                                    this.name = roomName
+                                    this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                                 }
+                            )
+                        } else {
+                            val homeServerCapabilities = session
+                                .getHomeServerCapabilities()
+                            val restrictedSupport = homeServerCapabilities
+                                .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
+
+                            val createRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
+                            if (createRestricted) {
+                                session.createRoom(CreateRoomParams().apply {
+                                    this.name = roomName
+                                    this.featurePreset = RestrictedRoomPreset(
+                                        homeServerCapabilities,
+                                        listOf(
+                                            RoomJoinRulesAllowEntry.restrictedToRoom(spaceID)
+                                        )
+                                    )
+                                    if (e2eByDefault) {
+                                        this.enableEncryption()
+                                    }
+                                })
+                            } else {
+                                session.createRoom(CreateRoomParams().apply {
+                                    this.name = roomName
+                                    visibility = RoomDirectoryVisibility.PRIVATE
+                                    this.preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
+                                    if (e2eByDefault) {
+                                        this.enableEncryption()
+                                    }
+                                })
                             }
-                        } catch (timeout: CreateRoomFailure.CreatedWithTimeout) {
-                            // we ignore that?
-                            timeout.roomID
                         }
-                        val via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
-                        createdSpace!!.addChildren(roomId, via, null, suggested = true)
-                        // set canonical
-                        session.spaceService().setSpaceParent(
-                                roomId,
-                                createdSpace.spaceId,
-                                true,
-                                via
-                        )
-                        childIds.add(roomId)
-                    } catch (failure: Throwable) {
-                        Timber.d("Space: Failed to create child room in $spaceID")
-                        childErrors[roomName] = failure
+                    } catch (timeout: CreateRoomFailure.CreatedWithTimeout) {
+                        // we ignore that?
+                        timeout.roomID
                     }
+                    val via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
+                    createdSpace!!.addChildren(roomId, via, null, suggested = true)
+                    // set canonical
+                    session.spaceService().setSpaceParent(
+                        roomId,
+                        createdSpace.spaceId,
+                        true,
+                        via
+                    )
+                    childIds.add(roomId)
+                } catch (failure: Throwable) {
+                    Timber.d("Space: Failed to create child room in $spaceID")
+                    childErrors[roomName] = failure
                 }
+            }
 
         return if (childErrors.isEmpty()) {
             CreateSpaceTaskResult.Success(spaceID, childIds)

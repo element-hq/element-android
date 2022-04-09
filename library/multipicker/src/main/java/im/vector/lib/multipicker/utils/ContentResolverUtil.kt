@@ -28,16 +28,16 @@ import im.vector.lib.multipicker.entity.MultiPickerVideoType
 
 internal fun Uri.toMultiPickerImageType(context: Context): MultiPickerImageType? {
     val projection = arrayOf(
-            MediaStore.Images.Media.DISPLAY_NAME,
-            MediaStore.Images.Media.SIZE
+        MediaStore.Images.Media.DISPLAY_NAME,
+        MediaStore.Images.Media.SIZE
     )
 
     return context.contentResolver.query(
-            this,
-            projection,
-            null,
-            null,
-            null
+        this,
+        projection,
+        null,
+        null,
+        null
     )?.use { cursor ->
         val nameColumn = cursor.getColumnIndexOrNull(MediaStore.Images.Media.DISPLAY_NAME) ?: return@use null
         val sizeColumn = cursor.getColumnIndexOrNull(MediaStore.Images.Media.SIZE) ?: return@use null
@@ -50,13 +50,13 @@ internal fun Uri.toMultiPickerImageType(context: Context): MultiPickerImageType?
             val orientation = ImageUtils.getOrientation(context, this)
 
             MultiPickerImageType(
-                    name,
-                    size,
-                    context.contentResolver.getType(this),
-                    this,
-                    bitmap?.width ?: 0,
-                    bitmap?.height ?: 0,
-                    orientation
+                name,
+                size,
+                context.contentResolver.getType(this),
+                this,
+                bitmap?.width ?: 0,
+                bitmap?.height ?: 0,
+                orientation
             )
         } else {
             null
@@ -66,16 +66,16 @@ internal fun Uri.toMultiPickerImageType(context: Context): MultiPickerImageType?
 
 internal fun Uri.toMultiPickerVideoType(context: Context): MultiPickerVideoType? {
     val projection = arrayOf(
-            MediaStore.Video.Media.DISPLAY_NAME,
-            MediaStore.Video.Media.SIZE
+        MediaStore.Video.Media.DISPLAY_NAME,
+        MediaStore.Video.Media.SIZE
     )
 
     return context.contentResolver.query(
-            this,
-            projection,
-            null,
-            null,
-            null
+        this,
+        projection,
+        null,
+        null,
+        null
     )?.use { cursor ->
         val nameColumn = cursor.getColumnIndexOrNull(MediaStore.Video.Media.DISPLAY_NAME) ?: return@use null
         val sizeColumn = cursor.getColumnIndexOrNull(MediaStore.Video.Media.SIZE) ?: return@use null
@@ -98,14 +98,14 @@ internal fun Uri.toMultiPickerVideoType(context: Context): MultiPickerVideoType?
             }
 
             MultiPickerVideoType(
-                    name,
-                    size,
-                    context.contentResolver.getType(this),
-                    this,
-                    width,
-                    height,
-                    orientation,
-                    duration
+                name,
+                size,
+                context.contentResolver.getType(this),
+                this,
+                width,
+                height,
+                orientation,
+                duration
             )
         } else {
             null
@@ -115,16 +115,16 @@ internal fun Uri.toMultiPickerVideoType(context: Context): MultiPickerVideoType?
 
 fun Uri.toMultiPickerAudioType(context: Context): MultiPickerAudioType? {
     val projection = arrayOf(
-            MediaStore.Audio.Media.DISPLAY_NAME,
-            MediaStore.Audio.Media.SIZE
+        MediaStore.Audio.Media.DISPLAY_NAME,
+        MediaStore.Audio.Media.SIZE
     )
 
     return context.contentResolver.query(
-            this,
-            projection,
-            null,
-            null,
-            null
+        this,
+        projection,
+        null,
+        null,
+        null
     )?.use { cursor ->
         val nameColumn = cursor.getColumnIndexOrNull(MediaStore.Audio.Media.DISPLAY_NAME) ?: return@use null
         val sizeColumn = cursor.getColumnIndexOrNull(MediaStore.Audio.Media.SIZE) ?: return@use null
@@ -141,11 +141,11 @@ fun Uri.toMultiPickerAudioType(context: Context): MultiPickerAudioType? {
             }
 
             MultiPickerAudioType(
-                    name,
-                    size,
-                    sanitize(context.contentResolver.getType(this)),
-                    this,
-                    duration
+                name,
+                size,
+                sanitize(context.contentResolver.getType(this)),
+                this,
+                duration
             )
         } else {
             null

@@ -29,14 +29,16 @@ import org.matrix.android.sdk.internal.session.room.directory.SetRoomDirectoryVi
 import javax.inject.Inject
 
 internal class DefaultRoomDirectoryService @Inject constructor(
-        private val getPublicRoomTask: GetPublicRoomTask,
-        private val getRoomDirectoryVisibilityTask: GetRoomDirectoryVisibilityTask,
-        private val setRoomDirectoryVisibilityTask: SetRoomDirectoryVisibilityTask,
-        private val roomAliasAvailabilityChecker: RoomAliasAvailabilityChecker
+    private val getPublicRoomTask: GetPublicRoomTask,
+    private val getRoomDirectoryVisibilityTask: GetRoomDirectoryVisibilityTask,
+    private val setRoomDirectoryVisibilityTask: SetRoomDirectoryVisibilityTask,
+    private val roomAliasAvailabilityChecker: RoomAliasAvailabilityChecker
 ) : RoomDirectoryService {
 
-    override suspend fun getPublicRooms(server: String?,
-                                        publicRoomsParams: PublicRoomsParams): PublicRoomsResponse {
+    override suspend fun getPublicRooms(
+        server: String?,
+        publicRoomsParams: PublicRoomsParams
+    ): PublicRoomsResponse {
         return getPublicRoomTask.execute(GetPublicRoomTask.Params(server, publicRoomsParams))
     }
 

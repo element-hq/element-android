@@ -40,9 +40,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class VerificationChooseMethodFragment @Inject constructor(
-        val controller: VerificationChooseMethodController
+    val controller: VerificationChooseMethodController
 ) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
-        VerificationChooseMethodController.Listener {
+    VerificationChooseMethodController.Listener {
 
     private val viewModel by fragmentViewModel(VerificationChooseMethodViewModel::class)
 
@@ -74,9 +74,12 @@ class VerificationChooseMethodFragment @Inject constructor(
     }
 
     override fun doVerifyBySas() = withState(sharedViewModel) { state ->
-        sharedViewModel.handle(VerificationAction.StartSASVerification(
+        sharedViewModel.handle(
+            VerificationAction.StartSASVerification(
                 state.otherUserMxItem?.id ?: "",
-                state.pendingRequest.invoke()?.transactionId ?: ""))
+                state.pendingRequest.invoke()?.transactionId ?: ""
+            )
+        )
     }
 
     private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
@@ -115,10 +118,12 @@ class VerificationChooseMethodFragment @Inject constructor(
     }
 
     private fun onRemoteQrCodeScanned(remoteQrCode: String) = withState(sharedViewModel) { state ->
-        sharedViewModel.handle(VerificationAction.RemoteQrCodeScanned(
+        sharedViewModel.handle(
+            VerificationAction.RemoteQrCodeScanned(
                 state.otherUserMxItem?.id ?: "",
                 state.pendingRequest.invoke()?.transactionId ?: "",
                 remoteQrCode
-        ))
+            )
+        )
     }
 }

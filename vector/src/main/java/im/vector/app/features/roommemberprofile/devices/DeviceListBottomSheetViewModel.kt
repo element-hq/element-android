@@ -38,18 +38,20 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 
 data class DeviceListViewState(
-        val userId: String,
-        val allowDeviceAction: Boolean,
-        val userItem: MatrixItem? = null,
-        val isMine: Boolean = false,
-        val memberCrossSigningKey: MXCrossSigningInfo? = null,
-        val cryptoDevices: Async<List<CryptoDeviceInfo>> = Loading(),
-        val selectedDevice: CryptoDeviceInfo? = null
+    val userId: String,
+    val allowDeviceAction: Boolean,
+    val userItem: MatrixItem? = null,
+    val isMine: Boolean = false,
+    val memberCrossSigningKey: MXCrossSigningInfo? = null,
+    val cryptoDevices: Async<List<CryptoDeviceInfo>> = Loading(),
+    val selectedDevice: CryptoDeviceInfo? = null
 ) : MavericksState
 
-class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted private val initialState: DeviceListViewState,
-                                                                 private val session: Session) :
-        VectorViewModel<DeviceListViewState, DeviceListAction, DeviceListBottomSheetViewEvents>(initialState) {
+class DeviceListBottomSheetViewModel @AssistedInject constructor(
+    @Assisted private val initialState: DeviceListViewState,
+    private val session: Session
+) :
+    VectorViewModel<DeviceListViewState, DeviceListAction, DeviceListBottomSheetViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<DeviceListBottomSheetViewModel, DeviceListViewState> {
@@ -64,10 +66,10 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
             val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
             return session.getUser(userId)?.toMatrixItem()?.let {
                 DeviceListViewState(
-                        userId = userId,
-                        allowDeviceAction = args.allowDeviceAction,
-                        userItem = it,
-                        isMine = userId == session.myUserId
+                    userId = userId,
+                    allowDeviceAction = args.allowDeviceAction,
+                    userItem = it,
+                    isMine = userId == session.myUserId
                 )
             } ?: return super.initialState(viewModelContext)
         }
@@ -76,21 +78,21 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
     init {
 
         session.flow().liveUserCryptoDevices(initialState.userId)
-                .execute {
-                    copy(cryptoDevices = it).also {
-                        refreshSelectedId()
-                    }
+            .execute {
+                copy(cryptoDevices = it).also {
+                    refreshSelectedId()
                 }
+            }
 
         session.flow().liveCrossSigningInfo(initialState.userId)
-                .execute {
-                    copy(memberCrossSigningKey = it.invoke()?.getOrNull())
-                }
+            .execute {
+                copy(memberCrossSigningKey = it.invoke()?.getOrNull())
+            }
     }
 
     override fun handle(action: DeviceListAction) {
         when (action) {
-            is DeviceListAction.SelectDevice   -> selectDevice(action)
+            is DeviceListAction.SelectDevice -> selectDevice(action)
             is DeviceListAction.DeselectDevice -> deselectDevice()
             is DeviceListAction.ManuallyVerify -> manuallyVerify(action)
         }
@@ -101,7 +103,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
             state.cryptoDevices.invoke()?.firstOrNull { state.selectedDevice.deviceId == it.deviceId }?.let {
                 setState {
                     copy(
-                            selectedDevice = it
+                        selectedDevice = it
                     )
                 }
             }

@@ -33,9 +33,9 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class SpaceManageRoomsController @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val errorFormatter: ErrorFormatter,
-        private val stringProvider: StringProvider
+    private val avatarRenderer: AvatarRenderer,
+    private val errorFormatter: ErrorFormatter,
+    private val stringProvider: StringProvider
 ) : TypedEpoxyController<SpaceManageRoomViewState>() {
 
     interface Listener {
@@ -82,8 +82,8 @@ class SpaceManageRoomsController @Inject constructor(
                 roomManageSelectionItem {
                     id(childInfo.childRoomId)
                     matrixItem(
-                            data.knownRoomSummaries.firstOrNull { it.roomId == childInfo.childRoomId }?.toMatrixItem()
-                                    ?: childInfo.toMatrixItem()
+                        data.knownRoomSummaries.firstOrNull { it.roomId == childInfo.childRoomId }?.toMatrixItem()
+                            ?: childInfo.toMatrixItem()
                     )
                     avatarRenderer(host.avatarRenderer)
                     suggested(childInfo.suggested ?: false)

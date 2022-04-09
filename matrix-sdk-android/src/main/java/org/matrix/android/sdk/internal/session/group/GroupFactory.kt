@@ -26,12 +26,12 @@ internal interface GroupFactory {
 
 @SessionScope
 internal class DefaultGroupFactory @Inject constructor(private val getGroupDataTask: GetGroupDataTask) :
-        GroupFactory {
+    GroupFactory {
 
     override fun create(groupId: String): Group {
         return DefaultGroup(
-                groupId = groupId,
-                getGroupDataTask = getGroupDataTask
+            groupId = groupId,
+            getGroupDataTask = getGroupDataTask
         )
     }
 }

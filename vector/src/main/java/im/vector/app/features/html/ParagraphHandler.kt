@@ -33,10 +33,10 @@ class ParagraphHandler(private val dimensionConverter: DimensionConverter) : Tag
             visitChildren(visitor, renderer, tag.asBlock)
         }
         SpannableBuilder.setSpans(
-                visitor.builder(),
-                VerticalPaddingSpan(dimensionConverter.dpToPx(4), dimensionConverter.dpToPx(4)),
-                tag.start(),
-                tag.end()
+            visitor.builder(),
+            VerticalPaddingSpan(dimensionConverter.dpToPx(4), dimensionConverter.dpToPx(4)),
+            tag.start(),
+            tag.end()
         )
     }
 }

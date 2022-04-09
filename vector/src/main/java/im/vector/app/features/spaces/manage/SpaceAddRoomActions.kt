@@ -23,5 +23,5 @@ sealed class SpaceAddRoomActions : VectorViewModelAction {
     data class UpdateFilter(val filter: String) : SpaceAddRoomActions()
     data class ToggleSelection(val roomSummary: RoomSummary) : SpaceAddRoomActions()
     object Save : SpaceAddRoomActions()
-//    object HandleBack : SpaceAddRoomActions()
+    //    object HandleBack : SpaceAddRoomActions()
 }

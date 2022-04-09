@@ -27,8 +27,8 @@ import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 
 class QrCodeScannerViewModel @AssistedInject constructor(
-        @Assisted initialState: VectorDummyViewState,
-        val session: Session
+    @Assisted initialState: VectorDummyViewState,
+    val session: Session
 ) : VectorViewModel<VectorDummyViewState, QrCodeScannerAction, QrCodeScannerEvents>(initialState) {
 
     @AssistedFactory
@@ -40,11 +40,11 @@ class QrCodeScannerViewModel @AssistedInject constructor(
 
     override fun handle(action: QrCodeScannerAction) {
         _viewEvents.post(
-                when (action) {
-                    is QrCodeScannerAction.CodeDecoded -> QrCodeScannerEvents.CodeParsed(action.result, action.isQrCode)
-                    is QrCodeScannerAction.SwitchMode  -> QrCodeScannerEvents.SwitchMode
-                    is QrCodeScannerAction.ScanFailed  -> QrCodeScannerEvents.ParseFailed
-                }
+            when (action) {
+                is QrCodeScannerAction.CodeDecoded -> QrCodeScannerEvents.CodeParsed(action.result, action.isQrCode)
+                is QrCodeScannerAction.SwitchMode -> QrCodeScannerEvents.SwitchMode
+                is QrCodeScannerAction.ScanFailed -> QrCodeScannerEvents.ParseFailed
+            }
         )
     }
 }

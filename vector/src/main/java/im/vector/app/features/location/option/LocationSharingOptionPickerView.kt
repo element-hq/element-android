@@ -31,7 +31,7 @@ import im.vector.app.databinding.ViewLocationSharingOptionPickerBinding
  * Custom view to display the location sharing option picker.
  */
 class LocationSharingOptionPickerView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     val optionPinned: LocationSharingOptionView
@@ -50,8 +50,8 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
         get() = binding.locationSharingOptionsDivider2
 
     private val binding = ViewLocationSharingOptionPickerBinding.inflate(
-            LayoutInflater.from(context),
-            this
+        LayoutInflater.from(context),
+        this
     )
 
     init {
@@ -74,13 +74,13 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
     private fun applyBackground() {
         val outValue = TypedValue()
         context.theme.resolveAttribute(
-                R.attr.colorSurface,
-                outValue,
-                true
+            R.attr.colorSurface,
+            outValue,
+            true
         )
         binding.root.background = ContextCompat.getDrawable(
-                context,
-                outValue.resourceId
+            context,
+            outValue.resourceId
         )
     }
 }

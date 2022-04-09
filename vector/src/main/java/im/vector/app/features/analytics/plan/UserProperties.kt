@@ -24,38 +24,38 @@ package im.vector.app.features.analytics.plan
  * definition. These properties must all be device independent.
  */
 data class UserProperties(
-        /**
-         * Whether the user has the favourites space enabled
-         */
-        val WebMetaSpaceFavouritesEnabled: Boolean? = null,
-        /**
-         * Whether the user has the home space set to all rooms
-         */
-        val WebMetaSpaceHomeAllRooms: Boolean? = null,
-        /**
-         * Whether the user has the home space enabled
-         */
-        val WebMetaSpaceHomeEnabled: Boolean? = null,
-        /**
-         * Whether the user has the other rooms space enabled
-         */
-        val WebMetaSpaceOrphansEnabled: Boolean? = null,
-        /**
-         * Whether the user has the people space enabled
-         */
-        val WebMetaSpacePeopleEnabled: Boolean? = null,
-        /**
-         * The selected messaging use case during the onboarding flow.
-         */
-        val ftueUseCaseSelection: FtueUseCaseSelection? = null,
-        /**
-         * Number of joined rooms the user has favourited
-         */
-        val numFavouriteRooms: Int? = null,
-        /**
-         * Number of spaces (and sub-spaces) the user is joined to
-         */
-        val numSpaces: Int? = null,
+    /**
+     * Whether the user has the favourites space enabled
+     */
+    val WebMetaSpaceFavouritesEnabled: Boolean? = null,
+    /**
+     * Whether the user has the home space set to all rooms
+     */
+    val WebMetaSpaceHomeAllRooms: Boolean? = null,
+    /**
+     * Whether the user has the home space enabled
+     */
+    val WebMetaSpaceHomeEnabled: Boolean? = null,
+    /**
+     * Whether the user has the other rooms space enabled
+     */
+    val WebMetaSpaceOrphansEnabled: Boolean? = null,
+    /**
+     * Whether the user has the people space enabled
+     */
+    val WebMetaSpacePeopleEnabled: Boolean? = null,
+    /**
+     * The selected messaging use case during the onboarding flow.
+     */
+    val ftueUseCaseSelection: FtueUseCaseSelection? = null,
+    /**
+     * Number of joined rooms the user has favourited
+     */
+    val numFavouriteRooms: Int? = null,
+    /**
+     * Number of spaces (and sub-spaces) the user is joined to
+     */
+    val numSpaces: Int? = null,
 ) {
 
     enum class FtueUseCaseSelection {

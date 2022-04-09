@@ -24,14 +24,14 @@ object RoomSummaryConstants {
      *
      */
     val PREVIEWABLE_TYPES = listOf(
-            // TODO filter message type (KEY_VERIFICATION_READY, etc.)
-            EventType.MESSAGE,
-            EventType.CALL_INVITE,
-            EventType.CALL_HANGUP,
-            EventType.CALL_REJECT,
-            EventType.CALL_ANSWER,
-            EventType.ENCRYPTED,
-            EventType.STICKER,
-            EventType.REACTION
+        // TODO filter message type (KEY_VERIFICATION_READY, etc.)
+        EventType.MESSAGE,
+        EventType.CALL_INVITE,
+        EventType.CALL_HANGUP,
+        EventType.CALL_REJECT,
+        EventType.CALL_ANSWER,
+        EventType.ENCRYPTED,
+        EventType.STICKER,
+        EventType.REACTION
     ) + EventType.POLL_START
 }

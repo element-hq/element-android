@@ -29,15 +29,16 @@ import timber.log.Timber
  * Generic interactive key verification transaction
  */
 internal abstract class DefaultVerificationTransaction(
-        private val setDeviceVerificationAction: SetDeviceVerificationAction,
-        private val crossSigningService: CrossSigningService,
-        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
-        private val userId: String,
-        override val transactionId: String,
-        override val otherUserId: String,
-        override var otherDeviceId: String? = null,
-        override val isIncoming: Boolean) : VerificationTransaction {
+    private val setDeviceVerificationAction: SetDeviceVerificationAction,
+    private val crossSigningService: CrossSigningService,
+    private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+    private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
+    private val userId: String,
+    override val transactionId: String,
+    override val otherUserId: String,
+    override var otherDeviceId: String? = null,
+    override val isIncoming: Boolean
+) : VerificationTransaction {
 
     lateinit var transport: VerificationTransport
 
@@ -55,9 +56,11 @@ internal abstract class DefaultVerificationTransaction(
         listeners.remove(listener)
     }
 
-    protected fun trust(canTrustOtherUserMasterKey: Boolean,
-                        toVerifyDeviceIds: List<String>,
-                        eventuallyMarkMyMasterKeyAsTrusted: Boolean, autoDone: Boolean = true) {
+    protected fun trust(
+        canTrustOtherUserMasterKey: Boolean,
+        toVerifyDeviceIds: List<String>,
+        eventuallyMarkMyMasterKeyAsTrusted: Boolean, autoDone: Boolean = true
+    ) {
         Timber.d("## Verification: trust ($otherUserId,$otherDeviceId) , verifiedDevices:$toVerifyDeviceIds")
         Timber.d("## Verification: trust Mark myMSK trusted $eventuallyMarkMyMasterKeyAsTrusted")
 
@@ -105,8 +108,10 @@ internal abstract class DefaultVerificationTransaction(
 
     private fun setDeviceVerified(userId: String, deviceId: String) {
         // TODO should not override cross sign status
-        setDeviceVerificationAction.handle(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
-                userId,
-                deviceId)
+        setDeviceVerificationAction.handle(
+            DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+            userId,
+            deviceId
+        )
     }
 }

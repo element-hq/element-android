@@ -25,7 +25,7 @@ import im.vector.app.features.reactions.data.EmojiItem
 import javax.inject.Inject
 
 class AutocompleteEmojiController @Inject constructor(
-        private val fontProvider: EmojiCompatFontProvider
+    private val fontProvider: EmojiCompatFontProvider
 ) : TypedEpoxyController<List<EmojiItem>>() {
 
     var emojiTypeface: Typeface? = fontProvider.typeface
@@ -44,15 +44,15 @@ class AutocompleteEmojiController @Inject constructor(
         }
         val host = this
         data
-                .take(MAX)
-                .forEach { emojiItem ->
-                    autocompleteEmojiItem {
-                        id(emojiItem.name)
-                        emojiItem(emojiItem)
-                        emojiTypeFace(host.emojiTypeface)
-                        onClickListener { host.listener?.onItemClick(emojiItem.emoji) }
-                    }
+            .take(MAX)
+            .forEach { emojiItem ->
+                autocompleteEmojiItem {
+                    id(emojiItem.name)
+                    emojiItem(emojiItem)
+                    emojiTypeFace(host.emojiTypeface)
+                    onClickListener { host.listener?.onItemClick(emojiItem.emoji) }
                 }
+            }
 
         if (data.size > MAX) {
             autocompleteMoreResultItem {

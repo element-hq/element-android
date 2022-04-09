@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 
 internal fun RoomEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<RoomEntity> {
     return realm.where<RoomEntity>()
-            .equalTo(RoomEntityFields.ROOM_ID, roomId)
+        .equalTo(RoomEntityFields.ROOM_ID, roomId)
 }
 
 internal fun RoomEntity.Companion.getOrCreate(realm: Realm, roomId: String): RoomEntity {

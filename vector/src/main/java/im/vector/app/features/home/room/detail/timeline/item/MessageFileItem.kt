@@ -47,8 +47,8 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
     @DrawableRes
     var iconRes: Int = 0
 
-//    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-//    var clickListener: ClickListener? = null
+    //    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    //    var clickListener: ClickListener? = null
 
     @EpoxyAttribute
     var izLocalFile = false
@@ -83,7 +83,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
                 holder.fileImageView.setImageResource(R.drawable.ic_download)
             }
         }
-//        holder.view.setOnClickListener(clickListener)
+        //        holder.view.setOnClickListener(clickListener)
         val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
             Color.TRANSPARENT
         } else {

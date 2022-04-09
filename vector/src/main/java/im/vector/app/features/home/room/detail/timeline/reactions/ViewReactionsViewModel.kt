@@ -37,35 +37,36 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
 data class DisplayReactionsViewState(
-        val eventId: String,
-        val roomId: String,
-        val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized) :
-        MavericksState {
+    val eventId: String,
+    val roomId: String,
+    val mapReactionKeyToMemberList: Async<List<ReactionInfo>> = Uninitialized
+) :
+    MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)
 }
 
 data class ReactionInfo(
-        val eventId: String,
-        val reactionKey: String,
-        val authorId: String,
-        val authorName: String? = null,
-        val timestamp: String? = null
+    val eventId: String,
+    val reactionKey: String,
+    val authorId: String,
+    val authorName: String? = null,
+    val timestamp: String? = null
 )
 
 /**
  * Used to display the list of members that reacted to a given event
  */
 class ViewReactionsViewModel @AssistedInject constructor(
-        @Assisted initialState: DisplayReactionsViewState,
-        session: Session,
-        private val dateFormatter: VectorDateFormatter
+    @Assisted initialState: DisplayReactionsViewState,
+    session: Session,
+    private val dateFormatter: VectorDateFormatter
 ) : VectorViewModel<DisplayReactionsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
     private val room = session.getRoom(roomId)
-            ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
+        ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<ViewReactionsViewModel, DisplayReactionsViewState> {
@@ -80,28 +81,28 @@ class ViewReactionsViewModel @AssistedInject constructor(
 
     private fun observeEventAnnotationSummaries() {
         room.flow()
-                .liveAnnotationSummary(eventId)
-                .unwrap()
-                .map { annotationsSummary ->
-                    annotationsSummary.reactionsSummary
-                            .flatMap { reactionsSummary ->
-                                reactionsSummary.sourceEvents.map {
-                                    val event = room.getTimelineEvent(it)
-                                            ?: throw RuntimeException("Your eventId is not valid")
-                                    ReactionInfo(
-                                            event.root.eventId!!,
-                                            reactionsSummary.key,
-                                            event.root.senderId ?: "",
-                                            event.senderInfo.disambiguatedDisplayName,
-                                            dateFormatter.format(event.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
+            .liveAnnotationSummary(eventId)
+            .unwrap()
+            .map { annotationsSummary ->
+                annotationsSummary.reactionsSummary
+                    .flatMap { reactionsSummary ->
+                        reactionsSummary.sourceEvents.map {
+                            val event = room.getTimelineEvent(it)
+                                ?: throw RuntimeException("Your eventId is not valid")
+                            ReactionInfo(
+                                event.root.eventId!!,
+                                reactionsSummary.key,
+                                event.root.senderId ?: "",
+                                event.senderInfo.disambiguatedDisplayName,
+                                dateFormatter.format(event.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
 
-                                    )
-                                }
-                            }
-                }
-                .execute {
-                    copy(mapReactionKeyToMemberList = it)
-                }
+                            )
+                        }
+                    }
+            }
+            .execute {
+                copy(mapReactionKeyToMemberList = it)
+            }
     }
 
     override fun handle(action: EmptyAction) {

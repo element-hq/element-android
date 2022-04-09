@@ -39,17 +39,17 @@ class RoomMemberSummaryComparator @Inject constructor() : Comparator<RoomMemberS
                                         // No display names, compare ids
                                         leftRoomMemberSummary.userId.compareTo(rightRoomMemberSummary.userId)
                                     }
-                                    else                                               -> 1
+                                    else -> 1
                                 }
-                            else                                              ->
+                            else ->
                                 when {
                                     rightRoomMemberSummary.displayName.isNullOrBlank() -> -1
-                                    else                                               -> {
+                                    else -> {
                                         when (leftRoomMemberSummary.displayName) {
                                             rightRoomMemberSummary.displayName ->
                                                 // Same display name, compare id
                                                 leftRoomMemberSummary.userId.compareTo(rightRoomMemberSummary.userId)
-                                            else                               ->
+                                            else ->
                                                 leftRoomMemberSummary.displayName!!.compareTo(rightRoomMemberSummary.displayName!!, true)
                                         }
                                     }

@@ -20,9 +20,9 @@ package im.vector.app.features.notifications
  * Data class to hold information about a group of notifications for a room
  */
 data class RoomEventGroupInfo(
-        val roomId: String,
-        val roomDisplayName: String = "",
-        val isDirect: Boolean = false
+    val roomId: String,
+    val roomDisplayName: String = "",
+    val isDirect: Boolean = false
 ) {
     // An event in the list has not yet been display
     var hasNewEvent: Boolean = false

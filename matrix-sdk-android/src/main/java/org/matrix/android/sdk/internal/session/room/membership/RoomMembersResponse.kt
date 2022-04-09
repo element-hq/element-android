@@ -22,5 +22,5 @@ import org.matrix.android.sdk.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
 internal data class RoomMembersResponse(
-        @Json(name = "chunk") val roomMemberEvents: List<Event>
+    @Json(name = "chunk") val roomMemberEvents: List<Event>
 )

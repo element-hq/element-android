@@ -22,14 +22,14 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class RoomJoinRulesAllowEntry(
-        /**
-         * The room ID to check the membership of.
-         */
-        @Json(name = "room_id") val roomId: String?,
-        /**
-         * "m.room_membership" to describe that we are allowing access via room membership. Future MSCs may define other types.
-         */
-        @Json(name = "type") val type: String?
+    /**
+     * The room ID to check the membership of.
+     */
+    @Json(name = "room_id") val roomId: String?,
+    /**
+     * "m.room_membership" to describe that we are allowing access via room membership. Future MSCs may define other types.
+     */
+    @Json(name = "type") val type: String?
 ) {
     companion object {
         fun restrictedToRoom(roomId: String) = RoomJoinRulesAllowEntry(roomId, "m.room_membership")

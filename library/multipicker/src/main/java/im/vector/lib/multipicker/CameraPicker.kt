@@ -72,9 +72,9 @@ class CameraPicker {
             val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
             val storageDir: File = context.filesDir
             return File.createTempFile(
-                    "${timeStamp}_", /* prefix */
-                    ".jpg", /* suffix */
-                    storageDir /* directory */
+                "${timeStamp}_", /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
             )
         }
     }

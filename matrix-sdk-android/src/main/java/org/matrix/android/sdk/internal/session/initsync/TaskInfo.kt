@@ -19,10 +19,12 @@ package org.matrix.android.sdk.internal.session.initsync
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import timber.log.Timber
 
-internal class TaskInfo(val initSyncStep: InitSyncStep,
-                        val totalProgress: Int,
-                        val parent: TaskInfo?,
-                        val parentWeight: Float) {
+internal class TaskInfo(
+    val initSyncStep: InitSyncStep,
+    val totalProgress: Int,
+    val parent: TaskInfo?,
+    val parentWeight: Float
+) {
     var child: TaskInfo? = null
     var currentProgress = 0F
         private set

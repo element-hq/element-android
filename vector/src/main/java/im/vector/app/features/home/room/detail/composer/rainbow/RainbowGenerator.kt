@@ -34,17 +34,17 @@ class RainbowGenerator @Inject constructor() {
         val frequency = 2 * Math.PI / split.size
 
         return split
-                .mapIndexed { idx, letter ->
-                    // Do better than React-Sdk: Avoid adding font color for spaces
-                    if (letter == " ") {
-                        "$letter"
-                    } else {
-                        val (a, b) = generateAB(idx * frequency, 1f)
-                        val dashColor = labToRGB(75, a, b).toDashColor()
-                        "<font color=\"$dashColor\">$letter</font>"
-                    }
+            .mapIndexed { idx, letter ->
+                // Do better than React-Sdk: Avoid adding font color for spaces
+                if (letter == " ") {
+                    "$letter"
+                } else {
+                    val (a, b) = generateAB(idx * frequency, 1f)
+                    val dashColor = labToRGB(75, a, b).toDashColor()
+                    "<font color=\"$dashColor\">$letter</font>"
                 }
-                .joinToString(separator = "")
+            }
+            .joinToString(separator = "")
     }
 
     private fun generateAB(hue: Double, chroma: Float): Pair<Double, Double> {
@@ -87,7 +87,7 @@ class RainbowGenerator @Inject constructor() {
 
     private fun adjustRGB(value: Double): Int {
         return (gammaCorrection(value)
-                .coerceIn(0.0, 1.0) * 255)
-                .roundToInt()
+            .coerceIn(0.0, 1.0) * 255)
+            .roundToInt()
     }
 }

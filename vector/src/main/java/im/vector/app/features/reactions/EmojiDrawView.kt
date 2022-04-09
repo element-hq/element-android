@@ -32,7 +32,7 @@ import kotlin.math.abs
  * With generic textview, the performance in the recycler view are very bad
  */
 class EmojiDrawView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     var mLayout: StaticLayout? = null

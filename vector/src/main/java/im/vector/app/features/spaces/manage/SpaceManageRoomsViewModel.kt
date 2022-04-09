@@ -35,8 +35,8 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 
 class SpaceManageRoomsViewModel @AssistedInject constructor(
-        @Assisted val initialState: SpaceManageRoomViewState,
-        private val session: Session
+    @Assisted val initialState: SpaceManageRoomViewState,
+    private val session: Session
 ) : VectorViewModel<SpaceManageRoomViewState, SpaceManageRoomViewAction, SpaceManageRoomViewEvents>(initialState) {
 
     private val paginationLimit = 10
@@ -45,8 +45,8 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
         val spaceSummary = session.getRoomSummary(initialState.spaceId)
         setState {
             copy(
-                    spaceSummary = spaceSummary?.let { Success(it) } ?: Uninitialized,
-                    childrenInfo = Loading()
+                spaceSummary = spaceSummary?.let { Success(it) } ?: Uninitialized,
+                childrenInfo = Loading()
             )
         }
 
@@ -62,20 +62,20 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceManageRoomViewAction) {
         when (action) {
-            is SpaceManageRoomViewAction.ToggleSelection          -> handleToggleSelection(action)
-            is SpaceManageRoomViewAction.UpdateFilter             -> {
+            is SpaceManageRoomViewAction.ToggleSelection -> handleToggleSelection(action)
+            is SpaceManageRoomViewAction.UpdateFilter -> {
                 setState { copy(currentFilter = action.filter) }
             }
-            SpaceManageRoomViewAction.ClearSelection              -> {
+            SpaceManageRoomViewAction.ClearSelection -> {
                 setState { copy(selectedRooms = emptyList()) }
             }
-            SpaceManageRoomViewAction.BulkRemove                  -> {
+            SpaceManageRoomViewAction.BulkRemove -> {
                 handleBulkRemove()
             }
-            is SpaceManageRoomViewAction.MarkAllAsSuggested       -> {
+            is SpaceManageRoomViewAction.MarkAllAsSuggested -> {
                 handleBulkMarkAsSuggested(action.suggested)
             }
-            SpaceManageRoomViewAction.RefreshFromServer           -> {
+            SpaceManageRoomViewAction.RefreshFromServer -> {
                 refreshSummaryAPI()
             }
             SpaceManageRoomViewAction.LoadAdditionalItemsIfNeeded -> {
@@ -120,11 +120,11 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
             selection.forEach { info ->
                 try {
                     session.spaceService().getSpace(state.spaceId)?.addChildren(
-                            roomId = info.childRoomId,
-                            viaServers = info.viaServers,
-                            order = info.order,
-                            suggested = suggested
-//                            autoJoin = info.autoJoin
+                        roomId = info.childRoomId,
+                        viaServers = info.viaServers,
+                        order = info.order,
+                        suggested = suggested
+                        //                            autoJoin = info.autoJoin
                     )
                 } catch (failure: Throwable) {
                     errorList.add(failure)
@@ -143,23 +143,23 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
     private fun refreshSummaryAPI() {
         setState {
             copy(
-                    childrenInfo = Loading()
+                childrenInfo = Loading()
             )
         }
         viewModelScope.launch(Dispatchers.IO) {
             val apiResult = runCatchingToAsync {
                 session.spaceService().querySpaceChildren(
-                        spaceId = initialState.spaceId,
-                        limit = paginationLimit
+                    spaceId = initialState.spaceId,
+                    limit = paginationLimit
                 )
             }
             setState {
                 copy(
-                        childrenInfo = apiResult,
-                        paginationStatus = Uninitialized,
-                        knownRoomSummaries = apiResult.invoke()?.children?.mapNotNull {
-                            session.getRoomSummary(it.childRoomId)
-                        }.orEmpty()
+                    childrenInfo = apiResult,
+                    paginationStatus = Uninitialized,
+                    knownRoomSummaries = apiResult.invoke()?.children?.mapNotNull {
+                        session.getRoomSummary(it.childRoomId)
+                    }.orEmpty()
                 )
             }
         }
@@ -172,42 +172,42 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
         if (knownResults == null || nextToken == null) {
             setState {
                 copy(
-                        paginationStatus = Uninitialized
+                    paginationStatus = Uninitialized
                 )
             }
             return@withState
         }
         setState {
             copy(
-                    paginationStatus = Loading()
+                paginationStatus = Loading()
             )
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val apiResult = session.spaceService().querySpaceChildren(
-                        spaceId = initialState.spaceId,
-                        from = nextToken,
-                        knownStateList = knownResults.childrenState.orEmpty(),
-                        limit = paginationLimit
+                    spaceId = initialState.spaceId,
+                    from = nextToken,
+                    knownStateList = knownResults.childrenState.orEmpty(),
+                    limit = paginationLimit
                 )
                 val newKnown = apiResult.children.mapNotNull { session.getRoomSummary(it.childRoomId) }
                 setState {
                     copy(
-                            childrenInfo = Success(
-                                    knownResults.copy(
-                                            children = knownResults.children + apiResult.children,
-                                            nextToken = apiResult.nextToken
-                                    )
-                            ),
-                            paginationStatus = Success(Unit),
-                            knownRoomSummaries = (state.knownRoomSummaries + newKnown).distinctBy { it.roomId }
+                        childrenInfo = Success(
+                            knownResults.copy(
+                                children = knownResults.children + apiResult.children,
+                                nextToken = apiResult.nextToken
+                            )
+                        ),
+                        paginationStatus = Success(Unit),
+                        knownRoomSummaries = (state.knownRoomSummaries + newKnown).distinctBy { it.roomId }
                     )
                 }
             } catch (failure: Throwable) {
                 setState {
                     copy(
-                            paginationStatus = Fail(failure)
+                        paginationStatus = Fail(failure)
                     )
                 }
             }
@@ -223,7 +223,7 @@ class SpaceManageRoomsViewModel @AssistedInject constructor(
         }
         setState {
             copy(
-                    selectedRooms = existing.toList()
+                selectedRooms = existing.toList()
             )
         }
     }

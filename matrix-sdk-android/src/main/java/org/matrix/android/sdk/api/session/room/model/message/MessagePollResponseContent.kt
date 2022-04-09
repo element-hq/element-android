@@ -23,16 +23,16 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
 
 @JsonClass(generateAdapter = true)
 data class MessagePollResponseContent(
-        /**
-         * Local message type, not from server
-         */
-        @Transient
-        override val msgType: String = MessageType.MSGTYPE_POLL_RESPONSE,
-        @Json(name = "body") override val body: String = "",
-        @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
-        @Json(name = "m.new_content") override val newContent: Content? = null,
-        @Json(name = "org.matrix.msc3381.poll.response") val unstableResponse: PollResponse? = null,
-        @Json(name = "m.response") val response: PollResponse? = null
+    /**
+     * Local message type, not from server
+     */
+    @Transient
+    override val msgType: String = MessageType.MSGTYPE_POLL_RESPONSE,
+    @Json(name = "body") override val body: String = "",
+    @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
+    @Json(name = "m.new_content") override val newContent: Content? = null,
+    @Json(name = "org.matrix.msc3381.poll.response") val unstableResponse: PollResponse? = null,
+    @Json(name = "m.response") val response: PollResponse? = null
 ) : MessageContent {
 
     fun getBestResponse() = response ?: unstableResponse

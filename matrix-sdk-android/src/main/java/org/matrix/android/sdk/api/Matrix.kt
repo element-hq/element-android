@@ -62,9 +62,9 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         DaggerMatrixComponent.factory().create(context, matrixConfiguration).inject(this)
         if (context.applicationContext !is Configuration.Provider) {
             val configuration = Configuration.Builder()
-                    .setExecutor(Executors.newCachedThreadPool())
-                    .setWorkerFactory(matrixWorkerFactory)
-                    .build()
+                .setExecutor(Executors.newCachedThreadPool())
+                .setWorkerFactory(matrixWorkerFactory)
+                .build()
             WorkManager.initialize(context, configuration)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
@@ -131,9 +131,11 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
                     val matrixConfiguration = (appContext as MatrixConfiguration.Provider).providesMatrixConfiguration()
                     instance = Matrix(appContext, matrixConfiguration)
                 } else {
-                    throw IllegalStateException("Matrix is not initialized properly." +
-                            " If you want to manage your own Matrix instance use Matrix.createInstance" +
-                            " otherwise you should call Matrix.initialize or let your application implement MatrixConfiguration.Provider.")
+                    throw IllegalStateException(
+                        "Matrix is not initialized properly." +
+                                " If you want to manage your own Matrix instance use Matrix.createInstance" +
+                                " otherwise you should call Matrix.initialize or let your application implement MatrixConfiguration.Provider."
+                    )
                 }
             }
             return instance

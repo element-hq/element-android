@@ -44,9 +44,9 @@ import java.util.concurrent.CountDownLatch
 @LargeTest
 class TimelineForwardPaginationTest : InstrumentedTest {
 
-//    @Rule
-//    @JvmField
-//    val mRetryTestRule = RetryTestRule()
+    //    @Rule
+    //    @JvmField
+    //    val mRetryTestRule = RetryTestRule()
 
     /**
      * This test ensure that if we click to permalink, we will be able to go back to the live
@@ -68,9 +68,10 @@ class TimelineForwardPaginationTest : InstrumentedTest {
         // Alice sends X messages
         val message = "Message from Alice"
         val sentMessages = commonTestHelper.sendTextMessage(
-                roomFromAlicePOV,
-                message,
-                numberOfMessagesToSend)
+            roomFromAlicePOV,
+            message,
+            numberOfMessagesToSend
+        )
 
         // Alice clear the cache and restart the sync
         commonTestHelper.clearCacheAndSync(aliceSession)

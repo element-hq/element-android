@@ -42,29 +42,30 @@ import javax.inject.Inject
  */
 internal interface FetchThreadSummariesTask : Task<FetchThreadSummariesTask.Params, DefaultFetchThreadSummariesTask.Result> {
     data class Params(
-            val roomId: String,
-            val from: String = "",
-            val limit: Int = 500,
-            val isUserParticipating: Boolean = true
+        val roomId: String,
+        val from: String = "",
+        val limit: Int = 500,
+        val isUserParticipating: Boolean = true
     )
 }
 
 internal class DefaultFetchThreadSummariesTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val cryptoService: DefaultCryptoService,
-        @UserId private val userId: String,
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val cryptoService: DefaultCryptoService,
+    @UserId private val userId: String,
 ) : FetchThreadSummariesTask {
 
     override suspend fun execute(params: FetchThreadSummariesTask.Params): Result {
         val filter = FilterFactory.createThreadsFilter(
-                numberOfEvents = params.limit,
-                userId = if (params.isUserParticipating) userId else null).toJSONString()
+            numberOfEvents = params.limit,
+            userId = if (params.isUserParticipating) userId else null
+        ).toJSONString()
 
         val response = executeRequest(
-                globalErrorReceiver,
-                canRetry = true
+            globalErrorReceiver,
+            canRetry = true
         ) {
             roomAPI.getRoomMessagesFrom(params.roomId, params.from, PaginationDirection.BACKWARDS.value, params.limit, filter)
         }
@@ -74,8 +75,10 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
         return handleResponse(response, params)
     }
 
-    private suspend fun handleResponse(response: PaginationResponse,
-                                       params: FetchThreadSummariesTask.Params): Result {
+    private suspend fun handleResponse(
+        response: PaginationResponse,
+        params: FetchThreadSummariesTask.Params
+    ): Result {
         val rootThreadList = response.events
         monarchy.awaitTransaction { realm ->
             val roomEntity = RoomEntity.where(realm, roomId = params.roomId).findFirst() ?: return@awaitTransaction
@@ -87,14 +90,15 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
                 }
 
                 ThreadSummaryEntity.createOrUpdate(
-                        threadSummaryType = ThreadSummaryUpdateType.REPLACE,
-                        realm = realm,
-                        roomId = params.roomId,
-                        rootThreadEvent = rootThreadEvent,
-                        roomMemberContentsByUser = roomMemberContentsByUser,
-                        roomEntity = roomEntity,
-                        userId = userId,
-                        cryptoService = cryptoService)
+                    threadSummaryType = ThreadSummaryUpdateType.REPLACE,
+                    realm = realm,
+                    roomId = params.roomId,
+                    rootThreadEvent = rootThreadEvent,
+                    roomMemberContentsByUser = roomMemberContentsByUser,
+                    roomEntity = roomEntity,
+                    userId = userId,
+                    cryptoService = cryptoService
+                )
             }
         }
         return Result.SUCCESS

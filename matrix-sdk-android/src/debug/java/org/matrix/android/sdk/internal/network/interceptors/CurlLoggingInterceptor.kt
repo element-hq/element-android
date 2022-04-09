@@ -89,8 +89,8 @@ internal class CurlLoggingInterceptor @Inject constructor() :
         }
 
         curlCmd += ((if (compressed) " --compressed " else " ") + "'" + request.url.toString()
-                // Replace localhost for emulator by localhost for shell
-                .replace("://10.0.2.2:8080/".toRegex(), "://127.0.0.1:8080/") +
+            // Replace localhost for emulator by localhost for shell
+            .replace("://10.0.2.2:8080/".toRegex(), "://127.0.0.1:8080/") +
                 "'")
 
         // Add Json formatting

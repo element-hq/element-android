@@ -38,15 +38,15 @@ import javax.inject.Inject
 
 @SessionScope
 internal class DefaultContentScannerService @Inject constructor(
-        private val retrofitFactory: RetrofitFactory,
-        @Unauthenticated
-        private val okHttpClient: Lazy<OkHttpClient>,
-        private val contentScannerApiProvider: ContentScannerApiProvider,
-        private val contentScannerStore: ContentScannerStore,
-        private val getServerPublicKeyTask: GetServerPublicKeyTask,
-        private val scanEncryptedTask: ScanEncryptedTask,
-        private val scanMediaTask: ScanMediaTask,
-        private val taskExecutor: TaskExecutor
+    private val retrofitFactory: RetrofitFactory,
+    @Unauthenticated
+    private val okHttpClient: Lazy<OkHttpClient>,
+    private val contentScannerApiProvider: ContentScannerApiProvider,
+    private val contentScannerStore: ContentScannerStore,
+    private val getServerPublicKeyTask: GetServerPublicKeyTask,
+    private val scanEncryptedTask: ScanEncryptedTask,
+    private val scanMediaTask: ScanMediaTask,
+    private val taskExecutor: TaskExecutor
 ) : ContentScannerService {
 
     // Cache public key in memory
@@ -71,19 +71,21 @@ internal class DefaultContentScannerService @Inject constructor(
 
     override suspend fun getScanResultForAttachment(mxcUrl: String, fileInfo: ElementToDecrypt?): ScanStatusInfo {
         val result = if (fileInfo != null) {
-            scanEncryptedTask.execute(ScanEncryptedTask.Params(
+            scanEncryptedTask.execute(
+                ScanEncryptedTask.Params(
                     mxcUrl = mxcUrl,
                     publicServerKey = getServerPublicKey(false),
                     encryptedInfo = fileInfo
-            ))
+                )
+            )
         } else {
             scanMediaTask.execute(ScanMediaTask.Params(mxcUrl))
         }
 
         return ScanStatusInfo(
-                state = if (result.clean) ScanState.TRUSTED else ScanState.INFECTED,
-                humanReadableMessage = result.info,
-                scanDateTimestamp = System.currentTimeMillis()
+            state = if (result.clean) ScanState.TRUSTED else ScanState.INFECTED,
+            humanReadableMessage = result.info,
+            scanDateTimestamp = System.currentTimeMillis()
         )
     }
 
@@ -93,8 +95,8 @@ internal class DefaultContentScannerService @Inject constructor(
             serverPublicKey = null
         } else {
             val api = retrofitFactory
-                    .create(okHttpClient, url)
-                    .create(ContentScannerApi::class.java)
+                .create(okHttpClient, url)
+                .create(ContentScannerApi::class.java)
             contentScannerApiProvider.contentScannerApi = api
 
             taskExecutor.executorScope.launch {

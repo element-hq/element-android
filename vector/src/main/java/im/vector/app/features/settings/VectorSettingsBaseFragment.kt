@@ -66,8 +66,8 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .onEach { onClicked() }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach { onClicked() }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     abstract val preferenceXmlRes: Int
@@ -154,10 +154,10 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
 
     protected fun displayErrorDialog(errorMessage: String) {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorMessage)
-                .setPositiveButton(R.string.ok, null)
-                .show()
+            .setTitle(R.string.dialog_title_error)
+            .setMessage(errorMessage)
+            .setPositiveButton(R.string.ok, null)
+            .show()
     }
 
     override fun invalidate() {

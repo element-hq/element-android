@@ -48,26 +48,26 @@ class FilePicker : Picker<MultiPickerBaseType>() {
                 type.isMimeTypeVideo() -> selectedUri.toMultiPickerVideoType(context)
                 type.isMimeTypeImage() -> selectedUri.toMultiPickerImageType(context)
                 type.isMimeTypeAudio() -> selectedUri.toMultiPickerAudioType(context)
-                else                   -> {
+                else -> {
                     // Other files
                     context.contentResolver.query(selectedUri, null, null, null, null)
-                            ?.use { cursor ->
-                                val nameColumn = cursor.getColumnIndexOrNull(OpenableColumns.DISPLAY_NAME) ?: return@use null
-                                val sizeColumn = cursor.getColumnIndexOrNull(OpenableColumns.SIZE) ?: return@use null
-                                if (cursor.moveToFirst()) {
-                                    val name = cursor.getStringOrNull(nameColumn)
-                                    val size = cursor.getLongOrNull(sizeColumn) ?: 0
+                        ?.use { cursor ->
+                            val nameColumn = cursor.getColumnIndexOrNull(OpenableColumns.DISPLAY_NAME) ?: return@use null
+                            val sizeColumn = cursor.getColumnIndexOrNull(OpenableColumns.SIZE) ?: return@use null
+                            if (cursor.moveToFirst()) {
+                                val name = cursor.getStringOrNull(nameColumn)
+                                val size = cursor.getLongOrNull(sizeColumn) ?: 0
 
-                                    MultiPickerFileType(
-                                            name,
-                                            size,
-                                            context.contentResolver.getType(selectedUri),
-                                            selectedUri
-                                    )
-                                } else {
-                                    null
-                                }
+                                MultiPickerFileType(
+                                    name,
+                                    size,
+                                    context.contentResolver.getType(selectedUri),
+                                    selectedUri
+                                )
+                            } else {
+                                null
                             }
+                        }
                 }
             }
         }

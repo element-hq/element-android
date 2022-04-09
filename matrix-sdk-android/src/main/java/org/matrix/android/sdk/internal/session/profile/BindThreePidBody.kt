@@ -20,27 +20,27 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class BindThreePidBody(
-        /**
-         * Required. The client secret used in the session with the identity server.
-         */
-        @Json(name = "client_secret")
-        val clientSecret: String,
+    /**
+     * Required. The client secret used in the session with the identity server.
+     */
+    @Json(name = "client_secret")
+    val clientSecret: String,
 
-        /**
-         * Required. The identity server to use. (without "https://")
-         */
-        @Json(name = "id_server")
-        var identityServerUrlWithoutProtocol: String,
+    /**
+     * Required. The identity server to use. (without "https://")
+     */
+    @Json(name = "id_server")
+    var identityServerUrlWithoutProtocol: String,
 
-        /**
-         * Required. An access token previously registered with the identity server.
-         */
-        @Json(name = "id_access_token")
-        var identityServerAccessToken: String,
+    /**
+     * Required. An access token previously registered with the identity server.
+     */
+    @Json(name = "id_access_token")
+    var identityServerAccessToken: String,
 
-        /**
-         * Required. The session identifier given by the identity server.
-         */
-        @Json(name = "sid")
-        var sid: String
+    /**
+     * Required. The session identifier given by the identity server.
+     */
+    @Json(name = "sid")
+    var sid: String
 )

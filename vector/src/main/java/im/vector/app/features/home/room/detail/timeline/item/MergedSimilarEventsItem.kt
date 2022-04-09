@@ -67,10 +67,10 @@ abstract class MergedSimilarEventsItem : BasedMergedItem<MergedSimilarEventsItem
     }
 
     data class Attributes(
-            @PluralsRes val summaryTitleResId: Int,
-            override val isCollapsed: Boolean,
-            override val mergeData: List<Data>,
-            override val avatarRenderer: AvatarRenderer,
-            override val onCollapsedStateChanged: (Boolean) -> Unit
+        @PluralsRes val summaryTitleResId: Int,
+        override val isCollapsed: Boolean,
+        override val mergeData: List<Data>,
+        override val avatarRenderer: AvatarRenderer,
+        override val onCollapsedStateChanged: (Boolean) -> Unit
     ) : BasedMergedItem.Attributes
 }

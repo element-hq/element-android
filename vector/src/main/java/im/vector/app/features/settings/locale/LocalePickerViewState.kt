@@ -23,6 +23,6 @@ import im.vector.app.features.settings.VectorLocale
 import java.util.Locale
 
 data class LocalePickerViewState(
-        val currentLocale: Locale = VectorLocale.applicationLocale,
-        val locales: Async<List<Locale>> = Uninitialized
+    val currentLocale: Locale = VectorLocale.applicationLocale,
+    val locales: Async<List<Locale>> = Uninitialized
 ) : MavericksState

@@ -27,26 +27,27 @@ import javax.inject.Inject
 class ReadReceiptsItemFactory @Inject constructor(private val avatarRenderer: AvatarRenderer) {
 
     fun create(
-            eventId: String,
-            readReceipts: List<ReadReceipt>,
-            callback: TimelineEventController.Callback?,
-            isFromThreadTimeLine: Boolean): ReadReceiptsItem? {
+        eventId: String,
+        readReceipts: List<ReadReceipt>,
+        callback: TimelineEventController.Callback?,
+        isFromThreadTimeLine: Boolean
+    ): ReadReceiptsItem? {
         if (readReceipts.isEmpty()) {
             return null
         }
         val readReceiptsData = readReceipts
-                .map {
-                    ReadReceiptData(it.roomMember.userId, it.roomMember.avatarUrl, it.roomMember.displayName, it.originServerTs)
-                }
-                .sortedByDescending { it.timestamp }
+            .map {
+                ReadReceiptData(it.roomMember.userId, it.roomMember.avatarUrl, it.roomMember.displayName, it.originServerTs)
+            }
+            .sortedByDescending { it.timestamp }
         return ReadReceiptsItem_()
-                .id("read_receipts_$eventId")
-                .eventId(eventId)
-                .readReceipts(readReceiptsData)
-                .avatarRenderer(avatarRenderer)
-                .shouldHideReadReceipts(isFromThreadTimeLine)
-                .clickListener {
-                    callback?.onReadReceiptsClicked(readReceiptsData)
-                }
+            .id("read_receipts_$eventId")
+            .eventId(eventId)
+            .readReceipts(readReceiptsData)
+            .avatarRenderer(avatarRenderer)
+            .shouldHideReadReceipts(isFromThreadTimeLine)
+            .clickListener {
+                callback?.onReadReceiptsClicked(readReceiptsData)
+            }
     }
 }

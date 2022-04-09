@@ -26,21 +26,21 @@ import javax.inject.Inject
 
 internal interface DownloadEncryptedTask : Task<DownloadEncryptedTask.Params, ResponseBody> {
     data class Params(
-            val publicServerKey: String?,
-            val encryptedInfo: ElementToDecrypt,
-            val mxcUrl: String
+        val publicServerKey: String?,
+        val encryptedInfo: ElementToDecrypt,
+        val mxcUrl: String
     )
 }
 
 internal class DefaultDownloadEncryptedTask @Inject constructor(
-        private val contentScannerApiProvider: ContentScannerApiProvider
+    private val contentScannerApiProvider: ContentScannerApiProvider
 ) : DownloadEncryptedTask {
 
     override suspend fun execute(params: DownloadEncryptedTask.Params): ResponseBody {
         val dlBody = ScanEncryptorUtils.getDownloadBodyAndEncryptIfNeeded(
-                params.publicServerKey,
-                params.mxcUrl,
-                params.encryptedInfo
+            params.publicServerKey,
+            params.mxcUrl,
+            params.encryptedInfo
         )
 
         val api = contentScannerApiProvider.contentScannerApi ?: throw IllegalArgumentException()

@@ -35,19 +35,19 @@ import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class SpaceLeaveAdvancedFragment @Inject constructor(
-        val controller: SelectChildrenController
+    val controller: SelectChildrenController
 ) : VectorBaseFragment<FragmentSpaceLeaveAdvancedBinding>(),
-        SelectChildrenController.Listener {
+    SelectChildrenController.Listener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentSpaceLeaveAdvancedBinding.inflate(layoutInflater, container, false)
+        FragmentSpaceLeaveAdvancedBinding.inflate(layoutInflater, container, false)
 
     val viewModel: SpaceLeaveAdvancedViewModel by activityViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.toolbar)
-                .allowBack()
+            .allowBack()
         controller.listener = this
         views.roomList.configureWith(controller)
         views.spaceLeaveCancel.debouncedClicks { requireActivity().finish() }
@@ -57,11 +57,11 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
         }
 
         views.publicRoomsFilter.queryTextChanges()
-                .debounce(100)
-                .onEach {
-                    viewModel.handle(SpaceLeaveAdvanceViewAction.UpdateFilter(it.toString()))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .debounce(100)
+            .onEach {
+                viewModel.handle(SpaceLeaveAdvanceViewAction.UpdateFilter(it.toString()))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onDestroyView() {

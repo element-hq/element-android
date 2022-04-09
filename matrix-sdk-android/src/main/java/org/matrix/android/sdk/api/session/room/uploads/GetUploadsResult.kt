@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.api.session.room.uploads
 
 data class GetUploadsResult(
-        // List of fetched Events, most recent first
-        val uploadEvents: List<UploadEvent>,
-        // token to get more events
-        val nextToken: String,
-        // True if there are more event to load
-        val hasMore: Boolean
+    // List of fetched Events, most recent first
+    val uploadEvents: List<UploadEvent>,
+    // token to get more events
+    val nextToken: String,
+    // True if there are more event to load
+    val hasMore: Boolean
 )

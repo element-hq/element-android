@@ -25,46 +25,46 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
  */
 @JsonClass(generateAdapter = true)
 data class PowerLevelsContent(
-        /**
-         * The level required to ban a user. Defaults to 50 if unspecified.
-         */
-        @Json(name = "ban") val ban: Int? = null,
-        /**
-         * The level required to kick a user. Defaults to 50 if unspecified.
-         */
-        @Json(name = "kick") val kick: Int? = null,
-        /**
-         * The level required to invite a user. Defaults to 50 if unspecified.
-         */
-        @Json(name = "invite") val invite: Int? = null,
-        /**
-         * The level required to redact an event. Defaults to 50 if unspecified.
-         */
-        @Json(name = "redact") val redact: Int? = null,
-        /**
-         * The default level required to send message events. Can be overridden by the events key. Defaults to 0 if unspecified.
-         */
-        @Json(name = "events_default") val eventsDefault: Int? = null,
-        /**
-         * The level required to send specific event types. This is a mapping from event type to power level required.
-         */
-        @Json(name = "events") val events: Map<String, Int>? = null,
-        /**
-         * The default power level for every user in the room, unless their user_id is mentioned in the users key. Defaults to 0 if unspecified.
-         */
-        @Json(name = "users_default") val usersDefault: Int? = null,
-        /**
-         * The power levels for specific users. This is a mapping from user_id to power level for that user.
-         */
-        @Json(name = "users") val users: Map<String, Int>? = null,
-        /**
-         * The default level required to send state events. Can be overridden by the events key. Defaults to 50 if unspecified.
-         */
-        @Json(name = "state_default") val stateDefault: Int? = null,
-        /**
-         * The power level requirements for specific notification types. This is a mapping from key to power level for that notifications key.
-         */
-        @Json(name = "notifications") val notifications: Map<String, Any>? = null
+    /**
+     * The level required to ban a user. Defaults to 50 if unspecified.
+     */
+    @Json(name = "ban") val ban: Int? = null,
+    /**
+     * The level required to kick a user. Defaults to 50 if unspecified.
+     */
+    @Json(name = "kick") val kick: Int? = null,
+    /**
+     * The level required to invite a user. Defaults to 50 if unspecified.
+     */
+    @Json(name = "invite") val invite: Int? = null,
+    /**
+     * The level required to redact an event. Defaults to 50 if unspecified.
+     */
+    @Json(name = "redact") val redact: Int? = null,
+    /**
+     * The default level required to send message events. Can be overridden by the events key. Defaults to 0 if unspecified.
+     */
+    @Json(name = "events_default") val eventsDefault: Int? = null,
+    /**
+     * The level required to send specific event types. This is a mapping from event type to power level required.
+     */
+    @Json(name = "events") val events: Map<String, Int>? = null,
+    /**
+     * The default power level for every user in the room, unless their user_id is mentioned in the users key. Defaults to 0 if unspecified.
+     */
+    @Json(name = "users_default") val usersDefault: Int? = null,
+    /**
+     * The power levels for specific users. This is a mapping from user_id to power level for that user.
+     */
+    @Json(name = "users") val users: Map<String, Int>? = null,
+    /**
+     * The default level required to send state events. Can be overridden by the events key. Defaults to 50 if unspecified.
+     */
+    @Json(name = "state_default") val stateDefault: Int? = null,
+    /**
+     * The power level requirements for specific notification types. This is a mapping from key to power level for that notifications key.
+     */
+    @Json(name = "notifications") val notifications: Map<String, Any>? = null
 ) {
     /**
      * Return a copy of this content with a new power level for the specified user
@@ -74,13 +74,13 @@ data class PowerLevelsContent(
      */
     fun setUserPowerLevel(userId: String, powerLevel: Int?): PowerLevelsContent {
         return copy(
-                users = users.orEmpty().toMutableMap().apply {
-                    if (powerLevel == null || powerLevel == usersDefault) {
-                        remove(userId)
-                    } else {
-                        put(userId, powerLevel)
-                    }
+            users = users.orEmpty().toMutableMap().apply {
+                if (powerLevel == null || powerLevel == usersDefault) {
+                    remove(userId)
+                } else {
+                    put(userId, powerLevel)
                 }
+            }
         )
     }
 
@@ -95,8 +95,8 @@ data class PowerLevelsContent(
             // the first implementation was a string value
             is String -> value.toInt()
             is Double -> value.toInt()
-            is Int    -> value
-            else      -> Role.Moderator.value
+            is Int -> value
+            else -> Role.Moderator.value
         }
     }
 

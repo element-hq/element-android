@@ -34,9 +34,9 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 
 class LegalsViewModel @AssistedInject constructor(
-        @Assisted initialState: LegalsState,
-        private val session: Session,
-        private val stringProvider: StringProvider
+    @Assisted initialState: LegalsState,
+    private val session: Session,
+    private val stringProvider: StringProvider
 ) : VectorViewModel<LegalsState, LegalsAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -68,10 +68,10 @@ class LegalsViewModel @AssistedInject constructor(
             setState { copy(homeServer = Loading()) }
             viewModelScope.launch {
                 runCatching { session.fetchHomeserverWithTerms(stringProvider.getString(R.string.resources_language)) }
-                        .fold(
-                                onSuccess = { setState { copy(homeServer = Success(it)) } },
-                                onFailure = { setState { copy(homeServer = Fail(it)) } }
-                        )
+                    .fold(
+                        onSuccess = { setState { copy(homeServer = Success(it)) } },
+                        onFailure = { setState { copy(homeServer = Fail(it)) } }
+                    )
             }
         }
     }
@@ -81,10 +81,10 @@ class LegalsViewModel @AssistedInject constructor(
             setState { copy(identityServer = Loading()) }
             viewModelScope.launch {
                 runCatching { session.fetchIdentityServerWithTerms(stringProvider.getString(R.string.resources_language)) }
-                        .fold(
-                                onSuccess = { setState { copy(identityServer = Success(it)) } },
-                                onFailure = { setState { copy(identityServer = Fail(it)) } }
-                        )
+                    .fold(
+                        onSuccess = { setState { copy(identityServer = Success(it)) } },
+                        onFailure = { setState { copy(identityServer = Fail(it)) } }
+                    )
             }
         }
     }

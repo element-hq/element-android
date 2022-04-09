@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.RoomDisplayNameFallbackProvider
 import javax.inject.Inject
 
 class VectorRoomDisplayNameFallbackProvider @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) : RoomDisplayNameFallbackProvider {
 
     override fun getNameForRoomInvite(): String {
@@ -34,10 +34,10 @@ class VectorRoomDisplayNameFallbackProvider @Inject constructor(
             context.getString(R.string.room_displayname_empty_room)
         } else {
             val was = when (val size = leftMemberNames.size) {
-                1    -> getNameFor1member(leftMemberNames[0])
-                2    -> getNameFor2members(leftMemberNames[0], leftMemberNames[1])
-                3    -> getNameFor3members(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2])
-                4    -> getNameFor4members(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2], leftMemberNames[3])
+                1 -> getNameFor1member(leftMemberNames[0])
+                2 -> getNameFor2members(leftMemberNames[0], leftMemberNames[1])
+                3 -> getNameFor3members(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2])
+                4 -> getNameFor4members(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2], leftMemberNames[3])
                 else -> getNameFor4membersAndMore(leftMemberNames[0], leftMemberNames[1], leftMemberNames[2], size - 3)
             }
             context.getString(R.string.room_displayname_empty_room_was, was)
@@ -60,12 +60,12 @@ class VectorRoomDisplayNameFallbackProvider @Inject constructor(
 
     override fun getNameFor4membersAndMore(name1: String, name2: String, name3: String, remainingCount: Int): String {
         return context.resources.getQuantityString(
-                R.plurals.room_displayname_four_and_more_members,
-                remainingCount,
-                name1,
-                name2,
-                name3,
-                remainingCount
+            R.plurals.room_displayname_four_and_more_members,
+            remainingCount,
+            name1,
+            name2,
+            name3,
+            remainingCount
         )
     }
 }

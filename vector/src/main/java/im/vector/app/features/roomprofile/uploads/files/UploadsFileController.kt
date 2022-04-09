@@ -28,8 +28,8 @@ import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import javax.inject.Inject
 
 class UploadsFileController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val dateFormatter: VectorDateFormatter
+    private val stringProvider: StringProvider,
+    private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<RoomUploadsViewState>() {
 
     interface Listener {
@@ -68,9 +68,13 @@ class UploadsFileController @Inject constructor(
             uploadsFileItem {
                 id(uploadEvent.eventId)
                 title(uploadEvent.contentWithAttachmentContent.body)
-                subtitle(host.stringProvider.getString(R.string.uploads_files_subtitle,
+                subtitle(
+                    host.stringProvider.getString(
+                        R.string.uploads_files_subtitle,
                         uploadEvent.senderInfo.disambiguatedDisplayName,
-                        host.dateFormatter.format(uploadEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)))
+                        host.dateFormatter.format(uploadEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
+                    )
+                )
                 listener(object : UploadsFileItem.Listener {
                     override fun onItemClicked() {
                         host.listener?.onOpenClicked(uploadEvent)

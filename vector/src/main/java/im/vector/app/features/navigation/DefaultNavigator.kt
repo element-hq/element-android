@@ -111,17 +111,17 @@ import javax.inject.Singleton
 
 @Singleton
 class DefaultNavigator @Inject constructor(
-        private val sessionHolder: ActiveSessionHolder,
-        private val vectorPreferences: VectorPreferences,
-        private val widgetArgsBuilder: WidgetArgsBuilder,
-        private val appStateHandler: AppStateHandler,
-        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val features: VectorFeatures
+    private val sessionHolder: ActiveSessionHolder,
+    private val vectorPreferences: VectorPreferences,
+    private val widgetArgsBuilder: WidgetArgsBuilder,
+    private val appStateHandler: AppStateHandler,
+    private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
+    private val features: VectorFeatures
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
         val intent = when (features.onboardingVariant()) {
-            OnboardingVariant.LEGACY    -> LoginActivity.newIntent(context, loginConfig)
+            OnboardingVariant.LEGACY -> LoginActivity.newIntent(context, loginConfig)
             OnboardingVariant.LOGIN_2,
             OnboardingVariant.FTUE_AUTH -> OnboardingActivity.newIntent(context, loginConfig)
         }
@@ -131,7 +131,7 @@ class DefaultNavigator @Inject constructor(
 
     override fun loginSSORedirect(context: Context, data: Uri?) {
         val intent = when (features.onboardingVariant()) {
-            OnboardingVariant.LEGACY    -> LoginActivity.redirectIntent(context, data)
+            OnboardingVariant.LEGACY -> LoginActivity.redirectIntent(context, data)
             OnboardingVariant.LOGIN_2,
             OnboardingVariant.FTUE_AUTH -> OnboardingActivity.redirectIntent(context, data)
         }
@@ -144,11 +144,11 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoom(
-            context: Context,
-            roomId: String,
-            eventId: String?,
-            buildTask: Boolean,
-            isInviteAlreadyAccepted: Boolean
+        context: Context,
+        roomId: String,
+        eventId: String?,
+        buildTask: Boolean,
+        isInviteAlreadyAccepted: Boolean
     ) {
         if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
             fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
@@ -166,7 +166,7 @@ class DefaultNavigator @Inject constructor(
         }
         appStateHandler.setCurrentSpace(spaceId)
         when (postSwitchSpaceAction) {
-            Navigator.PostSwitchSpaceAction.None                 -> {
+            Navigator.PostSwitchSpaceAction.None -> {
                 // go back to home if we are showing room details?
                 // This is a bit ugly, but the navigator is supposed to know about the activity stack
                 if (context is RoomDetailActivity) {
@@ -176,11 +176,11 @@ class DefaultNavigator @Inject constructor(
             Navigator.PostSwitchSpaceAction.OpenAddExistingRooms -> {
                 startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
-            is Navigator.PostSwitchSpaceAction.OpenDefaultRoom   -> {
+            is Navigator.PostSwitchSpaceAction.OpenDefaultRoom -> {
                 val args = TimelineArgs(
-                        postSwitchSpaceAction.roomId,
-                        eventId = null,
-                        openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet }
+                    postSwitchSpaceAction.roomId,
+                    eventId = null,
+                    openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet }
                 )
                 val intent = RoomDetailActivity.newIntent(context, args)
                 startActivity(context, intent, false)
@@ -195,13 +195,13 @@ class DefaultNavigator @Inject constructor(
     override fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
         val tx = session.cryptoService().verificationService().getExistingTransaction(otherUserId, sasTransactionId)
-                ?: return
+            ?: return
         (tx as? IncomingSasVerificationTransaction)?.performAccept()
         if (context is AppCompatActivity) {
             VerificationBottomSheet.withArgs(
-                    roomId = null,
-                    otherUserId = otherUserId,
-                    transactionId = sasTransactionId
+                roomId = null,
+                otherUserId = otherUserId,
+                transactionId = sasTransactionId
             ).show(context.supportFragmentManager, "REQPOP")
         }
     }
@@ -209,15 +209,15 @@ class DefaultNavigator @Inject constructor(
     override fun requestSessionVerification(context: Context, otherSessionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
         val pr = session.cryptoService().verificationService().requestKeyVerification(
-                supportedVerificationMethodsProvider.provide(),
-                session.myUserId,
-                listOf(otherSessionId)
+            supportedVerificationMethodsProvider.provide(),
+            session.myUserId,
+            listOf(otherSessionId)
         )
         if (context is AppCompatActivity) {
             VerificationBottomSheet.withArgs(
-                    roomId = null,
-                    otherUserId = session.myUserId,
-                    transactionId = pr.transactionId
+                roomId = null,
+                otherUserId = session.myUserId,
+                transactionId = pr.transactionId
             ).show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
         }
     }
@@ -225,20 +225,21 @@ class DefaultNavigator @Inject constructor(
     override fun requestSelfSessionVerification(context: Context) {
         val session = sessionHolder.getSafeActiveSession() ?: return
         val otherSessions = session.cryptoService()
-                .getCryptoDeviceInfo(session.myUserId)
-                .filter { it.deviceId != session.sessionParams.deviceId }
-                .map { it.deviceId }
+            .getCryptoDeviceInfo(session.myUserId)
+            .filter { it.deviceId != session.sessionParams.deviceId }
+            .map { it.deviceId }
         if (context is AppCompatActivity) {
             if (otherSessions.isNotEmpty()) {
                 val pr = session.cryptoService().verificationService().requestKeyVerification(
-                        supportedVerificationMethodsProvider.provide(),
-                        session.myUserId,
-                        otherSessions)
+                    supportedVerificationMethodsProvider.provide(),
+                    session.myUserId,
+                    otherSessions
+                )
                 VerificationBottomSheet.forSelfVerification(session, pr.transactionId ?: pr.localId)
-                        .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+                    .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
             } else {
                 VerificationBottomSheet.forSelfVerification(session)
-                        .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+                    .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
             }
         }
     }
@@ -247,15 +248,15 @@ class DefaultNavigator @Inject constructor(
         val session = sessionHolder.getSafeActiveSession() ?: return
         if (context is AppCompatActivity) {
             VerificationBottomSheet.forSelfVerification(session)
-                    .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
+                .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
         }
     }
 
     override fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean) {
         if (context is AppCompatActivity) {
             BootstrapBottomSheet.show(
-                    context.supportFragmentManager,
-                    if (initCrossSigningOnly) SetupMode.CROSS_SIGNING_ONLY else SetupMode.NORMAL
+                context.supportFragmentManager,
+                if (initCrossSigningOnly) SetupMode.CROSS_SIGNING_ONLY else SetupMode.NORMAL
             )
         }
     }
@@ -298,7 +299,7 @@ class DefaultNavigator @Inject constructor(
             }
             // TODO check if there is already one??
             MatrixToBottomSheet.withLink(link)
-                    .show(context.supportFragmentManager, "HA#MatrixToBottomSheet")
+                .show(context.supportFragmentManager, "HA#MatrixToBottomSheet")
         }
     }
 
@@ -309,7 +310,7 @@ class DefaultNavigator @Inject constructor(
                 val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
                 context.startActivity(intent)
             }
-            is RoomGroupingMethod.BySpace       -> {
+            is RoomGroupingMethod.BySpace -> {
                 val selectedSpace = groupingMethod.space()
                 if (selectedSpace == null) {
                     val intent = RoomDirectoryActivity.getIntent(context, initialFilter)
@@ -320,7 +321,7 @@ class DefaultNavigator @Inject constructor(
                     }
                 }
             }
-            null                                -> Unit
+            null -> Unit
         }
     }
 
@@ -334,14 +335,14 @@ class DefaultNavigator @Inject constructor(
             is RoomGroupingMethod.ByLegacyGroup -> {
                 CreateDirectRoomActivity.getIntent(context)
             }
-            is RoomGroupingMethod.BySpace       -> {
+            is RoomGroupingMethod.BySpace -> {
                 if (currentGroupingMethod.spaceSummary != null) {
                     SpacePeopleActivity.newIntent(context, currentGroupingMethod.spaceSummary.roomId)
                 } else {
                     CreateDirectRoomActivity.getIntent(context)
                 }
             }
-            else                                -> null
+            else -> null
         } ?: return
         context.startActivity(intent)
     }
@@ -352,24 +353,24 @@ class DefaultNavigator @Inject constructor(
                 val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
                 context.startActivity(intent)
             }
-            is RoomGroupingMethod.BySpace       -> {
+            is RoomGroupingMethod.BySpace -> {
                 if (currentGroupingMethod.spaceSummary != null) {
                     // let user decides if he does it from space or room
                     (context as? AppCompatActivity)?.supportFragmentManager?.let { fm ->
                         InviteRoomSpaceChooserBottomSheet.newInstance(
-                                currentGroupingMethod.spaceSummary.roomId,
-                                roomId,
-                                object : InviteRoomSpaceChooserBottomSheet.InteractionListener {
-                                    override fun inviteToSpace(spaceId: String) {
-                                        val intent = InviteUsersToRoomActivity.getIntent(context, spaceId)
-                                        context.startActivity(intent)
-                                    }
-
-                                    override fun inviteToRoom(roomId: String) {
-                                        val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
-                                        context.startActivity(intent)
-                                    }
+                            currentGroupingMethod.spaceSummary.roomId,
+                            roomId,
+                            object : InviteRoomSpaceChooserBottomSheet.InteractionListener {
+                                override fun inviteToSpace(spaceId: String) {
+                                    val intent = InviteUsersToRoomActivity.getIntent(context, spaceId)
+                                    context.startActivity(intent)
                                 }
+
+                                override fun inviteToRoom(roomId: String) {
+                                    val intent = InviteUsersToRoomActivity.getIntent(context, roomId)
+                                    context.startActivity(intent)
+                                }
+                            }
                         ).show(fm, InviteRoomSpaceChooserBottomSheet::class.java.name)
                     }
                 } else {
@@ -377,7 +378,7 @@ class DefaultNavigator @Inject constructor(
                     context.startActivity(intent)
                 }
             }
-            null                                -> Unit
+            null -> Unit
         }
     }
 
@@ -404,7 +405,8 @@ class DefaultNavigator @Inject constructor(
         // if cross signing is enabled and trusted or not set up at all we should propose full 4S
         sessionHolder.getSafeActiveSession()?.let { session ->
             if (session.cryptoService().crossSigningService().getMyCrossSigningKeys() == null ||
-                    session.cryptoService().crossSigningService().canCrossSign()) {
+                session.cryptoService().crossSigningService().canCrossSign()
+            ) {
                 (context as? AppCompatActivity)?.let {
                     BootstrapBottomSheet.show(it.supportFragmentManager, SetupMode.NORMAL)
                 }
@@ -430,43 +432,49 @@ class DefaultNavigator @Inject constructor(
 
     override fun openBigImageViewer(activity: Activity, sharedElement: View?, mxcUrl: String?, title: String?) {
         mxcUrl
-                ?.takeIf { it.isNotBlank() }
-                ?.let { avatarUrl ->
-                    val intent = BigImageViewerActivity.newIntent(activity, title, avatarUrl)
-                    val options = sharedElement?.let {
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
-                    }
-                    activity.startActivity(intent, options?.toBundle())
+            ?.takeIf { it.isNotBlank() }
+            ?.let { avatarUrl ->
+                val intent = BigImageViewerActivity.newIntent(activity, title, avatarUrl)
+                val options = sharedElement?.let {
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
                 }
+                activity.startActivity(intent, options?.toBundle())
+            }
     }
 
     override fun openAnalyticsOptIn(context: Context) {
         context.startActivity(Intent(context, AnalyticsOptInActivity::class.java))
     }
 
-    override fun openTerms(context: Context,
-                           activityResultLauncher: ActivityResultLauncher<Intent>,
-                           serviceType: TermsService.ServiceType,
-                           baseUrl: String,
-                           token: String?) {
+    override fun openTerms(
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        serviceType: TermsService.ServiceType,
+        baseUrl: String,
+        token: String?
+    ) {
         val intent = ReviewTermsActivity.intent(context, serviceType, baseUrl, token)
         activityResultLauncher.launch(intent)
     }
 
-    override fun openStickerPicker(context: Context,
-                                   activityResultLauncher: ActivityResultLauncher<Intent>,
-                                   roomId: String,
-                                   widget: Widget) {
+    override fun openStickerPicker(
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        roomId: String,
+        widget: Widget
+    ) {
         val widgetArgs = widgetArgsBuilder.buildStickerPickerArgs(roomId, widget)
         val intent = WidgetActivity.newIntent(context, widgetArgs)
         activityResultLauncher.launch(intent)
     }
 
-    override fun openIntegrationManager(context: Context,
-                                        activityResultLauncher: ActivityResultLauncher<Intent>,
-                                        roomId: String,
-                                        integId: String?,
-                                        screen: String?) {
+    override fun openIntegrationManager(
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        roomId: String,
+        integId: String?,
+        screen: String?
+    ) {
         val widgetArgs = widgetArgsBuilder.buildIntegrationManagerArgs(roomId, integId, screen)
         val intent = WidgetActivity.newIntent(context, widgetArgs)
         activityResultLauncher.launch(intent)
@@ -477,10 +485,10 @@ class DefaultNavigator @Inject constructor(
             // Jitsi SDK is now for API 23+
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 MaterialAlertDialogBuilder(context)
-                        .setTitle(R.string.dialog_title_error)
-                        .setMessage(R.string.error_jitsi_not_supported_on_old_device)
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
+                    .setTitle(R.string.dialog_title_error)
+                    .setMessage(R.string.error_jitsi_not_supported_on_old_device)
+                    .setPositiveButton(R.string.ok, null)
+                    .show()
             } else {
                 val enableVideo = options?.get(JitsiCallViewModel.ENABLE_VIDEO_OPTION) == true
                 context.startActivity(VectorJitsiActivity.newIntent(context, roomId = roomId, widgetId = widget.widgetId, enableVideo = enableVideo))
@@ -491,25 +499,31 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openPinCode(context: Context,
-                             activityResultLauncher: ActivityResultLauncher<Intent>,
-                             pinMode: PinMode) {
+    override fun openPinCode(
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        pinMode: PinMode
+    ) {
         val intent = PinActivity.newIntent(context, PinArgs(pinMode))
         activityResultLauncher.launch(intent)
     }
 
-    override fun openMediaViewer(activity: Activity,
-                                 roomId: String,
-                                 mediaData: AttachmentData,
-                                 view: View,
-                                 inMemory: List<AttachmentData>,
-                                 options: ((MutableList<Pair<View, String>>) -> Unit)?) {
-        VectorAttachmentViewerActivity.newIntent(activity,
-                mediaData,
-                roomId,
-                mediaData.eventId,
-                inMemory,
-                ViewCompat.getTransitionName(view)).let { intent ->
+    override fun openMediaViewer(
+        activity: Activity,
+        roomId: String,
+        mediaData: AttachmentData,
+        view: View,
+        inMemory: List<AttachmentData>,
+        options: ((MutableList<Pair<View, String>>) -> Unit)?
+    ) {
+        VectorAttachmentViewerActivity.newIntent(
+            activity,
+            mediaData,
+            roomId,
+            mediaData.eventId,
+            inMemory,
+            ViewCompat.getTransitionName(view)
+        ).let { intent ->
             val pairs = ArrayList<Pair<View, String>>()
             activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
                 pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
@@ -526,10 +540,12 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openSearch(context: Context,
-                            roomId: String,
-                            roomDisplayName: String?,
-                            roomAvatarUrl: String?) {
+    override fun openSearch(
+        context: Context,
+        roomId: String,
+        roomDisplayName: String?,
+        roomAvatarUrl: String?
+    ) {
         val intent = SearchActivity.newIntent(context, SearchArgs(roomId, roomDisplayName, roomAvatarUrl))
         context.startActivity(intent)
     }
@@ -539,9 +555,9 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openCallTransfer(
-            context: Context,
-            activityResultLauncher: ActivityResultLauncher<Intent>,
-            callId: String
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        callId: String
     ) {
         val intent = CallTransferActivity.newIntent(context, callId)
         activityResultLauncher.launch(intent)
@@ -549,20 +565,22 @@ class DefaultNavigator @Inject constructor(
 
     override fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode) {
         val intent = CreatePollActivity.getIntent(
-                context,
-                CreatePollArgs(roomId = roomId, editedEventId = editedEventId, mode = mode)
+            context,
+            CreatePollArgs(roomId = roomId, editedEventId = editedEventId, mode = mode)
         )
         context.startActivity(intent)
     }
 
-    override fun openLocationSharing(context: Context,
-                                     roomId: String,
-                                     mode: LocationSharingMode,
-                                     initialLocationData: LocationData?,
-                                     locationOwnerId: String?) {
+    override fun openLocationSharing(
+        context: Context,
+        roomId: String,
+        mode: LocationSharingMode,
+        initialLocationData: LocationData?,
+        locationOwnerId: String?
+    ) {
         val intent = LocationSharingActivity.getIntent(
-                context,
-                LocationSharingArgs(roomId = roomId, mode = mode, initialLocationData = initialLocationData, locationOwnerId = locationOwnerId)
+            context,
+            LocationSharingArgs(roomId = roomId, mode = mode, initialLocationData = initialLocationData, locationOwnerId = locationOwnerId)
         )
         context.startActivity(intent)
     }
@@ -578,23 +596,28 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String?) {
-        context.startActivity(ThreadsActivity.newIntent(
+        context.startActivity(
+            ThreadsActivity.newIntent(
                 context = context,
                 threadTimelineArgs = threadTimelineArgs,
                 threadListArgs = null,
                 eventIdToNavigate = eventIdToNavigate
-        ))
+            )
+        )
     }
 
     override fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs) {
-        context.startActivity(ThreadsActivity.newIntent(
+        context.startActivity(
+            ThreadsActivity.newIntent(
                 context = context,
                 threadTimelineArgs = null,
                 threadListArgs = ThreadListArgs(
-                        roomId = threadTimelineArgs.roomId,
-                        displayName = threadTimelineArgs.displayName,
-                        avatarUrl = threadTimelineArgs.avatarUrl,
-                        roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
-                )))
+                    roomId = threadTimelineArgs.roomId,
+                    displayName = threadTimelineArgs.displayName,
+                    avatarUrl = threadTimelineArgs.avatarUrl,
+                    roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
+                )
+            )
+        )
     }
 }

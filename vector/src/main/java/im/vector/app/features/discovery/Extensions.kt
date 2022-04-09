@@ -23,11 +23,11 @@ import org.matrix.android.sdk.internal.session.terms.TermsResponse
 
 suspend fun Session.fetchIdentityServerWithTerms(userLanguage: String): ServerAndPolicies? {
     return identityService().getCurrentIdentityServerUrl()
-            ?.let { identityServerUrl ->
-                val termsResponse = getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
-                        .serverResponse
-                buildServerAndPolicies(identityServerUrl, termsResponse, userLanguage)
-            }
+        ?.let { identityServerUrl ->
+            val termsResponse = getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
+                .serverResponse
+            buildServerAndPolicies(identityServerUrl, termsResponse, userLanguage)
+        }
 }
 
 suspend fun Session.fetchHomeserverWithTerms(userLanguage: String): ServerAndPolicies {
@@ -36,9 +36,11 @@ suspend fun Session.fetchHomeserverWithTerms(userLanguage: String): ServerAndPol
     return buildServerAndPolicies(homeserverUrl, terms, userLanguage)
 }
 
-private fun buildServerAndPolicies(serviceUrl: String,
-                                   termsResponse: TermsResponse,
-                                   userLanguage: String): ServerAndPolicies {
+private fun buildServerAndPolicies(
+    serviceUrl: String,
+    termsResponse: TermsResponse,
+    userLanguage: String
+): ServerAndPolicies {
     val terms = termsResponse.getLocalizedTerms(userLanguage)
     val policyUrls = terms.mapNotNull {
         val name = it.localizedName ?: it.policyName

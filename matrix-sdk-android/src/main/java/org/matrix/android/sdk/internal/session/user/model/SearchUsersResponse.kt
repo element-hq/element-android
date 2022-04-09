@@ -24,6 +24,6 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class SearchUsersResponse(
-        @Json(name = "limited") val limited: Boolean = false,
-        @Json(name = "results") val users: List<SearchUser> = emptyList()
+    @Json(name = "limited") val limited: Boolean = false,
+    @Json(name = "results") val users: List<SearchUser> = emptyList()
 )

@@ -110,21 +110,23 @@ internal abstract class CryptoModule {
         @Provides
         @CryptoDatabase
         @SessionScope
-        fun providesRealmConfiguration(@SessionFilesDirectory directory: File,
-                                       @UserMd5 userMd5: String,
-                                       realmKeysUtils: RealmKeysUtils,
-                                       realmCryptoStoreMigration: RealmCryptoStoreMigration): RealmConfiguration {
+        fun providesRealmConfiguration(
+            @SessionFilesDirectory directory: File,
+            @UserMd5 userMd5: String,
+            realmKeysUtils: RealmKeysUtils,
+            realmCryptoStoreMigration: RealmCryptoStoreMigration
+        ): RealmConfiguration {
             return RealmConfiguration.Builder()
-                    .directory(directory)
-                    .apply {
-                        realmKeysUtils.configureEncryption(this, getKeyAlias(userMd5))
-                    }
-                    .name("crypto_store.realm")
-                    .modules(RealmCryptoStoreModule())
-                    .allowWritesOnUiThread(true)
-                    .schemaVersion(realmCryptoStoreMigration.schemaVersion)
-                    .migration(realmCryptoStoreMigration)
-                    .build()
+                .directory(directory)
+                .apply {
+                    realmKeysUtils.configureEncryption(this, getKeyAlias(userMd5))
+                }
+                .name("crypto_store.realm")
+                .modules(RealmCryptoStoreModule())
+                .allowWritesOnUiThread(true)
+                .schemaVersion(realmCryptoStoreMigration.schemaVersion)
+                .migration(realmCryptoStoreMigration)
+                .build()
         }
 
         @JvmStatic

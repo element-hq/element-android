@@ -89,16 +89,18 @@ object CompatUtil {
      * @param context the context holding the application shared preferences
      */
     @Synchronized
-    @Throws(KeyStoreException::class,
-            CertificateException::class,
-            NoSuchAlgorithmException::class,
-            IOException::class,
-            NoSuchProviderException::class,
-            InvalidAlgorithmParameterException::class,
-            NoSuchPaddingException::class,
-            InvalidKeyException::class,
-            IllegalBlockSizeException::class,
-            UnrecoverableKeyException::class)
+    @Throws(
+        KeyStoreException::class,
+        CertificateException::class,
+        NoSuchAlgorithmException::class,
+        IOException::class,
+        NoSuchProviderException::class,
+        InvalidAlgorithmParameterException::class,
+        NoSuchPaddingException::class,
+        InvalidKeyException::class,
+        IllegalBlockSizeException::class,
+        UnrecoverableKeyException::class
+    )
     private fun getAesGcmLocalProtectionKey(context: Context): SecretKeyAndVersion {
         if (sSecretKeyAndVersion == null) {
             val keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_PROVIDER)
@@ -112,7 +114,7 @@ object CompatUtil {
             // Get the version of Android when the key has been generated, default to the current version of the system. In this case, the
             // key will be generated
             val androidVersionWhenTheKeyHasBeenGenerated = sharedPreferences
-                    .getInt(SHARED_KEY_ANDROID_VERSION_WHEN_KEY_HAS_BEEN_GENERATED, Build.VERSION.SDK_INT)
+                .getInt(SHARED_KEY_ANDROID_VERSION_WHEN_KEY_HAS_BEEN_GENERATED, Build.VERSION.SDK_INT)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (keyStore.containsAlias(AES_LOCAL_PROTECTION_KEY_ALIAS)) {
@@ -126,12 +128,15 @@ object CompatUtil {
                         Timber.i(TAG, "Generating AES key with keystore")
                         val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE_PROVIDER)
                         generator.init(
-                                KeyGenParameterSpec.Builder(AES_LOCAL_PROTECTION_KEY_ALIAS,
-                                        KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                                        .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                                        .setKeySize(AES_GCM_KEY_SIZE_IN_BITS)
-                                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                                        .build())
+                            KeyGenParameterSpec.Builder(
+                                AES_LOCAL_PROTECTION_KEY_ALIAS,
+                                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+                            )
+                                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                                .setKeySize(AES_GCM_KEY_SIZE_IN_BITS)
+                                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                                .build()
+                        )
                         key = generator.generateKey()
 
                         sharedPreferences.edit {
@@ -150,14 +155,15 @@ object CompatUtil {
                     end.add(Calendar.YEAR, 10)
 
                     generator.initialize(
-                            KeyPairGeneratorSpec.Builder(context)
-                                    .setAlgorithmParameterSpec(RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4))
-                                    .setAlias(RSA_WRAP_LOCAL_PROTECTION_KEY_ALIAS)
-                                    .setSubject(X500Principal("CN=matrix-android-sdk"))
-                                    .setStartDate(start.time)
-                                    .setEndDate(end.time)
-                                    .setSerialNumber(BigInteger.ONE)
-                                    .build())
+                        KeyPairGeneratorSpec.Builder(context)
+                            .setAlgorithmParameterSpec(RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4))
+                            .setAlias(RSA_WRAP_LOCAL_PROTECTION_KEY_ALIAS)
+                            .setSubject(X500Principal("CN=matrix-android-sdk"))
+                            .setStartDate(start.time)
+                            .setEndDate(end.time)
+                            .setSerialNumber(BigInteger.ONE)
+                            .build()
+                    )
                     val keyPair = generator.generateKeyPair()
 
                     Timber.i(TAG, "Generating wrapped AES key")
@@ -190,11 +196,13 @@ object CompatUtil {
      * @param keyStore          key store
      * @return the key if it exists or null
      */
-    @Throws(KeyStoreException::class,
-            NoSuchPaddingException::class,
-            NoSuchAlgorithmException::class,
-            InvalidKeyException::class,
-            UnrecoverableKeyException::class)
+    @Throws(
+        KeyStoreException::class,
+        NoSuchPaddingException::class,
+        NoSuchAlgorithmException::class,
+        InvalidKeyException::class,
+        UnrecoverableKeyException::class
+    )
     private fun readKeyApiL(sharedPreferences: SharedPreferences, keyStore: KeyStore): SecretKey? {
         val wrappedAesKeyString = sharedPreferences.getString(AES_WRAPPED_PROTECTION_KEY_SHARED_PREFERENCE, null)
         if (wrappedAesKeyString != null && keyStore.containsAlias(RSA_WRAP_LOCAL_PROTECTION_KEY_ALIAS)) {
@@ -218,16 +226,18 @@ object CompatUtil {
      * @param out     the output stream
      * @param context the context holding the application shared preferences
      */
-    @Throws(IOException::class,
-            CertificateException::class,
-            NoSuchAlgorithmException::class,
-            UnrecoverableKeyException::class,
-            InvalidKeyException::class,
-            InvalidAlgorithmParameterException::class,
-            NoSuchPaddingException::class,
-            NoSuchProviderException::class,
-            KeyStoreException::class,
-            IllegalBlockSizeException::class)
+    @Throws(
+        IOException::class,
+        CertificateException::class,
+        NoSuchAlgorithmException::class,
+        UnrecoverableKeyException::class,
+        InvalidKeyException::class,
+        InvalidAlgorithmParameterException::class,
+        NoSuchPaddingException::class,
+        NoSuchProviderException::class,
+        KeyStoreException::class,
+        IllegalBlockSizeException::class
+    )
     fun createCipherOutputStream(out: OutputStream, context: Context): OutputStream? {
         val keyAndVersion = getAesGcmLocalProtectionKey(context)
 
@@ -262,16 +272,18 @@ object CompatUtil {
      * @param context     the context holding the application shared preferences
      * @return inputStream, or the created InputStream, or null if the InputStream inputStream does not contain encrypted data
      */
-    @Throws(NoSuchPaddingException::class,
-            NoSuchAlgorithmException::class,
-            CertificateException::class,
-            InvalidKeyException::class,
-            KeyStoreException::class,
-            UnrecoverableKeyException::class,
-            IllegalBlockSizeException::class,
-            NoSuchProviderException::class,
-            InvalidAlgorithmParameterException::class,
-            IOException::class)
+    @Throws(
+        NoSuchPaddingException::class,
+        NoSuchAlgorithmException::class,
+        CertificateException::class,
+        InvalidKeyException::class,
+        KeyStoreException::class,
+        UnrecoverableKeyException::class,
+        IllegalBlockSizeException::class,
+        NoSuchProviderException::class,
+        InvalidAlgorithmParameterException::class,
+        IOException::class
+    )
     fun createCipherInputStream(inputStream: InputStream, context: Context): InputStream? {
         val ivLen = inputStream.read()
         if (ivLen != AES_GCM_IV_LENGTH) {

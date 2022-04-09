@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.MatrixPatterns
  */
 @JsonClass(generateAdapter = true)
 data class SpaceOrderContent(
-        val order: String? = null
+    val order: String? = null
 ) {
     fun safeOrder(): String? {
         return order?.takeIf { MatrixPatterns.isValidOrderString(it) }

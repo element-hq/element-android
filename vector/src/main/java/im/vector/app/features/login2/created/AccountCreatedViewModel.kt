@@ -34,8 +34,8 @@ import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class AccountCreatedViewModel @AssistedInject constructor(
-        @Assisted initialState: AccountCreatedViewState,
-        private val session: Session
+    @Assisted initialState: AccountCreatedViewState,
+    private val session: Session
 ) : VectorViewModel<AccountCreatedViewState, AccountCreatedAction, AccountCreatedViewEvents>(initialState) {
 
     @AssistedFactory
@@ -48,7 +48,7 @@ class AccountCreatedViewModel @AssistedInject constructor(
     init {
         setState {
             copy(
-                    userId = session.myUserId
+                userId = session.myUserId
             )
         }
         observeUser()
@@ -56,24 +56,24 @@ class AccountCreatedViewModel @AssistedInject constructor(
 
     private fun observeUser() {
         session.flow()
-                .liveUser(session.myUserId)
-                .unwrap()
-                .map {
-                    if (MatrixPatterns.isUserId(it.userId)) {
-                        it.toMatrixItem()
-                    } else {
-                        Timber.w("liveUser() has returned an invalid user: $it")
-                        MatrixItem.UserItem(session.myUserId, null, null)
-                    }
+            .liveUser(session.myUserId)
+            .unwrap()
+            .map {
+                if (MatrixPatterns.isUserId(it.userId)) {
+                    it.toMatrixItem()
+                } else {
+                    Timber.w("liveUser() has returned an invalid user: $it")
+                    MatrixItem.UserItem(session.myUserId, null, null)
                 }
-                .execute {
-                    copy(currentUser = it)
-                }
+            }
+            .execute {
+                copy(currentUser = it)
+            }
     }
 
     override fun handle(action: AccountCreatedAction) {
         when (action) {
-            is AccountCreatedAction.SetAvatar      -> handleSetAvatar(action)
+            is AccountCreatedAction.SetAvatar -> handleSetAvatar(action)
             is AccountCreatedAction.SetDisplayName -> handleSetDisplayName(action)
         }
     }
@@ -82,11 +82,11 @@ class AccountCreatedViewModel @AssistedInject constructor(
         setState { copy(isLoading = true) }
         viewModelScope.launch {
             val result = runCatching { session.updateAvatar(session.myUserId, action.avatarUri, action.filename) }
-                    .onFailure { _viewEvents.post(AccountCreatedViewEvents.Failure(it)) }
+                .onFailure { _viewEvents.post(AccountCreatedViewEvents.Failure(it)) }
             setState {
                 copy(
-                        isLoading = false,
-                        hasBeenModified = hasBeenModified || result.isSuccess
+                    isLoading = false,
+                    hasBeenModified = hasBeenModified || result.isSuccess
                 )
             }
         }
@@ -96,11 +96,11 @@ class AccountCreatedViewModel @AssistedInject constructor(
         setState { copy(isLoading = true) }
         viewModelScope.launch {
             val result = runCatching { session.setDisplayName(session.myUserId, action.displayName) }
-                    .onFailure { _viewEvents.post(AccountCreatedViewEvents.Failure(it)) }
+                .onFailure { _viewEvents.post(AccountCreatedViewEvents.Failure(it)) }
             setState {
                 copy(
-                        isLoading = false,
-                        hasBeenModified = hasBeenModified || result.isSuccess
+                    isLoading = false,
+                    hasBeenModified = hasBeenModified || result.isSuccess
                 )
             }
         }

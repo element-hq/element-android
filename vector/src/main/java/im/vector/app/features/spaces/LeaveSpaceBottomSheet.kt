@@ -65,7 +65,7 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
 
     @Parcelize
     data class Args(
-            val spaceId: String
+        val spaceId: String
     ) : Parcelable
 
     override val showExpanded = true
@@ -84,24 +84,24 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.autoLeaveRadioGroup.checkedChanges()
-                .onEach {
-                    when (it) {
-                        views.leaveAll.id      -> {
-                            settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveAll)
-                        }
-                        views.leaveNone.id     -> {
-                            settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveNone)
-                        }
-                        views.leaveSelected.id -> {
-                            settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveSelected)
-                            // launch dedicated activity
-                            cherryPickLeaveActivityResult.launch(
-                                    SpaceLeaveAdvancedActivity.newIntent(requireContext(), spaceArgs.spaceId)
-                            )
-                        }
+            .onEach {
+                when (it) {
+                    views.leaveAll.id -> {
+                        settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveAll)
+                    }
+                    views.leaveNone.id -> {
+                        settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveNone)
+                    }
+                    views.leaveSelected.id -> {
+                        settingsViewModel.handle(SpaceLeaveViewAction.SetAutoLeaveSelected)
+                        // launch dedicated activity
+                        cherryPickLeaveActivityResult.launch(
+                            SpaceLeaveAdvancedActivity.newIntent(requireContext(), spaceArgs.spaceId)
+                        )
                     }
                 }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.leaveButton.debouncedClicks {
             settingsViewModel.handle(SpaceLeaveViewAction.LeaveSpace)
@@ -118,7 +118,7 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
         val spaceSummary = state.spaceSummary ?: return@withState
         val bestName = spaceSummary.toMatrixItem().getBestName()
         val commonText = getString(R.string.space_leave_prompt_msg_with_name, bestName)
-                .toSpannable().styleMatchingText(bestName, Typeface.BOLD)
+            .toSpannable().styleMatchingText(bestName, Typeface.BOLD)
 
         val warningMessage: CharSequence = if (spaceSummary.otherMemberIds.isEmpty()) {
             span {
@@ -168,10 +168,10 @@ class LeaveSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetLea
         if (hasChildren) {
             views.autoLeaveRadioGroup.isVisible = true
             when (state.leaveMode) {
-                SpaceMenuState.LeaveMode.LEAVE_ALL      -> {
+                SpaceMenuState.LeaveMode.LEAVE_ALL -> {
                     views.autoLeaveRadioGroup.check(views.leaveAll.id)
                 }
-                SpaceMenuState.LeaveMode.LEAVE_NONE     -> {
+                SpaceMenuState.LeaveMode.LEAVE_NONE -> {
                     views.autoLeaveRadioGroup.check(views.leaveNone.id)
                 }
                 SpaceMenuState.LeaveMode.LEAVE_SELECTED -> {

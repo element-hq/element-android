@@ -25,8 +25,8 @@ import java.util.WeakHashMap
  * Safe to use in different views
  */
 class DebouncedClickListener(
-        val original: View.OnClickListener,
-        private val minimumInterval: Long = 400
+    val original: View.OnClickListener,
+    private val minimumInterval: Long = 400
 ) : View.OnClickListener {
     private val lastClickMap = WeakHashMap<View, Long>()
 

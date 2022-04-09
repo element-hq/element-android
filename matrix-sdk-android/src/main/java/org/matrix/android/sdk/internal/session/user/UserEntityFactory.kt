@@ -23,9 +23,9 @@ internal object UserEntityFactory {
 
     fun create(userId: String, roomMember: RoomMemberContent): UserEntity {
         return UserEntity(
-                userId = userId,
-                displayName = roomMember.displayName ?: "",
-                avatarUrl = roomMember.avatarUrl ?: ""
+            userId = userId,
+            displayName = roomMember.displayName ?: "",
+            avatarUrl = roomMember.avatarUrl ?: ""
         )
     }
 }

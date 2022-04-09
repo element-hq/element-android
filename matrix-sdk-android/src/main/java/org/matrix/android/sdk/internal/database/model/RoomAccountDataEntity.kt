@@ -22,6 +22,6 @@ import io.realm.annotations.RealmClass
 
 @RealmClass(embedded = true)
 internal open class RoomAccountDataEntity(
-        @Index var type: String? = null,
-        var contentStr: String? = null
+    @Index var type: String? = null,
+    var contentStr: String? = null
 ) : RealmObject()

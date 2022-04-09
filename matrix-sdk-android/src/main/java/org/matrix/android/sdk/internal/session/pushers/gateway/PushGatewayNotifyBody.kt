@@ -21,9 +21,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class PushGatewayNotifyBody(
-        /**
-         * Required. Information about the push notification
-         */
-        @Json(name = "notification")
-        val notification: PushGatewayNotification
+    /**
+     * Required. Information about the push notification
+     */
+    @Json(name = "notification")
+    val notification: PushGatewayNotification
 )

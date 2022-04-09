@@ -33,8 +33,9 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 
 class ShareSpaceViewModel @AssistedInject constructor(
-        @Assisted private val initialState: ShareSpaceViewState,
-        private val session: Session) : VectorViewModel<ShareSpaceViewState, ShareSpaceAction, ShareSpaceViewEvents>(initialState) {
+    @Assisted private val initialState: ShareSpaceViewState,
+    private val session: Session
+) : VectorViewModel<ShareSpaceViewState, ShareSpaceAction, ShareSpaceViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<ShareSpaceViewModel, ShareSpaceViewState> {
@@ -47,8 +48,8 @@ class ShareSpaceViewModel @AssistedInject constructor(
         val roomSummary = session.getRoomSummary(initialState.spaceId)
         setState {
             copy(
-                    spaceSummary = roomSummary?.let { Success(it) } ?: Uninitialized,
-                    canShareLink = roomSummary?.isPublic.orFalse()
+                spaceSummary = roomSummary?.let { Success(it) } ?: Uninitialized,
+                canShareLink = roomSummary?.isPublic.orFalse()
             )
         }
         observePowerLevel()
@@ -57,16 +58,16 @@ class ShareSpaceViewModel @AssistedInject constructor(
     private fun observePowerLevel() {
         val room = session.getRoom(initialState.spaceId) ?: return
         PowerLevelsFlowFactory(room)
-                .createFlow()
-                .onEach { powerLevelContent ->
-                    val powerLevelsHelper = PowerLevelsHelper(powerLevelContent)
-                    setState {
-                        copy(
-                                canInviteByMxId = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
-                        )
-                    }
+            .createFlow()
+            .onEach { powerLevelContent ->
+                val powerLevelsHelper = PowerLevelsHelper(powerLevelContent)
+                setState {
+                    copy(
+                        canInviteByMxId = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
+                    )
                 }
-                .launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handle(action: ShareSpaceAction) {

@@ -71,18 +71,18 @@ sealed class Action {
 fun List<Action>.toJson(): List<Any> {
     return map { action ->
         when (action) {
-            is Action.Notify      -> Action.ACTION_NOTIFY
+            is Action.Notify -> Action.ACTION_NOTIFY
             is Action.DoNotNotify -> Action.ACTION_DONT_NOTIFY
-            is Action.Sound       -> {
+            is Action.Sound -> {
                 mapOf(
-                        Action.ACTION_OBJECT_SET_TWEAK_KEY to Action.ACTION_OBJECT_SET_TWEAK_VALUE_SOUND,
-                        Action.ACTION_OBJECT_VALUE_KEY to action.sound
+                    Action.ACTION_OBJECT_SET_TWEAK_KEY to Action.ACTION_OBJECT_SET_TWEAK_VALUE_SOUND,
+                    Action.ACTION_OBJECT_VALUE_KEY to action.sound
                 )
             }
-            is Action.Highlight   -> {
+            is Action.Highlight -> {
                 mapOf(
-                        Action.ACTION_OBJECT_SET_TWEAK_KEY to Action.ACTION_OBJECT_SET_TWEAK_VALUE_HIGHLIGHT,
-                        Action.ACTION_OBJECT_VALUE_KEY to action.highlight
+                    Action.ACTION_OBJECT_SET_TWEAK_KEY to Action.ACTION_OBJECT_SET_TWEAK_VALUE_HIGHLIGHT,
+                    Action.ACTION_OBJECT_VALUE_KEY to action.highlight
                 )
             }
         }
@@ -94,31 +94,31 @@ fun PushRule.getActions(): List<Action> {
 
     actions.forEach { actionStrOrObj ->
         when (actionStrOrObj) {
-            Action.ACTION_NOTIFY      -> Action.Notify
+            Action.ACTION_NOTIFY -> Action.Notify
             Action.ACTION_DONT_NOTIFY -> Action.DoNotNotify
-            is Map<*, *>              -> {
+            is Map<*, *> -> {
                 when (actionStrOrObj[Action.ACTION_OBJECT_SET_TWEAK_KEY]) {
-                    Action.ACTION_OBJECT_SET_TWEAK_VALUE_SOUND     -> {
+                    Action.ACTION_OBJECT_SET_TWEAK_VALUE_SOUND -> {
                         (actionStrOrObj[Action.ACTION_OBJECT_VALUE_KEY] as? String)?.let { stringValue ->
                             Action.Sound(stringValue)
                         }
                         // When the value is not there, default sound (not specified by the spec)
-                                ?: Action.Sound(Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT)
+                            ?: Action.Sound(Action.ACTION_OBJECT_VALUE_VALUE_DEFAULT)
                     }
                     Action.ACTION_OBJECT_SET_TWEAK_VALUE_HIGHLIGHT -> {
                         (actionStrOrObj[Action.ACTION_OBJECT_VALUE_KEY] as? Boolean)?.let { boolValue ->
                             Action.Highlight(boolValue)
                         }
                         // When the value is not there, default is true, says the spec
-                                ?: Action.Highlight(true)
+                            ?: Action.Highlight(true)
                     }
-                    else                                           -> {
+                    else -> {
                         Timber.w("Unsupported set_tweak value ${actionStrOrObj[Action.ACTION_OBJECT_SET_TWEAK_KEY]}")
                         null
                     }
                 }
             }
-            else                      -> {
+            else -> {
                 Timber.w("Unsupported action type $actionStrOrObj")
                 null
             }

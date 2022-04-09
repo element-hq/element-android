@@ -25,8 +25,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 
 data class VerificationConclusionViewState(
-        val conclusionState: ConclusionState = ConclusionState.CANCELLED,
-        val isSelfVerification: Boolean = false
+    val conclusionState: ConclusionState = ConclusionState.CANCELLED,
+    val isSelfVerification: Boolean = false
 ) : MavericksState
 
 enum class ConclusionState {
@@ -51,10 +51,10 @@ class VerificationConclusionViewModel(initialState: VerificationConclusionViewSt
                 CancelCode.MismatchedKeys -> {
                     VerificationConclusionViewState(ConclusionState.WARNING, args.isMe)
                 }
-                else                      -> {
+                else -> {
                     VerificationConclusionViewState(
-                            if (args.isSuccessFull) ConclusionState.SUCCESS else ConclusionState.CANCELLED,
-                            args.isMe
+                        if (args.isSuccessFull) ConclusionState.SUCCESS else ConclusionState.CANCELLED,
+                        args.isMe
                     )
                 }
             }

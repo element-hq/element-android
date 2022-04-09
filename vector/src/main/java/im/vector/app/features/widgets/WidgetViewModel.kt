@@ -47,13 +47,15 @@ import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 
-class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: WidgetViewState,
-                                                  widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
-                                                  private val stringProvider: StringProvider,
-                                                  private val session: Session) :
+class WidgetViewModel @AssistedInject constructor(
+    @Assisted val initialState: WidgetViewState,
+    widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
+    private val stringProvider: StringProvider,
+    private val session: Session
+) :
     VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
-        WidgetPostAPIHandler.NavigationCallback,
-        IntegrationManagerService.Listener {
+    WidgetPostAPIHandler.NavigationCallback,
+    IntegrationManagerService.Listener {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<WidgetViewModel, WidgetViewState> {
@@ -109,14 +111,14 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
             return
         }
         room.flow().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
-                .mapOptional { it.content.toModel<PowerLevelsContent>() }
-                .unwrap()
-                .map {
-                    PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, true, null)
-                }
-                .setOnEach {
-                    copy(canManageWidgets = it)
-                }
+            .mapOptional { it.content.toModel<PowerLevelsContent>() }
+            .unwrap()
+            .map {
+                PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, true, null)
+            }
+            .setOnEach {
+                copy(canManageWidgets = it)
+            }
     }
 
     private fun observeWidgetIfNeeded() {
@@ -125,25 +127,25 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         }
         val widgetId = initialState.widgetId ?: return
         session.flow()
-                .liveRoomWidgets(initialState.roomId, QueryStringValue.Equals(widgetId))
-                .filter { it.isNotEmpty() }
-                .map { it.first() }
-                .execute {
-                    copy(asyncWidget = it)
-                }
+            .liveRoomWidgets(initialState.roomId, QueryStringValue.Equals(widgetId))
+            .filter { it.isNotEmpty() }
+            .map { it.first() }
+            .execute {
+                copy(asyncWidget = it)
+            }
     }
 
     fun getPostAPIMediator() = postAPIMediator
 
     override fun handle(action: WidgetAction) {
         when (action) {
-            is WidgetAction.OnWebViewLoadingError   -> handleWebViewLoadingError(action)
+            is WidgetAction.OnWebViewLoadingError -> handleWebViewLoadingError(action)
             is WidgetAction.OnWebViewLoadingSuccess -> handleWebViewLoadingSuccess(action)
-            is WidgetAction.OnWebViewStartedToLoad  -> handleWebViewStartLoading()
-            WidgetAction.LoadFormattedUrl           -> loadFormattedUrl(forceFetchToken = false)
-            WidgetAction.DeleteWidget               -> handleDeleteWidget()
-            WidgetAction.RevokeWidget               -> handleRevokeWidget()
-            WidgetAction.OnTermsReviewed            -> loadFormattedUrl(forceFetchToken = false)
+            is WidgetAction.OnWebViewStartedToLoad -> handleWebViewStartLoading()
+            WidgetAction.LoadFormattedUrl -> loadFormattedUrl(forceFetchToken = false)
+            WidgetAction.DeleteWidget -> handleDeleteWidget()
+            WidgetAction.RevokeWidget -> handleRevokeWidget()
+            WidgetAction.OnTermsReviewed -> loadFormattedUrl(forceFetchToken = false)
         }
     }
 
@@ -181,8 +183,8 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                 return
             }
             val roomWidget = widgetService.getRoomWidgets(
-                    roomId = initialState.roomId,
-                    widgetId = QueryStringValue.Equals(widgetId, QueryStringValue.Case.SENSITIVE)
+                roomId = initialState.roomId,
+                widgetId = QueryStringValue.Equals(widgetId, QueryStringValue.Case.SENSITIVE)
             ).firstOrNull()
             if (roomWidget == null) {
                 setWidgetStatus(WidgetStatus.WIDGET_NOT_ALLOWED)
@@ -216,10 +218,10 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
             try {
                 setState { copy(formattedURL = Loading()) }
                 val formattedUrl = widgetURLFormatter.format(
-                        baseUrl = initialState.baseUrl,
-                        params = initialState.urlParams,
-                        forceFetchScalarToken = forceFetchToken,
-                        bypassWhitelist = initialState.widgetKind == WidgetKind.INTEGRATION_MANAGER
+                    baseUrl = initialState.baseUrl,
+                    params = initialState.urlParams,
+                    forceFetchScalarToken = forceFetchToken,
+                    bypassWhitelist = initialState.widgetKind == WidgetKind.INTEGRATION_MANAGER
                 )
                 setState { copy(formattedURL = Success(formattedUrl)) }
                 Timber.v("Post load formatted url event: $formattedUrl")

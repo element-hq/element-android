@@ -21,9 +21,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class SearchRequestCategories(
-        /**
-         * Mapping of category name to search criteria.
-         */
-        @Json(name = "room_events")
-        val roomEvents: SearchRequestRoomEvents? = null
+    /**
+     * Mapping of category name to search criteria.
+     */
+    @Json(name = "room_events")
+    val roomEvents: SearchRequestRoomEvents? = null
 )

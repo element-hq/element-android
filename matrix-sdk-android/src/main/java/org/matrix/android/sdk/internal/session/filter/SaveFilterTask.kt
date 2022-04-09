@@ -29,15 +29,15 @@ import javax.inject.Inject
 internal interface SaveFilterTask : Task<SaveFilterTask.Params, Unit> {
 
     data class Params(
-            val filterPreset: FilterService.FilterPreset
+        val filterPreset: FilterService.FilterPreset
     )
 }
 
 internal class DefaultSaveFilterTask @Inject constructor(
-        @UserId private val userId: String,
-        private val filterAPI: FilterApi,
-        private val filterRepository: FilterRepository,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    @UserId private val userId: String,
+    private val filterAPI: FilterApi,
+    private val filterRepository: FilterRepository,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : SaveFilterTask {
 
     override suspend fun execute(params: SaveFilterTask.Params) {
@@ -45,7 +45,7 @@ internal class DefaultSaveFilterTask @Inject constructor(
             FilterService.FilterPreset.ElementFilter -> {
                 FilterFactory.createElementFilter()
             }
-            FilterService.FilterPreset.NoFilter      -> {
+            FilterService.FilterPreset.NoFilter -> {
                 FilterFactory.createDefaultFilter()
             }
         }
@@ -53,7 +53,7 @@ internal class DefaultSaveFilterTask @Inject constructor(
             FilterService.FilterPreset.ElementFilter -> {
                 FilterFactory.createElementRoomFilter()
             }
-            FilterService.FilterPreset.NoFilter      -> {
+            FilterService.FilterPreset.NoFilter -> {
                 FilterFactory.createDefaultRoomFilter()
             }
         }

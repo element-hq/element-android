@@ -24,7 +24,7 @@ import im.vector.app.core.qrcode.toBitMatrix
 import im.vector.app.core.qrcode.toBitmap
 
 class QrCodeImageView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
     private var data: String? = null
@@ -46,10 +46,10 @@ class QrCodeImageView @JvmOverloads constructor(
 
     private fun render() {
         data
-                ?.takeIf { height > 0 }
-                ?.let {
-                    val bitmap = it.toBitMatrix(height).toBitmap()
-                    post { setImageBitmap(bitmap) }
-                }
+            ?.takeIf { height > 0 }
+            ?.let {
+                val bitmap = it.toBitMatrix(height).toBitmap()
+                post { setImageBitmap(bitmap) }
+            }
     }
 }

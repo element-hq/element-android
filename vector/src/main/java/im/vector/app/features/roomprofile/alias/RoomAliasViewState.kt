@@ -24,17 +24,17 @@ import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class RoomAliasViewState(
-        val roomId: String,
-        val homeServerName: String = "",
-        val roomSummary: Async<RoomSummary> = Uninitialized,
-        val actionPermissions: ActionPermissions = ActionPermissions(),
-        val roomDirectoryVisibility: Async<RoomDirectoryVisibility> = Uninitialized,
-        val isLoading: Boolean = false,
-        val canonicalAlias: String? = null,
-        val alternativeAliases: List<String> = emptyList(),
-        val publishManuallyState: AddAliasState = AddAliasState.Hidden,
-        val localAliases: Async<List<String>> = Uninitialized,
-        val newLocalAliasState: AddAliasState = AddAliasState.Closed
+    val roomId: String,
+    val homeServerName: String = "",
+    val roomSummary: Async<RoomSummary> = Uninitialized,
+    val actionPermissions: ActionPermissions = ActionPermissions(),
+    val roomDirectoryVisibility: Async<RoomDirectoryVisibility> = Uninitialized,
+    val isLoading: Boolean = false,
+    val canonicalAlias: String? = null,
+    val alternativeAliases: List<String> = emptyList(),
+    val publishManuallyState: AddAliasState = AddAliasState.Hidden,
+    val localAliases: Async<List<String>> = Uninitialized,
+    val newLocalAliasState: AddAliasState = AddAliasState.Closed
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
@@ -43,7 +43,7 @@ data class RoomAliasViewState(
         get() = (alternativeAliases + listOfNotNull(canonicalAlias)).distinct()
 
     data class ActionPermissions(
-            val canChangeCanonicalAlias: Boolean = false
+        val canChangeCanonicalAlias: Boolean = false
     )
 
     sealed class AddAliasState {

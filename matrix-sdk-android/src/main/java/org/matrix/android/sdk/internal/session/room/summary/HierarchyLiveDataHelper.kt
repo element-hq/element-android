@@ -22,9 +22,10 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.Optional
 
 internal class HierarchyLiveDataHelper(
-        val spaceId: String,
-        val memberships: List<Membership>,
-        val roomSummaryDataSource: RoomSummaryDataSource) {
+    val spaceId: String,
+    val memberships: List<Membership>,
+    val roomSummaryDataSource: RoomSummaryDataSource
+) {
 
     private val sources = HashMap<String, LiveData<Optional<RoomSummary>>>()
     private val mediatorLiveData = MediatorLiveData<List<String>>()

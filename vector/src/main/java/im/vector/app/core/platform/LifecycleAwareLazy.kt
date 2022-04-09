@@ -27,8 +27,8 @@ fun <T> LifecycleOwner.lifecycleAwareLazy(initializer: () -> T): Lazy<T> = Lifec
 private object UninitializedValue
 
 class LifecycleAwareLazy<out T>(
-        private val owner: LifecycleOwner,
-        initializer: () -> T
+    private val owner: LifecycleOwner,
+    initializer: () -> T
 ) : Lazy<T>, DefaultLifecycleObserver {
 
     private var initializer: (() -> T)? = initializer
@@ -64,7 +64,7 @@ class LifecycleAwareLazy<out T>(
 
     private fun getLifecycleOwner() = when (owner) {
         is Fragment -> owner.viewLifecycleOwner
-        else        -> owner
+        else -> owner
     }
 
     override fun isInitialized(): Boolean = _value !== UninitializedValue

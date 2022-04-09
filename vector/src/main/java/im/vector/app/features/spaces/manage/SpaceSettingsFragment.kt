@@ -59,14 +59,14 @@ import java.util.UUID
 import javax.inject.Inject
 
 class SpaceSettingsFragment @Inject constructor(
-        private val epoxyController: SpaceSettingsController,
-        private val colorProvider: ColorProvider,
-        private val avatarRenderer: AvatarRenderer,
-        private val drawableProvider: DrawableProvider
+    private val epoxyController: SpaceSettingsController,
+    private val colorProvider: ColorProvider,
+    private val avatarRenderer: AvatarRenderer,
+    private val drawableProvider: DrawableProvider
 ) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
-        SpaceSettingsController.Callback,
-        GalleryOrCameraDialogHelper.Listener,
-        OnBackPressed {
+    SpaceSettingsController.Callback,
+    GalleryOrCameraDialogHelper.Listener,
+    OnBackPressed {
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private val sharedViewModel: SpaceManageSharedViewModel by activityViewModel()
@@ -84,9 +84,9 @@ class SpaceSettingsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.roomSettingsToolbar)
-                .allowBack()
+            .allowBack()
         // roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
-//        setupRoomHistoryVisibilitySharedActionViewModel()
+        //        setupRoomHistoryVisibilitySharedActionViewModel()
         setupRoomJoinRuleSharedActionViewModel()
         epoxyController.callback = this
         views.roomSettingsRecyclerView.configureWith(epoxyController, hasFixedSize = true)
@@ -145,11 +145,11 @@ class SpaceSettingsFragment @Inject constructor(
     private fun setupRoomJoinRuleSharedActionViewModel() {
         roomJoinRuleSharedActionViewModel = activityViewModelProvider.get(RoomJoinRuleSharedActionViewModel::class.java)
         roomJoinRuleSharedActionViewModel
-                .stream()
-                .onEach { action ->
-                    viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .stream()
+            .onEach { action ->
+                viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private var ignoreChanges = false
@@ -160,13 +160,13 @@ class SpaceSettingsFragment @Inject constructor(
         return withState(viewModel) {
             return@withState if (it.showSaveAction) {
                 MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.dialog_title_warning)
-                        .setMessage(R.string.warning_unsaved_change)
-                        .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
-                            viewModel.handle(RoomSettingsAction.Cancel)
-                        }
-                        .setNegativeButton(R.string.action_cancel, null)
-                        .show()
+                    .setTitle(R.string.dialog_title_warning)
+                    .setMessage(R.string.warning_unsaved_change)
+                    .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
+                        viewModel.handle(RoomSettingsAction.Cancel)
+                    }
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .show()
                 true
             } else {
                 false
@@ -233,11 +233,12 @@ class SpaceSettingsFragment @Inject constructor(
     override fun onImageReady(uri: Uri?) {
         uri ?: return
         viewModel.handle(
-                RoomSettingsAction.SetAvatarAction(
-                        RoomSettingsViewState.AvatarAction.UpdateAvatar(
-                                newAvatarUri = uri,
-                                newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
+            RoomSettingsAction.SetAvatarAction(
+                RoomSettingsViewState.AvatarAction.UpdateAvatar(
+                    newAvatarUri = uri,
+                    newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString()
                 )
+            )
         )
     }
 

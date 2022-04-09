@@ -32,12 +32,13 @@ import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
 import javax.inject.Inject
 
 class EncryptionItemFactory @Inject constructor(
-        private val messageItemAttributesFactory: MessageItemAttributesFactory,
-        private val messageColorProvider: MessageColorProvider,
-        private val stringProvider: StringProvider,
-        private val informationDataFactory: MessageInformationDataFactory,
-        private val avatarSizeProvider: AvatarSizeProvider,
-        private val session: Session) {
+    private val messageItemAttributesFactory: MessageItemAttributesFactory,
+    private val messageColorProvider: MessageColorProvider,
+    private val stringProvider: StringProvider,
+    private val informationDataFactory: MessageInformationDataFactory,
+    private val avatarSizeProvider: AvatarSizeProvider,
+    private val session: Session
+) {
 
     fun create(params: TimelineItemFactoryParams): StatusTileTimelineItem? {
         val event = params.event
@@ -55,11 +56,11 @@ class EncryptionItemFactory @Inject constructor(
         if (isSafeAlgorithm) {
             title = stringProvider.getString(R.string.encryption_enabled)
             description = stringProvider.getString(
-                    if (session.getRoomSummary(event.root.roomId ?: "")?.isDirect.orFalse()) {
-                        R.string.direct_room_encryption_enabled_tile_description
-                    } else {
-                        R.string.encryption_enabled_tile_description
-                    }
+                if (session.getRoomSummary(event.root.roomId ?: "")?.isDirect.orFalse()) {
+                    R.string.direct_room_encryption_enabled_tile_description
+                } else {
+                    R.string.encryption_enabled_tile_description
+                }
             )
             shield = StatusTileTimelineItem.ShieldUIState.BLACK
         } else {
@@ -68,23 +69,23 @@ class EncryptionItemFactory @Inject constructor(
             shield = StatusTileTimelineItem.ShieldUIState.ERROR
         }
         return StatusTileTimelineItem_()
-                .attributes(
-                        StatusTileTimelineItem.Attributes(
-                                title = title,
-                                description = description,
-                                shieldUIState = shield,
-                                informationData = informationData,
-                                avatarRenderer = attributes.avatarRenderer,
-                                messageColorProvider = messageColorProvider,
-                                emojiTypeFace = attributes.emojiTypeFace,
-                                itemClickListener = attributes.itemClickListener,
-                                itemLongClickListener = attributes.itemLongClickListener,
-                                reactionPillCallback = attributes.reactionPillCallback,
-                                readReceiptsCallback = attributes.readReceiptsCallback,
-                                reactionsSummaryEvents = attributes.reactionsSummaryEvents
-                        )
+            .attributes(
+                StatusTileTimelineItem.Attributes(
+                    title = title,
+                    description = description,
+                    shieldUIState = shield,
+                    informationData = informationData,
+                    avatarRenderer = attributes.avatarRenderer,
+                    messageColorProvider = messageColorProvider,
+                    emojiTypeFace = attributes.emojiTypeFace,
+                    itemClickListener = attributes.itemClickListener,
+                    itemLongClickListener = attributes.itemLongClickListener,
+                    reactionPillCallback = attributes.reactionPillCallback,
+                    readReceiptsCallback = attributes.readReceiptsCallback,
+                    reactionsSummaryEvents = attributes.reactionsSummaryEvents
                 )
-                .highlighted(params.isHighlighted)
-                .leftGuideline(avatarSizeProvider.leftGuideline)
+            )
+            .highlighted(params.isHighlighted)
+            .leftGuideline(avatarSizeProvider.leftGuideline)
     }
 }

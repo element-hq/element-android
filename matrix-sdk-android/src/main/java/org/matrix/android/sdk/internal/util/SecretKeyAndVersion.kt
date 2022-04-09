@@ -22,11 +22,12 @@ import javax.crypto.SecretKey
  * Tuple which contains the secret key and the version of Android when the key has been generated
  */
 internal data class SecretKeyAndVersion(
-        /**
-         * the key
-         */
-        val secretKey: SecretKey,
-        /**
-         * The android version when the key has been generated
-         */
-        val androidVersionWhenTheKeyHasBeenGenerated: Int)
+    /**
+     * the key
+     */
+    val secretKey: SecretKey,
+    /**
+     * The android version when the key has been generated
+     */
+    val androidVersionWhenTheKeyHasBeenGenerated: Int
+)

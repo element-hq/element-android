@@ -46,7 +46,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
     override fun initUiAndData() {
         setupToolbar(views.bugReportToolbar)
-                .allowBack()
+            .allowBack()
         setupViews()
 
         if (bugReporter.screenshot != null) {
@@ -63,11 +63,11 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
         // Default screen is for bug report, so modify it for suggestion
         when (reportType) {
-            ReportType.BUG_REPORT          -> {
+            ReportType.BUG_REPORT -> {
                 supportActionBar?.setTitle(R.string.title_activity_bug_report)
                 views.bugReportButtonContactMe.isVisible = true
             }
-            ReportType.SUGGESTION          -> {
+            ReportType.SUGGESTION -> {
                 supportActionBar?.setTitle(R.string.send_suggestion)
 
                 views.bugReportFirstText.setText(R.string.send_suggestion_content)
@@ -94,7 +94,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
                 hideBugReportOptions()
             }
-            else                           -> {
+            else -> {
                 // other types not supported here
             }
         }
@@ -161,87 +161,93 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
         views.bugReportProgressView.progress = 0
 
         bugReporter.sendBugReport(
-                reportType,
-                views.bugReportButtonIncludeLogs.isChecked,
-                views.bugReportButtonIncludeCrashLogs.isChecked,
-                views.bugReportButtonIncludeKeyShareHistory.isChecked,
-                views.bugReportButtonIncludeScreenshot.isChecked,
-                views.bugReportEditText.text.toString(),
-                state.serverVersion,
-                views.bugReportButtonContactMe.isChecked,
-                null,
-                object : BugReporter.IMXBugReportListener {
-                    override fun onUploadFailed(reason: String?) {
-                        try {
-                            if (!reason.isNullOrEmpty()) {
-                                when (reportType) {
-                                    ReportType.BUG_REPORT          -> {
-                                        Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show()
-                                    }
-                                    ReportType.SUGGESTION          -> {
-                                        Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG).show()
-                                    }
-                                    ReportType.SPACE_BETA_FEEDBACK -> {
-                                        Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.feedback_failed, reason), Toast.LENGTH_LONG).show()
-                                    }
-                                    else                           -> {
-                                        // nop
-                                    }
-                                }
-                            }
-                        } catch (e: Exception) {
-                            Timber.e(e, "## onUploadFailed() : failed to display the toast")
-                        }
-
-                        views.bugReportMaskView.isVisible = false
-                        views.bugReportProgressView.isVisible = false
-                        views.bugReportProgressTextView.isVisible = false
-                        views.bugReportScrollview.alpha = 1.0f
-
-                        invalidateOptionsMenu()
-                    }
-
-                    override fun onUploadCancelled() {
-                        onUploadFailed(null)
-                    }
-
-                    override fun onProgress(progress: Int) {
-                        val myProgress = progress.coerceIn(0, 100)
-
-                        views.bugReportProgressView.progress = myProgress
-                        views.bugReportProgressTextView.text = getString(R.string.send_bug_report_progress, myProgress.toString())
-                    }
-
-                    override fun onUploadSucceed(reportUrl: String?) {
-                        try {
+            reportType,
+            views.bugReportButtonIncludeLogs.isChecked,
+            views.bugReportButtonIncludeCrashLogs.isChecked,
+            views.bugReportButtonIncludeKeyShareHistory.isChecked,
+            views.bugReportButtonIncludeScreenshot.isChecked,
+            views.bugReportEditText.text.toString(),
+            state.serverVersion,
+            views.bugReportButtonContactMe.isChecked,
+            null,
+            object : BugReporter.IMXBugReportListener {
+                override fun onUploadFailed(reason: String?) {
+                    try {
+                        if (!reason.isNullOrEmpty()) {
                             when (reportType) {
-                                ReportType.BUG_REPORT          -> {
-                                    Toast.makeText(this@BugReportActivity, R.string.send_bug_report_sent, Toast.LENGTH_LONG).show()
+                                ReportType.BUG_REPORT -> {
+                                    Toast.makeText(
+                                        this@BugReportActivity,
+                                        getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG
+                                    ).show()
                                 }
-                                ReportType.SUGGESTION          -> {
-                                    Toast.makeText(this@BugReportActivity, R.string.send_suggestion_sent, Toast.LENGTH_LONG).show()
+                                ReportType.SUGGESTION -> {
+                                    Toast.makeText(
+                                        this@BugReportActivity,
+                                        getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG
+                                    ).show()
                                 }
                                 ReportType.SPACE_BETA_FEEDBACK -> {
-                                    Toast.makeText(this@BugReportActivity, R.string.feedback_sent, Toast.LENGTH_LONG).show()
+                                    Toast.makeText(
+                                        this@BugReportActivity,
+                                        getString(R.string.feedback_failed, reason), Toast.LENGTH_LONG
+                                    ).show()
                                 }
-                                else                           -> {
+                                else -> {
                                     // nop
                                 }
                             }
-                        } catch (e: Exception) {
-                            Timber.e(e, "## onUploadSucceed() : failed to dismiss the toast")
                         }
-
-                        try {
-                            finish()
-                        } catch (e: Exception) {
-                            Timber.e(e, "## onUploadSucceed() : failed to dismiss the dialog")
-                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "## onUploadFailed() : failed to display the toast")
                     }
-                })
+
+                    views.bugReportMaskView.isVisible = false
+                    views.bugReportProgressView.isVisible = false
+                    views.bugReportProgressTextView.isVisible = false
+                    views.bugReportScrollview.alpha = 1.0f
+
+                    invalidateOptionsMenu()
+                }
+
+                override fun onUploadCancelled() {
+                    onUploadFailed(null)
+                }
+
+                override fun onProgress(progress: Int) {
+                    val myProgress = progress.coerceIn(0, 100)
+
+                    views.bugReportProgressView.progress = myProgress
+                    views.bugReportProgressTextView.text = getString(R.string.send_bug_report_progress, myProgress.toString())
+                }
+
+                override fun onUploadSucceed(reportUrl: String?) {
+                    try {
+                        when (reportType) {
+                            ReportType.BUG_REPORT -> {
+                                Toast.makeText(this@BugReportActivity, R.string.send_bug_report_sent, Toast.LENGTH_LONG).show()
+                            }
+                            ReportType.SUGGESTION -> {
+                                Toast.makeText(this@BugReportActivity, R.string.send_suggestion_sent, Toast.LENGTH_LONG).show()
+                            }
+                            ReportType.SPACE_BETA_FEEDBACK -> {
+                                Toast.makeText(this@BugReportActivity, R.string.feedback_sent, Toast.LENGTH_LONG).show()
+                            }
+                            else -> {
+                                // nop
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "## onUploadSucceed() : failed to dismiss the toast")
+                    }
+
+                    try {
+                        finish()
+                    } catch (e: Exception) {
+                        Timber.e(e, "## onUploadSucceed() : failed to dismiss the dialog")
+                    }
+                }
+            })
     }
 
     /* ==========================================================================================

@@ -31,7 +31,7 @@ import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 
 class VectorSettingsHelpAboutFragment @Inject constructor(
-        private val versionProvider: VersionProvider
+    private val versionProvider: VersionProvider
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.preference_root_help_about
@@ -47,7 +47,7 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
     override fun bindPref() {
         // Help
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HELP_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
                 openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.HELP)
             }
@@ -56,7 +56,7 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
 
         // preference to start the App info screen, to facilitate App permissions access
         findPreference<VectorPreference>(APP_INFO_LINK_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let { openAppSettingsPage(it) }
             true
         }
@@ -89,7 +89,7 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
 
         // olm version
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_OLM_VERSION_PREFERENCE_KEY)!!
-                .summary = session.cryptoService().getCryptoVersion(requireContext(), false)
+            .summary = session.cryptoService().getCryptoVersion(requireContext(), false)
     }
 
     companion object {

@@ -35,10 +35,11 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 
-class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
-                                                              @Assisted val roomId: String,
-                                                              private val session: Session,
-                                                              private val controller: AutocompleteMemberController
+class AutocompleteMemberPresenter @AssistedInject constructor(
+    context: Context,
+    @Assisted val roomId: String,
+    private val session: Session,
+    private val controller: AutocompleteMemberController
 ) : RecyclerViewPresenter<AutocompleteMemberItem>(context), AutocompleteClickListener<AutocompleteMemberItem> {
 
     /* ==========================================================================================
@@ -120,39 +121,39 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
     }
 
     private fun createMembersHeader() =
-            AutocompleteMemberItem.Header(
-                    ID_HEADER_MEMBERS,
-                    context.getString(R.string.room_message_autocomplete_users)
-            )
+        AutocompleteMemberItem.Header(
+            ID_HEADER_MEMBERS,
+            context.getString(R.string.room_message_autocomplete_users)
+        )
 
     private fun createMemberItems(queryParams: RoomMemberQueryParams) =
-            room.getRoomMembers(queryParams)
-                    .asSequence()
-                    .sortedBy { it.displayName }
-                    .disambiguate()
-                    .map { AutocompleteMemberItem.RoomMember(it) }
-                    .toList()
+        room.getRoomMembers(queryParams)
+            .asSequence()
+            .sortedBy { it.displayName }
+            .disambiguate()
+            .map { AutocompleteMemberItem.RoomMember(it) }
+            .toList()
 
     private fun createEveryoneHeader() =
-            AutocompleteMemberItem.Header(
-                    ID_HEADER_EVERYONE,
-                    context.getString(R.string.room_message_autocomplete_notification)
-            )
+        AutocompleteMemberItem.Header(
+            ID_HEADER_EVERYONE,
+            context.getString(R.string.room_message_autocomplete_notification)
+        )
 
     private fun createEveryoneItem(query: CharSequence?) =
-            room.roomSummary()
-                    ?.takeIf { canNotifyEveryone() }
-                    ?.takeIf { query.isNullOrBlank() || MatrixItem.NOTIFY_EVERYONE.startsWith("@$query") }
-                    ?.let {
-                        AutocompleteMemberItem.Everyone(it)
-                    }
+        room.roomSummary()
+            ?.takeIf { canNotifyEveryone() }
+            ?.takeIf { query.isNullOrBlank() || MatrixItem.NOTIFY_EVERYONE.startsWith("@$query") }
+            ?.let {
+                AutocompleteMemberItem.Everyone(it)
+            }
 
     private fun canNotifyEveryone() = session.resolveSenderNotificationPermissionCondition(
-            Event(
-                    senderId = session.myUserId,
-                    roomId = roomId
-            ),
-            SenderNotificationPermissionCondition(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY)
+        Event(
+            senderId = session.myUserId,
+            roomId = roomId
+        ),
+        SenderNotificationPermissionCondition(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY)
     )
 
     /* ==========================================================================================

@@ -21,5 +21,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class IdentityServerContent(
-        @Json(name = "base_url") val baseUrl: String? = null
+    @Json(name = "base_url") val baseUrl: String? = null
 )

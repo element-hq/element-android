@@ -21,6 +21,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class RoomUpgradeResponse(
-        @Json(name = "replacement_room")
-        val replacementRoomId: String
+    @Json(name = "replacement_room")
+    val replacementRoomId: String
 )

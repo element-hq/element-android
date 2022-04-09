@@ -22,6 +22,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
  * Define the result of an encryption file
  */
 internal data class EncryptionResult(
-        var encryptedFileInfo: EncryptedFileInfo,
-        var encryptedByteArray: ByteArray
+    var encryptedFileInfo: EncryptedFileInfo,
+    var encryptedByteArray: ByteArray
 )

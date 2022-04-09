@@ -35,8 +35,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
 class CreateSubSpaceController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val roomAliasErrorFormatter: RoomAliasErrorFormatter
+    private val stringProvider: StringProvider,
+    private val roomAliasErrorFormatter: RoomAliasErrorFormatter
 ) : TypedEpoxyController<CreateRoomViewState>() {
 
     var listener: CreateRoomController.Listener? = null
@@ -85,8 +85,9 @@ class CreateSubSpaceController @Inject constructor(
                 prefixText("#")
                 maxLength(MatrixConstants.maxAliasLocalPartLength(data.homeServerName))
                 errorMessage(
-                        host.roomAliasErrorFormatter.format(
-                                (((data.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError)
+                    host.roomAliasErrorFormatter.format(
+                        (((data.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError
+                    )
                 )
                 onTextChange { value ->
                     host.listener?.setAliasLocalPart(value)
@@ -111,37 +112,37 @@ class CreateSubSpaceController @Inject constructor(
         }
 
         when (data.roomJoinRules) {
-            RoomJoinRules.INVITE     -> {
+            RoomJoinRules.INVITE -> {
                 buildProfileAction(
-                        id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_private_title),
-                        subtitle = stringProvider.getString(R.string.room_settings_room_access_private_description),
-                        divider = false,
-                        editable = true,
-                        action = { host.listener?.selectVisibility() }
+                    id = "joinRule",
+                    title = stringProvider.getString(R.string.room_settings_room_access_private_title),
+                    subtitle = stringProvider.getString(R.string.room_settings_room_access_private_description),
+                    divider = false,
+                    editable = true,
+                    action = { host.listener?.selectVisibility() }
                 )
             }
-            RoomJoinRules.PUBLIC     -> {
+            RoomJoinRules.PUBLIC -> {
                 buildProfileAction(
-                        id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_public_title),
-                        subtitle = stringProvider.getString(R.string.room_settings_room_access_public_description),
-                        divider = false,
-                        editable = true,
-                        action = { host.listener?.selectVisibility() }
+                    id = "joinRule",
+                    title = stringProvider.getString(R.string.room_settings_room_access_public_title),
+                    subtitle = stringProvider.getString(R.string.room_settings_room_access_public_description),
+                    divider = false,
+                    editable = true,
+                    action = { host.listener?.selectVisibility() }
                 )
             }
             RoomJoinRules.RESTRICTED -> {
                 buildProfileAction(
-                        id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_restricted_title),
-                        subtitle = stringProvider.getString(R.string.room_create_member_of_space_name_can_join, data.parentSpaceSummary?.displayName),
-                        divider = false,
-                        editable = true,
-                        action = { host.listener?.selectVisibility() }
+                    id = "joinRule",
+                    title = stringProvider.getString(R.string.room_settings_room_access_restricted_title),
+                    subtitle = stringProvider.getString(R.string.room_create_member_of_space_name_can_join, data.parentSpaceSummary?.displayName),
+                    divider = false,
+                    editable = true,
+                    action = { host.listener?.selectVisibility() }
                 )
             }
-            else                     -> {
+            else -> {
                 // not yet supported
             }
         }

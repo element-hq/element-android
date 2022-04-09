@@ -78,11 +78,11 @@ import javax.inject.Inject
 
 @Parcelize
 data class CallArgs(
-        val signalingRoomId: String,
-        val callId: String,
-        val participantUserId: String,
-        val isIncomingCall: Boolean,
-        val isVideoCall: Boolean
+    val signalingRoomId: String,
+    val callId: String,
+    val participantUserId: String,
+    val isIncomingCall: Boolean,
+    val isVideoCall: Boolean
 ) : Parcelable
 
 private val loggerTag = LoggerTag("VectorCallActivity", LoggerTag.VOIP)
@@ -162,10 +162,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intent?.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
-                ?.let { intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG) }
-                ?.let {
-                    callViewModel.handle(VectorCallViewActions.SwitchCall(it))
-                }
+            ?.let { intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG) }
+            ?.let {
+                callViewModel.handle(VectorCallViewActions.SwitchCall(it))
+            }
         this.intent = intent
     }
 
@@ -187,8 +187,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val aspectRatio = Rational(resources.getDimensionPixelSize(R.dimen.call_pip_width), resources.getDimensionPixelSize(R.dimen.call_pip_height))
             val params = PictureInPictureParams.Builder()
-                    .setAspectRatio(aspectRatio)
-                    .build()
+                .setAspectRatio(aspectRatio)
+                .build()
             renderPiPMode(it)
             enterPictureInPictureMode(params)
         } else {
@@ -257,7 +257,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             is CallState.Idle,
             is CallState.CreateOffer,
             is CallState.LocalRinging,
-            is CallState.Dialing   -> {
+            is CallState.Dialing -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
@@ -323,14 +323,14 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     toolbar?.setSubtitle(R.string.call_connecting)
                 }
             }
-            is CallState.Ended     -> {
+            is CallState.Ended -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
                 toolbar?.setSubtitle(R.string.call_ended)
                 configureCallInfo(state)
             }
-            else                   -> {
+            else -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isInvisible = true
@@ -370,7 +370,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.callInfoGroup.isVisible = false
                 }
             }
-            else                   -> {
+            else -> {
                 views.fullscreenRenderer.isVisible = false
                 views.callInfoGroup.isVisible = false
             }
@@ -385,13 +385,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             startActivity(startIntent)
         }
         when (callState.reason) {
-            EndCallReason.USER_BUSY      -> {
+            EndCallReason.USER_BUSY -> {
                 showEndCallDialog(R.string.call_ended_user_busy_title, R.string.call_ended_user_busy_description)
             }
             EndCallReason.INVITE_TIMEOUT -> {
                 showEndCallDialog(R.string.call_ended_invite_timeout_title, R.string.call_error_user_not_responding)
             }
-            else                         -> {
+            else -> {
                 finish()
             }
         }
@@ -399,13 +399,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private fun showEndCallDialog(@StringRes title: Int, @StringRes description: Int) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(title)
-                .setMessage(description)
-                .setNegativeButton(R.string.ok, null)
-                .setOnDismissListener {
-                    finish()
-                }
-                .show()
+            .setTitle(title)
+            .setMessage(description)
+            .setNegativeButton(R.string.ok, null)
+            .setOnDismissListener {
+                finish()
+            }
+            .show()
     }
 
     private fun configureCallInfo(state: VectorCallViewState, blurAvatar: Boolean = false) {
@@ -434,12 +434,12 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             val otherCall = callManager.getCallById(state.otherKnownCallInfo.callId)
             val colorFilter = ContextCompat.getColor(this, R.color.bg_call_screen_blur)
             avatarRenderer.renderBlur(
-                    matrixItem = state.otherKnownCallInfo.opponentUserItem,
-                    imageView = views.otherKnownCallAvatarView,
-                    sampling = 20,
-                    rounded = true,
-                    colorFilter = colorFilter,
-                    addPlaceholder = true
+                matrixItem = state.otherKnownCallInfo.opponentUserItem,
+                imageView = views.otherKnownCallAvatarView,
+                sampling = 20,
+                rounded = true,
+                colorFilter = colorFilter,
+                addPlaceholder = true
             )
             views.otherKnownCallLayout.isVisible = true
             views.otherSmallIsHeldIcon.isVisible = otherCall?.let { it.isLocalOnHold || it.isRemoteOnHold }.orFalse()
@@ -452,11 +452,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             withState(callViewModel) {
                 val otherCall = callManager.getCallById(it.otherKnownCallInfo?.callId ?: "") ?: return@withState
                 val callArgs = CallArgs(
-                        signalingRoomId = otherCall.nativeRoomId,
-                        callId = otherCall.callId,
-                        participantUserId = otherCall.mxCall.opponentUserId,
-                        isIncomingCall = !otherCall.mxCall.isOutgoing,
-                        isVideoCall = otherCall.mxCall.isVideoCall
+                    signalingRoomId = otherCall.nativeRoomId,
+                    callId = otherCall.callId,
+                    participantUserId = otherCall.mxCall.opponentUserId,
+                    isIncomingCall = !otherCall.mxCall.isOutgoing,
+                    isVideoCall = otherCall.mxCall.isVideoCall
                 )
                 callViewModel.handle(VectorCallViewActions.SwitchCall(callArgs))
             }
@@ -465,12 +465,12 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             callViewModel.handle(VectorCallViewActions.ToggleCamera)
         }
         pipDraggrableView = views.pipRendererWrapper.setupDraggable()
-                .setStickyMode(DraggableView.Mode.STICKY_XY)
-                .build()
+            .setStickyMode(DraggableView.Mode.STICKY_XY)
+            .build()
 
         otherCallDraggableView = views.otherKnownCallLayout.setupDraggable()
-                .setStickyMode(DraggableView.Mode.STICKY_XY)
-                .build()
+            .setStickyMode(DraggableView.Mode.STICKY_XY)
+            .build()
     }
 
     private val permissionCameraLauncher = registerForPermissionsResult { allGranted, _ ->
@@ -512,10 +512,10 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.tag(loggerTag.value).v("handleViewEvents $event")
         when (event) {
-            is VectorCallViewEvents.ConnectionTimeout      -> {
+            is VectorCallViewEvents.ConnectionTimeout -> {
                 onErrorTimoutConnect(event.turn)
             }
-            is VectorCallViewEvents.ShowDialPad            -> {
+            is VectorCallViewEvents.ShowDialPad -> {
                 CallDialPadBottomSheet.newInstance(false).apply {
                     callback = dialPadCallback
                 }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
@@ -524,8 +524,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 val callId = withState(callViewModel) { it.callId }
                 navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
-            is VectorCallViewEvents.FailToTransfer         -> showSnackbar(getString(R.string.call_transfer_failure))
-            else                                           -> Unit
+            is VectorCallViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
+            else -> Unit
         }
     }
 
@@ -534,9 +534,9 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             Activity.RESULT_CANCELED -> {
                 callViewModel.handle(VectorCallViewActions.CallTransferSelectionCancelled)
             }
-            Activity.RESULT_OK       -> {
+            Activity.RESULT_OK -> {
                 CallTransferActivity.getCallTransferResult(activityResult.data)
-                        ?.let { callViewModel.handle(VectorCallViewActions.CallTransferSelectionResult(it)) }
+                    ?.let { callViewModel.handle(VectorCallViewActions.CallTransferSelectionResult(it)) }
             }
         }
     }
@@ -545,12 +545,12 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         Timber.tag(loggerTag.value).d("onErrorTimoutConnect $turn")
         // TODO ask to use default stun, etc...
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.call_failed_no_connection)
-                .setMessage(R.string.call_failed_no_connection_description)
-                .setNegativeButton(R.string.ok) { _, _ ->
-                    callViewModel.handle(VectorCallViewActions.EndCall)
-                }
-                .show()
+            .setTitle(R.string.call_failed_no_connection)
+            .setMessage(R.string.call_failed_no_connection_description)
+            .setNegativeButton(R.string.ok) { _, _ ->
+                callViewModel.handle(VectorCallViewActions.EndCall)
+            }
+            .show()
     }
 
     override fun didTapAudioSettings() {
@@ -601,9 +601,9 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         } else {
             @Suppress("DEPRECATION")
             window.addFlags(
-                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                            or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                            or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                        or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
             )
         }
 
@@ -622,8 +622,8 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         } else {
             @Suppress("DEPRECATION")
             window.clearFlags(
-                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                            or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
             )
         }
     }
@@ -646,13 +646,15 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             }
         }
 
-        fun newIntent(context: Context,
-                      callId: String,
-                      signalingRoomId: String,
-                      otherUserId: String,
-                      isIncomingCall: Boolean,
-                      isVideoCall: Boolean,
-                      mode: String?): Intent {
+        fun newIntent(
+            context: Context,
+            callId: String,
+            signalingRoomId: String,
+            otherUserId: String,
+            isIncomingCall: Boolean,
+            isVideoCall: Boolean,
+            mode: String?
+        ): Intent {
             val callArgs = CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall)
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?

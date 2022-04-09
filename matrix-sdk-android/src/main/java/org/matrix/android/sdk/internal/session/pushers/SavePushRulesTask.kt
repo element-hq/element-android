@@ -40,8 +40,8 @@ internal class DefaultSavePushRulesTask @Inject constructor(@SessionDatabase pri
         monarchy.awaitTransaction { realm ->
             // clear current push rules
             realm.where(PushRulesEntity::class.java)
-                    .findAll()
-                    .forEach { it.deleteOnCascade() }
+                .findAll()
+                .forEach { it.deleteOnCascade() }
 
             // Save only global rules for the moment
             val globalRules = params.pushRules.global

@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.session.call.MxCall
 import javax.inject.Inject
 
 class SharedKnownCallsViewModel @Inject constructor(
-        private val callManager: WebRtcCallManager
+    private val callManager: WebRtcCallManager
 ) : ViewModel() {
 
     val liveKnownCalls: MutableLiveData<List<WebRtcCall>> = MutableLiveData()

@@ -27,9 +27,9 @@ internal fun String.simpleGlobToRegExp(): String {
         // append("^")
         string.forEach { char ->
             when (char) {
-                '*'  -> append(".*")
-                '?'  -> append(".")
-                '.'  -> append("\\.")
+                '*' -> append(".*")
+                '?' -> append(".")
+                '.' -> append("\\.")
                 '\\' -> append("\\\\")
                 else -> append(char)
             }

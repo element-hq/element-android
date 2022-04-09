@@ -38,9 +38,9 @@ import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class UserColorAccountDataViewModel @AssistedInject constructor(
-        @Assisted initialState: VectorDummyViewState,
-        private val session: Session,
-        private val matrixItemColorProvider: MatrixItemColorProvider
+    @Assisted initialState: VectorDummyViewState,
+    private val session: Session,
+    private val matrixItemColorProvider: MatrixItemColorProvider
 ) : VectorViewModel<VectorDummyViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -56,16 +56,16 @@ class UserColorAccountDataViewModel @AssistedInject constructor(
 
     private fun observeAccountData() {
         session.flow()
-                .liveUserAccountData(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
-                .unwrap()
-                .map { it.content.toModel<Map<String, String>>() }
-                .onEach { userColorAccountDataContent ->
-                    if (userColorAccountDataContent == null) {
-                        Timber.w("Invalid account data im.vector.setting.override_colors")
-                    }
-                    matrixItemColorProvider.setOverrideColors(userColorAccountDataContent)
+            .liveUserAccountData(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
+            .unwrap()
+            .map { it.content.toModel<Map<String, String>>() }
+            .onEach { userColorAccountDataContent ->
+                if (userColorAccountDataContent == null) {
+                    Timber.w("Invalid account data im.vector.setting.override_colors")
                 }
-                .launchIn(viewModelScope)
+                matrixItemColorProvider.setOverrideColors(userColorAccountDataContent)
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handle(action: EmptyAction) {

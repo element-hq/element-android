@@ -44,7 +44,7 @@ private const val DARK_MODE_ICON_BACKGROUND_ALPHA = 0.30f
 private const val LIGHT_MODE_ICON_BACKGROUND_ALPHA = 0.15f
 
 class FtueAuthUseCaseFragment @Inject constructor(
-        private val themeProvider: ThemeProvider
+    private val themeProvider: ThemeProvider
 ) : AbstractFtueAuthFragment<FragmentFtueAuthUseCaseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthUseCaseBinding {
@@ -58,30 +58,30 @@ class FtueAuthUseCaseFragment @Inject constructor(
 
     private fun setupViews() {
         views.useCaseOptionOne.renderUseCase(
-                useCase = FtueUseCase.FRIENDS_FAMILY,
-                label = R.string.ftue_auth_use_case_option_one,
-                icon = R.drawable.ic_use_case_friends,
-                tint = R.color.palette_grape
+            useCase = FtueUseCase.FRIENDS_FAMILY,
+            label = R.string.ftue_auth_use_case_option_one,
+            icon = R.drawable.ic_use_case_friends,
+            tint = R.color.palette_grape
         )
         views.useCaseOptionTwo.renderUseCase(
-                useCase = FtueUseCase.TEAMS,
-                label = R.string.ftue_auth_use_case_option_two,
-                icon = R.drawable.ic_use_case_teams,
-                tint = R.color.palette_element_green
+            useCase = FtueUseCase.TEAMS,
+            label = R.string.ftue_auth_use_case_option_two,
+            icon = R.drawable.ic_use_case_teams,
+            tint = R.color.palette_element_green
         )
         views.useCaseOptionThree.renderUseCase(
-                useCase = FtueUseCase.COMMUNITIES,
-                label = R.string.ftue_auth_use_case_option_three,
-                icon = R.drawable.ic_use_case_communities,
-                tint = R.color.palette_azure
+            useCase = FtueUseCase.COMMUNITIES,
+            label = R.string.ftue_auth_use_case_option_three,
+            icon = R.drawable.ic_use_case_communities,
+            tint = R.color.palette_azure
         )
 
         views.useCaseSkip.setTextWithColoredPart(
-                fullTextRes = R.string.ftue_auth_use_case_skip,
-                coloredTextRes = R.string.ftue_auth_use_case_skip_partial,
-                underline = false,
-                colorAttribute = R.attr.colorAccent,
-                onClick = { viewModel.handle(OnboardingAction.UpdateUseCase(FtueUseCase.SKIP)) }
+            fullTextRes = R.string.ftue_auth_use_case_skip,
+            coloredTextRes = R.string.ftue_auth_use_case_skip_partial,
+            underline = false,
+            colorAttribute = R.attr.colorAccent,
+            onClick = { viewModel.handle(OnboardingAction.UpdateUseCase(FtueUseCase.SKIP)) }
         )
 
         views.useCaseConnectToServer.setOnClickListener {
@@ -104,7 +104,7 @@ class FtueAuthUseCaseFragment @Inject constructor(
     private fun createIcon(@ColorRes tint: Int, icon: Int, isLightMode: Boolean): Drawable {
         val context = requireContext()
         val alpha = when (isLightMode) {
-            true  -> LIGHT_MODE_ICON_BACKGROUND_ALPHA
+            true -> LIGHT_MODE_ICON_BACKGROUND_ALPHA
             false -> DARK_MODE_ICON_BACKGROUND_ALPHA
         }
         val iconBackground = context.getResTintedDrawable(R.drawable.bg_feature_icon, tint, alpha = alpha)

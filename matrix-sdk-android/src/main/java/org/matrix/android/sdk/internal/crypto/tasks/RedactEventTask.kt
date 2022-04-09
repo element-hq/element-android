@@ -23,24 +23,25 @@ import javax.inject.Inject
 
 internal interface RedactEventTask : Task<RedactEventTask.Params, String> {
     data class Params(
-            val txID: String,
-            val roomId: String,
-            val eventId: String,
-            val reason: String?
+        val txID: String,
+        val roomId: String,
+        val eventId: String,
+        val reason: String?
     )
 }
 
 internal class DefaultRedactEventTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : RedactEventTask {
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
+) : RedactEventTask {
 
     override suspend fun execute(params: RedactEventTask.Params): String {
         val response = executeRequest(globalErrorReceiver) {
             roomAPI.redactEvent(
-                    txId = params.txID,
-                    roomId = params.roomId,
-                    eventId = params.eventId,
-                    reason = if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
+                txId = params.txID,
+                roomId = params.roomId,
+                eventId = params.eventId,
+                reason = if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
             )
         }
         return response.eventId

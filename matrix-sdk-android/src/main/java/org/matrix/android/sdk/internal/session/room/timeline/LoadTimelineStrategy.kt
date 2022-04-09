@@ -54,10 +54,11 @@ import java.util.concurrent.atomic.AtomicReference
  */
 
 internal class LoadTimelineStrategy(
-        private val roomId: String,
-        private val timelineId: String,
-        private val mode: Mode,
-        private val dependencies: Dependencies) {
+    private val roomId: String,
+    private val timelineId: String,
+    private val mode: Mode,
+    private val dependencies: Dependencies
+) {
 
     sealed interface Mode {
         object Live : Mode
@@ -72,31 +73,31 @@ internal class LoadTimelineStrategy(
             }
         }
 
-//        fun getRootThreadEventId(): String? {
-//            return if (this is Thread) {
-//                rootThreadEventId
-//            } else {
-//                null
-//            }
-//        }
+        //        fun getRootThreadEventId(): String? {
+        //            return if (this is Thread) {
+        //                rootThreadEventId
+        //            } else {
+        //                null
+        //            }
+        //        }
     }
 
     data class Dependencies(
-            val timelineSettings: TimelineSettings,
-            val realm: AtomicReference<Realm>,
-            val eventDecryptor: TimelineEventDecryptor,
-            val paginationTask: PaginationTask,
-            val realmConfiguration: RealmConfiguration,
-            val fetchThreadTimelineTask: FetchThreadTimelineTask,
-            val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-            val getContextOfEventTask: GetContextOfEventTask,
-            val timelineInput: TimelineInput,
-            val timelineEventMapper: TimelineEventMapper,
-            val threadsAwarenessHandler: ThreadsAwarenessHandler,
-            val lightweightSettingsStorage: LightweightSettingsStorage,
-            val onEventsUpdated: (Boolean) -> Unit,
-            val onLimitedTimeline: () -> Unit,
-            val onNewTimelineEvents: (List<String>) -> Unit
+        val timelineSettings: TimelineSettings,
+        val realm: AtomicReference<Realm>,
+        val eventDecryptor: TimelineEventDecryptor,
+        val paginationTask: PaginationTask,
+        val realmConfiguration: RealmConfiguration,
+        val fetchThreadTimelineTask: FetchThreadTimelineTask,
+        val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+        val getContextOfEventTask: GetContextOfEventTask,
+        val timelineInput: TimelineInput,
+        val timelineEventMapper: TimelineEventMapper,
+        val threadsAwarenessHandler: ThreadsAwarenessHandler,
+        val lightweightSettingsStorage: LightweightSettingsStorage,
+        val onEventsUpdated: (Boolean) -> Unit,
+        val onLimitedTimeline: () -> Unit,
+        val onNewTimelineEvents: (List<String>) -> Unit
     )
 
     private var getContextLatch: CompletableDeferred<Unit>? = null
@@ -154,11 +155,11 @@ internal class LoadTimelineStrategy(
 
     private val uiEchoManager = UIEchoManager(uiEchoManagerListener)
     private val sendingEventsDataSource: SendingEventsDataSource = RealmSendingEventsDataSource(
-            roomId = roomId,
-            realm = dependencies.realm,
-            uiEchoManager = uiEchoManager,
-            timelineEventMapper = dependencies.timelineEventMapper,
-            onEventsUpdated = dependencies.onEventsUpdated
+        roomId = roomId,
+        realm = dependencies.realm,
+        uiEchoManager = uiEchoManager,
+        timelineEventMapper = dependencies.timelineEventMapper,
+        onEventsUpdated = dependencies.onEventsUpdated
     )
 
     fun onStart() {
@@ -231,20 +232,20 @@ internal class LoadTimelineStrategy(
 
     private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
         return when (mode) {
-            is Mode.Live      -> {
+            is Mode.Live -> {
                 ChunkEntity.where(realm, roomId)
-                        .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
-                        .findAll()
+                    .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
+                    .findAll()
             }
             is Mode.Permalink -> {
                 ChunkEntity.findAllIncludingEvents(realm, listOf(mode.originEventId))
             }
-            is Mode.Thread    -> {
+            is Mode.Thread -> {
                 recreateThreadChunkEntity(realm, mode.rootThreadEventId)
                 ChunkEntity.where(realm, roomId)
-                        .equalTo(ChunkEntityFields.ROOT_THREAD_EVENT_ID, mode.rootThreadEventId)
-                        .equalTo(ChunkEntityFields.IS_LAST_FORWARD_THREAD, true)
-                        .findAll()
+                    .equalTo(ChunkEntityFields.ROOT_THREAD_EVENT_ID, mode.rootThreadEventId)
+                    .equalTo(ChunkEntityFields.IS_LAST_FORWARD_THREAD, true)
+                    .findAll()
             }
         }
     }
@@ -288,21 +289,21 @@ internal class LoadTimelineStrategy(
     private fun RealmResults<ChunkEntity>.createTimelineChunk(): TimelineChunk? {
         return firstOrNull()?.let {
             return TimelineChunk(
-                    chunkEntity = it,
-                    timelineSettings = dependencies.timelineSettings,
-                    roomId = roomId,
-                    timelineId = timelineId,
-                    fetchThreadTimelineTask = dependencies.fetchThreadTimelineTask,
-                    eventDecryptor = dependencies.eventDecryptor,
-                    paginationTask = dependencies.paginationTask,
-                    realmConfiguration = dependencies.realmConfiguration,
-                    fetchTokenAndPaginateTask = dependencies.fetchTokenAndPaginateTask,
-                    timelineEventMapper = dependencies.timelineEventMapper,
-                    uiEchoManager = uiEchoManager,
-                    threadsAwarenessHandler = dependencies.threadsAwarenessHandler,
-                    lightweightSettingsStorage = dependencies.lightweightSettingsStorage,
-                    initialEventId = mode.originEventId(),
-                    onBuiltEvents = dependencies.onEventsUpdated
+                chunkEntity = it,
+                timelineSettings = dependencies.timelineSettings,
+                roomId = roomId,
+                timelineId = timelineId,
+                fetchThreadTimelineTask = dependencies.fetchThreadTimelineTask,
+                eventDecryptor = dependencies.eventDecryptor,
+                paginationTask = dependencies.paginationTask,
+                realmConfiguration = dependencies.realmConfiguration,
+                fetchTokenAndPaginateTask = dependencies.fetchTokenAndPaginateTask,
+                timelineEventMapper = dependencies.timelineEventMapper,
+                uiEchoManager = uiEchoManager,
+                threadsAwarenessHandler = dependencies.threadsAwarenessHandler,
+                lightweightSettingsStorage = dependencies.lightweightSettingsStorage,
+                initialEventId = mode.originEventId(),
+                onBuiltEvents = dependencies.onEventsUpdated
             )
         }
     }

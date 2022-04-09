@@ -39,8 +39,8 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
 
     @Parcelize
     data class Args(
-            val spaceId: String,
-            val postCreation: Boolean = false
+        val spaceId: String,
+        val postCreation: Boolean = false
     ) : Parcelable
 
     override val showExpanded = true
@@ -87,13 +87,13 @@ class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpa
                     startActivity(intent)
                     dismissAllowingStateLoss()
                 }
-                is ShareSpaceViewEvents.ShowInviteByLink     -> {
+                is ShareSpaceViewEvents.ShowInviteByLink -> {
                     startSharePlainTextIntent(
-                            fragment = this,
-                            activityResultLauncher = null,
-                            chooserTitle = getString(R.string.share_by_text),
-                            text = getString(R.string.share_space_link_message, event.spaceName, event.permalink),
-                            extraTitle = getString(R.string.share_space_link_message, event.spaceName, event.permalink)
+                        fragment = this,
+                        activityResultLauncher = null,
+                        chooserTitle = getString(R.string.share_by_text),
+                        text = getString(R.string.share_space_link_message, event.spaceName, event.permalink),
+                        extraTitle = getString(R.string.share_space_link_message, event.spaceName, event.permalink)
                     )
                     dismissAllowingStateLoss()
                 }

@@ -62,7 +62,7 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
         Timber.v("Redact event for ${redactionEvent.redacts} localEcho=$isLocalEcho")
 
         val eventToPrune = EventEntity.where(realm, eventId = redactionEvent.redacts).findFirst()
-                ?: return
+            ?: return
 
         val typeToPrune = eventToPrune.type
         val stateKey = eventToPrune.stateKey
@@ -77,13 +77,13 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
                 in EventType.POLL_START -> {
                     Timber.d("REDACTION for message ${eventToPrune.eventId}")
                     val unsignedData = EventMapper.map(eventToPrune).unsignedData
-                            ?: UnsignedData(null, null)
+                        ?: UnsignedData(null, null)
 
                     // was this event a m.replace
-//                    val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
-//                    if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
-//                        eventRelationsAggregationUpdater.handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
-//                    }
+                    //                    val contentModel = ContentMapper.map(eventToPrune.content)?.toModel<MessageContent>()
+                    //                    if (RelationType.REPLACE == contentModel?.relatesTo?.type && contentModel.relatesTo?.eventId != null) {
+                    //                        eventRelationsAggregationUpdater.handleRedactionOfReplace(eventToPrune, contentModel.relatesTo!!.eventId!!, realm)
+                    //                    }
 
                     val modified = unsignedData.copy(redactedEvent = redactionEvent)
                     // Deleting the content of a thread message will result to delete the thread relation, however threads are now dynamic
@@ -95,9 +95,9 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
 
                     handleTimelineThreadSummaryIfNeeded(realm, eventToPrune, isLocalEcho)
                 }
-//                EventType.REACTION -> {
-//                    eventRelationsAggregationUpdater.handleReactionRedact(eventToPrune, realm, userId)
-//                }
+                //                EventType.REACTION -> {
+                //                    eventRelationsAggregationUpdater.handleReactionRedact(eventToPrune, realm, userId)
+                //                }
             }
         }
         if (typeToPrune == EventType.STATE_ROOM_MEMBER && stateKey != null) {
@@ -114,9 +114,9 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
      * with respect to redactions.
      */
     private fun handleTimelineThreadSummaryIfNeeded(
-            realm: Realm,
-            eventToPrune: EventEntity,
-            isLocalEcho: Boolean,
+        realm: Realm,
+        eventToPrune: EventEntity,
+        isLocalEcho: Boolean,
     ) {
         if (eventToPrune.isThread() && !isLocalEcho) {
             val roomId = eventToPrune.roomId
@@ -124,9 +124,9 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
             val rootThreadEventId = eventToPrune.rootThreadEventId ?: return
 
             val inThreadMessages = countInThreadMessages(
-                    realm = realm,
-                    roomId = roomId,
-                    rootThreadEventId = rootThreadEventId
+                realm = realm,
+                roomId = roomId,
+                rootThreadEventId = rootThreadEventId
             )
 
             rootThreadEvent.numberOfThreads = inThreadMessages
@@ -135,9 +135,9 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
                 rootThreadEvent.isRootThread = false
                 rootThreadEvent.threadSummaryLatestMessage = null
                 ThreadSummaryEntity
-                        .where(realm, roomId = roomId, rootThreadEventId)
-                        .findFirst()
-                        ?.deleteFromRealm()
+                    .where(realm, roomId = roomId, rootThreadEventId)
+                    .findFirst()
+                    ?.deleteFromRealm()
             }
         }
     }
@@ -145,22 +145,24 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
     private fun computeAllowedKeys(type: String): List<String> {
         // Add filtered content, allowed keys in content depends on the event type
         return when (type) {
-            EventType.STATE_ROOM_MEMBER          -> listOf("membership")
-            EventType.STATE_ROOM_CREATE          -> listOf("creator")
-            EventType.STATE_ROOM_JOIN_RULES      -> listOf("join_rule")
-            EventType.STATE_ROOM_POWER_LEVELS    -> listOf("users",
-                    "users_default",
-                    "events",
-                    "events_default",
-                    "state_default",
-                    "ban",
-                    "kick",
-                    "redact",
-                    "invite")
-            EventType.STATE_ROOM_ALIASES         -> listOf("aliases")
+            EventType.STATE_ROOM_MEMBER -> listOf("membership")
+            EventType.STATE_ROOM_CREATE -> listOf("creator")
+            EventType.STATE_ROOM_JOIN_RULES -> listOf("join_rule")
+            EventType.STATE_ROOM_POWER_LEVELS -> listOf(
+                "users",
+                "users_default",
+                "events",
+                "events_default",
+                "state_default",
+                "ban",
+                "kick",
+                "redact",
+                "invite"
+            )
+            EventType.STATE_ROOM_ALIASES -> listOf("aliases")
             EventType.STATE_ROOM_CANONICAL_ALIAS -> listOf("alias")
-            EventType.FEEDBACK                   -> listOf("type", "target_event_id")
-            else                                 -> emptyList()
+            EventType.FEEDBACK -> listOf("type", "target_event_id")
+            else -> emptyList()
         }
     }
 }

@@ -48,10 +48,10 @@ interface WidgetService {
      * @param excludedTypes if you want to exclude some widget type.
      */
     fun getRoomWidgets(
-            roomId: String,
-            widgetId: QueryStringValue = QueryStringValue.NoCondition,
-            widgetTypes: Set<String>? = null,
-            excludedTypes: Set<String>? = null
+        roomId: String,
+        widgetId: QueryStringValue = QueryStringValue.NoCondition,
+        widgetTypes: Set<String>? = null,
+        excludedTypes: Set<String>? = null
     ): List<Widget>
 
     /**
@@ -69,10 +69,10 @@ interface WidgetService {
      * @param excludedTypes if you want to exclude some widget type.
      */
     fun getRoomWidgetsLive(
-            roomId: String,
-            widgetId: QueryStringValue = QueryStringValue.NoCondition,
-            widgetTypes: Set<String>? = null,
-            excludedTypes: Set<String>? = null
+        roomId: String,
+        widgetId: QueryStringValue = QueryStringValue.NoCondition,
+        widgetTypes: Set<String>? = null,
+        excludedTypes: Set<String>? = null
     ): LiveData<List<Widget>>
 
     /**
@@ -83,8 +83,8 @@ interface WidgetService {
      * @param excludedTypes if you want to exclude some widget type.
      */
     fun getUserWidgets(
-            widgetTypes: Set<String>? = null,
-            excludedTypes: Set<String>? = null
+        widgetTypes: Set<String>? = null,
+        excludedTypes: Set<String>? = null
     ): List<Widget>
 
     /**
@@ -95,8 +95,8 @@ interface WidgetService {
      * @param excludedTypes if you want to exclude some widget type.
      */
     fun getUserWidgetsLive(
-            widgetTypes: Set<String>? = null,
-            excludedTypes: Set<String>? = null
+        widgetTypes: Set<String>? = null,
+        excludedTypes: Set<String>? = null
     ): LiveData<List<Widget>>
 
     /**

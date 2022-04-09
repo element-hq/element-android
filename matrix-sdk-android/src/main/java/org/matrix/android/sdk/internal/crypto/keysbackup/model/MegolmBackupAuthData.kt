@@ -27,31 +27,31 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
  */
 @JsonClass(generateAdapter = true)
 data class MegolmBackupAuthData(
-        /**
-         * The curve25519 public key used to encrypt the backups.
-         */
-        @Json(name = "public_key")
-        val publicKey: String,
+    /**
+     * The curve25519 public key used to encrypt the backups.
+     */
+    @Json(name = "public_key")
+    val publicKey: String,
 
-        /**
-         * In case of a backup created from a password, the salt associated with the backup
-         * private key.
-         */
-        @Json(name = "private_key_salt")
-        val privateKeySalt: String? = null,
+    /**
+     * In case of a backup created from a password, the salt associated with the backup
+     * private key.
+     */
+    @Json(name = "private_key_salt")
+    val privateKeySalt: String? = null,
 
-        /**
-         * In case of a backup created from a password, the number of key derivations.
-         */
-        @Json(name = "private_key_iterations")
-        val privateKeyIterations: Int? = null,
+    /**
+     * In case of a backup created from a password, the number of key derivations.
+     */
+    @Json(name = "private_key_iterations")
+    val privateKeyIterations: Int? = null,
 
-        /**
-         * Signatures of the public key.
-         * userId -> (deviceSignKeyId -> signature)
-         */
-        @Json(name = "signatures")
-        val signatures: Map<String, Map<String, String>>? = null
+    /**
+     * Signatures of the public key.
+     * userId -> (deviceSignKeyId -> signature)
+     */
+    @Json(name = "signatures")
+    val signatures: Map<String, Map<String, String>>? = null
 ) {
 
     fun toJsonDict(): JsonDict {
@@ -59,28 +59,28 @@ data class MegolmBackupAuthData(
         val adapter = moshi.adapter(Map::class.java)
 
         return moshi
-                .adapter(MegolmBackupAuthData::class.java)
-                .toJson(this)
-                .let {
-                    @Suppress("UNCHECKED_CAST")
-                    adapter.fromJson(it) as JsonDict
-                }
+            .adapter(MegolmBackupAuthData::class.java)
+            .toJson(this)
+            .let {
+                @Suppress("UNCHECKED_CAST")
+                adapter.fromJson(it) as JsonDict
+            }
     }
 
     fun signalableJSONDictionary(): JsonDict {
         return SignalableMegolmBackupAuthData(
-                publicKey = publicKey,
-                privateKeySalt = privateKeySalt,
-                privateKeyIterations = privateKeyIterations
+            publicKey = publicKey,
+            privateKeySalt = privateKeySalt,
+            privateKeyIterations = privateKeyIterations
         )
-                .signalableJSONDictionary()
+            .signalableJSONDictionary()
     }
 }
 
 internal data class SignalableMegolmBackupAuthData(
-        val publicKey: String,
-        val privateKeySalt: String? = null,
-        val privateKeyIterations: Int? = null
+    val publicKey: String,
+    val privateKeySalt: String? = null,
+    val privateKeyIterations: Int? = null
 ) {
     fun signalableJSONDictionary(): JsonDict = HashMap<String, Any>().apply {
         put("public_key", publicKey)

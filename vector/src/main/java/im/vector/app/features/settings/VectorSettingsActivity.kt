@@ -46,9 +46,9 @@ private const val KEY_ACTIVITY_PAYLOAD = "settings-activity-payload"
  */
 @AndroidEntryPoint
 class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>(),
-        PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
-        FragmentManager.OnBackStackChangedListener,
-        VectorSettingsFragmentInteractionListener {
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
+    FragmentManager.OnBackStackChangedListener,
+    VectorSettingsFragmentInteractionListener {
 
     override fun getBinding() = ActivityVectorSettingsBinding.inflate(layoutInflater)
 
@@ -64,31 +64,33 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
 
     override fun initUiAndData() {
         setupToolbar(views.settingsToolbar)
-                .allowBack()
+            .allowBack()
 
         if (isFirstCreation()) {
             // display the fragment
 
             when (val payload = readPayload<SettingsActivityPayload>(SettingsActivityPayload.Root)) {
-                SettingsActivityPayload.General                       ->
+                SettingsActivityPayload.General ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsGeneralFragment::class.java, null, FRAGMENT_TAG)
-                SettingsActivityPayload.AdvancedSettings              ->
+                SettingsActivityPayload.AdvancedSettings ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsAdvancedSettingsFragment::class.java, null, FRAGMENT_TAG)
-                SettingsActivityPayload.SecurityPrivacy               ->
+                SettingsActivityPayload.SecurityPrivacy ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsSecurityPrivacyFragment::class.java, null, FRAGMENT_TAG)
                 SettingsActivityPayload.SecurityPrivacyManageSessions ->
-                    replaceFragment(views.vectorSettingsPage,
-                            VectorSettingsDevicesFragment::class.java,
-                            null,
-                            FRAGMENT_TAG)
-                SettingsActivityPayload.Notifications                 -> {
+                    replaceFragment(
+                        views.vectorSettingsPage,
+                        VectorSettingsDevicesFragment::class.java,
+                        null,
+                        FRAGMENT_TAG
+                    )
+                SettingsActivityPayload.Notifications -> {
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
                     replaceFragment(views.vectorSettingsPage, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
                 }
-                is SettingsActivityPayload.DiscoverySettings          -> {
+                is SettingsActivityPayload.DiscoverySettings -> {
                     replaceFragment(views.vectorSettingsPage, DiscoverySettingsFragment::class.java, payload, FRAGMENT_TAG)
                 }
-                else                                                  ->
+                else ->
                     replaceFragment(views.vectorSettingsPage, VectorSettingsRootFragment::class.java, null, FRAGMENT_TAG)
             }
         }
@@ -123,10 +125,10 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
             // oFragment.setTargetFragment(caller, 0)
             // Replace the existing Fragment with the new Fragment
             supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
-                    .replace(views.vectorSettingsPage.id, oFragment, pref.title.toString())
-                    .addToBackStack(null)
-                    .commit()
+                .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
+                .replace(views.vectorSettingsPage.id, oFragment, pref.title.toString())
+                .addToBackStack(null)
+                .commit()
             return true
         }
         return false
@@ -154,29 +156,31 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
 
     fun <T : Fragment> navigateTo(fragmentClass: Class<T>, arguments: Bundle? = null) {
         supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
-                .replace(views.vectorSettingsPage.id, fragmentClass, arguments)
-                .addToBackStack(null)
-                .commit()
+            .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
+            .replace(views.vectorSettingsPage.id, fragmentClass, arguments)
+            .addToBackStack(null)
+            .commit()
     }
 
     companion object {
-        fun getIntent(context: Context, directAccess: Int) = Companion.getIntent(context, when (directAccess) {
-            EXTRA_DIRECT_ACCESS_ROOT                             -> SettingsActivityPayload.Root
-            EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS                -> SettingsActivityPayload.AdvancedSettings
-            EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY                 -> SettingsActivityPayload.SecurityPrivacy
-            EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS -> SettingsActivityPayload.SecurityPrivacyManageSessions
-            EXTRA_DIRECT_ACCESS_GENERAL                          -> SettingsActivityPayload.General
-            EXTRA_DIRECT_ACCESS_NOTIFICATIONS                    -> SettingsActivityPayload.Notifications
-            EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS               -> SettingsActivityPayload.DiscoverySettings()
-            else                                                 -> {
-                Timber.w("Unknown directAccess: $directAccess defaulting to Root")
-                SettingsActivityPayload.Root
+        fun getIntent(context: Context, directAccess: Int) = Companion.getIntent(
+            context, when (directAccess) {
+                EXTRA_DIRECT_ACCESS_ROOT -> SettingsActivityPayload.Root
+                EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS -> SettingsActivityPayload.AdvancedSettings
+                EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY -> SettingsActivityPayload.SecurityPrivacy
+                EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY_MANAGE_SESSIONS -> SettingsActivityPayload.SecurityPrivacyManageSessions
+                EXTRA_DIRECT_ACCESS_GENERAL -> SettingsActivityPayload.General
+                EXTRA_DIRECT_ACCESS_NOTIFICATIONS -> SettingsActivityPayload.Notifications
+                EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS -> SettingsActivityPayload.DiscoverySettings()
+                else -> {
+                    Timber.w("Unknown directAccess: $directAccess defaulting to Root")
+                    SettingsActivityPayload.Root
+                }
             }
-        })
+        )
 
         fun getIntent(context: Context, payload: SettingsActivityPayload) = Intent(context, VectorSettingsActivity::class.java)
-                .applyPayload(payload)
+            .applyPayload(payload)
 
         const val EXTRA_DIRECT_ACCESS_ROOT = 0
         const val EXTRA_DIRECT_ACCESS_ADVANCED_SETTINGS = 1

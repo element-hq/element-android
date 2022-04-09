@@ -24,10 +24,10 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class IdentityLookUpResponse(
-        /**
-         * Required. Any applicable mappings of addresses to Matrix User IDs. Addresses which do not have associations will
-         * not be included, which can make this property be an empty object.
-         */
-        @Json(name = "mappings")
-        val mappings: Map<String, String>
+    /**
+     * Required. Any applicable mappings of addresses to Matrix User IDs. Addresses which do not have associations will
+     * not be included, which can make this property be an empty object.
+     */
+    @Json(name = "mappings")
+    val mappings: Map<String, String>
 )

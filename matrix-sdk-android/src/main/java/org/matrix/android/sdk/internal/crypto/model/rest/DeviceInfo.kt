@@ -24,35 +24,35 @@ import org.matrix.android.sdk.api.interfaces.DatedObject
  */
 @JsonClass(generateAdapter = true)
 data class DeviceInfo(
-        /**
-         * The owner user id (not documented and useless but the homeserver sent it. You should not need it)
-         */
-        @Json(name = "user_id")
-        val userId: String? = null,
+    /**
+     * The owner user id (not documented and useless but the homeserver sent it. You should not need it)
+     */
+    @Json(name = "user_id")
+    val userId: String? = null,
 
-        /**
-         * The device id
-         */
-        @Json(name = "device_id")
-        val deviceId: String? = null,
+    /**
+     * The device id
+     */
+    @Json(name = "device_id")
+    val deviceId: String? = null,
 
-        /**
-         * The device display name
-         */
-        @Json(name = "display_name")
-        val displayName: String? = null,
+    /**
+     * The device display name
+     */
+    @Json(name = "display_name")
+    val displayName: String? = null,
 
-        /**
-         * The last time this device has been seen.
-         */
-        @Json(name = "last_seen_ts")
-        val lastSeenTs: Long? = null,
+    /**
+     * The last time this device has been seen.
+     */
+    @Json(name = "last_seen_ts")
+    val lastSeenTs: Long? = null,
 
-        /**
-         * The last ip address
-         */
-        @Json(name = "last_seen_ip")
-        val lastSeenIp: String? = null
+    /**
+     * The last ip address
+     */
+    @Json(name = "last_seen_ip")
+    val lastSeenIp: String? = null
 ) : DatedObject {
 
     override val date: Long

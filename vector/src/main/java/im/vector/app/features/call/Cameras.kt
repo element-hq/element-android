@@ -22,8 +22,8 @@ enum class CameraType {
 }
 
 data class CameraProxy(
-        val name: String,
-        val type: CameraType
+    val name: String,
+    val type: CameraType
 )
 
 sealed class CaptureFormat(val width: Int, val height: Int, val fps: Int) {

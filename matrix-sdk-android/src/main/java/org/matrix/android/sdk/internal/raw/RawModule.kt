@@ -43,32 +43,36 @@ internal abstract class RawModule {
         @GlobalDatabase
         fun providesMonarchy(@GlobalDatabase realmConfiguration: RealmConfiguration): Monarchy {
             return Monarchy.Builder()
-                    .setRealmConfiguration(realmConfiguration)
-                    .build()
+                .setRealmConfiguration(realmConfiguration)
+                .build()
         }
 
         @JvmStatic
         @Provides
         @GlobalDatabase
         @MatrixScope
-        fun providesRealmConfiguration(realmKeysUtils: RealmKeysUtils,
-                                       globalRealmMigration: GlobalRealmMigration): RealmConfiguration {
+        fun providesRealmConfiguration(
+            realmKeysUtils: RealmKeysUtils,
+            globalRealmMigration: GlobalRealmMigration
+        ): RealmConfiguration {
             return RealmConfiguration.Builder()
-                    .apply {
-                        realmKeysUtils.configureEncryption(this, DB_ALIAS)
-                    }
-                    .name("matrix-sdk-global.realm")
-                    .schemaVersion(globalRealmMigration.schemaVersion)
-                    .migration(globalRealmMigration)
-                    .allowWritesOnUiThread(true)
-                    .modules(GlobalRealmModule())
-                    .build()
+                .apply {
+                    realmKeysUtils.configureEncryption(this, DB_ALIAS)
+                }
+                .name("matrix-sdk-global.realm")
+                .schemaVersion(globalRealmMigration.schemaVersion)
+                .migration(globalRealmMigration)
+                .allowWritesOnUiThread(true)
+                .modules(GlobalRealmModule())
+                .build()
         }
 
         @Provides
         @JvmStatic
-        fun providesRawAPI(@Unauthenticated okHttpClient: Lazy<OkHttpClient>,
-                           retrofitFactory: RetrofitFactory): RawAPI {
+        fun providesRawAPI(
+            @Unauthenticated okHttpClient: Lazy<OkHttpClient>,
+            retrofitFactory: RetrofitFactory
+        ): RawAPI {
             return retrofitFactory.create(okHttpClient, "https://example.org").create(RawAPI::class.java)
         }
     }

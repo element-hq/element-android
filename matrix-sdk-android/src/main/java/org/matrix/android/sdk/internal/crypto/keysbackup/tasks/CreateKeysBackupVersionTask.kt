@@ -27,8 +27,8 @@ import javax.inject.Inject
 internal interface CreateKeysBackupVersionTask : Task<CreateKeysBackupVersionBody, KeysVersion>
 
 internal class DefaultCreateKeysBackupVersionTask @Inject constructor(
-        private val roomKeysApi: RoomKeysApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomKeysApi: RoomKeysApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : CreateKeysBackupVersionTask {
 
     override suspend fun execute(params: CreateKeysBackupVersionBody): KeysVersion {

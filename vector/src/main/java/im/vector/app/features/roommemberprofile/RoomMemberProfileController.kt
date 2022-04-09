@@ -31,8 +31,8 @@ import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import javax.inject.Inject
 
 class RoomMemberProfileController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val session: Session
+    private val stringProvider: StringProvider,
+    private val session: Session
 ) : TypedEpoxyController<RoomMemberProfileViewState>() {
 
     var callback: Callback? = null
@@ -69,19 +69,19 @@ class RoomMemberProfileController @Inject constructor(
         // More
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
         buildProfileAction(
-                id = "ignore",
-                title = ignoreActionTitle,
-                destructive = true,
-                editable = false,
-                divider = false,
-                action = { callback?.onIgnoreClicked() }
+            id = "ignore",
+            title = ignoreActionTitle,
+            destructive = true,
+            editable = false,
+            divider = false,
+            action = { callback?.onIgnoreClicked() }
         )
         if (!state.isMine) {
             buildProfileAction(
-                    id = "direct",
-                    editable = false,
-                    title = stringProvider.getString(R.string.room_member_open_or_create_dm),
-                    action = { callback?.onOpenDmClicked() }
+                id = "direct",
+                editable = false,
+                title = stringProvider.getString(R.string.room_member_open_or_create_dm),
+                action = { callback?.onOpenDmClicked() }
             )
         }
     }
@@ -120,32 +120,32 @@ class RoomMemberProfileController @Inject constructor(
                     }
 
                     buildProfileAction(
-                            id = "learn_more",
-                            title = stringProvider.getString(titleRes),
-                            editable = true,
-                            icon = icon,
-                            tintIcon = false,
-                            divider = false,
-                            action = { callback?.onShowDeviceList() }
+                        id = "learn_more",
+                        title = stringProvider.getString(titleRes),
+                        editable = true,
+                        icon = icon,
+                        tintIcon = false,
+                        divider = false,
+                        action = { callback?.onShowDeviceList() }
                     )
                 } else {
                     // Not trusted, propose to verify
                     if (!state.isMine) {
                         buildProfileAction(
-                                id = "learn_more",
-                                title = stringProvider.getString(R.string.verification_profile_verify),
-                                editable = true,
-                                icon = R.drawable.ic_shield_black,
-                                divider = false,
-                                action = { callback?.onTapVerify() }
+                            id = "learn_more",
+                            title = stringProvider.getString(R.string.verification_profile_verify),
+                            editable = true,
+                            icon = R.drawable.ic_shield_black,
+                            divider = false,
+                            action = { callback?.onTapVerify() }
                         )
                     } else {
                         buildProfileAction(
-                                id = "learn_more",
-                                title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
-                                editable = false,
-                                divider = false,
-                                action = { callback?.onShowDeviceListNoCrossSigning() }
+                            id = "learn_more",
+                            title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+                            editable = false,
+                            divider = false,
+                            action = { callback?.onShowDeviceListNoCrossSigning() }
                         )
                     }
 
@@ -159,12 +159,12 @@ class RoomMemberProfileController @Inject constructor(
                 buildProfileSection(stringProvider.getString(R.string.room_profile_section_security))
 
                 buildProfileAction(
-                        id = "learn_more",
-                        title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
-                        editable = false,
-                        divider = false,
-                        subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle),
-                        action = { callback?.onShowDeviceListNoCrossSigning() }
+                    id = "learn_more",
+                    title = stringProvider.getString(R.string.room_profile_section_security_learn_more),
+                    editable = false,
+                    divider = false,
+                    subtitle = stringProvider.getString(R.string.room_profile_encrypted_subtitle),
+                    action = { callback?.onShowDeviceListNoCrossSigning() }
                 )
             }
         } else {
@@ -183,41 +183,41 @@ class RoomMemberProfileController @Inject constructor(
         buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
 
         buildProfileAction(
-                id = "overrideColor",
-                editable = false,
-                title = stringProvider.getString(R.string.room_member_override_nick_color),
-                subtitle = state.userColorOverride,
-                divider = !state.isMine,
-                action = { callback?.onOverrideColorClicked() }
+            id = "overrideColor",
+            editable = false,
+            title = stringProvider.getString(R.string.room_member_override_nick_color),
+            subtitle = state.userColorOverride,
+            divider = !state.isMine,
+            action = { callback?.onOverrideColorClicked() }
         )
 
         if (!state.isMine) {
             val membership = state.asyncMembership() ?: return
 
             buildProfileAction(
-                    id = "direct",
-                    editable = false,
-                    title = stringProvider.getString(R.string.room_member_open_or_create_dm),
-                    action = { callback?.onOpenDmClicked() }
+                id = "direct",
+                editable = false,
+                title = stringProvider.getString(R.string.room_member_open_or_create_dm),
+                action = { callback?.onOpenDmClicked() }
             )
 
             if (!state.isSpace && state.hasReadReceipt) {
                 buildProfileAction(
-                        id = "read_receipt",
-                        editable = false,
-                        title = stringProvider.getString(R.string.room_member_jump_to_read_receipt),
-                        action = { callback?.onJumpToReadReceiptClicked() }
+                    id = "read_receipt",
+                    editable = false,
+                    title = stringProvider.getString(R.string.room_member_jump_to_read_receipt),
+                    action = { callback?.onJumpToReadReceiptClicked() }
                 )
             }
 
             val ignoreActionTitle = state.buildIgnoreActionTitle()
             if (!state.isSpace) {
                 buildProfileAction(
-                        id = "mention",
-                        title = stringProvider.getString(R.string.room_participants_action_mention),
-                        editable = false,
-                        divider = ignoreActionTitle != null,
-                        action = { callback?.onMentionClicked() }
+                    id = "mention",
+                    title = stringProvider.getString(R.string.room_participants_action_mention),
+                    editable = false,
+                    divider = ignoreActionTitle != null,
+                    action = { callback?.onMentionClicked() }
                 )
             }
 
@@ -225,22 +225,22 @@ class RoomMemberProfileController @Inject constructor(
 
             if (canInvite && (membership == Membership.LEAVE || membership == Membership.KNOCK)) {
                 buildProfileAction(
-                        id = "invite",
-                        title = stringProvider.getString(R.string.room_participants_action_invite),
-                        destructive = false,
-                        editable = false,
-                        divider = ignoreActionTitle != null,
-                        action = { callback?.onInviteClicked() }
+                    id = "invite",
+                    title = stringProvider.getString(R.string.room_participants_action_invite),
+                    destructive = false,
+                    editable = false,
+                    divider = ignoreActionTitle != null,
+                    action = { callback?.onInviteClicked() }
                 )
             }
             if (ignoreActionTitle != null) {
                 buildProfileAction(
-                        id = "ignore",
-                        title = ignoreActionTitle,
-                        destructive = true,
-                        editable = false,
-                        divider = false,
-                        action = { callback?.onIgnoreClicked() }
+                    id = "ignore",
+                    title = ignoreActionTitle,
+                    destructive = true,
+                    editable = false,
+                    divider = false,
+                    action = { callback?.onIgnoreClicked() }
                 )
             }
         }
@@ -264,39 +264,39 @@ class RoomMemberProfileController @Inject constructor(
         }
         if (canEditPowerLevel) {
             buildProfileAction(
-                    id = "edit_power_level",
-                    editable = true,
-                    title = stringProvider.getString(R.string.power_level_title),
-                    subtitle = powerLevelsStr,
-                    divider = canKick || canBan,
-                    editableRes = R.drawable.ic_edit,
-                    action = { callback?.onEditPowerLevel(userPowerLevel) }
+                id = "edit_power_level",
+                editable = true,
+                title = stringProvider.getString(R.string.power_level_title),
+                subtitle = powerLevelsStr,
+                divider = canKick || canBan,
+                editableRes = R.drawable.ic_edit,
+                action = { callback?.onEditPowerLevel(userPowerLevel) }
             )
         }
 
         if (canKick) {
             when (membership) {
-                Membership.JOIN   -> {
+                Membership.JOIN -> {
                     buildProfileAction(
-                            id = "kick",
-                            editable = false,
-                            divider = canBan,
-                            destructive = true,
-                            title = stringProvider.getString(R.string.room_participants_action_remove),
-                            action = { callback?.onKickClicked(state.isSpace) }
+                        id = "kick",
+                        editable = false,
+                        divider = canBan,
+                        destructive = true,
+                        title = stringProvider.getString(R.string.room_participants_action_remove),
+                        action = { callback?.onKickClicked(state.isSpace) }
                     )
                 }
                 Membership.INVITE -> {
                     buildProfileAction(
-                            id = "cancel_invite",
-                            title = stringProvider.getString(R.string.room_participants_action_cancel_invite),
-                            divider = canBan,
-                            destructive = true,
-                            editable = false,
-                            action = { callback?.onCancelInviteClicked() }
+                        id = "cancel_invite",
+                        title = stringProvider.getString(R.string.room_participants_action_cancel_invite),
+                        divider = canBan,
+                        destructive = true,
+                        editable = false,
+                        action = { callback?.onCancelInviteClicked() }
                     )
                 }
-                else              -> Unit
+                else -> Unit
             }
         }
         if (canBan) {
@@ -306,11 +306,11 @@ class RoomMemberProfileController @Inject constructor(
                 stringProvider.getString(R.string.room_participants_action_ban)
             }
             buildProfileAction(
-                    id = "ban",
-                    editable = false,
-                    destructive = true,
-                    title = banActionTitle,
-                    action = { callback?.onBanClicked(state.isSpace, membership == Membership.BAN) }
+                id = "ban",
+                editable = false,
+                destructive = true,
+                title = banActionTitle,
+                action = { callback?.onBanClicked(state.isSpace, membership == Membership.BAN) }
             )
         }
     }

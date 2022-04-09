@@ -22,30 +22,30 @@ import org.matrix.android.sdk.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
 internal data class EventContextResponse(
-        /**
-         * Details of the requested event.
-         */
-        @Json(name = "event") val event: Event,
-        /**
-         * A token that can be used to paginate backwards with.
-         */
-        @Json(name = "start") override val start: String? = null,
-        /**
-         * A list of room events that happened just before the requested event, in reverse-chronological order.
-         */
-        @Json(name = "events_before") val eventsBefore: List<Event>? = null,
-        /**
-         * A list of room events that happened just after the requested event, in chronological order.
-         */
-        @Json(name = "events_after") val eventsAfter: List<Event>? = null,
-        /**
-         * A token that can be used to paginate forwards with.
-         */
-        @Json(name = "end") override val end: String? = null,
-        /**
-         * The state of the room at the last event returned.
-         */
-        @Json(name = "state") override val stateEvents: List<Event>? = null
+    /**
+     * Details of the requested event.
+     */
+    @Json(name = "event") val event: Event,
+    /**
+     * A token that can be used to paginate backwards with.
+     */
+    @Json(name = "start") override val start: String? = null,
+    /**
+     * A list of room events that happened just before the requested event, in reverse-chronological order.
+     */
+    @Json(name = "events_before") val eventsBefore: List<Event>? = null,
+    /**
+     * A list of room events that happened just after the requested event, in chronological order.
+     */
+    @Json(name = "events_after") val eventsAfter: List<Event>? = null,
+    /**
+     * A token that can be used to paginate forwards with.
+     */
+    @Json(name = "end") override val end: String? = null,
+    /**
+     * The state of the room at the last event returned.
+     */
+    @Json(name = "state") override val stateEvents: List<Event>? = null
 ) : TokenChunkEvent {
 
     override val events: List<Event> by lazy {

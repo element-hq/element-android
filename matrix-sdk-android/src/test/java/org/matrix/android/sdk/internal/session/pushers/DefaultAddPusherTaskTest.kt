@@ -30,14 +30,14 @@ import org.matrix.android.sdk.test.fakes.FakeRequestExecutor
 import java.net.SocketException
 
 private val A_JSON_PUSHER = JsonPusher(
-        pushKey = "push-key",
-        kind = "http",
-        appId = "m.email",
-        appDisplayName = "Element",
-        deviceDisplayName = null,
-        profileTag = "",
-        lang = "en-GB",
-        data = JsonPusherData(brand = "Element")
+    pushKey = "push-key",
+    kind = "http",
+    appId = "m.email",
+    appDisplayName = "Element",
+    deviceDisplayName = null,
+    profileTag = "",
+    lang = "en-GB",
+    data = JsonPusherData(brand = "Element")
 )
 
 @ExperimentalCoroutinesApi
@@ -47,10 +47,10 @@ class DefaultAddPusherTaskTest {
     private val monarchy = FakeMonarchy()
 
     private val addPusherTask = DefaultAddPusherTask(
-            pushersAPI = pushersAPI,
-            monarchy = monarchy.instance,
-            requestExecutor = FakeRequestExecutor(),
-            globalErrorReceiver = FakeGlobalErrorReceiver()
+        pushersAPI = pushersAPI,
+        monarchy = monarchy.instance,
+        requestExecutor = FakeRequestExecutor(),
+        globalErrorReceiver = FakeGlobalErrorReceiver()
     )
 
     @Test

@@ -74,10 +74,10 @@ class KeyShareTests : InstrumentedTest {
         // Create an encrypted room and add a message
         val roomId = commonTestHelper.runBlockingTest {
             aliceSession.createRoom(
-                    CreateRoomParams().apply {
-                        visibility = RoomDirectoryVisibility.PRIVATE
-                        enableEncryption()
-                    }
+                CreateRoomParams().apply {
+                    visibility = RoomDirectoryVisibility.PRIVATE
+                    enableEncryption()
+                }
             )
         }
         val room = aliceSession.getRoom(roomId)
@@ -112,18 +112,18 @@ class KeyShareTests : InstrumentedTest {
 
         var outGoingRequestId: String? = null
 
-        commonTestHelper.waitWithLatch {  latch ->
+        commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
-                        .filter { req ->
-                            // filter out request that was known before
-                            !outgoingRequestsBefore.any { req.requestId == it.requestId }
-                        }
-                        .let {
-                            val outgoing = it.firstOrNull { it.sessionId == eventMegolmSessionId }
-                            outGoingRequestId = outgoing?.requestId
-                            outgoing != null
-                        }
+                    .filter { req ->
+                        // filter out request that was known before
+                        !outgoingRequestsBefore.any { req.requestId == it.requestId }
+                    }
+                    .let {
+                        val outgoing = it.firstOrNull { it.sessionId == eventMegolmSessionId }
+                        outGoingRequestId = outgoing?.requestId
+                        outgoing != null
+                    }
             }
         }
         Log.v("TEST", "=======> Outgoing requet Id is $outGoingRequestId")
@@ -143,7 +143,10 @@ class KeyShareTests : InstrumentedTest {
                     Log.v("TEST", "Incoming request Session 1 (looking for $outGoingRequestId)")
                     Log.v("TEST", "=========================")
                     it.forEach { keyRequest ->
-                        Log.v("TEST", "[ts${keyRequest.localCreationTimestamp}] requestId ${keyRequest.requestId}, for sessionId ${keyRequest.requestBody?.sessionId} is ${keyRequest.state}")
+                        Log.v(
+                            "TEST",
+                            "[ts${keyRequest.localCreationTimestamp}] requestId ${keyRequest.requestId}, for sessionId ${keyRequest.requestBody?.sessionId} is ${keyRequest.state}"
+                        )
                     }
                     Log.v("TEST", "=========================")
                 }
@@ -162,8 +165,10 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Mark the device as trusted
-        aliceSession.cryptoService().setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
-                aliceSession2.sessionParams.deviceId ?: "")
+        aliceSession.cryptoService().setDeviceVerification(
+            DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
+            aliceSession2.sessionParams.deviceId ?: ""
+        )
 
         // Re request
         aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
@@ -211,17 +216,18 @@ class KeyShareTests : InstrumentedTest {
 
         commonTestHelper.doSync<Unit> {
             aliceSession1.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = aliceSession1.myUserId,
-                                                    password = TestConstants.PASSWORD
-                                            )
-                                    )
-                                }
-                            }, it)
+                .initializeCrossSigning(
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                UserPasswordAuth(
+                                    user = aliceSession1.myUserId,
+                                    password = TestConstants.PASSWORD
+                                )
+                            )
+                        }
+                    }, it
+                )
         }
 
         // Also bootstrap keybackup on first session
@@ -280,8 +286,10 @@ class KeyShareTests : InstrumentedTest {
         })
 
         val txId = "m.testVerif12"
-        aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
-                ?: "", txId)
+        aliceVerificationService2.beginKeyVerification(
+            VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
+                ?: "", txId
+        )
 
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
@@ -324,27 +332,28 @@ class KeyShareTests : InstrumentedTest {
 
         commonTestHelper.doSync<Unit> {
             aliceSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = aliceSession.myUserId,
-                                                    password = TestConstants.PASSWORD,
-                                                    session = flowResponse.session
-                                            )
-                                    )
-                                }
-                            }, it)
+                .initializeCrossSigning(
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                UserPasswordAuth(
+                                    user = aliceSession.myUserId,
+                                    password = TestConstants.PASSWORD,
+                                    session = flowResponse.session
+                                )
+                            )
+                        }
+                    }, it
+                )
         }
 
         // Create an encrypted room and send a couple of messages
         val roomId = commonTestHelper.runBlockingTest {
             aliceSession.createRoom(
-                    CreateRoomParams().apply {
-                        visibility = RoomDirectoryVisibility.PRIVATE
-                        enableEncryption()
-                    }
+                CreateRoomParams().apply {
+                    visibility = RoomDirectoryVisibility.PRIVATE
+                    enableEncryption()
+                }
             )
         }
         val roomAlicePov = aliceSession.getRoom(roomId)
@@ -358,18 +367,19 @@ class KeyShareTests : InstrumentedTest {
         val bobSession = commonTestHelper.createAccount(TestConstants.USER_BOB, SessionTestParams(true))
         commonTestHelper.doSync<Unit> {
             bobSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = bobSession.myUserId,
-                                                    password = TestConstants.PASSWORD,
-                                                    session = flowResponse.session
-                                            )
-                                    )
-                                }
-                            }, it)
+                .initializeCrossSigning(
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                UserPasswordAuth(
+                                    user = bobSession.myUserId,
+                                    password = TestConstants.PASSWORD,
+                                    session = flowResponse.session
+                                )
+                            )
+                        }
+                    }, it
+                )
         }
 
         // Let alice invite bob

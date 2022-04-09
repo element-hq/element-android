@@ -25,51 +25,51 @@ import org.matrix.android.sdk.internal.auth.data.InteractiveAuthenticationFlow
 @JsonClass(generateAdapter = true)
 data class RegistrationFlowResponse(
 
-        /**
-         * The list of flows.
-         */
-        @Json(name = "flows")
-        val flows: List<InteractiveAuthenticationFlow>? = null,
+    /**
+     * The list of flows.
+     */
+    @Json(name = "flows")
+    val flows: List<InteractiveAuthenticationFlow>? = null,
 
-        /**
-         * The list of stages the client has completed successfully.
-         */
-        @Json(name = "completed")
-        val completedStages: List<String>? = null,
+    /**
+     * The list of stages the client has completed successfully.
+     */
+    @Json(name = "completed")
+    val completedStages: List<String>? = null,
 
-        /**
-         * The session identifier that the client must pass back to the homeserver, if one is provided,
-         * in subsequent attempts to authenticate in the same API call.
-         */
-        @Json(name = "session")
-        val session: String? = null,
+    /**
+     * The session identifier that the client must pass back to the homeserver, if one is provided,
+     * in subsequent attempts to authenticate in the same API call.
+     */
+    @Json(name = "session")
+    val session: String? = null,
 
-        /**
-         * The information that the client will need to know in order to use a given type of authentication.
-         * For each login stage type presented, that type may be present as a key in this dictionary.
-         * For example, the public key of reCAPTCHA stage could be given here.
-         * other example
-         *  "params": {
-         *       "m.login.sso": {
-         *          "identity_providers": [
-         *              {
-         *                  "id": "google",
-         *                  "name": "Google",
-         *                  "icon": "https://..."
-         *              }
-         *          ]
-         *      }
-         *  }
-         */
-        @Json(name = "params")
-        val params: JsonDict? = null
+    /**
+     * The information that the client will need to know in order to use a given type of authentication.
+     * For each login stage type presented, that type may be present as a key in this dictionary.
+     * For example, the public key of reCAPTCHA stage could be given here.
+     * other example
+     *  "params": {
+     *       "m.login.sso": {
+     *          "identity_providers": [
+     *              {
+     *                  "id": "google",
+     *                  "name": "Google",
+     *                  "icon": "https://..."
+     *              }
+     *          ]
+     *      }
+     *  }
+     */
+    @Json(name = "params")
+    val params: JsonDict? = null
 
-        /**
-         * WARNING,
-         * The two MatrixError fields "errcode" and "error" can also be present here in case of error when validating a stage,
-         * But in this case Moshi will be able to parse the result as a MatrixError, see [RetrofitExtensions.toFailure]
-         * Ex: when polling for "m.login.msisdn" validation
-         */
+    /**
+     * WARNING,
+     * The two MatrixError fields "errcode" and "error" can also be present here in case of error when validating a stage,
+     * But in this case Moshi will be able to parse the result as a MatrixError, see [RetrofitExtensions.toFailure]
+     * Ex: when polling for "m.login.msisdn" validation
+     */
 )
 
 /**
@@ -88,13 +88,15 @@ fun RegistrationFlowResponse.toFlowResult(): FlowResult {
         val isMandatory = flows?.all { type in it.stages.orEmpty() } == true
 
         val stage = when (type) {
-            LoginFlowTypes.RECAPTCHA      -> Stage.ReCaptcha(isMandatory, ((params?.get(type) as? Map<*, *>)?.get("public_key") as? String)
-                    ?: "")
-            LoginFlowTypes.DUMMY          -> Stage.Dummy(isMandatory)
-            LoginFlowTypes.TERMS          -> Stage.Terms(isMandatory, params?.get(type) as? TermPolicies ?: emptyMap<String, String>())
+            LoginFlowTypes.RECAPTCHA -> Stage.ReCaptcha(
+                isMandatory, ((params?.get(type) as? Map<*, *>)?.get("public_key") as? String)
+                    ?: ""
+            )
+            LoginFlowTypes.DUMMY -> Stage.Dummy(isMandatory)
+            LoginFlowTypes.TERMS -> Stage.Terms(isMandatory, params?.get(type) as? TermPolicies ?: emptyMap<String, String>())
             LoginFlowTypes.EMAIL_IDENTITY -> Stage.Email(isMandatory)
-            LoginFlowTypes.MSISDN         -> Stage.Msisdn(isMandatory)
-            else                          -> Stage.Other(isMandatory, type, (params?.get(type) as? Map<*, *>))
+            LoginFlowTypes.MSISDN -> Stage.Msisdn(isMandatory)
+            else -> Stage.Other(isMandatory, type, (params?.get(type) as? Map<*, *>))
         }
 
         if (type in completedStages.orEmpty()) {

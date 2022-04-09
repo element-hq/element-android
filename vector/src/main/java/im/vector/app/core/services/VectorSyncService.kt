@@ -45,8 +45,10 @@ class VectorSyncService : SyncService() {
 
     companion object {
 
-        fun newOneShotIntent(context: Context,
-                             sessionId: String): Intent {
+        fun newOneShotIntent(
+            context: Context,
+            sessionId: String
+        ): Intent {
             return Intent(context, VectorSyncService::class.java).also {
                 it.putExtra(EXTRA_SESSION_ID, sessionId)
                 it.putExtra(EXTRA_TIMEOUT_SECONDS, 0)
@@ -54,11 +56,13 @@ class VectorSyncService : SyncService() {
             }
         }
 
-        fun newPeriodicIntent(context: Context,
-                              sessionId: String,
-                              syncTimeoutSeconds: Int,
-                              syncDelaySeconds: Int,
-                              isNetworkBack: Boolean): Intent {
+        fun newPeriodicIntent(
+            context: Context,
+            sessionId: String,
+            syncTimeoutSeconds: Int,
+            syncDelaySeconds: Int,
+            isNetworkBack: Boolean
+        ): Intent {
             return Intent(context, VectorSyncService::class.java).also {
                 it.putExtra(EXTRA_SESSION_ID, sessionId)
                 it.putExtra(EXTRA_TIMEOUT_SECONDS, syncTimeoutSeconds)
@@ -94,36 +98,41 @@ class VectorSyncService : SyncService() {
         startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
     }
 
-    override fun onRescheduleAsked(sessionId: String,
-                                   syncTimeoutSeconds: Int,
-                                   syncDelaySeconds: Int) {
+    override fun onRescheduleAsked(
+        sessionId: String,
+        syncTimeoutSeconds: Int,
+        syncDelaySeconds: Int
+    ) {
         rescheduleSyncService(
-                sessionId = sessionId,
-                syncTimeoutSeconds = syncTimeoutSeconds,
-                syncDelaySeconds = syncDelaySeconds,
-                isPeriodic = true,
-                isNetworkBack = false
+            sessionId = sessionId,
+            syncTimeoutSeconds = syncTimeoutSeconds,
+            syncDelaySeconds = syncDelaySeconds,
+            isPeriodic = true,
+            isNetworkBack = false
         )
     }
 
-    override fun onNetworkError(sessionId: String,
-                                syncTimeoutSeconds: Int,
-                                syncDelaySeconds: Int,
-                                isPeriodic: Boolean) {
+    override fun onNetworkError(
+        sessionId: String,
+        syncTimeoutSeconds: Int,
+        syncDelaySeconds: Int,
+        isPeriodic: Boolean
+    ) {
         Timber.d("## Sync: A network error occurred during sync")
         val rescheduleSyncWorkRequest: WorkRequest =
-                OneTimeWorkRequestBuilder<RestartWhenNetworkOn>()
-                        .setInputData(RestartWhenNetworkOn.createInputData(sessionId, syncTimeoutSeconds, syncDelaySeconds, isPeriodic))
-                        .setConstraints(Constraints.Builder()
-                                .setRequiredNetworkType(NetworkType.CONNECTED)
-                                .build()
-                        )
+            OneTimeWorkRequestBuilder<RestartWhenNetworkOn>()
+                .setInputData(RestartWhenNetworkOn.createInputData(sessionId, syncTimeoutSeconds, syncDelaySeconds, isPeriodic))
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build()
+                )
+                .build()
 
         Timber.d("## Sync: Schedule a work to restart service when network will be on")
         WorkManager
-                .getInstance(applicationContext)
-                .enqueue(rescheduleSyncWorkRequest)
+            .getInstance(applicationContext)
+            .enqueue(rescheduleSyncWorkRequest)
     }
 
     override fun onDestroy() {
@@ -138,7 +147,7 @@ class VectorSyncService : SyncService() {
 
     // I do not move or rename this class, since I'm not sure about the side effect regarding the WorkManager
     class RestartWhenNetworkOn(appContext: Context, workerParams: WorkerParameters) :
-            Worker(appContext, workerParams) {
+        Worker(appContext, workerParams) {
         override fun doWork(): Result {
             Timber.d("## Sync: RestartWhenNetworkOn.doWork()")
             val sessionId = inputData.getString(KEY_SESSION_ID) ?: return Result.failure()
@@ -146,28 +155,29 @@ class VectorSyncService : SyncService() {
             val syncDelaySeconds = inputData.getInt(KEY_SYNC_DELAY_SECONDS, BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS)
             val isPeriodic = inputData.getBoolean(KEY_IS_PERIODIC, false)
             applicationContext.rescheduleSyncService(
-                    sessionId = sessionId,
-                    syncTimeoutSeconds = syncTimeoutSeconds,
-                    syncDelaySeconds = syncDelaySeconds,
-                    isPeriodic = isPeriodic,
-                    isNetworkBack = true
+                sessionId = sessionId,
+                syncTimeoutSeconds = syncTimeoutSeconds,
+                syncDelaySeconds = syncDelaySeconds,
+                isPeriodic = isPeriodic,
+                isNetworkBack = true
             )
             // Indicate whether the work finished successfully with the Result
             return Result.success()
         }
 
         companion object {
-            fun createInputData(sessionId: String,
-                                syncTimeoutSeconds: Int,
-                                syncDelaySeconds: Int,
-                                isPeriodic: Boolean
+            fun createInputData(
+                sessionId: String,
+                syncTimeoutSeconds: Int,
+                syncDelaySeconds: Int,
+                isPeriodic: Boolean
             ): Data {
                 return Data.Builder()
-                        .putString(KEY_SESSION_ID, sessionId)
-                        .putInt(KEY_SYNC_TIMEOUT_SECONDS, syncTimeoutSeconds)
-                        .putInt(KEY_SYNC_DELAY_SECONDS, syncDelaySeconds)
-                        .putBoolean(KEY_IS_PERIODIC, isPeriodic)
-                        .build()
+                    .putString(KEY_SESSION_ID, sessionId)
+                    .putInt(KEY_SYNC_TIMEOUT_SECONDS, syncTimeoutSeconds)
+                    .putInt(KEY_SYNC_DELAY_SECONDS, syncDelaySeconds)
+                    .putBoolean(KEY_IS_PERIODIC, isPeriodic)
+                    .build()
             }
 
             private const val KEY_SESSION_ID = "sessionId"
@@ -178,24 +188,26 @@ class VectorSyncService : SyncService() {
     }
 }
 
-private fun Context.rescheduleSyncService(sessionId: String,
-                                          syncTimeoutSeconds: Int,
-                                          syncDelaySeconds: Int,
-                                          isPeriodic: Boolean,
-                                          isNetworkBack: Boolean) {
+private fun Context.rescheduleSyncService(
+    sessionId: String,
+    syncTimeoutSeconds: Int,
+    syncDelaySeconds: Int,
+    isPeriodic: Boolean,
+    isNetworkBack: Boolean
+) {
     Timber.d("## Sync: rescheduleSyncService")
     val intent = if (isPeriodic) {
         VectorSyncService.newPeriodicIntent(
-                context = this,
-                sessionId = sessionId,
-                syncTimeoutSeconds = syncTimeoutSeconds,
-                syncDelaySeconds = syncDelaySeconds,
-                isNetworkBack = isNetworkBack
+            context = this,
+            sessionId = sessionId,
+            syncTimeoutSeconds = syncTimeoutSeconds,
+            syncDelaySeconds = syncDelaySeconds,
+            isNetworkBack = isNetworkBack
         )
     } else {
         VectorSyncService.newOneShotIntent(
-                context = this,
-                sessionId = sessionId
+            context = this,
+            sessionId = sessionId
         )
     }
 

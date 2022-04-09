@@ -26,6 +26,6 @@ class MigrateIdentityTo001(realm: DynamicRealm) : RealmMigrator(realm, 1) {
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Add field userConsent (Boolean) and set the value to false")
         realm.schema.get("IdentityDataEntity")
-                ?.addField(IdentityDataEntityFields.USER_CONSENT, Boolean::class.java)
+            ?.addField(IdentityDataEntityFields.USER_CONSENT, Boolean::class.java)
     }
 }

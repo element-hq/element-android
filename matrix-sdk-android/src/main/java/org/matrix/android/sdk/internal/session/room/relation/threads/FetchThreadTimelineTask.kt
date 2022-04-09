@@ -74,21 +74,21 @@ import javax.inject.Inject
  */
 internal interface FetchThreadTimelineTask : Task<FetchThreadTimelineTask.Params, DefaultFetchThreadTimelineTask.Result> {
     data class Params(
-            val roomId: String,
-            val rootThreadEventId: String,
-            val from: String?,
-            val limit: Int
+        val roomId: String,
+        val rootThreadEventId: String,
+        val from: String?,
+        val limit: Int
 
     )
 }
 
 internal class DefaultFetchThreadTimelineTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-        @SessionDatabase private val monarchy: Monarchy,
-        @UserId private val userId: String,
-        private val cryptoService: DefaultCryptoService
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+    @SessionDatabase private val monarchy: Monarchy,
+    @UserId private val userId: String,
+    private val cryptoService: DefaultCryptoService
 ) : FetchThreadTimelineTask {
 
     enum class Result {
@@ -100,10 +100,10 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     override suspend fun execute(params: FetchThreadTimelineTask.Params): Result {
         val response = executeRequest(globalErrorReceiver) {
             roomAPI.getThreadsRelations(
-                    roomId = params.roomId,
-                    eventId = params.rootThreadEventId,
-                    from = params.from,
-                    limit = params.limit
+                roomId = params.roomId,
+                eventId = params.rootThreadEventId,
+                from = params.from,
+                limit = params.limit
             )
         }
 
@@ -111,8 +111,10 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         return handleRelationsResponse(response, params)
     }
 
-    private suspend fun handleRelationsResponse(response: RelationsResponse,
-                                                params: FetchThreadTimelineTask.Params): Result {
+    private suspend fun handleRelationsResponse(
+        response: RelationsResponse,
+        params: FetchThreadTimelineTask.Params
+    ): Result {
         val threadList = response.chunks
         val threadRootEvent = response.originalEvent
         val hasReachEnd = response.nextBatch == null
@@ -120,9 +122,9 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         monarchy.awaitTransaction { realm ->
 
             val threadChunk = ChunkEntity.findLastForwardChunkOfThread(realm, params.roomId, params.rootThreadEventId)
-                    ?: run {
-                        return@awaitTransaction
-                    }
+                ?: run {
+                    return@awaitTransaction
+                }
 
             threadChunk.prevToken = response.nextBatch
             val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
@@ -139,8 +141,8 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                 }
 
                 val timelineEvent = TimelineEventEntity
-                        .where(realm, roomId = params.roomId, event.eventId)
-                        .findFirst()
+                    .where(realm, roomId = params.roomId, event.eventId)
+                    .findFirst()
 
                 if (timelineEvent != null) {
                     // Event already exists but not in the thread chunk
@@ -152,18 +154,19 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     val eventEntity = createEventEntity(params.roomId, event, realm)
                     roomMemberContentsByUser.addSenderState(realm, params.roomId, event.senderId)
                     threadChunk.addTimelineEvent(
-                            roomId = params.roomId,
-                            eventEntity = eventEntity,
-                            direction = PaginationDirection.FORWARDS,
-                            ownedByThreadChunk = true,
-                            roomMemberContentsByUser = roomMemberContentsByUser)
+                        roomId = params.roomId,
+                        eventEntity = eventEntity,
+                        direction = PaginationDirection.FORWARDS,
+                        ownedByThreadChunk = true,
+                        roomMemberContentsByUser = roomMemberContentsByUser
+                    )
                 }
             }
 
             if (hasReachEnd) {
                 val rootThread = TimelineEventEntity
-                        .where(realm, roomId = params.roomId, params.rootThreadEventId)
-                        .findFirst()
+                    .where(realm, roomId = params.roomId, params.rootThreadEventId)
+                    .findFirst()
                 if (rootThread != null) {
                     // If root thread event already exists add it to our chunk
                     threadChunk.timelineEvents.add(rootThread)
@@ -174,11 +177,12 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     val eventEntity = createEventEntity(params.roomId, threadRootEvent, realm)
                     roomMemberContentsByUser.addSenderState(realm, params.roomId, threadRootEvent.senderId)
                     threadChunk.addTimelineEvent(
-                            roomId = params.roomId,
-                            eventEntity = eventEntity,
-                            direction = PaginationDirection.FORWARDS,
-                            ownedByThreadChunk = true,
-                            roomMemberContentsByUser = roomMemberContentsByUser)
+                        roomId = params.roomId,
+                        eventEntity = eventEntity,
+                        direction = PaginationDirection.FORWARDS,
+                        ownedByThreadChunk = true,
+                        roomMemberContentsByUser = roomMemberContentsByUser
+                    )
                 }
             }
         }
@@ -197,9 +201,9 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roomId: String, senderId: String) {
         getOrPut(senderId) {
             CurrentStateEventEntity
-                    .getOrNull(realm, roomId, senderId, EventType.STATE_ROOM_MEMBER)
-                    ?.root?.asDomain()
-                    ?.getFixedRoomMemberContent()
+                .getOrNull(realm, roomId, senderId, EventType.STATE_ROOM_MEMBER)
+                ?.root?.asDomain()
+                ?.getFixedRoomMemberContent()
         }
     }
 
@@ -219,10 +223,10 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
             // Event from sync does not have roomId, so add it to the event first
             val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
             event.mxDecryptionResult = OlmDecryptionResult(
-                    payload = result.clearEvent,
-                    senderKey = result.senderCurve25519Key,
-                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                payload = result.clearEvent,
+                senderKey = result.senderCurve25519Key,
+                keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
             )
         } catch (e: MXCryptoError) {
             if (e is MXCryptoError.Base) {
@@ -232,9 +236,11 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
         }
     }
 
-    private fun handleReaction(realm: Realm,
-                               event: Event,
-                               roomId: String) {
+    private fun handleReaction(
+        realm: Realm,
+        event: Event,
+        roomId: String
+    ) {
         val unsignedData = event.unsignedData ?: return
         val relatedEventId = event.eventId ?: return
 
@@ -254,7 +260,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     Timber.v("Adding synced reaction $reaction")
                     sum.count = 1
                     // reactionEventId not included in the /relations API
-//                    sum.sourceEvents.add(reactionEventId)
+                    //                    sum.sourceEvents.add(reactionEventId)
                     eventSummary.reactionsSummary.add(sum)
                 } else {
                     sum.count += 1

@@ -40,9 +40,9 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.voice.AudioWaveformView
 
 class VoiceMessageViews(
-        private val resources: Resources,
-        private val views: ViewVoiceMessageRecorderBinding,
-        private val dimensionConverter: DimensionConverter,
+    private val resources: Resources,
+    private val views: ViewVoiceMessageRecorderBinding,
+    private val dimensionConverter: DimensionConverter,
 ) {
 
     private val distanceToLock = dimensionConverter.dpToPx(48).toFloat()
@@ -65,7 +65,7 @@ class VoiceMessageViews(
                 MotionEvent.ACTION_DOWN -> {
                     actions.onWaveformClicked()
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     val percentage = getTouchedPositionPercentage(motionEvent, view)
                     actions.onVoiceWaveformTouchedUp(percentage)
                 }
@@ -95,7 +95,7 @@ class VoiceMessageViews(
                     actions.onRequestRecording()
                     true
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     actions.onMicButtonReleased()
                     true
                 }
@@ -103,7 +103,7 @@ class VoiceMessageViews(
                     actions.onMicButtonDrag { currentState -> draggableStateProcessor.process(event, currentState) }
                     true
                 }
-                else                    -> false
+                else -> false
             }
         }
     }
@@ -191,16 +191,16 @@ class VoiceMessageViews(
 
         if (recordingState !is RecordingUiState.Locked) {
             views.voiceMessageMicButton
-                    .animate()
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .translationX(0f)
-                    .translationY(0f)
-                    .setDuration(150)
-                    .withEndAction {
-                        resetMicButtonUi()
-                    }
-                    .start()
+                .animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .translationX(0f)
+                .translationY(0f)
+                .setDuration(150)
+                .withEndAction {
+                    resetMicButtonUi()
+                }
+                .start()
         } else {
             views.voiceMessageTimerIndicator.isVisible = false
             views.voiceMessageTimer.isVisible = false
@@ -224,19 +224,19 @@ class VoiceMessageViews(
         }
         views.voiceMessageLockBackground.apply {
             animate()
-                    .scaleX(0f)
-                    .scaleY(0f)
-                    .setDuration(400L)
-                    .withEndAction {
-                        updateLayoutParams {
-                            height = dimensionConverter.dpToPx(180)
-                        }
-                        isVisible = false
-                        scaleX = 1f
-                        scaleY = 1f
-                        animate().translationY(0f).start()
+                .scaleX(0f)
+                .scaleY(0f)
+                .setDuration(400L)
+                .withEndAction {
+                    updateLayoutParams {
+                        height = dimensionConverter.dpToPx(180)
                     }
-                    .start()
+                    isVisible = false
+                    scaleX = 1f
+                    scaleY = 1f
+                    animate().translationY(0f).start()
+                }
+                .start()
         }
 
         // Lock image animation
@@ -244,17 +244,17 @@ class VoiceMessageViews(
         views.voiceMessageLockImage.apply {
             isVisible = true
             animate()
-                    .scaleX(0f)
-                    .scaleY(0f)
-                    .setDuration(400L)
-                    .withEndAction {
-                        isVisible = false
-                        scaleX = 1f
-                        scaleY = 1f
-                        translationY = 0f
-                        resetMicButtonUi()
-                    }
-                    .start()
+                .scaleX(0f)
+                .scaleY(0f)
+                .setDuration(400L)
+                .withEndAction {
+                    isVisible = false
+                    scaleX = 1f
+                    scaleY = 1f
+                    translationY = 0f
+                    resetMicButtonUi()
+                }
+                .start()
         }
     }
 

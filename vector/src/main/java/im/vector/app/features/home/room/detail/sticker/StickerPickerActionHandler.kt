@@ -36,7 +36,7 @@ class StickerPickerActionHandler @Inject constructor(private val session: Sessio
             RoomDetailViewEvents.DisplayPromptForIntegrationManager
         } else {
             RoomDetailViewEvents.OpenStickerPicker(
-                    widget = stickerWidget
+                widget = stickerWidget
             )
         }
     }

@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationInfo
 
 @JsonClass(generateAdapter = true)
 internal data class MessageVerificationDoneContent(
-        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
+    @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
 ) : VerificationInfo<ValidVerificationDone> {
 
     override val transactionId: String?
@@ -36,11 +36,11 @@ internal data class MessageVerificationDoneContent(
         val validTransactionId = transactionId?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationDone(
-                validTransactionId
+            validTransactionId
         )
     }
 }
 
 internal data class ValidVerificationDone(
-        val transactionId: String
+    val transactionId: String
 )

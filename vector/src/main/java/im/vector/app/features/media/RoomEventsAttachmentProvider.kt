@@ -36,119 +36,119 @@ import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import java.io.File
 
 class RoomEventsAttachmentProvider(
-        attachments: List<TimelineEvent>,
-        imageContentRenderer: ImageContentRenderer,
-        dateFormatter: VectorDateFormatter,
-        fileService: FileService,
-        coroutineScope: CoroutineScope,
-        stringProvider: StringProvider
+    attachments: List<TimelineEvent>,
+    imageContentRenderer: ImageContentRenderer,
+    dateFormatter: VectorDateFormatter,
+    fileService: FileService,
+    coroutineScope: CoroutineScope,
+    stringProvider: StringProvider
 ) : BaseAttachmentProvider<TimelineEvent>(
-        attachments = attachments,
-        imageContentRenderer = imageContentRenderer,
-        fileService = fileService,
-        coroutineScope = coroutineScope,
-        dateFormatter = dateFormatter,
-        stringProvider = stringProvider
+    attachments = attachments,
+    imageContentRenderer = imageContentRenderer,
+    fileService = fileService,
+    coroutineScope = coroutineScope,
+    dateFormatter = dateFormatter,
+    stringProvider = stringProvider
 ) {
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
         return getItem(position).let {
             val clearContent = it.root.getClearContent()
             val content = clearContent.toModel<MessageContent>()
-                    ?: clearContent.toModel<MessageStickerContent>()
-                            as? MessageWithAttachmentContent
+                ?: clearContent.toModel<MessageStickerContent>()
+                        as? MessageWithAttachmentContent
             if (content is MessageImageContent) {
                 val data = ImageContentRenderer.Data(
-                        eventId = it.eventId,
-                        filename = content.body,
-                        mimeType = content.mimeType,
-                        url = content.getFileUrl(),
-                        elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
-                        maxHeight = -1,
-                        maxWidth = -1,
-                        width = null,
-                        height = null,
-                        allowNonMxcUrls = it.root.sendState.isSending()
+                    eventId = it.eventId,
+                    filename = content.body,
+                    mimeType = content.mimeType,
+                    url = content.getFileUrl(),
+                    elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
+                    maxHeight = -1,
+                    maxWidth = -1,
+                    width = null,
+                    height = null,
+                    allowNonMxcUrls = it.root.sendState.isSending()
 
                 )
                 if (content.mimeType == MimeTypes.Gif) {
                     AttachmentInfo.AnimatedImage(
-                            uid = it.eventId,
-                            url = content.url ?: "",
-                            data = data
+                        uid = it.eventId,
+                        url = content.url ?: "",
+                        data = data
                     )
                 } else {
                     AttachmentInfo.Image(
-                            uid = it.eventId,
-                            url = content.url ?: "",
-                            data = data
+                        uid = it.eventId,
+                        url = content.url ?: "",
+                        data = data
                     )
                 }
             } else if (content is MessageStickerContent) {
                 val data = ImageContentRenderer.Data(
-                        eventId = it.eventId,
-                        filename = content.body,
-                        mimeType = content.mimeType,
-                        url = content.getFileUrl(),
-                        elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
-                        maxHeight = -1,
-                        maxWidth = -1,
-                        width = null,
-                        height = null,
-                        allowNonMxcUrls = false
+                    eventId = it.eventId,
+                    filename = content.body,
+                    mimeType = content.mimeType,
+                    url = content.getFileUrl(),
+                    elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
+                    maxHeight = -1,
+                    maxWidth = -1,
+                    width = null,
+                    height = null,
+                    allowNonMxcUrls = false
 
                 )
                 if (content.mimeType == MimeTypes.Gif) {
                     AttachmentInfo.AnimatedImage(
-                            uid = it.eventId,
-                            url = content.url ?: "",
-                            data = data
+                        uid = it.eventId,
+                        url = content.url ?: "",
+                        data = data
                     )
                 } else {
                     AttachmentInfo.Image(
-                            uid = it.eventId,
-                            url = content.url ?: "",
-                            data = data
+                        uid = it.eventId,
+                        url = content.url ?: "",
+                        data = data
                     )
                 }
             } else if (content is MessageVideoContent) {
                 val thumbnailData = ImageContentRenderer.Data(
-                        eventId = it.eventId,
-                        filename = content.body,
-                        mimeType = content.mimeType,
-                        url = content.videoInfo?.getThumbnailUrl(),
-                        elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
-                        height = content.videoInfo?.height,
-                        maxHeight = -1,
-                        width = content.videoInfo?.width,
-                        maxWidth = -1,
-                        allowNonMxcUrls = it.root.sendState.isSending()
+                    eventId = it.eventId,
+                    filename = content.body,
+                    mimeType = content.mimeType,
+                    url = content.videoInfo?.getThumbnailUrl(),
+                    elementToDecrypt = content.videoInfo?.thumbnailFile?.toElementToDecrypt(),
+                    height = content.videoInfo?.height,
+                    maxHeight = -1,
+                    width = content.videoInfo?.width,
+                    maxWidth = -1,
+                    allowNonMxcUrls = it.root.sendState.isSending()
                 )
                 val data = VideoContentRenderer.Data(
-                        eventId = it.eventId,
-                        filename = content.body,
-                        mimeType = content.mimeType,
-                        url = content.getFileUrl(),
-                        elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
-                        thumbnailMediaData = thumbnailData,
-                        allowNonMxcUrls = it.root.sendState.isSending()
+                    eventId = it.eventId,
+                    filename = content.body,
+                    mimeType = content.mimeType,
+                    url = content.getFileUrl(),
+                    elementToDecrypt = content.encryptedFileInfo?.toElementToDecrypt(),
+                    thumbnailMediaData = thumbnailData,
+                    allowNonMxcUrls = it.root.sendState.isSending()
                 )
                 AttachmentInfo.Video(
+                    uid = it.eventId,
+                    url = content.getFileUrl() ?: "",
+                    data = data,
+                    thumbnail = AttachmentInfo.Image(
                         uid = it.eventId,
-                        url = content.getFileUrl() ?: "",
-                        data = data,
-                        thumbnail = AttachmentInfo.Image(
-                                uid = it.eventId,
-                                url = content.videoInfo?.getThumbnailUrl() ?: "",
-                                data = thumbnailData
+                        url = content.videoInfo?.getThumbnailUrl() ?: "",
+                        data = thumbnailData
 
-                        )
+                    )
                 )
             } else {
                 AttachmentInfo.Image(
-                        uid = it.eventId,
-                        url = "",
-                        data = null
+                    uid = it.eventId,
+                    url = "",
+                    data = null
                 )
             }
         }
@@ -160,17 +160,18 @@ class RoomEventsAttachmentProvider(
 
     override suspend fun getFileForSharing(position: Int): File? {
         return getItem(position)
-                .let { timelineEvent ->
-                    timelineEvent.root.getClearContent().toModel<MessageContent>() as? MessageWithAttachmentContent
+            .let { timelineEvent ->
+                timelineEvent.root.getClearContent().toModel<MessageContent>() as? MessageWithAttachmentContent
+            }
+            ?.let { messageContent ->
+                tryOrNull {
+                    fileService.downloadFile(
+                        fileName = messageContent.body,
+                        mimeType = messageContent.mimeType,
+                        url = messageContent.getFileUrl(),
+                        elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+                    )
                 }
-                ?.let { messageContent ->
-                    tryOrNull {
-                        fileService.downloadFile(
-                                fileName = messageContent.body,
-                                mimeType = messageContent.mimeType,
-                                url = messageContent.getFileUrl(),
-                                elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
-                    }
-                }
+            }
     }
 }

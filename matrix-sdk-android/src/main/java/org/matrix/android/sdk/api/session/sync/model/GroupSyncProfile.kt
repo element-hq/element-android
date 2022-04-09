@@ -21,13 +21,13 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class GroupSyncProfile(
-        /**
-         * The name of the group, if any. May be nil.
-         */
-        @Json(name = "name") val name: String? = null,
+    /**
+     * The name of the group, if any. May be nil.
+     */
+    @Json(name = "name") val name: String? = null,
 
-        /**
-         * The URL for the group's avatar. May be nil.
-         */
-        @Json(name = "avatar_url") val avatarUrl: String? = null
+    /**
+     * The URL for the group's avatar. May be nil.
+     */
+    @Json(name = "avatar_url") val avatarUrl: String? = null
 )

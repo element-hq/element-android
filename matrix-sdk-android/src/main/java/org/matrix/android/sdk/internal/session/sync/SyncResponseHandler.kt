@@ -53,28 +53,30 @@ import kotlin.system.measureTimeMillis
 private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 
 internal class SyncResponseHandler @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        @SessionId private val sessionId: String,
-        private val sessionManager: SessionManager,
-        private val sessionListeners: SessionListeners,
-        private val workManagerProvider: WorkManagerProvider,
-        private val roomSyncHandler: RoomSyncHandler,
-        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
-        private val groupSyncHandler: GroupSyncHandler,
-        private val cryptoSyncHandler: CryptoSyncHandler,
-        private val aggregatorHandler: SyncResponsePostTreatmentAggregatorHandler,
-        private val cryptoService: DefaultCryptoService,
-        private val tokenStore: SyncTokenStore,
-        private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val processEventForPushTask: ProcessEventForPushTask,
-        private val pushRuleService: PushRuleService,
-        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
-        private val presenceSyncHandler: PresenceSyncHandler
+    @SessionDatabase private val monarchy: Monarchy,
+    @SessionId private val sessionId: String,
+    private val sessionManager: SessionManager,
+    private val sessionListeners: SessionListeners,
+    private val workManagerProvider: WorkManagerProvider,
+    private val roomSyncHandler: RoomSyncHandler,
+    private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
+    private val groupSyncHandler: GroupSyncHandler,
+    private val cryptoSyncHandler: CryptoSyncHandler,
+    private val aggregatorHandler: SyncResponsePostTreatmentAggregatorHandler,
+    private val cryptoService: DefaultCryptoService,
+    private val tokenStore: SyncTokenStore,
+    private val lightweightSettingsStorage: LightweightSettingsStorage,
+    private val processEventForPushTask: ProcessEventForPushTask,
+    private val pushRuleService: PushRuleService,
+    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+    private val presenceSyncHandler: PresenceSyncHandler
 ) {
 
-    suspend fun handleResponse(syncResponse: SyncResponse,
-                               fromToken: String?,
-                               reporter: ProgressReporter?) {
+    suspend fun handleResponse(
+        syncResponse: SyncResponse,
+        fromToken: String?,
+        reporter: ProgressReporter?
+    ) {
         val isInitialSync = fromToken == null
         Timber.v("Start handling sync, is InitialSync: $isInitialSync")
 
@@ -103,10 +105,10 @@ internal class SyncResponseHandler @Inject constructor(
         val aggregator = SyncResponsePostTreatmentAggregator()
 
         // Prerequisite for thread events handling in RoomSyncHandler
-// Disabled due to the new fallback
-//        if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
-//            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
-//        }
+        // Disabled due to the new fallback
+        //        if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
+        //            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+        //        }
 
         // Start one big transaction
         monarchy.awaitTransaction { realm ->
@@ -198,12 +200,12 @@ internal class SyncResponseHandler @Inject constructor(
         val workData = WorkerParamsFactory.toData(getGroupDataWorkerParams)
 
         val getGroupWork = workManagerProvider.matrixPeriodicWorkRequestBuilder<GetGroupDataWorker>(1, TimeUnit.HOURS)
-                .setInputData(workData)
-                .setConstraints(WorkManagerProvider.workConstraints)
-                .build()
+            .setInputData(workData)
+            .setConstraints(WorkManagerProvider.workConstraints)
+            .build()
 
         workManagerProvider.workManager
-                .enqueueUniquePeriodicWork(GET_GROUP_DATA_WORKER, ExistingPeriodicWorkPolicy.REPLACE, getGroupWork)
+            .enqueueUniquePeriodicWork(GET_GROUP_DATA_WORKER, ExistingPeriodicWorkPolicy.REPLACE, getGroupWork)
     }
 
     private suspend fun checkPushRules(roomsSyncResponse: RoomsSyncResponse, isInitialSync: Boolean) {

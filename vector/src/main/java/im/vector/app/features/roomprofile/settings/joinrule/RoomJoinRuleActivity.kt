@@ -61,9 +61,9 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         roomProfileArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
         if (isFirstCreation()) {
             addFragment(
-                    views.simpleFragmentContainer,
-                    RoomJoinRuleFragment::class.java,
-                    roomProfileArgs
+                views.simpleFragmentContainer,
+                RoomJoinRuleFragment::class.java,
+                roomProfileArgs
             )
         }
     }
@@ -75,10 +75,10 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                 Uninitialized -> {
                     // nop
                 }
-                is Loading    -> {
+                is Loading -> {
                     views.simpleActivityWaitingView.isVisible = true
                 }
-                is Success    -> {
+                is Success -> {
                     withState(viewModel) { state ->
                         if (state.didSwitchToReplacementRoom) {
                             // we should navigate to new room
@@ -87,7 +87,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                         finish()
                     }
                 }
-                is Fail       -> {
+                is Fail -> {
                     views.simpleActivityWaitingView.isVisible = false
                     toast(errorFormatter.toHumanReadable(it.error))
                 }
@@ -97,7 +97,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         viewModel.observeViewEvents {
             when (it) {
                 RoomJoinRuleChooseRestrictedEvents.NavigateToChooseRestricted -> navigateToChooseRestricted()
-                is RoomJoinRuleChooseRestrictedEvents.NavigateToUpgradeRoom   -> navigateToUpgradeRoom(it)
+                is RoomJoinRuleChooseRestrictedEvents.NavigateToUpgradeRoom -> navigateToUpgradeRoom(it)
             }
         }
 
@@ -110,10 +110,10 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     private fun navigateToUpgradeRoom(events: RoomJoinRuleChooseRestrictedEvents.NavigateToUpgradeRoom) {
         MigrateRoomBottomSheet.newInstance(
-                events.roomId,
-                events.toVersion,
-                MigrateRoomBottomSheet.MigrationReason.FOR_RESTRICTED,
-                events.description
+            events.roomId,
+            events.toVersion,
+            MigrateRoomBottomSheet.MigrationReason.FOR_RESTRICTED,
+            events.description
         ).show(supportFragmentManager, "migrate")
     }
 
@@ -121,10 +121,11 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         supportFragmentManager.commitTransaction {
             setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
             val tag = RoomJoinRuleChooseRestrictedFragment::class.simpleName
-            replace(views.simpleFragmentContainer.id,
-                    RoomJoinRuleChooseRestrictedFragment::class.java,
-                    this@RoomJoinRuleActivity.roomProfileArgs.toMvRxBundle(),
-                    tag
+            replace(
+                views.simpleFragmentContainer.id,
+                RoomJoinRuleChooseRestrictedFragment::class.java,
+                this@RoomJoinRuleActivity.roomProfileArgs.toMvRxBundle(),
+                tag
             ).addToBackStack(tag)
         }
     }

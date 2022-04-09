@@ -24,16 +24,16 @@ import javax.inject.Inject
 
 internal interface ReportContentTask : Task<ReportContentTask.Params, Unit> {
     data class Params(
-            val roomId: String,
-            val eventId: String,
-            val score: Int,
-            val reason: String
+        val roomId: String,
+        val eventId: String,
+        val score: Int,
+        val reason: String
     )
 }
 
 internal class DefaultReportContentTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : ReportContentTask {
 
     override suspend fun execute(params: ReportContentTask.Params) {

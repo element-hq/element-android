@@ -32,8 +32,8 @@ import org.matrix.android.sdk.api.session.room.model.message.PollType
 import javax.inject.Inject
 
 class CreatePollController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider
 ) : EpoxyController() {
 
     private var state: CreatePollViewState? = null
@@ -59,11 +59,11 @@ class CreatePollController @Inject constructor(
             pollType(currentState.pollType)
             pollTypeChangedListener { _, id ->
                 host.callback?.onPollTypeChanged(
-                        if (id == R.id.openPollTypeRadioButton) {
-                            PollType.DISCLOSED_UNSTABLE
-                        } else {
-                            PollType.UNDISCLOSED_UNSTABLE
-                        }
+                    if (id == R.id.openPollTypeRadioButton) {
+                        PollType.DISCLOSED_UNSTABLE
+                    } else {
+                        PollType.UNDISCLOSED_UNSTABLE
+                    }
                 )
             }
         }

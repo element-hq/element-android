@@ -26,12 +26,12 @@ import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntit
 
 internal fun ThreadSummaryEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ThreadSummaryEntity> {
     return realm.where<ThreadSummaryEntity>()
-            .equalTo(ThreadSummaryEntityFields.ROOM.ROOM_ID, roomId)
+        .equalTo(ThreadSummaryEntityFields.ROOM.ROOM_ID, roomId)
 }
 
 internal fun ThreadSummaryEntity.Companion.where(realm: Realm, roomId: String, rootThreadEventId: String): RealmQuery<ThreadSummaryEntity> {
     return where(realm, roomId)
-            .equalTo(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+        .equalTo(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
 }
 
 internal fun ThreadSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: String, rootThreadEventId: String): ThreadSummaryEntity {
@@ -39,21 +39,23 @@ internal fun ThreadSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: Str
         this.rootThreadEventId = rootThreadEventId
     }
 }
+
 internal fun ThreadSummaryEntity.Companion.getOrNull(realm: Realm, roomId: String, rootThreadEventId: String): ThreadSummaryEntity? {
     return where(realm, roomId, rootThreadEventId).findFirst()
 }
+
 internal fun RealmList<ThreadSummaryEntity>.find(rootThreadEventId: String): ThreadSummaryEntity? {
     return this.where()
-            .equalTo(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-            .findFirst()
+        .equalTo(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+        .findFirst()
 }
 
 internal fun RealmList<ThreadSummaryEntity>.findRootOrLatest(eventId: String): ThreadSummaryEntity? {
     return this.where()
-            .beginGroup()
-            .equalTo(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, eventId)
-            .or()
-            .equalTo(ThreadSummaryEntityFields.LATEST_THREAD_EVENT_ENTITY.EVENT_ID, eventId)
-            .endGroup()
-            .findFirst()
+        .beginGroup()
+        .equalTo(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, eventId)
+        .or()
+        .equalTo(ThreadSummaryEntityFields.LATEST_THREAD_EVENT_ENTITY.EVENT_ID, eventId)
+        .endGroup()
+        .findFirst()
 }

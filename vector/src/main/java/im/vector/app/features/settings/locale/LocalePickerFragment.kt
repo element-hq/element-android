@@ -33,9 +33,9 @@ import java.util.Locale
 import javax.inject.Inject
 
 class LocalePickerFragment @Inject constructor(
-        private val controller: LocalePickerController
+    private val controller: LocalePickerController
 ) : VectorBaseFragment<FragmentLocalePickerBinding>(),
-        LocalePickerController.Listener {
+    LocalePickerController.Listener {
 
     private val viewModel: LocalePickerViewModel by fragmentViewModel()
 

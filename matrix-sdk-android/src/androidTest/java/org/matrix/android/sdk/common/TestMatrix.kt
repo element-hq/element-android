@@ -63,9 +63,9 @@ internal class TestMatrix constructor(context: Context, matrixConfiguration: Mat
         Monarchy.init(context)
         DaggerTestMatrixComponent.factory().create(context, matrixConfiguration).inject(this)
         val configuration = Configuration.Builder()
-                .setExecutor(Executors.newCachedThreadPool())
-                .setWorkerFactory(matrixWorkerFactory)
-                .build()
+            .setExecutor(Executors.newCachedThreadPool())
+            .setWorkerFactory(matrixWorkerFactory)
+            .build()
         WorkManager.initialize(context, configuration)
         uiHandler.post {
             ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)

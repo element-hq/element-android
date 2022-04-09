@@ -29,9 +29,9 @@ import me.gujun.android.span.span
 import javax.inject.Inject
 
 class CrossSigningSettingsController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider,
-        private val dimensionConverter: DimensionConverter
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider,
+    private val dimensionConverter: DimensionConverter
 ) : TypedEpoxyController<CrossSigningSettingsViewState>() {
 
     interface InteractionListener {
@@ -44,7 +44,7 @@ class CrossSigningSettingsController @Inject constructor(
         if (data == null) return
         val host = this
         when {
-            data.xSigningKeyCanSign        -> {
+            data.xSigningKeyCanSign -> {
                 genericItem {
                     id("can")
                     titleIconResourceId(R.drawable.ic_shield_trusted)
@@ -58,7 +58,7 @@ class CrossSigningSettingsController @Inject constructor(
                     }
                 }
             }
-            data.xSigningKeysAreTrusted    -> {
+            data.xSigningKeysAreTrusted -> {
                 genericItem {
                     id("trusted")
                     titleIconResourceId(R.drawable.ic_shield_custom)
@@ -86,7 +86,7 @@ class CrossSigningSettingsController @Inject constructor(
                     }
                 }
             }
-            else                           -> {
+            else -> {
                 genericItem {
                     id("not")
                     title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled).toEpoxyCharSequence())
@@ -109,14 +109,14 @@ class CrossSigningSettingsController @Inject constructor(
                 id("msk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
+                    span {
+                        +"Master Key:\n"
                         span {
-                            +"Master Key:\n"
-                            span {
-                                text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-                                textSize = host.dimensionConverter.spToPx(12)
-                            }
-                        }.toEpoxyCharSequence()
+                            text = it.unpaddedBase64PublicKey ?: ""
+                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                            textSize = host.dimensionConverter.spToPx(12)
+                        }
+                    }.toEpoxyCharSequence()
                 )
             }
         }
@@ -125,14 +125,14 @@ class CrossSigningSettingsController @Inject constructor(
                 id("usk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
+                    span {
+                        +"User Key:\n"
                         span {
-                            +"User Key:\n"
-                            span {
-                                text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-                                textSize = host.dimensionConverter.spToPx(12)
-                            }
-                        }.toEpoxyCharSequence()
+                            text = it.unpaddedBase64PublicKey ?: ""
+                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                            textSize = host.dimensionConverter.spToPx(12)
+                        }
+                    }.toEpoxyCharSequence()
                 )
             }
         }
@@ -141,14 +141,14 @@ class CrossSigningSettingsController @Inject constructor(
                 id("ssk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
+                    span {
+                        +"Self Signed Key:\n"
                         span {
-                            +"Self Signed Key:\n"
-                            span {
-                                text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-                                textSize = host.dimensionConverter.spToPx(12)
-                            }
-                        }.toEpoxyCharSequence()
+                            text = it.unpaddedBase64PublicKey ?: ""
+                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                            textSize = host.dimensionConverter.spToPx(12)
+                        }
+                    }.toEpoxyCharSequence()
                 )
             }
         }

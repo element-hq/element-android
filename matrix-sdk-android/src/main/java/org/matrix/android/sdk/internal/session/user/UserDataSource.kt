@@ -36,14 +36,16 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import javax.inject.Inject
 
-internal class UserDataSource @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                  private val realmSessionProvider: RealmSessionProvider) {
+internal class UserDataSource @Inject constructor(
+    @SessionDatabase private val monarchy: Monarchy,
+    private val realmSessionProvider: RealmSessionProvider
+) {
 
     private val realmDataSourceFactory: Monarchy.RealmDataSourceFactory<UserEntity> by lazy {
         monarchy.createDataSourceFactory { realm ->
             realm.where(UserEntity::class.java)
-                    .isNotEmpty(UserEntityFields.USER_ID)
-                    .sort(UserEntityFields.DISPLAY_NAME)
+                .isNotEmpty(UserEntityFields.USER_ID)
+                .sort(UserEntityFields.DISPLAY_NAME)
         }
     }
 
@@ -66,8 +68,8 @@ internal class UserDataSource @Inject constructor(@SessionDatabase private val m
 
     fun getUserLive(userId: String): LiveData<Optional<User>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { UserEntity.where(it, userId) },
-                { it.asDomain() }
+            { UserEntity.where(it, userId) },
+            { it.asDomain() }
         )
         return Transformations.map(liveData) { results ->
             results.firstOrNull().toOptional()
@@ -76,12 +78,12 @@ internal class UserDataSource @Inject constructor(@SessionDatabase private val m
 
     fun getUsersLive(): LiveData<List<User>> {
         return monarchy.findAllMappedWithChanges(
-                { realm ->
-                    realm.where(UserEntity::class.java)
-                            .isNotEmpty(UserEntityFields.USER_ID)
-                            .sort(UserEntityFields.DISPLAY_NAME)
-                },
-                { it.asDomain() }
+            { realm ->
+                realm.where(UserEntity::class.java)
+                    .isNotEmpty(UserEntityFields.USER_ID)
+                    .sort(UserEntityFields.DISPLAY_NAME)
+            },
+            { it.asDomain() }
         )
     }
 
@@ -92,17 +94,17 @@ internal class UserDataSource @Inject constructor(@SessionDatabase private val m
                 query.isNotEmpty(UserEntityFields.USER_ID)
             } else {
                 query
-                        .beginGroup()
-                        .contains(UserEntityFields.DISPLAY_NAME, filter, Case.INSENSITIVE)
-                        .or()
-                        .contains(UserEntityFields.USER_ID, filter)
-                        .endGroup()
+                    .beginGroup()
+                    .contains(UserEntityFields.DISPLAY_NAME, filter, Case.INSENSITIVE)
+                    .or()
+                    .contains(UserEntityFields.USER_ID, filter)
+                    .endGroup()
             }
             excludedUserIds
-                    ?.takeIf { it.isNotEmpty() }
-                    ?.let {
-                        query.not().`in`(UserEntityFields.USER_ID, it.toTypedArray())
-                    }
+                ?.takeIf { it.isNotEmpty() }
+                ?.let {
+                    query.not().`in`(UserEntityFields.USER_ID, it.toTypedArray())
+                }
             query.sort(UserEntityFields.DISPLAY_NAME)
         }
         return monarchy.findAllPagedWithChanges(realmDataSourceFactory, livePagedListBuilder)
@@ -110,12 +112,12 @@ internal class UserDataSource @Inject constructor(@SessionDatabase private val m
 
     fun getIgnoredUsersLive(): LiveData<List<User>> {
         return monarchy.findAllMappedWithChanges(
-                { realm ->
-                    realm.where(IgnoredUserEntity::class.java)
-                            .isNotEmpty(IgnoredUserEntityFields.USER_ID)
-                            .sort(IgnoredUserEntityFields.USER_ID)
-                },
-                { getUser(it.userId) ?: User(userId = it.userId) }
+            { realm ->
+                realm.where(IgnoredUserEntity::class.java)
+                    .isNotEmpty(IgnoredUserEntityFields.USER_ID)
+                    .sort(IgnoredUserEntityFields.USER_ID)
+            },
+            { getUser(it.userId) ?: User(userId = it.userId) }
         )
     }
 }

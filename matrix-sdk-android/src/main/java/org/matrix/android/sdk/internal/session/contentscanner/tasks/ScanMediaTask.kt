@@ -29,13 +29,13 @@ import javax.inject.Inject
 
 internal interface ScanMediaTask : Task<ScanMediaTask.Params, ScanResponse> {
     data class Params(
-            val mxcUrl: String
+        val mxcUrl: String
     )
 }
 
 internal class DefaultScanMediaTask @Inject constructor(
-        private val contentScannerApiProvider: ContentScannerApiProvider,
-        private val contentScannerStore: ContentScannerStore
+    private val contentScannerApiProvider: ContentScannerApiProvider,
+    private val contentScannerStore: ContentScannerStore
 ) : ScanMediaTask {
 
     override suspend fun execute(params: ScanMediaTask.Params): ScanResponse {
@@ -63,10 +63,10 @@ internal class DefaultScanMediaTask @Inject constructor(
                 api.scanMedia(split[0], split[1])
             }
             contentScannerStore.updateScanResultForContent(
-                    params.mxcUrl,
-                    scannerUrl,
-                    ScanState.TRUSTED.takeIf { scanResponse.clean } ?: ScanState.INFECTED,
-                    scanResponse.info ?: ""
+                params.mxcUrl,
+                scannerUrl,
+                ScanState.TRUSTED.takeIf { scanResponse.clean } ?: ScanState.INFECTED,
+                scanResponse.info ?: ""
             )
             return scanResponse
         } catch (failure: Throwable) {

@@ -25,8 +25,8 @@ import javax.inject.Inject
 
 @SessionScope
 internal class RoomDecryptorProvider @Inject constructor(
-        private val olmDecryptionFactory: MXOlmDecryptionFactory,
-        private val megolmDecryptionFactory: MXMegolmDecryptionFactory
+    private val olmDecryptionFactory: MXOlmDecryptionFactory,
+    private val megolmDecryptionFactory: MXMegolmDecryptionFactory
 ) {
 
     // A map from algorithm to MXDecrypting instance, for each room
@@ -83,7 +83,7 @@ internal class RoomDecryptorProvider @Inject constructor(
                         }
                     }
                 }
-                else                      -> olmDecryptionFactory.create()
+                else -> olmDecryptionFactory.create()
             }
             if (!roomId.isNullOrEmpty()) {
                 synchronized(roomDecryptors) {

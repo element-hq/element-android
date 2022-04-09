@@ -21,9 +21,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class UpdateDeviceInfoBody(
-        /**
-         * The new display name for this device. If not given, the display name is unchanged.
-         */
-        @Json(name = "display_name")
-        val displayName: String? = null
+    /**
+     * The new display name for this device. If not given, the display name is unchanged.
+     */
+    @Json(name = "display_name")
+    val displayName: String? = null
 )

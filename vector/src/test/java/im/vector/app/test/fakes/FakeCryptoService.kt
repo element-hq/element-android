@@ -33,6 +33,6 @@ class FakeCryptoService : CryptoService by mockk() {
     override fun getLiveCryptoDeviceInfo(userId: String) = getLiveCryptoDeviceInfo(listOf(userId))
 
     override fun getLiveCryptoDeviceInfo(userIds: List<String>) = MutableLiveData(
-            cryptoDeviceInfos.filterKeys { userIds.contains(it) }.values.toList()
+        cryptoDeviceInfos.filterKeys { userIds.contains(it) }.values.toList()
     )
 }

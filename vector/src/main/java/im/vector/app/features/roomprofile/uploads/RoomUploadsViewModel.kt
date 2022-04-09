@@ -33,8 +33,8 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
 class RoomUploadsViewModel @AssistedInject constructor(
-        @Assisted initialState: RoomUploadsViewState,
-        private val session: Session
+    @Assisted initialState: RoomUploadsViewState,
+    private val session: Session
 ) : VectorViewModel<RoomUploadsViewState, RoomUploadsAction, RoomUploadsViewEvents>(initialState) {
 
     @AssistedFactory
@@ -54,10 +54,10 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
     private fun observeRoomSummary() {
         room.flow().liveRoomSummary()
-                .unwrap()
-                .execute { async ->
-                    copy(roomSummary = async)
-                }
+            .unwrap()
+            .execute { async ->
+                copy(roomSummary = async)
+            }
     }
 
     private fun handleLoadMore() = withState { state ->
@@ -66,7 +66,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    asyncEventsRequest = Loading()
+                asyncEventsRequest = Loading()
             )
         }
 
@@ -77,24 +77,24 @@ class RoomUploadsViewModel @AssistedInject constructor(
                 token = result.nextToken
 
                 val groupedUploadEvents = result.uploadEvents
-                        .groupBy {
-                            it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_IMAGE ||
-                                    it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_VIDEO
-                        }
+                    .groupBy {
+                        it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_IMAGE ||
+                                it.contentWithAttachmentContent.msgType == MessageType.MSGTYPE_VIDEO
+                    }
 
                 setState {
                     copy(
-                            asyncEventsRequest = Success(Unit),
-                            mediaEvents = this.mediaEvents + groupedUploadEvents[true].orEmpty(),
-                            fileEvents = this.fileEvents + groupedUploadEvents[false].orEmpty(),
-                            hasMore = result.hasMore
+                        asyncEventsRequest = Success(Unit),
+                        mediaEvents = this.mediaEvents + groupedUploadEvents[true].orEmpty(),
+                        fileEvents = this.fileEvents + groupedUploadEvents[false].orEmpty(),
+                        hasMore = result.hasMore
                     )
                 }
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomUploadsViewEvents.Failure(failure))
                 setState {
                     copy(
-                            asyncEventsRequest = Fail(failure)
+                        asyncEventsRequest = Fail(failure)
                     )
                 }
             }
@@ -106,9 +106,9 @@ class RoomUploadsViewModel @AssistedInject constructor(
     override fun handle(action: RoomUploadsAction) {
         when (action) {
             is RoomUploadsAction.Download -> handleDownload(action)
-            is RoomUploadsAction.Share    -> handleShare(action)
-            RoomUploadsAction.Retry       -> handleLoadMore()
-            RoomUploadsAction.LoadMore    -> handleLoadMore()
+            is RoomUploadsAction.Share -> handleShare(action)
+            RoomUploadsAction.Retry -> handleLoadMore()
+            RoomUploadsAction.LoadMore -> handleLoadMore()
         }
     }
 
@@ -116,7 +116,8 @@ class RoomUploadsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val event = try {
                 val file = session.fileService().downloadFile(
-                        messageContent = action.uploadEvent.contentWithAttachmentContent)
+                    messageContent = action.uploadEvent.contentWithAttachmentContent
+                )
                 RoomUploadsViewEvents.FileReadyForSharing(file)
             } catch (failure: Throwable) {
                 RoomUploadsViewEvents.Failure(failure)
@@ -129,7 +130,8 @@ class RoomUploadsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val event = try {
                 val file = session.fileService().downloadFile(
-                        messageContent = action.uploadEvent.contentWithAttachmentContent)
+                    messageContent = action.uploadEvent.contentWithAttachmentContent
+                )
                 RoomUploadsViewEvents.FileReadyForSaving(file, action.uploadEvent.contentWithAttachmentContent.body)
             } catch (failure: Throwable) {
                 RoomUploadsViewEvents.Failure(failure)

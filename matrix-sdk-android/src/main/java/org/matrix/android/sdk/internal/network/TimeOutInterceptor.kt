@@ -34,17 +34,17 @@ internal class TimeOutInterceptor @Inject constructor() : Interceptor {
         val writeTimeout = request.header(WRITE_TIMEOUT)?.let { Integer.valueOf(it) } ?: chain.writeTimeoutMillis()
 
         val newRequestBuilder = request.newBuilder()
-                .removeHeader(CONNECT_TIMEOUT)
-                .removeHeader(READ_TIMEOUT)
-                .removeHeader(WRITE_TIMEOUT)
+            .removeHeader(CONNECT_TIMEOUT)
+            .removeHeader(READ_TIMEOUT)
+            .removeHeader(WRITE_TIMEOUT)
 
         request = newRequestBuilder.build()
 
         return chain
-                .withConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
-                .withReadTimeout(readTimeout, TimeUnit.MILLISECONDS)
-                .withWriteTimeout(writeTimeout, TimeUnit.MILLISECONDS)
-                .proceed(request)
+            .withConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
+            .withReadTimeout(readTimeout, TimeUnit.MILLISECONDS)
+            .withWriteTimeout(writeTimeout, TimeUnit.MILLISECONDS)
+            .proceed(request)
     }
 
     companion object {

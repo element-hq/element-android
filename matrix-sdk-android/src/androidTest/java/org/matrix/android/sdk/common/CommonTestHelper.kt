@@ -64,11 +64,11 @@ class CommonTestHelper(context: Context) {
     init {
         UiThreadStatement.runOnUiThread {
             TestMatrix.initialize(
-                    context,
-                    MatrixConfiguration(
-                            applicationFlavor = "TestFlavor",
-                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
-                    )
+                context,
+                MatrixConfiguration(
+                    applicationFlavor = "TestFlavor",
+                    roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
+                )
             )
         }
         matrix = TestMatrix.getInstance()
@@ -87,8 +87,8 @@ class CommonTestHelper(context: Context) {
      */
     fun createHomeServerConfig(): HomeServerConnectionConfig {
         return HomeServerConnectionConfig.Builder()
-                .withHomeServerUri(Uri.parse(TestConstants.TESTS_HOME_SERVER_URL))
-                .build()
+            .withHomeServerUri(Uri.parse(TestConstants.TESTS_HOME_SERVER_URL))
+            .build()
     }
 
     /**
@@ -157,48 +157,56 @@ class CommonTestHelper(context: Context) {
     /**
      * Will send nb of messages provided by count parameter but waits every 10 messages to avoid gap in sync
      */
-    private fun sendTextMessagesBatched(timeline: Timeline, room: Room, message: String, count: Int, timeout: Long, rootThreadEventId: String? = null): List<TimelineEvent> {
+    private fun sendTextMessagesBatched(
+        timeline: Timeline,
+        room: Room,
+        message: String,
+        count: Int,
+        timeout: Long,
+        rootThreadEventId: String? = null
+    ): List<TimelineEvent> {
         val sentEvents = ArrayList<TimelineEvent>(count)
         (1 until count + 1)
-                .map { "$message #$it" }
-                .chunked(10)
-                .forEach { batchedMessages ->
-                    batchedMessages.forEach { formattedMessage ->
-                        if (rootThreadEventId != null) {
-                            room.replyInThread(
-                                    rootThreadEventId = rootThreadEventId,
-                                    replyInThreadText = formattedMessage)
-                        } else {
-                            room.sendTextMessage(formattedMessage)
-                        }
-                    }
-                    waitWithLatch(timeout) { latch ->
-                        val timelineListener = object : Timeline.Listener {
-
-                            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                                val allSentMessages = snapshot
-                                        .filter { it.root.sendState == SendState.SYNCED }
-                                        .filter { it.root.getClearType() == EventType.MESSAGE }
-                                        .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
-
-                                val hasSyncedAllBatchedMessages = allSentMessages
-                                        .map {
-                                            it.root.getClearContent().toModel<MessageContent>()?.body
-                                        }
-                                        .containsAll(batchedMessages)
-
-                                if (allSentMessages.size == count) {
-                                    sentEvents.addAll(allSentMessages)
-                                }
-                                if (hasSyncedAllBatchedMessages) {
-                                    timeline.removeListener(this)
-                                    latch.countDown()
-                                }
-                            }
-                        }
-                        timeline.addListener(timelineListener)
+            .map { "$message #$it" }
+            .chunked(10)
+            .forEach { batchedMessages ->
+                batchedMessages.forEach { formattedMessage ->
+                    if (rootThreadEventId != null) {
+                        room.replyInThread(
+                            rootThreadEventId = rootThreadEventId,
+                            replyInThreadText = formattedMessage
+                        )
+                    } else {
+                        room.sendTextMessage(formattedMessage)
                     }
                 }
+                waitWithLatch(timeout) { latch ->
+                    val timelineListener = object : Timeline.Listener {
+
+                        override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                            val allSentMessages = snapshot
+                                .filter { it.root.sendState == SendState.SYNCED }
+                                .filter { it.root.getClearType() == EventType.MESSAGE }
+                                .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
+
+                            val hasSyncedAllBatchedMessages = allSentMessages
+                                .map {
+                                    it.root.getClearContent().toModel<MessageContent>()?.body
+                                }
+                                .containsAll(batchedMessages)
+
+                            if (allSentMessages.size == count) {
+                                sentEvents.addAll(allSentMessages)
+                            }
+                            if (hasSyncedAllBatchedMessages) {
+                                timeline.removeListener(this)
+                                latch.countDown()
+                            }
+                        }
+                    }
+                    timeline.addListener(timelineListener)
+                }
+            }
         return sentEvents
     }
 
@@ -209,11 +217,12 @@ class CommonTestHelper(context: Context) {
      * @param numberOfMessages the number of time the message will be sent
      */
     fun replyInThreadMessage(
-            room: Room,
-            message: String,
-            numberOfMessages: Int,
-            rootThreadEventId: String,
-            timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
+        room: Room,
+        message: String,
+        numberOfMessages: Int,
+        rootThreadEventId: String,
+        timeout: Long = TestConstants.timeOutMillis
+    ): List<TimelineEvent> {
         val timeline = room.createTimeline(null, TimelineSettings(10))
         timeline.start()
         val sentEvents = sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout, rootThreadEventId)
@@ -233,13 +242,15 @@ class CommonTestHelper(context: Context) {
      * @param testParams     test params about the session
      * @return the session associated with the newly created account
      */
-    private fun createAccount(userNamePrefix: String,
-                              password: String,
-                              testParams: SessionTestParams): Session {
+    private fun createAccount(
+        userNamePrefix: String,
+        password: String,
+        testParams: SessionTestParams
+    ): Session {
         val session = createAccountAndSync(
-                userNamePrefix + "_" + System.currentTimeMillis() + UUID.randomUUID(),
-                password,
-                testParams
+            userNamePrefix + "_" + System.currentTimeMillis() + UUID.randomUUID(),
+            password,
+            testParams
         )
         assertNotNull(session)
         return session
@@ -253,9 +264,11 @@ class CommonTestHelper(context: Context) {
      * @param testParams test params about the session
      * @return the session associated with the existing account
      */
-    fun logIntoAccount(userId: String,
-                       password: String,
-                       testParams: SessionTestParams): Session {
+    fun logIntoAccount(
+        userId: String,
+        password: String,
+        testParams: SessionTestParams
+    ): Session {
         val session = logAccountAndSync(userId, password, testParams)
         assertNotNull(session)
         return session
@@ -268,9 +281,11 @@ class CommonTestHelper(context: Context) {
      * @param password          the password
      * @param sessionTestParams parameters for the test
      */
-    private fun createAccountAndSync(userName: String,
-                                     password: String,
-                                     sessionTestParams: SessionTestParams): Session {
+    private fun createAccountAndSync(
+        userName: String,
+        password: String,
+        sessionTestParams: SessionTestParams
+    ): Session {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -279,15 +294,15 @@ class CommonTestHelper(context: Context) {
 
         runBlockingTest(timeout = 60_000) {
             matrix.authenticationService
-                    .getRegistrationWizard()
-                    .createAccount(userName, password, null)
+                .getRegistrationWizard()
+                .createAccount(userName, password, null)
         }
 
         // Perform dummy step
         val registrationResult = runBlockingTest(timeout = 60_000) {
             matrix.authenticationService
-                    .getRegistrationWizard()
-                    .dummy()
+                .getRegistrationWizard()
+                .dummy()
         }
 
         assertTrue(registrationResult is RegistrationResult.Success)
@@ -306,9 +321,11 @@ class CommonTestHelper(context: Context) {
      * @param password          the password
      * @param sessionTestParams session test params
      */
-    private fun logAccountAndSync(userName: String,
-                                  password: String,
-                                  sessionTestParams: SessionTestParams): Session {
+    private fun logAccountAndSync(
+        userName: String,
+        password: String,
+        sessionTestParams: SessionTestParams
+    ): Session {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -317,8 +334,8 @@ class CommonTestHelper(context: Context) {
 
         val session = runBlockingTest {
             matrix.authenticationService
-                    .getLoginWizard()
-                    .login(userName, password, "myDevice")
+                .getLoginWizard()
+                .login(userName, password, "myDevice")
         }
         session.open()
         if (sessionTestParams.withInitialSync) {
@@ -334,8 +351,10 @@ class CommonTestHelper(context: Context) {
      * @param userName the account username
      * @param password the password
      */
-    fun logAccountWithError(userName: String,
-                            password: String): Throwable {
+    fun logAccountWithError(
+        userName: String,
+        password: String
+    ): Throwable {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -346,8 +365,8 @@ class CommonTestHelper(context: Context) {
         runBlockingTest {
             try {
                 matrix.authenticationService
-                        .getLoginWizard()
-                        .login(userName, password, "myDevice")
+                    .getLoginWizard()
+                    .login(userName, password, "myDevice")
             } catch (failure: Throwable) {
                 requestFailure = failure
             }
@@ -388,7 +407,11 @@ class CommonTestHelper(context: Context) {
         }
     }
 
-    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, dispatcher: CoroutineDispatcher = Dispatchers.Main, block: suspend (CountDownLatch) -> Unit) {
+    fun waitWithLatch(
+        timeout: Long? = TestConstants.timeOutMillis,
+        dispatcher: CoroutineDispatcher = Dispatchers.Main,
+        block: suspend (CountDownLatch) -> Unit
+    ) {
         val latch = CountDownLatch(1)
         coroutineScope.launch(dispatcher) {
             block(latch)
@@ -440,10 +463,10 @@ class CommonTestHelper(context: Context) {
 
 fun List<TimelineEvent>.checkSendOrder(baseTextMessage: String, numberOfMessages: Int, startIndex: Int): Boolean {
     return drop(startIndex)
-            .take(numberOfMessages)
-            .foldRightIndexed(true) { index, timelineEvent, acc ->
-                val body = timelineEvent.root.content.toModel<MessageContent>()?.body
-                val currentMessageSuffix = numberOfMessages - index
-                acc && (body == null || body.startsWith(baseTextMessage) && body.endsWith("#$currentMessageSuffix"))
-            }
+        .take(numberOfMessages)
+        .foldRightIndexed(true) { index, timelineEvent, acc ->
+            val body = timelineEvent.root.content.toModel<MessageContent>()?.body
+            val currentMessageSuffix = numberOfMessages - index
+            acc && (body == null || body.startsWith(baseTextMessage) && body.endsWith("#$currentMessageSuffix"))
+        }
 }

@@ -25,16 +25,16 @@ import org.matrix.android.sdk.api.pushrules.RuleSetKey
  */
 @JsonClass(generateAdapter = true)
 data class RuleSet(
-        @Json(name = "content")
-        val content: List<PushRule>? = null,
-        @Json(name = "override")
-        val override: List<PushRule>? = null,
-        @Json(name = "room")
-        val room: List<PushRule>? = null,
-        @Json(name = "sender")
-        val sender: List<PushRule>? = null,
-        @Json(name = "underride")
-        val underride: List<PushRule>? = null
+    @Json(name = "content")
+    val content: List<PushRule>? = null,
+    @Json(name = "override")
+    val override: List<PushRule>? = null,
+    @Json(name = "room")
+    val room: List<PushRule>? = null,
+    @Json(name = "sender")
+    val sender: List<PushRule>? = null,
+    @Json(name = "underride")
+    val underride: List<PushRule>? = null
 ) {
     fun getAllRules(): List<PushRule> {
         // Ref. for the order: https://matrix.org/docs/spec/client_server/latest#push-rules
@@ -77,6 +77,6 @@ data class RuleSet(
 }
 
 data class PushRuleAndKind(
-        val pushRule: PushRule,
-        val kind: RuleSetKey
+    val pushRule: PushRule,
+    val kind: RuleSetKey
 )

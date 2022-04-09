@@ -29,8 +29,8 @@ class HomeServerConnectionConfigFactory @Inject constructor() {
 
         return try {
             HomeServerConnectionConfig.Builder()
-                    .withHomeServerUri(url)
-                    .build()
+                .withHomeServerUri(url)
+                .build()
         } catch (t: Throwable) {
             Timber.e(t)
             null

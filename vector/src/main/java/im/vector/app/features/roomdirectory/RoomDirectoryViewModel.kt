@@ -44,11 +44,11 @@ import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class RoomDirectoryViewModel @AssistedInject constructor(
-        @Assisted initialState: PublicRoomsViewState,
-        vectorPreferences: VectorPreferences,
-        private val session: Session,
-        private val analyticsTracker: AnalyticsTracker,
-        private val explicitTermFilter: ExplicitTermFilter
+    @Assisted initialState: PublicRoomsViewState,
+    vectorPreferences: VectorPreferences,
+    private val session: Session,
+    private val analyticsTracker: AnalyticsTracker,
+    private val explicitTermFilter: ExplicitTermFilter
 ) : VectorViewModel<PublicRoomsViewState, RoomDirectoryAction, RoomDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
@@ -77,32 +77,32 @@ class RoomDirectoryViewModel @AssistedInject constructor(
             memberships = listOf(Membership.JOIN)
         }
         session
-                .flow()
-                .liveRoomSummaries(queryParams)
-                .map { roomSummaries ->
-                    roomSummaries
-                            .map { it.roomId }
-                            .toSet()
-                }
-                .setOnEach {
-                    copy(joinedRoomsIds = it)
-                }
+            .flow()
+            .liveRoomSummaries(queryParams)
+            .map { roomSummaries ->
+                roomSummaries
+                    .map { it.roomId }
+                    .toSet()
+            }
+            .setOnEach {
+                copy(joinedRoomsIds = it)
+            }
     }
 
     private fun observeMembershipChanges() {
         session.flow()
-                .liveRoomChangeMembershipState()
-                .setOnEach {
-                    copy(changeMembershipStates = it)
-                }
+            .liveRoomChangeMembershipState()
+            .setOnEach {
+                copy(changeMembershipStates = it)
+            }
     }
 
     override fun handle(action: RoomDirectoryAction) {
         when (action) {
             is RoomDirectoryAction.SetRoomDirectoryData -> setRoomDirectoryData(action)
-            is RoomDirectoryAction.FilterWith           -> filterWith(action)
-            RoomDirectoryAction.LoadMore                -> loadMore()
-            is RoomDirectoryAction.JoinRoom             -> joinRoom(action)
+            is RoomDirectoryAction.FilterWith -> filterWith(action)
+            RoomDirectoryAction.LoadMore -> loadMore()
+            is RoomDirectoryAction.JoinRoom -> joinRoom(action)
         }
     }
 
@@ -132,10 +132,10 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    publicRooms = emptyList(),
-                    asyncPublicRoomsRequest = Loading(),
-                    hasMore = false,
-                    currentFilter = newFilter
+                publicRooms = emptyList(),
+                asyncPublicRoomsRequest = Loading(),
+                hasMore = false,
+                currentFilter = newFilter
             )
         }
     }
@@ -144,7 +144,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
         if (currentJob == null) {
             setState {
                 copy(
-                        asyncPublicRoomsRequest = Loading()
+                    asyncPublicRoomsRequest = Loading()
                 )
             }
             load(state.currentFilter, state.roomDirectoryData)
@@ -155,9 +155,9 @@ class RoomDirectoryViewModel @AssistedInject constructor(
         if (!showAllRooms && !explicitTermFilter.canSearchFor(filter)) {
             setState {
                 copy(
-                        asyncPublicRoomsRequest = Success(Unit),
-                        publicRooms = emptyList(),
-                        hasMore = false
+                    asyncPublicRoomsRequest = Success(Unit),
+                    publicRooms = emptyList(),
+                    hasMore = false
                 )
             }
             return
@@ -165,14 +165,15 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
         currentJob = viewModelScope.launch {
             val data = try {
-                session.getPublicRooms(roomDirectoryData.homeServer,
-                        PublicRoomsParams(
-                                limit = PUBLIC_ROOMS_LIMIT,
-                                filter = PublicRoomsFilter(searchTerm = filter),
-                                includeAllNetworks = roomDirectoryData.includeAllNetworks,
-                                since = since,
-                                thirdPartyInstanceId = roomDirectoryData.thirdPartyInstanceId
-                        )
+                session.getPublicRooms(
+                    roomDirectoryData.homeServer,
+                    PublicRoomsParams(
+                        limit = PUBLIC_ROOMS_LIMIT,
+                        filter = PublicRoomsFilter(searchTerm = filter),
+                        includeAllNetworks = roomDirectoryData.includeAllNetworks,
+                        since = since,
+                        thirdPartyInstanceId = roomDirectoryData.thirdPartyInstanceId
+                    )
                 )
             } catch (failure: Throwable) {
                 if (failure is CancellationException) {
@@ -184,7 +185,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
                 setState {
                     copy(
-                            asyncPublicRoomsRequest = Fail(failure)
+                        asyncPublicRoomsRequest = Fail(failure)
                     )
                 }
                 null
@@ -198,18 +199,18 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
             // Filter
             val newPublicRooms = data.chunk.orEmpty()
-                    .filter {
-                        showAllRooms || explicitTermFilter.isValid("${it.name.orEmpty()} ${it.topic.orEmpty()}")
-                    }
+                .filter {
+                    showAllRooms || explicitTermFilter.isValid("${it.name.orEmpty()} ${it.topic.orEmpty()}")
+                }
 
             setState {
                 copy(
-                        asyncPublicRoomsRequest = Success(Unit),
-                        // It's ok to append at the end of the list, so I use publicRooms.size()
-                        publicRooms = publicRooms.appendAt(newPublicRooms, publicRooms.size)
-                                // Rageshake #8206 tells that we can have several times the same room
-                                .distinctBy { it.roomId },
-                        hasMore = since != null
+                    asyncPublicRoomsRequest = Success(Unit),
+                    // It's ok to append at the end of the list, so I use publicRooms.size()
+                    publicRooms = publicRooms.appendAt(newPublicRooms, publicRooms.size)
+                        // Rageshake #8206 tells that we can have several times the same room
+                        .distinctBy { it.roomId },
+                    hasMore = since != null
                 )
             }
         }

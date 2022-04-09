@@ -33,10 +33,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private data class DecryptionFailure(
-        val timeStamp: Long,
-        val roomId: String,
-        val failedEventId: String,
-        val error: MXCryptoError.ErrorType
+    val timeStamp: Long,
+    val roomId: String,
+    val failedEventId: String,
+    val error: MXCryptoError.ErrorType
 )
 
 private const val GRACE_PERIOD_MILLIS = 4_000
@@ -49,8 +49,8 @@ private const val CHECK_INTERVAL = 2_000L
  */
 @Singleton
 class DecryptionFailureTracker @Inject constructor(
-        private val analyticsTracker: AnalyticsTracker,
-        private val clock: Clock
+    private val analyticsTracker: AnalyticsTracker,
+    private val clock: Clock
 ) {
 
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
@@ -63,9 +63,9 @@ class DecryptionFailureTracker @Inject constructor(
 
     fun start() {
         tickerFlow(scope, CHECK_INTERVAL)
-                .onEach {
-                    checkFailures()
-                }.launchIn(scope)
+            .onEach {
+                checkFailures()
+            }.launchIn(scope)
     }
 
     fun stop() {
@@ -124,32 +124,32 @@ class DecryptionFailureTracker @Inject constructor(
             }
 
             aggregatedErrors = toReport
-                    .groupBy { it.error.toAnalyticsErrorName() }
-                    .mapValues {
-                        it.value.map { it.failedEventId }
-                    }
+                .groupBy { it.error.toAnalyticsErrorName() }
+                .mapValues {
+                    it.value.map { it.failedEventId }
+                }
         }
 
         aggregatedErrors.forEach { aggregation ->
             // there is now way to send the total/sum in posthog, so iterating
             aggregation.value
-                    // for now we ignore events already reported even if displayed again?
-                    .filter { alreadyReported.contains(it).not() }
-                    .forEach { failedEventId ->
-                        analyticsTracker.capture(Error(failedEventId, Error.Domain.E2EE, aggregation.key))
-                        alreadyReported.add(failedEventId)
-                    }
+                // for now we ignore events already reported even if displayed again?
+                .filter { alreadyReported.contains(it).not() }
+                .forEach { failedEventId ->
+                    analyticsTracker.capture(Error(failedEventId, Error.Domain.E2EE, aggregation.key))
+                    alreadyReported.add(failedEventId)
+                }
         }
     }
 
     private fun MXCryptoError.ErrorType.toAnalyticsErrorName(): Error.Name {
         return when (this) {
             MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID -> Error.Name.OlmKeysNotSentError
-            MXCryptoError.ErrorType.OLM                        -> {
+            MXCryptoError.ErrorType.OLM -> {
                 Error.Name.OlmUnspecifiedError
             }
-            MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX      -> Error.Name.OlmIndexError
-            else                                               -> Error.Name.UnknownError
+            MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX -> Error.Name.OlmIndexError
+            else -> Error.Name.UnknownError
         }
     }
 }

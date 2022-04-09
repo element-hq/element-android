@@ -21,16 +21,16 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class FieldType(
-        /**
-         * Required. A regular expression for validation of a field's value. This may be relatively coarse to verify the value as the application
-         * service providing this protocol may apply additional
-         */
-        @Json(name = "regexp")
-        val regexp: String? = null,
+    /**
+     * Required. A regular expression for validation of a field's value. This may be relatively coarse to verify the value as the application
+     * service providing this protocol may apply additional
+     */
+    @Json(name = "regexp")
+    val regexp: String? = null,
 
-        /**
-         * Required. An placeholder serving as a valid example of the field value.
-         */
-        @Json(name = "placeholder")
-        val placeholder: String? = null
+    /**
+     * Required. An placeholder serving as a valid example of the field value.
+     */
+    @Json(name = "placeholder")
+    val placeholder: String? = null
 )

@@ -43,13 +43,13 @@ internal class SendGossipRequestWorker(context: Context, params: WorkerParameter
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val sessionId: String,
-            val keyShareRequest: OutgoingRoomKeyRequest? = null,
-            val secretShareRequest: OutgoingSecretRequest? = null,
-            // The txnId for the sendToDevice request. Nullable for compatibility reasons, but MUST always be provided
-            // to use the same value if this worker is retried.
-            val txnId: String? = null,
-            override val lastFailureMessage: String? = null
+        override val sessionId: String,
+        val keyShareRequest: OutgoingRoomKeyRequest? = null,
+        val secretShareRequest: OutgoingSecretRequest? = null,
+        // The txnId for the sendToDevice request. Nullable for compatibility reasons, but MUST always be provided
+        // to use the same value if this worker is retried.
+        val txnId: String? = null,
+        override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var sendToDeviceTask: SendToDeviceTask
@@ -69,19 +69,19 @@ internal class SendGossipRequestWorker(context: Context, params: WorkerParameter
         val eventType: String
         val requestId: String
         when {
-            params.keyShareRequest != null    -> {
+            params.keyShareRequest != null -> {
                 eventType = EventType.ROOM_KEY_REQUEST
                 requestId = params.keyShareRequest.requestId
                 val toDeviceContent = RoomKeyShareRequest(
-                        requestingDeviceId = credentials.deviceId,
-                        requestId = params.keyShareRequest.requestId,
-                        action = GossipingToDeviceObject.ACTION_SHARE_REQUEST,
-                        body = params.keyShareRequest.requestBody
+                    requestingDeviceId = credentials.deviceId,
+                    requestId = params.keyShareRequest.requestId,
+                    action = GossipingToDeviceObject.ACTION_SHARE_REQUEST,
+                    body = params.keyShareRequest.requestBody
                 )
                 cryptoStore.saveGossipingEvent(Event(
-                        type = eventType,
-                        content = toDeviceContent.toContent(),
-                        senderId = credentials.userId
+                    type = eventType,
+                    content = toDeviceContent.toContent(),
+                    senderId = credentials.userId
                 ).also {
                     it.ageLocalTs = System.currentTimeMillis()
                 })
@@ -96,16 +96,16 @@ internal class SendGossipRequestWorker(context: Context, params: WorkerParameter
                 eventType = EventType.REQUEST_SECRET
                 requestId = params.secretShareRequest.requestId
                 val toDeviceContent = SecretShareRequest(
-                        requestingDeviceId = credentials.deviceId,
-                        requestId = params.secretShareRequest.requestId,
-                        action = GossipingToDeviceObject.ACTION_SHARE_REQUEST,
-                        secretName = params.secretShareRequest.secretName
+                    requestingDeviceId = credentials.deviceId,
+                    requestId = params.secretShareRequest.requestId,
+                    action = GossipingToDeviceObject.ACTION_SHARE_REQUEST,
+                    secretName = params.secretShareRequest.secretName
                 )
 
                 cryptoStore.saveGossipingEvent(Event(
-                        type = eventType,
-                        content = toDeviceContent.toContent(),
-                        senderId = credentials.userId
+                    type = eventType,
+                    content = toDeviceContent.toContent(),
+                    senderId = credentials.userId
                 ).also {
                     it.ageLocalTs = System.currentTimeMillis()
                 })
@@ -116,7 +116,7 @@ internal class SendGossipRequestWorker(context: Context, params: WorkerParameter
                     }
                 }
             }
-            else                              -> {
+            else -> {
                 return buildErrorResult(params, "Unknown empty gossiping request").also {
                     Timber.e("Unknown empty gossiping request: $params")
                 }
@@ -125,11 +125,11 @@ internal class SendGossipRequestWorker(context: Context, params: WorkerParameter
         try {
             cryptoStore.updateOutgoingGossipingRequestState(requestId, OutgoingGossipingRequestState.SENDING)
             sendToDeviceTask.execute(
-                    SendToDeviceTask.Params(
-                            eventType = eventType,
-                            contentMap = contentMap,
-                            transactionId = txnId
-                    )
+                SendToDeviceTask.Params(
+                    eventType = eventType,
+                    contentMap = contentMap,
+                    transactionId = txnId
+                )
             )
             cryptoStore.updateOutgoingGossipingRequestState(requestId, OutgoingGossipingRequestState.SENT)
             return Result.success()

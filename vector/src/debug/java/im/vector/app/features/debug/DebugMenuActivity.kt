@@ -145,80 +145,80 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
         // Create channel first
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel =
-                    NotificationChannel(
-                            "CHAN",
-                            "Channel name",
-                            NotificationManager.IMPORTANCE_DEFAULT
-                    )
+                NotificationChannel(
+                    "CHAN",
+                    "Channel name",
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
 
             channel.description = "Channel description"
             notificationManager.createNotificationChannel(channel)
 
             val channel2 =
-                    NotificationChannel(
-                            "CHAN2",
-                            "Channel name 2",
-                            NotificationManager.IMPORTANCE_DEFAULT
-                    )
+                NotificationChannel(
+                    "CHAN2",
+                    "Channel name 2",
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
 
             channel2.description = "Channel description 2"
             notificationManager.createNotificationChannel(channel2)
         }
 
         val builder = NotificationCompat.Builder(this, "CHAN")
-                .setWhen(System.currentTimeMillis())
-                .setContentTitle("Title")
-                .setContentText("Content")
-                // No effect because it's a group summary notif
-                .setNumber(33)
-                .setSmallIcon(R.drawable.ic_status_bar)
-                // This provocate the badge issue: no badge for group notification
-                .setGroup("GroupKey")
-                .setGroupSummary(true)
+            .setWhen(System.currentTimeMillis())
+            .setContentTitle("Title")
+            .setContentText("Content")
+            // No effect because it's a group summary notif
+            .setNumber(33)
+            .setSmallIcon(R.drawable.ic_status_bar)
+            // This provocate the badge issue: no badge for group notification
+            .setGroup("GroupKey")
+            .setGroupSummary(true)
 
         val messagingStyle1 = NotificationCompat.MessagingStyle(
-                Person.Builder()
-                        .setName("User name")
-                        .build()
+            Person.Builder()
+                .setName("User name")
+                .build()
         )
-                .addMessage("Message 1 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
-                .addMessage("Message 1 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
+            .addMessage("Message 1 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
+            .addMessage("Message 1 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
 
         val messagingStyle2 = NotificationCompat.MessagingStyle(
-                Person.Builder()
-                        .setName("User name 2")
-                        .build()
+            Person.Builder()
+                .setName("User name 2")
+                .build()
         )
-                .addMessage("Message 2 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
-                .addMessage("Message 2 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
+            .addMessage("Message 2 - 1", System.currentTimeMillis(), Person.Builder().setName("user 1-1").build())
+            .addMessage("Message 2 - 2", System.currentTimeMillis(), Person.Builder().setName("user 1-2").build())
 
         notificationManager.notify(10, builder.build())
 
         notificationManager.notify(
-                11,
-                NotificationCompat.Builder(this, "CHAN")
-                        .setChannelId("CHAN")
-                        .setWhen(System.currentTimeMillis())
-                        .setContentTitle("Title 1")
-                        .setContentText("Content 1")
-                        // For shortcut on long press on launcher icon
-                        .setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
-                        .setStyle(messagingStyle1)
-                        .setSmallIcon(R.drawable.ic_status_bar)
-                        .setGroup("GroupKey")
-                        .build()
+            11,
+            NotificationCompat.Builder(this, "CHAN")
+                .setChannelId("CHAN")
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle("Title 1")
+                .setContentText("Content 1")
+                // For shortcut on long press on launcher icon
+                .setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
+                .setStyle(messagingStyle1)
+                .setSmallIcon(R.drawable.ic_status_bar)
+                .setGroup("GroupKey")
+                .build()
         )
 
         notificationManager.notify(
-                12,
-                NotificationCompat.Builder(this, "CHAN2")
-                        .setWhen(System.currentTimeMillis())
-                        .setContentTitle("Title 2")
-                        .setContentText("Content 2")
-                        .setStyle(messagingStyle2)
-                        .setSmallIcon(R.drawable.ic_status_bar)
-                        .setGroup("GroupKey")
-                        .build()
+            12,
+            NotificationCompat.Builder(this, "CHAN2")
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle("Title 2")
+                .setContentText("Content 2")
+                .setStyle(messagingStyle2)
+                .setSmallIcon(R.drawable.ic_status_bar)
+                .setGroup("GroupKey")
+                .build()
         )
     }
 
@@ -244,8 +244,10 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     private val qrStartForActivityResult = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            toast("QrCode: " + QrCodeScannerActivity.getResultText(activityResult.data) +
-                    " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(activityResult.data))
+            toast(
+                "QrCode: " + QrCodeScannerActivity.getResultText(activityResult.data) +
+                        " is QRCode: " + QrCodeScannerActivity.getResultIsQrCode(activityResult.data)
+            )
 
             // Also update the current QR Code (reverse operation)
             // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")

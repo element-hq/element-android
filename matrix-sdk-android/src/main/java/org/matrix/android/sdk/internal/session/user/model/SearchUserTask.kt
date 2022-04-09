@@ -26,15 +26,15 @@ import javax.inject.Inject
 internal interface SearchUserTask : Task<SearchUserTask.Params, List<User>> {
 
     data class Params(
-            val limit: Int,
-            val search: String,
-            val excludedUserIds: Set<String>
+        val limit: Int,
+        val search: String,
+        val excludedUserIds: Set<String>
     )
 }
 
 internal class DefaultSearchUserTask @Inject constructor(
-        private val searchUserAPI: SearchUserAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val searchUserAPI: SearchUserAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : SearchUserTask {
 
     override suspend fun execute(params: SearchUserTask.Params): List<User> {

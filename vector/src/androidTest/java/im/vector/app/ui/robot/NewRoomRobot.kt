@@ -23,7 +23,7 @@ import im.vector.app.R
 import im.vector.app.espresso.tools.waitUntilViewVisible
 
 class NewRoomRobot(
-        var createdRoom: Boolean = false
+    var createdRoom: Boolean = false
 ) {
 
     fun createNewRoom(block: CreateNewRoomRobot.() -> Unit) {

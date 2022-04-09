@@ -25,9 +25,9 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class InteractiveAuthenticationFlow(
 
-        @Json(name = "type")
-        val type: String? = null,
+    @Json(name = "type")
+    val type: String? = null,
 
-        @Json(name = "stages")
-        val stages: List<String>? = null
+    @Json(name = "stages")
+    val stages: List<String>? = null
 )

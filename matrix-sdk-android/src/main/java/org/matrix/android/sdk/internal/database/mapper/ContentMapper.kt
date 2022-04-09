@@ -29,9 +29,9 @@ internal object ContentMapper {
         // and we lost typing information doing so.
         // We don't want this check to be done on all adapters, so we create a new moshi just for that.
         MoshiProvider.providesMoshi()
-                .newBuilder()
-                .add(CheckNumberType.JSON_ADAPTER_FACTORY)
-                .build()
+            .newBuilder()
+            .add(CheckNumberType.JSON_ADAPTER_FACTORY)
+            .build()
     }
 
     fun map(content: String?, castJsonNumbers: Boolean = false): Content? {

@@ -70,19 +70,19 @@ internal class UIEchoManager(private val listener: Listener) {
         when (timelineEvent.root.getClearType()) {
             EventType.REDACTION -> {
             }
-            EventType.REACTION  -> {
+            EventType.REACTION -> {
                 val content: ReactionContent? = timelineEvent.root.content?.toModel<ReactionContent>()
                 if (RelationType.ANNOTATION == content?.relatesTo?.type) {
                     val reaction = content.relatesTo.key
                     val relatedEventID = content.relatesTo.eventId
                     inMemoryReactions.getOrPut(relatedEventID) { mutableListOf() }
-                            .add(
-                                    ReactionUiEchoData(
-                                            localEchoId = timelineEvent.eventId,
-                                            reactedOnEventId = relatedEventID,
-                                            reaction = reaction
-                                    )
+                        .add(
+                            ReactionUiEchoData(
+                                localEchoId = timelineEvent.eventId,
+                                reactedOnEventId = relatedEventID,
+                                reaction = reaction
                             )
+                        )
                     listener.rebuildEvent(relatedEventID) {
                         decorateEventWithReactionUiEcho(it)
                     }
@@ -99,7 +99,7 @@ internal class UIEchoManager(private val listener: Listener) {
         val contents = inMemoryReactions[relatedEventID] ?: return timelineEvent
 
         var existingAnnotationSummary = timelineEvent.annotations ?: EventAnnotationsSummary(
-                relatedEventID
+            relatedEventID
         )
         val updateReactions = existingAnnotationSummary.reactionsSummary.toMutableList()
 
@@ -108,12 +108,12 @@ internal class UIEchoManager(private val listener: Listener) {
             if (indexOfExistingReaction == -1) {
                 // just add the new key
                 ReactionAggregatedSummary(
-                        key = uiEchoReaction.reaction,
-                        count = 1,
-                        addedByMe = true,
-                        firstTimestamp = System.currentTimeMillis(),
-                        sourceEvents = emptyList(),
-                        localEchoEvents = listOf(uiEchoReaction.localEchoId)
+                    key = uiEchoReaction.reaction,
+                    count = 1,
+                    addedByMe = true,
+                    firstTimestamp = System.currentTimeMillis(),
+                    sourceEvents = emptyList(),
+                    localEchoEvents = listOf(uiEchoReaction.localEchoId)
                 ).let { updateReactions.add(it) }
             } else {
                 // update Existing Key
@@ -122,12 +122,12 @@ internal class UIEchoManager(private val listener: Listener) {
                     updateReactions.remove(existing)
                     // only update if echo is not yet there
                     ReactionAggregatedSummary(
-                            key = existing.key,
-                            count = existing.count + 1,
-                            addedByMe = true,
-                            firstTimestamp = existing.firstTimestamp,
-                            sourceEvents = existing.sourceEvents,
-                            localEchoEvents = existing.localEchoEvents + uiEchoReaction.localEchoId
+                        key = existing.key,
+                        count = existing.count + 1,
+                        addedByMe = true,
+                        firstTimestamp = existing.firstTimestamp,
+                        sourceEvents = existing.sourceEvents,
+                        localEchoEvents = existing.localEchoEvents + uiEchoReaction.localEchoId
 
                     ).let { updateReactions.add(indexOfExistingReaction, it) }
                 }
@@ -135,10 +135,10 @@ internal class UIEchoManager(private val listener: Listener) {
         }
 
         existingAnnotationSummary = existingAnnotationSummary.copy(
-                reactionsSummary = updateReactions
+            reactionsSummary = updateReactions
         )
         return timelineEvent.copy(
-                annotations = existingAnnotationSummary
+            annotations = existingAnnotationSummary
         )
     }
 
@@ -147,8 +147,8 @@ internal class UIEchoManager(private val listener: Listener) {
         val inMemoryState = inMemorySendingStates[timelineEvent.eventId] ?: return timelineEvent
         // Timber.v("## ${System.currentTimeMillis()} Send event refresh echo with live state $inMemoryState from state ${element.root.sendState}")
         return timelineEvent.copy(
-                root = timelineEvent.root.copyAll()
-                        .also { it.sendState = inMemoryState }
+            root = timelineEvent.root.copyAll()
+                .also { it.sendState = inMemoryState }
         )
     }
 

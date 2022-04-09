@@ -23,7 +23,7 @@ import javax.inject.Inject
  * Injectable class to encapsulate ThemeUtils call...
  */
 class ThemeProvider @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
     fun isLightTheme() = ThemeUtils.isLightTheme(context)
 }

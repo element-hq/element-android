@@ -91,11 +91,12 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         val firstMessage = "First messages from Alice"
         // Alice sends 30 messages
         val firstMessageFromAliceId = commonTestHelper.sendTextMessage(
-                roomFromAlicePOV,
-                firstMessage,
-                30)
-                .last()
-                .eventId
+            roomFromAlicePOV,
+            firstMessage,
+            30
+        )
+            .last()
+            .eventId
 
         // Bob start to sync
         bobSession.startSync(true)
@@ -127,9 +128,10 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         val secondMessage = "Second messages from Alice"
         // Alice sends again 30 messages
         commonTestHelper.sendTextMessage(
-                roomFromAlicePOV,
-                secondMessage,
-                30)
+            roomFromAlicePOV,
+            secondMessage,
+            30
+        )
 
         // Bob start to sync
         bobSession.startSync(true)

@@ -25,21 +25,21 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class CallRejectContent(
-        /**
-         * Required. The ID of the call this event relates to.
-         */
-        @Json(name = "call_id") override val callId: String,
-        /**
-         * Required. ID to let user identify remote echo of their own events
-         */
-        @Json(name = "party_id") override val partyId: String? = null,
-        /**
-         * Required. The version of the VoIP specification this message adheres to.
-         */
-        @Json(name = "version") override val version: String?,
+    /**
+     * Required. The ID of the call this event relates to.
+     */
+    @Json(name = "call_id") override val callId: String,
+    /**
+     * Required. ID to let user identify remote echo of their own events
+     */
+    @Json(name = "party_id") override val partyId: String? = null,
+    /**
+     * Required. The version of the VoIP specification this message adheres to.
+     */
+    @Json(name = "version") override val version: String?,
 
-        /**
-         * Optional error reason for the reject.
-         */
-        @Json(name = "reason") val reason: EndCallReason? = null
+    /**
+     * Optional error reason for the reject.
+     */
+    @Json(name = "reason") val reason: EndCallReason? = null
 ) : CallSignalingContent

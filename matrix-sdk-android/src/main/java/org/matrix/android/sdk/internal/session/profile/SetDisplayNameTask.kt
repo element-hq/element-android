@@ -23,18 +23,19 @@ import javax.inject.Inject
 
 internal abstract class SetDisplayNameTask : Task<SetDisplayNameTask.Params, Unit> {
     data class Params(
-            val userId: String,
-            val newDisplayName: String
+        val userId: String,
+        val newDisplayName: String
     )
 }
 
 internal class DefaultSetDisplayNameTask @Inject constructor(
-        private val profileAPI: ProfileAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SetDisplayNameTask() {
+    private val profileAPI: ProfileAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
+) : SetDisplayNameTask() {
 
     override suspend fun execute(params: Params) {
         val body = SetDisplayNameBody(
-                displayName = params.newDisplayName
+            displayName = params.newDisplayName
         )
         return executeRequest(globalErrorReceiver) {
             profileAPI.setDisplayName(params.userId, body)

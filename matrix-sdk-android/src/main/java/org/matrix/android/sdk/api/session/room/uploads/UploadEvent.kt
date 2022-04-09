@@ -25,8 +25,8 @@ import org.matrix.android.sdk.api.session.room.sender.SenderInfo
  * Similar to [org.matrix.android.sdk.api.session.room.timeline.TimelineEvent], contains an Event with extra useful data
  */
 data class UploadEvent(
-        val root: Event,
-        val eventId: String,
-        val contentWithAttachmentContent: MessageWithAttachmentContent,
-        val senderInfo: SenderInfo
+    val root: Event,
+    val eventId: String,
+    val contentWithAttachmentContent: MessageWithAttachmentContent,
+    val senderInfo: SenderInfo
 )

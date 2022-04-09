@@ -43,15 +43,15 @@ internal class SendGossipWorker(context: Context, params: WorkerParameters, sess
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val sessionId: String,
-            val secretValue: String,
-            val requestUserId: String?,
-            val requestDeviceId: String?,
-            val requestId: String?,
-            // The txnId for the sendToDevice request. Nullable for compatibility reasons, but MUST always be provided
-            // to use the same value if this worker is retried.
-            val txnId: String? = null,
-            override val lastFailureMessage: String? = null
+        override val sessionId: String,
+        val secretValue: String,
+        val requestUserId: String?,
+        val requestDeviceId: String?,
+        val requestId: String?,
+        // The txnId for the sendToDevice request. Nullable for compatibility reasons, but MUST always be provided
+        // to use the same value if this worker is retried.
+        val txnId: String? = null,
+        override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var sendToDeviceTask: SendToDeviceTask
@@ -72,22 +72,22 @@ internal class SendGossipWorker(context: Context, params: WorkerParameters, sess
         val eventType: String = EventType.SEND_SECRET
 
         val toDeviceContent = SecretSendEventContent(
-                requestId = params.requestId ?: "",
-                secretValue = params.secretValue
+            requestId = params.requestId ?: "",
+            secretValue = params.secretValue
         )
 
         val requestingUserId = params.requestUserId ?: ""
         val requestingDeviceId = params.requestDeviceId ?: ""
         val deviceInfo = cryptoStore.getUserDevice(requestingUserId, requestingDeviceId)
-                ?: return buildErrorResult(params, "Unknown deviceInfo, cannot send message").also {
-                    cryptoStore.updateGossipingRequestState(
-                            requestUserId = params.requestUserId,
-                            requestDeviceId = params.requestDeviceId,
-                            requestId = params.requestId,
-                            state = GossipingRequestState.FAILED_TO_ACCEPTED
-                    )
-                    Timber.e("Unknown deviceInfo, cannot send message, sessionId: ${params.requestDeviceId}")
-                }
+            ?: return buildErrorResult(params, "Unknown deviceInfo, cannot send message").also {
+                cryptoStore.updateGossipingRequestState(
+                    requestUserId = params.requestUserId,
+                    requestDeviceId = params.requestDeviceId,
+                    requestId = params.requestId,
+                    state = GossipingRequestState.FAILED_TO_ACCEPTED
+                )
+                Timber.e("Unknown deviceInfo, cannot send message, sessionId: ${params.requestDeviceId}")
+            }
 
         val sendToDeviceMap = MXUsersDevicesMap<Any>()
 
@@ -99,18 +99,18 @@ internal class SendGossipWorker(context: Context, params: WorkerParameters, sess
             // were no one-time keys.
             return buildErrorResult(params, "no session with this device").also {
                 cryptoStore.updateGossipingRequestState(
-                        requestUserId = params.requestUserId,
-                        requestDeviceId = params.requestDeviceId,
-                        requestId = params.requestId,
-                        state = GossipingRequestState.FAILED_TO_ACCEPTED
+                    requestUserId = params.requestUserId,
+                    requestDeviceId = params.requestDeviceId,
+                    requestId = params.requestId,
+                    state = GossipingRequestState.FAILED_TO_ACCEPTED
                 )
                 Timber.e("no session with this device $requestingDeviceId, probably because there were no one-time keys.")
             }
         }
 
         val payloadJson = mapOf(
-                "type" to EventType.SEND_SECRET,
-                "content" to toDeviceContent.toContent()
+            "type" to EventType.SEND_SECRET,
+            "content" to toDeviceContent.toContent()
         )
 
         try {
@@ -121,26 +121,26 @@ internal class SendGossipWorker(context: Context, params: WorkerParameters, sess
         }
 
         cryptoStore.saveGossipingEvent(Event(
-                type = eventType,
-                content = toDeviceContent.toContent(),
-                senderId = credentials.userId
+            type = eventType,
+            content = toDeviceContent.toContent(),
+            senderId = credentials.userId
         ).also {
             it.ageLocalTs = System.currentTimeMillis()
         })
 
         try {
             sendToDeviceTask.execute(
-                    SendToDeviceTask.Params(
-                            eventType = EventType.ENCRYPTED,
-                            contentMap = sendToDeviceMap,
-                            transactionId = txnId
-                    )
+                SendToDeviceTask.Params(
+                    eventType = EventType.ENCRYPTED,
+                    contentMap = sendToDeviceMap,
+                    transactionId = txnId
+                )
             )
             cryptoStore.updateGossipingRequestState(
-                    requestUserId = params.requestUserId,
-                    requestDeviceId = params.requestDeviceId,
-                    requestId = params.requestId,
-                    state = GossipingRequestState.ACCEPTED
+                requestUserId = params.requestUserId,
+                requestDeviceId = params.requestDeviceId,
+                requestId = params.requestId,
+                state = GossipingRequestState.ACCEPTED
             )
             return Result.success()
         } catch (throwable: Throwable) {
@@ -148,10 +148,10 @@ internal class SendGossipWorker(context: Context, params: WorkerParameters, sess
                 Result.retry()
             } else {
                 cryptoStore.updateGossipingRequestState(
-                        requestUserId = params.requestUserId,
-                        requestDeviceId = params.requestDeviceId,
-                        requestId = params.requestId,
-                        state = GossipingRequestState.FAILED_TO_ACCEPTED
+                    requestUserId = params.requestUserId,
+                    requestDeviceId = params.requestDeviceId,
+                    requestId = params.requestId,
+                    state = GossipingRequestState.FAILED_TO_ACCEPTED
                 )
                 buildErrorResult(params, throwable.localizedMessage ?: "error")
             }

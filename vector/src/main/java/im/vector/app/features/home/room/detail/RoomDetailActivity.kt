@@ -50,8 +50,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RoomDetailActivity :
-        VectorBaseActivity<ActivityRoomDetailBinding>(),
-        MatrixToBottomSheet.InteractionListener {
+    VectorBaseActivity<ActivityRoomDetailBinding>(),
+    MatrixToBottomSheet.InteractionListener {
 
     override fun getBinding(): ActivityRoomDetailBinding {
         return ActivityRoomDetailBinding.inflate(layoutInflater)
@@ -78,7 +78,7 @@ class RoomDetailActivity :
     private val playbackActivityListener = VoiceMessagePlaybackTracker.ActivityListener { isPlayingOrRecording ->
         if (lastKnownPlayingOrRecordingState == isPlayingOrRecording) return@ActivityListener
         when (isPlayingOrRecording) {
-            true  -> keepScreenOn()
+            true -> keepScreenOn()
             false -> endKeepScreenOn()
         }
         lastKnownPlayingOrRecordingState = isPlayingOrRecording
@@ -114,13 +114,13 @@ class RoomDetailActivity :
         sharedActionViewModel = viewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
 
         sharedActionViewModel
-                .stream()
-                .onEach { sharedAction ->
-                    when (sharedAction) {
-                        is RoomDetailSharedAction.SwitchToRoom -> switchToRoom(sharedAction)
-                    }
+            .stream()
+            .onEach { sharedAction ->
+                when (sharedAction) {
+                    is RoomDetailSharedAction.SwitchToRoom -> switchToRoom(sharedAction)
                 }
-                .launchIn(lifecycleScope)
+            }
+            .launchIn(lifecycleScope)
 
         requireActiveMembershipViewModel.observeViewEvents {
             when (it) {
@@ -173,7 +173,7 @@ class RoomDetailActivity :
 
     private fun scrollBreadcrumbsToTop() {
         supportFragmentManager.fragments.filterIsInstance<BreadcrumbsFragment>()
-                .forEach { it.scrollToTop() }
+            .forEach { it.scrollToTop() }
     }
 
     override fun onBackPressed() {

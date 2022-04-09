@@ -40,15 +40,15 @@ class AssetReader @Inject constructor(private val context: Context) {
         return cache.getOrPut(assetFilename, {
             return try {
                 context.assets.open(assetFilename)
-                        .use { asset ->
-                            buildString {
-                                var ch = asset.read()
-                                while (ch != -1) {
-                                    append(ch.toChar())
-                                    ch = asset.read()
-                                }
+                    .use { asset ->
+                        buildString {
+                            var ch = asset.read()
+                            while (ch != -1) {
+                                append(ch.toChar())
+                                ch = asset.read()
                             }
                         }
+                    }
             } catch (e: Exception) {
                 Timber.e(e, "## readAssetFile() failed")
                 null

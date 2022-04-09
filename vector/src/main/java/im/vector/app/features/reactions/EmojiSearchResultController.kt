@@ -26,8 +26,8 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class EmojiSearchResultController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val fontProvider: EmojiCompatFontProvider
+    private val stringProvider: StringProvider,
+    private val fontProvider: EmojiCompatFontProvider
 ) : TypedEpoxyController<EmojiSearchResultViewState>() {
 
     var emojiTypeface: Typeface? = fontProvider.typeface

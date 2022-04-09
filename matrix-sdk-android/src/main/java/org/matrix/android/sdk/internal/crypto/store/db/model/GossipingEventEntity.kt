@@ -33,12 +33,14 @@ import timber.log.Timber
  * (room key request, or sss secret sharing, as well as cancellations)
  *
  */
-internal open class GossipingEventEntity(@Index var type: String? = "",
-                                         var content: String? = null,
-                                         @Index var sender: String? = null,
-                                         var decryptionResultJson: String? = null,
-                                         var decryptionErrorCode: String? = null,
-                                         var ageLocalTs: Long? = null) : RealmObject() {
+internal open class GossipingEventEntity(
+    @Index var type: String? = "",
+    var content: String? = null,
+    @Index var sender: String? = null,
+    var decryptionResultJson: String? = null,
+    var decryptionErrorCode: String? = null,
+    var ageLocalTs: Long? = null
+) : RealmObject() {
 
     private var sendStateStr: String = SendState.UNKNOWN.name
 
@@ -54,10 +56,10 @@ internal open class GossipingEventEntity(@Index var type: String? = "",
 
     fun setDecryptionResult(result: MXEventDecryptionResult) {
         val decryptionResult = OlmDecryptionResult(
-                payload = result.clearEvent,
-                senderKey = result.senderCurve25519Key,
-                keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+            payload = result.clearEvent,
+            senderKey = result.senderCurve25519Key,
+            keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
         )
         val adapter = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java)
         decryptionResultJson = adapter.toJson(decryptionResult)
@@ -66,9 +68,9 @@ internal open class GossipingEventEntity(@Index var type: String? = "",
 
     fun toModel(): Event {
         return Event(
-                type = this.type ?: "",
-                content = ContentMapper.map(this.content),
-                senderId = this.sender
+            type = this.type ?: "",
+            content = ContentMapper.map(this.content),
+            senderId = this.sender
         ).also {
             it.ageLocalTs = this.ageLocalTs
             it.sendState = this.sendState

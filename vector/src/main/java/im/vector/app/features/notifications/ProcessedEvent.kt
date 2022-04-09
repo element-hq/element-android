@@ -17,8 +17,8 @@
 package im.vector.app.features.notifications
 
 data class ProcessedEvent<T>(
-        val type: Type,
-        val event: T
+    val type: Type,
+    val event: T
 ) {
 
     enum class Type {

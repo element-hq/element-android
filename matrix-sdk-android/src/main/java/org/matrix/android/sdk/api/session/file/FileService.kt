@@ -44,65 +44,73 @@ interface FileService {
      * Download a file if necessary and ensure that if the file is encrypted, the file is decrypted.
      * Result will be a decrypted file, stored in the cache folder. url parameter will be used to create unique filename to avoid name collision.
      */
-    suspend fun downloadFile(fileName: String,
-                     mimeType: String?,
-                     url: String?,
-                     elementToDecrypt: ElementToDecrypt?): File
+    suspend fun downloadFile(
+        fileName: String,
+        mimeType: String?,
+        url: String?,
+        elementToDecrypt: ElementToDecrypt?
+    ): File
 
     suspend fun downloadFile(messageContent: MessageWithAttachmentContent): File =
-            downloadFile(
-                    fileName = messageContent.getFileName(),
-                    mimeType = messageContent.mimeType,
-                    url = messageContent.getFileUrl(),
-                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
-            )
+        downloadFile(
+            fileName = messageContent.getFileName(),
+            mimeType = messageContent.mimeType,
+            url = messageContent.getFileUrl(),
+            elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+        )
 
-    fun isFileInCache(mxcUrl: String?,
-                      fileName: String,
-                      mimeType: String?,
-                      elementToDecrypt: ElementToDecrypt?
+    fun isFileInCache(
+        mxcUrl: String?,
+        fileName: String,
+        mimeType: String?,
+        elementToDecrypt: ElementToDecrypt?
     ): Boolean
 
     fun isFileInCache(messageContent: MessageWithAttachmentContent) =
-            isFileInCache(
-                    mxcUrl = messageContent.getFileUrl(),
-                    fileName = messageContent.getFileName(),
-                    mimeType = messageContent.mimeType,
-                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
+        isFileInCache(
+            mxcUrl = messageContent.getFileUrl(),
+            fileName = messageContent.getFileName(),
+            mimeType = messageContent.mimeType,
+            elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+        )
 
     /**
      * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
      * (if not other app won't be able to access it)
      */
-    fun getTemporarySharableURI(mxcUrl: String?,
-                                fileName: String,
-                                mimeType: String?,
-                                elementToDecrypt: ElementToDecrypt?): Uri?
+    fun getTemporarySharableURI(
+        mxcUrl: String?,
+        fileName: String,
+        mimeType: String?,
+        elementToDecrypt: ElementToDecrypt?
+    ): Uri?
 
     fun getTemporarySharableURI(messageContent: MessageWithAttachmentContent): Uri? =
-            getTemporarySharableURI(
-                    mxcUrl = messageContent.getFileUrl(),
-                    fileName = messageContent.getFileName(),
-                    mimeType = messageContent.mimeType,
-                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
-            )
+        getTemporarySharableURI(
+            mxcUrl = messageContent.getFileUrl(),
+            fileName = messageContent.getFileName(),
+            mimeType = messageContent.mimeType,
+            elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+        )
 
     /**
      * Get information on the given file.
      * Mimetype should be the same one as passed to downloadFile (limitation for now)
      */
-    fun fileState(mxcUrl: String?,
-                  fileName: String,
-                  mimeType: String?,
-                  elementToDecrypt: ElementToDecrypt?): FileState
+    fun fileState(
+        mxcUrl: String?,
+        fileName: String,
+        mimeType: String?,
+        elementToDecrypt: ElementToDecrypt?
+    ): FileState
 
     fun fileState(messageContent: MessageWithAttachmentContent): FileState =
-            fileState(
-                    mxcUrl = messageContent.getFileUrl(),
-                    fileName = messageContent.getFileName(),
-                    mimeType = messageContent.mimeType,
-                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
-            )
+        fileState(
+            mxcUrl = messageContent.getFileUrl(),
+            fileName = messageContent.getFileName(),
+            mimeType = messageContent.mimeType,
+            elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+        )
 
     /**
      * Clears all the files downloaded by the service, including decrypted files

@@ -40,20 +40,20 @@ import javax.inject.Inject
 
 internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
     data class Params(
-            val roomIdOrAlias: String,
-            val reason: String?,
-            val viaServers: List<String> = emptyList(),
-            val thirdPartySigned: SignInvitationResult? = null
+        val roomIdOrAlias: String,
+        val reason: String?,
+        val viaServers: List<String> = emptyList(),
+        val thirdPartySigned: SignInvitationResult? = null
     )
 }
 
 internal class DefaultJoinRoomTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val readMarkersTask: SetReadMarkersTask,
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration,
-        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    private val readMarkersTask: SetReadMarkersTask,
+    @SessionDatabase
+    private val realmConfiguration: RealmConfiguration,
+    private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : JoinRoomTask {
 
     override suspend fun execute(params: JoinRoomTask.Params) {
@@ -69,9 +69,9 @@ internal class DefaultJoinRoomTask @Inject constructor(
         val joinRoomResponse = try {
             executeRequest(globalErrorReceiver) {
                 roomAPI.join(
-                        roomIdOrAlias = params.roomIdOrAlias,
-                        viaServers = params.viaServers.take(3),
-                        params = extraParams
+                    roomIdOrAlias = params.roomIdOrAlias,
+                    viaServers = params.viaServers.take(3),
+                    params = extraParams
                 )
             }
         } catch (failure: Throwable) {
@@ -83,8 +83,8 @@ internal class DefaultJoinRoomTask @Inject constructor(
         try {
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                 realm.where(RoomSummaryEntity::class.java)
-                        .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
-                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+                    .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
+                    .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
             }
         } catch (exception: TimeoutCancellationException) {
             throw JoinRoomFailure.JoinedWithTimeout

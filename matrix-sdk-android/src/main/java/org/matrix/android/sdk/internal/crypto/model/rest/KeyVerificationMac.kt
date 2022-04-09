@@ -25,9 +25,9 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoMacFa
  */
 @JsonClass(generateAdapter = true)
 internal data class KeyVerificationMac(
-        @Json(name = "transaction_id") override val transactionId: String? = null,
-        @Json(name = "mac") override val mac: Map<String, String>? = null,
-        @Json(name = "keys") override val keys: String? = null
+    @Json(name = "transaction_id") override val transactionId: String? = null,
+    @Json(name = "mac") override val mac: Map<String, String>? = null,
+    @Json(name = "keys") override val keys: String? = null
 
 ) : SendToDeviceObject, VerificationInfoMac {
 

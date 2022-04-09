@@ -26,21 +26,21 @@ import javax.inject.Inject
 
 internal interface SetRoomDirectoryVisibilityTask : Task<SetRoomDirectoryVisibilityTask.Params, Unit> {
     data class Params(
-            val roomId: String,
-            val roomDirectoryVisibility: RoomDirectoryVisibility
+        val roomId: String,
+        val roomDirectoryVisibility: RoomDirectoryVisibility
     )
 }
 
 internal class DefaultSetRoomDirectoryVisibilityTask @Inject constructor(
-        private val directoryAPI: DirectoryAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val directoryAPI: DirectoryAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : SetRoomDirectoryVisibilityTask {
 
     override suspend fun execute(params: SetRoomDirectoryVisibilityTask.Params) {
         executeRequest(globalErrorReceiver) {
             directoryAPI.setRoomDirectoryVisibility(
-                    params.roomId,
-                    RoomDirectoryVisibilityJson(visibility = params.roomDirectoryVisibility)
+                params.roomId,
+                RoomDirectoryVisibilityJson(visibility = params.roomDirectoryVisibility)
             )
         }
     }

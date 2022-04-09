@@ -60,43 +60,44 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
-        val otherUserId: String,
-        val verificationId: String?,
-        val roomId: String?,
-        // true when we display the loading and we wait for the other (incoming request)
-        val selfVerificationMode: Boolean,
-        val otherUserMxItem: MatrixItem? = null,
-        val pendingRequest: Async<PendingVerificationRequest> = Uninitialized,
-        val pendingLocalId: String? = null,
-        val sasTransactionState: VerificationTxState? = null,
-        val qrTransactionState: VerificationTxState? = null,
-        val transactionId: String? = null,
-        val verifiedFromPrivateKeys: Boolean = false,
-        val verifyingFrom4S: Boolean = false,
-        val isMe: Boolean = false,
-        val currentDeviceCanCrossSign: Boolean = false,
-        val userWantsToCancel: Boolean = false,
-        val userThinkItsNotHim: Boolean = false,
-        val quadSContainsSecrets: Boolean = true,
-        val quadSHasBeenReset: Boolean = false,
-        val hasAnyOtherSession: Boolean = false
+    val otherUserId: String,
+    val verificationId: String?,
+    val roomId: String?,
+    // true when we display the loading and we wait for the other (incoming request)
+    val selfVerificationMode: Boolean,
+    val otherUserMxItem: MatrixItem? = null,
+    val pendingRequest: Async<PendingVerificationRequest> = Uninitialized,
+    val pendingLocalId: String? = null,
+    val sasTransactionState: VerificationTxState? = null,
+    val qrTransactionState: VerificationTxState? = null,
+    val transactionId: String? = null,
+    val verifiedFromPrivateKeys: Boolean = false,
+    val verifyingFrom4S: Boolean = false,
+    val isMe: Boolean = false,
+    val currentDeviceCanCrossSign: Boolean = false,
+    val userWantsToCancel: Boolean = false,
+    val userThinkItsNotHim: Boolean = false,
+    val quadSContainsSecrets: Boolean = true,
+    val quadSHasBeenReset: Boolean = false,
+    val hasAnyOtherSession: Boolean = false
 ) : MavericksState {
 
     constructor(args: VerificationBottomSheet.VerificationArgs) : this(
-            otherUserId = args.otherUserId,
-            verificationId = args.verificationId,
-            roomId = args.roomId,
-            selfVerificationMode = args.selfVerificationMode
+        otherUserId = args.otherUserId,
+        verificationId = args.verificationId,
+        roomId = args.roomId,
+        selfVerificationMode = args.selfVerificationMode
     )
 }
 
 class VerificationBottomSheetViewModel @AssistedInject constructor(
-        @Assisted initialState: VerificationBottomSheetViewState,
-        private val session: Session,
-        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val stringProvider: StringProvider) :
-        VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
-        VerificationService.Listener {
+    @Assisted initialState: VerificationBottomSheetViewState,
+    private val session: Session,
+    private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
+    private val stringProvider: StringProvider
+) :
+    VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
+    VerificationService.Listener {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<VerificationBottomSheetViewModel, VerificationBottomSheetViewState> {
@@ -115,13 +116,13 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             // See if active tx for this user and take it
 
             session.cryptoService().verificationService().getExistingVerificationRequests(initialState.otherUserId)
-                    .lastOrNull { !it.isFinished }
-                    ?.also { verificationRequest ->
-                        if (verificationRequest.isIncoming && !verificationRequest.isReady) {
-                            // auto ready in this case, as we are waiting
-                            autoReady = true
-                        }
+                .lastOrNull { !it.isFinished }
+                ?.also { verificationRequest ->
+                    if (verificationRequest.isIncoming && !verificationRequest.isReady) {
+                        // auto ready in this case, as we are waiting
+                        autoReady = true
                     }
+                }
         } else {
             session.cryptoService().verificationService().getExistingVerificationRequest(initialState.otherUserId, initialState.verificationId)
         }
@@ -135,33 +136,33 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         }
 
         val hasAnyOtherSession = session.cryptoService()
-                .getCryptoDeviceInfo(session.myUserId)
-                .any {
-                    it.deviceId != session.sessionParams.deviceId
-                }
+            .getCryptoDeviceInfo(session.myUserId)
+            .any {
+                it.deviceId != session.sessionParams.deviceId
+            }
 
         setState {
             copy(
-                    otherUserMxItem = userItem?.toMatrixItem(),
-                    sasTransactionState = sasTx?.state,
-                    qrTransactionState = qrTx?.state,
-                    transactionId = pr?.transactionId ?: initialState.verificationId,
-                    pendingRequest = if (pr != null) Success(pr) else Uninitialized,
-                    isMe = initialState.otherUserId == session.myUserId,
-                    currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
-                    quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
-                    hasAnyOtherSession = hasAnyOtherSession
+                otherUserMxItem = userItem?.toMatrixItem(),
+                sasTransactionState = sasTx?.state,
+                qrTransactionState = qrTx?.state,
+                transactionId = pr?.transactionId ?: initialState.verificationId,
+                pendingRequest = if (pr != null) Success(pr) else Uninitialized,
+                isMe = initialState.otherUserId == session.myUserId,
+                currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
+                quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
+                hasAnyOtherSession = hasAnyOtherSession
             )
         }
 
         if (autoReady) {
             // TODO, can I be here in DM mode? in this case should test if roomID is null?
             session.cryptoService().verificationService()
-                    .readyPendingVerification(
-                            supportedVerificationMethodsProvider.provide(),
-                            pr!!.otherUserId,
-                            pr.transactionId ?: ""
-                    )
+                .readyPendingVerification(
+                    supportedVerificationMethodsProvider.provide(),
+                    pr!!.otherUserId,
+                    pr.transactionId ?: ""
+                )
         }
     }
 
@@ -178,8 +179,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         } else {
             // if the verification is already done you can't cancel anymore
             if (state.pendingRequest.invoke()?.cancelConclusion != null ||
-                    state.sasTransactionState is VerificationTxState.TerminalTxState ||
-                    state.verifyingFrom4S) {
+                state.sasTransactionState is VerificationTxState.TerminalTxState ||
+                state.verifyingFrom4S
+            ) {
                 // you cannot cancel anymore
             } else {
                 setState {
@@ -196,13 +198,13 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
     private fun cancelAllPendingVerifications(state: VerificationBottomSheetViewState) {
         session.cryptoService()
-                .verificationService().getExistingVerificationRequest(state.otherUserMxItem?.id ?: "", state.transactionId)?.let {
-                    session.cryptoService().verificationService().cancelVerificationRequest(it)
-                }
+            .verificationService().getExistingVerificationRequest(state.otherUserMxItem?.id ?: "", state.transactionId)?.let {
+                session.cryptoService().verificationService().cancelVerificationRequest(it)
+            }
         session.cryptoService()
-                .verificationService()
-                .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
-                ?.cancel(CancelCode.User)
+            .verificationService()
+            .getExistingTransaction(state.otherUserMxItem?.id ?: "", state.transactionId ?: "")
+            ?.cancel(CancelCode.User)
     }
 
     fun continueFromCancel() {
@@ -231,128 +233,129 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     override fun handle(action: VerificationAction) = withState { state ->
         val otherUserId = state.otherUserMxItem?.id ?: return@withState
         val roomId = state.roomId
-                ?: session.getExistingDirectRoomWithUser(otherUserId)
+            ?: session.getExistingDirectRoomWithUser(otherUserId)
 
         when (action) {
-            is VerificationAction.RequestVerificationByDM      -> {
+            is VerificationAction.RequestVerificationByDM -> {
                 if (roomId == null) {
                     val localId = LocalEcho.createLocalEchoId()
                     setState {
                         copy(
-                                pendingLocalId = localId,
-                                pendingRequest = Loading()
+                            pendingLocalId = localId,
+                            pendingRequest = Loading()
                         )
                     }
                     viewModelScope.launch {
                         val result = runCatching { session.createDirectRoom(otherUserId) }
                         result.fold(
-                                { data ->
-                                    setState {
-                                        copy(
-                                                roomId = data,
-                                                pendingRequest = Success(
-                                                        session
-                                                                .cryptoService()
-                                                                .verificationService()
-                                                                .requestKeyVerificationInDMs(
-                                                                        supportedVerificationMethodsProvider.provide(),
-                                                                        otherUserId,
-                                                                        data,
-                                                                        pendingLocalId
-                                                                )
+                            { data ->
+                                setState {
+                                    copy(
+                                        roomId = data,
+                                        pendingRequest = Success(
+                                            session
+                                                .cryptoService()
+                                                .verificationService()
+                                                .requestKeyVerificationInDMs(
+                                                    supportedVerificationMethodsProvider.provide(),
+                                                    otherUserId,
+                                                    data,
+                                                    pendingLocalId
                                                 )
                                         )
-                                    }
-                                },
-                                { failure ->
-                                    setState {
-                                        copy(pendingRequest = Fail(failure))
-                                    }
+                                    )
                                 }
+                            },
+                            { failure ->
+                                setState {
+                                    copy(pendingRequest = Fail(failure))
+                                }
+                            }
                         )
                     }
                 } else {
                     setState {
                         copy(
-                                pendingRequest = Success(session
-                                        .cryptoService()
-                                        .verificationService()
-                                        .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
-                                )
+                            pendingRequest = Success(
+                                session
+                                    .cryptoService()
+                                    .verificationService()
+                                    .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
+                            )
                         )
                     }
                 }
                 Unit
             }
-            is VerificationAction.StartSASVerification         -> {
+            is VerificationAction.StartSASVerification -> {
                 val request = session.cryptoService().verificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
-                        ?: return@withState
+                    ?: return@withState
                 val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
                 if (roomId == null) {
                     session.cryptoService().verificationService().beginKeyVerification(
-                            VerificationMethod.SAS,
-                            otherUserId = request.otherUserId,
-                            otherDeviceId = otherDevice ?: "",
-                            transactionId = action.pendingRequestTransactionId
+                        VerificationMethod.SAS,
+                        otherUserId = request.otherUserId,
+                        otherDeviceId = otherDevice ?: "",
+                        transactionId = action.pendingRequestTransactionId
                     )
                 } else {
                     session.cryptoService().verificationService().beginKeyVerificationInDMs(
-                            VerificationMethod.SAS,
-                            transactionId = action.pendingRequestTransactionId,
-                            roomId = roomId,
-                            otherUserId = request.otherUserId,
-                            otherDeviceId = otherDevice ?: ""
+                        VerificationMethod.SAS,
+                        transactionId = action.pendingRequestTransactionId,
+                        roomId = roomId,
+                        otherUserId = request.otherUserId,
+                        otherDeviceId = otherDevice ?: ""
                     )
                 }
                 Unit
             }
-            is VerificationAction.RemoteQrCodeScanned          -> {
+            is VerificationAction.RemoteQrCodeScanned -> {
                 val existingTransaction = session.cryptoService().verificationService()
-                        .getExistingTransaction(action.otherUserId, action.transactionId) as? QrCodeVerificationTransaction
+                    .getExistingTransaction(action.otherUserId, action.transactionId) as? QrCodeVerificationTransaction
                 existingTransaction
-                        ?.userHasScannedOtherQrCode(action.scannedData)
+                    ?.userHasScannedOtherQrCode(action.scannedData)
             }
             is VerificationAction.OtherUserScannedSuccessfully -> {
                 val transactionId = state.transactionId ?: return@withState
 
                 val existingTransaction = session.cryptoService().verificationService()
-                        .getExistingTransaction(otherUserId, transactionId) as? QrCodeVerificationTransaction
+                    .getExistingTransaction(otherUserId, transactionId) as? QrCodeVerificationTransaction
                 existingTransaction
-                        ?.otherUserScannedMyQrCode()
+                    ?.otherUserScannedMyQrCode()
             }
-            is VerificationAction.OtherUserDidNotScanned       -> {
+            is VerificationAction.OtherUserDidNotScanned -> {
                 val transactionId = state.transactionId ?: return@withState
 
                 val existingTransaction = session.cryptoService().verificationService()
-                        .getExistingTransaction(otherUserId, transactionId) as? QrCodeVerificationTransaction
+                    .getExistingTransaction(otherUserId, transactionId) as? QrCodeVerificationTransaction
                 existingTransaction
-                        ?.otherUserDidNotScannedMyQrCode()
+                    ?.otherUserDidNotScannedMyQrCode()
             }
-            is VerificationAction.SASMatchAction               -> {
+            is VerificationAction.SASMatchAction -> {
                 (session.cryptoService().verificationService()
-                        .getExistingTransaction(action.otherUserId, action.sasTransactionId)
+                    .getExistingTransaction(action.otherUserId, action.sasTransactionId)
                         as? SasVerificationTransaction)?.userHasVerifiedShortCode()
             }
-            is VerificationAction.SASDoNotMatchAction          -> {
+            is VerificationAction.SASDoNotMatchAction -> {
                 (session.cryptoService().verificationService()
-                        .getExistingTransaction(action.otherUserId, action.sasTransactionId)
+                    .getExistingTransaction(action.otherUserId, action.sasTransactionId)
                         as? SasVerificationTransaction)
-                        ?.shortCodeDoesNotMatch()
+                    ?.shortCodeDoesNotMatch()
             }
-            is VerificationAction.GotItConclusion              -> {
+            is VerificationAction.GotItConclusion -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
-            is VerificationAction.SkipVerification             -> {
+            is VerificationAction.SkipVerification -> {
                 _viewEvents.post(VerificationBottomSheetViewEvents.Dismiss)
             }
-            is VerificationAction.VerifyFromPassphrase         -> {
+            is VerificationAction.VerifyFromPassphrase -> {
                 setState { copy(verifyingFrom4S = true) }
                 _viewEvents.post(VerificationBottomSheetViewEvents.AccessSecretStore)
             }
-            is VerificationAction.GotResultFromSsss            -> {
+            is VerificationAction.GotResultFromSsss -> {
                 handleSecretBackFromSSSS(action)
             }
-            VerificationAction.SecuredStorageHasBeenReset      -> {
+            VerificationAction.SecuredStorageHasBeenReset -> {
                 if (session.cryptoService().crossSigningService().allPrivateKeysKnown()) {
                     setState {
                         copy(quadSHasBeenReset = true, verifyingFrom4S = false)
@@ -360,7 +363,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            VerificationAction.CancelledFromSsss               -> {
+            VerificationAction.CancelledFromSsss -> {
                 setState {
                     copy(verifyingFrom4S = false)
                 }
@@ -374,25 +377,25 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 action.cypherData.fromBase64().inputStream().use { ins ->
                     val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
                     val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
-                            res?.get(MASTER_KEY_SSSS_NAME),
-                            res?.get(USER_SIGNING_KEY_SSSS_NAME),
-                            res?.get(SELF_SIGNING_KEY_SSSS_NAME)
+                        res?.get(MASTER_KEY_SSSS_NAME),
+                        res?.get(USER_SIGNING_KEY_SSSS_NAME),
+                        res?.get(SELF_SIGNING_KEY_SSSS_NAME)
                     )
                     if (trustResult.isVerified()) {
                         // Sign this device and upload the signature
                         session.sessionParams.deviceId?.let { deviceId ->
                             session.cryptoService()
-                                    .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
-                                        override fun onFailure(failure: Throwable) {
-                                            Timber.w(failure, "Failed to sign my device after recovery")
-                                        }
-                                    })
+                                .crossSigningService().trustDevice(deviceId, object : MatrixCallback<Unit> {
+                                    override fun onFailure(failure: Throwable) {
+                                        Timber.w(failure, "Failed to sign my device after recovery")
+                                    }
+                                })
                         }
 
                         setState {
                             copy(
-                                    verifyingFrom4S = false,
-                                    verifiedFromPrivateKeys = true
+                                verifyingFrom4S = false,
+                                verifiedFromPrivateKeys = true
                             )
                         }
 
@@ -401,7 +404,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     } else {
                         setState {
                             copy(
-                                    verifyingFrom4S = false
+                                verifyingFrom4S = false
                             )
                         }
                         // POP UP something
@@ -411,11 +414,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
             } catch (failure: Throwable) {
                 setState {
                     copy(
-                            verifyingFrom4S = false
+                        verifyingFrom4S = false
                     )
                 }
                 _viewEvents.post(
-                        VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
+                    VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error))
+                )
             }
         }
     }
@@ -433,12 +437,12 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
                 awaitCallback<ImportRoomKeysResult> {
                     session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
-                            version,
-                            computeRecoveryKey(secret.fromBase64()),
-                            null,
-                            null,
-                            null,
-                            it
+                        version,
+                        computeRecoveryKey(secret.fromBase64()),
+                        null,
+                        null,
+                        null,
+                        it
                     )
                 }
 
@@ -469,21 +473,21 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 // Use this one!
                 setState {
                     copy(
-                            transactionId = tx.transactionId,
-                            sasTransactionState = tx.state.takeIf { tx is SasVerificationTransaction },
-                            qrTransactionState = tx.state.takeIf { tx is QrCodeVerificationTransaction }
+                        transactionId = tx.transactionId,
+                        sasTransactionState = tx.state.takeIf { tx is SasVerificationTransaction },
+                        qrTransactionState = tx.state.takeIf { tx is QrCodeVerificationTransaction }
                     )
                 }
             }
         }
 
         when (tx) {
-            is SasVerificationTransaction    -> {
+            is SasVerificationTransaction -> {
                 if (tx.transactionId == (state.pendingRequest.invoke()?.transactionId ?: state.transactionId)) {
                     // A SAS tx has been started following this request
                     setState {
                         copy(
-                                sasTransactionState = tx.state
+                            sasTransactionState = tx.state
                         )
                     }
                 }
@@ -493,7 +497,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     // A QR tx has been started following this request
                     setState {
                         copy(
-                                qrTransactionState = tx.state
+                            qrTransactionState = tx.state
                         )
                     }
                 }
@@ -514,18 +518,18 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     // auto ready in this case, as we are waiting
                     // TODO, can I be here in DM mode? in this case should test if roomID is null?
                     session.cryptoService().verificationService()
-                            .readyPendingVerification(
-                                    supportedVerificationMethodsProvider.provide(),
-                                    pr.otherUserId,
-                                    pr.transactionId ?: ""
-                            )
+                        .readyPendingVerification(
+                            supportedVerificationMethodsProvider.provide(),
+                            pr.otherUserId,
+                            pr.transactionId ?: ""
+                        )
                 }
 
                 // Use this one!
                 setState {
                     copy(
-                            transactionId = pr.transactionId,
-                            pendingRequest = Success(pr)
+                        transactionId = pr.transactionId,
+                        pendingRequest = Success(pr)
                     )
                 }
                 return@withState
@@ -533,12 +537,13 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         }
 
         if (pr.localId == state.pendingLocalId ||
-                pr.localId == state.pendingRequest.invoke()?.localId ||
-                state.pendingRequest.invoke()?.transactionId == pr.transactionId) {
+            pr.localId == state.pendingRequest.invoke()?.localId ||
+            state.pendingRequest.invoke()?.transactionId == pr.transactionId
+        ) {
             setState {
                 copy(
-                        transactionId = state.verificationId ?: pr.transactionId,
-                        pendingRequest = Success(pr)
+                    transactionId = state.verificationId ?: pr.transactionId,
+                    pendingRequest = Success(pr)
                 )
             }
         }

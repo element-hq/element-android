@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 internal data class GroupRooms(
 
-        @Json(name = "total_room_count_estimate") val totalRoomCountEstimate: Int? = null,
-        @Json(name = "chunk") val rooms: List<GroupRoom> = emptyList()
+    @Json(name = "total_room_count_estimate") val totalRoomCountEstimate: Int? = null,
+    @Json(name = "chunk") val rooms: List<GroupRoom> = emptyList()
 
 )

@@ -60,10 +60,12 @@ class VectorGlideModelLoader(private val context: Context) :
     }
 }
 
-class VectorGlideDataFetcher(context: Context,
-                             private val data: ImageContentRenderer.Data,
-                             private val width: Int,
-                             private val height: Int) :
+class VectorGlideDataFetcher(
+    context: Context,
+    private val data: ImageContentRenderer.Data,
+    private val width: Int,
+    private val height: Int
+) :
     DataFetcher<InputStream> {
 
     private val localFilesHelper = LocalFilesHelper(context)
@@ -109,7 +111,7 @@ class VectorGlideDataFetcher(context: Context,
             }
             return
         }
-//        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
+        //        val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
 
         val fileService = activeSessionHolder.getSafeActiveSession()?.fileService() ?: return Unit.also {
             callback.onLoadFailed(IllegalArgumentException("No File service"))
@@ -118,37 +120,38 @@ class VectorGlideDataFetcher(context: Context,
         activeSessionHolder.getSafeActiveSession()?.coroutineScope?.launch {
             val result = runCatching {
                 fileService.downloadFile(
-                        fileName = data.filename,
-                        mimeType = data.mimeType,
-                        url = data.url,
-                        elementToDecrypt = data.elementToDecrypt)
+                    fileName = data.filename,
+                    mimeType = data.mimeType,
+                    url = data.url,
+                    elementToDecrypt = data.elementToDecrypt
+                )
             }
             withContext(Dispatchers.Main) {
                 result.fold(
-                        { callback.onDataReady(it.inputStream()) },
-                        { callback.onLoadFailed(it as? Exception ?: IOException(it.localizedMessage)) }
+                    { callback.onDataReady(it.inputStream()) },
+                    { callback.onLoadFailed(it as? Exception ?: IOException(it.localizedMessage)) }
                 )
             }
         }
-//        val url = contentUrlResolver.resolveFullSize(data.url)
-//                ?: return
-//
-//        val request = Request.Builder()
-//                .url(url)
-//                .build()
-//
-//        val response = client.newCall(request).execute()
-//        val inputStream = response.body?.byteStream()
-//        Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
-//        if (!response.isSuccessful) {
-//            callback.onLoadFailed(IOException("Unexpected code $response"))
-//            return
-//        }
-//        stream = if (data.elementToDecrypt != null && data.elementToDecrypt.k.isNotBlank()) {
-//            Matrix.decryptStream(inputStream, data.elementToDecrypt)
-//        } else {
-//            inputStream
-//        }
-//        callback.onDataReady(stream)
+        //        val url = contentUrlResolver.resolveFullSize(data.url)
+        //                ?: return
+        //
+        //        val request = Request.Builder()
+        //                .url(url)
+        //                .build()
+        //
+        //        val response = client.newCall(request).execute()
+        //        val inputStream = response.body?.byteStream()
+        //        Timber.v("Response size ${response.body?.contentLength()} - Stream available: ${inputStream?.available()}")
+        //        if (!response.isSuccessful) {
+        //            callback.onLoadFailed(IOException("Unexpected code $response"))
+        //            return
+        //        }
+        //        stream = if (data.elementToDecrypt != null && data.elementToDecrypt.k.isNotBlank()) {
+        //            Matrix.decryptStream(inputStream, data.elementToDecrypt)
+        //        } else {
+        //            inputStream
+        //        }
+        //        callback.onDataReady(stream)
     }
 }

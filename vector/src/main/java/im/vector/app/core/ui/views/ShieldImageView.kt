@@ -25,9 +25,9 @@ import im.vector.app.R
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 
 class ShieldImageView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
     init {
@@ -40,32 +40,32 @@ class ShieldImageView @JvmOverloads constructor(
         isVisible = roomEncryptionTrustLevel != null
 
         when (roomEncryptionTrustLevel) {
-            RoomEncryptionTrustLevel.Default                     -> {
+            RoomEncryptionTrustLevel.Default -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_default)
                 setImageResource(
-                        if (borderLess) R.drawable.ic_shield_black_no_border
-                        else R.drawable.ic_shield_black
+                    if (borderLess) R.drawable.ic_shield_black_no_border
+                    else R.drawable.ic_shield_black
                 )
             }
-            RoomEncryptionTrustLevel.Warning                     -> {
+            RoomEncryptionTrustLevel.Warning -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_warning)
                 setImageResource(
-                        if (borderLess) R.drawable.ic_shield_warning_no_border
-                        else R.drawable.ic_shield_warning
+                    if (borderLess) R.drawable.ic_shield_warning_no_border
+                    else R.drawable.ic_shield_warning
                 )
             }
-            RoomEncryptionTrustLevel.Trusted                     -> {
+            RoomEncryptionTrustLevel.Trusted -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_trusted)
                 setImageResource(
-                        if (borderLess) R.drawable.ic_shield_trusted_no_border
-                        else R.drawable.ic_shield_trusted
+                    if (borderLess) R.drawable.ic_shield_trusted_no_border
+                    else R.drawable.ic_shield_trusted
                 )
             }
             RoomEncryptionTrustLevel.E2EWithUnsupportedAlgorithm -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_trusted)
                 setImageResource(R.drawable.ic_warning_badge)
             }
-            null                                                 -> Unit
+            null -> Unit
         }
     }
 }
@@ -73,9 +73,9 @@ class ShieldImageView @JvmOverloads constructor(
 @DrawableRes
 fun RoomEncryptionTrustLevel.toDrawableRes(): Int {
     return when (this) {
-        RoomEncryptionTrustLevel.Default                     -> R.drawable.ic_shield_black
-        RoomEncryptionTrustLevel.Warning                     -> R.drawable.ic_shield_warning
-        RoomEncryptionTrustLevel.Trusted                     -> R.drawable.ic_shield_trusted
+        RoomEncryptionTrustLevel.Default -> R.drawable.ic_shield_black
+        RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
+        RoomEncryptionTrustLevel.Trusted -> R.drawable.ic_shield_trusted
         RoomEncryptionTrustLevel.E2EWithUnsupportedAlgorithm -> R.drawable.ic_warning_badge
     }
 }

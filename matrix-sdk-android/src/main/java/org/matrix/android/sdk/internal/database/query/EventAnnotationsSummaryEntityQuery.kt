@@ -25,8 +25,8 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 
 internal fun EventAnnotationsSummaryEntity.Companion.where(realm: Realm, roomId: String, eventId: String): RealmQuery<EventAnnotationsSummaryEntity> {
     return realm.where<EventAnnotationsSummaryEntity>()
-            .equalTo(EventAnnotationsSummaryEntityFields.ROOM_ID, roomId)
-            .equalTo(EventAnnotationsSummaryEntityFields.EVENT_ID, eventId)
+        .equalTo(EventAnnotationsSummaryEntityFields.ROOM_ID, roomId)
+        .equalTo(EventAnnotationsSummaryEntityFields.EVENT_ID, eventId)
 }
 
 internal fun EventAnnotationsSummaryEntity.Companion.create(realm: Realm, roomId: String, eventId: String): EventAnnotationsSummaryEntity {
@@ -42,5 +42,5 @@ internal fun EventAnnotationsSummaryEntity.Companion.create(realm: Realm, roomId
 
 internal fun EventAnnotationsSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: String, eventId: String): EventAnnotationsSummaryEntity {
     return EventAnnotationsSummaryEntity.where(realm, roomId, eventId).findFirst()
-            ?: EventAnnotationsSummaryEntity.create(realm, roomId, eventId)
+        ?: EventAnnotationsSummaryEntity.create(realm, roomId, eventId)
 }

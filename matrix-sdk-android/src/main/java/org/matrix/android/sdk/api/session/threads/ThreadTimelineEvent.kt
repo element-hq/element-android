@@ -23,6 +23,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
  * determines if the current user has participated in that event
  */
 data class ThreadTimelineEvent(
-        val timelineEvent: TimelineEvent,
-        val isParticipating: Boolean
+    val timelineEvent: TimelineEvent,
+    val isParticipating: Boolean
 )

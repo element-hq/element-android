@@ -36,22 +36,22 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 
 internal class TimelineEventDecryptor @Inject constructor(
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration,
-        private val cryptoService: CryptoService,
-        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
-        private val lightweightSettingsStorage: LightweightSettingsStorage
+    @SessionDatabase
+    private val realmConfiguration: RealmConfiguration,
+    private val cryptoService: CryptoService,
+    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+    private val lightweightSettingsStorage: LightweightSettingsStorage
 ) {
 
     private val newSessionListener = object : NewSessionListener {
         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
             synchronized(unknownSessionsFailure) {
                 unknownSessionsFailure[sessionId]
-                        ?.toList()
-                        .orEmpty()
-                        .also {
-                            unknownSessionsFailure[sessionId]?.clear()
-                        }
+                    ?.toList()
+                    .orEmpty()
+                    .also {
+                        unknownSessionsFailure[sessionId]?.clear()
+                    }
             }.forEach {
                 requestDecryption(it)
             }
@@ -113,15 +113,16 @@ internal class TimelineEventDecryptor @Inject constructor(
 
     private fun threadAwareNonEncryptedEvents(request: DecryptionRequest, realm: Realm) {
         val event = request.event
-            realm.executeTransaction {
-                val eventId = event.eventId ?: return@executeTransaction
-                val eventEntity = EventEntity
-                        .where(it, eventId = eventId)
-                        .findFirst()
-                val decryptedEvent = eventEntity?.asDomain()
-                threadsAwarenessHandler.makeEventThreadAware(realm, event.roomId, decryptedEvent, eventEntity)
+        realm.executeTransaction {
+            val eventId = event.eventId ?: return@executeTransaction
+            val eventEntity = EventEntity
+                .where(it, eventId = eventId)
+                .findFirst()
+            val decryptedEvent = eventEntity?.asDomain()
+            threadsAwarenessHandler.makeEventThreadAware(realm, event.roomId, decryptedEvent, eventEntity)
         }
     }
+
     private suspend fun processDecryptRequest(request: DecryptionRequest, realm: Realm) {
         val event = request.event
         val timelineId = request.timelineId
@@ -138,8 +139,8 @@ internal class TimelineEventDecryptor @Inject constructor(
             realm.executeTransaction {
                 val eventId = event.eventId ?: return@executeTransaction
                 val eventEntity = EventEntity
-                        .where(it, eventId = eventId)
-                        .findFirst()
+                    .where(it, eventId = eventId)
+                    .findFirst()
                 eventEntity?.setDecryptionResult(result)
                 val decryptedEvent = eventEntity?.asDomain()
                 threadsAwarenessHandler.makeEventThreadAware(realm, event.roomId, decryptedEvent, eventEntity)
@@ -150,11 +151,11 @@ internal class TimelineEventDecryptor @Inject constructor(
                 // Keep track of unknown sessions to automatically try to decrypt on new session
                 realm.executeTransaction {
                     EventEntity.where(it, eventId = event.eventId ?: "")
-                            .findFirst()
-                            ?.let {
-                                it.decryptionErrorCode = e.errorType.name
-                                it.decryptionErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
-                            }
+                        .findFirst()
+                        ?.let {
+                            it.decryptionErrorCode = e.errorType.name
+                            it.decryptionErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
+                        }
                 }
                 event.content?.toModel<EncryptedEventContent>()?.let { content ->
                     content.sessionId?.let { sessionId ->
@@ -175,7 +176,7 @@ internal class TimelineEventDecryptor @Inject constructor(
     }
 
     data class DecryptionRequest(
-            val event: Event,
-            val timelineId: String
+        val event: Event,
+        val timelineId: String
     )
 }

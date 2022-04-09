@@ -25,11 +25,11 @@ class NewDirectMessageRobot {
 
     fun verifyQrCodeButton() {
         Espresso.onView(ViewMatchers.withId(R.id.userListRecyclerView))
-                .perform(waitForView(ViewMatchers.withText(R.string.qr_code)))
+            .perform(waitForView(ViewMatchers.withText(R.string.qr_code)))
     }
 
     fun verifyInviteFriendsButton() {
         Espresso.onView(ViewMatchers.withId(R.id.userListRecyclerView))
-                .perform(waitForView(ViewMatchers.withText(R.string.invite_friends)))
+            .perform(waitForView(ViewMatchers.withText(R.string.invite_friends)))
     }
 }

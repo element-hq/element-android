@@ -125,11 +125,11 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
             views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                 override fun onProviderSelected(id: String?) {
                     loginViewModel.getSsoUrl(
-                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                            deviceId = state.deviceId,
-                            providerId = id
+                        redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                        deviceId = state.deviceId,
+                        providerId = id
                     )
-                            ?.let { openInCustomTab(it) }
+                        ?.let { openInCustomTab(it) }
                 }
             }
         } else {
@@ -141,17 +141,17 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
         combine(
-                views.loginField.textChanges().map { it.trim().isNotEmpty() },
-                views.passwordField.textChanges().map { it.isNotEmpty() }
+            views.loginField.textChanges().map { it.trim().isNotEmpty() },
+            views.passwordField.textChanges().map { it.isNotEmpty() }
         ) { isLoginNotEmpty, isPasswordNotEmpty ->
             isLoginNotEmpty && isPasswordNotEmpty
         }
-                .onEach {
-                    views.loginFieldTil.error = null
-                    views.passwordFieldTil.error = null
-                    views.loginSubmit.isEnabled = it
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                views.loginFieldTil.error = null
+                views.passwordFieldTil.error = null
+                views.loginSubmit.isEnabled = it
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun forgetPasswordClicked() {
@@ -165,12 +165,14 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
     override fun onError(throwable: Throwable) {
         // Show M_WEAK_PASSWORD error in the password field
         if (throwable is Failure.ServerError &&
-                throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
+            throwable.error.code == MatrixError.M_WEAK_PASSWORD
+        ) {
             views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
         } else {
             if (throwable is Failure.ServerError &&
-                    throwable.error.code == MatrixError.M_FORBIDDEN &&
-                    throwable.error.message.isEmpty()) {
+                throwable.error.code == MatrixError.M_FORBIDDEN &&
+                throwable.error.message.isEmpty()
+            ) {
                 // Login with email, but email unknown
                 views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
             } else {

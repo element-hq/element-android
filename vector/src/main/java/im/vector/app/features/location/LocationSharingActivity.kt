@@ -27,10 +27,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LocationSharingArgs(
-        val roomId: String,
-        val mode: LocationSharingMode,
-        val initialLocationData: LocationData?,
-        val locationOwnerId: String?
+    val roomId: String,
+    val mode: LocationSharingMode,
+    val initialLocationData: LocationData?,
+    val locationOwnerId: String?
 ) : Parcelable
 
 @AndroidEntryPoint
@@ -45,23 +45,23 @@ class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBindin
             return
         }
         setupToolbar(views.toolbar)
-                .setTitle(locationSharingArgs.mode.titleRes)
-                .allowBack()
+            .setTitle(locationSharingArgs.mode.titleRes)
+            .allowBack()
 
         if (isFirstCreation()) {
             when (locationSharingArgs.mode) {
                 LocationSharingMode.STATIC_SHARING -> {
                     addFragment(
-                            views.fragmentContainer,
-                            LocationSharingFragment::class.java,
-                            locationSharingArgs
+                        views.fragmentContainer,
+                        LocationSharingFragment::class.java,
+                        locationSharingArgs
                     )
                 }
-                LocationSharingMode.PREVIEW        -> {
+                LocationSharingMode.PREVIEW -> {
                     addFragment(
-                            views.fragmentContainer,
-                            LocationPreviewFragment::class.java,
-                            locationSharingArgs
+                        views.fragmentContainer,
+                        LocationPreviewFragment::class.java,
+                        locationSharingArgs
                     )
                 }
             }

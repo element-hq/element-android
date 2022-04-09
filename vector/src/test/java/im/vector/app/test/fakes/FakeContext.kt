@@ -25,7 +25,7 @@ import io.mockk.mockk
 import java.io.OutputStream
 
 class FakeContext(
-        private val contentResolver: ContentResolver = mockk()
+    private val contentResolver: ContentResolver = mockk()
 ) {
 
     val instance = mockk<Context>()

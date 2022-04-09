@@ -41,7 +41,7 @@ class SearchActivity : VectorBaseActivity<ActivitySearchBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupToolbar(views.searchToolbar)
-                .allowBack()
+            .allowBack()
     }
 
     override fun initUiAndData() {

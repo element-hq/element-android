@@ -23,9 +23,9 @@ import im.vector.app.core.platform.VectorSharedAction
  * Parent class for a bottom sheet action
  */
 open class BottomSheetGenericRadioAction(
-        open val title: String?,
-        open val description: String? = null,
-        open val isSelected: Boolean
+    open val title: String?,
+    open val description: String? = null,
+    open val isSelected: Boolean
 ) : VectorSharedAction {
 
     fun toRadioBottomSheetItem(): BottomSheetRadioActionItem_ {

@@ -30,55 +30,56 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 
 internal class DefaultIncomingSASDefaultVerificationTransaction(
-        setDeviceVerificationAction: SetDeviceVerificationAction,
-        override val userId: String,
-        override val deviceId: String?,
-        private val cryptoStore: IMXCryptoStore,
-        crossSigningService: CrossSigningService,
-        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        incomingGossipingRequestManager: IncomingGossipingRequestManager,
-        deviceFingerprint: String,
-        transactionId: String,
-        otherUserID: String,
-        private val autoAccept: Boolean = false
+    setDeviceVerificationAction: SetDeviceVerificationAction,
+    override val userId: String,
+    override val deviceId: String?,
+    private val cryptoStore: IMXCryptoStore,
+    crossSigningService: CrossSigningService,
+    outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+    incomingGossipingRequestManager: IncomingGossipingRequestManager,
+    deviceFingerprint: String,
+    transactionId: String,
+    otherUserID: String,
+    private val autoAccept: Boolean = false
 ) : SASDefaultVerificationTransaction(
-        setDeviceVerificationAction,
-        userId,
-        deviceId,
-        cryptoStore,
-        crossSigningService,
-        outgoingGossipingRequestManager,
-        incomingGossipingRequestManager,
-        deviceFingerprint,
-        transactionId,
-        otherUserID,
-        null,
-        isIncoming = true),
-        IncomingSasVerificationTransaction {
+    setDeviceVerificationAction,
+    userId,
+    deviceId,
+    cryptoStore,
+    crossSigningService,
+    outgoingGossipingRequestManager,
+    incomingGossipingRequestManager,
+    deviceFingerprint,
+    transactionId,
+    otherUserID,
+    null,
+    isIncoming = true
+),
+    IncomingSasVerificationTransaction {
 
     override val uxState: IncomingSasVerificationTransaction.UxState
         get() {
             return when (val immutableState = state) {
-                is VerificationTxState.OnStarted      -> IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT
+                is VerificationTxState.OnStarted -> IncomingSasVerificationTransaction.UxState.SHOW_ACCEPT
                 is VerificationTxState.SendingAccept,
                 is VerificationTxState.Accepted,
                 is VerificationTxState.OnKeyReceived,
                 is VerificationTxState.SendingKey,
-                is VerificationTxState.KeySent        -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
+                is VerificationTxState.KeySent -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_KEY_AGREEMENT
                 is VerificationTxState.ShortCodeReady -> IncomingSasVerificationTransaction.UxState.SHOW_SAS
                 is VerificationTxState.ShortCodeAccepted,
                 is VerificationTxState.SendingMac,
                 is VerificationTxState.MacSent,
-                is VerificationTxState.Verifying      -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
-                is VerificationTxState.Verified       -> IncomingSasVerificationTransaction.UxState.VERIFIED
-                is VerificationTxState.Cancelled      -> {
+                is VerificationTxState.Verifying -> IncomingSasVerificationTransaction.UxState.WAIT_FOR_VERIFICATION
+                is VerificationTxState.Verified -> IncomingSasVerificationTransaction.UxState.VERIFIED
+                is VerificationTxState.Cancelled -> {
                     if (immutableState.byMe) {
                         IncomingSasVerificationTransaction.UxState.CANCELLED_BY_ME
                     } else {
                         IncomingSasVerificationTransaction.UxState.CANCELLED_BY_OTHER
                     }
                 }
-                else                                  -> IncomingSasVerificationTransaction.UxState.UNKNOWN
+                else -> IncomingSasVerificationTransaction.UxState.UNKNOWN
             }
         }
 
@@ -115,7 +116,7 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         // If a device is unable to complete the verification because the devices are unable to find a common key sharing,
         // hashing, hmac, or SAS method, then it should send a m.key.verification.cancel message
         if (listOf(agreedProtocol, agreedHash, agreedMac).any { it.isNullOrBlank() } ||
-                agreedShortCode.isNullOrEmpty()) {
+            agreedShortCode.isNullOrEmpty()) {
             // Failed to find agreement
             Timber.e("## SAS Failed to find agreement ")
             cancel(CancelCode.UnknownMethod)
@@ -135,12 +136,12 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
             // val otherKey = info.identityKey()
             // need to jump back to correct thread
             val accept = transport.createAccept(
-                    tid = transactionId,
-                    keyAgreementProtocol = agreedProtocol!!,
-                    hash = agreedHash!!,
-                    messageAuthenticationCode = agreedMac!!,
-                    shortAuthenticationStrings = agreedShortCode,
-                    commitment = Base64.encodeToString("temporary commitment".toByteArray(), Base64.DEFAULT)
+                tid = transactionId,
+                keyAgreementProtocol = agreedProtocol!!,
+                hash = agreedHash!!,
+                messageAuthenticationCode = agreedMac!!,
+                shortAuthenticationStrings = agreedShortCode,
+                commitment = Base64.encodeToString("temporary commitment".toByteArray(), Base64.DEFAULT)
             )
             doAccept(accept)
         }
@@ -231,7 +232,7 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
                 val sasInfo = "MATRIX_KEY_VERIFICATION_SAS|$otherUserId|$otherDeviceId|$otherKey|$userId|$deviceId|${getSAS().publicKey}|$transactionId"
                 return getSAS().generateShortCode(sasInfo, 6)
             }
-            else             -> {
+            else -> {
                 // Protocol has been checked earlier
                 throw IllegalArgumentException()
             }
@@ -242,11 +243,12 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         Timber.v("## SAS I: received mac for request id:$transactionId")
         // Check for state?
         if (state != VerificationTxState.SendingKey &&
-                state != VerificationTxState.KeySent &&
-                state != VerificationTxState.ShortCodeReady &&
-                state != VerificationTxState.ShortCodeAccepted &&
-                state != VerificationTxState.SendingMac &&
-                state != VerificationTxState.MacSent) {
+            state != VerificationTxState.KeySent &&
+            state != VerificationTxState.ShortCodeReady &&
+            state != VerificationTxState.ShortCodeAccepted &&
+            state != VerificationTxState.SendingMac &&
+            state != VerificationTxState.MacSent
+        ) {
             Timber.e("## SAS I: received key from invalid state $state")
             cancel(CancelCode.UnexpectedMessage)
             return

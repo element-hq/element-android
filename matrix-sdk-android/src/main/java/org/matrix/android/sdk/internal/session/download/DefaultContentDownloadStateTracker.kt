@@ -57,7 +57,7 @@ internal class DefaultContentDownloadStateTracker @Inject constructor() : Progre
         listeners.clear()
     }
 
-//    private fun URL.toKey() = toString()
+    //    private fun URL.toKey() = toString()
 
     override fun update(url: String, bytesRead: Long, contentLength: Long, done: Boolean) {
         mainHandler.post {

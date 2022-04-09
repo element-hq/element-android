@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.task.Task
 
 internal interface RegisterAvailableTask : Task<RegisterAvailableTask.Params, RegistrationAvailability> {
     data class Params(
-            val userName: String
+        val userName: String
     )
 }
 

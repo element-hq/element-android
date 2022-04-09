@@ -20,9 +20,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class SetDisplayNameBody(
-        /**
-         * The new display name for this user.
-         */
-        @Json(name = "displayname")
-        val displayName: String
+    /**
+     * The new display name for this user.
+     */
+    @Json(name = "displayname")
+    val displayName: String
 )

@@ -25,15 +25,15 @@ class RegistrationActionHandler @Inject constructor() {
 
     suspend fun handleRegisterAction(registrationWizard: RegistrationWizard, action: RegisterAction): RegistrationResult {
         return when (action) {
-            RegisterAction.StartRegistration               -> registrationWizard.getRegistrationFlow()
-            is RegisterAction.CaptchaDone                  -> registrationWizard.performReCaptcha(action.captchaResponse)
-            is RegisterAction.AcceptTerms                  -> registrationWizard.acceptTerms()
-            is RegisterAction.RegisterDummy                -> registrationWizard.dummy()
-            is RegisterAction.AddThreePid                  -> registrationWizard.addThreePid(action.threePid)
-            is RegisterAction.SendAgainThreePid            -> registrationWizard.sendAgainThreePid()
-            is RegisterAction.ValidateThreePid             -> registrationWizard.handleValidateThreePid(action.code)
+            RegisterAction.StartRegistration -> registrationWizard.getRegistrationFlow()
+            is RegisterAction.CaptchaDone -> registrationWizard.performReCaptcha(action.captchaResponse)
+            is RegisterAction.AcceptTerms -> registrationWizard.acceptTerms()
+            is RegisterAction.RegisterDummy -> registrationWizard.dummy()
+            is RegisterAction.AddThreePid -> registrationWizard.addThreePid(action.threePid)
+            is RegisterAction.SendAgainThreePid -> registrationWizard.sendAgainThreePid()
+            is RegisterAction.ValidateThreePid -> registrationWizard.handleValidateThreePid(action.code)
             is RegisterAction.CheckIfEmailHasBeenValidated -> registrationWizard.checkIfEmailHasBeenValidated(action.delayMillis)
-            is RegisterAction.CreateAccount                -> registrationWizard.createAccount(action.username, action.password, action.initialDeviceName)
+            is RegisterAction.CreateAccount -> registrationWizard.createAccount(action.username, action.password, action.initialDeviceName)
         }
     }
 }
@@ -56,12 +56,12 @@ sealed interface RegisterAction {
 }
 
 fun RegisterAction.ignoresResult() = when (this) {
-    is RegisterAction.AddThreePid       -> true
+    is RegisterAction.AddThreePid -> true
     is RegisterAction.SendAgainThreePid -> true
-    else                                -> false
+    else -> false
 }
 
 fun RegisterAction.hasLoadingState() = when (this) {
     is RegisterAction.CheckIfEmailHasBeenValidated -> false
-    else                                           -> true
+    else -> true
 }

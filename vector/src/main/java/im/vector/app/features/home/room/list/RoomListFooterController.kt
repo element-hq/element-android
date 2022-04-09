@@ -28,8 +28,8 @@ import im.vector.app.space
 import javax.inject.Inject
 
 class RoomListFooterController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val userPreferencesProvider: UserPreferencesProvider
+    private val stringProvider: StringProvider,
+    private val userPreferencesProvider: UserPreferencesProvider
 ) : TypedEpoxyController<RoomListViewState>() {
 
     var listener: FilteredRoomFooterItem.Listener? = null
@@ -45,7 +45,7 @@ class RoomListFooterController @Inject constructor(
                     inSpace(data.currentRoomGrouping.invoke()?.space() != null)
                 }
             }
-            else                         -> {
+            else -> {
                 if (userPreferencesProvider.shouldShowLongClickOnRoomHelp()) {
                     helpFooterItem {
                         id("long_click_help")

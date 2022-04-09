@@ -28,7 +28,7 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class AutocompleteMemberController @Inject constructor(private val context: Context) :
-        TypedEpoxyController<List<AutocompleteMemberItem>>() {
+    TypedEpoxyController<List<AutocompleteMemberItem>>() {
 
     /* ==========================================================================================
      * Fields
@@ -52,9 +52,9 @@ class AutocompleteMemberController @Inject constructor(private val context: Cont
         }
         data.forEach { item ->
             when (item) {
-                is AutocompleteMemberItem.Header     -> buildHeaderItem(item)
+                is AutocompleteMemberItem.Header -> buildHeaderItem(item)
                 is AutocompleteMemberItem.RoomMember -> buildRoomMemberItem(item)
-                is AutocompleteMemberItem.Everyone   -> buildEveryoneItem(item)
+                is AutocompleteMemberItem.Everyone -> buildEveryoneItem(item)
             }
         }
     }

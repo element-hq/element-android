@@ -33,18 +33,20 @@ import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.flow.flow
 
 data class AccountDataViewState(
-        val accountData: Async<List<UserAccountDataEvent>> = Uninitialized
+    val accountData: Async<List<UserAccountDataEvent>> = Uninitialized
 ) : MavericksState
 
-class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: AccountDataViewState,
-                                                       private val session: Session) :
+class AccountDataViewModel @AssistedInject constructor(
+    @Assisted initialState: AccountDataViewState,
+    private val session: Session
+) :
     VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
 
     init {
         session.flow().liveUserAccountData(emptySet())
-                .execute {
-                    copy(accountData = it)
-                }
+            .execute {
+                copy(accountData = it)
+            }
     }
 
     override fun handle(action: AccountDataAction) {

@@ -25,28 +25,28 @@ internal object PushersMapper {
 
     fun map(pushEntity: PusherEntity): Pusher {
         return Pusher(
-                pushKey = pushEntity.pushKey,
-                kind = pushEntity.kind ?: "",
-                appId = pushEntity.appId,
-                appDisplayName = pushEntity.appDisplayName,
-                deviceDisplayName = pushEntity.deviceDisplayName,
-                profileTag = pushEntity.profileTag,
-                lang = pushEntity.lang,
-                data = PusherData(pushEntity.data?.url, pushEntity.data?.format),
-                state = pushEntity.state
+            pushKey = pushEntity.pushKey,
+            kind = pushEntity.kind ?: "",
+            appId = pushEntity.appId,
+            appDisplayName = pushEntity.appDisplayName,
+            deviceDisplayName = pushEntity.deviceDisplayName,
+            profileTag = pushEntity.profileTag,
+            lang = pushEntity.lang,
+            data = PusherData(pushEntity.data?.url, pushEntity.data?.format),
+            state = pushEntity.state
         )
     }
 
     fun map(pusher: JsonPusher): PusherEntity {
         return PusherEntity(
-                pushKey = pusher.pushKey,
-                kind = pusher.kind,
-                appId = pusher.appId,
-                appDisplayName = pusher.appDisplayName,
-                deviceDisplayName = pusher.deviceDisplayName,
-                profileTag = pusher.profileTag,
-                lang = pusher.lang,
-                data = PusherDataEntity(pusher.data?.url, pusher.data?.format)
+            pushKey = pusher.pushKey,
+            kind = pusher.kind,
+            appId = pusher.appId,
+            appDisplayName = pusher.appDisplayName,
+            deviceDisplayName = pusher.deviceDisplayName,
+            profileTag = pusher.profileTag,
+            lang = pusher.lang,
+            data = PusherDataEntity(pusher.data?.url, pusher.data?.format)
         )
     }
 }

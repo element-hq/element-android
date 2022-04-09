@@ -44,11 +44,11 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 class MatrixToBottomSheetViewModel @AssistedInject constructor(
-        @Assisted initialState: MatrixToBottomSheetState,
-        private val session: Session,
-        private val stringProvider: StringProvider,
-        private val directRoomHelper: DirectRoomHelper,
-        private val errorFormatter: ErrorFormatter
+    @Assisted initialState: MatrixToBottomSheetState,
+    private val session: Session,
+    private val stringProvider: StringProvider,
+    private val directRoomHelper: DirectRoomHelper,
+    private val errorFormatter: ErrorFormatter
 ) : VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
 
     @AssistedFactory
@@ -60,20 +60,20 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
 
     init {
         when (initialState.linkType) {
-            is PermalinkData.RoomLink            -> {
+            is PermalinkData.RoomLink -> {
                 setState {
                     copy(roomPeekResult = Loading())
                 }
             }
-            is PermalinkData.UserLink            -> {
+            is PermalinkData.UserLink -> {
                 setState {
                     copy(matrixItem = Loading())
                 }
             }
-            is PermalinkData.GroupLink           -> {
+            is PermalinkData.GroupLink -> {
                 // Not yet supported
             }
-            is PermalinkData.FallbackLink        -> {
+            is PermalinkData.FallbackLink -> {
                 // Not yet supported
             }
             is PermalinkData.RoomEmailInviteLink -> Unit
@@ -88,99 +88,99 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         if (permalinkData is PermalinkData.FallbackLink) {
             setState {
                 copy(
-                        matrixItem = Fail(IllegalArgumentException(stringProvider.getString(R.string.permalink_malformed))),
-                        startChattingState = Uninitialized
+                    matrixItem = Fail(IllegalArgumentException(stringProvider.getString(R.string.permalink_malformed))),
+                    startChattingState = Uninitialized
                 )
             }
             return
         }
 
         when (permalinkData) {
-            is PermalinkData.UserLink     -> {
+            is PermalinkData.UserLink -> {
                 val user = resolveUser(permalinkData.userId)
                 setState {
                     copy(
-                            matrixItem = Success(user.toMatrixItem()),
-                            startChattingState = Success(Unit)
+                        matrixItem = Success(user.toMatrixItem()),
+                        startChattingState = Success(Unit)
                     )
                 }
             }
-            is PermalinkData.RoomLink     -> {
+            is PermalinkData.RoomLink -> {
                 // could this room be already known
                 val knownRoom = if (permalinkData.isRoomAlias) {
                     tryOrNull {
                         session.getRoomIdByAlias(permalinkData.roomIdOrAlias, false)
                     }
-                            ?.getOrNull()
-                            ?.roomId?.let {
-                                session.getRoom(it)
-                            }
+                        ?.getOrNull()
+                        ?.roomId?.let {
+                            session.getRoom(it)
+                        }
                 } else {
                     session.getRoom(permalinkData.roomIdOrAlias)
                 }
-                        ?.roomSummary()
-                        // don't take if not Join, as it could be outdated
-                        ?.takeIf { it.membership == Membership.JOIN }
+                    ?.roomSummary()
+                    // don't take if not Join, as it could be outdated
+                    ?.takeIf { it.membership == Membership.JOIN }
                 if (knownRoom != null) {
                     setState {
                         copy(
-                                roomPeekResult = Success(
-                                        RoomInfoResult.FullInfo(
-                                                roomItem = knownRoom.toMatrixItem(),
-                                                name = knownRoom.name,
-                                                topic = knownRoom.topic,
-                                                memberCount = knownRoom.joinedMembersCount,
-                                                alias = knownRoom.canonicalAlias,
-                                                membership = knownRoom.membership,
-                                                roomType = knownRoom.roomType,
-                                                viaServers = null,
-                                                isPublic = knownRoom.isPublic
-                                        )
+                            roomPeekResult = Success(
+                                RoomInfoResult.FullInfo(
+                                    roomItem = knownRoom.toMatrixItem(),
+                                    name = knownRoom.name,
+                                    topic = knownRoom.topic,
+                                    memberCount = knownRoom.joinedMembersCount,
+                                    alias = knownRoom.canonicalAlias,
+                                    membership = knownRoom.membership,
+                                    roomType = knownRoom.roomType,
+                                    viaServers = null,
+                                    isPublic = knownRoom.isPublic
                                 )
+                            )
                         )
                     }
                 } else {
                     val result = when (val peekResult = tryOrNull { resolveSpace(permalinkData) }) {
-                        is PeekResult.Success           -> {
+                        is PeekResult.Success -> {
                             RoomInfoResult.FullInfo(
-                                    roomItem = MatrixItem.RoomItem(peekResult.roomId, peekResult.name, peekResult.avatarUrl),
-                                    name = peekResult.name ?: "",
-                                    topic = peekResult.topic ?: "",
-                                    memberCount = peekResult.numJoinedMembers,
-                                    alias = peekResult.alias,
-                                    membership = knownRoom?.membership ?: Membership.NONE,
-                                    roomType = peekResult.roomType,
-                                    viaServers = peekResult.viaServers.takeIf { it.isNotEmpty() } ?: permalinkData.viaParameters,
-                                    isPublic = peekResult.isPublic
+                                roomItem = MatrixItem.RoomItem(peekResult.roomId, peekResult.name, peekResult.avatarUrl),
+                                name = peekResult.name ?: "",
+                                topic = peekResult.topic ?: "",
+                                memberCount = peekResult.numJoinedMembers,
+                                alias = peekResult.alias,
+                                membership = knownRoom?.membership ?: Membership.NONE,
+                                roomType = peekResult.roomType,
+                                viaServers = peekResult.viaServers.takeIf { it.isNotEmpty() } ?: permalinkData.viaParameters,
+                                isPublic = peekResult.isPublic
                             ).also {
                                 peekResult.someMembers?.let { checkForKnownMembers(it) }
                             }
                         }
                         is PeekResult.PeekingNotAllowed -> {
                             RoomInfoResult.PartialInfo(
-                                    roomId = permalinkData.roomIdOrAlias,
-                                    viaServers = permalinkData.viaParameters
+                                roomId = permalinkData.roomIdOrAlias,
+                                viaServers = permalinkData.viaParameters
                             )
                         }
-                        PeekResult.UnknownAlias         -> {
+                        PeekResult.UnknownAlias -> {
                             RoomInfoResult.UnknownAlias(permalinkData.roomIdOrAlias)
                         }
-                        null                            -> {
+                        null -> {
                             RoomInfoResult.PartialInfo(
-                                    roomId = permalinkData.roomIdOrAlias,
-                                    viaServers = permalinkData.viaParameters
+                                roomId = permalinkData.roomIdOrAlias,
+                                viaServers = permalinkData.viaParameters
                             ).takeIf { permalinkData.isRoomAlias.not() }
-                                    ?: RoomInfoResult.NotFound
+                                ?: RoomInfoResult.NotFound
                         }
                     }
                     setState {
                         copy(
-                                roomPeekResult = Success(result)
+                            roomPeekResult = Success(result)
                         )
                     }
                 }
             }
-            is PermalinkData.GroupLink    -> {
+            is PermalinkData.GroupLink -> {
                 // not yet supported
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
@@ -198,44 +198,44 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
             }
             // put one with avatar first, and take 5
             val finalRes = (knownMembers.filter { it.avatarUrl != null } + knownMembers.filter { it.avatarUrl == null })
-                    .take(5)
+                .take(5)
             setState {
                 copy(
-                        peopleYouKnow = Success(finalRes)
+                    peopleYouKnow = Success(finalRes)
                 )
             }
         }
     }
 
     private suspend fun resolveSpace(permalinkData: PermalinkData.RoomLink): PeekResult {
-//        try {
-//            return session.spaceService().querySpaceChildren(permalinkData.roomIdOrAlias).let {
-//                val roomSummary = it.first
-//                PeekResult.Success(
-//                        roomId = roomSummary.roomId,
-//                        alias = roomSummary.canonicalAlias,
-//                        avatarUrl = roomSummary.avatarUrl,
-//                        name = roomSummary.name,
-//                        topic = roomSummary.topic,
-//                        numJoinedMembers = roomSummary.joinedMembersCount,
-//                        roomType = roomSummary.roomType,
-//                        viaServers = emptyList(),
-//                        someMembers = null
-//                )
-//            }
-//        } catch (failure: Throwable) {
-//            if (failure is Failure.OtherServerError && failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND) {
+        //        try {
+        //            return session.spaceService().querySpaceChildren(permalinkData.roomIdOrAlias).let {
+        //                val roomSummary = it.first
+        //                PeekResult.Success(
+        //                        roomId = roomSummary.roomId,
+        //                        alias = roomSummary.canonicalAlias,
+        //                        avatarUrl = roomSummary.avatarUrl,
+        //                        name = roomSummary.name,
+        //                        topic = roomSummary.topic,
+        //                        numJoinedMembers = roomSummary.joinedMembersCount,
+        //                        roomType = roomSummary.roomType,
+        //                        viaServers = emptyList(),
+        //                        someMembers = null
+        //                )
+        //            }
+        //        } catch (failure: Throwable) {
+        //            if (failure is Failure.OtherServerError && failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND) {
         return resolveRoom(permalinkData.roomIdOrAlias)
-//            } else {
-//                throw failure
-//            }
-//        }
+        //            } else {
+        //                throw failure
+        //            }
+        //        }
     }
 
     private suspend fun resolveUser(userId: String): User {
         return tryOrNull { session.resolveUser(userId) }
         // Create raw user in case the user is not searchable
-                ?: User(userId, null, null)
+            ?: User(userId, null, null)
     }
 
     /**
@@ -249,18 +249,18 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     override fun handle(action: MatrixToAction) {
         when (action) {
             is MatrixToAction.StartChattingWithUser -> handleStartChatting(action)
-            MatrixToAction.FailedToResolveUser      -> {
+            MatrixToAction.FailedToResolveUser -> {
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
-            MatrixToAction.FailedToStartChatting    -> {
+            MatrixToAction.FailedToStartChatting -> {
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
-            is MatrixToAction.JoinSpace             -> handleJoinSpace(action)
-            is MatrixToAction.JoinRoom              -> handleJoinRoom(action)
-            is MatrixToAction.OpenSpace             -> {
+            is MatrixToAction.JoinSpace -> handleJoinSpace(action)
+            is MatrixToAction.JoinRoom -> handleJoinRoom(action)
+            is MatrixToAction.OpenSpace -> {
                 _viewEvents.post(MatrixToViewEvents.NavigateToSpace(action.spaceID))
             }
-            is MatrixToAction.OpenRoom              -> {
+            is MatrixToAction.OpenRoom -> {
                 _viewEvents.post(MatrixToViewEvents.NavigateToRoom(action.roomId))
             }
         }

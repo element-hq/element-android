@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController) :
     VectorBaseFragment<FragmentKeysBackupSettingsBinding>(),
-        KeysBackupSettingsRecyclerViewController.Listener {
+    KeysBackupSettingsRecyclerViewController.Listener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSettingsBinding {
         return FragmentKeysBackupSettingsBinding.inflate(inflater, container, false)
@@ -72,15 +72,15 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
     override fun didSelectDeleteSetupMessageRecovery() {
         activity?.let {
             MaterialAlertDialogBuilder(it)
-                    .setTitle(R.string.keys_backup_settings_delete_confirm_title)
-                    .setMessage(R.string.keys_backup_settings_delete_confirm_message)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.keys_backup_settings_delete_confirm_title) { _, _ ->
-                        viewModel.handle(KeyBackupSettingsAction.DeleteKeyBackup)
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .setCancelable(true)
-                    .show()
+                .setTitle(R.string.keys_backup_settings_delete_confirm_title)
+                .setMessage(R.string.keys_backup_settings_delete_confirm_message)
+                .setCancelable(false)
+                .setPositiveButton(R.string.keys_backup_settings_delete_confirm_title) { _, _ ->
+                    viewModel.handle(KeyBackupSettingsAction.DeleteKeyBackup)
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .setCancelable(true)
+                .show()
         }
     }
 

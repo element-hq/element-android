@@ -35,9 +35,9 @@ import java.util.Locale
 import javax.inject.Inject
 
 class LocalePickerController @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val stringProvider: StringProvider,
-        private val errorFormatter: ErrorFormatter
+    private val vectorPreferences: VectorPreferences,
+    private val stringProvider: StringProvider,
+    private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<LocalePickerViewState>() {
 
     var listener: Listener? = null
@@ -78,19 +78,19 @@ class LocalePickerController @Inject constructor(
                     }
                 } else {
                     list()
-                            .filter { it.toString() != data.currentLocale.toString() }
-                            .forEach { locale ->
-                                localeItem {
-                                    id(locale.toString())
-                                    title(VectorLocale.localeToLocalisedString(locale).safeCapitalize(locale))
-                                    if (host.vectorPreferences.developerMode()) {
-                                        subtitle(VectorLocale.localeToLocalisedStringInfo(locale))
-                                    }
-                                    clickListener { host.listener?.onLocaleClicked(locale) }
+                        .filter { it.toString() != data.currentLocale.toString() }
+                        .forEach { locale ->
+                            localeItem {
+                                id(locale.toString())
+                                title(VectorLocale.localeToLocalisedString(locale).safeCapitalize(locale))
+                                if (host.vectorPreferences.developerMode()) {
+                                    subtitle(VectorLocale.localeToLocalisedStringInfo(locale))
                                 }
+                                clickListener { host.listener?.onLocaleClicked(locale) }
                             }
+                        }
                 }
-            is Fail    ->
+            is Fail ->
                 errorWithRetryItem {
                     id("error")
                     text(host.errorFormatter.toHumanReadable(list.error))

@@ -26,27 +26,27 @@ import javax.inject.Inject
 internal interface AddTagToRoomTask : Task<AddTagToRoomTask.Params, Unit> {
 
     data class Params(
-            val roomId: String,
-            val tag: String,
-            val order: Double?
+        val roomId: String,
+        val tag: String,
+        val order: Double?
     )
 }
 
 internal class DefaultAddTagToRoomTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        @UserId private val userId: String,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    @UserId private val userId: String,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddTagToRoomTask {
 
     override suspend fun execute(params: AddTagToRoomTask.Params) {
         executeRequest(globalErrorReceiver) {
             roomAPI.putTag(
-                    userId = userId,
-                    roomId = params.roomId,
-                    tag = params.tag,
-                    body = TagBody(
-                            order = params.order
-                    )
+                userId = userId,
+                roomId = params.roomId,
+                tag = params.tag,
+                body = TagBody(
+                    order = params.order
+                )
             )
         }
     }

@@ -46,25 +46,25 @@ import org.matrix.android.sdk.api.util.Optional
  * This interface defines methods to interact within a room.
  */
 interface Room :
-        TimelineService,
-        ThreadsService,
-        ThreadsLocalService,
-        SendService,
-        DraftService,
-        ReadService,
-        TypingService,
-        AliasService,
-        TagsService,
-        MembershipService,
-        StateService,
-        UploadsService,
-        ReportingService,
-        RoomCallService,
-        RelationService,
-        RoomCryptoService,
-        RoomPushRuleService,
-        RoomAccountDataService,
-        RoomVersionService {
+    TimelineService,
+    ThreadsService,
+    ThreadsLocalService,
+    SendService,
+    DraftService,
+    ReadService,
+    TypingService,
+    AliasService,
+    TagsService,
+    MembershipService,
+    StateService,
+    UploadsService,
+    ReportingService,
+    RoomCallService,
+    RelationService,
+    RoomCryptoService,
+    RoomPushRuleService,
+    RoomAccountDataService,
+    RoomVersionService {
 
     val coroutineDispatchers: MatrixCoroutineDispatchers
 
@@ -96,13 +96,15 @@ interface Room :
      * @param includeProfile requests that the server returns the historic profile information for the users that sent the events that were returned.
      * @return The search result
      */
-    suspend fun search(searchTerm: String,
-                       nextBatch: String?,
-                       orderByRecent: Boolean,
-                       limit: Int,
-                       beforeLimit: Int,
-                       afterLimit: Int,
-                       includeProfile: Boolean): SearchResult
+    suspend fun search(
+        searchTerm: String,
+        nextBatch: String?,
+        orderByRecent: Boolean,
+        limit: Int,
+        beforeLimit: Int,
+        afterLimit: Int,
+        includeProfile: Boolean
+    ): SearchResult
 
     /**
      * Use this room as a Space, if the type is correct.

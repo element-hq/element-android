@@ -39,13 +39,13 @@ class BigImageViewerActivity : VectorBaseActivity<ActivityBigImageViewerBinding>
         super.onCreate(savedInstanceState)
 
         setupToolbar(views.bigImageViewerToolbar)
-                .setTitle(intent.getStringExtra(EXTRA_TITLE))
-                .allowBack()
+            .setTitle(intent.getStringExtra(EXTRA_TITLE))
+            .allowBack()
 
         val uri = sessionHolder.getSafeActiveSession()
-                ?.contentUrlResolver()
-                ?.resolveFullSize(intent.getStringExtra(EXTRA_IMAGE_URL))
-                ?.toUri()
+            ?.contentUrlResolver()
+            ?.resolveFullSize(intent.getStringExtra(EXTRA_IMAGE_URL))
+            ?.toUri()
 
         if (uri == null) {
             finish()

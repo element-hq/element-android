@@ -30,8 +30,8 @@ class MaterialProgressDialog(val context: Context) {
         views.message.text = message
 
         return MaterialAlertDialogBuilder(context)
-                .setCancelable(cancellable)
-                .setView(view)
-                .show()
+            .setCancelable(cancellable)
+            .setView(view)
+            .show()
     }
 }

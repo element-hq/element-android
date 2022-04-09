@@ -25,14 +25,14 @@ import javax.inject.Inject
 
 internal interface UpdateKeysBackupVersionTask : Task<UpdateKeysBackupVersionTask.Params, Unit> {
     data class Params(
-            val version: String,
-            val keysBackupVersionBody: UpdateKeysBackupVersionBody
+        val version: String,
+        val keysBackupVersionBody: UpdateKeysBackupVersionBody
     )
 }
 
 internal class DefaultUpdateKeysBackupVersionTask @Inject constructor(
-        private val roomKeysApi: RoomKeysApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomKeysApi: RoomKeysApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : UpdateKeysBackupVersionTask {
 
     override suspend fun execute(params: UpdateKeysBackupVersionTask.Params) {

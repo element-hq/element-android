@@ -52,7 +52,7 @@ class SettingsRobot {
         clickOnAndGoBack(R.string.settings_security_and_privacy) { block(SettingsSecurityRobot()) }
     }
 
-    fun labs(shouldGoBack: Boolean = true, block:  () -> Unit = {}) {
+    fun labs(shouldGoBack: Boolean = true, block: () -> Unit = {}) {
         if (shouldGoBack) {
             clickOnAndGoBack(R.string.room_settings_labs_pref_title) { block() }
         } else {

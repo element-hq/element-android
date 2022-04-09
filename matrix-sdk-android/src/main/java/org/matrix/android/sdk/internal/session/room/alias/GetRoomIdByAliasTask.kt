@@ -31,15 +31,15 @@ import javax.inject.Inject
 
 internal interface GetRoomIdByAliasTask : Task<GetRoomIdByAliasTask.Params, Optional<RoomAliasDescription>> {
     data class Params(
-            val roomAlias: String,
-            val searchOnServer: Boolean
+        val roomAlias: String,
+        val searchOnServer: Boolean
     )
 }
 
 internal class DefaultGetRoomIdByAliasTask @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        private val directoryAPI: DirectoryAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    @SessionDatabase private val monarchy: Monarchy,
+    private val directoryAPI: DirectoryAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetRoomIdByAliasTask {
 
     override suspend fun execute(params: GetRoomIdByAliasTask.Params): Optional<RoomAliasDescription> {
@@ -51,7 +51,7 @@ internal class DefaultGetRoomIdByAliasTask @Inject constructor(
         } else if (!params.searchOnServer) {
             Optional.from(null)
         } else {
-            val description  = tryOrNull("## Failed to get roomId from alias") {
+            val description = tryOrNull("## Failed to get roomId from alias") {
                 executeRequest(globalErrorReceiver) {
                     directoryAPI.getRoomIdByAlias(params.roomAlias)
                 }

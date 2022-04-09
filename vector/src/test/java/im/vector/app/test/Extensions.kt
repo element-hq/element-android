@@ -33,8 +33,8 @@ fun <S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents> Vect
 }
 
 class ViewModelTest<S, VE>(
-        val states: FlowTestObserver<S>,
-        val viewEvents: FlowTestObserver<VE>
+    val states: FlowTestObserver<S>,
+    val viewEvents: FlowTestObserver<VE>
 ) {
 
     fun assertNoEvents(): ViewModelTest<S, VE> {

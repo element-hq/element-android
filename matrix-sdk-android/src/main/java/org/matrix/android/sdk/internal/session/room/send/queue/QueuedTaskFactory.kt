@@ -25,33 +25,33 @@ import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import javax.inject.Inject
 
 internal class QueuedTaskFactory @Inject constructor(
-        private val sendEventTask: SendEventTask,
-        private val cryptoService: CryptoService,
-        private val localEchoRepository: LocalEchoRepository,
-        private val redactEventTask: RedactEventTask,
-        private val cancelSendTracker: CancelSendTracker
+    private val sendEventTask: SendEventTask,
+    private val cryptoService: CryptoService,
+    private val localEchoRepository: LocalEchoRepository,
+    private val redactEventTask: RedactEventTask,
+    private val cancelSendTracker: CancelSendTracker
 ) {
 
     fun createSendTask(event: Event, encrypt: Boolean): QueuedTask {
         return SendEventQueuedTask(
-                event = event,
-                encrypt = encrypt,
-                cryptoService = cryptoService,
-                localEchoRepository = localEchoRepository,
-                sendEventTask = sendEventTask,
-                cancelSendTracker = cancelSendTracker
+            event = event,
+            encrypt = encrypt,
+            cryptoService = cryptoService,
+            localEchoRepository = localEchoRepository,
+            sendEventTask = sendEventTask,
+            cancelSendTracker = cancelSendTracker
         )
     }
 
     fun createRedactTask(redactionLocalEcho: String, eventId: String, roomId: String, reason: String?): QueuedTask {
         return RedactQueuedTask(
-                redactionLocalEchoId = redactionLocalEcho,
-                toRedactEventId = eventId,
-                roomId = roomId,
-                reason = reason,
-                redactEventTask = redactEventTask,
-                localEchoRepository = localEchoRepository,
-                cancelSendTracker = cancelSendTracker
+            redactionLocalEchoId = redactionLocalEcho,
+            toRedactEventId = eventId,
+            roomId = roomId,
+            reason = reason,
+            redactEventTask = redactEventTask,
+            localEchoRepository = localEchoRepository,
+            cancelSendTracker = cancelSendTracker
         )
     }
 }

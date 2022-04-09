@@ -31,8 +31,8 @@ import javax.inject.Singleton
 
 @Singleton
 class PushRuleTriggerListener @Inject constructor(
-        private val resolver: NotifiableEventResolver,
-        private val notificationDrawerManager: NotificationDrawerManager
+    private val resolver: NotifiableEventResolver,
+    private val notificationDrawerManager: NotificationDrawerManager
 ) : PushRuleService.PushRuleListener {
 
     private var session: Session? = null

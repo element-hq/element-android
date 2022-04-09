@@ -43,17 +43,17 @@ fun Session.startSyncing(context: Context) {
     if (!hasAlreadySynced()) {
         // initial sync is done as a service so it can continue below app lifecycle
         VectorSyncService.newOneShotIntent(
-                context = applicationContext,
-                sessionId = sessionId
+            context = applicationContext,
+            sessionId = sessionId
         )
-                .let {
-                    try {
-                        ContextCompat.startForegroundService(applicationContext, it)
-                    } catch (ex: Throwable) {
-                        // TODO
-                        Timber.e(ex)
-                    }
+            .let {
+                try {
+                    ContextCompat.startForegroundService(applicationContext, it)
+                } catch (ex: Throwable) {
+                    // TODO
+                    Timber.e(ex)
                 }
+            }
     } else {
         val isAtLeastStarted = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
         Timber.v("--> is at least started? $isAtLeastStarted")
@@ -74,8 +74,8 @@ fun Session.cannotLogoutSafely(): Boolean {
     return hasUnsavedKeys() ||
             // has local cross signing keys
             (cryptoService().crossSigningService().allPrivateKeysKnown() &&
-            // That are not backed up
-            !sharedSecretStorageService.isRecoverySetup())
+                    // That are not backed up
+                    !sharedSecretStorageService.isRecoverySetup())
 }
 
 fun Session.vectorStore(context: Context) = VectorSessionStore(context, myUserId)

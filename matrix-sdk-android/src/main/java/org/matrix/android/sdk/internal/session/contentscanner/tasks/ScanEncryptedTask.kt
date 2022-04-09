@@ -29,15 +29,15 @@ import javax.inject.Inject
 
 internal interface ScanEncryptedTask : Task<ScanEncryptedTask.Params, ScanResponse> {
     data class Params(
-            val mxcUrl: String,
-            val publicServerKey: String?,
-            val encryptedInfo: ElementToDecrypt
+        val mxcUrl: String,
+        val publicServerKey: String?,
+        val encryptedInfo: ElementToDecrypt
     )
 }
 
 internal class DefaultScanEncryptedTask @Inject constructor(
-        private val contentScannerApiProvider: ContentScannerApiProvider,
-        private val contentScannerStore: ContentScannerStore
+    private val contentScannerApiProvider: ContentScannerApiProvider,
+    private val contentScannerStore: ContentScannerStore
 ) : ScanEncryptedTask {
 
     override suspend fun execute(params: ScanEncryptedTask.Params): ScanResponse {
@@ -53,10 +53,10 @@ internal class DefaultScanEncryptedTask @Inject constructor(
                 api.scanFile(dlBody)
             }
             contentScannerStore.updateScanResultForContent(
-                    mxcUrl,
-                    scannerUrl,
-                    ScanState.TRUSTED.takeIf { executeRequest.clean } ?: ScanState.INFECTED,
-                    executeRequest.info ?: ""
+                mxcUrl,
+                scannerUrl,
+                ScanState.TRUSTED.takeIf { executeRequest.clean } ?: ScanState.INFECTED,
+                executeRequest.info ?: ""
             )
             return executeRequest
         } catch (failure: Throwable) {

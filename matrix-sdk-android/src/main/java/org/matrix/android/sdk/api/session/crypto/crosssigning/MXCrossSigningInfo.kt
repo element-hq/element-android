@@ -20,19 +20,19 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
 import org.matrix.android.sdk.internal.crypto.model.KeyUsage
 
 data class MXCrossSigningInfo(
-        val userId: String,
-        val crossSigningKeys: List<CryptoCrossSigningKey>
+    val userId: String,
+    val crossSigningKeys: List<CryptoCrossSigningKey>
 ) {
 
     fun isTrusted(): Boolean = masterKey()?.trustLevel?.isVerified() == true &&
             selfSigningKey()?.trustLevel?.isVerified() == true
 
     fun masterKey(): CryptoCrossSigningKey? = crossSigningKeys
-            .firstOrNull { it.usages?.contains(KeyUsage.MASTER.value) == true }
+        .firstOrNull { it.usages?.contains(KeyUsage.MASTER.value) == true }
 
     fun userKey(): CryptoCrossSigningKey? = crossSigningKeys
-            .firstOrNull { it.usages?.contains(KeyUsage.USER_SIGNING.value) == true }
+        .firstOrNull { it.usages?.contains(KeyUsage.USER_SIGNING.value) == true }
 
     fun selfSigningKey(): CryptoCrossSigningKey? = crossSigningKeys
-            .firstOrNull { it.usages?.contains(KeyUsage.SELF_SIGNING.value) == true }
+        .firstOrNull { it.usages?.contains(KeyUsage.SELF_SIGNING.value) == true }
 }

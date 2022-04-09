@@ -72,9 +72,9 @@ class CameraVideoPicker {
             val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
             val storageDir: File = context.filesDir
             return File.createTempFile(
-                    "${timeStamp}_", /* prefix */
-                    ".mp4", /* suffix */
-                    storageDir /* directory */
+                "${timeStamp}_", /* prefix */
+                ".mp4", /* suffix */
+                storageDir /* directory */
             )
         }
     }

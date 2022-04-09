@@ -30,8 +30,10 @@ import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
-                                                           private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>) :
+internal class EventInsertLiveObserver @Inject constructor(
+    @SessionDatabase realmConfiguration: RealmConfiguration,
+    private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>
+) :
     RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query {
@@ -49,8 +51,8 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
             if (shouldProcess(it)) {
                 // don't use copy from realm over there
                 val copiedEvent = EventInsertEntity(
-                        eventId = it.eventId,
-                        eventType = it.eventType
+                    eventId = it.eventId,
+                    eventType = it.eventType
                 ).apply {
                     insertType = it.insertType
                 }
@@ -76,9 +78,9 @@ internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase real
                     }
                 }
                 realm.where(EventInsertEntity::class.java)
-                        .`in`(EventInsertEntityFields.EVENT_ID, idsToDeleteAfterProcess.toTypedArray())
-                        .findAll()
-                        .deleteAllFromRealm()
+                    .`in`(EventInsertEntityFields.EVENT_ID, idsToDeleteAfterProcess.toTypedArray())
+                    .findAll()
+                    .deleteAllFromRealm()
             }
             processors.forEach { it.onPostProcess() }
         }

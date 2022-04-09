@@ -20,31 +20,31 @@ import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 
 data class MXKey(
-        /**
-         * The type of the key (in the example: "signed_curve25519").
-         */
-        val type: String,
+    /**
+     * The type of the key (in the example: "signed_curve25519").
+     */
+    val type: String,
 
-        /**
-         * The id of the key (in the example: "AAAAFw").
-         */
-        private val keyId: String,
+    /**
+     * The id of the key (in the example: "AAAAFw").
+     */
+    private val keyId: String,
 
-        /**
-         * The key (in the example: "IjwIcskng7YjYcn0tS8TUOT2OHHtBSfMpcfIczCgXj4").
-         */
-        val value: String,
+    /**
+     * The key (in the example: "IjwIcskng7YjYcn0tS8TUOT2OHHtBSfMpcfIczCgXj4").
+     */
+    val value: String,
 
-        /**
-         * signature user Id to [deviceid][signature]
-         */
-        private val signatures: Map<String, Map<String, String>>,
+    /**
+     * signature user Id to [deviceid][signature]
+     */
+    private val signatures: Map<String, Map<String, String>>,
 
-        /**
-         * We have to store the original json because it can contain other fields
-         * that we don't support yet but they would be needed to check signatures
-         */
-        private val rawMap: JsonDict
+    /**
+     * We have to store the original json because it can contain other fields
+     * that we don't support yet but they would be needed to check signatures
+     */
+    private val rawMap: JsonDict
 ) {
 
     /**
@@ -113,11 +113,11 @@ data class MXKey(
                         if (params["key"] is String) {
                             @Suppress("UNCHECKED_CAST")
                             return MXKey(
-                                    type = components[0],
-                                    keyId = components[1],
-                                    value = params["key"] as String,
-                                    signatures = params["signatures"] as Map<String, Map<String, String>>,
-                                    rawMap = params
+                                type = components[0],
+                                keyId = components[1],
+                                value = params["key"] as String,
+                                signatures = params["signatures"] as Map<String, Map<String, String>>,
+                                rawMap = params
                             )
                         }
                     }

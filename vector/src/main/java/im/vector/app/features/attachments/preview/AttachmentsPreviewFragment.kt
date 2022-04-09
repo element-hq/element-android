@@ -58,13 +58,13 @@ import javax.inject.Inject
 
 @Parcelize
 data class AttachmentsPreviewArgs(
-        val attachments: List<ContentAttachmentData>
+    val attachments: List<ContentAttachmentData>
 ) : Parcelable
 
 class AttachmentsPreviewFragment @Inject constructor(
-        private val attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController,
-        private val attachmentBigPreviewController: AttachmentBigPreviewController,
-        private val colorProvider: ColorProvider
+    private val attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController,
+    private val attachmentBigPreviewController: AttachmentBigPreviewController,
+    private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentAttachmentsPreviewBinding>(), AttachmentMiniaturePreviewController.Callback {
 
     private val fragmentArgs: AttachmentsPreviewArgs by args()
@@ -101,11 +101,11 @@ class AttachmentsPreviewFragment @Inject constructor(
                 handleRemoveAction()
                 true
             }
-            R.id.attachmentsPreviewEditAction   -> {
+            R.id.attachmentsPreviewEditAction -> {
                 handleEditAction()
                 true
             }
-            else                                -> {
+            else -> {
                 super.onOptionsItemSelected(item)
             }
         }
@@ -150,7 +150,7 @@ class AttachmentsPreviewFragment @Inject constructor(
         return when {
             nbVideos == 0 -> resources.getQuantityString(R.plurals.send_images_with_original_size, nbImages)
             nbImages == 0 -> resources.getQuantityString(R.plurals.send_videos_with_original_size, nbVideos)
-            else          -> getString(R.string.send_images_and_video_with_original_size)
+            else -> getString(R.string.send_images_and_video_with_original_size)
         }
     }
 
@@ -160,8 +160,8 @@ class AttachmentsPreviewFragment @Inject constructor(
 
     private fun setResultAndFinish() = withState(viewModel) {
         (requireActivity() as? AttachmentsPreviewActivity)?.setResultAndFinish(
-                it.attachments,
-                views.attachmentPreviewerSendImageOriginalSize.isChecked
+            it.attachments,
+            views.attachmentPreviewerSendImageOriginalSize.isChecked
         )
     }
 
@@ -195,8 +195,8 @@ class AttachmentsPreviewFragment @Inject constructor(
         val destinationFile = File(requireContext().cacheDir, currentAttachment.name.insertBeforeLast("_edited_image_${System.currentTimeMillis()}"))
         val uri = currentAttachment.queryUri
         createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), currentAttachment.name)
-                .getIntent(requireContext())
-                .let { intent -> uCropActivityResultLauncher.launch(intent) }
+            .getIntent(requireContext())
+            .let { intent -> uCropActivityResultLauncher.launch(intent) }
     }
 
     private fun setupRecyclerViews() {
@@ -211,13 +211,13 @@ class AttachmentsPreviewFragment @Inject constructor(
         views.attachmentPreviewerBigList.let {
             it.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             it.attachSnapHelperWithListener(
-                    PagerSnapHelper(),
-                    SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE,
-                    object : OnSnapPositionChangeListener {
-                        override fun onSnapPositionChange(position: Int) {
-                            viewModel.handle(AttachmentsPreviewAction.SetCurrentAttachment(position))
-                        }
-                    })
+                PagerSnapHelper(),
+                SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE,
+                object : OnSnapPositionChangeListener {
+                    override fun onSnapPositionChange(position: Int) {
+                        viewModel.handle(AttachmentsPreviewAction.SetCurrentAttachment(position))
+                    }
+                })
             it.setHasFixedSize(true)
             it.adapter = attachmentBigPreviewController.adapter
         }

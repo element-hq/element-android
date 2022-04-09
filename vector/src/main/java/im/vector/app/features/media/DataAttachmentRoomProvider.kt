@@ -28,20 +28,20 @@ import org.matrix.android.sdk.api.util.MimeTypes
 import java.io.File
 
 class DataAttachmentRoomProvider(
-        attachments: List<AttachmentData>,
-        private val room: Room?,
-        imageContentRenderer: ImageContentRenderer,
-        dateFormatter: VectorDateFormatter,
-        fileService: FileService,
-        coroutineScope: CoroutineScope,
-        stringProvider: StringProvider
+    attachments: List<AttachmentData>,
+    private val room: Room?,
+    imageContentRenderer: ImageContentRenderer,
+    dateFormatter: VectorDateFormatter,
+    fileService: FileService,
+    coroutineScope: CoroutineScope,
+    stringProvider: StringProvider
 ) : BaseAttachmentProvider<AttachmentData>(
-        attachments = attachments,
-        imageContentRenderer = imageContentRenderer,
-        fileService = fileService,
-        coroutineScope = coroutineScope,
-        dateFormatter = dateFormatter,
-        stringProvider = stringProvider
+    attachments = attachments,
+    imageContentRenderer = imageContentRenderer,
+    fileService = fileService,
+    coroutineScope = coroutineScope,
+    dateFormatter = dateFormatter,
+    stringProvider = stringProvider
 ) {
 
     override fun getAttachmentInfoAt(position: Int): AttachmentInfo {
@@ -50,31 +50,31 @@ class DataAttachmentRoomProvider(
                 is ImageContentRenderer.Data -> {
                     if (it.mimeType == MimeTypes.Gif) {
                         AttachmentInfo.AnimatedImage(
-                                uid = it.eventId,
-                                url = it.url ?: "",
-                                data = it
+                            uid = it.eventId,
+                            url = it.url ?: "",
+                            data = it
                         )
                     } else {
                         AttachmentInfo.Image(
-                                uid = it.eventId,
-                                url = it.url ?: "",
-                                data = it
+                            uid = it.eventId,
+                            url = it.url ?: "",
+                            data = it
                         )
                     }
                 }
                 is VideoContentRenderer.Data -> {
                     AttachmentInfo.Video(
+                        uid = it.eventId,
+                        url = it.url ?: "",
+                        data = it,
+                        thumbnail = AttachmentInfo.Image(
                             uid = it.eventId,
-                            url = it.url ?: "",
-                            data = it,
-                            thumbnail = AttachmentInfo.Image(
-                                    uid = it.eventId,
-                                    url = it.thumbnailMediaData.url ?: "",
-                                    data = it.thumbnailMediaData
-                            )
+                            url = it.thumbnailMediaData.url ?: "",
+                            data = it.thumbnailMediaData
+                        )
                     )
                 }
-                else                         -> throw IllegalArgumentException()
+                else -> throw IllegalArgumentException()
             }
         }
     }
@@ -86,15 +86,15 @@ class DataAttachmentRoomProvider(
 
     override suspend fun getFileForSharing(position: Int): File? {
         return getItem(position)
-                .let { item ->
-                    tryOrNull {
-                        fileService.downloadFile(
-                                fileName = item.filename,
-                                mimeType = item.mimeType,
-                                url = item.url,
-                                elementToDecrypt = item.elementToDecrypt
-                        )
-                    }
+            .let { item ->
+                tryOrNull {
+                    fileService.downloadFile(
+                        fileName = item.filename,
+                        mimeType = item.mimeType,
+                        url = item.url,
+                        elementToDecrypt = item.elementToDecrypt
+                    )
                 }
+            }
     }
 }

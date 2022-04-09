@@ -24,10 +24,10 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.viewpager2.widget.ViewPager2
 
 fun ViewPager2.setCurrentItem(
-        item: Int,
-        duration: Long,
-        interpolator: TimeInterpolator = AccelerateDecelerateInterpolator(),
-        pagePxWidth: Int = width,
+    item: Int,
+    duration: Long,
+    interpolator: TimeInterpolator = AccelerateDecelerateInterpolator(),
+    pagePxWidth: Int = width,
 ) {
     val pxToDrag: Int = pagePxWidth * (item - currentItem)
     val animator = ValueAnimator.ofInt(0, pxToDrag)
@@ -40,7 +40,7 @@ fun ViewPager2.setCurrentItem(
         kotlin.runCatching {
             when {
                 isRtl -> fakeDragBy(currentPxToDrag)
-                else  -> fakeDragBy(-currentPxToDrag)
+                else -> fakeDragBy(-currentPxToDrag)
             }
             previousValue = currentValue
         }.onFailure { animator.cancel() }

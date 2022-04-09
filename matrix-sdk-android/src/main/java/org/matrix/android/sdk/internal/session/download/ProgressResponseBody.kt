@@ -25,9 +25,10 @@ import okio.Source
 import okio.buffer
 
 class ProgressResponseBody(
-        private val responseBody: ResponseBody,
-        private val chainUrl: String,
-        private val progressListener: ProgressListener) : ResponseBody() {
+    private val responseBody: ResponseBody,
+    private val chainUrl: String,
+    private val progressListener: ProgressListener
+) : ResponseBody() {
 
     private var bufferedSource: BufferedSource? = null
 

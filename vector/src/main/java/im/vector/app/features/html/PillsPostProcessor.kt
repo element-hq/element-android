@@ -32,11 +32,13 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
-class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomId: String?,
-                                                     private val context: Context,
-                                                     private val avatarRenderer: AvatarRenderer,
-                                                     private val sessionHolder: ActiveSessionHolder) :
-        EventHtmlRenderer.PostProcessor {
+class PillsPostProcessor @AssistedInject constructor(
+    @Assisted private val roomId: String?,
+    private val context: Context,
+    private val avatarRenderer: AvatarRenderer,
+    private val sessionHolder: ActiveSessionHolder
+) :
+    EventHtmlRenderer.PostProcessor {
 
     /* ==========================================================================================
      * Public api
@@ -64,10 +66,10 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
     }
 
     private fun addPillSpan(
-            renderedText: Spannable,
-            pillSpan: PillImageSpan,
-            startSpan: Int,
-            endSpan: Int
+        renderedText: Spannable,
+        pillSpan: PillImageSpan,
+        startSpan: Int,
+        endSpan: Int
     ) {
         renderedText.setSpan(pillSpan, startSpan, endSpan, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
@@ -84,36 +86,36 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
     }
 
     private fun createPillImageSpan(matrixItem: MatrixItem) =
-            PillImageSpan(GlideApp.with(context), avatarRenderer, context, matrixItem)
+        PillImageSpan(GlideApp.with(context), avatarRenderer, context, matrixItem)
 
     private fun LinkSpan.createPillSpan(roomId: String?): PillImageSpan? {
         val matrixItem = when (val permalinkData = PermalinkParser.parse(url)) {
-            is PermalinkData.UserLink  -> permalinkData.toMatrixItem(roomId)
-            is PermalinkData.RoomLink  -> permalinkData.toMatrixItem()
+            is PermalinkData.UserLink -> permalinkData.toMatrixItem(roomId)
+            is PermalinkData.RoomLink -> permalinkData.toMatrixItem()
             is PermalinkData.GroupLink -> permalinkData.toMatrixItem()
-            else                       -> null
+            else -> null
         } ?: return null
         return createPillImageSpan(matrixItem)
     }
 
     private fun PermalinkData.UserLink.toMatrixItem(roomId: String?): MatrixItem? =
-            if (roomId == null) {
-                sessionHolder.getSafeActiveSession()?.getUser(userId)?.toMatrixItem()
-            } else {
-                sessionHolder.getSafeActiveSession()?.getRoomMember(userId, roomId)?.toMatrixItem()
-            }
+        if (roomId == null) {
+            sessionHolder.getSafeActiveSession()?.getUser(userId)?.toMatrixItem()
+        } else {
+            sessionHolder.getSafeActiveSession()?.getRoomMember(userId, roomId)?.toMatrixItem()
+        }
 
     private fun PermalinkData.RoomLink.toMatrixItem(): MatrixItem? =
-            if (eventId == null) {
-                val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomIdOrAlias)
-                when {
-                    isRoomAlias -> MatrixItem.RoomAliasItem(roomIdOrAlias, room?.displayName, room?.avatarUrl)
-                    else        -> MatrixItem.RoomItem(roomIdOrAlias, room?.displayName, room?.avatarUrl)
-                }
-            } else {
-                // Exclude event link (used in reply events, we do not want to pill the "in reply to")
-                null
+        if (eventId == null) {
+            val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomIdOrAlias)
+            when {
+                isRoomAlias -> MatrixItem.RoomAliasItem(roomIdOrAlias, room?.displayName, room?.avatarUrl)
+                else -> MatrixItem.RoomItem(roomIdOrAlias, room?.displayName, room?.avatarUrl)
             }
+        } else {
+            // Exclude event link (used in reply events, we do not want to pill the "in reply to")
+            null
+        }
 
     private fun PermalinkData.GroupLink.toMatrixItem(): MatrixItem? {
         val group = sessionHolder.getSafeActiveSession()?.getGroupSummary(groupId)

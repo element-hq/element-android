@@ -42,14 +42,14 @@ import javax.inject.Inject
  * several checks are made to see if this conclusion is attached to a known request
  */
 class VerificationItemFactory @Inject constructor(
-        private val messageColorProvider: MessageColorProvider,
-        private val messageInformationDataFactory: MessageInformationDataFactory,
-        private val messageItemAttributesFactory: MessageItemAttributesFactory,
-        private val avatarSizeProvider: AvatarSizeProvider,
-        private val noticeItemFactory: NoticeItemFactory,
-        private val userPreferencesProvider: UserPreferencesProvider,
-        private val stringProvider: StringProvider,
-        private val session: Session
+    private val messageColorProvider: MessageColorProvider,
+    private val messageInformationDataFactory: MessageInformationDataFactory,
+    private val messageItemAttributesFactory: MessageItemAttributesFactory,
+    private val avatarSizeProvider: AvatarSizeProvider,
+    private val noticeItemFactory: NoticeItemFactory,
+    private val userPreferencesProvider: UserPreferencesProvider,
+    private val stringProvider: StringProvider,
+    private val session: Session
 ) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
@@ -57,16 +57,16 @@ class VerificationItemFactory @Inject constructor(
         if (event.root.eventId == null) return null
 
         val relContent: MessageRelationContent = event.root.content.toModel()
-                ?: event.root.getClearContent().toModel()
-                ?: return ignoredConclusion(params)
+            ?: event.root.getClearContent().toModel()
+            ?: return ignoredConclusion(params)
 
         if (relContent.relatesTo?.type != RelationType.REFERENCE) return ignoredConclusion(params)
         val refEventId = relContent.relatesTo?.eventId
-                ?: return ignoredConclusion(params)
+            ?: return ignoredConclusion(params)
 
         // If we cannot find the referenced request we do not display the done event
         val refEvent = session.getRoom(event.root.roomId ?: "")?.getTimelineEvent(refEventId)
-                ?: return ignoredConclusion(params)
+            ?: return ignoredConclusion(params)
 
         // If it's not a request ignore this event
         // if (refEvent.root.getClearContent().toModel<MessageVerificationRequestContent>() == null) return ignoredConclusion(event, highlight, callback)
@@ -80,7 +80,7 @@ class VerificationItemFactory @Inject constructor(
             EventType.KEY_VERIFICATION_CANCEL -> {
                 // Is the request referenced is actually really cancelled?
                 val cancelContent = event.root.getClearContent().toModel<MessageVerificationCancelContent>()
-                        ?: return ignoredConclusion(params)
+                    ?: return ignoredConclusion(params)
 
                 when (safeValueOf(cancelContent.code)) {
                     CancelCode.MismatchedCommitment,
@@ -88,29 +88,29 @@ class VerificationItemFactory @Inject constructor(
                     CancelCode.MismatchedSas -> {
                         // We should display these bad conclusions
                         return StatusTileTimelineItem_()
-                                .attributes(
-                                        StatusTileTimelineItem.Attributes(
-                                                title = stringProvider.getString(R.string.verification_conclusion_warning),
-                                                description = "${informationData.memberName} (${informationData.senderId})",
-                                                shieldUIState = StatusTileTimelineItem.ShieldUIState.RED,
-                                                informationData = informationData,
-                                                avatarRenderer = attributes.avatarRenderer,
-                                                messageColorProvider = messageColorProvider,
-                                                emojiTypeFace = attributes.emojiTypeFace,
-                                                itemClickListener = attributes.itemClickListener,
-                                                itemLongClickListener = attributes.itemLongClickListener,
-                                                reactionPillCallback = attributes.reactionPillCallback,
-                                                readReceiptsCallback = attributes.readReceiptsCallback,
-                                                reactionsSummaryEvents = attributes.reactionsSummaryEvents
-                                        )
+                            .attributes(
+                                StatusTileTimelineItem.Attributes(
+                                    title = stringProvider.getString(R.string.verification_conclusion_warning),
+                                    description = "${informationData.memberName} (${informationData.senderId})",
+                                    shieldUIState = StatusTileTimelineItem.ShieldUIState.RED,
+                                    informationData = informationData,
+                                    avatarRenderer = attributes.avatarRenderer,
+                                    messageColorProvider = messageColorProvider,
+                                    emojiTypeFace = attributes.emojiTypeFace,
+                                    itemClickListener = attributes.itemClickListener,
+                                    itemLongClickListener = attributes.itemLongClickListener,
+                                    reactionPillCallback = attributes.reactionPillCallback,
+                                    readReceiptsCallback = attributes.readReceiptsCallback,
+                                    reactionsSummaryEvents = attributes.reactionsSummaryEvents
                                 )
-                                .highlighted(params.isHighlighted)
-                                .leftGuideline(avatarSizeProvider.leftGuideline)
+                            )
+                            .highlighted(params.isHighlighted)
+                            .leftGuideline(avatarSizeProvider.leftGuideline)
                     }
-                    else                     -> return ignoredConclusion(params)
+                    else -> return ignoredConclusion(params)
                 }
             }
-            EventType.KEY_VERIFICATION_DONE   -> {
+            EventType.KEY_VERIFICATION_DONE -> {
                 // Is the request referenced is actually really completed?
                 if (referenceInformationData.referencesInfoData?.verificationStatus != VerificationState.DONE) {
                     return ignoredConclusion(params)
@@ -122,24 +122,24 @@ class VerificationItemFactory @Inject constructor(
                     return ignoredConclusion(params)
                 }
                 return StatusTileTimelineItem_()
-                        .attributes(
-                                StatusTileTimelineItem.Attributes(
-                                        title = stringProvider.getString(R.string.sas_verified),
-                                        description = "${informationData.memberName} (${informationData.senderId})",
-                                        shieldUIState = StatusTileTimelineItem.ShieldUIState.GREEN,
-                                        informationData = informationData,
-                                        avatarRenderer = attributes.avatarRenderer,
-                                        messageColorProvider = messageColorProvider,
-                                        emojiTypeFace = attributes.emojiTypeFace,
-                                        itemClickListener = attributes.itemClickListener,
-                                        itemLongClickListener = attributes.itemLongClickListener,
-                                        reactionPillCallback = attributes.reactionPillCallback,
-                                        readReceiptsCallback = attributes.readReceiptsCallback,
-                                        reactionsSummaryEvents = attributes.reactionsSummaryEvents
-                                )
+                    .attributes(
+                        StatusTileTimelineItem.Attributes(
+                            title = stringProvider.getString(R.string.sas_verified),
+                            description = "${informationData.memberName} (${informationData.senderId})",
+                            shieldUIState = StatusTileTimelineItem.ShieldUIState.GREEN,
+                            informationData = informationData,
+                            avatarRenderer = attributes.avatarRenderer,
+                            messageColorProvider = messageColorProvider,
+                            emojiTypeFace = attributes.emojiTypeFace,
+                            itemClickListener = attributes.itemClickListener,
+                            itemLongClickListener = attributes.itemLongClickListener,
+                            reactionPillCallback = attributes.reactionPillCallback,
+                            readReceiptsCallback = attributes.readReceiptsCallback,
+                            reactionsSummaryEvents = attributes.reactionsSummaryEvents
                         )
-                        .highlighted(params.isHighlighted)
-                        .leftGuideline(avatarSizeProvider.leftGuideline)
+                    )
+                    .highlighted(params.isHighlighted)
+                    .leftGuideline(avatarSizeProvider.leftGuideline)
             }
         }
         return null

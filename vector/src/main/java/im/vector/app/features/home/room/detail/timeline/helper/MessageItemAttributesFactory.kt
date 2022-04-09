@@ -30,43 +30,46 @@ import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import javax.inject.Inject
 
 class MessageItemAttributesFactory @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val messageColorProvider: MessageColorProvider,
-        private val avatarSizeProvider: AvatarSizeProvider,
-        private val stringProvider: StringProvider,
-        private val displayableEventFormatter: DisplayableEventFormatter,
-        private val preferencesProvider: UserPreferencesProvider,
-        private val emojiCompatFontProvider: EmojiCompatFontProvider) {
+    private val avatarRenderer: AvatarRenderer,
+    private val messageColorProvider: MessageColorProvider,
+    private val avatarSizeProvider: AvatarSizeProvider,
+    private val stringProvider: StringProvider,
+    private val displayableEventFormatter: DisplayableEventFormatter,
+    private val preferencesProvider: UserPreferencesProvider,
+    private val emojiCompatFontProvider: EmojiCompatFontProvider
+) {
 
-    fun create(messageContent: Any?,
-               informationData: MessageInformationData,
-               callback: TimelineEventController.Callback?,
-               reactionsSummaryEvents: ReactionsSummaryEvents?,
-               threadDetails: ThreadDetails? = null): AbsMessageItem.Attributes {
+    fun create(
+        messageContent: Any?,
+        informationData: MessageInformationData,
+        callback: TimelineEventController.Callback?,
+        reactionsSummaryEvents: ReactionsSummaryEvents?,
+        threadDetails: ThreadDetails? = null
+    ): AbsMessageItem.Attributes {
         return AbsMessageItem.Attributes(
-                avatarSize = avatarSizeProvider.avatarSize,
-                informationData = informationData,
-                avatarRenderer = avatarRenderer,
-                messageColorProvider = messageColorProvider,
-                itemLongClickListener = { view ->
-                    callback?.onEventLongClicked(informationData, messageContent, view) ?: false
-                },
-                itemClickListener = { view ->
-                    callback?.onEventCellClicked(informationData, messageContent, view, threadDetails?.isRootThread ?: false)
-                },
-                memberClickListener = {
-                    callback?.onMemberNameClicked(informationData)
-                },
-                reactionPillCallback = callback,
-                avatarCallback = callback,
-                threadCallback = callback,
-                readReceiptsCallback = callback,
-                emojiTypeFace = emojiCompatFontProvider.typeface,
-                decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message),
-                threadSummaryFormatted = displayableEventFormatter.formatThreadSummary(threadDetails?.threadSummaryLatestEvent).toString(),
-                threadDetails = threadDetails,
-                reactionsSummaryEvents = reactionsSummaryEvents,
-                areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled()
+            avatarSize = avatarSizeProvider.avatarSize,
+            informationData = informationData,
+            avatarRenderer = avatarRenderer,
+            messageColorProvider = messageColorProvider,
+            itemLongClickListener = { view ->
+                callback?.onEventLongClicked(informationData, messageContent, view) ?: false
+            },
+            itemClickListener = { view ->
+                callback?.onEventCellClicked(informationData, messageContent, view, threadDetails?.isRootThread ?: false)
+            },
+            memberClickListener = {
+                callback?.onMemberNameClicked(informationData)
+            },
+            reactionPillCallback = callback,
+            avatarCallback = callback,
+            threadCallback = callback,
+            readReceiptsCallback = callback,
+            emojiTypeFace = emojiCompatFontProvider.typeface,
+            decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message),
+            threadSummaryFormatted = displayableEventFormatter.formatThreadSummary(threadDetails?.threadSummaryLatestEvent).toString(),
+            threadDetails = threadDetails,
+            reactionsSummaryEvents = reactionsSummaryEvents,
+            areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled()
         )
     }
 }

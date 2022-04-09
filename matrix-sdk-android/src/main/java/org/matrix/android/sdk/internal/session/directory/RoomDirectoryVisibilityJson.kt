@@ -22,8 +22,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 
 @JsonClass(generateAdapter = true)
 internal data class RoomDirectoryVisibilityJson(
-        /**
-         * The visibility of the room in the directory. One of: ["private", "public"]
-         */
-        @Json(name = "visibility") val visibility: RoomDirectoryVisibility
+    /**
+     * The visibility of the room in the directory. One of: ["private", "public"]
+     */
+    @Json(name = "visibility") val visibility: RoomDirectoryVisibility
 )

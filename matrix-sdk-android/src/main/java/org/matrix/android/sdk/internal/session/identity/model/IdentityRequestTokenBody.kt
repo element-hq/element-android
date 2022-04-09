@@ -33,50 +33,50 @@ private interface IdentityRequestTokenBody {
 
 @JsonClass(generateAdapter = true)
 internal data class IdentityRequestTokenForEmailBody(
-        @Json(name = "client_secret")
-        override val clientSecret: String,
+    @Json(name = "client_secret")
+    override val clientSecret: String,
 
-        /**
-         * Required. The server will only send an email if the send_attempt is a number greater than the most
-         * recent one which it has seen, scoped to that email + client_secret pair. This is to avoid repeatedly
-         * sending the same email in the case of request retries between the POSTing user and the identity server.
-         * The client should increment this value if they desire a new email (e.g. a reminder) to be sent.
-         * If they do not, the server should respond with success but not resend the email.
-         */
-        @Json(name = "send_attempt")
-        override val sendAttempt: Int,
+    /**
+     * Required. The server will only send an email if the send_attempt is a number greater than the most
+     * recent one which it has seen, scoped to that email + client_secret pair. This is to avoid repeatedly
+     * sending the same email in the case of request retries between the POSTing user and the identity server.
+     * The client should increment this value if they desire a new email (e.g. a reminder) to be sent.
+     * If they do not, the server should respond with success but not resend the email.
+     */
+    @Json(name = "send_attempt")
+    override val sendAttempt: Int,
 
-        /**
-         * Required. The email address to validate.
-         */
-        @Json(name = "email")
-        val email: String
+    /**
+     * Required. The email address to validate.
+     */
+    @Json(name = "email")
+    val email: String
 ) : IdentityRequestTokenBody
 
 @JsonClass(generateAdapter = true)
 internal data class IdentityRequestTokenForMsisdnBody(
-        @Json(name = "client_secret")
-        override val clientSecret: String,
+    @Json(name = "client_secret")
+    override val clientSecret: String,
 
-        /**
-         * Required. The server will only send an SMS if the send_attempt is a number greater than the most recent one
-         * which it has seen, scoped to that country + phone_number + client_secret triple. This is to avoid repeatedly
-         * sending the same SMS in the case of request retries between the POSTing user and the identity server.
-         * The client should increment this value if they desire a new SMS (e.g. a reminder) to be sent.
-         */
-        @Json(name = "send_attempt")
-        override val sendAttempt: Int,
+    /**
+     * Required. The server will only send an SMS if the send_attempt is a number greater than the most recent one
+     * which it has seen, scoped to that country + phone_number + client_secret triple. This is to avoid repeatedly
+     * sending the same SMS in the case of request retries between the POSTing user and the identity server.
+     * The client should increment this value if they desire a new SMS (e.g. a reminder) to be sent.
+     */
+    @Json(name = "send_attempt")
+    override val sendAttempt: Int,
 
-        /**
-         * Required. The phone number to validate.
-         */
-        @Json(name = "phone_number")
-        val phoneNumber: String,
+    /**
+     * Required. The phone number to validate.
+     */
+    @Json(name = "phone_number")
+    val phoneNumber: String,
 
-        /**
-         * Required. The two-letter uppercase ISO-3166-1 alpha-2 country code that the number in phone_number
-         * should be parsed as if it were dialled from.
-         */
-        @Json(name = "country")
-        val countryCode: String
+    /**
+     * Required. The two-letter uppercase ISO-3166-1 alpha-2 country code that the number in phone_number
+     * should be parsed as if it were dialled from.
+     */
+    @Json(name = "country")
+    val countryCode: String
 ) : IdentityRequestTokenBody

@@ -28,21 +28,21 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_S
 import org.matrix.android.sdk.flow.flow
 
 data class SecretsSynchronisationInfo(
-        val isBackupSetup: Boolean,
-        val isCrossSigningEnabled: Boolean,
-        val isCrossSigningTrusted: Boolean,
-        val allPrivateKeysKnown: Boolean,
-        val megolmBackupAvailable: Boolean,
-        val megolmSecretKnown: Boolean,
-        val isMegolmKeyIn4S: Boolean
+    val isBackupSetup: Boolean,
+    val isCrossSigningEnabled: Boolean,
+    val isCrossSigningTrusted: Boolean,
+    val allPrivateKeysKnown: Boolean,
+    val megolmBackupAvailable: Boolean,
+    val megolmSecretKnown: Boolean,
+    val isMegolmKeyIn4S: Boolean
 )
 
 fun Session.liveSecretSynchronisationInfo(): Flow<SecretsSynchronisationInfo> {
     val sessionFlow = flow()
     return combine(
-            sessionFlow.liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)),
-            sessionFlow.liveCrossSigningInfo(myUserId),
-            sessionFlow.liveCrossSigningPrivateKeys()
+        sessionFlow.liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME, KEYBACKUP_SECRET_SSSS_NAME)),
+        sessionFlow.liveCrossSigningInfo(myUserId),
+        sessionFlow.liveCrossSigningPrivateKeys()
     ) { _, crossSigningInfo, pInfo ->
         // first check if 4S is already setup
         val is4SSetup = sharedSecretStorageService.isRecoverySetup()
@@ -57,14 +57,14 @@ fun Session.liveSecretSynchronisationInfo(): Flow<SecretsSynchronisationInfo> {
 
         val megolmKeyKnown = savedBackupKey?.version == currentBackupVersion
         SecretsSynchronisationInfo(
-                isBackupSetup = is4SSetup,
-                isCrossSigningEnabled = isCrossSigningEnabled,
-                isCrossSigningTrusted = isCrossSigningTrusted,
-                allPrivateKeysKnown = allPrivateKeysKnown,
-                megolmBackupAvailable = megolmBackupAvailable,
-                megolmSecretKnown = megolmKeyKnown,
-                isMegolmKeyIn4S = sharedSecretStorageService.isMegolmKeyInBackup()
+            isBackupSetup = is4SSetup,
+            isCrossSigningEnabled = isCrossSigningEnabled,
+            isCrossSigningTrusted = isCrossSigningTrusted,
+            allPrivateKeysKnown = allPrivateKeysKnown,
+            megolmBackupAvailable = megolmBackupAvailable,
+            megolmSecretKnown = megolmKeyKnown,
+            isMegolmKeyIn4S = sharedSecretStorageService.isMegolmKeyInBackup()
         )
     }
-            .distinctUntilChanged()
+        .distinctUntilChanged()
 }

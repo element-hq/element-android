@@ -24,10 +24,10 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class KeysClaimResponse(
-        /**
-         * The requested keys ordered by device by user.
-         * TODO Type does not match spec, should be Map<String, JsonDict>
-         */
-        @Json(name = "one_time_keys")
-        val oneTimeKeys: Map<String, Map<String, Map<String, Map<String, Any>>>>? = null
+    /**
+     * The requested keys ordered by device by user.
+     * TODO Type does not match spec, should be Map<String, JsonDict>
+     */
+    @Json(name = "one_time_keys")
+    val oneTimeKeys: Map<String, Map<String, Map<String, Map<String, Any>>>>? = null
 )

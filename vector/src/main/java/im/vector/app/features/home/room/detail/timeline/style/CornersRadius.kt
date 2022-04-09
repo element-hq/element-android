@@ -26,11 +26,11 @@ fun TimelineMessageLayout.Bubble.CornersRadius.granularRoundedCorners(): Granula
 
 fun TimelineMessageLayout.Bubble.CornersRadius.shapeAppearanceModel(): ShapeAppearanceModel {
     return ShapeAppearanceModel().toBuilder()
-            .setTopRightCorner(topEndRadius.cornerFamily(), topEndRadius)
-            .setBottomRightCorner(bottomEndRadius.cornerFamily(), bottomEndRadius)
-            .setTopLeftCorner(topStartRadius.cornerFamily(), topStartRadius)
-            .setBottomLeftCorner(bottomStartRadius.cornerFamily(), bottomStartRadius)
-            .build()
+        .setTopRightCorner(topEndRadius.cornerFamily(), topEndRadius)
+        .setBottomRightCorner(bottomEndRadius.cornerFamily(), bottomEndRadius)
+        .setTopLeftCorner(topStartRadius.cornerFamily(), topStartRadius)
+        .setBottomLeftCorner(bottomStartRadius.cornerFamily(), bottomStartRadius)
+        .build()
 }
 
 private fun Float.cornerFamily(): Int {

@@ -37,11 +37,13 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
-class DeviceListEpoxyController @Inject constructor(private val stringProvider: StringProvider,
-                                                    private val colorProvider: ColorProvider,
-                                                    private val dimensionConverter: DimensionConverter,
-                                                    private val vectorPreferences: VectorPreferences) :
-        TypedEpoxyController<DeviceListViewState>() {
+class DeviceListEpoxyController @Inject constructor(
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider,
+    private val dimensionConverter: DimensionConverter,
+    private val vectorPreferences: VectorPreferences
+) :
+    TypedEpoxyController<DeviceListViewState>() {
 
     interface InteractionListener {
         fun onDeviceSelected(device: CryptoDeviceInfo)
@@ -55,13 +57,13 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
         when (data.cryptoDevices) {
             Uninitialized -> {
             }
-            is Loading    -> {
+            is Loading -> {
                 loadingItem {
                     id("loading")
                     loadingText(host.stringProvider.getString(R.string.loading))
                 }
             }
-            is Success    -> {
+            is Success -> {
                 val deviceList = data.cryptoDevices.invoke().sortedBy {
                     it.isVerified
                 }
@@ -76,9 +78,9 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                     style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(if (allGreen) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                     title(
-                            host.stringProvider
-                                    .getString(if (allGreen) R.string.verification_profile_verified else R.string.verification_profile_warning)
-                                    .toEpoxyCharSequence()
+                        host.stringProvider
+                            .getString(if (allGreen) R.string.verification_profile_verified else R.string.verification_profile_warning)
+                            .toEpoxyCharSequence()
                     )
                     description(host.stringProvider.getString(R.string.verification_conclusion_ok_notice).toEpoxyCharSequence())
                 }
@@ -123,14 +125,14 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                                 title(title.toEpoxyCharSequence())
                             }
                             value(
-                                    host.stringProvider.getString(
-                                            if (device.isVerified) R.string.trusted else R.string.not_trusted
-                                    )
+                                host.stringProvider.getString(
+                                    if (device.isVerified) R.string.trusted else R.string.not_trusted
+                                )
                             )
                             valueColorInt(
-                                    host.colorProvider.getColorFromAttribute(
-                                            if (device.isVerified) R.attr.colorPrimary else R.attr.colorError
-                                    )
+                                host.colorProvider.getColorFromAttribute(
+                                    if (device.isVerified) R.attr.colorPrimary else R.attr.colorError
+                                )
                             )
                             itemClickAction {
                                 host.interactionListener?.onDeviceSelected(device)
@@ -139,7 +141,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                     }
                 }
             }
-            is Fail       -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("error")
                     text(host.stringProvider.getString(R.string.room_member_profile_failed_to_get_devices))
@@ -158,14 +160,14 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                 id("msk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
+                    span {
+                        +"Master Key:\n"
                         span {
-                            +"Master Key:\n"
-                            span {
-                                text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-                                textSize = host.dimensionConverter.spToPx(12)
-                            }
-                        }.toEpoxyCharSequence()
+                            text = it.unpaddedBase64PublicKey ?: ""
+                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                            textSize = host.dimensionConverter.spToPx(12)
+                        }
+                    }.toEpoxyCharSequence()
                 )
             }
         }
@@ -174,14 +176,14 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                 id("usk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
+                    span {
+                        +"User Key:\n"
                         span {
-                            +"User Key:\n"
-                            span {
-                                text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-                                textSize = host.dimensionConverter.spToPx(12)
-                            }
-                        }.toEpoxyCharSequence()
+                            text = it.unpaddedBase64PublicKey ?: ""
+                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                            textSize = host.dimensionConverter.spToPx(12)
+                        }
+                    }.toEpoxyCharSequence()
                 )
             }
         }
@@ -190,14 +192,14 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                 id("ssk")
                 titleIconResourceId(R.drawable.key_small)
                 title(
+                    span {
+                        +"Self Signed Key:\n"
                         span {
-                            +"Self Signed Key:\n"
-                            span {
-                                text = it.unpaddedBase64PublicKey ?: ""
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-                                textSize = host.dimensionConverter.spToPx(12)
-                            }
-                        }.toEpoxyCharSequence()
+                            text = it.unpaddedBase64PublicKey ?: ""
+                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                            textSize = host.dimensionConverter.spToPx(12)
+                        }
+                    }.toEpoxyCharSequence()
                 )
             }
         }

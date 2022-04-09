@@ -49,12 +49,12 @@ import javax.inject.Inject
  * The user can select multiple rooms to send the data to
  */
 class IncomingShareFragment @Inject constructor(
-        private val incomingShareController: IncomingShareController,
-        private val sessionHolder: ActiveSessionHolder
+    private val incomingShareController: IncomingShareController,
+    private val sessionHolder: ActiveSessionHolder
 ) :
-        VectorBaseFragment<FragmentIncomingShareBinding>(),
-        AttachmentsHelper.Callback,
-        IncomingShareController.Callback {
+    VectorBaseFragment<FragmentIncomingShareBinding>(),
+    AttachmentsHelper.Callback,
+    IncomingShareController.Callback {
 
     private lateinit var attachmentsHelper: AttachmentsHelper
     private val viewModel: IncomingShareViewModel by fragmentViewModel()
@@ -77,7 +77,7 @@ class IncomingShareFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
+                is IncomingShareViewEvents.ShareToRoom -> handleShareToRoom(it)
                 is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
                 is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
             }
@@ -85,7 +85,7 @@ class IncomingShareFragment @Inject constructor(
 
         val intent = vectorBaseActivity.intent
         val isShareManaged = when (intent?.action) {
-            Intent.ACTION_SEND          -> {
+            Intent.ACTION_SEND -> {
                 var isShareManaged = attachmentsHelper.handleShareIntent(requireContext(), intent)
                 if (!isShareManaged) {
                     isShareManaged = handleTextShare(intent)
@@ -100,7 +100,7 @@ class IncomingShareFragment @Inject constructor(
                 isShareManaged
             }
             Intent.ACTION_SEND_MULTIPLE -> attachmentsHelper.handleShareIntent(requireContext(), intent)
-            else                        -> false
+            else -> false
         }
 
         if (!isShareManaged) {
@@ -197,19 +197,19 @@ class IncomingShareFragment @Inject constructor(
 
     private fun showConfirmationDialog(roomSummary: RoomSummary, sharedData: SharedData) {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.send_attachment)
-                .setMessage(getString(R.string.share_confirm_room, roomSummary.displayName))
-                .setPositiveButton(R.string.action_send) { _, _ ->
-                    navigator.openRoomForSharingAndFinish(requireActivity(), roomSummary.roomId, sharedData)
-                }
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
+            .setTitle(R.string.send_attachment)
+            .setMessage(getString(R.string.share_confirm_room, roomSummary.displayName))
+            .setPositiveButton(R.string.action_send) { _, _ ->
+                navigator.openRoomForSharingAndFinish(requireActivity(), roomSummary.roomId, sharedData)
+            }
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
     }
 
     private fun startLoginActivity() {
         navigator.openLogin(
-                context = requireActivity(),
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            context = requireActivity(),
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         )
         requireActivity().finish()
     }

@@ -24,35 +24,35 @@ import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
 data class MessageStickerContent(
-        /**
-         * Set in local, not from server
-         */
-        @Transient
-        override val msgType: String = MessageType.MSGTYPE_STICKER_LOCAL,
+    /**
+     * Set in local, not from server
+     */
+    @Transient
+    override val msgType: String = MessageType.MSGTYPE_STICKER_LOCAL,
 
-        /**
-         * Required. A textual representation of the image. This could be the alt text of the image, the filename of the image,
-         * or some kind of content description for accessibility e.g. 'image attachment'.
-         */
-        @Json(name = "body") override val body: String,
+    /**
+     * Required. A textual representation of the image. This could be the alt text of the image, the filename of the image,
+     * or some kind of content description for accessibility e.g. 'image attachment'.
+     */
+    @Json(name = "body") override val body: String,
 
-        /**
-         * Metadata about the image referred to in url.
-         */
-        @Json(name = "info") override val info: ImageInfo? = null,
+    /**
+     * Metadata about the image referred to in url.
+     */
+    @Json(name = "info") override val info: ImageInfo? = null,
 
-        /**
-         * Required if the file is unencrypted. The URL (typically MXC URI) to the image.
-         */
-        @Json(name = "url") override val url: String? = null,
+    /**
+     * Required if the file is unencrypted. The URL (typically MXC URI) to the image.
+     */
+    @Json(name = "url") override val url: String? = null,
 
-        @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
-        @Json(name = "m.new_content") override val newContent: Content? = null,
+    @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
+    @Json(name = "m.new_content") override val newContent: Content? = null,
 
-        /**
-         * Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.
-         */
-        @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
+    /**
+     * Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.
+     */
+    @Json(name = "file") override val encryptedFileInfo: EncryptedFileInfo? = null
 ) : MessageImageInfoContent {
     override val mimeType: String?
         get() = info?.mimeType

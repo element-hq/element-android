@@ -44,18 +44,18 @@ import javax.inject.Inject
 internal interface GetUploadsTask : Task<GetUploadsTask.Params, GetUploadsResult> {
 
     data class Params(
-            val roomId: String,
-            val isRoomEncrypted: Boolean,
-            val numberOfEvents: Int,
-            val since: String?
+        val roomId: String,
+        val isRoomEncrypted: Boolean,
+        val numberOfEvents: Int,
+        val since: String?
     )
 }
 
 internal class DefaultGetUploadsTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val tokenStore: SyncTokenStore,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    private val tokenStore: SyncTokenStore,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetUploadsTask {
 
     override suspend fun execute(params: GetUploadsTask.Params): GetUploadsResult {
@@ -66,19 +66,19 @@ internal class DefaultGetUploadsTask @Inject constructor(
             // Get a chunk of events from cache for e2e rooms
 
             result = GetUploadsResult(
-                    uploadEvents = emptyList(),
-                    nextToken = "",
-                    hasMore = false
+                uploadEvents = emptyList(),
+                nextToken = "",
+                hasMore = false
             )
 
             var eventsFromRealm = emptyList<Event>()
             monarchy.doWithRealm { realm ->
                 eventsFromRealm = EventEntity.whereType(realm, EventType.ENCRYPTED, params.roomId)
-                        .like(EventEntityFields.DECRYPTION_RESULT_JSON, TimelineEventFilter.DecryptedContent.URL)
-                        .findAll()
-                        .map { it.asDomain() }
-                        // Exclude stickers
-                        .filter { it.getClearType() != EventType.STICKER }
+                    .like(EventEntityFields.DECRYPTION_RESULT_JSON, TimelineEventFilter.DecryptedContent.URL)
+                    .findAll()
+                    .map { it.asDomain() }
+                    // Exclude stickers
+                    .filter { it.getClearType() != EventType.STICKER }
             }
             events = eventsFromRealm
         } else {
@@ -90,9 +90,9 @@ internal class DefaultGetUploadsTask @Inject constructor(
             }
 
             result = GetUploadsResult(
-                    uploadEvents = emptyList(),
-                    nextToken = chunk.end ?: "",
-                    hasMore = chunk.hasMore()
+                uploadEvents = emptyList(),
+                nextToken = chunk.end ?: "",
+                hasMore = chunk.hasMore()
             )
             events = chunk.events
         }
@@ -114,18 +114,18 @@ internal class DefaultGetUploadsTask @Inject constructor(
                 val senderInfo = cacheOfSenderInfos.getOrPut(senderId) {
                     val roomMemberSummaryEntity = roomMemberHelper.getLastRoomMember(senderId)
                     SenderInfo(
-                            userId = senderId,
-                            displayName = roomMemberSummaryEntity?.displayName,
-                            isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(roomMemberSummaryEntity?.displayName),
-                            avatarUrl = roomMemberSummaryEntity?.avatarUrl
+                        userId = senderId,
+                        displayName = roomMemberSummaryEntity?.displayName,
+                        isUniqueDisplayName = roomMemberHelper.isUniqueDisplayName(roomMemberSummaryEntity?.displayName),
+                        avatarUrl = roomMemberSummaryEntity?.avatarUrl
                     )
                 }
 
                 UploadEvent(
-                        root = event,
-                        eventId = eventId,
-                        contentWithAttachmentContent = messageWithAttachmentContent,
-                        senderInfo = senderInfo
+                    root = event,
+                    eventId = eventId,
+                    contentWithAttachmentContent = messageWithAttachmentContent,
+                    senderInfo = senderInfo
                 )
             }
         }

@@ -29,6 +29,6 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class WellKnownBaseConfig(
-        @Json(name = "base_url")
-        val baseURL: String? = null
+    @Json(name = "base_url")
+    val baseURL: String? = null
 )

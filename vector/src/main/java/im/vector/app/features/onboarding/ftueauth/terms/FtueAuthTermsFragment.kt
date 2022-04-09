@@ -40,16 +40,16 @@ import javax.inject.Inject
 
 @Parcelize
 data class FtueAuthTermsFragmentArgument(
-        val localizedFlowDataLoginTerms: List<LocalizedFlowDataLoginTerms>
+    val localizedFlowDataLoginTerms: List<LocalizedFlowDataLoginTerms>
 ) : Parcelable
 
 /**
  * LoginTermsFragment displays the list of policies the user has to accept
  */
 class FtueAuthTermsFragment @Inject constructor(
-        private val policyController: PolicyController
+    private val policyController: PolicyController
 ) : AbstractFtueAuthFragment<FragmentLoginTermsBinding>(),
-        PolicyController.PolicyControllerListener {
+    PolicyController.PolicyControllerListener {
 
     private val params: FtueAuthTermsFragmentArgument by args()
 
@@ -69,9 +69,9 @@ class FtueAuthTermsFragment @Inject constructor(
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()
 
         params.localizedFlowDataLoginTerms
-                .forEach {
-                    list.add(LocalizedFlowDataLoginTermsChecked(it))
-                }
+            .forEach {
+                list.add(LocalizedFlowDataLoginTermsChecked(it))
+            }
 
         loginTermsViewState = LoginTermsViewState(list)
     }
@@ -105,10 +105,10 @@ class FtueAuthTermsFragment @Inject constructor(
 
     override fun openPolicy(localizedFlowDataLoginTerms: LocalizedFlowDataLoginTerms) {
         localizedFlowDataLoginTerms.localizedUrl
-                ?.takeIf { it.isNotBlank() }
-                ?.let {
-                    openUrlInChromeCustomTab(requireContext(), null, it)
-                }
+            ?.takeIf { it.isNotBlank() }
+            ?.let {
+                openUrlInChromeCustomTab(requireContext(), null, it)
+            }
     }
 
     private fun submit() {

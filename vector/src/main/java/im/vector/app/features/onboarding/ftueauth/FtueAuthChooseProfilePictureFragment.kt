@@ -38,8 +38,8 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 class FtueAuthChooseProfilePictureFragment @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder,
-        colorProvider: ColorProvider
+    private val activeSessionHolder: ActiveSessionHolder,
+    colorProvider: ColorProvider
 ) : AbstractFtueAuthFragment<FragmentFtueProfilePictureBinding>(), GalleryOrCameraDialogHelper.Listener {
 
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
@@ -79,8 +79,8 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
 
         val session = activeSessionHolder.getActiveSession()
         val matrixItem = MatrixItem.UserItem(
-                id = session.myUserId,
-                displayName = state.personalizationState.displayName ?: ""
+            id = session.myUserId,
+            displayName = state.personalizationState.displayName ?: ""
         )
         avatarRenderer.render(matrixItem, localUri = state.personalizationState.selectedPictureUri, imageView = views.profilePictureView)
     }
@@ -99,7 +99,7 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         return when (withState(viewModel) { it.personalizationState.supportsChangingDisplayName }) {
-            true  -> super.onBackPressed(toolbarButton)
+            true -> super.onBackPressed(toolbarButton)
             false -> {
                 viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome))
                 true

@@ -27,11 +27,12 @@ import im.vector.app.features.command.Command
 import im.vector.app.features.settings.VectorPreferences
 
 class AutocompleteCommandPresenter @AssistedInject constructor(
-        @Assisted val isInThreadTimeline: Boolean,
-        context: Context,
-        private val controller: AutocompleteCommandController,
-        private val vectorPreferences: VectorPreferences) :
-        RecyclerViewPresenter<Command>(context), AutocompleteClickListener<Command> {
+    @Assisted val isInThreadTimeline: Boolean,
+    context: Context,
+    private val controller: AutocompleteCommandController,
+    private val vectorPreferences: VectorPreferences
+) :
+    RecyclerViewPresenter<Command>(context), AutocompleteClickListener<Command> {
 
     @AssistedFactory
     interface Factory {
@@ -52,23 +53,23 @@ class AutocompleteCommandPresenter @AssistedInject constructor(
 
     override fun onQuery(query: CharSequence?) {
         val data = Command.values()
-                .filter {
-                    !it.isDevCommand || vectorPreferences.developerMode()
+            .filter {
+                !it.isDevCommand || vectorPreferences.developerMode()
+            }
+            .filter {
+                if (vectorPreferences.areThreadMessagesEnabled() && isInThreadTimeline) {
+                    it.isThreadCommand
+                } else {
+                    true
                 }
-                .filter {
-                    if (vectorPreferences.areThreadMessagesEnabled() && isInThreadTimeline) {
-                        it.isThreadCommand
-                    } else {
-                        true
-                    }
+            }
+            .filter {
+                if (query.isNullOrEmpty()) {
+                    true
+                } else {
+                    it.startsWith(query)
                 }
-                .filter {
-                    if (query.isNullOrEmpty()) {
-                        true
-                    } else {
-                        it.startsWith(query)
-                    }
-                }
+            }
         controller.setData(data)
     }
 

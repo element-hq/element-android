@@ -89,11 +89,11 @@ class LoginFragmentSignupPassword2 @Inject constructor() : AbstractLoginFragment
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
         views.passwordField.textChanges()
-                .onEach { password ->
-                    views.passwordFieldTil.error = null
-                    views.loginSubmit.isEnabled = password.isNotEmpty()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach { password ->
+                views.passwordFieldTil.error = null
+                views.loginSubmit.isEnabled = password.isNotEmpty()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun resetViewModel() {

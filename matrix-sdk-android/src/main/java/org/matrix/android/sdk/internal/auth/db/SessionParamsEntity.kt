@@ -20,11 +20,11 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
 internal open class SessionParamsEntity(
-        @PrimaryKey var sessionId: String = "",
-        var userId: String = "",
-        var credentialsJson: String = "",
-        var homeServerConnectionConfigJson: String = "",
-        // Set to false when the token is invalid and the user has been soft logged out
-        // In case of hard logout, this object is deleted from DB
-        var isTokenValid: Boolean = true
+    @PrimaryKey var sessionId: String = "",
+    var userId: String = "",
+    var credentialsJson: String = "",
+    var homeServerConnectionConfigJson: String = "",
+    // Set to false when the token is invalid and the user has been soft logged out
+    // In case of hard logout, this object is deleted from DB
+    var isTokenValid: Boolean = true
 ) : RealmObject()

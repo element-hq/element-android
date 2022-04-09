@@ -87,10 +87,10 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     private var isSwipeToDismissAllowed: Boolean = true
     private var isOverlayWasClicked = false
 
-//    private val shouldDismissToBottom: Boolean
-//        get() = e == null
-//                || !externalTransitionImageView.isRectVisible
-//                || !isAtStartPosition
+    //    private val shouldDismissToBottom: Boolean
+    //        get() = e == null
+    //                || !externalTransitionImageView.isRectVisible
+    //                || !isAtStartPosition
 
     private var isImagePagerIdle = true
 
@@ -204,13 +204,13 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
         // Log.v("ATTACHEMENTS", "wasScaled $wasScaled")
         if (swipeDirection == null && (scaleDetector.isInProgress || ev.pointerCount > 1 || wasScaled)) {
             wasScaled = true
-//            Log.v("ATTACHEMENTS", "dispatch to pager")
+            //            Log.v("ATTACHEMENTS", "dispatch to pager")
             return views.attachmentPager.dispatchTouchEvent(ev)
         }
 
         // Log.v("ATTACHEMENTS", "is current item scaled ${isScaled()}")
         return (if (isScaled()) super.dispatchTouchEvent(ev) else handleTouchIfNotScaled(ev)).also {
-//            Log.v("ATTACHEMENTS", "\n================")
+            //            Log.v("ATTACHEMENTS", "\n================")
         }
     }
 
@@ -238,7 +238,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     }
 
     private fun handleEventActionUp(event: MotionEvent) {
-//        wasDoubleTapped = false
+        //        wasDoubleTapped = false
         swipeDismissHandler.onTouch(views.rootContainer, event)
         views.attachmentPager.dispatchTouchEvent(event)
         isOverlayWasClicked = dispatchOverlayTouch(event)
@@ -267,11 +267,11 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     }
 
     private fun handleTouchIfNotScaled(event: MotionEvent): Boolean {
-//        Log.v("ATTACHEMENTS", "handleTouchIfNotScaled $event")
+        //        Log.v("ATTACHEMENTS", "handleTouchIfNotScaled $event")
         directionDetector.handleTouchEvent(event)
 
         return when (swipeDirection) {
-            SwipeDirection.Up, SwipeDirection.Down    -> {
+            SwipeDirection.Up, SwipeDirection.Down -> {
                 if (isSwipeToDismissAllowed && !wasScaled && isImagePagerIdle) {
                     swipeDismissHandler.onTouch(views.rootContainer, event)
                 } else true
@@ -279,7 +279,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
             SwipeDirection.Left, SwipeDirection.Right -> {
                 views.attachmentPager.dispatchTouchEvent(event)
             }
-            else                                      -> true
+            else -> true
         }
     }
 
@@ -291,40 +291,40 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     }
 
     private fun dispatchOverlayTouch(event: MotionEvent): Boolean =
-            overlayView
-                    ?.let { it.isVisible && it.dispatchTouchEvent(event) }
-                    ?: false
+        overlayView
+            ?.let { it.isVisible && it.dispatchTouchEvent(event) }
+            ?: false
 
     private fun calculateTranslationAlpha(translationY: Float, translationLimit: Int): Float =
-            1.0f - 1.0f / translationLimit.toFloat() / 4f * abs(translationY)
+        1.0f - 1.0f / translationLimit.toFloat() / 4f * abs(translationY)
 
     private fun createSwipeToDismissHandler(): SwipeToDismissHandler =
-            SwipeToDismissHandler(
-                    swipeView = views.dismissContainer,
-                    shouldAnimateDismiss = { shouldAnimateDismiss() },
-                    onDismiss = { animateClose() },
-                    onSwipeViewMove = ::handleSwipeViewMove
-            )
+        SwipeToDismissHandler(
+            swipeView = views.dismissContainer,
+            shouldAnimateDismiss = { shouldAnimateDismiss() },
+            onDismiss = { animateClose() },
+            onSwipeViewMove = ::handleSwipeViewMove
+        )
 
     private fun createSwipeDirectionDetector() =
-            SwipeDirectionDetector(this) { swipeDirection = it }
+        SwipeDirectionDetector(this) { swipeDirection = it }
 
     private fun createScaleGestureDetector() =
-            ScaleGestureDetector(this, ScaleGestureDetector.SimpleOnScaleGestureListener())
+        ScaleGestureDetector(this, ScaleGestureDetector.SimpleOnScaleGestureListener())
 
     private fun createGestureDetector() =
-            GestureDetectorCompat(this, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                    if (isImagePagerIdle) {
-                        handleSingleTap(e, isOverlayWasClicked)
-                    }
-                    return false
+        GestureDetectorCompat(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                if (isImagePagerIdle) {
+                    handleSingleTap(e, isOverlayWasClicked)
                 }
+                return false
+            }
 
-                override fun onDoubleTap(e: MotionEvent?): Boolean {
-                    return super.onDoubleTap(e)
-                }
-            })
+            override fun onDoubleTap(e: MotionEvent?): Boolean {
+                return super.onDoubleTap(e)
+            }
+        })
 
     override fun onEvent(event: AttachmentEvents) {
         if (overlayView is AttachmentEventListener) {
@@ -341,7 +341,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
 
     fun handle(commands: AttachmentCommands) {
         (attachmentsAdapter.recyclerView?.findViewHolderForAdapterPosition(currentPosition) as? BaseViewHolder)
-                ?.handleCommand(commands)
+            ?.handleCommand(commands)
     }
 
     @Suppress("DEPRECATION")
@@ -380,7 +380,7 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
     }
 
     // Shows the system bars by removing all the flags
-// except for the ones that make the content appear under the system bars.
+    // except for the ones that make the content appear under the system bars.
     @Suppress("DEPRECATION")
     private fun showSystemUI() {
         systemUiVisibility = true

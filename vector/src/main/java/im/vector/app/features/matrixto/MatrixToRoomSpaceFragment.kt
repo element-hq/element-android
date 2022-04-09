@@ -39,8 +39,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import javax.inject.Inject
 
 class MatrixToRoomSpaceFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val spaceCardRenderer: SpaceCardRenderer
+    private val avatarRenderer: AvatarRenderer,
+    private val spaceCardRenderer: SpaceCardRenderer
 ) : VectorBaseFragment<FragmentMatrixToRoomSpaceCardBinding>() {
 
     private val sharedViewModel: MatrixToBottomSheetViewModel by parentFragmentViewModel()
@@ -66,7 +66,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
             is Success -> {
                 views.matrixToCardContentVisibility.isVisible = true
                 when (val peek = item.invoke()) {
-                    is RoomInfoResult.FullInfo     -> {
+                    is RoomInfoResult.FullInfo -> {
                         val matrixItem = peek.roomItem
                         avatarRenderer.render(matrixItem, views.matrixToCardAvatar)
                         if (peek.roomType == RoomType.SPACE) {
@@ -99,7 +99,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
 
                         when (peek.membership) {
                             Membership.LEAVE,
-                            Membership.NONE   -> {
+                            Membership.NONE -> {
                                 views.matrixToCardMainButton.isVisible = true
                                 views.matrixToCardMainButton.button.text = getString(joinTextRes)
                                 views.matrixToCardSecondaryButton.isVisible = false
@@ -110,20 +110,20 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                                 views.matrixToCardMainButton.button.text = getString(joinTextRes)
                                 views.matrixToCardSecondaryButton.button.text = getString(R.string.action_decline)
                             }
-                            Membership.JOIN   -> {
+                            Membership.JOIN -> {
                                 views.matrixToCardMainButton.isVisible = true
                                 views.matrixToCardSecondaryButton.isVisible = false
                                 views.matrixToCardMainButton.button.text = getString(R.string.action_open)
                             }
                             Membership.KNOCK,
-                            Membership.BAN    -> {
+                            Membership.BAN -> {
                                 // What to do here ?
                                 views.matrixToCardMainButton.isVisible = false
                                 views.matrixToCardSecondaryButton.isVisible = false
                             }
                         }
                     }
-                    is RoomInfoResult.PartialInfo  -> {
+                    is RoomInfoResult.PartialInfo -> {
                         // It may still be possible to join
                         views.matrixToCardNameText.text = peek.roomId
                         views.matrixToCardAliasText.isVisible = false
@@ -133,7 +133,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                         views.matrixToCardMainButton.button.text = getString(R.string.join_anyway)
                         views.matrixToCardSecondaryButton.isVisible = false
                     }
-                    RoomInfoResult.NotFound        -> {
+                    RoomInfoResult.NotFound -> {
                         // we cannot join :/
                         views.matrixToCardNameText.isVisible = false
                         views.matrixToCardAliasText.isVisible = false
@@ -161,13 +161,13 @@ class MatrixToRoomSpaceFragment @Inject constructor(
         }
 
         listOf(views.knownMember1, views.knownMember2, views.knownMember3, views.knownMember4, views.knownMember5)
-                .onEach { it.isGone = true }
+            .onEach { it.isGone = true }
         when (state.peopleYouKnow) {
             is Success -> {
                 val someYouKnow = state.peopleYouKnow.invoke()
                 spaceCardRenderer.renderPeopleYouKnow(views, someYouKnow)
             }
-            else       -> {
+            else -> {
                 views.peopleYouMayKnowText.isVisible = false
             }
         }
@@ -202,14 +202,14 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                             sharedViewModel.handle(MatrixToAction.JoinRoom(info.roomItem.id, info.viaServers))
                         }
                     }
-                    Membership.JOIN  -> {
+                    Membership.JOIN -> {
                         if (info.roomType == RoomType.SPACE) {
                             sharedViewModel.handle(MatrixToAction.OpenSpace(info.roomItem.id))
                         } else {
                             sharedViewModel.handle(MatrixToAction.OpenRoom(info.roomItem.id))
                         }
                     }
-                    else             -> {
+                    else -> {
                     }
                 }
             }
@@ -219,7 +219,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                     sharedViewModel.handle(MatrixToAction.JoinRoom(info.roomId, info.viaServers))
                 }
             }
-            else                          -> {
+            else -> {
             }
         }
     }

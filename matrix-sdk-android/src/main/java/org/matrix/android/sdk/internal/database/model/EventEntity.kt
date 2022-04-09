@@ -25,28 +25,29 @@ import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
-internal open class EventEntity(@Index var eventId: String = "",
-                                @Index var roomId: String = "",
-                                @Index var type: String = "",
-                                var content: String? = null,
-                                var prevContent: String? = null,
-                                var isUseless: Boolean = false,
-                                @Index var stateKey: String? = null,
-                                var originServerTs: Long? = null,
-                                @Index var sender: String? = null,
-        // Can contain a serialized MatrixError
-                                var sendStateDetails: String? = null,
-                                var age: Long? = 0,
-                                var unsignedData: String? = null,
-                                var redacts: String? = null,
-                                var decryptionResultJson: String? = null,
-                                var ageLocalTs: Long? = null,
-        // Thread related, no need to create a new Entity for performance
-                                @Index var isRootThread: Boolean = false,
-                                @Index var rootThreadEventId: String? = null,
-        // Number messages within the thread
-                                var numberOfThreads: Int = 0,
-                                var threadSummaryLatestMessage: TimelineEventEntity? = null
+internal open class EventEntity(
+    @Index var eventId: String = "",
+    @Index var roomId: String = "",
+    @Index var type: String = "",
+    var content: String? = null,
+    var prevContent: String? = null,
+    var isUseless: Boolean = false,
+    @Index var stateKey: String? = null,
+    var originServerTs: Long? = null,
+    @Index var sender: String? = null,
+    // Can contain a serialized MatrixError
+    var sendStateDetails: String? = null,
+    var age: Long? = 0,
+    var unsignedData: String? = null,
+    var redacts: String? = null,
+    var decryptionResultJson: String? = null,
+    var ageLocalTs: Long? = null,
+    // Thread related, no need to create a new Entity for performance
+    @Index var isRootThread: Boolean = false,
+    @Index var rootThreadEventId: String? = null,
+    // Number messages within the thread
+    var numberOfThreads: Int = 0,
+    var threadSummaryLatestMessage: TimelineEventEntity? = null
 ) : RealmObject() {
 
     private var sendStateStr: String = SendState.UNKNOWN.name
@@ -83,10 +84,10 @@ internal open class EventEntity(@Index var eventId: String = "",
     fun setDecryptionResult(result: MXEventDecryptionResult) {
         assertIsManaged()
         val decryptionResult = OlmDecryptionResult(
-                payload = result.clearEvent,
-                senderKey = result.senderCurve25519Key,
-                keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+            payload = result.clearEvent,
+            senderKey = result.senderCurve25519Key,
+            keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
         )
         val adapter = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java)
         decryptionResultJson = adapter.toJson(decryptionResult)
@@ -95,9 +96,9 @@ internal open class EventEntity(@Index var eventId: String = "",
 
         // If we have an EventInsertEntity for the eventId we make sures it can be processed now.
         realm.where(EventInsertEntity::class.java)
-                .equalTo(EventInsertEntityFields.EVENT_ID, eventId)
-                .findFirst()
-                ?.canBeProcessed = true
+            .equalTo(EventInsertEntityFields.EVENT_ID, eventId)
+            .findFirst()
+            ?.canBeProcessed = true
     }
 
     fun isThread(): Boolean = rootThreadEventId != null

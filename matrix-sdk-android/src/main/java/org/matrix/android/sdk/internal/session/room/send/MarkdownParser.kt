@@ -29,10 +29,10 @@ import javax.inject.Inject
  * If any change is required, please add a test covering the problem and make sure all the tests are still passing.
  */
 internal class MarkdownParser @Inject constructor(
-        @AdvancedCommonmarkParser private val advancedParser: Parser,
-        @SimpleCommonmarkParser private val simpleParser: Parser,
-        private val htmlRenderer: HtmlRenderer,
-        private val textPillsUtils: TextPillsUtils
+    @AdvancedCommonmarkParser private val advancedParser: Parser,
+    @SimpleCommonmarkParser private val simpleParser: Parser,
+    private val htmlRenderer: HtmlRenderer,
+    private val textPillsUtils: TextPillsUtils
 ) {
 
     private val mdSpecialChars = "[`_\\-*>.\\[\\]#~$]".toRegex()
@@ -74,15 +74,15 @@ internal class MarkdownParser @Inject constructor(
     }
 
     private fun isFormattedTextPertinent(text: String, htmlText: String?) =
-            text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
+        text != htmlText && htmlText != "<p>${text.trim()}</p>\n"
 
     /**
      * The parser makes some mistakes, so deal with it here
      */
     private fun String.postTreatment(): String {
         return this
-                // Remove extra space before and after the content
-                .trim()
+            // Remove extra space before and after the content
+            .trim()
         // There is no need to include new line in an html-like source
         // But new line can be in embedded code block, so do not remove them
         // .replace("\n", "")

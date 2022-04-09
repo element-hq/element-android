@@ -36,16 +36,16 @@ import javax.inject.Inject
 
 @Parcelize
 data class LoginTermsFragmentArgument(
-        val localizedFlowDataLoginTerms: List<LocalizedFlowDataLoginTerms>
+    val localizedFlowDataLoginTerms: List<LocalizedFlowDataLoginTerms>
 ) : Parcelable
 
 /**
  * LoginTermsFragment displays the list of policies the user has to accept
  */
 class LoginTermsFragment @Inject constructor(
-        private val policyController: PolicyController
+    private val policyController: PolicyController
 ) : AbstractLoginFragment<FragmentLoginTermsBinding>(),
-        PolicyController.PolicyControllerListener {
+    PolicyController.PolicyControllerListener {
 
     private val params: LoginTermsFragmentArgument by args()
 
@@ -65,9 +65,9 @@ class LoginTermsFragment @Inject constructor(
         val list = ArrayList<LocalizedFlowDataLoginTermsChecked>()
 
         params.localizedFlowDataLoginTerms
-                .forEach {
-                    list.add(LocalizedFlowDataLoginTermsChecked(it))
-                }
+            .forEach {
+                list.add(LocalizedFlowDataLoginTermsChecked(it))
+            }
 
         loginTermsViewState = LoginTermsViewState(list)
     }
@@ -101,10 +101,10 @@ class LoginTermsFragment @Inject constructor(
 
     override fun openPolicy(localizedFlowDataLoginTerms: LocalizedFlowDataLoginTerms) {
         localizedFlowDataLoginTerms.localizedUrl
-                ?.takeIf { it.isNotBlank() }
-                ?.let {
-                    openUrlInChromeCustomTab(requireContext(), null, it)
-                }
+            ?.takeIf { it.isNotBlank() }
+            ?.let {
+                openUrlInChromeCustomTab(requireContext(), null, it)
+            }
     }
 
     private fun submit() {

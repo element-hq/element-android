@@ -57,18 +57,18 @@ import javax.inject.Inject
  * Epoxy controller for message action list
  */
 class MessageActionsEpoxyController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val avatarRenderer: AvatarRenderer,
-        private val fontProvider: EmojiCompatFontProvider,
-        private val imageContentRenderer: ImageContentRenderer,
-        private val dimensionConverter: DimensionConverter,
-        private val errorFormatter: ErrorFormatter,
-        private val spanUtils: SpanUtils,
-        private val eventDetailsFormatter: EventDetailsFormatter,
-        private val vectorPreferences: VectorPreferences,
-        private val dateFormatter: VectorDateFormatter,
-        private val urlMapProvider: UrlMapProvider,
-        private val locationPinProvider: LocationPinProvider
+    private val stringProvider: StringProvider,
+    private val avatarRenderer: AvatarRenderer,
+    private val fontProvider: EmojiCompatFontProvider,
+    private val imageContentRenderer: ImageContentRenderer,
+    private val dimensionConverter: DimensionConverter,
+    private val errorFormatter: ErrorFormatter,
+    private val spanUtils: SpanUtils,
+    private val eventDetailsFormatter: EventDetailsFormatter,
+    private val vectorPreferences: VectorPreferences,
+    private val dateFormatter: VectorDateFormatter,
+    private val urlMapProvider: UrlMapProvider,
+    private val locationPinProvider: LocationPinProvider
 ) : TypedEpoxyController<MessageActionState>() {
 
     var listener: MessageActionsEpoxyControllerListener? = null
@@ -102,8 +102,8 @@ class MessageActionsEpoxyController @Inject constructor(
         if (sendState?.hasFailed().orFalse()) {
             // Get more details about the error
             val errorMessage = state.timelineEvent()?.root?.sendStateError()
-                    ?.let { errorFormatter.toHumanReadable(Failure.ServerError(it, 0)) }
-                    ?: stringProvider.getString(R.string.unable_to_send_message)
+                ?.let { errorFormatter.toHumanReadable(Failure.ServerError(it, 0)) }
+                ?: stringProvider.getString(R.string.unable_to_send_message)
             bottomSheetSendStateItem {
                 id("send_state")
                 showProgress(false)
@@ -126,7 +126,7 @@ class MessageActionsEpoxyController @Inject constructor(
         }
 
         when (state.informationData.e2eDecoration) {
-            E2EDecoration.WARN_IN_CLEAR        -> {
+            E2EDecoration.WARN_IN_CLEAR -> {
                 bottomSheetSendStateItem {
                     id("e2e_clear")
                     showProgress(false)
@@ -143,7 +143,7 @@ class MessageActionsEpoxyController @Inject constructor(
                     drawableStart(R.drawable.ic_shield_warning_small)
                 }
             }
-            else                               -> {
+            else -> {
                 // nothing
             }
         }
@@ -198,9 +198,9 @@ class MessageActionsEpoxyController @Inject constructor(
                 if (action is EventSharedAction.ReportContent && state.expendedReportContentMenu) {
                     // Special case for report content menu: add the submenu
                     listOf(
-                            EventSharedAction.ReportContentSpam(action.eventId, action.senderId),
-                            EventSharedAction.ReportContentInappropriate(action.eventId, action.senderId),
-                            EventSharedAction.ReportContentCustom(action.eventId, action.senderId)
+                        EventSharedAction.ReportContentSpam(action.eventId, action.senderId),
+                        EventSharedAction.ReportContentInappropriate(action.eventId, action.senderId),
+                        EventSharedAction.ReportContentCustom(action.eventId, action.senderId)
                     ).forEachIndexed { indexReport, actionReport ->
                         bottomSheetActionItem {
                             id("actionReport_$indexReport")
@@ -219,21 +219,21 @@ class MessageActionsEpoxyController @Inject constructor(
         if (state.timelineEvent()?.root?.isLocationMessage() != true) return null
 
         val locationContent = state.timelineEvent()?.root?.getClearContent().toModel<MessageLocationContent>(catchError = true)
-                ?: return null
+            ?: return null
         val locationUrl = locationContent.toLocationData()
-                ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
-                ?: return null
+            ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
+            ?: return null
         val locationOwnerId = if (locationContent.isSelfLocation()) state.informationData.matrixItem.id else null
 
         return LocationUiData(
-                locationUrl = locationUrl,
-                locationOwnerId = locationOwnerId,
-                locationPinProvider = locationPinProvider,
+            locationUrl = locationUrl,
+            locationOwnerId = locationOwnerId,
+            locationPinProvider = locationPinProvider,
         )
     }
 
     private fun EventSharedAction.shouldShowBetaLabel(): Boolean =
-            this is EventSharedAction.ReplyInThread && !vectorPreferences.areThreadMessagesEnabled()
+        this is EventSharedAction.ReplyInThread && !vectorPreferences.areThreadMessagesEnabled()
 
     interface MessageActionsEpoxyControllerListener : TimelineEventController.UrlClickCallback {
         fun didSelectMenuAction(eventAction: EventSharedAction)

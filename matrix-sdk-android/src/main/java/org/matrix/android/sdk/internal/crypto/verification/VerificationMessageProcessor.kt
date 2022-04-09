@@ -39,24 +39,24 @@ import java.util.ArrayList
 import javax.inject.Inject
 
 internal class VerificationMessageProcessor @Inject constructor(
-        private val eventDecryptor: EventDecryptor,
-        private val verificationService: DefaultVerificationService,
-        @UserId private val userId: String,
-        @DeviceId private val deviceId: String?
+    private val eventDecryptor: EventDecryptor,
+    private val verificationService: DefaultVerificationService,
+    @UserId private val userId: String,
+    @DeviceId private val deviceId: String?
 ) : EventInsertLiveProcessor {
 
     private val transactionsHandledByOtherDevice = ArrayList<String>()
 
     private val allowedTypes = listOf(
-            EventType.KEY_VERIFICATION_START,
-            EventType.KEY_VERIFICATION_ACCEPT,
-            EventType.KEY_VERIFICATION_KEY,
-            EventType.KEY_VERIFICATION_MAC,
-            EventType.KEY_VERIFICATION_CANCEL,
-            EventType.KEY_VERIFICATION_DONE,
-            EventType.KEY_VERIFICATION_READY,
-            EventType.MESSAGE,
-            EventType.ENCRYPTED
+        EventType.KEY_VERIFICATION_START,
+        EventType.KEY_VERIFICATION_ACCEPT,
+        EventType.KEY_VERIFICATION_KEY,
+        EventType.KEY_VERIFICATION_MAC,
+        EventType.KEY_VERIFICATION_CANCEL,
+        EventType.KEY_VERIFICATION_DONE,
+        EventType.KEY_VERIFICATION_READY,
+        EventType.MESSAGE,
+        EventType.ENCRYPTED
     )
 
     override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
@@ -72,8 +72,11 @@ internal class VerificationMessageProcessor @Inject constructor(
         // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
         // the message should be ignored by the receiver.
 
-        if (!VerificationService.isValidRequest(event.ageLocalTs
-                        ?: event.originServerTs)) return Unit.also {
+        if (!VerificationService.isValidRequest(
+                event.ageLocalTs
+                    ?: event.originServerTs
+            )
+        ) return Unit.also {
             Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is outdated")
         }
 
@@ -84,10 +87,10 @@ internal class VerificationMessageProcessor @Inject constructor(
             try {
                 val result = eventDecryptor.decryptEvent(event, "")
                 event.mxDecryptionResult = OlmDecryptionResult(
-                        payload = result.clearEvent,
-                        senderKey = result.senderCurve25519Key,
-                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                    payload = result.clearEvent,
+                    senderKey = result.senderCurve25519Key,
+                    keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                 )
             } catch (e: MXCryptoError) {
                 Timber.e("## SAS Failed to decrypt event: ${event.eventId}")
@@ -158,7 +161,7 @@ internal class VerificationMessageProcessor @Inject constructor(
             EventType.KEY_VERIFICATION_DONE -> {
                 verificationService.onRoomEvent(event)
             }
-            EventType.MESSAGE               -> {
+            EventType.MESSAGE -> {
                 if (MessageType.MSGTYPE_VERIFICATION_REQUEST == event.getClearContent().toModel<MessageContent>()?.msgType) {
                     verificationService.onRoomRequestReceived(event)
                 }

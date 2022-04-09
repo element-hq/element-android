@@ -30,8 +30,9 @@ import javax.inject.Inject
  * Epoxy controller for room widgets list
  */
 class RoomWidgetsController @Inject constructor(
-        val stringProvider: StringProvider,
-        val colorProvider: ColorProvider) :
+    val stringProvider: StringProvider,
+    val colorProvider: ColorProvider
+) :
     TypedEpoxyController<List<Widget>>() {
 
     var listener: Listener? = null

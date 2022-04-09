@@ -24,21 +24,21 @@ import javax.inject.Inject
 
 internal interface UploadSignaturesTask : Task<UploadSignaturesTask.Params, Unit> {
     data class Params(
-            val signatures: Map<String, Map<String, Any>>
+        val signatures: Map<String, Map<String, Any>>
     )
 }
 
 internal class DefaultUploadSignaturesTask @Inject constructor(
-        private val cryptoApi: CryptoApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val cryptoApi: CryptoApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : UploadSignaturesTask {
 
     override suspend fun execute(params: UploadSignaturesTask.Params) {
         try {
             val response = executeRequest(
-                    globalErrorReceiver,
-                    canRetry = true,
-                    maxRetriesCount = 10
+                globalErrorReceiver,
+                canRetry = true,
+                maxRetriesCount = 10
             ) {
                 cryptoApi.uploadSignatures(params.signatures)
             }

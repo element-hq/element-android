@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 @Parcelize
 data class RoomHistoryVisibilityBottomSheetArgs(
-        val currentRoomHistoryVisibility: RoomHistoryVisibility
+    val currentRoomHistoryVisibility: RoomHistoryVisibility
 ) : Parcelable
 
 @AndroidEntryPoint

@@ -19,7 +19,7 @@ import im.vector.app.ActiveSessionDataSource
 import javax.inject.Inject
 
 class OutdatedEventDetector @Inject constructor(
-        private val activeSessionDataSource: ActiveSessionDataSource
+    private val activeSessionDataSource: ActiveSessionDataSource
 ) {
 
     /**

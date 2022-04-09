@@ -24,6 +24,6 @@ import org.matrix.android.sdk.internal.database.model.ScalarTokenEntityFields
 
 internal fun ScalarTokenEntity.Companion.where(realm: Realm, serverUrl: String): RealmQuery<ScalarTokenEntity> {
     return realm
-            .where<ScalarTokenEntity>()
-            .equalTo(ScalarTokenEntityFields.SERVER_URL, serverUrl)
+        .where<ScalarTokenEntity>()
+        .equalTo(ScalarTokenEntityFields.SERVER_URL, serverUrl)
 }

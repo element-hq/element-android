@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.DirectMess
 import javax.inject.Inject
 
 internal class DirectChatsHelper @Inject constructor(
-        @SessionDatabase private val realmConfiguration: RealmConfiguration
+    @SessionDatabase private val realmConfiguration: RealmConfiguration
 ) {
 
     /**
@@ -36,9 +36,9 @@ internal class DirectChatsHelper @Inject constructor(
             // Makes sure we have the latest realm updates, this is important as we sent this information to the server.
             realm.refresh()
             RoomSummaryEntity.getDirectRooms(realm)
-                    .asSequence()
-                    .filter { it.roomId != filterRoomId && it.directUserId != null && it.membership.isActive() }
-                    .groupByTo(mutableMapOf(), { it.directUserId!! }, { it.roomId })
+                .asSequence()
+                .filter { it.roomId != filterRoomId && it.directUserId != null && it.membership.isActive() }
+                .groupByTo(mutableMapOf(), { it.directUserId!! }, { it.roomId })
         }
     }
 }

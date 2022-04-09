@@ -28,20 +28,22 @@ class NotificationEventQueueTest {
 
     @Test
     fun `given events when redacting some then marks matching event ids as redacted`() {
-        val queue = givenQueue(listOf(
+        val queue = givenQueue(
+            listOf(
                 aSimpleNotifiableEvent(eventId = "redacted-id-1"),
                 aNotifiableMessageEvent(eventId = "redacted-id-2"),
                 anInviteNotifiableEvent(eventId = "redacted-id-3"),
                 aSimpleNotifiableEvent(eventId = "kept-id"),
-        ))
+            )
+        )
 
         queue.markRedacted(listOf("redacted-id-1", "redacted-id-2", "redacted-id-3"))
 
         queue.rawEvents() shouldBeEqualTo listOf(
-                aSimpleNotifiableEvent(eventId = "redacted-id-1", isRedacted = true),
-                aNotifiableMessageEvent(eventId = "redacted-id-2", isRedacted = true),
-                anInviteNotifiableEvent(eventId = "redacted-id-3", isRedacted = true),
-                aSimpleNotifiableEvent(eventId = "kept-id", isRedacted = false),
+            aSimpleNotifiableEvent(eventId = "redacted-id-1", isRedacted = true),
+            aNotifiableMessageEvent(eventId = "redacted-id-2", isRedacted = true),
+            anInviteNotifiableEvent(eventId = "redacted-id-3", isRedacted = true),
+            aSimpleNotifiableEvent(eventId = "kept-id", isRedacted = false),
         )
     }
 
@@ -77,16 +79,18 @@ class NotificationEventQueueTest {
 
     @Test
     fun `given events when syncing without rooms left or joined ids then does not change the events`() {
-        val queue = givenQueue(listOf(
+        val queue = givenQueue(
+            listOf(
                 aNotifiableMessageEvent(roomId = "a-room-id"),
                 anInviteNotifiableEvent(roomId = "a-room-id")
-        ))
+            )
+        )
 
         queue.syncRoomEvents(roomsLeft = emptyList(), roomsJoined = emptyList())
 
         queue.rawEvents() shouldBeEqualTo listOf(
-                aNotifiableMessageEvent(roomId = "a-room-id"),
-                anInviteNotifiableEvent(roomId = "a-room-id")
+            aNotifiableMessageEvent(roomId = "a-room-id"),
+            anInviteNotifiableEvent(roomId = "a-room-id")
         )
     }
 
@@ -189,10 +193,12 @@ class NotificationEventQueueTest {
     @Test
     fun `when clearing membership notification then removes invite events with matching room id`() {
         val roomId = "a-room-id"
-        val queue = givenQueue(listOf(
+        val queue = givenQueue(
+            listOf(
                 anInviteNotifiableEvent(roomId = roomId),
                 aNotifiableMessageEvent(roomId = roomId)
-        ))
+            )
+        )
 
         queue.clearMemberShipNotificationForRoom(roomId)
 
@@ -202,10 +208,12 @@ class NotificationEventQueueTest {
     @Test
     fun `when clearing messages for room then removes message events with matching room id`() {
         val roomId = "a-room-id"
-        val queue = givenQueue(listOf(
+        val queue = givenQueue(
+            listOf(
                 anInviteNotifiableEvent(roomId = roomId),
                 aNotifiableMessageEvent(roomId = roomId)
-        ))
+            )
+        )
 
         queue.clearMessagesForRoom(roomId)
 

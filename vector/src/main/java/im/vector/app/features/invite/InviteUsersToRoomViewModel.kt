@@ -33,9 +33,9 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 
 class InviteUsersToRoomViewModel @AssistedInject constructor(
-        @Assisted initialState: InviteUsersToRoomViewState,
-        session: Session,
-        val stringProvider: StringProvider
+    @Assisted initialState: InviteUsersToRoomViewState,
+    session: Session,
+    val stringProvider: StringProvider
 ) : VectorViewModel<InviteUsersToRoomViewState, InviteUsersToRoomAction, InviteUsersToRoomViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -57,29 +57,35 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _viewEvents.post(InviteUsersToRoomViewEvents.Loading)
             selections.asFlow()
-                    .map { user ->
-                        when (user) {
-                            is PendingSelection.UserPendingSelection     -> room.invite(user.user.userId, null)
-                            is PendingSelection.ThreePidPendingSelection -> room.invite3pid(user.threePid)
-                        }
+                .map { user ->
+                    when (user) {
+                        is PendingSelection.UserPendingSelection -> room.invite(user.user.userId, null)
+                        is PendingSelection.ThreePidPendingSelection -> room.invite3pid(user.threePid)
                     }
-                    .catch { cause ->
-                        _viewEvents.post(InviteUsersToRoomViewEvents.Failure(cause))
+                }
+                .catch { cause ->
+                    _viewEvents.post(InviteUsersToRoomViewEvents.Failure(cause))
+                }
+                .collect {
+                    val successMessage = when (selections.size) {
+                        1 -> stringProvider.getString(
+                            R.string.invitation_sent_to_one_user,
+                            selections.first().getBestName()
+                        )
+                        2 -> stringProvider.getString(
+                            R.string.invitations_sent_to_two_users,
+                            selections.first().getBestName(),
+                            selections.last().getBestName()
+                        )
+                        else -> stringProvider.getQuantityString(
+                            R.plurals.invitations_sent_to_one_and_more_users,
+                            selections.size - 1,
+                            selections.first().getBestName(),
+                            selections.size - 1
+                        )
                     }
-                    .collect {
-                        val successMessage = when (selections.size) {
-                            1    -> stringProvider.getString(R.string.invitation_sent_to_one_user,
-                                    selections.first().getBestName())
-                            2    -> stringProvider.getString(R.string.invitations_sent_to_two_users,
-                                    selections.first().getBestName(),
-                                    selections.last().getBestName())
-                            else -> stringProvider.getQuantityString(R.plurals.invitations_sent_to_one_and_more_users,
-                                    selections.size - 1,
-                                    selections.first().getBestName(),
-                                    selections.size - 1)
-                        }
-                        _viewEvents.post(InviteUsersToRoomViewEvents.Success(successMessage))
-                    }
+                    _viewEvents.post(InviteUsersToRoomViewEvents.Success(successMessage))
+                }
         }
     }
 

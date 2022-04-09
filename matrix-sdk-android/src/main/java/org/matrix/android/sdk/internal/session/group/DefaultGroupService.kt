@@ -36,9 +36,9 @@ import org.matrix.android.sdk.internal.util.fetchCopyMap
 import javax.inject.Inject
 
 internal class DefaultGroupService @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        private val groupFactory: GroupFactory,
-        private val queryStringValueProcessor: QueryStringValueProcessor,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val groupFactory: GroupFactory,
+    private val queryStringValueProcessor: QueryStringValueProcessor,
 ) : GroupService {
 
     override fun getGroup(groupId: String): Group? {
@@ -51,30 +51,30 @@ internal class DefaultGroupService @Inject constructor(
 
     override fun getGroupSummary(groupId: String): GroupSummary? {
         return monarchy.fetchCopyMap(
-                { realm -> GroupSummaryEntity.where(realm, groupId).findFirst() },
-                { it, _ -> it.asDomain() }
+            { realm -> GroupSummaryEntity.where(realm, groupId).findFirst() },
+            { it, _ -> it.asDomain() }
         )
     }
 
     override fun getGroupSummaries(groupSummaryQueryParams: GroupSummaryQueryParams): List<GroupSummary> {
         return monarchy.fetchAllMappedSync(
-                { groupSummariesQuery(it, groupSummaryQueryParams) },
-                { it.asDomain() }
+            { groupSummariesQuery(it, groupSummaryQueryParams) },
+            { it.asDomain() }
         )
     }
 
     override fun getGroupSummariesLive(groupSummaryQueryParams: GroupSummaryQueryParams): LiveData<List<GroupSummary>> {
         return monarchy.findAllMappedWithChanges(
-                { groupSummariesQuery(it, groupSummaryQueryParams) },
-                { it.asDomain() }
+            { groupSummariesQuery(it, groupSummaryQueryParams) },
+            { it.asDomain() }
         )
     }
 
     private fun groupSummariesQuery(realm: Realm, queryParams: GroupSummaryQueryParams): RealmQuery<GroupSummaryEntity> {
         return with(queryStringValueProcessor) {
             GroupSummaryEntity.where(realm)
-                    .process(GroupSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-                    .process(GroupSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+                .process(GroupSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+                .process(GroupSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
         }
     }
 }

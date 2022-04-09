@@ -30,12 +30,12 @@ import javax.inject.Inject
  * Possible next worker    : None
  */
 internal class GetGroupDataWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-        SessionSafeCoroutineWorker<GetGroupDataWorker.Params>(context, params, sessionManager, Params::class.java) {
+    SessionSafeCoroutineWorker<GetGroupDataWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val sessionId: String,
-            override val lastFailureMessage: String? = null
+        override val sessionId: String,
+        override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var getGroupDataTask: GetGroupDataTask
@@ -48,8 +48,8 @@ internal class GetGroupDataWorker(context: Context, params: WorkerParameters, se
         return runCatching {
             getGroupDataTask.execute(GetGroupDataTask.Params.FetchAllActive)
         }.fold(
-                { Result.success() },
-                { Result.retry() }
+            { Result.success() },
+            { Result.retry() }
         )
     }
 

@@ -21,13 +21,13 @@ import io.realm.annotations.PrimaryKey
 import timber.log.Timber
 
 internal open class EventAnnotationsSummaryEntity(
-        @PrimaryKey
-        var eventId: String = "",
-        var roomId: String? = null,
-        var reactionsSummary: RealmList<ReactionAggregatedSummaryEntity> = RealmList(),
-        var editSummary: EditAggregatedSummaryEntity? = null,
-        var referencesSummaryEntity: ReferencesAggregatedSummaryEntity? = null,
-        var pollResponseSummary: PollResponseAggregatedSummaryEntity? = null
+    @PrimaryKey
+    var eventId: String = "",
+    var roomId: String? = null,
+    var reactionsSummary: RealmList<ReactionAggregatedSummaryEntity> = RealmList(),
+    var editSummary: EditAggregatedSummaryEntity? = null,
+    var referencesSummaryEntity: ReferencesAggregatedSummaryEntity? = null,
+    var pollResponseSummary: PollResponseAggregatedSummaryEntity? = null
 ) : RealmObject() {
 
     /**
@@ -39,10 +39,10 @@ internal open class EventAnnotationsSummaryEntity(
         editSummary?.editions?.filter {
             it.senderId != originalEventSenderId
         }
-                ?.forEach {
-                    Timber.w("Deleting an edition from ${it.senderId} of event sent by $originalEventSenderId")
-                    it.deleteFromRealm()
-                }
+            ?.forEach {
+                Timber.w("Deleting an edition from ${it.senderId} of event sent by $originalEventSenderId")
+                it.deleteFromRealm()
+            }
     }
 
     companion object

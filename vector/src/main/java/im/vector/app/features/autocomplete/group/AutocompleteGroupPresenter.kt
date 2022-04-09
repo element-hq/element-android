@@ -26,9 +26,10 @@ import org.matrix.android.sdk.api.session.group.groupSummaryQueryParams
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import javax.inject.Inject
 
-class AutocompleteGroupPresenter @Inject constructor(context: Context,
-                                                     private val controller: AutocompleteGroupController,
-                                                     private val session: Session
+class AutocompleteGroupPresenter @Inject constructor(
+    context: Context,
+    private val controller: AutocompleteGroupController,
+    private val session: Session
 ) : RecyclerViewPresenter<GroupSummary>(context), AutocompleteClickListener<GroupSummary> {
 
     init {
@@ -56,8 +57,8 @@ class AutocompleteGroupPresenter @Inject constructor(context: Context,
             }
         }
         val groups = session.getGroupSummaries(queryParams)
-                .asSequence()
-                .sortedBy { it.displayName }
+            .asSequence()
+            .sortedBy { it.displayName }
         controller.setData(groups.toList())
     }
 }

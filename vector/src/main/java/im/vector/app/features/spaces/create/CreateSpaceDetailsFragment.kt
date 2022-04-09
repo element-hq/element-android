@@ -32,15 +32,15 @@ import im.vector.app.databinding.FragmentSpaceCreateGenericEpoxyFormBinding
 import javax.inject.Inject
 
 class CreateSpaceDetailsFragment @Inject constructor(
-        private val epoxyController: SpaceDetailEpoxyController,
-        colorProvider: ColorProvider
+    private val epoxyController: SpaceDetailEpoxyController,
+    colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(), SpaceDetailEpoxyController.Listener,
-        GalleryOrCameraDialogHelper.Listener, OnBackPressed {
+    GalleryOrCameraDialogHelper.Listener, OnBackPressed {
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentSpaceCreateGenericEpoxyFormBinding.inflate(layoutInflater, container, false)
+        FragmentSpaceCreateGenericEpoxyFormBinding.inflate(layoutInflater, container, false)
 
     private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
 

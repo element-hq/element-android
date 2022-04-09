@@ -23,16 +23,16 @@ import im.vector.app.features.settings.VectorSettingsUrls
 import javax.inject.Inject
 
 class ElementLegals @Inject constructor(
-        private val stringProvider: StringProvider
+    private val stringProvider: StringProvider
 ) {
     /**
      * Use ServerPolicy model
      */
     fun getData(): List<ServerPolicy> {
         return listOf(
-                ServerPolicy(stringProvider.getString(R.string.settings_copyright), VectorSettingsUrls.COPYRIGHT),
-                ServerPolicy(stringProvider.getString(R.string.settings_app_term_conditions), VectorSettingsUrls.TAC),
-                ServerPolicy(stringProvider.getString(R.string.settings_privacy_policy), VectorSettingsUrls.PRIVACY_POLICY)
+            ServerPolicy(stringProvider.getString(R.string.settings_copyright), VectorSettingsUrls.COPYRIGHT),
+            ServerPolicy(stringProvider.getString(R.string.settings_app_term_conditions), VectorSettingsUrls.TAC),
+            ServerPolicy(stringProvider.getString(R.string.settings_privacy_policy), VectorSettingsUrls.PRIVACY_POLICY)
         )
     }
 }

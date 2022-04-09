@@ -30,8 +30,10 @@ import javax.net.ssl.X509TrustManager
  * @param defaultTrustManager Optional trust manager to fall back on if cert does not match
  * any of the fingerprints. Can be null.
  */
-internal class PinnedTrustManager(private val fingerprints: List<Fingerprint>,
-                                  private val defaultTrustManager: X509TrustManager?) : X509TrustManager {
+internal class PinnedTrustManager(
+    private val fingerprints: List<Fingerprint>,
+    private val defaultTrustManager: X509TrustManager?
+) : X509TrustManager {
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, s: String) {

@@ -22,24 +22,24 @@ import javax.inject.Inject
 import kotlin.reflect.KClass
 
 data class FeaturesState(
-        val features: List<Feature>
+    val features: List<Feature>
 )
 
 sealed interface Feature {
 
     data class EnumFeature<T : Enum<T>>(
-            val label: String,
-            val override: T?,
-            val default: T,
-            val options: List<T>,
-            val type: KClass<T>
+        val label: String,
+        val override: T?,
+        val default: T,
+        val options: List<T>,
+        val type: KClass<T>
     ) : Feature
 
     data class BooleanFeature(
-            val label: String,
-            val featureOverride: Boolean?,
-            val featureDefault: Boolean,
-            val key: Preferences.Key<Boolean>
+        val label: String,
+        val featureOverride: Boolean?,
+        val featureDefault: Boolean,
+        val key: Preferences.Key<Boolean>
     ) : Feature
 }
 

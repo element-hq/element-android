@@ -21,6 +21,6 @@ package im.vector.app.core.extensions
  */
 fun String?.toReducedUrl(): String {
     return (this ?: "")
-            .substringAfter("://")
-            .trim { it == '/' }
+        .substringAfter("://")
+        .trim { it == '/' }
 }

@@ -52,16 +52,16 @@ import java.math.BigDecimal
 private val loggerTag = LoggerTag("MxCallImpl", LoggerTag.VOIP)
 
 internal class MxCallImpl(
-        override val callId: String,
-        override val isOutgoing: Boolean,
-        override val roomId: String,
-        private val userId: String,
-        override val isVideoCall: Boolean,
-        override val ourPartyId: String,
-        private val localEchoEventFactory: LocalEchoEventFactory,
-        private val eventSenderProcessor: EventSenderProcessor,
-        private val matrixConfiguration: MatrixConfiguration,
-        private val getProfileInfoTask: GetProfileInfoTask
+    override val callId: String,
+    override val isOutgoing: Boolean,
+    override val roomId: String,
+    private val userId: String,
+    override val isVideoCall: Boolean,
+    override val ourPartyId: String,
+    private val localEchoEventFactory: LocalEchoEventFactory,
+    private val eventSenderProcessor: EventSenderProcessor,
+    private val matrixConfiguration: MatrixConfiguration,
+    private val getProfileInfoTask: GetProfileInfoTask
 ) : MxCall {
 
     override var opponentPartyId: Optional<String>? = null
@@ -116,27 +116,27 @@ internal class MxCallImpl(
         Timber.tag(loggerTag.value).v("offerSdp $callId")
         state = CallState.Dialing
         CallInviteContent(
-                callId = callId,
-                partyId = ourPartyId,
-                lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
-                offer = CallInviteContent.Offer(sdp = sdpString),
-                version = MxCall.VOIP_PROTO_VERSION.toString(),
-                capabilities = buildCapabilities()
+            callId = callId,
+            partyId = ourPartyId,
+            lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
+            offer = CallInviteContent.Offer(sdp = sdpString),
+            version = MxCall.VOIP_PROTO_VERSION.toString(),
+            capabilities = buildCapabilities()
         )
-                .let { createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = it.toContent()) }
-                .also { eventSenderProcessor.postEvent(it) }
+            .let { createEventAndLocalEcho(type = EventType.CALL_INVITE, roomId = roomId, content = it.toContent()) }
+            .also { eventSenderProcessor.postEvent(it) }
     }
 
     override fun sendLocalCallCandidates(candidates: List<CallCandidate>) {
         Timber.tag(loggerTag.value).v("Send local call canditates $callId: $candidates")
         CallCandidatesContent(
-                callId = callId,
-                partyId = ourPartyId,
-                candidates = candidates,
-                version = MxCall.VOIP_PROTO_VERSION.toString()
+            callId = callId,
+            partyId = ourPartyId,
+            candidates = candidates,
+            version = MxCall.VOIP_PROTO_VERSION.toString()
         )
-                .let { createEventAndLocalEcho(type = EventType.CALL_CANDIDATES, roomId = roomId, content = it.toContent()) }
-                .also { eventSenderProcessor.postEvent(it) }
+            .let { createEventAndLocalEcho(type = EventType.CALL_CANDIDATES, roomId = roomId, content = it.toContent()) }
+            .also { eventSenderProcessor.postEvent(it) }
     }
 
     override fun sendLocalIceCandidateRemovals(candidates: List<CallCandidate>) {
@@ -151,25 +151,25 @@ internal class MxCallImpl(
         }
         Timber.tag(loggerTag.value).v("reject $callId")
         CallRejectContent(
-                callId = callId,
-                partyId = ourPartyId,
-                version = MxCall.VOIP_PROTO_VERSION.toString()
+            callId = callId,
+            partyId = ourPartyId,
+            version = MxCall.VOIP_PROTO_VERSION.toString()
         )
-                .let { createEventAndLocalEcho(type = EventType.CALL_REJECT, roomId = roomId, content = it.toContent()) }
-                .also { eventSenderProcessor.postEvent(it) }
+            .let { createEventAndLocalEcho(type = EventType.CALL_REJECT, roomId = roomId, content = it.toContent()) }
+            .also { eventSenderProcessor.postEvent(it) }
         state = CallState.Ended(reason = EndCallReason.USER_HANGUP)
     }
 
     override fun hangUp(reason: EndCallReason?) {
         Timber.tag(loggerTag.value).v("hangup $callId")
         CallHangupContent(
-                callId = callId,
-                partyId = ourPartyId,
-                reason = reason,
-                version = MxCall.VOIP_PROTO_VERSION.toString()
+            callId = callId,
+            partyId = ourPartyId,
+            reason = reason,
+            version = MxCall.VOIP_PROTO_VERSION.toString()
         )
-                .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }
-                .also { eventSenderProcessor.postEvent(it) }
+            .let { createEventAndLocalEcho(type = EventType.CALL_HANGUP, roomId = roomId, content = it.toContent()) }
+            .also { eventSenderProcessor.postEvent(it) }
         state = CallState.Ended(reason)
     }
 
@@ -178,27 +178,27 @@ internal class MxCallImpl(
         if (isOutgoing) return
         state = CallState.Answering
         CallAnswerContent(
-                callId = callId,
-                partyId = ourPartyId,
-                answer = CallAnswerContent.Answer(sdp = sdpString),
-                version = MxCall.VOIP_PROTO_VERSION.toString(),
-                capabilities = buildCapabilities()
+            callId = callId,
+            partyId = ourPartyId,
+            answer = CallAnswerContent.Answer(sdp = sdpString),
+            version = MxCall.VOIP_PROTO_VERSION.toString(),
+            capabilities = buildCapabilities()
         )
-                .let { createEventAndLocalEcho(type = EventType.CALL_ANSWER, roomId = roomId, content = it.toContent()) }
-                .also { eventSenderProcessor.postEvent(it) }
+            .let { createEventAndLocalEcho(type = EventType.CALL_ANSWER, roomId = roomId, content = it.toContent()) }
+            .also { eventSenderProcessor.postEvent(it) }
     }
 
     override fun negotiate(sdpString: String, type: SdpType) {
         Timber.tag(loggerTag.value).v("negotiate $callId")
         CallNegotiateContent(
-                callId = callId,
-                partyId = ourPartyId,
-                lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
-                description = CallNegotiateContent.Description(sdp = sdpString, type = type),
-                version = MxCall.VOIP_PROTO_VERSION.toString()
+            callId = callId,
+            partyId = ourPartyId,
+            lifetime = DefaultCallSignalingService.CALL_TIMEOUT_MS,
+            description = CallNegotiateContent.Description(sdp = sdpString, type = type),
+            version = MxCall.VOIP_PROTO_VERSION.toString()
         )
-                .let { createEventAndLocalEcho(type = EventType.CALL_NEGOTIATE, roomId = roomId, content = it.toContent()) }
-                .also { eventSenderProcessor.postEvent(it) }
+            .let { createEventAndLocalEcho(type = EventType.CALL_NEGOTIATE, roomId = roomId, content = it.toContent()) }
+            .also { eventSenderProcessor.postEvent(it) }
     }
 
     override fun selectAnswer() {
@@ -209,19 +209,21 @@ internal class MxCallImpl(
             Timber.tag(loggerTag.value).w("Expected state is CallState.Dialing or CallState.Connected got $state.")
         }
         CallSelectAnswerContent(
-                callId = callId,
-                partyId = ourPartyId,
-                selectedPartyId = opponentPartyId?.getOrNull(),
-                version = MxCall.VOIP_PROTO_VERSION.toString()
+            callId = callId,
+            partyId = ourPartyId,
+            selectedPartyId = opponentPartyId?.getOrNull(),
+            version = MxCall.VOIP_PROTO_VERSION.toString()
         )
-                .let { createEventAndLocalEcho(type = EventType.CALL_SELECT_ANSWER, roomId = roomId, content = it.toContent()) }
-                .also { eventSenderProcessor.postEvent(it) }
+            .let { createEventAndLocalEcho(type = EventType.CALL_SELECT_ANSWER, roomId = roomId, content = it.toContent()) }
+            .also { eventSenderProcessor.postEvent(it) }
     }
 
-    override suspend fun transfer(targetUserId: String,
-                                  targetRoomId: String?,
-                                  createCallId: String?,
-                                  awaitCallId: String?) {
+    override suspend fun transfer(
+        targetUserId: String,
+        targetRoomId: String?,
+        createCallId: String?,
+        awaitCallId: String?
+    ) {
         val profileInfoParams = GetProfileInfoTask.Params(targetUserId)
         val profileInfo = try {
             getProfileInfoTask.execute(profileInfoParams)
@@ -230,34 +232,34 @@ internal class MxCallImpl(
             null
         }
         CallReplacesContent(
-                callId = callId,
-                partyId = ourPartyId,
-                replacementId = CallIdGenerator.generate(),
-                version = MxCall.VOIP_PROTO_VERSION.toString(),
-                targetUser = CallReplacesContent.TargetUser(
-                        id = targetUserId,
-                        displayName = profileInfo?.get(ProfileService.DISPLAY_NAME_KEY) as? String,
-                        avatarUrl = profileInfo?.get(ProfileService.AVATAR_URL_KEY) as? String
-                ),
-                targetRoomId = targetRoomId,
-                awaitCall = awaitCallId,
-                createCall = createCallId
+            callId = callId,
+            partyId = ourPartyId,
+            replacementId = CallIdGenerator.generate(),
+            version = MxCall.VOIP_PROTO_VERSION.toString(),
+            targetUser = CallReplacesContent.TargetUser(
+                id = targetUserId,
+                displayName = profileInfo?.get(ProfileService.DISPLAY_NAME_KEY) as? String,
+                avatarUrl = profileInfo?.get(ProfileService.AVATAR_URL_KEY) as? String
+            ),
+            targetRoomId = targetRoomId,
+            awaitCall = awaitCallId,
+            createCall = createCallId
         )
-                .let { createEventAndLocalEcho(type = EventType.CALL_REPLACES, roomId = roomId, content = it.toContent()) }
-                .also { eventSenderProcessor.postEvent(it) }
+            .let { createEventAndLocalEcho(type = EventType.CALL_REPLACES, roomId = roomId, content = it.toContent()) }
+            .also { eventSenderProcessor.postEvent(it) }
     }
 
     private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
         return Event(
-                roomId = roomId,
-                originServerTs = System.currentTimeMillis(),
-                senderId = userId,
-                eventId = localId,
-                type = type,
-                content = content,
-                unsignedData = UnsignedData(age = null, transactionId = localId)
+            roomId = roomId,
+            originServerTs = System.currentTimeMillis(),
+            senderId = userId,
+            eventId = localId,
+            type = type,
+            content = content,
+            unsignedData = UnsignedData(age = null, transactionId = localId)
         )
-                .also { localEchoEventFactory.createLocalEcho(it) }
+            .also { localEchoEventFactory.createLocalEcho(it) }
     }
 
     private fun buildCapabilities(): CallCapabilities? {

@@ -21,5 +21,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class PollResponse(
-        @Json(name = "answers") val answers: List<String>? = null
+    @Json(name = "answers") val answers: List<String>? = null
 )

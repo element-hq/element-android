@@ -115,13 +115,14 @@ object VectorStaticModule {
 
     @Provides
     fun providesMatrixConfiguration(
-            vectorPreferences: VectorPreferences,
-            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider): MatrixConfiguration {
+        vectorPreferences: VectorPreferences,
+        vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider
+    ): MatrixConfiguration {
         return MatrixConfiguration(
-                applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
-                roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
-                threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
-                presenceSyncEnabled = BuildConfig.PRESENCE_SYNC_ENABLED
+            applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
+            roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
+            threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
+            presenceSyncEnabled = BuildConfig.PRESENCE_SYNC_ENABLED
         )
     }
 

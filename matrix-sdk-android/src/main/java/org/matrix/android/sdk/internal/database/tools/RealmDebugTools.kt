@@ -22,7 +22,7 @@ import org.matrix.android.sdk.BuildConfig
 import timber.log.Timber
 
 internal class RealmDebugTools(
-        private val realmConfiguration: RealmConfiguration
+    private val realmConfiguration: RealmConfiguration
 ) {
     /**
      * Log info about the DB
@@ -54,7 +54,7 @@ internal class RealmDebugTools(
                 separator()
             }
         }
-                .let { Timber.i(it) }
+            .let { Timber.i(it) }
     }
 
     private fun StringBuilder.separator() = append("\n==============================================")

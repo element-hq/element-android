@@ -55,11 +55,13 @@ fun writeToFile(data: ByteArray, file: File): Try<Unit> {
     }
 }
 
-fun addEntryToDownloadManager(context: Context,
-                              file: File,
-                              mimeType: String,
-                              title: String = file.name,
-                              description: String = file.name): Uri? {
+fun addEntryToDownloadManager(
+    context: Context,
+    file: File,
+    mimeType: String,
+    title: String = file.name,
+    description: String = file.name
+): Uri? {
     try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues().apply {
@@ -69,18 +71,18 @@ fun addEntryToDownloadManager(context: Context,
                 put(MediaStore.Downloads.SIZE, file.length())
             }
             return context.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-                    ?.let { uri ->
-                        Timber.v("## addEntryToDownloadManager(): $uri")
-                        val source = file.inputStream().source().buffer()
-                        context.contentResolver.openOutputStream(uri)?.sink()?.buffer()?.let { sink ->
-                            source.use { input ->
-                                sink.use { output ->
-                                    output.writeAll(input)
-                                }
+                ?.let { uri ->
+                    Timber.v("## addEntryToDownloadManager(): $uri")
+                    val source = file.inputStream().source().buffer()
+                    context.contentResolver.openOutputStream(uri)?.sink()?.buffer()?.let { sink ->
+                        source.use { input ->
+                            sink.use { output ->
+                                output.writeAll(input)
                             }
                         }
-                        uri
-                    } ?: run {
+                    }
+                    uri
+                } ?: run {
                 Timber.v("## addEntryToDownloadManager(): context.contentResolver.insert failed")
 
                 null

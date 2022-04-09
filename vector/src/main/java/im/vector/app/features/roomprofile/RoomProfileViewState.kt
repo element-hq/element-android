@@ -25,22 +25,22 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 
 data class RoomProfileViewState(
-        val roomId: String,
-        val roomSummary: Async<RoomSummary> = Uninitialized,
-        val roomCreateContent: Async<RoomCreateContent> = Uninitialized,
-        val bannedMembership: Async<List<RoomMemberSummary>> = Uninitialized,
-        val actionPermissions: ActionPermissions = ActionPermissions(),
-        val isLoading: Boolean = false,
-        val isUsingUnstableRoomVersion: Boolean = false,
-        val recommendedRoomVersion: String? = null,
-        val canUpgradeRoom: Boolean = false,
-        val isTombstoned: Boolean = false,
-        val canUpdateRoomState: Boolean = false
+    val roomId: String,
+    val roomSummary: Async<RoomSummary> = Uninitialized,
+    val roomCreateContent: Async<RoomCreateContent> = Uninitialized,
+    val bannedMembership: Async<List<RoomMemberSummary>> = Uninitialized,
+    val actionPermissions: ActionPermissions = ActionPermissions(),
+    val isLoading: Boolean = false,
+    val isUsingUnstableRoomVersion: Boolean = false,
+    val recommendedRoomVersion: String? = null,
+    val canUpgradeRoom: Boolean = false,
+    val isTombstoned: Boolean = false,
+    val canUpdateRoomState: Boolean = false
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 
     data class ActionPermissions(
-            val canEnableEncryption: Boolean = false
+        val canEnableEncryption: Boolean = false
     )
 }

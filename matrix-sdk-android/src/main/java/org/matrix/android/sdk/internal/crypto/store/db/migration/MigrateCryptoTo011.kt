@@ -25,6 +25,6 @@ class MigrateCryptoTo011(realm: DynamicRealm) : RealmMigrator(realm, 11) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("CryptoMetadataEntity")
-                ?.addField(CryptoMetadataEntityFields.DEVICE_KEYS_SENT_TO_SERVER, Boolean::class.java)
+            ?.addField(CryptoMetadataEntityFields.DEVICE_KEYS_SENT_TO_SERVER, Boolean::class.java)
     }
 }

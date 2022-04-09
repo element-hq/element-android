@@ -34,7 +34,7 @@ object QRCodeBitmapDecodeHelper {
     private val decoderHints = mapOf(DecodeHintType.POSSIBLE_FORMATS to listOf(BarcodeFormat.QR_CODE))
 
     fun decodeQRFromBitmap(bitmap: Bitmap): Result? =
-            decode(bitmap, false) ?: decode(bitmap, true)
+        decode(bitmap, false) ?: decode(bitmap, true)
 
     private fun decode(bitmap: Bitmap, invert: Boolean = false): Result? {
         val pixels = IntArray(bitmap.width * bitmap.height)
@@ -42,9 +42,9 @@ object QRCodeBitmapDecodeHelper {
     }
 
     private fun decode(
-            pixels: IntArray,
-            bitmap: Bitmap,
-            invert: Boolean = false
+        pixels: IntArray,
+        bitmap: Bitmap,
+        invert: Boolean = false
     ): Result? {
         val width = bitmap.width
         val height = bitmap.height
@@ -54,21 +54,21 @@ object QRCodeBitmapDecodeHelper {
             bitmap
         }.getPixels(pixels, 0, width, 0, 0, width, height)
         return decodeLuminanceSource(
-                RGBLuminanceSource(width, height, pixels),
-                invert
+            RGBLuminanceSource(width, height, pixels),
+            invert
         )
     }
 
     private fun decodeLuminanceSource(
-            source: LuminanceSource,
-            invert: Boolean
+        source: LuminanceSource,
+        invert: Boolean
     ): Result? {
         return decodeLuminanceSource(
-                if (invert) {
-                    source.invert()
-                } else {
-                    source
-                }
+            if (invert) {
+                source.invert()
+            } else {
+                source
+            }
         )
     }
 

@@ -39,12 +39,12 @@ class MigrateCryptoTo013(realm: DynamicRealm) : RealmMigrator(realm, 13) {
         val deleteCounter: Int
 
         trustLevelEntitySchema
-                ?.addField("isLinked", Boolean::class.java)
-                ?.transform { obj ->
-                    // Setting to false for all by default
-                    obj.set("isLinked", false)
-                    mainCounter++
-                }
+            ?.addField("isLinked", Boolean::class.java)
+            ?.transform { obj ->
+                // Setting to false for all by default
+                obj.set("isLinked", false)
+                mainCounter++
+            }
 
         realm.schema.get("DeviceInfoEntity")?.transform { obj ->
             // Setting to true for those which are referenced in DeviceInfoEntity
@@ -60,10 +60,10 @@ class MigrateCryptoTo013(realm: DynamicRealm) : RealmMigrator(realm, 13) {
 
         // Removing all those which are set as false
         realm.where("TrustLevelEntity")
-                .equalTo("isLinked", false)
-                .findAll()
-                .also { deleteCounter = it.size }
-                .deleteAllFromRealm()
+            .equalTo("isLinked", false)
+            .findAll()
+            .also { deleteCounter = it.size }
+            .deleteAllFromRealm()
 
         trustLevelEntitySchema?.removeField("isLinked")
 

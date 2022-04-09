@@ -54,84 +54,88 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 internal class VerificationTransportRoomMessage(
-        private val workManagerProvider: WorkManagerProvider,
-        private val sessionId: String,
-        private val userId: String,
-        private val userDeviceId: String?,
-        private val roomId: String,
-        private val localEchoEventFactory: LocalEchoEventFactory,
-        private val tx: DefaultVerificationTransaction?,
-        private val coroutineScope: CoroutineScope
+    private val workManagerProvider: WorkManagerProvider,
+    private val sessionId: String,
+    private val userId: String,
+    private val userDeviceId: String?,
+    private val roomId: String,
+    private val localEchoEventFactory: LocalEchoEventFactory,
+    private val tx: DefaultVerificationTransaction?,
+    private val coroutineScope: CoroutineScope
 ) : VerificationTransport {
 
-    override fun <T> sendToOther(type: String,
-                                 verificationInfo: VerificationInfo<T>,
-                                 nextState: VerificationTxState,
-                                 onErrorReason: CancelCode,
-                                 onDone: (() -> Unit)?) {
+    override fun <T> sendToOther(
+        type: String,
+        verificationInfo: VerificationInfo<T>,
+        nextState: VerificationTxState,
+        onErrorReason: CancelCode,
+        onDone: (() -> Unit)?
+    ) {
         Timber.d("## SAS sending msg type $type")
         Timber.v("## SAS sending msg info $verificationInfo")
         val event = createEventAndLocalEcho(
-                type = type,
-                roomId = roomId,
-                content = verificationInfo.toEventContent()!!
+            type = type,
+            roomId = roomId,
+            content = verificationInfo.toEventContent()!!
         )
 
-        val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
+        val workerParams = WorkerParamsFactory.toData(
+            SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
                 eventId = event.eventId ?: ""
-        ))
+            )
+        )
         val enqueueInfo = enqueueSendWork(workerParams)
 
         // I cannot just listen to the given work request, because when used in a uniqueWork,
         // The callback is called while it is still Running ...
 
-//        Futures.addCallback(enqueueInfo.first.result, object : FutureCallback<Operation.State.SUCCESS> {
-//            override fun onSuccess(result: Operation.State.SUCCESS?) {
-//                if (onDone != null) {
-//                    onDone()
-//                } else {
-//                    tx?.state = nextState
-//                }
-//            }
-//
-//            override fun onFailure(t: Throwable) {
-//                Timber.e("## SAS verification [${tx?.transactionId}] failed to send toDevice in state : ${tx?.state}, reason: ${t.localizedMessage}")
-//                tx?.cancel(onErrorReason)
-//            }
-//        }, listenerExecutor)
+        //        Futures.addCallback(enqueueInfo.first.result, object : FutureCallback<Operation.State.SUCCESS> {
+        //            override fun onSuccess(result: Operation.State.SUCCESS?) {
+        //                if (onDone != null) {
+        //                    onDone()
+        //                } else {
+        //                    tx?.state = nextState
+        //                }
+        //            }
+        //
+        //            override fun onFailure(t: Throwable) {
+        //                Timber.e("## SAS verification [${tx?.transactionId}] failed to send toDevice in state : ${tx?.state}, reason: ${t.localizedMessage}")
+        //                tx?.cancel(onErrorReason)
+        //            }
+        //        }, listenerExecutor)
 
         val workLiveData = workManagerProvider.workManager
-                .getWorkInfosForUniqueWorkLiveData(uniqueQueueName())
+            .getWorkInfosForUniqueWorkLiveData(uniqueQueueName())
 
         val observer = object : Observer<List<WorkInfo>> {
             override fun onChanged(workInfoList: List<WorkInfo>?) {
                 workInfoList
-                        ?.firstOrNull { it.id == enqueueInfo.second }
-                        ?.let { wInfo ->
-                            when (wInfo.state) {
-                                WorkInfo.State.FAILED    -> {
+                    ?.firstOrNull { it.id == enqueueInfo.second }
+                    ?.let { wInfo ->
+                        when (wInfo.state) {
+                            WorkInfo.State.FAILED -> {
+                                tx?.cancel(onErrorReason)
+                                workLiveData.removeObserver(this)
+                            }
+                            WorkInfo.State.SUCCEEDED -> {
+                                if (SessionSafeCoroutineWorker.hasFailed(wInfo.outputData)) {
+                                    Timber.e("## SAS verification [${tx?.transactionId}] failed to send verification message in state : ${tx?.state}")
                                     tx?.cancel(onErrorReason)
-                                    workLiveData.removeObserver(this)
-                                }
-                                WorkInfo.State.SUCCEEDED -> {
-                                    if (SessionSafeCoroutineWorker.hasFailed(wInfo.outputData)) {
-                                        Timber.e("## SAS verification [${tx?.transactionId}] failed to send verification message in state : ${tx?.state}")
-                                        tx?.cancel(onErrorReason)
+                                } else {
+                                    if (onDone != null) {
+                                        onDone()
                                     } else {
-                                        if (onDone != null) {
-                                            onDone()
-                                        } else {
-                                            tx?.state = nextState
-                                        }
+                                        tx?.state = nextState
                                     }
-                                    workLiveData.removeObserver(this)
                                 }
-                                else                     -> {
-                                    // nop
-                                }
+                                workLiveData.removeObserver(this)
+                            }
+                            else -> {
+                                // nop
                             }
                         }
+                    }
             }
         }
 
@@ -141,79 +145,83 @@ internal class VerificationTransportRoomMessage(
         }
     }
 
-    override fun sendVerificationRequest(supportedMethods: List<String>,
-                                         localId: String,
-                                         otherUserId: String,
-                                         roomId: String?,
-                                         toDevices: List<String>?,
-                                         callback: (String?, ValidVerificationInfoRequest?) -> Unit) {
+    override fun sendVerificationRequest(
+        supportedMethods: List<String>,
+        localId: String,
+        otherUserId: String,
+        roomId: String?,
+        toDevices: List<String>?,
+        callback: (String?, ValidVerificationInfoRequest?) -> Unit
+    ) {
         Timber.d("## SAS sending verification request with supported methods: $supportedMethods")
         // This transport requires a room
         requireNotNull(roomId)
 
         val validInfo = ValidVerificationInfoRequest(
-                transactionId = "",
-                fromDevice = userDeviceId ?: "",
-                methods = supportedMethods,
-                timestamp = System.currentTimeMillis()
+            transactionId = "",
+            fromDevice = userDeviceId ?: "",
+            methods = supportedMethods,
+            timestamp = System.currentTimeMillis()
         )
 
         val info = MessageVerificationRequestContent(
-                body = "$userId is requesting to verify your key, but your client does not support in-chat key verification." +
-                        " You will need to use legacy key verification to verify keys.",
-                fromDevice = validInfo.fromDevice,
-                toUserId = otherUserId,
-                timestamp = validInfo.timestamp,
-                methods = validInfo.methods
+            body = "$userId is requesting to verify your key, but your client does not support in-chat key verification." +
+                    " You will need to use legacy key verification to verify keys.",
+            fromDevice = validInfo.fromDevice,
+            toUserId = otherUserId,
+            timestamp = validInfo.timestamp,
+            methods = validInfo.methods
         )
         val content = info.toContent()
 
         val event = createEventAndLocalEcho(
-                localId,
-                EventType.MESSAGE,
-                roomId,
-                content
+            localId,
+            EventType.MESSAGE,
+            roomId,
+            content
         )
 
-        val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
+        val workerParams = WorkerParamsFactory.toData(
+            SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
                 eventId = event.eventId ?: ""
-        ))
+            )
+        )
 
         val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
-                .setConstraints(WorkManagerProvider.workConstraints)
-                .setInputData(workerParams)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                .build()
+            .setConstraints(WorkManagerProvider.workConstraints)
+            .setInputData(workerParams)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+            .build()
 
         workManagerProvider.workManager
-                .beginUniqueWork("${roomId}_VerificationWork", ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
-                .enqueue()
+            .beginUniqueWork("${roomId}_VerificationWork", ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
+            .enqueue()
 
         // I cannot just listen to the given work request, because when used in a uniqueWork,
         // The callback is called while it is still Running ...
 
         val workLiveData = workManagerProvider.workManager
-                .getWorkInfosForUniqueWorkLiveData("${roomId}_VerificationWork")
+            .getWorkInfosForUniqueWorkLiveData("${roomId}_VerificationWork")
 
         val observer = object : Observer<List<WorkInfo>> {
             override fun onChanged(workInfoList: List<WorkInfo>?) {
                 workInfoList
-                        ?.filter { it.state == WorkInfo.State.SUCCEEDED }
-                        ?.firstOrNull { it.id == workRequest.id }
-                        ?.let { wInfo ->
-                            if (SessionSafeCoroutineWorker.hasFailed(wInfo.outputData)) {
-                                callback(null, null)
+                    ?.filter { it.state == WorkInfo.State.SUCCEEDED }
+                    ?.firstOrNull { it.id == workRequest.id }
+                    ?.let { wInfo ->
+                        if (SessionSafeCoroutineWorker.hasFailed(wInfo.outputData)) {
+                            callback(null, null)
+                        } else {
+                            val eventId = wInfo.outputData.getString(localId)
+                            if (eventId != null) {
+                                callback(eventId, validInfo)
                             } else {
-                                val eventId = wInfo.outputData.getString(localId)
-                                if (eventId != null) {
-                                    callback(eventId, validInfo)
-                                } else {
-                                    callback(null, null)
-                                }
+                                callback(null, null)
                             }
-                            workLiveData.removeObserver(this)
                         }
+                        workLiveData.removeObserver(this)
+                    }
             }
         }
 
@@ -226,47 +234,53 @@ internal class VerificationTransportRoomMessage(
     override fun cancelTransaction(transactionId: String, otherUserId: String, otherUserDeviceId: String?, code: CancelCode) {
         Timber.d("## SAS canceling transaction $transactionId for reason $code")
         val event = createEventAndLocalEcho(
-                type = EventType.KEY_VERIFICATION_CANCEL,
-                roomId = roomId,
-                content = MessageVerificationCancelContent.create(transactionId, code).toContent()
+            type = EventType.KEY_VERIFICATION_CANCEL,
+            roomId = roomId,
+            content = MessageVerificationCancelContent.create(transactionId, code).toContent()
         )
-        val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
+        val workerParams = WorkerParamsFactory.toData(
+            SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
                 eventId = event.eventId ?: ""
-        ))
+            )
+        )
         enqueueSendWork(workerParams)
     }
 
-    override fun done(transactionId: String,
-                      onDone: (() -> Unit)?) {
+    override fun done(
+        transactionId: String,
+        onDone: (() -> Unit)?
+    ) {
         Timber.d("## SAS sending done for $transactionId")
         val event = createEventAndLocalEcho(
-                type = EventType.KEY_VERIFICATION_DONE,
-                roomId = roomId,
-                content = MessageVerificationDoneContent(
-                        relatesTo = RelationDefaultContent(
-                                RelationType.REFERENCE,
-                                transactionId
-                        )
-                ).toContent()
+            type = EventType.KEY_VERIFICATION_DONE,
+            roomId = roomId,
+            content = MessageVerificationDoneContent(
+                relatesTo = RelationDefaultContent(
+                    RelationType.REFERENCE,
+                    transactionId
+                )
+            ).toContent()
         )
-        val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
+        val workerParams = WorkerParamsFactory.toData(
+            SendVerificationMessageWorker.Params(
                 sessionId = sessionId,
                 eventId = event.eventId ?: ""
-        ))
+            )
+        )
         val enqueueInfo = enqueueSendWork(workerParams)
 
         val workLiveData = workManagerProvider.workManager
-                .getWorkInfosForUniqueWorkLiveData(uniqueQueueName())
+            .getWorkInfosForUniqueWorkLiveData(uniqueQueueName())
         val observer = object : Observer<List<WorkInfo>> {
             override fun onChanged(workInfoList: List<WorkInfo>?) {
                 workInfoList
-                        ?.filter { it.state == WorkInfo.State.SUCCEEDED }
-                        ?.firstOrNull { it.id == enqueueInfo.second }
-                        ?.let { _ ->
-                            onDone?.invoke()
-                            workLiveData.removeObserver(this)
-                        }
+                    ?.filter { it.state == WorkInfo.State.SUCCEEDED }
+                    ?.firstOrNull { it.id == enqueueInfo.second }
+                    ?.let { _ ->
+                        onDone?.invoke()
+                        workLiveData.removeObserver(this)
+                    }
             }
         }
 
@@ -278,104 +292,112 @@ internal class VerificationTransportRoomMessage(
 
     private fun enqueueSendWork(workerParams: Data): Pair<Operation, UUID> {
         val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
-                .setConstraints(WorkManagerProvider.workConstraints)
-                .setInputData(workerParams)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                .build()
+            .setConstraints(WorkManagerProvider.workConstraints)
+            .setInputData(workerParams)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+            .build()
         return workManagerProvider.workManager
-                .beginUniqueWork(uniqueQueueName(), ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
-                .enqueue() to workRequest.id
+            .beginUniqueWork(uniqueQueueName(), ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
+            .enqueue() to workRequest.id
     }
 
     private fun uniqueQueueName() = "${roomId}_VerificationWork"
 
-    override fun createAccept(tid: String,
-                              keyAgreementProtocol: String,
-                              hash: String,
-                              commitment: String,
-                              messageAuthenticationCode: String,
-                              shortAuthenticationStrings: List<String>): VerificationInfoAccept =
-            MessageVerificationAcceptContent.create(
+    override fun createAccept(
+        tid: String,
+        keyAgreementProtocol: String,
+        hash: String,
+        commitment: String,
+        messageAuthenticationCode: String,
+        shortAuthenticationStrings: List<String>
+    ): VerificationInfoAccept =
+        MessageVerificationAcceptContent.create(
             tid,
             keyAgreementProtocol,
             hash,
             commitment,
             messageAuthenticationCode,
             shortAuthenticationStrings
-    )
+        )
 
     override fun createKey(tid: String, pubKey: String): VerificationInfoKey = MessageVerificationKeyContent.create(tid, pubKey)
 
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = MessageVerificationMacContent.create(tid, mac, keys)
 
-    override fun createStartForSas(fromDevice: String,
-                                   transactionId: String,
-                                   keyAgreementProtocols: List<String>,
-                                   hashes: List<String>,
-                                   messageAuthenticationCodes: List<String>,
-                                   shortAuthenticationStrings: List<String>): VerificationInfoStart {
+    override fun createStartForSas(
+        fromDevice: String,
+        transactionId: String,
+        keyAgreementProtocols: List<String>,
+        hashes: List<String>,
+        messageAuthenticationCodes: List<String>,
+        shortAuthenticationStrings: List<String>
+    ): VerificationInfoStart {
         return MessageVerificationStartContent(
-                fromDevice,
-                hashes,
-                keyAgreementProtocols,
-                messageAuthenticationCodes,
-                shortAuthenticationStrings,
-                VERIFICATION_METHOD_SAS,
-                RelationDefaultContent(
-                        type = RelationType.REFERENCE,
-                        eventId = transactionId
-                ),
-                null
+            fromDevice,
+            hashes,
+            keyAgreementProtocols,
+            messageAuthenticationCodes,
+            shortAuthenticationStrings,
+            VERIFICATION_METHOD_SAS,
+            RelationDefaultContent(
+                type = RelationType.REFERENCE,
+                eventId = transactionId
+            ),
+            null
         )
     }
 
-    override fun createStartForQrCode(fromDevice: String,
-                                      transactionId: String,
-                                      sharedSecret: String): VerificationInfoStart {
+    override fun createStartForQrCode(
+        fromDevice: String,
+        transactionId: String,
+        sharedSecret: String
+    ): VerificationInfoStart {
         return MessageVerificationStartContent(
-                fromDevice,
-                null,
-                null,
-                null,
-                null,
-                VERIFICATION_METHOD_RECIPROCATE,
-                RelationDefaultContent(
-                        type = RelationType.REFERENCE,
-                        eventId = transactionId
-                ),
-                sharedSecret
+            fromDevice,
+            null,
+            null,
+            null,
+            null,
+            VERIFICATION_METHOD_RECIPROCATE,
+            RelationDefaultContent(
+                type = RelationType.REFERENCE,
+                eventId = transactionId
+            ),
+            sharedSecret
         )
     }
 
     override fun createReady(tid: String, fromDevice: String, methods: List<String>): VerificationInfoReady {
         return MessageVerificationReadyContent(
-                fromDevice = fromDevice,
-                relatesTo = RelationDefaultContent(
-                        type = RelationType.REFERENCE,
-                        eventId = tid
-                ),
-                methods = methods
+            fromDevice = fromDevice,
+            relatesTo = RelationDefaultContent(
+                type = RelationType.REFERENCE,
+                eventId = tid
+            ),
+            methods = methods
         )
     }
 
     private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
         return Event(
-                roomId = roomId,
-                originServerTs = System.currentTimeMillis(),
-                senderId = userId,
-                eventId = localId,
-                type = type,
-                content = content,
-                unsignedData = UnsignedData(age = null, transactionId = localId)
+            roomId = roomId,
+            originServerTs = System.currentTimeMillis(),
+            senderId = userId,
+            eventId = localId,
+            type = type,
+            content = content,
+            unsignedData = UnsignedData(age = null, transactionId = localId)
         ).also {
             localEchoEventFactory.createLocalEcho(it)
         }
     }
 
-    override fun sendVerificationReady(keyReq: VerificationInfoReady,
-                                       otherUserId: String,
-                                       otherDeviceId: String?,
-                                       callback: (() -> Unit)?) {
+    override fun sendVerificationReady(
+        keyReq: VerificationInfoReady,
+        otherUserId: String,
+        otherDeviceId: String?,
+        callback: (() -> Unit)?
+    ) {
         // Not applicable (send event is called directly)
         Timber.w("## SAS ignored verification ready with methods: ${keyReq.methods}")
     }

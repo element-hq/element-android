@@ -21,13 +21,13 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class SearchRequestEventContext(
-        // How many events before the result are returned.
-        @Json(name = "before_limit")
-        val beforeLimit: Int? = null,
-        // How many events after the result are returned.
-        @Json(name = "after_limit")
-        val afterLimit: Int? = null,
-        // Requests that the server returns the historic profile information
-        @Json(name = "include_profile")
-        val includeProfile: Boolean? = null
+    // How many events before the result are returned.
+    @Json(name = "before_limit")
+    val beforeLimit: Int? = null,
+    // How many events after the result are returned.
+    @Json(name = "after_limit")
+    val afterLimit: Int? = null,
+    // Requests that the server returns the historic profile information
+    @Json(name = "include_profile")
+    val includeProfile: Boolean? = null
 )

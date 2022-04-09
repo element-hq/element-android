@@ -23,9 +23,9 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageLocationCont
 
 @Parcelize
 data class LocationData(
-        val latitude: Double,
-        val longitude: Double,
-        val uncertainty: Double?
+    val latitude: Double,
+    val longitude: Double,
+    val uncertainty: Double?
 ) : Parcelable
 
 /**
@@ -40,10 +40,10 @@ fun MessageLocationContent.toLocationData(): LocationData? {
 @VisibleForTesting
 fun parseGeo(geo: String): LocationData? {
     val geoParts = geo
-            .split(":")
-            .takeIf { it.firstOrNull() == "geo" }
-            ?.getOrNull(1)
-            ?.split(";") ?: return null
+        .split(":")
+        .takeIf { it.firstOrNull() == "geo" }
+        ?.getOrNull(1)
+        ?.split(";") ?: return null
 
     val gpsParts = geoParts.getOrNull(0)?.split(",") ?: return null
     val lat = gpsParts.getOrNull(0)?.toDoubleOrNull() ?: return null
@@ -52,8 +52,8 @@ fun parseGeo(geo: String): LocationData? {
     val uncertainty = geoParts.getOrNull(1)?.replace("u=", "")?.toDoubleOrNull()
 
     return LocationData(
-            latitude = lat,
-            longitude = lng,
-            uncertainty = uncertainty
+        latitude = lat,
+        longitude = lng,
+        uncertainty = uncertainty
     )
 }

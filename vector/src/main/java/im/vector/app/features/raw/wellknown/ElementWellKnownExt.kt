@@ -25,7 +25,7 @@ suspend fun RawService.getElementWellknown(sessionParams: SessionParams): Elemen
     // By default we use the domain of the userId to retrieve the .well-known data
     val domain = sessionParams.userId.getDomain()
     return tryOrNull { getWellknown(domain) }
-            ?.let { ElementWellKnownMapper.from(it) }
+        ?.let { ElementWellKnownMapper.from(it) }
 }
 
 fun ElementWellKnown.isE2EByDefault() = elementE2E?.e2eDefault ?: riotE2E?.e2eDefault ?: true

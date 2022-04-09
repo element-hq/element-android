@@ -43,7 +43,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class SetIdentityServerFragment @Inject constructor(
-        val colorProvider: ColorProvider
+    val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentSetIdentityServerBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSetIdentityServerBinding {
@@ -62,13 +62,15 @@ class SetIdentityServerFragment @Inject constructor(
             views.identityServerSetDefaultAlternative.setText(R.string.identity_server_set_alternative_notice_no_default)
         } else {
             views.identityServerSetDefaultNotice.text = getString(
-                    R.string.identity_server_set_default_notice,
-                    state.homeServerUrl.toReducedUrl(),
-                    state.defaultIdentityServerUrl.toReducedUrl()
+                R.string.identity_server_set_default_notice,
+                state.homeServerUrl.toReducedUrl(),
+                state.defaultIdentityServerUrl.toReducedUrl()
             )
-                    .toSpannable()
-                    .colorizeMatchingText(state.defaultIdentityServerUrl.toReducedUrl(),
-                            colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary))
+                .toSpannable()
+                .colorizeMatchingText(
+                    state.defaultIdentityServerUrl.toReducedUrl(),
+                    colorProvider.getColorFromAttribute(R.attr.vctr_content_tertiary)
+                )
 
             views.identityServerSetDefaultNotice.isVisible = true
             views.identityServerSetDefaultSubmit.isVisible = true
@@ -91,12 +93,12 @@ class SetIdentityServerFragment @Inject constructor(
         }
 
         views.identityServerSetDefaultAlternativeTextInput
-                .textChanges()
-                .onEach {
-                    views.identityServerSetDefaultAlternativeTil.error = null
-                    views.identityServerSetDefaultAlternativeSubmit.isEnabled = it.isNotEmpty()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .textChanges()
+            .onEach {
+                views.identityServerSetDefaultAlternativeTil.error = null
+                views.identityServerSetDefaultAlternativeSubmit.isEnabled = it.isNotEmpty()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.identityServerSetDefaultSubmit.debouncedClicks {
             viewModel.handle(SetIdentityServerAction.UseDefaultIdentityServer)
@@ -108,28 +110,29 @@ class SetIdentityServerFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                is SetIdentityServerViewEvents.Loading       -> showLoading(it.message)
-                is SetIdentityServerViewEvents.Failure       -> handleFailure(it)
-                is SetIdentityServerViewEvents.OtherFailure  -> showFailure(it.failure)
-                is SetIdentityServerViewEvents.NoTerms       -> {
+                is SetIdentityServerViewEvents.Loading -> showLoading(it.message)
+                is SetIdentityServerViewEvents.Failure -> handleFailure(it)
+                is SetIdentityServerViewEvents.OtherFailure -> showFailure(it.failure)
+                is SetIdentityServerViewEvents.NoTerms -> {
                     MaterialAlertDialogBuilder(requireActivity())
-                            .setTitle(R.string.settings_discovery_no_terms_title)
-                            .setMessage(R.string.settings_discovery_no_terms)
-                            .setPositiveButton(R.string._continue) { _, _ ->
-                                processIdentityServerChange()
-                            }
-                            .setNegativeButton(R.string.action_cancel, null)
-                            .show()
+                        .setTitle(R.string.settings_discovery_no_terms_title)
+                        .setMessage(R.string.settings_discovery_no_terms)
+                        .setPositiveButton(R.string._continue) { _, _ ->
+                            processIdentityServerChange()
+                        }
+                        .setNegativeButton(R.string.action_cancel, null)
+                        .show()
                     Unit
                 }
                 is SetIdentityServerViewEvents.TermsAccepted -> processIdentityServerChange()
-                is SetIdentityServerViewEvents.ShowTerms     -> {
+                is SetIdentityServerViewEvents.ShowTerms -> {
                     navigator.openTerms(
-                            requireContext(),
-                            termsActivityResultLauncher,
-                            TermsService.ServiceType.IdentityService,
-                            it.identityServerUrl,
-                            null)
+                        requireContext(),
+                        termsActivityResultLauncher,
+                        TermsService.ServiceType.IdentityService,
+                        it.identityServerUrl,
+                        null
+                    )
                 }
             }
         }
@@ -140,10 +143,10 @@ class SetIdentityServerFragment @Inject constructor(
         if (failure.forDefault) {
             // Display the error in a dialog
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.dialog_title_error)
-                    .setMessage(message)
-                    .setPositiveButton(R.string.ok, null)
-                    .show()
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, null)
+                .show()
         } else {
             // Display the error inlined
             views.identityServerSetDefaultAlternativeTil.error = message

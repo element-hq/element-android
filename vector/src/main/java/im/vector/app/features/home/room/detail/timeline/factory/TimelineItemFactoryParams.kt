@@ -22,16 +22,16 @@ import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryEve
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 data class TimelineItemFactoryParams(
-        val event: TimelineEvent,
-        val prevEvent: TimelineEvent? = null,
-        val prevDisplayableEvent: TimelineEvent? = null,
-        val nextEvent: TimelineEvent? = null,
-        val nextDisplayableEvent: TimelineEvent? = null,
-        val partialState: TimelineEventController.PartialState = TimelineEventController.PartialState(),
-        val lastSentEventIdWithoutReadReceipts: String? = null,
-        val callback: TimelineEventController.Callback? = null,
-        val reactionsSummaryEvents: ReactionsSummaryEvents? = null,
-        val eventsGroup: TimelineEventsGroup? = null
+    val event: TimelineEvent,
+    val prevEvent: TimelineEvent? = null,
+    val prevDisplayableEvent: TimelineEvent? = null,
+    val nextEvent: TimelineEvent? = null,
+    val nextDisplayableEvent: TimelineEvent? = null,
+    val partialState: TimelineEventController.PartialState = TimelineEventController.PartialState(),
+    val lastSentEventIdWithoutReadReceipts: String? = null,
+    val callback: TimelineEventController.Callback? = null,
+    val reactionsSummaryEvents: ReactionsSummaryEvents? = null,
+    val eventsGroup: TimelineEventsGroup? = null
 ) {
 
     val highlightedEventId: String?

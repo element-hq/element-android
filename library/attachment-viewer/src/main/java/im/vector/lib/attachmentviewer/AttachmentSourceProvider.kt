@@ -23,8 +23,8 @@ sealed class AttachmentInfo(open val uid: String) {
     data class Image(override val uid: String, val url: String, val data: Any?) : AttachmentInfo(uid)
     data class AnimatedImage(override val uid: String, val url: String, val data: Any?) : AttachmentInfo(uid)
     data class Video(override val uid: String, val url: String, val data: Any, val thumbnail: Image?) : AttachmentInfo(uid)
-//    data class Audio(override val uid: String, val url: String, val data: Any) : AttachmentInfo(uid)
-//    data class File(override val uid: String, val url: String, val data: Any) : AttachmentInfo(uid)
+    //    data class Audio(override val uid: String, val url: String, val data: Any) : AttachmentInfo(uid)
+    //    data class File(override val uid: String, val url: String, val data: Any) : AttachmentInfo(uid)
 }
 
 interface AttachmentSourceProvider {

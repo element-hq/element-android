@@ -36,11 +36,11 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 
 internal class DefaultReadService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val setReadMarkersTask: SetReadMarkersTask,
-        private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
-        @UserId private val userId: String
+    @Assisted private val roomId: String,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val setReadMarkersTask: SetReadMarkersTask,
+    private val readReceiptsSummaryMapper: ReadReceiptsSummaryMapper,
+    @UserId private val userId: String
 ) : ReadService {
 
     @AssistedFactory
@@ -50,9 +50,9 @@ internal class DefaultReadService @AssistedInject constructor(
 
     override suspend fun markAsRead(params: ReadService.MarkAsReadParams) {
         val taskParams = SetReadMarkersTask.Params(
-                roomId = roomId,
-                forceReadMarker = params.forceReadMarker(),
-                forceReadReceipt = params.forceReadReceipt()
+            roomId = roomId,
+            forceReadMarker = params.forceReadMarker(),
+            forceReadReceipt = params.forceReadReceipt()
         )
         setReadMarkersTask.execute(taskParams)
     }
@@ -73,8 +73,8 @@ internal class DefaultReadService @AssistedInject constructor(
 
     override fun getReadMarkerLive(): LiveData<Optional<String>> {
         val liveRealmData = monarchy.findAllMappedWithChanges(
-                { ReadMarkerEntity.where(it, roomId) },
-                { it.eventId }
+            { ReadMarkerEntity.where(it, roomId) },
+            { it.eventId }
         )
         return Transformations.map(liveRealmData) {
             it.firstOrNull().toOptional()
@@ -83,8 +83,8 @@ internal class DefaultReadService @AssistedInject constructor(
 
     override fun getMyReadReceiptLive(): LiveData<Optional<String>> {
         val liveRealmData = monarchy.findAllMappedWithChanges(
-                { ReadReceiptEntity.where(it, roomId = roomId, userId = userId) },
-                { it.eventId }
+            { ReadReceiptEntity.where(it, roomId = roomId, userId = userId) },
+            { it.eventId }
         )
         return Transformations.map(liveRealmData) {
             it.firstOrNull().toOptional()
@@ -95,16 +95,16 @@ internal class DefaultReadService @AssistedInject constructor(
         var eventId: String? = null
         monarchy.doWithRealm {
             eventId = ReadReceiptEntity.where(it, roomId = roomId, userId = userId)
-                    .findFirst()
-                    ?.eventId
+                .findFirst()
+                ?.eventId
         }
         return eventId
     }
 
     override fun getEventReadReceiptsLive(eventId: String): LiveData<List<ReadReceipt>> {
         val liveRealmData = monarchy.findAllMappedWithChanges(
-                { ReadReceiptsSummaryEntity.where(it, eventId) },
-                { readReceiptsSummaryMapper.map(it) }
+            { ReadReceiptsSummaryEntity.where(it, eventId) },
+            { readReceiptsSummaryMapper.map(it) }
         )
         return Transformations.map(liveRealmData) {
             it.firstOrNull().orEmpty()

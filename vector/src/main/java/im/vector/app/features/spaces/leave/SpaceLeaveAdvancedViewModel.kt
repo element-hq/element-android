@@ -43,9 +43,9 @@ import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
-        @Assisted val initialState: SpaceLeaveAdvanceViewState,
-        private val session: Session,
-        private val appStateHandler: AppStateHandler
+    @Assisted val initialState: SpaceLeaveAdvanceViewState,
+    private val session: Session,
+    private val appStateHandler: AppStateHandler
 ) : VectorViewModel<SpaceLeaveAdvanceViewState, SpaceLeaveAdvanceViewAction, EmptyViewEvents>(initialState) {
 
     override fun handle(action: SpaceLeaveAdvanceViewAction) = withState { state ->
@@ -59,14 +59,14 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
                 }
                 setState {
                     copy(
-                            selectedRooms = existing.toImmutableList()
+                        selectedRooms = existing.toImmutableList()
                     )
                 }
             }
-            is SpaceLeaveAdvanceViewAction.UpdateFilter    -> {
+            is SpaceLeaveAdvanceViewAction.UpdateFilter -> {
                 setState { copy(currentFilter = action.filter) }
             }
-            SpaceLeaveAdvanceViewAction.DoLeave            -> {
+            SpaceLeaveAdvanceViewAction.DoLeave -> {
                 setState { copy(leaveState = Loading()) }
                 viewModelScope.launch {
                     try {
@@ -86,7 +86,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
                     }
                 }
             }
-            SpaceLeaveAdvanceViewAction.ClearError         -> {
+            SpaceLeaveAdvanceViewAction.ClearError -> {
                 setState { copy(leaveState = Uninitialized) }
             }
         }
@@ -97,26 +97,26 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         setState { copy(spaceSummary = spaceSummary) }
         session.getRoom(initialState.spaceId)?.let { room ->
             room.flow().liveRoomSummary()
-                    .unwrap()
-                    .onEach {
-                        if (it.membership == Membership.LEAVE) {
-                            setState { copy(leaveState = Success(Unit)) }
-                            if (appStateHandler.safeActiveSpaceId() == initialState.spaceId) {
-                                // switch to home?
-                                appStateHandler.setCurrentSpace(null, session)
-                            }
+                .unwrap()
+                .onEach {
+                    if (it.membership == Membership.LEAVE) {
+                        setState { copy(leaveState = Success(Unit)) }
+                        if (appStateHandler.safeActiveSpaceId() == initialState.spaceId) {
+                            // switch to home?
+                            appStateHandler.setCurrentSpace(null, session)
                         }
-                    }.launchIn(viewModelScope)
+                    }
+                }.launchIn(viewModelScope)
         }
 
         viewModelScope.launch {
             val children = session.getRoomSummaries(
-                    roomSummaryQueryParams {
-                        includeType = null
-                        memberships = listOf(Membership.JOIN)
-                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
-                        roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                    }
+                roomSummaryQueryParams {
+                    includeType = null
+                    memberships = listOf(Membership.JOIN)
+                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
+                    roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                }
             )
 
             setState {

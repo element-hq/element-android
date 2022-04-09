@@ -17,13 +17,13 @@
 package org.matrix.android.sdk.api.session.room.timeline
 
 data class EventTypeFilter(
-        /**
-         * Allowed event type.
-         */
-        val eventType: String,
-        /**
-         * Allowed state key. Set null if you want to allow all events,
-         * otherwise allowed events will be filtered according to the given stateKey.
-         */
-        val stateKey: String?
+    /**
+     * Allowed event type.
+     */
+    val eventType: String,
+    /**
+     * Allowed state key. Set null if you want to allow all events,
+     * otherwise allowed events will be filtered according to the given stateKey.
+     */
+    val stateKey: String?
 )

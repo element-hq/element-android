@@ -25,13 +25,13 @@ import javax.inject.Inject
 
 internal interface GetSessionsDataTask : Task<GetSessionsDataTask.Params, KeysBackupData> {
     data class Params(
-            val version: String
+        val version: String
     )
 }
 
 internal class DefaultGetSessionsDataTask @Inject constructor(
-        private val roomKeysApi: RoomKeysApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomKeysApi: RoomKeysApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetSessionsDataTask {
 
     override suspend fun execute(params: GetSessionsDataTask.Params): KeysBackupData {

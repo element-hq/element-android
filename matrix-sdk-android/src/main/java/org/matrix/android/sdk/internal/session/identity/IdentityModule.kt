@@ -47,33 +47,37 @@ internal abstract class IdentityModule {
         @Provides
         @SessionScope
         @AuthenticatedIdentity
-        fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
-                                 @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider): OkHttpClient {
+        fun providesOkHttpClient(
+            @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+            @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider
+        ): OkHttpClient {
             return okHttpClient
-                    .newBuilder()
-                    .addAccessTokenInterceptor(accessTokenProvider)
-                    .build()
+                .newBuilder()
+                .addAccessTokenInterceptor(accessTokenProvider)
+                .build()
         }
 
         @JvmStatic
         @Provides
         @IdentityDatabase
         @SessionScope
-        fun providesIdentityRealmConfiguration(realmKeysUtils: RealmKeysUtils,
-                                               realmIdentityStoreMigration: RealmIdentityStoreMigration,
-                                               @SessionFilesDirectory directory: File,
-                                               @UserMd5 userMd5: String): RealmConfiguration {
+        fun providesIdentityRealmConfiguration(
+            realmKeysUtils: RealmKeysUtils,
+            realmIdentityStoreMigration: RealmIdentityStoreMigration,
+            @SessionFilesDirectory directory: File,
+            @UserMd5 userMd5: String
+        ): RealmConfiguration {
             return RealmConfiguration.Builder()
-                    .directory(directory)
-                    .name("matrix-sdk-identity.realm")
-                    .apply {
-                        realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
-                    }
-                    .schemaVersion(realmIdentityStoreMigration.schemaVersion)
-                    .migration(realmIdentityStoreMigration)
-                    .allowWritesOnUiThread(true)
-                    .modules(IdentityRealmModule())
-                    .build()
+                .directory(directory)
+                .name("matrix-sdk-identity.realm")
+                .apply {
+                    realmKeysUtils.configureEncryption(this, SessionModule.getKeyAlias(userMd5))
+                }
+                .schemaVersion(realmIdentityStoreMigration.schemaVersion)
+                .migration(realmIdentityStoreMigration)
+                .allowWritesOnUiThread(true)
+                .modules(IdentityRealmModule())
+                .build()
         }
     }
 

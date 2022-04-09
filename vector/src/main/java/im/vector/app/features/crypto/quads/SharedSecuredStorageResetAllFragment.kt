@@ -57,9 +57,9 @@ class SharedSecuredStorageResetAllFragment @Inject constructor() :
 
         sharedViewModel.onEach { state ->
             views.ssssResetOtherDevices.setTextOrHide(
-                    state.activeDeviceCount
-                            .takeIf { it > 0 }
-                            ?.let { resources.getQuantityString(R.plurals.secure_backup_reset_devices_you_can_verify, it, it) }
+                state.activeDeviceCount
+                    .takeIf { it > 0 }
+                    ?.let { resources.getQuantityString(R.plurals.secure_backup_reset_devices_you_can_verify, it, it) }
             )
         }
     }

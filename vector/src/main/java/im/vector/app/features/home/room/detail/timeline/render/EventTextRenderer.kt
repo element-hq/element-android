@@ -30,10 +30,12 @@ import im.vector.app.features.html.PillImageSpan
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 
-class EventTextRenderer @AssistedInject constructor(@Assisted private val roomId: String?,
-                                                    private val context: Context,
-                                                    private val avatarRenderer: AvatarRenderer,
-                                                    private val sessionHolder: ActiveSessionHolder) {
+class EventTextRenderer @AssistedInject constructor(
+    @Assisted private val roomId: String?,
+    private val context: Context,
+    private val avatarRenderer: AvatarRenderer,
+    private val sessionHolder: ActiveSessionHolder
+) {
 
     /* ==========================================================================================
      * Public api
@@ -64,9 +66,9 @@ class EventTextRenderer @AssistedInject constructor(@Assisted private val roomId
     private fun addNotifyEveryoneSpans(text: Spannable, roomId: String) {
         val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)
         val matrixItem = MatrixItem.EveryoneInRoomItem(
-                id = roomId,
-                avatarUrl = room?.avatarUrl,
-                roomDisplayName = room?.displayName
+            id = roomId,
+            avatarUrl = room?.avatarUrl,
+            roomDisplayName = room?.displayName
         )
 
         // search for notify everyone text
@@ -79,13 +81,13 @@ class EventTextRenderer @AssistedInject constructor(@Assisted private val roomId
     }
 
     private fun createPillImageSpan(matrixItem: MatrixItem) =
-            PillImageSpan(GlideApp.with(context), avatarRenderer, context, matrixItem)
+        PillImageSpan(GlideApp.with(context), avatarRenderer, context, matrixItem)
 
     private fun addPillSpan(
-            renderedText: Spannable,
-            pillSpan: PillImageSpan,
-            startSpan: Int,
-            endSpan: Int
+        renderedText: Spannable,
+        pillSpan: PillImageSpan,
+        startSpan: Int,
+        endSpan: Int
     ) {
         renderedText.setSpan(pillSpan, startSpan, endSpan, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     }

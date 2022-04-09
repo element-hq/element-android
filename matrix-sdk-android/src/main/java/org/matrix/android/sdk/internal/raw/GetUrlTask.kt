@@ -30,28 +30,28 @@ import javax.inject.Inject
 
 internal interface GetUrlTask : Task<GetUrlTask.Params, String> {
     data class Params(
-            val url: String,
-            val cacheStrategy: CacheStrategy
+        val url: String,
+        val cacheStrategy: CacheStrategy
     )
 }
 
 internal class DefaultGetUrlTask @Inject constructor(
-        private val rawAPI: RawAPI,
-        @GlobalDatabase private val monarchy: Monarchy
+    private val rawAPI: RawAPI,
+    @GlobalDatabase private val monarchy: Monarchy
 ) : GetUrlTask {
 
     override suspend fun execute(params: GetUrlTask.Params): String {
         return when (params.cacheStrategy) {
-            CacheStrategy.NoCache       -> doRequest(params.url)
-            is CacheStrategy.TtlCache   -> doRequestWithCache(
-                    params.url,
-                    params.cacheStrategy.validityDurationInMillis,
-                    params.cacheStrategy.strict
+            CacheStrategy.NoCache -> doRequest(params.url)
+            is CacheStrategy.TtlCache -> doRequestWithCache(
+                params.url,
+                params.cacheStrategy.validityDurationInMillis,
+                params.cacheStrategy.strict
             )
             CacheStrategy.InfiniteCache -> doRequestWithCache(
-                    params.url,
-                    Long.MAX_VALUE,
-                    true
+                params.url,
+                Long.MAX_VALUE,
+                true
             )
         }
     }
@@ -60,7 +60,7 @@ internal class DefaultGetUrlTask @Inject constructor(
         return executeRequest(null) {
             rawAPI.getUrl(url)
         }
-                .string()
+            .string()
     }
 
     private suspend fun doRequestWithCache(url: String, validityDurationInMillis: Long, strict: Boolean): String {
@@ -83,8 +83,8 @@ internal class DefaultGetUrlTask @Inject constructor(
         } catch (throwable: Throwable) {
             // In case of error, we can return value from cache even if outdated
             return dataFromCache
-                    ?.takeIf { !strict }
-                    ?: throw throwable
+                ?.takeIf { !strict }
+                ?: throw throwable
         }
 
         // Store cache

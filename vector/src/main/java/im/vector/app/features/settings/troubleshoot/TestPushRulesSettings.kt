@@ -25,15 +25,19 @@ import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.getActions
 import javax.inject.Inject
 
-class TestPushRulesSettings @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                                private val stringProvider: StringProvider) :
+class TestPushRulesSettings @Inject constructor(
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val stringProvider: StringProvider
+) :
     TroubleshootTest(R.string.settings_troubleshoot_test_bing_settings_title) {
 
     private val testedRules =
-            listOf(RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
-                    RuleIds.RULE_ID_CONTAIN_USER_NAME,
-                    RuleIds.RULE_ID_ONE_TO_ONE_ROOM,
-                    RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS)
+        listOf(
+            RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
+            RuleIds.RULE_ID_CONTAIN_USER_NAME,
+            RuleIds.RULE_ID_ONE_TO_ONE_ROOM,
+            RuleIds.RULE_ID_ALL_OTHER_MESSAGES_ROOMS
+        )
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
@@ -59,15 +63,15 @@ class TestPushRulesSettings @Inject constructor(private val activeSessionHolder:
         if (oneOrMoreRuleIsOff) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_bing_settings_failed)
             // TODO
-//                quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_bing_settings_quickfix) {
-//                    override fun doFix() {
-//                        val activity = fragment.activity
-//                        if (activity is VectorSettingsFragmentInteractionListener) {
-//                            activity.requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)
-//                        }
-//                        activity?.supportFragmentManager?.popBackStack()
-//                    }
-//                }
+            //                quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_bing_settings_quickfix) {
+            //                    override fun doFix() {
+            //                        val activity = fragment.activity
+            //                        if (activity is VectorSettingsFragmentInteractionListener) {
+            //                            activity.requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY)
+            //                        }
+            //                        activity?.supportFragmentManager?.popBackStack()
+            //                    }
+            //                }
             status = TestStatus.FAILED
         } else {
             description = if (oneOrMoreRuleAreSilent) {

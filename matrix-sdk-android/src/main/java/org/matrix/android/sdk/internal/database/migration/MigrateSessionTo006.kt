@@ -24,14 +24,14 @@ class MigrateSessionTo006(realm: DynamicRealm) : RealmMigrator(realm, 6) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.create("PreviewUrlCacheEntity")
-                .addField(PreviewUrlCacheEntityFields.URL, String::class.java)
-                .setRequired(PreviewUrlCacheEntityFields.URL, true)
-                .addPrimaryKey(PreviewUrlCacheEntityFields.URL)
-                .addField(PreviewUrlCacheEntityFields.URL_FROM_SERVER, String::class.java)
-                .addField(PreviewUrlCacheEntityFields.SITE_NAME, String::class.java)
-                .addField(PreviewUrlCacheEntityFields.TITLE, String::class.java)
-                .addField(PreviewUrlCacheEntityFields.DESCRIPTION, String::class.java)
-                .addField(PreviewUrlCacheEntityFields.MXC_URL, String::class.java)
-                .addField(PreviewUrlCacheEntityFields.LAST_UPDATED_TIMESTAMP, Long::class.java)
+            .addField(PreviewUrlCacheEntityFields.URL, String::class.java)
+            .setRequired(PreviewUrlCacheEntityFields.URL, true)
+            .addPrimaryKey(PreviewUrlCacheEntityFields.URL)
+            .addField(PreviewUrlCacheEntityFields.URL_FROM_SERVER, String::class.java)
+            .addField(PreviewUrlCacheEntityFields.SITE_NAME, String::class.java)
+            .addField(PreviewUrlCacheEntityFields.TITLE, String::class.java)
+            .addField(PreviewUrlCacheEntityFields.DESCRIPTION, String::class.java)
+            .addField(PreviewUrlCacheEntityFields.MXC_URL, String::class.java)
+            .addField(PreviewUrlCacheEntityFields.LAST_UPDATED_TIMESTAMP, Long::class.java)
     }
 }

@@ -21,12 +21,13 @@ import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 
-internal open class UserPresenceEntity(@PrimaryKey var userId: String = "",
-                                       var lastActiveAgo: Long? = null,
-                                       var statusMessage: String? = null,
-                                       var isCurrentlyActive: Boolean? = null,
-                                       var avatarUrl: String? = null,
-                                       var displayName: String? = null
+internal open class UserPresenceEntity(
+    @PrimaryKey var userId: String = "",
+    var lastActiveAgo: Long? = null,
+    var statusMessage: String? = null,
+    var isCurrentlyActive: Boolean? = null,
+    var avatarUrl: String? = null,
+    var displayName: String? = null
 ) : RealmObject() {
 
     var presence: PresenceEnum
@@ -43,9 +44,9 @@ internal open class UserPresenceEntity(@PrimaryKey var userId: String = "",
 }
 
 internal fun UserPresenceEntity.toUserPresence() =
-        UserPresence(
-                lastActiveAgo,
-                statusMessage,
-                isCurrentlyActive,
-                presence
-        )
+    UserPresence(
+        lastActiveAgo,
+        statusMessage,
+        isCurrentlyActive,
+        presence
+    )

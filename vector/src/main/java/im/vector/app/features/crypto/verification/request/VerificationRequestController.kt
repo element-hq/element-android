@@ -37,8 +37,8 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationRequestController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -102,15 +102,15 @@ class VerificationRequestController @Inject constructor(
             }
         } else {
             val styledText =
-                    if (state.isMe) {
-                        stringProvider.getString(R.string.verify_new_session_notice)
-                    } else {
-                        matrixItem.let {
-                            stringProvider.getString(R.string.verification_request_notice, it.id)
-                                    .toSpannable()
-                                    .colorizeMatchingText(it.id, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
-                        }
+                if (state.isMe) {
+                    stringProvider.getString(R.string.verify_new_session_notice)
+                } else {
+                    matrixItem.let {
+                        stringProvider.getString(R.string.verification_request_notice, it.id)
+                            .toSpannable()
+                            .colorizeMatchingText(it.id, colorProvider.getColorFromAttribute(R.attr.vctr_notice_text_color))
                     }
+                }
 
             bottomSheetVerificationNoticeItem {
                 id("notice")
@@ -133,13 +133,13 @@ class VerificationRequestController @Inject constructor(
                         listener { host.listener?.onClickOnVerificationStart() }
                     }
                 }
-                is Loading       -> {
+                is Loading -> {
                     bottomSheetVerificationWaitingItem {
                         id("waiting")
                         title(host.stringProvider.getString(R.string.verification_request_waiting_for, matrixItem.getBestName()))
                     }
                 }
-                is Success       -> {
+                is Success -> {
                     if (!pr.invoke().isReady) {
                         if (state.isMe) {
                             bottomSheetVerificationWaitingItem {
@@ -154,7 +154,7 @@ class VerificationRequestController @Inject constructor(
                         }
                     }
                 }
-                is Fail          -> Unit
+                is Fail -> Unit
             }
         }
 

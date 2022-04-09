@@ -34,15 +34,15 @@ internal object HomeServerCapabilitiesMapper {
 
     fun map(entity: HomeServerCapabilitiesEntity): HomeServerCapabilities {
         return HomeServerCapabilities(
-                canChangePassword = entity.canChangePassword,
-                canChangeDisplayName = entity.canChangeDisplayName,
-                canChangeAvatar = entity.canChangeAvatar,
-                canChange3pid = entity.canChange3pid,
-                maxUploadFileSize = entity.maxUploadFileSize,
-                lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
-                defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
-                roomVersions = mapRoomVersion(entity.roomVersionsJson),
-                canUseThreading = entity.canUseThreading
+            canChangePassword = entity.canChangePassword,
+            canChangeDisplayName = entity.canChangeDisplayName,
+            canChangeAvatar = entity.canChangeAvatar,
+            canChange3pid = entity.canChange3pid,
+            maxUploadFileSize = entity.maxUploadFileSize,
+            lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
+            defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
+            roomVersions = mapRoomVersion(entity.roomVersionsJson),
+            canUseThreading = entity.canUseThreading
         )
     }
 
@@ -52,26 +52,26 @@ internal object HomeServerCapabilitiesMapper {
         return tryOrNull {
             MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).fromJson(roomVersionsJson)?.let { roomVersions ->
                 RoomVersionCapabilities(
-                        defaultRoomVersion = roomVersions.default ?: DefaultRoomVersionService.DEFAULT_ROOM_VERSION,
-                        supportedVersion = roomVersions.available?.entries?.map { entry ->
-                            RoomVersionInfo(entry.key, RoomVersionStatus.STABLE
-                                    .takeIf { entry.value == "stable" }
-                                    ?: RoomVersionStatus.UNSTABLE)
-                        }.orEmpty(),
-                        capabilities = roomVersions.roomCapabilities?.entries?.mapNotNull { entry ->
-                            (entry.value as? Map<*, *>)?.let {
-                                val preferred = it["preferred"] as? String ?: return@mapNotNull null
-                                val support = (it["support"] as? List<*>)?.filterIsInstance<String>()
-                                entry.key to RoomCapabilitySupport(preferred, support.orEmpty())
-                            }
-                        }?.toMap()
-                        // Just for debug purpose
-//                                ?: mapOf(
-//                                HomeServerCapabilities.ROOM_CAP_RESTRICTED to RoomCapabilitySupport(
-//                                        preferred = null,
-//                                        support = listOf("org.matrix.msc3083")
-//                                )
-//                                )
+                    defaultRoomVersion = roomVersions.default ?: DefaultRoomVersionService.DEFAULT_ROOM_VERSION,
+                    supportedVersion = roomVersions.available?.entries?.map { entry ->
+                        RoomVersionInfo(entry.key, RoomVersionStatus.STABLE
+                            .takeIf { entry.value == "stable" }
+                            ?: RoomVersionStatus.UNSTABLE)
+                    }.orEmpty(),
+                    capabilities = roomVersions.roomCapabilities?.entries?.mapNotNull { entry ->
+                        (entry.value as? Map<*, *>)?.let {
+                            val preferred = it["preferred"] as? String ?: return@mapNotNull null
+                            val support = (it["support"] as? List<*>)?.filterIsInstance<String>()
+                            entry.key to RoomCapabilitySupport(preferred, support.orEmpty())
+                        }
+                    }?.toMap()
+                    // Just for debug purpose
+                    //                                ?: mapOf(
+                    //                                HomeServerCapabilities.ROOM_CAP_RESTRICTED to RoomCapabilitySupport(
+                    //                                        preferred = null,
+                    //                                        support = listOf("org.matrix.msc3083")
+                    //                                )
+                    //                                )
                 )
             }
         }

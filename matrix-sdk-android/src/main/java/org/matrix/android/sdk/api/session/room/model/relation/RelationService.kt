@@ -58,16 +58,20 @@ interface RelationService {
      * @param targetEventId the id of the event being reacted
      * @param reaction the reaction (preferably emoji)
      */
-    fun sendReaction(targetEventId: String,
-                     reaction: String): Cancelable
+    fun sendReaction(
+        targetEventId: String,
+        reaction: String
+    ): Cancelable
 
     /**
      * Undo a reaction (emoji) to the targetedEvent.
      * @param targetEventId the id of the event being reacted
      * @param reaction the reaction (preferably emoji)
      */
-    suspend fun undoReaction(targetEventId: String,
-                             reaction: String): Cancelable
+    suspend fun undoReaction(
+        targetEventId: String,
+        reaction: String
+    ): Cancelable
 
     /**
      * Edit a poll.
@@ -76,10 +80,12 @@ interface RelationService {
      * @param question The edited question
      * @param options The edited options
      */
-    fun editPoll(targetEvent: TimelineEvent,
-                 pollType: PollType,
-                 question: String,
-                 options: List<String>): Cancelable
+    fun editPoll(
+        targetEvent: TimelineEvent,
+        pollType: PollType,
+        question: String,
+        options: List<String>
+    ): Cancelable
 
     /**
      * Edit a text message body. Limited to "m.text" contentType
@@ -87,11 +93,13 @@ interface RelationService {
      * @param newBodyText The edited body
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */
-    fun editTextMessage(targetEvent: TimelineEvent,
-                        msgType: String,
-                        newBodyText: CharSequence,
-                        newBodyAutoMarkdown: Boolean,
-                        compatibilityBodyText: String = "* $newBodyText"): Cancelable
+    fun editTextMessage(
+        targetEvent: TimelineEvent,
+        msgType: String,
+        newBodyText: CharSequence,
+        newBodyAutoMarkdown: Boolean,
+        compatibilityBodyText: String = "* $newBodyText"
+    ): Cancelable
 
     /**
      * Edit a reply. This is a special case because replies contains fallback text as a prefix.
@@ -101,10 +109,12 @@ interface RelationService {
      * @param newBodyText The edited body (stripped from in reply to content)
      * @param compatibilityBodyText The text that will appear on clients that don't support yet edition
      */
-    fun editReply(replyToEdit: TimelineEvent,
-                  originalTimelineEvent: TimelineEvent,
-                  newBodyText: String,
-                  compatibilityBodyText: String = "* $newBodyText"): Cancelable
+    fun editReply(
+        replyToEdit: TimelineEvent,
+        originalTimelineEvent: TimelineEvent,
+        newBodyText: String,
+        compatibilityBodyText: String = "* $newBodyText"
+    ): Cancelable
 
     /**
      * Get the edit history of the given event
@@ -125,11 +135,12 @@ interface RelationService {
      * @param showInThread If true, relation will be added to the reply in order to be visible from within threads
      * @param rootThreadEventId If show in thread is true then we need the rootThreadEventId to generate the relation
      */
-    fun replyToMessage(eventReplied: TimelineEvent,
-                       replyText: CharSequence,
-                       autoMarkdown: Boolean = false,
-                       showInThread: Boolean = false,
-                       rootThreadEventId: String? = null
+    fun replyToMessage(
+        eventReplied: TimelineEvent,
+        replyText: CharSequence,
+        autoMarkdown: Boolean = false,
+        showInThread: Boolean = false,
+        rootThreadEventId: String? = null
     ): Cancelable?
 
     /**
@@ -157,10 +168,12 @@ interface RelationService {
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      * @param eventReplied the event referenced by the reply within a thread
      */
-    fun replyInThread(rootThreadEventId: String,
-                      replyInThreadText: CharSequence,
-                      msgType: String = MessageType.MSGTYPE_TEXT,
-                      autoMarkdown: Boolean = false,
-                      formattedText: String? = null,
-                      eventReplied: TimelineEvent? = null): Cancelable?
+    fun replyInThread(
+        rootThreadEventId: String,
+        replyInThreadText: CharSequence,
+        msgType: String = MessageType.MSGTYPE_TEXT,
+        autoMarkdown: Boolean = false,
+        formattedText: String? = null,
+        eventReplied: TimelineEvent? = null
+    ): Cancelable?
 }

@@ -26,35 +26,35 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 
 data class LoginViewState2(
-        val isLoading: Boolean = false,
+    val isLoading: Boolean = false,
 
-        // User choices
-        @PersistState
-        val signMode: SignMode2 = SignMode2.Unknown,
-        @PersistState
-        val userName: String? = null,
-        @PersistState
-        val resetPasswordEmail: String? = null,
-        @PersistState
-        val homeServerUrlFromUser: String? = null,
+    // User choices
+    @PersistState
+    val signMode: SignMode2 = SignMode2.Unknown,
+    @PersistState
+    val userName: String? = null,
+    @PersistState
+    val resetPasswordEmail: String? = null,
+    @PersistState
+    val homeServerUrlFromUser: String? = null,
 
-        // Can be modified after a Wellknown request
-        @PersistState
-        val homeServerUrl: String? = null,
+    // Can be modified after a Wellknown request
+    @PersistState
+    val homeServerUrl: String? = null,
 
-        // For SSO session recovery
-        @PersistState
-        val deviceId: String? = null,
+    // For SSO session recovery
+    @PersistState
+    val deviceId: String? = null,
 
-        // Network result
-        val loginProfileInfo: Async<LoginProfileInfo> = Uninitialized,
+    // Network result
+    val loginProfileInfo: Async<LoginProfileInfo> = Uninitialized,
 
-        // Network result
-        @PersistState
-        val loginMode: LoginMode = LoginMode.Unknown,
+    // Network result
+    @PersistState
+    val loginMode: LoginMode = LoginMode.Unknown,
 
-        // From database
-        val knownCustomHomeServersUrls: List<String> = emptyList()
+    // From database
+    val knownCustomHomeServersUrls: List<String> = emptyList()
 ) : MavericksState {
 
     // Pending user identifier

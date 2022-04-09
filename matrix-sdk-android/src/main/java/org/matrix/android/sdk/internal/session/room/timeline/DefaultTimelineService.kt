@@ -36,21 +36,21 @@ import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHand
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 
 internal class DefaultTimelineService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val timelineInput: TimelineInput,
-        private val contextOfEventTask: GetContextOfEventTask,
-        private val eventDecryptor: TimelineEventDecryptor,
-        private val paginationTask: PaginationTask,
-        private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-        private val fetchThreadTimelineTask: FetchThreadTimelineTask,
-        private val timelineEventMapper: TimelineEventMapper,
-        private val loadRoomMembersTask: LoadRoomMembersTask,
-        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
-        private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val readReceiptHandler: ReadReceiptHandler,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val timelineEventDataSource: TimelineEventDataSource
+    @Assisted private val roomId: String,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val timelineInput: TimelineInput,
+    private val contextOfEventTask: GetContextOfEventTask,
+    private val eventDecryptor: TimelineEventDecryptor,
+    private val paginationTask: PaginationTask,
+    private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+    private val fetchThreadTimelineTask: FetchThreadTimelineTask,
+    private val timelineEventMapper: TimelineEventMapper,
+    private val loadRoomMembersTask: LoadRoomMembersTask,
+    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+    private val lightweightSettingsStorage: LightweightSettingsStorage,
+    private val readReceiptHandler: ReadReceiptHandler,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+    private val timelineEventDataSource: TimelineEventDataSource
 ) : TimelineService {
 
     @AssistedFactory
@@ -60,22 +60,22 @@ internal class DefaultTimelineService @AssistedInject constructor(
 
     override fun createTimeline(eventId: String?, settings: TimelineSettings): Timeline {
         return DefaultTimeline(
-                roomId = roomId,
-                initialEventId = eventId,
-                settings = settings,
-                realmConfiguration = monarchy.realmConfiguration,
-                coroutineDispatchers = coroutineDispatchers,
-                paginationTask = paginationTask,
-                fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
-                timelineEventMapper = timelineEventMapper,
-                timelineInput = timelineInput,
-                eventDecryptor = eventDecryptor,
-                fetchThreadTimelineTask = fetchThreadTimelineTask,
-                loadRoomMembersTask = loadRoomMembersTask,
-                readReceiptHandler = readReceiptHandler,
-                getEventTask = contextOfEventTask,
-                threadsAwarenessHandler = threadsAwarenessHandler,
-                lightweightSettingsStorage = lightweightSettingsStorage
+            roomId = roomId,
+            initialEventId = eventId,
+            settings = settings,
+            realmConfiguration = monarchy.realmConfiguration,
+            coroutineDispatchers = coroutineDispatchers,
+            paginationTask = paginationTask,
+            fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+            timelineEventMapper = timelineEventMapper,
+            timelineInput = timelineInput,
+            eventDecryptor = eventDecryptor,
+            fetchThreadTimelineTask = fetchThreadTimelineTask,
+            loadRoomMembersTask = loadRoomMembersTask,
+            readReceiptHandler = readReceiptHandler,
+            getEventTask = contextOfEventTask,
+            threadsAwarenessHandler = threadsAwarenessHandler,
+            lightweightSettingsStorage = lightweightSettingsStorage
         )
     }
 

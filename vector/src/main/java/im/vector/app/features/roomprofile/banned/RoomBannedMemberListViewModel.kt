@@ -40,10 +40,12 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
-class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomBannedMemberListViewState,
-                                                                private val stringProvider: StringProvider,
-                                                                private val session: Session) :
-        VectorViewModel<RoomBannedMemberListViewState, RoomBannedMemberListAction, RoomBannedMemberListViewEvents>(initialState) {
+class RoomBannedMemberListViewModel @AssistedInject constructor(
+    @Assisted initialState: RoomBannedMemberListViewState,
+    private val stringProvider: StringProvider,
+    private val session: Session
+) :
+    VectorViewModel<RoomBannedMemberListViewState, RoomBannedMemberListAction, RoomBannedMemberListViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> {
@@ -55,25 +57,25 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
     init {
 
         room.flow().liveRoomSummary()
-                .unwrap()
-                .execute { async ->
-                    copy(roomSummary = async)
-                }
+            .unwrap()
+            .execute { async ->
+                copy(roomSummary = async)
+            }
 
         room.flow().liveRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.BAN) })
-                .execute {
-                    copy(
-                            bannedMemberSummaries = it
-                    )
-                }
+            .execute {
+                copy(
+                    bannedMemberSummaries = it
+                )
+            }
 
         val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
 
         powerLevelsContentLive
-                .setOnEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    copy(canUserBan = powerLevelsHelper.isUserAbleToBan(session.myUserId))
-                }
+            .setOnEach {
+                val powerLevelsHelper = PowerLevelsHelper(it)
+                copy(canUserBan = powerLevelsHelper.isUserAbleToBan(session.myUserId))
+            }
     }
 
     companion object : MavericksViewModelFactory<RoomBannedMemberListViewModel, RoomBannedMemberListViewState> by hiltMavericksViewModelFactory()
@@ -82,14 +84,14 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
         when (action) {
             is RoomBannedMemberListAction.QueryInfo -> onQueryBanInfo(action.roomMemberSummary)
             is RoomBannedMemberListAction.UnBanUser -> unBanUser(action.roomMemberSummary)
-            is RoomBannedMemberListAction.Filter    -> handleFilter(action)
+            is RoomBannedMemberListAction.Filter -> handleFilter(action)
         }
     }
 
     private fun handleFilter(action: RoomBannedMemberListAction.Filter) {
         setState {
             copy(
-                    filter = action.filter
+                filter = action.filter
             )
         }
     }
@@ -120,7 +122,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initia
             } finally {
                 setState {
                     copy(
-                            onGoingModerationAction = onGoingModerationAction - roomMemberSummary.userId
+                        onGoingModerationAction = onGoingModerationAction - roomMemberSummary.userId
                     )
                 }
             }

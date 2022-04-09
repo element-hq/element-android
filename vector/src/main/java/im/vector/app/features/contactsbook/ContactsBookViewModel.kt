@@ -38,10 +38,10 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
 
 class ContactsBookViewModel @AssistedInject constructor(
-        @Assisted initialState: ContactsBookViewState,
-        private val contactsDataSource: ContactsDataSource,
-        private val stringProvider: StringProvider,
-        private val session: Session
+    @Assisted initialState: ContactsBookViewState,
+    private val contactsDataSource: ContactsDataSource,
+    private val stringProvider: StringProvider,
+    private val session: Session
 ) : VectorViewModel<ContactsBookViewState, ContactsBookAction, ContactsBookViewEvents>(initialState) {
 
     @AssistedFactory
@@ -65,23 +65,23 @@ class ContactsBookViewModel @AssistedInject constructor(
     private fun loadContacts() {
         setState {
             copy(
-                    mappedContacts = Loading(),
-                    identityServerUrl = session.identityService().getCurrentIdentityServerUrl(),
-                    userConsent = session.identityService().getUserConsent()
+                mappedContacts = Loading(),
+                identityServerUrl = session.identityService().getCurrentIdentityServerUrl(),
+                userConsent = session.identityService().getUserConsent()
             )
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             allContacts = contactsDataSource.getContacts(
-                    withEmails = true,
-                    // Do not handle phone numbers for the moment
-                    withMsisdn = false
+                withEmails = true,
+                // Do not handle phone numbers for the moment
+                withMsisdn = false
             )
             mappedContacts = allContacts
 
             setState {
                 copy(
-                        mappedContacts = Success(allContacts)
+                    mappedContacts = Success(allContacts)
                 )
             }
 
@@ -116,26 +116,26 @@ class ContactsBookViewModel @AssistedInject constructor(
 
             mappedContacts = allContacts.map { contactModel ->
                 contactModel.copy(
-                        emails = contactModel.emails.map { email ->
-                            email.copy(
-                                    matrixId = data
-                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == email.email }
-                                            ?.matrixId
-                            )
-                        },
-                        msisdns = contactModel.msisdns.map { msisdn ->
-                            msisdn.copy(
-                                    matrixId = data
-                                            .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
-                                            ?.matrixId
-                            )
-                        }
+                    emails = contactModel.emails.map { email ->
+                        email.copy(
+                            matrixId = data
+                                .firstOrNull { foundThreePid -> foundThreePid.threePid.value == email.email }
+                                ?.matrixId
+                        )
+                    },
+                    msisdns = contactModel.msisdns.map { msisdn ->
+                        msisdn.copy(
+                            matrixId = data
+                                .firstOrNull { foundThreePid -> foundThreePid.threePid.value == msisdn.phoneNumber }
+                                ?.matrixId
+                        )
+                    }
                 )
             }
 
             setState {
                 copy(
-                        isBoundRetrieved = true
+                    isBoundRetrieved = true
                 )
             }
 
@@ -145,25 +145,25 @@ class ContactsBookViewModel @AssistedInject constructor(
 
     private fun updateFilteredMappedContacts() = withState { state ->
         val filteredMappedContacts = mappedContacts
-                .filter { it.displayName.contains(state.searchTerm, true) }
-                .filter { contactModel ->
-                    !state.onlyBoundContacts ||
-                            contactModel.emails.any { it.matrixId != null } || contactModel.msisdns.any { it.matrixId != null }
-                }
+            .filter { it.displayName.contains(state.searchTerm, true) }
+            .filter { contactModel ->
+                !state.onlyBoundContacts ||
+                        contactModel.emails.any { it.matrixId != null } || contactModel.msisdns.any { it.matrixId != null }
+            }
 
         setState {
             copy(
-                    filteredMappedContacts = filteredMappedContacts
+                filteredMappedContacts = filteredMappedContacts
             )
         }
     }
 
     override fun handle(action: ContactsBookAction) {
         when (action) {
-            is ContactsBookAction.FilterWith        -> handleFilterWith(action)
+            is ContactsBookAction.FilterWith -> handleFilterWith(action)
             is ContactsBookAction.OnlyBoundContacts -> handleOnlyBoundContacts(action)
-            ContactsBookAction.UserConsentGranted   -> handleUserConsentGranted()
-            ContactsBookAction.UserConsentRequest   -> handleUserConsentRequest()
+            ContactsBookAction.UserConsentGranted -> handleUserConsentGranted()
+            ContactsBookAction.UserConsentRequest -> handleUserConsentRequest()
         }
     }
 
@@ -193,7 +193,7 @@ class ContactsBookViewModel @AssistedInject constructor(
     private fun handleOnlyBoundContacts(action: ContactsBookAction.OnlyBoundContacts) {
         setState {
             copy(
-                    onlyBoundContacts = action.onlyBoundContacts
+                onlyBoundContacts = action.onlyBoundContacts
             )
         }
     }
@@ -201,7 +201,7 @@ class ContactsBookViewModel @AssistedInject constructor(
     private fun handleFilterWith(action: ContactsBookAction.FilterWith) {
         setState {
             copy(
-                    searchTerm = action.filter
+                searchTerm = action.filter
             )
         }
     }

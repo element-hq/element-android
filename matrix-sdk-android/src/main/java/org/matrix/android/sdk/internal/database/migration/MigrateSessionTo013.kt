@@ -25,8 +25,8 @@ class MigrateSessionTo013(realm: DynamicRealm) : RealmMigrator(realm, 13) {
     override fun doMigrate(realm: DynamicRealm) {
         // Fix issue with the nightly build. Eventually play again the migration which has been included in migrateTo12()
         realm.schema.get("SpaceChildSummaryEntity")
-                ?.takeIf { !it.hasField(SpaceChildSummaryEntityFields.SUGGESTED) }
-                ?.addField(SpaceChildSummaryEntityFields.SUGGESTED, Boolean::class.java)
-                ?.setNullable(SpaceChildSummaryEntityFields.SUGGESTED, true)
+            ?.takeIf { !it.hasField(SpaceChildSummaryEntityFields.SUGGESTED) }
+            ?.addField(SpaceChildSummaryEntityFields.SUGGESTED, Boolean::class.java)
+            ?.setNullable(SpaceChildSummaryEntityFields.SUGGESTED, true)
     }
 }

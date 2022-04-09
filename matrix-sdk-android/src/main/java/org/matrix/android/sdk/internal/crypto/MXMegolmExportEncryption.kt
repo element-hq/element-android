@@ -100,7 +100,7 @@ object MXMegolmExportEncryption {
         val salt = body.copyOfRange(1, 1 + 16)
         val iv = body.copyOfRange(17, 17 + 16)
         val iterations =
-                (body[33].toUnsignedInt() shl 24) or (body[34].toUnsignedInt() shl 16) or (body[35].toUnsignedInt() shl 8) or body[36].toUnsignedInt()
+            (body[33].toUnsignedInt() shl 24) or (body[34].toUnsignedInt() shl 16) or (body[35].toUnsignedInt() shl 8) or body[36].toUnsignedInt()
         val ciphertext = body.copyOfRange(37, 37 + ciphertextLength)
         val hmac = body.copyOfRange(body.size - 32, body.size)
 

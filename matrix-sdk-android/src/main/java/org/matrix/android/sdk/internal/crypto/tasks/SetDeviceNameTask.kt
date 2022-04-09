@@ -25,21 +25,21 @@ import javax.inject.Inject
 
 internal interface SetDeviceNameTask : Task<SetDeviceNameTask.Params, Unit> {
     data class Params(
-            // the device id
-            val deviceId: String,
-            // the device name
-            val deviceName: String
+        // the device id
+        val deviceId: String,
+        // the device name
+        val deviceName: String
     )
 }
 
 internal class DefaultSetDeviceNameTask @Inject constructor(
-        private val cryptoApi: CryptoApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val cryptoApi: CryptoApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : SetDeviceNameTask {
 
     override suspend fun execute(params: SetDeviceNameTask.Params) {
         val body = UpdateDeviceInfoBody(
-                displayName = params.deviceName
+            displayName = params.deviceName
         )
         return executeRequest(globalErrorReceiver) {
             cryptoApi.updateDeviceInfo(params.deviceId, body)

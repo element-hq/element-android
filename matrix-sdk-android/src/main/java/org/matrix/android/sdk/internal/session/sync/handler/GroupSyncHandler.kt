@@ -37,9 +37,11 @@ internal class GroupSyncHandler @Inject constructor() {
         data class LEFT(val data: Map<String, Any>) : HandlingStrategy()
     }
 
-    fun handle(realm: Realm,
-               roomsSyncResponse: GroupsSyncResponse,
-               reporter: ProgressReporter? = null) {
+    fun handle(
+        realm: Realm,
+        roomsSyncResponse: GroupsSyncResponse,
+        reporter: ProgressReporter? = null
+    ) {
         handleGroupSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), reporter)
         handleGroupSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), reporter)
         handleGroupSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), reporter)
@@ -49,7 +51,7 @@ internal class GroupSyncHandler @Inject constructor() {
 
     private fun handleGroupSync(realm: Realm, handlingStrategy: HandlingStrategy, reporter: ProgressReporter?) {
         val groups = when (handlingStrategy) {
-            is HandlingStrategy.JOINED  ->
+            is HandlingStrategy.JOINED ->
                 handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountGroups, 0.6f) {
                     handleJoinedGroup(realm, it.key)
                 }
@@ -59,7 +61,7 @@ internal class GroupSyncHandler @Inject constructor() {
                     handleInvitedGroup(realm, it.key)
                 }
 
-            is HandlingStrategy.LEFT    ->
+            is HandlingStrategy.LEFT ->
                 handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountGroups, 0.1f) {
                     handleLeftGroup(realm, it.key)
                 }
@@ -67,8 +69,10 @@ internal class GroupSyncHandler @Inject constructor() {
         realm.insertOrUpdate(groups)
     }
 
-    private fun handleJoinedGroup(realm: Realm,
-                                  groupId: String): GroupEntity {
+    private fun handleJoinedGroup(
+        realm: Realm,
+        groupId: String
+    ): GroupEntity {
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
         val groupSummaryEntity = GroupSummaryEntity.getOrCreate(realm, groupId)
         groupEntity.membership = Membership.JOIN
@@ -76,8 +80,10 @@ internal class GroupSyncHandler @Inject constructor() {
         return groupEntity
     }
 
-    private fun handleInvitedGroup(realm: Realm,
-                                   groupId: String): GroupEntity {
+    private fun handleInvitedGroup(
+        realm: Realm,
+        groupId: String
+    ): GroupEntity {
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
         val groupSummaryEntity = GroupSummaryEntity.getOrCreate(realm, groupId)
         groupEntity.membership = Membership.INVITE
@@ -85,8 +91,10 @@ internal class GroupSyncHandler @Inject constructor() {
         return groupEntity
     }
 
-    private fun handleLeftGroup(realm: Realm,
-                                groupId: String): GroupEntity {
+    private fun handleLeftGroup(
+        realm: Realm,
+        groupId: String
+    ): GroupEntity {
         val groupEntity = GroupEntity.where(realm, groupId).findFirst() ?: GroupEntity(groupId)
         val groupSummaryEntity = GroupSummaryEntity.getOrCreate(realm, groupId)
         groupEntity.membership = Membership.LEAVE

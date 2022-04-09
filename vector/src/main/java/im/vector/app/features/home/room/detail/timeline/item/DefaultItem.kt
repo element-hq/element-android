@@ -54,10 +54,10 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     }
 
     data class Attributes(
-            val avatarRenderer: AvatarRenderer,
-            val informationData: MessageInformationData,
-            val text: String,
-            val itemLongClickListener: View.OnLongClickListener? = null
+        val avatarRenderer: AvatarRenderer,
+        val informationData: MessageInformationData,
+        val text: String,
+        val itemLongClickListener: View.OnLongClickListener? = null
     )
 
     companion object {

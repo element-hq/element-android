@@ -45,9 +45,9 @@ class UiAllScreensSanityTest {
 
     @get:Rule
     val testRule = RuleChain
-            .outerRule(ActivityScenarioRule(MainActivity::class.java))
-            .around(GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE))
-            .around(ScreenshotFailureRule())
+        .outerRule(ActivityScenarioRule(MainActivity::class.java))
+        .around(GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+        .around(ScreenshotFailureRule())
 
     private val elementRobot = ElementRobot()
 

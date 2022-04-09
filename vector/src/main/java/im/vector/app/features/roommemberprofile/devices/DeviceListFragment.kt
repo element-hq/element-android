@@ -31,10 +31,10 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
 class DeviceListFragment @Inject constructor(
-        val dimensionConverter: DimensionConverter,
-        val epoxyController: DeviceListEpoxyController
+    val dimensionConverter: DimensionConverter,
+    val epoxyController: DeviceListEpoxyController
 ) : VectorBaseFragment<BottomSheetGenericListBinding>(),
-        DeviceListEpoxyController.InteractionListener {
+    DeviceListEpoxyController.InteractionListener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListBinding {
         return BottomSheetGenericListBinding.inflate(inflater, container, false)
@@ -46,8 +46,8 @@ class DeviceListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         views.bottomSheetRecyclerView.setPadding(0, dimensionConverter.dpToPx(16), 0, dimensionConverter.dpToPx(16))
         views.bottomSheetRecyclerView.configureWith(
-                epoxyController,
-                hasFixedSize = false
+            epoxyController,
+            hasFixedSize = false
         )
         epoxyController.interactionListener = this
     }

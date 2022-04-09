@@ -19,7 +19,7 @@ package im.vector.app.features.settings.notifications
 import org.matrix.android.sdk.api.pushrules.Action
 
 sealed class StandardActions(
-        val actions: List<Action>?
+    val actions: List<Action>?
 ) {
     object Notify : StandardActions(actions = listOf(Action.Notify))
     object NotifyDefaultSound : StandardActions(actions = listOf(Action.Notify, Action.Sound()))

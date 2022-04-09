@@ -21,9 +21,11 @@ import androidx.lifecycle.MediatorLiveData
 
 object LiveDataUtils {
 
-    fun <FIRST, SECOND, OUT> combine(firstSource: LiveData<FIRST>,
-                                     secondSource: LiveData<SECOND>,
-                                     mapper: (FIRST, SECOND) -> OUT): LiveData<OUT> {
+    fun <FIRST, SECOND, OUT> combine(
+        firstSource: LiveData<FIRST>,
+        secondSource: LiveData<SECOND>,
+        mapper: (FIRST, SECOND) -> OUT
+    ): LiveData<OUT> {
         return MediatorLiveData<OUT>().apply {
             var firstValue: FIRST? = null
             var secondValue: SECOND? = null

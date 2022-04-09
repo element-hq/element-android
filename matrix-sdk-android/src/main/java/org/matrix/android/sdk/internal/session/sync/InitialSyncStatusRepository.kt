@@ -25,8 +25,8 @@ import java.io.File
 
 @JsonClass(generateAdapter = true)
 internal data class InitialSyncStatus(
-        val step: Int = STEP_INIT,
-        val downloadedDate: Long = 0
+    val step: Int = STEP_INIT,
+    val downloadedDate: Long = 0
 ) {
     companion object {
         const val STEP_INIT = 0
@@ -64,7 +64,8 @@ internal class FileInitialSyncStatusRepository(directory: File) : InitialSyncSta
         ensureCache()
         val state = cache?.step ?: InitialSyncStatus.STEP_INIT
         return if (state >= InitialSyncStatus.STEP_DOWNLOADED &&
-                System.currentTimeMillis() > (cache?.downloadedDate ?: 0) + INIT_SYNC_FILE_LIFETIME) {
+            System.currentTimeMillis() > (cache?.downloadedDate ?: 0) + INIT_SYNC_FILE_LIFETIME
+        ) {
             Timber.d("INIT_SYNC downloaded file is outdated, download it again")
             // The downloaded file is outdated
             setStep(InitialSyncStatus.STEP_INIT)
@@ -79,7 +80,7 @@ internal class FileInitialSyncStatusRepository(directory: File) : InitialSyncSta
         if (step == InitialSyncStatus.STEP_DOWNLOADED) {
             // Also store the downloaded date
             newStatus = newStatus.copy(
-                    downloadedDate = System.currentTimeMillis()
+                downloadedDate = System.currentTimeMillis()
             )
         }
         cache = newStatus
@@ -95,8 +96,8 @@ internal class FileInitialSyncStatusRepository(directory: File) : InitialSyncSta
      */
     private fun readFile() {
         cache = file
-                .takeIf { it.exists() }
-                ?.let { jsonAdapter.fromJson(it.source().buffer()) }
+            .takeIf { it.exists() }
+            ?.let { jsonAdapter.fromJson(it.source().buffer()) }
     }
 
     /**
@@ -105,7 +106,7 @@ internal class FileInitialSyncStatusRepository(directory: File) : InitialSyncSta
     private fun writeFile() {
         file.delete()
         cache
-                ?.let { jsonAdapter.toJson(it) }
-                ?.let { file.writeText(it) }
+            ?.let { jsonAdapter.toJson(it) }
+            ?.let { file.writeText(it) }
     }
 }

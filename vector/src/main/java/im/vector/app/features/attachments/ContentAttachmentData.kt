@@ -20,9 +20,9 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.util.MimeTypes
 
 private val listOfPreviewableMimeTypes = listOf(
-        MimeTypes.Jpeg,
-        MimeTypes.Png,
-        MimeTypes.Gif
+    MimeTypes.Jpeg,
+    MimeTypes.Png,
+    MimeTypes.Gif
 )
 
 fun ContentAttachmentData.isPreviewable(): Boolean {
@@ -33,16 +33,16 @@ fun ContentAttachmentData.isPreviewable(): Boolean {
 }
 
 data class GroupedContentAttachmentData(
-        val previewables: List<ContentAttachmentData>,
-        val notPreviewables: List<ContentAttachmentData>
+    val previewables: List<ContentAttachmentData>,
+    val notPreviewables: List<ContentAttachmentData>
 )
 
 fun List<ContentAttachmentData>.toGroupedContentAttachmentData(): GroupedContentAttachmentData {
     return groupBy { it.isPreviewable() }
-            .let {
-                GroupedContentAttachmentData(
-                        it[true].orEmpty(),
-                        it[false].orEmpty()
-                )
-            }
+        .let {
+            GroupedContentAttachmentData(
+                it[true].orEmpty(),
+                it[false].orEmpty()
+            )
+        }
 }

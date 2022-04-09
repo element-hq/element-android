@@ -37,17 +37,17 @@ import im.vector.app.R
 import timber.log.Timber
 
 class MapTilerMapView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : MapView(context, attrs, defStyleAttr) {
 
     private var pendingState: MapState? = null
 
     data class MapRefs(
-            val map: MapboxMap,
-            val symbolManager: SymbolManager,
-            val style: Style
+        val map: MapboxMap,
+        val symbolManager: SymbolManager,
+        val style: Style
     )
 
     private val userLocationDrawable by lazy {
@@ -60,10 +60,10 @@ class MapTilerMapView @JvmOverloads constructor(
 
     init {
         context.theme.obtainStyledAttributes(
-                attrs,
-                R.styleable.MapTilerMapView,
-                0,
-                0
+            attrs,
+            R.styleable.MapTilerMapView,
+            0,
+            0
         ).run {
             try {
                 setLocateButtonVisibility(this)
@@ -81,8 +81,8 @@ class MapTilerMapView @JvmOverloads constructor(
      * For location fragments
      */
     fun initialize(
-            url: String,
-            locationTargetChangeListener: LocationTargetChangeListener? = null
+        url: String,
+        locationTargetChangeListener: LocationTargetChangeListener? = null
     ) {
         Timber.d("## Location: initialize")
         getMapAsync { map ->
@@ -96,9 +96,9 @@ class MapTilerMapView @JvmOverloads constructor(
     private fun initMapStyle(map: MapboxMap, url: String) {
         map.setStyle(url) { style ->
             mapRefs = MapRefs(
-                    map,
-                    SymbolManager(this, map, style),
-                    style
+                map,
+                SymbolManager(this, map, style),
+                style
             )
             pendingState?.let { render(it) }
             pendingState = null
@@ -113,19 +113,19 @@ class MapTilerMapView @JvmOverloads constructor(
     }
 
     private fun createLocateButton(): ImageView =
-            ImageView(context).apply {
-                setImageDrawable(ContextCompat.getDrawable(context, R.drawable.btn_locate))
-                contentDescription = context.getString(R.string.a11y_location_share_locate_button)
-                layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-                updateLayoutParams<MarginLayoutParams> {
-                    val marginHorizontal = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_button_margin_horizontal)
-                    val marginVertical = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_button_margin_vertical)
-                    setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical)
-                }
-                updateLayoutParams<LayoutParams> {
-                    gravity = Gravity.TOP or Gravity.END
-                }
+        ImageView(context).apply {
+            setImageDrawable(ContextCompat.getDrawable(context, R.drawable.btn_locate))
+            contentDescription = context.getString(R.string.a11y_location_share_locate_button)
+            layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+            updateLayoutParams<MarginLayoutParams> {
+                val marginHorizontal = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_button_margin_horizontal)
+                val marginVertical = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_button_margin_vertical)
+                setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical)
             }
+            updateLayoutParams<LayoutParams> {
+                gravity = Gravity.TOP or Gravity.END
+            }
+        }
 
     private fun adjustCompassButton(map: MapboxMap) {
         locateButton.post {
@@ -157,7 +157,8 @@ class MapTilerMapView @JvmOverloads constructor(
         val pinDrawable = state.pinDrawable ?: userLocationDrawable
         pinDrawable?.let { drawable ->
             if (!safeMapRefs.style.isFullyLoaded ||
-                    safeMapRefs.style.getImage(state.pinId) == null) {
+                safeMapRefs.style.getImage(state.pinId) == null
+            ) {
                 safeMapRefs.style.addImage(state.pinId, drawable)
             }
         }
@@ -171,10 +172,10 @@ class MapTilerMapView @JvmOverloads constructor(
             safeMapRefs.symbolManager.deleteAll()
             if (pinDrawable != null && state.showPin) {
                 safeMapRefs.symbolManager.create(
-                        SymbolOptions()
-                                .withLatLng(LatLng(locationData.latitude, locationData.longitude))
-                                .withIconImage(state.pinId)
-                                .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
+                    SymbolOptions()
+                        .withLatLng(LatLng(locationData.latitude, locationData.longitude))
+                        .withIconImage(state.pinId)
+                        .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
                 )
             }
         }
@@ -183,17 +184,17 @@ class MapTilerMapView @JvmOverloads constructor(
     fun zoomToLocation(latitude: Double, longitude: Double) {
         Timber.d("## Location: zoomToLocation")
         mapRefs?.map?.cameraPosition = CameraPosition.Builder()
-                .target(LatLng(latitude, longitude))
-                .zoom(INITIAL_MAP_ZOOM_IN_PREVIEW)
-                .build()
+            .target(LatLng(latitude, longitude))
+            .zoom(INITIAL_MAP_ZOOM_IN_PREVIEW)
+            .build()
     }
 
     fun getLocationOfMapCenter(): LocationData? =
-            mapRefs?.map?.cameraPosition?.target?.let { target ->
-                LocationData(
-                        latitude = target.latitude,
-                        longitude = target.longitude,
-                        uncertainty = null
-                )
-            }
+        mapRefs?.map?.cameraPosition?.target?.let { target ->
+            LocationData(
+                latitude = target.latitude,
+                longitude = target.longitude,
+                uncertainty = null
+            )
+        }
 }

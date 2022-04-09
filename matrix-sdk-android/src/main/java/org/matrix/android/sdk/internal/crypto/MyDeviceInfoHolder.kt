@@ -25,12 +25,12 @@ import javax.inject.Inject
 
 @SessionScope
 internal class MyDeviceInfoHolder @Inject constructor(
-        // The credentials,
-        credentials: Credentials,
-        // the crypto store
-        cryptoStore: IMXCryptoStore,
-        // Olm device
-        olmDevice: MXOlmDevice
+    // The credentials,
+    credentials: Credentials,
+    // the crypto store
+    cryptoStore: IMXCryptoStore,
+    // Olm device
+    olmDevice: MXOlmDevice
 ) {
     // Our device keys
     /**
@@ -42,7 +42,7 @@ internal class MyDeviceInfoHolder @Inject constructor(
 
         val keys = HashMap<String, String>()
 
-// TODO it's a bit strange, why not load from DB?
+        // TODO it's a bit strange, why not load from DB?
         if (!olmDevice.deviceEd25519Key.isNullOrEmpty()) {
             keys["ed25519:" + credentials.deviceId] = olmDevice.deviceEd25519Key!!
         }
@@ -51,21 +51,21 @@ internal class MyDeviceInfoHolder @Inject constructor(
             keys["curve25519:" + credentials.deviceId] = olmDevice.deviceCurve25519Key!!
         }
 
-//        myDevice.keys = keys
-//
-//        myDevice.algorithms = MXCryptoAlgorithms.supportedAlgorithms()
+        //        myDevice.keys = keys
+        //
+        //        myDevice.algorithms = MXCryptoAlgorithms.supportedAlgorithms()
 
         // TODO hwo to really check cross signed status?
         //
         val crossSigned = cryptoStore.getMyCrossSigningInfo()?.masterKey()?.trustLevel?.locallyVerified ?: false
-//        myDevice.trustLevel = DeviceTrustLevel(crossSigned, true)
+        //        myDevice.trustLevel = DeviceTrustLevel(crossSigned, true)
 
         myDevice = CryptoDeviceInfo(
-                credentials.deviceId!!,
-                credentials.userId,
-                keys = keys,
-                algorithms = MXCryptoAlgorithms.supportedAlgorithms(),
-                trustLevel = DeviceTrustLevel(crossSigned, true)
+            credentials.deviceId!!,
+            credentials.userId,
+            keys = keys,
+            algorithms = MXCryptoAlgorithms.supportedAlgorithms(),
+            trustLevel = DeviceTrustLevel(crossSigned, true)
         )
 
         // Add our own deviceinfo to the store

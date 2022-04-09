@@ -46,7 +46,7 @@ import kotlin.math.abs
  * TODO: Scroll to section - Find a way to snap section to the top
  */
 class EmojiRecyclerAdapter @Inject constructor() :
-        RecyclerView.Adapter<EmojiRecyclerAdapter.ViewHolder>() {
+    RecyclerView.Adapter<EmojiRecyclerAdapter.ViewHolder>() {
 
     var reactionClickListener: ReactionClickListener? = null
     var interactionListener: InteractionListener? = null
@@ -110,7 +110,7 @@ class EmojiRecyclerAdapter @Inject constructor() :
         recyclerView.setHasFixedSize(true)
         // Default is 5 but we have lots of views for emojis
         recyclerView.recycledViewPool
-                .setMaxRecycledViews(R.layout.grid_item_emoji, 300)
+            .setMaxRecycledViews(R.layout.grid_item_emoji, 300)
 
         recyclerView.addOnScrollListener(scrollListener)
     }
@@ -139,7 +139,7 @@ class EmojiRecyclerAdapter @Inject constructor() :
         itemView.setOnClickListener(itemClickListener)
         val viewHolder = when (viewType) {
             R.layout.grid_section_header -> SectionViewHolder(itemView)
-            else                         -> EmojiViewHolder(itemView)
+            else -> EmojiViewHolder(itemView)
         }
         Trace.endSection()
         return viewHolder
@@ -202,10 +202,10 @@ class EmojiRecyclerAdapter @Inject constructor() :
             val item = rawData.emojis[emoji]!!.emoji
             (holder as EmojiViewHolder).data = item
             if (scrollState != ScrollState.SETTLING || !isFastScroll) {
-//                    Log.i("PERF","Bind with draw at position:$position")
+                //                    Log.i("PERF","Bind with draw at position:$position")
                 holder.bind(item)
             } else {
-//                    Log.i("PERF","Bind without draw at position:$position")
+                //                    Log.i("PERF","Bind without draw at position:$position")
                 toUpdateWhenNotBusy.add(item to holder)
                 holder.bind(null)
             }
@@ -222,7 +222,7 @@ class EmojiRecyclerAdapter @Inject constructor() :
     }
 
     override fun getItemCount() = rawData.categories
-            .sumOf { emojiCategory -> 1 /* Section */ + emojiCategory.emojis.size }
+        .sumOf { emojiCategory -> 1 /* Section */ + emojiCategory.emojis.size }
 
     abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         abstract fun bind(s: String?)
@@ -241,11 +241,11 @@ class EmojiRecyclerAdapter @Inject constructor() :
                 emojiView.mLayout = getStaticLayoutForEmoji(s)
                 emojiView.contentDescription = s
                 placeHolder.visibility = View.GONE
-//                emojiView.visibility = View.VISIBLE
+                //                emojiView.visibility = View.VISIBLE
             } else {
                 emojiView.mLayout = null
                 placeHolder.visibility = View.VISIBLE
-//                emojiView.visibility = View.GONE
+                //                emojiView.visibility = View.GONE
             }
         }
     }
@@ -266,10 +266,10 @@ class EmojiRecyclerAdapter @Inject constructor() :
             return staticLayoutCache.getOrPut(emoji) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     StaticLayout.Builder.obtain(emoji, 0, emoji.length, EmojiDrawView.tPaint, EmojiDrawView.emojiSize)
-                            .setAlignment(Layout.Alignment.ALIGN_CENTER)
-                            .setLineSpacing(0f, 1f)
-                            .setIncludePad(true)
-                            .build()
+                        .setAlignment(Layout.Alignment.ALIGN_CENTER)
+                        .setLineSpacing(0f, 1f)
+                        .setIncludePad(true)
+                        .build()
                 } else {
                     @Suppress("DEPRECATION")
                     StaticLayout(emoji, EmojiDrawView.tPaint, EmojiDrawView.emojiSize, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true)
@@ -289,10 +289,10 @@ class EmojiRecyclerAdapter @Inject constructor() :
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             scrollState = when (newState) {
-                RecyclerView.SCROLL_STATE_IDLE     -> ScrollState.IDLE
+                RecyclerView.SCROLL_STATE_IDLE -> ScrollState.IDLE
                 RecyclerView.SCROLL_STATE_SETTLING -> ScrollState.SETTLING
                 RecyclerView.SCROLL_STATE_DRAGGING -> ScrollState.DRAGGING
-                else                               -> ScrollState.UNKNOWN
+                else -> ScrollState.UNKNOWN
             }
 
             // TODO better

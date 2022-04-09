@@ -39,12 +39,12 @@ class RoomListRobot {
 
     fun verifyCreatedRoom() {
         onView(ViewMatchers.withId(R.id.roomListView))
-                .perform(
-                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(withText(R.string.room_displayname_empty_room)),
-                                ViewActions.longClick()
-                        )
+            .perform(
+                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                    ViewMatchers.hasDescendant(withText(R.string.room_displayname_empty_room)),
+                    ViewActions.longClick()
                 )
+            )
         pressBack()
     }
 

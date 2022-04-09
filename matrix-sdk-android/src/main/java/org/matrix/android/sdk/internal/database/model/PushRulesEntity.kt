@@ -21,8 +21,8 @@ import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.internal.extensions.clearWith
 
 internal open class PushRulesEntity(
-        var scope: String = "",
-        var pushRules: RealmList<PushRuleEntity> = RealmList()
+    var scope: String = "",
+    var pushRules: RealmList<PushRuleEntity> = RealmList()
 ) : RealmObject() {
 
     private var kindStr: String = RuleKind.CONTENT.name

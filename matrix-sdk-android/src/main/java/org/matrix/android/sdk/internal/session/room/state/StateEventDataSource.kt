@@ -36,9 +36,9 @@ import org.matrix.android.sdk.internal.query.process
 import javax.inject.Inject
 
 internal class StateEventDataSource @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        private val realmSessionProvider: RealmSessionProvider,
-        private val queryStringValueProcessor: QueryStringValueProcessor
+    @SessionDatabase private val monarchy: Monarchy,
+    private val realmSessionProvider: RealmSessionProvider,
+    private val queryStringValueProcessor: QueryStringValueProcessor
 ) {
 
     fun getStateEvent(roomId: String, eventType: String, stateKey: QueryStringValue): Event? {
@@ -49,8 +49,8 @@ internal class StateEventDataSource @Inject constructor(
 
     fun getStateEventLive(roomId: String, eventType: String, stateKey: QueryStringValue): LiveData<Optional<Event>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm -> buildStateEventQuery(realm, roomId, setOf(eventType), stateKey) },
-                { it.root?.asDomain() }
+            { realm -> buildStateEventQuery(realm, roomId, setOf(eventType), stateKey) },
+            { it.root?.asDomain() }
         )
         return Transformations.map(liveData) { results ->
             results.firstOrNull().toOptional()
@@ -60,37 +60,38 @@ internal class StateEventDataSource @Inject constructor(
     fun getStateEvents(roomId: String, eventTypes: Set<String>, stateKey: QueryStringValue): List<Event> {
         return realmSessionProvider.withRealm { realm ->
             buildStateEventQuery(realm, roomId, eventTypes, stateKey)
-                    .findAll()
-                    .mapNotNull {
-                        it.root?.asDomain()
-                    }
+                .findAll()
+                .mapNotNull {
+                    it.root?.asDomain()
+                }
         }
     }
 
     fun getStateEventsLive(roomId: String, eventTypes: Set<String>, stateKey: QueryStringValue): LiveData<List<Event>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm -> buildStateEventQuery(realm, roomId, eventTypes, stateKey) },
-                { it.root?.asDomain() }
+            { realm -> buildStateEventQuery(realm, roomId, eventTypes, stateKey) },
+            { it.root?.asDomain() }
         )
         return Transformations.map(liveData) { results ->
             results.filterNotNull()
         }
     }
 
-    private fun buildStateEventQuery(realm: Realm,
-                                     roomId: String,
-                                     eventTypes: Set<String>,
-                                     stateKey: QueryStringValue
+    private fun buildStateEventQuery(
+        realm: Realm,
+        roomId: String,
+        eventTypes: Set<String>,
+        stateKey: QueryStringValue
     ): RealmQuery<CurrentStateEventEntity> {
         return with(queryStringValueProcessor) {
             realm.where<CurrentStateEventEntity>()
-                    .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
-                    .apply {
-                        if (eventTypes.isNotEmpty()) {
-                            `in`(CurrentStateEventEntityFields.TYPE, eventTypes.toTypedArray())
-                        }
+                .equalTo(CurrentStateEventEntityFields.ROOM_ID, roomId)
+                .apply {
+                    if (eventTypes.isNotEmpty()) {
+                        `in`(CurrentStateEventEntityFields.TYPE, eventTypes.toTypedArray())
                     }
-                    .process(CurrentStateEventEntityFields.STATE_KEY, stateKey)
+                }
+                .process(CurrentStateEventEntityFields.STATE_KEY, stateKey)
         }
     }
 }

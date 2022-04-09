@@ -99,14 +99,14 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         holder.mapViewContainer.isVisible = locationUiData != null
         locationUiData?.let { safeLocationUiData ->
             GlideApp.with(holder.staticMapImageView)
-                    .load(safeLocationUiData.locationUrl)
-                    .apply(RequestOptions.centerCropTransform())
-                    .into(holder.staticMapImageView)
+                .load(safeLocationUiData.locationUrl)
+                .apply(RequestOptions.centerCropTransform())
+                .into(holder.staticMapImageView)
 
             safeLocationUiData.locationPinProvider.create(safeLocationUiData.locationOwnerId) { pinDrawable ->
                 GlideApp.with(holder.staticMapPinImageView)
-                        .load(pinDrawable)
-                        .into(holder.staticMapPinImageView)
+                    .load(pinDrawable)
+                    .into(holder.staticMapPinImageView)
             }
         }
     }

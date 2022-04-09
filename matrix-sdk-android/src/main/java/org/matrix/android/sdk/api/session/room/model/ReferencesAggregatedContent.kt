@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.crypto.VerificationState
  */
 @JsonClass(generateAdapter = true)
 data class ReferencesAggregatedContent(
-        // Verification status info for m.key.verification.request msgType events
-        @Json(name = "verif_sum") val verificationState: VerificationState
-        // Add more fields for future summary info.
+    // Verification status info for m.key.verification.request msgType events
+    @Json(name = "verif_sum") val verificationState: VerificationState
+    // Add more fields for future summary info.
 )

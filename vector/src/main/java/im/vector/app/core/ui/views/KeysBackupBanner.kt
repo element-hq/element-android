@@ -32,9 +32,9 @@ import timber.log.Timber
  * It does have a unique render method
  */
 class KeysBackupBanner @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
     var delegate: Delegate? = null
@@ -66,28 +66,28 @@ class KeysBackupBanner @JvmOverloads constructor(
 
         hideAll()
         when (newState) {
-            State.Initial    -> renderInitial()
-            State.Hidden     -> renderHidden()
-            is State.Setup   -> renderSetup(newState.numberOfKeys)
+            State.Initial -> renderInitial()
+            State.Hidden -> renderHidden()
+            is State.Setup -> renderSetup(newState.numberOfKeys)
             is State.Recover -> renderRecover(newState.version)
-            is State.Update  -> renderUpdate(newState.version)
-            State.BackingUp  -> renderBackingUp()
+            is State.Update -> renderUpdate(newState.version)
+            State.BackingUp -> renderBackingUp()
         }
     }
 
     override fun onClick(v: View?) {
         when (state) {
-            is State.Setup   -> delegate?.setupKeysBackup()
+            is State.Setup -> delegate?.setupKeysBackup()
             is State.Update,
             is State.Recover -> delegate?.recoverKeysBackup()
-            else             -> Unit
+            else -> Unit
         }
     }
 
     private fun onCloseClicked() {
         state.let {
             when (it) {
-                is State.Setup   -> {
+                is State.Setup -> {
                     DefaultSharedPreferences.getInstance(context).edit {
                         putBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, true)
                     }
@@ -97,12 +97,12 @@ class KeysBackupBanner @JvmOverloads constructor(
                         putString(BANNER_RECOVER_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
-                is State.Update  -> {
+                is State.Update -> {
                     DefaultSharedPreferences.getInstance(context).edit {
                         putString(BANNER_UPDATE_DO_NOT_SHOW_FOR_VERSION, it.version)
                     }
                 }
-                else             -> {
+                else -> {
                     // Should not happen, close button is not displayed in other cases
                 }
             }
@@ -134,7 +134,8 @@ class KeysBackupBanner @JvmOverloads constructor(
 
     private fun renderSetup(nbOfKeys: Int) {
         if (nbOfKeys == 0 ||
-                DefaultSharedPreferences.getInstance(context).getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)) {
+            DefaultSharedPreferences.getInstance(context).getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)
+        ) {
             // Do not display the setup banner if there is no keys to backup, or if the user has already closed it
             isVisible = false
         } else {

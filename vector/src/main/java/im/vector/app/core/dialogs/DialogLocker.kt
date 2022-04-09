@@ -45,14 +45,14 @@ class DialogLocker(savedInstanceState: Bundle?) : Restorable {
             null
         } else {
             builder
-                    .invoke()
-                    .create()
-                    .apply {
-                        setOnShowListener { lock() }
-                        setOnCancelListener { unlock() }
-                        setOnDismissListener { unlock() }
-                        show()
-                    }
+                .invoke()
+                .create()
+                .apply {
+                    setOnShowListener { lock() }
+                    setOnCancelListener { unlock() }
+                    setOnDismissListener { unlock() }
+                    show()
+                }
         }
     }
 

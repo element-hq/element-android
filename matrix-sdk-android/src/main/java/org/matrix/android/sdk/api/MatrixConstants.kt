@@ -29,6 +29,6 @@ object MatrixConstants {
 
     fun maxAliasLocalPartLength(domain: String): Int {
         return (ALIAS_MAX_LENGTH - 1 /* # sigil */ - 1 /* ':' */ - domain.length)
-                .coerceAtLeast(0)
+            .coerceAtLeast(0)
     }
 }

@@ -87,12 +87,12 @@ class SpaceCreationTest : InstrumentedTest {
         assertEquals("Space-rooms should be created with a power level for events_default of 100", 100, powerLevelsContent?.eventsDefault)
 
         val guestAccess = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_GUEST_ACCESS)?.content
-                ?.toModel<RoomGuestAccessContent>()?.guestAccess
+            ?.toModel<RoomGuestAccessContent>()?.guestAccess
 
         assertEquals("Public space room should be peekable by guest", GuestAccess.CanJoin, guestAccess)
 
         val historyVisibility = syncedSpace.asRoom().getStateEvent(EventType.STATE_ROOM_HISTORY_VISIBILITY)?.content
-                ?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility
+            ?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility
 
         assertEquals("Public space room should be world readable", RoomHistoryVisibility.WORLD_READABLE, historyVisibility)
 
@@ -192,17 +192,17 @@ class SpaceCreationTest : InstrumentedTest {
         // /!\ AUTO_JOIN has been descoped
         // check if bob has joined automatically the first room
 
-//        val bobMembershipFirstRoom = bobSession.getRoomSummary(firstChild!!)?.membership
-//        assertEquals("Bob should have joined this room", Membership.JOIN, bobMembershipFirstRoom)
-//        RoomSummaryQueryParams.Builder()
-//
-//        val childCount = bobSession.getRoomSummaries(
-//                roomSummaryQueryParams {
-//                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(spaceId)
-//                }
-//        ).size
-//
-//        assertEquals("Unexpected number of joined children", 1, childCount)
+        //        val bobMembershipFirstRoom = bobSession.getRoomSummary(firstChild!!)?.membership
+        //        assertEquals("Bob should have joined this room", Membership.JOIN, bobMembershipFirstRoom)
+        //        RoomSummaryQueryParams.Builder()
+        //
+        //        val childCount = bobSession.getRoomSummaries(
+        //                roomSummaryQueryParams {
+        //                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(spaceId)
+        //                }
+        //        ).size
+        //
+        //        assertEquals("Unexpected number of joined children", 1, childCount)
 
         commonTestHelper.signOutAndClose(aliceSession)
         commonTestHelper.signOutAndClose(bobSession)

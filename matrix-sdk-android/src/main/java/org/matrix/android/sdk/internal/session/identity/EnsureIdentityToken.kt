@@ -29,12 +29,12 @@ import javax.inject.Inject
 internal interface EnsureIdentityTokenTask : Task<Unit, Unit>
 
 internal class DefaultEnsureIdentityTokenTask @Inject constructor(
-        private val identityStore: IdentityStore,
-        private val retrofitFactory: RetrofitFactory,
-        @UnauthenticatedWithCertificate
-        private val unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
-        private val getOpenIdTokenTask: GetOpenIdTokenTask,
-        private val identityRegisterTask: IdentityRegisterTask
+    private val identityStore: IdentityStore,
+    private val retrofitFactory: RetrofitFactory,
+    @UnauthenticatedWithCertificate
+    private val unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
+    private val getOpenIdTokenTask: GetOpenIdTokenTask,
+    private val identityRegisterTask: IdentityRegisterTask
 ) : EnsureIdentityTokenTask {
 
     override suspend fun execute(params: Unit) {

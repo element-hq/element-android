@@ -116,53 +116,65 @@ interface Navigator {
 
     fun openAnalyticsOptIn(context: Context)
 
-    fun openPinCode(context: Context,
-                    activityResultLauncher: ActivityResultLauncher<Intent>,
-                    pinMode: PinMode)
+    fun openPinCode(
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        pinMode: PinMode
+    )
 
-    fun openTerms(context: Context,
-                  activityResultLauncher: ActivityResultLauncher<Intent>,
-                  serviceType: TermsService.ServiceType,
-                  baseUrl: String,
-                  token: String?)
+    fun openTerms(
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        serviceType: TermsService.ServiceType,
+        baseUrl: String,
+        token: String?
+    )
 
-    fun openStickerPicker(context: Context,
-                          activityResultLauncher: ActivityResultLauncher<Intent>,
-                          roomId: String,
-                          widget: Widget)
+    fun openStickerPicker(
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        roomId: String,
+        widget: Widget
+    )
 
-    fun openIntegrationManager(context: Context,
-                               activityResultLauncher: ActivityResultLauncher<Intent>,
-                               roomId: String,
-                               integId: String?,
-                               screen: String?)
+    fun openIntegrationManager(
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        roomId: String,
+        integId: String?,
+        screen: String?
+    )
 
     fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>? = null)
 
-    fun openMediaViewer(activity: Activity,
-                        roomId: String,
-                        mediaData: AttachmentData,
-                        view: View,
-                        inMemory: List<AttachmentData> = emptyList(),
-                        options: ((MutableList<Pair<View, String>>) -> Unit)?)
+    fun openMediaViewer(
+        activity: Activity,
+        roomId: String,
+        mediaData: AttachmentData,
+        view: View,
+        inMemory: List<AttachmentData> = emptyList(),
+        options: ((MutableList<Pair<View, String>>) -> Unit)?
+    )
 
     fun openSearch(context: Context, roomId: String, roomDisplayName: String?, roomAvatarUrl: String?)
 
     fun openDevTools(context: Context, roomId: String)
 
     fun openCallTransfer(
-            context: Context,
-            activityResultLauncher: ActivityResultLauncher<Intent>,
-            callId: String
+        context: Context,
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        callId: String
     )
 
     fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode)
 
-    fun openLocationSharing(context: Context,
-                            roomId: String,
-                            mode: LocationSharingMode,
-                            initialLocationData: LocationData?,
-                            locationOwnerId: String?)
+    fun openLocationSharing(
+        context: Context,
+        roomId: String,
+        mode: LocationSharingMode,
+        initialLocationData: LocationData?,
+        locationOwnerId: String?
+    )
 
     fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
 

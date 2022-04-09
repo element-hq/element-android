@@ -36,9 +36,9 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class ReviewTermsFragment @Inject constructor(
-        private val termsController: TermsController
+    private val termsController: TermsController
 ) : VectorBaseFragment<FragmentReviewTermsBinding>(),
-        TermsController.Listener {
+    TermsController.Listener {
 
     private val reviewTermsViewModel: ReviewTermsViewModel by activityViewModel()
 
@@ -50,7 +50,7 @@ class ReviewTermsFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         termsController.description = when (reviewTermsViewModel.termsArgs.type) {
-            TermsService.ServiceType.IdentityService    -> getString(R.string.terms_description_for_identity_server)
+            TermsService.ServiceType.IdentityService -> getString(R.string.terms_description_for_identity_server)
             TermsService.ServiceType.IntegrationManager -> getString(R.string.terms_description_for_integration_manager)
         }
 
@@ -66,7 +66,7 @@ class ReviewTermsFragment @Inject constructor(
                 is ReviewTermsViewEvents.Failure -> {
                     // Dialog is displayed by the Activity
                 }
-                ReviewTermsViewEvents.Success    -> {
+                ReviewTermsViewEvents.Success -> {
                     // Handled by the Activity
                 }
             }
@@ -97,7 +97,7 @@ class ReviewTermsFragment @Inject constructor(
                 views.reviewTermsBottomBar.isVisible = true
                 views.reviewTermsAccept.isEnabled = state.termsList.invoke().all { it.accepted }
             }
-            else       -> Unit
+            else -> Unit
         }
     }
 

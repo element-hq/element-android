@@ -27,7 +27,7 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class ScanResponse(
-        @Json(name = "clean") val clean: Boolean,
-        /** Human-readable information about the result. */
-        @Json(name = "info") val info: String?
+    @Json(name = "clean") val clean: Boolean,
+    /** Human-readable information about the result. */
+    @Json(name = "info") val info: String?
 )

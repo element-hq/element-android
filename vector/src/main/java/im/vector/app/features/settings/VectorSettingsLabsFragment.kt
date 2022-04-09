@@ -27,8 +27,8 @@ import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsS
 import javax.inject.Inject
 
 class VectorSettingsLabsFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val lightweightSettingsStorage: LightweightSettingsStorage
+    private val vectorPreferences: VectorPreferences,
+    private val lightweightSettingsStorage: LightweightSettingsStorage
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.room_settings_labs_pref_title

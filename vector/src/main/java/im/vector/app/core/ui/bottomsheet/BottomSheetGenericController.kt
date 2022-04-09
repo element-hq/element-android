@@ -42,16 +42,16 @@ abstract class BottomSheetGenericController<State : BottomSheetGenericState, Act
                 subTitle(host.getSubTitle())
             }
 
-//            bottomSheetDividerItem {
-//                id("title_separator")
-//            }
+            //            bottomSheetDividerItem {
+            //                id("title_separator")
+            //            }
         }
         // Actions
         val actions = getActions(state)
         actions.forEach { action ->
             action.toRadioBottomSheetItem()
-                    .listener { listener?.didSelectAction(action) }
-                    .addTo(this)
+                .listener { listener?.didSelectAction(action) }
+                .addTo(this)
         }
     }
 

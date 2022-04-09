@@ -66,17 +66,17 @@ class AttachmentEncryptionTest {
     @Test
     fun checkDecrypt1() {
         val encryptedFileInfo = EncryptedFileInfo(
-                v = "v2",
-                hashes = mapOf("sha256" to "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU"),
-                key = EncryptedFileKey(
-                        alg = "A256CTR",
-                        k = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                        keyOps = listOf("encrypt", "decrypt"),
-                        kty = "oct",
-                        ext = true
-                ),
-                iv = "AAAAAAAAAAAAAAAAAAAAAA",
-                url = "dummyUrl"
+            v = "v2",
+            hashes = mapOf("sha256" to "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU"),
+            key = EncryptedFileKey(
+                alg = "A256CTR",
+                k = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                keyOps = listOf("encrypt", "decrypt"),
+                kty = "oct",
+                ext = true
+            ),
+            iv = "AAAAAAAAAAAAAAAAAAAAAA",
+            url = "dummyUrl"
         )
 
         assertEquals("", checkDecryption("", encryptedFileInfo))
@@ -85,17 +85,17 @@ class AttachmentEncryptionTest {
     @Test
     fun checkDecrypt2() {
         val encryptedFileInfo = EncryptedFileInfo(
-                v = "v2",
-                hashes = mapOf("sha256" to "YzF08lARDdOCzJpzuSwsjTNlQc4pHxpdHcXiD/wpK6k"),
-                key = EncryptedFileKey(
-                        alg = "A256CTR",
-                        k = "__________________________________________8",
-                        keyOps = listOf("encrypt", "decrypt"),
-                        kty = "oct",
-                        ext = true
-                ),
-                iv = "//////////8AAAAAAAAAAA",
-                url = "dummyUrl"
+            v = "v2",
+            hashes = mapOf("sha256" to "YzF08lARDdOCzJpzuSwsjTNlQc4pHxpdHcXiD/wpK6k"),
+            key = EncryptedFileKey(
+                alg = "A256CTR",
+                k = "__________________________________________8",
+                keyOps = listOf("encrypt", "decrypt"),
+                kty = "oct",
+                ext = true
+            ),
+            iv = "//////////8AAAAAAAAAAA",
+            url = "dummyUrl"
         )
 
         assertEquals("SGVsbG8sIFdvcmxk", checkDecryption("5xJZTt5cQicm+9f4", encryptedFileInfo))
@@ -104,42 +104,50 @@ class AttachmentEncryptionTest {
     @Test
     fun checkDecrypt3() {
         val encryptedFileInfo = EncryptedFileInfo(
-                v = "v2",
-                hashes = mapOf("sha256" to "IOq7/dHHB+mfHfxlRY5XMeCWEwTPmlf4cJcgrkf6fVU"),
-                key = EncryptedFileKey(
-                        alg = "A256CTR",
-                        k = "__________________________________________8",
-                        keyOps = listOf("encrypt", "decrypt"),
-                        kty = "oct",
-                        ext = true
-                ),
-                iv = "//////////8AAAAAAAAAAA",
-                url = "dummyUrl"
+            v = "v2",
+            hashes = mapOf("sha256" to "IOq7/dHHB+mfHfxlRY5XMeCWEwTPmlf4cJcgrkf6fVU"),
+            key = EncryptedFileKey(
+                alg = "A256CTR",
+                k = "__________________________________________8",
+                keyOps = listOf("encrypt", "decrypt"),
+                kty = "oct",
+                ext = true
+            ),
+            iv = "//////////8AAAAAAAAAAA",
+            url = "dummyUrl"
         )
 
-        assertEquals("YWxwaGFudW1lcmljYWxseWFscGhhbnVtZXJpY2FsbHlhbHBoYW51bWVyaWNhbGx5YWxwaGFudW1lcmljYWxseQ",
-                checkDecryption("zhtFStAeFx0s+9L/sSQO+WQMtldqYEHqTxMduJrCIpnkyer09kxJJuA4K+adQE4w+7jZe/vR9kIcqj9rOhDR8Q",
-                        encryptedFileInfo))
+        assertEquals(
+            "YWxwaGFudW1lcmljYWxseWFscGhhbnVtZXJpY2FsbHlhbHBoYW51bWVyaWNhbGx5YWxwaGFudW1lcmljYWxseQ",
+            checkDecryption(
+                "zhtFStAeFx0s+9L/sSQO+WQMtldqYEHqTxMduJrCIpnkyer09kxJJuA4K+adQE4w+7jZe/vR9kIcqj9rOhDR8Q",
+                encryptedFileInfo
+            )
+        )
     }
 
     @Test
     fun checkDecrypt4() {
         val encryptedFileInfo = EncryptedFileInfo(
-                v = "v2",
-                hashes = mapOf("sha256" to "LYG/orOViuFwovJpv2YMLSsmVKwLt7pY3f8SYM7KU5E"),
-                key = EncryptedFileKey(
-                        alg = "A256CTR",
-                        k = "__________________________________________8",
-                        keyOps = listOf("encrypt", "decrypt"),
-                        kty = "oct",
-                        ext = true
-                ),
-                iv = "/////////////////////w",
-                url = "dummyUrl"
+            v = "v2",
+            hashes = mapOf("sha256" to "LYG/orOViuFwovJpv2YMLSsmVKwLt7pY3f8SYM7KU5E"),
+            key = EncryptedFileKey(
+                alg = "A256CTR",
+                k = "__________________________________________8",
+                keyOps = listOf("encrypt", "decrypt"),
+                kty = "oct",
+                ext = true
+            ),
+            iv = "/////////////////////w",
+            url = "dummyUrl"
         )
 
-        assertNotEquals("YWxwaGFudW1lcmljYWxseWFscGhhbnVtZXJpY2FsbHlhbHBoYW51bWVyaWNhbGx5YWxwaGFudW1lcmljYWxseQ",
-                checkDecryption("tJVNBVJ/vl36UQt4Y5e5m84bRUrQHhcdLPvS/7EkDvlkDLZXamBB6k8THbiawiKZ5Mnq9PZMSSbgOCvmnUBOMA",
-                        encryptedFileInfo))
+        assertNotEquals(
+            "YWxwaGFudW1lcmljYWxseWFscGhhbnVtZXJpY2FsbHlhbHBoYW51bWVyaWNhbGx5YWxwaGFudW1lcmljYWxseQ",
+            checkDecryption(
+                "tJVNBVJ/vl36UQt4Y5e5m84bRUrQHhcdLPvS/7EkDvlkDLZXamBB6k8THbiawiKZ5Mnq9PZMSSbgOCvmnUBOMA",
+                encryptedFileInfo
+            )
+        )
     }
 }

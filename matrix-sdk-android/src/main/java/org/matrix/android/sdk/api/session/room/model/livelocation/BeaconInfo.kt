@@ -21,13 +21,13 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class BeaconInfo(
-        @Json(name = "description") val description: String? = null,
-        /**
-         * Beacon should be considered as inactive after this timeout as milliseconds.
-         */
-        @Json(name = "timeout") val timeout: Long? = null,
-        /**
-         * Should be set true to start sharing beacon.
-         */
-        @Json(name = "live") val isLive: Boolean? = null
+    @Json(name = "description") val description: String? = null,
+    /**
+     * Beacon should be considered as inactive after this timeout as milliseconds.
+     */
+    @Json(name = "timeout") val timeout: Long? = null,
+    /**
+     * Should be set true to start sharing beacon.
+     */
+    @Json(name = "live") val isLive: Boolean? = null
 )

@@ -43,10 +43,10 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomMemberListFragment @Inject constructor(
-        private val roomMemberListController: RoomMemberListController,
-        private val avatarRenderer: AvatarRenderer
+    private val roomMemberListController: RoomMemberListController,
+    private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomMemberListBinding>(),
-        RoomMemberListController.Callback {
+    RoomMemberListController.Callback {
 
     private val viewModel: RoomMemberListViewModel by fragmentViewModel()
     private val roomProfileArgs: RoomProfileArgs by args()
@@ -64,7 +64,7 @@ class RoomMemberListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(views.roomSettingGeneric.roomSettingsToolbar)
-                .allowBack()
+            .allowBack()
         setupSearchView()
         setupInviteUsersButton()
         views.roomSettingGeneric.roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
@@ -76,21 +76,21 @@ class RoomMemberListFragment @Inject constructor(
         }
         // Hide FAB when list is scrolling
         views.roomSettingGeneric.roomSettingsRecyclerView.addOnScrollListener(
-                object : RecyclerView.OnScrollListener() {
-                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                        when (newState) {
-                            RecyclerView.SCROLL_STATE_IDLE     -> {
-                                if (withState(viewModel) { it.actionsPermissions.canInvite }) {
-                                    views.inviteUsersButton.show()
-                                }
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    when (newState) {
+                        RecyclerView.SCROLL_STATE_IDLE -> {
+                            if (withState(viewModel) { it.actionsPermissions.canInvite }) {
+                                views.inviteUsersButton.show()
                             }
-                            RecyclerView.SCROLL_STATE_DRAGGING,
-                            RecyclerView.SCROLL_STATE_SETTLING -> {
-                                views.inviteUsersButton.hide()
-                            }
+                        }
+                        RecyclerView.SCROLL_STATE_DRAGGING,
+                        RecyclerView.SCROLL_STATE_SETTLING -> {
+                            views.inviteUsersButton.hide()
                         }
                     }
                 }
+            }
         )
     }
 
@@ -131,13 +131,13 @@ class RoomMemberListFragment @Inject constructor(
         val stateKey = event.stateKey ?: return
         if (withState(viewModel) { it.actionsPermissions.canRevokeThreePidInvite }) {
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.three_pid_revoke_invite_dialog_title)
-                    .setMessage(getString(R.string.three_pid_revoke_invite_dialog_content, content.displayName))
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .setPositiveButton(R.string.action_revoke) { _, _ ->
-                        viewModel.handle(RoomMemberListAction.RevokeThreePidInvite(stateKey))
-                    }
-                    .show()
+                .setTitle(R.string.three_pid_revoke_invite_dialog_title)
+                .setMessage(getString(R.string.three_pid_revoke_invite_dialog_content, content.displayName))
+                .setNegativeButton(R.string.action_cancel, null)
+                .setPositiveButton(R.string.action_revoke) { _, _ ->
+                    viewModel.handle(RoomMemberListAction.RevokeThreePidInvite(stateKey))
+                }
+                .show()
         }
     }
 

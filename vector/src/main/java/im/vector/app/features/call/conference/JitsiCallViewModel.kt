@@ -40,9 +40,9 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
 class JitsiCallViewModel @AssistedInject constructor(
-        @Assisted initialState: JitsiCallViewState,
-        private val session: Session,
-        private val jitsiService: JitsiService
+    @Assisted initialState: JitsiCallViewState,
+    private val session: Session,
+    private val jitsiService: JitsiService
 ) : VectorViewModel<JitsiCallViewState, JitsiCallViewActions, JitsiCallViewEvents>(initialState) {
 
     @AssistedFactory
@@ -64,27 +64,27 @@ class JitsiCallViewModel @AssistedInject constructor(
         confIsJoined = false
         currentWidgetObserver?.cancel()
         currentWidgetObserver = widgetService.getRoomWidgetsLive(roomId, QueryStringValue.Equals(widgetId), WidgetType.Jitsi.values())
-                .asFlow()
-                .distinctUntilChanged()
-                .onEach {
-                    val jitsiWidget = it.firstOrNull()
-                    if (jitsiWidget != null) {
-                        setState {
-                            copy(widget = Success(jitsiWidget))
-                        }
-                        if (!confIsJoined) {
-                            confIsJoined = true
-                            joinConference(jitsiWidget)
-                        }
-                    } else {
-                        setState {
-                            copy(
-                                    widget = Fail(IllegalArgumentException("Widget not found"))
-                            )
-                        }
+            .asFlow()
+            .distinctUntilChanged()
+            .onEach {
+                val jitsiWidget = it.firstOrNull()
+                if (jitsiWidget != null) {
+                    setState {
+                        copy(widget = Success(jitsiWidget))
+                    }
+                    if (!confIsJoined) {
+                        confIsJoined = true
+                        joinConference(jitsiWidget)
+                    }
+                } else {
+                    setState {
+                        copy(
+                            widget = Fail(IllegalArgumentException("Widget not found"))
+                        )
                     }
                 }
-                .launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun joinConference(jitsiWidget: Widget) = withState { state ->
@@ -100,7 +100,7 @@ class JitsiCallViewModel @AssistedInject constructor(
 
     override fun handle(action: JitsiCallViewActions) {
         when (action) {
-            is JitsiCallViewActions.SwitchTo      -> handleSwitchTo(action)
+            is JitsiCallViewActions.SwitchTo -> handleSwitchTo(action)
             JitsiCallViewActions.OnConferenceLeft -> handleOnConferenceLeft()
         }
     }
@@ -108,7 +108,8 @@ class JitsiCallViewModel @AssistedInject constructor(
     private fun handleSwitchTo(action: JitsiCallViewActions.SwitchTo) = withState { state ->
         // Check if it is the same conf
         if (action.args.roomId != state.roomId ||
-                action.args.widgetId != state.widgetId) {
+            action.args.widgetId != state.widgetId
+        ) {
             if (action.withConfirmation) {
                 // Ask confirmation to switch, but wait a bit for the Activity to quit the PiP mode
                 viewModelScope.launch {
@@ -133,10 +134,10 @@ class JitsiCallViewModel @AssistedInject constructor(
         } else {
             setState {
                 copy(
-                        roomId = safePendingArgs.roomId,
-                        widgetId = safePendingArgs.widgetId,
-                        enableVideo = safePendingArgs.enableVideo,
-                        widget = Uninitialized
+                    roomId = safePendingArgs.roomId,
+                    widgetId = safePendingArgs.widgetId,
+                    enableVideo = safePendingArgs.enableVideo,
+                    widget = Uninitialized
                 )
             }
             observeWidget(safePendingArgs.roomId, safePendingArgs.widgetId)

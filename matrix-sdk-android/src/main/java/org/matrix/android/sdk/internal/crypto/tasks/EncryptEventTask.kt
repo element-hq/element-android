@@ -30,16 +30,17 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 import javax.inject.Inject
 
 internal interface EncryptEventTask : Task<EncryptEventTask.Params, Event> {
-    data class Params(val roomId: String,
-                      val event: Event,
-                      /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
-                      val keepKeys: List<String>? = null
+    data class Params(
+        val roomId: String,
+        val event: Event,
+        /**Do not encrypt these keys, keep them as is in encrypted content (e.g. m.relates_to)*/
+        val keepKeys: List<String>? = null
     )
 }
 
 internal class DefaultEncryptEventTask @Inject constructor(
-        private val localEchoRepository: LocalEchoRepository,
-        private val cryptoService: CryptoService
+    private val localEchoRepository: LocalEchoRepository,
+    private val cryptoService: CryptoService
 ) : EncryptEventTask {
     override suspend fun execute(params: EncryptEventTask.Params): Event {
         // don't want to wait for any query
@@ -56,7 +57,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
             localMutableContent.remove(it)
         }
 
-//        try {
+        //        try {
         // let it throws
         awaitCallback<MXEncryptEventContentResult> {
             cryptoService.encryptEventContent(localMutableContent, localEvent.type, params.roomId, it)
@@ -73,14 +74,14 @@ internal class DefaultEncryptEventTask @Inject constructor(
             // Should I only do it for text messages?
             val decryptionLocalEcho = if (result.eventContent["algorithm"] == MXCRYPTO_ALGORITHM_MEGOLM) {
                 MXEventDecryptionResult(
-                        clearEvent = Event(
-                                type = localEvent.type,
-                                content = localEvent.content,
-                                roomId = localEvent.roomId
-                        ).toContent(),
-                        forwardingCurve25519KeyChain = emptyList(),
-                        senderCurve25519Key = result.eventContent["sender_key"] as? String,
-                        claimedEd25519Key = cryptoService.getMyDevice().fingerprint()
+                    clearEvent = Event(
+                        type = localEvent.type,
+                        content = localEvent.content,
+                        roomId = localEvent.roomId
+                    ).toContent(),
+                    forwardingCurve25519KeyChain = emptyList(),
+                    senderCurve25519Key = result.eventContent["sender_key"] as? String,
+                    claimedEd25519Key = cryptoService.getMyDevice().fingerprint()
                 )
             } else {
                 null
@@ -94,8 +95,8 @@ internal class DefaultEncryptEventTask @Inject constructor(
                 }
             }
             return localEvent.copy(
-                    type = safeResult.eventType,
-                    content = safeResult.eventContent
+                type = safeResult.eventType,
+                content = safeResult.eventContent
             )
         }
     }

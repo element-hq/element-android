@@ -33,27 +33,27 @@ class BackgroundSyncModeChooserDialog : DialogFragment() {
         val view = requireActivity().layoutInflater.inflate(R.layout.dialog_background_sync_mode, null)
         val views = DialogBackgroundSyncModeBinding.bind(view)
         val dialog = MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.settings_background_fdroid_sync_mode)
-                .setView(view)
-                .setPositiveButton(R.string.action_cancel, null)
-                .create()
+            .setTitle(R.string.settings_background_fdroid_sync_mode)
+            .setView(view)
+            .setPositiveButton(R.string.action_cancel, null)
+            .create()
 
         views.backgroundSyncModeBattery.setOnClickListener {
             interactionListener
-                    ?.takeIf { initialMode != BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY }
-                    ?.onOptionSelected(BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY)
+                ?.takeIf { initialMode != BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY }
+                ?.onOptionSelected(BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY)
             dialog.dismiss()
         }
         views.backgroundSyncModeReal.setOnClickListener {
             interactionListener
-                    ?.takeIf { initialMode != BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME }
-                    ?.onOptionSelected(BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME)
+                ?.takeIf { initialMode != BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME }
+                ?.onOptionSelected(BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME)
             dialog.dismiss()
         }
         views.backgroundSyncModeOff.setOnClickListener {
             interactionListener
-                    ?.takeIf { initialMode != BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED }
-                    ?.onOptionSelected(BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED)
+                ?.takeIf { initialMode != BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED }
+                ?.onOptionSelected(BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED)
             dialog.dismiss()
         }
         return dialog

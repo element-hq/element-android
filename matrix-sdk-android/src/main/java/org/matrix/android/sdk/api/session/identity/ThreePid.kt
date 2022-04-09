@@ -27,7 +27,7 @@ sealed class ThreePid(open val value: String) {
 
 internal fun ThreePid.toMedium(): String {
     return when (this) {
-        is ThreePid.Email  -> ThirdPartyIdentifier.MEDIUM_EMAIL
+        is ThreePid.Email -> ThirdPartyIdentifier.MEDIUM_EMAIL
         is ThreePid.Msisdn -> ThirdPartyIdentifier.MEDIUM_MSISDN
     }
 }

@@ -44,21 +44,21 @@ import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
  * Users can also enrich it with metadata.
  */
 data class TimelineEvent(
-        val root: Event,
-        /**
-         * Uniquely identify an event, computed locally by the sdk
-         */
-        val localId: Long,
-        val eventId: String,
-        /**
-         * This display index is the position in the current chunk.
-         * It's not unique on the timeline as it's reset on each chunk.
-         */
-        val displayIndex: Int,
-        var ownedByThreadChunk: Boolean = false,
-        val senderInfo: SenderInfo,
-        val annotations: EventAnnotationsSummary? = null,
-        val readReceipts: List<ReadReceipt> = emptyList()
+    val root: Event,
+    /**
+     * Uniquely identify an event, computed locally by the sdk
+     */
+    val localId: Long,
+    val eventId: String,
+    /**
+     * This display index is the position in the current chunk.
+     * It's not unique on the timeline as it's reset on each chunk.
+     */
+    val displayIndex: Int,
+    var ownedByThreadChunk: Boolean = false,
+    val senderInfo: SenderInfo,
+    val annotations: EventAnnotationsSummary? = null,
+    val readReceipts: List<ReadReceipt> = emptyList()
 ) {
 
     init {
@@ -111,10 +111,10 @@ fun TimelineEvent.hasBeenEdited() = annotations?.editSummary != null
  */
 fun TimelineEvent.getLatestEventId(): String {
     return annotations
-            ?.editSummary
-            ?.sourceEvents
-            ?.lastOrNull()
-            ?: eventId
+        ?.editSummary
+        ?.sourceEvents
+        ?.lastOrNull()
+        ?: eventId
 }
 
 /**
@@ -136,9 +136,9 @@ fun TimelineEvent.getEditedEventId(): String? {
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return when (root.getClearType()) {
-        EventType.STICKER       -> root.getClearContent().toModel<MessageStickerContent>()
+        EventType.STICKER -> root.getClearContent().toModel<MessageStickerContent>()
         in EventType.POLL_START -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
-        else                    -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
+        else -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
 }
 
@@ -154,7 +154,7 @@ fun TimelineEvent.isEdition(): Boolean {
 }
 
 fun TimelineEvent.isPoll(): Boolean =
-        root.isPoll()
+    root.isPoll()
 
 fun TimelineEvent.isSticker(): Boolean {
     return root.isSticker()
@@ -185,7 +185,7 @@ fun TimelineEvent.getTextEditableContent(): String {
  */
 fun MessageContent.getTextDisplayableContent(): String {
     return newContent?.toModel<MessageTextContent>()?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
-            ?: newContent?.toModel<MessageContent>()?.body
-            ?: (this as MessageTextContent?)?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
-            ?: body
+        ?: newContent?.toModel<MessageContent>()?.body
+        ?: (this as MessageTextContent?)?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
+        ?: body
 }

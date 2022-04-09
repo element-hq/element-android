@@ -25,9 +25,9 @@ import im.vector.app.databinding.ViewRoomWidgetsBannerBinding
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 
 class RoomWidgetsBannerView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr) {
 
     interface Callback {

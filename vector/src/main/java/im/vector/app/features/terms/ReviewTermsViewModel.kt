@@ -30,8 +30,8 @@ import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
 class ReviewTermsViewModel @AssistedInject constructor(
-        @Assisted initialState: ReviewTermsViewState,
-        private val session: Session
+    @Assisted initialState: ReviewTermsViewState,
+    private val session: Session
 ) : VectorViewModel<ReviewTermsViewState, ReviewTermsAction, ReviewTermsViewEvents>(initialState) {
 
     @AssistedFactory
@@ -45,9 +45,9 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
     override fun handle(action: ReviewTermsAction) {
         when (action) {
-            is ReviewTermsAction.LoadTerms          -> loadTerms(action)
+            is ReviewTermsAction.LoadTerms -> loadTerms(action)
             is ReviewTermsAction.MarkTermAsAccepted -> markTermAsAccepted(action)
-            ReviewTermsAction.Accept                -> acceptTerms()
+            ReviewTermsAction.Accept -> acceptTerms()
         }
     }
 
@@ -63,7 +63,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
         if (newList != null) {
             setState {
                 state.copy(
-                        termsList = Success(newList)
+                    termsList = Success(newList)
                 )
             }
         }
@@ -85,10 +85,10 @@ class ReviewTermsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.agreeToTerms(
-                        termsArgs.type,
-                        termsArgs.baseURL,
-                        agreedUrls,
-                        termsArgs.token
+                    termsArgs.type,
+                    termsArgs.baseURL,
+                    agreedUrls,
+                    termsArgs.token
                 )
                 _viewEvents.post(ReviewTermsViewEvents.Success)
             } catch (failure: Throwable) {
@@ -111,23 +111,24 @@ class ReviewTermsViewModel @AssistedInject constructor(
             try {
                 val data = session.getTerms(termsArgs.type, termsArgs.baseURL)
                 val terms = data.serverResponse.getLocalizedTerms(action.preferredLanguageCode).map {
-                    Term(it.localizedUrl ?: "",
-                            it.localizedName ?: "",
-                            it.version,
-                            accepted = data.alreadyAcceptedTermUrls.contains(it.localizedUrl)
+                    Term(
+                        it.localizedUrl ?: "",
+                        it.localizedName ?: "",
+                        it.version,
+                        accepted = data.alreadyAcceptedTermUrls.contains(it.localizedUrl)
                     )
                 }
 
                 setState {
                     copy(
-                            termsList = Success(terms)
+                        termsList = Success(terms)
                     )
                 }
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to load terms")
                 setState {
                     copy(
-                            termsList = Uninitialized
+                        termsList = Uninitialized
                     )
                 }
                 _viewEvents.post(ReviewTermsViewEvents.Failure(failure, true))

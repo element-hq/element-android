@@ -28,31 +28,31 @@ import javax.inject.Inject
 
 internal interface ProcessEventForPushTask : Task<ProcessEventForPushTask.Params, Unit> {
     data class Params(
-            val syncResponse: RoomsSyncResponse,
-            val rules: List<PushRule>
+        val syncResponse: RoomsSyncResponse,
+        val rules: List<PushRule>
     )
 }
 
 internal class DefaultProcessEventForPushTask @Inject constructor(
-        private val defaultPushRuleService: DefaultPushRuleService,
-        private val pushRuleFinder: PushRuleFinder,
-        @UserId private val userId: String
+    private val defaultPushRuleService: DefaultPushRuleService,
+    private val pushRuleFinder: PushRuleFinder,
+    @UserId private val userId: String
 ) : ProcessEventForPushTask {
 
     override suspend fun execute(params: ProcessEventForPushTask.Params) {
         val newJoinEvents = params.syncResponse.join
-                .mapNotNull { (key, value) ->
-                    value.timeline?.events?.mapNotNull {
-                        it.takeIf { !it.isInvitation() }?.copy(roomId = key)
-                    }
+            .mapNotNull { (key, value) ->
+                value.timeline?.events?.mapNotNull {
+                    it.takeIf { !it.isInvitation() }?.copy(roomId = key)
                 }
-                .flatten()
+            }
+            .flatten()
 
         val inviteEvents = params.syncResponse.invite
-                .mapNotNull { (key, value) ->
-                    value.inviteState?.events?.map { it.copy(roomId = key) }
-                }
-                .flatten()
+            .mapNotNull { (key, value) ->
+                value.inviteState?.events?.map { it.copy(roomId = key) }
+            }
+            .flatten()
 
         val allEvents = (newJoinEvents + inviteEvents).filter { event ->
             when (event.type) {
@@ -61,13 +61,15 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
                 EventType.REDACTION,
                 EventType.ENCRYPTED,
                 EventType.STATE_ROOM_MEMBER -> true
-                else                        -> false
+                else -> false
             }
         }.filter {
             it.senderId != userId
         }
-        Timber.v("[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
-                " to check for push rules with ${params.rules.size} rules")
+        Timber.v(
+            "[PushRules] Found ${allEvents.size} out of ${(newJoinEvents + inviteEvents).size}" +
+                    " to check for push rules with ${params.rules.size} rules"
+        )
         val matchedEvents = allEvents.mapNotNull { event ->
             pushRuleFinder.fulfilledBingRule(event, params.rules)?.let {
                 Timber.v("[PushRules] Rule $it match for event ${event.eventId}")
@@ -77,22 +79,22 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
         Timber.d("[PushRules] matched ${matchedEvents.size} out of ${allEvents.size}")
 
         val allRedactedEvents = params.syncResponse.join
-                .asSequence()
-                .mapNotNull { it.value.timeline?.events }
-                .flatten()
-                .filter { it.type == EventType.REDACTION }
-                .mapNotNull { it.redacts }
-                .toList()
+            .asSequence()
+            .mapNotNull { it.value.timeline?.events }
+            .flatten()
+            .filter { it.type == EventType.REDACTION }
+            .mapNotNull { it.redacts }
+            .toList()
 
         Timber.v("[PushRules] Found ${allRedactedEvents.size} redacted events")
 
         defaultPushRuleService.dispatchEvents(
-                PushEvents(
-                        matchedEvents = matchedEvents,
-                        roomsJoined = params.syncResponse.join.keys,
-                        roomsLeft = params.syncResponse.leave.keys,
-                        redactedEventIds = allRedactedEvents
-                )
+            PushEvents(
+                matchedEvents = matchedEvents,
+                roomsJoined = params.syncResponse.join.keys,
+                roomsLeft = params.syncResponse.leave.keys,
+                redactedEventIds = allRedactedEvents
+            )
         )
     }
 }

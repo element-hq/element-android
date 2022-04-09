@@ -40,12 +40,12 @@ class CountUpTimer(private val intervalInMs: Long = 1_000) {
 
     private fun startCounter() {
         tickerFlow(coroutineScope, intervalInMs / 10)
-                .filter { resumed.get() }
-                .map { elapsedTime.addAndGet(intervalInMs / 10) }
-                .filter { it % intervalInMs == 0L }
-                .onEach {
-                    tickListener?.onTick(it)
-                }.launchIn(coroutineScope)
+            .filter { resumed.get() }
+            .map { elapsedTime.addAndGet(intervalInMs / 10) }
+            .filter { it % intervalInMs == 0L }
+            .onEach {
+                tickListener?.onTick(it)
+            }.launchIn(coroutineScope)
     }
 
     var tickListener: TickListener? = null

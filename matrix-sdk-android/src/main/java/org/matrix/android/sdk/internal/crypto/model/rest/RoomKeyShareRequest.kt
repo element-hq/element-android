@@ -23,15 +23,15 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class RoomKeyShareRequest(
-        @Json(name = "action")
-        override val action: String? = GossipingToDeviceObject.ACTION_SHARE_REQUEST,
+    @Json(name = "action")
+    override val action: String? = GossipingToDeviceObject.ACTION_SHARE_REQUEST,
 
-        @Json(name = "requesting_device_id")
-        override val requestingDeviceId: String? = null,
+    @Json(name = "requesting_device_id")
+    override val requestingDeviceId: String? = null,
 
-        @Json(name = "request_id")
-        override val requestId: String? = null,
+    @Json(name = "request_id")
+    override val requestId: String? = null,
 
-        @Json(name = "body")
-        val body: RoomKeyRequestBody? = null
+    @Json(name = "body")
+    val body: RoomKeyRequestBody? = null
 ) : GossipingToDeviceObject

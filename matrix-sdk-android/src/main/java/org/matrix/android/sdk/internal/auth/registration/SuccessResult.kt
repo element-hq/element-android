@@ -22,8 +22,8 @@ import org.matrix.android.sdk.api.extensions.orFalse
 
 @JsonClass(generateAdapter = true)
 data class SuccessResult(
-        @Json(name = "success")
-        val success: Boolean?
+    @Json(name = "success")
+    val success: Boolean?
 ) {
     fun isSuccess() = success.orFalse()
 }

@@ -56,10 +56,10 @@ object TextUtils {
         } else {
             // First convert the size
             when {
-                sizeBytes < 1024               -> sizeBytes
-                sizeBytes < 1024 * 1024        -> sizeBytes * 1000 / 1024
+                sizeBytes < 1024 -> sizeBytes
+                sizeBytes < 1024 * 1024 -> sizeBytes * 1000 / 1024
                 sizeBytes < 1024 * 1024 * 1024 -> sizeBytes * 1000 / 1024 * 1000 / 1024
-                else                           -> sizeBytes * 1000 / 1024 * 1000 / 1024 * 1000 / 1024
+                else -> sizeBytes * 1000 / 1024 * 1000 / 1024 * 1000 / 1024
             }
         }
 

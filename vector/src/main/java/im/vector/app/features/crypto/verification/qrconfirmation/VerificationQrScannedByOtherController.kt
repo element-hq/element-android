@@ -31,8 +31,8 @@ import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class VerificationQrScannedByOtherController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider
 ) : EpoxyController() {
 
     var listener: Listener? = null

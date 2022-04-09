@@ -44,24 +44,28 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 data class VerificationEmojiCodeViewState(
-        val transactionId: String?,
-        val otherUser: MatrixItem? = null,
-        val supportsEmoji: Boolean = true,
-        val emojiDescription: Async<List<EmojiRepresentation>> = Uninitialized,
-        val decimalDescription: Async<String> = Uninitialized,
-        val isWaitingFromOther: Boolean = false
+    val transactionId: String?,
+    val otherUser: MatrixItem? = null,
+    val supportsEmoji: Boolean = true,
+    val emojiDescription: Async<List<EmojiRepresentation>> = Uninitialized,
+    val decimalDescription: Async<String> = Uninitialized,
+    val isWaitingFromOther: Boolean = false
 ) : MavericksState
 
 class VerificationEmojiCodeViewModel @AssistedInject constructor(
-        @Assisted initialState: VerificationEmojiCodeViewState,
-        private val session: Session
+    @Assisted initialState: VerificationEmojiCodeViewState,
+    private val session: Session
 ) : VectorViewModel<VerificationEmojiCodeViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.Listener {
 
     init {
         withState { state ->
-            refreshStateFromTx(session.cryptoService().verificationService()
-                    .getExistingTransaction(state.otherUser?.id ?: "", state.transactionId
-                            ?: "") as? SasVerificationTransaction)
+            refreshStateFromTx(
+                session.cryptoService().verificationService()
+                    .getExistingTransaction(
+                        state.otherUser?.id ?: "", state.transactionId
+                            ?: ""
+                    ) as? SasVerificationTransaction
+            )
         }
 
         session.cryptoService().verificationService().addListener(this)
@@ -83,29 +87,29 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
             is VerificationTxState.OnAccepted,
             is VerificationTxState.SendingKey,
             is VerificationTxState.KeySent,
-            is VerificationTxState.OnKeyReceived  -> {
+            is VerificationTxState.OnKeyReceived -> {
                 setState {
                     copy(
-                            isWaitingFromOther = false,
-                            supportsEmoji = sasTx.supportsEmoji(),
-                            emojiDescription = Loading<List<EmojiRepresentation>>()
-                                    .takeIf { sasTx.supportsEmoji() }
-                                    ?: Uninitialized,
-                            decimalDescription = Loading<String>()
-                                    .takeIf { sasTx.supportsEmoji().not() }
-                                    ?: Uninitialized
+                        isWaitingFromOther = false,
+                        supportsEmoji = sasTx.supportsEmoji(),
+                        emojiDescription = Loading<List<EmojiRepresentation>>()
+                            .takeIf { sasTx.supportsEmoji() }
+                            ?: Uninitialized,
+                        decimalDescription = Loading<String>()
+                            .takeIf { sasTx.supportsEmoji().not() }
+                            ?: Uninitialized
                     )
                 }
             }
             is VerificationTxState.ShortCodeReady -> {
                 setState {
                     copy(
-                            isWaitingFromOther = false,
-                            supportsEmoji = sasTx.supportsEmoji(),
-                            emojiDescription = if (sasTx.supportsEmoji()) Success(sasTx.getEmojiCodeRepresentation())
-                            else Uninitialized,
-                            decimalDescription = if (!sasTx.supportsEmoji()) Success(sasTx.getDecimalCodeRepresentation())
-                            else Uninitialized
+                        isWaitingFromOther = false,
+                        supportsEmoji = sasTx.supportsEmoji(),
+                        emojiDescription = if (sasTx.supportsEmoji()) Success(sasTx.getEmojiCodeRepresentation())
+                        else Uninitialized,
+                        decimalDescription = if (!sasTx.supportsEmoji()) Success(sasTx.getDecimalCodeRepresentation())
+                        else Uninitialized
                     )
                 }
             }
@@ -113,33 +117,33 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
             is VerificationTxState.SendingMac,
             is VerificationTxState.MacSent,
             is VerificationTxState.Verifying,
-            is VerificationTxState.Verified       -> {
+            is VerificationTxState.Verified -> {
                 setState {
                     copy(isWaitingFromOther = true)
                 }
             }
-            is VerificationTxState.Cancelled      -> {
+            is VerificationTxState.Cancelled -> {
                 // The fragment should not be rendered in this state,
                 // it should have been replaced by a conclusion fragment
                 setState {
                     copy(
-                            isWaitingFromOther = false,
-                            supportsEmoji = sasTx.supportsEmoji(),
-                            emojiDescription = Fail(Throwable("Transaction Cancelled")),
-                            decimalDescription = Fail(Throwable("Transaction Cancelled"))
+                        isWaitingFromOther = false,
+                        supportsEmoji = sasTx.supportsEmoji(),
+                        emojiDescription = Fail(Throwable("Transaction Cancelled")),
+                        decimalDescription = Fail(Throwable("Transaction Cancelled"))
                     )
                 }
             }
-            null                                  -> {
+            null -> {
                 setState {
                     copy(
-                            isWaitingFromOther = false,
-                            emojiDescription = Fail(Throwable("Unknown Transaction")),
-                            decimalDescription = Fail(Throwable("Unknown Transaction"))
+                        isWaitingFromOther = false,
+                        emojiDescription = Fail(Throwable("Unknown Transaction")),
+                        decimalDescription = Fail(Throwable("Unknown Transaction"))
                     )
                 }
             }
-            else                                  -> Unit
+            else -> Unit
         }
     }
 
@@ -166,8 +170,8 @@ class VerificationEmojiCodeViewModel @AssistedInject constructor(
             val matrixItem = session.getUser(args.otherUserId)?.toMatrixItem()
 
             return VerificationEmojiCodeViewState(
-                    transactionId = args.verificationId,
-                    otherUser = matrixItem
+                transactionId = args.verificationId,
+                otherUser = matrixItem
             )
         }
     }

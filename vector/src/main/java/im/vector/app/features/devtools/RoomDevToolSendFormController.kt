@@ -26,7 +26,7 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class RoomDevToolSendFormController @Inject constructor(
-        private val stringProvider: StringProvider
+    private val stringProvider: StringProvider
 ) : TypedEpoxyController<RoomDevToolViewState>() {
 
     var interactionListener: DevToolsInteractionListener? = null

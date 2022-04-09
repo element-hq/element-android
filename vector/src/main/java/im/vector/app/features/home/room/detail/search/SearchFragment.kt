@@ -45,16 +45,16 @@ import javax.inject.Inject
 
 @Parcelize
 data class SearchArgs(
-        val roomId: String,
-        val roomDisplayName: String?,
-        val roomAvatarUrl: String?
+    val roomId: String,
+    val roomDisplayName: String?,
+    val roomAvatarUrl: String?
 ) : Parcelable
 
 class SearchFragment @Inject constructor(
-        private val controller: SearchResultController
+    private val controller: SearchResultController
 ) : VectorBaseFragment<FragmentSearchBinding>(),
-        StateView.EventCallback,
-        SearchResultController.Listener {
+    StateView.EventCallback,
+    SearchResultController.Listener {
 
     private val fragmentArgs: SearchArgs by args()
     private val searchViewModel: SearchViewModel by fragmentViewModel()
@@ -91,15 +91,16 @@ class SearchFragment @Inject constructor(
                 is Loading -> {
                     views.stateView.state = StateView.State.Loading
                 }
-                is Fail    -> {
+                is Fail -> {
                     views.stateView.state = StateView.State.Error(errorFormatter.toHumanReadable(state.asyncSearchRequest.error))
                 }
                 is Success -> {
                     views.stateView.state = StateView.State.Empty(
-                            title = getString(R.string.search_no_results),
-                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results))
+                        title = getString(R.string.search_no_results),
+                        image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results)
+                    )
                 }
-                else       -> Unit
+                else -> Unit
             }
         } else {
             controller.setData(state)
@@ -117,7 +118,7 @@ class SearchFragment @Inject constructor(
     }
 
     override fun onItemClicked(event: Event) =
-            navigateToEvent(event)
+        navigateToEvent(event)
 
     /**
      * Navigate and highlight the event. If this is a thread event,
@@ -128,11 +129,12 @@ class SearchFragment @Inject constructor(
         val roomId = event.roomId ?: return
         event.getRootThreadEventId()?.let {
             val threadTimelineArgs = ThreadTimelineArgs(
-                    roomId = roomId,
-                    displayName = fragmentArgs.roomDisplayName,
-                    avatarUrl = fragmentArgs.roomAvatarUrl,
-                    roomEncryptionTrustLevel = null,
-                    rootThreadEventId = it)
+                roomId = roomId,
+                displayName = fragmentArgs.roomDisplayName,
+                avatarUrl = fragmentArgs.roomAvatarUrl,
+                roomEncryptionTrustLevel = null,
+                rootThreadEventId = it
+            )
             navigator.openThread(requireContext(), threadTimelineArgs, event.eventId)
         } ?: navigator.openRoom(requireContext(), roomId, event.eventId)
     }

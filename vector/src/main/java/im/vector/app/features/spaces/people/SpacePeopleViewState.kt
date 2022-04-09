@@ -22,10 +22,10 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.platform.GenericIdArgs
 
 data class SpacePeopleViewState(
-        val spaceId: String,
-        val createAndInviteState: Async<String> = Uninitialized
+    val spaceId: String,
+    val createAndInviteState: Async<String> = Uninitialized
 ) : MavericksState {
     constructor(args: GenericIdArgs) : this(
-            spaceId = args.id
+        spaceId = args.id
     )
 }

@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.Content
  * Currently used types are defined in [RoomAccountDataTypes].
  */
 data class RoomAccountDataEvent(
-        val roomId: String,
-        val type: String,
-        val content: Content
+    val roomId: String,
+    val type: String,
+    val content: Content
 )

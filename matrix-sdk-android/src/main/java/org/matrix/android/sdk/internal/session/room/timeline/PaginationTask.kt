@@ -26,25 +26,25 @@ import javax.inject.Inject
 internal interface PaginationTask : Task<PaginationTask.Params, TokenChunkEventPersistor.Result> {
 
     data class Params(
-            val roomId: String,
-            val from: String,
-            val direction: PaginationDirection,
-            val limit: Int
+        val roomId: String,
+        val from: String,
+        val direction: PaginationDirection,
+        val limit: Int
     )
 }
 
 internal class DefaultPaginationTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val filterRepository: FilterRepository,
-        private val tokenChunkEventPersistor: TokenChunkEventPersistor,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    private val filterRepository: FilterRepository,
+    private val tokenChunkEventPersistor: TokenChunkEventPersistor,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : PaginationTask {
 
     override suspend fun execute(params: PaginationTask.Params): TokenChunkEventPersistor.Result {
         val filter = filterRepository.getRoomFilter()
         val chunk = executeRequest(
-                globalErrorReceiver,
-                canRetry = true
+            globalErrorReceiver,
+            canRetry = true
         ) {
             roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)
         }

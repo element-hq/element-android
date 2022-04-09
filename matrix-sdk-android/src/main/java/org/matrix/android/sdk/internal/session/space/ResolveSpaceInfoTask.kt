@@ -24,17 +24,17 @@ import javax.inject.Inject
 
 internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, SpacesResponse> {
     data class Params(
-            val spaceId: String,
-            val limit: Int?,
-            val maxDepth: Int?,
-            val from: String?,
-            val suggestedOnly: Boolean?
+        val spaceId: String,
+        val limit: Int?,
+        val maxDepth: Int?,
+        val from: String?,
+        val suggestedOnly: Boolean?
     )
 }
 
 internal class DefaultResolveSpaceInfoTask @Inject constructor(
-        private val spaceApi: SpaceApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val spaceApi: SpaceApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : ResolveSpaceInfoTask {
 
     override suspend fun execute(params: ResolveSpaceInfoTask.Params) = executeRequest(globalErrorReceiver) {
@@ -46,20 +46,20 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
     }
 
     private suspend fun getSpaceHierarchy(params: ResolveSpaceInfoTask.Params) =
-            spaceApi.getSpaceHierarchy(
-                    spaceId = params.spaceId,
-                    suggestedOnly = params.suggestedOnly,
-                    limit = params.limit,
-                    maxDepth = params.maxDepth,
-                    from = params.from,
-            )
+        spaceApi.getSpaceHierarchy(
+            spaceId = params.spaceId,
+            suggestedOnly = params.suggestedOnly,
+            limit = params.limit,
+            maxDepth = params.maxDepth,
+            from = params.from,
+        )
 
     private suspend fun getUnstableSpaceHierarchy(params: ResolveSpaceInfoTask.Params) =
-            spaceApi.getSpaceHierarchyUnstable(
-                    spaceId = params.spaceId,
-                    suggestedOnly = params.suggestedOnly,
-                    limit = params.limit,
-                    maxDepth = params.maxDepth,
-                    from = params.from,
-            )
+        spaceApi.getSpaceHierarchyUnstable(
+            spaceId = params.spaceId,
+            suggestedOnly = params.suggestedOnly,
+            limit = params.limit,
+            maxDepth = params.maxDepth,
+            from = params.from,
+        )
 }

@@ -27,14 +27,14 @@ import javax.inject.Inject
 internal interface CleanRawCacheTask : Task<Unit, Unit>
 
 internal class DefaultCleanRawCacheTask @Inject constructor(
-        @GlobalDatabase private val monarchy: Monarchy
+    @GlobalDatabase private val monarchy: Monarchy
 ) : CleanRawCacheTask {
 
     override suspend fun execute(params: Unit) {
         monarchy.awaitTransaction { realm ->
             realm.where<RawCacheEntity>()
-                    .findAll()
-                    .deleteAllFromRealm()
+                .findAll()
+                .deleteAllFromRealm()
         }
     }
 }

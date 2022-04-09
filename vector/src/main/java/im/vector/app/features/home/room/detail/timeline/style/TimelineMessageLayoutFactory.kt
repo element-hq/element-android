@@ -34,34 +34,36 @@ import org.matrix.android.sdk.api.session.room.timeline.isEdition
 import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import javax.inject.Inject
 
-class TimelineMessageLayoutFactory @Inject constructor(private val session: Session,
-                                                       private val layoutSettingsProvider: TimelineLayoutSettingsProvider,
-                                                       private val localeProvider: LocaleProvider,
-                                                       private val resources: Resources,
-                                                       private val vectorPreferences: VectorPreferences) {
+class TimelineMessageLayoutFactory @Inject constructor(
+    private val session: Session,
+    private val layoutSettingsProvider: TimelineLayoutSettingsProvider,
+    private val localeProvider: LocaleProvider,
+    private val resources: Resources,
+    private val vectorPreferences: VectorPreferences
+) {
 
     companion object {
         // Can be rendered in bubbles, other types will fallback to default
         private val EVENT_TYPES_WITH_BUBBLE_LAYOUT = setOf(
-                EventType.MESSAGE,
-                EventType.ENCRYPTED,
-                EventType.STICKER
+            EventType.MESSAGE,
+            EventType.ENCRYPTED,
+            EventType.STICKER
         ) + EventType.POLL_START
 
         // Can't be rendered in bubbles, so get back to default layout
         private val MSG_TYPES_WITHOUT_BUBBLE_LAYOUT = setOf(
-                MessageType.MSGTYPE_VERIFICATION_REQUEST
+            MessageType.MSGTYPE_VERIFICATION_REQUEST
         )
 
         // Use the bubble layout but without borders
         private val MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT = setOf(
-                MessageType.MSGTYPE_IMAGE,
-                MessageType.MSGTYPE_VIDEO,
-                MessageType.MSGTYPE_STICKER_LOCAL,
-                MessageType.MSGTYPE_EMOTE
+            MessageType.MSGTYPE_IMAGE,
+            MessageType.MSGTYPE_VIDEO,
+            MessageType.MSGTYPE_STICKER_LOCAL,
+            MessageType.MSGTYPE_EMOTE
         )
         private val MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY = setOf(
-                MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_VIDEO
+            MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_VIDEO
         )
     }
 
@@ -70,7 +72,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
     }
 
     private val isRTL: Boolean by lazy {
-       localeProvider.isRTL()
+        localeProvider.isRTL()
     }
 
     fun create(params: TimelineItemFactoryParams): TimelineMessageLayout {
@@ -84,7 +86,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                ?: false
+            ?: false
 
         val showInformation = addDaySeparator ||
                 event.senderInfo.avatarUrl != nextDisplayableEvent?.senderInfo?.avatarUrl ||
@@ -110,20 +112,20 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                             prevDisplayableEvent.root.localDateTime().toLocalDate() != date.toLocalDate()
 
                     val cornersRadius = buildCornersRadius(
-                            isIncoming = !isSentByMe,
-                            isFirstFromThisSender = isFirstFromThisSender,
-                            isLastFromThisSender = isLastFromThisSender
+                        isIncoming = !isSentByMe,
+                        isFirstFromThisSender = isFirstFromThisSender,
+                        isLastFromThisSender = isLastFromThisSender
                     )
 
                     val messageContent = event.getLastMessageContent()
                     TimelineMessageLayout.Bubble(
-                            showAvatar = showInformation && !isSentByMe,
-                            showDisplayName = showInformation && !isSentByMe,
-                            addTopMargin = isFirstFromThisSender && isSentByMe,
-                            isIncoming = !isSentByMe,
-                            cornersRadius = cornersRadius,
-                            isPseudoBubble = messageContent.isPseudoBubble(),
-                            timestampAsOverlay = messageContent.timestampAsOverlay()
+                        showAvatar = showInformation && !isSentByMe,
+                        showDisplayName = showInformation && !isSentByMe,
+                        addTopMargin = isFirstFromThisSender && isSentByMe,
+                        isIncoming = !isSentByMe,
+                        cornersRadius = cornersRadius,
+                        isPseudoBubble = messageContent.isPseudoBubble(),
+                        timestampAsOverlay = messageContent.timestampAsOverlay()
                     )
                 } else {
                     buildModernLayout(showInformation)
@@ -156,28 +158,30 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
 
     private fun buildModernLayout(showInformation: Boolean): TimelineMessageLayout.Default {
         return TimelineMessageLayout.Default(
-                showAvatar = showInformation,
-                showDisplayName = showInformation,
-                showTimestamp = showInformation || vectorPreferences.alwaysShowTimeStamps()
+            showAvatar = showInformation,
+            showDisplayName = showInformation,
+            showTimestamp = showInformation || vectorPreferences.alwaysShowTimeStamps()
         )
     }
 
-    private fun buildCornersRadius(isIncoming: Boolean,
-                                   isFirstFromThisSender: Boolean,
-                                   isLastFromThisSender: Boolean): TimelineMessageLayout.Bubble.CornersRadius {
+    private fun buildCornersRadius(
+        isIncoming: Boolean,
+        isFirstFromThisSender: Boolean,
+        isLastFromThisSender: Boolean
+    ): TimelineMessageLayout.Bubble.CornersRadius {
         return if ((isIncoming && !isRTL) || (!isIncoming && isRTL)) {
             TimelineMessageLayout.Bubble.CornersRadius(
-                    topStartRadius = if (isFirstFromThisSender) cornerRadius else 0f,
-                    topEndRadius = cornerRadius,
-                    bottomStartRadius = if (isLastFromThisSender) cornerRadius else 0f,
-                    bottomEndRadius = cornerRadius
+                topStartRadius = if (isFirstFromThisSender) cornerRadius else 0f,
+                topEndRadius = cornerRadius,
+                bottomStartRadius = if (isLastFromThisSender) cornerRadius else 0f,
+                bottomEndRadius = cornerRadius
             )
         } else {
             TimelineMessageLayout.Bubble.CornersRadius(
-                    topStartRadius = cornerRadius,
-                    topEndRadius = if (isFirstFromThisSender) cornerRadius else 0f,
-                    bottomStartRadius = cornerRadius,
-                    bottomEndRadius = if (isLastFromThisSender) cornerRadius else 0f
+                topStartRadius = cornerRadius,
+                topEndRadius = if (isFirstFromThisSender) cornerRadius else 0f,
+                bottomStartRadius = cornerRadius,
+                bottomEndRadius = if (isLastFromThisSender) cornerRadius else 0f
             )
         }
     }
@@ -190,10 +194,10 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         return when (event?.root?.getClearType()) {
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL -> true
-            EventType.MESSAGE                 -> {
+            EventType.MESSAGE -> {
                 event.getLastMessageContent() is MessageVerificationRequestContent
             }
-            else                              -> false
+            else -> false
         }
     }
 }

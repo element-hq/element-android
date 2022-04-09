@@ -30,14 +30,14 @@ import javax.net.ssl.HttpsURLConnection
 
 internal interface IsValidClientServerApiTask : Task<IsValidClientServerApiTask.Params, Boolean> {
     data class Params(
-            val homeServerConnectionConfig: HomeServerConnectionConfig
+        val homeServerConnectionConfig: HomeServerConnectionConfig
     )
 }
 
 internal class DefaultIsValidClientServerApiTask @Inject constructor(
-        @Unauthenticated
-        private val okHttpClient: Lazy<OkHttpClient>,
-        private val retrofitFactory: RetrofitFactory
+    @Unauthenticated
+    private val okHttpClient: Lazy<OkHttpClient>,
+    private val retrofitFactory: RetrofitFactory
 ) : IsValidClientServerApiTask {
 
     override suspend fun execute(params: IsValidClientServerApiTask.Params): Boolean {
@@ -45,7 +45,7 @@ internal class DefaultIsValidClientServerApiTask @Inject constructor(
         val homeServerUrl = params.homeServerConnectionConfig.homeServerUriBase.toString()
 
         val authAPI = retrofitFactory.create(client, homeServerUrl)
-                .create(AuthAPI::class.java)
+            .create(AuthAPI::class.java)
 
         return try {
             executeRequest(null) {
@@ -55,7 +55,7 @@ internal class DefaultIsValidClientServerApiTask @Inject constructor(
             true
         } catch (failure: Throwable) {
             if (failure is Failure.OtherServerError &&
-                    failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
                 // Probably not valid
                 false
             } else {
@@ -67,8 +67,8 @@ internal class DefaultIsValidClientServerApiTask @Inject constructor(
 
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
         return okHttpClient.get()
-                .newBuilder()
-                .addSocketFactory(homeServerConnectionConfig)
-                .build()
+            .newBuilder()
+            .addSocketFactory(homeServerConnectionConfig)
+            .build()
     }
 }

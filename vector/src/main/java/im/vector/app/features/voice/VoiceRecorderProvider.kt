@@ -21,7 +21,7 @@ import android.os.Build
 import javax.inject.Inject
 
 class VoiceRecorderProvider @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
     fun provideVoiceRecorder(): VoiceRecorder {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

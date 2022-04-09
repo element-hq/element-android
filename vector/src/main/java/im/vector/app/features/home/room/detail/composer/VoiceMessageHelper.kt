@@ -41,9 +41,9 @@ import javax.inject.Inject
  * Helper class to record audio for voice messages.
  */
 class VoiceMessageHelper @Inject constructor(
-        private val context: Context,
-        private val playbackTracker: VoiceMessagePlaybackTracker,
-        voiceRecorderProvider: VoiceRecorderProvider
+    private val context: Context,
+    private val playbackTracker: VoiceMessagePlaybackTracker,
+    voiceRecorderProvider: VoiceRecorderProvider
 ) {
     private var mediaPlayer: MediaPlayer? = null
     private var voiceRecorder: VoiceRecorder = voiceRecorderProvider.provideVoiceRecorder()
@@ -93,14 +93,14 @@ class VoiceMessageHelper @Inject constructor(
             voiceMessageFile?.let {
                 val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it, "Voice message.${it.extension}")
                 return outputFileUri
-                        .toMultiPickerAudioType(context)
-                        ?.apply {
-                            waveform = if (amplitudeList.size < 50) {
-                                amplitudeList
-                            } else {
-                                amplitudeList.chunked(amplitudeList.size / 50) { items -> items.maxOrNull() ?: 0 }
-                            }
+                    .toMultiPickerAudioType(context)
+                    ?.apply {
+                        waveform = if (amplitudeList.size < 50) {
+                            amplitudeList
+                        } else {
+                            amplitudeList.chunked(amplitudeList.size / 50) { items -> items.maxOrNull() ?: 0 }
                         }
+                    }
             } ?: return null
         } catch (e: FileNotFoundException) {
             Timber.e(e, "Cannot stop voice recording")
@@ -151,11 +151,11 @@ class VoiceMessageHelper @Inject constructor(
             FileInputStream(file).use { fis ->
                 mediaPlayer = MediaPlayer().apply {
                     setAudioAttributes(
-                            AudioAttributes.Builder()
-                                    // Do not use CONTENT_TYPE_SPEECH / USAGE_VOICE_COMMUNICATION because we want to play loud here
-                                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                                    .build()
+                        AudioAttributes.Builder()
+                            // Do not use CONTENT_TYPE_SPEECH / USAGE_VOICE_COMMUNICATION because we want to play loud here
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build()
                     )
                     setDataSource(fis.fd)
                     prepare()

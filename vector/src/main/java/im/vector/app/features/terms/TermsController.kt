@@ -28,7 +28,7 @@ import im.vector.app.features.discovery.settingsSectionTitleItem
 import javax.inject.Inject
 
 class TermsController @Inject constructor(
-        private val errorFormatter: ErrorFormatter
+    private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<ReviewTermsViewState>() {
 
     var description: String? = null
@@ -45,7 +45,7 @@ class TermsController @Inject constructor(
                     id("loading")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 errorWithRetryItem {
                     id("errorRetry")
                     text(host.errorFormatter.toHumanReadable(data.termsList.error))

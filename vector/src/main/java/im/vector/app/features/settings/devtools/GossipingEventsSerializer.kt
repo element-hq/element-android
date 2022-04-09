@@ -38,7 +38,7 @@ class GossipingEventsSerializer {
                 val clearType = it.getClearType()
                 append("[${getFormattedDate(it.ageLocalTs)}] $clearType from:${it.senderId} - ")
                 when (clearType) {
-                    EventType.ROOM_KEY_REQUEST   -> {
+                    EventType.ROOM_KEY_REQUEST -> {
                         val content = it.getClearContent().toModel<RoomKeyShareRequest>()
                         append("reqId:${content?.requestId} action:${content?.action} ")
                         if (content?.action == GossipingToDeviceObject.ACTION_SHARE_REQUEST) {
@@ -55,15 +55,15 @@ class GossipingEventsSerializer {
                             textStyle = "bold"
                         }
                     }
-                    EventType.ROOM_KEY           -> {
+                    EventType.ROOM_KEY -> {
                         val content = it.getClearContent()
                         append("sessionId:${content?.get("session_id")} roomId:${content?.get("room_id")} dest:${content?.get("_dest") ?: "me"}")
                     }
-                    EventType.SEND_SECRET        -> {
+                    EventType.SEND_SECRET -> {
                         val content = it.getClearContent().toModel<SecretSendEventContent>()
                         append("requestId:${content?.requestId} From Device:${it.mxDecryptionResult?.payload?.get("sender_device")}")
                     }
-                    EventType.REQUEST_SECRET     -> {
+                    EventType.REQUEST_SECRET -> {
                         val content = it.getClearContent().toModel<SecretShareRequest>()
                         append("reqId:${content?.requestId} action:${content?.action} ")
                         if (content?.action == GossipingToDeviceObject.ACTION_SHARE_REQUEST) {
@@ -71,10 +71,10 @@ class GossipingEventsSerializer {
                         }
                         append("requestedBy:${content?.requestingDeviceId}")
                     }
-                    EventType.ENCRYPTED          -> {
+                    EventType.ENCRYPTED -> {
                         append("Failed to Decrypt")
                     }
-                    else                         -> {
+                    else -> {
                         append("??")
                     }
                 }
@@ -85,8 +85,8 @@ class GossipingEventsSerializer {
 
     private fun getFormattedDate(ageLocalTs: Long?): String {
         return ageLocalTs
-                ?.let { DateProvider.toLocalDateTime(it) }
-                ?.let { full24DateFormatter.format(it) }
-                ?: "?"
+            ?.let { DateProvider.toLocalDateTime(it) }
+            ?.let { full24DateFormatter.format(it) }
+            ?: "?"
     }
 }

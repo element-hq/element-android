@@ -47,12 +47,12 @@ import javax.inject.Inject
 
 @Parcelize
 data class SpacePreviewArgs(
-        val idOrAlias: String
+    val idOrAlias: String
 ) : Parcelable
 
 class SpacePreviewFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val epoxyController: SpacePreviewController
+    private val avatarRenderer: AvatarRenderer,
+    private val epoxyController: SpacePreviewController
 ) : VectorBaseFragment<FragmentSpacePreviewBinding>() {
 
     private val viewModel by fragmentViewModel(SpacePreviewViewModel::class)
@@ -75,10 +75,10 @@ class SpacePreviewFragment @Inject constructor(
         }
 
         views.roomPreviewNoPreviewToolbar
-                .navigationClicks()
-                .throttleFirst(300)
-                .onEach { sharedActionViewModel.post(SpacePreviewSharedAction.DismissAction) }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .navigationClicks()
+            .throttleFirst(300)
+            .onEach { sharedActionViewModel.post(SpacePreviewSharedAction.DismissAction) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.spacePreviewRecyclerView.configureWith(epoxyController)
 
@@ -121,7 +121,7 @@ class SpacePreviewFragment @Inject constructor(
 
         when (it.inviteTermination) {
             is Loading -> sharedActionViewModel.post(SpacePreviewSharedAction.ShowModalLoading)
-            else       -> sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
+            else -> sharedActionViewModel.post(SpacePreviewSharedAction.HideModalLoading)
         }
     }
 
@@ -142,23 +142,23 @@ class SpacePreviewFragment @Inject constructor(
     }
 
     private fun updateToolbar(spacePreviewState: SpacePreviewState) {
-//        when (val preview = spacePreviewState.peekResult.invoke()) {
-//            is SpacePeekResult.Success -> {
-//                val roomPeekResult = preview.summary.roomPeekResult
+        //        when (val preview = spacePreviewState.peekResult.invoke()) {
+        //            is SpacePeekResult.Success -> {
+        //                val roomPeekResult = preview.summary.roomPeekResult
         val spaceName = spacePreviewState.spaceInfo.invoke()?.name ?: spacePreviewState.name ?: ""
         val spaceAvatarUrl = spacePreviewState.spaceInfo.invoke()?.avatarUrl ?: spacePreviewState.avatarUrl
         val mxItem = MatrixItem.SpaceItem(spacePreviewState.idOrAlias, spaceName, spaceAvatarUrl)
         avatarRenderer.render(mxItem, views.spacePreviewToolbarAvatar)
         views.roomPreviewNoPreviewToolbarTitle.text = spaceName
-//            }
-//            is SpacePeekResult.SpacePeekError,
-//            null -> {
-//                // what to do here?
-//                val mxItem = MatrixItem.RoomItem(spacePreviewState.idOrAlias, spacePreviewState.name, spacePreviewState.avatarUrl)
-//                avatarRenderer.renderSpace(mxItem, views.spacePreviewToolbarAvatar)
-//                views.roomPreviewNoPreviewToolbarTitle.text = spacePreviewState.name
-//            }
-//        }
+        //            }
+        //            is SpacePeekResult.SpacePeekError,
+        //            null -> {
+        //                // what to do here?
+        //                val mxItem = MatrixItem.RoomItem(spacePreviewState.idOrAlias, spacePreviewState.name, spacePreviewState.avatarUrl)
+        //                avatarRenderer.renderSpace(mxItem, views.spacePreviewToolbarAvatar)
+        //                views.roomPreviewNoPreviewToolbarTitle.text = spacePreviewState.name
+        //            }
+        //        }
     }
 
     override fun onStart() {

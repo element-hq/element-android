@@ -58,29 +58,29 @@ private fun storeFailureScreenshot(bitmap: Bitmap, screenshotName: String) {
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         useMediaStoreScreenshotStorage(
-                contentValues,
-                contentResolver,
-                screenshotName,
-                SCREENSHOT_FOLDER_LOCATION,
-                bitmap
+            contentValues,
+            contentResolver,
+            screenshotName,
+            SCREENSHOT_FOLDER_LOCATION,
+            bitmap
         )
     } else {
         usePublicExternalScreenshotStorage(
-                contentValues,
-                contentResolver,
-                screenshotName,
-                SCREENSHOT_FOLDER_LOCATION,
-                bitmap
+            contentValues,
+            contentResolver,
+            screenshotName,
+            SCREENSHOT_FOLDER_LOCATION,
+            bitmap
         )
     }
 }
 
 private fun useMediaStoreScreenshotStorage(
-        contentValues: ContentValues,
-        contentResolver: ContentResolver,
-        screenshotName: String,
-        screenshotLocation: String,
-        bitmap: Bitmap
+    contentValues: ContentValues,
+    contentResolver: ContentResolver,
+    screenshotName: String,
+    screenshotLocation: String,
+    bitmap: Bitmap
 ) {
     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "$screenshotName.jpeg")
     contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, screenshotLocation)
@@ -93,11 +93,11 @@ private fun useMediaStoreScreenshotStorage(
 
 @Suppress("DEPRECATION")
 private fun usePublicExternalScreenshotStorage(
-        contentValues: ContentValues,
-        contentResolver: ContentResolver,
-        screenshotName: String,
-        screenshotLocation: String,
-        bitmap: Bitmap
+    contentValues: ContentValues,
+    contentResolver: ContentResolver,
+    screenshotName: String,
+    screenshotLocation: String,
+    bitmap: Bitmap
 ) {
     val directory = File(Environment.getExternalStoragePublicDirectory(screenshotLocation).toString())
     if (!directory.exists()) {

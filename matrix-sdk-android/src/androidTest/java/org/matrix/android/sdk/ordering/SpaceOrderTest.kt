@@ -26,9 +26,9 @@ class SpaceOrderTest {
     @Test
     fun testOrderBetweenNodesWithOrder() {
         val orderedSpaces = listOf(
-                "roomId1" to "a",
-                "roomId2" to "m",
-                "roomId3" to "z"
+            "roomId1" to "a",
+            "roomId2" to "m",
+            "roomId3" to "z"
         ).assertSpaceOrdered()
 
         val orderCommand = SpaceOrderUtils.orderCommandsForMove(orderedSpaces, "roomId1", 1)
@@ -43,9 +43,9 @@ class SpaceOrderTest {
     @Test
     fun testMoveLastBetweenNodesWithOrder() {
         val orderedSpaces = listOf(
-                "roomId1" to "a",
-                "roomId2" to "m",
-                "roomId3" to "z"
+            "roomId1" to "a",
+            "roomId2" to "m",
+            "roomId3" to "z"
         ).assertSpaceOrdered()
 
         val orderCommand = SpaceOrderUtils.orderCommandsForMove(orderedSpaces, "roomId1", 2)
@@ -59,9 +59,9 @@ class SpaceOrderTest {
     @Test
     fun testMoveUpNoOrder() {
         val orderedSpaces = listOf(
-                "roomId1" to null,
-                "roomId2" to null,
-                "roomId3" to null
+            "roomId1" to null,
+            "roomId2" to null,
+            "roomId3" to null
         ).assertSpaceOrdered()
 
         val orderCommand = SpaceOrderUtils.orderCommandsForMove(orderedSpaces, "roomId1", 1)
@@ -78,9 +78,9 @@ class SpaceOrderTest {
     @Test
     fun testMoveUpNotEnoughSpace() {
         val orderedSpaces = listOf(
-                "roomId1" to "a",
-                "roomId2" to "j",
-                "roomId3" to "k"
+            "roomId1" to "a",
+            "roomId2" to "j",
+            "roomId3" to "k"
         ).assertSpaceOrdered()
 
         val orderCommand = SpaceOrderUtils.orderCommandsForMove(orderedSpaces, "roomId1", 1)
@@ -97,9 +97,9 @@ class SpaceOrderTest {
     @Test
     fun testMoveEndNoOrder() {
         val orderedSpaces = listOf(
-                "roomId1" to null,
-                "roomId2" to null,
-                "roomId3" to null
+            "roomId1" to null,
+            "roomId2" to null,
+            "roomId3" to null
         ).assertSpaceOrdered()
 
         val orderCommand = SpaceOrderUtils.orderCommandsForMove(orderedSpaces, "roomId1", 2)
@@ -117,12 +117,12 @@ class SpaceOrderTest {
     @Test
     fun testMoveUpBiggerOrder() {
         val orderedSpaces = listOf(
-                "roomId1" to "aaaa",
-                "roomId2" to "ffff",
-                "roomId3" to "pppp",
-                "roomId4" to null,
-                "roomId5" to null,
-                "roomId6" to null
+            "roomId1" to "aaaa",
+            "roomId2" to "ffff",
+            "roomId3" to "pppp",
+            "roomId4" to null,
+            "roomId5" to null,
+            "roomId6" to null
         ).assertSpaceOrdered()
 
         val orderCommand = SpaceOrderUtils.orderCommandsForMove(orderedSpaces, "roomId2", 3)
@@ -143,9 +143,9 @@ class SpaceOrderTest {
     @Test
     fun testMoveDownBetweenNodesWithOrder() {
         val orderedSpaces = listOf(
-                "roomId1" to "a",
-                "roomId2" to "m",
-                "roomId3" to "z"
+            "roomId1" to "a",
+            "roomId2" to "m",
+            "roomId3" to "z"
         ).assertSpaceOrdered()
 
         val orderCommand = SpaceOrderUtils.orderCommandsForMove(orderedSpaces, "roomId3", -1)
@@ -163,9 +163,9 @@ class SpaceOrderTest {
     @Test
     fun testMoveDownNoOrder() {
         val orderedSpaces = listOf(
-                "roomId1" to null,
-                "roomId2" to null,
-                "roomId3" to null
+            "roomId1" to null,
+            "roomId2" to null,
+            "roomId3" to null
         ).assertSpaceOrdered()
 
         val orderCommand = SpaceOrderUtils.orderCommandsForMove(orderedSpaces, "roomId3", -1)
@@ -182,12 +182,12 @@ class SpaceOrderTest {
     @Test
     fun testMoveDownBiggerOrder() {
         val orderedSpaces = listOf(
-                "roomId1" to "aaaa",
-                "roomId2" to "ffff",
-                "roomId3" to "pppp",
-                "roomId4" to null,
-                "roomId5" to null,
-                "roomId6" to null
+            "roomId1" to "aaaa",
+            "roomId2" to "ffff",
+            "roomId3" to "pppp",
+            "roomId4" to null,
+            "roomId5" to null,
+            "roomId6" to null
         ).assertSpaceOrdered()
 
         val orderCommand = SpaceOrderUtils.orderCommandsForMove(orderedSpaces, "roomId5", -4)
@@ -207,12 +207,12 @@ class SpaceOrderTest {
     @Test
     fun testMultipleMoveOrder() {
         val orderedSpaces = listOf(
-                "roomId1" to null,
-                "roomId2" to null,
-                "roomId3" to null,
-                "roomId4" to null,
-                "roomId5" to null,
-                "roomId6" to null
+            "roomId1" to null,
+            "roomId2" to null,
+            "roomId3" to null,
+            "roomId4" to null,
+            "roomId5" to null,
+            "roomId6" to null
         ).assertSpaceOrdered()
 
         // move 5 to Top
@@ -238,18 +238,18 @@ class SpaceOrderTest {
     @Test
     fun testComparator() {
         listOf(
-                "roomId2" to "a",
-                "roomId1" to "b",
-                "roomId3" to null,
-                "roomId4" to null
+            "roomId2" to "a",
+            "roomId1" to "b",
+            "roomId3" to null,
+            "roomId4" to null
         ).assertSpaceOrdered()
     }
 
     private fun reOrderWithCommands(orderedSpaces: List<Pair<String, String?>>, orderCommand: List<SpaceOrderUtils.SpaceReOrderCommand>) =
-            orderedSpaces.map { orderInfo ->
-                orderInfo.first to (orderCommand.find { it.spaceId == orderInfo.first }?.order ?: orderInfo.second)
-            }
-                    .sortedWith(testSpaceComparator)
+        orderedSpaces.map { orderInfo ->
+            orderInfo.first to (orderCommand.find { it.spaceId == orderInfo.first }?.order ?: orderInfo.second)
+        }
+            .sortedWith(testSpaceComparator)
 
     private fun List<Pair<String, String?>>.assertSpaceOrdered(): List<Pair<String, String?>> {
         assertEquals(this, this.sortedWith(testSpaceComparator))

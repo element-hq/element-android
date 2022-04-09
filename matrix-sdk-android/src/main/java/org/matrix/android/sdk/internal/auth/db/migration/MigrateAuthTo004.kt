@@ -30,28 +30,28 @@ class MigrateAuthTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
         Timber.d("Update SessionParamsEntity to add HomeServerConnectionConfig.homeServerUriBase value")
 
         val adapter = MoshiProvider.providesMoshi()
-                .adapter(HomeServerConnectionConfig::class.java)
+            .adapter(HomeServerConnectionConfig::class.java)
 
         realm.schema.get("SessionParamsEntity")
-                ?.transform {
-                    val homeserverConnectionConfigJson = it.getString(SessionParamsEntityFields.HOME_SERVER_CONNECTION_CONFIG_JSON)
+            ?.transform {
+                val homeserverConnectionConfigJson = it.getString(SessionParamsEntityFields.HOME_SERVER_CONNECTION_CONFIG_JSON)
 
-                    val homeserverConnectionConfig = adapter
-                            .fromJson(homeserverConnectionConfigJson)
+                val homeserverConnectionConfig = adapter
+                    .fromJson(homeserverConnectionConfigJson)
 
-                    val homeserverUrl = homeserverConnectionConfig?.homeServerUri?.toString()
-                    // Special case for matrix.org. Old session may use "https://matrix.org", newer one may use
-                    // "https://matrix-client.matrix.org". So fix that here
-                    val alteredHomeserverConnectionConfig =
-                            if (homeserverUrl == "https://matrix.org" || homeserverUrl == "https://matrix-client.matrix.org") {
-                                homeserverConnectionConfig.copy(
-                                        homeServerUri = Uri.parse("https://matrix.org"),
-                                        homeServerUriBase = Uri.parse("https://matrix-client.matrix.org")
-                                )
-                            } else {
-                                homeserverConnectionConfig
-                            }
-                    it.set(SessionParamsEntityFields.HOME_SERVER_CONNECTION_CONFIG_JSON, adapter.toJson(alteredHomeserverConnectionConfig))
-                }
+                val homeserverUrl = homeserverConnectionConfig?.homeServerUri?.toString()
+                // Special case for matrix.org. Old session may use "https://matrix.org", newer one may use
+                // "https://matrix-client.matrix.org". So fix that here
+                val alteredHomeserverConnectionConfig =
+                    if (homeserverUrl == "https://matrix.org" || homeserverUrl == "https://matrix-client.matrix.org") {
+                        homeserverConnectionConfig.copy(
+                            homeServerUri = Uri.parse("https://matrix.org"),
+                            homeServerUriBase = Uri.parse("https://matrix-client.matrix.org")
+                        )
+                    } else {
+                        homeserverConnectionConfig
+                    }
+                it.set(SessionParamsEntityFields.HOME_SERVER_CONNECTION_CONFIG_JSON, adapter.toJson(alteredHomeserverConnectionConfig))
+            }
     }
 }

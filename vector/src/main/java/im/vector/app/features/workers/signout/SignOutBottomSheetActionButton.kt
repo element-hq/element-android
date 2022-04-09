@@ -29,7 +29,7 @@ import im.vector.app.databinding.ViewSignOutBottomSheetActionButtonBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class SignOutBottomSheetActionButton @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val views: ViewSignOutBottomSheetActionButtonBinding

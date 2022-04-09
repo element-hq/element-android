@@ -25,8 +25,8 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class JitsiWidgetData(
-        @Json(name = "domain") val domain: String,
-        @Json(name = "conferenceId") val confId: String,
-        @Json(name = "isAudioOnly") val isAudioOnly: Boolean = false,
-        @Json(name = "auth") val auth: String? = null
+    @Json(name = "domain") val domain: String,
+    @Json(name = "conferenceId") val confId: String,
+    @Json(name = "isAudioOnly") val isAudioOnly: Boolean = false,
+    @Json(name = "auth") val auth: String? = null
 )

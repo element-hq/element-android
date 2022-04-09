@@ -18,17 +18,17 @@ package org.matrix.android.sdk.api.session.widgets.model
 
 private val DEFINED_TYPES by lazy {
     listOf(
-            WidgetType.Jitsi,
-            WidgetType.TradingView,
-            WidgetType.Spotify,
-            WidgetType.Video,
-            WidgetType.GoogleDoc,
-            WidgetType.GoogleCalendar,
-            WidgetType.Etherpad,
-            WidgetType.StickerPicker,
-            WidgetType.Grafana,
-            WidgetType.Custom,
-            WidgetType.IntegrationManager
+        WidgetType.Jitsi,
+        WidgetType.TradingView,
+        WidgetType.Spotify,
+        WidgetType.Video,
+        WidgetType.GoogleDoc,
+        WidgetType.GoogleCalendar,
+        WidgetType.Etherpad,
+        WidgetType.StickerPicker,
+        WidgetType.Grafana,
+        WidgetType.Custom,
+        WidgetType.IntegrationManager
     )
 }
 

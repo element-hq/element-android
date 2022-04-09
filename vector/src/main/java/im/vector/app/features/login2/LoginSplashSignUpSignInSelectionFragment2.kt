@@ -32,7 +32,7 @@ import javax.inject.Inject
  * This is the new splash screen
  */
 class LoginSplashSignUpSignInSelectionFragment2 @Inject constructor(
-        private val vectorPreferences: VectorPreferences
+    private val vectorPreferences: VectorPreferences
 ) : AbstractLoginFragment2<FragmentLoginSplash2Binding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplash2Binding {

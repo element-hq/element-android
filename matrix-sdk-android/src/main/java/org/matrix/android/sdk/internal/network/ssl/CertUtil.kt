@@ -129,8 +129,8 @@ internal object CertUtil {
     }
 
     internal data class PinnedSSLSocketFactory(
-            val sslSocketFactory: SSLSocketFactory,
-            val x509TrustManager: X509TrustManager
+        val sslSocketFactory: SSLSocketFactory,
+        val x509TrustManager: X509TrustManager
     )
 
     /**

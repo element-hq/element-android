@@ -36,7 +36,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class SharedSecuredStoragePassphraseFragment @Inject constructor(
-        private val colorProvider: ColorProvider
+    private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentSsssAccessFromPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSsssAccessFromPassphraseBinding {
@@ -52,30 +52,30 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
         val pass = getString(R.string.recovery_passphrase)
         val key = getString(R.string.recovery_key)
         views.ssssRestoreWithPassphraseWarningText.text = getString(
-                R.string.enter_secret_storage_passphrase_or_key,
-                pass,
-                key
+            R.string.enter_secret_storage_passphrase_or_key,
+            pass,
+            key
         )
-                .toSpannable()
+            .toSpannable()
         // TODO Restore coloration when we will have a FAQ to open with those terms
         // .colorizeMatchingText(pass, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
         // .colorizeMatchingText(key, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
         views.ssssPassphraseEnterEdittext.editorActionEvents()
-                .throttleFirst(300)
-                .onEach {
-                    if (it.actionId == EditorInfo.IME_ACTION_DONE) {
-                        submit()
-                    }
+            .throttleFirst(300)
+            .onEach {
+                if (it.actionId == EditorInfo.IME_ACTION_DONE) {
+                    submit()
                 }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseEnterEdittext.textChanges()
-                .onEach {
-                    views.ssssPassphraseEnterTil.error = null
-                    views.ssssPassphraseSubmit.isEnabled = it.isNotBlank()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                views.ssssPassphraseEnterTil.error = null
+                views.ssssPassphraseSubmit.isEnabled = it.isNotBlank()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseReset.views.bottomSheetActionClickableZone.debouncedClicks {
             sharedViewModel.handle(SharedSecureStorageAction.ForgotResetAll)
@@ -86,7 +86,7 @@ class SharedSecuredStoragePassphraseFragment @Inject constructor(
                 is SharedSecureStorageViewEvent.InlineError -> {
                     views.ssssPassphraseEnterTil.error = it.message
                 }
-                else                                        -> Unit
+                else -> Unit
             }
         }
 

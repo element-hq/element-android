@@ -32,19 +32,19 @@ import timber.log.Timber
 
 @Parcelize
 data class RoomPreviewData(
-        val roomId: String,
-        val eventId: String? = null,
-        val roomName: String? = null,
-        val roomAlias: String? = null,
-        val roomType: String? = null,
-        val topic: String? = null,
-        val numJoinedMembers: Int? = null,
-        val worldReadable: Boolean = false,
-        val avatarUrl: String? = null,
-        val homeServers: List<String> = emptyList(),
-        val peekFromServer: Boolean = false,
-        val buildTask: Boolean = false,
-        val fromEmailInvite: PermalinkData.RoomEmailInviteLink? = null
+    val roomId: String,
+    val eventId: String? = null,
+    val roomName: String? = null,
+    val roomAlias: String? = null,
+    val roomType: String? = null,
+    val topic: String? = null,
+    val numJoinedMembers: Int? = null,
+    val worldReadable: Boolean = false,
+    val avatarUrl: String? = null,
+    val homeServers: List<String> = emptyList(),
+    val peekFromServer: Boolean = false,
+    val buildTask: Boolean = false,
+    val fromEmailInvite: PermalinkData.RoomEmailInviteLink? = null
 ) : Parcelable {
     val matrixItem: MatrixItem
         get() = MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
@@ -64,14 +64,14 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
         fun newIntent(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData): Intent {
             val roomPreviewData = RoomPreviewData(
-                    roomId = publicRoom.roomId,
-                    roomName = publicRoom.name,
-                    roomAlias = publicRoom.getPrimaryAlias(),
-                    topic = publicRoom.topic,
-                    numJoinedMembers = publicRoom.numJoinedMembers,
-                    worldReadable = publicRoom.worldReadable,
-                    avatarUrl = publicRoom.avatarUrl,
-                    homeServers = listOfNotNull(roomDirectoryData.homeServer)
+                roomId = publicRoom.roomId,
+                roomName = publicRoom.name,
+                roomAlias = publicRoom.getPrimaryAlias(),
+                topic = publicRoom.topic,
+                numJoinedMembers = publicRoom.numJoinedMembers,
+                worldReadable = publicRoom.worldReadable,
+                avatarUrl = publicRoom.avatarUrl,
+                homeServers = listOfNotNull(roomDirectoryData.homeServer)
             )
             return newIntent(context, roomPreviewData)
         }

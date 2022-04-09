@@ -24,35 +24,35 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class RoomKeyWithHeldContent(
 
-        /**
-         * Required if code is not m.no_olm. The ID of the room that the session belongs to.
-         */
-        @Json(name = "room_id") val roomId: String? = null,
+    /**
+     * Required if code is not m.no_olm. The ID of the room that the session belongs to.
+     */
+    @Json(name = "room_id") val roomId: String? = null,
 
-        /**
-         * Required. The encryption algorithm that the key is for.
-         */
-        @Json(name = "algorithm") val algorithm: String? = null,
+    /**
+     * Required. The encryption algorithm that the key is for.
+     */
+    @Json(name = "algorithm") val algorithm: String? = null,
 
-        /**
-         *  Required if code is not m.no_olm. The ID of the session.
-         */
-        @Json(name = "session_id") val sessionId: String? = null,
+    /**
+     *  Required if code is not m.no_olm. The ID of the session.
+     */
+    @Json(name = "session_id") val sessionId: String? = null,
 
-        /**
-         * Required. The key of the session creator.
-         */
-        @Json(name = "sender_key") val senderKey: String? = null,
+    /**
+     * Required. The key of the session creator.
+     */
+    @Json(name = "sender_key") val senderKey: String? = null,
 
-        /**
-         *  Required. A machine-readable code for why the key was not sent
-         */
-        @Json(name = "code") val codeString: String? = null,
+    /**
+     *  Required. A machine-readable code for why the key was not sent
+     */
+    @Json(name = "code") val codeString: String? = null,
 
-        /**
-         *  A human-readable reason for why the key was not sent. The receiving client should only use this string if it does not understand the code.
-         */
-        @Json(name = "reason") val reason: String? = null
+    /**
+     *  A human-readable reason for why the key was not sent. The receiving client should only use this string if it does not understand the code.
+     */
+    @Json(name = "reason") val reason: String? = null
 
 ) {
     val code: WithHeldCode?
@@ -92,12 +92,12 @@ enum class WithHeldCode(val value: String) {
     companion object {
         fun fromCode(code: String?): WithHeldCode? {
             return when (code) {
-                BLACKLISTED.value  -> BLACKLISTED
-                UNVERIFIED.value   -> UNVERIFIED
+                BLACKLISTED.value -> BLACKLISTED
+                UNVERIFIED.value -> UNVERIFIED
                 UNAUTHORISED.value -> UNAUTHORISED
-                UNAVAILABLE.value  -> UNAVAILABLE
-                NO_OLM.value       -> NO_OLM
-                else               -> null
+                UNAVAILABLE.value -> UNAVAILABLE
+                NO_OLM.value -> NO_OLM
+                else -> null
             }
         }
     }

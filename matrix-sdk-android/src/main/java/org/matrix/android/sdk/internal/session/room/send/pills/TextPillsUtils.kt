@@ -28,9 +28,9 @@ import javax.inject.Inject
  * formatted text to send them as a Matrix messages.
  */
 internal class TextPillsUtils @Inject constructor(
-        private val mentionLinkSpecComparator: MentionLinkSpecComparator,
-        private val displayNameResolver: DisplayNameResolver,
-        private val permalinkService: PermalinkService
+    private val mentionLinkSpecComparator: MentionLinkSpecComparator,
+    private val displayNameResolver: DisplayNameResolver,
+    private val permalinkService: PermalinkService
 ) {
 
     /**
@@ -52,13 +52,13 @@ internal class TextPillsUtils @Inject constructor(
     private fun transformPills(text: CharSequence, template: String): String? {
         val spannableString = SpannableString.valueOf(text)
         val pills = spannableString
-                ?.getSpans(0, text.length, MatrixItemSpan::class.java)
-                ?.map { MentionLinkSpec(it, spannableString.getSpanStart(it), spannableString.getSpanEnd(it)) }
-                // we use the raw text for @room notification instead of a link
-                ?.filterNot { it.span.matrixItem is MatrixItem.EveryoneInRoomItem }
-                ?.toMutableList()
-                ?.takeIf { it.isNotEmpty() }
-                ?: return null
+            ?.getSpans(0, text.length, MatrixItemSpan::class.java)
+            ?.map { MentionLinkSpec(it, spannableString.getSpanStart(it), spannableString.getSpanEnd(it)) }
+            // we use the raw text for @room notification instead of a link
+            ?.filterNot { it.span.matrixItem is MatrixItem.EveryoneInRoomItem }
+            ?.toMutableList()
+            ?.takeIf { it.isNotEmpty() }
+            ?: return null
 
         // we need to prune overlaps!
         pruneOverlaps(pills)
@@ -90,7 +90,7 @@ internal class TextPillsUtils @Inject constructor(
             // test if there is an overlap
             if (b.start in a.start until a.end) {
                 when {
-                    b.end <= a.end                    ->
+                    b.end <= a.end ->
                         // b is inside a -> b should be removed
                         remove = i + 1
                     a.end - a.start > b.end - b.start ->

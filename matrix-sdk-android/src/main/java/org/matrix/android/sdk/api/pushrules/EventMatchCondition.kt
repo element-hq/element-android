@@ -23,19 +23,19 @@ import org.matrix.android.sdk.internal.util.simpleGlobToRegExp
 import timber.log.Timber
 
 class EventMatchCondition(
-        /**
-         * The dot-separated field of the event to match, e.g. content.body
-         */
-        val key: String,
-        /**
-         * The glob-style pattern to match against. Patterns with no special glob characters should
-         * be treated as having asterisks prepended and appended when testing the condition.
-         */
-        val pattern: String,
-        /**
-         * true to match only words. In this case pattern will not be considered as a glob
-         */
-        val wordsOnly: Boolean
+    /**
+     * The dot-separated field of the event to match, e.g. content.body
+     */
+    val key: String,
+    /**
+     * The glob-style pattern to match against. Patterns with no special glob characters should
+     * be treated as having asterisks prepended and appended when testing the condition.
+     */
+    val pattern: String,
+    /**
+     * true to match only words. In this case pattern will not be considered as a glob
+     */
+    val wordsOnly: Boolean
 ) : Condition {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
@@ -47,7 +47,7 @@ class EventMatchCondition(
     fun isSatisfied(event: Event): Boolean {
         // TODO encrypted events?
         val rawJson = MoshiProvider.providesMoshi().adapter(Event::class.java).toJsonValue(event) as? Map<*, *>
-                ?: return false
+            ?: return false
         val value = extractField(rawJson, key) ?: return false
 
         // Patterns with no special glob characters should be treated as having asterisks prepended

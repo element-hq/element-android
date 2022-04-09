@@ -23,10 +23,10 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class RoomSummaryPagedController(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory
+    private val roomSummaryItemFactory: RoomSummaryItemFactory
 ) : PagedListEpoxyController<RoomSummary>(
-        // Important it must match the PageList builder notify Looper
-        modelBuildingHandler = createUIHandler()
+    // Important it must match the PageList builder notify Looper
+    modelBuildingHandler = createUIHandler()
 ), CollapsableControllerExtension {
 
     var listener: RoomListListener? = null

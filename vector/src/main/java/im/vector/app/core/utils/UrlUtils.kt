@@ -32,16 +32,16 @@ fun String.isValidUrl(): Boolean {
  */
 fun String.ensureProtocol(): String {
     return when {
-        isEmpty()           -> this
+        isEmpty() -> this
         !startsWith("http") -> "https://$this"
-        else                -> this
+        else -> this
     }
 }
 
 fun String.ensureTrailingSlash(): String {
     return when {
-        isEmpty()      -> this
+        isEmpty() -> this
         !endsWith("/") -> "$this/"
-        else           -> this
+        else -> this
     }
 }

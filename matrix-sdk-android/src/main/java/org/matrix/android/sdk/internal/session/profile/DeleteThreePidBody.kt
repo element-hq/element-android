@@ -20,12 +20,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class DeleteThreePidBody(
-        /**
-         * Required. The medium of the third party identifier being removed. One of: ["email", "msisdn"]
-         */
-        @Json(name = "medium") val medium: String,
-        /**
-         * Required. The third party address being removed.
-         */
-        @Json(name = "address") val address: String
+    /**
+     * Required. The medium of the third party identifier being removed. One of: ["email", "msisdn"]
+     */
+    @Json(name = "medium") val medium: String,
+    /**
+     * Required. The third party address being removed.
+     */
+    @Json(name = "address") val address: String
 )

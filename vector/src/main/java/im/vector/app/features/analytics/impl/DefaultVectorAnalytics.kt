@@ -40,16 +40,16 @@ private val IGNORED_OPTIONS: Options? = null
 
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
-        postHogFactory: PostHogFactory,
-        analyticsConfig: AnalyticsConfig,
-        private val analyticsStore: AnalyticsStore,
-        private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
-        @NamedGlobalScope private val globalScope: CoroutineScope
+    postHogFactory: PostHogFactory,
+    analyticsConfig: AnalyticsConfig,
+    private val analyticsStore: AnalyticsStore,
+    private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
+    @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
 
     private val posthog: PostHog? = when {
         analyticsConfig.isEnabled -> postHogFactory.createPosthog()
-        else                      -> {
+        else -> {
             Timber.tag(analyticsTag.value).w("Analytics is disabled")
             null
         }
@@ -98,12 +98,12 @@ class DefaultVectorAnalytics @Inject constructor(
 
     private fun observeAnalyticsId() {
         getAnalyticsId()
-                .onEach { id ->
-                    Timber.tag(analyticsTag.value).d("Analytics Id updated to '$id'")
-                    analyticsId = id
-                    identifyPostHog()
-                }
-                .launchIn(globalScope)
+            .onEach { id ->
+                Timber.tag(analyticsTag.value).d("Analytics Id updated to '$id'")
+                analyticsId = id
+                identifyPostHog()
+            }
+            .launchIn(globalScope)
     }
 
     private suspend fun identifyPostHog() {
@@ -119,12 +119,12 @@ class DefaultVectorAnalytics @Inject constructor(
 
     private fun observeUserConsent() {
         getUserConsent()
-                .onEach { consent ->
-                    Timber.tag(analyticsTag.value).d("User consent updated to $consent")
-                    userConsent = consent
-                    optOutPostHog()
-                }
-                .launchIn(globalScope)
+            .onEach { consent ->
+                Timber.tag(analyticsTag.value).d("User consent updated to $consent")
+                userConsent = consent
+                optOutPostHog()
+            }
+            .launchIn(globalScope)
     }
 
     private fun optOutPostHog() {
@@ -134,15 +134,15 @@ class DefaultVectorAnalytics @Inject constructor(
     override fun capture(event: VectorAnalyticsEvent) {
         Timber.tag(analyticsTag.value).d("capture($event)")
         posthog
-                ?.takeIf { userConsent == true }
-                ?.capture(event.getName(), event.getProperties()?.toPostHogProperties())
+            ?.takeIf { userConsent == true }
+            ?.capture(event.getName(), event.getProperties()?.toPostHogProperties())
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
         Timber.tag(analyticsTag.value).d("screen($screen)")
         posthog
-                ?.takeIf { userConsent == true }
-                ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
+            ?.takeIf { userConsent == true }
+            ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {

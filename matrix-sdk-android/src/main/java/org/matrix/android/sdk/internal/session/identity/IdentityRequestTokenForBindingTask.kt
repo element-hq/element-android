@@ -31,16 +31,16 @@ import javax.inject.Inject
 
 internal interface IdentityRequestTokenForBindingTask : Task<IdentityRequestTokenForBindingTask.Params, Unit> {
     data class Params(
-            val threePid: ThreePid,
-            // True to request the identity server to send again the email or the SMS
-            val sendAgain: Boolean
+        val threePid: ThreePid,
+        // True to request the identity server to send again the email or the SMS
+        val sendAgain: Boolean
     )
 }
 
 internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
-        private val identityApiProvider: IdentityApiProvider,
-        private val identityStore: IdentityStore,
-        @UserId private val userId: String
+    private val identityApiProvider: IdentityApiProvider,
+    private val identityStore: IdentityStore,
+    @UserId private val userId: String
 ) : IdentityRequestTokenForBindingTask {
 
     override suspend fun execute(params: IdentityRequestTokenForBindingTask.Params) {
@@ -57,30 +57,34 @@ internal class DefaultIdentityRequestTokenForBindingTask @Inject constructor(
 
         val tokenResponse = executeRequest(null) {
             when (params.threePid) {
-                is ThreePid.Email  -> identityAPI.requestTokenToBindEmail(IdentityRequestTokenForEmailBody(
+                is ThreePid.Email -> identityAPI.requestTokenToBindEmail(
+                    IdentityRequestTokenForEmailBody(
                         clientSecret = clientSecret,
                         sendAttempt = sendAttempt,
                         email = params.threePid.email
-                ))
+                    )
+                )
                 is ThreePid.Msisdn -> {
-                    identityAPI.requestTokenToBindMsisdn(IdentityRequestTokenForMsisdnBody(
+                    identityAPI.requestTokenToBindMsisdn(
+                        IdentityRequestTokenForMsisdnBody(
                             clientSecret = clientSecret,
                             sendAttempt = sendAttempt,
                             phoneNumber = params.threePid.msisdn,
                             countryCode = params.threePid.getCountryCode()
-                    ))
+                        )
+                    )
                 }
             }
         }
 
         // Store client secret, send attempt and sid
         identityStore.storePendingBinding(
-                params.threePid,
-                IdentityPendingBinding(
-                        clientSecret = clientSecret,
-                        sendAttempt = sendAttempt,
-                        sid = tokenResponse.sid
-                )
+            params.threePid,
+            IdentityPendingBinding(
+                clientSecret = clientSecret,
+                sendAttempt = sendAttempt,
+                sid = tokenResponse.sid
+            )
         )
     }
 }

@@ -22,34 +22,34 @@ import com.squareup.moshi.JsonClass
 // RoomSync represents the response for a room during server sync v2.
 @JsonClass(generateAdapter = true)
 data class RoomSync(
-        /**
-         * The state updates for the room.
-         */
-        @Json(name = "state") val state: RoomSyncState? = null,
+    /**
+     * The state updates for the room.
+     */
+    @Json(name = "state") val state: RoomSyncState? = null,
 
-        /**
-         * The timeline of messages and state changes in the room.
-         */
-        @Json(name = "timeline") val timeline: RoomSyncTimeline? = null,
+    /**
+     * The timeline of messages and state changes in the room.
+     */
+    @Json(name = "timeline") val timeline: RoomSyncTimeline? = null,
 
-        /**
-         * The ephemeral events in the room that aren't recorded in the timeline or state of the room (e.g. typing, receipts).
-         */
-        @Json(name = "ephemeral") val ephemeral: LazyRoomSyncEphemeral? = null,
+    /**
+     * The ephemeral events in the room that aren't recorded in the timeline or state of the room (e.g. typing, receipts).
+     */
+    @Json(name = "ephemeral") val ephemeral: LazyRoomSyncEphemeral? = null,
 
-        /**
-         * The account data events for the room (e.g. tags).
-         */
-        @Json(name = "account_data") val accountData: RoomSyncAccountData? = null,
+    /**
+     * The account data events for the room (e.g. tags).
+     */
+    @Json(name = "account_data") val accountData: RoomSyncAccountData? = null,
 
-        /**
-         * The notification counts for the room.
-         */
-        @Json(name = "unread_notifications") val unreadNotifications: RoomSyncUnreadNotifications? = null,
+    /**
+     * The notification counts for the room.
+     */
+    @Json(name = "unread_notifications") val unreadNotifications: RoomSyncUnreadNotifications? = null,
 
-        /**
-         * The room summary
-         */
-        @Json(name = "summary") val summary: RoomSyncSummary? = null
+    /**
+     * The room summary
+     */
+    @Json(name = "summary") val summary: RoomSyncSummary? = null
 
 )

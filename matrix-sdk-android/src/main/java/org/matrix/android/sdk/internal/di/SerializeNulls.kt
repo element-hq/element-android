@@ -31,7 +31,7 @@ annotation class SerializeNulls {
             @Nullable
             override fun create(type: Type, annotations: Set<Annotation>, moshi: Moshi): JsonAdapter<*>? {
                 val nextAnnotations = Types.nextAnnotations(annotations, SerializeNulls::class.java)
-                        ?: return null
+                    ?: return null
                 return moshi.nextAdapter<Any>(this, type, nextAnnotations).serializeNulls()
             }
         }

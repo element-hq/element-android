@@ -22,18 +22,18 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 
 @JsonClass(generateAdapter = true)
 internal data class DeactivateAccountParams(
-        // Set to true to erase all data of the account
-        @Json(name = "erase")
-        val erase: Boolean,
+    // Set to true to erase all data of the account
+    @Json(name = "erase")
+    val erase: Boolean,
 
-        @Json(name = "auth")
-        val auth: Map<String, *>? = null
+    @Json(name = "auth")
+    val auth: Map<String, *>? = null
 ) {
     companion object {
         fun create(auth: UIABaseAuth?, erase: Boolean): DeactivateAccountParams {
             return DeactivateAccountParams(
-                    auth = auth?.asMap(),
-                    erase = erase
+                auth = auth?.asMap(),
+                erase = erase
             )
         }
     }

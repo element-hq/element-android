@@ -23,22 +23,22 @@ import io.realm.RealmObject
  * Decorates room summary with space related information.
  */
 internal open class SpaceChildSummaryEntity(
-//        var isSpace: Boolean = false,
+    //        var isSpace: Boolean = false,
 
-        var order: String? = null,
+    var order: String? = null,
 
-        var autoJoin: Boolean? = null,
+    var autoJoin: Boolean? = null,
 
-        var suggested: Boolean? = null,
+    var suggested: Boolean? = null,
 
-        var childRoomId: String? = null,
-        // Link to the actual space summary if it is known locally
-        var childSummaryEntity: RoomSummaryEntity? = null,
+    var childRoomId: String? = null,
+    // Link to the actual space summary if it is known locally
+    var childSummaryEntity: RoomSummaryEntity? = null,
 
-        var viaServers: RealmList<String> = RealmList()
-//        var owner: RoomSummaryEntity? = null,
+    var viaServers: RealmList<String> = RealmList()
+    //        var owner: RoomSummaryEntity? = null,
 
-//        var level: Int = 0
+    //        var level: Int = 0
 
 ) : RealmObject() {
 

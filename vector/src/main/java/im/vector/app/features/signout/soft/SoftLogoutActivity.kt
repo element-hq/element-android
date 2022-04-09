@@ -59,20 +59,22 @@ class SoftLogoutActivity : LoginActivity() {
 
     private fun handleSoftLogoutViewEvents(softLogoutViewEvents: SoftLogoutViewEvents) {
         when (softLogoutViewEvents) {
-            is SoftLogoutViewEvents.Failure          ->
+            is SoftLogoutViewEvents.Failure ->
                 showError(errorFormatter.toHumanReadable(softLogoutViewEvents.throwable))
             is SoftLogoutViewEvents.ErrorNotSameUser -> {
                 // Pop the backstack
                 supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
                 // And inform the user
-                showError(getString(
+                showError(
+                    getString(
                         R.string.soft_logout_sso_not_same_user_error,
                         softLogoutViewEvents.currentUserId,
-                        softLogoutViewEvents.newUserId)
+                        softLogoutViewEvents.newUserId
+                    )
                 )
             }
-            is SoftLogoutViewEvents.ClearData        -> {
+            is SoftLogoutViewEvents.ClearData -> {
                 MainActivity.restartApp(this, MainActivityArgs(clearCredentials = true))
             }
         }
@@ -80,10 +82,10 @@ class SoftLogoutActivity : LoginActivity() {
 
     private fun showError(message: String) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(message)
-                .setPositiveButton(R.string.ok, null)
-                .show()
+            .setTitle(R.string.dialog_title_error)
+            .setMessage(message)
+            .setPositiveButton(R.string.ok, null)
+            .show()
     }
 
     override fun addFirstFragment() {

@@ -29,35 +29,43 @@ import org.matrix.android.sdk.internal.session.room.RoomGetter
 import javax.inject.Inject
 
 internal class DefaultConditionResolver @Inject constructor(
-        private val roomGetter: RoomGetter,
-        @UserId private val userId: String
+    private val roomGetter: RoomGetter,
+    @UserId private val userId: String
 ) : ConditionResolver {
 
-    override fun resolveEventMatchCondition(event: Event,
-                                            condition: EventMatchCondition): Boolean {
+    override fun resolveEventMatchCondition(
+        event: Event,
+        condition: EventMatchCondition
+    ): Boolean {
         return condition.isSatisfied(event)
     }
 
-    override fun resolveRoomMemberCountCondition(event: Event,
-                                                 condition: RoomMemberCountCondition): Boolean {
+    override fun resolveRoomMemberCountCondition(
+        event: Event,
+        condition: RoomMemberCountCondition
+    ): Boolean {
         return condition.isSatisfied(event, roomGetter)
     }
 
-    override fun resolveSenderNotificationPermissionCondition(event: Event,
-                                                              condition: SenderNotificationPermissionCondition): Boolean {
+    override fun resolveSenderNotificationPermissionCondition(
+        event: Event,
+        condition: SenderNotificationPermissionCondition
+    ): Boolean {
         val roomId = event.roomId ?: return false
         val room = roomGetter.getRoom(roomId) ?: return false
 
         val powerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
-                ?.content
-                ?.toModel<PowerLevelsContent>()
-                ?: PowerLevelsContent()
+            ?.content
+            ?.toModel<PowerLevelsContent>()
+            ?: PowerLevelsContent()
 
         return condition.isSatisfied(event, powerLevelsContent)
     }
 
-    override fun resolveContainsDisplayNameCondition(event: Event,
-                                                     condition: ContainsDisplayNameCondition): Boolean {
+    override fun resolveContainsDisplayNameCondition(
+        event: Event,
+        condition: ContainsDisplayNameCondition
+    ): Boolean {
         val roomId = event.roomId ?: return false
         val room = roomGetter.getRoom(roomId) ?: return false
         val myDisplayName = room.getRoomMember(userId)?.displayName ?: return false

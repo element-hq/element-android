@@ -25,24 +25,24 @@ internal class ThreadSummaryMapper @Inject constructor() {
 
     fun map(threadSummary: ThreadSummaryEntity): ThreadSummary {
         return ThreadSummary(
-                roomId = threadSummary.room?.firstOrNull()?.roomId.orEmpty(),
-                rootEvent = threadSummary.rootThreadEventEntity?.asDomain(),
-                latestEvent = threadSummary.latestThreadEventEntity?.asDomain(),
-                rootEventId = threadSummary.rootThreadEventId.orEmpty(),
-                rootThreadSenderInfo = SenderInfo(
-                        userId = threadSummary.rootThreadEventEntity?.sender ?: "",
-                        displayName = threadSummary.rootThreadSenderName,
-                        isUniqueDisplayName = threadSummary.rootThreadIsUniqueDisplayName,
-                        avatarUrl = threadSummary.rootThreadSenderAvatar
-                ),
-                latestThreadSenderInfo = SenderInfo(
-                        userId = threadSummary.latestThreadEventEntity?.sender ?: "",
-                        displayName = threadSummary.latestThreadSenderName,
-                        isUniqueDisplayName = threadSummary.latestThreadIsUniqueDisplayName,
-                        avatarUrl = threadSummary.latestThreadSenderAvatar
-                ),
-                isUserParticipating = threadSummary.isUserParticipating,
-                numberOfThreads = threadSummary.numberOfThreads
+            roomId = threadSummary.room?.firstOrNull()?.roomId.orEmpty(),
+            rootEvent = threadSummary.rootThreadEventEntity?.asDomain(),
+            latestEvent = threadSummary.latestThreadEventEntity?.asDomain(),
+            rootEventId = threadSummary.rootThreadEventId.orEmpty(),
+            rootThreadSenderInfo = SenderInfo(
+                userId = threadSummary.rootThreadEventEntity?.sender ?: "",
+                displayName = threadSummary.rootThreadSenderName,
+                isUniqueDisplayName = threadSummary.rootThreadIsUniqueDisplayName,
+                avatarUrl = threadSummary.rootThreadSenderAvatar
+            ),
+            latestThreadSenderInfo = SenderInfo(
+                userId = threadSummary.latestThreadEventEntity?.sender ?: "",
+                displayName = threadSummary.latestThreadSenderName,
+                isUniqueDisplayName = threadSummary.latestThreadIsUniqueDisplayName,
+                avatarUrl = threadSummary.latestThreadSenderAvatar
+            ),
+            isUserParticipating = threadSummary.isUserParticipating,
+            numberOfThreads = threadSummary.numberOfThreads
         )
     }
 }

@@ -20,7 +20,7 @@ import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.analytics.plan.UserProperties.FtueUseCaseSelection
 
 fun aUserProperties(
-        ftueUseCase: FtueUseCaseSelection? = FtueUseCaseSelection.Skip
+    ftueUseCase: FtueUseCaseSelection? = FtueUseCaseSelection.Skip
 ) = UserProperties(
-        ftueUseCaseSelection = ftueUseCase
+    ftueUseCaseSelection = ftueUseCase
 )

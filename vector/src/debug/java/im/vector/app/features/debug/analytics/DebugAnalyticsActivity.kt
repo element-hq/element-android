@@ -29,8 +29,8 @@ class DebugAnalyticsActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFragment(
-                    views.simpleFragmentContainer,
-                    DebugAnalyticsFragment::class.java
+                views.simpleFragmentContainer,
+                DebugAnalyticsFragment::class.java
             )
         }
     }

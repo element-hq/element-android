@@ -74,8 +74,8 @@ import androidx.work.Configuration as WorkConfiguration
 
 @HiltAndroidApp
 class VectorApplication :
-        Application(),
-        WorkConfiguration.Provider {
+    Application(),
+    WorkConfiguration.Provider {
 
     lateinit var appContext: Context
     @Inject lateinit var legacySessionImporter: LegacySessionImporter
@@ -105,7 +105,8 @@ class VectorApplication :
     private val powerKeyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             if (intent.action == Intent.ACTION_SCREEN_OFF &&
-                    vectorPreferences.useFlagPinCode()) {
+                vectorPreferences.useFlagPinCode()
+            ) {
                 pinLocker.screenIsOff()
             }
         }
@@ -122,8 +123,8 @@ class VectorApplication :
 
         // Remove Log handler statically added by Jitsi
         Timber.forest()
-                .filterIsInstance(JitsiMeetDefaultLogHandler::class.java)
-                .forEach { Timber.uproot(it) }
+            .filterIsInstance(JitsiMeetDefaultLogHandler::class.java)
+            .forEach { Timber.uproot(it) }
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -140,10 +141,10 @@ class VectorApplication :
         EpoxyController.defaultModelBuildingHandler = EpoxyAsyncUtil.getAsyncBackgroundHandler()
         registerActivityLifecycleCallbacks(VectorActivityLifecycleCallbacks(popupAlertManager))
         val fontRequest = FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                "Noto Color Emoji Compat",
-                R.array.com_google_android_gms_fonts_certs
+            "com.google.android.gms.fonts",
+            "com.google.android.gms",
+            "Noto Color Emoji Compat",
+            R.array.com_google_android_gms_fonts_certs
         )
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
         VectorLocale.init(this)
@@ -211,18 +212,20 @@ class VectorApplication :
 
     private fun enableStrictModeIfNeeded() {
         if (BuildConfig.ENABLE_STRICT_MODE_LOGS) {
-            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
                     .detectAll()
                     .penaltyLog()
-                    .build())
+                    .build()
+            )
         }
     }
 
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()
-                .setWorkerFactory(matrix.workerFactory())
-                .setExecutor(Executors.newCachedThreadPool())
-                .build()
+            .setWorkerFactory(matrix.workerFactory())
+            .setExecutor(Executors.newCachedThreadPool())
+            .build()
     }
 
     private fun logInfo() {

@@ -27,7 +27,7 @@ import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 
 class CreateNewRoomRobot(
-        var createdRoom: Boolean = false
+    var createdRoom: Boolean = false
 ) {
 
     fun createRoom(block: RoomDetailRobot.() -> Unit) {

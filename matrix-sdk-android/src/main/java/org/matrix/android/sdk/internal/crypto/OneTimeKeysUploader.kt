@@ -35,10 +35,10 @@ const val FALLBACK_KEY_FORGET_DELAY = 60 * 60_000L
 
 @SessionScope
 internal class OneTimeKeysUploader @Inject constructor(
-        private val olmDevice: MXOlmDevice,
-        private val objectSigner: ObjectSigner,
-        private val uploadKeysTask: UploadKeysTask,
-        context: Context
+    private val olmDevice: MXOlmDevice,
+    private val objectSigner: ObjectSigner,
+    private val uploadKeysTask: UploadKeysTask,
+    context: Context
 ) {
     // tell if there is a OTK check in progress
     private var oneTimeKeyCheckInProgress = false
@@ -86,11 +86,11 @@ internal class OneTimeKeysUploader @Inject constructor(
         oneTimeKeyCheckInProgress = true
 
         val oneTimeKeyCountFromSync = oneTimeKeyCount
-                ?: fetchOtkCount() // we don't have count from sync so get from server
-                ?: return Unit.also {
-                    oneTimeKeyCheckInProgress = false
-                    Timber.w("maybeUploadOneTimeKeys: Failed to get otk count from server")
-                }
+            ?: fetchOtkCount() // we don't have count from sync so get from server
+            ?: return Unit.also {
+                oneTimeKeyCheckInProgress = false
+                Timber.w("maybeUploadOneTimeKeys: Failed to get otk count from server")
+            }
 
         Timber.d("maybeUploadOneTimeKeys: otk count $oneTimeKeyCountFromSync , unpublished fallback key ${olmDevice.hasUnpublishedFallbackKey()}")
 
@@ -225,9 +225,9 @@ internal class OneTimeKeysUploader @Inject constructor(
         // For now, we set the device id explicitly, as we may not be using the
         // same one as used in login.
         val uploadParams = UploadKeysTask.Params(
-                deviceKeys = null,
-                oneTimeKeys = oneTimeJson,
-                fallbackKeys = fallbackJson.takeIf { fallbackJson.isNotEmpty() }
+            deviceKeys = null,
+            oneTimeKeys = oneTimeJson,
+            fallbackKeys = fallbackJson.takeIf { fallbackJson.isNotEmpty() }
         )
         return uploadKeysTask.executeRetry(uploadParams, 3)
     }

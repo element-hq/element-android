@@ -27,9 +27,9 @@ class MigrateCryptoTo001Legacy(realm: DynamicRealm) : RealmMigrator(realm, 1) {
         Timber.d("Add field lastReceivedMessageTs (Long) and set the value to 0")
 
         realm.schema.get("OlmSessionEntity")
-                ?.addField(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, Long::class.java)
-                ?.transform {
-                    it.setLong(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, 0)
-                }
+            ?.addField(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, Long::class.java)
+            ?.transform {
+                it.setLong(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, 0)
+            }
     }
 }

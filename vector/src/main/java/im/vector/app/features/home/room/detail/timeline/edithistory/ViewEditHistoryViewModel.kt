@@ -36,14 +36,14 @@ import timber.log.Timber
 import java.util.UUID
 
 class ViewEditHistoryViewModel @AssistedInject constructor(
-        @Assisted initialState: ViewEditHistoryViewState,
-        private val session: Session
+    @Assisted initialState: ViewEditHistoryViewState,
+    private val session: Session
 ) : VectorViewModel<ViewEditHistoryViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val roomId = initialState.roomId
     private val eventId = initialState.eventId
     private val room = session.getRoom(roomId)
-            ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
+        ?: throw IllegalStateException("Shouldn't use this ViewModel without a room")
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<ViewEditHistoryViewModel, ViewEditHistoryViewState> {
@@ -79,10 +79,10 @@ class ViewEditHistoryViewModel @AssistedInject constructor(
                     try {
                         val result = session.cryptoService().decryptEvent(event, timelineID)
                         event.mxDecryptionResult = OlmDecryptionResult(
-                                payload = result.clearEvent,
-                                senderKey = result.senderCurve25519Key,
-                                keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                                forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                            payload = result.clearEvent,
+                            senderKey = result.senderCurve25519Key,
+                            keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
                         )
                     } catch (e: MXCryptoError) {
                         Timber.w("Failed to decrypt event in history")
@@ -95,8 +95,8 @@ class ViewEditHistoryViewModel @AssistedInject constructor(
             }
             setState {
                 copy(
-                        editList = Success(data),
-                        isOriginalAReply = originalIsReply
+                    editList = Success(data),
+                    isOriginalAReply = originalIsReply
                 )
             }
         }

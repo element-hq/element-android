@@ -38,9 +38,9 @@ private const val adaptiveIconOuterSidesDp = 18
 private const val directShareCategory = BuildConfig.APPLICATION_ID + ".SHORTCUT_SHARE"
 
 class ShortcutCreator @Inject constructor(
-        private val context: Context,
-        private val avatarRenderer: AvatarRenderer,
-        private val dimensionConverter: DimensionConverter
+    private val context: Context,
+    private val avatarRenderer: AvatarRenderer,
+    private val dimensionConverter: DimensionConverter
 ) {
     private val adaptiveIconSize = dimensionConverter.dpToPx(adaptiveIconSizeDp)
     private val adaptiveIconOuterSides = dimensionConverter.dpToPx(adaptiveIconOuterSidesDp)
@@ -63,7 +63,7 @@ class ShortcutCreator @Inject constructor(
             val glideRequests = GlideApp.with(context)
             val matrixItem = roomSummary.toMatrixItem()
             when (useAdaptiveIcon) {
-                true  -> avatarRenderer.adaptiveShortcutDrawable(glideRequests, matrixItem, iconSize, adaptiveIconSize, adaptiveIconOuterSides.toFloat())
+                true -> avatarRenderer.adaptiveShortcutDrawable(glideRequests, matrixItem, iconSize, adaptiveIconSize, adaptiveIconOuterSides.toFloat())
                 false -> avatarRenderer.shortcutDrawable(glideRequests, matrixItem, iconSize)
             }
         } catch (failure: Throwable) {
@@ -76,13 +76,13 @@ class ShortcutCreator @Inject constructor(
         }
 
         return ShortcutInfoCompat.Builder(context, roomSummary.roomId)
-                .setShortLabel(roomSummary.displayName)
-                .setIcon(bitmap?.toProfileImageIcon())
-                .setIntent(intent)
-                .setLongLived(true)
-                .setRank(rank)
-                .setCategories(categories)
-                .build()
+            .setShortLabel(roomSummary.displayName)
+            .setIcon(bitmap?.toProfileImageIcon())
+            .setIntent(intent)
+            .setLongLived(true)
+            .setRank(rank)
+            .setCategories(categories)
+            .build()
     }
 
     private fun Bitmap.toProfileImageIcon(): IconCompat {

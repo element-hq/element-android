@@ -20,18 +20,19 @@ package org.matrix.android.sdk.api.session.room.timeline
  * Data class holding setting values for a [Timeline] instance.
  */
 data class TimelineSettings(
-        /**
-         * The initial number of events to retrieve from cache. You might get less events if you don't have loaded enough yet.
-         */
-        val initialSize: Int,
-        /**
-         * If true, will build read receipts for each event.
-         */
-        val buildReadReceipts: Boolean = true,
-        /**
-         * The root thread eventId if this is a thread timeline, or null if this is NOT a thread timeline
-         */
-        val rootThreadEventId: String? = null) {
+    /**
+     * The initial number of events to retrieve from cache. You might get less events if you don't have loaded enough yet.
+     */
+    val initialSize: Int,
+    /**
+     * If true, will build read receipts for each event.
+     */
+    val buildReadReceipts: Boolean = true,
+    /**
+     * The root thread eventId if this is a thread timeline, or null if this is NOT a thread timeline
+     */
+    val rootThreadEventId: String? = null
+) {
 
     /**
      * Returns true if this is a thread timeline or false otherwise

@@ -47,10 +47,10 @@ private const val CAROUSEL_ROTATION_DELAY_MS = 5000L
 private const val CAROUSEL_TRANSITION_TIME_MS = 500L
 
 class FtueAuthSplashCarouselFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val vectorFeatures: VectorFeatures,
-        private val carouselController: SplashCarouselController,
-        private val carouselStateFactory: SplashCarouselStateFactory
+    private val vectorPreferences: VectorPreferences,
+    private val vectorFeatures: VectorFeatures,
+    private val carouselController: SplashCarouselController,
+    private val carouselStateFactory: SplashCarouselStateFactory
 ) : AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashCarouselBinding {
@@ -130,18 +130,19 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
 
     override fun onError(throwable: Throwable) {
         if (throwable is Failure.NetworkConnection &&
-                throwable.ioException is UnknownHostException) {
+            throwable.ioException is UnknownHostException
+        ) {
             // Invalid homeserver from URL config
             val url = viewModel.getInitialHomeServerUrl().orEmpty()
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.dialog_title_error)
-                    .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
-                    .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
-                        val flow = withState(viewModel) { it.onboardingFlow } ?: OnboardingFlow.SignInSignUp
-                        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = true, flow))
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
+                .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
+                    val flow = withState(viewModel) { it.onboardingFlow } ?: OnboardingFlow.SignInSignUp
+                    viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = true, flow))
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         } else {
             super.onError(throwable)
         }

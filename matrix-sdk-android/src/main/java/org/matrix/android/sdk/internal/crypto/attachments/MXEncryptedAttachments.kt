@@ -39,9 +39,11 @@ internal object MXEncryptedAttachments {
     private const val SECRET_KEY_SPEC_ALGORITHM = "AES"
     private const val MESSAGE_DIGEST_ALGORITHM = "SHA-256"
 
-    fun encrypt(clearStream: InputStream,
-                outputFile: File,
-                progress: ((current: Int, total: Int) -> Unit)): EncryptedFileInfo {
+    fun encrypt(
+        clearStream: InputStream,
+        outputFile: File,
+        progress: ((current: Int, total: Int) -> Unit)
+    ): EncryptedFileInfo {
         val t0 = System.currentTimeMillis()
         val secureRandom = SecureRandom()
         val initVectorBytes = ByteArray(16) { 0.toByte() }
@@ -87,70 +89,70 @@ internal object MXEncryptedAttachments {
         }
 
         return EncryptedFileInfo(
-                url = null,
-                key = EncryptedFileKey(
-                        alg = "A256CTR",
-                        ext = true,
-                        keyOps = listOf("encrypt", "decrypt"),
-                        kty = "oct",
-                        k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))
-                ),
-                iv = Base64.encodeToString(initVectorBytes, Base64.DEFAULT).replace("\n", "").replace("=", ""),
-                hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))),
-                v = "v2"
+            url = null,
+            key = EncryptedFileKey(
+                alg = "A256CTR",
+                ext = true,
+                keyOps = listOf("encrypt", "decrypt"),
+                kty = "oct",
+                k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))
+            ),
+            iv = Base64.encodeToString(initVectorBytes, Base64.DEFAULT).replace("\n", "").replace("=", ""),
+            hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))),
+            v = "v2"
         )
-                .also { Timber.v("Encrypt in ${System.currentTimeMillis() - t0}ms") }
+            .also { Timber.v("Encrypt in ${System.currentTimeMillis() - t0}ms") }
     }
 
-//    fun cipherInputStream(attachmentStream: InputStream, mimetype: String?): Pair<DigestInputStream, EncryptedFileInfo> {
-//        val secureRandom = SecureRandom()
-//
-//        // generate a random iv key
-//        // Half of the IV is random, the lower order bits are zeroed
-//        // such that the counter never wraps.
-//        // See https://github.com/matrix-org/matrix-ios-kit/blob/3dc0d8e46b4deb6669ed44f72ad79be56471354c/MatrixKit/Models/Room/MXEncryptedAttachments.m#L75
-//        val initVectorBytes = ByteArray(16) { 0.toByte() }
-//
-//        val ivRandomPart = ByteArray(8)
-//        secureRandom.nextBytes(ivRandomPart)
-//
-//        System.arraycopy(ivRandomPart, 0, initVectorBytes, 0, ivRandomPart.size)
-//
-//        val key = ByteArray(32)
-//        secureRandom.nextBytes(key)
-//
-//        val encryptCipher = Cipher.getInstance(CIPHER_ALGORITHM)
-//        val secretKeySpec = SecretKeySpec(key, SECRET_KEY_SPEC_ALGORITHM)
-//        val ivParameterSpec = IvParameterSpec(initVectorBytes)
-//        encryptCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
-//
-//        val cipherInputStream = CipherInputStream(attachmentStream, encryptCipher)
-//
-//        // Could it be possible to get the digest on the fly instead of
-//        val info = EncryptedFileInfo(
-//                url = null,
-//                mimetype = mimetype,
-//                key = EncryptedFileKey(
-//                        alg = "A256CTR",
-//                        ext = true,
-//                        key_ops = listOf("encrypt", "decrypt"),
-//                        kty = "oct",
-//                        k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))
-//                ),
-//                iv = Base64.encodeToString(initVectorBytes, Base64.DEFAULT).replace("\n", "").replace("=", ""),
-//                //hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))),
-//                v = "v2"
-//        )
-//
-//        val messageDigest = MessageDigest.getInstance(MESSAGE_DIGEST_ALGORITHM)
-//        return DigestInputStream(cipherInputStream, messageDigest) to info
-//    }
-//
-//    fun updateInfoWithDigest(digestInputStream: DigestInputStream, info: EncryptedFileInfo): EncryptedFileInfo {
-//        return info.copy(
-//                hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(digestInputStream.messageDigest.digest(), Base64.DEFAULT)))
-//        )
-//    }
+    //    fun cipherInputStream(attachmentStream: InputStream, mimetype: String?): Pair<DigestInputStream, EncryptedFileInfo> {
+    //        val secureRandom = SecureRandom()
+    //
+    //        // generate a random iv key
+    //        // Half of the IV is random, the lower order bits are zeroed
+    //        // such that the counter never wraps.
+    //        // See https://github.com/matrix-org/matrix-ios-kit/blob/3dc0d8e46b4deb6669ed44f72ad79be56471354c/MatrixKit/Models/Room/MXEncryptedAttachments.m#L75
+    //        val initVectorBytes = ByteArray(16) { 0.toByte() }
+    //
+    //        val ivRandomPart = ByteArray(8)
+    //        secureRandom.nextBytes(ivRandomPart)
+    //
+    //        System.arraycopy(ivRandomPart, 0, initVectorBytes, 0, ivRandomPart.size)
+    //
+    //        val key = ByteArray(32)
+    //        secureRandom.nextBytes(key)
+    //
+    //        val encryptCipher = Cipher.getInstance(CIPHER_ALGORITHM)
+    //        val secretKeySpec = SecretKeySpec(key, SECRET_KEY_SPEC_ALGORITHM)
+    //        val ivParameterSpec = IvParameterSpec(initVectorBytes)
+    //        encryptCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
+    //
+    //        val cipherInputStream = CipherInputStream(attachmentStream, encryptCipher)
+    //
+    //        // Could it be possible to get the digest on the fly instead of
+    //        val info = EncryptedFileInfo(
+    //                url = null,
+    //                mimetype = mimetype,
+    //                key = EncryptedFileKey(
+    //                        alg = "A256CTR",
+    //                        ext = true,
+    //                        key_ops = listOf("encrypt", "decrypt"),
+    //                        kty = "oct",
+    //                        k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))
+    //                ),
+    //                iv = Base64.encodeToString(initVectorBytes, Base64.DEFAULT).replace("\n", "").replace("=", ""),
+    //                //hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))),
+    //                v = "v2"
+    //        )
+    //
+    //        val messageDigest = MessageDigest.getInstance(MESSAGE_DIGEST_ALGORITHM)
+    //        return DigestInputStream(cipherInputStream, messageDigest) to info
+    //    }
+    //
+    //    fun updateInfoWithDigest(digestInputStream: DigestInputStream, info: EncryptedFileInfo): EncryptedFileInfo {
+    //        return info.copy(
+    //                hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(digestInputStream.messageDigest.digest(), Base64.DEFAULT)))
+    //        )
+    //    }
 
     /***
      * Encrypt an attachment stream.
@@ -205,22 +207,22 @@ internal object MXEncryptedAttachments {
         }
 
         return EncryptionResult(
-                encryptedFileInfo = EncryptedFileInfo(
-                        url = null,
-                        key = EncryptedFileKey(
-                                alg = "A256CTR",
-                                ext = true,
-                                keyOps = listOf("encrypt", "decrypt"),
-                                kty = "oct",
-                                k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))
-                        ),
-                        iv = Base64.encodeToString(initVectorBytes, Base64.DEFAULT).replace("\n", "").replace("=", ""),
-                        hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))),
-                        v = "v2"
+            encryptedFileInfo = EncryptedFileInfo(
+                url = null,
+                key = EncryptedFileKey(
+                    alg = "A256CTR",
+                    ext = true,
+                    keyOps = listOf("encrypt", "decrypt"),
+                    kty = "oct",
+                    k = base64ToBase64Url(Base64.encodeToString(key, Base64.DEFAULT))
                 ),
-                encryptedByteArray = byteArrayOutputStream.toByteArray()
+                iv = Base64.encodeToString(initVectorBytes, Base64.DEFAULT).replace("\n", "").replace("=", ""),
+                hashes = mapOf("sha256" to base64ToUnpaddedBase64(Base64.encodeToString(messageDigest.digest(), Base64.DEFAULT))),
+                v = "v2"
+            ),
+            encryptedByteArray = byteArrayOutputStream.toByteArray()
         )
-                .also { Timber.v("Encrypt in ${System.currentTimeMillis() - t0}ms") }
+            .also { Timber.v("Encrypt in ${System.currentTimeMillis() - t0}ms") }
     }
 
     /**
@@ -231,9 +233,11 @@ internal object MXEncryptedAttachments {
      * @param outputStream     the outputStream where the decrypted attachment will be write.
      * @return true in case of success, false in case of error
      */
-    fun decryptAttachment(attachmentStream: InputStream?,
-                          elementToDecrypt: ElementToDecrypt?,
-                          outputStream: OutputStream): Boolean {
+    fun decryptAttachment(
+        attachmentStream: InputStream?,
+        elementToDecrypt: ElementToDecrypt?,
+        outputStream: OutputStream
+    ): Boolean {
         // sanity checks
         if (null == attachmentStream || elementToDecrypt == null) {
             Timber.e("## decryptAttachment() : null stream")

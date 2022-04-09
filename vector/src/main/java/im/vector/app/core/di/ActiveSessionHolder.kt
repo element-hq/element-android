@@ -31,14 +31,15 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ActiveSessionHolder @Inject constructor(private val activeSessionDataSource: ActiveSessionDataSource,
-                                              private val keyRequestHandler: KeyRequestHandler,
-                                              private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler,
-                                              private val callManager: WebRtcCallManager,
-                                              private val pushRuleTriggerListener: PushRuleTriggerListener,
-                                              private val sessionListener: SessionListener,
-                                              private val imageManager: ImageManager,
-                                              private val guardServiceStarter: GuardServiceStarter
+class ActiveSessionHolder @Inject constructor(
+    private val activeSessionDataSource: ActiveSessionDataSource,
+    private val keyRequestHandler: KeyRequestHandler,
+    private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler,
+    private val callManager: WebRtcCallManager,
+    private val pushRuleTriggerListener: PushRuleTriggerListener,
+    private val sessionListener: SessionListener,
+    private val imageManager: ImageManager,
+    private val guardServiceStarter: GuardServiceStarter
 ) {
 
     private var activeSession: AtomicReference<Session?> = AtomicReference()
@@ -84,12 +85,12 @@ class ActiveSessionHolder @Inject constructor(private val activeSessionDataSourc
 
     fun getActiveSession(): Session {
         return activeSession.get()
-                ?: throw IllegalStateException("You should authenticate before using this")
+            ?: throw IllegalStateException("You should authenticate before using this")
     }
 
     // TODO: Stop sync ?
-//    fun switchToSession(sessionParams: SessionParams) {
-//        val newActiveSession = authenticationService.getSession(sessionParams)
-//        activeSession.set(newActiveSession)
-//    }
+    //    fun switchToSession(sessionParams: SessionParams) {
+    //        val newActiveSession = authenticationService.getSession(sessionParams)
+    //        activeSession.set(newActiveSession)
+    //    }
 }

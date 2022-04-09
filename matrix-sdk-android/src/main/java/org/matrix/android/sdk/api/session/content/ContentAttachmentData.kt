@@ -27,17 +27,17 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class ContentAttachmentData(
-        val size: Long = 0,
-        val duration: Long? = 0,
-        val date: Long = 0,
-        val height: Long? = 0,
-        val width: Long? = 0,
-        val exifOrientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
-        val name: String? = null,
-        val queryUri: Uri,
-        val mimeType: String?,
-        val type: Type,
-        val waveform: List<Int>? = null
+    val size: Long = 0,
+    val duration: Long? = 0,
+    val date: Long = 0,
+    val height: Long? = 0,
+    val width: Long? = 0,
+    val exifOrientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
+    val name: String? = null,
+    val queryUri: Uri,
+    val mimeType: String?,
+    val type: Type,
+    val waveform: List<Int>? = null
 ) : Parcelable {
 
     @JsonClass(generateAdapter = false)

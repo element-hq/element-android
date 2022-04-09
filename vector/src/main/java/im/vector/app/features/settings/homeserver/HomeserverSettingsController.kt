@@ -38,9 +38,9 @@ import org.matrix.android.sdk.api.session.homeserver.RoomVersionStatus
 import javax.inject.Inject
 
 class HomeserverSettingsController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val errorFormatter: ErrorFormatter,
-        private val vectorPreferences: VectorPreferences
+    private val stringProvider: StringProvider,
+    private val errorFormatter: ErrorFormatter,
+    private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<HomeServerSettingsViewState>() {
 
     var callback: Callback? = null
@@ -61,13 +61,13 @@ class HomeserverSettingsController @Inject constructor(
                 loadingItem {
                     id("loading")
                 }
-            is Fail          ->
+            is Fail ->
                 errorWithRetryItem {
                     id("error")
                     text(host.errorFormatter.toHumanReadable(federationVersion.error))
                     listener { host.callback?.retry() }
                 }
-            is Success       ->
+            is Success ->
                 buildFederationVersion(federationVersion())
         }
     }
@@ -153,12 +153,12 @@ class HomeserverSettingsController @Inject constructor(
                         id("room_version_${it.version}")
                         title(it.version.toEpoxyCharSequence())
                         value(
-                                host.stringProvider.getString(
-                                        when (it.status) {
-                                            RoomVersionStatus.STABLE   -> R.string.settings_server_room_version_stable
-                                            RoomVersionStatus.UNSTABLE -> R.string.settings_server_room_version_unstable
-                                        }
-                                )
+                            host.stringProvider.getString(
+                                when (it.status) {
+                                    RoomVersionStatus.STABLE -> R.string.settings_server_room_version_stable
+                                    RoomVersionStatus.UNSTABLE -> R.string.settings_server_room_version_unstable
+                                }
+                            )
                         )
                     }
                 }

@@ -136,7 +136,7 @@ fun startAddGoogleAccountIntent(context: Context, activityResultLauncher: Activi
 @RequiresApi(Build.VERSION_CODES.O)
 fun startInstallFromSourceIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
-            .setData(Uri.parse(String.format("package:%s", context.packageName)))
+        .setData(Uri.parse(String.format("package:%s", context.packageName)))
     try {
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
@@ -144,12 +144,14 @@ fun startInstallFromSourceIntent(context: Context, activityResultLauncher: Activ
     }
 }
 
-fun startSharePlainTextIntent(fragment: Fragment,
-                              activityResultLauncher: ActivityResultLauncher<Intent>?,
-                              chooserTitle: String?,
-                              text: String,
-                              subject: String? = null,
-                              extraTitle: String? = null) {
+fun startSharePlainTextIntent(
+    fragment: Fragment,
+    activityResultLauncher: ActivityResultLauncher<Intent>?,
+    chooserTitle: String?,
+    text: String,
+    subject: String? = null,
+    extraTitle: String? = null
+) {
     val share = Intent(Intent.ACTION_SEND)
     share.type = "text/plain"
     share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)

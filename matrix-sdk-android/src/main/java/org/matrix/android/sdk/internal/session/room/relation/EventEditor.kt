@@ -30,25 +30,29 @@ import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProces
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class EventEditor @Inject constructor(private val eventSenderProcessor: EventSenderProcessor,
-                                               private val eventFactory: LocalEchoEventFactory,
-                                               private val localEchoRepository: LocalEchoRepository) {
+internal class EventEditor @Inject constructor(
+    private val eventSenderProcessor: EventSenderProcessor,
+    private val eventFactory: LocalEchoEventFactory,
+    private val localEchoRepository: LocalEchoRepository
+) {
 
-    fun editTextMessage(targetEvent: TimelineEvent,
-                        msgType: String,
-                        newBodyText: CharSequence,
-                        newBodyAutoMarkdown: Boolean,
-                        compatibilityBodyText: String): Cancelable {
+    fun editTextMessage(
+        targetEvent: TimelineEvent,
+        msgType: String,
+        newBodyText: CharSequence,
+        newBodyAutoMarkdown: Boolean,
+        compatibilityBodyText: String
+    ): Cancelable {
         val roomId = targetEvent.roomId
         if (targetEvent.root.sendState.hasFailed()) {
             // We create a new in memory event for the EventSenderProcessor but we keep the eventId of the failed event.
             val editedEvent = eventFactory.createTextEvent(roomId, msgType, newBodyText, newBodyAutoMarkdown).copy(
-                    eventId = targetEvent.eventId
+                eventId = targetEvent.eventId
             )
             return sendFailedEvent(targetEvent, editedEvent)
         } else if (targetEvent.root.sendState.isSent()) {
             val event = eventFactory
-                    .createReplaceTextEvent(roomId, targetEvent.eventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
+                .createReplaceTextEvent(roomId, targetEvent.eventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
             return sendReplaceEvent(event)
         } else {
             // Should we throw?
@@ -57,19 +61,21 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
         }
     }
 
-    fun editPoll(targetEvent: TimelineEvent,
-                 pollType: PollType,
-                 question: String,
-                 options: List<String>): Cancelable {
+    fun editPoll(
+        targetEvent: TimelineEvent,
+        pollType: PollType,
+        question: String,
+        options: List<String>
+    ): Cancelable {
         val roomId = targetEvent.roomId
         if (targetEvent.root.sendState.hasFailed()) {
             val editedEvent = eventFactory.createPollEvent(roomId, pollType, question, options).copy(
-                    eventId = targetEvent.eventId
+                eventId = targetEvent.eventId
             )
             return sendFailedEvent(targetEvent, editedEvent)
         } else if (targetEvent.root.sendState.isSent()) {
             val event = eventFactory
-                    .createPollReplaceEvent(roomId, pollType, targetEvent.eventId, question, options)
+                .createPollReplaceEvent(roomId, pollType, targetEvent.eventId, question, options)
             return sendReplaceEvent(event)
         } else {
             Timber.w("Can't edit a sending event")
@@ -88,35 +94,37 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
         return eventSenderProcessor.postEvent(editedEvent)
     }
 
-    fun editReply(replyToEdit: TimelineEvent,
-                  originalTimelineEvent: TimelineEvent,
-                  newBodyText: String,
-                  compatibilityBodyText: String): Cancelable {
+    fun editReply(
+        replyToEdit: TimelineEvent,
+        originalTimelineEvent: TimelineEvent,
+        newBodyText: String,
+        compatibilityBodyText: String
+    ): Cancelable {
         val roomId = replyToEdit.roomId
         if (replyToEdit.root.sendState.hasFailed()) {
             // We create a new in memory event for the EventSenderProcessor but we keep the eventId of the failed event.
             val editedEvent = eventFactory.createReplyTextEvent(
-                    roomId = roomId,
-                    eventReplied = originalTimelineEvent,
-                    replyText = newBodyText,
-                    autoMarkdown = false,
-                    showInThread = false
+                roomId = roomId,
+                eventReplied = originalTimelineEvent,
+                replyText = newBodyText,
+                autoMarkdown = false,
+                showInThread = false
             )?.copy(
-                    eventId = replyToEdit.eventId
+                eventId = replyToEdit.eventId
             ) ?: return NoOpCancellable
             updateFailedEchoWithEvent(roomId, replyToEdit.eventId, editedEvent)
             return eventSenderProcessor.postEvent(editedEvent)
         } else if (replyToEdit.root.sendState.isSent()) {
             val event = eventFactory.createReplaceTextOfReply(
-                    roomId,
-                    replyToEdit,
-                    originalTimelineEvent,
-                    newBodyText,
-                    true,
-                    MessageType.MSGTYPE_TEXT,
-                    compatibilityBodyText
+                roomId,
+                replyToEdit,
+                originalTimelineEvent,
+                newBodyText,
+                true,
+                MessageType.MSGTYPE_TEXT,
+                compatibilityBodyText
             )
-                    .also { localEchoRepository.createLocalEcho(it) }
+                .also { localEchoRepository.createLocalEcho(it) }
             return eventSenderProcessor.postEvent(event)
         } else {
             // Should we throw?

@@ -22,5 +22,5 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
 
 @JsonClass(generateAdapter = true)
 data class MessageRelationContent(
-        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
+    @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
 )

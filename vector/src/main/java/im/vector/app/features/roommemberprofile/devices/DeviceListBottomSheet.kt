@@ -37,7 +37,7 @@ import kotlin.reflect.KClass
 
 @AndroidEntryPoint
 class DeviceListBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetWithFragmentsBinding>() {
+    VectorBaseBottomSheetDialogFragment<BottomSheetWithFragmentsBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetWithFragmentsBinding {
         return BottomSheetWithFragmentsBinding.inflate(inflater, container, false)
@@ -51,9 +51,9 @@ class DeviceListBottomSheet :
             when (it) {
                 is DeviceListBottomSheetViewEvents.Verify -> {
                     VerificationBottomSheet.withArgs(
-                            roomId = null,
-                            otherUserId = it.userId,
-                            transactionId = it.txID
+                        roomId = null,
+                        otherUserId = it.userId,
+                        transactionId = it.txID
                     ).show(requireActivity().supportFragmentManager, "REQPOP")
                 }
             }
@@ -96,10 +96,11 @@ class DeviceListBottomSheet :
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             childFragmentManager.commitTransaction {
-                replace(R.id.bottomSheetFragmentContainer,
-                        fragmentClass.java,
-                        bundle,
-                        fragmentClass.simpleName
+                replace(
+                    R.id.bottomSheetFragmentContainer,
+                    fragmentClass.java,
+                    bundle,
+                    fragmentClass.simpleName
                 )
             }
         }
@@ -107,8 +108,8 @@ class DeviceListBottomSheet :
 
     @Parcelize
     data class Args(
-            val userId: String,
-            val allowDeviceAction: Boolean
+        val userId: String,
+        val allowDeviceAction: Boolean
     ) : Parcelable
 
     companion object {

@@ -49,26 +49,26 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         if (intent == null || context == null) return
         Timber.v("NotificationBroadcastReceiver received : $intent")
         when (intent.action) {
-            NotificationUtils.SMART_REPLY_ACTION        ->
+            NotificationUtils.SMART_REPLY_ACTION ->
                 handleSmartReply(intent, context)
             NotificationUtils.DISMISS_ROOM_NOTIF_ACTION ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
                 }
-            NotificationUtils.DISMISS_SUMMARY_ACTION    ->
+            NotificationUtils.DISMISS_SUMMARY_ACTION ->
                 notificationDrawerManager.clearAllEvents()
-            NotificationUtils.MARK_ROOM_READ_ACTION     ->
+            NotificationUtils.MARK_ROOM_READ_ACTION ->
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMessagesForRoom(roomId) }
                     handleMarkAsRead(roomId)
                 }
-            NotificationUtils.JOIN_ACTION               -> {
+            NotificationUtils.JOIN_ACTION -> {
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
                     handleJoinRoom(roomId)
                 }
             }
-            NotificationUtils.REJECT_ACTION             -> {
+            NotificationUtils.REJECT_ACTION -> {
                 intent.getStringExtra(KEY_ROOM_ID)?.let { roomId ->
                     notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(roomId) }
                     handleRejectRoom(roomId)
@@ -132,21 +132,21 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         // Create a new event to be displayed in the notification drawer, right now
 
         val notifiableMessageEvent = NotifiableMessageEvent(
-                // Generate a Fake event id
-                eventId = UUID.randomUUID().toString(),
-                editedEventId = null,
-                noisy = false,
-                timestamp = System.currentTimeMillis(),
-                senderName = session.getRoomMember(session.myUserId, room.roomId)?.displayName
-                        ?: context?.getString(R.string.notification_sender_me),
-                senderId = session.myUserId,
-                body = message,
-                imageUri = null,
-                roomId = room.roomId,
-                roomName = room.roomSummary()?.displayName ?: room.roomId,
-                roomIsDirect = room.roomSummary()?.isDirect == true,
-                outGoingMessage = true,
-                canBeReplaced = false
+            // Generate a Fake event id
+            eventId = UUID.randomUUID().toString(),
+            editedEventId = null,
+            noisy = false,
+            timestamp = System.currentTimeMillis(),
+            senderName = session.getRoomMember(session.myUserId, room.roomId)?.displayName
+                ?: context?.getString(R.string.notification_sender_me),
+            senderId = session.myUserId,
+            body = message,
+            imageUri = null,
+            roomId = room.roomId,
+            roomName = room.roomSummary()?.displayName ?: room.roomId,
+            roomIsDirect = room.roomSummary()?.isDirect == true,
+            outGoingMessage = true,
+            canBeReplaced = false
         )
 
         notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(notifiableMessageEvent) }

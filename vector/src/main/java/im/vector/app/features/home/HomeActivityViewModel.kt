@@ -58,12 +58,12 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 class HomeActivityViewModel @AssistedInject constructor(
-        @Assisted initialState: HomeActivityViewState,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val reAuthHelper: ReAuthHelper,
-        private val analyticsStore: AnalyticsStore,
-        private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val vectorPreferences: VectorPreferences
+    @Assisted initialState: HomeActivityViewState,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val reAuthHelper: ReAuthHelper,
+    private val analyticsStore: AnalyticsStore,
+    private val lightweightSettingsStorage: LightweightSettingsStorage,
+    private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
@@ -91,12 +91,12 @@ class HomeActivityViewModel @AssistedInject constructor(
     private fun observeAnalytics() {
         if (analyticsConfig.isEnabled) {
             analyticsStore.didAskUserConsentFlow
-                    .onEach { didAskUser ->
-                        if (!didAskUser) {
-                            _viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
-                        }
+                .onEach { didAskUser ->
+                    if (!didAskUser) {
+                        _viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
                     }
-                    .launchIn(viewModelScope)
+                }
+                .launchIn(viewModelScope)
         }
     }
 
@@ -109,27 +109,27 @@ class HomeActivityViewModel @AssistedInject constructor(
         val safeActiveSession = activeSessionHolder.getSafeActiveSession() ?: return
 
         onceTrusted = safeActiveSession
-                .cryptoService()
-                .crossSigningService().allPrivateKeysKnown()
+            .cryptoService()
+            .crossSigningService().allPrivateKeysKnown()
 
         safeActiveSession
-                .flow()
-                .liveCrossSigningInfo(safeActiveSession.myUserId)
-                .onEach {
-                    val isVerified = it.getOrNull()?.isTrusted() ?: false
-                    if (!isVerified && onceTrusted) {
-                        // cross signing keys have been reset
-                        // Trigger a popup to re-verify
-                        // Note: user can be null in case of logout
-                        safeActiveSession.getUser(safeActiveSession.myUserId)
-                                ?.toMatrixItem()
-                                ?.let { user ->
-                                    _viewEvents.post(HomeActivityViewEvents.OnCrossSignedInvalidated(user))
-                                }
-                    }
-                    onceTrusted = isVerified
+            .flow()
+            .liveCrossSigningInfo(safeActiveSession.myUserId)
+            .onEach {
+                val isVerified = it.getOrNull()?.isTrusted() ?: false
+                if (!isVerified && onceTrusted) {
+                    // cross signing keys have been reset
+                    // Trigger a popup to re-verify
+                    // Note: user can be null in case of logout
+                    safeActiveSession.getUser(safeActiveSession.myUserId)
+                        ?.toMatrixItem()
+                        ?.let { user ->
+                            _viewEvents.post(HomeActivityViewEvents.OnCrossSignedInvalidated(user))
+                        }
                 }
-                .launchIn(viewModelScope)
+                onceTrusted = isVerified
+            }
+            .launchIn(viewModelScope)
     }
 
     /**
@@ -140,10 +140,10 @@ class HomeActivityViewModel @AssistedInject constructor(
      */
     private fun initThreadsMigration() {
         // When we would like to enable threads for all users
-//        if(vectorPreferences.shouldMigrateThreads()) {
-//            vectorPreferences.setThreadMessagesEnabled()
-//            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
-//        }
+        //        if(vectorPreferences.shouldMigrateThreads()) {
+        //            vectorPreferences.setThreadMessagesEnabled()
+        //            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
+        //        }
 
         when {
             // Notify users
@@ -155,7 +155,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 vectorPreferences.userNotifiedAboutThreads()
             }
             // Migrate users with enabled lab settings
-            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads()     -> {
+            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads() -> {
                 Timber.i("----> Migrate threads with enabled labs")
                 // If user had io.element.thread enabled then enable the new thread support,
                 // clear cache to sync messages appropriately
@@ -165,7 +165,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                 _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = false))
             }
             // Enable all users
-            vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled()         -> {
+            vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled() -> {
                 Timber.i("----> Try to migrate threads")
                 _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = true))
             }
@@ -176,29 +176,29 @@ class HomeActivityViewModel @AssistedInject constructor(
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
         session.getSyncStatusLive()
-                .asFlow()
-                .onEach { status ->
-                    when (status) {
-                        is SyncStatusService.Status.Progressing -> {
-                            // Schedule a check of the bootstrap when the init sync will be finished
-                            checkBootstrap = true
-                        }
-                        is SyncStatusService.Status.Idle        -> {
-                            if (checkBootstrap) {
-                                checkBootstrap = false
-                                maybeBootstrapCrossSigningAfterInitialSync()
-                            }
-                        }
-                        else                                    -> Unit
+            .asFlow()
+            .onEach { status ->
+                when (status) {
+                    is SyncStatusService.Status.Progressing -> {
+                        // Schedule a check of the bootstrap when the init sync will be finished
+                        checkBootstrap = true
                     }
-
-                    setState {
-                        copy(
-                                syncStatusServiceStatus = status
-                        )
+                    is SyncStatusService.Status.Idle -> {
+                        if (checkBootstrap) {
+                            checkBootstrap = false
+                            maybeBootstrapCrossSigningAfterInitialSync()
+                        }
                     }
+                    else -> Unit
                 }
-                .launchIn(viewModelScope)
+
+                setState {
+                    copy(
+                        syncStatusServiceStatus = status
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     /**
@@ -215,9 +215,9 @@ class HomeActivityViewModel @AssistedInject constructor(
             if (!vectorPreferences.areNotificationEnabledForDevice()) {
                 // Check if set at account level
                 val mRuleMaster = activeSessionHolder.getSafeActiveSession()
-                        ?.getPushRules()
-                        ?.getAllRules()
-                        ?.find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
+                    ?.getPushRules()
+                    ?.getAllRules()
+                    ?.find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
                 if (mRuleMaster?.enabled == false) {
                     // So push are enabled at account level but not for this session
                     // Let's check that there are some rooms?
@@ -255,11 +255,11 @@ class HomeActivityViewModel @AssistedInject constructor(
                 if (!mxCrossSigningInfo.isTrusted()) {
                     // New session
                     _viewEvents.post(
-                            HomeActivityViewEvents.OnNewSession(
-                                    session.getUser(session.myUserId)?.toMatrixItem(),
-                                    // Always send request instead of waiting for an incoming as per recent EW changes
-                                    false
-                            )
+                        HomeActivityViewEvents.OnNewSession(
+                            session.getUser(session.myUserId)?.toMatrixItem(),
+                            // Always send request instead of waiting for an incoming as per recent EW changes
+                            false
+                        )
                     )
                 }
             } else {
@@ -268,25 +268,26 @@ class HomeActivityViewModel @AssistedInject constructor(
                 try {
                     awaitCallback<Unit> {
                         session.cryptoService().crossSigningService().initializeCrossSigning(
-                                object : UserInteractiveAuthInterceptor {
-                                    override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                        // We missed server grace period or it's not setup, see if we remember locally password
-                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
-                                                errCode == null &&
-                                                reAuthHelper.data != null) {
-                                            promise.resume(
-                                                    UserPasswordAuth(
-                                                            session = flowResponse.session,
-                                                            user = session.myUserId,
-                                                            password = reAuthHelper.data
-                                                    )
+                            object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    // We missed server grace period or it's not setup, see if we remember locally password
+                                    if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                        errCode == null &&
+                                        reAuthHelper.data != null
+                                    ) {
+                                        promise.resume(
+                                            UserPasswordAuth(
+                                                session = flowResponse.session,
+                                                user = session.myUserId,
+                                                password = reAuthHelper.data
                                             )
-                                        } else {
-                                            promise.resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
-                                        }
+                                        )
+                                    } else {
+                                        promise.resumeWithException(Exception("Cannot silently initialize cross signing, UIA missing"))
                                     }
-                                },
-                                callback = it
+                                }
+                            },
+                            callback = it
                         )
                         Timber.d("Initialize cross signing SUCCESS")
                     }
@@ -302,7 +303,7 @@ class HomeActivityViewModel @AssistedInject constructor(
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
             }
-            HomeActivityViewActions.ViewStarted               -> {
+            HomeActivityViewActions.ViewStarted -> {
                 initialize()
             }
         }

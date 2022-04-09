@@ -37,11 +37,13 @@ interface SpaceService {
     /**
      * Just a shortcut for space creation for ease of use
      */
-    suspend fun createSpace(name: String,
-                            topic: String?,
-                            avatarUri: Uri?,
-                            isPublic: Boolean,
-                            roomAliasLocalPart: String? = null): String
+    suspend fun createSpace(
+        name: String,
+        topic: String?,
+        avatarUri: Uri?,
+        isPublic: Boolean,
+        roomAliasLocalPart: String? = null
+    ): String
 
     /**
      * Get a space from a roomId
@@ -64,26 +66,34 @@ interface SpaceService {
      * @param from: Optional. Pagination token given to retrieve the next set of rooms. Note that if a pagination token is provided,
      * then the parameters given for suggested_only and max_depth must be the same.
      */
-    suspend fun querySpaceChildren(spaceId: String,
-                                   suggestedOnly: Boolean? = null,
-                                   limit: Int? = null,
-                                   from: String? = null,
-                                   // when paginating, pass back the m.space.child state events
-                                   knownStateList: List<Event>? = null): SpaceHierarchyData
+    suspend fun querySpaceChildren(
+        spaceId: String,
+        suggestedOnly: Boolean? = null,
+        limit: Int? = null,
+        from: String? = null,
+        // when paginating, pass back the m.space.child state events
+        knownStateList: List<Event>? = null
+    ): SpaceHierarchyData
 
     /**
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of List[SpaceSummary]
      */
-    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams,
-                              sortOrder: RoomSortOrder = RoomSortOrder.NONE): LiveData<List<RoomSummary>>
+    fun getSpaceSummariesLive(
+        queryParams: SpaceSummaryQueryParams,
+        sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): LiveData<List<RoomSummary>>
 
-    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams,
-                          sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary>
+    fun getSpaceSummaries(
+        spaceSummaryQueryParams: SpaceSummaryQueryParams,
+        sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): List<RoomSummary>
 
-    suspend fun joinSpace(spaceIdOrAlias: String,
-                          reason: String? = null,
-                          viaServers: List<String> = emptyList()): JoinSpaceResult
+    suspend fun joinSpace(
+        spaceIdOrAlias: String,
+        reason: String? = null,
+        viaServers: List<String> = emptyList()
+    ): JoinSpaceResult
 
     suspend fun rejectInvite(spaceId: String, reason: String?)
 
@@ -94,7 +104,7 @@ interface SpaceService {
      */
     suspend fun leaveSpace(spaceId: String, reason: String? = null)
 
-//    fun getSpaceParentsOfRoom(roomId: String) : List<SpaceSummary>
+    //    fun getSpaceParentsOfRoom(roomId: String) : List<SpaceSummary>
 
     /**
      * Let this room declare that it has a parent.

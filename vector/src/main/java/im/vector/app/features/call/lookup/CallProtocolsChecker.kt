@@ -93,8 +93,8 @@ class CallProtocolsChecker(private val session: Session) {
     private fun Map<String, ThirdPartyProtocol>.extractPSTN(): String? {
         return when {
             containsKey(PROTOCOL_PSTN_PREFIXED) -> PROTOCOL_PSTN_PREFIXED
-            containsKey(PROTOCOL_PSTN)          -> PROTOCOL_PSTN
-            else                                -> null
+            containsKey(PROTOCOL_PSTN) -> PROTOCOL_PSTN
+            else -> null
         }
     }
 

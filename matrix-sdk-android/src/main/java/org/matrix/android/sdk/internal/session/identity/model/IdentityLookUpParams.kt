@@ -24,22 +24,22 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class IdentityLookUpParams(
-        /**
-         * Required. The addresses to look up. The format of the entries here depend on the algorithm used.
-         * Note that queries which have been incorrectly hashed or formatted will lead to no matches.
-         */
-        @Json(name = "addresses")
-        val hashedAddresses: List<String>,
+    /**
+     * Required. The addresses to look up. The format of the entries here depend on the algorithm used.
+     * Note that queries which have been incorrectly hashed or formatted will lead to no matches.
+     */
+    @Json(name = "addresses")
+    val hashedAddresses: List<String>,
 
-        /**
-         * Required. The algorithm the client is using to encode the addresses. This should be one of the available options from /hash_details.
-         */
-        @Json(name = "algorithm")
-        val algorithm: String,
+    /**
+     * Required. The algorithm the client is using to encode the addresses. This should be one of the available options from /hash_details.
+     */
+    @Json(name = "algorithm")
+    val algorithm: String,
 
-        /**
-         * Required. The pepper from /hash_details. This is required even when the algorithm does not make use of it.
-         */
-        @Json(name = "pepper")
-        val pepper: String
+    /**
+     * Required. The pepper from /hash_details. This is required even when the algorithm does not make use of it.
+     */
+    @Json(name = "pepper")
+    val pepper: String
 )

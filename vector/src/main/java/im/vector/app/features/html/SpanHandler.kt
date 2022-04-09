@@ -30,10 +30,10 @@ class SpanHandler(private val colorProvider: ColorProvider) : TagHandler() {
         val mxSpoiler = tag.attributes()["data-mx-spoiler"]
         if (mxSpoiler != null) {
             SpannableBuilder.setSpans(
-                    visitor.builder(),
-                    SpoilerSpan(colorProvider),
-                    tag.start(),
-                    tag.end()
+                visitor.builder(),
+                SpoilerSpan(colorProvider),
+                tag.start(),
+                tag.end()
             )
         } else {
             // default thing?

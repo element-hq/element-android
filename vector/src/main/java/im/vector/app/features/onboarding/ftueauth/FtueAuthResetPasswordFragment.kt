@@ -65,17 +65,17 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
     private fun setupSubmitButton() {
         views.resetPasswordSubmit.setOnClickListener { submit() }
         combine(
-                views.resetPasswordEmail.textChanges().map { it.isEmail() },
-                views.passwordField.textChanges().map { it.isNotEmpty() }
+            views.resetPasswordEmail.textChanges().map { it.isEmail() },
+            views.passwordField.textChanges().map { it.isNotEmpty() }
         ) { isEmail, isPasswordNotEmpty ->
             isEmail && isPasswordNotEmpty
         }
-                .onEach {
-                    views.resetPasswordEmailTil.error = null
-                    views.passwordFieldTil.error = null
-                    views.resetPasswordSubmit.isEnabled = it
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                views.resetPasswordEmailTil.error = null
+                views.passwordFieldTil.error = null
+                views.resetPasswordSubmit.isEnabled = it
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun submit() {
@@ -85,13 +85,13 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
             showWarning = false
             // Display a warning as Riot-Web does first
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.login_reset_password_warning_title)
-                    .setMessage(R.string.login_reset_password_warning_content)
-                    .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
-                        doSubmit()
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.login_reset_password_warning_title)
+                .setMessage(R.string.login_reset_password_warning_content)
+                .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
+                    doSubmit()
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         } else {
             doSubmit()
         }

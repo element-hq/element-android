@@ -50,9 +50,10 @@ private const val ANIMATION_DURATION = 250
  * It will return result through [Callback].
  */
 
-class AttachmentTypeSelectorView(context: Context,
-                                 inflater: LayoutInflater,
-                                 var callback: Callback?
+class AttachmentTypeSelectorView(
+    context: Context,
+    inflater: LayoutInflater,
+    var callback: Callback?
 ) : PopupWindow(context) {
 
     interface Callback {
@@ -89,14 +90,14 @@ class AttachmentTypeSelectorView(context: Context,
 
     private fun animateOpen() {
         views.attachmentCloseButton.animate()
-                .setDuration(200)
-                .rotation(135f)
+            .setDuration(200)
+            .rotation(135f)
     }
 
     private fun animateClose() {
         views.attachmentCloseButton.animate()
-                .setDuration(200)
-                .rotation(0f)
+            .setDuration(200)
+            .rotation(0f)
     }
 
     fun show(anchor: View) {
@@ -125,12 +126,12 @@ class AttachmentTypeSelectorView(context: Context,
 
     fun setAttachmentVisibility(type: Type, isVisible: Boolean) {
         when (type) {
-            Type.CAMERA   -> views.attachmentCameraButton
-            Type.GALLERY  -> views.attachmentGalleryButton
-            Type.FILE     -> views.attachmentFileButton
-            Type.STICKER  -> views.attachmentStickersButton
-            Type.CONTACT  -> views.attachmentContactButton
-            Type.POLL     -> views.attachmentPollButton
+            Type.CAMERA -> views.attachmentCameraButton
+            Type.GALLERY -> views.attachmentGalleryButton
+            Type.FILE -> views.attachmentFileButton
+            Type.STICKER -> views.attachmentStickersButton
+            Type.CONTACT -> views.attachmentContactButton
+            Type.POLL -> views.attachmentPollButton
             Type.LOCATION -> views.attachmentLocationButton
         }.let {
             it.isVisible = isVisible
@@ -139,22 +140,26 @@ class AttachmentTypeSelectorView(context: Context,
 
     private fun animateWindowInCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
-        val animator = ViewAnimationUtils.createCircularReveal(contentView,
-                coordinates.first,
-                coordinates.second,
-                0f,
-                max(contentView.width, contentView.height).toFloat())
+        val animator = ViewAnimationUtils.createCircularReveal(
+            contentView,
+            coordinates.first,
+            coordinates.second,
+            0f,
+            max(contentView.width, contentView.height).toFloat()
+        )
         animator.duration = ANIMATION_DURATION.toLong()
         animator.start()
     }
 
     private fun animateWindowOutCircular(anchor: View, contentView: View) {
         val coordinates = getClickCoordinates(anchor, contentView)
-        val animator = ViewAnimationUtils.createCircularReveal(getContentView(),
-                coordinates.first,
-                coordinates.second,
-                max(getContentView().width, getContentView().height).toFloat(),
-                0f)
+        val animator = ViewAnimationUtils.createCircularReveal(
+            getContentView(),
+            coordinates.first,
+            coordinates.second,
+            max(getContentView().width, getContentView().height).toFloat(),
+            0f
+        )
 
         animator.duration = ANIMATION_DURATION.toLong()
         animator.addListener(object : AnimatorListenerAdapter() {

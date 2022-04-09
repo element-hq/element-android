@@ -23,9 +23,9 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class PublicRoomsFilter(
-        /**
-         * A string to search for in the room metadata, e.g. name, topic, canonical alias etc. (Optional).
-         */
-        @Json(name = "generic_search_term")
-        val searchTerm: String? = null
+    /**
+     * A string to search for in the room metadata, e.g. name, topic, canonical alias etc. (Optional).
+     */
+    @Json(name = "generic_search_term")
+    val searchTerm: String? = null
 )

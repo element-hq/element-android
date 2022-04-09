@@ -29,22 +29,22 @@ import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 sealed class DevicesViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : DevicesViewEvents()
 
-//    object HideLoading : DevicesViewEvents()
+    //    object HideLoading : DevicesViewEvents()
     data class Failure(val throwable: Throwable) : DevicesViewEvents()
 
-//    object RequestPassword : DevicesViewEvents()
+    //    object RequestPassword : DevicesViewEvents()
 
     data class RequestReAuth(val registrationFlowResponse: RegistrationFlowResponse, val lastErrorCode: String?) : DevicesViewEvents()
 
     data class PromptRenameDevice(val deviceInfo: DeviceInfo) : DevicesViewEvents()
 
     data class ShowVerifyDevice(
-            val userId: String,
-            val transactionId: String?
+        val userId: String,
+        val transactionId: String?
     ) : DevicesViewEvents()
 
     data class SelfVerification(
-            val session: Session
+        val session: Session
     ) : DevicesViewEvents()
 
     data class ShowManuallyVerify(val cryptoDeviceInfo: CryptoDeviceInfo) : DevicesViewEvents()

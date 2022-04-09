@@ -24,8 +24,8 @@ import javax.inject.Inject
 
 internal interface IdentityRegisterTask : Task<IdentityRegisterTask.Params, IdentityRegisterResponse> {
     data class Params(
-            val identityAuthAPI: IdentityAuthAPI,
-            val openIdToken: OpenIdToken
+        val identityAuthAPI: IdentityAuthAPI,
+        val openIdToken: OpenIdToken
     )
 }
 

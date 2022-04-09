@@ -31,7 +31,7 @@ import im.vector.app.databinding.FragmentBootstrapConclusionBinding
 import javax.inject.Inject
 
 class BootstrapConclusionFragment @Inject constructor(
-        private val colorProvider: ColorProvider
+    private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentBootstrapConclusionBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapConclusionBinding {
@@ -50,12 +50,12 @@ class BootstrapConclusionFragment @Inject constructor(
         if (state.step !is BootstrapStep.DoneSuccess) return@withState
 
         views.bootstrapConclusionText.text = getString(
-                R.string.bootstrap_cross_signing_success,
-                getString(R.string.recovery_passphrase),
-                getString(R.string.message_key)
+            R.string.bootstrap_cross_signing_success,
+            getString(R.string.recovery_passphrase),
+            getString(R.string.message_key)
         )
-                .toSpannable()
-                .colorizeMatchingText(getString(R.string.recovery_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
-                .colorizeMatchingText(getString(R.string.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+            .toSpannable()
+            .colorizeMatchingText(getString(R.string.recovery_passphrase), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+            .colorizeMatchingText(getString(R.string.message_key), colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
     }
 }

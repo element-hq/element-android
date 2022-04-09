@@ -34,32 +34,32 @@ import javax.inject.Inject
 
 internal interface GetPreviewUrlTask : Task<GetPreviewUrlTask.Params, PreviewUrlData> {
     data class Params(
-            val url: String,
-            val timestamp: Long?,
-            val cacheStrategy: CacheStrategy
+        val url: String,
+        val timestamp: Long?,
+        val cacheStrategy: CacheStrategy
     )
 }
 
 internal class DefaultGetPreviewUrlTask @Inject constructor(
-        private val mediaAPI: MediaAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        @SessionDatabase private val monarchy: Monarchy
+    private val mediaAPI: MediaAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    @SessionDatabase private val monarchy: Monarchy
 ) : GetPreviewUrlTask {
 
     override suspend fun execute(params: GetPreviewUrlTask.Params): PreviewUrlData {
         return when (params.cacheStrategy) {
-            CacheStrategy.NoCache       -> doRequest(params.url, params.timestamp)
-            is CacheStrategy.TtlCache   -> doRequestWithCache(
-                    params.url,
-                    params.timestamp,
-                    params.cacheStrategy.validityDurationInMillis,
-                    params.cacheStrategy.strict
+            CacheStrategy.NoCache -> doRequest(params.url, params.timestamp)
+            is CacheStrategy.TtlCache -> doRequestWithCache(
+                params.url,
+                params.timestamp,
+                params.cacheStrategy.validityDurationInMillis,
+                params.cacheStrategy.strict
             )
             CacheStrategy.InfiniteCache -> doRequestWithCache(
-                    params.url,
-                    params.timestamp,
-                    Long.MAX_VALUE,
-                    true
+                params.url,
+                params.timestamp,
+                Long.MAX_VALUE,
+                true
             )
         }
     }
@@ -68,18 +68,18 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
         return executeRequest(globalErrorReceiver) {
             mediaAPI.getPreviewUrlData(url, timestamp)
         }
-                .toPreviewUrlData(url)
+            .toPreviewUrlData(url)
     }
 
     private fun JsonDict.toPreviewUrlData(url: String): PreviewUrlData {
         return PreviewUrlData(
-                url = (get("og:url") as? String) ?: url,
-                siteName = (get("og:site_name") as? String)?.unescapeHtml(),
-                title = (get("og:title") as? String)?.unescapeHtml(),
-                description = (get("og:description") as? String)?.unescapeHtml(),
-                mxcUrl = get("og:image") as? String,
-                imageHeight = (get("og:image:height") as? Double)?.toInt(),
-                imageWidth = (get("og:image:width") as? Double)?.toInt(),
+            url = (get("og:url") as? String) ?: url,
+            siteName = (get("og:site_name") as? String)?.unescapeHtml(),
+            title = (get("og:title") as? String)?.unescapeHtml(),
+            description = (get("og:description") as? String)?.unescapeHtml(),
+            mxcUrl = get("og:image") as? String,
+            imageHeight = (get("og:image:height") as? Double)?.toInt(),
+            imageWidth = (get("og:image:width") as? Double)?.toInt(),
         )
     }
 
@@ -104,8 +104,8 @@ internal class DefaultGetPreviewUrlTask @Inject constructor(
         } catch (throwable: Throwable) {
             // In case of error, we can return value from cache even if outdated
             return finalDataFromCache
-                    ?.takeIf { !strict }
-                    ?: throw throwable
+                ?.takeIf { !strict }
+                ?: throw throwable
         }
 
         // Store cache

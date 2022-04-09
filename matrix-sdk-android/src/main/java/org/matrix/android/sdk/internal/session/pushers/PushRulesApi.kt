@@ -39,9 +39,11 @@ internal interface PushRulesApi {
      * @param enable the new enable status
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}/enabled")
-    suspend fun updateEnableRuleStatus(@Path("kind") kind: String,
-                                       @Path("ruleId") ruleId: String,
-                                       @Body enabledBody: EnabledBody)
+    suspend fun updateEnableRuleStatus(
+        @Path("kind") kind: String,
+        @Path("ruleId") ruleId: String,
+        @Body enabledBody: EnabledBody
+    )
 
     /**
      * Update the ruleID action
@@ -52,9 +54,11 @@ internal interface PushRulesApi {
      * @param actions the actions
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}/actions")
-    suspend fun updateRuleActions(@Path("kind") kind: String,
-                                  @Path("ruleId") ruleId: String,
-                                  @Body actions: Any)
+    suspend fun updateRuleActions(
+        @Path("kind") kind: String,
+        @Path("ruleId") ruleId: String,
+        @Body actions: Any
+    )
 
     /**
      * Delete a rule
@@ -63,8 +67,10 @@ internal interface PushRulesApi {
      * @param ruleId the ruleId
      */
     @DELETE(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}")
-    suspend fun deleteRule(@Path("kind") kind: String,
-                           @Path("ruleId") ruleId: String)
+    suspend fun deleteRule(
+        @Path("kind") kind: String,
+        @Path("ruleId") ruleId: String
+    )
 
     /**
      * Add the ruleID enable status
@@ -74,7 +80,9 @@ internal interface PushRulesApi {
      * @param rule   the rule to add.
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushrules/global/{kind}/{ruleId}")
-    suspend fun addRule(@Path("kind") kind: String,
-                        @Path("ruleId") ruleId: String,
-                        @Body rule: PushRule)
+    suspend fun addRule(
+        @Path("kind") kind: String,
+        @Path("ruleId") ruleId: String,
+        @Body rule: PushRule
+    )
 }

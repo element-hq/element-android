@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.session.LiveEventListener
 import javax.inject.Inject
 
 internal class DefaultEventStreamService @Inject constructor(
-        private val streamEventsManager: StreamEventsManager
+    private val streamEventsManager: StreamEventsManager
 ) : EventStreamService {
 
     override fun addEventStreamListener(streamListener: LiveEventListener) {

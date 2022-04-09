@@ -30,9 +30,9 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheetViewMod
 import javax.inject.Inject
 
 class VerificationCancelFragment @Inject constructor(
-        val controller: VerificationCancelController
+    val controller: VerificationCancelController
 ) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
-        VerificationCancelController.Listener {
+    VerificationCancelController.Listener {
 
     private val viewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 

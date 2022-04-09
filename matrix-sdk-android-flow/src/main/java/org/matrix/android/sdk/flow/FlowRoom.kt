@@ -39,44 +39,44 @@ class FlowRoom(private val room: Room) {
 
     fun liveRoomSummary(): Flow<Optional<RoomSummary>> {
         return room.getRoomSummaryLive().asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.roomSummary().toOptional()
-                }
+            .startWith(room.coroutineDispatchers.io) {
+                room.roomSummary().toOptional()
+            }
     }
 
     fun liveRoomMembers(queryParams: RoomMemberQueryParams): Flow<List<RoomMemberSummary>> {
         return room.getRoomMembersLive(queryParams).asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.getRoomMembers(queryParams)
-                }
+            .startWith(room.coroutineDispatchers.io) {
+                room.getRoomMembers(queryParams)
+            }
     }
 
     fun liveAnnotationSummary(eventId: String): Flow<Optional<EventAnnotationsSummary>> {
         return room.getEventAnnotationsSummaryLive(eventId).asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.getEventAnnotationsSummary(eventId).toOptional()
-                }
+            .startWith(room.coroutineDispatchers.io) {
+                room.getEventAnnotationsSummary(eventId).toOptional()
+            }
     }
 
     fun liveTimelineEvent(eventId: String): Flow<Optional<TimelineEvent>> {
         return room.getTimelineEventLive(eventId).asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.getTimelineEvent(eventId).toOptional()
-                }
+            .startWith(room.coroutineDispatchers.io) {
+                room.getTimelineEvent(eventId).toOptional()
+            }
     }
 
     fun liveStateEvent(eventType: String, stateKey: QueryStringValue): Flow<Optional<Event>> {
         return room.getStateEventLive(eventType, stateKey).asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.getStateEvent(eventType, stateKey).toOptional()
-                }
+            .startWith(room.coroutineDispatchers.io) {
+                room.getStateEvent(eventType, stateKey).toOptional()
+            }
     }
 
     fun liveStateEvents(eventTypes: Set<String>): Flow<List<Event>> {
         return room.getStateEventsLive(eventTypes).asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.getStateEvents(eventTypes)
-                }
+            .startWith(room.coroutineDispatchers.io) {
+                room.getStateEvents(eventTypes)
+            }
     }
 
     fun liveReadMarker(): Flow<Optional<String>> {
@@ -93,9 +93,9 @@ class FlowRoom(private val room: Room) {
 
     fun liveDraft(): Flow<Optional<UserDraft>> {
         return room.getDraftLive().asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.getDraft().toOptional()
-                }
+            .startWith(room.coroutineDispatchers.io) {
+                room.getDraft().toOptional()
+            }
     }
 
     fun liveNotificationState(): Flow<RoomNotificationState> {
@@ -104,21 +104,23 @@ class FlowRoom(private val room: Room) {
 
     fun liveThreadSummaries(): Flow<List<ThreadSummary>> {
         return room.getAllThreadSummariesLive().asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.getAllThreadSummaries()
-                }
+            .startWith(room.coroutineDispatchers.io) {
+                room.getAllThreadSummaries()
+            }
     }
+
     fun liveThreadList(): Flow<List<ThreadRootEvent>> {
         return room.getAllThreadsLive().asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.getAllThreads()
-                }
+            .startWith(room.coroutineDispatchers.io) {
+                room.getAllThreads()
+            }
     }
+
     fun liveLocalUnreadThreadList(): Flow<List<ThreadRootEvent>> {
         return room.getMarkedThreadNotificationsLive().asFlow()
-                .startWith(room.coroutineDispatchers.io) {
-                    room.getMarkedThreadNotifications()
-                }
+            .startWith(room.coroutineDispatchers.io) {
+                room.getMarkedThreadNotifications()
+            }
     }
 }
 

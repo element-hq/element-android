@@ -75,15 +75,15 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
         setState(id, currentState)
         // Pause any active playback
         states
-                .filter { it.key != id }
-                .keys
-                .forEach { key ->
-                    val state = states[key]
-                    if (state is Listener.State.Playing) {
-                        // Paused(state.playbackTime) state should also be considered later.
-                        setState(key, Listener.State.Idle)
-                    }
+            .filter { it.key != id }
+            .keys
+            .forEach { key ->
+                val state = states[key]
+                if (state is Listener.State.Playing) {
+                    // Paused(state.playbackTime) state should also be considered later.
+                    setState(key, Listener.State.Idle)
                 }
+            }
     }
 
     fun pausePlayback(id: String) {
@@ -109,18 +109,18 @@ class VoiceMessagePlaybackTracker @Inject constructor() {
     fun getPlaybackTime(id: String): Int {
         return when (val state = states[id]) {
             is Listener.State.Playing -> state.playbackTime
-            is Listener.State.Paused  -> state.playbackTime
+            is Listener.State.Paused -> state.playbackTime
             /* Listener.State.Idle, */
-            else                      -> 0
+            else -> 0
         }
     }
 
     private fun getPercentage(id: String): Float {
         return when (val state = states[id]) {
             is Listener.State.Playing -> state.percentage
-            is Listener.State.Paused  -> state.percentage
+            is Listener.State.Paused -> state.percentage
             /* Listener.State.Idle, */
-            else                      -> 0f
+            else -> 0f
         }
     }
 

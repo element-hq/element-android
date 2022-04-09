@@ -56,11 +56,11 @@ import javax.inject.Inject
 
 @Parcelize
 data class MainActivityArgs(
-        val clearCache: Boolean = false,
-        val clearCredentials: Boolean = false,
-        val isUserLoggedOut: Boolean = false,
-        val isAccountDeactivated: Boolean = false,
-        val isSoftLogout: Boolean = false
+    val clearCache: Boolean = false,
+    val clearCredentials: Boolean = false,
+    val isUserLoggedOut: Boolean = false,
+    val isAccountDeactivated: Boolean = false,
+    val isSoftLogout: Boolean = false
 ) : Parcelable
 
 /**
@@ -131,11 +131,11 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         Timber.w("Starting MainActivity with $argsFromIntent")
 
         return MainActivityArgs(
-                clearCache = argsFromIntent?.clearCache ?: false,
-                clearCredentials = argsFromIntent?.clearCredentials ?: false,
-                isUserLoggedOut = argsFromIntent?.isUserLoggedOut ?: false,
-                isAccountDeactivated = argsFromIntent?.isAccountDeactivated ?: false,
-                isSoftLogout = argsFromIntent?.isSoftLogout ?: false
+            clearCache = argsFromIntent?.clearCache ?: false,
+            clearCredentials = argsFromIntent?.clearCredentials ?: false,
+            isUserLoggedOut = argsFromIntent?.isUserLoggedOut ?: false,
+            isAccountDeactivated = argsFromIntent?.isAccountDeactivated ?: false,
+            isSoftLogout = argsFromIntent?.isSoftLogout ?: false
         )
     }
 
@@ -157,7 +157,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     startNextActivityAndFinish()
                 }
             }
-            args.clearCredentials     -> {
+            args.clearCredentials -> {
                 lifecycleScope.launch {
                     try {
                         session.signOut(!args.isUserLoggedOut)
@@ -171,7 +171,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     startNextActivityAndFinish()
                 }
             }
-            args.clearCache           -> {
+            args.clearCache -> {
                 lifecycleScope.launch {
                     session.clearCache()
                     doLocalCleanup(clearPreferences = false, onboardingStore)
@@ -211,12 +211,12 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private fun displayError(failure: Throwable) {
         if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
             MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.dialog_title_error)
-                    .setMessage(errorFormatter.toHumanReadable(failure))
-                    .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
-                    .setNegativeButton(R.string.action_cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
-                    .setCancelable(false)
-                    .show()
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(errorFormatter.toHumanReadable(failure))
+                .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
+                .setNegativeButton(R.string.action_cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
+                .setCancelable(false)
+                .show()
         }
     }
 
@@ -229,15 +229,15 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 navigator.openLogin(this, null)
                 null
             }
-            args.isSoftLogout                                            -> {
+            args.isSoftLogout -> {
                 // The homeserver has invalidated the token, with a soft logout
                 navigator.softLogout(this)
                 null
             }
-            args.isUserLoggedOut                                         ->
+            args.isUserLoggedOut ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
-            sessionHolder.hasActiveSession()                             ->
+            sessionHolder.hasActiveSession() ->
                 // We have a session.
                 // Check it can be opened
                 if (sessionHolder.getActiveSession().isOpenable) {
@@ -247,7 +247,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     navigator.softLogout(this)
                     null
                 }
-            else                                                         -> {
+            else -> {
                 // First start, or no active session
                 navigator.openLogin(this, null)
                 null

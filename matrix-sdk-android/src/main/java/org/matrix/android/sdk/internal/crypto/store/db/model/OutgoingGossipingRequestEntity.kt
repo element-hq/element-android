@@ -30,10 +30,10 @@ import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 internal open class OutgoingGossipingRequestEntity(
-        @Index var requestId: String? = null,
-        var recipientsData: String? = null,
-        var requestedInfoStr: String? = null,
-        @Index var typeStr: String? = null
+    @Index var requestId: String? = null,
+    var recipientsData: String? = null,
+    var requestedInfoStr: String? = null,
+    @Index var typeStr: String? = null
 ) : RealmObject() {
 
     fun getRequestedSecretName(): String? = if (type == GossipRequestType.SECRET) {
@@ -57,7 +57,7 @@ internal open class OutgoingGossipingRequestEntity(
     var requestState: OutgoingGossipingRequestState
         get() {
             return tryOrNull { OutgoingGossipingRequestState.valueOf(requestStateStr) }
-                    ?: OutgoingGossipingRequestState.UNSENT
+                ?: OutgoingGossipingRequestState.UNSENT
         }
         set(value) {
             requestStateStr = value.name
@@ -66,29 +66,29 @@ internal open class OutgoingGossipingRequestEntity(
     companion object {
 
         private val recipientsDataMapper: JsonAdapter<Map<String, List<String>>> =
-                MoshiProvider
-                        .providesMoshi()
-                        .adapter<Map<String, List<String>>>(
-                                Types.newParameterizedType(Map::class.java, String::class.java, List::class.java)
-                        )
+            MoshiProvider
+                .providesMoshi()
+                .adapter<Map<String, List<String>>>(
+                    Types.newParameterizedType(Map::class.java, String::class.java, List::class.java)
+                )
     }
 
     fun toOutgoingGossipingRequest(): OutgoingGossipingRequest {
         return when (type) {
-            GossipRequestType.KEY    -> {
+            GossipRequestType.KEY -> {
                 OutgoingRoomKeyRequest(
-                        requestBody = getRequestedKeyInfo(),
-                        recipients = getRecipients().orEmpty(),
-                        requestId = requestId ?: "",
-                        state = requestState
+                    requestBody = getRequestedKeyInfo(),
+                    recipients = getRecipients().orEmpty(),
+                    requestId = requestId ?: "",
+                    state = requestState
                 )
             }
             GossipRequestType.SECRET -> {
                 OutgoingSecretRequest(
-                        secretName = getRequestedSecretName(),
-                        recipients = getRecipients().orEmpty(),
-                        requestId = requestId ?: "",
-                        state = requestState
+                    secretName = getRequestedSecretName(),
+                    recipients = getRecipients().orEmpty(),
+                    requestId = requestId ?: "",
+                    state = requestState
                 )
             }
         }

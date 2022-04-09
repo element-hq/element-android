@@ -33,26 +33,27 @@ enum class UISIEventSource {
 }
 
 data class E2EMessageDetected(
-        val eventId: String,
-        val roomId: String,
-        val senderUserId: String,
-        val senderDeviceId: String,
-        val senderKey: String,
-        val sessionId: String,
-        val source: UISIEventSource) {
+    val eventId: String,
+    val roomId: String,
+    val senderUserId: String,
+    val senderDeviceId: String,
+    val senderKey: String,
+    val sessionId: String,
+    val source: UISIEventSource
+) {
 
     companion object {
         fun fromEvent(event: Event, roomId: String, source: UISIEventSource): E2EMessageDetected {
             val encryptedContent = event.content.toModel<EncryptedEventContent>()
 
             return E2EMessageDetected(
-                    eventId = event.eventId ?: "",
-                    roomId = roomId,
-                    senderUserId = event.senderId ?: "",
-                    senderDeviceId = encryptedContent?.deviceId ?: "",
-                    senderKey = encryptedContent?.senderKey ?: "",
-                    sessionId = encryptedContent?.sessionId ?: "",
-                    source = source
+                eventId = event.eventId ?: "",
+                roomId = roomId,
+                senderUserId = event.senderId ?: "",
+                senderDeviceId = encryptedContent?.deviceId ?: "",
+                senderKey = encryptedContent?.senderKey ?: "",
+                sessionId = encryptedContent?.sessionId ?: "",
+                source = source
             )
         }
     }
@@ -110,13 +111,13 @@ class UISIDetector : LiveEventListener {
             unTrack(eventId, roomId)?.let {
                 triggerUISI(it)
             }
-//            if (throwable is MXCryptoError.OlmError) {
-//                if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
-//                    unTrack(eventId, roomId)?.let {
-//                        triggerUISI(it)
-//                    }
-//                }
-//            }
+            //            if (throwable is MXCryptoError.OlmError) {
+            //                if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
+            //                    unTrack(eventId, roomId)?.let {
+            //                        triggerUISI(it)
+            //                    }
+            //                }
+            //            }
         }
     }
 

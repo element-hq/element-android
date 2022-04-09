@@ -23,9 +23,9 @@ internal object UserMapper {
 
     fun map(userEntity: UserEntity): User {
         return User(
-                userEntity.userId,
-                userEntity.displayName,
-                userEntity.avatarUrl
+            userEntity.userId,
+            userEntity.displayName,
+            userEntity.avatarUrl
         )
     }
 }

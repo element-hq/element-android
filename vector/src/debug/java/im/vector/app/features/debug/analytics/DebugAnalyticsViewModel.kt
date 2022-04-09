@@ -28,8 +28,8 @@ import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.launch
 
 class DebugAnalyticsViewModel @AssistedInject constructor(
-        @Assisted initialState: DebugAnalyticsViewState,
-        private val analyticsStore: AnalyticsStore
+    @Assisted initialState: DebugAnalyticsViewState,
+    private val analyticsStore: AnalyticsStore
 ) : VectorViewModel<DebugAnalyticsViewState, DebugAnalyticsViewActions, EmptyViewEvents>(initialState) {
 
     @AssistedFactory

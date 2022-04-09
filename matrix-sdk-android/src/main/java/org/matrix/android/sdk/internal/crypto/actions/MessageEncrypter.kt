@@ -32,11 +32,12 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("MessageEncrypter", LoggerTag.CRYPTO)
 
 internal class MessageEncrypter @Inject constructor(
-        @UserId
-        private val userId: String,
-        @DeviceId
-        private val deviceId: String?,
-        private val olmDevice: MXOlmDevice) {
+    @UserId
+    private val userId: String,
+    @DeviceId
+    private val deviceId: String?,
+    private val olmDevice: MXOlmDevice
+) {
     /**
      * Encrypt an event payload for a list of devices.
      * This method must be called from the getCryptoHandler() thread.
@@ -80,9 +81,9 @@ internal class MessageEncrypter @Inject constructor(
         }
 
         return EncryptedMessage(
-                algorithm = MXCRYPTO_ALGORITHM_OLM,
-                senderKey = olmDevice.deviceCurve25519Key,
-                cipherText = ciphertext
+            algorithm = MXCRYPTO_ALGORITHM_OLM,
+            senderKey = olmDevice.deviceCurve25519Key,
+            cipherText = ciphertext
         )
     }
 }

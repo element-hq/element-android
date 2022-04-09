@@ -24,6 +24,6 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class AcceptTermsBody(
-        @Json(name = "user_accepts")
-        val acceptedTermUrls: List<String>
+    @Json(name = "user_accepts")
+    val acceptedTermUrls: List<String>
 )

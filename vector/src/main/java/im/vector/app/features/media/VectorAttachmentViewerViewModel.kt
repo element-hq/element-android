@@ -30,9 +30,9 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 
 class VectorAttachmentViewerViewModel @AssistedInject constructor(
-        @Assisted initialState: VectorDummyViewState,
-        private val session: Session,
-        private val downloadMediaUseCase: DownloadMediaUseCase
+    @Assisted initialState: VectorDummyViewState,
+    private val session: Session,
+    private val downloadMediaUseCase: DownloadMediaUseCase
 ) : VectorViewModel<VectorDummyViewState, VectorAttachmentViewerAction, VectorAttachmentViewerViewEvents>(initialState) {
 
     @AssistedFactory
@@ -55,7 +55,7 @@ class VectorAttachmentViewerViewModel @AssistedInject constructor(
         session.coroutineScope.launch {
             // Success event is handled via a notification inside the use case
             downloadMediaUseCase.execute(action.file)
-                    .onFailure { _viewEvents.post(VectorAttachmentViewerViewEvents.ErrorDownloadingMedia(it)) }
+                .onFailure { _viewEvents.post(VectorAttachmentViewerViewEvents.ErrorDownloadingMedia(it)) }
         }
     }
 }

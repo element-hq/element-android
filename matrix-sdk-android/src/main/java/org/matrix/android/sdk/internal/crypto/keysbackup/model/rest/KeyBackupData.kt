@@ -26,29 +26,29 @@ import org.matrix.android.sdk.internal.network.parsing.ForceToBoolean
  */
 @JsonClass(generateAdapter = true)
 data class KeyBackupData(
-        /**
-         * Required. The index of the first message in the session that the key can decrypt.
-         */
-        @Json(name = "first_message_index")
-        val firstMessageIndex: Long,
+    /**
+     * Required. The index of the first message in the session that the key can decrypt.
+     */
+    @Json(name = "first_message_index")
+    val firstMessageIndex: Long,
 
-        /**
-         * Required. The number of times this key has been forwarded.
-         */
-        @Json(name = "forwarded_count")
-        val forwardedCount: Int,
+    /**
+     * Required. The number of times this key has been forwarded.
+     */
+    @Json(name = "forwarded_count")
+    val forwardedCount: Int,
 
-        /**
-         * Whether the device backing up the key has verified the device that the key is from.
-         * Force to boolean because of https://github.com/matrix-org/synapse/issues/6977
-         */
-        @ForceToBoolean
-        @Json(name = "is_verified")
-        val isVerified: Boolean,
+    /**
+     * Whether the device backing up the key has verified the device that the key is from.
+     * Force to boolean because of https://github.com/matrix-org/synapse/issues/6977
+     */
+    @ForceToBoolean
+    @Json(name = "is_verified")
+    val isVerified: Boolean,
 
-        /**
-         * Algorithm-dependent data.
-         */
-        @Json(name = "session_data")
-        val sessionData: JsonDict
+    /**
+     * Algorithm-dependent data.
+     */
+    @Json(name = "session_data")
+    val sessionData: JsonDict
 )

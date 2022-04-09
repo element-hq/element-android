@@ -41,9 +41,11 @@ interface NetworkConnectivityChecker {
 }
 
 @SessionScope
-internal class DefaultNetworkConnectivityChecker @Inject constructor(private val homeServerPinger: HomeServerPinger,
-                                                                     private val backgroundDetectionObserver: BackgroundDetectionObserver,
-                                                                     private val networkCallbackStrategy: NetworkCallbackStrategy) :
+internal class DefaultNetworkConnectivityChecker @Inject constructor(
+    private val homeServerPinger: HomeServerPinger,
+    private val backgroundDetectionObserver: BackgroundDetectionObserver,
+    private val networkCallbackStrategy: NetworkCallbackStrategy
+) :
     NetworkConnectivityChecker {
 
     private val hasInternetAccess = AtomicBoolean(true)

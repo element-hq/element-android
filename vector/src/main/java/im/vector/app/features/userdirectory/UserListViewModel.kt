@@ -49,14 +49,14 @@ import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 data class ThreePidUser(
-        val email: String,
-        val user: User?
+    val email: String,
+    val user: User?
 )
 
 class UserListViewModel @AssistedInject constructor(
-        @Assisted initialState: UserListViewState,
-        private val stringProvider: StringProvider,
-        private val session: Session
+    @Assisted initialState: UserListViewState,
+    private val stringProvider: StringProvider,
+    private val session: Session
 ) : VectorViewModel<UserListViewState, UserListAction, UserListViewEvents>(initialState) {
 
     private val knownUsersSearch = MutableStateFlow("")
@@ -86,7 +86,7 @@ class UserListViewModel @AssistedInject constructor(
         observeUsers()
         setState {
             copy(
-                    configuredIdentityServer = cleanISURL(session.identityService().getCurrentIdentityServerUrl())
+                configuredIdentityServer = cleanISURL(session.identityService().getCurrentIdentityServerUrl())
             )
         }
         session.identityService().addListener(identityServerListener)
@@ -103,14 +103,14 @@ class UserListViewModel @AssistedInject constructor(
 
     override fun handle(action: UserListAction) {
         when (action) {
-            is UserListAction.SearchUsers                -> handleSearchUsers(action.value)
-            is UserListAction.ClearSearchUsers           -> handleClearSearchUsers()
-            is UserListAction.AddPendingSelection        -> handleSelectUser(action)
-            is UserListAction.RemovePendingSelection     -> handleRemoveSelectedUser(action)
+            is UserListAction.SearchUsers -> handleSearchUsers(action.value)
+            is UserListAction.ClearSearchUsers -> handleClearSearchUsers()
+            is UserListAction.AddPendingSelection -> handleSelectUser(action)
+            is UserListAction.RemovePendingSelection -> handleRemoveSelectedUser(action)
             UserListAction.ComputeMatrixToLinkForSharing -> handleShareMyMatrixToLink()
-            UserListAction.UserConsentRequest            -> handleUserConsentRequest()
-            is UserListAction.UpdateUserConsent          -> handleISUpdateConsent(action)
-            UserListAction.Resumed                       -> handleResumed()
+            UserListAction.UserConsentRequest -> handleUserConsentRequest()
+            is UserListAction.UpdateUserConsent -> handleISUpdateConsent(action)
+            UserListAction.Resumed -> handleResumed()
         }
     }
 
@@ -148,7 +148,7 @@ class UserListViewModel @AssistedInject constructor(
     private fun handleSearchUsers(searchTerm: String) {
         setState {
             copy(
-                    searchTerm = searchTerm
+                searchTerm = searchTerm
             )
         }
         if (searchTerm.isEmail().not()) {
@@ -156,7 +156,7 @@ class UserListViewModel @AssistedInject constructor(
             // because the flow won't be triggered and result would stay
             setState {
                 copy(
-                        matchingEmail = Uninitialized
+                    matchingEmail = Uninitialized
                 )
             }
         }
@@ -182,26 +182,26 @@ class UserListViewModel @AssistedInject constructor(
 
     private fun observeUsers() = withState { state ->
         identityServerUsersSearch
-                .filter { it.searchTerm.isEmail() }
-                .sample(300)
-                .onEach { search ->
-                    executeSearchEmail(search.searchTerm)
-                }.launchIn(viewModelScope)
+            .filter { it.searchTerm.isEmail() }
+            .sample(300)
+            .onEach { search ->
+                executeSearchEmail(search.searchTerm)
+            }.launchIn(viewModelScope)
 
         knownUsersSearch
-                .sample(300)
-                .flatMapLatest { search ->
-                    session.getPagedUsersLive(search, state.excludedUserIds).asFlow()
-                }
-                .execute {
-                    copy(knownUsers = it)
-                }
+            .sample(300)
+            .flatMapLatest { search ->
+                session.getPagedUsersLive(search, state.excludedUserIds).asFlow()
+            }
+            .execute {
+                copy(knownUsers = it)
+            }
 
         directoryUsersSearch
-                .debounce(300)
-                .onEach { search ->
-                    executeSearchDirectory(state, search)
-                }.launchIn(viewModelScope)
+            .debounce(300)
+            .onEach { search ->
+                executeSearchDirectory(state, search)
+            }.launchIn(viewModelScope)
     }
 
     private suspend fun executeSearchEmail(search: String) {
@@ -214,8 +214,8 @@ class UserListViewModel @AssistedInject constructor(
                 try {
                     val user = tryOrNull { session.getProfileAsUser(foundThreePid.matrixId) } ?: User(foundThreePid.matrixId)
                     ThreePidUser(
-                            email = search,
-                            user = user
+                        email = search,
+                        user = user
                     )
                 } catch (failure: Throwable) {
                     ThreePidUser(email = search, user = User(foundThreePid.matrixId))
@@ -232,14 +232,14 @@ class UserListViewModel @AssistedInject constructor(
                 emptyList()
             } else {
                 val searchResult = session
-                        .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
-                        .sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
+                    .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
+                    .sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                 val userProfile = if (MatrixPatterns.isUserId(search)) {
                     val user = tryOrNull { session.getProfileAsUser(search) }
                     User(
-                            userId = search,
-                            displayName = user?.displayName,
-                            avatarUrl = user?.avatarUrl
+                        userId = search,
+                        displayName = user?.displayName,
+                        avatarUrl = user?.avatarUrl
                     )
                 } else {
                     null

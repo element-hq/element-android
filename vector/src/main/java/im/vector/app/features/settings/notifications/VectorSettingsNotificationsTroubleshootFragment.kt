@@ -45,8 +45,8 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import javax.inject.Inject
 
 class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
-        private val bugReporter: BugReporter,
-        private val testManagerFactory: NotificationTroubleshootTestManagerFactory
+    private val bugReporter: BugReporter,
+    private val testManagerFactory: NotificationTroubleshootTestManagerFactory
 ) : VectorBaseFragment<FragmentSettingsNotificationsTroubleshootBinding>() {
 
     private var testManager: NotificationTroubleshootTestManager? = null
@@ -84,7 +84,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
             if (isAdded) {
                 TransitionManager.beginDelayedTransition(views.troubleshootBottomView)
                 when (troubleshootTestManager.diagStatus) {
-                    TroubleshootTest.TestStatus.NOT_STARTED      -> {
+                    TroubleshootTest.TestStatus.NOT_STARTED -> {
                         views.toubleshootSummDescription.text = ""
                         views.troubleshootSummButton.visibility = View.GONE
                         views.troubleshootRunButton.visibility = View.VISIBLE
@@ -94,14 +94,14 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                         val size = troubleshootTestManager.testListSize
                         val currentTestIndex = troubleshootTestManager.currentTestIndex
                         views.toubleshootSummDescription.text = getString(
-                                R.string.settings_troubleshoot_diagnostic_running_status,
-                                currentTestIndex,
-                                size
+                            R.string.settings_troubleshoot_diagnostic_running_status,
+                            currentTestIndex,
+                            size
                         )
                         views.troubleshootSummButton.visibility = View.GONE
                         views.troubleshootRunButton.visibility = View.GONE
                     }
-                    TroubleshootTest.TestStatus.FAILED           -> {
+                    TroubleshootTest.TestStatus.FAILED -> {
                         // check if there are quick fixes
                         val hasQuickFix = testManager?.hasQuickFix().orFalse()
                         if (hasQuickFix) {
@@ -112,7 +112,7 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
                         views.troubleshootSummButton.visibility = View.VISIBLE
                         views.troubleshootRunButton.visibility = View.VISIBLE
                     }
-                    TroubleshootTest.TestStatus.SUCCESS          -> {
+                    TroubleshootTest.TestStatus.SUCCESS -> {
                         views.toubleshootSummDescription.text = getString(R.string.settings_troubleshoot_diagnostic_success_status)
                         views.troubleshootSummButton.visibility = View.VISIBLE
                         views.troubleshootRunButton.visibility = View.VISIBLE
@@ -151,11 +151,11 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
 
         tryOrNull("Unable to register the receiver") {
             LocalBroadcastManager.getInstance(requireContext())
-                    .registerReceiver(broadcastReceiverPush, IntentFilter(NotificationUtils.PUSH_ACTION))
+                .registerReceiver(broadcastReceiverPush, IntentFilter(NotificationUtils.PUSH_ACTION))
         }
         tryOrNull("Unable to register the receiver") {
             LocalBroadcastManager.getInstance(requireContext())
-                    .registerReceiver(broadcastReceiverNotification, IntentFilter(NotificationUtils.DIAGNOSTIC_ACTION))
+                .registerReceiver(broadcastReceiverNotification, IntentFilter(NotificationUtils.DIAGNOSTIC_ACTION))
         }
     }
 
@@ -163,11 +163,11 @@ class VectorSettingsNotificationsTroubleshootFragment @Inject constructor(
         super.onPause()
         tryOrNull {
             LocalBroadcastManager.getInstance(requireContext())
-                    .unregisterReceiver(broadcastReceiverPush)
+                .unregisterReceiver(broadcastReceiverPush)
         }
         tryOrNull {
             LocalBroadcastManager.getInstance(requireContext())
-                    .unregisterReceiver(broadcastReceiverNotification)
+                .unregisterReceiver(broadcastReceiverNotification)
         }
     }
 

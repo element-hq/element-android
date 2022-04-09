@@ -34,7 +34,13 @@ class FakeSharedSecretStorageService : SharedSecretStorageService {
         TODO("Not yet implemented")
     }
 
-    override suspend fun generateKeyWithPassphrase(keyId: String, keyName: String, passphrase: String, keySigner: KeySigner, progressListener: ProgressListener?): SsssKeyCreationInfo {
+    override suspend fun generateKeyWithPassphrase(
+        keyId: String,
+        keyName: String,
+        passphrase: String,
+        keySigner: KeySigner,
+        progressListener: ProgressListener?
+    ): SsssKeyCreationInfo {
         TODO("Not yet implemented")
     }
 

@@ -52,15 +52,15 @@ import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection
 
 internal class DefaultAuthenticationService @Inject constructor(
-        @Unauthenticated
-        private val okHttpClient: Lazy<OkHttpClient>,
-        private val retrofitFactory: RetrofitFactory,
-        private val sessionParamsStore: SessionParamsStore,
-        private val sessionManager: SessionManager,
-        private val sessionCreator: SessionCreator,
-        private val pendingSessionStore: PendingSessionStore,
-        private val getWellknownTask: GetWellknownTask,
-        private val directLoginTask: DirectLoginTask
+    @Unauthenticated
+    private val okHttpClient: Lazy<OkHttpClient>,
+    private val retrofitFactory: RetrofitFactory,
+    private val sessionParamsStore: SessionParamsStore,
+    private val sessionManager: SessionManager,
+    private val sessionCreator: SessionCreator,
+    private val pendingSessionStore: PendingSessionStore,
+    private val getWellknownTask: GetWellknownTask,
+    private val directLoginTask: DirectLoginTask
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -81,7 +81,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
     override suspend fun getLoginFlowOfSession(sessionId: String): LoginFlowResult {
         val homeServerConnectionConfig = sessionParamsStore.get(sessionId)?.homeServerConnectionConfig
-                ?: throw IllegalStateException("Session not found")
+            ?: throw IllegalStateException("Session not found")
 
         return getLoginFlow(homeServerConnectionConfig)
     }
@@ -124,10 +124,10 @@ internal class DefaultAuthenticationService @Inject constructor(
 
     private fun getHomeServerUrlBase(): String? {
         return pendingSessionData
-                ?.homeServerConnectionConfig
-                ?.homeServerUriBase
-                ?.toString()
-                ?.trim { it == '/' }
+            ?.homeServerConnectionConfig
+            ?.homeServerUriBase
+            ?.toString()
+            ?.trim { it == '/' }
     }
 
     /**
@@ -144,24 +144,24 @@ internal class DefaultAuthenticationService @Inject constructor(
             getLoginFlowInternal(homeServerConnectionConfig)
         }
         return result.fold(
-                {
-                    // The homeserver exists and up to date, keep the config
-                    // Homeserver url may have been changed, if it was a Web client url
-                    val alteredHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                            homeServerUriBase = Uri.parse(it.homeServerUrl)
-                    )
+            {
+                // The homeserver exists and up to date, keep the config
+                // Homeserver url may have been changed, if it was a Web client url
+                val alteredHomeServerConnectionConfig = homeServerConnectionConfig.copy(
+                    homeServerUriBase = Uri.parse(it.homeServerUrl)
+                )
 
-                    pendingSessionData = PendingSessionData(alteredHomeServerConnectionConfig)
-                            .also { data -> pendingSessionStore.savePendingSessionData(data) }
-                    it
-                },
-                {
-                    if (it is UnrecognizedCertificateException) {
-                        throw Failure.UnrecognizedCertificateFailure(homeServerConnectionConfig.homeServerUriBase.toString(), it.fingerprint)
-                    } else {
-                        throw it
-                    }
+                pendingSessionData = PendingSessionData(alteredHomeServerConnectionConfig)
+                    .also { data -> pendingSessionStore.savePendingSessionData(data) }
+                it
+            },
+            {
+                if (it is UnrecognizedCertificateException) {
+                    throw Failure.UnrecognizedCertificateFailure(homeServerConnectionConfig.homeServerUriBase.toString(), it.fingerprint)
+                } else {
+                    throw it
                 }
+            }
         )
     }
 
@@ -173,7 +173,7 @@ internal class DefaultAuthenticationService @Inject constructor(
             getWellknownLoginFlowInternal(homeServerConnectionConfig)
         } catch (failure: Throwable) {
             if (failure is Failure.OtherServerError &&
-                    failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                failure.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
                 // 404, no well-known data, try direct access to the API
                 // First check the homeserver version
                 return runCatching {
@@ -181,24 +181,24 @@ internal class DefaultAuthenticationService @Inject constructor(
                         authAPI.versions()
                     }
                 }
-                        .map { versions ->
-                            // Ok, it seems that the homeserver url is valid
-                            getLoginFlowResult(authAPI, versions, homeServerConnectionConfig.homeServerUriBase.toString())
+                    .map { versions ->
+                        // Ok, it seems that the homeserver url is valid
+                        getLoginFlowResult(authAPI, versions, homeServerConnectionConfig.homeServerUriBase.toString())
+                    }
+                    .fold(
+                        {
+                            it
+                        },
+                        {
+                            if (it is Failure.OtherServerError &&
+                                it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                                // It's maybe a Web client url?
+                                getWebClientDomainLoginFlowInternal(homeServerConnectionConfig)
+                            } else {
+                                throw it
+                            }
                         }
-                        .fold(
-                                {
-                                    it
-                                },
-                                {
-                                    if (it is Failure.OtherServerError &&
-                                            it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
-                                        // It's maybe a Web client url?
-                                        getWebClientDomainLoginFlowInternal(homeServerConnectionConfig)
-                                    } else {
-                                        throw it
-                                    }
-                                }
-                        )
+                    )
             } else {
                 throw failure
             }
@@ -209,7 +209,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         val authAPI = buildAuthAPI(homeServerConnectionConfig)
 
         val domain = homeServerConnectionConfig.homeServerUri.host
-                ?: return getWebClientLoginFlowInternal(homeServerConnectionConfig)
+            ?: return getWebClientLoginFlowInternal(homeServerConnectionConfig)
 
         // Ok, try to get the config.domain.json file of a Web client
         return runCatching {
@@ -217,23 +217,23 @@ internal class DefaultAuthenticationService @Inject constructor(
                 authAPI.getWebClientConfigDomain(domain)
             }
         }
-                .map { webClientConfig ->
-                    onWebClientConfigRetrieved(homeServerConnectionConfig, webClientConfig)
+            .map { webClientConfig ->
+                onWebClientConfigRetrieved(homeServerConnectionConfig, webClientConfig)
+            }
+            .fold(
+                {
+                    it
+                },
+                {
+                    if (it is Failure.OtherServerError &&
+                        it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
+                        // Try with config.json
+                        getWebClientLoginFlowInternal(homeServerConnectionConfig)
+                    } else {
+                        throw it
+                    }
                 }
-                .fold(
-                        {
-                            it
-                        },
-                        {
-                            if (it is Failure.OtherServerError &&
-                                    it.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */) {
-                                // Try with config.json
-                                getWebClientLoginFlowInternal(homeServerConnectionConfig)
-                            } else {
-                                throw it
-                            }
-                        }
-                )
+            )
     }
 
     private suspend fun getWebClientLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
@@ -243,9 +243,9 @@ internal class DefaultAuthenticationService @Inject constructor(
         return executeRequest(null) {
             authAPI.getWebClientConfig()
         }
-                .let { webClientConfig ->
-                    onWebClientConfigRetrieved(homeServerConnectionConfig, webClientConfig)
-                }
+            .let { webClientConfig ->
+                onWebClientConfigRetrieved(homeServerConnectionConfig, webClientConfig)
+            }
     }
 
     private suspend fun onWebClientConfigRetrieved(homeServerConnectionConfig: HomeServerConnectionConfig, webClientConfig: WebClientConfig): LoginFlowResult {
@@ -253,7 +253,7 @@ internal class DefaultAuthenticationService @Inject constructor(
         if (defaultHomeServerUrl?.isNotEmpty() == true) {
             // Ok, good sign, we got a default hs url
             val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                    homeServerUriBase = Uri.parse(defaultHomeServerUrl)
+                homeServerUriBase = Uri.parse(defaultHomeServerUrl)
             )
 
             val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
@@ -271,15 +271,15 @@ internal class DefaultAuthenticationService @Inject constructor(
 
     private suspend fun getWellknownLoginFlowInternal(homeServerConnectionConfig: HomeServerConnectionConfig): LoginFlowResult {
         val domain = homeServerConnectionConfig.homeServerUri.host
-                ?: throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+            ?: throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
 
         val wellknownResult = getWellknownTask.execute(GetWellknownTask.Params(domain, homeServerConnectionConfig))
 
         return when (wellknownResult) {
             is WellknownResult.Prompt -> {
                 val newHomeServerConnectionConfig = homeServerConnectionConfig.copy(
-                        homeServerUriBase = Uri.parse(wellknownResult.homeServerUrl),
-                        identityServerUri = wellknownResult.identityServerUrl?.let { Uri.parse(it) } ?: homeServerConnectionConfig.identityServerUri
+                    homeServerUriBase = Uri.parse(wellknownResult.homeServerUrl),
+                    identityServerUri = wellknownResult.identityServerUrl?.let { Uri.parse(it) } ?: homeServerConnectionConfig.identityServerUri
                 )
 
                 val newAuthAPI = buildAuthAPI(newHomeServerConnectionConfig)
@@ -290,7 +290,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
                 getLoginFlowResult(newAuthAPI, versions, wellknownResult.homeServerUrl)
             }
-            else                      -> throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
+            else -> throw Failure.OtherServerError("", HttpsURLConnection.HTTP_NOT_FOUND /* 404 */)
         }
     }
 
@@ -300,27 +300,27 @@ internal class DefaultAuthenticationService @Inject constructor(
             authAPI.getLoginFlows()
         }
         return LoginFlowResult(
-                supportedLoginTypes = loginFlowResponse.flows.orEmpty().mapNotNull { it.type },
-                ssoIdentityProviders = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
-                isLoginAndRegistrationSupported = versions.isLoginAndRegistrationSupportedBySdk(),
-                homeServerUrl = homeServerUrl,
-                isOutdatedHomeserver = !versions.isSupportedBySdk()
+            supportedLoginTypes = loginFlowResponse.flows.orEmpty().mapNotNull { it.type },
+            ssoIdentityProviders = loginFlowResponse.flows.orEmpty().firstOrNull { it.type == LoginFlowTypes.SSO }?.ssoIdentityProvider,
+            isLoginAndRegistrationSupported = versions.isLoginAndRegistrationSupportedBySdk(),
+            homeServerUrl = homeServerUrl,
+            isOutdatedHomeserver = !versions.isSupportedBySdk()
         )
     }
 
     override fun getRegistrationWizard(): RegistrationWizard {
         return currentRegistrationWizard
-                ?: let {
-                    pendingSessionData?.homeServerConnectionConfig?.let {
-                        DefaultRegistrationWizard(
-                                buildAuthAPI(it),
-                                sessionCreator,
-                                pendingSessionStore
-                        ).also {
-                            currentRegistrationWizard = it
-                        }
-                    } ?: error("Please call getLoginFlow() with success first")
-                }
+            ?: let {
+                pendingSessionData?.homeServerConnectionConfig?.let {
+                    DefaultRegistrationWizard(
+                        buildAuthAPI(it),
+                        sessionCreator,
+                        pendingSessionStore
+                    ).also {
+                        currentRegistrationWizard = it
+                    }
+                } ?: error("Please call getLoginFlow() with success first")
+            }
     }
 
     override val isRegistrationStarted: Boolean
@@ -328,17 +328,17 @@ internal class DefaultAuthenticationService @Inject constructor(
 
     override fun getLoginWizard(): LoginWizard {
         return currentLoginWizard
-                ?: let {
-                    pendingSessionData?.homeServerConnectionConfig?.let {
-                        DefaultLoginWizard(
-                                buildAuthAPI(it),
-                                sessionCreator,
-                                pendingSessionStore
-                        ).also {
-                            currentLoginWizard = it
-                        }
-                    } ?: error("Please call getLoginFlow() with success first")
-                }
+            ?: let {
+                pendingSessionData?.homeServerConnectionConfig?.let {
+                    DefaultLoginWizard(
+                        buildAuthAPI(it),
+                        sessionCreator,
+                        pendingSessionStore
+                    ).also {
+                        currentLoginWizard = it
+                    }
+                } ?: error("Please call getLoginFlow() with success first")
+            }
     }
 
     override suspend fun cancelPendingLoginOrRegistration() {
@@ -348,15 +348,15 @@ internal class DefaultAuthenticationService @Inject constructor(
         // Keep only the home sever config
         // Update the local pendingSessionData synchronously
         pendingSessionData = pendingSessionData?.homeServerConnectionConfig
-                ?.let { PendingSessionData(it) }
-                .also {
-                    if (it == null) {
-                        // Should not happen
-                        pendingSessionStore.delete()
-                    } else {
-                        pendingSessionStore.savePendingSessionData(it)
-                    }
+            ?.let { PendingSessionData(it) }
+            .also {
+                if (it == null) {
+                    // Should not happen
+                    pendingSessionStore.delete()
+                } else {
+                    pendingSessionStore.savePendingSessionData(it)
                 }
+            }
     }
 
     override suspend fun reset() {
@@ -368,35 +368,45 @@ internal class DefaultAuthenticationService @Inject constructor(
         pendingSessionStore.delete()
     }
 
-    override suspend fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                              credentials: Credentials): Session {
+    override suspend fun createSessionFromSso(
+        homeServerConnectionConfig: HomeServerConnectionConfig,
+        credentials: Credentials
+    ): Session {
         return sessionCreator.createSession(credentials, homeServerConnectionConfig)
     }
 
-    override suspend fun getWellKnownData(matrixId: String,
-                                          homeServerConnectionConfig: HomeServerConnectionConfig?): WellknownResult {
+    override suspend fun getWellKnownData(
+        matrixId: String,
+        homeServerConnectionConfig: HomeServerConnectionConfig?
+    ): WellknownResult {
         if (!MatrixPatterns.isUserId(matrixId)) {
             throw MatrixIdFailure.InvalidMatrixId
         }
 
-        return getWellknownTask.execute(GetWellknownTask.Params(
+        return getWellknownTask.execute(
+            GetWellknownTask.Params(
                 domain = matrixId.getDomain(),
-                homeServerConnectionConfig = homeServerConnectionConfig)
+                homeServerConnectionConfig = homeServerConnectionConfig
+            )
         )
     }
 
-    override suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                              matrixId: String,
-                                              password: String,
-                                              initialDeviceName: String,
-                                              deviceId: String?): Session {
-        return directLoginTask.execute(DirectLoginTask.Params(
+    override suspend fun directAuthentication(
+        homeServerConnectionConfig: HomeServerConnectionConfig,
+        matrixId: String,
+        password: String,
+        initialDeviceName: String,
+        deviceId: String?
+    ): Session {
+        return directLoginTask.execute(
+            DirectLoginTask.Params(
                 homeServerConnectionConfig = homeServerConnectionConfig,
                 userId = matrixId,
                 password = password,
                 deviceName = initialDeviceName,
                 deviceId = deviceId
-        ))
+            )
+        )
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
@@ -406,8 +416,8 @@ internal class DefaultAuthenticationService @Inject constructor(
 
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
         return okHttpClient.get()
-                .newBuilder()
-                .addSocketFactory(homeServerConnectionConfig)
-                .build()
+            .newBuilder()
+            .addSocketFactory(homeServerConnectionConfig)
+            .build()
     }
 }

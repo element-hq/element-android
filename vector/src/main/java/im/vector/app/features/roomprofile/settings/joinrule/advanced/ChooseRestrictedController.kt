@@ -33,8 +33,8 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 class ChooseRestrictedController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val avatarRenderer: AvatarRenderer
+    private val stringProvider: StringProvider,
+    private val avatarRenderer: AvatarRenderer
 ) : TypedEpoxyController<RoomJoinRuleChooseRestrictedState>() {
 
     interface Listener {
@@ -50,7 +50,7 @@ class ChooseRestrictedController @Inject constructor(
         if (data.filter.isNotEmpty()) {
             when (val results = data.filteredResults) {
                 Uninitialized,
-                is Fail    -> return
+                is Fail -> return
                 is Loading -> loadingItem { id("filter_load") }
                 is Success -> {
                     if (results.invoke().isEmpty()) {

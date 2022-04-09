@@ -41,8 +41,8 @@ typealias TaggedEvents = Map<String, TaggedEvent>
  */
 @JsonClass(generateAdapter = true)
 data class TaggedEventsContent(
-        @Json(name = "tags")
-        var tags: TaggedEvents = emptyMap()
+    @Json(name = "tags")
+    var tags: TaggedEvents = emptyMap()
 ) {
     val favouriteEvents
         get() = tags[TAG_FAVOURITE].orEmpty()
@@ -68,12 +68,12 @@ data class TaggedEventsContent(
 
 @JsonClass(generateAdapter = true)
 data class TaggedEventInfo(
-        @Json(name = "keywords")
-        val keywords: List<String>? = null,
+    @Json(name = "keywords")
+    val keywords: List<String>? = null,
 
-        @Json(name = "origin_server_ts")
-        val originServerTs: Long? = null,
+    @Json(name = "origin_server_ts")
+    val originServerTs: Long? = null,
 
-        @Json(name = "tagged_at")
-        val taggedAt: Long? = null
+    @Json(name = "tagged_at")
+    val taggedAt: Long? = null
 )

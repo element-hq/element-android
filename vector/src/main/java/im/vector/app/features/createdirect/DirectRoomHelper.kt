@@ -28,9 +28,9 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import javax.inject.Inject
 
 class DirectRoomHelper @Inject constructor(
-        private val rawService: RawService,
-        private val session: Session,
-        private val analyticsTracker: AnalyticsTracker
+    private val rawService: RawService,
+    private val session: Session,
+    private val analyticsTracker: AnalyticsTracker
 ) {
 
     suspend fun ensureDMExists(userId: String): String {
@@ -40,8 +40,8 @@ class DirectRoomHelper @Inject constructor(
             roomId = existingRoomId
         } else {
             val adminE2EByDefault = rawService.getElementWellknown(session.sessionParams)
-                    ?.isE2EByDefault()
-                    ?: true
+                ?.isE2EByDefault()
+                ?: true
 
             val roomParams = CreateRoomParams().apply {
                 invitedUserIds.add(userId)

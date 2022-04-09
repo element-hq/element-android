@@ -42,12 +42,12 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.user.model.User
 
 class CreateDirectRoomViewModel @AssistedInject constructor(
-        @Assisted initialState: CreateDirectRoomViewState,
-        private val rawService: RawService,
-        val session: Session,
-        val analyticsTracker: AnalyticsTracker
+    @Assisted initialState: CreateDirectRoomViewState,
+    private val rawService: RawService,
+    val session: Session,
+    val analyticsTracker: AnalyticsTracker
 ) :
-        VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
+    VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
@@ -59,7 +59,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
             is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
-            is CreateDirectRoomAction.QrScannedAction                  -> onCodeParsed(action)
+            is CreateDirectRoomAction.QrScannedAction -> onCodeParsed(action)
         }
     }
 
@@ -103,20 +103,20 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             val adminE2EByDefault = rawService.getElementWellknown(session.sessionParams)
-                    ?.isE2EByDefault()
-                    ?: true
+                ?.isE2EByDefault()
+                ?: true
 
             val roomParams = CreateRoomParams()
-                    .apply {
-                        selections.forEach {
-                            when (it) {
-                                is PendingSelection.UserPendingSelection     -> invitedUserIds.add(it.user.userId)
-                                is PendingSelection.ThreePidPendingSelection -> invite3pids.add(it.threePid)
-                            }
+                .apply {
+                    selections.forEach {
+                        when (it) {
+                            is PendingSelection.UserPendingSelection -> invitedUserIds.add(it.user.userId)
+                            is PendingSelection.ThreePidPendingSelection -> invite3pids.add(it.threePid)
                         }
-                        setDirectMessage()
-                        enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
                     }
+                    setDirectMessage()
+                    enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
+                }
 
             val result = runCatchingToAsync {
                 session.createRoom(roomParams)
@@ -125,7 +125,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
 
             setState {
                 copy(
-                        createAndInviteState = result
+                    createAndInviteState = result
                 )
             }
         }

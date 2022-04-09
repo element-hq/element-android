@@ -38,8 +38,8 @@ class LateInitUserPropertiesFactoryTest {
     }
 
     private val lateInitUserProperties = LateInitUserPropertiesFactory(
-            fakeActiveSessionDataSource.instance,
-            fakeContext.instance
+        fakeActiveSessionDataSource.instance,
+        fakeContext.instance
     )
 
     @Test
@@ -67,7 +67,7 @@ class LateInitUserPropertiesFactoryTest {
         val result = lateInitUserProperties.createUserProperties()
 
         result shouldBeEqualTo UserProperties(
-                ftueUseCaseSelection = UserProperties.FtueUseCaseSelection.WorkMessaging
+            ftueUseCaseSelection = UserProperties.FtueUseCaseSelection.WorkMessaging
         )
     }
 }

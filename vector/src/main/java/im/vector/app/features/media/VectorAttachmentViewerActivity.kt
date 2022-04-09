@@ -61,9 +61,9 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
     @Parcelize
     data class Args(
-            val roomId: String?,
-            val eventId: String,
-            val sharedTransitionName: String?
+        val roomId: String?,
+        val eventId: String,
+        val sharedTransitionName: String?
     ) : Parcelable
 
     @Inject
@@ -204,20 +204,20 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         if (transition != null) {
             // There is an entering shared element transition so add a listener to it
             transition.addListener(
-                    onEnd = {
-                        // The listener is also called when we are exiting
-                        // so we use a boolean to avoid reshowing pager at end of dismiss transition
-                        if (!isAnimatingOut) {
-                            transitionImageContainer.isVisible = false
-                            pager2.isInvisible = false
-                        }
-                    },
-                    onCancel = {
-                        if (!isAnimatingOut) {
-                            transitionImageContainer.isVisible = false
-                            pager2.isInvisible = false
-                        }
+                onEnd = {
+                    // The listener is also called when we are exiting
+                    // so we use a boolean to avoid reshowing pager at end of dismiss transition
+                    if (!isAnimatingOut) {
+                        transitionImageContainer.isVisible = false
+                        pager2.isInvisible = false
                     }
+                },
+                onCancel = {
+                    if (!isAnimatingOut) {
+                        transitionImageContainer.isVisible = false
+                        pager2.isInvisible = false
+                    }
+                }
             )
             return true
         }
@@ -230,20 +230,20 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
     private fun scheduleStartPostponedTransition(sharedElement: View) {
         sharedElement.viewTreeObserver.addOnPreDrawListener(
-                object : ViewTreeObserver.OnPreDrawListener {
-                    override fun onPreDraw(): Boolean {
-                        sharedElement.viewTreeObserver.removeOnPreDrawListener(this)
-                        supportStartPostponedEnterTransition()
-                        return true
-                    }
-                })
+            object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    sharedElement.viewTreeObserver.removeOnPreDrawListener(this)
+                    supportStartPostponedEnterTransition()
+                    return true
+                }
+            })
     }
 
     private fun observeViewEvents() {
         viewModel.viewEvents
-                .stream()
-                .onEach(::handleViewEvents)
-                .launchIn(lifecycleScope)
+            .stream()
+            .onEach(::handleViewEvents)
+            .launchIn(lifecycleScope)
     }
 
     private fun handleViewEvents(event: VectorAttachmentViewerViewEvents) {
@@ -257,8 +257,8 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
     }
 
     private fun hasWritePermission() =
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ||
-                    checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, downloadActionResultLauncher)
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ||
+                checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, downloadActionResultLauncher)
 
     override fun onDismiss() {
         animateClose()
@@ -278,9 +278,9 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
             withContext(Dispatchers.Main) {
                 shareMedia(
-                        this@VectorAttachmentViewerActivity,
-                        file,
-                        getMimeTypeFromUri(this@VectorAttachmentViewerActivity, file.toUri())
+                    this@VectorAttachmentViewerActivity,
+                    file,
+                    getMimeTypeFromUri(this@VectorAttachmentViewerActivity, file.toUri())
                 )
             }
         }
@@ -306,12 +306,14 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         private const val EXTRA_IMAGE_DATA = "EXTRA_IMAGE_DATA"
         private const val EXTRA_IN_MEMORY_DATA = "EXTRA_IN_MEMORY_DATA"
 
-        fun newIntent(context: Context,
-                      mediaData: AttachmentData,
-                      roomId: String?,
-                      eventId: String,
-                      inMemoryData: List<AttachmentData>,
-                      sharedTransitionName: String?) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
+        fun newIntent(
+            context: Context,
+            mediaData: AttachmentData,
+            roomId: String?,
+            eventId: String,
+            inMemoryData: List<AttachmentData>,
+            sharedTransitionName: String?
+        ) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
             it.putExtra(EXTRA_ARGS, Args(roomId, eventId, sharedTransitionName))
             it.putExtra(EXTRA_IMAGE_DATA, mediaData)
             if (inMemoryData.isNotEmpty()) {

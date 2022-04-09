@@ -31,8 +31,10 @@ internal interface FilterApi {
      * @param body   the Json representation of a FilterBody object
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/filter")
-    suspend fun uploadFilter(@Path("userId") userId: String,
-                             @Body body: Filter): FilterResponse
+    suspend fun uploadFilter(
+        @Path("userId") userId: String,
+        @Body body: Filter
+    ): FilterResponse
 
     /**
      * Gets a filter with a given filterId from the homeserver
@@ -42,6 +44,8 @@ internal interface FilterApi {
      * @return Filter
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/filter/{filterId}")
-    suspend fun getFilterById(@Path("userId") userId: String,
-                              @Path("filterId") filterId: String): Filter
+    suspend fun getFilterById(
+        @Path("userId") userId: String,
+        @Path("filterId") filterId: String
+    ): Filter
 }

@@ -24,6 +24,6 @@ import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntit
 
 internal fun UserPresenceEntity.Companion.where(realm: Realm, userId: String): RealmQuery<UserPresenceEntity> {
     return realm
-            .where<UserPresenceEntity>()
-            .equalTo(UserPresenceEntityFields.USER_ID, userId)
+        .where<UserPresenceEntity>()
+        .equalTo(UserPresenceEntityFields.USER_ID, userId)
 }

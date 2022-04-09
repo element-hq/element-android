@@ -20,12 +20,12 @@ package org.matrix.android.sdk.api.federation
  * Ref: https://matrix.org/docs/spec/server_server/latest#get-matrix-federation-v1-version
  */
 data class FederationVersion(
-        /**
-         * Arbitrary name that identify this implementation.
-         */
-        val name: String?,
-        /**
-         * Version of this implementation. The version format depends on the implementation.
-         */
-        val version: String?
+    /**
+     * Arbitrary name that identify this implementation.
+     */
+    val name: String?,
+    /**
+     * Version of this implementation. The version format depends on the implementation.
+     */
+    val version: String?
 )

@@ -30,24 +30,24 @@ import javax.inject.Inject
 internal interface UpdateIgnoredUserIdsTask : Task<UpdateIgnoredUserIdsTask.Params, Unit> {
 
     data class Params(
-            val userIdsToIgnore: List<String> = emptyList(),
-            val userIdsToUnIgnore: List<String> = emptyList()
+        val userIdsToIgnore: List<String> = emptyList(),
+        val userIdsToUnIgnore: List<String> = emptyList()
     )
 }
 
 internal class DefaultUpdateIgnoredUserIdsTask @Inject constructor(
-        private val accountDataApi: AccountDataAPI,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val saveIgnoredUsersTask: SaveIgnoredUsersTask,
-        @UserId private val userId: String,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val accountDataApi: AccountDataAPI,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val saveIgnoredUsersTask: SaveIgnoredUsersTask,
+    @UserId private val userId: String,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : UpdateIgnoredUserIdsTask {
 
     override suspend fun execute(params: UpdateIgnoredUserIdsTask.Params) {
         // Get current list
         val ignoredUserIds = monarchy.fetchAllMappedSync(
-                { realm -> realm.where(IgnoredUserEntity::class.java) },
-                { it.userId }
+            { realm -> realm.where(IgnoredUserEntity::class.java) },
+            { it.userId }
         ).toMutableSet()
 
         val original = ignoredUserIds.toSet()

@@ -21,10 +21,10 @@ import im.vector.app.features.userdirectory.PendingSelection
 
 sealed class CreateDirectRoomAction : VectorViewModelAction {
     data class CreateRoomAndInviteSelectedUsers(
-            val selections: Set<PendingSelection>
+        val selections: Set<PendingSelection>
     ) : CreateDirectRoomAction()
 
     data class QrScannedAction(
-            val result: String
+        val result: String
     ) : CreateDirectRoomAction()
 }

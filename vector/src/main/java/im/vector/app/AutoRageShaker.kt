@@ -42,10 +42,10 @@ const val AUTO_RS_REQUEST = "im.vector.auto_rs_request"
 
 @Singleton
 class AutoRageShaker @Inject constructor(
-        private val sessionDataSource: ActiveSessionDataSource,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val bugReporter: BugReporter,
-        private val vectorPreferences: VectorPreferences
+    private val sessionDataSource: ActiveSessionDataSource,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val bugReporter: BugReporter,
+    private val vectorPreferences: VectorPreferences
 ) : Session.Listener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val activeSessionIds = mutableSetOf<String>()
@@ -54,8 +54,8 @@ class AutoRageShaker @Inject constructor(
 
     // Simple in memory cache of already sent report
     private data class ReportInfo(
-            val roomId: String,
-            val sessionId: String
+        val roomId: String,
+        val sessionId: String
     )
 
     private val alreadyReportedUisi = mutableListOf<ReportInfo>()
@@ -72,24 +72,24 @@ class AutoRageShaker @Inject constructor(
         // Simple rate limit, notice that order is not
         // necessarily preserved
         e2eDetectedFlow
-                .onEach {
-                    sendRageShake(it)
-                    delay(2_000)
-                }
-                .catch { cause ->
-                    Timber.w(cause, "Failed to RS")
-                }
-                .launchIn(coroutineScope)
+            .onEach {
+                sendRageShake(it)
+                delay(2_000)
+            }
+            .catch { cause ->
+                Timber.w(cause, "Failed to RS")
+            }
+            .launchIn(coroutineScope)
 
         matchingRSRequestFlow
-                .onEach {
-                    sendMatchingRageShake(it)
-                    delay(2_000)
-                }
-                .catch { cause ->
-                    Timber.w(cause, "Failed to send matching rageshake")
-                }
-                .launchIn(coroutineScope)
+            .onEach {
+                sendMatchingRageShake(it)
+                delay(2_000)
+            }
+            .catch { cause ->
+                Timber.w(cause, "Failed to send matching rageshake")
+            }
+            .launchIn(coroutineScope)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -105,13 +105,13 @@ class AutoRageShaker @Inject constructor(
 
     private fun observeActiveSession() {
         sessionDataSource.stream()
-                .distinctUntilChanged()
-                .onEach {
-                    it.orNull()?.let { session ->
-                        onSessionActive(session)
-                    }
+            .distinctUntilChanged()
+            .onEach {
+                it.orNull()?.let { session ->
+                    onSessionActive(session)
                 }
-                .launchIn(coroutineScope)
+            }
+            .launchIn(coroutineScope)
     }
 
     fun decryptionErrorDetected(target: E2EMessageDetected) {
@@ -134,66 +134,66 @@ class AutoRageShaker @Inject constructor(
 
     private fun sendRageShake(target: E2EMessageDetected) {
         bugReporter.sendBugReport(
-                reportType = ReportType.AUTO_UISI,
-                withDevicesLogs = true,
-                withCrashLogs = true,
-                withKeyRequestHistory = true,
-                withScreenshot = false,
-                theBugDescription = "Auto-reporting decryption error",
-                serverVersion = "",
-                canContact = false,
-                customFields = mapOf("auto_uisi" to buildString {
-                    append("{")
-                    append("\"event_id\": \"${target.eventId}\",")
-                    append("\"room_id\": \"${target.roomId}\",")
-                    append("\"sender_key\": \"${target.senderKey}\",")
-                    append("\"device_id\": \"${target.senderDeviceId}\",")
-                    append("\"source\": \"${target.source}\",")
-                    append("\"user_id\": \"${target.senderUserId}\",")
-                    append("\"session_id\": \"${target.sessionId}\"")
-                    append("}")
-                }),
-                listener = object : BugReporter.IMXBugReportListener {
-                    override fun onUploadCancelled() {
-                        synchronized(alreadyReportedUisi) {
-                            alreadyReportedUisi.remove(ReportInfo(target.roomId, target.sessionId))
+            reportType = ReportType.AUTO_UISI,
+            withDevicesLogs = true,
+            withCrashLogs = true,
+            withKeyRequestHistory = true,
+            withScreenshot = false,
+            theBugDescription = "Auto-reporting decryption error",
+            serverVersion = "",
+            canContact = false,
+            customFields = mapOf("auto_uisi" to buildString {
+                append("{")
+                append("\"event_id\": \"${target.eventId}\",")
+                append("\"room_id\": \"${target.roomId}\",")
+                append("\"sender_key\": \"${target.senderKey}\",")
+                append("\"device_id\": \"${target.senderDeviceId}\",")
+                append("\"source\": \"${target.source}\",")
+                append("\"user_id\": \"${target.senderUserId}\",")
+                append("\"session_id\": \"${target.sessionId}\"")
+                append("}")
+            }),
+            listener = object : BugReporter.IMXBugReportListener {
+                override fun onUploadCancelled() {
+                    synchronized(alreadyReportedUisi) {
+                        alreadyReportedUisi.remove(ReportInfo(target.roomId, target.sessionId))
+                    }
+                }
+
+                override fun onUploadFailed(reason: String?) {
+                    synchronized(alreadyReportedUisi) {
+                        alreadyReportedUisi.remove(ReportInfo(target.roomId, target.sessionId))
+                    }
+                }
+
+                override fun onProgress(progress: Int) {
+                }
+
+                override fun onUploadSucceed(reportUrl: String?) {
+                    // we need to send the toDevice message to the sender
+
+                    coroutineScope.launch {
+                        try {
+                            activeSessionHolder.getSafeActiveSession()?.sendToDevice(
+                                eventType = AUTO_RS_REQUEST,
+                                userId = target.senderUserId,
+                                deviceId = target.senderDeviceId,
+                                content = mapOf(
+                                    "event_id" to target.eventId,
+                                    "room_id" to target.roomId,
+                                    "session_id" to target.sessionId,
+                                    "device_id" to target.senderDeviceId,
+                                    "user_id" to target.senderUserId,
+                                    "sender_key" to target.senderKey,
+                                    "recipient_rageshake" to reportUrl
+                                ).toContent()
+                            )
+                        } catch (failure: Throwable) {
+                            Timber.w("failed to send auto-uisi to device")
                         }
                     }
-
-                    override fun onUploadFailed(reason: String?) {
-                        synchronized(alreadyReportedUisi) {
-                            alreadyReportedUisi.remove(ReportInfo(target.roomId, target.sessionId))
-                        }
-                    }
-
-                    override fun onProgress(progress: Int) {
-                    }
-
-                    override fun onUploadSucceed(reportUrl: String?) {
-                        // we need to send the toDevice message to the sender
-
-                        coroutineScope.launch {
-                            try {
-                                activeSessionHolder.getSafeActiveSession()?.sendToDevice(
-                                        eventType = AUTO_RS_REQUEST,
-                                        userId = target.senderUserId,
-                                        deviceId = target.senderDeviceId,
-                                        content = mapOf(
-                                                "event_id" to target.eventId,
-                                                "room_id" to target.roomId,
-                                                "session_id" to target.sessionId,
-                                                "device_id" to target.senderDeviceId,
-                                                "user_id" to target.senderUserId,
-                                                "sender_key" to target.senderKey,
-                                                "recipient_rageshake" to reportUrl
-                                        ).toContent()
-                                )
-                            } catch (failure: Throwable) {
-                                Timber.w("failed to send auto-uisi to device")
-                            }
-                        }
-                    }
-                })
+                }
+            })
     }
 
     fun remoteAutoUISIRequest(event: Event) {
@@ -215,28 +215,28 @@ class AutoRageShaker @Inject constructor(
         val matchingIssue = event.content?.get("recipient_rageshake")?.toString() ?: ""
 
         bugReporter.sendBugReport(
-                reportType = ReportType.AUTO_UISI_SENDER,
-                withDevicesLogs = true,
-                withCrashLogs = true,
-                withKeyRequestHistory = true,
-                withScreenshot = false,
-                theBugDescription = "Auto-reporting decryption error \nRecipient rageshake: $matchingIssue",
-                serverVersion = "",
-                canContact = false,
-                customFields = mapOf(
-                        "auto_uisi" to buildString {
-                            append("{")
-                            append("\"event_id\": \"$eventId\",")
-                            append("\"room_id\": \"$roomId\",")
-                            append("\"sender_key\": \"$senderKey\",")
-                            append("\"device_id\": \"$deviceId\",")
-                            append("\"user_id\": \"$userId\",")
-                            append("\"session_id\": \"$sessionId\"")
-                            append("}")
-                        },
-                        "recipient_rageshake" to matchingIssue
-                ),
-                listener = null
+            reportType = ReportType.AUTO_UISI_SENDER,
+            withDevicesLogs = true,
+            withCrashLogs = true,
+            withKeyRequestHistory = true,
+            withScreenshot = false,
+            theBugDescription = "Auto-reporting decryption error \nRecipient rageshake: $matchingIssue",
+            serverVersion = "",
+            canContact = false,
+            customFields = mapOf(
+                "auto_uisi" to buildString {
+                    append("{")
+                    append("\"event_id\": \"$eventId\",")
+                    append("\"room_id\": \"$roomId\",")
+                    append("\"sender_key\": \"$senderKey\",")
+                    append("\"device_id\": \"$deviceId\",")
+                    append("\"user_id\": \"$userId\",")
+                    append("\"session_id\": \"$sessionId\"")
+                    append("}")
+                },
+                "recipient_rageshake" to matchingIssue
+            ),
+            listener = null
         )
     }
 

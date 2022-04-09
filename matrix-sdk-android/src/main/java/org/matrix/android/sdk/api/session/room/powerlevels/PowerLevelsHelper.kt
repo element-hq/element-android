@@ -39,8 +39,8 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      */
     fun getUserPowerLevelValue(userId: String): Int {
         return powerLevelsContent.users
-                ?.get(userId)
-                ?: powerLevelsContent.usersDefaultOrDefault()
+            ?.get(userId)
+            ?: powerLevelsContent.usersDefaultOrDefault()
     }
 
     /**
@@ -67,11 +67,11 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
         return if (userId.isNotEmpty()) {
             val powerLevel = getUserPowerLevelValue(userId)
             val minimumPowerLevel = powerLevelsContent.events?.get(eventType)
-                    ?: if (isState) {
-                        powerLevelsContent.stateDefaultOrDefault()
-                    } else {
-                        powerLevelsContent.eventsDefaultOrDefault()
-                    }
+                ?: if (isState) {
+                    powerLevelsContent.stateDefaultOrDefault()
+                } else {
+                    powerLevelsContent.eventsDefaultOrDefault()
+                }
             powerLevel >= minimumPowerLevel
         } else false
     }

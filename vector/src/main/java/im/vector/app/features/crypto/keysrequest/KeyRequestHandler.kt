@@ -50,11 +50,11 @@ import javax.inject.Singleton
 
 @Singleton
 class KeyRequestHandler @Inject constructor(
-        private val context: Context,
-        private val popupAlertManager: PopupAlertManager,
-        private val dateFormatter: VectorDateFormatter
+    private val context: Context,
+    private val popupAlertManager: PopupAlertManager,
+    private val dateFormatter: VectorDateFormatter
 ) : GossipingRequestListener,
-        VerificationService.Listener {
+    VerificationService.Listener {
 
     private val alertsToRequests = HashMap<String, ArrayList<IncomingRoomKeyRequest>>()
 
@@ -138,12 +138,14 @@ class KeyRequestHandler @Inject constructor(
         })
     }
 
-    private fun postAlert(context: Context,
-                          userId: String,
-                          deviceId: String,
-                          wasNewDevice: Boolean,
-                          deviceInfo: CryptoDeviceInfo?,
-                          moreInfo: DeviceInfo? = null) {
+    private fun postAlert(
+        context: Context,
+        userId: String,
+        deviceId: String,
+        wasNewDevice: Boolean,
+        deviceInfo: CryptoDeviceInfo?,
+        moreInfo: DeviceInfo? = null
+    ) {
         val deviceName = if (deviceInfo!!.displayName().isNullOrEmpty()) deviceInfo.deviceId else deviceInfo.displayName()
         val dialogText: String?
 
@@ -170,10 +172,10 @@ class KeyRequestHandler @Inject constructor(
         }
 
         val alert = DefaultVectorAlert(
-                alertManagerId(userId, deviceId),
-                context.getString(R.string.key_share_request),
-                dialogText,
-                R.drawable.key_small
+            alertManagerId(userId, deviceId),
+            context.getString(R.string.key_share_request),
+            dialogText,
+            R.drawable.key_small
         )
 
         alert.colorRes = R.color.key_share_req_accent_color

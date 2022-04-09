@@ -53,17 +53,18 @@ fun Context.getResTintedDrawable(@DrawableRes drawableRes: Int, @ColorRes tint: 
     return getTintedDrawable(drawableRes, ContextCompat.getColor(this, tint), alpha)
 }
 
-fun Context.getTintedDrawable(@DrawableRes drawableRes: Int,
-                              @ColorInt tint: Int,
-                              @FloatRange(from = 0.0, to = 1.0) alpha: Float = 1f
+fun Context.getTintedDrawable(
+    @DrawableRes drawableRes: Int,
+    @ColorInt tint: Int,
+    @FloatRange(from = 0.0, to = 1.0) alpha: Float = 1f
 ) = ContextCompat.getDrawable(this, drawableRes)
-        ?.mutate()
-        ?.also { drawable ->
-            drawable.setTint(tint)
-            alpha.let {
-                drawable.alpha = it.toAndroidAlpha()
-            }
+    ?.mutate()
+    ?.also { drawable ->
+        drawable.setTint(tint)
+        alpha.let {
+            drawable.alpha = it.toAndroidAlpha()
         }
+    }
 
 private fun Float.toAndroidAlpha(): Int {
     return (this * 255).roundToInt()

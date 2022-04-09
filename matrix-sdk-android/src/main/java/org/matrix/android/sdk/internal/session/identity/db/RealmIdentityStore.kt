@@ -29,8 +29,8 @@ import javax.inject.Inject
 
 @SessionScope
 internal class RealmIdentityStore @Inject constructor(
-        @IdentityDatabase
-        private val realmConfiguration: RealmConfiguration
+    @IdentityDatabase
+    private val realmConfiguration: RealmConfiguration
 ) : IdentityStore {
 
     override fun getIdentityData(): IdentityData? {

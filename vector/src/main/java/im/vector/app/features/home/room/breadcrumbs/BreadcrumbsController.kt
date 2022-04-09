@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class BreadcrumbsController @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+    private val avatarRenderer: AvatarRenderer
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -46,21 +46,21 @@ class BreadcrumbsController @Inject constructor(
         // An empty breadcrumbs list can only be temporary because when entering in a room,
         // this one is added to the breadcrumbs
         safeViewState.asyncBreadcrumbs.invoke()
-                ?.forEach { roomSummary ->
-                    breadcrumbsItem {
-                        id(roomSummary.roomId)
-                        hasTypingUsers(roomSummary.typingUsers.isNotEmpty())
-                        avatarRenderer(host.avatarRenderer)
-                        matrixItem(roomSummary.toMatrixItem())
-                        unreadNotificationCount(roomSummary.notificationCount)
-                        showHighlighted(roomSummary.highlightCount > 0)
-                        hasUnreadMessage(roomSummary.hasUnreadMessages)
-                        hasDraft(roomSummary.userDrafts.isNotEmpty())
-                        itemClickListener {
-                            host.listener?.onBreadcrumbClicked(roomSummary.roomId)
-                        }
+            ?.forEach { roomSummary ->
+                breadcrumbsItem {
+                    id(roomSummary.roomId)
+                    hasTypingUsers(roomSummary.typingUsers.isNotEmpty())
+                    avatarRenderer(host.avatarRenderer)
+                    matrixItem(roomSummary.toMatrixItem())
+                    unreadNotificationCount(roomSummary.notificationCount)
+                    showHighlighted(roomSummary.highlightCount > 0)
+                    hasUnreadMessage(roomSummary.hasUnreadMessages)
+                    hasDraft(roomSummary.userDrafts.isNotEmpty())
+                    itemClickListener {
+                        host.listener?.onBreadcrumbClicked(roomSummary.roomId)
                     }
                 }
+            }
     }
 
     interface Listener {

@@ -52,8 +52,8 @@ abstract class WidgetTileTimelineItem : AbsBaseMessageItem<WidgetTileTimelineIte
 
         holder.titleView.text = attributes.title
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(holder.view.context, attributes.drawableStart),
-                null, null, null
+            ContextCompat.getDrawable(holder.view.context, attributes.drawableStart),
+            null, null, null
         )
 
         renderSendState(holder.view, null, holder.failedToSendIndicator)
@@ -73,17 +73,17 @@ abstract class WidgetTileTimelineItem : AbsBaseMessageItem<WidgetTileTimelineIte
      * This class holds all the common attributes for timeline items.
      */
     data class Attributes(
-            val title: String,
-            @DrawableRes
-            val drawableStart: Int,
-            override val informationData: MessageInformationData,
-            override val avatarRenderer: AvatarRenderer,
-            override val messageColorProvider: MessageColorProvider,
-            override val itemLongClickListener: View.OnLongClickListener? = null,
-            override val itemClickListener: ClickListener? = null,
-            override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
-            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val emojiTypeFace: Typeface? = null,
-            override val reactionsSummaryEvents: ReactionsSummaryEvents? = null
+        val title: String,
+        @DrawableRes
+        val drawableStart: Int,
+        override val informationData: MessageInformationData,
+        override val avatarRenderer: AvatarRenderer,
+        override val messageColorProvider: MessageColorProvider,
+        override val itemLongClickListener: View.OnLongClickListener? = null,
+        override val itemClickListener: ClickListener? = null,
+        override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
+        override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
+        val emojiTypeFace: Typeface? = null,
+        override val reactionsSummaryEvents: ReactionsSummaryEvents? = null
     ) : AbsBaseMessageItem.Attributes
 }

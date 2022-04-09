@@ -30,15 +30,15 @@ import im.vector.app.databinding.FragmentSpaceCreateGenericEpoxyFormBinding
 import javax.inject.Inject
 
 class CreateSpaceDefaultRoomsFragment @Inject constructor(
-        private val epoxyController: SpaceDefaultRoomEpoxyController
+    private val epoxyController: SpaceDefaultRoomEpoxyController
 ) : VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(),
-        SpaceDefaultRoomEpoxyController.Listener,
-        OnBackPressed {
+    SpaceDefaultRoomEpoxyController.Listener,
+    OnBackPressed {
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentSpaceCreateGenericEpoxyFormBinding.inflate(layoutInflater, container, false)
+        FragmentSpaceCreateGenericEpoxyFormBinding.inflate(layoutInflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -28,7 +28,7 @@ import java.lang.ref.WeakReference
 // for better customization and control
 // But for now VideoView is enough, it released player when detached, we use a timer to update progress
 class VideoViewHolder constructor(itemView: View) :
-        BaseViewHolder(itemView) {
+    BaseViewHolder(itemView) {
 
     private var isSelected = false
     private var mVideoPath: String? = null
@@ -108,7 +108,7 @@ class VideoViewHolder constructor(itemView: View) :
                         val duration = views.videoView.duration
                         val progress = views.videoView.currentPosition
                         val isPlaying = views.videoView.isPlaying
-//                        Log.v("FOO", "isPlaying $isPlaying $progress/$duration")
+                        //                        Log.v("FOO", "isPlaying $isPlaying $progress/$duration")
                         eventListener?.get()?.onEvent(AttachmentEvents.VideoEvent(isPlaying, progress, duration))
                     }
                 }
@@ -146,7 +146,7 @@ class VideoViewHolder constructor(itemView: View) :
                 wasPaused = true
                 views.videoView.pause()
             }
-            is AttachmentCommands.SeekTo  -> {
+            is AttachmentCommands.SeekTo -> {
                 val duration = views.videoView.duration
                 if (duration > 0) {
                     val seekDuration = duration * (commands.percentProgress / 100f)

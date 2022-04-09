@@ -27,33 +27,33 @@ import javax.inject.Inject
 
 internal interface FetchEditHistoryTask : Task<FetchEditHistoryTask.Params, List<Event>> {
     data class Params(
-            val roomId: String,
-            val eventId: String
+        val roomId: String,
+        val eventId: String
     )
 }
 
 internal class DefaultFetchEditHistoryTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    private val cryptoSessionInfoProvider: CryptoSessionInfoProvider
 ) : FetchEditHistoryTask {
 
     override suspend fun execute(params: FetchEditHistoryTask.Params): List<Event> {
         val isRoomEncrypted = cryptoSessionInfoProvider.isRoomEncrypted(params.roomId)
         val response = executeRequest(globalErrorReceiver) {
             roomAPI.getRelations(
-                    roomId = params.roomId,
-                    eventId = params.eventId,
-                    relationType = RelationType.REPLACE,
-                    eventType = if (isRoomEncrypted) EventType.ENCRYPTED else EventType.MESSAGE
+                roomId = params.roomId,
+                eventId = params.eventId,
+                relationType = RelationType.REPLACE,
+                eventType = if (isRoomEncrypted) EventType.ENCRYPTED else EventType.MESSAGE
             )
         }
 
         // Filter out edition form other users, and redacted editions
         val originalSenderId = response.originalEvent?.senderId
         val events = response.chunks
-                .filter { it.senderId == originalSenderId }
-                .filter { !it.isRedacted() }
+            .filter { it.senderId == originalSenderId }
+            .filter { !it.isRedacted() }
         return events + listOfNotNull(response.originalEvent)
     }
 }

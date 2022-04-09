@@ -36,11 +36,11 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 
 class RoomDirectoryPickerViewModel @AssistedInject constructor(
-        @Assisted initialState: RoomDirectoryPickerViewState,
-        private val session: Session,
-        private val uiStateRepository: UiStateRepository,
-        private val stringProvider: StringProvider,
-        private val roomDirectoryListCreator: RoomDirectoryListCreator
+    @Assisted initialState: RoomDirectoryPickerViewState,
+    private val session: Session,
+    private val uiStateRepository: UiStateRepository,
+    private val stringProvider: StringProvider,
+    private val roomDirectoryListCreator: RoomDirectoryListCreator
 ) : VectorViewModel<RoomDirectoryPickerViewState, RoomDirectoryPickerAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -58,8 +58,8 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
 
     private fun observeAndCompute() {
         onEach(
-                RoomDirectoryPickerViewState::asyncThirdPartyRequest,
-                RoomDirectoryPickerViewState::customHomeservers
+            RoomDirectoryPickerViewState::asyncThirdPartyRequest,
+            RoomDirectoryPickerViewState::customHomeservers
         ) { async, custom ->
             async()?.let {
                 setState {
@@ -90,18 +90,18 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
     private fun loadCustomRoomDirectoryHomeservers() {
         setState {
             copy(
-                    customHomeservers = uiStateRepository.getCustomRoomDirectoryHomeservers(session.sessionId)
+                customHomeservers = uiStateRepository.getCustomRoomDirectoryHomeservers(session.sessionId)
             )
         }
     }
 
     override fun handle(action: RoomDirectoryPickerAction) {
         when (action) {
-            RoomDirectoryPickerAction.Retry           -> load()
-            RoomDirectoryPickerAction.EnterEditMode   -> handleEnterEditMode()
-            RoomDirectoryPickerAction.ExitEditMode    -> handleExitEditMode()
+            RoomDirectoryPickerAction.Retry -> load()
+            RoomDirectoryPickerAction.EnterEditMode -> handleEnterEditMode()
+            RoomDirectoryPickerAction.ExitEditMode -> handleExitEditMode()
             is RoomDirectoryPickerAction.SetServerUrl -> handleSetServerUrl(action)
-            RoomDirectoryPickerAction.Submit          -> handleSubmit()
+            RoomDirectoryPickerAction.Submit -> handleSubmit()
             is RoomDirectoryPickerAction.RemoveServer -> handleRemoveServer(action)
         }
     }
@@ -109,9 +109,9 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
     private fun handleEnterEditMode() {
         setState {
             copy(
-                    inEditMode = true,
-                    enteredServer = "",
-                    addServerAsync = Uninitialized
+                inEditMode = true,
+                enteredServer = "",
+                addServerAsync = Uninitialized
             )
         }
     }
@@ -119,9 +119,9 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
     private fun handleExitEditMode() {
         setState {
             copy(
-                    inEditMode = false,
-                    enteredServer = "",
-                    addServerAsync = Uninitialized
+                inEditMode = false,
+                enteredServer = "",
+                addServerAsync = Uninitialized
             )
         }
     }
@@ -129,7 +129,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
     private fun handleSetServerUrl(action: RoomDirectoryPickerAction.SetServerUrl) {
         setState {
             copy(
-                    enteredServer = action.url
+                enteredServer = action.url
             )
         }
     }
@@ -153,18 +153,18 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
             }
             try {
                 session.getPublicRooms(
-                        server = enteredServer,
-                        publicRoomsParams = PublicRoomsParams(limit = 1)
+                    server = enteredServer,
+                    publicRoomsParams = PublicRoomsParams(limit = 1)
                 )
                 // Success, let add the server to our local repository, and update the state
                 val newSet = uiStateRepository.getCustomRoomDirectoryHomeservers(session.sessionId) + enteredServer
                 uiStateRepository.setCustomRoomDirectoryHomeservers(session.sessionId, newSet)
                 setState {
                     copy(
-                            inEditMode = false,
-                            enteredServer = "",
-                            addServerAsync = Uninitialized,
-                            customHomeservers = newSet
+                        inEditMode = false,
+                        enteredServer = "",
+                        addServerAsync = Uninitialized,
+                        customHomeservers = newSet
                     )
                 }
             } catch (failure: Throwable) {
@@ -180,7 +180,7 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
         uiStateRepository.setCustomRoomDirectoryHomeservers(session.sessionId, newSet)
         setState {
             copy(
-                    customHomeservers = newSet
+                customHomeservers = newSet
             )
         }
     }

@@ -63,9 +63,9 @@ class MathUtilTest : MatrixTest {
         // Test that the result make sense, when we use chunked()
         if (result.chunkSize > 0) {
             generateSequence { "a" }
-                    .take(listSize)
-                    .chunked(result.chunkSize)
-                    .shouldHaveSize(result.numberOfChunks)
+                .take(listSize)
+                .chunked(result.chunkSize)
+                .shouldHaveSize(result.numberOfChunks)
         }
     }
 }

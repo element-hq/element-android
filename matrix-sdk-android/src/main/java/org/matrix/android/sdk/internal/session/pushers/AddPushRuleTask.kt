@@ -24,14 +24,14 @@ import javax.inject.Inject
 
 internal interface AddPushRuleTask : Task<AddPushRuleTask.Params, Unit> {
     data class Params(
-            val kind: RuleKind,
-            val pushRule: PushRule
+        val kind: RuleKind,
+        val pushRule: PushRule
     )
 }
 
 internal class DefaultAddPushRuleTask @Inject constructor(
-        private val pushRulesApi: PushRulesApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val pushRulesApi: PushRulesApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddPushRuleTask {
 
     override suspend fun execute(params: AddPushRuleTask.Params) {

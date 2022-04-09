@@ -71,26 +71,26 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 data class DevicesViewState(
-        val myDeviceId: String = "",
-//        val devices: Async<List<DeviceInfo>> = Uninitialized,
-//        val cryptoDevices: Async<List<CryptoDeviceInfo>> = Uninitialized,
-        val devices: Async<List<DeviceFullInfo>> = Uninitialized,
-        // TODO Replace by isLoading boolean
-        val request: Async<Unit> = Uninitialized,
-        val hasAccountCrossSigning: Boolean = false,
-        val accountCrossSigningIsTrusted: Boolean = false
+    val myDeviceId: String = "",
+    //        val devices: Async<List<DeviceInfo>> = Uninitialized,
+    //        val cryptoDevices: Async<List<CryptoDeviceInfo>> = Uninitialized,
+    val devices: Async<List<DeviceFullInfo>> = Uninitialized,
+    // TODO Replace by isLoading boolean
+    val request: Async<Unit> = Uninitialized,
+    val hasAccountCrossSigning: Boolean = false,
+    val accountCrossSigningIsTrusted: Boolean = false
 ) : MavericksState
 
 data class DeviceFullInfo(
-        val deviceInfo: DeviceInfo,
-        val cryptoDeviceInfo: CryptoDeviceInfo?
+    val deviceInfo: DeviceInfo,
+    val cryptoDeviceInfo: CryptoDeviceInfo?
 )
 
 class DevicesViewModel @AssistedInject constructor(
-        @Assisted initialState: DevicesViewState,
-        private val session: Session,
-        private val reAuthHelper: ReAuthHelper,
-        private val stringProvider: StringProvider
+    @Assisted initialState: DevicesViewState,
+    private val session: Session,
+    private val reAuthHelper: ReAuthHelper,
+    private val stringProvider: StringProvider
 ) : VectorViewModel<DevicesViewState, DevicesAction, DevicesViewEvents>(initialState), VerificationService.Listener {
 
     var uiaContinuation: Continuation<UIABaseAuth>? = null
@@ -109,69 +109,69 @@ class DevicesViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized(),
-                    accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
-                    myDeviceId = session.sessionParams.deviceId ?: ""
+                hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized(),
+                accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified(),
+                myDeviceId = session.sessionParams.deviceId ?: ""
             )
         }
 
         combine(
-                session.flow().liveUserCryptoDevices(session.myUserId),
-                session.flow().liveMyDevicesInfo()
+            session.flow().liveUserCryptoDevices(session.myUserId),
+            session.flow().liveMyDevicesInfo()
         ) { cryptoList, infoList ->
             infoList
-                    .sortedByDescending { it.lastSeenTs }
-                    .map { deviceInfo ->
-                        val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
-                        DeviceFullInfo(deviceInfo, cryptoDeviceInfo)
-                    }
-        }
-                .distinctUntilChanged()
-                .execute { async ->
-                    copy(
-                            devices = async
-                    )
+                .sortedByDescending { it.lastSeenTs }
+                .map { deviceInfo ->
+                    val cryptoDeviceInfo = cryptoList.firstOrNull { it.deviceId == deviceInfo.deviceId }
+                    DeviceFullInfo(deviceInfo, cryptoDeviceInfo)
                 }
+        }
+            .distinctUntilChanged()
+            .execute { async ->
+                copy(
+                    devices = async
+                )
+            }
 
         session.flow().liveCrossSigningInfo(session.myUserId)
-                .execute {
-                    copy(
-                            hasAccountCrossSigning = it.invoke()?.getOrNull() != null,
-                            accountCrossSigningIsTrusted = it.invoke()?.getOrNull()?.isTrusted() == true
-                    )
-                }
+            .execute {
+                copy(
+                    hasAccountCrossSigning = it.invoke()?.getOrNull() != null,
+                    accountCrossSigningIsTrusted = it.invoke()?.getOrNull()?.isTrusted() == true
+                )
+            }
         session.cryptoService().verificationService().addListener(this)
 
-//        session.flow().liveMyDeviceInfo()
-//                .execute {
-//                    copy(
-//                            devices = it
-//                    )
-//                }
+        //        session.flow().liveMyDeviceInfo()
+        //                .execute {
+        //                    copy(
+        //                            devices = it
+        //                    )
+        //                }
 
         session.flow().liveUserCryptoDevices(session.myUserId)
-                .map { it.size }
-                .distinctUntilChanged()
-                .sample(5_000)
-                .onEach {
-                    // If we have a new crypto device change, we might want to trigger refresh of device info
-                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
-                }
-                .launchIn(viewModelScope)
+            .map { it.size }
+            .distinctUntilChanged()
+            .sample(5_000)
+            .onEach {
+                // If we have a new crypto device change, we might want to trigger refresh of device info
+                session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+            }
+            .launchIn(viewModelScope)
 
-//        session.flow().liveUserCryptoDevices(session.myUserId)
-//                .execute {
-//                    copy(
-//                            cryptoDevices = it
-//                    )
-//                }
+        //        session.flow().liveUserCryptoDevices(session.myUserId)
+        //                .execute {
+        //                    copy(
+        //                            cryptoDevices = it
+        //                    )
+        //                }
 
         refreshSource.stream().throttleFirst(4_000)
-                .onEach {
-                    session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
-                    session.cryptoService().downloadKeys(listOf(session.myUserId), true, NoOpMatrixCallback())
-                }
-                .launchIn(viewModelScope)
+            .onEach {
+                session.cryptoService().fetchDevicesList(NoOpMatrixCallback())
+                session.cryptoService().downloadKeys(listOf(session.myUserId), true, NoOpMatrixCallback())
+            }
+            .launchIn(viewModelScope)
         // then force download
         queryRefreshDevicesList()
     }
@@ -198,15 +198,15 @@ class DevicesViewModel @AssistedInject constructor(
 
     override fun handle(action: DevicesAction) {
         return when (action) {
-            is DevicesAction.Refresh                -> queryRefreshDevicesList()
-            is DevicesAction.Delete                 -> handleDelete(action)
-            is DevicesAction.Rename                 -> handleRename(action)
-            is DevicesAction.PromptRename           -> handlePromptRename(action)
-            is DevicesAction.VerifyMyDevice         -> handleInteractiveVerification(action)
-            is DevicesAction.CompleteSecurity       -> handleCompleteSecurity()
+            is DevicesAction.Refresh -> queryRefreshDevicesList()
+            is DevicesAction.Delete -> handleDelete(action)
+            is DevicesAction.Rename -> handleRename(action)
+            is DevicesAction.PromptRename -> handlePromptRename(action)
+            is DevicesAction.VerifyMyDevice -> handleInteractiveVerification(action)
+            is DevicesAction.CompleteSecurity -> handleCompleteSecurity()
             is DevicesAction.MarkAsManuallyVerified -> handleVerifyManually(action)
             is DevicesAction.VerifyMyDeviceManually -> handleShowDeviceCryptoInfo(action)
-            is DevicesAction.SsoAuthDone            -> {
+            is DevicesAction.SsoAuthDone -> {
                 // we should use token based auth
                 // _viewEvents.post(CrossSigningSettingsViewEvents.ShowModalWaitingView(null))
                 // will release the interactive auth interceptor
@@ -218,20 +218,20 @@ class DevicesViewModel @AssistedInject constructor(
                 }
                 Unit
             }
-            is DevicesAction.PasswordAuthDone       -> {
+            is DevicesAction.PasswordAuthDone -> {
                 val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
-                        UserPasswordAuth(
-                                session = pendingAuth?.session,
-                                password = decryptedPass,
-                                user = session.myUserId
-                        )
+                    UserPasswordAuth(
+                        session = pendingAuth?.session,
+                        password = decryptedPass,
+                        user = session.myUserId
+                    )
                 )
                 Unit
             }
-            DevicesAction.ReAuthCancelled           -> {
+            DevicesAction.ReAuthCancelled -> {
                 Timber.d("## UIA - Reauth cancelled")
-//                _viewEvents.post(DevicesViewEvents.Loading)
+                //                _viewEvents.post(DevicesViewEvents.Loading)
                 uiaContinuation?.resumeWithException(Exception())
                 uiaContinuation = null
                 pendingAuth = null
@@ -241,20 +241,22 @@ class DevicesViewModel @AssistedInject constructor(
 
     private fun handleInteractiveVerification(action: DevicesAction.VerifyMyDevice) {
         val txID = session.cryptoService()
-                .verificationService()
-                .beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId, null)
-        _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
+            .verificationService()
+            .beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId, null)
+        _viewEvents.post(
+            DevicesViewEvents.ShowVerifyDevice(
                 session.myUserId,
                 txID
-        ))
+            )
+        )
     }
 
     private fun handleShowDeviceCryptoInfo(action: DevicesAction.VerifyMyDeviceManually) = withState { state ->
         state.devices.invoke()
-                ?.firstOrNull { it.cryptoDeviceInfo?.deviceId == action.deviceId }
-                ?.let {
-                    _viewEvents.post(DevicesViewEvents.ShowManuallyVerify(it.cryptoDeviceInfo!!))
-                }
+            ?.firstOrNull { it.cryptoDeviceInfo?.deviceId == action.deviceId }
+            ?.let {
+                _viewEvents.post(DevicesViewEvents.ShowManuallyVerify(it.cryptoDeviceInfo!!))
+            }
     }
 
     private fun handleVerifyManually(action: DevicesAction.MarkAsManuallyVerified) = withState { state ->
@@ -271,9 +273,10 @@ class DevicesViewModel @AssistedInject constructor(
             } else {
                 // legacy
                 session.cryptoService().setDeviceVerification(
-                        DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
-                        action.cryptoDeviceInfo.userId,
-                        action.cryptoDeviceInfo.deviceId)
+                    DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+                    action.cryptoDeviceInfo.userId,
+                    action.cryptoDeviceInfo.deviceId
+                )
             }
         }
     }
@@ -294,7 +297,7 @@ class DevicesViewModel @AssistedInject constructor(
             override fun onSuccess(data: Unit) {
                 setState {
                     copy(
-                            request = Success(data)
+                        request = Success(data)
                     )
                 }
                 // force settings update
@@ -304,7 +307,7 @@ class DevicesViewModel @AssistedInject constructor(
             override fun onFailure(failure: Throwable) {
                 setState {
                     copy(
-                            request = Fail(failure)
+                        request = Fail(failure)
                     )
                 }
 
@@ -321,7 +324,7 @@ class DevicesViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    request = Loading()
+                request = Loading()
             )
         }
 
@@ -333,9 +336,9 @@ class DevicesViewModel @AssistedInject constructor(
                             Timber.d("## UIA : deleteDevice UIA")
                             if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD && reAuthHelper.data != null && errCode == null) {
                                 UserPasswordAuth(
-                                        session = null,
-                                        user = session.myUserId,
-                                        password = reAuthHelper.data
+                                    session = null,
+                                    user = session.myUserId,
+                                    password = reAuthHelper.data
                                 ).let { promise.resume(it) }
                             } else {
                                 Timber.d("## UIA : deleteDevice UIA > start reauth activity")
@@ -348,7 +351,7 @@ class DevicesViewModel @AssistedInject constructor(
                 }
                 setState {
                     copy(
-                            request = Success(Unit)
+                        request = Success(Unit)
                     )
                 }
                 // force settings update
@@ -356,7 +359,7 @@ class DevicesViewModel @AssistedInject constructor(
             } catch (failure: Throwable) {
                 setState {
                     copy(
-                            request = Fail(failure)
+                        request = Fail(failure)
                     )
                 }
                 if (failure is Failure.OtherServerError && failure.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {

@@ -24,39 +24,39 @@ import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
  * IncomingSecretShareRequest class defines the incoming secret keys request.
  */
 data class IncomingSecretShareRequest(
-        /**
-         * The user id
-         */
-        override val userId: String? = null,
+    /**
+     * The user id
+     */
+    override val userId: String? = null,
 
-        /**
-         * The device id
-         */
-        override val deviceId: String? = null,
+    /**
+     * The device id
+     */
+    override val deviceId: String? = null,
 
-        /**
-         * The request id
-         */
-        override val requestId: String? = null,
+    /**
+     * The request id
+     */
+    override val requestId: String? = null,
 
-        /**
-         * The request body
-         */
-        val secretName: String? = null,
+    /**
+     * The request body
+     */
+    val secretName: String? = null,
 
-        /**
-         * The runnable to call to accept to share the keys
-         */
-        @Transient
-        var share: ((String) -> Unit)? = null,
+    /**
+     * The runnable to call to accept to share the keys
+     */
+    @Transient
+    var share: ((String) -> Unit)? = null,
 
-        /**
-         * The runnable to call to ignore the key share request.
-         */
-        @Transient
-        var ignore: Runnable? = null,
+    /**
+     * The runnable to call to ignore the key share request.
+     */
+    @Transient
+    var ignore: Runnable? = null,
 
-        override val localCreationTimestamp: Long?
+    override val localCreationTimestamp: Long?
 
 ) : IncomingShareRequestCommon {
     companion object {
@@ -67,16 +67,16 @@ data class IncomingSecretShareRequest(
          */
         fun fromEvent(event: Event): IncomingSecretShareRequest? {
             return event.getClearContent()
-                    .toModel<SecretShareRequest>()
-                    ?.let {
-                        IncomingSecretShareRequest(
-                                userId = event.senderId,
-                                deviceId = it.requestingDeviceId,
-                                requestId = it.requestId,
-                                secretName = it.secretName,
-                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
-                        )
-                    }
+                .toModel<SecretShareRequest>()
+                ?.let {
+                    IncomingSecretShareRequest(
+                        userId = event.senderId,
+                        deviceId = it.requestingDeviceId,
+                        requestId = it.requestId,
+                        secretName = it.secretName,
+                        localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
+                    )
+                }
         }
     }
 }

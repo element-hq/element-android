@@ -36,8 +36,8 @@ class InviteRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
 
     @Parcelize
     data class Args(
-            val spaceId: String,
-            val roomId: String
+        val spaceId: String,
+        val roomId: String
     ) : Parcelable
 
     override val showExpanded = true

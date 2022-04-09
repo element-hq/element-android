@@ -21,5 +21,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class FullyReadContent(
-        @Json(name = "event_id") val eventId: String
+    @Json(name = "event_id") val eventId: String
 )

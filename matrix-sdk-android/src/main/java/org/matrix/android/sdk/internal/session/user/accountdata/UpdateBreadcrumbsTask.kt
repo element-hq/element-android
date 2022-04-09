@@ -30,38 +30,40 @@ private const val MAX_BREADCRUMBS_ROOMS_NUMBER = 20
 
 internal interface UpdateBreadcrumbsTask : Task<UpdateBreadcrumbsTask.Params, Unit> {
     data class Params(
-            val newTopRoomId: String
+        val newTopRoomId: String
     )
 }
 
 internal class DefaultUpdateBreadcrumbsTask @Inject constructor(
-        private val saveBreadcrumbsTask: SaveBreadcrumbsTask,
-        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        @SessionDatabase private val monarchy: Monarchy
+    private val saveBreadcrumbsTask: SaveBreadcrumbsTask,
+    private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+    @SessionDatabase private val monarchy: Monarchy
 ) : UpdateBreadcrumbsTask {
 
     override suspend fun execute(params: UpdateBreadcrumbsTask.Params) {
         val newBreadcrumbs =
-                // Get the breadcrumbs entity, if any
-                monarchy.fetchCopied { BreadcrumbsEntity.get(it) }
-                        ?.recentRoomIds
-                        ?.apply {
-                            // Modify the list to add the newTopRoomId first
-                            // Ensure the newTopRoomId is not already in the list
-                            remove(params.newTopRoomId)
-                            // Add the newTopRoomId at first position
-                            add(0, params.newTopRoomId)
-                        }
-                        ?.take(MAX_BREADCRUMBS_ROOMS_NUMBER)
-                        ?: listOf(params.newTopRoomId)
+            // Get the breadcrumbs entity, if any
+            monarchy.fetchCopied { BreadcrumbsEntity.get(it) }
+                ?.recentRoomIds
+                ?.apply {
+                    // Modify the list to add the newTopRoomId first
+                    // Ensure the newTopRoomId is not already in the list
+                    remove(params.newTopRoomId)
+                    // Add the newTopRoomId at first position
+                    add(0, params.newTopRoomId)
+                }
+                ?.take(MAX_BREADCRUMBS_ROOMS_NUMBER)
+                ?: listOf(params.newTopRoomId)
 
         // Update the DB locally, do not wait for the sync
         saveBreadcrumbsTask.execute(SaveBreadcrumbsTask.Params(newBreadcrumbs))
 
         // FIXME It can remove the previous breadcrumbs, if not synced yet
         // And update account data
-        updateUserAccountDataTask.execute(UpdateUserAccountDataTask.BreadcrumbsParams(
+        updateUserAccountDataTask.execute(
+            UpdateUserAccountDataTask.BreadcrumbsParams(
                 breadcrumbsContent = BreadcrumbsContent(newBreadcrumbs)
-        ))
+            )
+        )
     }
 }

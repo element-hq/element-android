@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 // Referenced in vector_settings_notifications.xml
 class PushRulesFragment @Inject constructor(
-        private val epoxyController: PushRulesController
+    private val epoxyController: PushRulesController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {

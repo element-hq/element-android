@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 internal interface GetServerPublicKeyTask : Task<GetServerPublicKeyTask.Params, String?> {
     data class Params(
-            val contentScannerApi: ContentScannerApi
+        val contentScannerApi: ContentScannerApi
     )
 }
 

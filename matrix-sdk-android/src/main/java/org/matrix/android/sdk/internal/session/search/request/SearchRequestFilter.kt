@@ -21,10 +21,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class SearchRequestFilter(
-        // The maximum number of events to return.
-        @Json(name = "limit")
-        val limit: Int? = null,
-        // A list of room IDs to include. If this list is absent then all rooms are included.
-        @Json(name = "rooms")
-        val rooms: List<String>? = null
+    // The maximum number of events to return.
+    @Json(name = "limit")
+    val limit: Int? = null,
+    // A list of room IDs to include. If this list is absent then all rooms are included.
+    @Json(name = "rooms")
+    val rooms: List<String>? = null
 )

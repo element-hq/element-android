@@ -28,14 +28,14 @@ import org.matrix.android.sdk.api.session.pushers.PusherState
 //        at org.matrix.android.sdk.internal.session.pushers.AddHttpPusherWorker$doWork$$inlined$fold$lambda$2.execute(AddHttpPusherWorker.kt:70)
 //        at io.realm.Realm.executeTransaction(Realm.java:1493)
 internal open class PusherEntity(
-        var pushKey: String = "",
-        var kind: String? = null,
-        var appId: String = "",
-        var appDisplayName: String? = null,
-        var deviceDisplayName: String? = null,
-        var profileTag: String? = null,
-        var lang: String? = null,
-        var data: PusherDataEntity? = null
+    var pushKey: String = "",
+    var kind: String? = null,
+    var appId: String = "",
+    var appDisplayName: String? = null,
+    var deviceDisplayName: String? = null,
+    var profileTag: String? = null,
+    var lang: String? = null,
+    var data: PusherDataEntity? = null
 ) : RealmObject() {
     private var stateStr: String = PusherState.UNREGISTERED.name
 

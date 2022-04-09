@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.list
 
 class SuggestedRoomListController(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory
+    private val roomSummaryItemFactory: RoomSummaryItemFactory
 ) : CollapsableTypedEpoxyController<SuggestedRoomInfo>() {
 
     var listener: RoomListListener? = null

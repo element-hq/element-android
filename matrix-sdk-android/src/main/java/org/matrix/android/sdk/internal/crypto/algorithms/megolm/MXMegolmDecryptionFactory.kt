@@ -31,31 +31,32 @@ import org.matrix.android.sdk.internal.session.StreamEventsManager
 import javax.inject.Inject
 
 internal class MXMegolmDecryptionFactory @Inject constructor(
-        @UserId private val userId: String,
-        private val olmDevice: MXOlmDevice,
-        private val deviceListManager: DeviceListManager,
-        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        private val messageEncrypter: MessageEncrypter,
-        private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-        private val cryptoStore: IMXCryptoStore,
-        private val sendToDeviceTask: SendToDeviceTask,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val cryptoCoroutineScope: CoroutineScope,
-        private val eventsManager: Lazy<StreamEventsManager>
+    @UserId private val userId: String,
+    private val olmDevice: MXOlmDevice,
+    private val deviceListManager: DeviceListManager,
+    private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+    private val messageEncrypter: MessageEncrypter,
+    private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+    private val cryptoStore: IMXCryptoStore,
+    private val sendToDeviceTask: SendToDeviceTask,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+    private val cryptoCoroutineScope: CoroutineScope,
+    private val eventsManager: Lazy<StreamEventsManager>
 ) {
 
     fun create(): MXMegolmDecryption {
         return MXMegolmDecryption(
-                userId,
-                olmDevice,
-                deviceListManager,
-                outgoingGossipingRequestManager,
-                messageEncrypter,
-                ensureOlmSessionsForDevicesAction,
-                cryptoStore,
-                sendToDeviceTask,
-                coroutineDispatchers,
-                cryptoCoroutineScope,
-                eventsManager)
+            userId,
+            olmDevice,
+            deviceListManager,
+            outgoingGossipingRequestManager,
+            messageEncrypter,
+            ensureOlmSessionsForDevicesAction,
+            cryptoStore,
+            sendToDeviceTask,
+            coroutineDispatchers,
+            cryptoCoroutineScope,
+            eventsManager
+        )
     }
 }

@@ -25,26 +25,26 @@ import java.util.UUID
  * This class holds all pending data when creating a session, either by login or by register
  */
 internal data class PendingSessionData(
-        val homeServerConnectionConfig: HomeServerConnectionConfig,
+    val homeServerConnectionConfig: HomeServerConnectionConfig,
 
-        /* ==========================================================================================
-         * Common
-         * ========================================================================================== */
+    /* ==========================================================================================
+     * Common
+     * ========================================================================================== */
 
-        val clientSecret: String = UUID.randomUUID().toString(),
-        val sendAttempt: Int = 0,
+    val clientSecret: String = UUID.randomUUID().toString(),
+    val sendAttempt: Int = 0,
 
-        /* ==========================================================================================
-         * For login
-         * ========================================================================================== */
+    /* ==========================================================================================
+     * For login
+     * ========================================================================================== */
 
-        val resetPasswordData: ResetPasswordData? = null,
+    val resetPasswordData: ResetPasswordData? = null,
 
-        /* ==========================================================================================
-         * For register
-         * ========================================================================================== */
+    /* ==========================================================================================
+     * For register
+     * ========================================================================================== */
 
-        val currentSession: String? = null,
-        val isRegistrationStarted: Boolean = false,
-        val currentThreePidData: ThreePidData? = null
+    val currentSession: String? = null,
+    val isRegistrationStarted: Boolean = false,
+    val currentThreePidData: ThreePidData? = null
 )

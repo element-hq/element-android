@@ -25,12 +25,12 @@ import org.matrix.android.sdk.internal.database.model.ReadReceiptEntityFields
 
 internal fun ReadReceiptEntity.Companion.where(realm: Realm, roomId: String, userId: String): RealmQuery<ReadReceiptEntity> {
     return realm.where<ReadReceiptEntity>()
-            .equalTo(ReadReceiptEntityFields.PRIMARY_KEY, buildPrimaryKey(roomId, userId))
+        .equalTo(ReadReceiptEntityFields.PRIMARY_KEY, buildPrimaryKey(roomId, userId))
 }
 
 internal fun ReadReceiptEntity.Companion.whereUserId(realm: Realm, userId: String): RealmQuery<ReadReceiptEntity> {
     return realm.where<ReadReceiptEntity>()
-            .equalTo(ReadReceiptEntityFields.USER_ID, userId)
+        .equalTo(ReadReceiptEntityFields.USER_ID, userId)
 }
 
 internal fun ReadReceiptEntity.Companion.createUnmanaged(roomId: String, eventId: String, userId: String, originServerTs: Double): ReadReceiptEntity {
@@ -45,11 +45,11 @@ internal fun ReadReceiptEntity.Companion.createUnmanaged(roomId: String, eventId
 
 internal fun ReadReceiptEntity.Companion.getOrCreate(realm: Realm, roomId: String, userId: String): ReadReceiptEntity {
     return ReadReceiptEntity.where(realm, roomId, userId).findFirst()
-            ?: realm.createObject<ReadReceiptEntity>(buildPrimaryKey(roomId, userId))
-                    .apply {
-                        this.roomId = roomId
-                        this.userId = userId
-                    }
+        ?: realm.createObject<ReadReceiptEntity>(buildPrimaryKey(roomId, userId))
+            .apply {
+                this.roomId = roomId
+                this.userId = userId
+            }
 }
 
 private fun buildPrimaryKey(roomId: String, userId: String) = "${roomId}_$userId"

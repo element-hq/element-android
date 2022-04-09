@@ -55,8 +55,8 @@ internal interface KeysAlgorithmAndData {
      */
     fun getAuthDataAsMegolmBackupAuthData(): MegolmBackupAuthData? {
         return MoshiProvider.providesMoshi()
-                .takeIf { algorithm == MXCRYPTO_ALGORITHM_MEGOLM_BACKUP }
-                ?.adapter(MegolmBackupAuthData::class.java)
-                ?.fromJsonValue(authData)
+            .takeIf { algorithm == MXCRYPTO_ALGORITHM_MEGOLM_BACKUP }
+            ?.adapter(MegolmBackupAuthData::class.java)
+            ?.fromJsonValue(authData)
     }
 }

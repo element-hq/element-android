@@ -39,8 +39,8 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class ViewReactionsBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
-        ViewReactionsEpoxyController.Listener {
+    VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
+    ViewReactionsEpoxyController.Listener {
 
     private val viewModel: ViewReactionsViewModel by fragmentViewModel(ViewReactionsViewModel::class)
 
@@ -56,9 +56,9 @@ class ViewReactionsBottomSheet :
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(MessageSharedActionViewModel::class.java)
         views.bottomSheetRecyclerView.configureWith(
-                epoxyController,
-                hasFixedSize = false,
-                dividerDrawable = R.drawable.divider_horizontal_on_secondary
+            epoxyController,
+            hasFixedSize = false,
+            dividerDrawable = R.drawable.divider_horizontal_on_secondary
         )
         views.bottomSheetTitle.text = context?.getString(R.string.reactions)
         epoxyController.listener = this
@@ -82,11 +82,13 @@ class ViewReactionsBottomSheet :
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): ViewReactionsBottomSheet {
             return ViewReactionsBottomSheet().apply {
-                setArguments(TimelineEventFragmentArgs(
+                setArguments(
+                    TimelineEventFragmentArgs(
                         eventId = informationData.eventId,
                         roomId = roomId,
                         informationData = informationData
-                ))
+                    )
+                )
             }
         }
     }

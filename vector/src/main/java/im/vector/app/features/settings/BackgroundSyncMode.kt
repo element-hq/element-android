@@ -43,6 +43,6 @@ enum class BackgroundSyncMode {
         const val DEFAULT_SYNC_TIMEOUT_SECONDS = 6
 
         fun fromString(value: String?): BackgroundSyncMode = values().firstOrNull { it.name == value }
-                ?: FDROID_BACKGROUND_SYNC_MODE_DISABLED
+            ?: FDROID_BACKGROUND_SYNC_MODE_DISABLED
     }
 }

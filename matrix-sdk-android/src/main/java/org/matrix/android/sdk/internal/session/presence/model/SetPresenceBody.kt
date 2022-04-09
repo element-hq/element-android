@@ -21,8 +21,8 @@ import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 
 @JsonClass(generateAdapter = true)
 internal data class SetPresenceBody(
-        @Json(name = "presence")
-        val presence: PresenceEnum,
-        @Json(name = "status_msg")
-        val statusMsg: String?
+    @Json(name = "presence")
+    val presence: PresenceEnum,
+    @Json(name = "status_msg")
+    val statusMsg: String?
 )

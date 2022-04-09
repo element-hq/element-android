@@ -23,9 +23,9 @@ import org.matrix.android.sdk.internal.crypto.model.KeyUsage
 import org.matrix.android.sdk.internal.extensions.clearWith
 
 internal open class CrossSigningInfoEntity(
-        @PrimaryKey
-        var userId: String? = null,
-        var crossSigningKeys: RealmList<KeyInfoEntity> = RealmList()
+    @PrimaryKey
+    var userId: String? = null,
+    var crossSigningKeys: RealmList<KeyInfoEntity> = RealmList()
 ) : RealmObject() {
 
     companion object
@@ -34,8 +34,8 @@ internal open class CrossSigningInfoEntity(
 
     fun setMasterKey(info: KeyInfoEntity?) {
         crossSigningKeys
-                .filter { it.usages.contains(KeyUsage.MASTER.value) }
-                .forEach { crossSigningKeys.remove(it) }
+            .filter { it.usages.contains(KeyUsage.MASTER.value) }
+            .forEach { crossSigningKeys.remove(it) }
         info?.let { crossSigningKeys.add(it) }
     }
 
@@ -43,8 +43,8 @@ internal open class CrossSigningInfoEntity(
 
     fun setSelfSignedKey(info: KeyInfoEntity?) {
         crossSigningKeys
-                .filter { it.usages.contains(KeyUsage.SELF_SIGNING.value) }
-                .forEach { crossSigningKeys.remove(it) }
+            .filter { it.usages.contains(KeyUsage.SELF_SIGNING.value) }
+            .forEach { crossSigningKeys.remove(it) }
         info?.let { crossSigningKeys.add(it) }
     }
 
@@ -52,8 +52,8 @@ internal open class CrossSigningInfoEntity(
 
     fun setUserSignedKey(info: KeyInfoEntity?) {
         crossSigningKeys
-                .filter { it.usages.contains(KeyUsage.USER_SIGNING.value) }
-                .forEach { crossSigningKeys.remove(it) }
+            .filter { it.usages.contains(KeyUsage.USER_SIGNING.value) }
+            .forEach { crossSigningKeys.remove(it) }
         info?.let { crossSigningKeys.add(it) }
     }
 }

@@ -27,5 +27,5 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class RoomAliasesContent(
-        @Json(name = "aliases") val aliases: List<String> = emptyList()
+    @Json(name = "aliases") val aliases: List<String> = emptyList()
 )

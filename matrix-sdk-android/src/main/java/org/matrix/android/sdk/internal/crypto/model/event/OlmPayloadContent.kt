@@ -24,35 +24,35 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
  */
 @JsonClass(generateAdapter = true)
 data class OlmPayloadContent(
-        /**
-         * The room id
-         */
-        @Json(name = "room_id")
-        val roomId: String? = null,
+    /**
+     * The room id
+     */
+    @Json(name = "room_id")
+    val roomId: String? = null,
 
-        /**
-         * The sender
-         */
-        @Json(name = "sender")
-        val sender: String? = null,
+    /**
+     * The sender
+     */
+    @Json(name = "sender")
+    val sender: String? = null,
 
-        /**
-         * The recipient
-         */
-        @Json(name = "recipient")
-        val recipient: String? = null,
+    /**
+     * The recipient
+     */
+    @Json(name = "recipient")
+    val recipient: String? = null,
 
-        /**
-         * the recipient keys
-         */
-        @Json(name = "recipient_keys")
-        val recipientKeys: Map<String, String>? = null,
+    /**
+     * the recipient keys
+     */
+    @Json(name = "recipient_keys")
+    val recipientKeys: Map<String, String>? = null,
 
-        /**
-         * The keys
-         */
-        @Json(name = "keys")
-        val keys: Map<String, String>? = null
+    /**
+     * The keys
+     */
+    @Json(name = "keys")
+    val keys: Map<String, String>? = null
 ) {
     fun toJsonString(): String {
         return MoshiProvider.providesMoshi().adapter(OlmPayloadContent::class.java).toJson(this)

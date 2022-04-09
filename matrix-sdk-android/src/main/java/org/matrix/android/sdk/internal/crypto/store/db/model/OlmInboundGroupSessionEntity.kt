@@ -26,14 +26,15 @@ import timber.log.Timber
 internal fun OlmInboundGroupSessionEntity.Companion.createPrimaryKey(sessionId: String?, senderKey: String?) = "$sessionId|$senderKey"
 
 internal open class OlmInboundGroupSessionEntity(
-        // Combined value to build a primary key
-        @PrimaryKey var primaryKey: String? = null,
-        var sessionId: String? = null,
-        var senderKey: String? = null,
-        // olmInboundGroupSessionData contains Json
-        var olmInboundGroupSessionData: String? = null,
-        // Indicate if the key has been backed up to the homeserver
-        var backedUp: Boolean = false) :
+    // Combined value to build a primary key
+    @PrimaryKey var primaryKey: String? = null,
+    var sessionId: String? = null,
+    var senderKey: String? = null,
+    // olmInboundGroupSessionData contains Json
+    var olmInboundGroupSessionData: String? = null,
+    // Indicate if the key has been backed up to the homeserver
+    var backedUp: Boolean = false
+) :
     RealmObject() {
 
     fun getInboundGroupSession(): OlmInboundGroupSessionWrapper2? {

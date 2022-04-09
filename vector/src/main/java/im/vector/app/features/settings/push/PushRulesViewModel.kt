@@ -26,7 +26,7 @@ import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 
 data class PushRulesViewState(
-        val rules: List<PushRule> = emptyList()
+    val rules: List<PushRule> = emptyList()
 ) : MavericksState
 
 class PushRulesViewModel(initialState: PushRulesViewState) :

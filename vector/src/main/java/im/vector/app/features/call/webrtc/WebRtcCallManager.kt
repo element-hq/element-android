@@ -70,11 +70,11 @@ private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
 
 @Singleton
 class WebRtcCallManager @Inject constructor(
-        private val context: Context,
-        private val activeSessionDataSource: ActiveSessionDataSource,
-        private val analyticsTracker: AnalyticsTracker
+    private val context: Context,
+    private val activeSessionDataSource: ActiveSessionDataSource,
+    private val analyticsTracker: AnalyticsTracker
 ) : CallListener,
-        DefaultLifecycleObserver {
+    DefaultLifecycleObserver {
 
     private val currentSession: Session?
         get() = activeSessionDataSource.currentValue?.orNull()
@@ -215,25 +215,27 @@ class WebRtcCallManager @Inject constructor(
         }
 
         Timber.tag(loggerTag.value).v("PeerConnectionFactory.initialize")
-        PeerConnectionFactory.initialize(PeerConnectionFactory
+        PeerConnectionFactory.initialize(
+            PeerConnectionFactory
                 .InitializationOptions.builder(context.applicationContext)
                 .createInitializationOptions()
         )
 
         val options = PeerConnectionFactory.Options()
         val defaultVideoEncoderFactory = DefaultVideoEncoderFactory(
-                eglBaseContext,
-                /* enableIntelVp8Encoder */
-                true,
-                /* enableH264HighProfile */
-                true)
+            eglBaseContext,
+            /* enableIntelVp8Encoder */
+            true,
+            /* enableH264HighProfile */
+            true
+        )
         val defaultVideoDecoderFactory = DefaultVideoDecoderFactory(eglBaseContext)
         Timber.tag(loggerTag.value).v("PeerConnectionFactory.createPeerConnectionFactory ...")
         peerConnectionFactory = PeerConnectionFactory.builder()
-                .setOptions(options)
-                .setVideoEncoderFactory(defaultVideoEncoderFactory)
-                .setVideoDecoderFactory(defaultVideoDecoderFactory)
-                .createPeerConnectionFactory()
+            .setOptions(options)
+            .setVideoEncoderFactory(defaultVideoEncoderFactory)
+            .setVideoDecoderFactory(defaultVideoDecoderFactory)
+            .createPeerConnectionFactory()
     }
 
     private fun onCallActive(call: WebRtcCall) {
@@ -303,8 +305,9 @@ class WebRtcCallManager @Inject constructor(
             transferees[webRtcCall.callId] = transferee
         }
         CallService.onOutgoingCallRinging(
-                context = context.applicationContext,
-                callId = mxCall.callId)
+            context = context.applicationContext,
+            callId = mxCall.callId
+        )
 
         // start the activity now
         context.startActivity(VectorCallActivity.newIntent(context, webRtcCall, VectorCallActivity.OUTGOING_CREATED))
@@ -313,33 +316,33 @@ class WebRtcCallManager @Inject constructor(
     override fun onCallIceCandidateReceived(mxCall: MxCall, iceCandidatesContent: CallCandidatesContent) {
         Timber.tag(loggerTag.value).v("onCallIceCandidateReceived for call ${mxCall.callId}")
         val call = callsByCallId[iceCandidatesContent.callId]
-                ?: return Unit.also {
-                    Timber.tag(loggerTag.value).w("onCallIceCandidateReceived for non active call? ${iceCandidatesContent.callId}")
-                }
+            ?: return Unit.also {
+                Timber.tag(loggerTag.value).w("onCallIceCandidateReceived for non active call? ${iceCandidatesContent.callId}")
+            }
         call.onCallIceCandidateReceived(iceCandidatesContent)
     }
 
     private fun createWebRtcCall(mxCall: MxCall, nativeRoomId: String): WebRtcCall {
         val webRtcCall = WebRtcCall(
-                mxCall = mxCall,
-                nativeRoomId = nativeRoomId,
-                rootEglBase = rootEglBase,
-                context = context,
-                dispatcher = dispatcher,
-                peerConnectionFactoryProvider = {
-                    createPeerConnectionFactoryIfNeeded()
-                    peerConnectionFactory
-                },
-                sessionProvider = { currentSession },
-                onCallBecomeActive = this::onCallActive,
-                onCallEnded = this::onCallEnded
+            mxCall = mxCall,
+            nativeRoomId = nativeRoomId,
+            rootEglBase = rootEglBase,
+            context = context,
+            dispatcher = dispatcher,
+            peerConnectionFactoryProvider = {
+                createPeerConnectionFactoryIfNeeded()
+                peerConnectionFactory
+            },
+            sessionProvider = { currentSession },
+            onCallBecomeActive = this::onCallActive,
+            onCallEnded = this::onCallEnded
         )
         advertisedCalls.add(mxCall.callId)
         callsByCallId[mxCall.callId] = webRtcCall
         callsByRoomId.getOrPut(nativeRoomId) { ArrayList(1) }
-                .add(webRtcCall)
+            .add(webRtcCall)
         callsByRoomId.getOrPut(mxCall.roomId) { ArrayList(1) }
-                .add(webRtcCall)
+            .add(webRtcCall)
         if (getCurrentCall() == null) {
             currentCall.setAndNotify(webRtcCall)
         }
@@ -367,9 +370,9 @@ class WebRtcCallManager @Inject constructor(
         }
         // Start background service with notification
         CallService.onIncomingCallRinging(
-                context = context,
-                callId = mxCall.callId,
-                isInBackground = isInBackground
+            context = context,
+            callId = mxCall.callId,
+            isInBackground = isInBackground
         )
         // If this is received while in background, the app will not sync,
         // and thus won't be able to received events. For example if the call is
@@ -386,56 +389,56 @@ class WebRtcCallManager @Inject constructor(
 
     override fun onCallAnswerReceived(callAnswerContent: CallAnswerContent) {
         val call = callsByCallId[callAnswerContent.callId]
-                ?: return Unit.also {
-                    Timber.tag(loggerTag.value).w("onCallAnswerReceived for non active call? ${callAnswerContent.callId}")
-                }
+            ?: return Unit.also {
+                Timber.tag(loggerTag.value).w("onCallAnswerReceived for non active call? ${callAnswerContent.callId}")
+            }
         val mxCall = call.mxCall
         // Update service state
         CallService.onPendingCall(
-                context = context,
-                callId = mxCall.callId
+            context = context,
+            callId = mxCall.callId
         )
         call.onCallAnswerReceived(callAnswerContent)
     }
 
     override fun onCallHangupReceived(callHangupContent: CallHangupContent) {
         val call = callsByCallId[callHangupContent.callId]
-                ?: return Unit.also {
-                    Timber.tag(loggerTag.value).w("onCallHangupReceived for non active call? ${callHangupContent.callId}")
-                }
+            ?: return Unit.also {
+                Timber.tag(loggerTag.value).w("onCallHangupReceived for non active call? ${callHangupContent.callId}")
+            }
         call.onCallHangupReceived(callHangupContent)
     }
 
     override fun onCallRejectReceived(callRejectContent: CallRejectContent) {
         val call = callsByCallId[callRejectContent.callId]
-                ?: return Unit.also {
-                    Timber.tag(loggerTag.value).w("onCallRejectReceived for non active call? ${callRejectContent.callId}")
-                }
+            ?: return Unit.also {
+                Timber.tag(loggerTag.value).w("onCallRejectReceived for non active call? ${callRejectContent.callId}")
+            }
         call.onCallRejectReceived(callRejectContent)
     }
 
     override fun onCallSelectAnswerReceived(callSelectAnswerContent: CallSelectAnswerContent) {
         val call = callsByCallId[callSelectAnswerContent.callId]
-                ?: return Unit.also {
-                    Timber.tag(loggerTag.value).w("onCallSelectAnswerReceived for non active call? ${callSelectAnswerContent.callId}")
-                }
+            ?: return Unit.also {
+                Timber.tag(loggerTag.value).w("onCallSelectAnswerReceived for non active call? ${callSelectAnswerContent.callId}")
+            }
         call.onCallSelectedAnswerReceived(callSelectAnswerContent)
     }
 
     override fun onCallNegotiateReceived(callNegotiateContent: CallNegotiateContent) {
         val call = callsByCallId[callNegotiateContent.callId]
-                ?: return Unit.also {
-                    Timber.tag(loggerTag.value).w("onCallNegotiateReceived for non active call? ${callNegotiateContent.callId}")
-                }
+            ?: return Unit.also {
+                Timber.tag(loggerTag.value).w("onCallNegotiateReceived for non active call? ${callNegotiateContent.callId}")
+            }
         call.onCallNegotiateReceived(callNegotiateContent)
     }
 
     override fun onCallManagedByOtherSession(callId: String) {
         Timber.tag(loggerTag.value).v("onCallManagedByOtherSession: $callId")
         val call = callsByCallId[callId]
-                ?: return Unit.also {
-                    Timber.tag(loggerTag.value).w("onCallManagedByOtherSession for non active call? $callId")
-                }
+            ?: return Unit.also {
+                Timber.tag(loggerTag.value).w("onCallManagedByOtherSession for non active call? $callId")
+            }
         call.endCall(EndCallReason.ANSWERED_ELSEWHERE, sendSignaling = false)
     }
 
@@ -444,9 +447,9 @@ class WebRtcCallManager @Inject constructor(
             return
         }
         val call = callsByCallId[callAssertedIdentityContent.callId]
-                ?: return Unit.also {
-                    Timber.tag(loggerTag.value).w("onCallAssertedIdentityReceived for non active call? ${callAssertedIdentityContent.callId}")
-                }
+            ?: return Unit.also {
+                Timber.tag(loggerTag.value).w("onCallAssertedIdentityReceived for non active call? ${callAssertedIdentityContent.callId}")
+            }
         call.onCallAssertedIdentityReceived(callAssertedIdentityContent)
     }
 
@@ -455,22 +458,22 @@ class WebRtcCallManager @Inject constructor(
      */
     private fun WebRtcCall.trackCallStarted() {
         analyticsTracker.capture(
-                CallStarted(
-                        isVideo = mxCall.isVideoCall,
-                        numParticipants = 2,
-                        placed = mxCall.isOutgoing
-                )
+            CallStarted(
+                isVideo = mxCall.isVideoCall,
+                numParticipants = 2,
+                placed = mxCall.isOutgoing
+            )
         )
     }
 
     private fun WebRtcCall.trackCallEnded() {
         analyticsTracker.capture(
-                CallEnded(
-                        durationMs = durationMillis(),
-                        isVideo = mxCall.isVideoCall,
-                        numParticipants = 2,
-                        placed = mxCall.isOutgoing
-                )
+            CallEnded(
+                durationMs = durationMillis(),
+                isVideo = mxCall.isVideoCall,
+                numParticipants = 2,
+                placed = mxCall.isOutgoing
+            )
         )
     }
 }

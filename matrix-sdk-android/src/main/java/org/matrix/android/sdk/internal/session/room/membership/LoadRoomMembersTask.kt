@@ -48,27 +48,27 @@ import javax.inject.Inject
 internal interface LoadRoomMembersTask : Task<LoadRoomMembersTask.Params, Unit> {
 
     data class Params(
-            val roomId: String,
-            val excludeMembership: Membership? = null
+        val roomId: String,
+        val excludeMembership: Membership? = null
     )
 }
 
 internal class DefaultLoadRoomMembersTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val syncTokenStore: SyncTokenStore,
-        private val roomSummaryUpdater: RoomSummaryUpdater,
-        private val roomMemberEventHandler: RoomMemberEventHandler,
-        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-        private val deviceListManager: DeviceListManager,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val syncTokenStore: SyncTokenStore,
+    private val roomSummaryUpdater: RoomSummaryUpdater,
+    private val roomMemberEventHandler: RoomMemberEventHandler,
+    private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+    private val deviceListManager: DeviceListManager,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : LoadRoomMembersTask {
 
     override suspend fun execute(params: LoadRoomMembersTask.Params) {
         when (getRoomMembersLoadStatus(params.roomId)) {
-            RoomMembersLoadStatusType.NONE    -> doRequest(params)
+            RoomMembersLoadStatusType.NONE -> doRequest(params)
             RoomMembersLoadStatusType.LOADING -> waitPreviousRequestToFinish(params)
-            RoomMembersLoadStatusType.LOADED  -> Unit
+            RoomMembersLoadStatusType.LOADED -> Unit
         }
     }
 
@@ -76,8 +76,8 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         try {
             awaitNotEmptyResult(monarchy.realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                 realm.where(RoomEntity::class.java)
-                        .equalTo(RoomEntityFields.ROOM_ID, params.roomId)
-                        .equalTo(RoomEntityFields.MEMBERS_LOAD_STATUS_STR, RoomMembersLoadStatusType.LOADED.name)
+                    .equalTo(RoomEntityFields.ROOM_ID, params.roomId)
+                    .equalTo(RoomEntityFields.MEMBERS_LOAD_STATUS_STR, RoomMembersLoadStatusType.LOADED.name)
             }
         } catch (exception: TimeoutCancellationException) {
             // Timeout, do the request anyway (?)
@@ -106,7 +106,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
         monarchy.awaitTransaction { realm ->
             // We ignore all the already known members
             val roomEntity = RoomEntity.where(realm, roomId).findFirst()
-                    ?: realm.createObject(roomId)
+                ?: realm.createObject(roomId)
             val now = System.currentTimeMillis()
             for (roomMemberEvent in response.roomMemberEvents) {
                 if (roomMemberEvent.eventId == null || roomMemberEvent.stateKey == null || roomMemberEvent.type == null) {
@@ -115,10 +115,10 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                 val ageLocalTs = roomMemberEvent.unsignedData?.age?.let { now - it }
                 val eventEntity = roomMemberEvent.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
                 CurrentStateEventEntity.getOrCreate(
-                        realm,
-                        roomId,
-                        roomMemberEvent.stateKey,
-                        roomMemberEvent.type
+                    realm,
+                    roomId,
+                    roomMemberEvent.stateKey,
+                    roomMemberEvent.type
                 ).apply {
                     eventId = roomMemberEvent.eventId
                     root = eventEntity

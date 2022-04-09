@@ -28,9 +28,11 @@ import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class VectorDateFormatter @Inject constructor(private val context: Context,
-                                              private val localeProvider: LocaleProvider,
-                                              private val dateFormatterProviders: DateFormatterProviders) {
+class VectorDateFormatter @Inject constructor(
+    private val context: Context,
+    private val localeProvider: LocaleProvider,
+    private val dateFormatterProviders: DateFormatterProviders
+) {
 
     private val hourFormatter by lazy {
         if (DateFormat.is24HourFormat(context)) {
@@ -62,23 +64,23 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
         val localDateTime = DateProvider.toLocalDateTime(ts)
         return when (dateFormatKind) {
             DateFormatKind.DEFAULT_DATE_AND_TIME -> formatDateAndTime(ts)
-            DateFormatKind.ROOM_LIST             -> formatTimeOrDate(
-                    date = localDateTime,
-                    showTimeIfSameDay = true,
-                    abbrev = true,
-                    useRelative = true
+            DateFormatKind.ROOM_LIST -> formatTimeOrDate(
+                date = localDateTime,
+                showTimeIfSameDay = true,
+                abbrev = true,
+                useRelative = true
             )
-            DateFormatKind.TIMELINE_DAY_DIVIDER  -> formatTimeOrDate(
-                    date = localDateTime,
-                    alwaysShowYear = true
+            DateFormatKind.TIMELINE_DAY_DIVIDER -> formatTimeOrDate(
+                date = localDateTime,
+                alwaysShowYear = true
             )
-            DateFormatKind.MESSAGE_DETAIL        -> formatFullDate(localDateTime)
-            DateFormatKind.MESSAGE_SIMPLE        -> formatHour(localDateTime)
-            DateFormatKind.EDIT_HISTORY_ROW      -> formatHour(localDateTime)
-            DateFormatKind.EDIT_HISTORY_HEADER   -> formatTimeOrDate(
-                    date = localDateTime,
-                    abbrev = true,
-                    useRelative = true
+            DateFormatKind.MESSAGE_DETAIL -> formatFullDate(localDateTime)
+            DateFormatKind.MESSAGE_SIMPLE -> formatHour(localDateTime)
+            DateFormatKind.EDIT_HISTORY_ROW -> formatHour(localDateTime)
+            DateFormatKind.EDIT_HISTORY_HEADER -> formatTimeOrDate(
+                date = localDateTime,
+                abbrev = true,
+                useRelative = true
             )
         }
     }
@@ -103,11 +105,11 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
      * This method will only show time or date following the parameters.
      */
     private fun formatTimeOrDate(
-            date: LocalDateTime?,
-            showTimeIfSameDay: Boolean = false,
-            useRelative: Boolean = false,
-            alwaysShowYear: Boolean = false,
-            abbrev: Boolean = false
+        date: LocalDateTime?,
+        showTimeIfSameDay: Boolean = false,
+        useRelative: Boolean = false,
+        alwaysShowYear: Boolean = false,
+        abbrev: Boolean = false
     ): String {
         if (date == null) {
             return ""
@@ -122,11 +124,11 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
     }
 
     private fun formatDate(
-            date: LocalDateTime,
-            currentDate: LocalDateTime,
-            alwaysShowYear: Boolean,
-            abbrev: Boolean,
-            useRelative: Boolean
+        date: LocalDateTime,
+        currentDate: LocalDateTime,
+        alwaysShowYear: Boolean,
+        abbrev: Boolean,
+        useRelative: Boolean
     ): String {
         val period = Period.between(date.toLocalDate(), currentDate.toLocalDate())
         return if (period.years.absoluteValue >= 1 || alwaysShowYear) {
@@ -157,9 +159,10 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
      */
     private fun getRelativeDay(ts: Long): String {
         return DateUtils.getRelativeTimeSpanString(
-                ts,
-                System.currentTimeMillis(),
-                DateUtils.DAY_IN_MILLIS,
-                DateUtils.FORMAT_SHOW_WEEKDAY).toString()
+            ts,
+            System.currentTimeMillis(),
+            DateUtils.DAY_IN_MILLIS,
+            DateUtils.FORMAT_SHOW_WEEKDAY
+        ).toString()
     }
 }

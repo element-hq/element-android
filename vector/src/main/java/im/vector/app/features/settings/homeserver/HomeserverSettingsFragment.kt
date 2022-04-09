@@ -34,9 +34,9 @@ import javax.inject.Inject
  * Display some information about the homeserver
  */
 class HomeserverSettingsFragment @Inject constructor(
-        private val homeserverSettingsController: HomeserverSettingsController
+    private val homeserverSettingsController: HomeserverSettingsController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
-        HomeserverSettingsController.Callback {
+    HomeserverSettingsController.Callback {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)

@@ -45,7 +45,7 @@ class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>()
 
     override fun initUiAndData() {
         setupToolbar(views.webviewToolbar)
-                .allowBack()
+            .allowBack()
         waitingView = views.simpleWebviewLoader
 
         views.simpleWebview.settings.apply {
@@ -115,16 +115,18 @@ class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>()
 
         private const val USE_TITLE_FROM_WEB_PAGE = ""
 
-        fun getIntent(context: Context,
-                      url: String,
-                      title: String = USE_TITLE_FROM_WEB_PAGE,
-                      mode: WebViewMode = WebViewMode.DEFAULT): Intent {
+        fun getIntent(
+            context: Context,
+            url: String,
+            title: String = USE_TITLE_FROM_WEB_PAGE,
+            mode: WebViewMode = WebViewMode.DEFAULT
+        ): Intent {
             return Intent(context, VectorWebViewActivity::class.java)
-                    .apply {
-                        putExtra(EXTRA_URL, url)
-                        putExtra(EXTRA_TITLE, title)
-                        putExtra(EXTRA_MODE, mode)
-                    }
+                .apply {
+                    putExtra(EXTRA_URL, url)
+                    putExtra(EXTRA_TITLE, title)
+                    putExtra(EXTRA_MODE, mode)
+                }
         }
     }
 }

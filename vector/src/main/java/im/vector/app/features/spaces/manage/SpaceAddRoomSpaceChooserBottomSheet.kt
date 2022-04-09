@@ -29,7 +29,7 @@ class SpaceAddRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<
     override val showExpanded = true
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            BottomSheetAddRoomsOrSpacesToSpaceBinding.inflate(inflater, container, false)
+        BottomSheetAddRoomsOrSpacesToSpaceBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

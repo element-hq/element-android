@@ -28,10 +28,10 @@ import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import javax.inject.Inject
 
 class IncomingKeyRequestPagedController @Inject constructor(
-        private val vectorDateFormatter: VectorDateFormatter
+    private val vectorDateFormatter: VectorDateFormatter
 ) : PagedListEpoxyController<IncomingRoomKeyRequest>(
-        // Important it must match the PageList builder notify Looper
-        modelBuildingHandler = createUIHandler()
+    // Important it must match the PageList builder notify Looper
+    modelBuildingHandler = createUIHandler()
 ) {
 
     interface InteractionListener {
@@ -48,25 +48,25 @@ class IncomingKeyRequestPagedController @Inject constructor(
             id(roomKeyRequest.requestId)
             title(roomKeyRequest.requestId?.toEpoxyCharSequence())
             description(
-                    span {
-                        span("From: ") {
-                            textStyle = "bold"
-                        }
-                        span("${roomKeyRequest.userId}")
-                        +host.vectorDateFormatter.format(roomKeyRequest.localCreationTimestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
-                        span("\nsessionId:") {
-                            textStyle = "bold"
-                        }
-                        +"${roomKeyRequest.requestBody?.sessionId}"
-                        span("\nFrom device:") {
-                            textStyle = "bold"
-                        }
-                        +"${roomKeyRequest.deviceId}"
-                        span("\nstate: ") {
-                            textStyle = "bold"
-                        }
-                        +roomKeyRequest.state.name
-                    }.toEpoxyCharSequence()
+                span {
+                    span("From: ") {
+                        textStyle = "bold"
+                    }
+                    span("${roomKeyRequest.userId}")
+                    +host.vectorDateFormatter.format(roomKeyRequest.localCreationTimestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
+                    span("\nsessionId:") {
+                        textStyle = "bold"
+                    }
+                    +"${roomKeyRequest.requestBody?.sessionId}"
+                    span("\nFrom device:") {
+                        textStyle = "bold"
+                    }
+                    +"${roomKeyRequest.deviceId}"
+                    span("\nstate: ") {
+                        textStyle = "bold"
+                    }
+                    +roomKeyRequest.state.name
+                }.toEpoxyCharSequence()
             )
         }
     }

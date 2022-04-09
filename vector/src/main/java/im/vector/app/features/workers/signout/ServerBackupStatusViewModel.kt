@@ -44,7 +44,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListe
 import org.matrix.android.sdk.flow.flow
 
 data class ServerBackupStatusViewState(
-        val bannerState: Async<BannerState> = Uninitialized
+    val bannerState: Async<BannerState> = Uninitialized
 ) : MavericksState
 
 /**
@@ -62,9 +62,11 @@ sealed class BannerState {
     object BackingUp : BannerState()
 }
 
-class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialState: ServerBackupStatusViewState,
-                                                              private val session: Session) :
-        VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
+class ServerBackupStatusViewModel @AssistedInject constructor(
+    @Assisted initialState: ServerBackupStatusViewState,
+    private val session: Session
+) :
+    VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> {
@@ -91,29 +93,29 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                 // 4S is already setup sp we should not display anything
                 return@combine when (keyBackupState) {
                     KeysBackupState.BackingUp -> BannerState.BackingUp
-                    else                      -> BannerState.Hidden
+                    else -> BannerState.Hidden
                 }
             }
 
             // So recovery is not setup
             // Check if cross signing is enabled and local secrets known
             if (
-                    crossSigningInfo.getOrNull() == null ||
-                    (crossSigningInfo.getOrNull()?.isTrusted() == true &&
-                            pInfo.getOrNull()?.allKnown().orFalse())
+                crossSigningInfo.getOrNull() == null ||
+                (crossSigningInfo.getOrNull()?.isTrusted() == true &&
+                        pInfo.getOrNull()?.allKnown().orFalse())
             ) {
                 // So 4S is not setup and we have local secrets,
                 return@combine BannerState.Setup(numberOfKeys = getNumberOfKeysToBackup())
             }
             BannerState.Hidden
         }
-                .sample(1000) // we don't want to flicker or catch transient states
-                .distinctUntilChanged()
-                .execute { async ->
-                    copy(
-                            bannerState = async
-                    )
-                }
+            .sample(1000) // we don't want to flicker or catch transient states
+            .distinctUntilChanged()
+            .execute { async ->
+                copy(
+                    bannerState = async
+                )
+            }
 
         viewModelScope.launch {
             keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)

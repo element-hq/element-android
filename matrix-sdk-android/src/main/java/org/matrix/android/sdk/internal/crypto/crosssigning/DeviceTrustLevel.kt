@@ -16,8 +16,8 @@
 package org.matrix.android.sdk.internal.crypto.crosssigning
 
 data class DeviceTrustLevel(
-        val crossSigningVerified: Boolean,
-        val locallyVerified: Boolean?
+    val crossSigningVerified: Boolean,
+    val locallyVerified: Boolean?
 ) {
     fun isVerified() = crossSigningVerified || locallyVerified == true
     fun isCrossSigningVerified() = crossSigningVerified

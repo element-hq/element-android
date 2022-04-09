@@ -24,13 +24,13 @@ import javax.inject.Inject
 
 internal interface DeleteSessionsDataTask : Task<DeleteSessionsDataTask.Params, Unit> {
     data class Params(
-            val version: String
+        val version: String
     )
 }
 
 internal class DefaultDeleteSessionsDataTask @Inject constructor(
-        private val roomKeysApi: RoomKeysApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomKeysApi: RoomKeysApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : DeleteSessionsDataTask {
 
     override suspend fun execute(params: DeleteSessionsDataTask.Params) {

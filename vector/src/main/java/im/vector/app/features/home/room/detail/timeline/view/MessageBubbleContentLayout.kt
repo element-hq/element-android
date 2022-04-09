@@ -31,7 +31,7 @@ import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.getLayoutDirectionFromCurrentLocale
 
 class MessageBubbleContentLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-        ConstraintLayout(context, attrs, defStyleAttr) {
+    ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var messageTextView: TextView? = null
 
@@ -71,7 +71,8 @@ class MessageBubbleContentLayout @JvmOverloads constructor(context: Context, att
                 width = contentContainerView.measuredWidth + timeViewMeasuredWidthWithMargins
                 height = contentContainerView.measuredHeight
             } else if (textLineCount > 1 && lastLineWidth + timeViewMeasuredWidthWithMargins
-                    < contentContainerView.measuredWidth - contentContainerView.paddingEnd) {
+                < contentContainerView.measuredWidth - contentContainerView.paddingEnd
+            ) {
                 width = contentContainerView.measuredWidth
                 height = contentContainerView.measuredHeight
             } else {
@@ -92,29 +93,29 @@ class MessageBubbleContentLayout @JvmOverloads constructor(context: Context, att
             if (localeLayoutDirection == LAYOUT_DIRECTION_RTL) {
                 val contentLeft = parentRight - contentContainerView.measuredWidth - contentContainerView.marginEnd
                 contentContainerView.layout(
-                        contentLeft,
-                        parentTop + contentContainerView.marginTop,
-                        parentRight - contentContainerView.marginEnd,
-                        parentTop + contentContainerView.marginTop + contentContainerView.measuredHeight
+                    contentLeft,
+                    parentTop + contentContainerView.marginTop,
+                    parentRight - contentContainerView.marginEnd,
+                    parentTop + contentContainerView.marginTop + contentContainerView.measuredHeight
                 )
                 timeView.layout(
-                        parentLeft + timeView.marginEnd,
-                        parentBottom - timeView.measuredHeight - timeView.marginBottom,
-                        parentLeft + timeView.measuredWidth + timeView.marginEnd,
-                        parentBottom - timeView.marginBottom
+                    parentLeft + timeView.marginEnd,
+                    parentBottom - timeView.measuredHeight - timeView.marginBottom,
+                    parentLeft + timeView.measuredWidth + timeView.marginEnd,
+                    parentBottom - timeView.marginBottom
                 )
             } else {
                 contentContainerView.layout(
-                        parentLeft,
-                        parentTop,
-                        parentLeft + contentContainerView.measuredWidth,
-                        parentTop + contentContainerView.measuredHeight
+                    parentLeft,
+                    parentTop,
+                    parentLeft + contentContainerView.measuredWidth,
+                    parentTop + contentContainerView.measuredHeight
                 )
                 timeView.layout(
-                        parentRight - timeView.measuredWidth - timeView.marginEnd,
-                        parentBottom - timeView.measuredHeight - timeView.marginBottom,
-                        parentRight - timeView.marginEnd,
-                        parentBottom - timeView.marginBottom
+                    parentRight - timeView.measuredWidth - timeView.marginEnd,
+                    parentBottom - timeView.measuredHeight - timeView.marginBottom,
+                    parentRight - timeView.marginEnd,
+                    parentBottom - timeView.marginBottom
                 )
             }
         } else {

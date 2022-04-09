@@ -29,10 +29,14 @@ internal interface WidgetsAPI {
      * @param body the body content (Ref: https://github.com/matrix-org/matrix-doc/pull/1961)
      */
     @POST("register")
-    suspend fun register(@Body body: OpenIdToken,
-                         @Query("v") version: String?): RegisterWidgetResponse
+    suspend fun register(
+        @Body body: OpenIdToken,
+        @Query("v") version: String?
+    ): RegisterWidgetResponse
 
     @GET("account")
-    suspend fun validateToken(@Query("scalar_token") scalarToken: String?,
-                              @Query("v") version: String?)
+    suspend fun validateToken(
+        @Query("scalar_token") scalarToken: String?,
+        @Query("v") version: String?
+    )
 }

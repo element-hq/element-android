@@ -21,8 +21,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class AddRoomAliasBody(
-        /**
-         * Required. The room id which the alias will be added to.
-         */
-        @Json(name = "room_id") val roomId: String
+    /**
+     * Required. The room id which the alias will be added to.
+     */
+    @Json(name = "room_id") val roomId: String
 )

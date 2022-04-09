@@ -22,35 +22,35 @@ import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
 data class FileInfo(
-        /**
-         * The mimetype of the file e.g. application/msword.
-         */
-        @Json(name = "mimetype") val mimeType: String?,
+    /**
+     * The mimetype of the file e.g. application/msword.
+     */
+    @Json(name = "mimetype") val mimeType: String?,
 
-        /**
-         * The size of the file in bytes.
-         */
-        @Json(name = "size") val size: Long = 0,
+    /**
+     * The size of the file in bytes.
+     */
+    @Json(name = "size") val size: Long = 0,
 
-        /**
-         * Metadata about the image referred to in thumbnail_url.
-         */
-        @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null,
+    /**
+     * Metadata about the image referred to in thumbnail_url.
+     */
+    @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null,
 
-        /**
-         * The URL to the thumbnail of the file. Only present if the thumbnail is unencrypted.
-         */
-        @Json(name = "thumbnail_url") val thumbnailUrl: String? = null,
+    /**
+     * The URL to the thumbnail of the file. Only present if the thumbnail is unencrypted.
+     */
+    @Json(name = "thumbnail_url") val thumbnailUrl: String? = null,
 
-        /**
-         * Information on the encrypted thumbnail file, as specified in End-to-end encryption. Only present if the thumbnail is encrypted.
-         */
-        @Json(name = "thumbnail_file") val thumbnailFile: EncryptedFileInfo? = null
+    /**
+     * Information on the encrypted thumbnail file, as specified in End-to-end encryption. Only present if the thumbnail is encrypted.
+     */
+    @Json(name = "thumbnail_file") val thumbnailFile: EncryptedFileInfo? = null
 )
 
 /**
  * Get the url of the encrypted thumbnail or of the thumbnail
  */
 fun FileInfo.getThumbnailUrl(): String? {
-        return thumbnailFile?.url ?: thumbnailUrl
+    return thumbnailFile?.url ?: thumbnailUrl
 }

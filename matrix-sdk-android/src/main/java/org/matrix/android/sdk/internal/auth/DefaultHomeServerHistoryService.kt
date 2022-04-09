@@ -24,15 +24,15 @@ import org.matrix.android.sdk.internal.di.GlobalDatabase
 import javax.inject.Inject
 
 class DefaultHomeServerHistoryService @Inject constructor(
-        @GlobalDatabase private val monarchy: Monarchy
+    @GlobalDatabase private val monarchy: Monarchy
 ) : HomeServerHistoryService {
 
     override fun getKnownServersUrls(): List<String> {
         return monarchy.fetchAllMappedSync(
-                { realm ->
-                    realm.where<KnownServerUrlEntity>()
-                },
-                { it.url }
+            { realm ->
+                realm.where<KnownServerUrlEntity>()
+            },
+            { it.url }
         )
     }
 

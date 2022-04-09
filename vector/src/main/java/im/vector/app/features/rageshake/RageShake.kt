@@ -31,11 +31,13 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import javax.inject.Inject
 
-class RageShake @Inject constructor(private val activity: FragmentActivity,
-                                    private val bugReporter: BugReporter,
-                                    private val navigator: Navigator,
-                                    private val sessionHolder: ActiveSessionHolder,
-                                    private val vectorPreferences: VectorPreferences) : ShakeDetector.Listener {
+class RageShake @Inject constructor(
+    private val activity: FragmentActivity,
+    private val bugReporter: BugReporter,
+    private val navigator: Navigator,
+    private val sessionHolder: ActiveSessionHolder,
+    private val vectorPreferences: VectorPreferences
+) : ShakeDetector.Listener {
 
     private var shakeDetector: ShakeDetector? = null
 
@@ -75,18 +77,18 @@ class RageShake @Inject constructor(private val activity: FragmentActivity,
             dialogDisplayed = true
 
             MaterialAlertDialogBuilder(activity)
-                    .setMessage(R.string.send_bug_report_alert_message)
-                    .setPositiveButton(R.string.yes) { _, _ -> openBugReportScreen() }
-                    .also {
-                        if (sessionHolder.hasActiveSession()) {
-                            it.setNeutralButton(R.string.settings) { _, _ -> openSettings() }
-                        } else {
-                            it.setNeutralButton(R.string.action_disable) { _, _ -> disableRageShake() }
-                        }
+                .setMessage(R.string.send_bug_report_alert_message)
+                .setPositiveButton(R.string.yes) { _, _ -> openBugReportScreen() }
+                .also {
+                    if (sessionHolder.hasActiveSession()) {
+                        it.setNeutralButton(R.string.settings) { _, _ -> openSettings() }
+                    } else {
+                        it.setNeutralButton(R.string.action_disable) { _, _ -> disableRageShake() }
                     }
-                    .setOnDismissListener { dialogDisplayed = false }
-                    .setNegativeButton(R.string.no, null)
-                    .show()
+                }
+                .setOnDismissListener { dialogDisplayed = false }
+                .setNegativeButton(R.string.no, null)
+                .show()
         }
     }
 

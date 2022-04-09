@@ -62,12 +62,13 @@ import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 
-class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
-                                                     private val appStateHandler: AppStateHandler,
-                                                     private val session: Session,
-                                                     private val vectorPreferences: VectorPreferences,
-                                                     private val autoAcceptInvites: AutoAcceptInvites,
-                                                     private val analyticsTracker: AnalyticsTracker
+class SpaceListViewModel @AssistedInject constructor(
+    @Assisted initialState: SpaceListViewState,
+    private val appStateHandler: AppStateHandler,
+    private val session: Session,
+    private val vectorPreferences: VectorPreferences,
+    private val autoAcceptInvites: AutoAcceptInvites,
+    private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -77,98 +78,98 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
 
     companion object : MavericksViewModelFactory<SpaceListViewModel, SpaceListViewState> by hiltMavericksViewModelFactory()
 
-//    private var currentGroupingMethod : RoomGroupingMethod? = null
+    //    private var currentGroupingMethod : RoomGroupingMethod? = null
 
     init {
 
         session.getUserLive(session.myUserId)
-                .asFlow()
-                .setOnEach {
-                    copy(
-                            myMxItem = it.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading()
-                    )
-                }
+            .asFlow()
+            .setOnEach {
+                copy(
+                    myMxItem = it.getOrNull()?.toMatrixItem()?.let { Success(it) } ?: Loading()
+                )
+            }
 
         observeSpaceSummaries()
-//        observeSelectionState()
+        //        observeSelectionState()
         appStateHandler.selectedRoomGroupingFlow
-                .distinctUntilChanged()
-                .setOnEach {
-                    copy(
-                            selectedGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
-                    )
-                }
+            .distinctUntilChanged()
+            .setOnEach {
+                copy(
+                    selectedGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
+                )
+            }
 
         session.getGroupSummariesLive(groupSummaryQueryParams {})
-                .asFlow()
-                .setOnEach {
-                    copy(legacyGroups = it)
-                }
+            .asFlow()
+            .setOnEach {
+                copy(legacyGroups = it)
+            }
 
         // XXX there should be a way to refactor this and share it
         session.getPagedRoomSummariesLive(
-                roomSummaryQueryParams {
-                    this.memberships = listOf(Membership.JOIN)
-                    this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
-                        !vectorPreferences.prefSpacesShowAllRoomInHome()
-                    } ?: ActiveSpaceFilter.None
-                }, sortOrder = RoomSortOrder.NONE
+            roomSummaryQueryParams {
+                this.memberships = listOf(Membership.JOIN)
+                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                    !vectorPreferences.prefSpacesShowAllRoomInHome()
+                } ?: ActiveSpaceFilter.None
+            }, sortOrder = RoomSortOrder.NONE
         ).asFlow()
-                .sample(300)
-                .onEach {
-                    val inviteCount = if (autoAcceptInvites.hideInvites) {
-                        0
-                    } else {
-                        session.getRoomSummaries(
-                                roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
-                        ).size
-                    }
-                    val totalCount = session.getNotificationCountForRooms(
-                            roomSummaryQueryParams {
-                                this.memberships = listOf(Membership.JOIN)
-                                this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
-                                    !vectorPreferences.prefSpacesShowAllRoomInHome()
-                                } ?: ActiveSpaceFilter.None
-                            }
-                    )
-                    val counts = RoomAggregateNotificationCount(
-                            totalCount.notificationCount + inviteCount,
-                            totalCount.highlightCount + inviteCount
-                    )
-                    setState {
-                        copy(
-                                homeAggregateCount = counts
-                        )
-                    }
+            .sample(300)
+            .onEach {
+                val inviteCount = if (autoAcceptInvites.hideInvites) {
+                    0
+                } else {
+                    session.getRoomSummaries(
+                        roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
+                    ).size
                 }
-                .flowOn(Dispatchers.Default)
-                .launchIn(viewModelScope)
+                val totalCount = session.getNotificationCountForRooms(
+                    roomSummaryQueryParams {
+                        this.memberships = listOf(Membership.JOIN)
+                        this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
+                            !vectorPreferences.prefSpacesShowAllRoomInHome()
+                        } ?: ActiveSpaceFilter.None
+                    }
+                )
+                val counts = RoomAggregateNotificationCount(
+                    totalCount.notificationCount + inviteCount,
+                    totalCount.highlightCount + inviteCount
+                )
+                setState {
+                    copy(
+                        homeAggregateCount = counts
+                    )
+                }
+            }
+            .flowOn(Dispatchers.Default)
+            .launchIn(viewModelScope)
     }
 
     override fun handle(action: SpaceListAction) {
         when (action) {
-            is SpaceListAction.SelectSpace       -> handleSelectSpace(action)
-            is SpaceListAction.LeaveSpace        -> handleLeaveSpace(action)
-            SpaceListAction.AddSpace             -> handleAddSpace()
-            is SpaceListAction.ToggleExpand      -> handleToggleExpand(action)
-            is SpaceListAction.OpenSpaceInvite   -> handleSelectSpaceInvite(action)
+            is SpaceListAction.SelectSpace -> handleSelectSpace(action)
+            is SpaceListAction.LeaveSpace -> handleLeaveSpace(action)
+            SpaceListAction.AddSpace -> handleAddSpace()
+            is SpaceListAction.ToggleExpand -> handleToggleExpand(action)
+            is SpaceListAction.OpenSpaceInvite -> handleSelectSpaceInvite(action)
             is SpaceListAction.SelectLegacyGroup -> handleSelectGroup(action)
-            is SpaceListAction.MoveSpace         -> handleMoveSpace(action)
-            is SpaceListAction.OnEndDragging     -> handleEndDragging()
-            is SpaceListAction.OnStartDragging   -> handleStartDragging()
+            is SpaceListAction.MoveSpace -> handleMoveSpace(action)
+            is SpaceListAction.OnEndDragging -> handleEndDragging()
+            is SpaceListAction.OnStartDragging -> handleStartDragging()
         }
     }
 
-// PRIVATE METHODS *****************************************************************************
+    // PRIVATE METHODS *****************************************************************************
 
     var preDragExpandedState: Map<String, Boolean>? = null
     private fun handleStartDragging() = withState { state ->
         preDragExpandedState = state.expandedStates.toMap()
         setState {
             copy(
-                    expandedStates = expandedStates.map {
-                        it.key to false
-                    }.toMap()
+                expandedStates = expandedStates.map {
+                    it.key to false
+                }.toMap()
             )
         }
     }
@@ -177,7 +178,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         // restore expanded state
         setState {
             copy(
-                    expandedStates = preDragExpandedState.orEmpty()
+                expandedStates = preDragExpandedState.orEmpty()
             )
         }
     }
@@ -185,11 +186,11 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
     private fun handleMoveSpace(action: SpaceListAction.MoveSpace) = withState { state ->
         state.rootSpacesOrdered ?: return@withState
         val orderCommands = SpaceOrderUtils.orderCommandsForMove(
-                state.rootSpacesOrdered.map {
-                    it.roomId to (state.spaceOrderLocalEchos?.get(it.roomId) ?: state.spaceOrderInfo?.get(it.roomId))
-                },
-                action.spaceId,
-                action.delta
+            state.rootSpacesOrdered.map {
+                it.roomId to (state.spaceOrderLocalEchos?.get(it.roomId) ?: state.spaceOrderInfo?.get(it.roomId))
+            },
+            action.spaceId,
+            action.delta
         )
 
         // local echo
@@ -201,18 +202,19 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
 
         setState {
             copy(
-                    rootSpacesOrdered = state.rootSpacesOrdered.toMutableList().apply {
-                        val index = indexOfFirst { it.roomId == action.spaceId }
-                        val moved = removeAt(index)
-                        add(index + action.delta, moved)
-                    },
-                    spaceOrderLocalEchos = updatedLocalEchos
+                rootSpacesOrdered = state.rootSpacesOrdered.toMutableList().apply {
+                    val index = indexOfFirst { it.roomId == action.spaceId }
+                    val moved = removeAt(index)
+                    add(index + action.delta, moved)
+                },
+                spaceOrderLocalEchos = updatedLocalEchos
             )
         }
         session.coroutineScope.launch {
             orderCommands.forEach {
-                session.getRoom(it.spaceId)?.updateAccountData(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER,
-                        SpaceOrderContent(order = it.order).toContent()
+                session.getRoom(it.spaceId)?.updateAccountData(
+                    RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER,
+                    SpaceOrderContent(order = it.order).toContent()
                 )
             }
         }
@@ -220,7 +222,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         // restore expanded state
         setState {
             copy(
-                    expandedStates = preDragExpandedState.orEmpty()
+                expandedStates = preDragExpandedState.orEmpty()
             )
         }
     }
@@ -275,50 +277,52 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         val spaceSummaryQueryParams = roomSummaryQueryParams {
             memberships = listOf(Membership.JOIN, Membership.INVITE)
             displayName = QueryStringValue.IsNotEmpty
-            excludeType = listOf(/**RoomType.MESSAGING,$*/
-                    null)
+            excludeType = listOf(
+                /**RoomType.MESSAGING,$*/
+                null
+            )
         }
 
         val flowSession = session.flow()
 
         combine(
-                flowSession
-                        .liveUser(session.myUserId)
-                        .map {
-                            it.getOrNull()
-                        },
-                flowSession
-                        .liveSpaceSummaries(spaceSummaryQueryParams),
-                session
-                        .accountDataService()
-                        .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
-                        .asFlow()
+            flowSession
+                .liveUser(session.myUserId)
+                .map {
+                    it.getOrNull()
+                },
+            flowSession
+                .liveSpaceSummaries(spaceSummaryQueryParams),
+            session
+                .accountDataService()
+                .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
+                .asFlow()
         ) { _, communityGroups, _ ->
             communityGroups
         }
-                .execute { async ->
-                    val rootSpaces = session.spaceService().getRootSpaceSummaries()
-                    val orders = rootSpaces.map {
-                        it.roomId to session.getRoom(it.roomId)
-                                ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
-                                ?.content.toModel<SpaceOrderContent>()
-                                ?.safeOrder()
-                    }.toMap()
-                    copy(
-                            asyncSpaces = async,
-                            rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
-                            spaceOrderInfo = orders
-                    )
-                }
+            .execute { async ->
+                val rootSpaces = session.spaceService().getRootSpaceSummaries()
+                val orders = rootSpaces.map {
+                    it.roomId to session.getRoom(it.roomId)
+                        ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
+                        ?.content.toModel<SpaceOrderContent>()
+                        ?.safeOrder()
+                }.toMap()
+                copy(
+                    asyncSpaces = async,
+                    rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                    spaceOrderInfo = orders
+                )
+            }
 
         // clear local echos on update
         session.accountDataService()
-                .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
-                .asFlow()
-                .execute {
-                    copy(
-                            spaceOrderLocalEchos = emptyMap()
-                    )
-                }
+            .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
+            .asFlow()
+            .execute {
+                copy(
+                    spaceOrderLocalEchos = emptyMap()
+                )
+            }
     }
 }

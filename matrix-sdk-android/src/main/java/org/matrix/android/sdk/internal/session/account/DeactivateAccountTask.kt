@@ -29,17 +29,17 @@ import javax.inject.Inject
 
 internal interface DeactivateAccountTask : Task<DeactivateAccountTask.Params, Unit> {
     data class Params(
-            val eraseAllData: Boolean,
-            val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor,
-            val userAuthParam: UIABaseAuth? = null
+        val eraseAllData: Boolean,
+        val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor,
+        val userAuthParam: UIABaseAuth? = null
     )
 }
 
 internal class DefaultDeactivateAccountTask @Inject constructor(
-        private val accountAPI: AccountAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        private val identityDisconnectTask: IdentityDisconnectTask,
-        private val cleanupSession: CleanupSession
+    private val accountAPI: AccountAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    private val identityDisconnectTask: IdentityDisconnectTask,
+    private val cleanupSession: CleanupSession
 ) : DeactivateAccountTask {
 
     override suspend fun execute(params: DeactivateAccountTask.Params) {
@@ -52,12 +52,12 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
             true
         } catch (throwable: Throwable) {
             if (!handleUIA(
-                            failure = throwable,
-                            interceptor = params.userInteractiveAuthInterceptor,
-                            retryBlock = { authUpdate ->
-                                execute(params.copy(userAuthParam = authUpdate))
-                            }
-                    )
+                    failure = throwable,
+                    interceptor = params.userInteractiveAuthInterceptor,
+                    retryBlock = { authUpdate ->
+                        execute(params.copy(userAuthParam = authUpdate))
+                    }
+                )
             ) {
                 Timber.d("## UIA: propagate failure")
                 throw throwable
@@ -69,7 +69,7 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
         if (canCleanup) {
             // Logout from identity server if any, ignoring errors
             runCatching { identityDisconnectTask.execute(Unit) }
-                    .onFailure { Timber.w(it, "Unable to disconnect identity server") }
+                .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
             cleanupSession.cleanup()
         }

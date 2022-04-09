@@ -25,42 +25,42 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
  */
 @JsonClass(generateAdapter = true)
 internal data class AuthParams(
-        @Json(name = "type")
-        val type: String,
+    @Json(name = "type")
+    val type: String,
 
-        /**
-         * Note: session can be null for reset password request
-         */
-        @Json(name = "session")
-        val session: String?,
+    /**
+     * Note: session can be null for reset password request
+     */
+    @Json(name = "session")
+    val session: String?,
 
-        /**
-         * parameter for "m.login.recaptcha" type
-         */
-        @Json(name = "response")
-        val captchaResponse: String? = null,
+    /**
+     * parameter for "m.login.recaptcha" type
+     */
+    @Json(name = "response")
+    val captchaResponse: String? = null,
 
-        /**
-         * parameter for "m.login.email.identity" type
-         */
-        @Json(name = "threepid_creds")
-        val threePidCredentials: ThreePidCredentials? = null
+    /**
+     * parameter for "m.login.email.identity" type
+     */
+    @Json(name = "threepid_creds")
+    val threePidCredentials: ThreePidCredentials? = null
 ) {
 
     companion object {
         fun createForCaptcha(session: String, captchaResponse: String): AuthParams {
             return AuthParams(
-                    type = LoginFlowTypes.RECAPTCHA,
-                    session = session,
-                    captchaResponse = captchaResponse
+                type = LoginFlowTypes.RECAPTCHA,
+                session = session,
+                captchaResponse = captchaResponse
             )
         }
 
         fun createForEmailIdentity(session: String, threePidCredentials: ThreePidCredentials): AuthParams {
             return AuthParams(
-                    type = LoginFlowTypes.EMAIL_IDENTITY,
-                    session = session,
-                    threePidCredentials = threePidCredentials
+                type = LoginFlowTypes.EMAIL_IDENTITY,
+                session = session,
+                threePidCredentials = threePidCredentials
             )
         }
 
@@ -70,20 +70,20 @@ internal data class AuthParams(
          */
         fun createForMsisdnIdentity(session: String, threePidCredentials: ThreePidCredentials): AuthParams {
             return AuthParams(
-                    type = LoginFlowTypes.MSISDN,
-                    session = session,
-                    threePidCredentials = threePidCredentials
+                type = LoginFlowTypes.MSISDN,
+                session = session,
+                threePidCredentials = threePidCredentials
             )
         }
 
         fun createForResetPassword(clientSecret: String, sid: String): AuthParams {
             return AuthParams(
-                    type = LoginFlowTypes.EMAIL_IDENTITY,
-                    session = null,
-                    threePidCredentials = ThreePidCredentials(
-                            clientSecret = clientSecret,
-                            sid = sid
-                    )
+                type = LoginFlowTypes.EMAIL_IDENTITY,
+                session = null,
+                threePidCredentials = ThreePidCredentials(
+                    clientSecret = clientSecret,
+                    sid = sid
+                )
             )
         }
     }
@@ -91,12 +91,12 @@ internal data class AuthParams(
 
 @JsonClass(generateAdapter = true)
 data class ThreePidCredentials(
-        @Json(name = "client_secret")
-        val clientSecret: String? = null,
+    @Json(name = "client_secret")
+    val clientSecret: String? = null,
 
-        @Json(name = "id_server")
-        val idServer: String? = null,
+    @Json(name = "id_server")
+    val idServer: String? = null,
 
-        @Json(name = "sid")
-        val sid: String? = null
+    @Json(name = "sid")
+    val sid: String? = null
 )

@@ -20,15 +20,15 @@ import org.matrix.android.sdk.internal.crypto.model.rest.DeviceKeys
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 
 data class CryptoDeviceInfo(
-        val deviceId: String,
-        override val userId: String,
-        var algorithms: List<String>? = null,
-        override val keys: Map<String, String>? = null,
-        override val signatures: Map<String, Map<String, String>>? = null,
-        val unsigned: UnsignedDeviceInfo? = null,
-        var trustLevel: DeviceTrustLevel? = null,
-        var isBlocked: Boolean = false,
-        val firstTimeSeenLocalTs: Long? = null
+    val deviceId: String,
+    override val userId: String,
+    var algorithms: List<String>? = null,
+    override val keys: Map<String, String>? = null,
+    override val signatures: Map<String, Map<String, String>>? = null,
+    val unsigned: UnsignedDeviceInfo? = null,
+    var trustLevel: DeviceTrustLevel? = null,
+    var isBlocked: Boolean = false,
+    val firstTimeSeenLocalTs: Long? = null
 ) : CryptoInfo {
 
     val isVerified: Boolean
@@ -42,8 +42,8 @@ data class CryptoDeviceInfo(
      */
     fun fingerprint(): String? {
         return keys
-                ?.takeIf { deviceId.isNotBlank() }
-                ?.get("ed25519:$deviceId")
+            ?.takeIf { deviceId.isNotBlank() }
+            ?.get("ed25519:$deviceId")
     }
 
     /**
@@ -51,8 +51,8 @@ data class CryptoDeviceInfo(
      */
     fun identityKey(): String? {
         return keys
-                ?.takeIf { deviceId.isNotBlank() }
-                ?.get("curve25519:$deviceId")
+            ?.takeIf { deviceId.isNotBlank() }
+            ?.get("curve25519:$deviceId")
     }
 
     /**

@@ -23,36 +23,36 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class EncryptedFileInfo(
-        /**
-         * Required. The URL to the file.
-         */
-        @Json(name = "url")
-        val url: String? = null,
+    /**
+     * Required. The URL to the file.
+     */
+    @Json(name = "url")
+    val url: String? = null,
 
-        /**
-         * Required. A JSON Web Key object.
-         */
-        @Json(name = "key")
-        val key: EncryptedFileKey? = null,
+    /**
+     * Required. A JSON Web Key object.
+     */
+    @Json(name = "key")
+    val key: EncryptedFileKey? = null,
 
-        /**
-         * Required. The Initialisation Vector used by AES-CTR, encoded as unpadded base64.
-         */
-        @Json(name = "iv")
-        val iv: String? = null,
+    /**
+     * Required. The Initialisation Vector used by AES-CTR, encoded as unpadded base64.
+     */
+    @Json(name = "iv")
+    val iv: String? = null,
 
-        /**
-         * Required. A map from an algorithm name to a hash of the ciphertext, encoded as unpadded base64.
-         * Clients should support the SHA-256 hash, which uses the key "sha256".
-         */
-        @Json(name = "hashes")
-        val hashes: Map<String, String>? = null,
+    /**
+     * Required. A map from an algorithm name to a hash of the ciphertext, encoded as unpadded base64.
+     * Clients should support the SHA-256 hash, which uses the key "sha256".
+     */
+    @Json(name = "hashes")
+    val hashes: Map<String, String>? = null,
 
-        /**
-         * Required. Version of the encrypted attachments protocol. Must be "v2".
-         */
-        @Json(name = "v")
-        val v: String? = null
+    /**
+     * Required. Version of the encrypted attachments protocol. Must be "v2".
+     */
+    @Json(name = "v")
+    val v: String? = null
 ) {
     /**
      * Check what the spec tells us

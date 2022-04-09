@@ -26,19 +26,19 @@ import org.matrix.android.sdk.internal.database.query.latestEvent
 internal object RoomSummaryEventsHelper {
 
     private val previewFilters = TimelineEventFilters(
-            filterTypes = true,
-            allowedTypes = RoomSummaryConstants.PREVIEWABLE_TYPES.map { EventTypeFilter(eventType = it, stateKey = null) },
-            filterUseless = true,
-            filterRedacted = false,
-            filterEdits = true
+        filterTypes = true,
+        allowedTypes = RoomSummaryConstants.PREVIEWABLE_TYPES.map { EventTypeFilter(eventType = it, stateKey = null) },
+        filterUseless = true,
+        filterRedacted = false,
+        filterEdits = true
     )
 
     fun getLatestPreviewableEvent(realm: Realm, roomId: String): TimelineEventEntity? {
         return TimelineEventEntity.latestEvent(
-                realm = realm,
-                roomId = roomId,
-                includesSending = true,
-                filters = previewFilters
+            realm = realm,
+            roomId = roomId,
+            includesSending = true,
+            filters = previewFilters
         )
     }
 }

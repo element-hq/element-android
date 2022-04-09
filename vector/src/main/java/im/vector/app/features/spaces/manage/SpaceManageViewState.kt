@@ -24,12 +24,13 @@ enum class ManageType {
     Settings,
     ManageRooms
 }
+
 data class SpaceManageViewState(
-        val spaceId: String = "",
-        val manageType: ManageType
+    val spaceId: String = "",
+    val manageType: ManageType
 ) : MavericksState {
     constructor(args: SpaceManageArgs) : this(
-            spaceId = args.spaceId,
-            manageType = args.manageType
+        spaceId = args.spaceId,
+        manageType = args.manageType
     )
 }

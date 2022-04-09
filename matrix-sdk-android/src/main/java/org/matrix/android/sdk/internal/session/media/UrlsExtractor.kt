@@ -31,25 +31,25 @@ internal class UrlsExtractor @Inject constructor() {
 
     fun extract(event: TimelineEvent): List<String> {
         return event.takeIf { it.root.getClearType() == EventType.MESSAGE }
-                ?.getLastMessageContent()
-                ?.takeIf {
-                    it.msgType == MessageType.MSGTYPE_TEXT ||
-                            it.msgType == MessageType.MSGTYPE_NOTICE ||
-                            it.msgType == MessageType.MSGTYPE_EMOTE
+            ?.getLastMessageContent()
+            ?.takeIf {
+                it.msgType == MessageType.MSGTYPE_TEXT ||
+                        it.msgType == MessageType.MSGTYPE_NOTICE ||
+                        it.msgType == MessageType.MSGTYPE_EMOTE
+            }
+            ?.let { messageContent ->
+                if (event.isReply()) {
+                    // This is a reply, strip the reply fallback
+                    ContentUtils.extractUsefulTextFromReply(messageContent.body)
+                } else {
+                    messageContent.body
                 }
-                ?.let { messageContent ->
-                    if (event.isReply()) {
-                        // This is a reply, strip the reply fallback
-                        ContentUtils.extractUsefulTextFromReply(messageContent.body)
-                    } else {
-                        messageContent.body
-                    }
-                }
-                ?.let { urlRegex.findAll(it) }
-                ?.map { it.value }
-                ?.filter { it.startsWith("https://") || it.startsWith("http://") }
-                ?.distinct()
-                ?.toList()
-                .orEmpty()
+            }
+            ?.let { urlRegex.findAll(it) }
+            ?.map { it.value }
+            ?.filter { it.startsWith("https://") || it.startsWith("http://") }
+            ?.distinct()
+            ?.toList()
+            .orEmpty()
     }
 }

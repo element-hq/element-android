@@ -28,18 +28,18 @@ internal object PushRulesMapper {
 
     private val moshiActionsAdapter = MoshiProvider.providesMoshi().adapter<List<Any>>(Types.newParameterizedType(List::class.java, Any::class.java))
 
-//    private val listOfAnyAdapter: JsonAdapter<List<Any>> =
-//            moshi.adapter<List<Any>>(Types.newParameterizedType(List::class.java, Any::class.java), kotlin.collections.emptySet(), "actions")
+    //    private val listOfAnyAdapter: JsonAdapter<List<Any>> =
+    //            moshi.adapter<List<Any>>(Types.newParameterizedType(List::class.java, Any::class.java), kotlin.collections.emptySet(), "actions")
 
     fun mapContentRule(pushrule: PushRuleEntity): PushRule {
         return PushRule(
-                actions = fromActionStr(pushrule.actionsStr),
-                default = pushrule.default,
-                enabled = pushrule.enabled,
-                ruleId = pushrule.ruleId,
-                conditions = listOf(
-                        PushCondition(Kind.EventMatch.value, "content.body", pushrule.pattern)
-                )
+            actions = fromActionStr(pushrule.actionsStr),
+            default = pushrule.default,
+            enabled = pushrule.enabled,
+            ruleId = pushrule.ruleId,
+            conditions = listOf(
+                PushCondition(Kind.EventMatch.value, "content.body", pushrule.pattern)
+            )
         )
     }
 
@@ -54,48 +54,48 @@ internal object PushRulesMapper {
 
     fun mapRoomRule(pushrule: PushRuleEntity): PushRule {
         return PushRule(
-                actions = fromActionStr(pushrule.actionsStr),
-                default = pushrule.default,
-                enabled = pushrule.enabled,
-                ruleId = pushrule.ruleId,
-                conditions = listOf(
-                        PushCondition(Kind.EventMatch.value, "room_id", pushrule.ruleId)
-                )
+            actions = fromActionStr(pushrule.actionsStr),
+            default = pushrule.default,
+            enabled = pushrule.enabled,
+            ruleId = pushrule.ruleId,
+            conditions = listOf(
+                PushCondition(Kind.EventMatch.value, "room_id", pushrule.ruleId)
+            )
         )
     }
 
     fun mapSenderRule(pushrule: PushRuleEntity): PushRule {
         return PushRule(
-                actions = fromActionStr(pushrule.actionsStr),
-                default = pushrule.default,
-                enabled = pushrule.enabled,
-                ruleId = pushrule.ruleId,
-                conditions = listOf(
-                        PushCondition(Kind.EventMatch.value, "user_id", pushrule.ruleId)
-                )
+            actions = fromActionStr(pushrule.actionsStr),
+            default = pushrule.default,
+            enabled = pushrule.enabled,
+            ruleId = pushrule.ruleId,
+            conditions = listOf(
+                PushCondition(Kind.EventMatch.value, "user_id", pushrule.ruleId)
+            )
         )
     }
 
     fun map(pushrule: PushRuleEntity): PushRule {
         return PushRule(
-                actions = fromActionStr(pushrule.actionsStr),
-                default = pushrule.default,
-                enabled = pushrule.enabled,
-                ruleId = pushrule.ruleId,
-                conditions = pushrule.conditions?.map { PushConditionMapper.map(it) }
+            actions = fromActionStr(pushrule.actionsStr),
+            default = pushrule.default,
+            enabled = pushrule.enabled,
+            ruleId = pushrule.ruleId,
+            conditions = pushrule.conditions?.map { PushConditionMapper.map(it) }
         )
     }
 
     fun map(pushRule: PushRule): PushRuleEntity {
         return PushRuleEntity(
-                actionsStr = moshiActionsAdapter.toJson(pushRule.actions),
-                default = pushRule.default ?: false,
-                enabled = pushRule.enabled,
-                ruleId = pushRule.ruleId,
-                pattern = pushRule.pattern,
-                conditions = pushRule.conditions?.let {
-                    RealmList(*pushRule.conditions.map { PushConditionMapper.map(it) }.toTypedArray())
-                } ?: RealmList()
+            actionsStr = moshiActionsAdapter.toJson(pushRule.actions),
+            default = pushRule.default ?: false,
+            enabled = pushRule.enabled,
+            ruleId = pushRule.ruleId,
+            pattern = pushRule.pattern,
+            conditions = pushRule.conditions?.let {
+                RealmList(*pushRule.conditions.map { PushConditionMapper.map(it) }.toTypedArray())
+            } ?: RealmList()
         )
     }
 }

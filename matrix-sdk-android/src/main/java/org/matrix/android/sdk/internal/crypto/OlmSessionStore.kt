@@ -60,8 +60,8 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
     fun getDeviceSessionIds(deviceKey: String): List<String> {
         // we need to get the persisted ids first
         val persistedKnownSessions = store.getDeviceSessionIds(deviceKey)
-                .orEmpty()
-                .toMutableList()
+            .orEmpty()
+            .toMutableList()
         // Do we have some in cache not yet persisted?
         olmSessions.getOrPut(deviceKey) { mutableListOf() }.forEach { cached ->
             getSafeSessionIdentifier(cached.olmSession)?.let { cachedSessionId ->
@@ -121,10 +121,10 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
 
     private fun internalGetSession(sessionId: String, deviceKey: String): OlmSessionWrapper? {
         return getSessionInCache(sessionId, deviceKey)
-                ?: // deserialize from store
-                return store.getDeviceSession(sessionId, deviceKey)?.also {
-                    addNewSessionInCache(it, deviceKey)
-                }
+            ?: // deserialize from store
+            return store.getDeviceSession(sessionId, deviceKey)?.also {
+                addNewSessionInCache(it, deviceKey)
+            }
     }
 
     private fun getSessionInCache(sessionId: String, deviceKey: String): OlmSessionWrapper? {

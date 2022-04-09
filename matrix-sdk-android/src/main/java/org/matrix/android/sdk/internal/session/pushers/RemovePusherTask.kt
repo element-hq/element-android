@@ -30,14 +30,16 @@ import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal interface RemovePusherTask : Task<RemovePusherTask.Params, Unit> {
-    data class Params(val pushKey: String,
-                      val pushAppId: String)
+    data class Params(
+        val pushKey: String,
+        val pushAppId: String
+    )
 }
 
 internal class DefaultRemovePusherTask @Inject constructor(
-        private val pushersAPI: PushersAPI,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val pushersAPI: PushersAPI,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : RemovePusherTask {
 
     override suspend fun execute(params: RemovePusherTask.Params) {
@@ -51,16 +53,16 @@ internal class DefaultRemovePusherTask @Inject constructor(
         } ?: throw Exception("No existing pusher")
 
         val deleteBody = JsonPusher(
-                pushKey = params.pushKey,
-                appId = params.pushAppId,
-                // kind null deletes the pusher
-                kind = null,
-                appDisplayName = existing.appDisplayName ?: "",
-                deviceDisplayName = existing.deviceDisplayName ?: "",
-                profileTag = existing.profileTag ?: "",
-                lang = existing.lang,
-                data = JsonPusherData(existing.data.url, existing.data.format),
-                append = false
+            pushKey = params.pushKey,
+            appId = params.pushAppId,
+            // kind null deletes the pusher
+            kind = null,
+            appDisplayName = existing.appDisplayName ?: "",
+            deviceDisplayName = existing.deviceDisplayName ?: "",
+            profileTag = existing.profileTag ?: "",
+            lang = existing.lang,
+            data = JsonPusherData(existing.data.url, existing.data.format),
+            append = false
         )
         executeRequest(globalErrorReceiver) {
             pushersAPI.setPusher(deleteBody)

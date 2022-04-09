@@ -38,7 +38,7 @@ object EglUtils {
                 val configAttributes = EglBase.CONFIG_PLAIN
                 try {
                     field = EglBase.createEgl14(configAttributes)
-                            ?: EglBase.createEgl10(configAttributes) // Fall back to EglBase10.
+                        ?: EglBase.createEgl10(configAttributes) // Fall back to EglBase10.
                 } catch (ex: Throwable) {
                     Timber.e(ex, "Failed to create EglBase")
                 }

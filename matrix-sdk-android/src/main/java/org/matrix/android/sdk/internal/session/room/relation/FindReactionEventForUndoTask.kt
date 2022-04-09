@@ -29,19 +29,20 @@ import javax.inject.Inject
 internal interface FindReactionEventForUndoTask : Task<FindReactionEventForUndoTask.Params, FindReactionEventForUndoTask.Result> {
 
     data class Params(
-            val roomId: String,
-            val eventId: String,
-            val reaction: String
+        val roomId: String,
+        val eventId: String,
+        val reaction: String
     )
 
     data class Result(
-            val redactEventId: String?
+        val redactEventId: String?
     )
 }
 
 internal class DefaultFindReactionEventForUndoTask @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        @UserId private val userId: String) : FindReactionEventForUndoTask {
+    @SessionDatabase private val monarchy: Monarchy,
+    @UserId private val userId: String
+) : FindReactionEventForUndoTask {
 
     override suspend fun execute(params: FindReactionEventForUndoTask.Params): FindReactionEventForUndoTask.Result {
         val eventId = Realm.getInstance(monarchy.realmConfiguration).use { realm ->
@@ -54,19 +55,19 @@ internal class DefaultFindReactionEventForUndoTask @Inject constructor(
         val summary = EventAnnotationsSummaryEntity.where(realm, params.roomId, params.eventId).findFirst() ?: return null
 
         val rase = summary.reactionsSummary.where()
-                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.reaction)
-                .findFirst() ?: return null
+            .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.reaction)
+            .findFirst() ?: return null
 
         // want to find the event originated by me!
         return rase.sourceEvents
-                .asSequence()
-                .mapNotNull {
-                    // find source event
-                    EventEntity.where(realm, it).findFirst()
-                }
-                .firstOrNull { eventEntity ->
-                    // is it mine?
-                    eventEntity.sender == userId
-                }
+            .asSequence()
+            .mapNotNull {
+                // find source event
+                EventEntity.where(realm, it).findFirst()
+            }
+            .firstOrNull { eventEntity ->
+                // is it mine?
+                eventEntity.sender == userId
+            }
     }
 }

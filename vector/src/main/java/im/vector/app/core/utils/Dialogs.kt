@@ -40,13 +40,15 @@ fun Context.displayInWebView(url: String) {
 
     wv.loadUrl(url)
     MaterialAlertDialogBuilder(this)
-            .setView(wv)
-            .setPositiveButton(android.R.string.ok, null)
-            .show()
+        .setView(wv)
+        .setPositiveButton(android.R.string.ok, null)
+        .show()
 }
 
-fun Context.showIdentityServerConsentDialog(identityServerWithTerms: ServerAndPolicies?,
-                                            consentCallBack: (() -> Unit)) {
+fun Context.showIdentityServerConsentDialog(
+    identityServerWithTerms: ServerAndPolicies?,
+    consentCallBack: (() -> Unit)
+) {
     // Build the message
     val content = span {
         +getString(R.string.identity_server_consent_dialog_content_3)
@@ -66,15 +68,15 @@ fun Context.showIdentityServerConsentDialog(identityServerWithTerms: ServerAndPo
         +getString(R.string.identity_server_consent_dialog_content_question)
     }
     MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.identity_server_consent_dialog_title_2, identityServerWithTerms?.serverUrl.orEmpty()))
-            .setMessage(content)
-            .setPositiveButton(R.string.action_agree) { _, _ ->
-                consentCallBack.invoke()
-            }
-            .setNegativeButton(R.string.action_not_now, null)
-            .show()
-            .apply {
-                // Make the link(s) clickable. Must be called after show()
-                (findViewById(android.R.id.message) as? TextView)?.movementMethod = LinkMovementMethod.getInstance()
-            }
+        .setTitle(getString(R.string.identity_server_consent_dialog_title_2, identityServerWithTerms?.serverUrl.orEmpty()))
+        .setMessage(content)
+        .setPositiveButton(R.string.action_agree) { _, _ ->
+            consentCallBack.invoke()
+        }
+        .setNegativeButton(R.string.action_not_now, null)
+        .show()
+        .apply {
+            // Make the link(s) clickable. Must be called after show()
+            (findViewById(android.R.id.message) as? TextView)?.movementMethod = LinkMovementMethod.getInstance()
+        }
 }

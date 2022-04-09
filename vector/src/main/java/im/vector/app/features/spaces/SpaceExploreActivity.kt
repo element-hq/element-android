@@ -80,29 +80,31 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
         if (isFirstCreation()) {
             val args = intent?.getParcelableExtra<SpaceDirectoryArgs>(Mavericks.KEY_ARG)
             replaceFragment(
-                    views.simpleFragmentContainer,
-                    SpaceDirectoryFragment::class.java,
-                    args
+                views.simpleFragmentContainer,
+                SpaceDirectoryFragment::class.java,
+                args
             )
         }
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                SpaceDirectoryViewEvents.Dismiss                      -> {
+                SpaceDirectoryViewEvents.Dismiss -> {
                     finish()
                 }
-                is SpaceDirectoryViewEvents.NavigateToRoom            -> {
+                is SpaceDirectoryViewEvents.NavigateToRoom -> {
                     navigator.openRoom(this, it.roomId)
                 }
                 is SpaceDirectoryViewEvents.NavigateToMxToBottomSheet -> {
                     MatrixToBottomSheet.withLink(it.link).show(supportFragmentManager, "ShowChild")
                 }
-                is SpaceDirectoryViewEvents.NavigateToCreateNewRoom   -> {
-                    createRoomResultLauncher.launch(CreateRoomActivity.getIntent(
+                is SpaceDirectoryViewEvents.NavigateToCreateNewRoom -> {
+                    createRoomResultLauncher.launch(
+                        CreateRoomActivity.getIntent(
                             this,
                             openAfterCreate = false,
                             currentSpaceId = it.currentSpaceId
-                    ))
+                        )
+                    )
                 }
             }
         }

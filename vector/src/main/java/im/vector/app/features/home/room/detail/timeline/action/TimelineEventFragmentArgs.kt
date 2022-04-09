@@ -22,8 +22,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TimelineEventFragmentArgs(
-        val eventId: String,
-        val roomId: String,
-        val informationData: MessageInformationData,
-        val isFromThreadTimeline: Boolean = false
+    val eventId: String,
+    val roomId: String,
+    val informationData: MessageInformationData,
+    val isFromThreadTimeline: Boolean = false
 ) : Parcelable

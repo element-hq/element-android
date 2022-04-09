@@ -42,9 +42,9 @@ internal interface VerificationInfoReady : VerificationInfo<ValidVerificationInf
         val validMethods = methods?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationInfoReady(
-                validTransactionId,
-                validFromDevice,
-                validMethods
+            validTransactionId,
+            validFromDevice,
+            validMethods
         )
     }
 }

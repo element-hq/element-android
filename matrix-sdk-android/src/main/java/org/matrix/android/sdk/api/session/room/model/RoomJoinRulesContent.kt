@@ -27,13 +27,13 @@ import timber.log.Timber
  */
 @JsonClass(generateAdapter = true)
 data class RoomJoinRulesContent(
-        @Json(name = "join_rule") val _joinRules: String? = null,
-        /**
-         * If the allow key is an empty list (or not a list at all),
-         * then no users are allowed to join without an invite.
-         * Each entry is expected to be an object with the following keys:
-         */
-        @Json(name = "allow") val allowList: List<RoomJoinRulesAllowEntry>? = null
+    @Json(name = "join_rule") val _joinRules: String? = null,
+    /**
+     * If the allow key is an empty list (or not a list at all),
+     * then no users are allowed to join without an invite.
+     * Each entry is expected to be an object with the following keys:
+     */
+    @Json(name = "allow") val allowList: List<RoomJoinRulesAllowEntry>? = null
 ) {
     val joinRules: RoomJoinRules? = when (_joinRules) {
         "public" -> RoomJoinRules.PUBLIC
@@ -41,7 +41,7 @@ data class RoomJoinRulesContent(
         "knock" -> RoomJoinRules.KNOCK
         "private" -> RoomJoinRules.PRIVATE
         "restricted" -> RoomJoinRules.RESTRICTED
-        else         -> {
+        else -> {
             Timber.w("Invalid value for RoomJoinRules: `$_joinRules`")
             null
         }

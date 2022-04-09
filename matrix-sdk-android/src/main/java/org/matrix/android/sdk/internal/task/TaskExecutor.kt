@@ -37,31 +37,31 @@ internal class TaskExecutor @Inject constructor(private val coroutineDispatchers
 
     fun <PARAMS, RESULT> execute(task: ConfigurableTask<PARAMS, RESULT>): Cancelable {
         return executorScope
-                .launch(task.callbackThread.toDispatcher()) {
-                    val resultOrFailure = runCatching {
-                        withContext(task.executionThread.toDispatcher()) {
-                            Timber.v("## TASK: Enqueue task $task")
-                            Timber.v("## TASK: Execute task $task on ${Thread.currentThread().name}")
-                            task.executeRetry(task.params, task.maxRetryCount)
-                        }
+            .launch(task.callbackThread.toDispatcher()) {
+                val resultOrFailure = runCatching {
+                    withContext(task.executionThread.toDispatcher()) {
+                        Timber.v("## TASK: Enqueue task $task")
+                        Timber.v("## TASK: Execute task $task on ${Thread.currentThread().name}")
+                        task.executeRetry(task.params, task.maxRetryCount)
                     }
-                    resultOrFailure
-                            .onFailure {
-                                Timber.e(it, "Task failed")
-                            }
-                            .foldToCallback(task.callback)
                 }
-                .toCancelable()
+                resultOrFailure
+                    .onFailure {
+                        Timber.e(it, "Task failed")
+                    }
+                    .foldToCallback(task.callback)
+            }
+            .toCancelable()
     }
 
     fun cancelAll() = executorScope.coroutineContext.cancelChildren()
 
     private fun TaskThread.toDispatcher() = when (this) {
-        TaskThread.MAIN        -> coroutineDispatchers.main
+        TaskThread.MAIN -> coroutineDispatchers.main
         TaskThread.COMPUTATION -> coroutineDispatchers.computation
-        TaskThread.IO          -> coroutineDispatchers.io
-        TaskThread.CALLER      -> EmptyCoroutineContext
-        TaskThread.CRYPTO      -> coroutineDispatchers.crypto
-        TaskThread.DM_VERIF    -> coroutineDispatchers.dmVerif
+        TaskThread.IO -> coroutineDispatchers.io
+        TaskThread.CALLER -> EmptyCoroutineContext
+        TaskThread.CRYPTO -> coroutineDispatchers.crypto
+        TaskThread.DM_VERIF -> coroutineDispatchers.dmVerif
     }
 }

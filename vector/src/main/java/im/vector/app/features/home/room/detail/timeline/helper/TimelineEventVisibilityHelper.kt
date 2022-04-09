@@ -40,12 +40,13 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      * @return a list of timeline events which have sequentially the same type following the next direction.
      */
     private fun nextSameTypeEvents(
-            timelineEvents: List<TimelineEvent>,
-            index: Int,
-            minSize: Int,
-            eventIdToHighlight: String?,
-            rootThreadEventId: String?,
-            isFromThreadTimeline: Boolean): List<TimelineEvent> {
+        timelineEvents: List<TimelineEvent>,
+        index: Int,
+        minSize: Int,
+        eventIdToHighlight: String?,
+        rootThreadEventId: String?,
+        isFromThreadTimeline: Boolean
+    ): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
             return emptyList()
         }
@@ -69,10 +70,10 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         }
         val filteredSameTypeEvents = sameTypeEvents.filter {
             shouldShowEvent(
-                    timelineEvent = it,
-                    highlightedEventId = eventIdToHighlight,
-                    isFromThreadTimeline = isFromThreadTimeline,
-                    rootThreadEventId = rootThreadEventId
+                timelineEvent = it,
+                highlightedEventId = eventIdToHighlight,
+                isFromThreadTimeline = isFromThreadTimeline,
+                rootThreadEventId = rootThreadEventId
             )
         }
         if (filteredSameTypeEvents.size < minSize) {
@@ -90,18 +91,19 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      * @return a list of timeline events which have sequentially the same type following the prev direction.
      */
     fun prevSameTypeEvents(
-            timelineEvents: List<TimelineEvent>,
-            index: Int,
-            minSize: Int,
-            eventIdToHighlight: String?,
-            rootThreadEventId: String?,
-            isFromThreadTimeline: Boolean): List<TimelineEvent> {
+        timelineEvents: List<TimelineEvent>,
+        index: Int,
+        minSize: Int,
+        eventIdToHighlight: String?,
+        rootThreadEventId: String?,
+        isFromThreadTimeline: Boolean
+    ): List<TimelineEvent> {
         val prevSub = timelineEvents.subList(0, index + 1)
         return prevSub
-                .reversed()
-                .let {
-                    nextSameTypeEvents(it, 0, minSize, eventIdToHighlight, rootThreadEventId, isFromThreadTimeline)
-                }
+            .reversed()
+            .let {
+                nextSameTypeEvents(it, 0, minSize, eventIdToHighlight, rootThreadEventId, isFromThreadTimeline)
+            }
     }
 
     /**
@@ -111,10 +113,10 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      * @return true if the event should be shown in the timeline.
      */
     fun shouldShowEvent(
-            timelineEvent: TimelineEvent,
-            highlightedEventId: String?,
-            isFromThreadTimeline: Boolean,
-            rootThreadEventId: String?
+        timelineEvent: TimelineEvent,
+        highlightedEventId: String?,
+        isFromThreadTimeline: Boolean,
+        rootThreadEventId: String?
     ): Boolean {
         // If show hidden events is true we should always display something
         if (userPreferencesProvider.shouldShowHiddenEvents() && !isFromThreadTimeline) {
@@ -143,16 +145,18 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
 
         // We should not display deleted thread messages within the normal timeline
         if (root.isRedacted() &&
-                userPreferencesProvider.areThreadMessagesEnabled() &&
-                !isFromThreadTimeline &&
-                (root.isThread() || root.threadDetails?.isThread == true)) {
+            userPreferencesProvider.areThreadMessagesEnabled() &&
+            !isFromThreadTimeline &&
+            (root.isThread() || root.threadDetails?.isThread == true)
+        ) {
             return true
         }
         if (root.isRedacted() &&
-                !userPreferencesProvider.shouldShowRedactedMessages() &&
-                userPreferencesProvider.areThreadMessagesEnabled() &&
-                isFromThreadTimeline &&
-                root.isThread()) {
+            !userPreferencesProvider.shouldShowRedactedMessages() &&
+            userPreferencesProvider.areThreadMessagesEnabled() &&
+            isFromThreadTimeline &&
+            root.isThread()
+        ) {
             return true
         }
 
@@ -192,17 +196,17 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         val isAvatarChange = isProfileChanged && content?.avatarUrl !== prevContent?.avatarUrl
 
         return MembershipDiff(
-                isJoin = isJoin,
-                isPart = isPart,
-                isDisplaynameChange = isDisplaynameChange,
-                isAvatarChange = isAvatarChange
+            isJoin = isJoin,
+            isPart = isPart,
+            isDisplaynameChange = isDisplaynameChange,
+            isAvatarChange = isAvatarChange
         )
     }
 
     private data class MembershipDiff(
-            val isJoin: Boolean,
-            val isPart: Boolean,
-            val isDisplaynameChange: Boolean,
-            val isAvatarChange: Boolean
+        val isJoin: Boolean,
+        val isPart: Boolean,
+        val isDisplaynameChange: Boolean,
+        val isAvatarChange: Boolean
     )
 }

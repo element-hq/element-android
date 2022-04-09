@@ -38,8 +38,8 @@ import im.vector.app.features.signout.soft.epoxy.loginTitleSmallItem
 import javax.inject.Inject
 
 class SoftLogoutController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val errorFormatter: ErrorFormatter
+    private val stringProvider: StringProvider,
+    private val errorFormatter: ErrorFormatter
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -74,10 +74,14 @@ class SoftLogoutController @Inject constructor(
         }
         loginTextItem {
             id("signText1")
-            text(host.stringProvider.getString(R.string.soft_logout_signin_notice,
+            text(
+                host.stringProvider.getString(
+                    R.string.soft_logout_signin_notice,
                     state.homeServerUrl.toReducedUrl(),
                     state.userDisplayName,
-                    state.userId))
+                    state.userId
+                )
+            )
         }
         if (state.hasUnsavedKeys) {
             loginTextItem {
@@ -96,7 +100,7 @@ class SoftLogoutController @Inject constructor(
                     id("loading")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 loginErrorWithRetryItem {
                     id("errorRetry")
                     text(host.errorFormatter.toHumanReadable(state.asyncHomeServerLoginFlowRequest.error))
@@ -105,7 +109,7 @@ class SoftLogoutController @Inject constructor(
             }
             is Success -> {
                 when (state.asyncHomeServerLoginFlowRequest.invoke()) {
-                    LoginMode.Password          -> {
+                    LoginMode.Password -> {
                         loginPasswordFormItem {
                             id("passwordForm")
                             stringProvider(host.stringProvider)
@@ -117,7 +121,7 @@ class SoftLogoutController @Inject constructor(
                             submitClickListener { host.listener?.submit() }
                         }
                     }
-                    is LoginMode.Sso            -> {
+                    is LoginMode.Sso -> {
                         loginCenterButtonItem {
                             id("sso")
                             text(host.stringProvider.getString(R.string.login_signin_sso))
@@ -126,14 +130,14 @@ class SoftLogoutController @Inject constructor(
                     }
                     is LoginMode.SsoAndPassword -> {
                     }
-                    LoginMode.Unsupported       -> {
+                    LoginMode.Unsupported -> {
                         loginCenterButtonItem {
                             id("fallback")
                             text(host.stringProvider.getString(R.string.login_signin))
                             listener { host.listener?.signinFallbackSubmit() }
                         }
                     }
-                    LoginMode.Unknown           -> Unit // Should not happen
+                    LoginMode.Unknown -> Unit // Should not happen
                 }
             }
         }

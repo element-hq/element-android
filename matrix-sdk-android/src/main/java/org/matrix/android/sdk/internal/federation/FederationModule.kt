@@ -34,11 +34,13 @@ internal abstract class FederationModule {
     companion object {
         @Provides
         @JvmStatic
-        fun providesFederationAPI(@Unauthenticated okHttpClient: Lazy<OkHttpClient>,
-                                  sessionParams: SessionParams,
-                                  retrofitFactory: RetrofitFactory): FederationAPI {
+        fun providesFederationAPI(
+            @Unauthenticated okHttpClient: Lazy<OkHttpClient>,
+            sessionParams: SessionParams,
+            retrofitFactory: RetrofitFactory
+        ): FederationAPI {
             return retrofitFactory.create(okHttpClient, sessionParams.homeServerUrlBase)
-                    .create(FederationAPI::class.java)
+                .create(FederationAPI::class.java)
         }
     }
 

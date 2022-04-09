@@ -21,10 +21,10 @@ package org.matrix.android.sdk.api.session.user.model
  * It can be retrieved with [org.matrix.android.sdk.api.session.user.UserService]
  */
 data class User(
-        val userId: String,
-        /**
-         * For usage in UI, consider converting to MatrixItem and call getBestName()
-         */
-        val displayName: String? = null,
-        val avatarUrl: String? = null
+    val userId: String,
+    /**
+     * For usage in UI, consider converting to MatrixItem and call getBestName()
+     */
+    val displayName: String? = null,
+    val avatarUrl: String? = null
 )

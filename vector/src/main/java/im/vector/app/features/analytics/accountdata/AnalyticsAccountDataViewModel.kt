@@ -43,9 +43,9 @@ import timber.log.Timber
 import java.util.UUID
 
 class AnalyticsAccountDataViewModel @AssistedInject constructor(
-        @Assisted initialState: VectorDummyViewState,
-        private val session: Session,
-        private val analytics: VectorAnalytics
+    @Assisted initialState: VectorDummyViewState,
+    private val session: Session,
+    private val analytics: VectorAnalytics
 ) : VectorViewModel<VectorDummyViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private var checkDone: Boolean = false
@@ -66,14 +66,15 @@ class AnalyticsAccountDataViewModel @AssistedInject constructor(
 
     private fun observeInitSync() {
         combine(
-                session.getSyncStatusLive().asFlow(),
-                analytics.getUserConsent(),
-                analytics.getAnalyticsId()
+            session.getSyncStatusLive().asFlow(),
+            analytics.getUserConsent(),
+            analytics.getAnalyticsId()
         ) { status, userConsent, analyticsId ->
             if (status is SyncStatusService.Status.IncrementalSyncIdle &&
-                    userConsent &&
-                    analyticsId.isEmpty() &&
-                    !checkDone) {
+                userConsent &&
+                analyticsId.isEmpty() &&
+                !checkDone
+            ) {
                 // Initial sync is over, analytics Id from account data is missing and user has given consent to use analytics
                 checkDone = true
                 createAnalyticsAccountData()
@@ -83,20 +84,20 @@ class AnalyticsAccountDataViewModel @AssistedInject constructor(
 
     private fun observeAccountData() {
         session.flow()
-                .liveUserAccountData(setOf(ANALYTICS_EVENT_TYPE))
-                .mapNotNull { it.firstOrNull() }
-                .mapNotNull { it.content.toModel<AnalyticsAccountDataContent>() }
-                .onEach { analyticsAccountDataContent ->
-                    if (analyticsAccountDataContent.id.isNullOrEmpty()) {
-                        // Probably consent revoked from Element Web
-                        // Ignore here
-                        Timber.tag(analyticsTag.value).d("Consent revoked from Element Web?")
-                    } else {
-                        Timber.tag(analyticsTag.value).d("AnalyticsId has been retrieved")
-                        analytics.setAnalyticsId(analyticsAccountDataContent.id)
-                    }
+            .liveUserAccountData(setOf(ANALYTICS_EVENT_TYPE))
+            .mapNotNull { it.firstOrNull() }
+            .mapNotNull { it.content.toModel<AnalyticsAccountDataContent>() }
+            .onEach { analyticsAccountDataContent ->
+                if (analyticsAccountDataContent.id.isNullOrEmpty()) {
+                    // Probably consent revoked from Element Web
+                    // Ignore here
+                    Timber.tag(analyticsTag.value).d("Consent revoked from Element Web?")
+                } else {
+                    Timber.tag(analyticsTag.value).d("AnalyticsId has been retrieved")
+                    analytics.setAnalyticsId(analyticsAccountDataContent.id)
                 }
-                .launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handle(action: EmptyAction) {
@@ -105,7 +106,7 @@ class AnalyticsAccountDataViewModel @AssistedInject constructor(
 
     private fun createAnalyticsAccountData() {
         val content = AnalyticsAccountDataContent(
-                id = UUID.randomUUID().toString()
+            id = UUID.randomUUID().toString()
         )
 
         viewModelScope.launch {

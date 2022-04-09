@@ -28,36 +28,37 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
  * Quick reactions state
  */
 data class ToggleState(
-        val reaction: String,
-        val isSelected: Boolean
+    val reaction: String,
+    val isSelected: Boolean
 )
 
 data class ActionPermissions(
-        val canSendMessage: Boolean = false,
-        val canReact: Boolean = false,
-        val canRedact: Boolean = false
+    val canSendMessage: Boolean = false,
+    val canReact: Boolean = false,
+    val canRedact: Boolean = false
 )
 
 data class MessageActionState(
-        val roomId: String,
-        val eventId: String,
-        val informationData: MessageInformationData,
-        val timelineEvent: Async<TimelineEvent> = Uninitialized,
-        val messageBody: CharSequence = "",
-        // For quick reactions
-        val quickStates: Async<List<ToggleState>> = Uninitialized,
-        // For actions
-        val actions: List<EventSharedAction> = emptyList(),
-        val expendedReportContentMenu: Boolean = false,
-        val actionPermissions: ActionPermissions = ActionPermissions(),
-        val isFromThreadTimeline: Boolean = false
+    val roomId: String,
+    val eventId: String,
+    val informationData: MessageInformationData,
+    val timelineEvent: Async<TimelineEvent> = Uninitialized,
+    val messageBody: CharSequence = "",
+    // For quick reactions
+    val quickStates: Async<List<ToggleState>> = Uninitialized,
+    // For actions
+    val actions: List<EventSharedAction> = emptyList(),
+    val expendedReportContentMenu: Boolean = false,
+    val actionPermissions: ActionPermissions = ActionPermissions(),
+    val isFromThreadTimeline: Boolean = false
 ) : MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(
-            roomId = args.roomId,
-            eventId = args.eventId,
-            informationData = args.informationData,
-            isFromThreadTimeline = args.isFromThreadTimeline)
+        roomId = args.roomId,
+        eventId = args.eventId,
+        informationData = args.informationData,
+        isFromThreadTimeline = args.isFromThreadTimeline
+    )
 
     fun senderName(): String = informationData.memberName?.toString() ?: ""
 

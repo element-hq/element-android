@@ -29,20 +29,22 @@ import javax.inject.Inject
 internal interface UpdateQuickReactionTask : Task<UpdateQuickReactionTask.Params, UpdateQuickReactionTask.Result> {
 
     data class Params(
-            val roomId: String,
-            val eventId: String,
-            val reaction: String,
-            val oppositeReaction: String
+        val roomId: String,
+        val eventId: String,
+        val reaction: String,
+        val oppositeReaction: String
     )
 
     data class Result(
-            val reactionToAdd: String?,
-            val reactionToRedact: List<String>
+        val reactionToAdd: String?,
+        val reactionToRedact: List<String>
     )
 }
 
-internal class DefaultUpdateQuickReactionTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                                  @UserId private val userId: String) : UpdateQuickReactionTask {
+internal class DefaultUpdateQuickReactionTask @Inject constructor(
+    @SessionDatabase private val monarchy: Monarchy,
+    @UserId private val userId: String
+) : UpdateQuickReactionTask {
 
     override suspend fun execute(params: UpdateQuickReactionTask.Params): UpdateQuickReactionTask.Result {
         var res: Pair<String?, List<String>?>? = null
@@ -55,15 +57,15 @@ internal class DefaultUpdateQuickReactionTask @Inject constructor(@SessionDataba
     private fun updateQuickReaction(realm: Realm, params: UpdateQuickReactionTask.Params): Pair<String?, List<String>?> {
         // the emoji reaction has been selected, we need to check if we have reacted it or not
         val existingSummary = EventAnnotationsSummaryEntity.where(realm, params.roomId, params.eventId).findFirst()
-                ?: return Pair(params.reaction, null)
+            ?: return Pair(params.reaction, null)
 
         // Ok there is already reactions on this event, have we reacted to it
         val aggregationForReaction = existingSummary.reactionsSummary.where()
-                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.reaction)
-                .findFirst()
+            .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.reaction)
+            .findFirst()
         val aggregationForOppositeReaction = existingSummary.reactionsSummary.where()
-                .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.oppositeReaction)
-                .findFirst()
+            .equalTo(ReactionAggregatedSummaryEntityFields.KEY, params.oppositeReaction)
+            .findFirst()
 
         if (aggregationForReaction == null || !aggregationForReaction.addedByMe) {
             // i haven't yet reacted to it, so need to add it, but do I need to redact the opposite?

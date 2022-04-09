@@ -24,19 +24,19 @@ import org.matrix.android.sdk.internal.auth.registration.AuthParams
  */
 @JsonClass(generateAdapter = true)
 internal data class ResetPasswordMailConfirmed(
-        // authentication parameters
-        @Json(name = "auth")
-        val auth: AuthParams? = null,
+    // authentication parameters
+    @Json(name = "auth")
+    val auth: AuthParams? = null,
 
-        // the new password
-        @Json(name = "new_password")
-        val newPassword: String? = null
+    // the new password
+    @Json(name = "new_password")
+    val newPassword: String? = null
 ) {
     companion object {
         fun create(clientSecret: String, sid: String, newPassword: String): ResetPasswordMailConfirmed {
             return ResetPasswordMailConfirmed(
-                    auth = AuthParams.createForResetPassword(clientSecret, sid),
-                    newPassword = newPassword
+                auth = AuthParams.createForResetPassword(clientSecret, sid),
+                newPassword = newPassword
             )
         }
     }

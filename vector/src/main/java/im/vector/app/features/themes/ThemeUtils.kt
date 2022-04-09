@@ -113,12 +113,12 @@ object ThemeUtils {
     fun setApplicationTheme(context: Context, aTheme: String) {
         currentTheme.set(aTheme)
         context.setTheme(
-                when (aTheme) {
-                    SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.Theme_Vector_Dark else R.style.Theme_Vector_Light
-                    THEME_DARK_VALUE   -> R.style.Theme_Vector_Dark
-                    THEME_BLACK_VALUE  -> R.style.Theme_Vector_Black
-                    else               -> R.style.Theme_Vector_Light
-                }
+            when (aTheme) {
+                SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(context.resources)) R.style.Theme_Vector_Dark else R.style.Theme_Vector_Light
+                THEME_DARK_VALUE -> R.style.Theme_Vector_Dark
+                THEME_BLACK_VALUE -> R.style.Theme_Vector_Black
+                else -> R.style.Theme_Vector_Light
+            }
         )
 
         // Clear the cache
@@ -133,8 +133,8 @@ object ThemeUtils {
     fun setActivityTheme(activity: Activity, otherThemes: ActivityOtherThemes) {
         when (getApplicationTheme(activity)) {
             SYSTEM_THEME_VALUE -> if (isSystemDarkTheme(activity.resources)) activity.setTheme(otherThemes.dark)
-            THEME_DARK_VALUE   -> activity.setTheme(otherThemes.dark)
-            THEME_BLACK_VALUE  -> activity.setTheme(otherThemes.black)
+            THEME_DARK_VALUE -> activity.setTheme(otherThemes.dark)
+            THEME_BLACK_VALUE -> activity.setTheme(otherThemes.black)
         }
 
         mColorByAttr.clear()

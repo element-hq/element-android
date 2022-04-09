@@ -30,9 +30,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class VectorSettingsPinFragment @Inject constructor(
-        private val pinCodeStore: PinCodeStore,
-        private val navigator: Navigator,
-        private val notificationDrawerManager: NotificationDrawerManager
+    private val pinCodeStore: PinCodeStore,
+    private val navigator: Navigator,
+    private val notificationDrawerManager: NotificationDrawerManager
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_application_protection_screen_title
@@ -72,9 +72,9 @@ class VectorSettingsPinFragment @Inject constructor(
                     }
                 } else {
                     navigator.openPinCode(
-                            requireContext(),
-                            pinActivityResultLauncher,
-                            PinMode.CREATE
+                        requireContext(),
+                        pinActivityResultLauncher,
+                        PinMode.CREATE
                     )
                 }
                 true
@@ -83,9 +83,9 @@ class VectorSettingsPinFragment @Inject constructor(
             changePinCodePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 if (hasPinCode) {
                     navigator.openPinCode(
-                            requireContext(),
-                            pinActivityResultLauncher,
-                            PinMode.MODIFY
+                        requireContext(),
+                        pinActivityResultLauncher,
+                        PinMode.MODIFY
                     )
                 }
                 true

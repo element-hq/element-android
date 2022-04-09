@@ -34,10 +34,10 @@ enum class ItemStyle {
 
     fun toTextSize(): Float {
         return when (this) {
-            BIG_TEXT    -> 18f
+            BIG_TEXT -> 18f
             NORMAL_TEXT -> 14f
-            TITLE       -> 20f
-            SUBHEADER   -> 16f
+            TITLE -> 20f
+            SUBHEADER -> 16f
         }
     }
 }

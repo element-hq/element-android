@@ -70,18 +70,19 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         existingSession = createAccountAndSync(matrix, userName, password, true)
         doSync<Unit> {
             existingSession!!.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = existingSession!!.myUserId,
-                                                    password = "password",
-                                                    session = flowResponse.session
-                                            )
-                                    )
-                                }
-                            }, it)
+                .initializeCrossSigning(
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                UserPasswordAuth(
+                                    user = existingSession!!.myUserId,
+                                    password = "password",
+                                    session = flowResponse.session
+                                )
+                            )
+                        }
+                    }, it
+                )
         }
     }
 
@@ -94,8 +95,8 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         // Thread.sleep(6000)
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
             onView(withId(R.id.roomListContainer))
-                    .check(matches(isDisplayed()))
-                    .perform(closeSoftKeyboard())
+                .check(matches(isDisplayed()))
+                .perform(closeSoftKeyboard())
         }
 
         val activity = EspressoHelper.getCurrentActivity()!!
@@ -103,16 +104,16 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
 
         withIdlingResource(initialSyncIdlingResource(uiSession)) {
             onView(withId(R.id.roomListContainer))
-                    .check(matches(isDisplayed()))
+                .check(matches(isDisplayed()))
         }
 
         // THIS IS THE ONLY WAY I FOUND TO CLICK ON ALERTERS... :(
         // Cannot wait for view because of alerter animation? ...
         onView(isRoot())
-                .perform(waitForView(withId(com.tapadoo.alerter.R.id.llAlertBackground)))
-//        Thread.sleep(1000)
-//        onView(withId(com.tapadoo.alerter.R.id.llAlertBackground))
-//                .perform(click())
+            .perform(waitForView(withId(com.tapadoo.alerter.R.id.llAlertBackground)))
+        //        Thread.sleep(1000)
+        //        onView(withId(com.tapadoo.alerter.R.id.llAlertBackground))
+        //                .perform(click())
         Thread.sleep(1000)
         val popup = activity.findViewById<View>(com.tapadoo.alerter.R.id.llAlertBackground)
         activity.runOnUiThread {
@@ -120,24 +121,24 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         }
 
         onView(isRoot())
-                .perform(waitForView(withId(R.id.bottomSheetFragmentContainer)))
-//                .check()
-//        onView(withId(R.id.bottomSheetFragmentContainer))
-//                .check(matches(isDisplayed()))
+            .perform(waitForView(withId(R.id.bottomSheetFragmentContainer)))
+        //                .check()
+        //        onView(withId(R.id.bottomSheetFragmentContainer))
+        //                .check(matches(isDisplayed()))
 
-//        onView(isRoot()).perform(SleepViewAction.sleep(2000))
+        //        onView(isRoot()).perform(SleepViewAction.sleep(2000))
 
         onView(withText(R.string.use_latest_app))
-                .check(matches(isDisplayed()))
+            .check(matches(isDisplayed()))
 
         // 4S is not setup so passphrase option should be hidden
         onView(withId(R.id.bottomSheetFragmentContainer))
-                .check(matches(not(hasDescendant(withText(R.string.verification_cannot_access_other_session)))))
+            .check(matches(not(hasDescendant(withText(R.string.verification_cannot_access_other_session)))))
 
         val request = existingSession!!.cryptoService().verificationService().requestKeyVerification(
-                listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
-                existingSession!!.myUserId,
-                listOf(uiSession.sessionParams.deviceId!!)
+            listOf(VerificationMethod.SAS, VerificationMethod.QR_CODE_SCAN, VerificationMethod.QR_CODE_SHOW),
+            existingSession!!.myUserId,
+            listOf(uiSession.sessionParams.deviceId!!)
         )
 
         val transactionId = request.transactionId!!
@@ -148,22 +149,22 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
 
         // Assert QR code option is there and available
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(matches(hasDescendant(withText(R.string.verification_scan_their_code))))
+            .check(matches(hasDescendant(withText(R.string.verification_scan_their_code))))
 
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                .check(matches(hasDescendant(withId(R.id.itemVerificationQrCodeImage))))
+            .check(matches(hasDescendant(withId(R.id.itemVerificationQrCodeImage))))
 
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                .perform(
-                        actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(R.string.verification_scan_emoji_title)),
-                                click()
-                        )
+            .perform(
+                actionOnItem<RecyclerView.ViewHolder>(
+                    hasDescendant(withText(R.string.verification_scan_emoji_title)),
+                    click()
                 )
+            )
 
         val firstSessionTr = existingSession!!.cryptoService().verificationService().getExistingTransaction(
-                existingSession!!.myUserId,
-                transactionId
+            existingSession!!.myUserId,
+            transactionId
         ) as SasVerificationTransaction
 
         IdlingRegistry.getInstance().register(sasReadyIdle)
@@ -174,26 +175,26 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         val targets = listOf(R.id.emoji0, R.id.emoji1, R.id.emoji2, R.id.emoji3, R.id.emoji4, R.id.emoji5, R.id.emoji6)
         targets.forEachIndexed { index, res ->
             onView(withId(res))
-                    .check(
-                            matches(hasDescendant(withText(expectedEmojis[index].nameResId)))
-                    )
+                .check(
+                    matches(hasDescendant(withText(expectedEmojis[index].nameResId)))
+                )
         }
 
         IdlingRegistry.getInstance().unregister(sasReadyIdle)
         IdlingRegistry.getInstance().unregister(otherSessionSasReadyIdle)
 
         val verificationSuccessIdle =
-                verificationStateIdleResource(transactionId, VerificationTxState.Verified, uiSession)
+            verificationStateIdleResource(transactionId, VerificationTxState.Verified, uiSession)
 
         // CLICK ON THEY MATCH
 
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                .perform(
-                        actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(R.string.verification_sas_match)),
-                                click()
-                        )
+            .perform(
+                actionOnItem<RecyclerView.ViewHolder>(
+                    hasDescendant(withText(R.string.verification_sas_match)),
+                    click()
                 )
+            )
 
         firstSessionTr.userHasVerifiedShortCode()
 
@@ -201,9 +202,9 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
 
         withIdlingResource(verificationSuccessIdle) {
             onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                    .check(
-                            matches(hasDescendant(withText(R.string.verification_conclusion_ok_self_notice)))
-                    )
+                .check(
+                    matches(hasDescendant(withText(R.string.verification_conclusion_ok_self_notice)))
+                )
         }
 
         // Wait a bit before done (to delay a bit sending of secrets to let other have time
@@ -211,29 +212,29 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
         Thread.sleep(5_000)
         // Click on done
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                .perform(
-                        actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(R.string.done)),
-                                click()
-                        )
+            .perform(
+                actionOnItem<RecyclerView.ViewHolder>(
+                    hasDescendant(withText(R.string.done)),
+                    click()
                 )
+            )
 
         // Wait until local secrets are known (gossip)
         withIdlingResource(allSecretsKnownIdling(uiSession)) {
             onView(withId(R.id.groupToolbarAvatarImageView))
-                    .perform(click())
+                .perform(click())
         }
     }
 
     fun signout() {
         onView(withId(R.id.groupToolbarAvatarImageView))
-                .perform(click())
+            .perform(click())
 
         onView(withId(R.id.homeDrawerHeaderSettingsView))
-                .perform(click())
+            .perform(click())
 
         onView(withText("General"))
-                .perform(click())
+            .perform(click())
     }
 
     fun verificationStateIdleResource(transactionId: String, checkForState: VerificationTxState, session: Session): IdlingResource {

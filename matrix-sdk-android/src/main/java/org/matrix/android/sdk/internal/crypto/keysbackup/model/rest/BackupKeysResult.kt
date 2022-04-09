@@ -21,11 +21,11 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class BackupKeysResult(
-        // The hash value which is an opaque string representing stored keys in the backup
-        @Json(name = "etag")
-        val hash: String,
+    // The hash value which is an opaque string representing stored keys in the backup
+    @Json(name = "etag")
+    val hash: String,
 
-        // The number of keys stored in the backup.
-        @Json(name = "count")
-        val count: Int
+    // The number of keys stored in the backup.
+    @Json(name = "count")
+    val count: Int
 )

@@ -25,9 +25,9 @@ fun EncryptedFileInfo.toElementToDecrypt(): ElementToDecrypt? {
     if (isValid()) {
         // It's valid so the data are here
         return ElementToDecrypt(
-                iv = this.iv ?: "",
-                k = this.key?.k ?: "",
-                sha256 = this.hashes?.get("sha256") ?: ""
+            iv = this.iv ?: "",
+            k = this.key?.k ?: "",
+            sha256 = this.hashes?.get("sha256") ?: ""
         )
     }
 
@@ -39,7 +39,7 @@ fun EncryptedFileInfo.toElementToDecrypt(): ElementToDecrypt? {
  */
 @Parcelize
 data class ElementToDecrypt(
-        val iv: String,
-        val k: String,
-        val sha256: String
+    val iv: String,
+    val k: String,
+    val sha256: String
 ) : Parcelable

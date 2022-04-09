@@ -41,17 +41,17 @@ class RegistrationActionHandlerTest {
     @Test
     fun `when handling register action then delegates to wizard`() = runTest {
         val cases = listOf(
-                case(RegisterAction.StartRegistration) { getRegistrationFlow() },
-                case(RegisterAction.CaptchaDone(A_CAPTCHA_RESPONSE)) { performReCaptcha(A_CAPTCHA_RESPONSE) },
-                case(RegisterAction.AcceptTerms) { acceptTerms() },
-                case(RegisterAction.RegisterDummy) { dummy() },
-                case(RegisterAction.AddThreePid(A_PID_TO_REGISTER)) { addThreePid(A_PID_TO_REGISTER) },
-                case(RegisterAction.SendAgainThreePid) { sendAgainThreePid() },
-                case(RegisterAction.ValidateThreePid(A_PID_CODE)) { handleValidateThreePid(A_PID_CODE) },
-                case(RegisterAction.CheckIfEmailHasBeenValidated(EMAIL_VALIDATED_DELAY)) { checkIfEmailHasBeenValidated(EMAIL_VALIDATED_DELAY) },
-                case(RegisterAction.CreateAccount(A_USERNAME, A_PASSWORD, AN_INITIAL_DEVICE_NAME)) {
-                    createAccount(A_USERNAME, A_PASSWORD, AN_INITIAL_DEVICE_NAME)
-                }
+            case(RegisterAction.StartRegistration) { getRegistrationFlow() },
+            case(RegisterAction.CaptchaDone(A_CAPTCHA_RESPONSE)) { performReCaptcha(A_CAPTCHA_RESPONSE) },
+            case(RegisterAction.AcceptTerms) { acceptTerms() },
+            case(RegisterAction.RegisterDummy) { dummy() },
+            case(RegisterAction.AddThreePid(A_PID_TO_REGISTER)) { addThreePid(A_PID_TO_REGISTER) },
+            case(RegisterAction.SendAgainThreePid) { sendAgainThreePid() },
+            case(RegisterAction.ValidateThreePid(A_PID_CODE)) { handleValidateThreePid(A_PID_CODE) },
+            case(RegisterAction.CheckIfEmailHasBeenValidated(EMAIL_VALIDATED_DELAY)) { checkIfEmailHasBeenValidated(EMAIL_VALIDATED_DELAY) },
+            case(RegisterAction.CreateAccount(A_USERNAME, A_PASSWORD, AN_INITIAL_DEVICE_NAME)) {
+                createAccount(A_USERNAME, A_PASSWORD, AN_INITIAL_DEVICE_NAME)
+            }
         )
 
         cases.forEach { testSuccessfulActionDelegation(it) }

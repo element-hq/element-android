@@ -24,23 +24,23 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class CallAssertedIdentityContent(
-        /**
-         * Required. The ID of the call this event relates to.
-         */
-        @Json(name = "call_id") override val callId: String,
-        /**
-         * Required. ID to let user identify remote echo of their own events
-         */
-        @Json(name = "party_id") override val partyId: String? = null,
-        /**
-         * Required. The version of the VoIP specification this messages adheres to.
-         */
-        @Json(name = "version") override val version: String?,
+    /**
+     * Required. The ID of the call this event relates to.
+     */
+    @Json(name = "call_id") override val callId: String,
+    /**
+     * Required. ID to let user identify remote echo of their own events
+     */
+    @Json(name = "party_id") override val partyId: String? = null,
+    /**
+     * Required. The version of the VoIP specification this messages adheres to.
+     */
+    @Json(name = "version") override val version: String?,
 
-        /**
-         * Optional. Used to inform the transferee who they're now speaking to.
-         */
-        @Json(name = "asserted_identity") val assertedIdentity: AssertedIdentity? = null
+    /**
+     * Optional. Used to inform the transferee who they're now speaking to.
+     */
+    @Json(name = "asserted_identity") val assertedIdentity: AssertedIdentity? = null
 ) : CallSignalingContent {
 
     /**
@@ -50,8 +50,8 @@ data class CallAssertedIdentityContent(
      */
     @JsonClass(generateAdapter = true)
     data class AssertedIdentity(
-            @Json(name = "id") val id: String? = null,
-            @Json(name = "display_name") val displayName: String? = null,
-            @Json(name = "avatar_url") val avatarUrl: String? = null
+        @Json(name = "id") val id: String? = null,
+        @Json(name = "display_name") val displayName: String? = null,
+        @Json(name = "avatar_url") val avatarUrl: String? = null
     )
 }

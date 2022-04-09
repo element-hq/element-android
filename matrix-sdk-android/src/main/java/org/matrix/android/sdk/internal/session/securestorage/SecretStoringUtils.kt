@@ -82,8 +82,8 @@ import javax.security.auth.x500.X500Principal
  * add a pin or change the schema); So you might and with a useless pile of bytes.
  */
 internal class SecretStoringUtils @Inject constructor(
-        private val context: Context,
-        private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider
+    private val context: Context,
+    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider
 ) {
 
     companion object {
@@ -125,7 +125,7 @@ internal class SecretStoringUtils @Inject constructor(
     fun securelyStoreString(secret: String, keyAlias: String): ByteArray {
         return when {
             buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> encryptStringM(secret, keyAlias)
-            else                                                      -> encryptString(secret, keyAlias)
+            else -> encryptString(secret, keyAlias)
         }
     }
 
@@ -139,8 +139,8 @@ internal class SecretStoringUtils @Inject constructor(
             // First get the format
             return when (val format = inputStream.read().toByte()) {
                 FORMAT_API_M -> decryptStringM(inputStream, keyAlias)
-                FORMAT_1     -> decryptString(inputStream, keyAlias)
-                else         -> throw IllegalArgumentException("Unknown format $format")
+                FORMAT_1 -> decryptString(inputStream, keyAlias)
+                else -> throw IllegalArgumentException("Unknown format $format")
             }
         }
     }
@@ -149,7 +149,7 @@ internal class SecretStoringUtils @Inject constructor(
     fun securelyStoreObject(any: Any, keyAlias: String, output: OutputStream) {
         when {
             buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> saveSecureObjectM(keyAlias, output, any)
-            else                                                      -> saveSecureObject(keyAlias, output, any)
+            else -> saveSecureObject(keyAlias, output, any)
         }
     }
 
@@ -158,24 +158,26 @@ internal class SecretStoringUtils @Inject constructor(
         // First get the format
         return when (val format = inputStream.read().toByte()) {
             FORMAT_API_M -> loadSecureObjectM(keyAlias, inputStream)
-            FORMAT_1     -> loadSecureObject(keyAlias, inputStream)
-            else         -> throw IllegalArgumentException("Unknown format $format")
+            FORMAT_1 -> loadSecureObject(keyAlias, inputStream)
+            else -> throw IllegalArgumentException("Unknown format $format")
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun getOrGenerateSymmetricKeyForAliasM(alias: String): SecretKey {
         val secretKeyEntry = (keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry)
-                ?.secretKey
+            ?.secretKey
         if (secretKeyEntry == null) {
             // we generate it
             val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
-            val keyGenSpec = KeyGenParameterSpec.Builder(alias,
-                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                    .setKeySize(128)
-                    .build()
+            val keyGenSpec = KeyGenParameterSpec.Builder(
+                alias,
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+            )
+                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                .setKeySize(128)
+                .build()
             generator.init(keyGenSpec)
             return generator.generateKey()
         }
@@ -200,13 +202,13 @@ internal class SecretStoringUtils @Inject constructor(
         end.add(Calendar.YEAR, 30)
 
         val spec = KeyPairGeneratorSpec.Builder(context)
-                .setAlias(alias)
-                .setSubject(X500Principal("CN=$alias"))
-                .setSerialNumber(BigInteger.TEN)
-                // .setEncryptionRequired() requires that the phone has a pin/schema
-                .setStartDate(start.time)
-                .setEndDate(end.time)
-                .build()
+            .setAlias(alias)
+            .setSubject(X500Principal("CN=$alias"))
+            .setSerialNumber(BigInteger.TEN)
+            // .setEncryptionRequired() requires that the phone has a pin/schema
+            .setStartDate(start.time)
+            .setEndDate(end.time)
+            .build()
         KeyPairGenerator.getInstance("RSA" /*KeyProperties.KEY_ALGORITHM_RSA*/, ANDROID_KEY_STORE).run {
             initialize(spec)
             generateKeyPair()

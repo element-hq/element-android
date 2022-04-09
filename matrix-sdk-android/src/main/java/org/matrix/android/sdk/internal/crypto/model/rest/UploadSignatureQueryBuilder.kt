@@ -23,8 +23,8 @@ import org.matrix.android.sdk.internal.crypto.model.toRest
  * Helper class to build CryptoApi#uploadSignatures params
  */
 internal data class UploadSignatureQueryBuilder(
-        private val deviceInfoList: MutableList<CryptoDeviceInfo> = mutableListOf(),
-        private val signingKeyInfoList: MutableList<CryptoCrossSigningKey> = mutableListOf()
+    private val deviceInfoList: MutableList<CryptoDeviceInfo> = mutableListOf(),
+    private val signingKeyInfoList: MutableList<CryptoCrossSigningKey> = mutableListOf()
 ) {
 
     fun withDeviceInfo(deviceInfo: CryptoDeviceInfo) = apply {
@@ -39,7 +39,7 @@ internal data class UploadSignatureQueryBuilder(
         val map = HashMap<String, HashMap<String, Any>>()
 
         val usersList = (deviceInfoList.map { it.userId } + signingKeyInfoList.map { it.userId })
-                .distinct()
+            .distinct()
 
         usersList.forEach { userID ->
             val userMap = HashMap<String, Any>()

@@ -24,43 +24,43 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
 class RoomJoinRuleController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val drawableProvider: DrawableProvider
+    private val stringProvider: StringProvider,
+    private val drawableProvider: DrawableProvider
 ) : BottomSheetGenericController<RoomJoinRuleState, RoomJoinRuleRadioAction>() {
 
     override fun getTitle() =
-            stringProvider.getString(
-                    // generic title for both room and space
-                    R.string.room_settings_access_rules_pref_dialog_title
-            )
+        stringProvider.getString(
+            // generic title for both room and space
+            R.string.room_settings_access_rules_pref_dialog_title
+        )
 
     override fun getActions(state: RoomJoinRuleState): List<RoomJoinRuleRadioAction> {
         return listOf(
-                RoomJoinRuleRadioAction(
-                        roomJoinRule = RoomJoinRules.INVITE,
-                        description = stringProvider.getString(R.string.room_settings_room_access_private_description),
-                        title = stringProvider.getString(R.string.room_settings_room_access_private_title),
-                        isSelected = state.currentRoomJoinRule == RoomJoinRules.INVITE
+            RoomJoinRuleRadioAction(
+                roomJoinRule = RoomJoinRules.INVITE,
+                description = stringProvider.getString(R.string.room_settings_room_access_private_description),
+                title = stringProvider.getString(R.string.room_settings_room_access_private_title),
+                isSelected = state.currentRoomJoinRule == RoomJoinRules.INVITE
+            ),
+            RoomJoinRuleRadioAction(
+                roomJoinRule = RoomJoinRules.PUBLIC,
+                description = stringProvider.getString(
+                    if (state.isSpace) R.string.room_settings_space_access_public_description
+                    else R.string.room_settings_room_access_public_description
                 ),
-                RoomJoinRuleRadioAction(
-                        roomJoinRule = RoomJoinRules.PUBLIC,
-                        description = stringProvider.getString(
-                                if (state.isSpace) R.string.room_settings_space_access_public_description
-                                else R.string.room_settings_room_access_public_description
-                        ),
-                        title = stringProvider.getString(R.string.room_settings_room_access_public_title),
-                        isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC
-                ),
-                RoomJoinRuleRadioAction(
-                        roomJoinRule = RoomJoinRules.RESTRICTED,
-                        description = if (state.parentSpaceName != null) {
-                            stringProvider.getString(R.string.room_create_member_of_space_name_can_join, state.parentSpaceName)
-                        } else {
-                            stringProvider.getString(R.string.room_settings_room_access_restricted_description)
-                        },
-                        title = stringProvider.getString(R.string.room_settings_room_access_restricted_title),
-                        isSelected = state.currentRoomJoinRule == RoomJoinRules.RESTRICTED
-                )
+                title = stringProvider.getString(R.string.room_settings_room_access_public_title),
+                isSelected = state.currentRoomJoinRule == RoomJoinRules.PUBLIC
+            ),
+            RoomJoinRuleRadioAction(
+                roomJoinRule = RoomJoinRules.RESTRICTED,
+                description = if (state.parentSpaceName != null) {
+                    stringProvider.getString(R.string.room_create_member_of_space_name_can_join, state.parentSpaceName)
+                } else {
+                    stringProvider.getString(R.string.room_settings_room_access_restricted_description)
+                },
+                title = stringProvider.getString(R.string.room_settings_room_access_restricted_title),
+                isSelected = state.currentRoomJoinRule == RoomJoinRules.RESTRICTED
+            )
         ).filter { state.allowedJoinedRules.map { it.rule }.contains(it.roomJoinRule) }
     }
 }

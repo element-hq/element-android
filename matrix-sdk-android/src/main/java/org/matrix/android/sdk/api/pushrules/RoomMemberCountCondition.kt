@@ -22,12 +22,12 @@ import timber.log.Timber
 private val regex = Regex("^(==|<=|>=|<|>)?(\\d*)$")
 
 class RoomMemberCountCondition(
-        /**
-         * A decimal integer optionally prefixed by one of ==, <, >, >= or <=.
-         * A prefix of < matches rooms where the member count is strictly less than the given number and so forth.
-         * If no prefix is present, this parameter defaults to ==.
-         */
-        val iz: String
+    /**
+     * A decimal integer optionally prefixed by one of ==, <, >, >= or <=.
+     * A prefix of < matches rooms where the member count is strictly less than the given number and so forth.
+     * If no prefix is present, this parameter defaults to ==.
+     */
+    val iz: String
 ) : Condition {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {
@@ -47,8 +47,8 @@ class RoomMemberCountCondition(
         val numMembers = room.getNumberOfJoinedMembers()
 
         return when (prefix) {
-            "<"  -> numMembers < count
-            ">"  -> numMembers > count
+            "<" -> numMembers < count
+            ">" -> numMembers > count
             "<=" -> numMembers <= count
             ">=" -> numMembers >= count
             else -> numMembers == count

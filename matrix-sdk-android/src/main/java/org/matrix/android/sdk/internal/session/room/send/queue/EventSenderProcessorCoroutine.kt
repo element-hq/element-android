@@ -54,11 +54,11 @@ private const val MAX_RETRY_COUNT = 3
  */
 @SessionScope
 internal class EventSenderProcessorCoroutine @Inject constructor(
-        private val cryptoStore: IMXCryptoStore,
-        private val sessionParams: SessionParams,
-        private val queuedTaskFactory: QueuedTaskFactory,
-        private val taskExecutor: TaskExecutor,
-        private val memento: QueueMemento
+    private val cryptoStore: IMXCryptoStore,
+    private val sessionParams: SessionParams,
+    private val queuedTaskFactory: QueuedTaskFactory,
+    private val taskExecutor: TaskExecutor,
+    private val memento: QueueMemento
 ) : EventSenderProcessor {
 
     private val waitForNetworkSequencer = SemaphoreCoroutineSequencer()
@@ -117,12 +117,12 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
         }
         Timber.v("## post $task")
         return taskExecutor.executorScope
-                .launchWith(sequencer) {
-                    executeTask(task)
-                }.toCancelable()
-                .also {
-                    cancelableBag[task.taskIdentifier] = it
-                }
+            .launchWith(sequencer) {
+                executeTask(task)
+            }.toCancelable()
+            .also {
+                cancelableBag[task.taskIdentifier] = it
+            }
     }
 
     override fun cancel(eventId: String, roomId: String) {
@@ -150,13 +150,13 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
                     canReachServer.set(false)
                     task.markAsFailedOrRetry(exception, 0)
                 }
-                (exception.isLimitExceededError())                                 -> {
+                (exception.isLimitExceededError()) -> {
                     task.markAsFailedOrRetry(exception, exception.getRetryDelay(3_000))
                 }
-                exception is CancellationException                                 -> {
+                exception is CancellationException -> {
                     Timber.v("## $task has been cancelled, try next task")
                 }
-                else                                                               -> {
+                else -> {
                     Timber.v("## un-retryable error for $task, try next task")
                     // this task is in error, check next one?
                     task.onTaskFailed()

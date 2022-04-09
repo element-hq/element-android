@@ -24,8 +24,8 @@ import java.io.InputStream
 import java.security.MessageDigest
 
 class MatrixDigestCheckInputStream(
-        inputStream: InputStream?,
-        private val expectedDigest: String
+    inputStream: InputStream?,
+    private val expectedDigest: String
 ) : FilterInputStream(inputStream) {
 
     private val digest = MessageDigest.getInstance("SHA-256")
@@ -45,9 +45,10 @@ class MatrixDigestCheckInputStream(
 
     @Throws(IOException::class)
     override fun read(
-            b: ByteArray,
-            off: Int,
-            len: Int): Int {
+        b: ByteArray,
+        off: Int,
+        len: Int
+    ): Int {
         val n = `in`.read(b, off, len)
         if (n > 0) {
             digest.update(b, off, n)

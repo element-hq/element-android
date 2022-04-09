@@ -24,14 +24,14 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.login.LoginMode
 
 data class SoftLogoutViewState(
-        val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized,
-        val asyncLoginAction: Async<Unit> = Uninitialized,
-        val homeServerUrl: String,
-        val userId: String,
-        val deviceId: String,
-        val userDisplayName: String,
-        val hasUnsavedKeys: Boolean,
-        val enteredPassword: String = ""
+    val asyncHomeServerLoginFlowRequest: Async<LoginMode> = Uninitialized,
+    val asyncLoginAction: Async<Unit> = Uninitialized,
+    val homeServerUrl: String,
+    val userId: String,
+    val deviceId: String,
+    val userDisplayName: String,
+    val hasUnsavedKeys: Boolean,
+    val enteredPassword: String = ""
 ) : MavericksState {
 
     fun isLoading(): Boolean {

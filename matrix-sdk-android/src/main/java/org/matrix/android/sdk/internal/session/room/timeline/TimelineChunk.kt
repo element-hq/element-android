@@ -49,21 +49,23 @@ import java.util.concurrent.atomic.AtomicBoolean
  * It does mainly listen to the db timeline events.
  * It also triggers pagination to the server when needed, or dispatch to the prev or next chunk if any.
  */
-internal class TimelineChunk(private val chunkEntity: ChunkEntity,
-                             private val timelineSettings: TimelineSettings,
-                             private val roomId: String,
-                             private val timelineId: String,
-                             private val fetchThreadTimelineTask: FetchThreadTimelineTask,
-                             private val eventDecryptor: TimelineEventDecryptor,
-                             private val paginationTask: PaginationTask,
-                             private val realmConfiguration: RealmConfiguration,
-                             private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-                             private val timelineEventMapper: TimelineEventMapper,
-                             private val uiEchoManager: UIEchoManager? = null,
-                             private val threadsAwarenessHandler: ThreadsAwarenessHandler,
-                             private val lightweightSettingsStorage: LightweightSettingsStorage,
-                             private val initialEventId: String?,
-                             private val onBuiltEvents: (Boolean) -> Unit) {
+internal class TimelineChunk(
+    private val chunkEntity: ChunkEntity,
+    private val timelineSettings: TimelineSettings,
+    private val roomId: String,
+    private val timelineId: String,
+    private val fetchThreadTimelineTask: FetchThreadTimelineTask,
+    private val eventDecryptor: TimelineEventDecryptor,
+    private val paginationTask: PaginationTask,
+    private val realmConfiguration: RealmConfiguration,
+    private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+    private val timelineEventMapper: TimelineEventMapper,
+    private val uiEchoManager: UIEchoManager? = null,
+    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+    private val lightweightSettingsStorage: LightweightSettingsStorage,
+    private val initialEventId: String?,
+    private val onBuiltEvents: (Boolean) -> Unit
+) {
 
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
     private val isLastBackward = AtomicBoolean(chunkEntity.isLastBackward)
@@ -97,10 +99,10 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     }
 
     private val timelineEventsChangeListener =
-            OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
-                Timber.v("on timeline events chunk update")
-                handleDatabaseChangeSet(results, changeSet)
-            }
+        OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
+            Timber.v("on timeline events chunk update")
+            handleDatabaseChangeSet(results, changeSet)
+        }
 
     private var timelineEventEntities: RealmResults<TimelineEventEntity> = chunkEntity.sortedTimelineEvents(timelineSettings.rootThreadEventId)
     private val builtEvents: MutableList<TimelineEvent> = Collections.synchronizedList(ArrayList())
@@ -177,12 +179,14 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val rootThreadEventId = timelineSettings.rootThreadEventId ?: return LoadMoreResult.FAILURE
         return if (direction == Timeline.Direction.BACKWARDS) {
             try {
-                fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(
+                fetchThreadTimelineTask.execute(
+                    FetchThreadTimelineTask.Params(
                         roomId,
                         rootThreadEventId,
                         chunkEntity.prevToken,
                         count
-                )).toLoadMoreResult()
+                    )
+                ).toLoadMoreResult()
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to fetch thread timeline events from the server")
                 LoadMoreResult.FAILURE
@@ -207,7 +211,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 fetchFromServerIfNeeded -> {
                     fetchFromServer(offsetCount, chunkEntity.nextToken, direction)
                 }
-                else                    -> {
+                else -> {
                     LoadMoreResult.SUCCESS
                 }
             }
@@ -225,7 +229,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 fetchFromServerIfNeeded -> {
                     fetchFromServer(offsetCount, chunkEntity.prevToken, direction)
                 }
-                else                    -> {
+                else -> {
                     LoadMoreResult.SUCCESS
                 }
             }
@@ -236,10 +240,12 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      * Simple log that displays the number and timeline of loaded events
      */
     private fun logLoadedFromStorage(loadedFromStorage: LoadedFromStorage, direction: Timeline.Direction) {
-        Timber.v("[" +
-                "${if (timelineSettings.isThreadTimeline()) "ThreadTimeLine" else "Timeline"}] Has loaded " +
-                "${loadedFromStorage.numberOfEvents} items from storage in $direction " +
-                if (timelineSettings.isThreadTimeline() && loadedFromStorage.threadReachedEnd) "[Reached End]" else "")
+        Timber.v(
+            "[" +
+                    "${if (timelineSettings.isThreadTimeline()) "ThreadTimeLine" else "Timeline"}] Has loaded " +
+                    "${loadedFromStorage.numberOfEvents} items from storage in $direction " +
+                    if (timelineSettings.isThreadTimeline() && loadedFromStorage.threadReachedEnd) "[Reached End]" else ""
+        )
     }
 
     fun getBuiltEventIndex(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): Int? {
@@ -302,7 +308,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 true
             }
         }
-                ?: false
+            ?: false
     }
 
     fun close(closeNext: Boolean, closePrev: Boolean) {
@@ -330,35 +336,36 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val baseQuery = timelineEventEntities.where()
 
         val timelineEvents = baseQuery
-                .offsets(direction, count, displayIndex)
-                .findAll()
-                .orEmpty()
+            .offsets(direction, count, displayIndex)
+            .findAll()
+            .orEmpty()
 
         if (timelineEvents.isEmpty()) return LoadedFromStorage()
-// Disabled due to the new fallback
-//        if(!lightweightSettingsStorage.areThreadMessagesEnabled()) {
-//            fetchRootThreadEventsIfNeeded(timelineEvents)
-//        }
+        // Disabled due to the new fallback
+        //        if(!lightweightSettingsStorage.areThreadMessagesEnabled()) {
+        //            fetchRootThreadEventsIfNeeded(timelineEvents)
+        //        }
         if (direction == Timeline.Direction.FORWARDS) {
             builtEventsIndexes.entries.forEach { it.setValue(it.value + timelineEvents.size) }
         }
         timelineEvents
-                .mapIndexed { index, timelineEventEntity ->
-                    val timelineEvent = timelineEventEntity.buildAndDecryptIfNeeded()
-                    if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
-                        isLastBackward.set(true)
-                    }
-                    if (direction == Timeline.Direction.FORWARDS) {
-                        builtEventsIndexes[timelineEvent.eventId] = index
-                        builtEvents.add(index, timelineEvent)
-                    } else {
-                        builtEventsIndexes[timelineEvent.eventId] = builtEvents.size
-                        builtEvents.add(timelineEvent)
-                    }
+            .mapIndexed { index, timelineEventEntity ->
+                val timelineEvent = timelineEventEntity.buildAndDecryptIfNeeded()
+                if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
+                    isLastBackward.set(true)
                 }
+                if (direction == Timeline.Direction.FORWARDS) {
+                    builtEventsIndexes[timelineEvent.eventId] = index
+                    builtEvents.add(index, timelineEvent)
+                } else {
+                    builtEventsIndexes[timelineEvent.eventId] = builtEvents.size
+                    builtEvents.add(timelineEvent)
+                }
+            }
         return LoadedFromStorage(
-                threadReachedEnd = threadReachedEnd(timelineEvents),
-                numberOfEvents = timelineEvents.size)
+            threadReachedEnd = threadReachedEnd(timelineEvents),
+            numberOfEvents = timelineEvents.size
+        )
     }
 
     /**
@@ -366,9 +373,9 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      * is not a thread timeline
      */
     private fun threadReachedEnd(timelineEvents: List<TimelineEventEntity>): Boolean =
-            timelineSettings.rootThreadEventId?.let { rootThreadId ->
-                timelineEvents.firstOrNull { it.eventId == rootThreadId }?.let { true }
-            } ?: false
+        timelineSettings.rootThreadEventId?.let { rootThreadId ->
+            timelineEvents.firstOrNull { it.eventId == rootThreadId }?.let { true }
+        } ?: false
 
     /**
      * This function is responsible to fetch and store the root event of a thread event
@@ -376,11 +383,11 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      */
     private suspend fun fetchRootThreadEventsIfNeeded(offsetResults: List<TimelineEventEntity>) {
         val eventEntityList = offsetResults
-                .mapNotNull {
-                    it.root
-                }.map {
-                    EventMapper.map(it)
-                }
+            .mapNotNull {
+                it.root
+            }.map {
+                EventMapper.map(it)
+            }
         threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(eventEntityList)
     }
 
@@ -389,7 +396,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val transactionId = timelineEvent.root.unsignedData?.transactionId
         uiEchoManager?.onSyncedEvent(transactionId)
         if (timelineEvent.isEncrypted() &&
-                timelineEvent.root.mxDecryptionResult == null) {
+            timelineEvent.root.mxDecryptionResult == null
+        ) {
             timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
         }
         if (!timelineEvent.isEncrypted() && !lightweightSettingsStorage.areThreadMessagesEnabled()) {
@@ -400,8 +408,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     }
 
     private fun buildTimelineEvent(eventEntity: TimelineEventEntity) = timelineEventMapper.map(
-            timelineEventEntity = eventEntity,
-            buildReadReceipts = timelineSettings.buildReadReceipts
+        timelineEventEntity = eventEntity,
+        buildReadReceipts = timelineSettings.buildReadReceipts
     ).let {
         // eventually enhance with ui echo?
         (uiEchoManager?.decorateEventWithReactionUiEcho(it) ?: it)
@@ -424,7 +432,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
             if (token == null) {
                 if (direction == Timeline.Direction.BACKWARDS || !chunkEntity.hasBeenALastForwardChunk()) return LoadMoreResult.REACHED_END
                 val lastKnownEventId = chunkEntity.sortedTimelineEvents(timelineSettings.rootThreadEventId).firstOrNull()?.eventId
-                        ?: return LoadMoreResult.FAILURE
+                    ?: return LoadMoreResult.FAILURE
                 val taskParams = FetchTokenAndPaginateTask.Params(roomId, lastKnownEventId, direction.toPaginationDirection(), count)
                 fetchTokenAndPaginateTask.execute(taskParams).toLoadMoreResult()
             } else {
@@ -448,7 +456,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         return when (this) {
             TokenChunkEventPersistor.Result.REACHED_END -> LoadMoreResult.REACHED_END
             TokenChunkEventPersistor.Result.SHOULD_FETCH_MORE,
-            TokenChunkEventPersistor.Result.SUCCESS     -> LoadMoreResult.SUCCESS
+            TokenChunkEventPersistor.Result.SUCCESS -> LoadMoreResult.SUCCESS
         }
     }
 
@@ -456,7 +464,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         return when (this) {
             DefaultFetchThreadTimelineTask.Result.REACHED_END -> LoadMoreResult.REACHED_END
             DefaultFetchThreadTimelineTask.Result.SHOULD_FETCH_MORE,
-            DefaultFetchThreadTimelineTask.Result.SUCCESS     -> LoadMoreResult.SUCCESS
+            DefaultFetchThreadTimelineTask.Result.SUCCESS -> LoadMoreResult.SUCCESS
         }
     }
 
@@ -478,8 +486,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val insertions = changeSet.insertionRanges
         for (range in insertions) {
             val newItems = results
-                    .subList(range.startIndex, range.startIndex + range.length)
-                    .map { it.buildAndDecryptIfNeeded() }
+                .subList(range.startIndex, range.startIndex + range.length)
+                .map { it.buildAndDecryptIfNeeded() }
             builtEventsIndexes.entries.filter { it.value >= range.startIndex }.forEach { it.setValue(it.value + range.length) }
             newItems.mapIndexed { index, timelineEvent ->
                 if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
@@ -529,34 +537,34 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     private fun createTimelineChunk(chunkEntity: ChunkEntity?): TimelineChunk? {
         if (chunkEntity == null) return null
         return TimelineChunk(
-                chunkEntity = chunkEntity,
-                timelineSettings = timelineSettings,
-                roomId = roomId,
-                timelineId = timelineId,
-                eventDecryptor = eventDecryptor,
-                paginationTask = paginationTask,
-                realmConfiguration = realmConfiguration,
-                fetchThreadTimelineTask = fetchThreadTimelineTask,
-                fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
-                timelineEventMapper = timelineEventMapper,
-                uiEchoManager = uiEchoManager,
-                threadsAwarenessHandler = threadsAwarenessHandler,
-                lightweightSettingsStorage = lightweightSettingsStorage,
-                initialEventId = null,
-                onBuiltEvents = this.onBuiltEvents
+            chunkEntity = chunkEntity,
+            timelineSettings = timelineSettings,
+            roomId = roomId,
+            timelineId = timelineId,
+            eventDecryptor = eventDecryptor,
+            paginationTask = paginationTask,
+            realmConfiguration = realmConfiguration,
+            fetchThreadTimelineTask = fetchThreadTimelineTask,
+            fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+            timelineEventMapper = timelineEventMapper,
+            uiEchoManager = uiEchoManager,
+            threadsAwarenessHandler = threadsAwarenessHandler,
+            lightweightSettingsStorage = lightweightSettingsStorage,
+            initialEventId = null,
+            onBuiltEvents = this.onBuiltEvents
         )
     }
 
     private data class LoadedFromStorage(
-            val threadReachedEnd: Boolean = false,
-            val numberOfEvents: Int = 0
+        val threadReachedEnd: Boolean = false,
+        val numberOfEvents: Int = 0
     )
 }
 
 private fun RealmQuery<TimelineEventEntity>.offsets(
-        direction: Timeline.Direction,
-        count: Int,
-        startDisplayIndex: Int
+    direction: Timeline.Direction,
+    count: Int,
+    startDisplayIndex: Int
 ): RealmQuery<TimelineEventEntity> {
     return if (direction == Timeline.Direction.BACKWARDS) {
         lessThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
@@ -579,15 +587,15 @@ private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
 private fun ChunkEntity.sortedTimelineEvents(rootThreadEventId: String?): RealmResults<TimelineEventEntity> {
     return if (rootThreadEventId == null) {
         timelineEvents
-                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+            .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
     } else {
         timelineEvents
-                .where()
-                .beginGroup()
-                .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-                .or()
-                .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, rootThreadEventId)
-                .endGroup()
-                .findAll()
+            .where()
+            .beginGroup()
+            .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+            .or()
+            .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, rootThreadEventId)
+            .endGroup()
+            .findAll()
     }
 }

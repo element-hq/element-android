@@ -16,5 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.model
 
-data class ImportRoomKeysResult(val totalNumberOfKeys: Int,
-                                val successfullyNumberOfImportedKeys: Int)
+data class ImportRoomKeysResult(
+    val totalNumberOfKeys: Int,
+    val successfullyNumberOfImportedKeys: Int
+)

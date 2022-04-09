@@ -33,8 +33,8 @@ import kotlin.reflect.KClass
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "debug_features")
 
 class DebugVectorFeatures(
-        context: Context,
-        private val vectorFeatures: DefaultVectorFeatures
+    context: Context,
+    private val vectorFeatures: DefaultVectorFeatures
 ) : VectorFeatures {
 
     private val dataStore = context.dataStore
@@ -44,21 +44,21 @@ class DebugVectorFeatures(
     }
 
     override fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean = read(DebugFeatureKeys.onboardingAlreadyHaveAnAccount)
-            ?: vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
+        ?: vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
 
     override fun isOnboardingSplashCarouselEnabled(): Boolean = read(DebugFeatureKeys.onboardingSplashCarousel)
-            ?: vectorFeatures.isOnboardingSplashCarouselEnabled()
+        ?: vectorFeatures.isOnboardingSplashCarouselEnabled()
 
     override fun isOnboardingUseCaseEnabled(): Boolean = read(DebugFeatureKeys.onboardingUseCase) ?: vectorFeatures.isOnboardingUseCaseEnabled()
 
     override fun isOnboardingPersonalizeEnabled(): Boolean = read(DebugFeatureKeys.onboardingPersonalize)
-            ?: vectorFeatures.isOnboardingPersonalizeEnabled()
+        ?: vectorFeatures.isOnboardingPersonalizeEnabled()
 
     override fun isOnboardingCombinedRegisterEnabled(): Boolean = read(DebugFeatureKeys.onboardingCombinedRegister)
-            ?: vectorFeatures.isOnboardingCombinedRegisterEnabled()
+        ?: vectorFeatures.isOnboardingCombinedRegisterEnabled()
 
     override fun isLiveLocationEnabled(): Boolean = read(DebugFeatureKeys.liveLocationSharing)
-            ?: vectorFeatures.isLiveLocationEnabled()
+        ?: vectorFeatures.isLiveLocationEnabled()
 
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {

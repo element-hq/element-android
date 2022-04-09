@@ -39,15 +39,15 @@ object ServerUrlsRepository {
      */
     fun setDefaultUrlsFromReferrer(context: Context, homeServerUrl: String, identityServerUrl: String) {
         DefaultSharedPreferences.getInstance(context)
-                .edit {
-                    if (homeServerUrl.isNotEmpty()) {
-                        putString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF, homeServerUrl)
-                    }
-
-                    if (identityServerUrl.isNotEmpty()) {
-                        putString(DEFAULT_REFERRER_IDENTITY_SERVER_URL_PREF, identityServerUrl)
-                    }
+            .edit {
+                if (homeServerUrl.isNotEmpty()) {
+                    putString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF, homeServerUrl)
                 }
+
+                if (identityServerUrl.isNotEmpty()) {
+                    putString(DEFAULT_REFERRER_IDENTITY_SERVER_URL_PREF, identityServerUrl)
+                }
+            }
     }
 
     /**
@@ -55,10 +55,10 @@ object ServerUrlsRepository {
      */
     fun saveServerUrls(context: Context, homeServerUrl: String, identityServerUrl: String) {
         DefaultSharedPreferences.getInstance(context)
-                .edit {
-                    putString(HOME_SERVER_URL_PREF, homeServerUrl)
-                    putString(IDENTITY_SERVER_URL_PREF, identityServerUrl)
-                }
+            .edit {
+                putString(HOME_SERVER_URL_PREF, homeServerUrl)
+                putString(IDENTITY_SERVER_URL_PREF, identityServerUrl)
+            }
     }
 
     /**
@@ -67,9 +67,13 @@ object ServerUrlsRepository {
     fun getLastHomeServerUrl(context: Context): String {
         val prefs = DefaultSharedPreferences.getInstance(context)
 
-        return prefs.getString(HOME_SERVER_URL_PREF,
-                prefs.getString(DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
-                        getDefaultHomeServerUrl(context))!!)!!
+        return prefs.getString(
+            HOME_SERVER_URL_PREF,
+            prefs.getString(
+                DEFAULT_REFERRER_HOME_SERVER_URL_PREF,
+                getDefaultHomeServerUrl(context)
+            )!!
+        )!!
     }
 
     /**

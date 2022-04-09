@@ -25,23 +25,23 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class TurnServerResponse(
-        /**
-         * Required. The username to use.
-         */
-        @Json(name = "username") val username: String?,
+    /**
+     * Required. The username to use.
+     */
+    @Json(name = "username") val username: String?,
 
-        /**
-         * Required. The password to use.
-         */
-        @Json(name = "password") val password: String?,
+    /**
+     * Required. The password to use.
+     */
+    @Json(name = "password") val password: String?,
 
-        /**
-         * Required. A list of TURN URIs
-         */
-        @Json(name = "uris") val uris: List<String>?,
+    /**
+     * Required. A list of TURN URIs
+     */
+    @Json(name = "uris") val uris: List<String>?,
 
-        /**
-         * Required. The time-to-live in seconds
-         */
-        @Json(name = "ttl") val ttl: Int?
+    /**
+     * Required. The time-to-live in seconds
+     */
+    @Json(name = "ttl") val ttl: Int?
 )

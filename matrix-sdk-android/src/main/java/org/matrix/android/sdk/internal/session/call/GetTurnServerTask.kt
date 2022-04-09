@@ -26,8 +26,10 @@ internal abstract class GetTurnServerTask : Task<GetTurnServerTask.Params, TurnS
     object Params
 }
 
-internal class DefaultGetTurnServerTask @Inject constructor(private val voipAPI: VoipApi,
-                                                            private val globalErrorReceiver: GlobalErrorReceiver) : GetTurnServerTask() {
+internal class DefaultGetTurnServerTask @Inject constructor(
+    private val voipAPI: VoipApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
+) : GetTurnServerTask() {
 
     override suspend fun execute(params: Params): TurnServerResponse {
         return executeRequest(globalErrorReceiver) {

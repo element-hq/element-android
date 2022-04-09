@@ -52,10 +52,10 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class UserListFragment @Inject constructor(
-        private val userListController: UserListController,
-        private val dimensionConverter: DimensionConverter,
+    private val userListController: UserListController,
+    private val dimensionConverter: DimensionConverter,
 ) : VectorBaseFragment<FragmentUserListBinding>(),
-        UserListController.Callback {
+    UserListController.Callback {
 
     private val args: UserListFragmentArgs by args()
     private val viewModel: UserListViewModel by activityViewModel()
@@ -73,8 +73,8 @@ class UserListFragment @Inject constructor(
         sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
         if (args.showToolbar) {
             setupToolbar(views.userListToolbar)
-                    .setTitle(args.title)
-                    .allowBack(useCross = true)
+                .setTitle(args.title)
+                .allowBack(useCross = true)
             views.userListToolbar.isVisible = true
         } else {
             views.userListToolbar.isVisible = false
@@ -95,15 +95,15 @@ class UserListFragment @Inject constructor(
                 is UserListViewEvents.OpenShareMatrixToLink -> {
                     val text = getString(R.string.invite_friends_text, it.link)
                     startSharePlainTextIntent(
-                            fragment = this,
-                            activityResultLauncher = null,
-                            chooserTitle = getString(R.string.invite_friends),
-                            text = text,
-                            extraTitle = getString(R.string.invite_friends_rich_title)
+                        fragment = this,
+                        activityResultLauncher = null,
+                        chooserTitle = getString(R.string.invite_friends),
+                        text = text,
+                        extraTitle = getString(R.string.invite_friends_rich_title)
                     )
                 }
-                is UserListViewEvents.Failure               -> showFailure(it.throwable)
-                is UserListViewEvents.OnPoliciesRetrieved   -> showConsentDialog(it)
+                is UserListViewEvents.Failure -> showFailure(it.throwable)
+                is UserListViewEvents.OnPoliciesRetrieved -> showConsentDialog(it)
             }
         }
     }
@@ -136,18 +136,18 @@ class UserListFragment @Inject constructor(
 
     private fun setupSearchView() {
         views.userListSearch
-                .textChanges()
-                .onStart { emit(views.userListSearch.text) }
-                .onEach { text ->
-                    val searchValue = text.trim()
-                    val action = if (searchValue.isBlank()) {
-                        UserListAction.ClearSearchUsers
-                    } else {
-                        UserListAction.SearchUsers(searchValue.toString())
-                    }
-                    viewModel.handle(action)
+            .textChanges()
+            .onStart { emit(views.userListSearch.text) }
+            .onEach { text ->
+                val searchValue = text.trim()
+                val action = if (searchValue.isBlank()) {
+                    UserListAction.ClearSearchUsers
+                } else {
+                    UserListAction.SearchUsers(searchValue.toString())
                 }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+                viewModel.handle(action)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.userListSearch.setupAsSearch()
         views.userListSearch.requestFocus()
@@ -215,8 +215,8 @@ class UserListFragment @Inject constructor(
 
     override fun onSetupDiscovery() {
         navigator.openSettings(
-                requireContext(),
-                VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
+            requireContext(),
+            VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
         )
     }
 
@@ -231,8 +231,8 @@ class UserListFragment @Inject constructor(
 
     private fun showConsentDialog(event: UserListViewEvents.OnPoliciesRetrieved) {
         requireContext().showIdentityServerConsentDialog(
-                event.identityServerWithTerms,
-                consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
+            event.identityServerWithTerms,
+            consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
         )
     }
 

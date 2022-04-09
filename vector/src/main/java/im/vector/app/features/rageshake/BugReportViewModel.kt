@@ -30,8 +30,8 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 
 class BugReportViewModel @AssistedInject constructor(
-        @Assisted initialState: BugReportState,
-        val activeSessionHolder: ActiveSessionHolder
+    @Assisted initialState: BugReportState,
+    val activeSessionHolder: ActiveSessionHolder
 ) : VectorViewModel<BugReportState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -39,7 +39,7 @@ class BugReportViewModel @AssistedInject constructor(
         override fun create(initialState: BugReportState): BugReportViewModel
     }
 
-    companion object : MavericksViewModelFactory<BugReportViewModel, BugReportState>  by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<BugReportViewModel, BugReportState> by hiltMavericksViewModelFactory()
 
     init {
         fetchHomeserverVersion()
@@ -49,14 +49,14 @@ class BugReportViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val version = tryOrNull {
                 activeSessionHolder.getSafeActiveSession()
-                        ?.federationService()
-                        ?.getFederationVersion()
-                        ?.let { "${it.name} - ${it.version}" }
+                    ?.federationService()
+                    ?.getFederationVersion()
+                    ?.let { "${it.name} - ${it.version}" }
             } ?: "undefined"
 
             setState {
                 copy(
-                        serverVersion = version
+                    serverVersion = version
                 )
             }
         }

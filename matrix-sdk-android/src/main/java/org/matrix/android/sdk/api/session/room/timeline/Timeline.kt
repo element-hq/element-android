@@ -119,9 +119,9 @@ interface Timeline {
      * Pagination state
      */
     data class PaginationState(
-            val hasMoreToLoad: Boolean = true,
-            val loading: Boolean = false,
-            val inError: Boolean = false
+        val hasMoreToLoad: Boolean = true,
+        val loading: Boolean = false,
+        val inError: Boolean = false
     )
 
     /**

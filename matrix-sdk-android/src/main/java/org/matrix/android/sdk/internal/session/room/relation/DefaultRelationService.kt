@@ -41,14 +41,14 @@ import org.matrix.android.sdk.internal.util.fetchCopyMap
 import timber.log.Timber
 
 internal class DefaultRelationService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        private val eventEditor: EventEditor,
-        private val eventSenderProcessor: EventSenderProcessor,
-        private val eventFactory: LocalEchoEventFactory,
-        private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
-        private val fetchEditHistoryTask: FetchEditHistoryTask,
-        private val timelineEventDataSource: TimelineEventDataSource,
-        @SessionDatabase private val monarchy: Monarchy
+    @Assisted private val roomId: String,
+    private val eventEditor: EventEditor,
+    private val eventSenderProcessor: EventSenderProcessor,
+    private val eventFactory: LocalEchoEventFactory,
+    private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
+    private val fetchEditHistoryTask: FetchEditHistoryTask,
+    private val timelineEventDataSource: TimelineEventDataSource,
+    @SessionDatabase private val monarchy: Monarchy
 ) : RelationService {
 
     @AssistedFactory
@@ -59,12 +59,13 @@ internal class DefaultRelationService @AssistedInject constructor(
     override fun sendReaction(targetEventId: String, reaction: String): Cancelable {
         val targetTimelineEvent = timelineEventDataSource.getTimelineEvent(roomId, targetEventId)
         return if (targetTimelineEvent
-                        ?.annotations
-                        ?.reactionsSummary
-                        .orEmpty()
-                        .none { it.addedByMe && it.key == reaction }) {
+                ?.annotations
+                ?.reactionsSummary
+                .orEmpty()
+                .none { it.addedByMe && it.key == reaction }
+        ) {
             val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
-                    .also { saveLocalEcho(it) }
+                .also { saveLocalEcho(it) }
             eventSenderProcessor.postEvent(event, false /* reaction are not encrypted*/)
         } else {
             Timber.w("Reaction already added")
@@ -74,9 +75,9 @@ internal class DefaultRelationService @AssistedInject constructor(
 
     override suspend fun undoReaction(targetEventId: String, reaction: String): Cancelable {
         val params = FindReactionEventForUndoTask.Params(
-                roomId,
-                targetEventId,
-                reaction
+            roomId,
+            targetEventId,
+            reaction
         )
 
         val data = findReactionEventForUndoTask.executeRetry(params, Int.MAX_VALUE)
@@ -87,30 +88,36 @@ internal class DefaultRelationService @AssistedInject constructor(
             NoOpCancellable
         } else {
             val redactEvent = eventFactory.createRedactEvent(roomId, data.redactEventId, null)
-                    .also { saveLocalEcho(it) }
+                .also { saveLocalEcho(it) }
             eventSenderProcessor.postRedaction(redactEvent, null)
         }
     }
 
-    override fun editPoll(targetEvent: TimelineEvent,
-                          pollType: PollType,
-                          question: String,
-                          options: List<String>): Cancelable {
+    override fun editPoll(
+        targetEvent: TimelineEvent,
+        pollType: PollType,
+        question: String,
+        options: List<String>
+    ): Cancelable {
         return eventEditor.editPoll(targetEvent, pollType, question, options)
     }
 
-    override fun editTextMessage(targetEvent: TimelineEvent,
-                                 msgType: String,
-                                 newBodyText: CharSequence,
-                                 newBodyAutoMarkdown: Boolean,
-                                 compatibilityBodyText: String): Cancelable {
+    override fun editTextMessage(
+        targetEvent: TimelineEvent,
+        msgType: String,
+        newBodyText: CharSequence,
+        newBodyAutoMarkdown: Boolean,
+        compatibilityBodyText: String
+    ): Cancelable {
         return eventEditor.editTextMessage(targetEvent, msgType, newBodyText, newBodyAutoMarkdown, compatibilityBodyText)
     }
 
-    override fun editReply(replyToEdit: TimelineEvent,
-                           originalTimelineEvent: TimelineEvent,
-                           newBodyText: String,
-                           compatibilityBodyText: String): Cancelable {
+    override fun editReply(
+        replyToEdit: TimelineEvent,
+        originalTimelineEvent: TimelineEvent,
+        newBodyText: String,
+        compatibilityBodyText: String
+    ): Cancelable {
         return eventEditor.editReply(replyToEdit, originalTimelineEvent, newBodyText, compatibilityBodyText)
     }
 
@@ -119,38 +126,39 @@ internal class DefaultRelationService @AssistedInject constructor(
     }
 
     override fun replyToMessage(
-            eventReplied: TimelineEvent,
-            replyText: CharSequence,
-            autoMarkdown: Boolean,
-            showInThread: Boolean,
-            rootThreadEventId: String?
+        eventReplied: TimelineEvent,
+        replyText: CharSequence,
+        autoMarkdown: Boolean,
+        showInThread: Boolean,
+        rootThreadEventId: String?
     ): Cancelable? {
         val event = eventFactory.createReplyTextEvent(
-                roomId = roomId,
-                eventReplied = eventReplied,
-                replyText = replyText,
-                autoMarkdown = autoMarkdown,
-                rootThreadEventId = rootThreadEventId,
-                showInThread = showInThread)
-                ?.also { saveLocalEcho(it) }
-                ?: return null
+            roomId = roomId,
+            eventReplied = eventReplied,
+            replyText = replyText,
+            autoMarkdown = autoMarkdown,
+            rootThreadEventId = rootThreadEventId,
+            showInThread = showInThread
+        )
+            ?.also { saveLocalEcho(it) }
+            ?: return null
 
         return eventSenderProcessor.postEvent(event)
     }
 
     override fun getEventAnnotationsSummary(eventId: String): EventAnnotationsSummary? {
         return monarchy.fetchCopyMap(
-                { EventAnnotationsSummaryEntity.where(it, roomId, eventId).findFirst() },
-                { entity, _ ->
-                    entity.asDomain()
-                }
+            { EventAnnotationsSummaryEntity.where(it, roomId, eventId).findFirst() },
+            { entity, _ ->
+                entity.asDomain()
+            }
         )
     }
 
     override fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { EventAnnotationsSummaryEntity.where(it, roomId, eventId) },
-                { it.asDomain() }
+            { EventAnnotationsSummaryEntity.where(it, roomId, eventId) },
+            { it.asDomain() }
         )
         return Transformations.map(liveData) { results ->
             results.firstOrNull().toOptional()
@@ -158,38 +166,40 @@ internal class DefaultRelationService @AssistedInject constructor(
     }
 
     override fun replyInThread(
-            rootThreadEventId: String,
-            replyInThreadText: CharSequence,
-            msgType: String,
-            autoMarkdown: Boolean,
-            formattedText: String?,
-            eventReplied: TimelineEvent?): Cancelable? {
+        rootThreadEventId: String,
+        replyInThreadText: CharSequence,
+        msgType: String,
+        autoMarkdown: Boolean,
+        formattedText: String?,
+        eventReplied: TimelineEvent?
+    ): Cancelable? {
         val event = if (eventReplied != null) {
             // Reply within a thread
             eventFactory.createReplyTextEvent(
-                    roomId = roomId,
-                    eventReplied = eventReplied,
-                    replyText = replyInThreadText,
-                    autoMarkdown = autoMarkdown,
-                    rootThreadEventId = rootThreadEventId,
-                    showInThread = false
+                roomId = roomId,
+                eventReplied = eventReplied,
+                replyText = replyInThreadText,
+                autoMarkdown = autoMarkdown,
+                rootThreadEventId = rootThreadEventId,
+                showInThread = false
             )
-                    ?.also {
-                        saveLocalEcho(it)
-                    }
-                    ?: return null
+                ?.also {
+                    saveLocalEcho(it)
+                }
+                ?: return null
         } else {
             // Normal thread reply
             eventFactory.createThreadTextEvent(
-                    rootThreadEventId = rootThreadEventId,
-                    roomId = roomId,
-                    text = replyInThreadText,
-                    msgType = msgType,
-                    autoMarkdown = autoMarkdown,
-                    formattedText = formattedText)
-                    .also {
-                        saveLocalEcho(it)
-                    }
+                rootThreadEventId = rootThreadEventId,
+                roomId = roomId,
+                text = replyInThreadText,
+                msgType = msgType,
+                autoMarkdown = autoMarkdown,
+                formattedText = formattedText
+            )
+                .also {
+                    saveLocalEcho(it)
+                }
         }
         return eventSenderProcessor.postEvent(event)
     }

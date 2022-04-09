@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 internal class DefaultRawService @Inject constructor(
-        private val getUrlTask: GetUrlTask,
-        private val cleanRawCacheTask: CleanRawCacheTask
+    private val getUrlTask: GetUrlTask,
+    private val cleanRawCacheTask: CleanRawCacheTask
 ) : RawService {
     override suspend fun getUrl(url: String, cacheStrategy: CacheStrategy): String {
         return getUrlTask.execute(GetUrlTask.Params(url, cacheStrategy))
@@ -31,8 +31,8 @@ internal class DefaultRawService @Inject constructor(
 
     override suspend fun getWellknown(domain: String): String {
         return getUrl(
-                "https://$domain/.well-known/matrix/client",
-                CacheStrategy.TtlCache(TimeUnit.HOURS.toMillis(8), false)
+            "https://$domain/.well-known/matrix/client",
+            CacheStrategy.TtlCache(TimeUnit.HOURS.toMillis(8), false)
         )
     }
 

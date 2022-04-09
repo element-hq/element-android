@@ -65,23 +65,25 @@ interface AttachmentData : Parcelable {
 private const val URL_PREVIEW_IMAGE_MIN_FULL_WIDTH_PX = 600
 private const val URL_PREVIEW_IMAGE_MIN_FULL_HEIGHT_PX = 315
 
-class ImageContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
-                                               private val activeSessionHolder: ActiveSessionHolder,
-                                               private val dimensionConverter: DimensionConverter) {
+class ImageContentRenderer @Inject constructor(
+    private val localFilesHelper: LocalFilesHelper,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val dimensionConverter: DimensionConverter
+) {
 
     @Parcelize
     data class Data(
-            override val eventId: String,
-            override val filename: String,
-            override val mimeType: String?,
-            override val url: String?,
-            override val elementToDecrypt: ElementToDecrypt?,
-            val height: Int?,
-            val maxHeight: Int,
-            val width: Int?,
-            val maxWidth: Int,
-            // If true will load non mxc url, be careful to set it only for images sent by you
-            override val allowNonMxcUrls: Boolean = false
+        override val eventId: String,
+        override val filename: String,
+        override val mimeType: String?,
+        override val url: String?,
+        override val elementToDecrypt: ElementToDecrypt?,
+        val height: Int?,
+        val maxHeight: Int,
+        val width: Int?,
+        val maxWidth: Int,
+        // If true will load non mxc url, be careful to set it only for images sent by you
+        override val allowNonMxcUrls: Boolean = false
     ) : AttachmentData
 
     enum class Mode {
@@ -105,9 +107,9 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         }
         GlideApp.with(imageView)
-                .load(imageUrl)
-                .override(width, height.coerceAtMost(maxHeight))
-                .into(imageView)
+            .load(imageUrl)
+            .override(width, height.coerceAtMost(maxHeight))
+            .into(imageView)
         return true
     }
 
@@ -119,8 +121,8 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         imageView.contentDescription = data.filename
 
         createGlideRequest(data, Mode.THUMBNAIL, imageView, Size(size, size))
-                .placeholder(R.drawable.ic_image)
-                .into(imageView)
+            .placeholder(R.drawable.ic_image)
+            .into(imageView)
     }
 
     fun render(data: Data, mode: Mode, imageView: ImageView, cornerTransformation: Transformation<Bitmap> = RoundedCorners(dimensionConverter.dpToPx(8))) {
@@ -133,10 +135,10 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, size)
-                .dontAnimate()
-                .transform(cornerTransformation)
-                // .thumbnail(0.3f)
-                .into(imageView)
+            .dontAnimate()
+            .transform(cornerTransformation)
+            // .thumbnail(0.3f)
+            .into(imageView)
     }
 
     fun clear(imageView: ImageView) {
@@ -144,7 +146,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         // We'd better keep ref to requestManager, but we don't have it
         tryOrNull {
             GlideApp
-                    .with(imageView).clear(imageView)
+                .with(imageView).clear(imageView)
         }
     }
 
@@ -155,20 +157,20 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         val req = if (data.elementToDecrypt != null) {
             // Encrypted image
             GlideApp
-                    .with(contextView)
-                    .load(data)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .with(contextView)
+                .load(data)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
             val resolvedUrl = resolveUrl(data)
             GlideApp
-                    .with(contextView)
-                    .load(resolvedUrl)
+                .with(contextView)
+                .load(resolvedUrl)
         }
 
         req.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .fitCenter()
-                .into(target)
+            .fitCenter()
+            .into(target)
     }
 
     fun renderFitTarget(data: Data, mode: Mode, imageView: ImageView, callback: ((Boolean) -> Unit)? = null) {
@@ -178,26 +180,30 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         imageView.contentDescription = data.filename
 
         createGlideRequest(data, mode, imageView, size)
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(e: GlideException?,
-                                              model: Any?,
-                                              target: Target<Drawable>?,
-                                              isFirstResource: Boolean): Boolean {
-                        callback?.invoke(false)
-                        return false
-                    }
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    callback?.invoke(false)
+                    return false
+                }
 
-                    override fun onResourceReady(resource: Drawable?,
-                                                 model: Any?,
-                                                 target: Target<Drawable>?,
-                                                 dataSource: DataSource?,
-                                                 isFirstResource: Boolean): Boolean {
-                        callback?.invoke(true)
-                        return false
-                    }
-                })
-                .fitCenter()
-                .into(imageView)
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    callback?.invoke(true)
+                    return false
+                }
+            })
+            .fitCenter()
+            .into(imageView)
     }
 
     /**
@@ -210,38 +216,42 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         val req = if (data.elementToDecrypt != null) {
             // Encrypted image
             GlideApp
-                    .with(imageView)
-                    .load(data)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .with(imageView)
+                .load(data)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
             val resolvedUrl = resolveUrl(data)
             GlideApp
-                    .with(imageView)
-                    .load(resolvedUrl)
+                .with(imageView)
+                .load(resolvedUrl)
         }
 
         req.listener(object : RequestListener<Drawable> {
-            override fun onLoadFailed(e: GlideException?,
-                                      model: Any?,
-                                      target: Target<Drawable>?,
-                                      isFirstResource: Boolean): Boolean {
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
                 callback?.invoke(false)
                 return false
             }
 
-            override fun onResourceReady(resource: Drawable?,
-                                         model: Any?,
-                                         target: Target<Drawable>?,
-                                         dataSource: DataSource?,
-                                         isFirstResource: Boolean): Boolean {
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
                 callback?.invoke(true)
                 return false
             }
         })
-                .onlyRetrieveFromCache(true)
-                .fitCenter()
-                .into(imageView)
+            .onlyRetrieveFromCache(true)
+            .fitCenter()
+            .into(imageView)
     }
 
     private fun createGlideRequest(data: Data, mode: Mode, imageView: ImageView, size: Size): GlideRequest<Drawable> {
@@ -252,28 +262,28 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         return if (data.elementToDecrypt != null) {
             // Encrypted image
             glideRequests
-                    .load(data)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .load(data)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
         } else {
             // Clear image
             val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
             val resolvedUrl = when (mode) {
                 Mode.FULL_SIZE,
-                Mode.STICKER   -> resolveUrl(data)
+                Mode.STICKER -> resolveUrl(data)
                 Mode.THUMBNAIL -> contentUrlResolver.resolveThumbnail(data.url, size.width, size.height, ContentUrlResolver.ThumbnailMethod.SCALE)
             }
             // Fallback to base url
-                    ?: data.url.takeIf { it?.startsWith("content://") == true }
+                ?: data.url.takeIf { it?.startsWith("content://") == true }
 
             glideRequests
-                    .load(resolvedUrl)
-                    .apply {
-                        if (mode == Mode.THUMBNAIL) {
-                            error(
-                                    glideRequests.load(resolveUrl(data))
-                            )
-                        }
+                .load(resolvedUrl)
+                .apply {
+                    if (mode == Mode.THUMBNAIL) {
+                        error(
+                            glideRequests.load(resolveUrl(data))
+                        )
                     }
+                }
         }
     }
 
@@ -298,14 +308,14 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         })
 
         imageView.showImage(
-                Uri.parse(thumbnail),
-                Uri.parse(fullSize)
+            Uri.parse(thumbnail),
+            Uri.parse(fullSize)
         )
     }
 
     private fun resolveUrl(data: Data) =
-            (activeSessionHolder.getActiveSession().contentUrlResolver().resolveFullSize(data.url)
-                    ?: data.url?.takeIf { localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls })
+        (activeSessionHolder.getActiveSession().contentUrlResolver().resolveFullSize(data.url)
+            ?: data.url?.takeIf { localFilesHelper.isLocalFile(data.url) && data.allowNonMxcUrls })
 
     private fun processSize(data: Data, mode: Mode): Size {
         val maxImageWidth = data.maxWidth
@@ -327,7 +337,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                     finalHeight = min(maxImageWidth * height / width, maxImageHeight)
                     finalWidth = finalHeight * width / height
                 }
-                Mode.STICKER   -> {
+                Mode.STICKER -> {
                     // limit on width
                     val maxWidthDp = min(dimensionConverter.dpToPx(120), maxImageWidth / 2)
                     finalWidth = min(dimensionConverter.dpToPx(width), maxWidthDp)

@@ -36,9 +36,9 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import javax.inject.Inject
 
 class VectorSettingsIgnoredUsersFragment @Inject constructor(
-        private val ignoredUsersController: IgnoredUsersController
+    private val ignoredUsersController: IgnoredUsersController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
-        IgnoredUsersController.Callback {
+    IgnoredUsersController.Callback {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -80,12 +80,12 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
 
     override fun onUserIdClicked(userId: String) {
         MaterialAlertDialogBuilder(requireActivity())
-                .setMessage(getString(R.string.settings_unignore_user, userId))
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    viewModel.handle(IgnoredUsersAction.UnIgnore(userId))
-                }
-                .setNegativeButton(R.string.no, null)
-                .show()
+            .setMessage(getString(R.string.settings_unignore_user, userId))
+            .setPositiveButton(R.string.yes) { _, _ ->
+                viewModel.handle(IgnoredUsersAction.UnIgnore(userId))
+            }
+            .setNegativeButton(R.string.no, null)
+            .show()
     }
 
     // ==============================================================================================================
@@ -101,7 +101,7 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
     private fun handleUnIgnoreRequestStatus(unIgnoreRequest: Async<Unit>) {
         views.waitingView.root.isVisible = when (unIgnoreRequest) {
             is Loading -> true
-            else       -> false
+            else -> false
         }
     }
 }

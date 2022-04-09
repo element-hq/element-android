@@ -24,15 +24,15 @@ import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 
 @JsonClass(generateAdapter = true)
 internal data class DownloadBody(
-        @Json(name = "file") val file: EncryptedFileInfo? = null,
-        @Json(name = "encrypted_body") val encryptedBody: EncryptedBody? = null
+    @Json(name = "file") val file: EncryptedFileInfo? = null,
+    @Json(name = "encrypted_body") val encryptedBody: EncryptedBody? = null
 )
 
 @JsonClass(generateAdapter = true)
 internal data class EncryptedBody(
-        @Json(name = "ciphertext") val cipherText: String,
-        @Json(name = "mac") val mac: String,
-        @Json(name = "ephemeral") val ephemeral: String
+    @Json(name = "ciphertext") val cipherText: String,
+    @Json(name = "mac") val mac: String,
+    @Json(name = "ephemeral") val ephemeral: String
 )
 
 internal fun DownloadBody.toJson(): String = MoshiProvider.providesMoshi().adapter(DownloadBody::class.java).toJson(this)

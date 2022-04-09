@@ -39,29 +39,31 @@ private const val READ_KEY = "m.read"
 private const val TIMESTAMP_KEY = "ts"
 
 internal class ReadReceiptHandler @Inject constructor(
-        private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
+    private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
 ) {
 
     companion object {
 
         fun createContent(userId: String, eventId: String): ReadReceiptContent {
             return mapOf(
-                    eventId to mapOf(
-                            READ_KEY to mapOf(
-                                    userId to mapOf(
-                                            TIMESTAMP_KEY to System.currentTimeMillis().toDouble()
-                                    )
-                            )
+                eventId to mapOf(
+                    READ_KEY to mapOf(
+                        userId to mapOf(
+                            TIMESTAMP_KEY to System.currentTimeMillis().toDouble()
+                        )
                     )
+                )
             )
         }
     }
 
-    fun handle(realm: Realm,
-               roomId: String,
-               content: ReadReceiptContent?,
-               isInitialSync: Boolean,
-               aggregator: SyncResponsePostTreatmentAggregator?) {
+    fun handle(
+        realm: Realm,
+        roomId: String,
+        content: ReadReceiptContent?,
+        isInitialSync: Boolean,
+        aggregator: SyncResponsePostTreatmentAggregator?
+    ) {
         content ?: return
 
         try {
@@ -71,11 +73,13 @@ internal class ReadReceiptHandler @Inject constructor(
         }
     }
 
-    private fun handleReadReceiptContent(realm: Realm,
-                                         roomId: String,
-                                         content: ReadReceiptContent,
-                                         isInitialSync: Boolean,
-                                         aggregator: SyncResponsePostTreatmentAggregator?) {
+    private fun handleReadReceiptContent(
+        realm: Realm,
+        roomId: String,
+        content: ReadReceiptContent,
+        isInitialSync: Boolean,
+        aggregator: SyncResponsePostTreatmentAggregator?
+    ) {
         if (isInitialSync) {
             initialSyncStrategy(realm, roomId, content)
         } else {
@@ -99,10 +103,12 @@ internal class ReadReceiptHandler @Inject constructor(
         realm.insertOrUpdate(readReceiptSummaries)
     }
 
-    private fun incrementalSyncStrategy(realm: Realm,
-                                        roomId: String,
-                                        content: ReadReceiptContent,
-                                        aggregator: SyncResponsePostTreatmentAggregator?) {
+    private fun incrementalSyncStrategy(
+        realm: Realm,
+        roomId: String,
+        content: ReadReceiptContent,
+        aggregator: SyncResponsePostTreatmentAggregator?
+    ) {
         // First check if we have data from init sync to handle
         getContentFromInitSync(roomId)?.let {
             Timber.w("INIT_SYNC Insert during incremental sync RR for room $roomId")
@@ -117,9 +123,9 @@ internal class ReadReceiptHandler @Inject constructor(
         for ((eventId, receiptDict) in content) {
             val userIdsDict = receiptDict[READ_KEY] ?: continue
             val readReceiptsSummary = ReadReceiptsSummaryEntity.where(realm, eventId).findFirst()
-                    ?: realm.createObject(ReadReceiptsSummaryEntity::class.java, eventId).apply {
-                        this.roomId = roomId
-                    }
+                ?: realm.createObject(ReadReceiptsSummaryEntity::class.java, eventId).apply {
+                    this.roomId = roomId
+                }
 
             for ((userId, paramsDict) in userIdsDict) {
                 val ts = paramsDict[TIMESTAMP_KEY] ?: 0.0
@@ -144,9 +150,9 @@ internal class ReadReceiptHandler @Inject constructor(
 
         @Suppress("UNCHECKED_CAST")
         val content = dataFromFile
-                .events
-                ?.firstOrNull { it.type == EventType.RECEIPT }
-                ?.content as? ReadReceiptContent
+            .events
+            ?.firstOrNull { it.type == EventType.RECEIPT }
+            ?.content as? ReadReceiptContent
 
         if (content == null) {
             // We can delete the file now

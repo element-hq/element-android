@@ -21,25 +21,25 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class ThreePidInviteBody(
-        /**
-         * Required. The hostname+port of the identity server which should be used for third party identifier lookups.
-         */
-        @Json(name = "id_server")
-        val idServer: String,
-        /**
-         * Required. An access token previously registered with the identity server. Servers can treat this as optional
-         * to distinguish between r0.5-compatible clients and this specification version.
-         */
-        @Json(name = "id_access_token")
-        val idAccessToken: String,
-        /**
-         * Required. The kind of address being passed in the address field, for example email.
-         */
-        @Json(name = "medium")
-        val medium: String,
-        /**
-         * Required. The invitee's third party identifier.
-         */
-        @Json(name = "address")
-        val address: String
+    /**
+     * Required. The hostname+port of the identity server which should be used for third party identifier lookups.
+     */
+    @Json(name = "id_server")
+    val idServer: String,
+    /**
+     * Required. An access token previously registered with the identity server. Servers can treat this as optional
+     * to distinguish between r0.5-compatible clients and this specification version.
+     */
+    @Json(name = "id_access_token")
+    val idAccessToken: String,
+    /**
+     * Required. The kind of address being passed in the address field, for example email.
+     */
+    @Json(name = "medium")
+    val medium: String,
+    /**
+     * Required. The invitee's third party identifier.
+     */
+    @Json(name = "address")
+    val address: String
 )

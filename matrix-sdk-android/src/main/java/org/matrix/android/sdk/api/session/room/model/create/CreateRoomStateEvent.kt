@@ -19,18 +19,18 @@ package org.matrix.android.sdk.api.session.room.model.create
 import org.matrix.android.sdk.api.session.events.model.Content
 
 data class CreateRoomStateEvent(
-        /**
-         * Required. The type of event to send.
-         */
-        val type: String,
+    /**
+     * Required. The type of event to send.
+     */
+    val type: String,
 
-        /**
-         * Required. The content of the event.
-         */
-        val content: Content,
+    /**
+     * Required. The content of the event.
+     */
+    val content: Content,
 
-        /**
-         * The state_key of the state event. Defaults to an empty string.
-         */
-        val stateKey: String = ""
+    /**
+     * The state_key of the state event. Defaults to an empty string.
+     */
+    val stateKey: String = ""
 )

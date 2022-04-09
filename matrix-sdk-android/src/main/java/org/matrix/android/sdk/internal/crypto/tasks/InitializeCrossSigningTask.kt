@@ -35,25 +35,25 @@ import javax.inject.Inject
 
 internal interface InitializeCrossSigningTask : Task<InitializeCrossSigningTask.Params, InitializeCrossSigningTask.Result> {
     data class Params(
-            val interactiveAuthInterceptor: UserInteractiveAuthInterceptor?
+        val interactiveAuthInterceptor: UserInteractiveAuthInterceptor?
     )
 
     data class Result(
-            val masterKeyPK: String,
-            val userKeyPK: String,
-            val selfSigningKeyPK: String,
-            val masterKeyInfo: CryptoCrossSigningKey,
-            val userKeyInfo: CryptoCrossSigningKey,
-            val selfSignedKeyInfo: CryptoCrossSigningKey
+        val masterKeyPK: String,
+        val userKeyPK: String,
+        val selfSigningKeyPK: String,
+        val masterKeyInfo: CryptoCrossSigningKey,
+        val userKeyInfo: CryptoCrossSigningKey,
+        val selfSignedKeyInfo: CryptoCrossSigningKey
     )
 }
 
 internal class DefaultInitializeCrossSigningTask @Inject constructor(
-        @UserId private val userId: String,
-        private val olmDevice: MXOlmDevice,
-        private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
-        private val uploadSigningKeysTask: UploadSigningKeysTask,
-        private val uploadSignaturesTask: UploadSignaturesTask
+    @UserId private val userId: String,
+    private val olmDevice: MXOlmDevice,
+    private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
+    private val uploadSigningKeysTask: UploadSigningKeysTask,
+    private val uploadSignaturesTask: UploadSignaturesTask
 ) : InitializeCrossSigningTask {
 
     override suspend fun execute(params: InitializeCrossSigningTask.Params): InitializeCrossSigningTask.Result {
@@ -83,10 +83,10 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
 
             // Sign userSigningKey with master
             val signedUSK = CryptoCrossSigningKey.Builder(userId, KeyUsage.USER_SIGNING)
-                    .key(uskPublicKey)
-                    .build()
-                    .canonicalSignable()
-                    .let { masterPkOlm.sign(it) }
+                .key(uskPublicKey)
+                .build()
+                .canonicalSignable()
+                .let { masterPkOlm.sign(it) }
 
             // =================
             // SELF SIGNING KEY
@@ -99,40 +99,40 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
 
             // Sign selfSigningKey with master
             val signedSSK = CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
-                    .key(sskPublicKey)
-                    .build()
-                    .canonicalSignable()
-                    .let { masterPkOlm.sign(it) }
+                .key(sskPublicKey)
+                .build()
+                .canonicalSignable()
+                .let { masterPkOlm.sign(it) }
 
             // I need to upload the keys
             val mskCrossSigningKeyInfo = CryptoCrossSigningKey.Builder(userId, KeyUsage.MASTER)
-                    .key(masterPublicKey)
-                    .build()
+                .key(masterPublicKey)
+                .build()
             val uploadSigningKeysParams = UploadSigningKeysTask.Params(
-                    masterKey = mskCrossSigningKeyInfo,
-                    userKey = CryptoCrossSigningKey.Builder(userId, KeyUsage.USER_SIGNING)
-                            .key(uskPublicKey)
-                            .signature(userId, masterPublicKey, signedUSK)
-                            .build(),
-                    selfSignedKey = CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
-                            .key(sskPublicKey)
-                            .signature(userId, masterPublicKey, signedSSK)
-                            .build(),
-                    userAuthParam = null
-//                    userAuthParam = params.authParams
+                masterKey = mskCrossSigningKeyInfo,
+                userKey = CryptoCrossSigningKey.Builder(userId, KeyUsage.USER_SIGNING)
+                    .key(uskPublicKey)
+                    .signature(userId, masterPublicKey, signedUSK)
+                    .build(),
+                selfSignedKey = CryptoCrossSigningKey.Builder(userId, KeyUsage.SELF_SIGNING)
+                    .key(sskPublicKey)
+                    .signature(userId, masterPublicKey, signedSSK)
+                    .build(),
+                userAuthParam = null
+                //                    userAuthParam = params.authParams
             )
 
             try {
                 uploadSigningKeysTask.execute(uploadSigningKeysParams)
             } catch (failure: Throwable) {
                 if (params.interactiveAuthInterceptor == null ||
-                        !handleUIA(
-                                failure = failure,
-                                interceptor = params.interactiveAuthInterceptor,
-                                retryBlock = { authUpdate ->
-                                    uploadSigningKeysTask.execute(uploadSigningKeysParams.copy(userAuthParam = authUpdate))
-                                }
-                        )
+                    !handleUIA(
+                        failure = failure,
+                        interceptor = params.interactiveAuthInterceptor,
+                        retryBlock = { authUpdate ->
+                            uploadSigningKeysTask.execute(uploadSigningKeysParams.copy(userAuthParam = authUpdate))
+                        }
+                    )
                 ) {
                     Timber.d("## UIA: propagate failure")
                     throw failure
@@ -146,10 +146,10 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
             val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, myDevice.signalableJSONDictionary())
             val signedDevice = selfSigningPkOlm.sign(canonicalJson)
             val updateSignatures = (myDevice.signatures?.toMutableMap() ?: HashMap())
-                    .also {
-                        it[userId] = (it[userId]
-                                ?: HashMap()) + mapOf("ed25519:$sskPublicKey" to signedDevice)
-                    }
+                .also {
+                    it[userId] = (it[userId]
+                        ?: HashMap()) + mapOf("ed25519:$sskPublicKey" to signedDevice)
+                }
             myDevice.copy(signatures = updateSignatures).let {
                 uploadSignatureQueryBuilder.withDeviceInfo(it)
             }
@@ -158,12 +158,12 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
             val message = JsonCanonicalizer.getCanonicalJson(Map::class.java, mskCrossSigningKeyInfo.signalableJSONDictionary())
             olmDevice.signMessage(message)?.let { sign ->
                 val mskUpdatedSignatures = (mskCrossSigningKeyInfo.signatures?.toMutableMap()
-                        ?: HashMap()).also {
+                    ?: HashMap()).also {
                     it[userId] = (it[userId]
-                            ?: HashMap()) + mapOf("ed25519:${myDevice.deviceId}" to sign)
+                        ?: HashMap()) + mapOf("ed25519:${myDevice.deviceId}" to sign)
                 }
                 mskCrossSigningKeyInfo.copy(
-                        signatures = mskUpdatedSignatures
+                    signatures = mskUpdatedSignatures
                 ).let {
                     uploadSignatureQueryBuilder.withSigningKeyInfo(it)
                 }
@@ -173,12 +173,12 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
             uploadSignaturesTask.execute(UploadSignaturesTask.Params(uploadSignatureQueryBuilder.build()))
 
             return InitializeCrossSigningTask.Result(
-                    masterKeyPK = masterKeyPrivateKey.toBase64NoPadding(),
-                    userKeyPK = uskPrivateKey.toBase64NoPadding(),
-                    selfSigningKeyPK = sskPrivateKey.toBase64NoPadding(),
-                    masterKeyInfo = uploadSigningKeysParams.masterKey,
-                    userKeyInfo = uploadSigningKeysParams.userKey,
-                    selfSignedKeyInfo = uploadSigningKeysParams.selfSignedKey
+                masterKeyPK = masterKeyPrivateKey.toBase64NoPadding(),
+                userKeyPK = uskPrivateKey.toBase64NoPadding(),
+                selfSigningKeyPK = sskPrivateKey.toBase64NoPadding(),
+                masterKeyInfo = uploadSigningKeysParams.masterKey,
+                userKeyInfo = uploadSigningKeysParams.userKey,
+                selfSignedKeyInfo = uploadSigningKeysParams.selfSignedKey
             )
         } finally {
             masterPkOlm?.releaseSigning()

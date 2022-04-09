@@ -40,11 +40,13 @@ import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class UserListController @Inject constructor(private val session: Session,
-                                             private val avatarRenderer: AvatarRenderer,
-                                             private val stringProvider: StringProvider,
-                                             private val colorProvider: ColorProvider,
-                                             private val errorFormatter: ErrorFormatter) : EpoxyController() {
+class UserListController @Inject constructor(
+    private val session: Session,
+    private val avatarRenderer: AvatarRenderer,
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider,
+    private val errorFormatter: ErrorFormatter
+) : EpoxyController() {
 
     private var state: UserListViewState? = null
 
@@ -104,11 +106,11 @@ class UserListController @Inject constructor(private val session: Session,
                         when (pendingSelection) {
                             is PendingSelection.ThreePidPendingSelection -> {
                                 when (pendingSelection.threePid) {
-                                    is ThreePid.Email  -> pendingSelection.threePid.email == threePidUser.email
+                                    is ThreePid.Email -> pendingSelection.threePid.email == threePidUser.email
                                     is ThreePid.Msisdn -> false
                                 }
                             }
-                            is PendingSelection.UserPendingSelection     -> {
+                            is PendingSelection.UserPendingSelection -> {
                                 threePidUser.user != null && threePidUser.user.userId == pendingSelection.user.userId
                             }
                         }
@@ -128,7 +130,7 @@ class UserListController @Inject constructor(private val session: Session,
                             selected(isSelected)
                             matrixItem(threePidUser.user.toMatrixItem().let {
                                 it.copy(
-                                        displayName = "${it.getBestName()} [${threePidUser.email}]"
+                                    displayName = "${it.getBestName()} [${threePidUser.email}]"
                                 )
                             })
                             avatarRenderer(host.avatarRenderer)
@@ -139,23 +141,23 @@ class UserListController @Inject constructor(private val session: Session,
                     }
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 when (matchingEmail.error) {
-                    is IdentityServiceError.UserConsentNotProvided     -> {
+                    is IdentityServiceError.UserConsentNotProvided -> {
                         genericPillItem {
                             id("consent_not_given")
                             text(
+                                span {
                                     span {
-                                        span {
-                                            text = host.stringProvider.getString(R.string.settings_discovery_consent_notice_off_2)
-                                        }
-                                        +"\n"
-                                        span {
-                                            text = host.stringProvider.getString(R.string.settings_discovery_consent_action_give_consent)
-                                            textStyle = "bold"
-                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
-                                        }
-                                    }.toEpoxyCharSequence()
+                                        text = host.stringProvider.getString(R.string.settings_discovery_consent_notice_off_2)
+                                    }
+                                    +"\n"
+                                    span {
+                                        text = host.stringProvider.getString(R.string.settings_discovery_consent_action_give_consent)
+                                        textStyle = "bold"
+                                        textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+                                    }
+                                }.toEpoxyCharSequence()
                             )
                             itemClickAction {
                                 host.callback?.giveIdentityServerConsent()
@@ -167,23 +169,23 @@ class UserListController @Inject constructor(private val session: Session,
                             id("no_IDS")
                             imageRes(R.drawable.ic_info)
                             text(
+                                span {
                                     span {
-                                        span {
-                                            text = host.stringProvider.getString(R.string.finish_setting_up_discovery)
-                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
-                                        }
-                                        +"\n"
-                                        span {
-                                            text = host.stringProvider.getString(R.string.discovery_invite)
-                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-                                        }
-                                        +"\n"
-                                        span {
-                                            text = host.stringProvider.getString(R.string.finish_setup)
-                                            textStyle = "bold"
-                                            textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
-                                        }
-                                    }.toEpoxyCharSequence()
+                                        text = host.stringProvider.getString(R.string.finish_setting_up_discovery)
+                                        textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
+                                    }
+                                    +"\n"
+                                    span {
+                                        text = host.stringProvider.getString(R.string.discovery_invite)
+                                        textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                                    }
+                                    +"\n"
+                                    span {
+                                        text = host.stringProvider.getString(R.string.finish_setup)
+                                        textStyle = "bold"
+                                        textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
+                                    }
+                                }.toEpoxyCharSequence()
                             )
                             itemClickAction {
                                 host.callback?.onSetupDiscovery()
@@ -201,29 +203,29 @@ class UserListController @Inject constructor(private val session: Session,
                     id("is_loading")
                 }
             }
-            else       -> {
+            else -> {
                 // nop
             }
         }
 
         when (currentState.knownUsers) {
             is Uninitialized -> renderEmptyState()
-            is Loading       -> renderLoading()
-            is Fail          -> renderFailure(currentState.knownUsers.error)
-            is Success       -> buildKnownUsers(currentState, currentState.getSelectedMatrixId())
+            is Loading -> renderLoading()
+            is Fail -> renderFailure(currentState.knownUsers.error)
+            is Success -> buildKnownUsers(currentState, currentState.getSelectedMatrixId())
         }
 
         when (val asyncUsers = currentState.directoryUsers) {
             is Uninitialized -> {
             }
-            is Loading       -> renderLoading()
-            is Fail          -> renderFailure(asyncUsers.error)
-            is Success       -> buildDirectoryUsers(
-                    asyncUsers(),
-                    currentState.getSelectedMatrixId(),
-                    currentState.searchTerm,
-                    // to avoid showing twice same user in known and suggestions
-                    currentState.knownUsers.invoke()?.map { it.userId }.orEmpty()
+            is Loading -> renderLoading()
+            is Fail -> renderFailure(asyncUsers.error)
+            is Success -> buildDirectoryUsers(
+                asyncUsers(),
+                currentState.getSelectedMatrixId(),
+                currentState.searchTerm,
+                // to avoid showing twice same user in known and suggestions
+                currentState.knownUsers.invoke()?.map { it.userId }.orEmpty()
             )
         }
     }
@@ -231,36 +233,36 @@ class UserListController @Inject constructor(private val session: Session,
     private fun buildKnownUsers(currentState: UserListViewState, selectedUsers: List<String>) {
         val host = this
         currentState.knownUsers()
-                ?.filter { it.userId != session.myUserId }
-                ?.let { userList ->
-                    userListHeaderItem {
-                        id("known_header")
-                        header(host.stringProvider.getString(R.string.direct_room_user_list_known_title))
-                    }
+            ?.filter { it.userId != session.myUserId }
+            ?.let { userList ->
+                userListHeaderItem {
+                    id("known_header")
+                    header(host.stringProvider.getString(R.string.direct_room_user_list_known_title))
+                }
 
-                    if (userList.isEmpty()) {
-                        renderEmptyState()
-                        return
-                    }
-                    userList.forEach { item ->
-                        val isSelected = selectedUsers.contains(item.userId)
-                        userDirectoryUserItem {
-                            id(item.userId)
-                            selected(isSelected)
-                            matrixItem(item.toMatrixItem())
-                            avatarRenderer(host.avatarRenderer)
-                            clickListener {
-                                host.callback?.onItemClick(item)
-                            }
+                if (userList.isEmpty()) {
+                    renderEmptyState()
+                    return
+                }
+                userList.forEach { item ->
+                    val isSelected = selectedUsers.contains(item.userId)
+                    userDirectoryUserItem {
+                        id(item.userId)
+                        selected(isSelected)
+                        matrixItem(item.toMatrixItem())
+                        avatarRenderer(host.avatarRenderer)
+                        clickListener {
+                            host.callback?.onItemClick(item)
                         }
                     }
                 }
+            }
     }
 
     private fun buildDirectoryUsers(directoryUsers: List<User>, selectedUsers: List<String>, searchTerms: String, ignoreIds: List<String>) {
         val host = this
         val toDisplay = directoryUsers
-                .filter { !ignoreIds.contains(it.userId) && it.userId != session.myUserId }
+            .filter { !ignoreIds.contains(it.userId) && it.userId != session.myUserId }
 
         if (toDisplay.isEmpty() && searchTerms.isBlank()) {
             return

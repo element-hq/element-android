@@ -41,12 +41,12 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import java.io.File
 
 abstract class BaseAttachmentProvider<Type>(
-        private val attachments: List<Type>,
-        private val imageContentRenderer: ImageContentRenderer,
-        protected val fileService: FileService,
-        private val coroutineScope: CoroutineScope,
-        private val dateFormatter: VectorDateFormatter,
-        private val stringProvider: StringProvider
+    private val attachments: List<Type>,
+    private val imageContentRenderer: ImageContentRenderer,
+    protected val fileService: FileService,
+    private val coroutineScope: CoroutineScope,
+    private val dateFormatter: VectorDateFormatter,
+    private val stringProvider: StringProvider
 ) : AttachmentSourceProvider {
 
     var interactionListener: AttachmentInteractionListener? = null
@@ -68,8 +68,8 @@ abstract class BaseAttachmentProvider<Type>(
         if (timelineEvent != null) {
             val dateString = dateFormatter.format(timelineEvent.root.originServerTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
             overlayView?.updateWith(
-                    counter = stringProvider.getString(R.string.attachment_viewer_item_x_of_y, position + 1, getItemCount()),
-                    senderInfo = "${timelineEvent.senderInfo.disambiguatedDisplayName} $dateString"
+                counter = stringProvider.getString(R.string.attachment_viewer_item_x_of_y, position + 1, getItemCount()),
+                senderInfo = "${timelineEvent.senderInfo.disambiguatedDisplayName} $dateString"
             )
             overlayView?.views?.overlayVideoControlsGroup?.isVisible = timelineEvent.root.isVideoMessage()
         } else {
@@ -141,16 +141,16 @@ abstract class BaseAttachmentProvider<Type>(
             coroutineScope.launch(Dispatchers.IO) {
                 val result = runCatching {
                     fileService.downloadFile(
-                            fileName = data.filename,
-                            mimeType = data.mimeType,
-                            url = data.url,
-                            elementToDecrypt = data.elementToDecrypt
+                        fileName = data.filename,
+                        mimeType = data.mimeType,
+                        url = data.url,
+                        elementToDecrypt = data.elementToDecrypt
                     )
                 }
                 withContext(Dispatchers.Main) {
                     result.fold(
-                            { target.onVideoFileReady(info.uid, it) },
-                            { target.onVideoFileLoadFailed(info.uid) }
+                        { target.onVideoFileReady(info.uid, it) },
+                        { target.onVideoFileLoadFailed(info.uid) }
                     )
                 }
             }

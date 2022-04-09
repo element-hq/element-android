@@ -54,11 +54,13 @@ import javax.inject.Inject
  *
  */
 @SessionScope
-internal class IntegrationManager @Inject constructor(matrixConfiguration: MatrixConfiguration,
-                                                      @SessionDatabase private val monarchy: Monarchy,
-                                                      private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-                                                      private val accountDataDataSource: UserAccountDataDataSource,
-                                                      private val widgetFactory: WidgetFactory) :
+internal class IntegrationManager @Inject constructor(
+    matrixConfiguration: MatrixConfiguration,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+    private val accountDataDataSource: UserAccountDataDataSource,
+    private val widgetFactory: WidgetFactory
+) :
     SessionLifecycleObserver {
 
     private val currentConfigs = ArrayList<IntegrationManagerConfig>()
@@ -71,9 +73,9 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
 
     init {
         val defaultConfig = IntegrationManagerConfig(
-                uiUrl = matrixConfiguration.integrationUIUrl,
-                restUrl = matrixConfiguration.integrationRestUrl,
-                kind = IntegrationManagerConfig.Kind.DEFAULT
+            uiUrl = matrixConfiguration.integrationUIUrl,
+            restUrl = matrixConfiguration.integrationRestUrl,
+            kind = IntegrationManagerConfig.Kind.DEFAULT
         )
         currentConfigs.add(defaultConfig)
     }
@@ -82,28 +84,28 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         observeWellknownConfig()
         accountDataDataSource
-                .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_ALLOWED_WIDGETS)
-                .observeNotNull(lifecycleOwner) {
-                    val allowedWidgetsContent = it.getOrNull()?.content?.toModel<AllowedWidgetsContent>()
-                    if (allowedWidgetsContent != null) {
-                        notifyWidgetPermissionsChanged(allowedWidgetsContent)
-                    }
+            .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_ALLOWED_WIDGETS)
+            .observeNotNull(lifecycleOwner) {
+                val allowedWidgetsContent = it.getOrNull()?.content?.toModel<AllowedWidgetsContent>()
+                if (allowedWidgetsContent != null) {
+                    notifyWidgetPermissionsChanged(allowedWidgetsContent)
                 }
+            }
         accountDataDataSource
-                .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_INTEGRATION_PROVISIONING)
-                .observeNotNull(lifecycleOwner) {
-                    val integrationProvisioningContent = it.getOrNull()?.content?.toModel<IntegrationProvisioningContent>()
-                    if (integrationProvisioningContent != null) {
-                        notifyIsEnabledChanged(integrationProvisioningContent)
-                    }
+            .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_INTEGRATION_PROVISIONING)
+            .observeNotNull(lifecycleOwner) {
+                val integrationProvisioningContent = it.getOrNull()?.content?.toModel<IntegrationProvisioningContent>()
+                if (integrationProvisioningContent != null) {
+                    notifyIsEnabledChanged(integrationProvisioningContent)
                 }
+            }
         accountDataDataSource
-                .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS)
-                .observeNotNull(lifecycleOwner) {
-                    val integrationManagerContent = it.getOrNull()?.asIntegrationManagerWidgetContent()
-                    val config = integrationManagerContent?.extractIntegrationManagerConfig()
-                    updateCurrentConfigs(IntegrationManagerConfig.Kind.ACCOUNT, config)
-                }
+            .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_WIDGETS)
+            .observeNotNull(lifecycleOwner) {
+                val integrationManagerContent = it.getOrNull()?.asIntegrationManagerWidgetContent()
+                val config = integrationManagerContent?.extractIntegrationManagerConfig()
+                updateCurrentConfigs(IntegrationManagerConfig.Kind.ACCOUNT, config)
+            }
     }
 
     override fun onSessionStopped(session: Session) {
@@ -234,24 +236,24 @@ internal class IntegrationManager @Inject constructor(matrixConfiguration: Matri
         }
         val integrationManagerData = data.toModel<IntegrationManagerWidgetData>()
         return IntegrationManagerConfig(
-                uiUrl = url,
-                restUrl = integrationManagerData?.apiUrl ?: url,
-                kind = IntegrationManagerConfig.Kind.ACCOUNT
+            uiUrl = url,
+            restUrl = integrationManagerData?.apiUrl ?: url,
+            kind = IntegrationManagerConfig.Kind.ACCOUNT
         )
     }
 
     private fun UserAccountDataEvent.asIntegrationManagerWidgetContent(): WidgetContent? {
         return extractWidgetSequence(widgetFactory)
-                .filter {
-                    WidgetType.IntegrationManager == it.type
-                }
-                .firstOrNull()?.widgetContent
+            .filter {
+                WidgetType.IntegrationManager == it.type
+            }
+            .firstOrNull()?.widgetContent
     }
 
     private fun observeWellknownConfig() {
         val liveData = monarchy.findAllMappedWithChanges(
-                { it.where(WellknownIntegrationManagerConfigEntity::class.java) },
-                { IntegrationManagerConfig(it.uiUrl, it.apiUrl, IntegrationManagerConfig.Kind.HOMESERVER) }
+            { it.where(WellknownIntegrationManagerConfigEntity::class.java) },
+            { IntegrationManagerConfig(it.uiUrl, it.apiUrl, IntegrationManagerConfig.Kind.HOMESERVER) }
         )
         liveData.observeNotNull(lifecycleOwner) {
             val config = it.firstOrNull()

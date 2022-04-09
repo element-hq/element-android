@@ -32,21 +32,21 @@ import org.matrix.android.sdk.internal.util.ensureTrailingSlash
  */
 @JsonClass(generateAdapter = true)
 data class HomeServerConnectionConfig(
-        // This is the homeserver URL entered by the user
-        val homeServerUri: Uri,
-        // This is the homeserver base URL for the client-server API. Default to homeServerUri,
-        // but can be updated with data from .Well-Known before login, and/or with the data
-        // included in the login response
-        val homeServerUriBase: Uri = homeServerUri,
-        val identityServerUri: Uri? = null,
-        val antiVirusServerUri: Uri? = null,
-        val allowedFingerprints: List<Fingerprint> = emptyList(),
-        val shouldPin: Boolean = false,
-        val tlsVersions: List<TlsVersion>? = null,
-        val tlsCipherSuites: List<CipherSuite>? = null,
-        val shouldAcceptTlsExtensions: Boolean = true,
-        val allowHttpExtension: Boolean = false,
-        val forceUsageTlsVersions: Boolean = false
+    // This is the homeserver URL entered by the user
+    val homeServerUri: Uri,
+    // This is the homeserver base URL for the client-server API. Default to homeServerUri,
+    // but can be updated with data from .Well-Known before login, and/or with the data
+    // included in the login response
+    val homeServerUriBase: Uri = homeServerUri,
+    val identityServerUri: Uri? = null,
+    val antiVirusServerUri: Uri? = null,
+    val allowedFingerprints: List<Fingerprint> = emptyList(),
+    val shouldPin: Boolean = false,
+    val tlsVersions: List<TlsVersion>? = null,
+    val tlsCipherSuites: List<CipherSuite>? = null,
+    val shouldAcceptTlsExtensions: Boolean = true,
+    val allowHttpExtension: Boolean = false,
+    val forceUsageTlsVersions: Boolean = false
 ) {
 
     /**
@@ -232,16 +232,16 @@ data class HomeServerConnectionConfig(
          */
         fun build(): HomeServerConnectionConfig {
             return HomeServerConnectionConfig(
-                    homeServerUri = homeServerUri,
-                    identityServerUri = identityServerUri,
-                    antiVirusServerUri = antiVirusServerUri,
-                    allowedFingerprints = allowedFingerprints,
-                    shouldPin = shouldPin,
-                    tlsVersions = tlsVersions,
-                    tlsCipherSuites = tlsCipherSuites,
-                    shouldAcceptTlsExtensions = shouldAcceptTlsExtensions,
-                    allowHttpExtension = allowHttpExtension,
-                    forceUsageTlsVersions = forceUsageTlsVersions
+                homeServerUri = homeServerUri,
+                identityServerUri = identityServerUri,
+                antiVirusServerUri = antiVirusServerUri,
+                allowedFingerprints = allowedFingerprints,
+                shouldPin = shouldPin,
+                tlsVersions = tlsVersions,
+                tlsCipherSuites = tlsCipherSuites,
+                shouldAcceptTlsExtensions = shouldAcceptTlsExtensions,
+                allowHttpExtension = allowHttpExtension,
+                forceUsageTlsVersions = forceUsageTlsVersions
             )
         }
     }

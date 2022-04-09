@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 @Parcelize
 data class LoginWaitForEmailFragmentArgument(
-        val email: String
+    val email: String
 ) : Parcelable
 
 /**

@@ -23,66 +23,68 @@ import javax.inject.Inject
 import kotlin.reflect.KFunction1
 
 class DebugFeaturesStateFactory @Inject constructor(
-        private val debugFeatures: DebugVectorFeatures,
-        private val defaultFeatures: DefaultVectorFeatures
+    private val debugFeatures: DebugVectorFeatures,
+    private val defaultFeatures: DefaultVectorFeatures
 ) {
 
     fun create(): FeaturesState {
-        return FeaturesState(listOf(
+        return FeaturesState(
+            listOf(
                 createEnumFeature(
-                        label = "Onboarding variant",
-                        featureOverride = debugFeatures.onboardingVariant(),
-                        featureDefault = defaultFeatures.onboardingVariant()
+                    label = "Onboarding variant",
+                    featureOverride = debugFeatures.onboardingVariant(),
+                    featureDefault = defaultFeatures.onboardingVariant()
                 ),
                 createBooleanFeature(
-                        label = "FTUE Splash - I already have an account",
-                        key = DebugFeatureKeys.onboardingAlreadyHaveAnAccount,
-                        factory = VectorFeatures::isOnboardingAlreadyHaveAccountSplashEnabled
+                    label = "FTUE Splash - I already have an account",
+                    key = DebugFeatureKeys.onboardingAlreadyHaveAnAccount,
+                    factory = VectorFeatures::isOnboardingAlreadyHaveAccountSplashEnabled
                 ),
                 createBooleanFeature(
-                        label = "FTUE Splash - carousel",
-                        key = DebugFeatureKeys.onboardingSplashCarousel,
-                        factory = VectorFeatures::isOnboardingSplashCarouselEnabled
+                    label = "FTUE Splash - carousel",
+                    key = DebugFeatureKeys.onboardingSplashCarousel,
+                    factory = VectorFeatures::isOnboardingSplashCarouselEnabled
                 ),
                 createBooleanFeature(
-                        label = "FTUE Use Case",
-                        key = DebugFeatureKeys.onboardingUseCase,
-                        factory = VectorFeatures::isOnboardingUseCaseEnabled
+                    label = "FTUE Use Case",
+                    key = DebugFeatureKeys.onboardingUseCase,
+                    factory = VectorFeatures::isOnboardingUseCaseEnabled
                 ),
                 createBooleanFeature(
-                        label = "FTUE Personalize profile",
-                        key = DebugFeatureKeys.onboardingPersonalize,
-                        factory = VectorFeatures::isOnboardingPersonalizeEnabled
+                    label = "FTUE Personalize profile",
+                    key = DebugFeatureKeys.onboardingPersonalize,
+                    factory = VectorFeatures::isOnboardingPersonalizeEnabled
                 ),
                 createBooleanFeature(
-                        label = "FTUE Combined register",
-                        key = DebugFeatureKeys.onboardingCombinedRegister,
-                        factory = VectorFeatures::isOnboardingCombinedRegisterEnabled
+                    label = "FTUE Combined register",
+                    key = DebugFeatureKeys.onboardingCombinedRegister,
+                    factory = VectorFeatures::isOnboardingCombinedRegisterEnabled
                 ),
                 createBooleanFeature(
-                        label = "Live location sharing",
-                        key = DebugFeatureKeys.liveLocationSharing,
-                        factory = VectorFeatures::isLiveLocationEnabled
+                    label = "Live location sharing",
+                    key = DebugFeatureKeys.liveLocationSharing,
+                    factory = VectorFeatures::isLiveLocationEnabled
                 ),
-        ))
+            )
+        )
     }
 
     private fun createBooleanFeature(key: Preferences.Key<Boolean>, label: String, factory: KFunction1<VectorFeatures, Boolean>): Feature {
         return Feature.BooleanFeature(
-                label = label,
-                featureOverride = factory.invoke(debugFeatures).takeIf { debugFeatures.hasOverride(key) },
-                featureDefault = factory.invoke(defaultFeatures),
-                key = key
+            label = label,
+            featureOverride = factory.invoke(debugFeatures).takeIf { debugFeatures.hasOverride(key) },
+            featureDefault = factory.invoke(defaultFeatures),
+            key = key
         )
     }
 
     private inline fun <reified T : Enum<T>> createEnumFeature(label: String, featureOverride: T, featureDefault: T): Feature {
         return Feature.EnumFeature(
-                label = label,
-                override = featureOverride.takeIf { debugFeatures.hasEnumOverride(T::class) },
-                default = featureDefault,
-                options = enumValues<T>().toList(),
-                type = T::class
+            label = label,
+            override = featureOverride.takeIf { debugFeatures.hasEnumOverride(T::class) },
+            default = featureDefault,
+            options = enumValues<T>().toList(),
+            type = T::class
         )
     }
 }

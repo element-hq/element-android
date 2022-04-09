@@ -103,8 +103,8 @@ class SecretStoringUtilsTest : InstrumentedTest {
                 secretStoringUtils.securelyStoreObject(TEST_STR, alias, it)
             }
         }
-                .toByteArray()
-                .toBase64NoPadding()
+            .toByteArray()
+            .toBase64NoPadding()
         // Decrypt
         val decrypted = encrypted.fromBase64().inputStream().use {
             secretStoringUtils.loadSecureSecret<String>(it, alias)
@@ -124,8 +124,8 @@ class SecretStoringUtilsTest : InstrumentedTest {
                 secretStoringUtils.securelyStoreObject(TEST_STR, alias, it)
             }
         }
-                .toByteArray()
-                .toBase64NoPadding()
+            .toByteArray()
+            .toBase64NoPadding()
         // Decrypt
         val decrypted = encrypted.fromBase64().inputStream().use {
             secretStoringUtils.loadSecureSecret<String>(it, alias)
@@ -145,8 +145,8 @@ class SecretStoringUtilsTest : InstrumentedTest {
                 secretStoringUtils.securelyStoreObject(TEST_STR, alias, it)
             }
         }
-                .toByteArray()
-                .toBase64NoPadding()
+            .toByteArray()
+            .toBase64NoPadding()
         // Decrypt
         val decrypted = encrypted.fromBase64().inputStream().use {
             secretStoringUtils.loadSecureSecret<String>(it, alias)
@@ -166,8 +166,8 @@ class SecretStoringUtilsTest : InstrumentedTest {
                 secretStoringUtils.securelyStoreObject(TEST_STR, alias, it)
             }
         }
-                .toByteArray()
-                .toBase64NoPadding()
+            .toByteArray()
+            .toBase64NoPadding()
 
         // Simulate a system upgrade
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.M

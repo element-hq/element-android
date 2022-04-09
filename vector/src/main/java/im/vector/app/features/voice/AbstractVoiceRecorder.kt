@@ -27,8 +27,8 @@ import java.io.FileOutputStream
 import java.util.UUID
 
 abstract class AbstractVoiceRecorder(
-        private val context: Context,
-        private val filenameExt: String
+    private val context: Context,
+    private val filenameExt: String
 ) : VoiceRecorder {
     private val outputDirectory: File by lazy {
         File(context.cacheDir, "voice_records").also {

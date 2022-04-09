@@ -22,13 +22,13 @@ import org.matrix.android.sdk.internal.task.Task
 
 internal interface ValidateCodeTask : Task<ValidateCodeTask.Params, SuccessResult> {
     data class Params(
-            val url: String,
-            val body: ValidationCodeBody
+        val url: String,
+        val body: ValidationCodeBody
     )
 }
 
 internal class DefaultValidateCodeTask(
-        private val authAPI: AuthAPI
+    private val authAPI: AuthAPI
 ) : ValidateCodeTask {
 
     override suspend fun execute(params: ValidateCodeTask.Params): SuccessResult {

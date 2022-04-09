@@ -25,19 +25,19 @@ internal object FilterFactory {
     fun createThreadsFilter(numberOfEvents: Int, userId: String?): RoomEventFilter {
         Timber.i("$userId")
         return RoomEventFilter(
-                limit = numberOfEvents,
-//                senders = listOf(userId),
-//                relationSenders = userId?.let { listOf(it) },
-                relationTypes = listOf(RelationType.THREAD)
+            limit = numberOfEvents,
+            //                senders = listOf(userId),
+            //                relationSenders = userId?.let { listOf(it) },
+            relationTypes = listOf(RelationType.THREAD)
         )
     }
 
     fun createUploadsFilter(numberOfEvents: Int): RoomEventFilter {
         return RoomEventFilter(
-                limit = numberOfEvents,
-                containsUrl = true,
-                types = listOf(EventType.MESSAGE),
-                lazyLoadMembers = true
+            limit = numberOfEvents,
+            containsUrl = true,
+            types = listOf(EventType.MESSAGE),
+            lazyLoadMembers = true
         )
     }
 
@@ -47,24 +47,24 @@ internal object FilterFactory {
 
     fun createElementFilter(): Filter {
         return Filter(
-                room = RoomFilter(
-                        timeline = createElementTimelineFilter(),
-                        state = createElementStateFilter()
-                )
+            room = RoomFilter(
+                timeline = createElementTimelineFilter(),
+                state = createElementStateFilter()
+            )
         )
     }
 
     fun createDefaultRoomFilter(): RoomEventFilter {
         return RoomEventFilter(
-                lazyLoadMembers = true
+            lazyLoadMembers = true
         )
     }
 
     fun createElementRoomFilter(): RoomEventFilter {
         return RoomEventFilter(
-                lazyLoadMembers = true
-                // TODO Enable this for optimization
-                // types = (listOfSupportedEventTypes + listOfSupportedStateEventTypes).toMutableList()
+            lazyLoadMembers = true
+            // TODO Enable this for optimization
+            // types = (listOfSupportedEventTypes + listOfSupportedStateEventTypes).toMutableList()
         )
     }
 
@@ -77,19 +77,19 @@ internal object FilterFactory {
 
     private fun createElementStateFilter(): RoomEventFilter {
         return RoomEventFilter(
-                lazyLoadMembers = true
+            lazyLoadMembers = true
         )
     }
 
     // Get only managed types by Element
     private val listOfSupportedEventTypes = listOf(
-            // TODO Complete the list
-            EventType.MESSAGE
+        // TODO Complete the list
+        EventType.MESSAGE
     )
 
     // Get only managed types by Element
     private val listOfSupportedStateEventTypes = listOf(
-            // TODO Complete the list
-            EventType.STATE_ROOM_MEMBER
+        // TODO Complete the list
+        EventType.STATE_ROOM_MEMBER
     )
 }

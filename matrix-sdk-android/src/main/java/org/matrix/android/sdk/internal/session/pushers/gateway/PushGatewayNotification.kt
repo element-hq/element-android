@@ -21,12 +21,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class PushGatewayNotification(
-        @Json(name = "event_id")
-        val eventId: String,
+    @Json(name = "event_id")
+    val eventId: String,
 
-        /**
-         * Required. This is an array of devices that the notification should be sent to.
-         */
-        @Json(name = "devices")
-        val devices: List<PushGatewayDevice>
+    /**
+     * Required. This is an array of devices that the notification should be sent to.
+     */
+    @Json(name = "devices")
+    val devices: List<PushGatewayDevice>
 )

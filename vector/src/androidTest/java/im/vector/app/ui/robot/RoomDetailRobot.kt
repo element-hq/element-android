@@ -127,12 +127,12 @@ class RoomDetailRobot {
 
     fun openMessageMenu(message: String, block: MessageMenuRobot.() -> Unit) {
         onView(withId(R.id.timelineRecyclerView))
-                .perform(
-                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(withText(message)),
-                                ViewActions.longClick()
-                        )
+            .perform(
+                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                    ViewMatchers.hasDescendant(withText(message)),
+                    ViewActions.longClick()
                 )
+            )
         interactWithSheet<MessageActionsBottomSheet>(contentMatcher = withId(R.id.bottomSheetRecyclerView)) {
             val messageMenuRobot = MessageMenuRobot()
             block(messageMenuRobot)

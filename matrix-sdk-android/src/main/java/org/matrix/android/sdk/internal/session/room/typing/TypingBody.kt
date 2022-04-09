@@ -21,10 +21,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class TypingBody(
-        // Required. Whether the user is typing or not. If false, the timeout key can be omitted.
-        @Json(name = "typing")
-        val typing: Boolean,
-        // The length of time in milliseconds to mark this user as typing.
-        @Json(name = "timeout")
-        val timeout: Int?
+    // Required. Whether the user is typing or not. If false, the timeout key can be omitted.
+    @Json(name = "typing")
+    val typing: Boolean,
+    // The length of time in milliseconds to mark this user as typing.
+    @Json(name = "timeout")
+    val timeout: Int?
 )

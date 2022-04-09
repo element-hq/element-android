@@ -21,13 +21,13 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class RoomAliasDescription(
-        /**
-         * The room ID for this alias.
-         */
-        @Json(name = "room_id") val roomId: String,
+    /**
+     * The room ID for this alias.
+     */
+    @Json(name = "room_id") val roomId: String,
 
-        /**
-         * A list of servers that are aware of this room ID.
-         */
-        @Json(name = "servers") val servers: List<String> = emptyList()
+    /**
+     * A list of servers that are aware of this room ID.
+     */
+    @Json(name = "servers") val servers: List<String> = emptyList()
 )

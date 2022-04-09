@@ -38,24 +38,26 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEnti
 /**
  * Realm module for Crypto store classes
  */
-@RealmModule(library = true,
-        classes = [
-            CryptoMetadataEntity::class,
-            CryptoRoomEntity::class,
-            DeviceInfoEntity::class,
-            KeysBackupDataEntity::class,
-            OlmInboundGroupSessionEntity::class,
-            OlmSessionEntity::class,
-            UserEntity::class,
-            KeyInfoEntity::class,
-            CrossSigningInfoEntity::class,
-            TrustLevelEntity::class,
-            GossipingEventEntity::class,
-            IncomingGossipingRequestEntity::class,
-            OutgoingGossipingRequestEntity::class,
-            MyDeviceLastSeenInfoEntity::class,
-            WithHeldSessionEntity::class,
-            SharedSessionEntity::class,
-            OutboundGroupSessionInfoEntity::class
-        ])
+@RealmModule(
+    library = true,
+    classes = [
+        CryptoMetadataEntity::class,
+        CryptoRoomEntity::class,
+        DeviceInfoEntity::class,
+        KeysBackupDataEntity::class,
+        OlmInboundGroupSessionEntity::class,
+        OlmSessionEntity::class,
+        UserEntity::class,
+        KeyInfoEntity::class,
+        CrossSigningInfoEntity::class,
+        TrustLevelEntity::class,
+        GossipingEventEntity::class,
+        IncomingGossipingRequestEntity::class,
+        OutgoingGossipingRequestEntity::class,
+        MyDeviceLastSeenInfoEntity::class,
+        WithHeldSessionEntity::class,
+        SharedSessionEntity::class,
+        OutboundGroupSessionInfoEntity::class
+    ]
+)
 internal class RealmCryptoStoreModule

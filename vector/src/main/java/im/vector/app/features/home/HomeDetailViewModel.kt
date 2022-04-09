@@ -62,17 +62,17 @@ import timber.log.Timber
  * change the selected room list view
  */
 class HomeDetailViewModel @AssistedInject constructor(
-        @Assisted initialState: HomeDetailViewState,
-        private val session: Session,
-        private val uiStateRepository: UiStateRepository,
-        private val vectorDataStore: VectorDataStore,
-        private val callManager: WebRtcCallManager,
-        private val directRoomHelper: DirectRoomHelper,
-        private val appStateHandler: AppStateHandler,
-        private val autoAcceptInvites: AutoAcceptInvites,
-        private val vectorOverrides: VectorOverrides
+    @Assisted initialState: HomeDetailViewState,
+    private val session: Session,
+    private val uiStateRepository: UiStateRepository,
+    private val vectorDataStore: VectorDataStore,
+    private val callManager: WebRtcCallManager,
+    private val directRoomHelper: DirectRoomHelper,
+    private val appStateHandler: AppStateHandler,
+    private val autoAcceptInvites: AutoAcceptInvites,
+    private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
-        CallProtocolsChecker.Listener {
+    CallProtocolsChecker.Listener {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
@@ -84,7 +84,7 @@ class HomeDetailViewModel @AssistedInject constructor(
         override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState {
             val uiStateRepository = viewModelContext.activity.singletonEntryPoint().uiStateRepository()
             return HomeDetailViewState(
-                    currentTab = HomeTab.RoomList(uiStateRepository.getDisplayMode())
+                currentTab = HomeTab.RoomList(uiStateRepository.getDisplayMode())
             )
         }
     }
@@ -105,7 +105,7 @@ class HomeDetailViewModel @AssistedInject constructor(
         callManager.addProtocolsCheckerListener(this)
         session.flow().liveUser(session.myUserId).execute {
             copy(
-                    myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
+                myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
             )
         }
     }
@@ -113,20 +113,20 @@ class HomeDetailViewModel @AssistedInject constructor(
     private fun observeDataStore() {
         vectorDataStore.pushCounterFlow.setOnEach { nbOfPush ->
             copy(
-                    pushCounter = nbOfPush
+                pushCounter = nbOfPush
             )
         }
         vectorOverrides.forceDialPad.setOnEach { force ->
             copy(
-                    forceDialPadTab = force
+                forceDialPadTab = force
             )
         }
     }
 
     override fun handle(action: HomeDetailAction) {
         when (action) {
-            is HomeDetailAction.SwitchTab                -> handleSwitchTab(action)
-            HomeDetailAction.MarkAllRoomsRead            -> handleMarkAllRoomsRead()
+            is HomeDetailAction.SwitchTab -> handleSwitchTab(action)
+            HomeDetailAction.MarkAllRoomsRead -> handleMarkAllRoomsRead()
             is HomeDetailAction.StartCallWithPhoneNumber -> handleStartCallWithPhoneNumber(action)
         }
     }
@@ -177,12 +177,12 @@ class HomeDetailViewModel @AssistedInject constructor(
         // questionable to use viewmodelscope
         viewModelScope.launch(Dispatchers.Default) {
             val roomIds = session.getRoomSummaries(
-                    roomSummaryQueryParams {
-                        memberships = listOf(Membership.JOIN)
-                        roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
-                    }
+                roomSummaryQueryParams {
+                    memberships = listOf(Membership.JOIN)
+                    roomCategoryFilter = RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS
+                }
             )
-                    .map { it.roomId }
+                .map { it.roomId }
             try {
                 session.markAllAsRead(roomIds)
             } catch (failure: Throwable) {
@@ -193,26 +193,26 @@ class HomeDetailViewModel @AssistedInject constructor(
 
     private fun observeSyncState() {
         session.flow()
-                .liveSyncState()
-                .setOnEach { syncState ->
-                    copy(syncState = syncState)
-                }
+            .liveSyncState()
+            .setOnEach { syncState ->
+                copy(syncState = syncState)
+            }
 
         session.getSyncStatusLive()
-                .asFlow()
-                .filterIsInstance<SyncStatusService.Status.IncrementalSyncStatus>()
-                .setOnEach {
-                    copy(incrementalSyncStatus = it)
-                }
+            .asFlow()
+            .filterIsInstance<SyncStatusService.Status.IncrementalSyncStatus>()
+            .setOnEach {
+                copy(incrementalSyncStatus = it)
+            }
     }
 
     private fun observeRoomGroupingMethod() {
         appStateHandler.selectedRoomGroupingFlow
-                .setOnEach {
-                    copy(
-                            roomGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
-                    )
-                }
+            .setOnEach {
+                copy(
+                    roomGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
+                )
+            }
     }
 
     private fun observeRoomSummaries() {
@@ -220,71 +220,71 @@ class HomeDetailViewModel @AssistedInject constructor(
             // we use it as a trigger to all changes in room, but do not really load
             // the actual models
             session.getPagedRoomSummariesLive(
-                    roomSummaryQueryParams {
-                        memberships = Membership.activeMemberships()
-                    },
-                    sortOrder = RoomSortOrder.NONE
+                roomSummaryQueryParams {
+                    memberships = Membership.activeMemberships()
+                },
+                sortOrder = RoomSortOrder.NONE
             ).asFlow()
         }
-                .throttleFirst(300)
-                .onEach {
-                    when (val groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
-                        is RoomGroupingMethod.ByLegacyGroup -> {
-                            // TODO!!
-                        }
-                        is RoomGroupingMethod.BySpace       -> {
-                            val activeSpaceRoomId = groupingMethod.spaceSummary?.roomId
-                            var dmInvites = 0
-                            var roomsInvite = 0
-                            if (autoAcceptInvites.showInvites()) {
-                                dmInvites = session.getRoomSummaries(
-                                        roomSummaryQueryParams {
-                                            memberships = listOf(Membership.INVITE)
-                                            roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                            activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
-                                        }
-                                ).size
-
-                                roomsInvite = session.getRoomSummaries(
-                                        roomSummaryQueryParams {
-                                            memberships = listOf(Membership.INVITE)
-                                            roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
-                                        }
-                                ).size
-                            }
-
-                            val dmRooms = session.getNotificationCountForRooms(
-                                    roomSummaryQueryParams {
-                                        memberships = listOf(Membership.JOIN)
-                                        roomCategoryFilter = RoomCategoryFilter.ONLY_DM
-                                        activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
-                                    }
-                            )
-
-                            val otherRooms = session.getNotificationCountForRooms(
-                                    roomSummaryQueryParams {
-                                        memberships = listOf(Membership.JOIN)
-                                        roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
-                                    }
-                            )
-
-                            setState {
-                                copy(
-                                        notificationCountCatchup = dmRooms.totalCount + otherRooms.totalCount + roomsInvite + dmInvites,
-                                        notificationHighlightCatchup = dmRooms.isHighlight || otherRooms.isHighlight || (dmInvites + roomsInvite) > 0,
-                                        notificationCountPeople = dmRooms.totalCount + dmInvites,
-                                        notificationHighlightPeople = dmRooms.isHighlight || dmInvites > 0,
-                                        notificationCountRooms = otherRooms.totalCount + roomsInvite,
-                                        notificationHighlightRooms = otherRooms.isHighlight || roomsInvite > 0,
-                                        hasUnreadMessages = dmRooms.totalCount + otherRooms.totalCount > 0
-                                )
-                            }
-                        }
-                        null                                -> Unit
+            .throttleFirst(300)
+            .onEach {
+                when (val groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
+                    is RoomGroupingMethod.ByLegacyGroup -> {
+                        // TODO!!
                     }
+                    is RoomGroupingMethod.BySpace -> {
+                        val activeSpaceRoomId = groupingMethod.spaceSummary?.roomId
+                        var dmInvites = 0
+                        var roomsInvite = 0
+                        if (autoAcceptInvites.showInvites()) {
+                            dmInvites = session.getRoomSummaries(
+                                roomSummaryQueryParams {
+                                    memberships = listOf(Membership.INVITE)
+                                    roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                                    activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
+                                }
+                            ).size
+
+                            roomsInvite = session.getRoomSummaries(
+                                roomSummaryQueryParams {
+                                    memberships = listOf(Membership.INVITE)
+                                    roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                                }
+                            ).size
+                        }
+
+                        val dmRooms = session.getNotificationCountForRooms(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.JOIN)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_DM
+                                activeSpaceFilter = activeSpaceRoomId?.let { ActiveSpaceFilter.ActiveSpace(it) } ?: ActiveSpaceFilter.None
+                            }
+                        )
+
+                        val otherRooms = session.getNotificationCountForRooms(
+                            roomSummaryQueryParams {
+                                memberships = listOf(Membership.JOIN)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+                                activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(groupingMethod.spaceSummary?.roomId)
+                            }
+                        )
+
+                        setState {
+                            copy(
+                                notificationCountCatchup = dmRooms.totalCount + otherRooms.totalCount + roomsInvite + dmInvites,
+                                notificationHighlightCatchup = dmRooms.isHighlight || otherRooms.isHighlight || (dmInvites + roomsInvite) > 0,
+                                notificationCountPeople = dmRooms.totalCount + dmInvites,
+                                notificationHighlightPeople = dmRooms.isHighlight || dmInvites > 0,
+                                notificationCountRooms = otherRooms.totalCount + roomsInvite,
+                                notificationHighlightRooms = otherRooms.isHighlight || roomsInvite > 0,
+                                hasUnreadMessages = dmRooms.totalCount + otherRooms.totalCount > 0
+                            )
+                        }
+                    }
+                    null -> Unit
                 }
-                .launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
     }
 }

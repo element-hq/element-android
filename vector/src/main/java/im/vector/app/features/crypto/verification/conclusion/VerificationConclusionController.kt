@@ -30,9 +30,9 @@ import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
 class VerificationConclusionController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider,
-        private val eventHtmlRenderer: EventHtmlRenderer
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider,
+    private val eventHtmlRenderer: EventHtmlRenderer
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -49,13 +49,16 @@ class VerificationConclusionController @Inject constructor(
         val host = this
 
         when (state.conclusionState) {
-            ConclusionState.SUCCESS   -> {
+            ConclusionState.SUCCESS -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(
+                    notice(
+                        host.stringProvider.getString(
                             if (state.isSelfVerification) R.string.verification_conclusion_ok_self_notice
-                            else R.string.verification_conclusion_ok_notice)
-                            .toEpoxyCharSequence())
+                            else R.string.verification_conclusion_ok_notice
+                        )
+                            .toEpoxyCharSequence()
+                    )
                 }
 
                 bottomSheetVerificationBigImageItem {
@@ -65,7 +68,7 @@ class VerificationConclusionController @Inject constructor(
 
                 bottomDone()
             }
-            ConclusionState.WARNING   -> {
+            ConclusionState.WARNING -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
                     notice(host.stringProvider.getString(R.string.verification_conclusion_not_secure).toEpoxyCharSequence())

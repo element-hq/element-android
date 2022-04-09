@@ -41,16 +41,16 @@ internal interface GetGroupDataTask : Task<GetGroupDataTask.Params, Unit> {
 }
 
 internal class DefaultGetGroupDataTask @Inject constructor(
-        private val groupAPI: GroupAPI,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val groupAPI: GroupAPI,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetGroupDataTask {
 
     private data class GroupData(
-            val groupId: String,
-            val groupSummary: GroupSummaryResponse,
-            val groupRooms: GroupRooms,
-            val groupUsers: GroupUsers
+        val groupId: String,
+        val groupSummary: GroupSummaryResponse,
+        val groupRooms: GroupRooms,
+        val groupUsers: GroupUsers
     )
 
     override suspend fun execute(params: GetGroupDataTask.Params) {
@@ -58,7 +58,7 @@ internal class DefaultGetGroupDataTask @Inject constructor(
             is GetGroupDataTask.Params.FetchAllActive -> {
                 getActiveGroupIds()
             }
-            is GetGroupDataTask.Params.FetchWithIds   -> {
+            is GetGroupDataTask.Params.FetchWithIds -> {
                 params.groupIds
             }
         }
@@ -80,31 +80,31 @@ internal class DefaultGetGroupDataTask @Inject constructor(
 
     private fun getActiveGroupIds(): List<String> {
         return monarchy.fetchAllMappedSync(
-                { realm ->
-                    GroupEntity.where(realm, Membership.activeMemberships())
-                },
-                { it.groupId }
+            { realm ->
+                GroupEntity.where(realm, Membership.activeMemberships())
+            },
+            { it.groupId }
         )
     }
 
     private suspend fun insertInDb(groupDataList: List<GroupData>) {
         monarchy
-                .awaitTransaction { realm ->
-                    groupDataList.forEach { groupData ->
+            .awaitTransaction { realm ->
+                groupDataList.forEach { groupData ->
 
-                        val groupSummaryEntity = GroupSummaryEntity.getOrCreate(realm, groupData.groupId)
+                    val groupSummaryEntity = GroupSummaryEntity.getOrCreate(realm, groupData.groupId)
 
-                        groupSummaryEntity.avatarUrl = groupData.groupSummary.profile?.avatarUrl ?: ""
-                        val name = groupData.groupSummary.profile?.name
-                        groupSummaryEntity.displayName = if (name.isNullOrEmpty()) groupData.groupId else name
-                        groupSummaryEntity.shortDescription = groupData.groupSummary.profile?.shortDescription ?: ""
+                    groupSummaryEntity.avatarUrl = groupData.groupSummary.profile?.avatarUrl ?: ""
+                    val name = groupData.groupSummary.profile?.name
+                    groupSummaryEntity.displayName = if (name.isNullOrEmpty()) groupData.groupId else name
+                    groupSummaryEntity.shortDescription = groupData.groupSummary.profile?.shortDescription ?: ""
 
-                        groupSummaryEntity.roomIds.clear()
-                        groupData.groupRooms.rooms.mapTo(groupSummaryEntity.roomIds) { it.roomId }
+                    groupSummaryEntity.roomIds.clear()
+                    groupData.groupRooms.rooms.mapTo(groupSummaryEntity.roomIds) { it.roomId }
 
-                        groupSummaryEntity.userIds.clear()
-                        groupData.groupUsers.users.mapTo(groupSummaryEntity.userIds) { it.userId }
-                    }
+                    groupSummaryEntity.userIds.clear()
+                    groupData.groupUsers.users.mapTo(groupSummaryEntity.userIds) { it.userId }
                 }
+            }
     }
 }

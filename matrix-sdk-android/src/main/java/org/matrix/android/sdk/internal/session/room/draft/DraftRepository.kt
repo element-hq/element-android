@@ -35,8 +35,10 @@ import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class DraftRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                   private val realmSessionProvider: RealmSessionProvider) {
+internal class DraftRepository @Inject constructor(
+    @SessionDatabase private val monarchy: Monarchy,
+    private val realmSessionProvider: RealmSessionProvider
+) {
 
     suspend fun saveDraft(roomId: String, userDraft: UserDraft) {
         monarchy.awaitTransaction {
@@ -53,22 +55,22 @@ internal class DraftRepository @Inject constructor(@SessionDatabase private val 
     fun getDraft(roomId: String): UserDraft? {
         return realmSessionProvider.withRealm { realm ->
             UserDraftsEntity.where(realm, roomId).findFirst()
-                    ?.userDrafts
-                    ?.firstOrNull()
-                    ?.let {
-                        DraftMapper.map(it)
-                    }
+                ?.userDrafts
+                ?.firstOrNull()
+                ?.let {
+                    DraftMapper.map(it)
+                }
         }
     }
 
     fun getDraftsLive(roomId: String): LiveData<Optional<UserDraft>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { UserDraftsEntity.where(it, roomId) },
-                {
-                    it.userDrafts.map { draft ->
-                        DraftMapper.map(draft)
-                    }
+            { UserDraftsEntity.where(it, roomId) },
+            {
+                it.userDrafts.map { draft ->
+                    DraftMapper.map(draft)
                 }
+            }
         )
         return Transformations.map(liveData) {
             it.firstOrNull()?.firstOrNull().toOptional()
@@ -81,12 +83,12 @@ internal class DraftRepository @Inject constructor(@SessionDatabase private val 
 
     private fun saveDraftInDb(realm: Realm, draft: UserDraft, roomId: String) {
         val roomSummaryEntity = RoomSummaryEntity.where(realm, roomId).findFirst()
-                ?: realm.createObject(roomId)
+            ?: realm.createObject(roomId)
 
         val userDraftsEntity = roomSummaryEntity.userDrafts
-                ?: realm.createObject<UserDraftsEntity>().also {
-                    roomSummaryEntity.userDrafts = it
-                }
+            ?: realm.createObject<UserDraftsEntity>().also {
+                roomSummaryEntity.userDrafts = it
+            }
 
         userDraftsEntity.let { userDraftEntity ->
             // Save only valid draft

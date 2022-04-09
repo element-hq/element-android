@@ -23,12 +23,12 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class KeysUploadResponse(
-        /**
-         * Required. For each key algorithm, the number of unclaimed one-time keys
-         * of that type currently held on the server for this device.
-         */
-        @Json(name = "one_time_key_counts")
-        val oneTimeKeyCounts: Map<String, Int>? = null
+    /**
+     * Required. For each key algorithm, the number of unclaimed one-time keys
+     * of that type currently held on the server for this device.
+     */
+    @Json(name = "one_time_key_counts")
+    val oneTimeKeyCounts: Map<String, Int>? = null
 ) {
     /**
      * Helper methods to extract information from 'oneTimeKeyCounts'

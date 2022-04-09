@@ -40,51 +40,51 @@ sealed class UnreadState {
 }
 
 data class JitsiState(
-        val hasJoined: Boolean = false,
-        // Not null if we have an active jitsi widget on the room
-        val confId: String? = null,
-        val widgetId: String? = null,
-        val deleteWidgetInProgress: Boolean = false
+    val hasJoined: Boolean = false,
+    // Not null if we have an active jitsi widget on the room
+    val confId: String? = null,
+    val widgetId: String? = null,
+    val deleteWidgetInProgress: Boolean = false
 )
 
 data class RoomDetailViewState(
-        val roomId: String,
-        val eventId: String?,
-        val isInviteAlreadyAccepted: Boolean,
-        val myRoomMember: Async<RoomMemberSummary> = Uninitialized,
-        val asyncInviter: Async<RoomMemberSummary> = Uninitialized,
-        val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
-        val activeRoomWidgets: Async<List<Widget>> = Uninitialized,
-        val formattedTypingUsers: String? = null,
-        val tombstoneEvent: Event? = null,
-        val joinUpgradedRoomAsync: Async<String> = Uninitialized,
-        val syncState: SyncState = SyncState.Idle,
-        val incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus = SyncStatusService.Status.IncrementalSyncIdle,
-        val pushCounter: Int = 0,
-        val highlightedEventId: String? = null,
-        val unreadState: UnreadState = UnreadState.Unknown,
-        val canShowJumpToReadMarker: Boolean = true,
-        val changeMembershipState: ChangeMembershipState = ChangeMembershipState.Unknown,
-        val canInvite: Boolean = true,
-        val isAllowedToManageWidgets: Boolean = false,
-        val isAllowedToStartWebRTCCall: Boolean = true,
-        val isAllowedToSetupEncryption: Boolean = true,
-        val hasFailedSending: Boolean = false,
-        val jitsiState: JitsiState = JitsiState(),
-        val switchToParentSpace: Boolean = false,
-        val rootThreadEventId: String? = null,
-        val threadNotificationBadgeState: ThreadNotificationBadgeState = ThreadNotificationBadgeState(),
-        val typingUsers: List<SenderInfo>? = null
+    val roomId: String,
+    val eventId: String?,
+    val isInviteAlreadyAccepted: Boolean,
+    val myRoomMember: Async<RoomMemberSummary> = Uninitialized,
+    val asyncInviter: Async<RoomMemberSummary> = Uninitialized,
+    val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
+    val activeRoomWidgets: Async<List<Widget>> = Uninitialized,
+    val formattedTypingUsers: String? = null,
+    val tombstoneEvent: Event? = null,
+    val joinUpgradedRoomAsync: Async<String> = Uninitialized,
+    val syncState: SyncState = SyncState.Idle,
+    val incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus = SyncStatusService.Status.IncrementalSyncIdle,
+    val pushCounter: Int = 0,
+    val highlightedEventId: String? = null,
+    val unreadState: UnreadState = UnreadState.Unknown,
+    val canShowJumpToReadMarker: Boolean = true,
+    val changeMembershipState: ChangeMembershipState = ChangeMembershipState.Unknown,
+    val canInvite: Boolean = true,
+    val isAllowedToManageWidgets: Boolean = false,
+    val isAllowedToStartWebRTCCall: Boolean = true,
+    val isAllowedToSetupEncryption: Boolean = true,
+    val hasFailedSending: Boolean = false,
+    val jitsiState: JitsiState = JitsiState(),
+    val switchToParentSpace: Boolean = false,
+    val rootThreadEventId: String? = null,
+    val threadNotificationBadgeState: ThreadNotificationBadgeState = ThreadNotificationBadgeState(),
+    val typingUsers: List<SenderInfo>? = null
 ) : MavericksState {
 
     constructor(args: TimelineArgs) : this(
-            roomId = args.roomId,
-            eventId = args.eventId,
-            isInviteAlreadyAccepted = args.isInviteAlreadyAccepted,
-            // Also highlight the target event, if any
-            highlightedEventId = args.eventId,
-            switchToParentSpace = args.switchToParentSpace,
-            rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
+        roomId = args.roomId,
+        eventId = args.eventId,
+        isInviteAlreadyAccepted = args.isInviteAlreadyAccepted,
+        // Also highlight the target event, if any
+        highlightedEventId = args.eventId,
+        switchToParentSpace = args.switchToParentSpace,
+        rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
     )
 
     fun isCallOptionAvailable() = asyncRoomSummary.invoke()?.isDirect ?: true

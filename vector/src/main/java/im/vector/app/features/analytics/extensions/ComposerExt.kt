@@ -21,9 +21,9 @@ import im.vector.app.features.home.room.detail.composer.MessageComposerViewState
 import im.vector.app.features.home.room.detail.composer.SendMode
 
 fun MessageComposerViewState.toAnalyticsComposer(): Composer =
-        Composer(
-                inThread = isInThreadTimeline(),
-                isEditing = sendMode is SendMode.Edit,
-                isReply = sendMode is SendMode.Reply,
-                startsThread = startsThread
-        )
+    Composer(
+        inThread = isInThreadTimeline(),
+        isEditing = sendMode is SendMode.Edit,
+        isReply = sendMode is SendMode.Reply,
+        startsThread = startsThread
+    )

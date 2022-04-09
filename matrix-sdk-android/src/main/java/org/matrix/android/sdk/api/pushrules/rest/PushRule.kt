@@ -28,36 +28,36 @@ import org.matrix.android.sdk.api.pushrules.toJson
  */
 @JsonClass(generateAdapter = true)
 data class PushRule(
-        /**
-         * Required. The actions to perform when this rule is matched.
-         */
-        @Json(name = "actions")
-        val actions: List<Any>,
-        /**
-         * Required. Whether this is a default rule, or has been set explicitly.
-         */
-        @Json(name = "default")
-        val default: Boolean? = false,
-        /**
-         * Required. Whether the push rule is enabled or not.
-         */
-        @Json(name = "enabled")
-        val enabled: Boolean,
-        /**
-         * Required. The ID of this rule.
-         */
-        @Json(name = "rule_id")
-        val ruleId: String,
-        /**
-         * The conditions that must hold true for an event in order for a rule to be applied to an event
-         */
-        @Json(name = "conditions")
-        val conditions: List<PushCondition>? = null,
-        /**
-         * The glob-style pattern to match against. Only applicable to content rules.
-         */
-        @Json(name = "pattern")
-        val pattern: String? = null
+    /**
+     * Required. The actions to perform when this rule is matched.
+     */
+    @Json(name = "actions")
+    val actions: List<Any>,
+    /**
+     * Required. Whether this is a default rule, or has been set explicitly.
+     */
+    @Json(name = "default")
+    val default: Boolean? = false,
+    /**
+     * Required. Whether the push rule is enabled or not.
+     */
+    @Json(name = "enabled")
+    val enabled: Boolean,
+    /**
+     * Required. The ID of this rule.
+     */
+    @Json(name = "rule_id")
+    val ruleId: String,
+    /**
+     * The conditions that must hold true for an event in order for a rule to be applied to an event
+     */
+    @Json(name = "conditions")
+    val conditions: List<PushCondition>? = null,
+    /**
+     * The glob-style pattern to match against. Only applicable to content rules.
+     */
+    @Json(name = "pattern")
+    val pattern: String? = null
 ) {
     /**
      * Add the default notification sound.
@@ -77,7 +77,7 @@ data class PushRule(
      */
     fun setNotificationSound(sound: String): PushRule {
         return copy(
-                actions = (getActions().filter { it !is Action.Sound } + Action.Sound(sound)).toJson()
+            actions = (getActions().filter { it !is Action.Sound } + Action.Sound(sound)).toJson()
         )
     }
 
@@ -86,7 +86,7 @@ data class PushRule(
      */
     fun removeNotificationSound(): PushRule {
         return copy(
-                actions = getActions().filter { it !is Action.Sound }.toJson()
+            actions = getActions().filter { it !is Action.Sound }.toJson()
         )
     }
 
@@ -97,7 +97,7 @@ data class PushRule(
      */
     fun setHighlight(highlight: Boolean): PushRule {
         return copy(
-                actions = (getActions().filter { it !is Action.Highlight } + Action.Highlight(highlight)).toJson()
+            actions = (getActions().filter { it !is Action.Highlight } + Action.Highlight(highlight)).toJson()
         )
     }
 

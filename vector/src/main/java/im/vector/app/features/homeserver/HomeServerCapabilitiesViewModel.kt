@@ -38,9 +38,9 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
 class HomeServerCapabilitiesViewModel @AssistedInject constructor(
-        @Assisted initialState: HomeServerCapabilitiesViewState,
-        private val session: Session,
-        private val rawService: RawService
+    @Assisted initialState: HomeServerCapabilitiesViewState,
+    private val session: Session,
+    private val rawService: RawService
 ) : VectorViewModel<HomeServerCapabilitiesViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -53,7 +53,7 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
         override fun initialState(viewModelContext: ViewModelContext): HomeServerCapabilitiesViewState {
             val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getSafeActiveSession()
             return HomeServerCapabilitiesViewState(
-                    capabilities = session?.getHomeServerCapabilities() ?: HomeServerCapabilities()
+                capabilities = session?.getHomeServerCapabilities() ?: HomeServerCapabilities()
             )
         }
     }
@@ -67,13 +67,13 @@ class HomeServerCapabilitiesViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val adminE2EByDefault = tryOrNull {
                 rawService.getElementWellknown(session.sessionParams)
-                        ?.isE2EByDefault()
-                        ?: true
+                    ?.isE2EByDefault()
+                    ?: true
             } ?: true
 
             setState {
                 copy(
-                        isE2EByDefault = adminE2EByDefault
+                    isE2EByDefault = adminE2EByDefault
                 )
             }
         }

@@ -37,18 +37,18 @@ import java.io.File
 import javax.inject.Inject
 
 internal class CleanupSession @Inject constructor(
-        private val workManagerProvider: WorkManagerProvider,
-        @SessionId private val sessionId: String,
-        private val sessionManager: SessionManager,
-        private val sessionParamsStore: SessionParamsStore,
-        @SessionDatabase private val clearSessionDataTask: ClearCacheTask,
-        @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
-        @SessionFilesDirectory private val sessionFiles: File,
-        @SessionDownloadsDirectory private val sessionCache: File,
-        private val realmKeysUtils: RealmKeysUtils,
-        @SessionDatabase private val realmSessionConfiguration: RealmConfiguration,
-        @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,
-        @UserMd5 private val userMd5: String
+    private val workManagerProvider: WorkManagerProvider,
+    @SessionId private val sessionId: String,
+    private val sessionManager: SessionManager,
+    private val sessionParamsStore: SessionParamsStore,
+    @SessionDatabase private val clearSessionDataTask: ClearCacheTask,
+    @CryptoDatabase private val clearCryptoDataTask: ClearCacheTask,
+    @SessionFilesDirectory private val sessionFiles: File,
+    @SessionDownloadsDirectory private val sessionCache: File,
+    private val realmKeysUtils: RealmKeysUtils,
+    @SessionDatabase private val realmSessionConfiguration: RealmConfiguration,
+    @CryptoDatabase private val realmCryptoConfiguration: RealmConfiguration,
+    @UserMd5 private val userMd5: String
 ) {
 
     fun stopActiveTasks() {

@@ -78,15 +78,15 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
         viewModel.navigateEvent.observeEvent(this) { uxStateEvent ->
             when (uxStateEvent) {
-                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2      -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2 -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     replaceFragment(views.container, KeysBackupSetupStep2Fragment::class.java)
                 }
-                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3      -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3 -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     replaceFragment(views.container, KeysBackupSetupStep3Fragment::class.java)
                 }
-                KeysBackupSetupSharedViewModel.NAVIGATE_FINISH         -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_FINISH -> {
                     val resultIntent = Intent()
                     viewModel.keysVersion.value?.version?.let {
                         resultIntent.putExtra(KEYS_VERSION, it)
@@ -96,16 +96,16 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_PROMPT_REPLACE -> {
                     MaterialAlertDialogBuilder(this)
-                            .setTitle(R.string.keys_backup_setup_override_backup_prompt_tile)
-                            .setMessage(R.string.keys_backup_setup_override_backup_prompt_description)
-                            .setPositiveButton(R.string.keys_backup_setup_override_replace) { _, _ ->
-                                viewModel.forceCreateKeyBackup(this)
-                            }.setNegativeButton(R.string.keys_backup_setup_override_stop) { _, _ ->
-                                viewModel.stopAndKeepAfterDetectingExistingOnServer()
-                            }
-                            .show()
+                        .setTitle(R.string.keys_backup_setup_override_backup_prompt_tile)
+                        .setMessage(R.string.keys_backup_setup_override_backup_prompt_description)
+                        .setPositiveButton(R.string.keys_backup_setup_override_replace) { _, _ ->
+                            viewModel.forceCreateKeyBackup(this)
+                        }.setNegativeButton(R.string.keys_backup_setup_override_stop) { _, _ ->
+                            viewModel.stopAndKeepAfterDetectingExistingOnServer()
+                        }
+                        .show()
                 }
-                KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT  -> {
+                KeysBackupSetupSharedViewModel.NAVIGATE_MANUAL_EXPORT -> {
                     queryExportKeys(session.myUserId, saveStartForActivityResult)
                 }
             }
@@ -114,26 +114,26 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
         viewModel.prepareRecoverFailError.observe(this) { error ->
             if (error != null) {
                 MaterialAlertDialogBuilder(this)
-                        .setTitle(R.string.unknown_error)
-                        .setMessage(error.localizedMessage)
-                        .setPositiveButton(R.string.ok) { _, _ ->
-                            // nop
-                            viewModel.prepareRecoverFailError.value = null
-                        }
-                        .show()
+                    .setTitle(R.string.unknown_error)
+                    .setMessage(error.localizedMessage)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        // nop
+                        viewModel.prepareRecoverFailError.value = null
+                    }
+                    .show()
             }
         }
 
         viewModel.creatingBackupError.observe(this) { error ->
             if (error != null) {
                 MaterialAlertDialogBuilder(this)
-                        .setTitle(R.string.unexpected_error)
-                        .setMessage(error.localizedMessage)
-                        .setPositiveButton(R.string.ok) { _, _ ->
-                            // nop
-                            viewModel.creatingBackupError.value = null
-                        }
-                        .show()
+                    .setTitle(R.string.unexpected_error)
+                    .setMessage(error.localizedMessage)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        // nop
+                        viewModel.creatingBackupError.value = null
+                    }
+                    .show()
             }
         }
     }
@@ -175,27 +175,27 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
                 return
             }
             MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.keys_backup_setup_skip_title)
-                    .setMessage(R.string.keys_backup_setup_skip_msg)
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .setPositiveButton(R.string.action_leave) { _, _ ->
-                        finish()
-                    }
-                    .show()
+                .setTitle(R.string.keys_backup_setup_skip_title)
+                .setMessage(R.string.keys_backup_setup_skip_msg)
+                .setNegativeButton(R.string.action_cancel, null)
+                .setPositiveButton(R.string.action_leave) { _, _ ->
+                    finish()
+                }
+                .show()
         } else {
             super.onBackPressed()
         }
     }
 
-//    I think this code is useful, but it violates the code quality rules
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (item.itemId == android .R. id.  home) {
-//            onBackPressed()
-//            return true
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
+    //    I think this code is useful, but it violates the code quality rules
+    //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    //        if (item.itemId == android .R. id.  home) {
+    //            onBackPressed()
+    //            return true
+    //        }
+    //
+    //        return super.onOptionsItemSelected(item)
+    //    }
 
     companion object {
         const val KEYS_VERSION = "KEYS_VERSION"

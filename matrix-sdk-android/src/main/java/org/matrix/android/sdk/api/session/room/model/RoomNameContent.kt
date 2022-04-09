@@ -24,5 +24,5 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class RoomNameContent(
-        @Json(name = "name") val name: String? = null
+    @Json(name = "name") val name: String? = null
 )

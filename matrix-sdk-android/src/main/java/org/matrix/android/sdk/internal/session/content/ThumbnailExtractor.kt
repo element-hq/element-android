@@ -26,15 +26,15 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 internal class ThumbnailExtractor @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
 
     class ThumbnailData(
-            val width: Int,
-            val height: Int,
-            val size: Long,
-            val bytes: ByteArray,
-            val mimeType: String
+        val width: Int,
+        val height: Int,
+        val size: Long,
+        val bytes: ByteArray,
+        val mimeType: String
     )
 
     fun extractThumbnail(attachment: ContentAttachmentData): ThumbnailData? {
@@ -57,11 +57,11 @@ internal class ThumbnailExtractor @Inject constructor(
                 val thumbnailHeight = thumbnail.height
                 val thumbnailSize = outputStream.size()
                 thumbnailData = ThumbnailData(
-                        width = thumbnailWidth,
-                        height = thumbnailHeight,
-                        size = thumbnailSize.toLong(),
-                        bytes = outputStream.toByteArray(),
-                        mimeType = MimeTypes.Jpeg
+                    width = thumbnailWidth,
+                    height = thumbnailHeight,
+                    size = thumbnailSize.toLong(),
+                    bytes = outputStream.toByteArray(),
+                    mimeType = MimeTypes.Jpeg
                 )
                 thumbnail.recycle()
                 outputStream.reset()

@@ -25,8 +25,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class FDroidGuardServiceStarter @Inject constructor(
-        private val preferences: VectorPreferences,
-        private val appContext: Context
+    private val preferences: VectorPreferences,
+    private val appContext: Context
 ) : GuardServiceStarter {
 
     override fun start() {

@@ -26,9 +26,9 @@ import org.matrix.android.sdk.internal.session.directory.DirectoryAPI
 import javax.inject.Inject
 
 internal class RoomAliasAvailabilityChecker @Inject constructor(
-        @UserId private val userId: String,
-        private val directoryAPI: DirectoryAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    @UserId private val userId: String,
+    private val directoryAPI: DirectoryAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) {
     /**
      * @param aliasLocalPart the local part of the alias.
@@ -58,10 +58,10 @@ internal class RoomAliasAvailabilityChecker @Inject constructor(
                 throw throwable
             }
         }
-                .let {
-                    // Alias already exists: error case
-                    throw RoomAliasError.AliasNotAvailable
-                }
+            .let {
+                // Alias already exists: error case
+                throw RoomAliasError.AliasNotAvailable
+            }
     }
 
     companion object {

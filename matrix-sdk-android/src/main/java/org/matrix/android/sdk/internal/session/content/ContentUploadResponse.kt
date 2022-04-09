@@ -21,8 +21,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class ContentUploadResponse(
-        /**
-         * Required. The MXC URI to the uploaded content.
-         */
-        @Json(name = "content_uri") val contentUri: String
+    /**
+     * Required. The MXC URI to the uploaded content.
+     */
+    @Json(name = "content_uri") val contentUri: String
 )

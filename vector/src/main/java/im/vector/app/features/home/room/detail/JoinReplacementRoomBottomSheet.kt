@@ -36,10 +36,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class JoinReplacementRoomBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetTombstoneJoinBinding>() {
+    VectorBaseBottomSheetDialogFragment<BottomSheetTombstoneJoinBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            BottomSheetTombstoneJoinBinding.inflate(inflater, container, false)
+        BottomSheetTombstoneJoinBinding.inflate(inflater, container, false)
 
     @Inject
     lateinit var errorFormatter: ErrorFormatter
@@ -62,15 +62,15 @@ class JoinReplacementRoomBottomSheet :
             when (joinState) {
                 // it should never be Uninitialized
                 Uninitialized,
-                is Loading    -> {
+                is Loading -> {
                     views.roomUpgradeButton.render(ButtonStateView.State.Loading)
                     views.descriptionText.setText(R.string.it_may_take_some_time)
                 }
-                is Success    -> {
+                is Success -> {
                     views.roomUpgradeButton.render(ButtonStateView.State.Loaded)
                     dismiss()
                 }
-                is Fail       -> {
+                is Fail -> {
                     // display the error message
                     views.descriptionText.text = errorFormatter.toHumanReadable(joinState.error)
                     views.roomUpgradeButton.render(ButtonStateView.State.Error)

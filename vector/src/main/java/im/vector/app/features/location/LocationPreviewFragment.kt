@@ -36,8 +36,8 @@ import javax.inject.Inject
  * TODO Move locationPinProvider to a ViewModel
  */
 class LocationPreviewFragment @Inject constructor(
-        private val urlMapProvider: UrlMapProvider,
-        private val locationPinProvider: LocationPinProvider
+    private val urlMapProvider: UrlMapProvider,
+    private val locationPinProvider: LocationPinProvider
 ) : VectorBaseFragment<FragmentLocationPreviewBinding>() {
 
     private val args: LocationSharingArgs by args()
@@ -121,12 +121,12 @@ class LocationPreviewFragment @Inject constructor(
         locationPinProvider.create(userId) { pinDrawable ->
             lifecycleScope.launchWhenResumed {
                 views.mapView.render(
-                        MapState(
-                                zoomOnlyOnce = true,
-                                userLocationData = location,
-                                pinId = args.locationOwnerId ?: DEFAULT_PIN_ID,
-                                pinDrawable = pinDrawable
-                        )
+                    MapState(
+                        zoomOnlyOnce = true,
+                        userLocationData = location,
+                        pinId = args.locationOwnerId ?: DEFAULT_PIN_ID,
+                        pinDrawable = pinDrawable
+                    )
                 )
             }
         }

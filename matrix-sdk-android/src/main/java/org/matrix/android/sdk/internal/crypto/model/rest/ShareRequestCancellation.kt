@@ -24,12 +24,12 @@ import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
  */
 @JsonClass(generateAdapter = true)
 internal data class ShareRequestCancellation(
-        @Json(name = "action")
-        override val action: String? = ACTION_SHARE_CANCELLATION,
+    @Json(name = "action")
+    override val action: String? = ACTION_SHARE_CANCELLATION,
 
-        @Json(name = "requesting_device_id")
-        override val requestingDeviceId: String? = null,
+    @Json(name = "requesting_device_id")
+    override val requestingDeviceId: String? = null,
 
-        @Json(name = "request_id")
-        override val requestId: String? = null
+    @Json(name = "request_id")
+    override val requestId: String? = null
 ) : GossipingToDeviceObject

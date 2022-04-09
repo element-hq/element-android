@@ -36,7 +36,7 @@ import kotlin.math.min
 import kotlin.math.sin
 
 class BadgeFloatingActionButton @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FloatingActionButton(context, attrs, defStyleAttr) {
 
     private val textPaint = TextPaint(ANTI_ALIAS_FLAG).apply {
@@ -181,7 +181,7 @@ class BadgeFloatingActionButton @JvmOverloads constructor(
     }
 
     private fun calculateCounterCenter(radius: Float, outPoint: PointF) =
-            calculateCounterCenter(radius, (PI / 4).toFloat(), outPoint)
+        calculateCounterCenter(radius, (PI / 4).toFloat(), outPoint)
 
     private fun calculateCounterCenter(radius: Float, angle: Float, outPoint: PointF) {
         outPoint.x = radius * cos(angle)

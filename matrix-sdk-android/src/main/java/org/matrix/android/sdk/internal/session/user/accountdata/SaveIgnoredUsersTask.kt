@@ -27,7 +27,7 @@ import javax.inject.Inject
  */
 internal interface SaveIgnoredUsersTask : Task<SaveIgnoredUsersTask.Params, Unit> {
     data class Params(
-            val userIds: List<String>
+        val userIds: List<String>
     )
 }
 
@@ -37,8 +37,8 @@ internal class DefaultSaveIgnoredUsersTask @Inject constructor(@SessionDatabase 
         monarchy.awaitTransaction { realm ->
             // clear current ignored users
             realm.where(IgnoredUserEntity::class.java)
-                    .findAll()
-                    .deleteAllFromRealm()
+                .findAll()
+                .deleteAllFromRealm()
 
             // And save the new received list
             params.userIds.forEach { realm.createObject(IgnoredUserEntity::class.java).apply { userId = it } }

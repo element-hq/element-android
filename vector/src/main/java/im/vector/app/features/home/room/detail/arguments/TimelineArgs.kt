@@ -23,11 +23,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TimelineArgs(
-        val roomId: String,
-        val eventId: String? = null,
-        val sharedData: SharedData? = null,
-        val openShareSpaceForId: String? = null,
-        val threadTimelineArgs: ThreadTimelineArgs? = null,
-        val switchToParentSpace: Boolean = false,
-        val isInviteAlreadyAccepted: Boolean = false
+    val roomId: String,
+    val eventId: String? = null,
+    val sharedData: SharedData? = null,
+    val openShareSpaceForId: String? = null,
+    val threadTimelineArgs: ThreadTimelineArgs? = null,
+    val switchToParentSpace: Boolean = false,
+    val isInviteAlreadyAccepted: Boolean = false
 ) : Parcelable

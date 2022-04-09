@@ -33,17 +33,17 @@ import javax.inject.Inject
 
 internal interface LeaveRoomTask : Task<LeaveRoomTask.Params, Unit> {
     data class Params(
-            val roomId: String,
-            val reason: String?
+        val roomId: String,
+        val reason: String?
     )
 }
 
 internal class DefaultLeaveRoomTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        private val stateEventDataSource: StateEventDataSource,
-        private val roomSummaryDataSource: RoomSummaryDataSource,
-        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    private val stateEventDataSource: StateEventDataSource,
+    private val roomSummaryDataSource: RoomSummaryDataSource,
+    private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource
 ) : LeaveRoomTask {
 
     override suspend fun execute(params: LeaveRoomTask.Params) {
@@ -58,9 +58,9 @@ internal class DefaultLeaveRoomTask @Inject constructor(
         }
         roomChangeMembershipStateDataSource.updateState(roomId, ChangeMembershipState.Leaving)
         val roomCreateStateEvent = stateEventDataSource.getStateEvent(
-                roomId = roomId,
-                eventType = EventType.STATE_ROOM_CREATE,
-                stateKey = QueryStringValue.NoCondition
+            roomId = roomId,
+            eventType = EventType.STATE_ROOM_CREATE,
+            stateKey = QueryStringValue.NoCondition
         )
         // Server is not cleaning predecessor rooms, so we also try to left them
         val predecessorRoomId = roomCreateStateEvent?.getClearContent()?.toModel<RoomCreateContent>()?.predecessor?.roomId

@@ -68,11 +68,11 @@ class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFrag
 
     private fun setupHomeServerField() {
         views.loginServerUrlFormHomeServerUrl.textChanges()
-                .onEach {
-                    views.loginServerUrlFormHomeServerUrlTil.error = null
-                    views.loginServerUrlFormSubmit.isEnabled = it.isNotBlank()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                views.loginServerUrlFormHomeServerUrlTil.error = null
+                views.loginServerUrlFormSubmit.isEnabled = it.isNotBlank()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.loginServerUrlFormHomeServerUrl.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -94,7 +94,7 @@ class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFrag
                 views.loginServerUrlFormHomeServerUrlTil.hint = getText(R.string.login_server_url_form_modular_hint)
                 views.loginServerUrlFormNotice.text = getString(R.string.login_server_url_form_modular_notice)
             }
-            else           -> {
+            else -> {
                 views.loginServerUrlFormIcon.isVisible = false
                 views.loginServerUrlFormTitle.text = getString(R.string.login_server_other_title)
                 views.loginServerUrlFormText.text = getString(R.string.login_connect_to_a_custom_server)
@@ -104,14 +104,16 @@ class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFrag
             }
         }
         val completions = state.knownCustomHomeServersUrls + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
-        views.loginServerUrlFormHomeServerUrl.setAdapter(ArrayAdapter(
+        views.loginServerUrlFormHomeServerUrl.setAdapter(
+            ArrayAdapter(
                 requireContext(),
                 R.layout.item_completion_homeserver,
                 completions
-        ))
+            )
+        )
         views.loginServerUrlFormHomeServerUrlTil.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                .takeIf { completions.isNotEmpty() }
-                ?: TextInputLayout.END_ICON_NONE
+            .takeIf { completions.isNotEmpty() }
+            ?: TextInputLayout.END_ICON_NONE
     }
 
     private fun learnMore() {
@@ -137,7 +139,7 @@ class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFrag
             serverUrl.isBlank() -> {
                 views.loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
             }
-            else                -> {
+            else -> {
                 views.loginServerUrlFormHomeServerUrl.setText(serverUrl, false /* to avoid completion dialog flicker*/)
                 viewModel.handle(OnboardingAction.UpdateHomeServer(serverUrl))
             }
@@ -151,7 +153,8 @@ class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFrag
 
     override fun onError(throwable: Throwable) {
         views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection &&
-                throwable.ioException is UnknownHostException) {
+            throwable.ioException is UnknownHostException
+        ) {
             // Invalid homeserver?
             getString(R.string.login_error_homeserver_not_found)
         } else {

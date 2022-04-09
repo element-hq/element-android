@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 internal class DisplayNameResolver @Inject constructor(
-        private val matrixConfiguration: MatrixConfiguration
+    private val matrixConfiguration: MatrixConfiguration
 ) {
     fun getBestName(matrixItem: MatrixItem): String {
         return if (matrixItem is MatrixItem.GroupItem || matrixItem is MatrixItem.RoomAliasItem) {
@@ -30,8 +30,8 @@ internal class DisplayNameResolver @Inject constructor(
             matrixItem.id
         } else {
             matrixItem.displayName?.takeIf { it.isNotBlank() }
-                    ?: matrixConfiguration.matrixItemDisplayNameFallbackProvider?.getDefaultName(matrixItem)
-                    ?: matrixItem.id
+                ?: matrixConfiguration.matrixItemDisplayNameFallbackProvider?.getDefaultName(matrixItem)
+                ?: matrixItem.id
         }
     }
 }

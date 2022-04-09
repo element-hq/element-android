@@ -41,17 +41,17 @@ class SearchMessagesTest : InstrumentedTest {
     fun sendTextMessageAndSearchPartOfItUsingSession() {
         doTest { cryptoTestData ->
             cryptoTestData.firstSession
-                    .searchService()
-                    .search(
-                            searchTerm = "lore",
-                            limit = 10,
-                            includeProfile = true,
-                            afterLimit = 0,
-                            beforeLimit = 10,
-                            orderByRecent = true,
-                            nextBatch = null,
-                            roomId = cryptoTestData.roomId
-                    )
+                .searchService()
+                .search(
+                    searchTerm = "lore",
+                    limit = 10,
+                    includeProfile = true,
+                    afterLimit = 0,
+                    beforeLimit = 10,
+                    orderByRecent = true,
+                    nextBatch = null,
+                    roomId = cryptoTestData.roomId
+                )
         }
     }
 
@@ -59,16 +59,16 @@ class SearchMessagesTest : InstrumentedTest {
     fun sendTextMessageAndSearchPartOfItUsingRoom() {
         doTest { cryptoTestData ->
             cryptoTestData.firstSession
-                    .getRoom(cryptoTestData.roomId)!!
-                    .search(
-                            searchTerm = "lore",
-                            limit = 10,
-                            includeProfile = true,
-                            afterLimit = 0,
-                            beforeLimit = 10,
-                            orderByRecent = true,
-                            nextBatch = null
-                    )
+                .getRoom(cryptoTestData.roomId)!!
+                .search(
+                    searchTerm = "lore",
+                    limit = 10,
+                    includeProfile = true,
+                    afterLimit = 0,
+                    beforeLimit = 10,
+                    orderByRecent = true,
+                    nextBatch = null
+                )
         }
     }
 
@@ -81,9 +81,10 @@ class SearchMessagesTest : InstrumentedTest {
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
         commonTestHelper.sendTextMessage(
-                roomFromAlicePOV,
-                MESSAGE,
-                2)
+            roomFromAlicePOV,
+            MESSAGE,
+            2
+        )
 
         val data = commonTestHelper.runBlockingTest {
             block.invoke(cryptoTestData)
@@ -91,10 +92,10 @@ class SearchMessagesTest : InstrumentedTest {
 
         assertTrue(data.results?.size == 2)
         assertTrue(
-                data.results
-                        ?.all {
-                            (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
-                        }.orFalse()
+            data.results
+                ?.all {
+                    (it.event.content?.get("body") as? String)?.startsWith(MESSAGE).orFalse()
+                }.orFalse()
         )
 
         cryptoTestData.cleanUp(commonTestHelper)

@@ -32,12 +32,12 @@ import org.matrix.android.sdk.internal.util.awaitCallback
 import javax.inject.Inject
 
 internal class DefaultSessionAccountDataService @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
-        private val userAccountDataDataSource: UserAccountDataDataSource,
-        private val roomAccountDataDataSource: RoomAccountDataDataSource,
-        private val taskExecutor: TaskExecutor
+    @SessionDatabase private val monarchy: Monarchy,
+    private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+    private val userAccountDataSyncHandler: UserAccountDataSyncHandler,
+    private val userAccountDataDataSource: UserAccountDataDataSource,
+    private val roomAccountDataDataSource: RoomAccountDataDataSource,
+    private val taskExecutor: TaskExecutor
 ) : SessionAccountDataService {
 
     override fun getUserAccountDataEvent(type: String): UserAccountDataEvent? {
@@ -71,7 +71,7 @@ internal class DefaultSessionAccountDataService @Inject constructor(
                 this.retryCount = 5 // TODO: Need to refactor retrying out into a helper method.
                 this.callback = callback
             }
-                    .executeBy(taskExecutor)
+                .executeBy(taskExecutor)
         }
         // TODO Move that to the task (but it created a circular dependencies...)
         monarchy.runTransactionSync { realm ->

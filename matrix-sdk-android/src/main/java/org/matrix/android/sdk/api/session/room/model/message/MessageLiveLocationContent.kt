@@ -23,27 +23,27 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
 
 @JsonClass(generateAdapter = true)
 data class MessageLiveLocationContent(
-        /**
-         * Local message type, not from server
-         */
-        @Transient
-        override val msgType: String = MessageType.MSGTYPE_LIVE_LOCATION,
+    /**
+     * Local message type, not from server
+     */
+    @Transient
+    override val msgType: String = MessageType.MSGTYPE_LIVE_LOCATION,
 
-        @Json(name = "body") override val body: String = "",
-        @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
-        @Json(name = "m.new_content") override val newContent: Content? = null,
+    @Json(name = "body") override val body: String = "",
+    @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
+    @Json(name = "m.new_content") override val newContent: Content? = null,
 
-        /**
-         * See [MSC3488](https://github.com/matrix-org/matrix-doc/blob/matthew/location/proposals/3488-location.md)
-         */
-        @Json(name = "org.matrix.msc3488.location") val unstableLocationInfo: LocationInfo? = null,
-        @Json(name = "m.location") val locationInfo: LocationInfo? = null,
+    /**
+     * See [MSC3488](https://github.com/matrix-org/matrix-doc/blob/matthew/location/proposals/3488-location.md)
+     */
+    @Json(name = "org.matrix.msc3488.location") val unstableLocationInfo: LocationInfo? = null,
+    @Json(name = "m.location") val locationInfo: LocationInfo? = null,
 
-        /**
-         * Exact time that the data in the event refers to (milliseconds since the UNIX epoch)
-         */
-        @Json(name = "org.matrix.msc3488.ts") val unstableTs: Long? = null,
-        @Json(name = "m.ts") val ts: Long? = null
+    /**
+     * Exact time that the data in the event refers to (milliseconds since the UNIX epoch)
+     */
+    @Json(name = "org.matrix.msc3488.ts") val unstableTs: Long? = null,
+    @Json(name = "m.ts") val ts: Long? = null
 ) : MessageContent {
 
     fun getBestLocationInfo() = locationInfo ?: unstableLocationInfo

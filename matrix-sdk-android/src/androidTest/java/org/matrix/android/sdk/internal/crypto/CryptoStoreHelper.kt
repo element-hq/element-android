@@ -28,13 +28,13 @@ internal class CryptoStoreHelper {
 
     fun createStore(): IMXCryptoStore {
         return RealmCryptoStore(
-                realmConfiguration = RealmConfiguration.Builder()
-                        .name("test.realm")
-                        .modules(RealmCryptoStoreModule())
-                        .build(),
-                crossSigningKeysMapper = CrossSigningKeysMapper(MoshiProvider.providesMoshi()),
-                userId = "userId_" + Random.nextInt(),
-                deviceId = "deviceId_sample"
+            realmConfiguration = RealmConfiguration.Builder()
+                .name("test.realm")
+                .modules(RealmCryptoStoreModule())
+                .build(),
+            crossSigningKeysMapper = CrossSigningKeysMapper(MoshiProvider.providesMoshi()),
+            userId = "userId_" + Random.nextInt(),
+            deviceId = "deviceId_sample"
         )
     }
 }

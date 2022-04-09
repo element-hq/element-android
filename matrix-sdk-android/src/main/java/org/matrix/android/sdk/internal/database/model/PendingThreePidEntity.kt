@@ -22,10 +22,10 @@ import io.realm.RealmObject
  * This class is used to store pending threePid data, when user wants to add a threePid to his account
  */
 internal open class PendingThreePidEntity(
-        var email: String? = null,
-        var msisdn: String? = null,
-        var clientSecret: String = "",
-        var sendAttempt: Int = 0,
-        var sid: String = "",
-        var submitUrl: String? = null
+    var email: String? = null,
+    var msisdn: String? = null,
+    var clientSecret: String = "",
+    var sendAttempt: Int = 0,
+    var sid: String = "",
+    var submitUrl: String? = null
 ) : RealmObject()

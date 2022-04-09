@@ -31,7 +31,7 @@ private const val SAME_LOCATION_THRESHOLD_IN_METERS = 5
  * Use case to check if 2 locations can be considered as equal.
  */
 class CompareLocationsUseCase @Inject constructor(
-        private val session: Session
+    private val session: Session
 ) {
 
     /**
@@ -39,10 +39,10 @@ class CompareLocationsUseCase @Inject constructor(
      * @return true when they are really close and could be considered as the same location, false otherwise
      */
     suspend fun execute(location1: LocationData, location2: LocationData): Boolean =
-            withContext(session.coroutineDispatchers.io) {
-                val loc1 = LatLng(location1.latitude, location1.longitude)
-                val loc2 = LatLng(location2.latitude, location2.longitude)
-                val distance = loc1.distanceTo(loc2)
-                distance <= SAME_LOCATION_THRESHOLD_IN_METERS
-            }
+        withContext(session.coroutineDispatchers.io) {
+            val loc1 = LatLng(location1.latitude, location1.longitude)
+            val loc2 = LatLng(location2.latitude, location2.longitude)
+            val distance = loc1.distanceTo(loc2)
+            distance <= SAME_LOCATION_THRESHOLD_IN_METERS
+        }
 }

@@ -74,7 +74,7 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDev
     override fun invalidate() = withState(viewModel) {
         when (it.exporting) {
             is Loading -> views.exportWaitingView.isVisible = true
-            else       -> views.exportWaitingView.isVisible = false
+            else -> views.exportWaitingView.isVisible = false
         }
     }
 
@@ -108,7 +108,7 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDev
                 is KeyRequestEvents.SaveAudit -> {
                     tryOrNull {
                         requireContext().safeOpenOutputStream(it.uri)
-                                ?.use { os -> os.write(it.raw.toByteArray()) }
+                            ?.use { os -> os.write(it.raw.toByteArray()) }
                     }
                 }
             }
@@ -124,10 +124,10 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDev
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.audit_export) {
             selectTxtFileToWrite(
-                    activity = requireActivity(),
-                    activityResultLauncher = epxortAuditForActivityResult,
-                    defaultFileName = "audit-export_${System.currentTimeMillis()}.txt",
-                    chooserHint = "Export Audit"
+                activity = requireActivity(),
+                activityResultLauncher = epxortAuditForActivityResult,
+                defaultFileName = "audit-export_${System.currentTimeMillis()}.txt",
+                chooserHint = "Export Audit"
             )
             return true
         }
@@ -148,10 +148,10 @@ class KeyRequestsFragment @Inject constructor() : VectorBaseFragment<FragmentDev
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0    -> {
+                0 -> {
                     childFragmentManager.fragmentFactory.instantiate(requireContext().classLoader, OutgoingKeyRequestListFragment::class.java.name)
                 }
-                1    -> {
+                1 -> {
                     childFragmentManager.fragmentFactory.instantiate(requireContext().classLoader, IncomingKeyRequestListFragment::class.java.name)
                 }
                 else -> {

@@ -23,8 +23,8 @@ import org.matrix.android.sdk.api.session.events.model.Event
 @JsonClass(generateAdapter = true)
 data class ToDeviceSyncResponse(
 
-        /**
-         * List of direct-to-device events.
-         */
-        val events: List<Event>? = null
+    /**
+     * List of direct-to-device events.
+     */
+    val events: List<Event>? = null
 )

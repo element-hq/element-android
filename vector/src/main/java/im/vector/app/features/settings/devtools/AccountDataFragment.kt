@@ -37,10 +37,10 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import javax.inject.Inject
 
 class AccountDataFragment @Inject constructor(
-        private val epoxyController: AccountDataEpoxyController,
-        private val colorProvider: ColorProvider
+    private val epoxyController: AccountDataEpoxyController,
+    private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
-        AccountDataEpoxyController.InteractionListener {
+    AccountDataEpoxyController.InteractionListener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
         return FragmentGenericRecyclerBinding.inflate(inflater, container, false)
@@ -71,23 +71,23 @@ class AccountDataFragment @Inject constructor(
 
     override fun didTap(data: UserAccountDataEvent) {
         val jsonString = MoshiProvider.providesMoshi()
-                .adapter(UserAccountDataEvent::class.java)
-                .toJson(data)
+            .adapter(UserAccountDataEvent::class.java)
+            .toJson(data)
         JSonViewerDialog.newInstance(
-                jsonString,
-                -1, // open All
-                createJSonViewerStyleProvider(colorProvider)
+            jsonString,
+            -1, // open All
+            createJSonViewerStyleProvider(colorProvider)
         ).show(childFragmentManager, "JSON_VIEWER")
     }
 
     override fun didLongTap(data: UserAccountDataEvent) {
         MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
-                .setTitle(R.string.action_delete)
-                .setMessage(getString(R.string.delete_account_data_warning, data.type))
-                .setNegativeButton(R.string.action_cancel, null)
-                .setPositiveButton(R.string.action_delete) { _, _ ->
-                    viewModel.handle(AccountDataAction.DeleteAccountData(data.type))
-                }
-                .show()
+            .setTitle(R.string.action_delete)
+            .setMessage(getString(R.string.delete_account_data_warning, data.type))
+            .setNegativeButton(R.string.action_cancel, null)
+            .setPositiveButton(R.string.action_delete) { _, _ ->
+                viewModel.handle(AccountDataAction.DeleteAccountData(data.type))
+            }
+            .show()
     }
 }

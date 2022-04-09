@@ -46,7 +46,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 // TODO this needs to be refactored to current standard and remove legacy
 @AndroidEntryPoint
 class SignOutBottomSheetDialogFragment :
-        VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>() {
+    VectorBaseBottomSheetDialogFragment<BottomSheetLogoutAndBackupBinding>() {
 
     var onSignOut: Runnable? = null
 
@@ -75,13 +75,13 @@ class SignOutBottomSheetDialogFragment :
         views.exitAnywayButton.action = {
             context?.let {
                 MaterialAlertDialogBuilder(it)
-                        .setTitle(R.string.are_you_sure)
-                        .setMessage(R.string.sign_out_bottom_sheet_will_lose_secure_messages)
-                        .setPositiveButton(R.string.backup, null)
-                        .setNegativeButton(R.string.action_sign_out) { _, _ ->
-                            onSignOut?.run()
-                        }
-                        .show()
+                    .setTitle(R.string.are_you_sure)
+                    .setMessage(R.string.sign_out_bottom_sheet_will_lose_secure_messages)
+                    .setPositiveButton(R.string.backup, null)
+                    .setNegativeButton(R.string.action_sign_out) { _, _ ->
+                        onSignOut?.run()
+                    }
+                    .show()
             }
         }
 
@@ -146,7 +146,7 @@ class SignOutBottomSheetDialogFragment :
                     views.signOutButton.isVisible = true
                 }
                 KeysBackupState.WillBackUp,
-                KeysBackupState.BackingUp     -> {
+                KeysBackupState.BackingUp -> {
                     views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_backing_up)
 
                     // save in progress
@@ -160,7 +160,7 @@ class SignOutBottomSheetDialogFragment :
                     views.exitAnywayButton.isVisible = true
                     views.signOutButton.isVisible = false
                 }
-                KeysBackupState.NotTrusted    -> {
+                KeysBackupState.NotTrusted -> {
                     views.bottomSheetSignoutWarningText.text = getString(R.string.sign_out_bottom_sheet_warning_backup_not_active)
                     // It's not trusted and we know there are unsaved keys..
                     views.backingUpStatusGroup.isVisible = false
@@ -171,7 +171,7 @@ class SignOutBottomSheetDialogFragment :
                     views.exitAnywayButton.isVisible = true
                     views.signOutButton.isVisible = false
                 }
-                else                          -> {
+                else -> {
                     // mmm.. strange state
 
                     views.exitAnywayButton.isVisible = true
@@ -203,7 +203,7 @@ class SignOutBottomSheetDialogFragment :
                     views.signOutButton.isVisible = true
                 }
             }
-            else       -> {
+            else -> {
             }
         }
         super.invalidate()

@@ -33,8 +33,8 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.search.SearchResult
 
 class SearchViewModel @AssistedInject constructor(
-        @Assisted private val initialState: SearchViewState,
-        session: Session
+    @Assisted private val initialState: SearchViewState,
+    session: Session
 ) : VectorViewModel<SearchViewState, SearchAction, SearchViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
@@ -53,8 +53,8 @@ class SearchViewModel @AssistedInject constructor(
     override fun handle(action: SearchAction) {
         when (action) {
             is SearchAction.SearchWith -> handleSearchWith(action)
-            is SearchAction.LoadMore   -> handleLoadMore()
-            is SearchAction.Retry      -> handleRetry()
+            is SearchAction.LoadMore -> handleLoadMore()
+            is SearchAction.Retry -> handleRetry()
         }
     }
 
@@ -62,10 +62,10 @@ class SearchViewModel @AssistedInject constructor(
         if (action.searchTerm.isNotEmpty()) {
             setState {
                 copy(
-                        searchResult = emptyList(),
-                        hasMoreResult = false,
-                        lastBatchSize = 0,
-                        searchTerm = action.searchTerm
+                    searchResult = emptyList(),
+                    hasMoreResult = false,
+                    lastBatchSize = 0,
+                    searchTerm = action.searchTerm
                 )
             }
             startSearching(false)
@@ -91,7 +91,7 @@ class SearchViewModel @AssistedInject constructor(
         if (!isNextBatch) {
             setState {
                 copy(
-                        asyncSearchRequest = Loading()
+                    asyncSearchRequest = Loading()
                 )
             }
         }
@@ -101,13 +101,13 @@ class SearchViewModel @AssistedInject constructor(
         currentTask = viewModelScope.launch {
             try {
                 val result = room.search(
-                        searchTerm = state.searchTerm,
-                        nextBatch = nextBatch,
-                        orderByRecent = true,
-                        beforeLimit = 0,
-                        afterLimit = 0,
-                        includeProfile = true,
-                        limit = 20
+                    searchTerm = state.searchTerm,
+                    nextBatch = nextBatch,
+                    orderByRecent = true,
+                    beforeLimit = 0,
+                    afterLimit = 0,
+                    includeProfile = true,
+                    limit = 20
                 )
                 onSearchResultSuccess(result)
             } catch (failure: Throwable) {
@@ -116,7 +116,7 @@ class SearchViewModel @AssistedInject constructor(
                 _viewEvents.post(SearchViewEvents.Failure(failure))
                 setState {
                     copy(
-                            asyncSearchRequest = Fail(failure)
+                        asyncSearchRequest = Fail(failure)
                     )
                 }
             }
@@ -132,11 +132,11 @@ class SearchViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    searchResult = accumulatedResult,
-                    highlights = searchResult.highlights.orEmpty(),
-                    hasMoreResult = !nextBatch.isNullOrEmpty(),
-                    lastBatchSize = searchResult.results.orEmpty().size,
-                    asyncSearchRequest = Success(Unit)
+                searchResult = accumulatedResult,
+                highlights = searchResult.highlights.orEmpty(),
+                hasMoreResult = !nextBatch.isNullOrEmpty(),
+                lastBatchSize = searchResult.results.orEmpty().size,
+                asyncSearchRequest = Success(Unit)
             )
         }
     }

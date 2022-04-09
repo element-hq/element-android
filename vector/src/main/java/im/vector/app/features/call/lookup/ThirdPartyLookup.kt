@@ -27,8 +27,8 @@ suspend fun Session.pstnLookup(phoneNumber: String, protocol: String?): List<Thi
     if (protocol == null) return emptyList()
     return tryOrNull {
         thirdPartyService().getThirdPartyUser(
-                protocol = protocol,
-                fields = mapOf("m.id.phone" to phoneNumber)
+            protocol = protocol,
+            fields = mapOf("m.id.phone" to phoneNumber)
         )
     }.orEmpty()
 }
@@ -36,25 +36,25 @@ suspend fun Session.pstnLookup(phoneNumber: String, protocol: String?): List<Thi
 suspend fun Session.sipVirtualLookup(nativeMxid: String): List<ThirdPartyUser> {
     return tryOrNull {
         thirdPartyService().getThirdPartyUser(
-                protocol = PROTOCOL_SIP_VIRTUAL,
-                fields = mapOf("native_mxid" to nativeMxid)
+            protocol = PROTOCOL_SIP_VIRTUAL,
+            fields = mapOf("native_mxid" to nativeMxid)
         )
     }
-            .orEmpty()
-            .filter {
-                (it.fields[LOOKUP_SUCCESS_FIELD] as? Boolean).orFalse()
-            }
+        .orEmpty()
+        .filter {
+            (it.fields[LOOKUP_SUCCESS_FIELD] as? Boolean).orFalse()
+        }
 }
 
 suspend fun Session.sipNativeLookup(virtualMxid: String): List<ThirdPartyUser> {
     return tryOrNull {
         thirdPartyService().getThirdPartyUser(
-                protocol = PROTOCOL_SIP_NATIVE,
-                fields = mapOf("virtual_mxid" to virtualMxid)
+            protocol = PROTOCOL_SIP_NATIVE,
+            fields = mapOf("virtual_mxid" to virtualMxid)
         )
     }
-            .orEmpty()
-            .filter {
-                (it.fields[LOOKUP_SUCCESS_FIELD] as? Boolean).orFalse()
-            }
+        .orEmpty()
+        .filter {
+            (it.fields[LOOKUP_SUCCESS_FIELD] as? Boolean).orFalse()
+        }
 }

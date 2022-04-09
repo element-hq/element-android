@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.api.session.room.model.tag
 
 data class RoomTag(
-        val name: String,
-        val order: Double?
+    val name: String,
+    val order: Double?
 ) {
 
     companion object {

@@ -35,9 +35,9 @@ internal interface VerificationInfoMac : VerificationInfo<ValidVerificationInfoM
         val validKeys = keys?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationInfoMac(
-                validTransactionId,
-                validMac,
-                validKeys
+            validTransactionId,
+            validMac,
+            validKeys
         )
     }
 }
@@ -47,7 +47,7 @@ internal interface VerificationInfoMacFactory {
 }
 
 internal data class ValidVerificationInfoMac(
-        val transactionId: String,
-        val mac: Map<String, String>,
-        val keys: String
+    val transactionId: String,
+    val mac: Map<String, String>,
+    val keys: String
 )

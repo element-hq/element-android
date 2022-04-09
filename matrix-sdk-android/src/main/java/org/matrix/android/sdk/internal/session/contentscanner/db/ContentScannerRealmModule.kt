@@ -21,9 +21,11 @@ import io.realm.annotations.RealmModule
 /**
  * Realm module for content scanner classes
  */
-@RealmModule(library = true,
-        classes = [
-            ContentScannerInfoEntity::class,
-            ContentScanResultEntity::class
-        ])
+@RealmModule(
+    library = true,
+    classes = [
+        ContentScannerInfoEntity::class,
+        ContentScanResultEntity::class
+    ]
+)
 internal class ContentScannerRealmModule

@@ -21,5 +21,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ReactionContent(
-        @Json(name = "m.relates_to") val relatesTo: ReactionInfo? = null
+    @Json(name = "m.relates_to") val relatesTo: ReactionInfo? = null
 )

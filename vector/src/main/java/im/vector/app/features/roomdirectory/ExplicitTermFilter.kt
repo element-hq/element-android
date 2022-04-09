@@ -20,22 +20,22 @@ import im.vector.app.core.utils.AssetReader
 import javax.inject.Inject
 
 class ExplicitTermFilter @Inject constructor(
-        assetReader: AssetReader
+    assetReader: AssetReader
 ) {
     // List of forbidden terms is in file asset forbidden_terms.txt, in lower case
     private val explicitTerms = assetReader.readAssetFile("forbidden_terms.txt")
-            .orEmpty()
-            .split("\n")
-            .map { it.trim() }
-            .distinct()
-            .filter { it.isNotEmpty() }
+        .orEmpty()
+        .split("\n")
+        .map { it.trim() }
+        .distinct()
+        .filter { it.isNotEmpty() }
 
     private val explicitContentRegex = explicitTerms
-            .joinToString(prefix = ".*\\b(", separator = "|", postfix = ")\\b.*")
-            .toRegex(RegexOption.IGNORE_CASE)
+        .joinToString(prefix = ".*\\b(", separator = "|", postfix = ")\\b.*")
+        .toRegex(RegexOption.IGNORE_CASE)
 
     fun canSearchFor(term: String): Boolean {
-        return term !in explicitTerms  && term != "18+"
+        return term !in explicitTerms && term != "18+"
     }
 
     fun isValid(str: String): Boolean {

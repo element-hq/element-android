@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 class BreadcrumbsRoomComparator @Inject constructor(
-        private val chronologicalRoomComparator: ChronologicalRoomComparator
+    private val chronologicalRoomComparator: ChronologicalRoomComparator
 ) : Comparator<RoomSummary> {
 
     override fun compare(leftRoomSummary: RoomSummary?, rightRoomSummary: RoomSummary?): Int {

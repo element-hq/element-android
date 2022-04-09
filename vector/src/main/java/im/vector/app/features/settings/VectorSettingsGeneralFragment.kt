@@ -73,10 +73,10 @@ import java.util.UUID
 import javax.inject.Inject
 
 class VectorSettingsGeneralFragment @Inject constructor(
-        colorProvider: ColorProvider
+    colorProvider: ColorProvider
 ) :
-        VectorSettingsBaseFragment(),
-        GalleryOrCameraDialogHelper.Listener {
+    VectorSettingsBaseFragment(),
+    GalleryOrCameraDialogHelper.Listener {
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
@@ -132,28 +132,28 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
     private fun observeUserAvatar() {
         session.flow()
-                .liveUser(session.myUserId)
-                .unwrap()
-                .distinctUntilChangedBy { user -> user.avatarUrl }
-                .onEach {
-                    mUserAvatarPreference.refreshAvatar(it)
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .liveUser(session.myUserId)
+            .unwrap()
+            .distinctUntilChangedBy { user -> user.avatarUrl }
+            .onEach {
+                mUserAvatarPreference.refreshAvatar(it)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun observeUserDisplayName() {
         session.flow()
-                .liveUser(session.myUserId)
-                .unwrap()
-                .map { it.displayName ?: "" }
-                .distinctUntilChanged()
-                .onEach { displayName ->
-                    mDisplayNamePreference.let {
-                        it.summary = displayName
-                        it.text = displayName
-                    }
+            .liveUser(session.myUserId)
+            .unwrap()
+            .map { it.displayName ?: "" }
+            .distinctUntilChanged()
+            .onEach { displayName ->
+                mDisplayNamePreference.let {
+                    it.summary = displayName
+                    it.text = displayName
                 }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun bindPref() {
@@ -169,8 +169,8 @@ class VectorSettingsGeneralFragment @Inject constructor(
         mDisplayNamePreference.let {
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 newValue
-                        ?.let { value -> (value as? String)?.trim() }
-                        ?.let { value -> onDisplayNameChanged(value) }
+                    ?.let { value -> (value as? String)?.trim() }
+                    ?.let { value -> onDisplayNameChanged(value) }
                 false
             }
         }
@@ -188,8 +188,8 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         val openDiscoveryScreenPreferenceClickListener = Preference.OnPreferenceClickListener {
             (requireActivity() as VectorSettingsActivity).navigateTo(
-                    DiscoverySettingsFragment::class.java,
-                    SettingsActivityPayload.DiscoverySettings().toMvRxBundle()
+                DiscoverySettingsFragment::class.java,
+                SettingsActivityPayload.DiscoverySettings().toMvRxBundle()
             )
             true
         }
@@ -203,11 +203,11 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         // user account
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_LOGGED_IN_PREFERENCE_KEY)!!
-                .summary = session.myUserId
+            .summary = session.myUserId
 
         // homeserver
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_HOME_SERVER_PREFERENCE_KEY)!!
-                .summary = session.sessionParams.homeServerUrl
+            .summary = session.sessionParams.homeServerUrl
 
         // Contacts
         setContactsPreferences()
@@ -278,7 +278,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         // Sign out
         findPreference<VectorPreference>("SETTINGS_SIGN_OUT_KEY")!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            .onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let {
                 SignOutUiWorker(requireActivity()).perform()
             }
@@ -337,11 +337,11 @@ class VectorSettingsGeneralFragment @Inject constructor(
             if (!isAdded) return@launch
 
             result.fold(
-                    onSuccess = { hideLoadingView() },
-                    onFailure = {
-                        hideLoadingView()
-                        displayErrorDialog(it)
-                    }
+                onSuccess = { hideLoadingView() },
+                onFailure = {
+                    hideLoadingView()
+                    displayErrorDialog(it)
+                }
             )
         }
     }
@@ -381,14 +381,14 @@ class VectorSettingsGeneralFragment @Inject constructor(
             val views = DialogChangePasswordBinding.bind(view)
 
             val dialog = MaterialAlertDialogBuilder(activity)
-                    .setView(view)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.settings_change_password, null)
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .setOnDismissListener {
-                        view.hideKeyboard()
-                    }
-                    .create()
+                .setView(view)
+                .setCancelable(false)
+                .setPositiveButton(R.string.settings_change_password, null)
+                .setNegativeButton(R.string.action_cancel, null)
+                .setOnDismissListener {
+                    view.hideKeyboard()
+                }
+                .create()
 
             dialog.setOnShowListener {
                 val updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -479,16 +479,16 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 val result = runCatching { session.setDisplayName(session.myUserId, value) }
                 if (!isAdded) return@launch
                 result.fold(
-                        onSuccess = {
-                            // refresh the settings value
-                            mDisplayNamePreference.summary = value
-                            mDisplayNamePreference.text = value
-                            hideLoadingView()
-                        },
-                        onFailure = {
-                            hideLoadingView()
-                            displayErrorDialog(it)
-                        }
+                    onSuccess = {
+                        // refresh the settings value
+                        mDisplayNamePreference.summary = value
+                        mDisplayNamePreference.text = value
+                        hideLoadingView()
+                    },
+                    onFailure = {
+                        hideLoadingView()
+                        displayErrorDialog(it)
+                    }
                 )
             }
         }

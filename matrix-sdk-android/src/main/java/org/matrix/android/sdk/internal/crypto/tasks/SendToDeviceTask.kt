@@ -27,23 +27,23 @@ import javax.inject.Inject
 
 internal interface SendToDeviceTask : Task<SendToDeviceTask.Params, Unit> {
     data class Params(
-            // the type of event to send
-            val eventType: String,
-            // the content to send. Map from user_id to device_id to content dictionary.
-            val contentMap: MXUsersDevicesMap<Any>,
-            // the transactionId. If not provided, a transactionId will be created by the task
-            val transactionId: String? = null
+        // the type of event to send
+        val eventType: String,
+        // the content to send. Map from user_id to device_id to content dictionary.
+        val contentMap: MXUsersDevicesMap<Any>,
+        // the transactionId. If not provided, a transactionId will be created by the task
+        val transactionId: String? = null
     )
 }
 
 internal class DefaultSendToDeviceTask @Inject constructor(
-        private val cryptoApi: CryptoApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val cryptoApi: CryptoApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : SendToDeviceTask {
 
     override suspend fun execute(params: SendToDeviceTask.Params) {
         val sendToDeviceBody = SendToDeviceBody(
-                messages = params.contentMap.map
+            messages = params.contentMap.map
         )
 
         // If params.transactionId is not provided, we create a unique txnId.
@@ -52,14 +52,14 @@ internal class DefaultSendToDeviceTask @Inject constructor(
         val txnId = params.transactionId ?: createUniqueTxnId()
 
         return executeRequest(
-                globalErrorReceiver,
-                canRetry = true,
-                maxRetriesCount = 3
+            globalErrorReceiver,
+            canRetry = true,
+            maxRetriesCount = 3
         ) {
             cryptoApi.sendToDevice(
-                    eventType = params.eventType,
-                    transactionId = txnId,
-                    body = sendToDeviceBody
+                eventType = params.eventType,
+                transactionId = txnId,
+                body = sendToDeviceBody
             )
         }
     }

@@ -199,10 +199,10 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             val resolvedEvent = notifiableEventResolver.resolveInMemoryEvent(session, event, canBeReplaced = true)
 
             resolvedEvent
-                    ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
-                    ?.let {
-                        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
-                    }
+                ?.also { Timber.tag(loggerTag.value).d("Fast lane: notify drawer") }
+                ?.let {
+                    notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(resolvedEvent) }
+                }
         }
     }
 

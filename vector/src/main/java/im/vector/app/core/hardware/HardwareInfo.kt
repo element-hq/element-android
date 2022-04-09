@@ -26,7 +26,7 @@ import androidx.core.content.getSystemService
 import javax.inject.Inject
 
 class HardwareInfo @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
     /**
      * Tell if the device has a back (or external) camera

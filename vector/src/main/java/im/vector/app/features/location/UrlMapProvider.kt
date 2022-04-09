@@ -26,9 +26,9 @@ import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 class UrlMapProvider @Inject constructor(
-        private val localeProvider: LocaleProvider,
-        private val session: Session,
-        private val rawService: RawService
+    private val localeProvider: LocaleProvider,
+    private val session: Session,
+    private val rawService: RawService
 ) {
     private val keyParam = "?key=${BuildConfig.mapTilerKey}"
 
@@ -39,15 +39,17 @@ class UrlMapProvider @Inject constructor(
 
     suspend fun getMapUrl(): String {
         val upstreamMapUrl = tryOrNull { rawService.getElementWellknown(session.sessionParams) }
-                ?.getBestMapTileServerConfig()
-                ?.mapStyleUrl
+            ?.getBestMapTileServerConfig()
+            ?.mapStyleUrl
         return upstreamMapUrl ?: fallbackMapUrl
     }
 
-    fun buildStaticMapUrl(locationData: LocationData,
-                          zoom: Double,
-                          width: Int,
-                          height: Int): String {
+    fun buildStaticMapUrl(
+        locationData: LocationData,
+        zoom: Double,
+        width: Int,
+        height: Int
+    ): String {
         return buildString {
             append(STATIC_MAP_BASE_URL)
             append(locationData.longitude)

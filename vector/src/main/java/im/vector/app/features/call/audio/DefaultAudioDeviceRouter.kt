@@ -22,8 +22,9 @@ import androidx.media.AudioFocusRequestCompat
 import androidx.media.AudioManagerCompat
 import timber.log.Timber
 
-class DefaultAudioDeviceRouter(private val audioManager: AudioManager,
-                               private val callAudioManager: CallAudioManager
+class DefaultAudioDeviceRouter(
+    private val audioManager: AudioManager,
+    private val callAudioManager: CallAudioManager
 ) : CallAudioManager.AudioDeviceRouter, AudioManager.OnAudioFocusChangeListener {
 
     private var audioFocusLost = false
@@ -51,17 +52,17 @@ class DefaultAudioDeviceRouter(private val audioManager: AudioManager,
         audioManager.isMicrophoneMute = false
 
         val audioFocusRequest = AudioFocusRequestCompat.Builder(AudioManagerCompat.AUDIOFOCUS_GAIN)
-                .setAudioAttributes(
-                        AudioAttributesCompat.Builder()
-                                .setUsage(AudioAttributesCompat.USAGE_VOICE_COMMUNICATION)
-                                .setContentType(AudioAttributesCompat.CONTENT_TYPE_SPEECH)
-                                .build()
-                )
-                .setOnAudioFocusChangeListener(this)
-                .build()
-                .also {
-                    focusRequestCompat = it
-                }
+            .setAudioAttributes(
+                AudioAttributesCompat.Builder()
+                    .setUsage(AudioAttributesCompat.USAGE_VOICE_COMMUNICATION)
+                    .setContentType(AudioAttributesCompat.CONTENT_TYPE_SPEECH)
+                    .build()
+            )
+            .setOnAudioFocusChangeListener(this)
+            .build()
+            .also {
+                focusRequestCompat = it
+            }
 
         val gotFocus = AudioManagerCompat.requestAudioFocus(audioManager, audioFocusRequest)
         if (gotFocus == AudioManager.AUDIOFOCUS_REQUEST_FAILED) {

@@ -23,26 +23,26 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
 
 @JsonClass(generateAdapter = true)
 data class MessageEmoteContent(
-        /**
-         * Required. Must be 'm.emote'.
-         */
-        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
+    /**
+     * Required. Must be 'm.emote'.
+     */
+    @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
 
-        /**
-         * Required. The emote action to perform.
-         */
-        @Json(name = "body") override val body: String,
+    /**
+     * Required. The emote action to perform.
+     */
+    @Json(name = "body") override val body: String,
 
-        /**
-         * The format used in the formatted_body. Currently only "org.matrix.custom.html" is supported.
-         */
-        @Json(name = "format") override val format: String? = null,
+    /**
+     * The format used in the formatted_body. Currently only "org.matrix.custom.html" is supported.
+     */
+    @Json(name = "format") override val format: String? = null,
 
-        /**
-         * The formatted version of the body. This is required if format is specified.
-         */
-        @Json(name = "formatted_body") override val formattedBody: String? = null,
+    /**
+     * The formatted version of the body. This is required if format is specified.
+     */
+    @Json(name = "formatted_body") override val formattedBody: String? = null,
 
-        @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
-        @Json(name = "m.new_content") override val newContent: Content? = null
+    @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
+    @Json(name = "m.new_content") override val newContent: Content? = null
 ) : MessageContentWithFormattedBody

@@ -32,10 +32,10 @@ import im.vector.app.features.settings.VectorSettingsActivity
 import javax.inject.Inject
 
 class CreateSpaceAdd3pidInvitesFragment @Inject constructor(
-        private val epoxyController: SpaceAdd3pidEpoxyController
+    private val epoxyController: SpaceAdd3pidEpoxyController
 ) : VectorBaseFragment<FragmentSpaceCreateGenericEpoxyFormBinding>(),
-        SpaceAdd3pidEpoxyController.Listener,
-        OnBackPressed {
+    SpaceAdd3pidEpoxyController.Listener,
+    OnBackPressed {
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 
@@ -78,7 +78,7 @@ class CreateSpaceAdd3pidInvitesFragment @Inject constructor(
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentSpaceCreateGenericEpoxyFormBinding.inflate(layoutInflater, container, false)
+        FragmentSpaceCreateGenericEpoxyFormBinding.inflate(layoutInflater, container, false)
 
     override fun on3pidChange(index: Int, newName: String) {
         sharedViewModel.handle(CreateSpaceAction.DefaultInvite3pidChanged(index, newName))
@@ -86,8 +86,8 @@ class CreateSpaceAdd3pidInvitesFragment @Inject constructor(
 
     override fun onNoIdentityServer() {
         navigator.openSettings(
-                requireContext(),
-                VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
+            requireContext(),
+            VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
         )
     }
 }

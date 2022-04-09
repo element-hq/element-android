@@ -31,9 +31,9 @@ import javax.inject.Inject
  * The class is responsible for handling thread specific tasks
  */
 class ThreadsManager @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val stringProvider: StringProvider
+    private val vectorPreferences: VectorPreferences,
+    private val lightweightSettingsStorage: LightweightSettingsStorage,
+    private val stringProvider: StringProvider
 ) {
 
     /**

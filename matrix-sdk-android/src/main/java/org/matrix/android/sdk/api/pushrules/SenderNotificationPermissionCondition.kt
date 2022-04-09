@@ -20,13 +20,13 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 
 class SenderNotificationPermissionCondition(
-        /**
-         * A string that determines the power level the sender must have to trigger notifications of a given type,
-         * such as room. Refer to the m.room.power_levels event schema for information about what the defaults are
-         * and how to interpret the event. The key is used to look up the power level required to send a notification
-         * type from the notifications object in the power level event content.
-         */
-        val key: String
+    /**
+     * A string that determines the power level the sender must have to trigger notifications of a given type,
+     * such as room. Refer to the m.room.power_levels event schema for information about what the defaults are
+     * and how to interpret the event. The key is used to look up the power level required to send a notification
+     * type from the notifications object in the power level event content.
+     */
+    val key: String
 ) : Condition {
 
     override fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean {

@@ -33,23 +33,23 @@ internal class RetrofitFactory @Inject constructor(private val moshi: Moshi) {
      */
     fun create(okHttpClient: OkHttpClient, baseUrl: String): Retrofit {
         return Retrofit.Builder()
-                .baseUrl(baseUrl.ensureTrailingSlash())
-                .client(okHttpClient)
-                .addConverterFactory(UnitConverterFactory)
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
-                .build()
+            .baseUrl(baseUrl.ensureTrailingSlash())
+            .client(okHttpClient)
+            .addConverterFactory(UnitConverterFactory)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
     }
 
     fun create(okHttpClient: Lazy<OkHttpClient>, baseUrl: String): Retrofit {
         return Retrofit.Builder()
-                .baseUrl(baseUrl.ensureTrailingSlash())
-                .callFactory(object : Call.Factory {
-                    override fun newCall(request: Request): Call {
-                        return okHttpClient.get().newCall(request)
-                    }
-                })
-                .addConverterFactory(UnitConverterFactory)
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
-                .build()
+            .baseUrl(baseUrl.ensureTrailingSlash())
+            .callFactory(object : Call.Factory {
+                override fun newCall(request: Request): Call {
+                    return okHttpClient.get().newCall(request)
+                }
+            })
+            .addConverterFactory(UnitConverterFactory)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
     }
 }

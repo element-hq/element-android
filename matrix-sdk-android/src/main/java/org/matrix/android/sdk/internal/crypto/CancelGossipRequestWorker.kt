@@ -40,22 +40,22 @@ internal class CancelGossipRequestWorker(context: Context, params: WorkerParamet
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val sessionId: String,
-            val requestId: String,
-            val recipients: Map<String, List<String>>,
-            // The txnId for the sendToDevice request. Nullable for compatibility reasons, but MUST always be provided
-            // to use the same value if this worker is retried.
-            val txnId: String? = null,
-            override val lastFailureMessage: String? = null
+        override val sessionId: String,
+        val requestId: String,
+        val recipients: Map<String, List<String>>,
+        // The txnId for the sendToDevice request. Nullable for compatibility reasons, but MUST always be provided
+        // to use the same value if this worker is retried.
+        val txnId: String? = null,
+        override val lastFailureMessage: String? = null
     ) : SessionWorkerParams {
         companion object {
             fun fromRequest(sessionId: String, request: OutgoingGossipingRequest): Params {
                 return Params(
-                        sessionId = sessionId,
-                        requestId = request.requestId,
-                        recipients = request.recipients,
-                        txnId = createUniqueTxnId(),
-                        lastFailureMessage = null
+                    sessionId = sessionId,
+                    requestId = request.requestId,
+                    recipients = request.recipients,
+                    txnId = createUniqueTxnId(),
+                    lastFailureMessage = null
                 )
             }
         }
@@ -76,13 +76,13 @@ internal class CancelGossipRequestWorker(context: Context, params: WorkerParamet
         val txnId = params.txnId ?: createUniqueTxnId()
         val contentMap = MXUsersDevicesMap<Any>()
         val toDeviceContent = ShareRequestCancellation(
-                requestingDeviceId = credentials.deviceId,
-                requestId = params.requestId
+            requestingDeviceId = credentials.deviceId,
+            requestId = params.requestId
         )
         cryptoStore.saveGossipingEvent(Event(
-                type = EventType.ROOM_KEY_REQUEST,
-                content = toDeviceContent.toContent(),
-                senderId = credentials.userId
+            type = EventType.ROOM_KEY_REQUEST,
+            content = toDeviceContent.toContent(),
+            senderId = credentials.userId
         ).also {
             it.ageLocalTs = System.currentTimeMillis()
         })
@@ -96,11 +96,11 @@ internal class CancelGossipRequestWorker(context: Context, params: WorkerParamet
         try {
             cryptoStore.updateOutgoingGossipingRequestState(params.requestId, OutgoingGossipingRequestState.CANCELLING)
             sendToDeviceTask.execute(
-                    SendToDeviceTask.Params(
-                            eventType = EventType.ROOM_KEY_REQUEST,
-                            contentMap = contentMap,
-                            transactionId = txnId
-                    )
+                SendToDeviceTask.Params(
+                    eventType = EventType.ROOM_KEY_REQUEST,
+                    contentMap = contentMap,
+                    transactionId = txnId
+                )
             )
             cryptoStore.updateOutgoingGossipingRequestState(params.requestId, OutgoingGossipingRequestState.CANCELLED)
             return Result.success()

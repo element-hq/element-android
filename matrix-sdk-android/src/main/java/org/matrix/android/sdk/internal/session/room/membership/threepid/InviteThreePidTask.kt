@@ -32,18 +32,18 @@ import javax.inject.Inject
 
 internal interface InviteThreePidTask : Task<InviteThreePidTask.Params, Unit> {
     data class Params(
-            val roomId: String,
-            val threePid: ThreePid
+        val roomId: String,
+        val threePid: ThreePid
     )
 }
 
 internal class DefaultInviteThreePidTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        private val identityStore: IdentityStore,
-        private val ensureIdentityTokenTask: EnsureIdentityTokenTask,
-        @AuthenticatedIdentity
-        private val accessTokenProvider: AccessTokenProvider
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    private val identityStore: IdentityStore,
+    private val ensureIdentityTokenTask: EnsureIdentityTokenTask,
+    @AuthenticatedIdentity
+    private val accessTokenProvider: AccessTokenProvider
 ) : InviteThreePidTask {
 
     override suspend fun execute(params: InviteThreePidTask.Params) {
@@ -54,10 +54,10 @@ internal class DefaultInviteThreePidTask @Inject constructor(
 
         return executeRequest(globalErrorReceiver) {
             val body = ThreePidInviteBody(
-                    idServer = identityServerUrlWithoutProtocol,
-                    idAccessToken = identityServerAccessToken,
-                    medium = params.threePid.toMedium(),
-                    address = params.threePid.value
+                idServer = identityServerUrlWithoutProtocol,
+                idAccessToken = identityServerAccessToken,
+                medium = params.threePid.toMedium(),
+                address = params.threePid.value
             )
             roomAPI.invite3pid(params.roomId, body)
         }

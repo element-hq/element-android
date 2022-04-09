@@ -29,14 +29,14 @@ fun <T> Flow<T>.test(scope: CoroutineScope): FlowTestObserver<T> {
 }
 
 class FlowTestObserver<T>(
-        scope: CoroutineScope,
-        flow: Flow<T>
+    scope: CoroutineScope,
+    flow: Flow<T>
 ) {
     private val values = mutableListOf<T>()
     private val job: Job = flow
-            .onEach {
-                values.add(it)
-            }.launchIn(scope)
+        .onEach {
+            values.add(it)
+        }.launchIn(scope)
 
     fun assertNoValues() = assertValues(emptyList())
 

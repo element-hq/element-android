@@ -25,18 +25,18 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
  * Triggered when the user clicks/taps/activates a UI element.
  */
 data class Interaction(
-        /**
-         * The index of the element, if its in a list of elements.
-         */
-        val index: Int? = null,
-        /**
-         * The manner with which the user activated the UI element.
-         */
-        val interactionType: InteractionType? = null,
-        /**
-         * The unique name of this element.
-         */
-        val name: Name,
+    /**
+     * The index of the element, if its in a list of elements.
+     */
+    val index: Int? = null,
+    /**
+     * The manner with which the user activated the UI element.
+     */
+    val interactionType: InteractionType? = null,
+    /**
+     * The unique name of this element.
+     */
+    val name: Name,
 ) : VectorAnalyticsEvent {
 
     enum class Name {

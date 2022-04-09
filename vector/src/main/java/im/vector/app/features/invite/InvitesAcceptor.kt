@@ -49,8 +49,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class InvitesAcceptor @Inject constructor(
-        private val sessionDataSource: ActiveSessionDataSource,
-        private val autoAcceptInvites: AutoAcceptInvites
+    private val sessionDataSource: ActiveSessionDataSource,
+    private val autoAcceptInvites: AutoAcceptInvites
 ) : Session.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -65,13 +65,13 @@ class InvitesAcceptor @Inject constructor(
 
     private fun observeActiveSession() {
         sessionDataSource.stream()
-                .distinctUntilChanged()
-                .onEach {
-                    it.orNull()?.let { session ->
-                        onSessionActive(session)
-                    }
+            .distinctUntilChanged()
+            .onEach {
+                it.orNull()?.let { session ->
+                    onSessionActive(session)
                 }
-                .launchIn(coroutineScope)
+            }
+            .launchIn(coroutineScope)
     }
 
     private fun onSessionActive(session: Session) {
@@ -88,13 +88,13 @@ class InvitesAcceptor @Inject constructor(
         }
         val flowSession = session.flow()
         combine(
-                flowSession.liveRoomSummaries(roomQueryParams),
-                flowSession.liveRoomChangeMembershipState().debounce(1000)
+            flowSession.liveRoomSummaries(roomQueryParams),
+            flowSession.liveRoomChangeMembershipState().debounce(1000)
         ) { invitedRooms, _ -> invitedRooms.map { it.roomId } }
-                .filter { it.isNotEmpty() }
-                .onEach { invitedRoomIds ->
-                    joinInvitedRooms(session, invitedRoomIds)
-                }.launchIn(session.coroutineScope)
+            .filter { it.isNotEmpty() }
+            .onEach { invitedRoomIds ->
+                joinInvitedRooms(session, invitedRoomIds)
+            }.launchIn(session.coroutineScope)
     }
 
     private suspend fun joinInvitedRooms(session: Session, invitedRoomIds: List<String>) = coroutineScope {

@@ -26,42 +26,42 @@ import im.vector.app.features.login.SignMode
 import kotlinx.parcelize.Parcelize
 
 data class OnboardingViewState(
-        val isLoading: Boolean = false,
+    val isLoading: Boolean = false,
 
-        @PersistState
-        val onboardingFlow: OnboardingFlow? = null,
+    @PersistState
+    val onboardingFlow: OnboardingFlow? = null,
 
-        // User choices
-        @PersistState
-        val serverType: ServerType = ServerType.Unknown,
-        @PersistState
-        val useCase: FtueUseCase? = null,
-        @PersistState
-        val signMode: SignMode = SignMode.Unknown,
-        @PersistState
-        val resetPasswordEmail: String? = null,
-        @PersistState
-        val homeServerUrlFromUser: String? = null,
+    // User choices
+    @PersistState
+    val serverType: ServerType = ServerType.Unknown,
+    @PersistState
+    val useCase: FtueUseCase? = null,
+    @PersistState
+    val signMode: SignMode = SignMode.Unknown,
+    @PersistState
+    val resetPasswordEmail: String? = null,
+    @PersistState
+    val homeServerUrlFromUser: String? = null,
 
-        // Can be modified after a Wellknown request
-        @PersistState
-        val homeServerUrl: String? = null,
+    // Can be modified after a Wellknown request
+    @PersistState
+    val homeServerUrl: String? = null,
 
-        // For SSO session recovery
-        @PersistState
-        val deviceId: String? = null,
+    // For SSO session recovery
+    @PersistState
+    val deviceId: String? = null,
 
-        // Network result
-        @PersistState
-        val loginMode: LoginMode = LoginMode.Unknown,
-        // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
-        @PersistState
-        val loginModeSupportedTypes: List<String> = emptyList(),
-        val knownCustomHomeServersUrls: List<String> = emptyList(),
-        val isForceLoginFallbackEnabled: Boolean = false,
+    // Network result
+    @PersistState
+    val loginMode: LoginMode = LoginMode.Unknown,
+    // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
+    @PersistState
+    val loginModeSupportedTypes: List<String> = emptyList(),
+    val knownCustomHomeServersUrls: List<String> = emptyList(),
+    val isForceLoginFallbackEnabled: Boolean = false,
 
-        @PersistState
-        val personalizationState: PersonalizationState = PersonalizationState()
+    @PersistState
+    val personalizationState: PersonalizationState = PersonalizationState()
 ) : MavericksState
 
 enum class OnboardingFlow {
@@ -72,10 +72,10 @@ enum class OnboardingFlow {
 
 @Parcelize
 data class PersonalizationState(
-        val supportsChangingDisplayName: Boolean = false,
-        val supportsChangingProfilePicture: Boolean = false,
-        val displayName: String? = null,
-        val selectedPictureUri: Uri? = null
+    val supportsChangingDisplayName: Boolean = false,
+    val supportsChangingProfilePicture: Boolean = false,
+    val displayName: String? = null,
+    val selectedPictureUri: Uri? = null
 ) : Parcelable {
 
     fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture

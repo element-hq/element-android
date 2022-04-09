@@ -67,13 +67,13 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
                 views.keysBackupSetupStep3FinishButton.text = getString(R.string.keys_backup_setup_step3_button_title_no_passphrase)
 
                 views.keysBackupSetupStep3RecoveryKeyText.text = viewModel.recoveryKey.value!!
-                        .replace(" ", "")
-                        .chunked(16)
-                        .joinToString("\n") {
-                            it
-                                    .chunked(4)
-                                    .joinToString(" ")
-                        }
+                    .replace(" ", "")
+                    .chunked(16)
+                    .joinToString("\n") {
+                        it
+                            .chunked(4)
+                            .joinToString(" ")
+                    }
                 views.keysBackupSetupStep3RecoveryKeyText.isVisible = true
             } else {
                 views.keysBackupSetupStep3Label2.text = getString(R.string.keys_backup_setup_step3_text_line2)
@@ -115,12 +115,12 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
             dialog.findViewById<TextView>(R.id.keys_backup_recovery_key_text)?.let {
                 it.isVisible = true
                 it.text = recoveryKey.replace(" ", "")
-                        .chunked(16)
-                        .joinToString("\n") {
-                            it
-                                    .chunked(4)
-                                    .joinToString(" ")
-                        }
+                    .chunked(16)
+                    .joinToString("\n") {
+                        it
+                            .chunked(4)
+                            .joinToString(" ")
+                    }
 
                 it.debouncedClicks {
                     copyToClipboard(requireActivity(), recoveryKey)
@@ -132,21 +132,22 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
             val userId = viewModel.userId
             val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             selectTxtFileToWrite(
-                    activity = requireActivity(),
-                    activityResultLauncher = saveRecoveryActivityResultLauncher,
-                    defaultFileName = "recovery-key-$userId-$timestamp.txt",
-                    chooserHint = getString(R.string.save_recovery_key_chooser_hint)
+                activity = requireActivity(),
+                activityResultLauncher = saveRecoveryActivityResultLauncher,
+                defaultFileName = "recovery-key-$userId-$timestamp.txt",
+                chooserHint = getString(R.string.save_recovery_key_chooser_hint)
             )
             dialog.dismiss()
         }
 
         dialog.findViewById<View>(R.id.keys_backup_setup_share)?.debouncedClicks {
             startSharePlainTextIntent(
-                    fragment = this,
-                    activityResultLauncher = null,
-                    chooserTitle = context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
-                    text = recoveryKey,
-                    subject = context?.getString(R.string.recovery_key))
+                fragment = this,
+                activityResultLauncher = null,
+                chooserTitle = context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
+                text = recoveryKey,
+                subject = context?.getString(R.string.recovery_key)
+            )
             viewModel.copyHasBeenMade = true
             dialog.dismiss()
         }
@@ -167,33 +168,33 @@ class KeysBackupSetupStep3Fragment @Inject constructor() : VectorBaseFragment<Fr
             Try {
                 withContext(Dispatchers.IO) {
                     requireContext().safeOpenOutputStream(uri)
-                            ?.use { os ->
-                                os.write(data.toByteArray())
-                                os.flush()
-                            }
+                        ?.use { os ->
+                            os.write(data.toByteArray())
+                            os.flush()
+                        }
                 }
-                        ?: throw IOException("Unable to write the file")
+                    ?: throw IOException("Unable to write the file")
             }
-                    .fold(
-                            { throwable ->
-                                activity?.let {
-                                    MaterialAlertDialogBuilder(it)
-                                            .setTitle(R.string.dialog_title_error)
-                                            .setMessage(errorFormatter.toHumanReadable(throwable))
-                                }
-                            },
-                            {
-                                viewModel.copyHasBeenMade = true
-                                activity?.let {
-                                    MaterialAlertDialogBuilder(it)
-                                            .setTitle(R.string.dialog_title_success)
-                                            .setMessage(R.string.recovery_key_export_saved)
-                                }
-                            }
-                    )
-                    ?.setCancelable(false)
-                    ?.setPositiveButton(R.string.ok, null)
-                    ?.show()
+                .fold(
+                    { throwable ->
+                        activity?.let {
+                            MaterialAlertDialogBuilder(it)
+                                .setTitle(R.string.dialog_title_error)
+                                .setMessage(errorFormatter.toHumanReadable(throwable))
+                        }
+                    },
+                    {
+                        viewModel.copyHasBeenMade = true
+                        activity?.let {
+                            MaterialAlertDialogBuilder(it)
+                                .setTitle(R.string.dialog_title_success)
+                                .setMessage(R.string.recovery_key_export_saved)
+                        }
+                    }
+                )
+                ?.setCancelable(false)
+                ?.setPositiveButton(R.string.ok, null)
+                ?.show()
         }
     }
 

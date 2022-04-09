@@ -26,8 +26,8 @@ import timber.log.Timber
 import java.io.InputStream
 
 data class Resource(
-        var mContentStream: InputStream? = null,
-        var mMimeType: String? = null
+    var mContentStream: InputStream? = null,
+    var mMimeType: String? = null
 ) {
     /**
      * Close the content stream.

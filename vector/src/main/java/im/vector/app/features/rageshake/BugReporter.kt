@@ -68,13 +68,13 @@ import javax.inject.Singleton
  */
 @Singleton
 class BugReporter @Inject constructor(
-        private val context: Context,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val versionProvider: VersionProvider,
-        private val vectorPreferences: VectorPreferences,
-        private val vectorFileLogger: VectorFileLogger,
-        private val systemLocaleProvider: SystemLocaleProvider,
-        private val matrix: Matrix
+    private val context: Context,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val versionProvider: VersionProvider,
+    private val vectorPreferences: VectorPreferences,
+    private val vectorFileLogger: VectorFileLogger,
+    private val systemLocaleProvider: SystemLocaleProvider,
+    private val matrix: Matrix
 ) {
     var inMultiWindowMode = false
 
@@ -99,7 +99,7 @@ class BugReporter @Inject constructor(
     private val mIsCancelled = false
 
     val adapter = MoshiProvider.providesMoshi()
-            .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
+        .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
 
     /**
      * Get current Screenshot
@@ -111,14 +111,15 @@ class BugReporter @Inject constructor(
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    private val LOGCAT_CMD_ERROR = arrayOf("logcat", // /< Run 'logcat' command
-            "-d", // /< Dump the log rather than continue outputting it
-            "-v", // formatting
-            "threadtime", // include timestamps
-            "AndroidRuntime:E " + // /< Pick all AndroidRuntime errors (such as uncaught exceptions)"communicatorjni:V " + ///< All communicatorjni logging
-                    "libcommunicator:V " + // /< All libcommunicator logging
-                    "DEBUG:V " + // /< All DEBUG logging - which includes native land crashes (seg faults, etc)
-                    "*:S" // /< Everything else silent, so don't pick it..
+    private val LOGCAT_CMD_ERROR = arrayOf(
+        "logcat", // /< Run 'logcat' command
+        "-d", // /< Dump the log rather than continue outputting it
+        "-v", // formatting
+        "threadtime", // include timestamps
+        "AndroidRuntime:E " + // /< Pick all AndroidRuntime errors (such as uncaught exceptions)"communicatorjni:V " + ///< All communicatorjni logging
+                "libcommunicator:V " + // /< All libcommunicator logging
+                "DEBUG:V " + // /< All DEBUG logging - which includes native land crashes (seg faults, etc)
+                "*:S" // /< Everything else silent, so don't pick it..
     )
 
     private val LOGCAT_CMD_DEBUG = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
@@ -164,16 +165,18 @@ class BugReporter @Inject constructor(
      * @param listener          the listener
      */
     @SuppressLint("StaticFieldLeak")
-    fun sendBugReport(reportType: ReportType,
-                      withDevicesLogs: Boolean,
-                      withCrashLogs: Boolean,
-                      withKeyRequestHistory: Boolean,
-                      withScreenshot: Boolean,
-                      theBugDescription: String,
-                      serverVersion: String,
-                      canContact: Boolean = false,
-                      customFields: Map<String, String>? = null,
-                      listener: IMXBugReportListener?) {
+    fun sendBugReport(
+        reportType: ReportType,
+        withDevicesLogs: Boolean,
+        withCrashLogs: Boolean,
+        withKeyRequestHistory: Boolean,
+        withScreenshot: Boolean,
+        theBugDescription: String,
+        serverVersion: String,
+        canContact: Boolean = false,
+        customFields: Map<String, String>? = null,
+        listener: IMXBugReportListener?
+    ) {
         // enumerate files to delete
         val mBugReportFiles: MutableList<File> = ArrayList()
 
@@ -228,20 +231,20 @@ class BugReporter @Inject constructor(
                 }
 
                 activeSessionHolder.getSafeActiveSession()
-                        ?.takeIf { !mIsCancelled && withKeyRequestHistory }
-                        ?.cryptoService()
-                        ?.getGossipingEvents()
-                        ?.let { GossipingEventsSerializer().serialize(it) }
-                        ?.toByteArray()
-                        ?.let { rawByteArray ->
-                            File(context.cacheDir.absolutePath, KEY_REQUESTS_FILENAME)
-                                    .also {
-                                        it.outputStream()
-                                                .use { os -> os.write(rawByteArray) }
-                                    }
-                        }
-                        ?.let { compressFile(it) }
-                        ?.let { gzippedFiles.add(it) }
+                    ?.takeIf { !mIsCancelled && withKeyRequestHistory }
+                    ?.cryptoService()
+                    ?.getGossipingEvents()
+                    ?.let { GossipingEventsSerializer().serialize(it) }
+                    ?.toByteArray()
+                    ?.let { rawByteArray ->
+                        File(context.cacheDir.absolutePath, KEY_REQUESTS_FILENAME)
+                            .also {
+                                it.outputStream()
+                                    .use { os -> os.write(rawByteArray) }
+                            }
+                    }
+                    ?.let { compressFile(it) }
+                    ?.let { gzippedFiles.add(it) }
 
                 var deviceId = "undefined"
                 var userId = "undefined"
@@ -255,40 +258,42 @@ class BugReporter @Inject constructor(
 
                 if (!mIsCancelled) {
                     val text = when (reportType) {
-                        ReportType.BUG_REPORT            -> "[Element] $bugDescription"
-                        ReportType.SUGGESTION            -> "[Element] [Suggestion] $bugDescription"
-                        ReportType.SPACE_BETA_FEEDBACK   -> "[Element] [spaces-feedback] $bugDescription"
+                        ReportType.BUG_REPORT -> "[Element] $bugDescription"
+                        ReportType.SUGGESTION -> "[Element] [Suggestion] $bugDescription"
+                        ReportType.SPACE_BETA_FEEDBACK -> "[Element] [spaces-feedback] $bugDescription"
                         ReportType.THREADS_BETA_FEEDBACK -> "[Element] [threads-feedback] $bugDescription"
                         ReportType.AUTO_UISI_SENDER,
-                        ReportType.AUTO_UISI             -> bugDescription
+                        ReportType.AUTO_UISI -> bugDescription
                     }
 
                     // build the multi part request
                     val builder = BugReporterMultipartBody.Builder()
-                            .addFormDataPart("text", text)
-                            .addFormDataPart("app", rageShakeAppNameForReport(reportType))
-                            .addFormDataPart("user_agent", matrix.getUserAgent())
-                            .addFormDataPart("user_id", userId)
-                            .addFormDataPart("can_contact", canContact.toString())
-                            .addFormDataPart("device_id", deviceId)
-                            .addFormDataPart("version", versionProvider.getVersion(longFormat = true, useBuildNumber = false))
-                            .addFormDataPart("branch_name", BuildConfig.GIT_BRANCH_NAME)
-                            .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
-                            .addFormDataPart("olm_version", olmVersion)
-                            .addFormDataPart("device", Build.MODEL.trim())
-                            .addFormDataPart("verbose_log", vectorPreferences.labAllowedExtendedLogging().toOnOff())
-                            .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
-                            .addFormDataPart("os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") " +
-                                    Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)
-                            .addFormDataPart("locale", Locale.getDefault().toString())
-                            .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
-                            .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
-                            .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
-                            .addFormDataPart("server_version", serverVersion).apply {
-                                customFields?.forEach { (name, value) ->
-                                    addFormDataPart(name, value)
-                                }
+                        .addFormDataPart("text", text)
+                        .addFormDataPart("app", rageShakeAppNameForReport(reportType))
+                        .addFormDataPart("user_agent", matrix.getUserAgent())
+                        .addFormDataPart("user_id", userId)
+                        .addFormDataPart("can_contact", canContact.toString())
+                        .addFormDataPart("device_id", deviceId)
+                        .addFormDataPart("version", versionProvider.getVersion(longFormat = true, useBuildNumber = false))
+                        .addFormDataPart("branch_name", BuildConfig.GIT_BRANCH_NAME)
+                        .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
+                        .addFormDataPart("olm_version", olmVersion)
+                        .addFormDataPart("device", Build.MODEL.trim())
+                        .addFormDataPart("verbose_log", vectorPreferences.labAllowedExtendedLogging().toOnOff())
+                        .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
+                        .addFormDataPart(
+                            "os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") " +
+                                    Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME
+                        )
+                        .addFormDataPart("locale", Locale.getDefault().toString())
+                        .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
+                        .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
+                        .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
+                        .addFormDataPart("server_version", serverVersion).apply {
+                            customFields?.forEach { (name, value) ->
+                                addFormDataPart(name, value)
                             }
+                        }
 
                     val buildNumber = BuildConfig.BUILD_NUMBER
                     if (buildNumber.isNotEmpty() && buildNumber != "0") {
@@ -317,8 +322,10 @@ class BugReporter @Inject constructor(
                                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
                                 }
 
-                                builder.addFormDataPart("file",
-                                        logCatScreenshotFile.name, logCatScreenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull()))
+                                builder.addFormDataPart(
+                                    "file",
+                                    logCatScreenshotFile.name, logCatScreenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull())
+                                )
                             } catch (e: Exception) {
                                 Timber.e(e, "## sendBugReport() : fail to write screenshot$e")
                             }
@@ -336,18 +343,18 @@ class BugReporter @Inject constructor(
                     builder.addFormDataPart("label", "[Element]")
 
                     when (reportType) {
-                        ReportType.BUG_REPORT            -> {
+                        ReportType.BUG_REPORT -> {
                             /* nop */
                         }
-                        ReportType.SUGGESTION            -> builder.addFormDataPart("label", "[Suggestion]")
-                        ReportType.SPACE_BETA_FEEDBACK   -> builder.addFormDataPart("label", "spaces-feedback")
+                        ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
+                        ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
                         ReportType.THREADS_BETA_FEEDBACK -> builder.addFormDataPart("label", "threads-feedback")
-                        ReportType.AUTO_UISI             -> {
+                        ReportType.AUTO_UISI -> {
                             builder.addFormDataPart("label", "Z-UISI")
                             builder.addFormDataPart("label", "android")
                             builder.addFormDataPart("label", "uisi-recipient")
                         }
-                        ReportType.AUTO_UISI_SENDER      -> {
+                        ReportType.AUTO_UISI_SENDER -> {
                             builder.addFormDataPart("label", "Z-UISI")
                             builder.addFormDataPart("label", "android")
                             builder.addFormDataPart("label", "uisi-sender")
@@ -387,9 +394,9 @@ class BugReporter @Inject constructor(
 
                     // build the request
                     val request = Request.Builder()
-                            .url(context.getString(R.string.bug_report_url))
-                            .post(requestBody)
-                            .build()
+                        .url(context.getString(R.string.bug_report_url))
+                        .post(requestBody)
+                        .build()
 
                     var responseCode = HttpURLConnection.HTTP_INTERNAL_ERROR
                     var response: Response? = null
@@ -494,15 +501,17 @@ class BugReporter @Inject constructor(
         // app: Identifier for the application (eg 'riot-web').
         // Should correspond to a mapping configured in the configuration file for github issue reporting to work.
         // (see R.string.bug_report_url for configured RS server)
-        return context.getString(when (reportType) {
-            ReportType.AUTO_UISI_SENDER,
-            ReportType.AUTO_UISI -> R.string.bug_report_auto_uisi_app_name
-            else                 -> R.string.bug_report_app_name
-        })
+        return context.getString(
+            when (reportType) {
+                ReportType.AUTO_UISI_SENDER,
+                ReportType.AUTO_UISI -> R.string.bug_report_auto_uisi_app_name
+                else -> R.string.bug_report_app_name
+            }
+        )
     }
-// ==============================================================================================================
-// crash report management
-// ==============================================================================================================
+    // ==============================================================================================================
+    // crash report management
+    // ==============================================================================================================
 
     /**
      * Provides the crash file
@@ -567,9 +576,9 @@ class BugReporter @Inject constructor(
         return null
     }
 
-// ==============================================================================================================
-// Screenshot management
-// ==============================================================================================================
+    // ==============================================================================================================
+    // Screenshot management
+    // ==============================================================================================================
 
     /**
      * Take a screenshot of the display.
@@ -611,14 +620,14 @@ class BugReporter @Inject constructor(
 
     private fun getDialogBitmaps(activity: FragmentActivity): List<Bitmap> {
         return activity.supportFragmentManager.fragments
-                .map { it.getAllChildFragments() }
-                .flatten()
-                .filterIsInstance(DialogFragment::class.java)
-                .mapNotNull { fragment ->
-                    fragment.dialog?.window?.decorView?.rootView?.let { rootView ->
-                        getBitmap(rootView)
-                    }
+            .map { it.getAllChildFragments() }
+            .flatten()
+            .filterIsInstance(DialogFragment::class.java)
+            .mapNotNull { fragment ->
+                fragment.dialog?.window?.decorView?.rootView?.let { rootView ->
+                    getBitmap(rootView)
                 }
+            }
     }
 
     private fun getBitmap(rootView: View): Bitmap? {
@@ -636,9 +645,9 @@ class BugReporter @Inject constructor(
         }
     }
 
-// ==============================================================================================================
-// Logcat management
-// ==============================================================================================================
+    // ==============================================================================================================
+    // Logcat management
+    // ==============================================================================================================
 
     /**
      * Save the logcat
@@ -686,20 +695,20 @@ class BugReporter @Inject constructor(
         try {
             val separator = System.getProperty("line.separator")
             logcatProc.inputStream
-                    .reader()
-                    .buffered(BUFFER_SIZE)
-                    .forEachLine { line ->
-                        streamWriter.append(line)
-                        streamWriter.append(separator)
-                    }
+                .reader()
+                .buffered(BUFFER_SIZE)
+                .forEachLine { line ->
+                    streamWriter.append(line)
+                    streamWriter.append(separator)
+                }
         } catch (e: IOException) {
             Timber.e(e, "getLog fails")
         }
     }
 
-// ==============================================================================================================
-// File compression management
-// ==============================================================================================================
+    // ==============================================================================================================
+    // File compression management
+    // ==============================================================================================================
 
     /**
      * GZip a file

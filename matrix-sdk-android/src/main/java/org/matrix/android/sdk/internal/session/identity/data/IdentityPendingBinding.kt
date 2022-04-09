@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.session.identity.data
 
 internal data class IdentityPendingBinding(
-        /* Managed by Riot */
-        val clientSecret: String,
-        /* Managed by Riot */
-        val sendAttempt: Int,
-        /* Provided by the identity server */
-        val sid: String
+    /* Managed by Riot */
+    val clientSecret: String,
+    /* Managed by Riot */
+    val sendAttempt: Int,
+    /* Provided by the identity server */
+    val sid: String
 )

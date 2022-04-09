@@ -49,12 +49,12 @@ import javax.inject.Inject
  * - the account has been created and we propose the user to set an avatar and a display name
  */
 class AccountCreatedFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val dateFormatter: VectorDateFormatter,
-        private val matrixItemColorProvider: MatrixItemColorProvider,
-        colorProvider: ColorProvider
+    private val avatarRenderer: AvatarRenderer,
+    private val dateFormatter: VectorDateFormatter,
+    private val matrixItemColorProvider: MatrixItemColorProvider,
+    colorProvider: ColorProvider
 ) : AbstractLoginFragment2<FragmentLoginAccountCreatedBinding>(),
-        GalleryOrCameraDialogHelper.Listener {
+    GalleryOrCameraDialogHelper.Listener {
 
     private val viewModel: AccountCreatedViewModel by fragmentViewModel()
 
@@ -101,21 +101,23 @@ class AccountCreatedFragment @Inject constructor(
         views.editText.setText(state.currentUser()?.getBestName().orEmpty())
 
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.settings_display_name)
-                .setView(layout)
-                .setPositiveButton(R.string.ok) { _, _ ->
-                    val newName = views.editText.text.toString()
-                    viewModel.handle(AccountCreatedAction.SetDisplayName(newName))
-                }
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
+            .setTitle(R.string.settings_display_name)
+            .setView(layout)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                val newName = views.editText.text.toString()
+                viewModel.handle(AccountCreatedAction.SetDisplayName(newName))
+            }
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
     }
 
     override fun onImageReady(uri: Uri?) {
         uri ?: return
-        viewModel.handle(AccountCreatedAction.SetAvatar(
+        viewModel.handle(
+            AccountCreatedAction.SetAvatar(
                 avatarUri = uri,
-                filename = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
+                filename = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString()
+            )
         )
     }
 
@@ -145,7 +147,7 @@ class AccountCreatedFragment @Inject constructor(
 
         // User color
         views.loginAccountCreatedMemberName
-                .setTextColor(matrixItemColorProvider.getColor(MatrixItem.UserItem(state.userId)))
+            .setTextColor(matrixItemColorProvider.getColor(MatrixItem.UserItem(state.userId)))
 
         views.loginAccountCreatedLater.isVisible = state.hasBeenModified.not()
         views.loginAccountCreatedDone.isVisible = state.hasBeenModified

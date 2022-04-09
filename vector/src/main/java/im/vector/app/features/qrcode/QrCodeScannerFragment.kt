@@ -49,8 +49,8 @@ import javax.inject.Inject
 
 @Parcelize
 data class QrScannerArgs(
-        val showExtraButtons: Boolean,
-        @StringRes val titleRes: Int
+    val showExtraButtons: Boolean,
+    @StringRes val titleRes: Int
 ) : Parcelable
 
 class QrCodeScannerFragment @Inject constructor() : VectorBaseFragment<FragmentQrCodeScannerBinding>(), ZXingScannerView.ResultHandler {
@@ -73,18 +73,18 @@ class QrCodeScannerFragment @Inject constructor() : VectorBaseFragment<FragmentQ
     private val pickImageActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             MultiPicker
-                    .get(MultiPicker.IMAGE)
-                    .getSelectedFiles(requireActivity(), activityResult.data)
-                    .firstOrNull()
-                    ?.contentUri
-                    ?.let { uri ->
-                        // try to see if it is a valid matrix code
-                        val bitmap = ImageUtils.getBitmap(requireContext(), uri)
-                                ?: return@let Unit.also {
-                                    Toast.makeText(requireContext(), getString(R.string.qr_code_not_scanned), Toast.LENGTH_SHORT).show()
-                                }
-                        handleResult(tryOrNull { QRCodeBitmapDecodeHelper.decodeQRFromBitmap(bitmap) })
-                    }
+                .get(MultiPicker.IMAGE)
+                .getSelectedFiles(requireActivity(), activityResult.data)
+                .firstOrNull()
+                ?.contentUri
+                ?.let { uri ->
+                    // try to see if it is a valid matrix code
+                    val bitmap = ImageUtils.getBitmap(requireContext(), uri)
+                        ?: return@let Unit.also {
+                            Toast.makeText(requireContext(), getString(R.string.qr_code_not_scanned), Toast.LENGTH_SHORT).show()
+                        }
+                    handleResult(tryOrNull { QRCodeBitmapDecodeHelper.decodeQRFromBitmap(bitmap) })
+                }
         }
     }
 
@@ -96,8 +96,8 @@ class QrCodeScannerFragment @Inject constructor() : VectorBaseFragment<FragmentQ
         val title = scannerArgs.titleRes.let { getString(it) }
 
         setupToolbar(views.qrScannerToolbar)
-                .setTitle(title)
-                .allowBack(useCross = true)
+            .setTitle(title)
+            .allowBack(useCross = true)
 
         scannerArgs.showExtraButtons.let { showButtons ->
             views.userCodeMyCodeButton.isVisible = showButtons

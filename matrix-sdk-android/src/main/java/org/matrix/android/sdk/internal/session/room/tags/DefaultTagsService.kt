@@ -22,9 +22,9 @@ import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.session.room.tags.TagsService
 
 internal class DefaultTagsService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        private val addTagToRoomTask: AddTagToRoomTask,
-        private val deleteTagFromRoomTask: DeleteTagFromRoomTask
+    @Assisted private val roomId: String,
+    private val addTagToRoomTask: AddTagToRoomTask,
+    private val deleteTagFromRoomTask: DeleteTagFromRoomTask
 ) : TagsService {
 
     @AssistedFactory

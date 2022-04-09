@@ -32,8 +32,9 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import java.util.concurrent.CountDownLatch
 
 class KeysBackupTestHelper(
-        private val testHelper: CommonTestHelper,
-        private val cryptoTestHelper: CryptoTestHelper) {
+    private val testHelper: CommonTestHelper,
+    private val cryptoTestHelper: CryptoTestHelper
+) {
 
     fun waitForKeybackUpBatching() {
         Thread.sleep(400)
@@ -88,14 +89,18 @@ class KeysBackupTestHelper(
 
         stateObserver.stopAndCheckStates(null)
 
-        return KeysBackupScenarioData(cryptoTestData,
-                aliceKeys,
-                prepareKeysBackupDataResult,
-                aliceSession2)
+        return KeysBackupScenarioData(
+            cryptoTestData,
+            aliceKeys,
+            prepareKeysBackupDataResult,
+            aliceSession2
+        )
     }
 
-    fun prepareAndCreateKeysBackupData(keysBackup: KeysBackupService,
-                                       password: String? = null): PrepareKeysBackupDataResult {
+    fun prepareAndCreateKeysBackupData(
+        keysBackup: KeysBackupService,
+        password: String? = null
+    ): PrepareKeysBackupDataResult {
         val stateObserver = StateObserver(keysBackup)
 
         val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
@@ -167,9 +172,11 @@ class KeysBackupTestHelper(
      * - The new device must have the same count of megolm keys
      * - Alice must have the same keys on both devices
      */
-    fun checkRestoreSuccess(testData: KeysBackupScenarioData,
-                            total: Int,
-                            imported: Int) {
+    fun checkRestoreSuccess(
+        testData: KeysBackupScenarioData,
+        total: Int,
+        imported: Int
+    ) {
         // - Imported keys number must be correct
         Assert.assertEquals(testData.aliceKeys.size, total)
         Assert.assertEquals(total, imported)
@@ -180,7 +187,7 @@ class KeysBackupTestHelper(
         // - Alice must have the same keys on both devices
         for (aliceKey1 in testData.aliceKeys) {
             val aliceKey2 = (testData.aliceSession2.cryptoService().keysBackupService() as DefaultKeysBackupService).store
-                    .getInboundGroupSession(aliceKey1.olmInboundGroupSession!!.sessionIdentifier(), aliceKey1.senderKey!!)
+                .getInboundGroupSession(aliceKey1.olmInboundGroupSession!!.sessionIdentifier(), aliceKey1.senderKey!!)
             Assert.assertNotNull(aliceKey2)
             assertKeysEquals(aliceKey1.exportKeys(), aliceKey2!!.exportKeys())
         }

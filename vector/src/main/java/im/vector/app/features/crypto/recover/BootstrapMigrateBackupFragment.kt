@@ -48,7 +48,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class BootstrapMigrateBackupFragment @Inject constructor(
-        private val colorProvider: ColorProvider
+    private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentBootstrapMigrateBackupBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapMigrateBackupBinding {
@@ -65,21 +65,21 @@ class BootstrapMigrateBackupFragment @Inject constructor(
             views.bootstrapMigrateEditText.setText(it.passphrase ?: "")
         }
         views.bootstrapMigrateEditText.editorActionEvents()
-                .throttleFirst(300)
-                .onEach {
-                    if (it.actionId == EditorInfo.IME_ACTION_DONE) {
-                        submit()
-                    }
+            .throttleFirst(300)
+            .onEach {
+                if (it.actionId == EditorInfo.IME_ACTION_DONE) {
+                    submit()
                 }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.bootstrapMigrateEditText.textChanges()
-                .skipInitialValue()
-                .onEach {
-                    views.bootstrapRecoveryKeyEnterTil.error = null
-                    // sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it?.toString() ?: ""))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .skipInitialValue()
+            .onEach {
+                views.bootstrapRecoveryKeyEnterTil.error = null
+                // sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it?.toString() ?: ""))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         // sharedViewModel.observeViewEvents {}
         views.bootstrapMigrateContinueButton.debouncedClicks { submit() }
@@ -133,8 +133,8 @@ class BootstrapMigrateBackupFragment @Inject constructor(
 
             val recKey = getString(R.string.bootstrap_migration_use_recovery_key)
             views.bootstrapMigrateForgotPassphrase.text = getString(R.string.bootstrap_migration_with_passphrase_helper_with_link, recKey)
-                    .toSpannable()
-                    .colorizeMatchingText(recKey, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
+                .toSpannable()
+                .colorizeMatchingText(recKey, colorProvider.getColorFromAttribute(android.R.attr.textColorLink))
 
             views.bootstrapMigrateUseFile.isVisible = false
         }
@@ -145,11 +145,11 @@ class BootstrapMigrateBackupFragment @Inject constructor(
             activityResult.data?.data?.let { dataURI ->
                 tryOrNull {
                     activity?.contentResolver?.openInputStream(dataURI)
-                            ?.bufferedReader()
-                            ?.use { it.readText() }
-                            ?.let {
-                                views.bootstrapMigrateEditText.setText(it)
-                            }
+                        ?.bufferedReader()
+                        ?.use { it.readText() }
+                        ?.let {
+                            views.bootstrapMigrateEditText.setText(it)
+                        }
                 }
             }
         }

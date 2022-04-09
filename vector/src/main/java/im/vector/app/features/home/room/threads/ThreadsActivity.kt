@@ -42,10 +42,10 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
     @Inject
     lateinit var avatarRenderer: AvatarRenderer
 
-//    private val roomThreadDetailFragment: RoomThreadDetailFragment?
-//        get() {
-//            return supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as? RoomThreadDetailFragment
-//        }
+    //    private val roomThreadDetailFragment: RoomThreadDetailFragment?
+    //        get() {
+    //            return supportFragmentManager.findFragmentByTag(FRAGMENT_TAG) as? RoomThreadDetailFragment
+    //        }
 
     override fun getBinding() = ActivityThreadsBinding.inflate(layoutInflater)
 
@@ -59,13 +59,13 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
     private fun initFragment() {
         if (isFirstCreation()) {
             when (val fragment = fragmentToNavigate()) {
-                is DisplayFragment.ThreadList     -> {
+                is DisplayFragment.ThreadList -> {
                     initThreadListFragment(fragment.threadListArgs)
                 }
                 is DisplayFragment.ThreadTimeLine -> {
                     initThreadTimelineFragment(fragment.threadTimelineArgs)
                 }
-                is DisplayFragment.ErrorFragment  -> {
+                is DisplayFragment.ErrorFragment -> {
                     finish()
                 }
             }
@@ -74,20 +74,22 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
 
     private fun initThreadListFragment(threadListArgs: ThreadListArgs) {
         replaceFragment(
-                views.threadsActivityFragmentContainer,
-                ThreadListFragment::class.java,
-                threadListArgs)
+            views.threadsActivityFragmentContainer,
+            ThreadListFragment::class.java,
+            threadListArgs
+        )
     }
 
     private fun initThreadTimelineFragment(threadTimelineArgs: ThreadTimelineArgs) =
-            replaceFragment(
-                    views.threadsActivityFragmentContainer,
-                    TimelineFragment::class.java,
-                    TimelineArgs(
-                            roomId = threadTimelineArgs.roomId,
-                            eventId = getEventIdToNavigate(),
-                            threadTimelineArgs = threadTimelineArgs
-                    ))
+        replaceFragment(
+            views.threadsActivityFragmentContainer,
+            TimelineFragment::class.java,
+            TimelineArgs(
+                roomId = threadTimelineArgs.roomId,
+                eventId = getEventIdToNavigate(),
+                threadTimelineArgs = threadTimelineArgs
+            )
+        )
 
     /**
      * This function is used to navigate to the selected thread timeline.
@@ -97,19 +99,20 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
         analyticsTracker.capture(Interaction.Name.MobileThreadListThreadItem.toAnalyticsInteraction())
         val commonOption: (FragmentTransaction) -> Unit = {
             it.setCustomAnimations(
-                    R.anim.animation_slide_in_right,
-                    R.anim.animation_slide_out_left,
-                    R.anim.animation_slide_in_left,
-                    R.anim.animation_slide_out_right)
+                R.anim.animation_slide_in_right,
+                R.anim.animation_slide_out_left,
+                R.anim.animation_slide_in_left,
+                R.anim.animation_slide_out_right
+            )
         }
         addFragmentToBackstack(
-                container = views.threadsActivityFragmentContainer,
-                fragmentClass = TimelineFragment::class.java,
-                params = TimelineArgs(
-                        roomId = threadTimelineArgs.roomId,
-                        threadTimelineArgs = threadTimelineArgs
-                ),
-                option = commonOption
+            container = views.threadsActivityFragmentContainer,
+            fragmentClass = TimelineFragment::class.java,
+            params = TimelineArgs(
+                roomId = threadTimelineArgs.roomId,
+                threadTimelineArgs = threadTimelineArgs
+            ),
+            option = commonOption
         )
     }
 
@@ -137,10 +140,10 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
         const val THREAD_LIST_ARGS = "THREAD_LIST_ARGS"
 
         fun newIntent(
-                context: Context,
-                threadTimelineArgs: ThreadTimelineArgs?,
-                threadListArgs: ThreadListArgs?,
-                eventIdToNavigate: String? = null
+            context: Context,
+            threadTimelineArgs: ThreadTimelineArgs?,
+            threadListArgs: ThreadListArgs?,
+            eventIdToNavigate: String? = null
         ): Intent {
             return Intent(context, ThreadsActivity::class.java).apply {
                 putExtra(THREAD_TIMELINE_ARGS, threadTimelineArgs)

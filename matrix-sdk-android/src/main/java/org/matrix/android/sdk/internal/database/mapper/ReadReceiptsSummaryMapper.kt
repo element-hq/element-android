@@ -27,7 +27,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import javax.inject.Inject
 
 internal class ReadReceiptsSummaryMapper @Inject constructor(
-        private val realmSessionProvider: RealmSessionProvider
+    private val realmSessionProvider: RealmSessionProvider
 ) {
 
     fun map(readReceiptsSummaryEntity: ReadReceiptsSummaryEntity?): List<ReadReceipt> {
@@ -47,10 +47,10 @@ internal class ReadReceiptsSummaryMapper @Inject constructor(
 
     private fun map(readReceipts: RealmList<ReadReceiptEntity>, realm: Realm): List<ReadReceipt> {
         return readReceipts
-                .mapNotNull {
-                    val roomMember = RoomMemberSummaryEntity.where(realm, roomId = it.roomId, userId = it.userId).findFirst()
-                            ?: return@mapNotNull null
-                    ReadReceipt(roomMember.asDomain(), it.originServerTs.toLong())
-                }
+            .mapNotNull {
+                val roomMember = RoomMemberSummaryEntity.where(realm, roomId = it.roomId, userId = it.userId).findFirst()
+                    ?: return@mapNotNull null
+                ReadReceipt(roomMember.asDomain(), it.originServerTs.toLong())
+            }
     }
 }

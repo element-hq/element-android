@@ -24,8 +24,8 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class SearchUsersParams(
-        // the searched term
-        @Json(name = "search_term") val searchTerm: String,
-        // set a limit to the request response
-        @Json(name = "limit") val limit: Int
+    // the searched term
+    @Json(name = "search_term") val searchTerm: String,
+    // set a limit to the request response
+    @Json(name = "limit") val limit: Int
 )

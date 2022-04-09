@@ -25,15 +25,17 @@ import com.google.zxing.qrcode.QRCodeWriter
 
 fun String.toBitMatrix(size: Int): BitMatrix {
     return QRCodeWriter().encode(
-            this,
-            BarcodeFormat.QR_CODE,
-            size,
-            size
+        this,
+        BarcodeFormat.QR_CODE,
+        size,
+        size
     )
 }
 
-fun BitMatrix.toBitmap(@ColorInt backgroundColor: Int = Color.WHITE,
-                       @ColorInt foregroundColor: Int = Color.BLACK): Bitmap {
+fun BitMatrix.toBitmap(
+    @ColorInt backgroundColor: Int = Color.WHITE,
+    @ColorInt foregroundColor: Int = Color.BLACK
+): Bitmap {
     val colorBuffer = IntArray(width * height)
     var rowOffset = 0
     for (y in 0 until height) {

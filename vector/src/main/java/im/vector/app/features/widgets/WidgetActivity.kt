@@ -75,12 +75,12 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
             return
         }
         setupToolbar(views.toolbar)
-                .allowBack()
+            .allowBack()
         views.toolbar.isVisible = widgetArgs.kind.nameRes != 0
         viewModel.observeViewEvents {
             when (it) {
                 is WidgetViewEvents.Close -> handleClose(it)
-                else                      -> Unit
+                else -> Unit
             }
         }
 
@@ -92,7 +92,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
         viewModel.onEach(WidgetViewState::status) { ws ->
             when (ws) {
-                WidgetStatus.UNKNOWN            -> {
+                WidgetStatus.UNKNOWN -> {
                 }
                 WidgetStatus.WIDGET_NOT_ALLOWED -> {
                     val dFrag = supportFragmentManager.findFragmentByTag(WIDGET_PERMISSION_FRAGMENT_TAG) as? RoomWidgetPermissionBottomSheet
@@ -100,11 +100,11 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
                         return@onEach
                     } else {
                         RoomWidgetPermissionBottomSheet
-                                .newInstance(widgetArgs)
-                                .show(supportFragmentManager, WIDGET_PERMISSION_FRAGMENT_TAG)
+                            .newInstance(widgetArgs)
+                            .show(supportFragmentManager, WIDGET_PERMISSION_FRAGMENT_TAG)
                     }
                 }
-                WidgetStatus.WIDGET_ALLOWED     -> {
+                WidgetStatus.WIDGET_ALLOWED -> {
                     if (supportFragmentManager.findFragmentByTag(WIDGET_FRAGMENT_TAG) == null) {
                         addFragment(views.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
                     }

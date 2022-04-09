@@ -43,9 +43,9 @@ import java.io.File
  * It's up to the caller to delete the file.
  */
 class GalleryOrCameraDialogHelper(
-        // must implement GalleryOrCameraDialogHelper.Listener
-        private val fragment: Fragment,
-        private val colorProvider: ColorProvider
+    // must implement GalleryOrCameraDialogHelper.Listener
+    private val fragment: Fragment,
+    private val colorProvider: ColorProvider
 ) {
     interface Listener {
         fun onImageReady(uri: Uri?)
@@ -68,8 +68,8 @@ class GalleryOrCameraDialogHelper(
         if (activityResult.resultCode == Activity.RESULT_OK) {
             avatarCameraUri?.let { uri ->
                 MultiPicker.get(MultiPicker.CAMERA)
-                        .getTakenPhoto(activity, uri)
-                        ?.let { startUCrop(it) }
+                    .getTakenPhoto(activity, uri)
+                    ?.let { startUCrop(it) }
             }
         }
     }
@@ -77,10 +77,10 @@ class GalleryOrCameraDialogHelper(
     private val pickImageActivityResultLauncher = fragment.registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             MultiPicker
-                    .get(MultiPicker.IMAGE)
-                    .getSelectedFiles(activity, activityResult.data)
-                    .firstOrNull()
-                    ?.let { startUCrop(it) }
+                .get(MultiPicker.IMAGE)
+                .getSelectedFiles(activity, activityResult.data)
+                .firstOrNull()
+                ?.let { startUCrop(it) }
         }
     }
 
@@ -94,9 +94,9 @@ class GalleryOrCameraDialogHelper(
         val destinationFile = File(activity.cacheDir, image.displayName.insertBeforeLast("_e_${System.currentTimeMillis()}"))
         val uri = image.contentUri
         createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), fragment.getString(R.string.rotate_and_crop_screen_title))
-                .withAspectRatio(1f, 1f)
-                .getIntent(activity)
-                .let { uCropActivityResultLauncher.launch(it) }
+            .withAspectRatio(1f, 1f)
+            .getIntent(activity)
+            .let { uCropActivityResultLauncher.launch(it) }
     }
 
     private enum class Type {
@@ -106,20 +106,22 @@ class GalleryOrCameraDialogHelper(
 
     fun show() {
         MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.attachment_type_dialog_title)
-                .setItems(arrayOf(
-                        fragment.getString(R.string.attachment_type_camera),
-                        fragment.getString(R.string.attachment_type_gallery)
-                )) { _, which ->
-                    onAvatarTypeSelected(if (which == 0) Type.Camera else Type.Gallery)
-                }
-                .setPositiveButton(R.string.action_cancel, null)
-                .show()
+            .setTitle(R.string.attachment_type_dialog_title)
+            .setItems(
+                arrayOf(
+                    fragment.getString(R.string.attachment_type_camera),
+                    fragment.getString(R.string.attachment_type_gallery)
+                )
+            ) { _, which ->
+                onAvatarTypeSelected(if (which == 0) Type.Camera else Type.Gallery)
+            }
+            .setPositiveButton(R.string.action_cancel, null)
+            .show()
     }
 
     private fun onAvatarTypeSelected(type: Type) {
         when (type) {
-            Type.Camera  ->
+            Type.Camera ->
                 if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, activity, takePhotoPermissionActivityResultLauncher)) {
                     doOpenCamera()
                 }

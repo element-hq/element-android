@@ -50,18 +50,18 @@ class KeepItSafeDialog {
         }
 
         MaterialAlertDialogBuilder(activity)
-//                .setIcon(android.R.drawable.ic_dialog_alert)
-//                .setTitle(R.string.devices_delete_dialog_title)
-                .setView(dialogLayout)
-                .setPositiveButton(R.string.ok, null)
-                .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                    if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                        dialog.cancel()
-                        return@OnKeyListener true
-                    }
-                    false
-                })
-                .create()
-                .show()
+            //                .setIcon(android.R.drawable.ic_dialog_alert)
+            //                .setTitle(R.string.devices_delete_dialog_title)
+            .setView(dialogLayout)
+            .setPositiveButton(R.string.ok, null)
+            .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
+                if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialog.cancel()
+                    return@OnKeyListener true
+                }
+                false
+            })
+            .create()
+            .show()
     }
 }

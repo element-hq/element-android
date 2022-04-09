@@ -21,14 +21,14 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class PushGatewayDevice(
-        /**
-         * Required. The app_id given when the pusher was created.
-         */
-        @Json(name = "app_id")
-        val appId: String,
-        /**
-         * Required. The pushkey given when the pusher was created.
-         */
-        @Json(name = "pushkey")
-        val pushKey: String
+    /**
+     * Required. The app_id given when the pusher was created.
+     */
+    @Json(name = "app_id")
+    val appId: String,
+    /**
+     * Required. The pushkey given when the pusher was created.
+     */
+    @Json(name = "pushkey")
+    val pushKey: String
 )

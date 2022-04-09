@@ -26,9 +26,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.M) class CallConnection(
-        private val context: Context,
-        private val roomId: String,
-        val callId: String
+    private val context: Context,
+    private val roomId: String,
+    val callId: String
 ) : Connection() {
 
     @Inject lateinit var callManager: WebRtcCallManager

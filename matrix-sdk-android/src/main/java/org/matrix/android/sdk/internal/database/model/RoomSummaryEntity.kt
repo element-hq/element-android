@@ -31,10 +31,10 @@ import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntit
 import org.matrix.android.sdk.internal.session.room.membership.RoomName
 
 internal open class RoomSummaryEntity(
-        @PrimaryKey var roomId: String = "",
-        var roomType: String? = null,
-        var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
-        var children: RealmList<SpaceChildSummaryEntity> = RealmList()
+    @PrimaryKey var roomId: String = "",
+    var roomType: String? = null,
+    var parents: RealmList<SpaceParentSummaryEntity> = RealmList(),
+    var children: RealmList<SpaceChildSummaryEntity> = RealmList()
 ) : RealmObject() {
 
     private var displayName: String? = ""
@@ -143,7 +143,7 @@ internal open class RoomSummaryEntity(
             if (tags.all { it.tagName != newTag.first }) {
                 // we must add it
                 tags.add(
-                        RoomTagEntity(newTag.first, newTag.second)
+                    RoomTagEntity(newTag.first, newTag.second)
                 )
             }
         }

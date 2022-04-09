@@ -27,14 +27,14 @@ import javax.inject.Inject
 internal interface ClearPreviewUrlCacheTask : Task<Unit, Unit>
 
 internal class DefaultClearPreviewUrlCacheTask @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy
+    @SessionDatabase private val monarchy: Monarchy
 ) : ClearPreviewUrlCacheTask {
 
     override suspend fun execute(params: Unit) {
         monarchy.awaitTransaction { realm ->
             realm.where<PreviewUrlCacheEntity>()
-                    .findAll()
-                    .deleteAllFromRealm()
+                .findAll()
+                .deleteAllFromRealm()
         }
     }
 }

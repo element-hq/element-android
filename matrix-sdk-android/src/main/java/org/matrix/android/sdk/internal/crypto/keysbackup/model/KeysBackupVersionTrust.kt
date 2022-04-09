@@ -20,14 +20,14 @@ package org.matrix.android.sdk.internal.crypto.keysbackup.model
  * Data model for response to [KeysBackup.getKeysBackupTrust()].
  */
 data class KeysBackupVersionTrust(
-        /**
-         * Flag to indicate if the backup is trusted.
-         * true if there is a signature that is valid & from a trusted device.
-         */
-        var usable: Boolean = false,
+    /**
+     * Flag to indicate if the backup is trusted.
+     * true if there is a signature that is valid & from a trusted device.
+     */
+    var usable: Boolean = false,
 
-        /**
-         * Signatures found in the backup version.
-         */
-        var signatures: MutableList<KeysBackupVersionTrustSignature> = ArrayList()
+    /**
+     * Signatures found in the backup version.
+     */
+    var signatures: MutableList<KeysBackupVersionTrustSignature> = ArrayList()
 )

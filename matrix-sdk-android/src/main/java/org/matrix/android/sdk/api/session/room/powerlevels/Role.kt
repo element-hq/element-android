@@ -32,11 +32,11 @@ sealed class Role(open val value: Int) : Comparable<Role> {
         // Order matters, default value should be checked after defined roles
         fun fromValue(value: Int, default: Int): Role {
             return when (value) {
-                Admin.value     -> Admin
+                Admin.value -> Admin
                 Moderator.value -> Moderator
                 Default.value,
-                default         -> Default
-                else            -> Custom(value)
+                default -> Default
+                else -> Custom(value)
             }
         }
     }

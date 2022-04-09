@@ -74,7 +74,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
 
         when (attributes.informationData.referencesInfoData?.verificationStatus) {
             VerificationState.REQUEST,
-            null                                -> {
+            null -> {
                 holder.buttonBar.isVisible = !attributes.informationData.sentByMe
                 holder.statusTextView.text = null
                 holder.statusTextView.isVisible = false
@@ -82,20 +82,20 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
             VerificationState.CANCELED_BY_OTHER -> {
                 holder.buttonBar.isVisible = false
                 holder.statusTextView.text = holder.view.context
-                        .getString(R.string.verification_request_other_cancelled, attributes.informationData.memberName)
+                    .getString(R.string.verification_request_other_cancelled, attributes.informationData.memberName)
                 holder.statusTextView.isVisible = true
             }
-            VerificationState.CANCELED_BY_ME    -> {
+            VerificationState.CANCELED_BY_ME -> {
                 holder.buttonBar.isVisible = false
                 holder.statusTextView.text = holder.view.context.getString(R.string.verification_request_you_cancelled)
                 holder.statusTextView.isVisible = true
             }
-            VerificationState.WAITING           -> {
+            VerificationState.WAITING -> {
                 holder.buttonBar.isVisible = false
                 holder.statusTextView.text = holder.view.context.getString(R.string.verification_request_waiting)
                 holder.statusTextView.isVisible = true
             }
-            VerificationState.DONE              -> {
+            VerificationState.DONE -> {
                 holder.buttonBar.isVisible = false
                 holder.statusTextView.text = if (attributes.informationData.sentByMe) {
                     holder.view.context.getString(R.string.verification_request_other_accepted, attributes.otherUserName)
@@ -140,20 +140,20 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
      * This class holds all the common attributes for timeline items.
      */
     data class Attributes(
-            val otherUserId: String,
-            val otherUserName: String,
-            val referenceId: String,
-//            val avatarSize: Int,
-            override val informationData: MessageInformationData,
-            override val avatarRenderer: AvatarRenderer,
-            override val messageColorProvider: MessageColorProvider,
-            override val itemLongClickListener: View.OnLongClickListener? = null,
-            override val itemClickListener: ClickListener? = null,
-//            val memberClickListener: ClickListener? = null,
-            override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
-//            val avatarCallback: TimelineEventController.AvatarCallback? = null,
-            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            override val reactionsSummaryEvents: ReactionsSummaryEvents? = null,
-            val emojiTypeFace: Typeface? = null,
+        val otherUserId: String,
+        val otherUserName: String,
+        val referenceId: String,
+        //            val avatarSize: Int,
+        override val informationData: MessageInformationData,
+        override val avatarRenderer: AvatarRenderer,
+        override val messageColorProvider: MessageColorProvider,
+        override val itemLongClickListener: View.OnLongClickListener? = null,
+        override val itemClickListener: ClickListener? = null,
+        //            val memberClickListener: ClickListener? = null,
+        override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
+        //            val avatarCallback: TimelineEventController.AvatarCallback? = null,
+        override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
+        override val reactionsSummaryEvents: ReactionsSummaryEvents? = null,
+        val emojiTypeFace: Typeface? = null,
     ) : AbsBaseMessageItem.Attributes
 }

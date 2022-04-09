@@ -28,16 +28,17 @@ import javax.inject.Inject
 
 internal interface SendVerificationMessageTask : Task<SendVerificationMessageTask.Params, String> {
     data class Params(
-            val event: Event
+        val event: Event
     )
 }
 
 internal class DefaultSendVerificationMessageTask @Inject constructor(
-        private val localEchoRepository: LocalEchoRepository,
-        private val encryptEventTask: EncryptEventTask,
-        private val roomAPI: RoomAPI,
-        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SendVerificationMessageTask {
+    private val localEchoRepository: LocalEchoRepository,
+    private val encryptEventTask: EncryptEventTask,
+    private val roomAPI: RoomAPI,
+    private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+    private val globalErrorReceiver: GlobalErrorReceiver
+) : SendVerificationMessageTask {
 
     override suspend fun execute(params: SendVerificationMessageTask.Params): String {
         val event = handleEncryption(params)
@@ -47,10 +48,10 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
             localEchoRepository.updateSendState(localId, event.roomId, SendState.SENDING)
             val response = executeRequest(globalErrorReceiver) {
                 roomAPI.send(
-                        localId,
-                        roomId = event.roomId ?: "",
-                        content = event.content,
-                        eventType = event.type ?: ""
+                    localId,
+                    roomId = event.roomId ?: "",
+                    content = event.content,
+                    eventType = event.type ?: ""
                 )
             }
             localEchoRepository.updateSendState(localId, event.roomId, SendState.SENT)
@@ -64,11 +65,13 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
     private suspend fun handleEncryption(params: SendVerificationMessageTask.Params): Event {
         if (cryptoSessionInfoProvider.isRoomEncrypted(params.event.roomId ?: "")) {
             try {
-                return encryptEventTask.execute(EncryptEventTask.Params(
+                return encryptEventTask.execute(
+                    EncryptEventTask.Params(
                         params.event.roomId ?: "",
                         params.event,
                         listOf("m.relates_to")
-                ))
+                    )
+                )
             } catch (throwable: Throwable) {
                 // We said it's ok to send verification request in clear
             }

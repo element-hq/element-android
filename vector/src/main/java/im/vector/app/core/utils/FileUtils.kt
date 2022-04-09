@@ -127,9 +127,9 @@ fun getFileExtension(fileUri: String): String? {
 
 fun getSizeOfFiles(root: File): Long {
     return root.walkTopDown()
-            .onEnter {
-                Timber.v("Get size of ${it.absolutePath}")
-                true
-            }
-            .sumOf { it.length() }
+        .onEnter {
+            Timber.v("Get size of ${it.absolutePath}")
+            true
+        }
+        .sumOf { it.length() }
 }

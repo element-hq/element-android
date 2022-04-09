@@ -23,8 +23,8 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class DeviceListResponse(
-        // user ids list which have new crypto devices
-        val changed: List<String> = emptyList(),
-        //  List of user ids who are no more tracked.
-        val left: List<String> = emptyList()
+    // user ids list which have new crypto devices
+    val changed: List<String> = emptyList(),
+    //  List of user ids who are no more tracked.
+    val left: List<String> = emptyList()
 )

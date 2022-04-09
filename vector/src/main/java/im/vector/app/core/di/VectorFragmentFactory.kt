@@ -27,7 +27,7 @@ import javax.inject.Provider
  * FragmentFactory which uses Dagger to create the instances.
  */
 class VectorFragmentFactory @Inject constructor(
-        private val creators: @JvmSuppressWildcards Map<Class<out Fragment>, Provider<Fragment>>
+    private val creators: @JvmSuppressWildcards Map<Class<out Fragment>, Provider<Fragment>>
 ) : FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {

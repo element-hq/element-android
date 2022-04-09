@@ -38,12 +38,12 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val sessionId: String,
-            val txID: String,
-            val roomId: String,
-            val eventId: String,
-            val reason: String?,
-            override val lastFailureMessage: String? = null
+        override val sessionId: String,
+        val txID: String,
+        val roomId: String,
+        val eventId: String,
+        val reason: String?,
+        override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var roomAPI: RoomAPI
@@ -58,28 +58,32 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
         return runCatching {
             executeRequest(globalErrorReceiver) {
                 roomAPI.redactEvent(
-                        params.txID,
-                        params.roomId,
-                        eventId,
-                        if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
+                    params.txID,
+                    params.roomId,
+                    eventId,
+                    if (params.reason == null) emptyMap() else mapOf("reason" to params.reason)
                 )
             }
         }.fold(
-                {
-                    Result.success()
-                },
-                {
-                    when (it) {
-                        is Failure.NetworkConnection -> Result.retry()
-                        else                         -> {
-                            // TODO mark as failed to send?
-                            // always return success, or the chain will be stuck for ever!
-                            Result.success(WorkerParamsFactory.toData(params.copy(
+            {
+                Result.success()
+            },
+            {
+                when (it) {
+                    is Failure.NetworkConnection -> Result.retry()
+                    else -> {
+                        // TODO mark as failed to send?
+                        // always return success, or the chain will be stuck for ever!
+                        Result.success(
+                            WorkerParamsFactory.toData(
+                                params.copy(
                                     lastFailureMessage = it.localizedMessage
-                            )))
-                        }
+                                )
+                            )
+                        )
                     }
                 }
+            }
         )
     }
 

@@ -24,17 +24,17 @@ import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
  */
 @JsonClass(generateAdapter = true)
 data class OutgoingRoomKeyRequest(
-        // RequestBody
-        var requestBody: RoomKeyRequestBody?,
-        // list of recipients for the request
-        override var recipients: Map<String, List<String>>,
-        // Unique id for this request. Used for both
-        // an id within the request for later pairing with a cancellation, and for
-        // the transaction id when sending the to_device messages to our local
-        override var requestId: String, // current state of this request
-        override var state: OutgoingGossipingRequestState
-        // transaction id for the cancellation, if any
-        // override var cancellationTxnId: String? = null
+    // RequestBody
+    var requestBody: RoomKeyRequestBody?,
+    // list of recipients for the request
+    override var recipients: Map<String, List<String>>,
+    // Unique id for this request. Used for both
+    // an id within the request for later pairing with a cancellation, and for
+    // the transaction id when sending the to_device messages to our local
+    override var requestId: String, // current state of this request
+    override var state: OutgoingGossipingRequestState
+    // transaction id for the cancellation, if any
+    // override var cancellationTxnId: String? = null
 ) : OutgoingGossipingRequest {
 
     /**

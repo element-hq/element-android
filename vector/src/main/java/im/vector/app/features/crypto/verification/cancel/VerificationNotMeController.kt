@@ -29,9 +29,9 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationNotMeController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider,
-        private val eventHtmlRenderer: EventHtmlRenderer
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider,
+    private val eventHtmlRenderer: EventHtmlRenderer
 ) : EpoxyController() {
 
     var listener: Listener? = null

@@ -27,10 +27,10 @@ import org.matrix.android.sdk.internal.util.getOrPut
 import javax.inject.Inject
 
 internal class DefaultMediaService @Inject constructor(
-        private val clearPreviewUrlCacheTask: ClearPreviewUrlCacheTask,
-        private val getPreviewUrlTask: GetPreviewUrlTask,
-        private val getRawPreviewUrlTask: GetRawPreviewUrlTask,
-        private val urlsExtractor: UrlsExtractor
+    private val clearPreviewUrlCacheTask: ClearPreviewUrlCacheTask,
+    private val getPreviewUrlTask: GetPreviewUrlTask,
+    private val getRawPreviewUrlTask: GetRawPreviewUrlTask,
+    private val urlsExtractor: UrlsExtractor
 ) : MediaService {
     // Cache of extracted URLs
     private val extractedUrlsCache = LruCache<String, List<String>>(1_000)

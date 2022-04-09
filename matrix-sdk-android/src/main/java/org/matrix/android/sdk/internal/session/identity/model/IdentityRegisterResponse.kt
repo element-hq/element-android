@@ -21,9 +21,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class IdentityRegisterResponse(
-        /**
-         * Required. An opaque string representing the token to authenticate future requests to the identity server with.
-         */
-        @Json(name = "token")
-        val token: String
+    /**
+     * Required. An opaque string representing the token to authenticate future requests to the identity server with.
+     */
+    @Json(name = "token")
+    val token: String
 )

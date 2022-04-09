@@ -62,15 +62,15 @@ import java.util.concurrent.TimeUnit
 private const val UPLOAD_WORK = "UPLOAD_WORK"
 
 internal class DefaultSendService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        private val workManagerProvider: WorkManagerProvider,
-        @SessionId private val sessionId: String,
-        private val localEchoEventFactory: LocalEchoEventFactory,
-        private val cryptoStore: IMXCryptoStore,
-        private val taskExecutor: TaskExecutor,
-        private val localEchoRepository: LocalEchoRepository,
-        private val eventSenderProcessor: EventSenderProcessor,
-        private val cancelSendTracker: CancelSendTracker
+    @Assisted private val roomId: String,
+    private val workManagerProvider: WorkManagerProvider,
+    @SessionId private val sessionId: String,
+    private val localEchoEventFactory: LocalEchoEventFactory,
+    private val cryptoStore: IMXCryptoStore,
+    private val taskExecutor: TaskExecutor,
+    private val localEchoRepository: LocalEchoRepository,
+    private val eventSenderProcessor: EventSenderProcessor,
+    private val cancelSendTracker: CancelSendTracker
 ) : SendService {
 
     @AssistedFactory
@@ -82,68 +82,68 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun sendEvent(eventType: String, content: JsonDict?): Cancelable {
         return localEchoEventFactory.createEvent(roomId, eventType, content)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+            .also { createLocalEcho(it) }
+            .let { sendEvent(it) }
     }
 
     override fun sendTextMessage(text: CharSequence, msgType: String, autoMarkdown: Boolean): Cancelable {
         return localEchoEventFactory.createTextEvent(roomId, msgType, text, autoMarkdown)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+            .also { createLocalEcho(it) }
+            .let { sendEvent(it) }
     }
 
     override fun sendFormattedTextMessage(text: String, formattedText: String, msgType: String): Cancelable {
         return localEchoEventFactory.createFormattedTextEvent(roomId, TextContent(text, formattedText), msgType)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+            .also { createLocalEcho(it) }
+            .let { sendEvent(it) }
     }
 
     override fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String?): Cancelable {
         return localEchoEventFactory.createQuotedTextEvent(
-                roomId = roomId,
-                quotedEvent = quotedEvent,
-                text = text,
-                autoMarkdown = autoMarkdown,
-                rootThreadEventId = rootThreadEventId
+            roomId = roomId,
+            quotedEvent = quotedEvent,
+            text = text,
+            autoMarkdown = autoMarkdown,
+            rootThreadEventId = rootThreadEventId
         )
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+            .also { createLocalEcho(it) }
+            .let { sendEvent(it) }
     }
 
     override fun sendPoll(pollType: PollType, question: String, options: List<String>): Cancelable {
         return localEchoEventFactory.createPollEvent(roomId, pollType, question, options)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+            .also { createLocalEcho(it) }
+            .let { sendEvent(it) }
     }
 
     override fun voteToPoll(pollEventId: String, answerId: String): Cancelable {
         return localEchoEventFactory.createPollReplyEvent(roomId, pollEventId, answerId)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+            .also { createLocalEcho(it) }
+            .let { sendEvent(it) }
     }
 
     override fun endPoll(pollEventId: String): Cancelable {
         return localEchoEventFactory.createEndPollEvent(roomId, pollEventId)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+            .also { createLocalEcho(it) }
+            .let { sendEvent(it) }
     }
 
     override fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?, isUserLocation: Boolean): Cancelable {
         return localEchoEventFactory.createLocationEvent(roomId, latitude, longitude, uncertainty, isUserLocation)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+            .also { createLocalEcho(it) }
+            .let { sendEvent(it) }
     }
 
     override fun sendLiveLocation(beaconInfoEventId: String, latitude: Double, longitude: Double, uncertainty: Double?): Cancelable {
         return localEchoEventFactory.createLiveLocationEvent(beaconInfoEventId, roomId, latitude, longitude, uncertainty)
-                .also { createLocalEcho(it) }
-                .let { sendEvent(it) }
+            .also { createLocalEcho(it) }
+            .let { sendEvent(it) }
     }
 
     override fun redactEvent(event: Event, reason: String?): Cancelable {
         // TODO manage media/attachements?
         val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason)
-                .also { createLocalEcho(it) }
+            .also { createLocalEcho(it) }
         return eventSenderProcessor.postRedaction(redactionEcho, reason)
     }
 
@@ -172,56 +172,56 @@ internal class DefaultSendService @AssistedInject constructor(
                 is MessageImageContent -> {
                     // The image has not yet been sent
                     val attachmentData = ContentAttachmentData(
-                            size = messageContent.info!!.size,
-                            mimeType = messageContent.mimeType,
-                            width = messageContent.info.width.toLong(),
-                            height = messageContent.info.height.toLong(),
-                            name = messageContent.body,
-                            queryUri = Uri.parse(messageContent.url),
-                            type = ContentAttachmentData.Type.IMAGE
+                        size = messageContent.info!!.size,
+                        mimeType = messageContent.mimeType,
+                        width = messageContent.info.width.toLong(),
+                        height = messageContent.info.height.toLong(),
+                        name = messageContent.body,
+                        queryUri = Uri.parse(messageContent.url),
+                        type = ContentAttachmentData.Type.IMAGE
                     )
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
                 is MessageVideoContent -> {
                     val attachmentData = ContentAttachmentData(
-                            size = messageContent.videoInfo?.size ?: 0L,
-                            mimeType = messageContent.mimeType,
-                            width = messageContent.videoInfo?.width?.toLong(),
-                            height = messageContent.videoInfo?.height?.toLong(),
-                            duration = messageContent.videoInfo?.duration?.toLong(),
-                            name = messageContent.body,
-                            queryUri = Uri.parse(messageContent.url),
-                            type = ContentAttachmentData.Type.VIDEO
+                        size = messageContent.videoInfo?.size ?: 0L,
+                        mimeType = messageContent.mimeType,
+                        width = messageContent.videoInfo?.width?.toLong(),
+                        height = messageContent.videoInfo?.height?.toLong(),
+                        duration = messageContent.videoInfo?.duration?.toLong(),
+                        name = messageContent.body,
+                        queryUri = Uri.parse(messageContent.url),
+                        type = ContentAttachmentData.Type.VIDEO
                     )
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
-                is MessageFileContent  -> {
+                is MessageFileContent -> {
                     val attachmentData = ContentAttachmentData(
-                            size = messageContent.info!!.size,
-                            mimeType = messageContent.mimeType,
-                            name = messageContent.getFileName(),
-                            queryUri = Uri.parse(messageContent.url),
-                            type = ContentAttachmentData.Type.FILE
+                        size = messageContent.info!!.size,
+                        mimeType = messageContent.mimeType,
+                        name = messageContent.getFileName(),
+                        queryUri = Uri.parse(messageContent.url),
+                        type = ContentAttachmentData.Type.FILE
                     )
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
                 is MessageAudioContent -> {
                     val attachmentData = ContentAttachmentData(
-                            size = messageContent.audioInfo?.size ?: 0,
-                            duration = messageContent.audioInfo?.duration?.toLong() ?: 0L,
-                            mimeType = messageContent.mimeType,
-                            name = messageContent.body,
-                            queryUri = Uri.parse(messageContent.url),
-                            type = ContentAttachmentData.Type.AUDIO,
-                            waveform = messageContent.audioWaveformInfo?.waveform?.filterNotNull()
+                        size = messageContent.audioInfo?.size ?: 0,
+                        duration = messageContent.audioInfo?.duration?.toLong() ?: 0L,
+                        mimeType = messageContent.mimeType,
+                        name = messageContent.body,
+                        queryUri = Uri.parse(messageContent.url),
+                        type = ContentAttachmentData.Type.AUDIO,
+                        waveform = messageContent.audioWaveformInfo?.waveform?.filterNotNull()
                     )
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)
                 }
-                else                   -> NoOpCancellable
+                else -> NoOpCancellable
             }
         }
         return NoOpCancellable
@@ -264,24 +264,27 @@ internal class DefaultSendService @AssistedInject constructor(
         }
     }
 
-    override fun sendMedias(attachments: List<ContentAttachmentData>,
-                            compressBeforeSending: Boolean,
-                            roomIds: Set<String>,
-                            rootThreadEventId: String?
+    override fun sendMedias(
+        attachments: List<ContentAttachmentData>,
+        compressBeforeSending: Boolean,
+        roomIds: Set<String>,
+        rootThreadEventId: String?
     ): Cancelable {
         return attachments.mapTo(CancelableBag()) {
             sendMedia(
-                    attachment = it,
-                    compressBeforeSending = compressBeforeSending,
-                    roomIds = roomIds,
-                    rootThreadEventId = rootThreadEventId)
+                attachment = it,
+                compressBeforeSending = compressBeforeSending,
+                roomIds = roomIds,
+                rootThreadEventId = rootThreadEventId
+            )
         }
     }
 
-    override fun sendMedia(attachment: ContentAttachmentData,
-                           compressBeforeSending: Boolean,
-                           roomIds: Set<String>,
-                           rootThreadEventId: String?
+    override fun sendMedia(
+        attachment: ContentAttachmentData,
+        compressBeforeSending: Boolean,
+        roomIds: Set<String>,
+        rootThreadEventId: String?
     ): Cancelable {
         // Ensure that the event will not be send in a thread if we are a different flow.
         // Like sending files to multiple rooms
@@ -294,9 +297,10 @@ internal class DefaultSendService @AssistedInject constructor(
         // Create local echo for each room
         val allLocalEchoes = allRoomIds.map {
             localEchoEventFactory.createMediaEvent(
-                    roomId = it,
-                    attachment = attachment,
-                    rootThreadEventId = rootThreadId).also { event ->
+                roomId = it,
+                attachment = attachment,
+                rootThreadEventId = rootThreadId
+            ).also { event ->
                 createLocalEcho(event)
             }
         }
@@ -310,31 +314,31 @@ internal class DefaultSendService @AssistedInject constructor(
         val cancelableBag = CancelableBag()
 
         allLocalEchoes.groupBy { cryptoStore.roomWasOnceEncrypted(it.roomId!!) }
-                .apply {
-                    keys.forEach { isRoomEncrypted ->
-                        // Should never be empty
-                        val localEchoes = get(isRoomEncrypted).orEmpty()
-                        val uploadWork = createUploadMediaWork(localEchoes, attachment, isRoomEncrypted, compressBeforeSending)
+            .apply {
+                keys.forEach { isRoomEncrypted ->
+                    // Should never be empty
+                    val localEchoes = get(isRoomEncrypted).orEmpty()
+                    val uploadWork = createUploadMediaWork(localEchoes, attachment, isRoomEncrypted, compressBeforeSending)
 
-                        val dispatcherWork = createMultipleEventDispatcherWork(isRoomEncrypted)
+                    val dispatcherWork = createMultipleEventDispatcherWork(isRoomEncrypted)
 
-                        workManagerProvider.workManager
-                                .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND_OR_REPLACE, uploadWork)
-                                .then(dispatcherWork)
-                                .enqueue()
-                                .also { operation ->
-                                    operation.result.addListener(Runnable {
-                                        if (operation.result.isCancelled) {
-                                            Timber.e("CHAIN WAS CANCELLED")
-                                        } else if (operation.state.value is Operation.State.FAILURE) {
-                                            Timber.e("CHAIN DID FAIL")
-                                        }
-                                    }, workerFutureListenerExecutor)
+                    workManagerProvider.workManager
+                        .beginUniqueWork(buildWorkName(UPLOAD_WORK), ExistingWorkPolicy.APPEND_OR_REPLACE, uploadWork)
+                        .then(dispatcherWork)
+                        .enqueue()
+                        .also { operation ->
+                            operation.result.addListener(Runnable {
+                                if (operation.result.isCancelled) {
+                                    Timber.e("CHAIN WAS CANCELLED")
+                                } else if (operation.state.value is Operation.State.FAILURE) {
+                                    Timber.e("CHAIN DID FAIL")
                                 }
+                            }, workerFutureListenerExecutor)
+                        }
 
-                        cancelableBag.add(CancelableWork(workManagerProvider.workManager, dispatcherWork.id))
-                    }
+                    cancelableBag.add(CancelableWork(workManagerProvider.workManager, dispatcherWork.id))
                 }
+            }
 
         return cancelableBag
     }
@@ -351,10 +355,12 @@ internal class DefaultSendService @AssistedInject constructor(
         return "${roomId}_$identifier"
     }
 
-    private fun createUploadMediaWork(allLocalEchos: List<Event>,
-                                      attachment: ContentAttachmentData,
-                                      isRoomEncrypted: Boolean,
-                                      compressBeforeSending: Boolean): OneTimeWorkRequest {
+    private fun createUploadMediaWork(
+        allLocalEchos: List<Event>,
+        attachment: ContentAttachmentData,
+        isRoomEncrypted: Boolean,
+        compressBeforeSending: Boolean
+    ): OneTimeWorkRequest {
         val localEchoIds = allLocalEchos.map {
             LocalEchoIdentifiers(it.roomId!!, it.eventId!!)
         }
@@ -362,11 +368,11 @@ internal class DefaultSendService @AssistedInject constructor(
         val uploadWorkData = WorkerParamsFactory.toData(uploadMediaWorkerParams)
 
         return workManagerProvider.matrixOneTimeWorkRequestBuilder<UploadContentWorker>()
-                .setConstraints(WorkManagerProvider.workConstraints)
-                .startChain(true)
-                .setInputData(uploadWorkData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                .build()
+            .setConstraints(WorkManagerProvider.workConstraints)
+            .startChain(true)
+            .setInputData(uploadWorkData)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+            .build()
     }
 
     private fun createMultipleEventDispatcherWork(isRoomEncrypted: Boolean): OneTimeWorkRequest {
@@ -375,11 +381,11 @@ internal class DefaultSendService @AssistedInject constructor(
         val workData = WorkerParamsFactory.toData(params)
 
         return workManagerProvider.matrixOneTimeWorkRequestBuilder<MultipleEventSendingDispatcherWorker>()
-                // No constraint
-                // .setConstraints(WorkManagerProvider.workConstraints)
-                .startChain(false)
-                .setInputData(workData)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                .build()
+            // No constraint
+            // .setConstraints(WorkManagerProvider.workConstraints)
+            .startChain(false)
+            .setInputData(workData)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+            .build()
     }
 }

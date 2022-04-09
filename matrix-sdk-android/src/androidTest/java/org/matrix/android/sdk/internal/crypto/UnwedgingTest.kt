@@ -170,7 +170,10 @@ class UnwedgingTest : InstrumentedTest {
         // Let us wedge the session now. Set crypto state like after the first message
         Timber.i("## CRYPTO | testUnwedging: wedge the session now. Set crypto state like after the first message")
 
-        aliceCryptoStore.storeSession(OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!), bobSession.cryptoService().getMyDevice().identityKey()!!)
+        aliceCryptoStore.storeSession(
+            OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!),
+            bobSession.cryptoService().getMyDevice().identityKey()!!
+        )
         olmDevice.clearOlmSessionCache()
         Thread.sleep(6_000)
 
@@ -206,18 +209,19 @@ class UnwedgingTest : InstrumentedTest {
         // It's a trick to force key request on fail to decrypt
         testHelper.doSync<Unit> {
             bobSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = bobSession.myUserId,
-                                                    password = TestConstants.PASSWORD,
-                                                    session = flowResponse.session
-                                            )
-                                    )
-                                }
-                            }, it)
+                .initializeCrossSigning(
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                UserPasswordAuth(
+                                    user = bobSession.myUserId,
+                                    password = TestConstants.PASSWORD,
+                                    session = flowResponse.session
+                                )
+                            )
+                        }
+                    }, it
+                )
         }
 
         // Wait until we received back the key

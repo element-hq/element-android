@@ -87,14 +87,14 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor() :
             val dataURI = activityResult.data?.data ?: return@registerStartForActivityResult
             tryOrNull(message = "Failed to read recovery kay from text") {
                 activity
-                        ?.contentResolver
-                        ?.openInputStream(dataURI)
-                        ?.bufferedReader()
-                        ?.use { it.readText() }
-                        ?.let {
-                            views.keyTextEdit.setText(it)
-                            views.keyTextEdit.setSelection(it.length)
-                        }
+                    ?.contentResolver
+                    ?.openInputStream(dataURI)
+                    ?.bufferedReader()
+                    ?.use { it.readText() }
+                    ?.let {
+                        views.keyTextEdit.setText(it)
+                        views.keyTextEdit.setSelection(it.length)
+                    }
             }
         }
     }

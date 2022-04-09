@@ -25,14 +25,14 @@ import javax.inject.Inject
 internal interface GetThirdPartyUserTask : Task<GetThirdPartyUserTask.Params, List<ThirdPartyUser>> {
 
     data class Params(
-            val protocol: String,
-            val fields: Map<String, String> = emptyMap()
+        val protocol: String,
+        val fields: Map<String, String> = emptyMap()
     )
 }
 
 internal class DefaultGetThirdPartyUserTask @Inject constructor(
-        private val thirdPartyAPI: ThirdPartyAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val thirdPartyAPI: ThirdPartyAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetThirdPartyUserTask {
 
     override suspend fun execute(params: GetThirdPartyUserTask.Params): List<ThirdPartyUser> {

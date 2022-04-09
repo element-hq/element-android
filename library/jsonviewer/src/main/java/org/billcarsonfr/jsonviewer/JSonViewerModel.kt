@@ -92,7 +92,7 @@ internal object ModelParser {
                 parent.addChild(objectComposed)
             }
             is String -> {
-                JSonViewerLeaf(key, index,  obj, JSONType.STRING).let {
+                JSonViewerLeaf(key, index, obj, JSONType.STRING).let {
                     it.depth = depth
                     parent.addChild(it)
                 }

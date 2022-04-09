@@ -23,7 +23,7 @@ import im.vector.app.core.ui.list.genericButtonItem
 import javax.inject.Inject
 
 class RoomDevToolRootController @Inject constructor(
-        private val stringProvider: StringProvider
+    private val stringProvider: StringProvider
 ) : EpoxyController() {
 
     var interactionListener: DevToolsInteractionListener? = null

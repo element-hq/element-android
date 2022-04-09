@@ -45,18 +45,18 @@ import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class SpacePeopleFragment @Inject constructor(
-        private val drawableProvider: DrawableProvider,
-        private val colorProvider: ColorProvider,
-        private val epoxyController: SpacePeopleListController
+    private val drawableProvider: DrawableProvider,
+    private val colorProvider: ColorProvider,
+    private val epoxyController: SpacePeopleListController
 ) : VectorBaseFragment<FragmentRecyclerviewWithSearchBinding>(),
-        OnBackPressed, SpacePeopleListController.InteractionListener {
+    OnBackPressed, SpacePeopleListController.InteractionListener {
 
     private val viewModel by fragmentViewModel(SpacePeopleViewModel::class)
     private val membersViewModel by fragmentViewModel(RoomMemberListViewModel::class)
     private lateinit var sharedActionViewModel: SpacePeopleSharedActionViewModel
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentRecyclerviewWithSearchBinding.inflate(inflater, container, false)
+        FragmentRecyclerviewWithSearchBinding.inflate(inflater, container, false)
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         sharedActionViewModel.post(SpacePeopleSharedAction.Dismiss)
@@ -67,7 +67,7 @@ class SpacePeopleFragment @Inject constructor(
         val memberCount = (memberListState.roomSummary.invoke()?.otherMemberIds?.size ?: 0) + 1
 
         toolbar?.subtitle = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
-//        views.listBuildingProgress.isVisible = true
+        //        views.listBuildingProgress.isVisible = true
         epoxyController.setData(memberListState)
     }
 
@@ -80,7 +80,7 @@ class SpacePeopleFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.addRoomToSpaceToolbar)
-                .allowBack()
+            .allowBack()
         setupRecyclerView()
         setupSearchView()
 
@@ -92,7 +92,7 @@ class SpacePeopleFragment @Inject constructor(
             when (it.createAndInviteState) {
                 is Loading -> sharedActionViewModel.post(SpacePeopleSharedAction.ShowModalLoading)
                 Uninitialized,
-                is Fail    -> sharedActionViewModel.post(SpacePeopleSharedAction.HideModalLoading)
+                is Fail -> sharedActionViewModel.post(SpacePeopleSharedAction.HideModalLoading)
                 is Success -> {
                     // don't hide on success, it will navigate out. If not the loading goes out before navigation
                 }
@@ -114,16 +114,16 @@ class SpacePeopleFragment @Inject constructor(
     private fun setupSearchView() {
         views.memberNameFilter.queryHint = getString(R.string.search_members_hint)
         views.memberNameFilter.queryTextChanges()
-                .debounce(100)
-                .onEach {
-                    membersViewModel.handle(RoomMemberListAction.FilterMemberList(it.toString()))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .debounce(100)
+            .onEach {
+                membersViewModel.handle(RoomMemberListAction.FilterMemberList(it.toString()))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun handleViewEvents(events: SpacePeopleViewEvents) {
         when (events) {
-            is SpacePeopleViewEvents.OpenRoom      -> {
+            is SpacePeopleViewEvents.OpenRoom -> {
                 sharedActionViewModel.post(SpacePeopleSharedAction.NavigateToRoom(events.roomId))
             }
             is SpacePeopleViewEvents.InviteToSpace -> {

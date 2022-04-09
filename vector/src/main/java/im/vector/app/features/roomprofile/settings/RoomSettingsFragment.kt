@@ -55,14 +55,14 @@ import java.util.UUID
 import javax.inject.Inject
 
 class RoomSettingsFragment @Inject constructor(
-        private val controller: RoomSettingsController,
-        colorProvider: ColorProvider,
-        private val avatarRenderer: AvatarRenderer
+    private val controller: RoomSettingsController,
+    colorProvider: ColorProvider,
+    private val avatarRenderer: AvatarRenderer
 ) :
-        VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
-        RoomSettingsController.Callback,
-        OnBackPressed,
-        GalleryOrCameraDialogHelper.Listener {
+    VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
+    RoomSettingsController.Callback,
+    OnBackPressed,
+    GalleryOrCameraDialogHelper.Listener {
 
     private val viewModel: RoomSettingsViewModel by fragmentViewModel()
     private lateinit var roomProfileSharedActionViewModel: RoomProfileSharedActionViewModel
@@ -90,7 +90,7 @@ class RoomSettingsFragment @Inject constructor(
         setupRoomJoinRuleSharedActionViewModel()
         controller.callback = this
         setupToolbar(views.roomSettingsToolbar)
-                .allowBack()
+            .allowBack()
         views.roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
@@ -98,8 +98,8 @@ class RoomSettingsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomSettingsViewEvents.Failure -> showFailure(it.throwable)
-                RoomSettingsViewEvents.Success    -> showSuccess()
-                RoomSettingsViewEvents.GoBack     -> {
+                RoomSettingsViewEvents.Success -> showSuccess()
+                RoomSettingsViewEvents.GoBack -> {
                     ignoreChanges = true
                     vectorBaseActivity.onBackPressed()
                 }
@@ -110,21 +110,21 @@ class RoomSettingsFragment @Inject constructor(
     private fun setupRoomJoinRuleSharedActionViewModel() {
         roomJoinRuleSharedActionViewModel = activityViewModelProvider.get(RoomJoinRuleSharedActionViewModel::class.java)
         roomJoinRuleSharedActionViewModel
-                .stream()
-                .onEach { action ->
-                    viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .stream()
+            .onEach { action ->
+                viewModel.handle(RoomSettingsAction.SetRoomJoinRule(action.roomJoinRule))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupRoomHistoryVisibilitySharedActionViewModel() {
         roomHistoryVisibilitySharedActionViewModel = activityViewModelProvider.get(RoomHistoryVisibilitySharedActionViewModel::class.java)
         roomHistoryVisibilitySharedActionViewModel
-                .stream()
-                .onEach { action ->
-                    viewModel.handle(RoomSettingsAction.SetRoomHistoryVisibility(action.roomHistoryVisibility))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .stream()
+            .onEach { action ->
+                viewModel.handle(RoomSettingsAction.SetRoomHistoryVisibility(action.roomHistoryVisibility))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun showSuccess() {
@@ -179,7 +179,7 @@ class RoomSettingsFragment @Inject constructor(
     override fun onHistoryVisibilityClicked() = withState(viewModel) { state ->
         val currentHistoryVisibility = state.newHistoryVisibility ?: state.currentHistoryVisibility
         RoomHistoryVisibilityBottomSheet.newInstance(currentHistoryVisibility)
-                .show(childFragmentManager, "RoomHistoryVisibilityBottomSheet")
+            .show(childFragmentManager, "RoomHistoryVisibilityBottomSheet")
     }
 
     override fun onJoinRuleClicked() {
@@ -195,21 +195,22 @@ class RoomSettingsFragment @Inject constructor(
     override fun onImageReady(uri: Uri?) {
         uri ?: return
         viewModel.handle(
-                RoomSettingsAction.SetAvatarAction(
-                        RoomSettingsViewState.AvatarAction.UpdateAvatar(
-                                newAvatarUri = uri,
-                                newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
+            RoomSettingsAction.SetAvatarAction(
+                RoomSettingsViewState.AvatarAction.UpdateAvatar(
+                    newAvatarUri = uri,
+                    newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString()
                 )
+            )
         )
     }
 
     override fun onAvatarDelete() {
         withState(viewModel) {
             when (it.avatarAction) {
-                RoomSettingsViewState.AvatarAction.None            -> {
+                RoomSettingsViewState.AvatarAction.None -> {
                     viewModel.handle(RoomSettingsAction.SetAvatarAction(RoomSettingsViewState.AvatarAction.DeleteAvatar))
                 }
-                RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
+                RoomSettingsViewState.AvatarAction.DeleteAvatar -> {
                     /* Should not happen */
                 }
                 is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
@@ -232,13 +233,13 @@ class RoomSettingsFragment @Inject constructor(
         return withState(viewModel) {
             return@withState if (it.showSaveAction) {
                 MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.dialog_title_warning)
-                        .setMessage(R.string.warning_unsaved_change)
-                        .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
-                            viewModel.handle(RoomSettingsAction.Cancel)
-                        }
-                        .setNegativeButton(R.string.action_cancel, null)
-                        .show()
+                    .setTitle(R.string.dialog_title_warning)
+                    .setMessage(R.string.warning_unsaved_change)
+                    .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
+                        viewModel.handle(RoomSettingsAction.Cancel)
+                    }
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .show()
                 true
             } else {
                 false

@@ -28,14 +28,15 @@ import java.io.File
 import javax.inject.Inject
 
 internal class ImageCompressor @Inject constructor(
-        private val temporaryFileCreator: TemporaryFileCreator,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+    private val temporaryFileCreator: TemporaryFileCreator,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
     suspend fun compress(
-            imageFile: File,
-            desiredWidth: Int,
-            desiredHeight: Int,
-            desiredQuality: Int = 80): File {
+        imageFile: File,
+        desiredWidth: Int,
+        desiredHeight: Int,
+        desiredQuality: Int = 80
+    ): File {
         return withContext(coroutineDispatchers.io) {
             val compressedBitmap = BitmapFactory.Options().run {
                 inJustDecodeBounds = true
@@ -81,7 +82,7 @@ internal class ImageCompressor @Inject constructor(
                             matrix.preRotate(90f)
                             matrix.preScale(-1f, 1f)
                         }
-                        else                                      -> return bitmap
+                        else -> return bitmap
                     }
                     return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
                 }

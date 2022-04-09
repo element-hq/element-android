@@ -35,8 +35,8 @@ import javax.inject.Singleton
 
 @Singleton
 class VectorFileLogger @Inject constructor(
-        context: Context,
-        private val vectorPreferences: VectorPreferences
+    context: Context,
+    private val vectorPreferences: VectorPreferences
 ) : Timber.Tree() {
 
     companion object {
@@ -59,12 +59,12 @@ class VectorFileLogger @Inject constructor(
     private var fileNamePrefix = "logs"
 
     private val prioPrefixes = mapOf(
-            Log.VERBOSE to "V/ ",
-            Log.DEBUG to "D/ ",
-            Log.INFO to "I/ ",
-            Log.WARN to "W/ ",
-            Log.ERROR to "E/ ",
-            Log.ASSERT to "WTF/ "
+        Log.VERBOSE to "V/ ",
+        Log.DEBUG to "D/ ",
+        Log.INFO to "I/ ",
+        Log.WARN to "W/ ",
+        Log.ERROR to "E/ ",
+        Log.ASSERT to "WTF/ "
     )
 
     init {
@@ -79,12 +79,12 @@ class VectorFileLogger @Inject constructor(
 
         fileHandler = tryOrNull("Failed to initialize FileLogger") {
             FileHandler(
-                    cacheDirectory.absolutePath + "/" + fileNamePrefix + ".%g.txt",
-                    maxLogSizeByte,
-                    logRotationCount
+                cacheDirectory.absolutePath + "/" + fileNamePrefix + ".%g.txt",
+                maxLogSizeByte,
+                logRotationCount
             )
-                    .also { it.formatter = LogFormatter() }
-                    .also { logger.addHandler(it) }
+                .also { it.formatter = LogFormatter() }
+                .also { logger.addHandler(it) }
         }
     }
 
@@ -117,14 +117,14 @@ class VectorFileLogger @Inject constructor(
     fun getLogFiles(): List<File> {
         return tryOrNull("## getLogFiles() failed") {
             fileHandler
-                    ?.flush()
-                    ?.let { 0 until logRotationCount }
-                    ?.mapNotNull { index ->
-                        File(cacheDirectory, "$fileNamePrefix.$index.txt")
-                                .takeIf { it.exists() }
-                    }
+                ?.flush()
+                ?.let { 0 until logRotationCount }
+                ?.mapNotNull { index ->
+                    File(cacheDirectory, "$fileNamePrefix.$index.txt")
+                        .takeIf { it.exists() }
+                }
         }
-                .orEmpty()
+            .orEmpty()
     }
 
     /**

@@ -19,9 +19,9 @@ package org.matrix.android.sdk.api.session.integrationmanager
  * This class holds configuration of integration manager.
  */
 data class IntegrationManagerConfig(
-        val uiUrl: String,
-        val restUrl: String,
-        val kind: Kind
+    val uiUrl: String,
+    val restUrl: String,
+    val kind: Kind
 ) {
 
     // Order matters, first is preferred

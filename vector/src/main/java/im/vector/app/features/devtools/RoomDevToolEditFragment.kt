@@ -46,11 +46,11 @@ class RoomDevToolEditFragment @Inject constructor() :
             views.editText.setText(it.editedContent ?: "{}")
         }
         views.editText.textChanges()
-                .skipInitialValue()
-                .onEach {
-                    sharedViewModel.handle(RoomDevToolAction.UpdateContentText(it.toString()))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .skipInitialValue()
+            .onEach {
+                sharedViewModel.handle(RoomDevToolAction.UpdateContentText(it.toString()))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onResume() {

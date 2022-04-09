@@ -43,7 +43,7 @@ import javax.inject.Inject
 
 @Parcelize
 data class RoomListActionsArgs(
-        val roomId: String
+    val roomId: String
 ) : Parcelable
 
 /**
@@ -51,8 +51,8 @@ data class RoomListActionsArgs(
  */
 @AndroidEntryPoint
 class RoomListQuickActionsBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
-        RoomListQuickActionsEpoxyController.Listener {
+    VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
+    RoomListQuickActionsEpoxyController.Listener {
 
     private lateinit var sharedActionViewModel: RoomListQuickActionsSharedActionViewModel
     @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
@@ -73,10 +73,10 @@ class RoomListQuickActionsBottomSheet :
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomListQuickActionsSharedActionViewModel::class.java)
         views.bottomSheetRecyclerView.configureWith(
-                epoxyController = roomListActionsEpoxyController,
-                viewPool = sharedViewPool,
-                hasFixedSize = false,
-                disableItemAnimation = true
+            epoxyController = roomListActionsEpoxyController,
+            viewPool = sharedViewPool,
+            hasFixedSize = false,
+            disableItemAnimation = true
         )
         roomListActionsEpoxyController.listener = this
 
@@ -95,8 +95,8 @@ class RoomListQuickActionsBottomSheet :
 
     override fun invalidate() = withState(viewModel) {
         val roomListViewState = RoomListQuickActionViewState(
-                roomListActionsArgs,
-                it
+            roomListActionsArgs,
+            it
         )
         roomListActionsEpoxyController.setData(roomListViewState)
         super.invalidate()
@@ -107,8 +107,8 @@ class RoomListQuickActionsBottomSheet :
         // Do not dismiss for all the actions
         when (quickAction) {
             is RoomListQuickActionsSharedAction.LowPriority -> Unit
-            is RoomListQuickActionsSharedAction.Favorite    -> Unit
-            else                                            -> dismiss()
+            is RoomListQuickActionsSharedAction.Favorite -> Unit
+            else -> dismiss()
         }
     }
 
@@ -126,9 +126,9 @@ class RoomListQuickActionsBottomSheet :
 
     private fun displayErrorDialog(throwable: Throwable) {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
+            .setTitle(R.string.dialog_title_error)
+            .setMessage(errorFormatter.toHumanReadable(throwable))
+            .setPositiveButton(R.string.ok, null)
+            .show()
     }
 }

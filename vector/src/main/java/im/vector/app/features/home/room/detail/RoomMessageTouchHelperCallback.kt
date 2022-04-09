@@ -38,9 +38,11 @@ import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.min
 
-class RoomMessageTouchHelperCallback(private val context: Context,
-                                     @DrawableRes actionIcon: Int,
-                                     private val handler: QuickReplayHandler) : EpoxyTouchHelperCallback() {
+class RoomMessageTouchHelperCallback(
+    private val context: Context,
+    @DrawableRes actionIcon: Int,
+    private val handler: QuickReplayHandler
+) : EpoxyTouchHelperCallback() {
 
     interface QuickReplayHandler {
         fun performQuickReplyOnHolder(model: EpoxyModel<*>)
@@ -56,13 +58,13 @@ class RoomMessageTouchHelperCallback(private val context: Context,
     private var lastReplyButtonAnimationTime: Long = 0
 
     private val imageDrawable: Drawable = DrawableCompat.wrap(
-            ContextCompat.getDrawable(context, actionIcon)!!
+        ContextCompat.getDrawable(context, actionIcon)!!
     )
 
     init {
         DrawableCompat.setTint(
-                imageDrawable,
-                ThemeUtils.getColor(context, R.attr.vctr_content_primary)
+            imageDrawable,
+            ThemeUtils.getColor(context, R.attr.vctr_content_primary)
         )
     }
 
@@ -94,13 +96,15 @@ class RoomMessageTouchHelperCallback(private val context: Context,
         return super.convertToAbsoluteDirection(flags, layoutDirection)
     }
 
-    override fun onChildDraw(c: Canvas,
-                             recyclerView: RecyclerView,
-                             viewHolder: EpoxyViewHolder,
-                             dX: Float,
-                             dY: Float,
-                             actionState: Int,
-                             isCurrentlyActive: Boolean) {
+    override fun onChildDraw(
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: EpoxyViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+    ) {
         if (actionState == ACTION_STATE_SWIPE) {
             setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
         }
@@ -115,13 +119,15 @@ class RoomMessageTouchHelperCallback(private val context: Context,
 
     @Suppress("UNUSED_PARAMETER")
     @SuppressLint("ClickableViewAccessibility")
-    private fun setTouchListener(c: Canvas,
-                                 recyclerView: RecyclerView,
-                                 viewHolder: EpoxyViewHolder,
-                                 dX: Float,
-                                 dY: Float,
-                                 actionState: Int,
-                                 isCurrentlyActive: Boolean) {
+    private fun setTouchListener(
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: EpoxyViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+    ) {
         // TODO can this interfere with other interactions? should i remove it
         recyclerView.setOnTouchListener { _, event ->
             swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
@@ -186,8 +192,8 @@ class RoomMessageTouchHelperCallback(private val context: Context,
         if (startTracking) {
             if (!isVibrate && translationX >= triggerDistance) {
                 itemView.performHapticFeedback(
-                        HapticFeedbackConstants.LONG_PRESS
-//                        , HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+                    HapticFeedbackConstants.LONG_PRESS
+                    //                        , HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
                 )
                 isVibrate = true
             }
@@ -203,10 +209,10 @@ class RoomMessageTouchHelperCallback(private val context: Context,
         val hw = imageDrawable.intrinsicWidth / 2f
         val hh = imageDrawable.intrinsicHeight / 2f
         imageDrawable.setBounds(
-                (x - hw * scale).toInt(),
-                (y - hh * scale).toInt(),
-                (x + hw * scale).toInt(),
-                (y + hh * scale).toInt()
+            (x - hw * scale).toInt(),
+            (y - hh * scale).toInt(),
+            (x + hw * scale).toInt(),
+            (y + hh * scale).toInt()
         )
         imageDrawable.draw(canvas)
         imageDrawable.alpha = 255
@@ -214,9 +220,9 @@ class RoomMessageTouchHelperCallback(private val context: Context,
 
     private fun convertToPx(dp: Int): Float {
         return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp.toFloat(),
-                context.resources.displayMetrics
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp.toFloat(),
+            context.resources.displayMetrics
         )
     }
 }

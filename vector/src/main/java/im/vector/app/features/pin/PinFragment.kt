@@ -42,12 +42,12 @@ import javax.inject.Inject
 
 @Parcelize
 data class PinArgs(
-        val pinMode: PinMode
+    val pinMode: PinMode
 ) : Parcelable
 
 class PinFragment @Inject constructor(
-        private val pinCodeStore: PinCodeStore,
-        private val vectorPreferences: VectorPreferences
+    private val pinCodeStore: PinCodeStore,
+    private val vectorPreferences: VectorPreferences
 ) : VectorBaseFragment<FragmentPinBinding>() {
 
     private val fragmentArgs: PinArgs by args()
@@ -60,7 +60,7 @@ class PinFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         when (fragmentArgs.pinMode) {
             PinMode.CREATE -> showCreateFragment()
-            PinMode.AUTH   -> showAuthFragment()
+            PinMode.AUTH -> showAuthFragment()
             PinMode.MODIFY -> showCreateFragment() // No need to create another function for now because texts are generic
         }
     }
@@ -68,10 +68,10 @@ class PinFragment @Inject constructor(
     private fun showCreateFragment() {
         val createFragment = PFLockScreenFragment()
         val builder = PFFLockScreenConfiguration.Builder(requireContext())
-                .setNewCodeValidation(true)
-                .setTitle(getString(R.string.create_pin_title))
-                .setNewCodeValidationTitle(getString(R.string.create_pin_confirm_title))
-                .setMode(PFFLockScreenConfiguration.MODE_CREATE)
+            .setNewCodeValidation(true)
+            .setTitle(getString(R.string.create_pin_title))
+            .setNewCodeValidationTitle(getString(R.string.create_pin_confirm_title))
+            .setMode(PFFLockScreenConfiguration.MODE_CREATE)
 
         createFragment.setConfiguration(builder.build())
         createFragment.setCodeCreateListener(object : PFLockScreenFragment.OnPFLockScreenCodeCreateListener {
@@ -99,13 +99,13 @@ class PinFragment @Inject constructor(
         val authFragment = PFLockScreenFragment()
         val canUseBiometrics = pinCodeStore.getRemainingBiometricsAttemptsNumber() > 0
         val builder = PFFLockScreenConfiguration.Builder(requireContext())
-                .setAutoShowBiometric(true)
-                .setUseBiometric(vectorPreferences.useBiometricsToUnlock() && canUseBiometrics)
-                .setAutoShowBiometric(canUseBiometrics)
-                .setTitle(getString(R.string.auth_pin_title))
-                .setLeftButton(getString(R.string.auth_pin_forgot))
-                .setClearCodeOnError(true)
-                .setMode(PFFLockScreenConfiguration.MODE_AUTH)
+            .setAutoShowBiometric(true)
+            .setUseBiometric(vectorPreferences.useBiometricsToUnlock() && canUseBiometrics)
+            .setAutoShowBiometric(canUseBiometrics)
+            .setTitle(getString(R.string.auth_pin_title))
+            .setLeftButton(getString(R.string.auth_pin_forgot))
+            .setClearCodeOnError(true)
+            .setMode(PFFLockScreenConfiguration.MODE_AUTH)
         authFragment.setConfiguration(builder.build())
         authFragment.setEncodedPinCode(encodedPin)
         authFragment.setOnLeftButtonClickListener {
@@ -143,11 +143,11 @@ class PinFragment @Inject constructor(
     private fun onWrongPin() {
         val remainingAttempts = pinCodeStore.onWrongPin()
         when {
-            remainingAttempts > 1  ->
+            remainingAttempts > 1 ->
                 requireActivity().toast(resources.getQuantityString(R.plurals.wrong_pin_message_remaining_attempts, remainingAttempts, remainingAttempts))
             remainingAttempts == 1 ->
                 requireActivity().toast(R.string.wrong_pin_message_last_remaining_attempt)
-            else                   -> {
+            else -> {
                 requireActivity().toast(R.string.too_many_pin_failures)
                 // Logout
                 MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true))
@@ -157,13 +157,13 @@ class PinFragment @Inject constructor(
 
     private fun displayForgotPinWarningDialog() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.auth_pin_reset_title))
-                .setMessage(getString(R.string.auth_pin_reset_content))
-                .setPositiveButton(getString(R.string.auth_pin_new_pin_action)) { _, _ ->
-                    launchResetPinFlow()
-                }
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
+            .setTitle(getString(R.string.auth_pin_reset_title))
+            .setMessage(getString(R.string.auth_pin_reset_content))
+            .setPositiveButton(getString(R.string.auth_pin_new_pin_action)) { _, _ ->
+                launchResetPinFlow()
+            }
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
     }
 
     private fun launchResetPinFlow() {

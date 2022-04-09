@@ -32,9 +32,11 @@ internal fun <T> Collection<T>.logLimit(maxQuantity: Int = 5): String {
     }
 }
 
-internal suspend fun <T> logDuration(message: String,
-                                     loggerTag: LoggerTag,
-                                     block: suspend () -> T): T {
+internal suspend fun <T> logDuration(
+    message: String,
+    loggerTag: LoggerTag,
+    block: suspend () -> T
+): T {
     Timber.tag(loggerTag.value).d("$message -- BEGIN")
     val start = System.currentTimeMillis()
     val result = logRamUsage(message) {

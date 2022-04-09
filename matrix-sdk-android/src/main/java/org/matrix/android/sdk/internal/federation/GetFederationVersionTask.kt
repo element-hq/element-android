@@ -24,7 +24,7 @@ import javax.inject.Inject
 internal interface GetFederationVersionTask : Task<Unit, FederationVersion>
 
 internal class DefaultGetFederationVersionTask @Inject constructor(
-        private val federationAPI: FederationAPI
+    private val federationAPI: FederationAPI
 ) : GetFederationVersionTask {
 
     override suspend fun execute(params: Unit): FederationVersion {
@@ -33,8 +33,8 @@ internal class DefaultGetFederationVersionTask @Inject constructor(
         }
 
         return FederationVersion(
-                name = result.server?.name,
-                version = result.server?.version
+            name = result.server?.name,
+            version = result.server?.version
         )
     }
 }

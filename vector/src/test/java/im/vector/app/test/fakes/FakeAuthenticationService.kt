@@ -52,6 +52,6 @@ class FakeAuthenticationService : AuthenticationService by mockk() {
     }
 
     fun givenDirectAuthenticationThrows(config: HomeServerConnectionConfig, matrixId: String, password: String, deviceName: String, cause: Throwable) {
-        coEvery { directAuthentication(config, matrixId, password, deviceName) } throws  cause
+        coEvery { directAuthentication(config, matrixId, password, deviceName) } throws cause
     }
 }

@@ -30,16 +30,16 @@ internal class AccountDataMapper @Inject constructor(moshi: Moshi) {
 
     fun map(entity: UserAccountDataEntity): UserAccountDataEvent {
         return UserAccountDataEvent(
-                type = entity.type ?: "",
-                content = entity.contentStr?.let { adapter.fromJson(it) }.orEmpty()
+            type = entity.type ?: "",
+            content = entity.contentStr?.let { adapter.fromJson(it) }.orEmpty()
         )
     }
 
     fun map(roomId: String, entity: RoomAccountDataEntity): RoomAccountDataEvent {
         return RoomAccountDataEvent(
-                roomId = roomId,
-                type = entity.type ?: "",
-                content = entity.contentStr?.let { adapter.fromJson(it) }.orEmpty()
+            roomId = roomId,
+            type = entity.type ?: "",
+            content = entity.contentStr?.let { adapter.fromJson(it) }.orEmpty()
         )
     }
 }

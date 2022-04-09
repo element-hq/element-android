@@ -34,9 +34,9 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 class SpaceDetailEpoxyController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val avatarRenderer: AvatarRenderer,
-        private val roomAliasErrorFormatter: RoomAliasErrorFormatter
+    private val stringProvider: StringProvider,
+    private val avatarRenderer: AvatarRenderer,
+    private val roomAliasErrorFormatter: RoomAliasErrorFormatter
 ) : TypedEpoxyController<CreateSpaceState>() {
 
     var listener: Listener? = null
@@ -58,11 +58,11 @@ class SpaceDetailEpoxyController @Inject constructor(
         genericFooterItem {
             id("info_help")
             text(
-                    if (data?.spaceType == SpaceType.Public) {
-                        host.stringProvider.getString(R.string.create_spaces_details_public_header)
-                    } else {
-                        host.stringProvider.getString(R.string.create_spaces_details_private_header)
-                    }.toEpoxyCharSequence()
+                if (data?.spaceType == SpaceType.Public) {
+                    host.stringProvider.getString(R.string.create_spaces_details_public_header)
+                } else {
+                    host.stringProvider.getString(R.string.create_spaces_details_private_header)
+                }.toEpoxyCharSequence()
             )
         }
 
@@ -101,8 +101,9 @@ class SpaceDetailEpoxyController @Inject constructor(
                     host.aliasTextIsFocused = hasFocus
                 }
                 errorMessage(
-                        host.roomAliasErrorFormatter.format(
-                                (((data.aliasVerificationTask as? Fail)?.error) as? RoomAliasError))
+                    host.roomAliasErrorFormatter.format(
+                        (((data.aliasVerificationTask as? Fail)?.error) as? RoomAliasError)
+                    )
                 )
                 onTextChange(host.aliasTextWatcher)
             }

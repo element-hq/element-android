@@ -42,9 +42,11 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
 
-class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: RoomAliasViewState,
-                                                     private val session: Session) :
-        VectorViewModel<RoomAliasViewState, RoomAliasAction, RoomAliasViewEvents>(initialState) {
+class RoomAliasViewModel @AssistedInject constructor(
+    @Assisted initialState: RoomAliasViewState,
+    private val session: Session
+) :
+    VectorViewModel<RoomAliasViewState, RoomAliasAction, RoomAliasViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<RoomAliasViewModel, RoomAliasViewState> {
@@ -67,27 +69,27 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun fetchRoomDirectoryVisibility() {
         setState {
             copy(
-                    roomDirectoryVisibility = Loading()
+                roomDirectoryVisibility = Loading()
             )
         }
         viewModelScope.launch {
             runCatching {
                 session.getRoomDirectoryVisibility(room.roomId)
             }.fold(
-                    {
-                        setState {
-                            copy(
-                                    roomDirectoryVisibility = Success(it)
-                            )
-                        }
-                    },
-                    {
-                        setState {
-                            copy(
-                                    roomDirectoryVisibility = Fail(it)
-                            )
-                        }
+                {
+                    setState {
+                        copy(
+                            roomDirectoryVisibility = Success(it)
+                        )
                     }
+                },
+                {
+                    setState {
+                        copy(
+                            roomDirectoryVisibility = Fail(it)
+                        )
+                    }
+                }
             )
         }
     }
@@ -95,7 +97,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun initHomeServerName() {
         setState {
             copy(
-                    homeServerName = session.myUserId.getDomain()
+                homeServerName = session.myUserId.getDomain()
             )
         }
     }
@@ -103,60 +105,60 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun fetchRoomAlias() {
         setState {
             copy(
-                    localAliases = Loading()
+                localAliases = Loading()
             )
         }
 
         viewModelScope.launch {
             runCatching { room.getRoomAliases() }
-                    .fold(
-                            {
-                                setState { copy(localAliases = Success(it.sorted())) }
-                            },
-                            {
-                                setState { copy(localAliases = Fail(it)) }
-                            }
-                    )
+                .fold(
+                    {
+                        setState { copy(localAliases = Success(it.sorted())) }
+                    },
+                    {
+                        setState { copy(localAliases = Fail(it)) }
+                    }
+                )
         }
     }
 
     private fun observeRoomSummary() {
         room.flow().liveRoomSummary()
-                .unwrap()
-                .execute { async ->
-                    copy(
-                            roomSummary = async
-                    )
-                }
+            .unwrap()
+            .execute { async ->
+                copy(
+                    roomSummary = async
+                )
+            }
     }
 
     private fun observePowerLevel() {
         PowerLevelsFlowFactory(room)
-                .createFlow()
-                .onEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    val permissions = RoomAliasViewState.ActionPermissions(
-                            canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(
-                                    userId = session.myUserId,
-                                    isState = true,
-                                    eventType = EventType.STATE_ROOM_CANONICAL_ALIAS
-                            )
+            .createFlow()
+            .onEach {
+                val powerLevelsHelper = PowerLevelsHelper(it)
+                val permissions = RoomAliasViewState.ActionPermissions(
+                    canChangeCanonicalAlias = powerLevelsHelper.isUserAllowedToSend(
+                        userId = session.myUserId,
+                        isState = true,
+                        eventType = EventType.STATE_ROOM_CANONICAL_ALIAS
                     )
-                    setState {
-                        val newPublishManuallyState = if (permissions.canChangeCanonicalAlias) {
-                            when (publishManuallyState) {
-                                RoomAliasViewState.AddAliasState.Hidden -> RoomAliasViewState.AddAliasState.Closed
-                                else                                    -> publishManuallyState
-                            }
-                        } else {
-                            RoomAliasViewState.AddAliasState.Hidden
+                )
+                setState {
+                    val newPublishManuallyState = if (permissions.canChangeCanonicalAlias) {
+                        when (publishManuallyState) {
+                            RoomAliasViewState.AddAliasState.Hidden -> RoomAliasViewState.AddAliasState.Closed
+                            else -> publishManuallyState
                         }
-                        copy(
-                                actionPermissions = permissions,
-                                publishManuallyState = newPublishManuallyState
-                        )
+                    } else {
+                        RoomAliasViewState.AddAliasState.Hidden
                     }
-                }.launchIn(viewModelScope)
+                    copy(
+                        actionPermissions = permissions,
+                        publishManuallyState = newPublishManuallyState
+                    )
+                }
+            }.launchIn(viewModelScope)
     }
 
     /**
@@ -164,31 +166,31 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
      */
     private fun observeRoomCanonicalAlias() {
         room.flow()
-                .liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
-                .mapOptional { it.content.toModel<RoomCanonicalAliasContent>() }
-                .unwrap()
-                .setOnEach {
-                    copy(
-                            canonicalAlias = it.canonicalAlias,
-                            alternativeAliases = it.alternativeAliases.orEmpty().sorted()
-                    )
-                }
+            .liveStateEvent(EventType.STATE_ROOM_CANONICAL_ALIAS, QueryStringValue.NoCondition)
+            .mapOptional { it.content.toModel<RoomCanonicalAliasContent>() }
+            .unwrap()
+            .setOnEach {
+                copy(
+                    canonicalAlias = it.canonicalAlias,
+                    alternativeAliases = it.alternativeAliases.orEmpty().sorted()
+                )
+            }
     }
 
     override fun handle(action: RoomAliasAction) {
         when (action) {
-            RoomAliasAction.ToggleManualPublishForm       -> handleToggleManualPublishForm()
-            is RoomAliasAction.SetNewAlias                -> handleSetNewAlias(action)
-            is RoomAliasAction.ManualPublishAlias         -> handleManualPublishAlias()
-            is RoomAliasAction.UnpublishAlias             -> handleUnpublishAlias(action)
-            is RoomAliasAction.SetCanonicalAlias          -> handleSetCanonicalAlias(action)
+            RoomAliasAction.ToggleManualPublishForm -> handleToggleManualPublishForm()
+            is RoomAliasAction.SetNewAlias -> handleSetNewAlias(action)
+            is RoomAliasAction.ManualPublishAlias -> handleManualPublishAlias()
+            is RoomAliasAction.UnpublishAlias -> handleUnpublishAlias(action)
+            is RoomAliasAction.SetCanonicalAlias -> handleSetCanonicalAlias(action)
             is RoomAliasAction.SetRoomDirectoryVisibility -> handleSetRoomDirectoryVisibility(action)
-            RoomAliasAction.ToggleAddLocalAliasForm       -> handleToggleAddLocalAliasForm()
-            is RoomAliasAction.SetNewLocalAliasLocalPart  -> handleSetNewLocalAliasLocalPart(action)
-            RoomAliasAction.AddLocalAlias                 -> handleAddLocalAlias()
-            is RoomAliasAction.RemoveLocalAlias           -> handleRemoveLocalAlias(action)
-            is RoomAliasAction.PublishAlias               -> handlePublishAlias(action)
-            RoomAliasAction.Retry                         -> handleRetry()
+            RoomAliasAction.ToggleAddLocalAliasForm -> handleToggleAddLocalAliasForm()
+            is RoomAliasAction.SetNewLocalAliasLocalPart -> handleSetNewLocalAliasLocalPart(action)
+            RoomAliasAction.AddLocalAlias -> handleAddLocalAlias()
+            is RoomAliasAction.RemoveLocalAlias -> handleRemoveLocalAlias(action)
+            is RoomAliasAction.PublishAlias -> handlePublishAlias(action)
+            RoomAliasAction.Retry -> handleRetry()
         }
     }
 
@@ -207,19 +209,19 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
             runCatching {
                 session.setRoomDirectoryVisibility(room.roomId, action.roomDirectoryVisibility)
             }.fold(
-                    {
-                        setState {
-                            copy(
-                                    isLoading = false,
-                                    // Local echo, no need to fetch the data from the server again
-                                    roomDirectoryVisibility = Success(action.roomDirectoryVisibility)
-                            )
-                        }
-                    },
-                    {
-                        postLoading(false)
-                        _viewEvents.post(RoomAliasViewEvents.Failure(it))
+                {
+                    setState {
+                        copy(
+                            isLoading = false,
+                            // Local echo, no need to fetch the data from the server again
+                            roomDirectoryVisibility = Success(action.roomDirectoryVisibility)
+                        )
                     }
+                },
+                {
+                    postLoading(false)
+                    _viewEvents.post(RoomAliasViewEvents.Failure(it))
+                }
             )
         }
     }
@@ -227,11 +229,11 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleToggleAddLocalAliasForm() {
         setState {
             copy(
-                    newLocalAliasState = when (newLocalAliasState) {
-                        RoomAliasViewState.AddAliasState.Hidden     -> RoomAliasViewState.AddAliasState.Hidden
-                        RoomAliasViewState.AddAliasState.Closed     -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
-                        is RoomAliasViewState.AddAliasState.Editing -> RoomAliasViewState.AddAliasState.Closed
-                    }
+                newLocalAliasState = when (newLocalAliasState) {
+                    RoomAliasViewState.AddAliasState.Hidden -> RoomAliasViewState.AddAliasState.Hidden
+                    RoomAliasViewState.AddAliasState.Closed -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
+                    is RoomAliasViewState.AddAliasState.Editing -> RoomAliasViewState.AddAliasState.Closed
+                }
             )
         }
     }
@@ -239,11 +241,11 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleToggleManualPublishForm() {
         setState {
             copy(
-                    publishManuallyState = when (publishManuallyState) {
-                        RoomAliasViewState.AddAliasState.Hidden     -> RoomAliasViewState.AddAliasState.Hidden
-                        RoomAliasViewState.AddAliasState.Closed     -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
-                        is RoomAliasViewState.AddAliasState.Editing -> RoomAliasViewState.AddAliasState.Closed
-                    }
+                publishManuallyState = when (publishManuallyState) {
+                    RoomAliasViewState.AddAliasState.Hidden -> RoomAliasViewState.AddAliasState.Hidden
+                    RoomAliasViewState.AddAliasState.Closed -> RoomAliasViewState.AddAliasState.Editing("", Uninitialized)
+                    is RoomAliasViewState.AddAliasState.Editing -> RoomAliasViewState.AddAliasState.Closed
+                }
             )
         }
     }
@@ -251,7 +253,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleSetNewAlias(action: RoomAliasAction.SetNewAlias) {
         setState {
             copy(
-                    publishManuallyState = RoomAliasViewState.AddAliasState.Editing(action.alias, Uninitialized)
+                publishManuallyState = RoomAliasViewState.AddAliasState.Editing(action.alias, Uninitialized)
             )
         }
     }
@@ -259,7 +261,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleSetNewLocalAliasLocalPart(action: RoomAliasAction.SetNewLocalAliasLocalPart) {
         setState {
             copy(
-                    newLocalAliasState = RoomAliasViewState.AddAliasState.Editing(action.aliasLocalPart, Uninitialized)
+                newLocalAliasState = RoomAliasViewState.AddAliasState.Editing(action.aliasLocalPart, Uninitialized)
             )
         }
     }
@@ -267,35 +269,35 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleManualPublishAlias() = withState { state ->
         val newAlias = (state.publishManuallyState as? RoomAliasViewState.AddAliasState.Editing)?.value ?: return@withState
         updateCanonicalAlias(
-                canonicalAlias = state.canonicalAlias,
-                alternativeAliases = state.alternativeAliases + newAlias,
-                closeForm = true
+            canonicalAlias = state.canonicalAlias,
+            alternativeAliases = state.alternativeAliases + newAlias,
+            closeForm = true
         )
     }
 
     private fun handlePublishAlias(action: RoomAliasAction.PublishAlias) = withState { state ->
         updateCanonicalAlias(
-                canonicalAlias = state.canonicalAlias,
-                alternativeAliases = state.alternativeAliases + action.alias,
-                closeForm = false
+            canonicalAlias = state.canonicalAlias,
+            alternativeAliases = state.alternativeAliases + action.alias,
+            closeForm = false
         )
     }
 
     private fun handleUnpublishAlias(action: RoomAliasAction.UnpublishAlias) = withState { state ->
         updateCanonicalAlias(
-                // We can also unpublish the canonical alias
-                canonicalAlias = state.canonicalAlias.takeIf { it != action.alias },
-                alternativeAliases = state.alternativeAliases - action.alias,
-                closeForm = false
+            // We can also unpublish the canonical alias
+            canonicalAlias = state.canonicalAlias.takeIf { it != action.alias },
+            alternativeAliases = state.alternativeAliases - action.alias,
+            closeForm = false
         )
     }
 
     private fun handleSetCanonicalAlias(action: RoomAliasAction.SetCanonicalAlias) = withState { state ->
         updateCanonicalAlias(
-                canonicalAlias = action.canonicalAlias,
-                // Ensure the previous canonical alias is moved to the alt aliases
-                alternativeAliases = state.allPublishedAliases,
-                closeForm = false
+            canonicalAlias = action.canonicalAlias,
+            // Ensure the previous canonical alias is moved to the alt aliases
+            alternativeAliases = state.allPublishedAliases,
+            closeForm = false
         )
     }
 
@@ -306,8 +308,8 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
                 room.updateCanonicalAlias(canonicalAlias, alternativeAliases)
                 setState {
                     copy(
-                            isLoading = false,
-                            publishManuallyState = if (closeForm) RoomAliasViewState.AddAliasState.Closed else publishManuallyState
+                        isLoading = false,
+                        publishManuallyState = if (closeForm) RoomAliasViewState.AddAliasState.Closed else publishManuallyState
                     )
                 }
             } catch (failure: Throwable) {
@@ -322,32 +324,32 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
 
         setState {
             copy(
-                    isLoading = true,
-                    newLocalAliasState = previousState.copy(asyncRequest = Loading())
+                isLoading = true,
+                newLocalAliasState = previousState.copy(asyncRequest = Loading())
             )
         }
         viewModelScope.launch {
             runCatching { room.addAlias(previousState.value) }
-                    .onFailure {
-                        setState {
-                            copy(
-                                    isLoading = false,
-                                    newLocalAliasState = previousState.copy(asyncRequest = Fail(it))
-                            )
-                        }
-                        _viewEvents.post(RoomAliasViewEvents.Failure(it))
+                .onFailure {
+                    setState {
+                        copy(
+                            isLoading = false,
+                            newLocalAliasState = previousState.copy(asyncRequest = Fail(it))
+                        )
                     }
-                    .onSuccess {
-                        setState {
-                            copy(
-                                    isLoading = false,
-                                    newLocalAliasState = RoomAliasViewState.AddAliasState.Closed,
-                                    // Local echo
-                                    localAliases = Success((localAliases().orEmpty() + previousState.value).sorted())
-                            )
-                        }
-                        fetchRoomAlias()
+                    _viewEvents.post(RoomAliasViewEvents.Failure(it))
+                }
+                .onSuccess {
+                    setState {
+                        copy(
+                            isLoading = false,
+                            newLocalAliasState = RoomAliasViewState.AddAliasState.Closed,
+                            // Local echo
+                            localAliases = Success((localAliases().orEmpty() + previousState.value).sorted())
+                        )
                     }
+                    fetchRoomAlias()
+                }
         }
     }
 
@@ -355,23 +357,23 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         postLoading(true)
         viewModelScope.launch {
             runCatching { session.deleteRoomAlias(action.alias) }
-                    .onFailure {
-                        setState {
-                            copy(isLoading = false)
-                        }
-                        _viewEvents.post(RoomAliasViewEvents.Failure(it))
+                .onFailure {
+                    setState {
+                        copy(isLoading = false)
                     }
-                    .onSuccess {
-                        // Local echo
-                        setState {
-                            copy(
-                                    isLoading = false,
-                                    // Local echo
-                                    localAliases = Success(localAliases().orEmpty() - action.alias)
-                            )
-                        }
-                        fetchRoomAlias()
+                    _viewEvents.post(RoomAliasViewEvents.Failure(it))
+                }
+                .onSuccess {
+                    // Local echo
+                    setState {
+                        copy(
+                            isLoading = false,
+                            // Local echo
+                            localAliases = Success(localAliases().orEmpty() - action.alias)
+                        )
                     }
+                    fetchRoomAlias()
+                }
         }
     }
 

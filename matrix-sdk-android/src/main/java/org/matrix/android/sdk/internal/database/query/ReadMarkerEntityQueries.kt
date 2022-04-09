@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.database.model.ReadMarkerEntityFields
 
 internal fun ReadMarkerEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ReadMarkerEntity> {
     return realm.where<ReadMarkerEntity>()
-            .equalTo(ReadMarkerEntityFields.ROOM_ID, roomId)
+        .equalTo(ReadMarkerEntityFields.ROOM_ID, roomId)
 }
 
 internal fun ReadMarkerEntity.Companion.getOrCreate(realm: Realm, roomId: String): ReadMarkerEntity {

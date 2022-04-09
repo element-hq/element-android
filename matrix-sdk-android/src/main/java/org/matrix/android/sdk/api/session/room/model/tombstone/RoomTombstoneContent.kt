@@ -23,13 +23,13 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class RoomTombstoneContent(
-        /**
-         * Required. A server-defined message.
-         */
-        @Json(name = "body") val body: String? = null,
+    /**
+     * Required. A server-defined message.
+     */
+    @Json(name = "body") val body: String? = null,
 
-        /**
-         * Required. The new room the client should be visiting.
-         */
-        @Json(name = "replacement_room") val replacementRoomId: String?
+    /**
+     * Required. The new room the client should be visiting.
+     */
+    @Json(name = "replacement_room") val replacementRoomId: String?
 )

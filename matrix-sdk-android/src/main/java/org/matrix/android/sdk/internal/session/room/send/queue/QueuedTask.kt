@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicInteger
  * @param taskIdentifier String value to identify a unique Task. Should be different from queueIdentifier
  */
 internal abstract class QueuedTask(
-        val queueIdentifier: String,
-        val taskIdentifier: String
+    val queueIdentifier: String,
+    val taskIdentifier: String
 ) : Cancelable {
 
     override fun toString() = "${javaClass.simpleName} queueIdentifier: $queueIdentifier, taskIdentifier:  $taskIdentifier)"

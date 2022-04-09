@@ -35,8 +35,8 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
 
 class CallRingPlayerIncoming(
-        context: Context,
-        private val notificationUtils: NotificationUtils
+    context: Context,
+    private val notificationUtils: NotificationUtils
 ) {
 
     private val applicationContext = context.applicationContext
@@ -96,8 +96,8 @@ class CallRingPlayerIncoming(
 }
 
 class CallRingPlayerOutgoing(
-        context: Context,
-        private val callManager: WebRtcCallManager
+    context: Context,
+    private val callManager: WebRtcCallManager
 ) {
 
     private val applicationContext = context.applicationContext
@@ -140,13 +140,15 @@ class CallRingPlayerOutgoing(
             mediaPlayer.setOnErrorListener(MediaPlayerErrorListener())
             mediaPlayer.isLooping = true
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                mediaPlayer.setAudioAttributes(AudioAttributes.Builder()
+                mediaPlayer.setAudioAttributes(
+                    AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                         .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
                         // TODO Change to ?
                         // .setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
                         // .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                        .build())
+                        .build()
+                )
             } else {
                 @Suppress("DEPRECATION")
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING)

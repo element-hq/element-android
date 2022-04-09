@@ -23,29 +23,29 @@ import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
 import org.matrix.olm.OlmAccount
 
 internal open class CryptoMetadataEntity(
-        // The current user id.
-        @PrimaryKey var userId: String? = null,
-        // The current device id.
-        var deviceId: String? = null,
-        // Serialized OlmAccount
-        var olmAccountData: String? = null,
-        // The sync token corresponding to the device list. // TODO?
-        var deviceSyncToken: String? = null,
-        // Settings for blacklisting unverified devices.
-        var globalBlacklistUnverifiedDevices: Boolean = false,
-        // The keys backup version currently used. Null means no backup.
-        var backupVersion: String? = null,
+    // The current user id.
+    @PrimaryKey var userId: String? = null,
+    // The current device id.
+    var deviceId: String? = null,
+    // Serialized OlmAccount
+    var olmAccountData: String? = null,
+    // The sync token corresponding to the device list. // TODO?
+    var deviceSyncToken: String? = null,
+    // Settings for blacklisting unverified devices.
+    var globalBlacklistUnverifiedDevices: Boolean = false,
+    // The keys backup version currently used. Null means no backup.
+    var backupVersion: String? = null,
 
-        // The device keys has been sent to the homeserver
-        var deviceKeysSentToServer: Boolean = false,
+    // The device keys has been sent to the homeserver
+    var deviceKeysSentToServer: Boolean = false,
 
-        var xSignMasterPrivateKey: String? = null,
-        var xSignUserPrivateKey: String? = null,
-        var xSignSelfSignedPrivateKey: String? = null,
-        var keyBackupRecoveryKey: String? = null,
-        var keyBackupRecoveryKeyVersion: String? = null
+    var xSignMasterPrivateKey: String? = null,
+    var xSignUserPrivateKey: String? = null,
+    var xSignSelfSignedPrivateKey: String? = null,
+    var keyBackupRecoveryKey: String? = null,
+    var keyBackupRecoveryKeyVersion: String? = null
 
-//        var crossSigningInfoEntity: CrossSigningInfoEntity? = null
+    //        var crossSigningInfoEntity: CrossSigningInfoEntity? = null
 ) : RealmObject() {
 
     // Deserialize data

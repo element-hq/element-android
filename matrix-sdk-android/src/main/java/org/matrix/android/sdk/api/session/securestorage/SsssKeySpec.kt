@@ -24,26 +24,26 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFro
 interface SsssKeySpec
 
 data class RawBytesKeySpec(
-        val privateKey: ByteArray
+    val privateKey: ByteArray
 ) : SsssKeySpec {
 
     companion object {
 
         fun fromPassphrase(passphrase: String, salt: String, iterations: Int, progressListener: ProgressListener?): RawBytesKeySpec {
             return RawBytesKeySpec(
-                    privateKey = deriveKey(
-                            passphrase,
-                            salt,
-                            iterations,
-                            progressListener
-                    )
+                privateKey = deriveKey(
+                    passphrase,
+                    salt,
+                    iterations,
+                    progressListener
+                )
             )
         }
 
         fun fromRecoveryKey(recoveryKey: String): RawBytesKeySpec? {
             return extractCurveKeyFromRecoveryKey(recoveryKey)?.let {
                 RawBytesKeySpec(
-                        privateKey = it
+                    privateKey = it
                 )
             }
         }

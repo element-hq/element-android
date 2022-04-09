@@ -50,19 +50,19 @@ class MarkdownParserTest : InstrumentedTest {
      * Create the same parser than in the RoomModule
      */
     private val markdownParser = MarkdownParser(
-            Parser.builder().build(),
-            Parser.builder().build(),
-            HtmlRenderer.builder().softbreak("<br />").build(),
-            TextPillsUtils(
-                    MentionLinkSpecComparator(),
-                    DisplayNameResolver(
-                            MatrixConfiguration(
-                                    applicationFlavor = "TestFlavor",
-                                    roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
-                            )
-                    ),
-                    TestPermalinkService()
-            )
+        Parser.builder().build(),
+        Parser.builder().build(),
+        HtmlRenderer.builder().softbreak("<br />").build(),
+        TextPillsUtils(
+            MentionLinkSpecComparator(),
+            DisplayNameResolver(
+                MatrixConfiguration(
+                    applicationFlavor = "TestFlavor",
+                    roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
+                )
+            ),
+            TestPermalinkService()
+        )
     )
 
     @Test
@@ -70,10 +70,12 @@ class MarkdownParserTest : InstrumentedTest {
         testIdentity("")
         testIdentity("a")
         testIdentity("1")
-        testIdentity("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et " +
-                "dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
-                "modo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pari" +
-                "atur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+        testIdentity(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et " +
+                    "dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
+                    "modo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pari" +
+                    "atur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        )
     }
 
     @Test
@@ -92,36 +94,36 @@ class MarkdownParserTest : InstrumentedTest {
     @Test
     fun parseBold() {
         testType(
-                name = "bold",
-                markdownPattern = "**",
-                htmlExpectedTag = "strong"
+            name = "bold",
+            markdownPattern = "**",
+            htmlExpectedTag = "strong"
         )
     }
 
     @Test
     fun parseBoldNewLines() {
         testTypeNewLines(
-                name = "bold",
-                markdownPattern = "**",
-                htmlExpectedTag = "strong"
+            name = "bold",
+            markdownPattern = "**",
+            htmlExpectedTag = "strong"
         )
     }
 
     @Test
     fun parseItalic() {
         testType(
-                name = "italic",
-                markdownPattern = "*",
-                htmlExpectedTag = "em"
+            name = "italic",
+            markdownPattern = "*",
+            htmlExpectedTag = "em"
         )
     }
 
     @Test
     fun parseItalicNewLines() {
         testTypeNewLines(
-                name = "italic",
-                markdownPattern = "*",
-                htmlExpectedTag = "em"
+            name = "italic",
+            markdownPattern = "*",
+            htmlExpectedTag = "em"
         )
     }
 
@@ -138,9 +140,9 @@ class MarkdownParserTest : InstrumentedTest {
     @Ignore("This test will be ignored until it is fixed")
     fun parseStrike_not_passing() {
         testType(
-                name = "strike",
-                markdownPattern = "~~",
-                htmlExpectedTag = "del"
+            name = "strike",
+            markdownPattern = "~~",
+            htmlExpectedTag = "del"
         )
     }
 
@@ -148,18 +150,18 @@ class MarkdownParserTest : InstrumentedTest {
     @Ignore("This test will be ignored until it is fixed")
     fun parseStrikeNewLines() {
         testTypeNewLines(
-                name = "strike",
-                markdownPattern = "~~",
-                htmlExpectedTag = "del"
+            name = "strike",
+            markdownPattern = "~~",
+            htmlExpectedTag = "del"
         )
     }
 
     @Test
     fun parseCode() {
         testType(
-                name = "code",
-                markdownPattern = "`",
-                htmlExpectedTag = "code"
+            name = "code",
+            markdownPattern = "`",
+            htmlExpectedTag = "code"
         )
     }
 
@@ -168,19 +170,19 @@ class MarkdownParserTest : InstrumentedTest {
     @Ignore("This test will be ignored until it is fixed")
     fun parseCodeNewLines_not_passing() {
         testTypeNewLines(
-                name = "code",
-                markdownPattern = "```",
-                htmlExpectedTag = "code",
-                softBreak = "\n"
+            name = "code",
+            markdownPattern = "```",
+            htmlExpectedTag = "code",
+            softBreak = "\n"
         )
     }
 
     @Test
     fun parseCode2() {
         testType(
-                name = "code",
-                markdownPattern = "``",
-                htmlExpectedTag = "code"
+            name = "code",
+            markdownPattern = "``",
+            htmlExpectedTag = "code"
         )
     }
 
@@ -188,18 +190,18 @@ class MarkdownParserTest : InstrumentedTest {
     @Ignore("This test will be ignored until it is fixed")
     fun parseCode2NewLines_not_passing() {
         testTypeNewLines(
-                name = "code",
-                markdownPattern = "``",
-                htmlExpectedTag = "code"
+            name = "code",
+            markdownPattern = "``",
+            htmlExpectedTag = "code"
         )
     }
 
     @Test
     fun parseCode3() {
         testType(
-                name = "code",
-                markdownPattern = "```",
-                htmlExpectedTag = "code"
+            name = "code",
+            markdownPattern = "```",
+            htmlExpectedTag = "code"
         )
     }
 
@@ -207,9 +209,9 @@ class MarkdownParserTest : InstrumentedTest {
     @Ignore("This test will be ignored until it is fixed")
     fun parseCode3NewLines_not_passing() {
         testTypeNewLines(
-                name = "code",
-                markdownPattern = "```",
-                htmlExpectedTag = "code"
+            name = "code",
+            markdownPattern = "```",
+            htmlExpectedTag = "code"
         )
     }
 
@@ -286,96 +288,120 @@ class MarkdownParserTest : InstrumentedTest {
         markdownParser.parse(text).expect(text, null)
     }
 
-    private fun testType(name: String,
-                         markdownPattern: String,
-                         htmlExpectedTag: String) {
+    private fun testType(
+        name: String,
+        markdownPattern: String,
+        htmlExpectedTag: String
+    ) {
         // Test simple case
         "$markdownPattern$name$markdownPattern"
-                .let {
-                    markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag>")
-                }
+            .let {
+                markdownParser.parse(it)
+                    .expect(
+                        expectedText = it,
+                        expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag>"
+                    )
+            }
 
         // Test twice the same tag
         "$markdownPattern$name$markdownPattern and $markdownPattern$name bis$markdownPattern"
-                .let {
-                    markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag> and <$htmlExpectedTag>$name bis</$htmlExpectedTag>")
-                }
+            .let {
+                markdownParser.parse(it)
+                    .expect(
+                        expectedText = it,
+                        expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag> and <$htmlExpectedTag>$name bis</$htmlExpectedTag>"
+                    )
+            }
 
         val textBefore = "a"
         val textAfter = "b"
 
         // With sticked text before
         "$textBefore$markdownPattern$name$markdownPattern"
-                .let {
-                    markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "$textBefore<$htmlExpectedTag>$name</$htmlExpectedTag>")
-                }
+            .let {
+                markdownParser.parse(it)
+                    .expect(
+                        expectedText = it,
+                        expectedFormattedText = "$textBefore<$htmlExpectedTag>$name</$htmlExpectedTag>"
+                    )
+            }
 
         // With text before and space
         "$textBefore $markdownPattern$name$markdownPattern"
-                .let {
-                    markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "$textBefore <$htmlExpectedTag>$name</$htmlExpectedTag>")
-                }
+            .let {
+                markdownParser.parse(it)
+                    .expect(
+                        expectedText = it,
+                        expectedFormattedText = "$textBefore <$htmlExpectedTag>$name</$htmlExpectedTag>"
+                    )
+            }
 
         // With sticked text after
         "$markdownPattern$name$markdownPattern$textAfter"
-                .let {
-                    markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag>$textAfter")
-                }
+            .let {
+                markdownParser.parse(it)
+                    .expect(
+                        expectedText = it,
+                        expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag>$textAfter"
+                    )
+            }
 
         // With space and text after
         "$markdownPattern$name$markdownPattern $textAfter"
-                .let {
-                    markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag> $textAfter")
-                }
+            .let {
+                markdownParser.parse(it)
+                    .expect(
+                        expectedText = it,
+                        expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag> $textAfter"
+                    )
+            }
 
         // With sticked text before and text after
         "$textBefore$markdownPattern$name$markdownPattern$textAfter"
-                .let {
-                    markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "a<$htmlExpectedTag>$name</$htmlExpectedTag>$textAfter")
-                }
+            .let {
+                markdownParser.parse(it)
+                    .expect(
+                        expectedText = it,
+                        expectedFormattedText = "a<$htmlExpectedTag>$name</$htmlExpectedTag>$textAfter"
+                    )
+            }
 
         // With text before and after, with spaces
         "$textBefore $markdownPattern$name$markdownPattern $textAfter"
-                .let {
-                    markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "$textBefore <$htmlExpectedTag>$name</$htmlExpectedTag> $textAfter")
-                }
+            .let {
+                markdownParser.parse(it)
+                    .expect(
+                        expectedText = it,
+                        expectedFormattedText = "$textBefore <$htmlExpectedTag>$name</$htmlExpectedTag> $textAfter"
+                    )
+            }
     }
 
-    private fun testTypeNewLines(name: String,
-                                 markdownPattern: String,
-                                 htmlExpectedTag: String,
-                                 softBreak: String = "<br />") {
+    private fun testTypeNewLines(
+        name: String,
+        markdownPattern: String,
+        htmlExpectedTag: String,
+        softBreak: String = "<br />"
+    ) {
         // With new line inside the block
         "$markdownPattern$name\n$name$markdownPattern"
-                .let {
-                    markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name$softBreak$name</$htmlExpectedTag>")
-                }
+            .let {
+                markdownParser.parse(it)
+                    .expect(
+                        expectedText = it,
+                        expectedFormattedText = "<$htmlExpectedTag>$name$softBreak$name</$htmlExpectedTag>"
+                    )
+            }
 
         // With new line between two blocks
         "$markdownPattern$name$markdownPattern\n$markdownPattern$name$markdownPattern"
-                .let {
-                    markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag><br /><$htmlExpectedTag>$name</$htmlExpectedTag>")
-                }
+            .let {
+                markdownParser.parse(it)
+                    .expect(
+                        expectedText = it,
+                        expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag><br /><$htmlExpectedTag>$name</$htmlExpectedTag>"
+                    )
+            }
     }
 
     private fun TextContent.expect(expectedText: String, expectedFormattedText: String?) {

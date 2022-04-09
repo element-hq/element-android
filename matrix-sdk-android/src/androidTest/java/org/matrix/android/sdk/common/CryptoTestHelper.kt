@@ -116,8 +116,9 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             val roomJoinedObserver = object : Observer<List<RoomSummary>> {
                 override fun onChanged(t: List<RoomSummary>?) {
                     if (bobSession.getRoom(aliceRoomId)
-                                    ?.getRoomMember(bobSession.myUserId)
-                                    ?.membership == Membership.JOIN) {
+                            ?.getRoomMember(bobSession.myUserId)
+                            ?.membership == Membership.JOIN
+                    ) {
                         bobRoomSummariesLive.removeObserver(this)
                         latch.countDown()
                     }
@@ -127,9 +128,9 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             bobSession.joinRoom(aliceRoomId)
         }
         // Ensure bob can send messages to the room
-//        val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
-//        assertNotNull(roomFromBobPOV.powerLevels)
-//        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
+        //        val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
+        //        assertNotNull(roomFromBobPOV.powerLevels)
+        //        assertTrue(roomFromBobPOV.powerLevels.maySendMessage(bobSession.myUserId))
 
         return CryptoTestData(aliceRoomId, listOf(aliceSession, bobSession))
     }
@@ -226,16 +227,16 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
 
     fun createFakeMegolmBackupAuthData(): MegolmBackupAuthData {
         return MegolmBackupAuthData(
-                publicKey = "abcdefg",
-                signatures = mapOf("something" to mapOf("ed25519:something" to "hijklmnop"))
+            publicKey = "abcdefg",
+            signatures = mapOf("something" to mapOf("ed25519:something" to "hijklmnop"))
         )
     }
 
     fun createFakeMegolmBackupCreationInfo(): MegolmBackupCreationInfo {
         return MegolmBackupCreationInfo(
-                algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
-                authData = createFakeMegolmBackupAuthData(),
-                recoveryKey = "fake"
+            algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
+            authData = createFakeMegolmBackupAuthData(),
+            recoveryKey = "fake"
         )
     }
 
@@ -260,8 +261,9 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             val newRoomObserver = object : Observer<List<RoomSummary>> {
                 override fun onChanged(t: List<RoomSummary>?) {
                     if (bob.getRoom(roomId)
-                                    ?.getRoomMember(bob.myUserId)
-                                    ?.membership == Membership.JOIN) {
+                            ?.getRoomMember(bob.myUserId)
+                            ?.membership == Membership.JOIN
+                    ) {
                         bobRoomSummariesLive.removeObserver(this)
                         latch.countDown()
                     }
@@ -277,18 +279,19 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
     fun initializeCrossSigning(session: Session) {
         testHelper.doSync<Unit> {
             session.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = session.myUserId,
-                                                    password = TestConstants.PASSWORD,
-                                                    session = flowResponse.session
-                                            )
-                                    )
-                                }
-                            }, it)
+                .initializeCrossSigning(
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                UserPasswordAuth(
+                                    user = session.myUserId,
+                                    password = TestConstants.PASSWORD,
+                                    session = flowResponse.session
+                                )
+                            )
+                        }
+                    }, it
+                )
         }
     }
 
@@ -301,11 +304,12 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         val bobVerificationService = bob.cryptoService().verificationService()
 
         aliceVerificationService.beginKeyVerificationInDMs(
-                VerificationMethod.SAS,
-                requestID,
-                roomId,
-                bob.myUserId,
-                bob.sessionParams.credentials.deviceId!!)
+            VerificationMethod.SAS,
+            requestID,
+            roomId,
+            bob.myUserId,
+            bob.sessionParams.credentials.deviceId!!
+        )
 
         // we should reach SHOW SAS on both
         var alicePovTx: OutgoingSasVerificationTransaction? = null

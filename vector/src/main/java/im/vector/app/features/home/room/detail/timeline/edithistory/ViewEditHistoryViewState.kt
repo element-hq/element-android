@@ -23,10 +23,11 @@ import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFrag
 import org.matrix.android.sdk.api.session.events.model.Event
 
 data class ViewEditHistoryViewState(
-        val eventId: String,
-        val roomId: String,
-        val isOriginalAReply: Boolean = false,
-        val editList: Async<List<Event>> = Uninitialized) :
+    val eventId: String,
+    val roomId: String,
+    val isOriginalAReply: Boolean = false,
+    val editList: Async<List<Event>> = Uninitialized
+) :
     MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId)

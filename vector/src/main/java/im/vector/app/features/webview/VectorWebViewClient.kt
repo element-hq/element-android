@@ -59,9 +59,11 @@ class VectorWebViewClient(private val eventListener: WebViewEventListener) : Web
 
     override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, errorResponse: WebResourceResponse) {
         super.onReceivedHttpError(view, request, errorResponse)
-        eventListener.onHttpError(request.url.toString(),
-                errorResponse.statusCode,
-                errorResponse.reasonPhrase)
+        eventListener.onHttpError(
+            request.url.toString(),
+            errorResponse.statusCode,
+            errorResponse.reasonPhrase
+        )
     }
 
     override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {

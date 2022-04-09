@@ -23,28 +23,28 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class PublicRoomsResponse(
-        /**
-         * A pagination token for the response. The absence of this token means there are no more results to fetch and the client should stop paginating.
-         */
-        @Json(name = "next_batch")
-        val nextBatch: String? = null,
+    /**
+     * A pagination token for the response. The absence of this token means there are no more results to fetch and the client should stop paginating.
+     */
+    @Json(name = "next_batch")
+    val nextBatch: String? = null,
 
-        /**
-         * A pagination token that allows fetching previous results. The absence of this token means there are no results before this batch,
-         * i.e. this is the first batch.
-         */
-        @Json(name = "prev_batch")
-        val prevBatch: String? = null,
+    /**
+     * A pagination token that allows fetching previous results. The absence of this token means there are no results before this batch,
+     * i.e. this is the first batch.
+     */
+    @Json(name = "prev_batch")
+    val prevBatch: String? = null,
 
-        /**
-         * A paginated chunk of public rooms.
-         */
-        @Json(name = "chunk")
-        val chunk: List<PublicRoom>? = null,
+    /**
+     * A paginated chunk of public rooms.
+     */
+    @Json(name = "chunk")
+    val chunk: List<PublicRoom>? = null,
 
-        /**
-         * An estimate on the total number of public rooms, if the server has an estimate.
-         */
-        @Json(name = "total_room_count_estimate")
-        val totalRoomCountEstimate: Int? = null
+    /**
+     * An estimate on the total number of public rooms, if the server has an estimate.
+     */
+    @Json(name = "total_room_count_estimate")
+    val totalRoomCountEstimate: Int? = null
 )

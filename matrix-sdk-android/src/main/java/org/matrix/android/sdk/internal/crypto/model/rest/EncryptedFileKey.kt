@@ -20,35 +20,35 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class EncryptedFileKey(
-        /**
-         * Required. Algorithm. Must be "A256CTR".
-         */
-        @Json(name = "alg")
-        val alg: String? = null,
+    /**
+     * Required. Algorithm. Must be "A256CTR".
+     */
+    @Json(name = "alg")
+    val alg: String? = null,
 
-        /**
-         * Required. Extractable. Must be true. This is a W3C extension.
-         */
-        @Json(name = "ext")
-        val ext: Boolean? = null,
+    /**
+     * Required. Extractable. Must be true. This is a W3C extension.
+     */
+    @Json(name = "ext")
+    val ext: Boolean? = null,
 
-        /**
-         * Required. Key operations. Must at least contain "encrypt" and "decrypt".
-         */
-        @Json(name = "key_ops")
-        val keyOps: List<String>? = null,
+    /**
+     * Required. Key operations. Must at least contain "encrypt" and "decrypt".
+     */
+    @Json(name = "key_ops")
+    val keyOps: List<String>? = null,
 
-        /**
-         * Required. Key type. Must be "oct".
-         */
-        @Json(name = "kty")
-        val kty: String? = null,
+    /**
+     * Required. Key type. Must be "oct".
+     */
+    @Json(name = "kty")
+    val kty: String? = null,
 
-        /**
-         * Required. The key, encoded as urlsafe unpadded base64.
-         */
-        @Json(name = "k")
-        val k: String? = null
+    /**
+     * Required. The key, encoded as urlsafe unpadded base64.
+     */
+    @Json(name = "k")
+    val k: String? = null
 ) {
     /**
      * Check what the spec tells us

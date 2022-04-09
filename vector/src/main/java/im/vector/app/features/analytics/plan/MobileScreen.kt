@@ -25,11 +25,11 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
  * Triggered when the user changed screen on Element Android/iOS
  */
 data class MobileScreen(
-        /**
-         * How long the screen was displayed for in milliseconds.
-         */
-        val durationMs: Int? = null,
-        val screenName: ScreenName,
+    /**
+     * How long the screen was displayed for in milliseconds.
+     */
+    val durationMs: Int? = null,
+    val screenName: ScreenName,
 ) : VectorAnalyticsScreen {
 
     enum class ScreenName {

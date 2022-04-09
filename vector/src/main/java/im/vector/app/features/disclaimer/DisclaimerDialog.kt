@@ -41,13 +41,13 @@ fun showDisclaimerDialog(activity: Activity) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_disclaimer_content, null)
 
         MaterialAlertDialogBuilder(activity)
-                .setView(dialogLayout)
-                .setCancelable(false)
-                .setNegativeButton(R.string.disclaimer_negative_button, null)
-                .setPositiveButton(R.string.disclaimer_positive_button) { _, _ ->
-                    openUrlInChromeCustomTab(activity, null, VectorSettingsUrls.DISCLAIMER_URL)
-                }
-                .show()
+            .setView(dialogLayout)
+            .setCancelable(false)
+            .setNegativeButton(R.string.disclaimer_negative_button, null)
+            .setPositiveButton(R.string.disclaimer_positive_button) { _, _ ->
+                openUrlInChromeCustomTab(activity, null, VectorSettingsUrls.DISCLAIMER_URL)
+            }
+            .show()
     }
 }
 

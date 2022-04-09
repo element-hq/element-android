@@ -22,8 +22,8 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
 class WidgetArgsBuilder @Inject constructor(
-        private val sessionHolder: ActiveSessionHolder,
-        private val themeProvider: ThemeProvider
+    private val sessionHolder: ActiveSessionHolder,
+    private val themeProvider: ThemeProvider
 ) {
 
     @Suppress("UNCHECKED_CAST")
@@ -31,20 +31,20 @@ class WidgetArgsBuilder @Inject constructor(
         val session = sessionHolder.getActiveSession()
         val integrationManagerConfig = session.integrationManagerService().getPreferredConfig()
         val normalizedScreen = when {
-            screen == null             -> null
+            screen == null -> null
             screen.startsWith("type_") -> screen
-            else                       -> "type_$screen"
+            else -> "type_$screen"
         }
         return WidgetArgs(
-                baseUrl = integrationManagerConfig.uiUrl,
-                kind = WidgetKind.INTEGRATION_MANAGER,
-                roomId = roomId,
-                urlParams = mapOf(
-                        "screen" to normalizedScreen,
-                        "integ_id" to integId,
-                        "room_id" to roomId,
-                        "theme" to getTheme()
-                ).filterNotNull()
+            baseUrl = integrationManagerConfig.uiUrl,
+            kind = WidgetKind.INTEGRATION_MANAGER,
+            roomId = roomId,
+            urlParams = mapOf(
+                "screen" to normalizedScreen,
+                "integ_id" to integId,
+                "room_id" to roomId,
+                "theme" to getTheme()
+            ).filterNotNull()
         )
     }
 
@@ -52,29 +52,29 @@ class WidgetArgsBuilder @Inject constructor(
     fun buildStickerPickerArgs(roomId: String, widget: Widget): WidgetArgs {
         val widgetId = widget.widgetId
         val baseUrl = sessionHolder.getActiveSession().widgetService()
-                .getWidgetComputedUrl(widget, themeProvider.isLightTheme()) ?: throw IllegalStateException()
+            .getWidgetComputedUrl(widget, themeProvider.isLightTheme()) ?: throw IllegalStateException()
         return WidgetArgs(
-                baseUrl = baseUrl,
-                kind = WidgetKind.STICKER_PICKER,
-                roomId = roomId,
-                widgetId = widgetId,
-                urlParams = mapOf(
-                        "widgetId" to widgetId,
-                        "room_id" to roomId,
-                        "theme" to getTheme()
-                ).filterNotNull()
+            baseUrl = baseUrl,
+            kind = WidgetKind.STICKER_PICKER,
+            roomId = roomId,
+            widgetId = widgetId,
+            urlParams = mapOf(
+                "widgetId" to widgetId,
+                "room_id" to roomId,
+                "theme" to getTheme()
+            ).filterNotNull()
         )
     }
 
     fun buildRoomWidgetArgs(roomId: String, widget: Widget): WidgetArgs {
         val widgetId = widget.widgetId
         val baseUrl = sessionHolder.getActiveSession().widgetService()
-                .getWidgetComputedUrl(widget, themeProvider.isLightTheme()) ?: throw IllegalStateException()
+            .getWidgetComputedUrl(widget, themeProvider.isLightTheme()) ?: throw IllegalStateException()
         return WidgetArgs(
-                baseUrl = baseUrl,
-                kind = WidgetKind.ROOM,
-                roomId = roomId,
-                widgetId = widgetId
+            baseUrl = baseUrl,
+            kind = WidgetKind.ROOM,
+            roomId = roomId,
+            widgetId = widgetId
         )
     }
 

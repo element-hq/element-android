@@ -23,10 +23,10 @@ import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
 
 internal open class ReadReceiptsSummaryEntity(
-        @PrimaryKey
-        var eventId: String = "",
-        var roomId: String = "",
-        var readReceipts: RealmList<ReadReceiptEntity> = RealmList()
+    @PrimaryKey
+    var eventId: String = "",
+    var roomId: String = "",
+    var readReceipts: RealmList<ReadReceiptEntity> = RealmList()
 ) : RealmObject() {
 
     @LinkingObjects("readReceipts")

@@ -30,13 +30,13 @@ fun roomSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {
 
 fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = {}): SpaceSummaryQueryParams {
     return RoomSummaryQueryParams.Builder()
-            .apply(init)
-            .apply {
-                includeType = listOf(RoomType.SPACE)
-                excludeType = null
-                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-            }
-            .build()
+        .apply(init)
+        .apply {
+            includeType = listOf(RoomType.SPACE)
+            excludeType = null
+            roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+        }
+        .build()
 }
 
 /**
@@ -44,16 +44,16 @@ fun spaceSummaryQueryParams(init: (RoomSummaryQueryParams.Builder.() -> Unit) = 
  * [org.matrix.android.sdk.api.session.room.Room] and [org.matrix.android.sdk.api.session.room.RoomService]
  */
 data class RoomSummaryQueryParams(
-        val roomId: QueryStringValue,
-        val displayName: QueryStringValue,
-        val canonicalAlias: QueryStringValue,
-        val memberships: List<Membership>,
-        val roomCategoryFilter: RoomCategoryFilter?,
-        val roomTagQueryFilter: RoomTagQueryFilter?,
-        val excludeType: List<String?>?,
-        val includeType: List<String?>?,
-        val activeSpaceFilter: ActiveSpaceFilter?,
-        val activeGroupId: String? = null
+    val roomId: QueryStringValue,
+    val displayName: QueryStringValue,
+    val canonicalAlias: QueryStringValue,
+    val memberships: List<Membership>,
+    val roomCategoryFilter: RoomCategoryFilter?,
+    val roomTagQueryFilter: RoomTagQueryFilter?,
+    val excludeType: List<String?>?,
+    val includeType: List<String?>?,
+    val activeSpaceFilter: ActiveSpaceFilter?,
+    val activeGroupId: String? = null
 ) {
 
     class Builder {
@@ -69,16 +69,16 @@ data class RoomSummaryQueryParams(
         var activeGroupId: String? = null
 
         fun build() = RoomSummaryQueryParams(
-                roomId = roomId,
-                displayName = displayName,
-                canonicalAlias = canonicalAlias,
-                memberships = memberships,
-                roomCategoryFilter = roomCategoryFilter,
-                roomTagQueryFilter = roomTagQueryFilter,
-                excludeType = excludeType,
-                includeType = includeType,
-                activeSpaceFilter = activeSpaceFilter,
-                activeGroupId = activeGroupId
+            roomId = roomId,
+            displayName = displayName,
+            canonicalAlias = canonicalAlias,
+            memberships = memberships,
+            roomCategoryFilter = roomCategoryFilter,
+            roomTagQueryFilter = roomTagQueryFilter,
+            excludeType = excludeType,
+            includeType = includeType,
+            activeSpaceFilter = activeSpaceFilter,
+            activeGroupId = activeGroupId
         )
     }
 }

@@ -64,27 +64,27 @@ internal object EventMapper {
 
     fun map(eventEntity: EventEntity, castJsonNumbers: Boolean = false): Event {
         val ud = eventEntity.unsignedData
-                ?.takeIf { it.isNotBlank() }
-                ?.let {
-                    try {
-                        MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(it)
-                    } catch (t: JsonDataException) {
-                        Timber.e(t, "Failed to parse UnsignedData")
-                        null
-                    }
+            ?.takeIf { it.isNotBlank() }
+            ?.let {
+                try {
+                    MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).fromJson(it)
+                } catch (t: JsonDataException) {
+                    Timber.e(t, "Failed to parse UnsignedData")
+                    null
                 }
+            }
 
         return Event(
-                type = eventEntity.type,
-                eventId = eventEntity.eventId,
-                content = ContentMapper.map(eventEntity.content, castJsonNumbers),
-                prevContent = ContentMapper.map(eventEntity.prevContent, castJsonNumbers),
-                originServerTs = eventEntity.originServerTs,
-                senderId = eventEntity.sender,
-                stateKey = eventEntity.stateKey,
-                roomId = eventEntity.roomId,
-                unsignedData = ud,
-                redacts = eventEntity.redacts
+            type = eventEntity.type,
+            eventId = eventEntity.eventId,
+            content = ContentMapper.map(eventEntity.content, castJsonNumbers),
+            prevContent = ContentMapper.map(eventEntity.prevContent, castJsonNumbers),
+            originServerTs = eventEntity.originServerTs,
+            senderId = eventEntity.sender,
+            stateKey = eventEntity.stateKey,
+            roomId = eventEntity.roomId,
+            unsignedData = ud,
+            redacts = eventEntity.redacts
         ).also {
             it.ageLocalTs = eventEntity.ageLocalTs
             it.sendState = eventEntity.sendState
@@ -102,20 +102,20 @@ internal object EventMapper {
             }
             it.mCryptoErrorReason = eventEntity.decryptionErrorReason
             it.threadDetails = ThreadDetails(
-                    isRootThread = eventEntity.isRootThread,
-                    isThread = if (it.threadDetails?.isThread == true) true else eventEntity.isThread(),
-                    numberOfThreads = eventEntity.numberOfThreads,
-                    threadSummarySenderInfo = eventEntity.threadSummaryLatestMessage?.let { timelineEventEntity ->
-                        SenderInfo(
-                                userId = timelineEventEntity.root?.sender ?: "",
-                                displayName = timelineEventEntity.senderName,
-                                isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
-                                avatarUrl = timelineEventEntity.senderAvatar
-                        )
-                    },
-                    threadNotificationState = eventEntity.threadNotificationState,
-                    threadSummaryLatestEvent = eventEntity.threadSummaryLatestMessage?.root?.asDomain(),
-                    lastMessageTimestamp = eventEntity.threadSummaryLatestMessage?.root?.originServerTs
+                isRootThread = eventEntity.isRootThread,
+                isThread = if (it.threadDetails?.isThread == true) true else eventEntity.isThread(),
+                numberOfThreads = eventEntity.numberOfThreads,
+                threadSummarySenderInfo = eventEntity.threadSummaryLatestMessage?.let { timelineEventEntity ->
+                    SenderInfo(
+                        userId = timelineEventEntity.root?.sender ?: "",
+                        displayName = timelineEventEntity.senderName,
+                        isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
+                        avatarUrl = timelineEventEntity.senderAvatar
+                    )
+                },
+                threadNotificationState = eventEntity.threadNotificationState,
+                threadSummaryLatestEvent = eventEntity.threadSummaryLatestMessage?.root?.asDomain(),
+                lastMessageTimestamp = eventEntity.threadSummaryLatestMessage?.root?.originServerTs
 
             )
         }

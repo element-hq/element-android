@@ -21,5 +21,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class BreadcrumbsContent(
-        @Json(name = "recent_rooms") val recentRoomIds: List<String> = emptyList()
+    @Json(name = "recent_rooms") val recentRoomIds: List<String> = emptyList()
 )

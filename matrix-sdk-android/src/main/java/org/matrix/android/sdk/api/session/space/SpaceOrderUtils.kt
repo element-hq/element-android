@@ -31,8 +31,8 @@ import org.matrix.android.sdk.api.util.StringOrderUtils
 object SpaceOrderUtils {
 
     data class SpaceReOrderCommand(
-            val spaceId: String,
-            val order: String
+        val spaceId: String,
+        val order: String
     )
 
     /**
@@ -67,10 +67,10 @@ object SpaceOrderUtils {
         } else null
 
         val defaultMaxOrder = CharArray(4) { StringOrderUtils.DEFAULT_ALPHABET.last() }
-                .joinToString("")
+            .joinToString("")
 
         val defaultMinOrder = CharArray(4) { StringOrderUtils.DEFAULT_ALPHABET.first() }
-                .joinToString("")
+            .joinToString("")
 
         val afterOrder = afterSpace?.second ?: defaultMaxOrder
 
@@ -88,16 +88,16 @@ object SpaceOrderUtils {
             return StringOrderUtils.midPoints(defaultMinOrder, defaultMaxOrder, orderedSpacesToOrderMap.size)?.let { orders ->
                 expectedList.mapIndexed { index, pair ->
                     SpaceReOrderCommand(
-                            pair.first,
-                            orders[index]
+                        pair.first,
+                        orders[index]
                     )
                 }
             } ?: emptyList()
         } else {
             return nodesToReNumber.mapIndexed { i, s ->
                 SpaceReOrderCommand(
-                        s,
-                        newOrder[i]
+                    s,
+                    newOrder[i]
                 )
             }
         }

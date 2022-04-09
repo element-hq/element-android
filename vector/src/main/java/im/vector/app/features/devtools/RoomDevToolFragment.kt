@@ -29,9 +29,9 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
 class RoomDevToolFragment @Inject constructor(
-        private val epoxyController: RoomDevToolRootController
+    private val epoxyController: RoomDevToolRootController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
-        DevToolsInteractionListener {
+    DevToolsInteractionListener {
 
     private val sharedViewModel: RoomDevToolViewModel by activityViewModel()
 
@@ -44,15 +44,15 @@ class RoomDevToolFragment @Inject constructor(
         views.genericRecyclerView.configureWith(epoxyController, dividerDrawable = R.drawable.divider_horizontal)
         epoxyController.interactionListener = this
 
-//        sharedViewModel.observeViewEvents {
-//            when (it) {
-//                is DevToolsViewEvents.showJson -> {
-//                    JSonViewerDialog.newInstance(it.jsonString, -1, createJSonViewerStyleProvider(colorProvider))
-//                            .show(childFragmentManager, "JSON_VIEWER")
-//
-//                }
-//            }
-//        }
+        //        sharedViewModel.observeViewEvents {
+        //            when (it) {
+        //                is DevToolsViewEvents.showJson -> {
+        //                    JSonViewerDialog.newInstance(it.jsonString, -1, createJSonViewerStyleProvider(colorProvider))
+        //                            .show(childFragmentManager, "JSON_VIEWER")
+        //
+        //                }
+        //            }
+        //        }
     }
 
     override fun onDestroyView() {

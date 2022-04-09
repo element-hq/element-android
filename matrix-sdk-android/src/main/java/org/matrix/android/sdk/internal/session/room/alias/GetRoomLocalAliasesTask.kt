@@ -24,13 +24,13 @@ import javax.inject.Inject
 
 internal interface GetRoomLocalAliasesTask : Task<GetRoomLocalAliasesTask.Params, List<String>> {
     data class Params(
-            val roomId: String
+        val roomId: String
     )
 }
 
 internal class DefaultGetRoomLocalAliasesTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetRoomLocalAliasesTask {
 
     override suspend fun execute(params: GetRoomLocalAliasesTask.Params): List<String> {

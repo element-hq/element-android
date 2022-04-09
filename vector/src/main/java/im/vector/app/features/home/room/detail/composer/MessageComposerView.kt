@@ -37,9 +37,10 @@ import im.vector.app.databinding.ComposerLayoutBinding
  * Encapsulate the timeline composer UX.
  */
 class MessageComposerView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0) : ConstraintLayout(context, attrs, defStyleAttr) {
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     interface Callback : ComposerEditText.Callback {
         fun onCloseRelatedMessage()

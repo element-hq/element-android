@@ -41,11 +41,11 @@ class BootstrapWaitingFragment @Inject constructor() :
                 views.bootstrapDescriptionText.isVisible = true
                 views.bootstrapLoadingStatusText.text = state.initializationWaitingViewData?.message
             }
-//            is BootstrapStep.CheckingMigration -> {
-//                bootstrapLoadingStatusText.isVisible = false
-//                bootstrapDescriptionText.isVisible = false
-//            }
-            else                          -> {
+            //            is BootstrapStep.CheckingMigration -> {
+            //                bootstrapLoadingStatusText.isVisible = false
+            //                bootstrapDescriptionText.isVisible = false
+            //            }
+            else -> {
                 // just show the spinner
                 views.bootstrapLoadingStatusText.isVisible = false
                 views.bootstrapDescriptionText.isVisible = false

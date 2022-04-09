@@ -26,21 +26,21 @@ internal object PollResponseAggregatedSummaryEntityMapper {
 
     fun map(entity: PollResponseAggregatedSummaryEntity): PollResponseAggregatedSummary {
         return PollResponseAggregatedSummary(
-                aggregatedContent = ContentMapper.map(entity.aggregatedContent).toModel(),
-                closedTime = entity.closedTime,
-                localEchos = entity.sourceLocalEchoEvents.toList(),
-                sourceEvents = entity.sourceEvents.toList(),
-                nbOptions = entity.nbOptions
+            aggregatedContent = ContentMapper.map(entity.aggregatedContent).toModel(),
+            closedTime = entity.closedTime,
+            localEchos = entity.sourceLocalEchoEvents.toList(),
+            sourceEvents = entity.sourceEvents.toList(),
+            nbOptions = entity.nbOptions
         )
     }
 
     fun map(model: PollResponseAggregatedSummary): PollResponseAggregatedSummaryEntity {
         return PollResponseAggregatedSummaryEntity(
-                aggregatedContent = ContentMapper.map(model.aggregatedContent.toContent()),
-                nbOptions = model.nbOptions,
-                closedTime = model.closedTime,
-                sourceEvents = RealmList<String>().apply { addAll(model.sourceEvents) },
-                sourceLocalEchoEvents = RealmList<String>().apply { addAll(model.localEchos) }
+            aggregatedContent = ContentMapper.map(model.aggregatedContent.toContent()),
+            nbOptions = model.nbOptions,
+            closedTime = model.closedTime,
+            sourceEvents = RealmList<String>().apply { addAll(model.sourceEvents) },
+            sourceLocalEchoEvents = RealmList<String>().apply { addAll(model.localEchos) }
         )
     }
 }

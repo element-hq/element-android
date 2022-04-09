@@ -35,9 +35,9 @@ class CreatePollActivity : SimpleFragmentActivity() {
 
         if (isFirstCreation()) {
             addFragment(
-                    views.container,
-                    CreatePollFragment::class.java,
-                    createPollArgs
+                views.container,
+                CreatePollFragment::class.java,
+                createPollArgs
             )
         }
     }

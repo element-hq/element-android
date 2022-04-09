@@ -32,12 +32,13 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class WidgetItemFactory @Inject constructor(
-        private val informationDataFactory: MessageInformationDataFactory,
-        private val noticeItemFactory: NoticeItemFactory,
-        private val avatarSizeProvider: AvatarSizeProvider,
-        private val messageColorProvider: MessageColorProvider,
-        private val avatarRenderer: AvatarRenderer,
-        private val userPreferencesProvider: UserPreferencesProvider) {
+    private val informationDataFactory: MessageInformationDataFactory,
+    private val noticeItemFactory: NoticeItemFactory,
+    private val avatarSizeProvider: AvatarSizeProvider,
+    private val messageColorProvider: MessageColorProvider,
+    private val avatarRenderer: AvatarRenderer,
+    private val userPreferencesProvider: UserPreferencesProvider
+) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
@@ -47,7 +48,7 @@ class WidgetItemFactory @Inject constructor(
         return when (WidgetType.fromString(widgetContent.type ?: previousWidgetContent?.type ?: "")) {
             WidgetType.Jitsi -> createJitsiItem(params, widgetContent)
             // There is lot of other widget types we could improve here
-            else             -> noticeItemFactory.create(params)
+            else -> noticeItemFactory.create(params)
         }
     }
 
@@ -75,25 +76,25 @@ class WidgetItemFactory @Inject constructor(
             CallTileTimelineItem.CallStatus.ENDED
         }
         val attributes = CallTileTimelineItem.Attributes(
-                callId = jitsiWidgetEventsGroup.callId,
-                callKind = CallTileTimelineItem.CallKind.CONFERENCE,
-                callStatus = callStatus,
-                informationData = informationData,
-                avatarRenderer = avatarRenderer,
-                messageColorProvider = messageColorProvider,
-                itemClickListener = null,
-                itemLongClickListener = null,
-                reactionPillCallback = params.callback,
-                readReceiptsCallback = params.callback,
-                userOfInterest = userOfInterest,
-                callback = params.callback,
-                isStillActive = isCallStillActive,
-                formattedDuration = "",
-                reactionsSummaryEvents = params.reactionsSummaryEvents
+            callId = jitsiWidgetEventsGroup.callId,
+            callKind = CallTileTimelineItem.CallKind.CONFERENCE,
+            callStatus = callStatus,
+            informationData = informationData,
+            avatarRenderer = avatarRenderer,
+            messageColorProvider = messageColorProvider,
+            itemClickListener = null,
+            itemLongClickListener = null,
+            reactionPillCallback = params.callback,
+            readReceiptsCallback = params.callback,
+            userOfInterest = userOfInterest,
+            callback = params.callback,
+            isStillActive = isCallStillActive,
+            formattedDuration = "",
+            reactionsSummaryEvents = params.reactionsSummaryEvents
         )
         return CallTileTimelineItem_()
-                .attributes(attributes)
-                .highlighted(params.isHighlighted)
-                .leftGuideline(avatarSizeProvider.leftGuideline)
+            .attributes(attributes)
+            .highlighted(params.isHighlighted)
+            .leftGuideline(avatarSizeProvider.leftGuideline)
     }
 }

@@ -83,14 +83,14 @@ class PreShareKeysTest : InstrumentedTest {
         val megolmSessionId = content.sessionId!!
 
         val sharedIndex = aliceSession.cryptoService().getSharedWithInfo(e2eRoomID, megolmSessionId)
-                .getObject(bobSession.myUserId, bobSession.sessionParams.deviceId)
+            .getObject(bobSession.myUserId, bobSession.sessionParams.deviceId)
 
         assertEquals("The session received by bob should match what alice sent", 0, sharedIndex)
 
         // Just send a real message as test
         val sentEvent = testHelper.sendTextMessage(aliceSession.getRoom(e2eRoomID)!!, "Allo", 1).first()
 
-        assertEquals("Unexpected megolm session", megolmSessionId, sentEvent.root.content.toModel<EncryptedEventContent>()?.sessionId,)
+        assertEquals("Unexpected megolm session", megolmSessionId, sentEvent.root.content.toModel<EncryptedEventContent>()?.sessionId)
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
                 bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEvent.eventId)?.root?.getClearType() == EventType.MESSAGE

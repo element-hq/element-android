@@ -47,10 +47,10 @@ internal class ChunkEntityTest : InstrumentedTest {
     fun setup() {
         Realm.init(context())
         val testConfig = RealmConfiguration.Builder()
-                .inMemory()
-                .name("test-realm")
-                .modules(SessionRealmModule())
-                .build()
+            .inMemory()
+            .name("test-realm")
+            .modules(SessionRealmModule())
+            .build()
         monarchy = Monarchy.Builder().setRealmConfiguration(testConfig).build()
     }
 
@@ -63,10 +63,11 @@ internal class ChunkEntityTest : InstrumentedTest {
                 realm.copyToRealm(it)
             }
             chunk.addTimelineEvent(
-                    roomId = ROOM_ID,
-                    eventEntity = fakeEvent,
-                    direction = PaginationDirection.FORWARDS,
-                    roomMemberContentsByUser = emptyMap())
+                roomId = ROOM_ID,
+                eventEntity = fakeEvent,
+                direction = PaginationDirection.FORWARDS,
+                roomMemberContentsByUser = emptyMap()
+            )
             chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
@@ -79,15 +80,17 @@ internal class ChunkEntityTest : InstrumentedTest {
                 realm.copyToRealm(it)
             }
             chunk.addTimelineEvent(
-                    roomId = ROOM_ID,
-                    eventEntity = fakeEvent,
-                    direction = PaginationDirection.FORWARDS,
-                    roomMemberContentsByUser = emptyMap())
+                roomId = ROOM_ID,
+                eventEntity = fakeEvent,
+                direction = PaginationDirection.FORWARDS,
+                roomMemberContentsByUser = emptyMap()
+            )
             chunk.addTimelineEvent(
-                    roomId = ROOM_ID,
-                    eventEntity = fakeEvent,
-                    direction = PaginationDirection.FORWARDS,
-                    roomMemberContentsByUser = emptyMap())
+                roomId = ROOM_ID,
+                eventEntity = fakeEvent,
+                direction = PaginationDirection.FORWARDS,
+                roomMemberContentsByUser = emptyMap()
+            )
             chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
@@ -149,18 +152,21 @@ internal class ChunkEntityTest : InstrumentedTest {
         }
     }
 
-    private fun ChunkEntity.addAll(roomId: String,
-                                   events: List<Event>,
-                                   direction: PaginationDirection) {
+    private fun ChunkEntity.addAll(
+        roomId: String,
+        events: List<Event>,
+        direction: PaginationDirection
+    ) {
         events.forEach { event ->
             val fakeEvent = event.toEntity(roomId, SendState.SYNCED, System.currentTimeMillis()).let {
                 realm.copyToRealm(it)
             }
             addTimelineEvent(
-                    roomId = roomId,
-                    eventEntity = fakeEvent,
-                    direction = direction,
-                    roomMemberContentsByUser = emptyMap())
+                roomId = roomId,
+                eventEntity = fakeEvent,
+                direction = direction,
+                roomMemberContentsByUser = emptyMap()
+            )
         }
     }
 

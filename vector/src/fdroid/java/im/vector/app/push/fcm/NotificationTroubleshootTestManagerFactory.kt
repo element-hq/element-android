@@ -28,14 +28,14 @@ import im.vector.app.features.settings.troubleshoot.TestSystemSettings
 import javax.inject.Inject
 
 class NotificationTroubleshootTestManagerFactory @Inject constructor(
-        private val testSystemSettings: TestSystemSettings,
-        private val testAccountSettings: TestAccountSettings,
-        private val testDeviceSettings: TestDeviceSettings,
-        private val testPushRulesSettings: TestPushRulesSettings,
-        private val testAutoStartBoot: TestAutoStartBoot,
-        private val testBackgroundRestrictions: TestBackgroundRestrictions,
-        private val testBatteryOptimization: TestBatteryOptimization,
-        private val testNotification: TestNotification
+    private val testSystemSettings: TestSystemSettings,
+    private val testAccountSettings: TestAccountSettings,
+    private val testDeviceSettings: TestDeviceSettings,
+    private val testPushRulesSettings: TestPushRulesSettings,
+    private val testAutoStartBoot: TestAutoStartBoot,
+    private val testBackgroundRestrictions: TestBackgroundRestrictions,
+    private val testBatteryOptimization: TestBatteryOptimization,
+    private val testNotification: TestNotification
 ) {
 
     fun create(fragment: Fragment): NotificationTroubleshootTestManager {

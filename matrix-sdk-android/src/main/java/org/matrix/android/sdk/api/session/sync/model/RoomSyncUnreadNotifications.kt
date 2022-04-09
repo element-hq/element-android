@@ -25,17 +25,18 @@ import org.matrix.android.sdk.api.session.events.model.Event
  */
 @JsonClass(generateAdapter = true)
 data class RoomSyncUnreadNotifications(
-        /**
-         * List of account data events (array of Event).
-         */
-        @Json(name = "events") val events: List<Event>? = null,
+    /**
+     * List of account data events (array of Event).
+     */
+    @Json(name = "events") val events: List<Event>? = null,
 
-        /**
-         * The number of unread messages that match the push notification rules.
-         */
-        @Json(name = "notification_count") val notificationCount: Int? = null,
+    /**
+     * The number of unread messages that match the push notification rules.
+     */
+    @Json(name = "notification_count") val notificationCount: Int? = null,
 
-        /**
-         * The number of highlighted unread messages (subset of notifications).
-         */
-        @Json(name = "highlight_count") val highlightCount: Int? = null)
+    /**
+     * The number of highlighted unread messages (subset of notifications).
+     */
+    @Json(name = "highlight_count") val highlightCount: Int? = null
+)

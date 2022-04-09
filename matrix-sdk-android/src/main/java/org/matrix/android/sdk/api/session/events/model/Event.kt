@@ -76,16 +76,16 @@ inline fun <reified T> T.toContent(): Content {
  */
 @JsonClass(generateAdapter = true)
 data class Event(
-        @Json(name = "type") val type: String? = null,
-        @Json(name = "event_id") val eventId: String? = null,
-        @Json(name = "content") val content: Content? = null,
-        @Json(name = "prev_content") val prevContent: Content? = null,
-        @Json(name = "origin_server_ts") val originServerTs: Long? = null,
-        @Json(name = "sender") val senderId: String? = null,
-        @Json(name = "state_key") val stateKey: String? = null,
-        @Json(name = "room_id") val roomId: String? = null,
-        @Json(name = "unsigned") val unsignedData: UnsignedData? = null,
-        @Json(name = "redacts") val redacts: String? = null
+    @Json(name = "type") val type: String? = null,
+    @Json(name = "event_id") val eventId: String? = null,
+    @Json(name = "content") val content: Content? = null,
+    @Json(name = "prev_content") val prevContent: Content? = null,
+    @Json(name = "origin_server_ts") val originServerTs: Long? = null,
+    @Json(name = "sender") val senderId: String? = null,
+    @Json(name = "state_key") val stateKey: String? = null,
+    @Json(name = "room_id") val roomId: String? = null,
+    @Json(name = "unsigned") val unsignedData: UnsignedData? = null,
+    @Json(name = "redacts") val redacts: String? = null
 ) {
 
     @Transient
@@ -210,13 +210,13 @@ data class Event(
 
         return when {
             isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
-            isFileMessage()                        -> "sent a file."
-            isAudioMessage()                       -> "sent an audio file."
-            isImageMessage()                       -> "sent an image."
-            isVideoMessage()                       -> "sent a video."
-            isSticker()                            -> "sent a sticker"
-            isPoll()                               -> getPollQuestion() ?: "created a poll."
-            else                                   -> text
+            isFileMessage() -> "sent a file."
+            isAudioMessage() -> "sent an audio file."
+            isImageMessage() -> "sent an image."
+            isVideoMessage() -> "sent a video."
+            isSticker() -> "sent a sticker"
+            isPoll() -> getPollQuestion() ?: "created a poll."
+            else -> text
         }
     }
 
@@ -316,35 +316,35 @@ fun Event.isTextMessage(): Boolean {
         MessageType.MSGTYPE_TEXT,
         MessageType.MSGTYPE_EMOTE,
         MessageType.MSGTYPE_NOTICE -> true
-        else                       -> false
+        else -> false
     }
 }
 
 fun Event.isImageMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_IMAGE -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isVideoMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_VIDEO -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isAudioMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_AUDIO -> true
-        else                      -> false
+        else -> false
     }
 }
 
 fun Event.isFileMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_FILE -> true
-        else                     -> false
+        else -> false
     }
 }
 
@@ -354,14 +354,14 @@ fun Event.isAttachmentMessage(): Boolean {
         MessageType.MSGTYPE_AUDIO,
         MessageType.MSGTYPE_VIDEO,
         MessageType.MSGTYPE_FILE -> true
-        else                     -> false
+        else -> false
     }
 }
 
 fun Event.isLocationMessage(): Boolean {
     return when (getMsgType()) {
         MessageType.MSGTYPE_LOCATION -> true
-        else                         -> false
+        else -> false
     }
 }
 
@@ -388,13 +388,13 @@ fun Event.getRelationContent(): RelationDefaultContent? {
  * Returns the poll question or null otherwise
  */
 fun Event.getPollQuestion(): String? =
-        getPollContent()?.getBestPollCreationInfo()?.question?.getBestQuestion()
+    getPollContent()?.getBestPollCreationInfo()?.question?.getBestQuestion()
 
 /**
  * Returns the relation content for a specific type or null otherwise
  */
 fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
-        getRelationContent()?.takeIf { it.type == type }
+    getRelationContent()?.takeIf { it.type == type }
 
 fun Event.isReply(): Boolean {
     return getRelationContent()?.inReplyTo?.eventId != null

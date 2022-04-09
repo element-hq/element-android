@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.MatrixConfiguration
 fun getMatrixInstance(): Matrix {
     val context = InstrumentationRegistry.getInstrumentation().targetContext
     val configuration = MatrixConfiguration(
-            roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(context)
+        roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(context)
     )
     return Matrix.createInstance(context, configuration)
 }

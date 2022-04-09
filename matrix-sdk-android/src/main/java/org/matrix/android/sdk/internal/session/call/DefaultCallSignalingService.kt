@@ -25,10 +25,10 @@ import javax.inject.Inject
 
 @SessionScope
 internal class DefaultCallSignalingService @Inject constructor(
-        private val callSignalingHandler: CallSignalingHandler,
-        private val mxCallFactory: MxCallFactory,
-        private val activeCallHandler: ActiveCallHandler,
-        private val turnServerDataSource: TurnServerDataSource
+    private val callSignalingHandler: CallSignalingHandler,
+    private val mxCallFactory: MxCallFactory,
+    private val activeCallHandler: ActiveCallHandler,
+    private val turnServerDataSource: TurnServerDataSource
 ) : CallSignalingService {
 
     override suspend fun getTurnServer(): TurnServerResponse {

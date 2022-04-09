@@ -45,17 +45,17 @@ import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 data class SignoutCheckViewState(
-        val userId: String = "",
-        val backupIsSetup: Boolean = false,
-        val crossSigningSetupAllKeysKnown: Boolean = false,
-        val keysBackupState: KeysBackupState = KeysBackupState.Unknown,
-        val hasBeenExportedToFile: Async<Boolean> = Uninitialized
+    val userId: String = "",
+    val backupIsSetup: Boolean = false,
+    val crossSigningSetupAllKeysKnown: Boolean = false,
+    val keysBackupState: KeysBackupState = KeysBackupState.Unknown,
+    val hasBeenExportedToFile: Async<Boolean> = Uninitialized
 ) : MavericksState
 
 class SignoutCheckViewModel @AssistedInject constructor(
-        @Assisted initialState: SignoutCheckViewState,
-        private val session: Session,
-        private val keysExporter: KeysExporter
+    @Assisted initialState: SignoutCheckViewState,
+    private val session: Session,
+    private val keysExporter: KeysExporter
 ) : VectorViewModel<SignoutCheckViewState, SignoutCheckViewModel.Actions, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
     sealed class Actions : VectorViewModelAction {
@@ -79,21 +79,21 @@ class SignoutCheckViewModel @AssistedInject constructor(
         val backupState = session.cryptoService().keysBackupService().state
         setState {
             copy(
-                    userId = session.myUserId,
-                    crossSigningSetupAllKeysKnown = allKeysKnown,
-                    backupIsSetup = quad4SIsSetup,
-                    keysBackupState = backupState
+                userId = session.myUserId,
+                crossSigningSetupAllKeysKnown = allKeysKnown,
+                backupIsSetup = quad4SIsSetup,
+                keysBackupState = backupState
             )
         }
 
         session.flow().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
-                .map {
-                    session.sharedSecretStorageService.isRecoverySetup()
-                }
-                .distinctUntilChanged()
-                .execute {
-                    copy(backupIsSetup = it.invoke() == true)
-                }
+            .map {
+                session.sharedSecretStorageService.isRecoverySetup()
+            }
+            .distinctUntilChanged()
+            .execute {
+                copy(backupIsSetup = it.invoke() == true)
+            }
     }
 
     override fun onCleared() {
@@ -104,7 +104,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
     override fun onStateChange(newState: KeysBackupState) {
         setState {
             copy(
-                    keysBackupState = newState
+                keysBackupState = newState
             )
         }
     }
@@ -117,7 +117,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
 
     override fun handle(action: Actions) {
         when (action) {
-            is Actions.ExportKeys                   -> handleExportKeys(action)
+            is Actions.ExportKeys -> handleExportKeys(action)
             Actions.KeySuccessfullyManuallyExported -> {
                 setState {
                     copy(hasBeenExportedToFile = Success(true))

@@ -24,7 +24,7 @@ import android.os.IBinder
 import javax.inject.Inject
 
 class LocationSharingServiceConnection @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) : ServiceConnection {
 
     interface Callback {

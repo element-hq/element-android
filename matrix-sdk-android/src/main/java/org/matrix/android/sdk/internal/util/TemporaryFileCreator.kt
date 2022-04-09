@@ -24,7 +24,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 internal class TemporaryFileCreator @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
     suspend fun create(): File {
         return withContext(Dispatchers.IO) {

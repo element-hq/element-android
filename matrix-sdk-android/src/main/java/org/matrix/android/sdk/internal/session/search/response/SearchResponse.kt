@@ -21,9 +21,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class SearchResponse(
-        /**
-         * Required. Describes which categories to search in and their criteria.
-         */
-        @Json(name = "search_categories")
-        val searchCategories: SearchResponseCategories
+    /**
+     * Required. Describes which categories to search in and their criteria.
+     */
+    @Json(name = "search_categories")
+    val searchCategories: SearchResponseCategories
 )

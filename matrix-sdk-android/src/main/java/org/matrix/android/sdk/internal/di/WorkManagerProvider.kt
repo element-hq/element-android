@@ -36,10 +36,10 @@ import javax.inject.Inject
 
 @SessionScope
 internal class WorkManagerProvider @Inject constructor(
-        context: Context,
-        @SessionId private val sessionId: String,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val sessionScope: CoroutineScope
+    context: Context,
+    @SessionId private val sessionId: String,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+    private val sessionScope: CoroutineScope
 ) {
     private val tag = MATRIX_SDK_TAG_PREFIX + sessionId
 
@@ -53,16 +53,18 @@ internal class WorkManagerProvider @Inject constructor(
      * Create a OneTimeWorkRequestBuilder, with the Matrix SDK tag
      */
     inline fun <reified W : ListenableWorker> matrixOneTimeWorkRequestBuilder() =
-            OneTimeWorkRequestBuilder<W>()
-                    .addTag(tag)
+        OneTimeWorkRequestBuilder<W>()
+            .addTag(tag)
 
     /**
      * Create a PeriodicWorkRequestBuilder, with the Matrix SDK tag
      */
-    inline fun <reified W : ListenableWorker> matrixPeriodicWorkRequestBuilder(repeatInterval: Long,
-                                                                               repeatIntervalTimeUnit: TimeUnit) =
-            PeriodicWorkRequestBuilder<W>(repeatInterval, repeatIntervalTimeUnit)
-                    .addTag(tag)
+    inline fun <reified W : ListenableWorker> matrixPeriodicWorkRequestBuilder(
+        repeatInterval: Long,
+        repeatIntervalTimeUnit: TimeUnit
+    ) =
+        PeriodicWorkRequestBuilder<W>(repeatInterval, repeatIntervalTimeUnit)
+            .addTag(tag)
 
     /**
      * Cancel all works instantiated by the Matrix SDK for the current session, and not those from the SDK client, or for other sessions
@@ -84,9 +86,11 @@ internal class WorkManagerProvider @Inject constructor(
                     if (workInfo?.state?.isFinished == true) {
                         checkWorkerLiveState.removeObserver(this)
                         if (workInfo.state == WorkInfo.State.FAILED) {
-                            throw RuntimeException("MatrixWorkerFactory is not being set on your worker configuration.\n" +
-                                    "Makes sure to add it to a DelegatingWorkerFactory if you have your own factory or use it directly.\n" +
-                                    "You can grab the instance through the Matrix class.")
+                            throw RuntimeException(
+                                "MatrixWorkerFactory is not being set on your worker configuration.\n" +
+                                        "Makes sure to add it to a DelegatingWorkerFactory if you have your own factory or use it directly.\n" +
+                                        "You can grab the instance through the Matrix class."
+                            )
                         }
                     }
                 }
@@ -102,8 +106,8 @@ internal class WorkManagerProvider @Inject constructor(
          * Default constraints: connected network
          */
         val workConstraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
 
         // Use min value, smaller value will be ignored
         const val BACKOFF_DELAY_MILLIS = WorkRequest.MIN_BACKOFF_MILLIS

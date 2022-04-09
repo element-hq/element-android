@@ -116,12 +116,12 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
         viewEvents
-                .stream()
-                .onEach {
-                    hideWaitingView()
-                    observer(it)
-                }
-                .launchIn(lifecycleScope)
+            .stream()
+            .onEach {
+                hideWaitingView()
+                observer(it)
+            }
+            .launchIn(lifecycleScope)
     }
 
     var toolbar: ToolbarConfig? = null
@@ -132,8 +132,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .onEach { onClicked() }
-                .launchIn(lifecycleScope)
+            .onEach { onClicked() }
+            .launchIn(lifecycleScope)
     }
 
     /* ==========================================================================================
@@ -258,36 +258,38 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     private fun handleGlobalError(globalError: GlobalError) {
         when (globalError) {
-            is GlobalError.InvalidToken         ->
+            is GlobalError.InvalidToken ->
                 handleInvalidToken(globalError)
             is GlobalError.ConsentNotGivenError ->
-                consentNotGivenHelper.displayDialog(globalError.consentUri,
-                        activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: "")
-            is GlobalError.CertificateError     ->
+                consentNotGivenHelper.displayDialog(
+                    globalError.consentUri,
+                    activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: ""
+                )
+            is GlobalError.CertificateError ->
                 handleCertificateError(globalError)
-            GlobalError.ExpiredAccount          -> Unit // TODO Handle account expiration
+            GlobalError.ExpiredAccount -> Unit // TODO Handle account expiration
         }
     }
 
     private fun handleCertificateError(certificateError: GlobalError.CertificateError) {
         singletonEntryPoint()
-                .unrecognizedCertificateDialog()
-                .show(this,
-                        certificateError.fingerprint,
-                        object : UnrecognizedCertificateDialog.Callback {
-                            override fun onAccept() {
-                                // TODO Support certificate error once logged
-                            }
+            .unrecognizedCertificateDialog()
+            .show(this,
+                certificateError.fingerprint,
+                object : UnrecognizedCertificateDialog.Callback {
+                    override fun onAccept() {
+                        // TODO Support certificate error once logged
+                    }
 
-                            override fun onIgnore() {
-                                // TODO Support certificate error once logged
-                            }
+                    override fun onIgnore() {
+                        // TODO Support certificate error once logged
+                    }
 
-                            override fun onReject() {
-                                // TODO Support certificate error once logged
-                            }
-                        }
-                )
+                    override fun onReject() {
+                        // TODO Support certificate error once logged
+                    }
+                }
+            )
     }
 
     protected open fun handleInvalidToken(globalError: GlobalError.InvalidToken) {
@@ -298,12 +300,13 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
         mainActivityStarted = true
 
-        MainActivity.restartApp(this,
-                MainActivityArgs(
-                        clearCredentials = !globalError.softLogout,
-                        isUserLoggedOut = true,
-                        isSoftLogout = globalError.softLogout
-                )
+        MainActivity.restartApp(
+            this,
+            MainActivityArgs(
+                clearCredentials = !globalError.softLogout,
+                isUserLoggedOut = true,
+                isSoftLogout = globalError.softLogout
+            )
         )
     }
 
@@ -322,7 +325,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 // FIXME I cannot use this anymore :/
                 // finishActivity(PinActivity.PIN_REQUEST_CODE)
             }
-            else               -> {
+            else -> {
                 if (pinLocker.getLiveState().value != PinLocker.State.UNLOCKED) {
                     // Remove the task, to be sure that PIN code will be requested when resumed
                     finishAndRemoveTask()
@@ -343,12 +346,12 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             rageShake.start()
         }
         DebugReceiver
-                .getIntentFilter(this)
-                .takeIf { BuildConfig.DEBUG }
-                ?.let {
-                    debugReceiver = DebugReceiver()
-                    registerReceiver(debugReceiver, it)
-                }
+            .getIntentFilter(this)
+            .takeIf { BuildConfig.DEBUG }
+            ?.let {
+                debugReceiver = DebugReceiver()
+                registerReceiver(debugReceiver, it)
+            }
     }
 
     private val postResumeScheduledActions = mutableListOf<() -> Unit>()
@@ -604,7 +607,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     private val consentNotGivenHelper by lazy {
         ConsentNotGivenHelper(this, DialogLocker(savedInstanceState))
-                .apply { restorables.add(this) }
+            .apply { restorables.add(this) }
     }
 
     /* ==========================================================================================

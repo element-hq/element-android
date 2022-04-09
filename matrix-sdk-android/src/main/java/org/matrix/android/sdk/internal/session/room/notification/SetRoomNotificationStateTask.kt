@@ -30,14 +30,16 @@ import javax.inject.Inject
 
 internal interface SetRoomNotificationStateTask : Task<SetRoomNotificationStateTask.Params, Unit> {
     data class Params(
-            val roomId: String,
-            val roomNotificationState: RoomNotificationState
+        val roomId: String,
+        val roomNotificationState: RoomNotificationState
     )
 }
 
-internal class DefaultSetRoomNotificationStateTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                                       private val removePushRuleTask: RemovePushRuleTask,
-                                                                       private val addPushRuleTask: AddPushRuleTask) :
+internal class DefaultSetRoomNotificationStateTask @Inject constructor(
+    @SessionDatabase private val monarchy: Monarchy,
+    private val removePushRuleTask: RemovePushRuleTask,
+    private val addPushRuleTask: AddPushRuleTask
+) :
     SetRoomNotificationStateTask {
 
     override suspend fun execute(params: SetRoomNotificationStateTask.Params) {

@@ -29,13 +29,13 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class RoomMemberListViewState(
-        val roomId: String,
-        val roomSummary: Async<RoomSummary> = Uninitialized,
-        val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized,
-        val filter: String = "",
-        val threePidInvites: Async<List<Event>> = Uninitialized,
-        val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized,
-        val actionsPermissions: ActionPermissions = ActionPermissions()
+    val roomId: String,
+    val roomSummary: Async<RoomSummary> = Uninitialized,
+    val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized,
+    val filter: String = "",
+    val threePidInvites: Async<List<Event>> = Uninitialized,
+    val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized,
+    val actionsPermissions: ActionPermissions = ActionPermissions()
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
@@ -44,8 +44,8 @@ data class RoomMemberListViewState(
 }
 
 data class ActionPermissions(
-        val canInvite: Boolean = false,
-        val canRevokeThreePidInvite: Boolean = false
+    val canInvite: Boolean = false,
+    val canRevokeThreePidInvite: Boolean = false
 )
 
 typealias RoomMemberSummaries = List<Pair<RoomMemberListCategories, List<RoomMemberSummary>>>

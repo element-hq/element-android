@@ -48,23 +48,23 @@ import javax.inject.Inject
 
 @SessionScope
 internal class DefaultPushRuleService @Inject constructor(
-        private val getPushRulesTask: GetPushRulesTask,
-        private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
-        private val addPushRuleTask: AddPushRuleTask,
-        private val updatePushRuleActionsTask: UpdatePushRuleActionsTask,
-        private val removePushRuleTask: RemovePushRuleTask,
-        private val pushRuleFinder: PushRuleFinder,
-        private val taskExecutor: TaskExecutor,
-        private val conditionResolver: ConditionResolver,
-        @SessionDatabase private val monarchy: Monarchy
+    private val getPushRulesTask: GetPushRulesTask,
+    private val updatePushRuleEnableStatusTask: UpdatePushRuleEnableStatusTask,
+    private val addPushRuleTask: AddPushRuleTask,
+    private val updatePushRuleActionsTask: UpdatePushRuleActionsTask,
+    private val removePushRuleTask: RemovePushRuleTask,
+    private val pushRuleFinder: PushRuleFinder,
+    private val taskExecutor: TaskExecutor,
+    private val conditionResolver: ConditionResolver,
+    @SessionDatabase private val monarchy: Monarchy
 ) : PushRuleService {
 
     private var listeners = mutableSetOf<PushRuleService.PushRuleListener>()
 
     override fun fetchPushRules(scope: String) {
         getPushRulesTask
-                .configureWith(GetPushRulesTask.Params(scope))
-                .executeBy(taskExecutor)
+            .configureWith(GetPushRulesTask.Params(scope))
+            .executeBy(taskExecutor)
     }
 
     override fun getPushRules(scope: String): RuleSet {
@@ -76,38 +76,38 @@ internal class DefaultPushRuleService @Inject constructor(
 
         monarchy.doWithRealm { realm ->
             PushRulesEntity.where(realm, scope, RuleSetKey.CONTENT)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        contentRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapContentRule(it) }
-                    }
+                .findFirst()
+                ?.let { pushRulesEntity ->
+                    contentRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapContentRule(it) }
+                }
             PushRulesEntity.where(realm, scope, RuleSetKey.OVERRIDE)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        overrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
-                    }
+                .findFirst()
+                ?.let { pushRulesEntity ->
+                    overrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
+                }
             PushRulesEntity.where(realm, scope, RuleSetKey.ROOM)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        roomRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapRoomRule(it) }
-                    }
+                .findFirst()
+                ?.let { pushRulesEntity ->
+                    roomRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapRoomRule(it) }
+                }
             PushRulesEntity.where(realm, scope, RuleSetKey.SENDER)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        senderRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapSenderRule(it) }
-                    }
+                .findFirst()
+                ?.let { pushRulesEntity ->
+                    senderRules = pushRulesEntity.pushRules.map { PushRulesMapper.mapSenderRule(it) }
+                }
             PushRulesEntity.where(realm, scope, RuleSetKey.UNDERRIDE)
-                    .findFirst()
-                    ?.let { pushRulesEntity ->
-                        underrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
-                    }
+                .findFirst()
+                ?.let { pushRulesEntity ->
+                    underrideRules = pushRulesEntity.pushRules.map { PushRulesMapper.map(it) }
+                }
         }
 
         return RuleSet(
-                content = contentRules,
-                override = overrideRules,
-                room = roomRules,
-                sender = senderRules,
-                underride = underrideRules
+            content = contentRules,
+            override = overrideRules,
+            room = roomRules,
+            sender = senderRules,
+            underride = underrideRules
         )
     }
 
@@ -153,12 +153,12 @@ internal class DefaultPushRuleService @Inject constructor(
     override fun getKeywords(): LiveData<Set<String>> {
         // Keywords are all content rules that don't start with '.'
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm ->
-                    PushRulesEntity.where(realm, RuleScope.GLOBAL, RuleSetKey.CONTENT)
-                },
-                { result ->
-                    result.pushRules.map(PushRuleEntity::ruleId).filter { !it.startsWith(".") }
-                }
+            { realm ->
+                PushRulesEntity.where(realm, RuleScope.GLOBAL, RuleSetKey.CONTENT)
+            },
+            { result ->
+                result.pushRules.map(PushRuleEntity::ruleId).filter { !it.startsWith(".") }
+            }
         )
         return Transformations.map(liveData) { results ->
             results.firstOrNull().orEmpty().toSet()

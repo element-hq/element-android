@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoDone
  */
 @JsonClass(generateAdapter = true)
 internal data class KeyVerificationDone(
-        @Json(name = "transaction_id") override val transactionId: String? = null
+    @Json(name = "transaction_id") override val transactionId: String? = null
 ) : SendToDeviceObject, VerificationInfoDone {
 
     override fun toSendToDeviceObject() = this

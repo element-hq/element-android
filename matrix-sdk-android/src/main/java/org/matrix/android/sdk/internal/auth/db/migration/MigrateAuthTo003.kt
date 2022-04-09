@@ -30,18 +30,18 @@ class MigrateAuthTo003(realm: DynamicRealm) : RealmMigrator(realm, 3) {
         Timber.d("Update SessionParamsEntity primary key, to allow several sessions with the same userId")
 
         realm.schema.get("SessionParamsEntity")
-                ?.removePrimaryKey()
-                ?.addField(SessionParamsEntityFields.SESSION_ID, String::class.java)
-                ?.setRequired(SessionParamsEntityFields.SESSION_ID, true)
-                ?.transform {
-                    val credentialsJson = it.getString(SessionParamsEntityFields.CREDENTIALS_JSON)
+            ?.removePrimaryKey()
+            ?.addField(SessionParamsEntityFields.SESSION_ID, String::class.java)
+            ?.setRequired(SessionParamsEntityFields.SESSION_ID, true)
+            ?.transform {
+                val credentialsJson = it.getString(SessionParamsEntityFields.CREDENTIALS_JSON)
 
-                    val credentials = MoshiProvider.providesMoshi()
-                            .adapter(Credentials::class.java)
-                            .fromJson(credentialsJson)
+                val credentials = MoshiProvider.providesMoshi()
+                    .adapter(Credentials::class.java)
+                    .fromJson(credentialsJson)
 
-                    it.set(SessionParamsEntityFields.SESSION_ID, credentials!!.sessionId())
-                }
-                ?.addPrimaryKey(SessionParamsEntityFields.SESSION_ID)
+                it.set(SessionParamsEntityFields.SESSION_ID, credentials!!.sessionId())
+            }
+            ?.addPrimaryKey(SessionParamsEntityFields.SESSION_ID)
     }
 }

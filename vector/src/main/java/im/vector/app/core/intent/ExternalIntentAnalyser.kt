@@ -34,19 +34,19 @@ sealed class ExternalIntentData {
      * @param format   the formatted text format
      */
     data class IntentDataText(
-            val text: CharSequence? = null,
-            val htmlText: String? = null,
-            val format: String? = null,
-            val clipDataItem: ClipData.Item = ClipData.Item(text, htmlText),
-            val mimeType: String? = if (null == htmlText) ClipDescription.MIMETYPE_TEXT_PLAIN else format
+        val text: CharSequence? = null,
+        val htmlText: String? = null,
+        val format: String? = null,
+        val clipDataItem: ClipData.Item = ClipData.Item(text, htmlText),
+        val mimeType: String? = if (null == htmlText) ClipDescription.MIMETYPE_TEXT_PLAIN else format
     ) : ExternalIntentData()
 
     /**
      * Clip data
      */
     data class IntentDataClipData(
-            val clipDataItem: ClipData.Item,
-            val mimeType: String?
+        val clipDataItem: ClipData.Item,
+        val mimeType: String?
     ) : ExternalIntentData()
 
     /**
@@ -56,8 +56,8 @@ sealed class ExternalIntentData {
      * @param filename the media file name
      */
     data class IntentDataUri(
-            val uri: Uri,
-            val filename: String? = null
+        val uri: Uri,
+        val filename: String? = null
     ) : ExternalIntentData()
 }
 
@@ -68,7 +68,7 @@ fun analyseIntent(intent: Intent): List<ExternalIntentData> {
     // so, test first the type
     if (intent.type == ClipDescription.MIMETYPE_TEXT_PLAIN) {
         var message: String? = intent.getStringExtra(Intent.EXTRA_TEXT)
-                ?: intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
+            ?: intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
 
         val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
 
@@ -109,8 +109,8 @@ fun analyseIntent(intent: Intent): List<ExternalIntentData> {
         for (i in 0 until clipData.itemCount) {
             val item = clipData.getItemAt(i)
             val mimeType = mimeTypes?.getOrElse(i) { mimeTypes[0] }
-                    // uris list is not a valid mimetype
-                    .takeUnless { it == ClipDescription.MIMETYPE_TEXT_URILIST }
+                // uris list is not a valid mimetype
+                .takeUnless { it == ClipDescription.MIMETYPE_TEXT_URILIST }
 
             externalIntentDataList.add(ExternalIntentData.IntentDataClipData(item, mimeType))
         }

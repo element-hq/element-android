@@ -24,8 +24,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import javax.inject.Inject
 
 class RoomHistoryVisibilityController @Inject constructor(
-        private val historyVisibilityFormatter: RoomHistoryVisibilityFormatter,
-        private val stringProvider: StringProvider
+    private val historyVisibilityFormatter: RoomHistoryVisibilityFormatter,
+    private val stringProvider: StringProvider
 ) : BottomSheetGenericController<RoomHistoryVisibilityState, RoomHistoryVisibilityRadioAction>() {
 
     override fun getTitle() = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_dialog_title)
@@ -34,17 +34,17 @@ class RoomHistoryVisibilityController @Inject constructor(
 
     override fun getActions(state: RoomHistoryVisibilityState): List<RoomHistoryVisibilityRadioAction> {
         return listOf(
-                RoomHistoryVisibility.WORLD_READABLE,
-                RoomHistoryVisibility.SHARED,
-                RoomHistoryVisibility.INVITED,
-                RoomHistoryVisibility.JOINED
+            RoomHistoryVisibility.WORLD_READABLE,
+            RoomHistoryVisibility.SHARED,
+            RoomHistoryVisibility.INVITED,
+            RoomHistoryVisibility.JOINED
         )
-                .map { roomHistoryVisibility ->
-                    RoomHistoryVisibilityRadioAction(
-                            roomHistoryVisibility = roomHistoryVisibility,
-                            title = historyVisibilityFormatter.getSetting(roomHistoryVisibility),
-                            isSelected = roomHistoryVisibility == state.currentRoomHistoryVisibility
-                    )
-                }
+            .map { roomHistoryVisibility ->
+                RoomHistoryVisibilityRadioAction(
+                    roomHistoryVisibility = roomHistoryVisibility,
+                    title = historyVisibilityFormatter.getSetting(roomHistoryVisibility),
+                    isSelected = roomHistoryVisibility == state.currentRoomHistoryVisibility
+                )
+            }
     }
 }

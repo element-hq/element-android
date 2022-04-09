@@ -23,8 +23,8 @@ import org.matrix.olm.OlmOutboundGroupSession
 import timber.log.Timber
 
 internal open class OutboundGroupSessionInfoEntity(
-        var serializedOutboundSessionData: String? = null,
-        var creationTime: Long? = null
+    var serializedOutboundSessionData: String? = null,
+    var creationTime: Long? = null
 ) : RealmObject() {
 
     fun getOutboundGroupSession(): OlmOutboundGroupSession? {

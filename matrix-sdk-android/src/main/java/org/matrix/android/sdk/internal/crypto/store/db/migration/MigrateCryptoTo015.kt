@@ -26,11 +26,11 @@ class MigrateCryptoTo015(realm: DynamicRealm) : RealmMigrator(realm, 15) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("CryptoRoomEntity")
-                ?.addField(CryptoRoomEntityFields.WAS_ENCRYPTED_ONCE, Boolean::class.java)
-                ?.setNullable(CryptoRoomEntityFields.WAS_ENCRYPTED_ONCE, true)
-                ?.transform {
-                    val currentAlgorithm = it.getString(CryptoRoomEntityFields.ALGORITHM)
-                    it.set(CryptoRoomEntityFields.WAS_ENCRYPTED_ONCE, currentAlgorithm == MXCRYPTO_ALGORITHM_MEGOLM)
-                }
+            ?.addField(CryptoRoomEntityFields.WAS_ENCRYPTED_ONCE, Boolean::class.java)
+            ?.setNullable(CryptoRoomEntityFields.WAS_ENCRYPTED_ONCE, true)
+            ?.transform {
+                val currentAlgorithm = it.getString(CryptoRoomEntityFields.ALGORITHM)
+                it.set(CryptoRoomEntityFields.WAS_ENCRYPTED_ONCE, currentAlgorithm == MXCRYPTO_ALGORITHM_MEGOLM)
+            }
     }
 }

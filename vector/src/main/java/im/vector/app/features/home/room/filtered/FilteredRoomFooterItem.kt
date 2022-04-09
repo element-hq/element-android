@@ -44,7 +44,7 @@ abstract class FilteredRoomFooterItem : VectorEpoxyModel<FilteredRoomFooterItem.
         holder.openRoomDirectory.onClick { listener?.openRoomDirectory(currentFilter) }
 
         holder.openRoomDirectory.setText(
-                if (inSpace) R.string.space_explore_activity_title else R.string.room_filtering_footer_open_room_directory
+            if (inSpace) R.string.space_explore_activity_title else R.string.room_filtering_footer_open_room_directory
         )
 
         // The explore space screen will have a shortcut to create

@@ -34,19 +34,19 @@ import javax.inject.Inject
 
 internal interface DirectLoginTask : Task<DirectLoginTask.Params, Session> {
     data class Params(
-            val homeServerConnectionConfig: HomeServerConnectionConfig,
-            val userId: String,
-            val password: String,
-            val deviceName: String,
-            val deviceId: String?
+        val homeServerConnectionConfig: HomeServerConnectionConfig,
+        val userId: String,
+        val password: String,
+        val deviceName: String,
+        val deviceId: String?
     )
 }
 
 internal class DefaultDirectLoginTask @Inject constructor(
-        @Unauthenticated
-        private val okHttpClient: Lazy<OkHttpClient>,
-        private val retrofitFactory: RetrofitFactory,
-        private val sessionCreator: SessionCreator
+    @Unauthenticated
+    private val okHttpClient: Lazy<OkHttpClient>,
+    private val retrofitFactory: RetrofitFactory,
+    private val sessionCreator: SessionCreator
 ) : DirectLoginTask {
 
     override suspend fun execute(params: DirectLoginTask.Params): Session {
@@ -54,13 +54,13 @@ internal class DefaultDirectLoginTask @Inject constructor(
         val homeServerUrl = params.homeServerConnectionConfig.homeServerUriBase.toString()
 
         val authAPI = retrofitFactory.create(client, homeServerUrl)
-                .create(AuthAPI::class.java)
+            .create(AuthAPI::class.java)
 
         val loginParams = PasswordLoginParams.userIdentifier(
-                user = params.userId,
-                password = params.password,
-                deviceDisplayName = params.deviceName,
-                deviceId = params.deviceId
+            user = params.userId,
+            password = params.password,
+            deviceDisplayName = params.deviceName,
+            deviceId = params.deviceId
         )
 
         val credentials = try {
@@ -70,10 +70,10 @@ internal class DefaultDirectLoginTask @Inject constructor(
         } catch (throwable: Throwable) {
             throw when (throwable) {
                 is UnrecognizedCertificateException -> Failure.UnrecognizedCertificateFailure(
-                        homeServerUrl,
-                        throwable.fingerprint
+                    homeServerUrl,
+                    throwable.fingerprint
                 )
-                else                                -> throwable
+                else -> throwable
             }
         }
 
@@ -82,8 +82,8 @@ internal class DefaultDirectLoginTask @Inject constructor(
 
     private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
         return okHttpClient.get()
-                .newBuilder()
-                .addSocketFactory(homeServerConnectionConfig)
-                .build()
+            .newBuilder()
+            .addSocketFactory(homeServerConnectionConfig)
+            .build()
     }
 }

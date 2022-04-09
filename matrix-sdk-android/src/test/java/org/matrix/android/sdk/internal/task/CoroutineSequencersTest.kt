@@ -38,18 +38,18 @@ class CoroutineSequencersTest : MatrixTest {
         val results = ArrayList<String>()
 
         val jobs = listOf(
-                GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#1") }
-                            .also { results.add(it) }
-                },
-                GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#2") }
-                            .also { results.add(it) }
-                },
-                GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#3") }
-                            .also { results.add(it) }
-                }
+            GlobalScope.launch(dispatcher) {
+                sequencer.post { suspendingMethod("#1") }
+                    .also { results.add(it) }
+            },
+            GlobalScope.launch(dispatcher) {
+                sequencer.post { suspendingMethod("#2") }
+                    .also { results.add(it) }
+            },
+            GlobalScope.launch(dispatcher) {
+                sequencer.post { suspendingMethod("#3") }
+                    .also { results.add(it) }
+            }
         )
         runTest {
             jobs.joinAll()
@@ -68,18 +68,18 @@ class CoroutineSequencersTest : MatrixTest {
         val sequencer3 = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()
         val jobs = listOf(
-                GlobalScope.launch(dispatcher) {
-                    sequencer1.post { suspendingMethod("#1") }
-                            .also { results.add(it) }
-                },
-                GlobalScope.launch(dispatcher) {
-                    sequencer2.post { suspendingMethod("#2") }
-                            .also { results.add(it) }
-                },
-                GlobalScope.launch(dispatcher) {
-                    sequencer3.post { suspendingMethod("#3") }
-                            .also { results.add(it) }
-                }
+            GlobalScope.launch(dispatcher) {
+                sequencer1.post { suspendingMethod("#1") }
+                    .also { results.add(it) }
+            },
+            GlobalScope.launch(dispatcher) {
+                sequencer2.post { suspendingMethod("#2") }
+                    .also { results.add(it) }
+            },
+            GlobalScope.launch(dispatcher) {
+                sequencer3.post { suspendingMethod("#3") }
+                    .also { results.add(it) }
+            }
         )
         runTest {
             jobs.joinAll()
@@ -93,19 +93,19 @@ class CoroutineSequencersTest : MatrixTest {
         val sequencer = SemaphoreCoroutineSequencer()
         val results = ArrayList<String>()
         val jobs = listOf(
-                GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#1") }
-                            .also { results.add(it) }
-                },
-                GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#2") }
-                            .also { results.add(it) }
-                            .also { println("Result: $it") }
-                },
-                GlobalScope.launch(dispatcher) {
-                    sequencer.post { suspendingMethod("#3") }
-                            .also { results.add(it) }
-                }
+            GlobalScope.launch(dispatcher) {
+                sequencer.post { suspendingMethod("#1") }
+                    .also { results.add(it) }
+            },
+            GlobalScope.launch(dispatcher) {
+                sequencer.post { suspendingMethod("#2") }
+                    .also { results.add(it) }
+                    .also { println("Result: $it") }
+            },
+            GlobalScope.launch(dispatcher) {
+                sequencer.post { suspendingMethod("#3") }
+                    .also { results.add(it) }
+            }
         )
         // We are canceling the second job
         jobs[1].cancel()

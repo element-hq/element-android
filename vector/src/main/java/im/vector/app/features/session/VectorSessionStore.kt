@@ -29,8 +29,8 @@ import org.matrix.android.sdk.internal.util.md5
  * - messaging use case (Enum/String)
  */
 class VectorSessionStore constructor(
-        context: Context,
-        myUserId: String
+    context: Context,
+    myUserId: String
 ) {
 
     private val useCaseKey = stringPreferencesKey("use_case")

@@ -73,7 +73,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY = "SETTINGS_SECURE_MESSAGE_RECOVERY_PREFERENCE_KEY"
 
         const val SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT = "SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT"
-//        const val SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY = "SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY"
+        //        const val SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY = "SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY"
 
         // user
         const val SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY = "SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY"
@@ -215,48 +215,48 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         // some preferences keys must be kept after a logout
         private val mKeysToKeepAfterLogout = listOf(
-                SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY,
-                SETTINGS_DEFAULT_MEDIA_SOURCE_KEY,
-                SETTINGS_PLAY_SHUTTER_SOUND_KEY,
+            SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY,
+            SETTINGS_DEFAULT_MEDIA_SOURCE_KEY,
+            SETTINGS_PLAY_SHUTTER_SOUND_KEY,
 
-                SETTINGS_SEND_TYPING_NOTIF_KEY,
-                SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
-                SETTINGS_12_24_TIMESTAMPS_KEY,
-                SETTINGS_SHOW_READ_RECEIPTS_KEY,
-                SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY,
-                SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY,
-                SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY,
-                SETTINGS_MEDIA_SAVING_PERIOD_KEY,
-                SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY,
-                SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY,
-                SETTINGS_SEND_MESSAGE_WITH_ENTER,
-                SETTINGS_SHOW_EMOJI_KEYBOARD,
+            SETTINGS_SEND_TYPING_NOTIF_KEY,
+            SETTINGS_ALWAYS_SHOW_TIMESTAMPS_KEY,
+            SETTINGS_12_24_TIMESTAMPS_KEY,
+            SETTINGS_SHOW_READ_RECEIPTS_KEY,
+            SETTINGS_SHOW_ROOM_MEMBER_STATE_EVENTS_KEY,
+            SETTINGS_SHOW_JOIN_LEAVE_MESSAGES_KEY,
+            SETTINGS_SHOW_AVATAR_DISPLAY_NAME_CHANGES_MESSAGES_KEY,
+            SETTINGS_MEDIA_SAVING_PERIOD_KEY,
+            SETTINGS_MEDIA_SAVING_PERIOD_SELECTED_KEY,
+            SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY,
+            SETTINGS_SEND_MESSAGE_WITH_ENTER,
+            SETTINGS_SHOW_EMOJI_KEYBOARD,
 
-                SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
-                SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
-                // Do not keep SETTINGS_LAZY_LOADING_PREFERENCE_KEY because the user may log in on a server which does not support lazy loading
-                SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY,
-                SETTINGS_START_ON_BOOT_PREFERENCE_KEY,
-                SETTINGS_INTERFACE_TEXT_SIZE_KEY,
-                SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY,
-                SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY,
-                SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY,
+            SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
+            SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
+            // Do not keep SETTINGS_LAZY_LOADING_PREFERENCE_KEY because the user may log in on a server which does not support lazy loading
+            SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY,
+            SETTINGS_START_ON_BOOT_PREFERENCE_KEY,
+            SETTINGS_INTERFACE_TEXT_SIZE_KEY,
+            SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY,
+            SETTINGS_NOTIFICATION_RINGTONE_PREFERENCE_KEY,
+            SETTINGS_NOTIFICATION_RINGTONE_SELECTION_PREFERENCE_KEY,
 
-                SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY,
-                SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY,
-                SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY,
-                SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY,
-                SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY,
-                SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
-                SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
+            SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY,
+            SETTINGS_CONTACTS_PHONEBOOK_COUNTRY_PREFERENCE_KEY,
+            SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY,
+            SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY,
+            SETTINGS_ENABLE_BACKGROUND_SYNC_PREFERENCE_KEY,
+            SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY,
+            SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY,
 
-                SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY,
-                SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY,
-                SETTINGS_LABS_ALLOW_EXTENDED_LOGS,
-                SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
+            SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY,
+            SETTINGS_LABS_SHOW_HIDDEN_EVENTS_PREFERENCE_KEY,
+            SETTINGS_LABS_ALLOW_EXTENDED_LOGS,
+            SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY,
 
-                SETTINGS_USE_RAGE_SHAKE_KEY,
-                SETTINGS_SECURITY_USE_FLAG_SECURE
+            SETTINGS_USE_RAGE_SHAKE_KEY,
+            SETTINGS_SECURITY_USE_FLAG_SECURE
         )
     }
 
@@ -663,11 +663,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun getMinMediasLastAccessTime(): Long {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS  -> System.currentTimeMillis() / 1000 - 3 * 24 * 60 * 60
-            MEDIA_SAVING_1_WEEK  -> System.currentTimeMillis() / 1000 - 7 * 24 * 60 * 60
+            MEDIA_SAVING_3_DAYS -> System.currentTimeMillis() / 1000 - 3 * 24 * 60 * 60
+            MEDIA_SAVING_1_WEEK -> System.currentTimeMillis() / 1000 - 7 * 24 * 60 * 60
             MEDIA_SAVING_1_MONTH -> System.currentTimeMillis() / 1000 - 30 * 24 * 60 * 60
             MEDIA_SAVING_FOREVER -> 0
-            else                 -> 0
+            else -> 0
         }
     }
 
@@ -678,11 +678,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun getSelectedMediasSavingPeriodString(): String {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS  -> context.getString(R.string.media_saving_period_3_days)
-            MEDIA_SAVING_1_WEEK  -> context.getString(R.string.media_saving_period_1_week)
+            MEDIA_SAVING_3_DAYS -> context.getString(R.string.media_saving_period_3_days)
+            MEDIA_SAVING_1_WEEK -> context.getString(R.string.media_saving_period_1_week)
             MEDIA_SAVING_1_MONTH -> context.getString(R.string.media_saving_period_1_month)
             MEDIA_SAVING_FOREVER -> context.getString(R.string.media_saving_period_forever)
-            else                 -> "?"
+            else -> "?"
         }
     }
 
@@ -945,9 +945,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun setBackgroundSyncTimeout(timeInSecond: Int) {
         defaultPrefs
-                .edit()
-                .putString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, timeInSecond.toString())
-                .apply()
+            .edit()
+            .putString(SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY, timeInSecond.toString())
+            .apply()
     }
 
     fun backgroundSyncDelay(): Int {
@@ -959,9 +959,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun setBackgroundSyncDelay(timeInSecond: Int) {
         defaultPrefs
-                .edit()
-                .putString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, timeInSecond.toString())
-                .apply()
+            .edit()
+            .putString(SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY, timeInSecond.toString())
+            .apply()
     }
 
     fun isBackgroundSyncEnabled(): Boolean {
@@ -970,15 +970,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun setFdroidSyncBackgroundMode(mode: BackgroundSyncMode) {
         defaultPrefs
-                .edit()
-                .putString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, mode.name)
-                .apply()
+            .edit()
+            .putString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, mode.name)
+            .apply()
     }
 
     fun getFdroidSyncBackgroundMode(): BackgroundSyncMode {
         return try {
             val strPref = defaultPrefs
-                    .getString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY.name)
+                .getString(SETTINGS_FDROID_BACKGROUND_SYNC_MODE, BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY.name)
             BackgroundSyncMode.values().firstOrNull { it.name == strPref } ?: BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
         } catch (e: Throwable) {
             BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_BATTERY
@@ -994,9 +994,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun prefSpacesShowAllRoomInHome(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME,
-                // migration of old property
-                !labsSpacesOnlyOrphansInHome())
+        return defaultPrefs.getBoolean(
+            SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME,
+            // migration of old property
+            !labsSpacesOnlyOrphansInHome()
+        )
     }
 
     /*
@@ -1032,9 +1034,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun setThreadMessagesEnabled() {
         defaultPrefs
-                .edit()
-                .putBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, true)
-                .apply()
+            .edit()
+            .putBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, true)
+            .apply()
     }
 
     /**
@@ -1050,9 +1052,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun userNotifiedAboutThreads() {
         defaultPrefs
-                .edit()
-                .putBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS, false)
-                .apply()
+            .edit()
+            .putBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS, false)
+            .apply()
     }
 
     /**
@@ -1068,8 +1070,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun setShouldMigrateThreads(shouldMigrate: Boolean) {
         defaultPrefs
-                .edit()
-                .putBoolean(SETTINGS_THREAD_MESSAGES_SYNCED, shouldMigrate)
-                .apply()
+            .edit()
+            .putBoolean(SETTINGS_THREAD_MESSAGES_SYNCED, shouldMigrate)
+            .apply()
     }
 }

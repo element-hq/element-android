@@ -25,25 +25,25 @@ import java.io.IOException
 import javax.net.ssl.HttpsURLConnection
 
 fun Throwable.is401() =
-        this is Failure.ServerError &&
-                httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED && /* 401 */
-                error.code == MatrixError.M_UNAUTHORIZED
+    this is Failure.ServerError &&
+            httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED && /* 401 */
+            error.code == MatrixError.M_UNAUTHORIZED
 
 fun Throwable.is404() =
-        this is Failure.ServerError &&
-                httpCode == HttpsURLConnection.HTTP_NOT_FOUND && /* 404 */
-                error.code == MatrixError.M_NOT_FOUND
+    this is Failure.ServerError &&
+            httpCode == HttpsURLConnection.HTTP_NOT_FOUND && /* 404 */
+            error.code == MatrixError.M_NOT_FOUND
 
 fun Throwable.isTokenError() =
-        this is Failure.ServerError &&
-                (error.code == MatrixError.M_UNKNOWN_TOKEN ||
-                        error.code == MatrixError.M_MISSING_TOKEN ||
-                        error.code == MatrixError.ORG_MATRIX_EXPIRED_ACCOUNT)
+    this is Failure.ServerError &&
+            (error.code == MatrixError.M_UNKNOWN_TOKEN ||
+                    error.code == MatrixError.M_MISSING_TOKEN ||
+                    error.code == MatrixError.ORG_MATRIX_EXPIRED_ACCOUNT)
 
 fun Throwable.isLimitExceededError() =
-        this is Failure.ServerError &&
-                httpCode == 429 &&
-                error.code == MatrixError.M_LIMIT_EXCEEDED
+    this is Failure.ServerError &&
+            httpCode == 429 &&
+            error.code == MatrixError.M_LIMIT_EXCEEDED
 
 fun Throwable.shouldBeRetried(): Boolean {
     return this is Failure.NetworkConnection ||
@@ -56,11 +56,11 @@ fun Throwable.shouldBeRetried(): Boolean {
  */
 fun Throwable.getRetryDelay(defaultValue: Long): Long {
     return (this as? Failure.ServerError)
-            ?.error
-            ?.takeIf { it.code == MatrixError.M_LIMIT_EXCEEDED }
-            ?.retryAfterMillis
-            ?.plus(100L)
-            ?: defaultValue
+        ?.error
+        ?.takeIf { it.code == MatrixError.M_LIMIT_EXCEEDED }
+        ?.retryAfterMillis
+        ?.plus(100L)
+        ?: defaultValue
 }
 
 fun Throwable.isUsernameInUse(): Boolean {
@@ -104,22 +104,23 @@ fun Throwable.isInvalidUIAAuth(): Boolean {
  */
 fun Throwable.toRegistrationFlowResponse(): RegistrationFlowResponse? {
     return if (this is Failure.OtherServerError &&
-            httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */) {
+        httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED /* 401 */) {
         tryOrNull {
             MoshiProvider.providesMoshi()
-                    .adapter(RegistrationFlowResponse::class.java)
-                    .fromJson(errorBody)
+                .adapter(RegistrationFlowResponse::class.java)
+                .fromJson(errorBody)
         }
     } else if (this is Failure.ServerError &&
-            httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED && /* 401 */
-            error.code == MatrixError.M_FORBIDDEN) {
+        httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED && /* 401 */
+        error.code == MatrixError.M_FORBIDDEN
+    ) {
         // This happens when the submission for this stage was bad (like bad password)
         if (error.session != null && error.flows != null) {
             RegistrationFlowResponse(
-                    flows = error.flows,
-                    session = error.session,
-                    completedStages = error.completedStages,
-                    params = error.params
+                flows = error.flows,
+                session = error.session,
+                completedStages = error.completedStages,
+                params = error.params
             )
         } else {
             null
@@ -144,10 +145,10 @@ fun Throwable.toScanFailure(): ScanFailure? {
     return if (this is Failure.OtherServerError) {
         tryOrNull {
             MoshiProvider.providesMoshi()
-                    .adapter(ContentScannerError::class.java)
-                    .fromJson(errorBody)
+                .adapter(ContentScannerError::class.java)
+                .fromJson(errorBody)
         }
-                ?.let { ScanFailure(it, httpCode, this) }
+            ?.let { ScanFailure(it, httpCode, this) }
     } else {
         null
     }

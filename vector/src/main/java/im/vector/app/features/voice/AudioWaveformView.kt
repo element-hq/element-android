@@ -27,7 +27,7 @@ import kotlin.math.max
 import kotlin.random.Random
 
 class AudioWaveformView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     private enum class Alignment(var value: Int) {
@@ -63,30 +63,30 @@ class AudioWaveformView @JvmOverloads constructor(
     init {
         attrs?.let {
             context
-                    .theme
-                    .obtainStyledAttributes(
-                            attrs,
-                            R.styleable.AudioWaveformView,
-                            0,
-                            0
-                    )
-                    .apply {
-                        alignment = Alignment.values().find { it.value == getInt(R.styleable.AudioWaveformView_alignment, alignment.value) }!!
-                        flow = Flow.values().find { it.value == getInt(R.styleable.AudioWaveformView_flow, alignment.value) }!!
-                        verticalPadding = getDimension(R.styleable.AudioWaveformView_verticalPadding, verticalPadding)
-                        horizontalPadding = getDimension(R.styleable.AudioWaveformView_horizontalPadding, horizontalPadding)
-                        barWidth = getDimension(R.styleable.AudioWaveformView_barWidth, barWidth)
-                        barSpace = getDimension(R.styleable.AudioWaveformView_barSpace, barSpace)
-                        barMinHeight = getDimension(R.styleable.AudioWaveformView_barMinHeight, barMinHeight)
-                        isBarRounded = getBoolean(R.styleable.AudioWaveformView_isBarRounded, isBarRounded)
-                        setWillNotDraw(false)
-                        barPaint.isAntiAlias = true
-                    }
-                    .apply { recycle() }
-                    .also {
-                        barPaint.strokeWidth = barWidth
-                        barPaint.strokeCap = if (isBarRounded) Paint.Cap.ROUND else Paint.Cap.BUTT
-                    }
+                .theme
+                .obtainStyledAttributes(
+                    attrs,
+                    R.styleable.AudioWaveformView,
+                    0,
+                    0
+                )
+                .apply {
+                    alignment = Alignment.values().find { it.value == getInt(R.styleable.AudioWaveformView_alignment, alignment.value) }!!
+                    flow = Flow.values().find { it.value == getInt(R.styleable.AudioWaveformView_flow, alignment.value) }!!
+                    verticalPadding = getDimension(R.styleable.AudioWaveformView_verticalPadding, verticalPadding)
+                    horizontalPadding = getDimension(R.styleable.AudioWaveformView_horizontalPadding, horizontalPadding)
+                    barWidth = getDimension(R.styleable.AudioWaveformView_barWidth, barWidth)
+                    barSpace = getDimension(R.styleable.AudioWaveformView_barSpace, barSpace)
+                    barMinHeight = getDimension(R.styleable.AudioWaveformView_barMinHeight, barMinHeight)
+                    isBarRounded = getBoolean(R.styleable.AudioWaveformView_isBarRounded, isBarRounded)
+                    setWillNotDraw(false)
+                    barPaint.isAntiAlias = true
+                }
+                .apply { recycle() }
+                .also {
+                    barPaint.strokeWidth = barWidth
+                    barPaint.strokeCap = if (isBarRounded) Paint.Cap.ROUND else Paint.Cap.BUTT
+                }
         }
     }
 
@@ -180,7 +180,7 @@ class AudioWaveformView @JvmOverloads constructor(
                     val stopY = startY + it.value
                     canvas.drawLine(currentX, startY, currentX, stopY, barPaint)
                 }
-                Alignment.TOP    -> {
+                Alignment.TOP -> {
                     val startY = verticalPadding
                     val stopY = startY + it.value
                     canvas.drawLine(currentX, startY, currentX, stopY, barPaint)

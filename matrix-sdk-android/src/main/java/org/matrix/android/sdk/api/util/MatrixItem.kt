@@ -29,14 +29,16 @@ import org.matrix.android.sdk.api.session.user.model.User
 import java.util.Locale
 
 sealed class MatrixItem(
-        open val id: String,
-        open val displayName: String?,
-        open val avatarUrl: String?
+    open val id: String,
+    open val displayName: String?,
+    open val avatarUrl: String?
 ) {
-    data class UserItem(override val id: String,
-                        override val displayName: String? = null,
-                        override val avatarUrl: String? = null) :
-            MatrixItem(id, displayName?.removeSuffix(IRC_PATTERN), avatarUrl) {
+    data class UserItem(
+        override val id: String,
+        override val displayName: String? = null,
+        override val avatarUrl: String? = null
+    ) :
+        MatrixItem(id, displayName?.removeSuffix(IRC_PATTERN), avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -44,11 +46,13 @@ sealed class MatrixItem(
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
-    data class EveryoneInRoomItem(override val id: String,
-                                  override val displayName: String = NOTIFY_EVERYONE,
-                                  override val avatarUrl: String? = null,
-                                  val roomDisplayName: String? = null) :
-            MatrixItem(id, displayName, avatarUrl) {
+    data class EveryoneInRoomItem(
+        override val id: String,
+        override val displayName: String = NOTIFY_EVERYONE,
+        override val avatarUrl: String? = null,
+        val roomDisplayName: String? = null
+    ) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -56,10 +60,12 @@ sealed class MatrixItem(
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
-    data class EventItem(override val id: String,
-                         override val displayName: String? = null,
-                         override val avatarUrl: String? = null) :
-            MatrixItem(id, displayName, avatarUrl) {
+    data class EventItem(
+        override val id: String,
+        override val displayName: String? = null,
+        override val avatarUrl: String? = null
+    ) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -67,10 +73,12 @@ sealed class MatrixItem(
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
-    data class RoomItem(override val id: String,
-                        override val displayName: String? = null,
-                        override val avatarUrl: String? = null) :
-            MatrixItem(id, displayName, avatarUrl) {
+    data class RoomItem(
+        override val id: String,
+        override val displayName: String? = null,
+        override val avatarUrl: String? = null
+    ) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -78,10 +86,12 @@ sealed class MatrixItem(
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
-    data class SpaceItem(override val id: String,
-                         override val displayName: String? = null,
-                         override val avatarUrl: String? = null) :
-            MatrixItem(id, displayName, avatarUrl) {
+    data class SpaceItem(
+        override val id: String,
+        override val displayName: String? = null,
+        override val avatarUrl: String? = null
+    ) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -89,10 +99,12 @@ sealed class MatrixItem(
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
-    data class RoomAliasItem(override val id: String,
-                             override val displayName: String? = null,
-                             override val avatarUrl: String? = null) :
-            MatrixItem(id, displayName, avatarUrl) {
+    data class RoomAliasItem(
+        override val id: String,
+        override val displayName: String? = null,
+        override val avatarUrl: String? = null
+    ) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -100,10 +112,12 @@ sealed class MatrixItem(
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
-    data class GroupItem(override val id: String,
-                         override val displayName: String? = null,
-                         override val avatarUrl: String? = null) :
-            MatrixItem(id, displayName, avatarUrl) {
+    data class GroupItem(
+        override val id: String,
+        override val displayName: String? = null,
+        override val avatarUrl: String? = null
+    ) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -123,50 +137,50 @@ sealed class MatrixItem(
      * Return the prefix as defined in the matrix spec (and not extracted from the id)
      */
     private fun getIdPrefix() = when (this) {
-        is UserItem           -> '@'
-        is EventItem          -> '$'
+        is UserItem -> '@'
+        is EventItem -> '$'
         is SpaceItem,
         is RoomItem,
         is EveryoneInRoomItem -> '!'
-        is RoomAliasItem      -> '#'
-        is GroupItem          -> '+'
+        is RoomAliasItem -> '#'
+        is GroupItem -> '+'
     }
 
     fun firstLetterOfDisplayName(): String {
         val displayName = when (this) {
             // use the room display name for the notify everyone item
             is EveryoneInRoomItem -> roomDisplayName
-            else                  -> displayName
+            else -> displayName
         }
         return (displayName?.takeIf { it.isNotBlank() } ?: id)
-                .let { dn ->
-                    var startIndex = 0
-                    val initial = dn[startIndex]
+            .let { dn ->
+                var startIndex = 0
+                val initial = dn[startIndex]
 
-                    if (initial in listOf('@', '#', '+') && dn.length > 1) {
-                        startIndex++
-                    }
-
-                    var length = 1
-                    var first = dn[startIndex]
-
-                    // LEFT-TO-RIGHT MARK
-                    if (dn.length >= 2 && 0x200e == first.code) {
-                        startIndex++
-                        first = dn[startIndex]
-                    }
-
-                    // check if it’s the start of a surrogate pair
-                    if (first.code in 0xD800..0xDBFF && dn.length > startIndex + 1) {
-                        val second = dn[startIndex + 1]
-                        if (second.code in 0xDC00..0xDFFF) {
-                            length++
-                        }
-                    }
-
-                    dn.substring(startIndex, startIndex + length)
+                if (initial in listOf('@', '#', '+') && dn.length > 1) {
+                    startIndex++
                 }
-                .uppercase(Locale.ROOT)
+
+                var length = 1
+                var first = dn[startIndex]
+
+                // LEFT-TO-RIGHT MARK
+                if (dn.length >= 2 && 0x200e == first.code) {
+                    startIndex++
+                    first = dn[startIndex]
+                }
+
+                // check if it’s the start of a surrogate pair
+                if (first.code in 0xD800..0xDBFF && dn.length > startIndex + 1) {
+                    val second = dn[startIndex + 1]
+                    if (second.code in 0xDC00..0xDFFF) {
+                        length++
+                    }
+                }
+
+                dn.substring(startIndex, startIndex + length)
+            }
+            .uppercase(Locale.ROOT)
     }
 
     companion object {
@@ -200,7 +214,7 @@ fun RoomMemberSummary.toMatrixItem() = MatrixItem.UserItem(userId, displayName, 
 
 fun SenderInfo.toMatrixItem() = MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl)
 
-fun SenderInfo.toMatrixItemOrNull() = tryOrNull {  MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl) }
+fun SenderInfo.toMatrixItemOrNull() = tryOrNull { MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl) }
 
 fun SpaceChildInfo.toMatrixItem() = if (roomType == RoomType.SPACE) {
     MatrixItem.SpaceItem(childRoomId, name ?: canonicalAlias, avatarUrl)

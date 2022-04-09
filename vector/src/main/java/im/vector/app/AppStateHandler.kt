@@ -53,9 +53,9 @@ fun RoomGroupingMethod.group() = (this as? RoomGroupingMethod.ByLegacyGroup)?.gr
 // TODO Keep this class for now, will maybe be used fro Space
 @Singleton
 class AppStateHandler @Inject constructor(
-        private val sessionDataSource: ActiveSessionDataSource,
-        private val uiStateRepository: UiStateRepository,
-        private val activeSessionHolder: ActiveSessionHolder
+    private val sessionDataSource: ActiveSessionDataSource,
+    private val uiStateRepository: UiStateRepository,
+    private val activeSessionHolder: ActiveSessionHolder
 ) : DefaultLifecycleObserver {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -81,7 +81,8 @@ class AppStateHandler @Inject constructor(
     fun setCurrentSpace(spaceId: String?, session: Session? = null, persistNow: Boolean = false) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
         if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace &&
-                spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
+            spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId
+        ) return
         val spaceSum = spaceId?.let { uSession.getRoomSummary(spaceId) }
 
         if (persistNow) {
@@ -102,7 +103,8 @@ class AppStateHandler @Inject constructor(
     fun setCurrentGroup(groupId: String?, session: Session? = null) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
         if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.ByLegacyGroup &&
-                groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId) return
+            groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId
+        ) return
         val activeGroup = groupId?.let { uSession.getGroupSummary(groupId) }
         selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.ByLegacyGroup(activeGroup)))
         if (groupId != null) {
@@ -116,18 +118,18 @@ class AppStateHandler @Inject constructor(
 
     private fun observeActiveSession() {
         sessionDataSource.stream()
-                .distinctUntilChanged()
-                .onEach {
-                    // sessionDataSource could already return a session while activeSession holder still returns null
-                    it.orNull()?.let { session ->
-                        if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
-                            setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
-                        } else {
-                            setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
-                        }
+            .distinctUntilChanged()
+            .onEach {
+                // sessionDataSource could already return a session while activeSession holder still returns null
+                it.orNull()?.let { session ->
+                    if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
+                        setCurrentSpace(uiStateRepository.getSelectedSpace(session.sessionId), session)
+                    } else {
+                        setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
                     }
                 }
-                .launchIn(coroutineScope)
+            }
+            .launchIn(coroutineScope)
     }
 
     fun safeActiveSpaceId(): String? {
@@ -146,7 +148,7 @@ class AppStateHandler @Inject constructor(
         coroutineScope.coroutineContext.cancelChildren()
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
-            is RoomGroupingMethod.BySpace       -> {
+            is RoomGroupingMethod.BySpace -> {
                 uiStateRepository.storeGroupingMethod(true, session.sessionId)
                 uiStateRepository.storeSelectedSpace(currentMethod.spaceSummary?.roomId, session.sessionId)
             }

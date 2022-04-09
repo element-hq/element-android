@@ -68,17 +68,17 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
     private fun setupSubmitButton() {
         views.resetPasswordSubmit.debouncedClicks { submit() }
         combine(
-                views.resetPasswordEmail.textChanges().map { it.isEmail() },
-                views.passwordField.textChanges().map { it.isNotEmpty() }
+            views.resetPasswordEmail.textChanges().map { it.isEmail() },
+            views.passwordField.textChanges().map { it.isNotEmpty() }
         ) { isEmail, isPasswordNotEmpty ->
             isEmail && isPasswordNotEmpty
         }
-                .onEach {
-                    views.resetPasswordEmailTil.error = null
-                    views.passwordFieldTil.error = null
-                    views.resetPasswordSubmit.isEnabled = it
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                views.resetPasswordEmailTil.error = null
+                views.passwordFieldTil.error = null
+                views.resetPasswordSubmit.isEnabled = it
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun submit() {
@@ -88,13 +88,13 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
             showWarning = false
             // Display a warning as Riot-Web does first
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.login_reset_password_warning_title)
-                    .setMessage(R.string.login_reset_password_warning_content)
-                    .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
-                        doSubmit()
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.login_reset_password_warning_title)
+                .setMessage(R.string.login_reset_password_warning_content)
+                .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
+                    doSubmit()
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         } else {
             doSubmit()
         }
@@ -125,10 +125,10 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
                 // Ensure new password is hidden
                 views.passwordField.hidePassword()
             }
-            is Fail    -> {
+            is Fail -> {
                 views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
             }
-            else       -> Unit
+            else -> Unit
         }
     }
 }

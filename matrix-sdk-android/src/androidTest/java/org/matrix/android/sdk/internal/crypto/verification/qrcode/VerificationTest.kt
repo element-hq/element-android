@@ -44,119 +44,121 @@ import kotlin.coroutines.resume
 class VerificationTest : InstrumentedTest {
 
     data class ExpectedResult(
-            val sasIsSupported: Boolean = false,
-            val otherCanScanQrCode: Boolean = false,
-            val otherCanShowQrCode: Boolean = false
+        val sasIsSupported: Boolean = false,
+        val otherCanScanQrCode: Boolean = false,
+        val otherCanShowQrCode: Boolean = false
     )
 
     private val sas = listOf(
-            VerificationMethod.SAS
+        VerificationMethod.SAS
     )
 
     private val sasShow = listOf(
-            VerificationMethod.SAS,
-            VerificationMethod.QR_CODE_SHOW
+        VerificationMethod.SAS,
+        VerificationMethod.QR_CODE_SHOW
     )
 
     private val sasScan = listOf(
-            VerificationMethod.SAS,
-            VerificationMethod.QR_CODE_SCAN
+        VerificationMethod.SAS,
+        VerificationMethod.QR_CODE_SCAN
     )
 
     private val sasShowScan = listOf(
-            VerificationMethod.SAS,
-            VerificationMethod.QR_CODE_SHOW,
-            VerificationMethod.QR_CODE_SCAN
+        VerificationMethod.SAS,
+        VerificationMethod.QR_CODE_SHOW,
+        VerificationMethod.QR_CODE_SCAN
     )
 
     @Test
     fun test_aliceAndBob_sas_sas() = doTest(
-            sas,
-            sas,
-            ExpectedResult(sasIsSupported = true),
-            ExpectedResult(sasIsSupported = true)
+        sas,
+        sas,
+        ExpectedResult(sasIsSupported = true),
+        ExpectedResult(sasIsSupported = true)
     )
 
     @Test
     fun test_aliceAndBob_sas_show() = doTest(
-            sas,
-            sasShow,
-            ExpectedResult(sasIsSupported = true),
-            ExpectedResult(sasIsSupported = true)
+        sas,
+        sasShow,
+        ExpectedResult(sasIsSupported = true),
+        ExpectedResult(sasIsSupported = true)
     )
 
     @Test
     fun test_aliceAndBob_show_sas() = doTest(
-            sasShow,
-            sas,
-            ExpectedResult(sasIsSupported = true),
-            ExpectedResult(sasIsSupported = true)
+        sasShow,
+        sas,
+        ExpectedResult(sasIsSupported = true),
+        ExpectedResult(sasIsSupported = true)
     )
 
     @Test
     fun test_aliceAndBob_sas_scan() = doTest(
-            sas,
-            sasScan,
-            ExpectedResult(sasIsSupported = true),
-            ExpectedResult(sasIsSupported = true)
+        sas,
+        sasScan,
+        ExpectedResult(sasIsSupported = true),
+        ExpectedResult(sasIsSupported = true)
     )
 
     @Test
     fun test_aliceAndBob_scan_sas() = doTest(
-            sasScan,
-            sas,
-            ExpectedResult(sasIsSupported = true),
-            ExpectedResult(sasIsSupported = true)
+        sasScan,
+        sas,
+        ExpectedResult(sasIsSupported = true),
+        ExpectedResult(sasIsSupported = true)
     )
 
     @Test
     fun test_aliceAndBob_scan_scan() = doTest(
-            sasScan,
-            sasScan,
-            ExpectedResult(sasIsSupported = true),
-            ExpectedResult(sasIsSupported = true)
+        sasScan,
+        sasScan,
+        ExpectedResult(sasIsSupported = true),
+        ExpectedResult(sasIsSupported = true)
     )
 
     @Test
     fun test_aliceAndBob_show_show() = doTest(
-            sasShow,
-            sasShow,
-            ExpectedResult(sasIsSupported = true),
-            ExpectedResult(sasIsSupported = true)
+        sasShow,
+        sasShow,
+        ExpectedResult(sasIsSupported = true),
+        ExpectedResult(sasIsSupported = true)
     )
 
     @Test
     fun test_aliceAndBob_show_scan() = doTest(
-            sasShow,
-            sasScan,
-            ExpectedResult(sasIsSupported = true, otherCanScanQrCode = true),
-            ExpectedResult(sasIsSupported = true, otherCanShowQrCode = true)
+        sasShow,
+        sasScan,
+        ExpectedResult(sasIsSupported = true, otherCanScanQrCode = true),
+        ExpectedResult(sasIsSupported = true, otherCanShowQrCode = true)
     )
 
     @Test
     fun test_aliceAndBob_scan_show() = doTest(
-            sasScan,
-            sasShow,
-            ExpectedResult(sasIsSupported = true, otherCanShowQrCode = true),
-            ExpectedResult(sasIsSupported = true, otherCanScanQrCode = true)
+        sasScan,
+        sasShow,
+        ExpectedResult(sasIsSupported = true, otherCanShowQrCode = true),
+        ExpectedResult(sasIsSupported = true, otherCanScanQrCode = true)
     )
 
     @Test
     fun test_aliceAndBob_all_all() = doTest(
-            sasShowScan,
-            sasShowScan,
-            ExpectedResult(sasIsSupported = true, otherCanShowQrCode = true, otherCanScanQrCode = true),
-            ExpectedResult(sasIsSupported = true, otherCanShowQrCode = true, otherCanScanQrCode = true)
+        sasShowScan,
+        sasShowScan,
+        ExpectedResult(sasIsSupported = true, otherCanShowQrCode = true, otherCanScanQrCode = true),
+        ExpectedResult(sasIsSupported = true, otherCanShowQrCode = true, otherCanScanQrCode = true)
     )
 
     // TODO Add tests without SAS
 
-    private fun doTest(aliceSupportedMethods: List<VerificationMethod>,
-                       bobSupportedMethods: List<VerificationMethod>,
-                       expectedResultForAlice: ExpectedResult,
-                       expectedResultForBob: ExpectedResult) {
-         val testHelper = CommonTestHelper(context())
-         val cryptoTestHelper = CryptoTestHelper(testHelper)
+    private fun doTest(
+        aliceSupportedMethods: List<VerificationMethod>,
+        bobSupportedMethods: List<VerificationMethod>,
+        expectedResultForAlice: ExpectedResult,
+        expectedResultForBob: ExpectedResult
+    ) {
+        val testHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(testHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
@@ -164,34 +166,36 @@ class VerificationTest : InstrumentedTest {
 
         testHelper.doSync<Unit> { callback ->
             aliceSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = aliceSession.myUserId,
-                                                    password = TestConstants.PASSWORD,
-                                                    session = flowResponse.session
-                                            )
-                                    )
-                                }
-                            }, callback)
+                .initializeCrossSigning(
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                UserPasswordAuth(
+                                    user = aliceSession.myUserId,
+                                    password = TestConstants.PASSWORD,
+                                    session = flowResponse.session
+                                )
+                            )
+                        }
+                    }, callback
+                )
         }
 
         testHelper.doSync<Unit> { callback ->
             bobSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = bobSession.myUserId,
-                                                    password = TestConstants.PASSWORD,
-                                                    session = flowResponse.session
-                                            )
-                                    )
-                                }
-                            }, callback)
+                .initializeCrossSigning(
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                UserPasswordAuth(
+                                    user = bobSession.myUserId,
+                                    password = TestConstants.PASSWORD,
+                                    session = flowResponse.session
+                                )
+                            )
+                        }
+                    }, callback
+                )
         }
 
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
@@ -216,10 +220,10 @@ class VerificationTest : InstrumentedTest {
             override fun verificationRequestCreated(pr: PendingVerificationRequest) {
                 // Step 2: Bob accepts the verification request
                 bobVerificationService.readyPendingVerificationInDMs(
-                        bobSupportedMethods,
-                        aliceSession.myUserId,
-                        cryptoTestData.roomId,
-                        pr.transactionId!!
+                    bobSupportedMethods,
+                    aliceSession.myUserId,
+                    cryptoTestData.roomId,
+                    pr.transactionId!!
                 )
             }
 

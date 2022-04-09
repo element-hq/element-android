@@ -23,24 +23,24 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class RegistrationParams(
-        // authentication parameters
-        @Json(name = "auth")
-        val auth: AuthParams? = null,
+    // authentication parameters
+    @Json(name = "auth")
+    val auth: AuthParams? = null,
 
-        // the account username
-        @Json(name = "username")
-        val username: String? = null,
+    // the account username
+    @Json(name = "username")
+    val username: String? = null,
 
-        // the account password
-        @Json(name = "password")
-        val password: String? = null,
+    // the account password
+    @Json(name = "password")
+    val password: String? = null,
 
-        // device name
-        @Json(name = "initial_device_display_name")
-        val initialDeviceDisplayName: String? = null,
+    // device name
+    @Json(name = "initial_device_display_name")
+    val initialDeviceDisplayName: String? = null,
 
-        // Temporary flag to notify the server that we support msisdn flow. Used to prevent old app
-        // versions to end up in fallback because the HS returns the msisdn flow which they don't support
-        @Json(name = "x_show_msisdn")
-        val xShowMsisdn: Boolean? = null
+    // Temporary flag to notify the server that we support msisdn flow. Used to prevent old app
+    // versions to end up in fallback because the HS returns the msisdn flow which they don't support
+    @Json(name = "x_show_msisdn")
+    val xShowMsisdn: Boolean? = null
 )

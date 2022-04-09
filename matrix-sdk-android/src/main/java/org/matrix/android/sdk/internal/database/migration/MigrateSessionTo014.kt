@@ -28,18 +28,18 @@ class MigrateSessionTo014(realm: DynamicRealm) : RealmMigrator(realm, 14) {
 
     override fun doMigrate(realm: DynamicRealm) {
         val roomAccountDataSchema = realm.schema.create("RoomAccountDataEntity")
-                .addField(RoomAccountDataEntityFields.CONTENT_STR, String::class.java)
-                .addField(RoomAccountDataEntityFields.TYPE, String::class.java, FieldAttribute.INDEXED)
+            .addField(RoomAccountDataEntityFields.CONTENT_STR, String::class.java)
+            .addField(RoomAccountDataEntityFields.TYPE, String::class.java, FieldAttribute.INDEXED)
 
         realm.schema.get("RoomEntity")
-                ?.addRealmListField(RoomEntityFields.ACCOUNT_DATA.`$`, roomAccountDataSchema)
+            ?.addRealmListField(RoomEntityFields.ACCOUNT_DATA.`$`, roomAccountDataSchema)
 
         realm.schema.get("RoomSummaryEntity")
-                ?.addField(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, Boolean::class.java, FieldAttribute.INDEXED)
-                ?.transform {
-                    val isHiddenFromUser = it.getString(RoomSummaryEntityFields.VERSIONING_STATE_STR) == VersioningState.UPGRADED_ROOM_JOINED.name
-                    it.setBoolean(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, isHiddenFromUser)
-                }
+            ?.addField(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, Boolean::class.java, FieldAttribute.INDEXED)
+            ?.transform {
+                val isHiddenFromUser = it.getString(RoomSummaryEntityFields.VERSIONING_STATE_STR) == VersioningState.UPGRADED_ROOM_JOINED.name
+                it.setBoolean(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, isHiddenFromUser)
+            }
 
         roomAccountDataSchema.isEmbedded = true
     }

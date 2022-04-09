@@ -44,11 +44,11 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 private const val TARGET_LOCATION_CHANGE_SAMPLING_PERIOD_IN_MS = 100L
 
 class LocationSharingViewModel @AssistedInject constructor(
-        @Assisted private val initialState: LocationSharingViewState,
-        private val locationTracker: LocationTracker,
-        private val locationPinProvider: LocationPinProvider,
-        private val session: Session,
-        private val compareLocationsUseCase: CompareLocationsUseCase,
+    @Assisted private val initialState: LocationSharingViewState,
+    private val locationTracker: LocationTracker,
+    private val locationPinProvider: LocationPinProvider,
+    private val session: Session,
+    private val compareLocationsUseCase: CompareLocationsUseCase,
 ) : VectorViewModel<LocationSharingViewState, LocationSharingAction, LocationSharingViewEvents>(initialState), LocationTracker.Callback {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -89,24 +89,24 @@ class LocationSharingViewModel @AssistedInject constructor(
     private fun updatePinDrawableInState(drawable: Drawable) {
         setState {
             copy(
-                    locationTargetDrawable = drawable
+                locationTargetDrawable = drawable
             )
         }
     }
 
     private fun compareTargetAndUserLocation() {
         locationTargetFlow
-                .sample(TARGET_LOCATION_CHANGE_SAMPLING_PERIOD_IN_MS)
-                .map { compareTargetLocation(it) }
-                .distinctUntilChanged()
-                .onEach { setState { copy(areTargetAndUserLocationEqual = it) } }
-                .onEach { updatePin(isUserPin = it) }
-                .launchIn(viewModelScope)
+            .sample(TARGET_LOCATION_CHANGE_SAMPLING_PERIOD_IN_MS)
+            .map { compareTargetLocation(it) }
+            .distinctUntilChanged()
+            .onEach { setState { copy(areTargetAndUserLocationEqual = it) } }
+            .onEach { updatePin(isUserPin = it) }
+            .launchIn(viewModelScope)
     }
 
     private suspend fun compareTargetLocation(targetLocation: LocationData): Boolean? {
         return awaitState().lastKnownUserLocation
-                ?.let { userLocation -> compareLocationsUseCase.execute(userLocation, targetLocation) }
+            ?.let { userLocation -> compareLocationsUseCase.execute(userLocation, targetLocation) }
     }
 
     override fun onCleared() {
@@ -116,10 +116,10 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     override fun handle(action: LocationSharingAction) {
         when (action) {
-            LocationSharingAction.CurrentUserLocationSharing  -> handleCurrentUserLocationSharingAction()
-            is LocationSharingAction.PinnedLocationSharing    -> handlePinnedLocationSharingAction(action)
-            is LocationSharingAction.LocationTargetChange     -> handleLocationTargetChangeAction(action)
-            LocationSharingAction.ZoomToUserLocation          -> handleZoomToUserLocationAction()
+            LocationSharingAction.CurrentUserLocationSharing -> handleCurrentUserLocationSharingAction()
+            is LocationSharingAction.PinnedLocationSharing -> handlePinnedLocationSharingAction(action)
+            is LocationSharingAction.LocationTargetChange -> handleLocationTargetChangeAction(action)
+            LocationSharingAction.ZoomToUserLocation -> handleZoomToUserLocationAction()
             is LocationSharingAction.StartLiveLocationSharing -> handleStartLiveLocationSharingAction(action.durationMillis)
         }
     }
@@ -135,10 +135,10 @@ class LocationSharingViewModel @AssistedInject constructor(
     private fun shareLocation(locationData: LocationData?, isUserLocation: Boolean) {
         locationData?.let { location ->
             room.sendLocation(
-                    latitude = location.latitude,
-                    longitude = location.longitude,
-                    uncertainty = location.uncertainty,
-                    isUserLocation = isUserLocation
+                latitude = location.latitude,
+                longitude = location.longitude,
+                uncertainty = location.uncertainty,
+                isUserLocation = isUserLocation
             )
             _viewEvents.post(LocationSharingViewEvents.Close)
         } ?: run {
@@ -159,11 +159,13 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun handleStartLiveLocationSharingAction(durationMillis: Long) {
-        _viewEvents.post(LocationSharingViewEvents.StartLiveLocationService(
+        _viewEvents.post(
+            LocationSharingViewEvents.StartLiveLocationService(
                 sessionId = session.sessionId,
                 roomId = room.roomId,
                 durationMillis = durationMillis
-        ))
+            )
+        )
     }
 
     override fun onLocationUpdate(locationData: LocationData) {

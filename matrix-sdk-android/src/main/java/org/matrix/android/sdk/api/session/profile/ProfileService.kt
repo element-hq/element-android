@@ -107,8 +107,10 @@ interface ProfileService {
     /**
      * Finalize adding a 3Pids. Call this method once the user has validated that he owns the ThreePid
      */
-    suspend fun finalizeAddingThreePid(threePid: ThreePid,
-                                       userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
+    suspend fun finalizeAddingThreePid(
+        threePid: ThreePid,
+        userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor
+    )
 
     /**
      * Cancel adding a threepid. It will remove locally stored data about this ThreePid
@@ -126,9 +128,9 @@ interface ProfileService {
     suspend fun getProfileAsUser(userId: String): User {
         return getProfile(userId).let { dict ->
             User(
-                    userId = userId,
-                    displayName = dict[DISPLAY_NAME_KEY] as? String,
-                    avatarUrl = dict[AVATAR_URL_KEY] as? String
+                userId = userId,
+                displayName = dict[DISPLAY_NAME_KEY] as? String,
+                avatarUrl = dict[AVATAR_URL_KEY] as? String
             )
         }
     }

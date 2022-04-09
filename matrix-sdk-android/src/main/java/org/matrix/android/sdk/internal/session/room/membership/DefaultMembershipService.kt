@@ -41,15 +41,15 @@ import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteTh
 import org.matrix.android.sdk.internal.util.fetchCopied
 
 internal class DefaultMembershipService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val loadRoomMembersTask: LoadRoomMembersTask,
-        private val inviteTask: InviteTask,
-        private val inviteThreePidTask: InviteThreePidTask,
-        private val membershipAdminTask: MembershipAdminTask,
-        @UserId
-        private val userId: String,
-        private val queryStringValueProcessor: QueryStringValueProcessor
+    @Assisted private val roomId: String,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val loadRoomMembersTask: LoadRoomMembersTask,
+    private val inviteTask: InviteTask,
+    private val inviteThreePidTask: InviteThreePidTask,
+    private val membershipAdminTask: MembershipAdminTask,
+    @UserId
+    private val userId: String,
+    private val queryStringValueProcessor: QueryStringValueProcessor
 ) : MembershipService {
 
     @AssistedFactory
@@ -71,37 +71,37 @@ internal class DefaultMembershipService @AssistedInject constructor(
 
     override fun getRoomMembers(queryParams: RoomMemberQueryParams): List<RoomMemberSummary> {
         return monarchy.fetchAllMappedSync(
-                {
-                    roomMembersQuery(it, queryParams)
-                },
-                {
-                    it.asDomain()
-                }
+            {
+                roomMembersQuery(it, queryParams)
+            },
+            {
+                it.asDomain()
+            }
         )
     }
 
     override fun getRoomMembersLive(queryParams: RoomMemberQueryParams): LiveData<List<RoomMemberSummary>> {
         return monarchy.findAllMappedWithChanges(
-                {
-                    roomMembersQuery(it, queryParams)
-                },
-                {
-                    it.asDomain()
-                }
+            {
+                roomMembersQuery(it, queryParams)
+            },
+            {
+                it.asDomain()
+            }
         )
     }
 
     private fun roomMembersQuery(realm: Realm, queryParams: RoomMemberQueryParams): RealmQuery<RoomMemberSummaryEntity> {
         return with(queryStringValueProcessor) {
             RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
-                    .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)
-                    .process(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-                    .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-                    .apply {
-                        if (queryParams.excludeSelf) {
-                            notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
-                        }
+                .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)
+                .process(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+                .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+                .apply {
+                    if (queryParams.excludeSelf) {
+                        notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
                     }
+                }
         }
     }
 

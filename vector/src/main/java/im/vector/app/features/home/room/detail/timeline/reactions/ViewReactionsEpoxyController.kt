@@ -33,9 +33,10 @@ import javax.inject.Inject
  * Epoxy controller for reaction event list
  */
 class ViewReactionsEpoxyController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val emojiSpanify: EmojiSpanify) :
-        TypedEpoxyController<DisplayReactionsViewState>() {
+    private val stringProvider: StringProvider,
+    private val emojiSpanify: EmojiSpanify
+) :
+    TypedEpoxyController<DisplayReactionsViewState>() {
 
     var listener: Listener? = null
 
@@ -48,7 +49,7 @@ class ViewReactionsEpoxyController @Inject constructor(
                     id("Spinner")
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 genericFooterItem {
                     id("failure")
                     text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())

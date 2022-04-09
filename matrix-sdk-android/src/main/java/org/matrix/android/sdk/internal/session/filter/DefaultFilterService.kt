@@ -21,13 +21,15 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import javax.inject.Inject
 
-internal class DefaultFilterService @Inject constructor(private val saveFilterTask: SaveFilterTask,
-                                                        private val taskExecutor: TaskExecutor) : FilterService {
+internal class DefaultFilterService @Inject constructor(
+    private val saveFilterTask: SaveFilterTask,
+    private val taskExecutor: TaskExecutor
+) : FilterService {
 
     // TODO Pass a list of support events instead
     override fun setFilter(filterPreset: FilterService.FilterPreset) {
         saveFilterTask
-                .configureWith(SaveFilterTask.Params(filterPreset))
-                .executeBy(taskExecutor)
+            .configureWith(SaveFilterTask.Params(filterPreset))
+            .executeBy(taskExecutor)
     }
 }

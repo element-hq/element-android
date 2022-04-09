@@ -32,9 +32,9 @@ import im.vector.app.databinding.ViewBottomSheetActionButtonBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class BottomSheetActionButton @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
     val views: ViewBottomSheetActionButtonBinding
 

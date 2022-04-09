@@ -33,23 +33,23 @@ import javax.inject.Inject
 
 internal interface RoomVersionUpgradeTask : Task<RoomVersionUpgradeTask.Params, String> {
     data class Params(
-            val roomId: String,
-            val newVersion: String
+        val roomId: String,
+        val newVersion: String
     )
 }
 
 internal class DefaultRoomVersionUpgradeTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    @SessionDatabase
+    private val realmConfiguration: RealmConfiguration
 ) : RoomVersionUpgradeTask {
 
     override suspend fun execute(params: RoomVersionUpgradeTask.Params): String {
         val replacementRoomId = executeRequest(globalErrorReceiver) {
             roomAPI.upgradeRoom(
-                    roomId = params.roomId,
-                    body = RoomUpgradeBody(params.newVersion)
+                roomId = params.roomId,
+                body = RoomUpgradeBody(params.newVersion)
             )
         }.replacementRoomId
 
@@ -57,8 +57,8 @@ internal class DefaultRoomVersionUpgradeTask @Inject constructor(
         tryOrNull {
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                 realm.where(RoomSummaryEntity::class.java)
-                        .equalTo(RoomSummaryEntityFields.ROOM_ID, replacementRoomId)
-                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+                    .equalTo(RoomSummaryEntityFields.ROOM_ID, replacementRoomId)
+                    .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
             }
         }
         return replacementRoomId

@@ -36,11 +36,11 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomSettingsController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val avatarRenderer: AvatarRenderer,
-        private val dimensionConverter: DimensionConverter,
-        private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
-        private val vectorPreferences: VectorPreferences
+    private val stringProvider: StringProvider,
+    private val avatarRenderer: AvatarRenderer,
+    private val dimensionConverter: DimensionConverter,
+    private val roomHistoryVisibilityFormatter: RoomHistoryVisibilityFormatter,
+    private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
     interface Callback {
@@ -64,13 +64,13 @@ class RoomSettingsController @Inject constructor(
             id("avatar")
             enabled(data.actionPermissions.canChangeAvatar)
             when (val avatarAction = data.avatarAction) {
-                RoomSettingsViewState.AvatarAction.None            -> {
+                RoomSettingsViewState.AvatarAction.None -> {
                     // Use the current value
                     avatarRenderer(host.avatarRenderer)
                     // We do not want to use the fallback avatar url, which can be the other user avatar, or the current user avatar.
                     matrixItem(roomSummary.toMatrixItem().updateAvatar(data.currentRoomAvatarUrl))
                 }
-                RoomSettingsViewState.AvatarAction.DeleteAvatar    -> imageUri(null)
+                RoomSettingsViewState.AvatarAction.DeleteAvatar -> imageUri(null)
                 is RoomSettingsViewState.AvatarAction.UpdateAvatar -> imageUri(avatarAction.newAvatarUri)
             }
             clickListener { host.callback?.onAvatarChange() }
@@ -78,7 +78,7 @@ class RoomSettingsController @Inject constructor(
         }
 
         buildProfileSection(
-                stringProvider.getString(R.string.settings)
+            stringProvider.getString(R.string.settings)
         )
 
         verticalMarginItem {
@@ -111,21 +111,21 @@ class RoomSettingsController @Inject constructor(
             id("topicDivider")
         }
         buildProfileAction(
-                id = "historyReadability",
-                title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
-                subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
-                divider = true,
-                editable = data.actionPermissions.canChangeHistoryVisibility,
-                action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
+            id = "historyReadability",
+            title = stringProvider.getString(R.string.room_settings_room_read_history_rules_pref_title),
+            subtitle = roomHistoryVisibilityFormatter.getSetting(data.newHistoryVisibility ?: data.currentHistoryVisibility),
+            divider = true,
+            editable = data.actionPermissions.canChangeHistoryVisibility,
+            action = { if (data.actionPermissions.canChangeHistoryVisibility) callback?.onHistoryVisibilityClicked() }
         )
 
         buildProfileAction(
-                id = "joinRule",
-                title = stringProvider.getString(R.string.room_settings_room_access_title),
-                subtitle = data.getJoinRuleWording(stringProvider),
-                divider = true,
-                editable = data.actionPermissions.canChangeJoinRule,
-                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+            id = "joinRule",
+            title = stringProvider.getString(R.string.room_settings_room_access_title),
+            subtitle = data.getJoinRuleWording(stringProvider),
+            divider = true,
+            editable = data.actionPermissions.canChangeJoinRule,
+            action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
         )
 
         val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC

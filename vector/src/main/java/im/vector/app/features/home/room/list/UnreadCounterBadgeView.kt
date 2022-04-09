@@ -45,7 +45,7 @@ class UnreadCounterBadgeView : MaterialTextView {
     }
 
     data class State(
-            val count: Int,
-            val highlighted: Boolean
+        val count: Int,
+        val highlighted: Boolean
     )
 }

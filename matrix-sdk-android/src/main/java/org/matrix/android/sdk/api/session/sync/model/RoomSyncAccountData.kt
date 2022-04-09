@@ -22,8 +22,8 @@ import org.matrix.android.sdk.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
 data class RoomSyncAccountData(
-        /**
-         * List of account data events (array of Event).
-         */
-        @Json(name = "events") val events: List<Event>? = null
+    /**
+     * List of account data events (array of Event).
+     */
+    @Json(name = "events") val events: List<Event>? = null
 )

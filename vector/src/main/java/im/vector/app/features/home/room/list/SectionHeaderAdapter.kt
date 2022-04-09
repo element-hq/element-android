@@ -29,20 +29,20 @@ import im.vector.app.databinding.ItemRoomCategoryBinding
 import im.vector.app.features.themes.ThemeUtils
 
 class SectionHeaderAdapter constructor(
-        roomsSectionData: RoomsSectionData,
-        private val onClickAction: ClickListener
+    roomsSectionData: RoomsSectionData,
+    private val onClickAction: ClickListener
 ) : RecyclerView.Adapter<SectionHeaderAdapter.VH>() {
 
     data class RoomsSectionData(
-            val name: String,
-            val itemCount: Int = 0,
-            val isExpanded: Boolean = true,
-            val notificationCount: Int = 0,
-            val isHighlighted: Boolean = false,
-            val isHidden: Boolean = true,
-            // This will be false until real data has been submitted once
-            val isLoading: Boolean = true,
-            val isCollapsable: Boolean = false
+        val name: String,
+        val itemCount: Int = 0,
+        val isExpanded: Boolean = true,
+        val notificationCount: Int = 0,
+        val isHighlighted: Boolean = false,
+        val isHidden: Boolean = true,
+        // This will be false until real data has been submitted once
+        val isLoading: Boolean = true,
+        val isCollapsable: Boolean = false
     )
 
     var roomsSectionData: RoomsSectionData = roomsSectionData
@@ -75,8 +75,8 @@ class SectionHeaderAdapter constructor(
     override fun getItemCount(): Int = if (roomsSectionData.isHidden) 0 else 1
 
     class VH constructor(
-            private val binding: ItemRoomCategoryBinding,
-            onClickAction: ClickListener
+        private val binding: ItemRoomCategoryBinding,
+        onClickAction: ClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -103,7 +103,7 @@ class SectionHeaderAdapter constructor(
         companion object {
             fun create(parent: ViewGroup, onClickAction: ClickListener): VH {
                 val view = LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_room_category, parent, false)
+                    .inflate(R.layout.item_room_category, parent, false)
                 val binding = ItemRoomCategoryBinding.bind(view)
                 return VH(binding, onClickAction)
             }

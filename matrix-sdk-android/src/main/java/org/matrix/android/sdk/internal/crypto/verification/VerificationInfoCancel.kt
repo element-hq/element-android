@@ -31,15 +31,15 @@ internal interface VerificationInfoCancel : VerificationInfo<ValidVerificationIn
         val validCode = code?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationInfoCancel(
-                validTransactionId,
-                validCode,
-                reason
+            validTransactionId,
+            validCode,
+            reason
         )
     }
 }
 
 internal data class ValidVerificationInfoCancel(
-        val transactionId: String,
-        val code: String,
-        val reason: String?
+    val transactionId: String,
+    val code: String,
+    val reason: String?
 )

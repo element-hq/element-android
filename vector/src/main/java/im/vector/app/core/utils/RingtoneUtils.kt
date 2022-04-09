@@ -41,7 +41,7 @@ import im.vector.app.features.settings.VectorPreferences
  */
 fun getCallRingtoneUri(context: Context): Uri? {
     val callRingtone: String? = DefaultSharedPreferences.getInstance(context)
-            .getString(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, null)
+        .getString(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, null)
 
     callRingtone?.let {
         return Uri.parse(it)
@@ -95,9 +95,9 @@ fun getCallRingtoneName(context: Context): String? {
  */
 fun setCallRingtoneUri(context: Context, ringtoneUri: Uri) {
     DefaultSharedPreferences.getInstance(context)
-            .edit {
-                putString(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, ringtoneUri.toString())
-            }
+        .edit {
+            putString(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY, ringtoneUri.toString())
+        }
 }
 
 /**
@@ -112,7 +112,7 @@ fun useRiotDefaultRingtone(context: Context): Boolean {
  */
 fun setUseRiotDefaultRingtone(context: Context, useRiotDefault: Boolean) {
     DefaultSharedPreferences.getInstance(context)
-            .edit {
-                putBoolean(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, useRiotDefault)
-            }
+        .edit {
+            putBoolean(VectorPreferences.SETTINGS_CALL_RINGTONE_USE_RIOT_PREFERENCE_KEY, useRiotDefault)
+        }
 }

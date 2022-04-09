@@ -48,14 +48,14 @@ import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class SpaceAddRoomFragment @Inject constructor(
-        private val spaceEpoxyController: AddRoomListController,
-        private val roomEpoxyController: AddRoomListController,
-        private val dmEpoxyController: AddRoomListController,
+    private val spaceEpoxyController: AddRoomListController,
+    private val roomEpoxyController: AddRoomListController,
+    private val dmEpoxyController: AddRoomListController,
 ) : VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
-        OnBackPressed, AddRoomListController.Listener {
+    OnBackPressed, AddRoomListController.Listener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentSpaceAddRoomsBinding.inflate(layoutInflater, container, false)
+        FragmentSpaceAddRoomsBinding.inflate(layoutInflater, container, false)
 
     private val viewModel by fragmentViewModel(SpaceAddRoomsViewModel::class)
 
@@ -69,17 +69,17 @@ class SpaceAddRoomFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.addRoomToSpaceToolbar)
-                .allowBack()
+            .allowBack()
 
-//        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        //        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
 
         views.publicRoomsFilter.queryTextChanges()
-                .debounce(100)
-                .onEach {
-                    viewModel.handle(SpaceAddRoomActions.UpdateFilter(it.toString()))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .debounce(100)
+            .onEach {
+                viewModel.handle(SpaceAddRoomActions.UpdateFilter(it.toString()))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         spaceEpoxyController.subHeaderText = getString(R.string.spaces_feeling_experimental_subspace)
         viewModel.selectionListLiveData.observe(viewLifecycleOwner) {
@@ -133,19 +133,19 @@ class SpaceAddRoomFragment @Inject constructor(
             when (it) {
                 SpaceAddRoomsViewEvents.WarnUnsavedChanged -> {
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(R.string.dialog_title_warning)
-                            .setMessage(R.string.warning_unsaved_change)
-                            .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
-                                sharedViewModel.handle(SpaceManagedSharedAction.HandleBack)
-                            }
-                            .setNegativeButton(R.string.action_cancel, null)
-                            .show()
+                        .setTitle(R.string.dialog_title_warning)
+                        .setMessage(R.string.warning_unsaved_change)
+                        .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
+                            sharedViewModel.handle(SpaceManagedSharedAction.HandleBack)
+                        }
+                        .setNegativeButton(R.string.action_cancel, null)
+                        .show()
                 }
-                is SpaceAddRoomsViewEvents.SaveFailed      -> {
+                is SpaceAddRoomsViewEvents.SaveFailed -> {
                     showErrorInSnackbar(it.reason)
                     invalidateOptionsMenu()
                 }
-                SpaceAddRoomsViewEvents.SavedDone          -> {
+                SpaceAddRoomsViewEvents.SavedDone -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.HandleBack)
                 }
             }
@@ -228,8 +228,8 @@ class SpaceAddRoomFragment @Inject constructor(
     private fun listenItemCount(itemCountFlow: Flow<Int>, onEachAction: (Int) -> Unit) {
         lifecycleScope.launch {
             itemCountFlow
-                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                    .collect { count -> onEachAction(count) }
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .collect { count -> onEachAction(count) }
         }
     }
 

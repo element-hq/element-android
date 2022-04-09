@@ -26,12 +26,13 @@ import org.matrix.android.sdk.internal.crypto.IncomingSecretShareRequest
 import org.matrix.android.sdk.internal.crypto.IncomingShareRequestCommon
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 
-internal open class IncomingGossipingRequestEntity(@Index var requestId: String? = "",
-                                                   @Index var typeStr: String? = null,
-                                                   var otherUserId: String? = null,
-                                                   var requestedInfoStr: String? = null,
-                                                   var otherDeviceId: String? = null,
-                                                   var localCreationTimestamp: Long? = null
+internal open class IncomingGossipingRequestEntity(
+    @Index var requestId: String? = "",
+    @Index var typeStr: String? = null,
+    var otherUserId: String? = null,
+    var requestedInfoStr: String? = null,
+    var otherDeviceId: String? = null,
+    var localCreationTimestamp: Long? = null
 ) : RealmObject() {
 
     fun getRequestedSecretName(): String? = if (type == GossipRequestType.SECRET) {
@@ -55,7 +56,7 @@ internal open class IncomingGossipingRequestEntity(@Index var requestId: String?
     var requestState: GossipingRequestState
         get() {
             return tryOrNull { GossipingRequestState.valueOf(requestStateStr) }
-                    ?: GossipingRequestState.NONE
+                ?: GossipingRequestState.NONE
         }
         set(value) {
             requestStateStr = value.name
@@ -65,23 +66,23 @@ internal open class IncomingGossipingRequestEntity(@Index var requestId: String?
 
     fun toIncomingGossipingRequest(): IncomingShareRequestCommon {
         return when (type) {
-            GossipRequestType.KEY    -> {
+            GossipRequestType.KEY -> {
                 IncomingRoomKeyRequest(
-                        requestBody = getRequestedKeyInfo(),
-                        deviceId = otherDeviceId,
-                        userId = otherUserId,
-                        requestId = requestId,
-                        state = requestState,
-                        localCreationTimestamp = localCreationTimestamp
+                    requestBody = getRequestedKeyInfo(),
+                    deviceId = otherDeviceId,
+                    userId = otherUserId,
+                    requestId = requestId,
+                    state = requestState,
+                    localCreationTimestamp = localCreationTimestamp
                 )
             }
             GossipRequestType.SECRET -> {
                 IncomingSecretShareRequest(
-                        secretName = getRequestedSecretName(),
-                        deviceId = otherDeviceId,
-                        userId = otherUserId,
-                        requestId = requestId,
-                        localCreationTimestamp = localCreationTimestamp
+                    secretName = getRequestedSecretName(),
+                    deviceId = otherDeviceId,
+                    userId = otherUserId,
+                    requestId = requestId,
+                    localCreationTimestamp = localCreationTimestamp
                 )
             }
         }

@@ -25,19 +25,19 @@ import java.util.UUID
  * Stores current pending verification requests
  */
 data class PendingVerificationRequest(
-        val ageLocalTs: Long,
-        val isIncoming: Boolean = false,
-        val localId: String = UUID.randomUUID().toString(),
-        val otherUserId: String,
-        val roomId: String?,
-        val transactionId: String? = null,
-        val requestInfo: ValidVerificationInfoRequest? = null,
-        val readyInfo: ValidVerificationInfoReady? = null,
-        val cancelConclusion: CancelCode? = null,
-        val isSuccessful: Boolean = false,
-        val handledByOtherSession: Boolean = false,
-        // In case of to device it is sent to a list of devices
-        val targetDevices: List<String>? = null
+    val ageLocalTs: Long,
+    val isIncoming: Boolean = false,
+    val localId: String = UUID.randomUUID().toString(),
+    val otherUserId: String,
+    val roomId: String?,
+    val transactionId: String? = null,
+    val requestInfo: ValidVerificationInfoRequest? = null,
+    val readyInfo: ValidVerificationInfoReady? = null,
+    val cancelConclusion: CancelCode? = null,
+    val isSuccessful: Boolean = false,
+    val handledByOtherSession: Boolean = false,
+    // In case of to device it is sent to a list of devices
+    val targetDevices: List<String>? = null
 ) {
     val isReady: Boolean = readyInfo != null
     val isSent: Boolean = transactionId != null

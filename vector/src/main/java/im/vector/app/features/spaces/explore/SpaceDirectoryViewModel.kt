@@ -46,8 +46,8 @@ import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class SpaceDirectoryViewModel @AssistedInject constructor(
-        @Assisted val initialState: SpaceDirectoryState,
-        private val session: Session
+    @Assisted val initialState: SpaceDirectoryState,
+    private val session: Session
 ) : VectorViewModel<SpaceDirectoryState, SpaceDirectoryViewAction, SpaceDirectoryViewEvents>(initialState) {
 
     @AssistedFactory
@@ -64,8 +64,8 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         val spaceSum = session.getRoomSummary(initialState.spaceId)
         setState {
             copy(
-                    childList = spaceSum?.spaceChildren ?: emptyList(),
-                    currentRootSummary = spaceSum
+                childList = spaceSum?.spaceChildren ?: emptyList(),
+                currentRootSummary = spaceSum
             )
         }
 
@@ -81,17 +81,17 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         // it's important to have them up to date. Particularly after creation where
         // resolved name is sometimes just "New Room"
         session.flow().liveRoomSummaries(
-                roomSummaryQueryParams {
-                    memberships = listOf(Membership.JOIN)
-                    includeType = null
-                }
+            roomSummaryQueryParams {
+                memberships = listOf(Membership.JOIN)
+                includeType = null
+            }
         ).execute {
             val updatedRoomSummaries = it
             copy(
-                    knownRoomSummaries = this.knownRoomSummaries.map { rs ->
-                        updatedRoomSummaries.invoke()?.firstOrNull { it.roomId == rs.roomId }
-                                ?: rs
-                    }
+                knownRoomSummaries = this.knownRoomSummaries.map { rs ->
+                    updatedRoomSummaries.invoke()?.firstOrNull { it.roomId == rs.roomId }
+                        ?: rs
+                }
             )
         }
     }
@@ -102,54 +102,58 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
 
         powerLevelsContentLive
-                .onEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    setState {
-                        copy(canAddRooms = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                EventType.STATE_SPACE_CHILD))
-                    }
+            .onEach {
+                val powerLevelsHelper = PowerLevelsHelper(it)
+                setState {
+                    copy(
+                        canAddRooms = powerLevelsHelper.isUserAllowedToSend(
+                            session.myUserId, true,
+                            EventType.STATE_SPACE_CHILD
+                        )
+                    )
                 }
-                .launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun refreshFromApi(rootId: String?) = withState { state ->
         val spaceId = rootId ?: initialState.spaceId
         setState {
             copy(
-                    apiResults = state.apiResults.toMutableMap().apply {
-                        this[spaceId] = Loading()
-                    }.toMap()
+                apiResults = state.apiResults.toMutableMap().apply {
+                    this[spaceId] = Loading()
+                }.toMap()
             )
         }
         viewModelScope.launch(Dispatchers.IO) {
             val cachedResults = state.apiResults.toMutableMap()
             try {
                 val query = session.spaceService().querySpaceChildren(
-                        spaceId,
-                        limit = PAGE_LENGTH
+                    spaceId,
+                    limit = PAGE_LENGTH
                 )
                 val knownSummaries = query.children.mapNotNull {
                     session.getRoomSummary(it.childRoomId)
-                            ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
+                        ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
                 }.distinctBy { it.roomId }
                 setState {
                     copy(
-                            apiResults = cachedResults.apply {
-                                this[spaceId] = Success(query)
-                            },
-                            currentRootSummary = query.rootSummary,
-                            paginationStatus = state.paginationStatus.toMutableMap().apply {
-                                this[spaceId] = Uninitialized
-                            }.toMap(),
-                            knownRoomSummaries = (state.knownRoomSummaries + knownSummaries).distinctBy { it.roomId }
+                        apiResults = cachedResults.apply {
+                            this[spaceId] = Success(query)
+                        },
+                        currentRootSummary = query.rootSummary,
+                        paginationStatus = state.paginationStatus.toMutableMap().apply {
+                            this[spaceId] = Uninitialized
+                        }.toMap(),
+                        knownRoomSummaries = (state.knownRoomSummaries + knownSummaries).distinctBy { it.roomId }
                     )
                 }
             } catch (failure: Throwable) {
                 setState {
                     copy(
-                            apiResults = cachedResults.apply {
-                                this[spaceId] = Fail(failure)
-                            }
+                        apiResults = cachedResults.apply {
+                            this[spaceId] = Fail(failure)
+                        }
                     )
                 }
             }
@@ -162,55 +166,55 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
             excludeType = null
         }
         session
-                .flow()
-                .liveRoomSummaries(queryParams)
-                .map {
-                    it.map { it.roomId }.toSet()
-                }
-                .execute {
-                    copy(joinedRoomsIds = it.invoke() ?: emptySet())
-                }
+            .flow()
+            .liveRoomSummaries(queryParams)
+            .map {
+                it.map { it.roomId }.toSet()
+            }
+            .execute {
+                copy(joinedRoomsIds = it.invoke() ?: emptySet())
+            }
     }
 
     private fun observeMembershipChanges() {
         session.flow()
-                .liveRoomChangeMembershipState()
-                .setOnEach {
-                    copy(changeMembershipStates = it)
-                }
+            .liveRoomChangeMembershipState()
+            .setOnEach {
+                copy(changeMembershipStates = it)
+            }
     }
 
     override fun handle(action: SpaceDirectoryViewAction) {
         when (action) {
-            is SpaceDirectoryViewAction.ExploreSubSpace          -> {
+            is SpaceDirectoryViewAction.ExploreSubSpace -> {
                 handleExploreSubSpace(action)
             }
-            SpaceDirectoryViewAction.HandleBack                  -> {
+            SpaceDirectoryViewAction.HandleBack -> {
                 handleBack()
             }
-            is SpaceDirectoryViewAction.JoinOrOpen               -> {
+            is SpaceDirectoryViewAction.JoinOrOpen -> {
                 handleJoinOrOpen(action.spaceChildInfo)
             }
-            is SpaceDirectoryViewAction.NavigateToRoom           -> {
+            is SpaceDirectoryViewAction.NavigateToRoom -> {
                 _viewEvents.post(SpaceDirectoryViewEvents.NavigateToRoom(action.roomId))
             }
-            is SpaceDirectoryViewAction.ShowDetails              -> {
+            is SpaceDirectoryViewAction.ShowDetails -> {
                 // This is temporary for now to at least display something for the space beta
                 // It's not ideal as it's doing some peeking that is not needed.
                 session.permalinkService().createRoomPermalink(action.spaceChildInfo.childRoomId)?.let {
                     _viewEvents.post(SpaceDirectoryViewEvents.NavigateToMxToBottomSheet(it))
                 }
             }
-            SpaceDirectoryViewAction.Retry                       -> {
+            SpaceDirectoryViewAction.Retry -> {
                 handleRetry()
             }
-            is SpaceDirectoryViewAction.RefreshUntilFound        -> {
+            is SpaceDirectoryViewAction.RefreshUntilFound -> {
                 handleRefreshUntilFound(action.roomIdToFind)
             }
             SpaceDirectoryViewAction.LoadAdditionalItemsIfNeeded -> {
                 loadAdditionalItemsIfNeeded()
             }
-            is SpaceDirectoryViewAction.CreateNewRoom            -> {
+            is SpaceDirectoryViewAction.CreateNewRoom -> {
                 withState { state ->
                     _viewEvents.post(SpaceDirectoryViewEvents.NavigateToCreateNewRoom(state.currentRootSummary?.roomId ?: initialState.spaceId))
                 }
@@ -227,8 +231,8 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
             val rootSummary = state.apiResults[newRootId]?.invoke()?.rootSummary
             setState {
                 copy(
-                        hierarchyStack = hierarchyStack.dropLast(1),
-                        currentRootSummary = rootSummary
+                    hierarchyStack = hierarchyStack.dropLast(1),
+                    currentRootSummary = rootSummary
                 )
             }
         }
@@ -248,51 +252,51 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         // mark as paginating
         setState {
             copy(
-                    paginationStatus = mutablePaginationStatus
+                paginationStatus = mutablePaginationStatus
             )
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             var query = session.spaceService().querySpaceChildren(
-                    currentRootId,
-                    limit = PAGE_LENGTH
+                currentRootId,
+                limit = PAGE_LENGTH
             )
 
             var knownSummaries = query.children.mapNotNull {
                 session.getRoomSummary(it.childRoomId)
-                        ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
+                    ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
             }.distinctBy { it.roomId }
 
             while (!query.children.any { it.childRoomId == roomIdToFind } && query.nextToken != null) {
                 // continue to paginate until found
                 val paginate = session.spaceService().querySpaceChildren(
-                        currentRootId,
-                        limit = PAGE_LENGTH,
-                        from = query.nextToken,
-                        knownStateList = query.childrenState
+                    currentRootId,
+                    limit = PAGE_LENGTH,
+                    from = query.nextToken,
+                    knownStateList = query.childrenState
                 )
 
                 knownSummaries = (
                         knownSummaries +
                                 (paginate.children.mapNotNull {
-                            session.getRoomSummary(it.childRoomId)
-                                    ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
-                        })
+                                    session.getRoomSummary(it.childRoomId)
+                                        ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
+                                })
                         ).distinctBy { it.roomId }
 
                 query = query.copy(
-                        children = query.children + paginate.children,
-                        nextToken = paginate.nextToken
+                    children = query.children + paginate.children,
+                    nextToken = paginate.nextToken
                 )
             }
 
             setState {
                 copy(
-                        apiResults = this.apiResults.toMutableMap().apply {
-                            this[currentRootId] = Success(query)
-                        },
-                        paginationStatus = this.paginationStatus.toMutableMap().apply { this[currentRootId] = Success(Unit) }.toMap(),
-                        knownRoomSummaries = (state.knownRoomSummaries + knownSummaries).distinctBy { it.roomId },
+                    apiResults = this.apiResults.toMutableMap().apply {
+                        this[currentRootId] = Success(query)
+                    },
+                    paginationStatus = this.paginationStatus.toMutableMap().apply { this[currentRootId] = Success(Unit) }.toMap(),
+                    knownRoomSummaries = (state.knownRoomSummaries + knownSummaries).distinctBy { it.roomId },
                 )
             }
         }
@@ -301,30 +305,30 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
     private fun handleExploreSubSpace(action: SpaceDirectoryViewAction.ExploreSubSpace) = withState { state ->
         val newRootId = action.spaceChildInfo.childRoomId
         val curSum = RoomSummary(
-                roomId = action.spaceChildInfo.childRoomId,
-                roomType = action.spaceChildInfo.roomType,
-                name = action.spaceChildInfo.name ?: "",
-                canonicalAlias = action.spaceChildInfo.canonicalAlias,
-                topic = action.spaceChildInfo.topic ?: "",
-                joinedMembersCount = action.spaceChildInfo.activeMemberCount,
-                avatarUrl = action.spaceChildInfo.avatarUrl ?: "",
-                isEncrypted = false,
-                joinRules = if (action.spaceChildInfo.worldReadable) RoomJoinRules.PUBLIC else RoomJoinRules.PRIVATE,
-                encryptionEventTs = 0,
-                typingUsers = emptyList()
+            roomId = action.spaceChildInfo.childRoomId,
+            roomType = action.spaceChildInfo.roomType,
+            name = action.spaceChildInfo.name ?: "",
+            canonicalAlias = action.spaceChildInfo.canonicalAlias,
+            topic = action.spaceChildInfo.topic ?: "",
+            joinedMembersCount = action.spaceChildInfo.activeMemberCount,
+            avatarUrl = action.spaceChildInfo.avatarUrl ?: "",
+            isEncrypted = false,
+            joinRules = if (action.spaceChildInfo.worldReadable) RoomJoinRules.PUBLIC else RoomJoinRules.PRIVATE,
+            encryptionEventTs = 0,
+            typingUsers = emptyList()
         )
         setState {
             copy(
-                    hierarchyStack = hierarchyStack + listOf(newRootId),
-                    currentRootSummary = curSum
+                hierarchyStack = hierarchyStack + listOf(newRootId),
+                currentRootSummary = curSum
             )
         }
         val shouldLoad = when (state.apiResults[newRootId]) {
             Uninitialized -> true
-            is Loading    -> false
-            is Success    -> false
-            is Fail       -> true
-            null          -> true
+            is Loading -> false
+            is Success -> false
+            is Fail -> true
+            null -> true
         }
 
         if (shouldLoad) {
@@ -360,33 +364,33 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                     return@launch
                 }
                 val query = session.spaceService().querySpaceChildren(
-                        currentRootId,
-                        limit = PAGE_LENGTH,
-                        from = currentResponse.nextToken,
-                        knownStateList = currentResponse.childrenState
+                    currentRootId,
+                    limit = PAGE_LENGTH,
+                    from = currentResponse.nextToken,
+                    knownStateList = currentResponse.childrenState
                 )
                 val knownSummaries = query.children.mapNotNull {
                     session.getRoomSummary(it.childRoomId)
-                            ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
+                        ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
                 }.distinctBy { it.roomId }
 
                 cachedResults[currentRootId] = Success(
-                        currentResponse.copy(
-                                children = currentResponse.children + query.children,
-                                nextToken = query.nextToken
-                        )
+                    currentResponse.copy(
+                        children = currentResponse.children + query.children,
+                        nextToken = query.nextToken
+                    )
                 )
                 setState {
                     copy(
-                            apiResults = cachedResults.toMap(),
-                            paginationStatus = mutablePaginationStatus.apply { this[currentRootId] = Success(Unit) }.toMap(),
-                            knownRoomSummaries = (state.knownRoomSummaries + knownSummaries).distinctBy { it.roomId }
+                        apiResults = cachedResults.toMap(),
+                        paginationStatus = mutablePaginationStatus.apply { this[currentRootId] = Success(Unit) }.toMap(),
+                        knownRoomSummaries = (state.knownRoomSummaries + knownSummaries).distinctBy { it.roomId }
                     )
                 }
             } catch (failure: Throwable) {
                 setState {
                     copy(
-                            paginationStatus = mutablePaginationStatus.apply { this[currentRootId] = Fail(failure) }.toMap()
+                        paginationStatus = mutablePaginationStatus.apply { this[currentRootId] = Fail(failure) }.toMap()
                     )
                 }
             }

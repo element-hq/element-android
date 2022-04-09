@@ -20,7 +20,7 @@ import com.airbnb.mvrx.MavericksState
 import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 
 data class LoginTermsViewState(
-        val localizedFlowDataLoginTermsChecked: List<LocalizedFlowDataLoginTermsChecked>
+    val localizedFlowDataLoginTermsChecked: List<LocalizedFlowDataLoginTermsChecked>
 ) : MavericksState {
     fun check(data: LocalizedFlowDataLoginTerms) {
         localizedFlowDataLoginTermsChecked.find { it.localizedFlowDataLoginTerms == data }?.checked = true

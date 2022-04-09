@@ -33,9 +33,9 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class SpaceSettingsController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val avatarRenderer: AvatarRenderer,
-        private val vectorPreferences: VectorPreferences
+    private val stringProvider: StringProvider,
+    private val avatarRenderer: AvatarRenderer,
+    private val vectorPreferences: VectorPreferences
 ) : TypedEpoxyController<RoomSettingsViewState>() {
 
     interface Callback {
@@ -81,7 +81,7 @@ class SpaceSettingsController @Inject constructor(
         }
 
         buildProfileSection(
-                stringProvider.getString(R.string.settings)
+            stringProvider.getString(R.string.settings)
         )
 
         formEditTextItem {
@@ -106,90 +106,90 @@ class SpaceSettingsController @Inject constructor(
 
         val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
         buildProfileAction(
-                id = "joinRule",
-                title = stringProvider.getString(R.string.room_settings_space_access_title),
-                subtitle = data.getJoinRuleWording(stringProvider),
-                divider = true,
-                editable = data.actionPermissions.canChangeJoinRule,
-                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+            id = "joinRule",
+            title = stringProvider.getString(R.string.room_settings_space_access_title),
+            subtitle = data.getJoinRuleWording(stringProvider),
+            divider = true,
+            editable = data.actionPermissions.canChangeJoinRule,
+            action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
         )
-//        if (vectorPreferences.labsUseExperimentalRestricted()) {
-//            buildProfileAction(
-//                    id = "joinRule",
-//                    title = stringProvider.getString(R.string.room_settings_room_access_title),
-//                    subtitle = data.getJoinRuleWording(stringProvider),
-//                    divider = false,
-//                    editable = data.actionPermissions.canChangeJoinRule,
-//                    action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
-//            )
-//        } else {
-//            formSwitchItem {
-//                id("isPublic")
-//                enabled(data.actionPermissions.canChangeJoinRule)
-//                title(host.stringProvider.getString(R.string.make_this_space_public))
-//                switchChecked(isPublic)
-//
-//                listener { value ->
-//                    host.callback?.setIsPublic(value)
-//                }
-//            }
-//        }
+        //        if (vectorPreferences.labsUseExperimentalRestricted()) {
+        //            buildProfileAction(
+        //                    id = "joinRule",
+        //                    title = stringProvider.getString(R.string.room_settings_room_access_title),
+        //                    subtitle = data.getJoinRuleWording(stringProvider),
+        //                    divider = false,
+        //                    editable = data.actionPermissions.canChangeJoinRule,
+        //                    action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+        //            )
+        //        } else {
+        //            formSwitchItem {
+        //                id("isPublic")
+        //                enabled(data.actionPermissions.canChangeJoinRule)
+        //                title(host.stringProvider.getString(R.string.make_this_space_public))
+        //                switchChecked(isPublic)
+        //
+        //                listener { value ->
+        //                    host.callback?.setIsPublic(value)
+        //                }
+        //            }
+        //        }
         dividerItem {
             id("divider")
         }
 
         buildProfileAction(
-                id = "manage_rooms",
-                title = stringProvider.getString(R.string.space_settings_manage_rooms),
-                // subtitle = data.getJoinRuleWording(stringProvider),
-                divider = true,
-                editable = data.actionPermissions.canAddChildren,
-                action = {
-                    if (data.actionPermissions.canAddChildren) callback?.onManageRooms()
-                }
+            id = "manage_rooms",
+            title = stringProvider.getString(R.string.space_settings_manage_rooms),
+            // subtitle = data.getJoinRuleWording(stringProvider),
+            divider = true,
+            editable = data.actionPermissions.canAddChildren,
+            action = {
+                if (data.actionPermissions.canAddChildren) callback?.onManageRooms()
+            }
         )
 
         if (isPublic) {
             buildProfileAction(
-                    id = "alias",
-                    title = stringProvider.getString(R.string.space_settings_alias_title),
-                    subtitle = stringProvider.getString(R.string.space_settings_alias_subtitle),
-                    divider = true,
-                    editable = true,
-                    action = { callback?.onRoomAliasesClicked() }
+                id = "alias",
+                title = stringProvider.getString(R.string.space_settings_alias_title),
+                subtitle = stringProvider.getString(R.string.space_settings_alias_subtitle),
+                divider = true,
+                editable = true,
+                action = { callback?.onRoomAliasesClicked() }
             )
         }
 
         buildProfileAction(
-                id = "permissions",
-                title = stringProvider.getString(R.string.space_settings_permissions_title),
-                subtitle = stringProvider.getString(R.string.space_settings_permissions_subtitle),
-                divider = vectorPreferences.developerMode(),
-                editable = true,
-                action = { callback?.onRoomPermissionsClicked() }
+            id = "permissions",
+            title = stringProvider.getString(R.string.space_settings_permissions_title),
+            subtitle = stringProvider.getString(R.string.space_settings_permissions_subtitle),
+            divider = vectorPreferences.developerMode(),
+            editable = true,
+            action = { callback?.onRoomPermissionsClicked() }
         )
 
         if (vectorPreferences.developerMode()) {
             buildProfileAction(
-                    id = "dev_tools",
-                    title = stringProvider.getString(R.string.settings_dev_tools),
-                    icon = R.drawable.ic_verification_glasses,
-                    tintIcon = false,
-                    divider = true,
-                    action = {
-                        callback?.onDevTools()
-                    }
+                id = "dev_tools",
+                title = stringProvider.getString(R.string.settings_dev_tools),
+                icon = R.drawable.ic_verification_glasses,
+                tintIcon = false,
+                divider = true,
+                action = {
+                    callback?.onDevTools()
+                }
             )
 
             buildProfileAction(
-                    id = "room_tools",
-                    title = stringProvider.getString(R.string.room_list_quick_actions_room_settings),
-                    icon = R.drawable.ic_verification_glasses,
-                    tintIcon = false,
-                    divider = false,
-                    action = {
-                        callback?.onDevRoomSettings()
-                    }
+                id = "room_tools",
+                title = stringProvider.getString(R.string.room_list_quick_actions_room_settings),
+                icon = R.drawable.ic_verification_glasses,
+                tintIcon = false,
+                divider = false,
+                action = {
+                    callback?.onDevRoomSettings()
+                }
             )
         }
     }

@@ -20,7 +20,7 @@ import android.view.View
 import im.vector.lib.attachmentviewer.databinding.ItemImageAttachmentBinding
 
 class ZoomableImageViewHolder constructor(itemView: View) :
-        BaseViewHolder(itemView) {
+    BaseViewHolder(itemView) {
 
     val views = ItemImageAttachmentBinding.bind(itemView)
 

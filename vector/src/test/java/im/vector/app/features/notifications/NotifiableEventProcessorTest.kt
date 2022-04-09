@@ -38,15 +38,15 @@ class NotifiableEventProcessorTest {
     @Test
     fun `given simple events when processing then keep simple events`() {
         val events = listOf(
-                aSimpleNotifiableEvent(eventId = "event-1"),
-                aSimpleNotifiableEvent(eventId = "event-2")
+            aSimpleNotifiableEvent(eventId = "event-1"),
+            aSimpleNotifiableEvent(eventId = "event-2")
         )
 
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
-                Type.KEEP to events[0],
-                Type.KEEP to events[1]
+            Type.KEEP to events[0],
+            Type.KEEP to events[1]
         )
     }
 
@@ -57,7 +57,7 @@ class NotifiableEventProcessorTest {
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
-                Type.REMOVE to events[0]
+            Type.REMOVE to events[0]
         )
     }
 
@@ -65,15 +65,15 @@ class NotifiableEventProcessorTest {
     fun `given invites are auto accepted when processing then remove invitations`() {
         autoAcceptInvites._isEnabled = true
         val events = listOf<NotifiableEvent>(
-                anInviteNotifiableEvent(roomId = "room-1"),
-                anInviteNotifiableEvent(roomId = "room-2")
+            anInviteNotifiableEvent(roomId = "room-1"),
+            anInviteNotifiableEvent(roomId = "room-2")
         )
 
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
-                Type.REMOVE to events[0],
-                Type.REMOVE to events[1]
+            Type.REMOVE to events[0],
+            Type.REMOVE to events[1]
         )
     }
 
@@ -81,15 +81,15 @@ class NotifiableEventProcessorTest {
     fun `given invites are not auto accepted when processing then keep invitation events`() {
         autoAcceptInvites._isEnabled = false
         val events = listOf(
-                anInviteNotifiableEvent(roomId = "room-1"),
-                anInviteNotifiableEvent(roomId = "room-2")
+            anInviteNotifiableEvent(roomId = "room-1"),
+            anInviteNotifiableEvent(roomId = "room-2")
         )
 
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
-                Type.KEEP to events[0],
-                Type.KEEP to events[1]
+            Type.KEEP to events[0],
+            Type.KEEP to events[1]
         )
     }
 
@@ -101,7 +101,7 @@ class NotifiableEventProcessorTest {
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
-                Type.REMOVE to events[0],
+            Type.REMOVE to events[0],
         )
     }
 
@@ -113,7 +113,7 @@ class NotifiableEventProcessorTest {
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
-                Type.KEEP to events[0],
+            Type.KEEP to events[0],
         )
     }
 
@@ -124,7 +124,7 @@ class NotifiableEventProcessorTest {
         val result = eventProcessor.process(events, currentRoomId = "room-1", renderedEvents = emptyList())
 
         result shouldBeEqualTo listOfProcessedEvents(
-                Type.REMOVE to events[0],
+            Type.REMOVE to events[0],
         )
     }
 
@@ -132,15 +132,15 @@ class NotifiableEventProcessorTest {
     fun `given events are different to rendered events when processing then removes difference`() {
         val events = listOf(aSimpleNotifiableEvent(eventId = "event-1"))
         val renderedEvents = listOf<ProcessedEvent<NotifiableEvent>>(
-                ProcessedEvent(Type.KEEP, events[0]),
-                ProcessedEvent(Type.KEEP, anInviteNotifiableEvent(roomId = "event-2"))
+            ProcessedEvent(Type.KEEP, events[0]),
+            ProcessedEvent(Type.KEEP, anInviteNotifiableEvent(roomId = "event-2"))
         )
 
         val result = eventProcessor.process(events, currentRoomId = NOT_VIEWING_A_ROOM, renderedEvents = renderedEvents)
 
         result shouldBeEqualTo listOfProcessedEvents(
-                Type.REMOVE to renderedEvents[1].event,
-                Type.KEEP to renderedEvents[0].event
+            Type.REMOVE to renderedEvents[1].event,
+            Type.KEEP to renderedEvents[0].event
         )
     }
 

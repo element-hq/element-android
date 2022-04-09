@@ -31,10 +31,10 @@ import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 
 internal class DefaultRoomVersionService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
-        private val stateEventDataSource: StateEventDataSource,
-        private val roomVersionUpgradeTask: RoomVersionUpgradeTask
+    @Assisted private val roomId: String,
+    private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
+    private val stateEventDataSource: StateEventDataSource,
+    private val roomVersionUpgradeTask: RoomVersionUpgradeTask
 ) : RoomVersionService {
 
     @AssistedFactory
@@ -44,19 +44,19 @@ internal class DefaultRoomVersionService @AssistedInject constructor(
 
     override fun getRoomVersion(): String {
         return stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_CREATE, QueryStringValue.IsEmpty)
-                ?.content
-                ?.toModel<RoomCreateContent>()
-                ?.roomVersion
+            ?.content
+            ?.toModel<RoomCreateContent>()
+            ?.roomVersion
         // as per spec -> Defaults to "1" if the key does not exist.
-                ?: DEFAULT_ROOM_VERSION
+            ?: DEFAULT_ROOM_VERSION
     }
 
     override suspend fun upgradeToVersion(version: String): String {
         return roomVersionUpgradeTask.execute(
-                RoomVersionUpgradeTask.Params(
-                        roomId = roomId,
-                        newVersion = version
-                )
+            RoomVersionUpgradeTask.Params(
+                roomId = roomId,
+                newVersion = version
+            )
         )
     }
 
@@ -72,8 +72,8 @@ internal class DefaultRoomVersionService @AssistedInject constructor(
 
     override fun userMayUpgradeRoom(userId: String): Boolean {
         val powerLevelsHelper = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
-                ?.content?.toModel<PowerLevelsContent>()
-                ?.let { PowerLevelsHelper(it) }
+            ?.content?.toModel<PowerLevelsContent>()
+            ?.let { PowerLevelsHelper(it) }
 
         return powerLevelsHelper?.isUserAllowedToSend(userId, true, EventType.STATE_ROOM_TOMBSTONE) ?: false
     }

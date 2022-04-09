@@ -30,8 +30,8 @@ object RoomDataHelper {
 
     private const val FAKE_TEST_SENDER = "@sender:test.org"
     private val EVENT_FACTORIES = hashMapOf(
-            0 to { createFakeMessageEvent() },
-            1 to { createFakeRoomMemberEvent() }
+        0 to { createFakeMessageEvent() },
+        1 to { createFakeRoomMemberEvent() }
     )
 
     fun createFakeListOfEvents(size: Int = 10): List<Event> {
@@ -41,19 +41,20 @@ object RoomDataHelper {
         }
     }
 
-    private fun createFakeEvent(type: String,
-                                content: Content? = null,
-                                prevContent: Content? = null,
-                                sender: String = FAKE_TEST_SENDER,
-                                stateKey: String? = null
+    private fun createFakeEvent(
+        type: String,
+        content: Content? = null,
+        prevContent: Content? = null,
+        sender: String = FAKE_TEST_SENDER,
+        stateKey: String? = null
     ): Event {
         return Event(
-                type = type,
-                eventId = Random.nextLong().toString(),
-                content = content,
-                prevContent = prevContent,
-                senderId = sender,
-                stateKey = stateKey
+            type = type,
+            eventId = Random.nextLong().toString(),
+            content = content,
+            prevContent = prevContent,
+            senderId = sender,
+            stateKey = stateKey
         )
     }
 

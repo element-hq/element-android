@@ -31,9 +31,11 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
 
-class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: BreadcrumbsViewState,
-                                                       private val session: Session) :
-        VectorViewModel<BreadcrumbsViewState, EmptyAction, EmptyViewEvents>(initialState) {
+class BreadcrumbsViewModel @AssistedInject constructor(
+    @Assisted initialState: BreadcrumbsViewState,
+    private val session: Session
+) :
+    VectorViewModel<BreadcrumbsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<BreadcrumbsViewModel, BreadcrumbsViewState> {
@@ -54,12 +56,12 @@ class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: B
 
     private fun observeBreadcrumbs() {
         session.flow()
-                .liveBreadcrumbs(roomSummaryQueryParams {
-                    displayName = QueryStringValue.NoCondition
-                    memberships = listOf(Membership.JOIN)
-                })
-                .execute { asyncBreadcrumbs ->
-                    copy(asyncBreadcrumbs = asyncBreadcrumbs)
-                }
+            .liveBreadcrumbs(roomSummaryQueryParams {
+                displayName = QueryStringValue.NoCondition
+                memberships = listOf(Membership.JOIN)
+            })
+            .execute { asyncBreadcrumbs ->
+                copy(asyncBreadcrumbs = asyncBreadcrumbs)
+            }
     }
 }

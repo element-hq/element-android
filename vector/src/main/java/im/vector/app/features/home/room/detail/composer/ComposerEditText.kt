@@ -35,9 +35,9 @@ import im.vector.app.features.html.PillImageSpan
 import timber.log.Timber
 
 class ComposerEditText @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = android.R.attr.editTextStyle
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = android.R.attr.editTextStyle
 ) : AppCompatEditText(context, attrs, defStyleAttr) {
 
     interface Callback {
@@ -81,39 +81,39 @@ class ComposerEditText @JvmOverloads constructor(
 
     init {
         addTextChangedListener(
-                object : SimpleTextWatcher() {
-                    var spanToRemove: PillImageSpan? = null
+            object : SimpleTextWatcher() {
+                var spanToRemove: PillImageSpan? = null
 
-                    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                        Timber.v("Pills: beforeTextChanged: start:$start count:$count after:$after")
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                    Timber.v("Pills: beforeTextChanged: start:$start count:$count after:$after")
 
-                        if (count > after) {
-                            // A char has been deleted
-                            val deleteCharPosition = start + count
-                            Timber.v("Pills: beforeTextChanged: deleted char at $deleteCharPosition")
+                    if (count > after) {
+                        // A char has been deleted
+                        val deleteCharPosition = start + count
+                        Timber.v("Pills: beforeTextChanged: deleted char at $deleteCharPosition")
 
-                            // Get the first span at this position
-                            spanToRemove = editableText.getSpans(deleteCharPosition, deleteCharPosition, PillImageSpan::class.java)
-                                    .ooi { Timber.v("Pills: beforeTextChanged: found ${it.size} span(s)") }
-                                    .firstOrNull()
-                        }
-                    }
-
-                    override fun afterTextChanged(s: Editable) {
-                        if (spanToRemove != null) {
-                            val start = editableText.getSpanStart(spanToRemove)
-                            val end = editableText.getSpanEnd(spanToRemove)
-                            Timber.v("Pills: afterTextChanged Removing the span start:$start end:$end")
-                            // Must be done before text replacement
-                            editableText.removeSpan(spanToRemove)
-                            if (start != -1 && end != -1) {
-                                editableText.replace(start, end, "")
-                            }
-                            spanToRemove = null
-                        }
-                        callback?.onTextChanged(s.toString())
+                        // Get the first span at this position
+                        spanToRemove = editableText.getSpans(deleteCharPosition, deleteCharPosition, PillImageSpan::class.java)
+                            .ooi { Timber.v("Pills: beforeTextChanged: found ${it.size} span(s)") }
+                            .firstOrNull()
                     }
                 }
+
+                override fun afterTextChanged(s: Editable) {
+                    if (spanToRemove != null) {
+                        val start = editableText.getSpanStart(spanToRemove)
+                        val end = editableText.getSpanEnd(spanToRemove)
+                        Timber.v("Pills: afterTextChanged Removing the span start:$start end:$end")
+                        // Must be done before text replacement
+                        editableText.removeSpan(spanToRemove)
+                        if (start != -1 && end != -1) {
+                            editableText.replace(start, end, "")
+                        }
+                        spanToRemove = null
+                    }
+                    callback?.onTextChanged(s.toString())
+                }
+            }
         )
     }
 }

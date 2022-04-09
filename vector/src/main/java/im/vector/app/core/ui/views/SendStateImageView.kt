@@ -26,9 +26,9 @@ import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.themes.ThemeUtils
 
 class SendStateImageView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
     init {
@@ -45,20 +45,20 @@ class SendStateImageView @JvmOverloads constructor(
                 contentDescription = context.getString(R.string.event_status_a11y_sending)
                 false
             }
-            SendStateDecoration.SENT              -> {
+            SendStateDecoration.SENT -> {
                 setImageResource(R.drawable.ic_message_sent)
                 imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.vctr_content_tertiary))
                 contentDescription = context.getString(R.string.event_status_a11y_sent)
                 false
             }
-            SendStateDecoration.FAILED            -> {
+            SendStateDecoration.FAILED -> {
                 setImageResource(R.drawable.ic_sending_message_failed)
                 imageTintList = null
                 contentDescription = context.getString(R.string.event_status_a11y_failed)
                 false
             }
             SendStateDecoration.SENDING_MEDIA,
-            SendStateDecoration.NONE              -> {
+            SendStateDecoration.NONE -> {
                 true
             }
         }

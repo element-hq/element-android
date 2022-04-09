@@ -27,32 +27,34 @@ import javax.inject.Inject
 
 internal class CrossSigningKeysMapper @Inject constructor(moshi: Moshi) {
 
-    private val signaturesAdapter = moshi.adapter<Map<String, Map<String, String>>>(Types.newParameterizedType(
+    private val signaturesAdapter = moshi.adapter<Map<String, Map<String, String>>>(
+        Types.newParameterizedType(
             Map::class.java,
             String::class.java,
             Any::class.java
-    ))
+        )
+    )
 
     fun update(keyInfo: KeyInfoEntity, cryptoCrossSigningKey: CryptoCrossSigningKey) {
         // update signatures?
         keyInfo.signatures = serializeSignatures(cryptoCrossSigningKey.signatures)
         keyInfo.usages = cryptoCrossSigningKey.usages?.toTypedArray()?.let { RealmList(*it) }
-                ?: RealmList()
+            ?: RealmList()
     }
 
     fun map(userId: String?, keyInfo: KeyInfoEntity?): CryptoCrossSigningKey? {
         val pubKey = keyInfo?.publicKeyBase64 ?: return null
         return CryptoCrossSigningKey(
-                userId = userId ?: "",
-                keys = mapOf("ed25519:$pubKey" to pubKey),
-                usages = keyInfo.usages.toList(),
-                signatures = deserializeSignatures(keyInfo.signatures),
-                trustLevel = keyInfo.trustLevelEntity?.let {
-                    DeviceTrustLevel(
-                            crossSigningVerified = it.crossSignedVerified ?: false,
-                            locallyVerified = it.locallyVerified ?: false
-                    )
-                }
+            userId = userId ?: "",
+            keys = mapOf("ed25519:$pubKey" to pubKey),
+            usages = keyInfo.usages.toList(),
+            signatures = deserializeSignatures(keyInfo.signatures),
+            trustLevel = keyInfo.trustLevelEntity?.let {
+                DeviceTrustLevel(
+                    crossSigningVerified = it.crossSignedVerified ?: false,
+                    locallyVerified = it.locallyVerified ?: false
+                )
+            }
         )
     }
 

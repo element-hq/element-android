@@ -26,25 +26,26 @@ import javax.inject.Inject
 
 internal interface StoreRoomSessionDataTask : Task<StoreRoomSessionDataTask.Params, BackupKeysResult> {
     data class Params(
-            val roomId: String,
-            val sessionId: String,
-            val version: String,
-            val keyBackupData: KeyBackupData
+        val roomId: String,
+        val sessionId: String,
+        val version: String,
+        val keyBackupData: KeyBackupData
     )
 }
 
 internal class DefaultStoreRoomSessionDataTask @Inject constructor(
-        private val roomKeysApi: RoomKeysApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomKeysApi: RoomKeysApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : StoreRoomSessionDataTask {
 
     override suspend fun execute(params: StoreRoomSessionDataTask.Params): BackupKeysResult {
         return executeRequest(globalErrorReceiver) {
             roomKeysApi.storeRoomSessionData(
-                    params.roomId,
-                    params.sessionId,
-                    params.version,
-                    params.keyBackupData)
+                params.roomId,
+                params.sessionId,
+                params.version,
+                params.keyBackupData
+            )
         }
     }
 }

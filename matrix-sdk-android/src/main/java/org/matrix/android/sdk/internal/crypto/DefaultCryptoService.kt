@@ -118,59 +118,59 @@ private val loggerTag = LoggerTag("DefaultCryptoService", LoggerTag.CRYPTO)
 
 @SessionScope
 internal class DefaultCryptoService @Inject constructor(
-        // Olm Manager
-        private val olmManager: OlmManager,
-        @UserId
-        private val userId: String,
-        @DeviceId
-        private val deviceId: String?,
-        private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
-        // the crypto store
-        private val cryptoStore: IMXCryptoStore,
-        // Room encryptors store
-        private val roomEncryptorsStore: RoomEncryptorsStore,
-        // Olm device
-        private val olmDevice: MXOlmDevice,
-        // Set of parameters used to configure/customize the end-to-end crypto.
-        private val mxCryptoConfig: MXCryptoConfig,
-        // Device list manager
-        private val deviceListManager: DeviceListManager,
-        // The key backup service.
-        private val keysBackupService: DefaultKeysBackupService,
-        //
-        private val objectSigner: ObjectSigner,
-        //
-        private val oneTimeKeysUploader: OneTimeKeysUploader,
-        //
-        private val roomDecryptorProvider: RoomDecryptorProvider,
-        // The verification service.
-        private val verificationService: DefaultVerificationService,
+    // Olm Manager
+    private val olmManager: OlmManager,
+    @UserId
+    private val userId: String,
+    @DeviceId
+    private val deviceId: String?,
+    private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
+    // the crypto store
+    private val cryptoStore: IMXCryptoStore,
+    // Room encryptors store
+    private val roomEncryptorsStore: RoomEncryptorsStore,
+    // Olm device
+    private val olmDevice: MXOlmDevice,
+    // Set of parameters used to configure/customize the end-to-end crypto.
+    private val mxCryptoConfig: MXCryptoConfig,
+    // Device list manager
+    private val deviceListManager: DeviceListManager,
+    // The key backup service.
+    private val keysBackupService: DefaultKeysBackupService,
+    //
+    private val objectSigner: ObjectSigner,
+    //
+    private val oneTimeKeysUploader: OneTimeKeysUploader,
+    //
+    private val roomDecryptorProvider: RoomDecryptorProvider,
+    // The verification service.
+    private val verificationService: DefaultVerificationService,
 
-        private val crossSigningService: DefaultCrossSigningService,
-        //
-        private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
-        //
-        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        // Actions
-        private val setDeviceVerificationAction: SetDeviceVerificationAction,
-        private val megolmSessionDataImporter: MegolmSessionDataImporter,
-        private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
-        // Repository
-        private val megolmEncryptionFactory: MXMegolmEncryptionFactory,
-        private val olmEncryptionFactory: MXOlmEncryptionFactory,
-        // Tasks
-        private val deleteDeviceTask: DeleteDeviceTask,
-        private val getDevicesTask: GetDevicesTask,
-        private val getDeviceInfoTask: GetDeviceInfoTask,
-        private val setDeviceNameTask: SetDeviceNameTask,
-        private val uploadKeysTask: UploadKeysTask,
-        private val loadRoomMembersTask: LoadRoomMembersTask,
-        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val taskExecutor: TaskExecutor,
-        private val cryptoCoroutineScope: CoroutineScope,
-        private val eventDecryptor: EventDecryptor,
-        private val liveEventManager: Lazy<StreamEventsManager>
+    private val crossSigningService: DefaultCrossSigningService,
+    //
+    private val incomingGossipingRequestManager: IncomingGossipingRequestManager,
+    //
+    private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+    // Actions
+    private val setDeviceVerificationAction: SetDeviceVerificationAction,
+    private val megolmSessionDataImporter: MegolmSessionDataImporter,
+    private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
+    // Repository
+    private val megolmEncryptionFactory: MXMegolmEncryptionFactory,
+    private val olmEncryptionFactory: MXOlmEncryptionFactory,
+    // Tasks
+    private val deleteDeviceTask: DeleteDeviceTask,
+    private val getDevicesTask: GetDevicesTask,
+    private val getDeviceInfoTask: GetDeviceInfoTask,
+    private val setDeviceNameTask: SetDeviceNameTask,
+    private val uploadKeysTask: UploadKeysTask,
+    private val loadRoomMembersTask: LoadRoomMembersTask,
+    private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+    private val taskExecutor: TaskExecutor,
+    private val cryptoCoroutineScope: CoroutineScope,
+    private val eventDecryptor: EventDecryptor,
+    private val liveEventManager: Lazy<StreamEventsManager>
 ) : CryptoService {
 
     private val isStarting = AtomicBoolean(false)
@@ -178,8 +178,8 @@ internal class DefaultCryptoService @Inject constructor(
 
     fun onStateEvent(roomId: String, event: Event) {
         when (event.type) {
-            EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+            EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
+            EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
         }
     }
@@ -188,8 +188,8 @@ internal class DefaultCryptoService @Inject constructor(
         // handle state events
         if (event.isStateEvent()) {
             when (event.type) {
-                EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-                EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+                EventType.STATE_ROOM_ENCRYPTION -> onRoomEncryptionEvent(roomId, event)
+                EventType.STATE_ROOM_MEMBER -> onRoomMembershipEvent(roomId, event)
                 EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
             }
         }
@@ -199,30 +199,30 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
         setDeviceNameTask
-                .configureWith(SetDeviceNameTask.Params(deviceId, deviceName)) {
-                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            // bg refresh of crypto device
-                            downloadKeys(listOf(userId), true, NoOpMatrixCallback())
-                            callback.onSuccess(data)
-                        }
+            .configureWith(SetDeviceNameTask.Params(deviceId, deviceName)) {
+                this.executionThread = TaskThread.CRYPTO
+                this.callback = object : MatrixCallback<Unit> {
+                    override fun onSuccess(data: Unit) {
+                        // bg refresh of crypto device
+                        downloadKeys(listOf(userId), true, NoOpMatrixCallback())
+                        callback.onSuccess(data)
+                    }
 
-                        override fun onFailure(failure: Throwable) {
-                            callback.onFailure(failure)
-                        }
+                    override fun onFailure(failure: Throwable) {
+                        callback.onFailure(failure)
                     }
                 }
-                .executeBy(taskExecutor)
+            }
+            .executeBy(taskExecutor)
     }
 
     override fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>) {
         deleteDeviceTask
-                .configureWith(DeleteDeviceTask.Params(deviceId, userInteractiveAuthInterceptor, null)) {
-                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+            .configureWith(DeleteDeviceTask.Params(deviceId, userInteractiveAuthInterceptor, null)) {
+                this.executionThread = TaskThread.CRYPTO
+                this.callback = callback
+            }
+            .executeBy(taskExecutor)
     }
 
     override fun getCryptoVersion(context: Context, longFormat: Boolean): String {
@@ -235,21 +235,21 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>) {
         getDevicesTask
-                .configureWith {
-                    //                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = object : MatrixCallback<DevicesListResponse> {
-                        override fun onFailure(failure: Throwable) {
-                            callback.onFailure(failure)
-                        }
+            .configureWith {
+                //                    this.executionThread = TaskThread.CRYPTO
+                this.callback = object : MatrixCallback<DevicesListResponse> {
+                    override fun onFailure(failure: Throwable) {
+                        callback.onFailure(failure)
+                    }
 
-                        override fun onSuccess(data: DevicesListResponse) {
-                            // Save in local DB
-                            cryptoStore.saveMyDevicesInfo(data.devices.orEmpty())
-                            callback.onSuccess(data)
-                        }
+                    override fun onSuccess(data: DevicesListResponse) {
+                        // Save in local DB
+                        cryptoStore.saveMyDevicesInfo(data.devices.orEmpty())
+                        callback.onSuccess(data)
                     }
                 }
-                .executeBy(taskExecutor)
+            }
+            .executeBy(taskExecutor)
     }
 
     override fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>> {
@@ -262,11 +262,11 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>) {
         getDeviceInfoTask
-                .configureWith(GetDeviceInfoTask.Params(deviceId)) {
-                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+            .configureWith(GetDeviceInfoTask.Params(deviceId)) {
+                this.executionThread = TaskThread.CRYPTO
+                this.callback = callback
+            }
+            .executeBy(taskExecutor)
     }
 
     override fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
@@ -372,25 +372,25 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.open()
 
         runCatching {
-//            if (isInitialSync) {
-//                // refresh the devices list for each known room members
-//                deviceListManager.invalidateAllDeviceLists()
-//                deviceListManager.refreshOutdatedDeviceLists()
-//            } else {
+            //            if (isInitialSync) {
+            //                // refresh the devices list for each known room members
+            //                deviceListManager.invalidateAllDeviceLists()
+            //                deviceListManager.refreshOutdatedDeviceLists()
+            //            } else {
 
             // Why would we do that? it will be called at end of syn
             incomingGossipingRequestManager.processReceivedGossipingRequests()
-//            }
+            //            }
         }.fold(
-                {
-                    isStarting.set(false)
-                    isStarted.set(true)
-                },
-                {
-                    isStarting.set(false)
-                    isStarted.set(false)
-                    Timber.tag(loggerTag.value).e(it, "Start failed")
-                }
+            {
+                isStarting.set(false)
+                isStarted.set(true)
+            },
+            {
+                isStarting.set(false)
+                isStarted.set(false)
+                Timber.tag(loggerTag.value).e(it, "Start failed")
+            }
         )
     }
 
@@ -458,8 +458,9 @@ internal class DefaultCryptoService @Inject constructor(
                     // The presence of device_unused_fallback_key_types indicates that the server supports fallback keys.
                     // If there's no unused signed_curve25519 fallback key we need a new one.
                     if (syncResponse.deviceUnusedFallbackKeyTypes != null &&
-                            // Generate a fallback key only if the server does not already have an unused fallback key.
-                            !syncResponse.deviceUnusedFallbackKeyTypes.contains(KEY_SIGNED_CURVE_25519_TYPE)) {
+                        // Generate a fallback key only if the server does not already have an unused fallback key.
+                        !syncResponse.deviceUnusedFallbackKeyTypes.contains(KEY_SIGNED_CURVE_25519_TYPE)
+                    ) {
                         oneTimeKeysUploader.needsNewFallback()
                     }
 
@@ -578,10 +579,12 @@ internal class DefaultCryptoService @Inject constructor(
      * @param membersId          list of members to start tracking their devices
      * @return true if the operation succeeds.
      */
-    private suspend fun setEncryptionInRoom(roomId: String,
-                                            algorithm: String?,
-                                            inhibitDeviceQuery: Boolean,
-                                            membersId: List<String>): Boolean {
+    private suspend fun setEncryptionInRoom(
+        roomId: String,
+        algorithm: String?,
+        inhibitDeviceQuery: Boolean,
+        membersId: List<String>
+    ): Boolean {
         // If we already have encryption in this room, we should ignore this event
         // (for now at least. Maybe we should alert the user somehow?)
         val existingAlgorithm = cryptoStore.getRoomAlgorithm(roomId)
@@ -604,8 +607,8 @@ internal class DefaultCryptoService @Inject constructor(
 
         val alg: IMXEncrypting? = when (algorithm) {
             MXCRYPTO_ALGORITHM_MEGOLM -> megolmEncryptionFactory.create(roomId)
-            MXCRYPTO_ALGORITHM_OLM    -> olmEncryptionFactory.create(roomId)
-            else                      -> null
+            MXCRYPTO_ALGORITHM_OLM -> olmEncryptionFactory.create(roomId)
+            else -> null
         }
 
         if (alg != null) {
@@ -677,10 +680,12 @@ internal class DefaultCryptoService @Inject constructor(
      * @param roomId       the room identifier the event will be sent.
      * @param callback     the asynchronous callback
      */
-    override fun encryptEventContent(eventContent: Content,
-                                     eventType: String,
-                                     roomId: String,
-                                     callback: MatrixCallback<MXEncryptEventContentResult>) {
+    override fun encryptEventContent(
+        eventContent: Content,
+        eventType: String,
+        roomId: String,
+        callback: MatrixCallback<MXEncryptEventContentResult>
+    ) {
         // moved to crypto scope to have uptodate values
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             val userIds = getRoomUserIds(roomId)
@@ -704,8 +709,10 @@ internal class DefaultCryptoService @Inject constructor(
                 }.foldToCallback(callback)
             } else {
                 val algorithm = getEncryptionAlgorithm(roomId)
-                val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
-                        algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                val reason = String.format(
+                    MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
+                    algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON
+                )
                 Timber.tag(loggerTag.value).e("encryptEventContent() : failed $reason")
                 callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason)))
             }
@@ -782,20 +789,20 @@ internal class DefaultCryptoService @Inject constructor(
                     onRoomKeyEvent(event)
                 }
                 EventType.REQUEST_SECRET,
-                EventType.ROOM_KEY_REQUEST                       -> {
+                EventType.ROOM_KEY_REQUEST -> {
                     // save audit trail
                     gossipingBuffer.add(event)
                     // Requests are stacked, and will be handled one by one at the end of the sync (onSyncComplete)
                     incomingGossipingRequestManager.onGossipingRequestEvent(event)
                 }
-                EventType.SEND_SECRET                            -> {
+                EventType.SEND_SECRET -> {
                     gossipingBuffer.add(event)
                     onSecretSendReceived(event)
                 }
-                EventType.ROOM_KEY_WITHHELD                      -> {
+                EventType.ROOM_KEY_WITHHELD -> {
                     onKeyWithHeldReceived(event)
                 }
-                else                                             -> {
+                else -> {
                     // ignore
                 }
             }
@@ -854,7 +861,7 @@ internal class DefaultCryptoService @Inject constructor(
         val secretContent = event.getClearContent().toModel<SecretSendEventContent>() ?: return
 
         val existingRequest = cryptoStore
-                .getOutgoingSecretKeyRequests().firstOrNull { it.requestId == secretContent.requestId }
+            .getOutgoingSecretKeyRequests().firstOrNull { it.requestId == secretContent.requestId }
 
         if (existingRequest == null) {
             Timber.tag(loggerTag.value).i("GOSSIP onSecretSend() : Ignore secret that was not requested: ${secretContent.requestId}")
@@ -872,7 +879,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     private fun handleSDKLevelGossip(secretName: String?, secretValue: String): Boolean {
         return when (secretName) {
-            MASTER_KEY_SSSS_NAME       -> {
+            MASTER_KEY_SSSS_NAME -> {
                 crossSigningService.onSecretMSKGossip(secretValue)
                 true
             }
@@ -888,7 +895,7 @@ internal class DefaultCryptoService @Inject constructor(
                 keysBackupService.onSecretKeyGossip(secretValue)
                 true
             }
-            else                       -> false
+            else -> false
         }
     }
 
@@ -930,8 +937,9 @@ internal class DefaultCryptoService @Inject constructor(
                 // make sure we are tracking the deviceList for this user.
                 deviceListManager.startTrackingDeviceList(listOf(userId))
             } else if (membership == Membership.INVITE &&
-                    shouldEncryptForInvitedMembers(roomId) &&
-                    isEncryptionEnabledForInvitedUser()) {
+                shouldEncryptForInvitedMembers(roomId) &&
+                isEncryptionEnabledForInvitedUser()
+            ) {
                 // track the deviceList for this invited user.
                 // Caution: there's a big edge case here in that federated servers do not
                 // know what other servers are in the room at the time they've been invited.
@@ -964,7 +972,7 @@ internal class DefaultCryptoService @Inject constructor(
         var rest = getMyDevice().toRest()
 
         rest = rest.copy(
-                signatures = objectSigner.signObject(canonicalJson)
+            signatures = objectSigner.signObject(canonicalJson)
         )
 
         val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null, null)
@@ -996,7 +1004,7 @@ internal class DefaultCryptoService @Inject constructor(
             val exportedSessions = cryptoStore.getInboundGroupSessions().mapNotNull { it.exportKeys() }
 
             val adapter = MoshiProvider.providesMoshi()
-                    .adapter(List::class.java)
+                .adapter(List::class.java)
 
             MXMegolmExportEncryption.encryptMegolmKeyFile(adapter.toJson(exportedSessions), password, iterationCount)
         }
@@ -1010,9 +1018,11 @@ internal class DefaultCryptoService @Inject constructor(
      * @param progressListener the progress listener
      * @return the result ImportRoomKeysResult
      */
-    override suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
-                                        password: String,
-                                        progressListener: ProgressListener?): ImportRoomKeysResult {
+    override suspend fun importRoomKeys(
+        roomKeysAsArray: ByteArray,
+        password: String,
+        progressListener: ProgressListener?
+    ): ImportRoomKeysResult {
         return withContext(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).v("importRoomKeys starts")
 
@@ -1023,8 +1033,8 @@ internal class DefaultCryptoService @Inject constructor(
             Timber.tag(loggerTag.value).v("importRoomKeys : decryptMegolmKeyFile done in ${t1 - t0} ms")
 
             val importedSessions = MoshiProvider.providesMoshi()
-                    .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
-                    .fromJson(roomKeys)
+                .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
+                .fromJson(roomKeys)
 
             val t2 = System.currentTimeMillis()
 
@@ -1035,9 +1045,9 @@ internal class DefaultCryptoService @Inject constructor(
             }
 
             megolmSessionDataImporter.handle(
-                    megolmSessionsData = importedSessions,
-                    fromBackup = false,
-                    progressListener = progressListener
+                megolmSessionsData = importedSessions,
+                fromBackup = false,
+                progressListener = progressListener
             )
         }
     }
@@ -1104,10 +1114,10 @@ internal class DefaultCryptoService @Inject constructor(
      * @param roomId the room id
      * @return true if the client should encrypt messages only for the verified devices.
      */
-// TODO add this info in CryptoRoomEntity?
+    // TODO add this info in CryptoRoomEntity?
     override fun isRoomBlacklistUnverifiedDevices(roomId: String?): Boolean {
         return roomId?.let { cryptoStore.getRoomsListBlacklistUnverifiedDevices().contains(it) }
-                ?: false
+            ?: false
     }
 
     /**
@@ -1148,7 +1158,7 @@ internal class DefaultCryptoService @Inject constructor(
         setRoomBlacklistUnverifiedDevices(roomId, false)
     }
 
-// TODO Check if this method is still necessary
+    // TODO Check if this method is still necessary
     /**
      * Cancel any earlier room key request
      *
@@ -1169,10 +1179,10 @@ internal class DefaultCryptoService @Inject constructor(
         }
 
         val requestBody = RoomKeyRequestBody(
-                algorithm = wireContent.algorithm,
-                roomId = event.roomId,
-                senderKey = wireContent.senderKey,
-                sessionId = wireContent.sessionId
+            algorithm = wireContent.algorithm,
+            roomId = event.roomId,
+            senderKey = wireContent.senderKey,
+            sessionId = wireContent.sessionId
         )
 
         outgoingGossipingRequestManager.resendRoomKeyRequest(requestBody)
@@ -1184,13 +1194,13 @@ internal class DefaultCryptoService @Inject constructor(
         }
 
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-//            if (!isStarted()) {
-//                Timber.v("## CRYPTO | requestRoomKeyForEvent() : wait after e2e init")
-//                internalStart(false)
-//            }
+            //            if (!isStarted()) {
+            //                Timber.v("## CRYPTO | requestRoomKeyForEvent() : wait after e2e init")
+            //                internalStart(false)
+            //            }
             roomDecryptorProvider
-                    .getOrCreateRoomDecryptor(event.roomId, wireContent.algorithm)
-                    ?.requestKeysForEvent(event, false) ?: run {
+                .getOrCreateRoomDecryptor(event.roomId, wireContent.algorithm)
+                ?.requestKeysForEvent(event, false) ?: run {
                 Timber.tag(loggerTag.value).v("requestRoomKeyForEvent() : No room decryptor for roomId:${event.roomId} algorithm:${wireContent.algorithm}")
             }
         }
@@ -1214,38 +1224,38 @@ internal class DefaultCryptoService @Inject constructor(
         incomingGossipingRequestManager.removeRoomKeysRequestListener(listener)
     }
 
-//    private fun markOlmSessionForUnwedging(senderId: String, deviceInfo: CryptoDeviceInfo) {
-//        val deviceKey = deviceInfo.identityKey()
-//
-//        val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
-//        val now = System.currentTimeMillis()
-//        if (now - lastForcedDate < CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
-//            Timber.d("## CRYPTO | markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
-//            return
-//        }
-//
-//        Timber.d("## CRYPTO | markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
-//        lastNewSessionForcedDates.setObject(senderId, deviceKey, now)
-//
-//        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-//            ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true)
-//
-//            // Now send a blank message on that session so the other side knows about it.
-//            // (The keyshare request is sent in the clear so that won't do)
-//            // We send this first such that, as long as the toDevice messages arrive in the
-//            // same order we sent them, the other end will get this first, set up the new session,
-//            // then get the keyshare request and send the key over this new session (because it
-//            // is the session it has most recently received a message on).
-//            val payloadJson = mapOf<String, Any>("type" to EventType.DUMMY)
-//
-//            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
-//            val sendToDeviceMap = MXUsersDevicesMap<Any>()
-//            sendToDeviceMap.setObject(senderId, deviceInfo.deviceId, encodedPayload)
-//            Timber.v("## CRYPTO | markOlmSessionForUnwedging() : sending to $senderId:${deviceInfo.deviceId}")
-//            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-//            sendToDeviceTask.execute(sendToDeviceParams)
-//        }
-//    }
+    //    private fun markOlmSessionForUnwedging(senderId: String, deviceInfo: CryptoDeviceInfo) {
+    //        val deviceKey = deviceInfo.identityKey()
+    //
+    //        val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
+    //        val now = System.currentTimeMillis()
+    //        if (now - lastForcedDate < CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
+    //            Timber.d("## CRYPTO | markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
+    //            return
+    //        }
+    //
+    //        Timber.d("## CRYPTO | markOlmSessionForUnwedging from $senderId:${deviceInfo.deviceId}")
+    //        lastNewSessionForcedDates.setObject(senderId, deviceKey, now)
+    //
+    //        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+    //            ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true)
+    //
+    //            // Now send a blank message on that session so the other side knows about it.
+    //            // (The keyshare request is sent in the clear so that won't do)
+    //            // We send this first such that, as long as the toDevice messages arrive in the
+    //            // same order we sent them, the other end will get this first, set up the new session,
+    //            // then get the keyshare request and send the key over this new session (because it
+    //            // is the session it has most recently received a message on).
+    //            val payloadJson = mapOf<String, Any>("type" to EventType.DUMMY)
+    //
+    //            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
+    //            val sendToDeviceMap = MXUsersDevicesMap<Any>()
+    //            sendToDeviceMap.setObject(senderId, deviceInfo.deviceId, encodedPayload)
+    //            Timber.v("## CRYPTO | markOlmSessionForUnwedging() : sending to $senderId:${deviceInfo.deviceId}")
+    //            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
+    //            sendToDeviceTask.execute(sendToDeviceParams)
+    //        }
+    //    }
 
     /**
      * Provides the list of unknown devices
@@ -1259,10 +1269,10 @@ internal class DefaultCryptoService @Inject constructor(
         for (userId in userIds) {
             devicesInRoom.getUserDeviceIds(userId)?.forEach { deviceId ->
                 devicesInRoom.getObject(userId, deviceId)
-                        ?.takeIf { it.isUnknown }
-                        ?.let {
-                            unknownDevices.setObject(userId, deviceId, it)
-                        }
+                    ?.takeIf { it.isUnknown }
+                    ?.let {
+                        unknownDevices.setObject(userId, deviceId, it)
+                    }
             }
         }
 
@@ -1284,9 +1294,9 @@ internal class DefaultCryptoService @Inject constructor(
     override fun removeSessionListener(listener: NewSessionListener) {
         roomDecryptorProvider.removeSessionListener(listener)
     }
-/* ==========================================================================================
- * DEBUG INFO
- * ========================================================================================== */
+    /* ==========================================================================================
+     * DEBUG INFO
+     * ========================================================================================== */
 
     override fun toString(): String {
         return "DefaultCryptoService of $userId ($deviceId)"
@@ -1342,9 +1352,9 @@ internal class DefaultCryptoService @Inject constructor(
 
             val userIds = getRoomUserIds(roomId)
             val alg = roomEncryptorsStore.get(roomId)
-                    ?: getEncryptionAlgorithm(roomId)
-                            ?.let { setEncryptionInRoom(roomId, it, false, userIds) }
-                            ?.let { roomEncryptorsStore.get(roomId) }
+                ?: getEncryptionAlgorithm(roomId)
+                    ?.let { setEncryptionInRoom(roomId, it, false, userIds) }
+                    ?.let { roomEncryptorsStore.get(roomId) }
 
             if (alg == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
@@ -1356,11 +1366,11 @@ internal class DefaultCryptoService @Inject constructor(
             runCatching {
                 (alg as? IMXGroupEncryption)?.preshareKey(userIds)
             }.fold(
-                    { callback.onSuccess(Unit) },
-                    {
-                        Timber.tag(loggerTag.value).e(it, "prepareToEncrypt() failed.")
-                        callback.onFailure(it)
-                    }
+                { callback.onSuccess(Unit) },
+                {
+                    Timber.tag(loggerTag.value).e(it, "prepareToEncrypt() failed.")
+                    callback.onFailure(it)
+                }
             )
         }
     }

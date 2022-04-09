@@ -47,22 +47,22 @@ import javax.inject.Inject
 internal interface CreateRoomTask : Task<CreateRoomParams, String>
 
 internal class DefaultCreateRoomTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val aliasAvailabilityChecker: RoomAliasAvailabilityChecker,
-        private val directChatsHelper: DirectChatsHelper,
-        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val readMarkersTask: SetReadMarkersTask,
-        @SessionDatabase
-        private val realmConfiguration: RealmConfiguration,
-        private val createRoomBodyBuilder: CreateRoomBodyBuilder,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val aliasAvailabilityChecker: RoomAliasAvailabilityChecker,
+    private val directChatsHelper: DirectChatsHelper,
+    private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+    private val readMarkersTask: SetReadMarkersTask,
+    @SessionDatabase
+    private val realmConfiguration: RealmConfiguration,
+    private val createRoomBodyBuilder: CreateRoomBodyBuilder,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : CreateRoomTask {
 
     override suspend fun execute(params: CreateRoomParams): String {
         val otherUserId = if (params.isDirect()) {
             params.getFirstInvitedUserId()
-                    ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
+                ?: throw IllegalStateException("You can't create a direct room without an invitedUser")
         } else null
 
         if (params.preset == CreateRoomPreset.PRESET_PUBLIC_CHAT) {
@@ -82,12 +82,14 @@ internal class DefaultCreateRoomTask @Inject constructor(
         } catch (throwable: Throwable) {
             if (throwable is Failure.ServerError) {
                 if (throwable.httpCode == 403 &&
-                        throwable.error.code == MatrixError.M_FORBIDDEN &&
-                        throwable.error.message.startsWith("Federation denied with")) {
+                    throwable.error.code == MatrixError.M_FORBIDDEN &&
+                    throwable.error.message.startsWith("Federation denied with")
+                ) {
                     throw CreateRoomFailure.CreatedWithFederationFailure(throwable.error)
                 } else if (throwable.httpCode == 400 &&
-                        throwable.error.code == MatrixError.M_UNKNOWN &&
-                        throwable.error.message == "Invalid characters in room alias") {
+                    throwable.error.code == MatrixError.M_UNKNOWN &&
+                    throwable.error.message == "Invalid characters in room alias"
+                ) {
                     throw CreateRoomFailure.AliasError(RoomAliasError.AliasInvalid)
                 }
             }
@@ -98,8 +100,8 @@ internal class DefaultCreateRoomTask @Inject constructor(
         try {
             awaitNotEmptyResult(realmConfiguration, TimeUnit.MINUTES.toMillis(1L)) { realm ->
                 realm.where(RoomSummaryEntity::class.java)
-                        .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
-                        .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+                    .equalTo(RoomSummaryEntityFields.ROOM_ID, roomId)
+                    .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
             }
         } catch (exception: TimeoutCancellationException) {
             throw CreateRoomFailure.CreatedWithTimeout(roomId)

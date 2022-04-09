@@ -24,26 +24,30 @@ import im.vector.app.features.notifications.NotificationDrawerManager.Companion.
 import timber.log.Timber
 import javax.inject.Inject
 
-class NotificationRenderer @Inject constructor(private val notificationDisplayer: NotificationDisplayer,
-                                               private val notificationFactory: NotificationFactory,
-                                               private val appContext: Context) {
+class NotificationRenderer @Inject constructor(
+    private val notificationDisplayer: NotificationDisplayer,
+    private val notificationFactory: NotificationFactory,
+    private val appContext: Context
+) {
 
     @WorkerThread
-    fun render(myUserId: String,
-               myUserDisplayName: String,
-               myUserAvatarUrl: String?,
-               useCompleteNotificationFormat: Boolean,
-               eventsToProcess: List<ProcessedEvent<NotifiableEvent>>) {
+    fun render(
+        myUserId: String,
+        myUserDisplayName: String,
+        myUserAvatarUrl: String?,
+        useCompleteNotificationFormat: Boolean,
+        eventsToProcess: List<ProcessedEvent<NotifiableEvent>>
+    ) {
         val (roomEvents, simpleEvents, invitationEvents) = eventsToProcess.groupByType()
         with(notificationFactory) {
             val roomNotifications = roomEvents.toNotifications(myUserDisplayName, myUserAvatarUrl)
             val invitationNotifications = invitationEvents.toNotifications(myUserId)
             val simpleNotifications = simpleEvents.toNotifications(myUserId)
             val summaryNotification = createSummaryNotification(
-                    roomNotifications = roomNotifications,
-                    invitationNotifications = invitationNotifications,
-                    simpleNotifications = simpleNotifications,
-                    useCompleteNotificationFormat = useCompleteNotificationFormat
+                roomNotifications = roomNotifications,
+                invitationNotifications = invitationNotifications,
+                simpleNotifications = simpleNotifications,
+                useCompleteNotificationFormat = useCompleteNotificationFormat
             )
 
             // Remove summary first to avoid briefly displaying it after dismissing the last notification
@@ -71,7 +75,7 @@ class NotificationRenderer @Inject constructor(private val notificationDisplayer
                         Timber.d("Removing invitation notification ${wrapper.key}")
                         notificationDisplayer.cancelNotificationMessage(wrapper.key, ROOM_INVITATION_NOTIFICATION_ID)
                     }
-                    is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
+                    is OneShotNotification.Append -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating invitation notification ${wrapper.meta.key}")
                         notificationDisplayer.showNotificationMessage(wrapper.meta.key, ROOM_INVITATION_NOTIFICATION_ID, wrapper.notification)
                     }
@@ -84,7 +88,7 @@ class NotificationRenderer @Inject constructor(private val notificationDisplayer
                         Timber.d("Removing simple notification ${wrapper.key}")
                         notificationDisplayer.cancelNotificationMessage(wrapper.key, ROOM_EVENT_NOTIFICATION_ID)
                     }
-                    is OneShotNotification.Append  -> if (useCompleteNotificationFormat) {
+                    is OneShotNotification.Append -> if (useCompleteNotificationFormat) {
                         Timber.d("Updating simple notification ${wrapper.meta.key}")
                         notificationDisplayer.showNotificationMessage(wrapper.meta.key, ROOM_EVENT_NOTIFICATION_ID, wrapper.notification)
                     }
@@ -106,12 +110,12 @@ private fun List<ProcessedEvent<NotifiableEvent>>.groupByType(): GroupedNotifica
     val invitationEvents: MutableList<ProcessedEvent<InviteNotifiableEvent>> = ArrayList()
     forEach {
         when (val event = it.event) {
-            is InviteNotifiableEvent  -> invitationEvents.add(it.castedToEventType())
+            is InviteNotifiableEvent -> invitationEvents.add(it.castedToEventType())
             is NotifiableMessageEvent -> {
                 val roomEvents = roomIdToEventMap.getOrPut(event.roomId) { ArrayList() }
                 roomEvents.add(it.castedToEventType())
             }
-            is SimpleNotifiableEvent  -> simpleEvents.add(it.castedToEventType())
+            is SimpleNotifiableEvent -> simpleEvents.add(it.castedToEventType())
         }
     }
     return GroupedNotificationEvents(roomIdToEventMap, simpleEvents, invitationEvents)
@@ -121,7 +125,7 @@ private fun List<ProcessedEvent<NotifiableEvent>>.groupByType(): GroupedNotifica
 private fun <T : NotifiableEvent> ProcessedEvent<NotifiableEvent>.castedToEventType(): ProcessedEvent<T> = this as ProcessedEvent<T>
 
 data class GroupedNotificationEvents(
-        val roomEvents: Map<String, List<ProcessedEvent<NotifiableMessageEvent>>>,
-        val simpleEvents: List<ProcessedEvent<SimpleNotifiableEvent>>,
-        val invitationEvents: List<ProcessedEvent<InviteNotifiableEvent>>
+    val roomEvents: Map<String, List<ProcessedEvent<NotifiableMessageEvent>>>,
+    val simpleEvents: List<ProcessedEvent<SimpleNotifiableEvent>>,
+    val invitationEvents: List<ProcessedEvent<InviteNotifiableEvent>>
 )

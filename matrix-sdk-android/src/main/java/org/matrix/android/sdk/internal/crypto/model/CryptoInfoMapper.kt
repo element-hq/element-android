@@ -23,42 +23,42 @@ internal object CryptoInfoMapper {
 
     fun map(deviceKeysWithUnsigned: DeviceKeysWithUnsigned): CryptoDeviceInfo {
         return CryptoDeviceInfo(
-                deviceId = deviceKeysWithUnsigned.deviceId,
-                userId = deviceKeysWithUnsigned.userId,
-                algorithms = deviceKeysWithUnsigned.algorithms,
-                keys = deviceKeysWithUnsigned.keys,
-                signatures = deviceKeysWithUnsigned.signatures,
-                unsigned = deviceKeysWithUnsigned.unsigned,
-                trustLevel = null
+            deviceId = deviceKeysWithUnsigned.deviceId,
+            userId = deviceKeysWithUnsigned.userId,
+            algorithms = deviceKeysWithUnsigned.algorithms,
+            keys = deviceKeysWithUnsigned.keys,
+            signatures = deviceKeysWithUnsigned.signatures,
+            unsigned = deviceKeysWithUnsigned.unsigned,
+            trustLevel = null
         )
     }
 
     fun map(cryptoDeviceInfo: CryptoDeviceInfo): DeviceKeys {
         return DeviceKeys(
-                deviceId = cryptoDeviceInfo.deviceId,
-                algorithms = cryptoDeviceInfo.algorithms,
-                keys = cryptoDeviceInfo.keys,
-                signatures = cryptoDeviceInfo.signatures,
-                userId = cryptoDeviceInfo.userId
+            deviceId = cryptoDeviceInfo.deviceId,
+            algorithms = cryptoDeviceInfo.algorithms,
+            keys = cryptoDeviceInfo.keys,
+            signatures = cryptoDeviceInfo.signatures,
+            userId = cryptoDeviceInfo.userId
         )
     }
 
     fun map(keyInfo: RestKeyInfo): CryptoCrossSigningKey {
         return CryptoCrossSigningKey(
-                userId = keyInfo.userId,
-                usages = keyInfo.usages,
-                keys = keyInfo.keys.orEmpty(),
-                signatures = keyInfo.signatures,
-                trustLevel = null
+            userId = keyInfo.userId,
+            usages = keyInfo.usages,
+            keys = keyInfo.keys.orEmpty(),
+            signatures = keyInfo.signatures,
+            trustLevel = null
         )
     }
 
     fun map(keyInfo: CryptoCrossSigningKey): RestKeyInfo {
         return RestKeyInfo(
-                userId = keyInfo.userId,
-                usages = keyInfo.usages,
-                keys = keyInfo.keys,
-                signatures = keyInfo.signatures
+            userId = keyInfo.userId,
+            usages = keyInfo.usages,
+            keys = keyInfo.keys,
+            signatures = keyInfo.signatures
         )
     }
 }

@@ -26,7 +26,7 @@ class MigrateCryptoTo006(realm: DynamicRealm) : RealmMigrator(realm, 6) {
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Updating CryptoMetadataEntity table")
         realm.schema.get("CryptoMetadataEntity")
-                ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY, String::class.java)
-                ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY_VERSION, String::class.java)
+            ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY, String::class.java)
+            ?.addField(CryptoMetadataEntityFields.KEY_BACKUP_RECOVERY_KEY_VERSION, String::class.java)
     }
 }

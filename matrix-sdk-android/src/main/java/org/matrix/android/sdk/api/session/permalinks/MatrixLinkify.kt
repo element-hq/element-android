@@ -51,11 +51,12 @@ object MatrixLinkify {
                     val endPos = match.range.last + 1
                     var url = text.substring(match.range)
                     if (MatrixPatterns.isUserId(url) ||
-                            MatrixPatterns.isRoomAlias(url) ||
-                            MatrixPatterns.isRoomId(url) ||
-                            MatrixPatterns.isGroupId(url) ||
-                            MatrixPatterns.isEventId(url)) {
-                        url = PermalinkService.MATRIX_TO_URL_BASE  + url
+                        MatrixPatterns.isRoomAlias(url) ||
+                        MatrixPatterns.isRoomId(url) ||
+                        MatrixPatterns.isGroupId(url) ||
+                        MatrixPatterns.isEventId(url)
+                    ) {
+                        url = PermalinkService.MATRIX_TO_URL_BASE + url
                     }
                     val span = MatrixPermalinkSpan(url, callback)
                     spannable.setSpan(span, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -64,6 +65,6 @@ object MatrixLinkify {
         }
         return hasMatch
 
-//        return false
+        //        return false
     }
 }

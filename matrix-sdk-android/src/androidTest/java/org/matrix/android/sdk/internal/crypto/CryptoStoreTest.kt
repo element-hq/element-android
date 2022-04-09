@@ -43,22 +43,22 @@ class CryptoStoreTest : InstrumentedTest {
         Realm.init(context())
     }
 
-//    @Test
-//    fun test_metadata_realm_ok() {
-//        val cryptoStore: IMXCryptoStore = cryptoStoreHelper.createStore()
-//
-//        assertFalse(cryptoStore.hasData())
-//
-//        cryptoStore.open()
-//
-//        assertEquals("deviceId_sample", cryptoStore.getDeviceId())
-//
-//        assertTrue(cryptoStore.hasData())
-//
-//        // Cleanup
-//        cryptoStore.close()
-//        cryptoStore.deleteStore()
-//    }
+    //    @Test
+    //    fun test_metadata_realm_ok() {
+    //        val cryptoStore: IMXCryptoStore = cryptoStoreHelper.createStore()
+    //
+    //        assertFalse(cryptoStore.hasData())
+    //
+    //        cryptoStore.open()
+    //
+    //        assertEquals("deviceId_sample", cryptoStore.getDeviceId())
+    //
+    //        assertTrue(cryptoStore.hasData())
+    //
+    //        // Cleanup
+    //        cryptoStore.close()
+    //        cryptoStore.deleteStore()
+    //    }
 
     @Test
     fun test_lastSessionUsed() {
@@ -74,9 +74,11 @@ class CryptoStoreTest : InstrumentedTest {
         }
 
         val olmSession1 = OlmSession().apply {
-            initOutboundSession(olmAccount1,
-                    olmAccount1.identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY],
-                    olmAccount1.oneTimeKeys()[OlmAccount.JSON_KEY_ONE_TIME_KEY]?.values?.first())
+            initOutboundSession(
+                olmAccount1,
+                olmAccount1.identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY],
+                olmAccount1.oneTimeKeys()[OlmAccount.JSON_KEY_ONE_TIME_KEY]?.values?.first()
+            )
         }
 
         val sessionId1 = olmSession1.sessionIdentifier()
@@ -91,9 +93,11 @@ class CryptoStoreTest : InstrumentedTest {
         }
 
         val olmSession2 = OlmSession().apply {
-            initOutboundSession(olmAccount2,
-                    olmAccount2.identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY],
-                    olmAccount2.oneTimeKeys()[OlmAccount.JSON_KEY_ONE_TIME_KEY]?.values?.first())
+            initOutboundSession(
+                olmAccount2,
+                olmAccount2.identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY],
+                olmAccount2.oneTimeKeys()[OlmAccount.JSON_KEY_ONE_TIME_KEY]?.values?.first()
+            )
         }
 
         val sessionId2 = olmSession2.sessionIdentifier()

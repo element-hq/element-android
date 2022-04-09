@@ -182,8 +182,8 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .onEach { onClicked() }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach { onClicked() }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     /* ==========================================================================================
@@ -192,10 +192,10 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
         viewEvents
-                .stream()
-                .onEach {
-                    observer(it)
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .stream()
+            .onEach {
+                observer(it)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }

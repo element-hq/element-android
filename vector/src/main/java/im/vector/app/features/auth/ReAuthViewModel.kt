@@ -29,8 +29,8 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import java.io.ByteArrayOutputStream
 
 class ReAuthViewModel @AssistedInject constructor(
-        @Assisted val initialState: ReAuthState,
-        private val session: Session
+    @Assisted val initialState: ReAuthState,
+    private val session: Session
 ) : VectorViewModel<ReAuthState, ReAuthActions, ReAuthEvents>(initialState) {
 
     @AssistedFactory

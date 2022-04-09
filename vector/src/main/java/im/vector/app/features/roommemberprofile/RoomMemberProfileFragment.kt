@@ -64,17 +64,17 @@ import javax.inject.Inject
 
 @Parcelize
 data class RoomMemberProfileArgs(
-        val userId: String,
-        val roomId: String? = null
+    val userId: String,
+    val roomId: String? = null
 ) : Parcelable
 
 class RoomMemberProfileFragment @Inject constructor(
-        private val roomMemberProfileController: RoomMemberProfileController,
-        private val avatarRenderer: AvatarRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
-        private val matrixItemColorProvider: MatrixItemColorProvider
+    private val roomMemberProfileController: RoomMemberProfileController,
+    private val avatarRenderer: AvatarRenderer,
+    private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
+    private val matrixItemColorProvider: MatrixItemColorProvider
 ) : VectorBaseFragment<FragmentMatrixProfileBinding>(),
-        RoomMemberProfileController.Callback {
+    RoomMemberProfileController.Callback {
 
     private lateinit var headerViews: ViewStubRoomMemberProfileHeaderBinding
 
@@ -97,7 +97,7 @@ class RoomMemberProfileFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.matrixProfileToolbar)
-                .allowBack()
+            .allowBack()
         val headerView = views.matrixProfileHeaderView.let {
             it.layoutResource = R.layout.view_stub_room_member_profile_header
             it.inflate()
@@ -111,28 +111,29 @@ class RoomMemberProfileFragment @Inject constructor(
         headerViews.memberProfileStateView.contentView = headerViews.memberProfileInfoContainer
         views.matrixProfileRecyclerView.configureWith(roomMemberProfileController, hasFixedSize = true, disableItemAnimation = true)
         roomMemberProfileController.callback = this
-        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(headerView,
-                listOf(
-                        views.matrixProfileToolbarAvatarImageView,
-                        views.matrixProfileToolbarTitleView,
-                        views.matrixProfileDecorationToolbarAvatarImageView
-                )
+        appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
+            headerView,
+            listOf(
+                views.matrixProfileToolbarAvatarImageView,
+                views.matrixProfileToolbarTitleView,
+                views.matrixProfileDecorationToolbarAvatarImageView
+            )
         )
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         viewModel.observeViewEvents {
             when (it) {
-                is RoomMemberProfileViewEvents.Loading                     -> showLoading(it.message)
-                is RoomMemberProfileViewEvents.Failure                     -> showFailure(it.throwable)
-                is RoomMemberProfileViewEvents.StartVerification           -> handleStartVerification(it)
-                is RoomMemberProfileViewEvents.ShareRoomMemberProfile      -> handleShareRoomMemberProfile(it.permalink)
-                is RoomMemberProfileViewEvents.ShowPowerLevelValidation    -> handleShowPowerLevelAdminWarning(it)
+                is RoomMemberProfileViewEvents.Loading -> showLoading(it.message)
+                is RoomMemberProfileViewEvents.Failure -> showFailure(it.throwable)
+                is RoomMemberProfileViewEvents.StartVerification -> handleStartVerification(it)
+                is RoomMemberProfileViewEvents.ShareRoomMemberProfile -> handleShareRoomMemberProfile(it.permalink)
+                is RoomMemberProfileViewEvents.ShowPowerLevelValidation -> handleShowPowerLevelAdminWarning(it)
                 is RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning -> handleShowPowerLevelDemoteWarning(it)
-                is RoomMemberProfileViewEvents.OpenRoom                    -> handleOpenRoom(it)
-                is RoomMemberProfileViewEvents.OnKickActionSuccess         -> Unit
-                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess      -> Unit
-                is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
-                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> Unit
-                is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
+                is RoomMemberProfileViewEvents.OpenRoom -> handleOpenRoom(it)
+                is RoomMemberProfileViewEvents.OnKickActionSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnBanActionSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess -> Unit
+                is RoomMemberProfileViewEvents.OnInviteActionSuccess -> Unit
             }
         }
         setupLongClicks()
@@ -172,19 +173,19 @@ class RoomMemberProfileFragment @Inject constructor(
     private fun handleStartVerification(startVerification: RoomMemberProfileViewEvents.StartVerification) {
         if (startVerification.canCrossSign) {
             VerificationBottomSheet
-                    .withArgs(roomId = null, otherUserId = startVerification.userId)
-                    .show(parentFragmentManager, "VERIF")
+                .withArgs(roomId = null, otherUserId = startVerification.userId)
+                .show(parentFragmentManager, "VERIF")
         } else {
             MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.dialog_title_warning)
-                    .setMessage(R.string.verify_cannot_cross_sign)
-                    .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
-                        VerificationBottomSheet
-                                .withArgs(roomId = null, otherUserId = startVerification.userId)
-                                .show(parentFragmentManager, "VERIF")
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.dialog_title_warning)
+                .setMessage(R.string.verify_cannot_cross_sign)
+                .setPositiveButton(R.string.verification_profile_verify) { _, _ ->
+                    VerificationBottomSheet
+                        .withArgs(roomId = null, otherUserId = startVerification.userId)
+                        .show(parentFragmentManager, "VERIF")
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
     }
 
@@ -204,7 +205,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
                 headerViews.memberProfileStateView.state = StateView.State.Loading
             }
-            is Fail    -> {
+            is Fail -> {
                 avatarRenderer.render(MatrixItem.UserItem(state.userId, null, null), views.matrixProfileToolbarAvatarImageView)
                 views.matrixProfileToolbarTitleView.text = state.userId
                 val failureMessage = errorFormatter.toHumanReadable(asyncUserMatrixItem.error)
@@ -278,16 +279,16 @@ class RoomMemberProfileFragment @Inject constructor(
             positiveButtonRes = R.string.room_participants_action_ignore
         }
         ConfirmationDialogBuilder
-                .show(
-                        activity = requireActivity(),
-                        askForReason = false,
-                        confirmationRes = confirmationRes,
-                        positiveRes = positiveButtonRes,
-                        reasonHintRes = 0,
-                        titleRes = titleRes
-                ) {
-                    viewModel.handle(RoomMemberProfileAction.IgnoreUser)
-                }
+            .show(
+                activity = requireActivity(),
+                askForReason = false,
+                confirmationRes = confirmationRes,
+                positiveRes = positiveButtonRes,
+                reasonHintRes = 0,
+                titleRes = titleRes
+            ) {
+                viewModel.handle(RoomMemberProfileAction.IgnoreUser)
+            }
     }
 
     override fun onTapVerify() {
@@ -321,16 +322,16 @@ class RoomMemberProfileFragment @Inject constructor(
         val views = DialogShareQrCodeBinding.bind(view)
         views.itemShareQrCodeImage.setData(permalink)
         MaterialAlertDialogBuilder(requireContext())
-                .setView(view)
-                .setNeutralButton(R.string.ok, null)
-                .setPositiveButton(R.string.share_by_text) { _, _ ->
-                    startSharePlainTextIntent(
-                            fragment = this,
-                            activityResultLauncher = null,
-                            chooserTitle = null,
-                            text = permalink
-                    )
-                }.show()
+            .setView(view)
+            .setNeutralButton(R.string.ok, null)
+            .setPositiveButton(R.string.share_by_text) { _, _ ->
+                startSharePlainTextIntent(
+                    fragment = this,
+                    activityResultLauncher = null,
+                    chooserTitle = null,
+                    text = permalink
+                )
+            }.show()
     }
 
     private fun onAvatarClicked(view: View, userMatrixItem: MatrixItem) {
@@ -345,16 +346,16 @@ class RoomMemberProfileFragment @Inject constructor(
         views.editText.hint = "#000000"
 
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.room_member_override_nick_color)
-                .setView(layout)
-                .setPositiveButton(R.string.ok) { _, _ ->
-                    val newColor = views.editText.text.toString()
-                    if (newColor != state.userColorOverride) {
-                        viewModel.handle(RoomMemberProfileAction.SetUserColorOverride(newColor))
-                    }
+            .setTitle(R.string.room_member_override_nick_color)
+            .setView(layout)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                val newColor = views.editText.text.toString()
+                if (newColor != state.userColorOverride) {
+                    viewModel.handle(RoomMemberProfileAction.SetUserColorOverride(newColor))
                 }
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
+            }
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
     }
 
     override fun onEditPowerLevel(currentRole: Role) {
@@ -365,17 +366,17 @@ class RoomMemberProfileFragment @Inject constructor(
 
     override fun onKickClicked(isSpace: Boolean) {
         ConfirmationDialogBuilder
-                .show(
-                        activity = requireActivity(),
-                        askForReason = true,
-                        confirmationRes = if (isSpace) R.string.space_participants_remove_prompt_msg
-                        else R.string.room_participants_remove_prompt_msg,
-                        positiveRes = R.string.room_participants_action_remove,
-                        reasonHintRes = R.string.room_participants_remove_reason,
-                        titleRes = R.string.room_participants_remove_title
-                ) { reason ->
-                    viewModel.handle(RoomMemberProfileAction.KickUser(reason))
-                }
+            .show(
+                activity = requireActivity(),
+                askForReason = true,
+                confirmationRes = if (isSpace) R.string.space_participants_remove_prompt_msg
+                else R.string.room_participants_remove_prompt_msg,
+                positiveRes = R.string.room_participants_action_remove,
+                reasonHintRes = R.string.room_participants_remove_reason,
+                titleRes = R.string.room_participants_remove_title
+            ) { reason ->
+                viewModel.handle(RoomMemberProfileAction.KickUser(reason))
+            }
     }
 
     override fun onBanClicked(isSpace: Boolean, isUserBanned: Boolean) {
@@ -394,30 +395,30 @@ class RoomMemberProfileFragment @Inject constructor(
             positiveButtonRes = R.string.room_participants_action_ban
         }
         ConfirmationDialogBuilder
-                .show(
-                        activity = requireActivity(),
-                        askForReason = !isUserBanned,
-                        confirmationRes = confirmationRes,
-                        positiveRes = positiveButtonRes,
-                        reasonHintRes = R.string.room_participants_ban_reason,
-                        titleRes = titleRes
-                ) { reason ->
-                    viewModel.handle(RoomMemberProfileAction.BanOrUnbanUser(reason))
-                }
+            .show(
+                activity = requireActivity(),
+                askForReason = !isUserBanned,
+                confirmationRes = confirmationRes,
+                positiveRes = positiveButtonRes,
+                reasonHintRes = R.string.room_participants_ban_reason,
+                titleRes = titleRes
+            ) { reason ->
+                viewModel.handle(RoomMemberProfileAction.BanOrUnbanUser(reason))
+            }
     }
 
     override fun onCancelInviteClicked() {
         ConfirmationDialogBuilder
-                .show(
-                        activity = requireActivity(),
-                        askForReason = false,
-                        confirmationRes = R.string.room_participants_action_cancel_invite_prompt_msg,
-                        positiveRes = R.string.room_participants_action_cancel_invite,
-                        reasonHintRes = 0,
-                        titleRes = R.string.room_participants_action_cancel_invite_title
-                ) {
-                    viewModel.handle(RoomMemberProfileAction.KickUser(null))
-                }
+            .show(
+                activity = requireActivity(),
+                askForReason = false,
+                confirmationRes = R.string.room_participants_action_cancel_invite_prompt_msg,
+                positiveRes = R.string.room_participants_action_cancel_invite,
+                reasonHintRes = 0,
+                titleRes = R.string.room_participants_action_cancel_invite_title
+            ) {
+                viewModel.handle(RoomMemberProfileAction.KickUser(null))
+            }
     }
 
     override fun onInviteClicked() {

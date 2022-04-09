@@ -27,9 +27,9 @@ import javax.inject.Inject
 internal interface IdentityDisconnectTask : Task<Unit, Unit>
 
 internal class DefaultIdentityDisconnectTask @Inject constructor(
-        private val identityApiProvider: IdentityApiProvider,
-        @AuthenticatedIdentity
-        private val accessTokenProvider: AccessTokenProvider
+    private val identityApiProvider: IdentityApiProvider,
+    @AuthenticatedIdentity
+    private val accessTokenProvider: AccessTokenProvider
 ) : IdentityDisconnectTask {
 
     override suspend fun execute(params: Unit) {

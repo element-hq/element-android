@@ -36,14 +36,14 @@ class MyAppGlideModule : AppGlideModule() {
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         registry.append(
-                ImageContentRenderer.Data::class.java,
-                InputStream::class.java,
-                VectorGlideModelLoaderFactory(context)
+            ImageContentRenderer.Data::class.java,
+            InputStream::class.java,
+            VectorGlideModelLoaderFactory(context)
         )
         registry.append(
-                AvatarPlaceholder::class.java,
-                Drawable::class.java,
-                AvatarPlaceholderModelLoaderFactory(context)
+            AvatarPlaceholder::class.java,
+            Drawable::class.java,
+            AvatarPlaceholderModelLoaderFactory(context)
         )
     }
 }

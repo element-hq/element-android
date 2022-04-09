@@ -37,12 +37,13 @@ internal interface TaskInfo {
         const val TYPE_REDACT = "TYPE_REDACT"
 
         private val moshi = Moshi.Builder()
-                .add(RuntimeJsonAdapterFactory.of(TaskInfo::class.java, "type", FallbackTaskInfo::class.java)
-                        .registerSubtype(SendEventTaskInfo::class.java, TYPE_SEND)
-                        .registerSubtype(RedactEventTaskInfo::class.java, TYPE_REDACT)
-                )
-                .add(SerializeNulls.JSON_ADAPTER_FACTORY)
-                .build()
+            .add(
+                RuntimeJsonAdapterFactory.of(TaskInfo::class.java, "type", FallbackTaskInfo::class.java)
+                    .registerSubtype(SendEventTaskInfo::class.java, TYPE_SEND)
+                    .registerSubtype(RedactEventTaskInfo::class.java, TYPE_REDACT)
+            )
+            .add(SerializeNulls.JSON_ADAPTER_FACTORY)
+            .build()
 
         fun map(info: TaskInfo): String {
             return moshi.adapter(TaskInfo::class.java).toJson(info)
@@ -56,21 +57,21 @@ internal interface TaskInfo {
 
 @JsonClass(generateAdapter = true)
 internal data class SendEventTaskInfo(
-        @Json(name = "type") override val type: String = TaskInfo.TYPE_SEND,
-        @Json(name = "localEchoId") val localEchoId: String,
-        @Json(name = "encrypt") val encrypt: Boolean?,
-        @Json(name = "order") override val order: Int
+    @Json(name = "type") override val type: String = TaskInfo.TYPE_SEND,
+    @Json(name = "localEchoId") val localEchoId: String,
+    @Json(name = "encrypt") val encrypt: Boolean?,
+    @Json(name = "order") override val order: Int
 ) : TaskInfo
 
 @JsonClass(generateAdapter = true)
 internal data class RedactEventTaskInfo(
-        @Json(name = "type") override val type: String = TaskInfo.TYPE_REDACT,
-        @Json(name = "redactionLocalEcho") val redactionLocalEcho: String?,
-        @Json(name = "order") override val order: Int
+    @Json(name = "type") override val type: String = TaskInfo.TYPE_REDACT,
+    @Json(name = "redactionLocalEcho") val redactionLocalEcho: String?,
+    @Json(name = "order") override val order: Int
 ) : TaskInfo
 
 @JsonClass(generateAdapter = true)
 internal data class FallbackTaskInfo(
-        @Json(name = "type") override val type: String = TaskInfo.TYPE_UNKNOWN,
-        @Json(name = "order") override val order: Int
+    @Json(name = "type") override val type: String = TaskInfo.TYPE_UNKNOWN,
+    @Json(name = "order") override val order: Int
 ) : TaskInfo

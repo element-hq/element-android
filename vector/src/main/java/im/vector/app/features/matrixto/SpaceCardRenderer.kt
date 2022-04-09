@@ -34,15 +34,17 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class SpaceCardRenderer @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val stringProvider: StringProvider
+    private val avatarRenderer: AvatarRenderer,
+    private val stringProvider: StringProvider
 ) {
 
-    fun render(spaceSummary: RoomSummary?,
-               peopleYouKnow: List<User>,
-               matrixLinkCallback: TimelineEventController.UrlClickCallback?,
-               inCard: FragmentMatrixToRoomSpaceCardBinding,
-               showDescription: Boolean) {
+    fun render(
+        spaceSummary: RoomSummary?,
+        peopleYouKnow: List<User>,
+        matrixLinkCallback: TimelineEventController.UrlClickCallback?,
+        inCard: FragmentMatrixToRoomSpaceCardBinding,
+        showDescription: Boolean
+    ) {
         if (spaceSummary == null) {
             inCard.matrixToCardContentVisibility.isVisible = false
             inCard.matrixToCardButtonLoading.isVisible = true
@@ -87,10 +89,12 @@ class SpaceCardRenderer @Inject constructor(
         })
     }
 
-    fun render(spaceChildInfo: SpaceChildInfo?,
-               peopleYouKnow: List<User>,
-               matrixLinkCallback: TimelineEventController.UrlClickCallback?,
-               inCard: FragmentMatrixToRoomSpaceCardBinding) {
+    fun render(
+        spaceChildInfo: SpaceChildInfo?,
+        peopleYouKnow: List<User>,
+        matrixLinkCallback: TimelineEventController.UrlClickCallback?,
+        inCard: FragmentMatrixToRoomSpaceCardBinding
+    ) {
         if (spaceChildInfo == null) {
             inCard.matrixToCardContentVisibility.isVisible = false
             inCard.matrixToCardButtonLoading.isVisible = true
@@ -125,11 +129,11 @@ class SpaceCardRenderer @Inject constructor(
 
     fun renderPeopleYouKnow(inCard: FragmentMatrixToRoomSpaceCardBinding, peopleYouKnow: List<MatrixItem.UserItem>) {
         val images = listOf(
-                inCard.knownMember1,
-                inCard.knownMember2,
-                inCard.knownMember3,
-                inCard.knownMember4,
-                inCard.knownMember5
+            inCard.knownMember1,
+            inCard.knownMember2,
+            inCard.knownMember3,
+            inCard.knownMember4,
+            inCard.knownMember5
         ).onEach { it.isGone = true }
 
         if (peopleYouKnow.isEmpty()) {
@@ -140,10 +144,11 @@ class SpaceCardRenderer @Inject constructor(
                 avatarRenderer.render(item, images[index])
             }
             inCard.peopleYouMayKnowText.setTextOrHide(
-                    stringProvider.getQuantityString(R.plurals.space_people_you_know,
-                            peopleYouKnow.count(),
-                            peopleYouKnow.count()
-                    )
+                stringProvider.getQuantityString(
+                    R.plurals.space_people_you_know,
+                    peopleYouKnow.count(),
+                    peopleYouKnow.count()
+                )
             )
         }
     }

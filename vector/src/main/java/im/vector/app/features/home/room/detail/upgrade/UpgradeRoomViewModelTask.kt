@@ -24,8 +24,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class UpgradeRoomViewModelTask @Inject constructor(
-        val session: Session,
-        val stringProvider: StringProvider
+    val session: Session,
+    val stringProvider: StringProvider
 ) : ViewModelTask<UpgradeRoomViewModelTask.Params, UpgradeRoomViewModelTask.Result> {
 
     sealed class Result {
@@ -37,18 +37,18 @@ class UpgradeRoomViewModelTask @Inject constructor(
     }
 
     data class Params(
-            val roomId: String,
-            val newVersion: String,
-            val userIdsToAutoInvite: List<String> = emptyList(),
-            val parentSpaceToUpdate: List<String> = emptyList(),
-            val progressReporter: ((indeterminate: Boolean, progress: Int, total: Int) -> Unit)? = null
+        val roomId: String,
+        val newVersion: String,
+        val userIdsToAutoInvite: List<String> = emptyList(),
+        val parentSpaceToUpdate: List<String> = emptyList(),
+        val progressReporter: ((indeterminate: Boolean, progress: Int, total: Int) -> Unit)? = null
     )
 
     override suspend fun execute(params: Params): Result {
         params.progressReporter?.invoke(true, 0, 0)
 
         val room = session.getRoom(params.roomId)
-                ?: return Result.UnknownRoom
+            ?: return Result.UnknownRoom
         if (!room.userMayUpgradeRoom(session.myUserId)) {
             return Result.NotAllowed
         }
@@ -77,11 +77,11 @@ class UpgradeRoomViewModelTask @Inject constructor(
                     val currentInfo = parentSpace.getChildInfo(params.roomId)
                     if (currentInfo != null) {
                         parentSpace.addChildren(
-                                roomId = updatedRoomId,
-                                viaServers = currentInfo.via,
-                                order = currentInfo.order,
-//                                autoJoin = currentInfo.autoJoin ?: false,
-                                suggested = currentInfo.suggested
+                            roomId = updatedRoomId,
+                            viaServers = currentInfo.via,
+                            order = currentInfo.order,
+                            //                                autoJoin = currentInfo.autoJoin ?: false,
+                            suggested = currentInfo.suggested
                         )
 
                         parentSpace.removeChildren(params.roomId)

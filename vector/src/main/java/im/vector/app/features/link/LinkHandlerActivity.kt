@@ -59,16 +59,16 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     private fun handleIntent() {
         val uri = intent.data
         when {
-            uri == null                                                                    -> {
+            uri == null -> {
                 // Should not happen
                 Timber.w("Uri is null")
                 finish()
             }
-            uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null                 -> handleConfigUrl(uri)
-            uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE)                 -> handleSupportedHostUrl()
-            uri.toString().startsWith(PermalinkHandler.MATRIX_TO_CUSTOM_SCHEME_URL_BASE)   -> handleSupportedHostUrl()
+            uri.getQueryParameter(LoginConfig.CONFIG_HS_PARAMETER) != null -> handleConfigUrl(uri)
+            uri.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> handleSupportedHostUrl()
+            uri.toString().startsWith(PermalinkHandler.MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> handleSupportedHostUrl()
             resources.getStringArray(R.array.permalink_supported_hosts).contains(uri.host) -> handleSupportedHostUrl()
-            else                                                                           -> {
+            else -> {
                 // Other links are not yet handled, but should not come here (manifest configuration error?)
                 toast(R.string.universal_link_malformed)
                 finish()
@@ -105,9 +105,9 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
      */
     private fun startLoginActivity(uri: Uri? = null) {
         navigator.openLogin(
-                context = this,
-                loginConfig = uri?.let { LoginConfig.parse(uri) },
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            context = this,
+            loginConfig = uri?.let { LoginConfig.parse(uri) },
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         )
         finish()
     }
@@ -117,12 +117,12 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
      */
     private fun displayAlreadyLoginPopup(uri: Uri) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_title_warning)
-                .setMessage(R.string.error_user_already_logged_in)
-                .setCancelable(false)
-                .setPositiveButton(R.string.logout) { _, _ -> safeSignout(uri) }
-                .setNegativeButton(R.string.action_cancel) { _, _ -> finish() }
-                .show()
+            .setTitle(R.string.dialog_title_warning)
+            .setMessage(R.string.error_user_already_logged_in)
+            .setCancelable(false)
+            .setPositiveButton(R.string.logout) { _, _ -> safeSignout(uri) }
+            .setNegativeButton(R.string.action_cancel) { _, _ -> finish() }
+            .show()
     }
 
     private fun safeSignout(uri: Uri) {
@@ -146,10 +146,10 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
 
     private fun displayError(failure: Throwable) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(failure))
-                .setCancelable(false)
-                .setPositiveButton(R.string.ok) { _, _ -> finish() }
-                .show()
+            .setTitle(R.string.dialog_title_error)
+            .setMessage(errorFormatter.toHumanReadable(failure))
+            .setCancelable(false)
+            .setPositiveButton(R.string.ok) { _, _ -> finish() }
+            .show()
     }
 }

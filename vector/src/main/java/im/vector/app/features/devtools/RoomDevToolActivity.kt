@@ -58,7 +58,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
 
     @Parcelize
     data class Args(
-            val roomId: String
+        val roomId: String
     ) : Parcelable
 
     override fun initUiAndData() {
@@ -69,12 +69,12 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
 
         viewModel.observeViewEvents {
             when (it) {
-                DevToolsViewEvents.Dismiss             -> finish()
+                DevToolsViewEvents.Dismiss -> finish()
                 is DevToolsViewEvents.ShowAlertMessage -> {
                     MaterialAlertDialogBuilder(this)
-                            .setMessage(it.message)
-                            .setPositiveButton(R.string.ok, null)
-                            .show()
+                        .setMessage(it.message)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
                     Unit
                 }
                 is DevToolsViewEvents.ShowSnackMessage -> showSnackbar(it.message)
@@ -86,7 +86,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
     private fun renderState(it: RoomDevToolViewState) {
         if (it.displayMode != currentDisplayMode) {
             when (it.displayMode) {
-                RoomDevToolViewState.Mode.Root                 -> {
+                RoomDevToolViewState.Mode.Root -> {
                     val classJava = RoomDevToolFragment::class.java
                     val tag = classJava.name
                     if (supportFragmentManager.findFragmentByTag(tag) == null) {
@@ -95,12 +95,12 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
                         supportFragmentManager.popBackStack()
                     }
                 }
-                RoomDevToolViewState.Mode.StateEventDetail     -> {
+                RoomDevToolViewState.Mode.StateEventDetail -> {
                     val frag = JSonViewerFragment.newInstance(
-                            jsonString = it.selectedEventJson ?: "",
-                            initialOpenDepth = -1,
-                            wrap = true,
-                            styleProvider = createJSonViewerStyleProvider(colorProvider)
+                        jsonString = it.selectedEventJson ?: "",
+                        initialOpenDepth = -1,
+                        wrap = true,
+                        styleProvider = createJSonViewerStyleProvider(colorProvider)
                     )
                     navigateTo(frag)
                 }
@@ -109,11 +109,11 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
                     val frag = createFragment(RoomDevToolStateEventListFragment::class.java)
                     navigateTo(frag)
                 }
-                RoomDevToolViewState.Mode.EditEventContent     -> {
+                RoomDevToolViewState.Mode.EditEventContent -> {
                     val frag = createFragment(RoomDevToolEditFragment::class.java)
                     navigateTo(frag)
                 }
-                is RoomDevToolViewState.Mode.SendEventForm     -> {
+                is RoomDevToolViewState.Mode.SendEventForm -> {
                     val frag = createFragment(RoomDevToolSendFormFragment::class.java)
                     navigateTo(frag)
                 }
@@ -123,9 +123,9 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
         }
 
         when (it.modalLoading) {
-            is Loading    -> showWaitingView()
-            is Success    -> hideWaitingView()
-            is Fail       -> {
+            is Loading -> showWaitingView()
+            is Success -> hideWaitingView()
+            is Fail -> {
                 hideWaitingView()
             }
             Uninitialized -> {
@@ -153,17 +153,17 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
         val tag = fragment.javaClass.name
         if (supportFragmentManager.findFragmentByTag(tag) == null) {
             supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+                .replace(views.container.id, fragment, tag)
+                .addToBackStack(tag)
+                .commit()
+        } else {
+            if (!supportFragmentManager.popBackStackImmediate(tag, 0)) {
+                supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
                     .replace(views.container.id, fragment, tag)
                     .addToBackStack(tag)
                     .commit()
-        } else {
-            if (!supportFragmentManager.popBackStackImmediate(tag, 0)) {
-                supportFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                        .replace(views.container.id, fragment, tag)
-                        .addToBackStack(tag)
-                        .commit()
             }
         }
     }
@@ -184,7 +184,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
                     state.displayMode is RoomDevToolViewState.Mode.EditEventContent ||
                             state.displayMode is RoomDevToolViewState.Mode.SendEventForm
                 }
-                else              -> true
+                else -> true
             }
             it.isVisible = isVisible
         }
@@ -206,25 +206,25 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
 
     private fun updateToolBar(state: RoomDevToolViewState) {
         val title = when (state.displayMode) {
-            RoomDevToolViewState.Mode.Root                 -> {
+            RoomDevToolViewState.Mode.Root -> {
                 getString(getTitleRes())
             }
-            RoomDevToolViewState.Mode.StateEventList       -> {
+            RoomDevToolViewState.Mode.StateEventList -> {
                 getString(R.string.dev_tools_state_event)
             }
-            RoomDevToolViewState.Mode.StateEventDetail     -> {
+            RoomDevToolViewState.Mode.StateEventDetail -> {
                 state.selectedEvent?.type
             }
-            RoomDevToolViewState.Mode.EditEventContent     -> {
+            RoomDevToolViewState.Mode.EditEventContent -> {
                 getString(R.string.dev_tools_edit_content)
             }
             RoomDevToolViewState.Mode.StateEventListByType -> {
                 state.currentStateType ?: ""
             }
-            is RoomDevToolViewState.Mode.SendEventForm     -> {
+            is RoomDevToolViewState.Mode.SendEventForm -> {
                 getString(
-                        if (state.displayMode.isState) R.string.dev_tools_send_custom_state_event
-                        else R.string.dev_tools_send_custom_event
+                    if (state.displayMode.isState) R.string.dev_tools_send_custom_state_event
+                    else R.string.dev_tools_send_custom_event
                 )
             }
         }

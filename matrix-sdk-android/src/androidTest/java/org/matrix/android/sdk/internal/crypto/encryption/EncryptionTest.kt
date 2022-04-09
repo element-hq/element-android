@@ -49,8 +49,8 @@ class EncryptionTest : InstrumentedTest {
         performTest(roomShouldBeEncrypted = false) { room ->
             // Send an encryption Event as an Event (and not as a state event)
             room.sendEvent(
-                    eventType = EventType.STATE_ROOM_ENCRYPTION,
-                    content = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent()
+                eventType = EventType.STATE_ROOM_ENCRYPTION,
+                content = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent()
             )
         }
     }
@@ -61,9 +61,9 @@ class EncryptionTest : InstrumentedTest {
             runBlocking {
                 // Send an encryption Event as a State Event
                 room.sendStateEvent(
-                        eventType = EventType.STATE_ROOM_ENCRYPTION,
-                        stateKey = "",
-                        body = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent()
+                    eventType = EventType.STATE_ROOM_ENCRYPTION,
+                    stateKey = "",
+                    body = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent()
                 )
             }
         }
@@ -89,8 +89,8 @@ class EncryptionTest : InstrumentedTest {
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
                 val newMessages = snapshot
-                        .filter { it.root.sendState == SendState.SYNCED }
-                        .filter { it.root.getClearType() == EventType.STATE_ROOM_ENCRYPTION }
+                    .filter { it.root.sendState == SendState.SYNCED }
+                    .filter { it.root.getClearType() == EventType.STATE_ROOM_ENCRYPTION }
 
                 if (newMessages.isNotEmpty()) {
                     timeline.removeListener(this)

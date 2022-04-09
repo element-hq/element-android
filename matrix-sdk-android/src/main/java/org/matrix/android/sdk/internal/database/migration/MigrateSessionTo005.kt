@@ -23,7 +23,7 @@ class MigrateSessionTo005(realm: DynamicRealm) : RealmMigrator(realm, 5) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.removeField("adminE2EByDefault")
-                ?.removeField("preferredJitsiDomain")
+            ?.removeField("adminE2EByDefault")
+            ?.removeField("preferredJitsiDomain")
     }
 }

@@ -41,11 +41,12 @@ class DebugPermissionActivity : VectorBaseActivity<ActivityDebugPermissionBindin
 
     // For debug
     private val allPermissions = listOf(
-            Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.READ_CONTACTS)
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.READ_CONTACTS
+    )
 
     private var lastPermissions = emptyList<String>()
 

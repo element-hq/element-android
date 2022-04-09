@@ -49,7 +49,7 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPickerBinding>(),
-        EmojiCompatFontProvider.FontProviderListener {
+    EmojiCompatFontProvider.FontProviderListener {
 
     lateinit var viewModel: EmojiChooserViewModel
 
@@ -80,7 +80,7 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
 
     override fun initUiAndData() {
         setupToolbar(views.emojiPickerToolbar)
-                .allowBack()
+            .allowBack()
         emojiCompatFontProvider.let {
             EmojiDrawView.configureTextPaint(this, it.typeface)
             it.addListener(this)
@@ -94,13 +94,13 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
             rawData.categories.forEach { category ->
                 val s = category.emojis[0]
                 views.tabs.newTab()
-                        .also { tab ->
-                            tab.text = rawData.emojis[s]!!.emoji
-                            tab.contentDescription = category.name
-                        }
-                        .also { tab ->
-                            views.tabs.addTab(tab)
-                        }
+                    .also { tab ->
+                        tab.text = rawData.emojis[s]!!.emoji
+                        tab.contentDescription = category.name
+                    }
+                    .also { tab ->
+                        views.tabs.addTab(tab)
+                    }
             }
         }
         views.tabs.addOnTabSelectedListener(tabLayoutSelectionListener)
@@ -168,11 +168,11 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
             }
 
             searchView.queryTextChanges()
-                    .throttleFirst(600)
-                    .onEach { query ->
-                        onQueryText(query.toString())
-                    }
-                    .launchIn(lifecycleScope)
+                .throttleFirst(600)
+                .onEach { query ->
+                    onQueryText(query.toString())
+                }
+                .launchIn(lifecycleScope)
         }
         searchItem.expandActionView()
         return true

@@ -36,7 +36,7 @@ import javax.inject.Inject
  * In this screen, the user is viewing an introduction to what he can do with this application
  */
 class LoginSplashFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences
+    private val vectorPreferences: VectorPreferences
 ) : AbstractLoginFragment<FragmentLoginSplashBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplashBinding {
@@ -77,17 +77,18 @@ class LoginSplashFragment @Inject constructor(
 
     override fun onError(throwable: Throwable) {
         if (throwable is Failure.NetworkConnection &&
-                throwable.ioException is UnknownHostException) {
+            throwable.ioException is UnknownHostException
+        ) {
             // Invalid homeserver from URL config
             val url = loginViewModel.getInitialHomeServerUrl().orEmpty()
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.dialog_title_error)
-                    .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
-                    .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
-                        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = true))
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
+                .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
+                    loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = true))
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         } else {
             super.onError(throwable)
         }

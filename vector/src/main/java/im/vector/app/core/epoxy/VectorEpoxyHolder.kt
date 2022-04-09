@@ -34,17 +34,17 @@ abstract class VectorEpoxyHolder : EpoxyHolder() {
     }
 
     protected fun <V : View> bind(id: Int): ReadOnlyProperty<VectorEpoxyHolder, V> =
-            Lazy { holder: VectorEpoxyHolder, prop ->
-                holder.view.findViewById(id) as V?
-                        ?: throw IllegalStateException("View ID $id for '${prop.name}' not found.")
-            }
+        Lazy { holder: VectorEpoxyHolder, prop ->
+            holder.view.findViewById(id) as V?
+                ?: throw IllegalStateException("View ID $id for '${prop.name}' not found.")
+        }
 
     /**
      * Taken from Kotterknife.
      * https://github.com/JakeWharton/kotterknife
      */
     private class Lazy<V>(
-            private val initializer: (VectorEpoxyHolder, KProperty<*>) -> V
+        private val initializer: (VectorEpoxyHolder, KProperty<*>) -> V
     ) : ReadOnlyProperty<VectorEpoxyHolder, V> {
         private object EMPTY
 

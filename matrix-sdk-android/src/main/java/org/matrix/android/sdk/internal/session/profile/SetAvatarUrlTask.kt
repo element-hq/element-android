@@ -23,18 +23,19 @@ import javax.inject.Inject
 
 internal abstract class SetAvatarUrlTask : Task<SetAvatarUrlTask.Params, Unit> {
     data class Params(
-            val userId: String,
-            val newAvatarUrl: String
+        val userId: String,
+        val newAvatarUrl: String
     )
 }
 
 internal class DefaultSetAvatarUrlTask @Inject constructor(
-        private val profileAPI: ProfileAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SetAvatarUrlTask() {
+    private val profileAPI: ProfileAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
+) : SetAvatarUrlTask() {
 
     override suspend fun execute(params: Params) {
         val body = SetAvatarUrlBody(
-                avatarUrl = params.newAvatarUrl
+            avatarUrl = params.newAvatarUrl
         )
         return executeRequest(globalErrorReceiver) {
             profileAPI.setAvatarUrl(params.userId, body)

@@ -17,6 +17,6 @@
 package im.vector.app.features.login.terms
 
 data class UrlAndName(
-        val url: String,
-        val name: String
+    val url: String,
+    val name: String
 )

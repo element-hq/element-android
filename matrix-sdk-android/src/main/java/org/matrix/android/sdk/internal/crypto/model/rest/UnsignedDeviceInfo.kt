@@ -21,9 +21,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class UnsignedDeviceInfo(
-        /**
-         * The display name which the user set on the device.
-         */
-        @Json(name = "device_display_name")
-        val deviceDisplayName: String? = null
+    /**
+     * The display name which the user set on the device.
+     */
+    @Json(name = "device_display_name")
+    val deviceDisplayName: String? = null
 )

@@ -82,27 +82,27 @@ class JitsiWidgetDataFactoryTest {
             append("&theme=\$theme")
         }
         val widgetEventContent = mapOf(
-                "url" to url,
-                "type" to WidgetType.Jitsi.preferred,
-                "data" to mapOf(
-                        "widgetSessionId" to WIDGET_ID
-                ),
-                "creatorUserId" to USER_ID,
-                "id" to WIDGET_ID,
-                "name" to "jitsi"
+            "url" to url,
+            "type" to WidgetType.Jitsi.preferred,
+            "data" to mapOf(
+                "widgetSessionId" to WIDGET_ID
+            ),
+            "creatorUserId" to USER_ID,
+            "id" to WIDGET_ID,
+            "name" to "jitsi"
         )
         return createWidgetWithContent(widgetEventContent)
     }
 
     private fun createWidgetV2(): Widget {
         val widgetEventContent = mapOf(
-                // We don't care of url here because we have data field
-                "url" to "url",
-                "type" to WidgetType.Jitsi.preferred,
-                "data" to JitsiWidgetData(DOMAIN, CONF_ID, false).toContent(),
-                "creatorUserId" to USER_ID,
-                "id" to WIDGET_ID,
-                "name" to "jitsi"
+            // We don't care of url here because we have data field
+            "url" to "url",
+            "type" to WidgetType.Jitsi.preferred,
+            "data" to JitsiWidgetData(DOMAIN, CONF_ID, false).toContent(),
+            "creatorUserId" to USER_ID,
+            "id" to WIDGET_ID,
+            "name" to "jitsi"
         )
         return createWidgetWithContent(widgetEventContent)
     }
@@ -111,12 +111,12 @@ class JitsiWidgetDataFactoryTest {
         val event = Event(type = EventType.STATE_ROOM_WIDGET, eventId = "eventId", content = widgetContent)
         val widgetContentModel = widgetContent.toModel<WidgetContent>()
         return Widget(
-                widgetContent = widgetContentModel!!,
-                event = event,
-                widgetId = WIDGET_ID,
-                senderInfo = SenderInfo(USER_ID, null, false, null),
-                isAddedByMe = true,
-                type = WidgetType.Jitsi
+            widgetContent = widgetContentModel!!,
+            event = event,
+            widgetId = WIDGET_ID,
+            senderInfo = SenderInfo(USER_ID, null, false, null),
+            isAddedByMe = true,
+            type = WidgetType.Jitsi
         )
     }
 }

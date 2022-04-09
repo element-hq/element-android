@@ -30,9 +30,9 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheetViewMod
 import javax.inject.Inject
 
 class VerificationQrScannedByOtherFragment @Inject constructor(
-        val controller: VerificationQrScannedByOtherController
+    val controller: VerificationQrScannedByOtherController
 ) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
-        VerificationQrScannedByOtherController.Listener {
+    VerificationQrScannedByOtherController.Listener {
 
     private val sharedViewModel by parentFragmentViewModel(VerificationBottomSheetViewModel::class)
 

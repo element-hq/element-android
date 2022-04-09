@@ -47,9 +47,10 @@ import org.matrix.android.sdk.flow.unwrap
  * This ViewModel observe a room summary and notify when the room is left
  */
 class RequireActiveMembershipViewModel @AssistedInject constructor(
-        @Assisted initialState: RequireActiveMembershipViewState,
-        private val stringProvider: StringProvider,
-        private val session: Session) :
+    @Assisted initialState: RequireActiveMembershipViewState,
+    private val stringProvider: StringProvider,
+    private val session: Session
+) :
     VectorViewModel<RequireActiveMembershipViewState, RequireActiveMembershipAction, RequireActiveMembershipViewEvents>(initialState) {
 
     @AssistedFactory
@@ -67,23 +68,23 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
 
     private fun observeRoomSummary() {
         roomIdFlow
-                .unwrap()
-                .flatMapLatest { roomId ->
-                    val room = session.getRoom(roomId) ?: return@flatMapLatest flow {
-                        val emptyResult = Optional.empty<RequireActiveMembershipViewEvents.RoomLeft>()
-                        emit(emptyResult)
-                    }
-                    room.flow()
-                            .liveRoomSummary()
-                            .unwrap()
-                            .map { mapToLeftViewEvent(room, it) }
-                            .flowOn(Dispatchers.Default)
+            .unwrap()
+            .flatMapLatest { roomId ->
+                val room = session.getRoom(roomId) ?: return@flatMapLatest flow {
+                    val emptyResult = Optional.empty<RequireActiveMembershipViewEvents.RoomLeft>()
+                    emit(emptyResult)
                 }
-                .unwrap()
-                .onEach { event ->
-                    _viewEvents.post(event)
-                }
-                .launchIn(viewModelScope)
+                room.flow()
+                    .liveRoomSummary()
+                    .unwrap()
+                    .map { mapToLeftViewEvent(room, it) }
+                    .flowOn(Dispatchers.Default)
+            }
+            .unwrap()
+            .onEach { event ->
+                _viewEvents.post(event)
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun mapToLeftViewEvent(room: Room, roomSummary: RoomSummary): Optional<RequireActiveMembershipViewEvents.RoomLeft> {
@@ -107,13 +108,13 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }
-            Membership.BAN   -> {
+            Membership.BAN -> {
                 val message = senderDisplayName?.let {
                     stringProvider.getString(R.string.has_been_banned, roomSummary.displayName, it)
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }
-            else             -> null
+            else -> null
         }
         return Optional.from(viewEvent)
     }

@@ -26,8 +26,8 @@ import io.realm.annotations.Index
  * The account_data may be either global or scoped to a particular rooms.
  */
 internal open class UserAccountDataEntity(
-        @Index var type: String? = null,
-        var contentStr: String? = null
+    @Index var type: String? = null,
+    var contentStr: String? = null
 ) : RealmObject() {
 
     companion object

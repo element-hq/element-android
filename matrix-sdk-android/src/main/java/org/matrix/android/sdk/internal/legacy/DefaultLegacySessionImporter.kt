@@ -40,10 +40,10 @@ import org.matrix.android.sdk.internal.legacy.riot.Fingerprint as LegacyFingerpr
 import org.matrix.android.sdk.internal.legacy.riot.HomeServerConnectionConfig as LegacyHomeServerConnectionConfig
 
 internal class DefaultLegacySessionImporter @Inject constructor(
-        private val context: Context,
-        private val sessionParamsStore: SessionParamsStore,
-        private val realmKeysUtils: RealmKeysUtils,
-        private val realmCryptoStoreMigration: RealmCryptoStoreMigration
+    private val context: Context,
+    private val sessionParamsStore: SessionParamsStore,
+    private val realmKeysUtils: RealmKeysUtils,
+    private val realmCryptoStoreMigration: RealmCryptoStoreMigration
 ) : LegacySessionImporter {
 
     private val loginStorage = LoginStorage(context)
@@ -105,47 +105,47 @@ internal class DefaultLegacySessionImporter @Inject constructor(
     private suspend fun importCredentials(legacyConfig: LegacyHomeServerConnectionConfig) {
         @Suppress("DEPRECATION")
         val sessionParams = SessionParams(
-                credentials = Credentials(
-                        userId = legacyConfig.credentials.userId,
-                        accessToken = legacyConfig.credentials.accessToken,
-                        refreshToken = legacyConfig.credentials.refreshToken,
-                        homeServer = legacyConfig.credentials.homeServer,
-                        deviceId = legacyConfig.credentials.deviceId,
-                        discoveryInformation = legacyConfig.credentials.wellKnown?.let { wellKnown ->
-                            // Note credentials.wellKnown is not serialized in the LoginStorage, so this code is a bit useless...
-                            if (wellKnown.homeServer?.baseURL != null || wellKnown.identityServer?.baseURL != null) {
-                                DiscoveryInformation(
-                                        homeServer = wellKnown.homeServer?.baseURL?.let { WellKnownBaseConfig(baseURL = it) },
-                                        identityServer = wellKnown.identityServer?.baseURL?.let { WellKnownBaseConfig(baseURL = it) }
-                                )
-                            } else {
-                                null
-                            }
+            credentials = Credentials(
+                userId = legacyConfig.credentials.userId,
+                accessToken = legacyConfig.credentials.accessToken,
+                refreshToken = legacyConfig.credentials.refreshToken,
+                homeServer = legacyConfig.credentials.homeServer,
+                deviceId = legacyConfig.credentials.deviceId,
+                discoveryInformation = legacyConfig.credentials.wellKnown?.let { wellKnown ->
+                    // Note credentials.wellKnown is not serialized in the LoginStorage, so this code is a bit useless...
+                    if (wellKnown.homeServer?.baseURL != null || wellKnown.identityServer?.baseURL != null) {
+                        DiscoveryInformation(
+                            homeServer = wellKnown.homeServer?.baseURL?.let { WellKnownBaseConfig(baseURL = it) },
+                            identityServer = wellKnown.identityServer?.baseURL?.let { WellKnownBaseConfig(baseURL = it) }
+                        )
+                    } else {
+                        null
+                    }
+                }
+            ),
+            homeServerConnectionConfig = HomeServerConnectionConfig(
+                homeServerUri = legacyConfig.homeserverUri,
+                identityServerUri = legacyConfig.identityServerUri,
+                antiVirusServerUri = legacyConfig.antiVirusServerUri,
+                allowedFingerprints = legacyConfig.allowedFingerprints.map {
+                    Fingerprint(
+                        bytes = it.bytes,
+                        hashType = when (it.type) {
+                            LegacyFingerprint.HashType.SHA1,
+                            null -> Fingerprint.HashType.SHA1
+                            LegacyFingerprint.HashType.SHA256 -> Fingerprint.HashType.SHA256
                         }
-                ),
-                homeServerConnectionConfig = HomeServerConnectionConfig(
-                        homeServerUri = legacyConfig.homeserverUri,
-                        identityServerUri = legacyConfig.identityServerUri,
-                        antiVirusServerUri = legacyConfig.antiVirusServerUri,
-                        allowedFingerprints = legacyConfig.allowedFingerprints.map {
-                            Fingerprint(
-                                    bytes = it.bytes,
-                                    hashType = when (it.type) {
-                                        LegacyFingerprint.HashType.SHA1,
-                                        null                              -> Fingerprint.HashType.SHA1
-                                        LegacyFingerprint.HashType.SHA256 -> Fingerprint.HashType.SHA256
-                                    }
-                            )
-                        },
-                        shouldPin = legacyConfig.shouldPin(),
-                        tlsVersions = legacyConfig.acceptedTlsVersions,
-                        tlsCipherSuites = legacyConfig.acceptedTlsCipherSuites,
-                        shouldAcceptTlsExtensions = legacyConfig.shouldAcceptTlsExtensions(),
-                        allowHttpExtension = false, // TODO
-                        forceUsageTlsVersions = legacyConfig.forceUsageOfTlsVersions()
-                ),
-                // If token is not valid, this boolean will be updated later
-                isTokenValid = true
+                    )
+                },
+                shouldPin = legacyConfig.shouldPin(),
+                tlsVersions = legacyConfig.acceptedTlsVersions,
+                tlsCipherSuites = legacyConfig.acceptedTlsCipherSuites,
+                shouldAcceptTlsExtensions = legacyConfig.shouldAcceptTlsExtensions(),
+                allowHttpExtension = false, // TODO
+                forceUsageTlsVersions = legacyConfig.forceUsageOfTlsVersions()
+            ),
+            // If token is not valid, this boolean will be updated later
+            isTokenValid = true
         )
 
         Timber.d("Migration: save session")
@@ -168,12 +168,12 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         Timber.d("Migration: create legacy realm configuration")
 
         val realmConfiguration = RealmConfiguration.Builder()
-                .directory(File(context.filesDir, userMd5))
-                .name("crypto_store.realm")
-                .modules(RealmCryptoStoreModule())
-                .schemaVersion(realmCryptoStoreMigration.schemaVersion)
-                .migration(realmCryptoStoreMigration)
-                .build()
+            .directory(File(context.filesDir, userMd5))
+            .name("crypto_store.realm")
+            .modules(RealmCryptoStoreModule())
+            .schemaVersion(realmCryptoStoreMigration.schemaVersion)
+            .migration(realmCryptoStoreMigration)
+            .build()
 
         Timber.d("Migration: copy DB to encrypted DB")
         Realm.getInstance(realmConfiguration).use {
@@ -187,20 +187,20 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         val cryptoFolder = legacyConfig.credentials.userId.md5()
 
         listOf(
-                // Where session store was saved (we do not care about migrating that, an initial sync will be performed)
-                File(context.filesDir, "MXFileStore"),
-                // Previous (and very old) file crypto store
-                File(context.filesDir, "MXFileCryptoStore"),
-                // Draft. They will be lost, this is sad but we assume it
-                File(context.filesDir, "MXLatestMessagesStore"),
-                // Media storage
-                File(context.filesDir, "MXMediaStore"),
-                File(context.filesDir, "MXMediaStore2"),
-                File(context.filesDir, "MXMediaStore3"),
-                // Ext folder
-                File(context.filesDir, "ext_share"),
-                // Crypto store
-                File(context.filesDir, cryptoFolder)
+            // Where session store was saved (we do not care about migrating that, an initial sync will be performed)
+            File(context.filesDir, "MXFileStore"),
+            // Previous (and very old) file crypto store
+            File(context.filesDir, "MXFileCryptoStore"),
+            // Draft. They will be lost, this is sad but we assume it
+            File(context.filesDir, "MXLatestMessagesStore"),
+            // Media storage
+            File(context.filesDir, "MXMediaStore"),
+            File(context.filesDir, "MXMediaStore2"),
+            File(context.filesDir, "MXMediaStore3"),
+            // Ext folder
+            File(context.filesDir, "ext_share"),
+            // Crypto store
+            File(context.filesDir, cryptoFolder)
         ).forEach { file ->
             try {
                 file.deleteRecursively()
@@ -213,14 +213,14 @@ internal class DefaultLegacySessionImporter @Inject constructor(
     private fun clearSharedPrefs() {
         // Shared Pref. Note that we do not delete the default preferences, as it should be nearly the same (TODO check that)
         listOf(
-                "Vector.LoginStorage",
-                "GcmRegistrationManager",
-                "IntegrationManager.Storage"
+            "Vector.LoginStorage",
+            "GcmRegistrationManager",
+            "IntegrationManager.Storage"
         ).forEach { prefName ->
             context.getSharedPreferences(prefName, Context.MODE_PRIVATE)
-                    .edit()
-                    .clear()
-                    .apply()
+                .edit()
+                .clear()
+                .apply()
         }
     }
 }

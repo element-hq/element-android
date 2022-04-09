@@ -38,13 +38,13 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
         } else {
             // Display a simple confirmation dialog
             MaterialAlertDialogBuilder(activity)
-                    .setTitle(R.string.action_sign_out)
-                    .setMessage(R.string.action_sign_out_confirmation_simple)
-                    .setPositiveButton(R.string.action_sign_out) { _, _ ->
-                        doSignOut()
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.action_sign_out)
+                .setMessage(R.string.action_sign_out_confirmation_simple)
+                .setPositiveButton(R.string.action_sign_out) { _, _ ->
+                    doSignOut()
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         }
     }
 

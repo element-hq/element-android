@@ -31,19 +31,19 @@ import javax.inject.Inject
 internal interface FetchTokenAndPaginateTask : Task<FetchTokenAndPaginateTask.Params, TokenChunkEventPersistor.Result> {
 
     data class Params(
-            val roomId: String,
-            val lastKnownEventId: String,
-            val direction: PaginationDirection,
-            val limit: Int
+        val roomId: String,
+        val lastKnownEventId: String,
+        val direction: PaginationDirection,
+        val limit: Int
     )
 }
 
 internal class DefaultFetchTokenAndPaginateTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val filterRepository: FilterRepository,
-        private val paginationTask: PaginationTask,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val filterRepository: FilterRepository,
+    private val paginationTask: PaginationTask,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : FetchTokenAndPaginateTask {
 
     override suspend fun execute(params: FetchTokenAndPaginateTask.Params): TokenChunkEventPersistor.Result {
@@ -56,7 +56,7 @@ internal class DefaultFetchTokenAndPaginateTask @Inject constructor(
         } else {
             response.start
         }
-                ?: throw IllegalStateException("No token found")
+            ?: throw IllegalStateException("No token found")
 
         monarchy.awaitTransaction { realm ->
             val chunkToUpdate = ChunkEntity.findIncludingEvent(realm, params.lastKnownEventId)
@@ -67,10 +67,10 @@ internal class DefaultFetchTokenAndPaginateTask @Inject constructor(
             }
         }
         val paginationParams = PaginationTask.Params(
-                roomId = params.roomId,
-                from = fromToken,
-                direction = params.direction,
-                limit = params.limit
+            roomId = params.roomId,
+            from = fromToken,
+            direction = params.direction,
+            limit = params.limit
         )
         return paginationTask.execute(paginationParams)
     }

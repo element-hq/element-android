@@ -82,15 +82,15 @@ object MatrixPatterns {
 
     // list of patterns to find some matrix item.
     val MATRIX_PATTERNS = listOf(
-            PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ID,
-            PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ALIAS,
-            PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID,
-            PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ALIAS,
-            PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER,
-            PATTERN_CONTAIN_MATRIX_ALIAS,
-            PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER,
-            PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER,
-            PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
+        PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ID,
+        PATTERN_CONTAIN_MATRIX_TO_PERMALINK_ROOM_ALIAS,
+        PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ID,
+        PATTERN_CONTAIN_APP_LINK_PERMALINK_ROOM_ALIAS,
+        PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER,
+        PATTERN_CONTAIN_MATRIX_ALIAS,
+        PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER,
+        PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER,
+        PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
     )
 
     /**
@@ -166,9 +166,9 @@ object MatrixPatterns {
 
     fun candidateAliasFromRoomName(roomName: String, domain: String): String {
         return roomName.lowercase()
-                .replaceSpaceChars(replacement = "_")
-                .removeInvalidRoomNameChars()
-                .take(MatrixConstants.maxAliasLocalPartLength(domain))
+            .replaceSpaceChars(replacement = "_")
+            .removeInvalidRoomNameChars()
+            .take(MatrixConstants.maxAliasLocalPartLength(domain))
     }
 
     /**

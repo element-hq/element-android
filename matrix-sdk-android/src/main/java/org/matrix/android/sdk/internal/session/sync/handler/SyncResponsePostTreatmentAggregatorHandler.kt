@@ -25,9 +25,9 @@ import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccoun
 import javax.inject.Inject
 
 internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
-        private val directChatsHelper: DirectChatsHelper,
-        private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
-        private val updateUserAccountDataTask: UpdateUserAccountDataTask
+    private val directChatsHelper: DirectChatsHelper,
+    private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
+    private val updateUserAccountDataTask: UpdateUserAccountDataTask
 ) {
     suspend fun handle(synResHaResponsePostTreatmentAggregator: SyncResponsePostTreatmentAggregator) {
         cleanupEphemeralFiles(synResHaResponsePostTreatmentAggregator.ephemeralFilesToDelete)
@@ -50,18 +50,18 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
             if (currentDirectUserId != null && !MatrixPatterns.isUserId(currentDirectUserId)) {
                 // link roomId with the matrix id
                 directChats
-                        .getOrPut(candidateUserId) { arrayListOf() }
-                        .apply {
-                            if (!contains(roomId)) {
-                                hasUpdate = true
-                                add(roomId)
-                            }
+                    .getOrPut(candidateUserId) { arrayListOf() }
+                    .apply {
+                        if (!contains(roomId)) {
+                            hasUpdate = true
+                            add(roomId)
                         }
+                    }
 
                 // remove roomId from currentDirectUserId entry
-                hasUpdate = hasUpdate or(directChats[currentDirectUserId]?.remove(roomId) == true)
+                hasUpdate = hasUpdate or (directChats[currentDirectUserId]?.remove(roomId) == true)
                 // remove currentDirectUserId entry if there is no attached room anymore
-                hasUpdate = hasUpdate or(directChats.takeIf { it[currentDirectUserId].isNullOrEmpty() }?.remove(currentDirectUserId) != null)
+                hasUpdate = hasUpdate or (directChats.takeIf { it[currentDirectUserId].isNullOrEmpty() }?.remove(currentDirectUserId) != null)
             }
         }
         if (hasUpdate) {

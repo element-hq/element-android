@@ -26,9 +26,11 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 import javax.inject.Provider
 
-internal class DefaultWidgetService @Inject constructor(private val widgetManager: WidgetManager,
-                                                        private val widgetURLFormatter: WidgetURLFormatter,
-                                                        private val widgetPostAPIMediator: Provider<WidgetPostAPIMediator>) :
+internal class DefaultWidgetService @Inject constructor(
+    private val widgetManager: WidgetManager,
+    private val widgetURLFormatter: WidgetURLFormatter,
+    private val widgetPostAPIMediator: Provider<WidgetPostAPIMediator>
+) :
     WidgetService {
 
     override fun getWidgetURLFormatter(): WidgetURLFormatter {
@@ -40,10 +42,10 @@ internal class DefaultWidgetService @Inject constructor(private val widgetManage
     }
 
     override fun getRoomWidgets(
-            roomId: String,
-            widgetId: QueryStringValue,
-            widgetTypes: Set<String>?,
-            excludedTypes: Set<String>?
+        roomId: String,
+        widgetId: QueryStringValue,
+        widgetTypes: Set<String>?,
+        excludedTypes: Set<String>?
     ): List<Widget> {
         return widgetManager.getRoomWidgets(roomId, widgetId, widgetTypes, excludedTypes)
     }
@@ -52,40 +54,40 @@ internal class DefaultWidgetService @Inject constructor(private val widgetManage
         return widgetManager.getWidgetComputedUrl(widget, isLightTheme)
     }
 
-override fun getRoomWidgetsLive(
-            roomId: String,
-            widgetId: QueryStringValue,
-            widgetTypes: Set<String>?,
-            excludedTypes: Set<String>?
+    override fun getRoomWidgetsLive(
+        roomId: String,
+        widgetId: QueryStringValue,
+        widgetTypes: Set<String>?,
+        excludedTypes: Set<String>?
     ): LiveData<List<Widget>> {
         return widgetManager.getRoomWidgetsLive(roomId, widgetId, widgetTypes, excludedTypes)
     }
 
     override fun getUserWidgetsLive(
-            widgetTypes: Set<String>?,
-            excludedTypes: Set<String>?
+        widgetTypes: Set<String>?,
+        excludedTypes: Set<String>?
     ): LiveData<List<Widget>> {
         return widgetManager.getUserWidgetsLive(widgetTypes, excludedTypes)
     }
 
     override fun getUserWidgets(
-            widgetTypes: Set<String>?,
-            excludedTypes: Set<String>?
+        widgetTypes: Set<String>?,
+        excludedTypes: Set<String>?
     ): List<Widget> {
         return widgetManager.getUserWidgets(widgetTypes, excludedTypes)
     }
 
     override suspend fun createRoomWidget(
-            roomId: String,
-            widgetId: String,
-            content: Content
+        roomId: String,
+        widgetId: String,
+        content: Content
     ): Widget {
         return widgetManager.createRoomWidget(roomId, widgetId, content)
     }
 
     override suspend fun destroyRoomWidget(
-            roomId: String,
-            widgetId: String
+        roomId: String,
+        widgetId: String
     ) {
         return widgetManager.destroyRoomWidget(roomId, widgetId)
     }

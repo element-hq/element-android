@@ -79,10 +79,10 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
 
         if (e2eCapable) {
             val shield = TrustUtils.shieldForTrust(
-                    currentDevice,
-                    trustedSession,
-                    legacyMode,
-                    trusted
+                currentDevice,
+                trustedSession,
+                legacyMode,
+                trusted
             )
 
             holder.trustIcon.render(shield)
@@ -91,12 +91,12 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
         }
 
         val detailedModeLabels = listOf(
-                holder.displayNameLabelText,
-                holder.displayNameText,
-                holder.deviceIdLabelText,
-                holder.deviceIdText,
-                holder.deviceLastSeenLabelText,
-                holder.deviceLastSeenText
+            holder.displayNameLabelText,
+            holder.displayNameText,
+            holder.deviceIdLabelText,
+            holder.deviceIdText,
+            holder.deviceLastSeenLabelText,
+            holder.deviceLastSeenText
         )
         if (detailedMode) {
             holder.summaryLabelText.isVisible = false
@@ -116,26 +116,26 @@ abstract class DeviceItem : VectorEpoxyModel<DeviceItem.Holder>() {
             }
         } else {
             holder.summaryLabelText.text =
-                    span {
-                        +(deviceInfo.displayName ?: deviceInfo.deviceId ?: "")
-                        apply {
-                            // Add additional info if current session is not trusted
-                            if (!trustedSession) {
-                                +"\n"
-                                span {
-                                    text = "${deviceInfo.deviceId}"
-                                    apply {
-                                        colorProvider?.getColorFromAttribute(R.attr.vctr_content_secondary)?.let {
-                                            textColor = it
-                                        }
-                                        dimensionConverter?.spToPx(12)?.let {
-                                            textSize = it
-                                        }
+                span {
+                    +(deviceInfo.displayName ?: deviceInfo.deviceId ?: "")
+                    apply {
+                        // Add additional info if current session is not trusted
+                        if (!trustedSession) {
+                            +"\n"
+                            span {
+                                text = "${deviceInfo.deviceId}"
+                                apply {
+                                    colorProvider?.getColorFromAttribute(R.attr.vctr_content_secondary)?.let {
+                                        textColor = it
+                                    }
+                                    dimensionConverter?.spToPx(12)?.let {
+                                        textSize = it
                                     }
                                 }
                             }
                         }
                     }
+                }
 
             holder.summaryLabelText.isVisible = true
             detailedModeLabels.map {

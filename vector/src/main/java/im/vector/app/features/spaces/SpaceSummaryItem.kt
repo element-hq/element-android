@@ -65,9 +65,10 @@ abstract class SpaceSummaryItem : VectorEpoxyModel<SpaceSummaryItem.Holder>() {
         if (hasChildren) {
             holder.collapseIndicator.isVisible = true
             holder.collapseIndicator.setImageDrawable(
-                    ContextCompat.getDrawable(holder.view.context,
-                            if (expanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more
-                    )
+                ContextCompat.getDrawable(
+                    holder.view.context,
+                    if (expanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more
+                )
             )
             holder.collapseIndicator.onClick(toggleExpand)
         } else {

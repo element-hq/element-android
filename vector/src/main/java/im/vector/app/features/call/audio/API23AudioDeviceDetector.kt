@@ -24,8 +24,9 @@ import timber.log.Timber
 import java.util.HashSet
 
 @RequiresApi(Build.VERSION_CODES.M)
-internal class API23AudioDeviceDetector(private val audioManager: AudioManager,
-                                        private val callAudioManager: CallAudioManager
+internal class API23AudioDeviceDetector(
+    private val audioManager: AudioManager,
+    private val callAudioManager: CallAudioManager
 ) : CallAudioManager.AudioDeviceDetector {
 
     private val onAudioDeviceChangeRunner = Runnable {
@@ -45,13 +46,15 @@ internal class API23AudioDeviceDetector(private val audioManager: AudioManager,
     }
     private val audioDeviceCallback: AudioDeviceCallback = object : AudioDeviceCallback() {
         override fun onAudioDevicesAdded(
-                addedDevices: Array<AudioDeviceInfo>) {
+            addedDevices: Array<AudioDeviceInfo>
+        ) {
             Timber.d(" Audio devices added")
             onAudioDeviceChange()
         }
 
         override fun onAudioDevicesRemoved(
-                removedDevices: Array<AudioDeviceInfo>) {
+            removedDevices: Array<AudioDeviceInfo>
+        ) {
             Timber.d(" Audio devices removed")
             onAudioDeviceChange()
         }

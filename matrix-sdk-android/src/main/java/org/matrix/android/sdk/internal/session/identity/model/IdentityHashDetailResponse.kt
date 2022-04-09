@@ -24,19 +24,19 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class IdentityHashDetailResponse(
-        /**
-         * Required. The pepper the client MUST use in hashing identifiers, and MUST supply to the /lookup endpoint when performing lookups.
-         * Servers SHOULD rotate this string often.
-         */
-        @Json(name = "lookup_pepper")
-        val pepper: String,
+    /**
+     * Required. The pepper the client MUST use in hashing identifiers, and MUST supply to the /lookup endpoint when performing lookups.
+     * Servers SHOULD rotate this string often.
+     */
+    @Json(name = "lookup_pepper")
+    val pepper: String,
 
-        /**
-         * Required. The algorithms the server supports. Must contain at least "sha256".
-         * "none" can be another possible value.
-         */
-        @Json(name = "algorithms")
-        val algorithms: List<String>
+    /**
+     * Required. The algorithms the server supports. Must contain at least "sha256".
+     * "none" can be another possible value.
+     */
+    @Json(name = "algorithms")
+    val algorithms: List<String>
 ) {
     companion object {
         const val ALGORITHM_SHA256 = "sha256"

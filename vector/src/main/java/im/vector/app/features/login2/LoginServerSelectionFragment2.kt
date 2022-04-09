@@ -47,9 +47,9 @@ class LoginServerSelectionFragment2 @Inject constructor() : AbstractLoginFragmen
         views.loginServerChoiceOther.setOnClickListener { selectOther() }
 
         views.loginServerChoiceEmsLearnMore.setTextWithColoredPart(
-                fullTextRes = R.string.login_server_modular_learn_more_about_ems,
-                coloredTextRes = R.string.login_server_modular_learn_more,
-                underline = true
+            fullTextRes = R.string.login_server_modular_learn_more_about_ems,
+            coloredTextRes = R.string.login_server_modular_learn_more,
+            underline = true
         )
         views.loginServerChoiceEmsLearnMore.setOnClickListener {
             openUrlInChromeCustomTab(requireActivity(), null, EMS_LINK)
@@ -59,10 +59,10 @@ class LoginServerSelectionFragment2 @Inject constructor() : AbstractLoginFragmen
     private fun updateUi(state: LoginViewState2) {
         when (state.signMode) {
             SignMode2.Unknown -> Unit
-            SignMode2.SignUp  -> {
+            SignMode2.SignUp -> {
                 views.loginServerTitle.setText(R.string.login_please_choose_a_server)
             }
-            SignMode2.SignIn  -> {
+            SignMode2.SignIn -> {
                 views.loginServerTitle.setText(R.string.login_please_select_your_server)
             }
         }

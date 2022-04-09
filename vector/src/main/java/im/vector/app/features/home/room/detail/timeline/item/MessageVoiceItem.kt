@@ -113,7 +113,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
         holder.voicePlaybackWaveform.setOnTouchListener { view, motionEvent ->
             when (motionEvent.action) {
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     val percentage = getTouchedPositionPercentage(motionEvent, view)
                     waveformTouchListener?.onWaveformTouchedUp(percentage)
                 }
@@ -128,9 +128,9 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : VoiceMessagePlaybackTracker.Listener {
             override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
                 when (state) {
-                    is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder, waveformColorIdle, waveformColorPlayed)
+                    is VoiceMessagePlaybackTracker.Listener.State.Idle -> renderIdleState(holder, waveformColorIdle, waveformColorPlayed)
                     is VoiceMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state, waveformColorIdle, waveformColorPlayed)
-                    is VoiceMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state, waveformColorIdle, waveformColorPlayed)
+                    is VoiceMessagePlaybackTracker.Listener.State.Paused -> renderPausedState(holder, state, waveformColorIdle, waveformColorPlayed)
                     is VoiceMessagePlaybackTracker.Listener.State.Recording -> Unit
                 }
             }

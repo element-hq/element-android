@@ -24,21 +24,21 @@ import org.matrix.android.sdk.internal.crypto.model.rest.ShareRequestCancellatio
  * IncomingRequestCancellation describes the incoming room key cancellation.
  */
 data class IncomingRequestCancellation(
-        /**
-         * The user id
-         */
-        override val userId: String? = null,
+    /**
+     * The user id
+     */
+    override val userId: String? = null,
 
-        /**
-         * The device id
-         */
-        override val deviceId: String? = null,
+    /**
+     * The device id
+     */
+    override val deviceId: String? = null,
 
-        /**
-         * The request id
-         */
-        override val requestId: String? = null,
-        override val localCreationTimestamp: Long?
+    /**
+     * The request id
+     */
+    override val requestId: String? = null,
+    override val localCreationTimestamp: Long?
 ) : IncomingShareRequestCommon {
     companion object {
         /**
@@ -48,15 +48,15 @@ data class IncomingRequestCancellation(
          */
         fun fromEvent(event: Event): IncomingRequestCancellation? {
             return event.getClearContent()
-                    .toModel<ShareRequestCancellation>()
-                    ?.let {
-                        IncomingRequestCancellation(
-                                userId = event.senderId,
-                                deviceId = it.requestingDeviceId,
-                                requestId = it.requestId,
-                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
-                        )
-                    }
+                .toModel<ShareRequestCancellation>()
+                ?.let {
+                    IncomingRequestCancellation(
+                        userId = event.senderId,
+                        deviceId = it.requestingDeviceId,
+                        requestId = it.requestId,
+                        localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
+                    )
+                }
         }
     }
 }

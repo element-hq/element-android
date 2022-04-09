@@ -63,9 +63,9 @@ internal class DefaultFilterRepository @Inject constructor(@SessionDatabase priv
 
             // Update the filter id, only if the filter body matches
             it.where<FilterEntity>()
-                    .equalTo(FilterEntityFields.FILTER_BODY_JSON, filterJson)
-                    ?.findFirst()
-                    ?.filterId = filterId
+                .equalTo(FilterEntityFields.FILTER_BODY_JSON, filterJson)
+                ?.findFirst()
+                ?.filterId = filterId
         }
     }
 

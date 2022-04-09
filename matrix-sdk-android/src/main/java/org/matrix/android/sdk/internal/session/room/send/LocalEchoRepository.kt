@@ -47,12 +47,14 @@ import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
-internal class LocalEchoRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                       private val taskExecutor: TaskExecutor,
-                                                       private val realmSessionProvider: RealmSessionProvider,
-                                                       private val roomSummaryUpdater: RoomSummaryUpdater,
-                                                       private val timelineInput: TimelineInput,
-                                                       private val timelineEventMapper: TimelineEventMapper) {
+internal class LocalEchoRepository @Inject constructor(
+    @SessionDatabase private val monarchy: Monarchy,
+    private val taskExecutor: TaskExecutor,
+    private val realmSessionProvider: RealmSessionProvider,
+    private val roomSummaryUpdater: RoomSummaryUpdater,
+    private val timelineInput: TimelineInput,
+    private val timelineEventMapper: TimelineEventMapper
+) {
 
     fun createLocalEcho(event: Event) {
         val roomId = event.roomId ?: throw IllegalStateException("You should have set a roomId for your event")
@@ -149,10 +151,10 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
     suspend fun clearSendingQueue(roomId: String) {
         monarchy.awaitTransaction { realm ->
             TimelineEventEntity
-                    .findAllInRoomWithSendStates(realm, roomId, SendState.IS_SENDING_STATES)
-                    .forEach {
-                        it.root?.sendState = SendState.UNSENT
-                    }
+                .findAllInRoomWithSendStates(realm, roomId, SendState.IS_SENDING_STATES)
+                .forEach {
+                    it.root?.sendState = SendState.UNSENT
+                }
             roomSummaryUpdater.updateSendingInformation(realm, roomId)
         }
     }
@@ -175,44 +177,44 @@ internal class LocalEchoRepository @Inject constructor(@SessionDatabase private 
     fun getAllEventsWithStates(roomId: String, states: List<SendState>): List<TimelineEvent> {
         return realmSessionProvider.withRealm { realm ->
             TimelineEventEntity
-                    .findAllInRoomWithSendStates(realm, roomId, states)
-                    .sortedByDescending { it.displayIndex }
-                    .mapNotNull { it?.let { timelineEventMapper.map(it) } }
-                    .filter { event ->
-                        when (event.root.getClearType()) {
-                            EventType.MESSAGE,
-                            EventType.REDACTION,
-                            EventType.REACTION -> {
-                                val content = event.root.getClearContent().toModel<MessageContent>()
-                                if (content != null) {
-                                    when (content.msgType) {
-                                        MessageType.MSGTYPE_EMOTE,
-                                        MessageType.MSGTYPE_NOTICE,
-                                        MessageType.MSGTYPE_LOCATION,
-                                        MessageType.MSGTYPE_TEXT,
-                                        MessageType.MSGTYPE_FILE,
-                                        MessageType.MSGTYPE_VIDEO,
-                                        MessageType.MSGTYPE_IMAGE,
-                                        MessageType.MSGTYPE_AUDIO -> {
-                                            // need to resend the attachment
-                                            true
-                                        }
-                                        else                      -> {
-                                            Timber.e("Cannot resend message ${event.root.getClearType()} / ${content.msgType}")
-                                            false
-                                        }
+                .findAllInRoomWithSendStates(realm, roomId, states)
+                .sortedByDescending { it.displayIndex }
+                .mapNotNull { it?.let { timelineEventMapper.map(it) } }
+                .filter { event ->
+                    when (event.root.getClearType()) {
+                        EventType.MESSAGE,
+                        EventType.REDACTION,
+                        EventType.REACTION -> {
+                            val content = event.root.getClearContent().toModel<MessageContent>()
+                            if (content != null) {
+                                when (content.msgType) {
+                                    MessageType.MSGTYPE_EMOTE,
+                                    MessageType.MSGTYPE_NOTICE,
+                                    MessageType.MSGTYPE_LOCATION,
+                                    MessageType.MSGTYPE_TEXT,
+                                    MessageType.MSGTYPE_FILE,
+                                    MessageType.MSGTYPE_VIDEO,
+                                    MessageType.MSGTYPE_IMAGE,
+                                    MessageType.MSGTYPE_AUDIO -> {
+                                        // need to resend the attachment
+                                        true
                                     }
-                                } else {
-                                    Timber.e("Unsupported message to resend ${event.root.getClearType()}")
-                                    false
+                                    else -> {
+                                        Timber.e("Cannot resend message ${event.root.getClearType()} / ${content.msgType}")
+                                        false
+                                    }
                                 }
-                            }
-                            else               -> {
+                            } else {
                                 Timber.e("Unsupported message to resend ${event.root.getClearType()}")
                                 false
                             }
                         }
+                        else -> {
+                            Timber.e("Unsupported message to resend ${event.root.getClearType()}")
+                            false
+                        }
                     }
+                }
         }
     }
 

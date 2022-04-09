@@ -28,14 +28,14 @@ import javax.inject.Inject
 
 internal interface ClaimOneTimeKeysForUsersDeviceTask : Task<ClaimOneTimeKeysForUsersDeviceTask.Params, MXUsersDevicesMap<MXKey>> {
     data class Params(
-            // a list of users, devices and key types to retrieve keys for.
-            val usersDevicesKeyTypesMap: MXUsersDevicesMap<String>
+        // a list of users, devices and key types to retrieve keys for.
+        val usersDevicesKeyTypesMap: MXUsersDevicesMap<String>
     )
 }
 
 internal class DefaultClaimOneTimeKeysForUsersDevice @Inject constructor(
-        private val cryptoApi: CryptoApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val cryptoApi: CryptoApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : ClaimOneTimeKeysForUsersDeviceTask {
 
     override suspend fun execute(params: ClaimOneTimeKeysForUsersDeviceTask.Params): MXUsersDevicesMap<MXKey> {

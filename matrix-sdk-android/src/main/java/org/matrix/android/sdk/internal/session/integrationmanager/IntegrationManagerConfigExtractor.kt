@@ -30,11 +30,12 @@ internal class IntegrationManagerConfigExtractor @Inject constructor() {
                         val apiUrl = map["api_url"] as? String
                         val uiUrl = map["ui_url"] as? String ?: apiUrl
                         if (apiUrl != null &&
-                                apiUrl.startsWith("https://") &&
-                                uiUrl!!.startsWith("https://")) {
+                            apiUrl.startsWith("https://") &&
+                            uiUrl!!.startsWith("https://")
+                        ) {
                             return WellknownIntegrationManagerConfigEntity(
-                                    apiUrl = apiUrl,
-                                    uiUrl = uiUrl
+                                apiUrl = apiUrl,
+                                uiUrl = uiUrl
                             )
                         }
                     }

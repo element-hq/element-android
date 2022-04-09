@@ -32,7 +32,7 @@ import org.threeten.bp.Duration
 import javax.inject.Inject
 
 class EventDetailsFormatter @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
 
     fun format(event: Event?): CharSequence? {
@@ -50,8 +50,8 @@ class EventDetailsFormatter @Inject constructor(
             event.isImageMessage() -> formatForImageMessage(event)
             event.isVideoMessage() -> formatForVideoMessage(event)
             event.isAudioMessage() -> formatForAudioMessage(event)
-            event.isFileMessage()  -> formatForFileMessage(event)
-            else                   -> null
+            event.isFileMessage() -> formatForFileMessage(event)
+            else -> null
         }
     }
 
@@ -60,7 +60,7 @@ class EventDetailsFormatter @Inject constructor(
      */
     private fun formatForImageMessage(event: Event): CharSequence? {
         return event.getClearContent().toModel<MessageImageContent>()?.info
-                ?.let { "${it.width} x ${it.height} - ${it.size.asFileSize()}" }
+            ?.let { "${it.width} x ${it.height} - ${it.size.asFileSize()}" }
     }
 
     /**
@@ -68,7 +68,7 @@ class EventDetailsFormatter @Inject constructor(
      */
     private fun formatForVideoMessage(event: Event): CharSequence? {
         return event.getClearContent().toModel<MessageVideoContent>()?.videoInfo
-                ?.let { "${it.duration.asDuration()} - ${it.width} x ${it.height} - ${it.size.asFileSize()}" }
+            ?.let { "${it.duration.asDuration()} - ${it.width} x ${it.height} - ${it.size.asFileSize()}" }
     }
 
     /**
@@ -76,11 +76,11 @@ class EventDetailsFormatter @Inject constructor(
      */
     private fun formatForAudioMessage(event: Event): CharSequence? {
         return event.getClearContent().toModel<MessageAudioContent>()?.audioInfo
-                ?.let { audioInfo ->
-                    listOfNotNull(audioInfo.duration?.asDuration(), audioInfo.size?.asFileSize())
-                            .joinToString(" - ")
-                            .takeIf { it.isNotEmpty() }
-                }
+            ?.let { audioInfo ->
+                listOfNotNull(audioInfo.duration?.asDuration(), audioInfo.size?.asFileSize())
+                    .joinToString(" - ")
+                    .takeIf { it.isNotEmpty() }
+            }
     }
 
     /**
@@ -88,7 +88,7 @@ class EventDetailsFormatter @Inject constructor(
      */
     private fun formatForFileMessage(event: Event): CharSequence? {
         return event.getClearContent().toModel<MessageFileContent>()?.info
-                ?.let { "${it.size.asFileSize()} - ${it.mimeType}" }
+            ?.let { "${it.size.asFileSize()} - ${it.mimeType}" }
     }
 
     private fun Long.asFileSize() = TextUtils.formatFileSize(context, this)

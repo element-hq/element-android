@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class BootstrapSaveRecoveryKeyFragment @Inject constructor(
-        private val colorProvider: ColorProvider
+    private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentBootstrapSaveKeyBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapSaveKeyBinding {
@@ -101,14 +101,14 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
 
     private fun shareRecoveryKey() = withState(sharedViewModel) { state ->
         val recoveryKey = state.recoveryKeyCreationInfo?.recoveryKey?.formatRecoveryKey()
-                ?: return@withState
+            ?: return@withState
 
         startSharePlainTextIntent(
-                this,
-                copyStartForActivityResult,
-                context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
-                recoveryKey,
-                context?.getString(R.string.recovery_key)
+            this,
+            copyStartForActivityResult,
+            context?.getString(R.string.keys_backup_setup_step3_share_intent_chooser_title),
+            recoveryKey,
+            context?.getString(R.string.recovery_key)
         )
     }
 

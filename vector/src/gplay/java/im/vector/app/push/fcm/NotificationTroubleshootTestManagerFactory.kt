@@ -29,15 +29,15 @@ import im.vector.app.gplay.features.settings.troubleshoot.TestTokenRegistration
 import javax.inject.Inject
 
 class NotificationTroubleshootTestManagerFactory @Inject constructor(
-        private val testSystemSettings: TestSystemSettings,
-        private val testAccountSettings: TestAccountSettings,
-        private val testDeviceSettings: TestDeviceSettings,
-        private val testBingRulesSettings: TestPushRulesSettings,
-        private val testPlayServices: TestPlayServices,
-        private val testFirebaseToken: TestFirebaseToken,
-        private val testTokenRegistration: TestTokenRegistration,
-        private val testPushFromPushGateway: TestPushFromPushGateway,
-        private val testNotification: TestNotification
+    private val testSystemSettings: TestSystemSettings,
+    private val testAccountSettings: TestAccountSettings,
+    private val testDeviceSettings: TestDeviceSettings,
+    private val testBingRulesSettings: TestPushRulesSettings,
+    private val testPlayServices: TestPlayServices,
+    private val testFirebaseToken: TestFirebaseToken,
+    private val testTokenRegistration: TestTokenRegistration,
+    private val testPushFromPushGateway: TestPushFromPushGateway,
+    private val testNotification: TestNotification
 ) {
 
     fun create(fragment: Fragment): NotificationTroubleshootTestManager {

@@ -33,10 +33,10 @@ internal fun PushRuleEntity.toRoomPushRule(): RoomPushRule? {
         RuleSetKey.OVERRIDE -> {
             PushRulesMapper.map(this)
         }
-        RuleSetKey.ROOM     -> {
+        RuleSetKey.ROOM -> {
             PushRulesMapper.mapRoomRule(this)
         }
-        else                -> null
+        else -> null
     }
     return if (pushRule == null || kind == null) {
         null
@@ -47,26 +47,26 @@ internal fun PushRuleEntity.toRoomPushRule(): RoomPushRule? {
 
 internal fun RoomNotificationState.toRoomPushRule(roomId: String): RoomPushRule? {
     return when {
-        this == RoomNotificationState.ALL_MESSAGES       -> null
+        this == RoomNotificationState.ALL_MESSAGES -> null
         this == RoomNotificationState.ALL_MESSAGES_NOISY -> {
             val rule = PushRule(
-                    actions = listOf(Action.Notify, Action.Sound()).toJson(),
-                    enabled = true,
-                    ruleId = roomId
+                actions = listOf(Action.Notify, Action.Sound()).toJson(),
+                enabled = true,
+                ruleId = roomId
             )
             return RoomPushRule(RuleSetKey.ROOM, rule)
         }
-        else                                             -> {
+        else -> {
             val condition = PushCondition(
-                    kind = Kind.EventMatch.value,
-                    key = "room_id",
-                    pattern = roomId
+                kind = Kind.EventMatch.value,
+                key = "room_id",
+                pattern = roomId
             )
             val rule = PushRule(
-                    actions = listOf(Action.DoNotNotify).toJson(),
-                    enabled = true,
-                    ruleId = roomId,
-                    conditions = listOf(condition)
+                actions = listOf(Action.DoNotNotify).toJson(),
+                enabled = true,
+                ruleId = roomId,
+                conditions = listOf(condition)
             )
             val kind = if (this == RoomNotificationState.MUTE) {
                 RuleSetKey.OVERRIDE

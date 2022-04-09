@@ -32,26 +32,26 @@ import timber.log.Timber
  * the next workers.
  */
 internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
-        context: Context,
-        workerParameters: WorkerParameters,
-        private val sessionManager: SessionManager,
-        private val paramClass: Class<PARAM>
+    context: Context,
+    workerParameters: WorkerParameters,
+    private val sessionManager: SessionManager,
+    private val paramClass: Class<PARAM>
 ) : CoroutineWorker(context, workerParameters) {
 
     @JsonClass(generateAdapter = true)
     internal data class ErrorData(
-            override val sessionId: String,
-            override val lastFailureMessage: String? = null
+        override val sessionId: String,
+        override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     final override suspend fun doWork(): Result {
         val params = WorkerParamsFactory.fromData(paramClass, inputData)
-                ?: return buildErrorResult(null, "Unable to parse work parameters")
-                        .also { Timber.e("Unable to parse work parameters") }
+            ?: return buildErrorResult(null, "Unable to parse work parameters")
+                .also { Timber.e("Unable to parse work parameters") }
 
         return try {
             val sessionComponent = sessionManager.getSessionComponent(params.sessionId)
-                    ?: return buildErrorResult(params, "No session")
+                ?: return buildErrorResult(params, "No session")
 
             // Make sure to inject before handling error as you may need some dependencies to process them.
             injectWith(sessionComponent)
@@ -75,11 +75,11 @@ internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
 
     protected fun buildErrorResult(params: PARAM?, message: String): Result {
         return Result.success(
-                if (params != null) {
-                    WorkerParamsFactory.toData(paramClass, buildErrorParams(params, message))
-                } else {
-                    WorkerParamsFactory.toData(ErrorData::class.java, ErrorData(sessionId = "", lastFailureMessage = message))
-                }
+            if (params != null) {
+                WorkerParamsFactory.toData(paramClass, buildErrorParams(params, message))
+            } else {
+                WorkerParamsFactory.toData(ErrorData::class.java, ErrorData(sessionId = "", lastFailureMessage = message))
+            }
         )
     }
 
@@ -92,13 +92,13 @@ internal abstract class SessionSafeCoroutineWorker<PARAM : SessionWorkerParams>(
     open fun doOnError(params: PARAM): Result {
         // Forward the error
         return Result.success(inputData)
-                .also { Timber.e("Work cancelled due to input error from parent") }
+            .also { Timber.e("Work cancelled due to input error from parent") }
     }
 
     companion object {
         fun hasFailed(outputData: Data): Boolean {
             return WorkerParamsFactory.fromData(ErrorData::class.java, outputData)
-                    .let { it?.lastFailureMessage != null }
+                .let { it?.lastFailureMessage != null }
         }
     }
 }

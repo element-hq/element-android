@@ -21,20 +21,20 @@ package org.matrix.android.sdk.api.auth.data
  * You don't have to manually instantiate it.
  */
 data class SessionParams(
-        /**
-         * Please consider using shortcuts instead
-         */
-        val credentials: Credentials,
+    /**
+     * Please consider using shortcuts instead
+     */
+    val credentials: Credentials,
 
-        /**
-         * Please consider using shortcuts instead
-         */
-        val homeServerConnectionConfig: HomeServerConnectionConfig,
+    /**
+     * Please consider using shortcuts instead
+     */
+    val homeServerConnectionConfig: HomeServerConnectionConfig,
 
-        /**
-         * Set to false if the current token is not valid anymore. Application should not have to use this info.
-         */
-        val isTokenValid: Boolean
+    /**
+     * Set to false if the current token is not valid anymore. Application should not have to use this info.
+     */
+    val isTokenValid: Boolean
 ) {
     /*
      * Shortcuts. Usually the application should only need to use these shortcuts

@@ -19,8 +19,8 @@ package org.matrix.android.sdk.internal.util
 import kotlin.math.ceil
 
 internal data class BestChunkSize(
-        val numberOfChunks: Int,
-        val chunkSize: Int
+    val numberOfChunks: Int,
+    val chunkSize: Int
 ) {
     fun shouldChunk() = numberOfChunks > 1
 }
@@ -28,8 +28,8 @@ internal data class BestChunkSize(
 internal fun computeBestChunkSize(listSize: Int, limit: Int): BestChunkSize {
     return if (listSize <= limit) {
         BestChunkSize(
-                numberOfChunks = 1,
-                chunkSize = listSize
+            numberOfChunks = 1,
+            chunkSize = listSize
         )
     } else {
         val numberOfChunks = ceil(listSize / limit.toDouble()).toInt()
@@ -37,8 +37,8 @@ internal fun computeBestChunkSize(listSize: Int, limit: Int): BestChunkSize {
         val chunkSize = ceil(listSize / numberOfChunks.toDouble()).toInt()
 
         BestChunkSize(
-                numberOfChunks = numberOfChunks,
-                chunkSize = chunkSize
+            numberOfChunks = numberOfChunks,
+            chunkSize = chunkSize
         )
     }
 }

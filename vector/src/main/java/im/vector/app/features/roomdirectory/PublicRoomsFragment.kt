@@ -50,11 +50,11 @@ import javax.inject.Inject
  * - When filtering more (when entering new chars), we could filter on result we already have, during the new server request, to avoid empty screen effect
  */
 class PublicRoomsFragment @Inject constructor(
-        private val publicRoomsController: PublicRoomsController,
-        private val permalinkHandler: PermalinkHandler,
-        private val session: Session
+    private val publicRoomsController: PublicRoomsController,
+    private val permalinkHandler: PermalinkHandler,
+    private val session: Session
 ) : VectorBaseFragment<FragmentPublicRoomsBinding>(),
-        PublicRoomsController.Callback {
+    PublicRoomsController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
@@ -69,17 +69,17 @@ class PublicRoomsFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.publicRoomsToolbar)
-                .allowBack()
+            .allowBack()
 
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
 
         views.publicRoomsFilter.queryTextChanges()
-                .debounce(500)
-                .onEach {
-                    viewModel.handle(RoomDirectoryAction.FilterWith(it.toString()))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .debounce(500)
+            .onEach {
+                viewModel.handle(RoomDirectoryAction.FilterWith(it.toString()))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.publicRoomsCreateNewRoom.debouncedClicks {
             sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoom)
@@ -110,7 +110,7 @@ class PublicRoomsFragment @Inject constructor(
                 sharedActionViewModel.post(RoomDirectorySharedAction.ChangeProtocol)
                 true
             }
-            else                                     ->
+            else ->
                 super.onOptionsItemSelected(item)
         }
     }
@@ -125,12 +125,12 @@ class PublicRoomsFragment @Inject constructor(
         viewLifecycleOwner.lifecycleScope.launch {
             val permalink = session.permalinkService().createPermalink(roomIdOrAlias)
             val isHandled = permalinkHandler
-                    .launch(requireContext(), permalink, object : NavigationInterceptor {
-                        override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
-                            requireActivity().finish()
-                            return false
-                        }
-                    })
+                .launch(requireContext(), permalink, object : NavigationInterceptor {
+                    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
+                        requireActivity().finish()
+                        return false
+                    }
+                })
 
             if (!isHandled) {
                 requireContext().toast(R.string.room_error_not_found)
@@ -145,7 +145,7 @@ class PublicRoomsFragment @Inject constructor(
                 JoinState.JOINED -> {
                     navigator.openRoom(requireActivity(), publicRoom.roomId)
                 }
-                else             -> {
+                else -> {
                     // ROOM PREVIEW
                     navigator.openRoomPreview(requireActivity(), publicRoom, state.roomDirectoryData)
                 }

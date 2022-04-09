@@ -32,10 +32,12 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
-class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvider: StringProvider,
-                                                         private val colorProvider: ColorProvider,
-                                                         private val dimensionConverter: DimensionConverter,
-                                                         private val vectorPreferences: VectorPreferences) :
+class DeviceTrustInfoEpoxyController @Inject constructor(
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider,
+    private val dimensionConverter: DimensionConverter,
+    private val vectorPreferences: VectorPreferences
+) :
     TypedEpoxyController<DeviceListViewState>() {
 
     interface InteractionListener {
@@ -53,9 +55,9 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                 style(ItemStyle.BIG_TEXT)
                 titleIconResourceId(if (isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                 title(
-                        host.stringProvider
-                                .getString(if (isVerified) R.string.verification_profile_verified else R.string.verification_profile_warning)
-                                .toEpoxyCharSequence()
+                    host.stringProvider
+                        .getString(if (isVerified) R.string.verification_profile_verified else R.string.verification_profile_warning)
+                        .toEpoxyCharSequence()
                 )
             }
             genericFooterItem {
@@ -65,31 +67,39 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                 apply {
                     if (isVerified) {
                         // TODO FORMAT
-                        text(host.stringProvider.getString(R.string.verification_profile_device_verified_because,
+                        text(
+                            host.stringProvider.getString(
+                                R.string.verification_profile_device_verified_because,
                                 data.userItem?.displayName ?: "",
-                                data.userItem?.id ?: "").toEpoxyCharSequence())
+                                data.userItem?.id ?: ""
+                            ).toEpoxyCharSequence()
+                        )
                     } else {
                         // TODO what if mine
-                        text(host.stringProvider.getString(R.string.verification_profile_device_new_signing,
+                        text(
+                            host.stringProvider.getString(
+                                R.string.verification_profile_device_new_signing,
                                 data.userItem?.displayName ?: "",
-                                data.userItem?.id ?: "").toEpoxyCharSequence())
+                                data.userItem?.id ?: ""
+                            ).toEpoxyCharSequence()
+                        )
                     }
                 }
-//                    text(stringProvider.getString(R.string.verification_profile_device_untrust_info))
+                //                    text(stringProvider.getString(R.string.verification_profile_device_untrust_info))
             }
 
             genericWithValueItem {
                 id(cryptoDeviceInfo.deviceId)
                 titleIconResourceId(if (isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                 title(
+                    span {
+                        +(cryptoDeviceInfo.displayName() ?: "")
                         span {
-                            +(cryptoDeviceInfo.displayName() ?: "")
-                            span {
-                                text = " (${cryptoDeviceInfo.deviceId})"
-                                textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
-                                textSize = host.dimensionConverter.spToPx(14)
-                            }
-                        }.toEpoxyCharSequence()
+                            text = " (${cryptoDeviceInfo.deviceId})"
+                            textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
+                            textSize = host.dimensionConverter.spToPx(14)
+                        }
+                    }.toEpoxyCharSequence()
                 )
             }
 

@@ -23,11 +23,11 @@ import org.matrix.android.sdk.api.session.room.model.Membership
  * It can be retrieved through [org.matrix.android.sdk.api.session.group.GroupService]
  */
 data class GroupSummary(
-        val groupId: String,
-        val membership: Membership,
-        val displayName: String = "",
-        val shortDescription: String = "",
-        val avatarUrl: String = "",
-        val roomIds: List<String> = emptyList(),
-        val userIds: List<String> = emptyList()
+    val groupId: String,
+    val membership: Membership,
+    val displayName: String = "",
+    val shortDescription: String = "",
+    val avatarUrl: String = "",
+    val roomIds: List<String> = emptyList(),
+    val userIds: List<String> = emptyList()
 )

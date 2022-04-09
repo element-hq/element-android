@@ -54,8 +54,10 @@ object FcmHelper {
      * @param context android context
      * @param token   the token to store
      */
-    fun storeFcmToken(context: Context,
-                      token: String?) {
+    fun storeFcmToken(
+        context: Context,
+        token: String?
+    ) {
         DefaultSharedPreferences.getInstance(context).edit {
             putString(PREFS_KEY_FCM_TOKEN, token)
         }
@@ -72,15 +74,15 @@ object FcmHelper {
         if (checkPlayServices(activity)) {
             try {
                 FirebaseMessaging.getInstance().token
-                        .addOnSuccessListener { token ->
-                            storeFcmToken(activity, token)
-                            if (registerPusher) {
-                                pushersManager.enqueueRegisterPusherWithFcmKey(token)
-                            }
+                    .addOnSuccessListener { token ->
+                        storeFcmToken(activity, token)
+                        if (registerPusher) {
+                            pushersManager.enqueueRegisterPusherWithFcmKey(token)
                         }
-                        .addOnFailureListener { e ->
-                            Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed")
-                        }
+                    }
+                    .addOnFailureListener { e ->
+                        Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed")
+                    }
             } catch (e: Throwable) {
                 Timber.e(e, "## ensureFcmTokenIsRetrieved() : failed")
             }

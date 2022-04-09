@@ -49,35 +49,38 @@ import java.io.IOException
 import javax.inject.Inject
 
 internal class FileUploader @Inject constructor(
-        @Authenticated private val okHttpClient: OkHttpClient,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
-        private val context: Context,
-        private val temporaryFileCreator: TemporaryFileCreator,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        contentUrlResolver: ContentUrlResolver,
-        moshi: Moshi
+    @Authenticated private val okHttpClient: OkHttpClient,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+    private val context: Context,
+    private val temporaryFileCreator: TemporaryFileCreator,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+    contentUrlResolver: ContentUrlResolver,
+    moshi: Moshi
 ) {
 
     private val uploadUrl = contentUrlResolver.uploadUrl
     private val responseAdapter = moshi.adapter(ContentUploadResponse::class.java)
 
-    suspend fun uploadFile(file: File,
-                           filename: String?,
-                           mimeType: String?,
-                           progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+    suspend fun uploadFile(
+        file: File,
+        filename: String?,
+        mimeType: String?,
+        progressListener: ProgressRequestBody.Listener? = null
+    ): ContentUploadResponse {
         // Check size limit
         val maxUploadFileSize = homeServerCapabilitiesService.getHomeServerCapabilities().maxUploadFileSize
 
         if (maxUploadFileSize != HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN &&
-                file.length() > maxUploadFileSize) {
+            file.length() > maxUploadFileSize
+        ) {
             // Known limitation and file too big for the server, save the pain to upload it
             throw Failure.ServerError(
-                    error = MatrixError(
-                            code = MatrixError.M_TOO_LARGE,
-                            message = "Cannot upload files larger than ${maxUploadFileSize / 1048576L}mb"
-                    ),
-                    httpCode = 413
+                error = MatrixError(
+                    code = MatrixError.M_TOO_LARGE,
+                    message = "Cannot upload files larger than ${maxUploadFileSize / 1048576L}mb"
+                ),
+                httpCode = 413
             )
         }
 
@@ -99,18 +102,22 @@ internal class FileUploader @Inject constructor(
         return upload(uploadBody, filename, progressListener)
     }
 
-    suspend fun uploadByteArray(byteArray: ByteArray,
-                                filename: String?,
-                                mimeType: String?,
-                                progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+    suspend fun uploadByteArray(
+        byteArray: ByteArray,
+        filename: String?,
+        mimeType: String?,
+        progressListener: ProgressRequestBody.Listener? = null
+    ): ContentUploadResponse {
         val uploadBody = byteArray.toRequestBody(mimeType?.toMediaTypeOrNull())
         return upload(uploadBody, filename, progressListener)
     }
 
-    suspend fun uploadFromUri(uri: Uri,
-                              filename: String?,
-                              mimeType: String?,
-                              progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
+    suspend fun uploadFromUri(
+        uri: Uri,
+        filename: String?,
+        mimeType: String?,
+        progressListener: ProgressRequestBody.Listener? = null
+    ): ContentUploadResponse {
         val workingFile = context.copyUriToTempFile(uri)
         return uploadFile(workingFile, filename, mimeType, progressListener).also {
             tryOrNull { workingFile.delete() }
@@ -128,35 +135,37 @@ internal class FileUploader @Inject constructor(
         }
     }
 
-    private suspend fun upload(uploadBody: RequestBody,
-                               filename: String?,
-                               progressListener: ProgressRequestBody.Listener?): ContentUploadResponse {
+    private suspend fun upload(
+        uploadBody: RequestBody,
+        filename: String?,
+        progressListener: ProgressRequestBody.Listener?
+    ): ContentUploadResponse {
         val urlBuilder = uploadUrl.toHttpUrlOrNull()?.newBuilder() ?: throw RuntimeException()
 
         val httpUrl = urlBuilder
-                .apply {
-                    if (filename != null) {
-                        addQueryParameter("filename", filename)
-                    }
+            .apply {
+                if (filename != null) {
+                    addQueryParameter("filename", filename)
                 }
-                .build()
+            }
+            .build()
 
         val requestBody = if (progressListener != null) ProgressRequestBody(uploadBody, progressListener) else uploadBody
 
         val request = Request.Builder()
-                .url(httpUrl)
-                .post(requestBody)
-                .build()
+            .url(httpUrl)
+            .post(requestBody)
+            .build()
 
-       return withContext(coroutineDispatchers.io) {
-             okHttpClient.newCall(request).awaitResponse().use { response ->
+        return withContext(coroutineDispatchers.io) {
+            okHttpClient.newCall(request).awaitResponse().use { response ->
                 if (!response.isSuccessful) {
                     throw response.toFailure(globalErrorReceiver)
                 } else {
                     response.body?.source()?.let {
                         responseAdapter.fromJson(it)
                     }
-                            ?: throw IOException()
+                        ?: throw IOException()
                 }
             }
         }

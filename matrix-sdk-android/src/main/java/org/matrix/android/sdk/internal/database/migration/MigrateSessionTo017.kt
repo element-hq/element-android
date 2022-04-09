@@ -24,6 +24,6 @@ class MigrateSessionTo017(realm: DynamicRealm) : RealmMigrator(realm, 17) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("EventInsertEntity")
-                ?.addField(EventInsertEntityFields.CAN_BE_PROCESSED, Boolean::class.java)
+            ?.addField(EventInsertEntityFields.CAN_BE_PROCESSED, Boolean::class.java)
     }
 }

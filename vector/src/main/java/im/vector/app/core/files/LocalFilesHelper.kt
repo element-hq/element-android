@@ -26,16 +26,16 @@ import javax.inject.Inject
 class LocalFilesHelper @Inject constructor(private val context: Context) {
     fun isLocalFile(fileUri: String?): Boolean {
         return fileUri
-                ?.let { Uri.parse(it) }
-                ?.let { DocumentFile.fromSingleUri(context, it) }
-                ?.exists()
-                .orFalse()
+            ?.let { Uri.parse(it) }
+            ?.let { DocumentFile.fromSingleUri(context, it) }
+            ?.exists()
+            .orFalse()
     }
 
     fun openInputStream(fileUri: String?): InputStream? {
         return fileUri
-                ?.takeIf { isLocalFile(it) }
-                ?.let { Uri.parse(it) }
-                ?.let { context.contentResolver.openInputStream(it) }
+            ?.takeIf { isLocalFile(it) }
+            ?.let { Uri.parse(it) }
+            ?.let { context.contentResolver.openInputStream(it) }
     }
 }

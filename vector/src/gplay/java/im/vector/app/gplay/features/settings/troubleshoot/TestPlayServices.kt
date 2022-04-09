@@ -29,8 +29,10 @@ import javax.inject.Inject
 /*
 * Check that the play services APK is available an up-to-date. If needed provide quick fix to install it.
  */
-class TestPlayServices @Inject constructor(private val context: FragmentActivity,
-                                           private val stringProvider: StringProvider) :
+class TestPlayServices @Inject constructor(
+    private val context: FragmentActivity,
+    private val stringProvider: StringProvider
+) :
     TroubleshootTest(R.string.settings_troubleshoot_test_play_services_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {

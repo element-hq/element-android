@@ -35,31 +35,31 @@ class MigrateSessionTo026(realm: DynamicRealm) : RealmMigrator(realm, 26) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("ChunkEntity")
-                ?.addField(ChunkEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
-                ?.addField(ChunkEntityFields.IS_LAST_FORWARD_THREAD, Boolean::class.java, FieldAttribute.INDEXED)
+            ?.addField(ChunkEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
+            ?.addField(ChunkEntityFields.IS_LAST_FORWARD_THREAD, Boolean::class.java, FieldAttribute.INDEXED)
 
         realm.schema.get("TimelineEventEntity")
-                ?.addField(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, Boolean::class.java)
+            ?.addField(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, Boolean::class.java)
 
         val eventEntity = realm.schema.get("EventEntity") ?: return
         val threadSummaryEntity = realm.schema.create("ThreadSummaryEntity")
-                .addField(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
-                .addField(ThreadSummaryEntityFields.ROOT_THREAD_SENDER_NAME, String::class.java)
-                .addField(ThreadSummaryEntityFields.ROOT_THREAD_SENDER_AVATAR, String::class.java)
-                .addField(ThreadSummaryEntityFields.ROOT_THREAD_IS_UNIQUE_DISPLAY_NAME, Boolean::class.java)
-                .addField(ThreadSummaryEntityFields.LATEST_THREAD_SENDER_NAME, String::class.java)
-                .addField(ThreadSummaryEntityFields.LATEST_THREAD_SENDER_AVATAR, String::class.java)
-                .addField(ThreadSummaryEntityFields.LATEST_THREAD_IS_UNIQUE_DISPLAY_NAME, Boolean::class.java)
-                .addField(ThreadSummaryEntityFields.NUMBER_OF_THREADS, Int::class.java)
-                .addField(ThreadSummaryEntityFields.IS_USER_PARTICIPATING, Boolean::class.java)
-                .addRealmObjectField(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ENTITY.`$`, eventEntity)
-                .addRealmObjectField(ThreadSummaryEntityFields.LATEST_THREAD_EVENT_ENTITY.`$`, eventEntity)
+            .addField(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
+            .addField(ThreadSummaryEntityFields.ROOT_THREAD_SENDER_NAME, String::class.java)
+            .addField(ThreadSummaryEntityFields.ROOT_THREAD_SENDER_AVATAR, String::class.java)
+            .addField(ThreadSummaryEntityFields.ROOT_THREAD_IS_UNIQUE_DISPLAY_NAME, Boolean::class.java)
+            .addField(ThreadSummaryEntityFields.LATEST_THREAD_SENDER_NAME, String::class.java)
+            .addField(ThreadSummaryEntityFields.LATEST_THREAD_SENDER_AVATAR, String::class.java)
+            .addField(ThreadSummaryEntityFields.LATEST_THREAD_IS_UNIQUE_DISPLAY_NAME, Boolean::class.java)
+            .addField(ThreadSummaryEntityFields.NUMBER_OF_THREADS, Int::class.java)
+            .addField(ThreadSummaryEntityFields.IS_USER_PARTICIPATING, Boolean::class.java)
+            .addRealmObjectField(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ENTITY.`$`, eventEntity)
+            .addRealmObjectField(ThreadSummaryEntityFields.LATEST_THREAD_EVENT_ENTITY.`$`, eventEntity)
 
         realm.schema.get("RoomEntity")
-                ?.addRealmListField(RoomEntityFields.THREAD_SUMMARIES.`$`, threadSummaryEntity)
+            ?.addRealmListField(RoomEntityFields.THREAD_SUMMARIES.`$`, threadSummaryEntity)
 
         realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField(HomeServerCapabilitiesEntityFields.CAN_USE_THREADING, Boolean::class.java)
-                ?.forceRefreshOfHomeServerCapabilities()
+            ?.addField(HomeServerCapabilitiesEntityFields.CAN_USE_THREADING, Boolean::class.java)
+            ?.forceRefreshOfHomeServerCapabilities()
     }
 }

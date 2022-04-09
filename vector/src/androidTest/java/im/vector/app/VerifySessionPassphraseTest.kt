@@ -72,38 +72,41 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         existingSession = createAccountAndSync(matrix, userName, password, true)
         doSync<Unit> {
             existingSession!!.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = existingSession!!.myUserId,
-                                                    password = "password",
-                                                    session = flowResponse.session
-                                            )
-                                    )
-                                }
-                            }, it)
+                .initializeCrossSigning(
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            promise.resume(
+                                UserPasswordAuth(
+                                    user = existingSession!!.myUserId,
+                                    password = "password",
+                                    session = flowResponse.session
+                                )
+                            )
+                        }
+                    }, it
+                )
         }
 
         val task = BootstrapCrossSigningTask(existingSession!!, StringProvider(context.resources))
 
         runBlocking {
-            task.execute(Params(
+            task.execute(
+                Params(
                     userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
                         override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                             promise.resume(
-                                    UserPasswordAuth(
-                                            user = existingSession!!.myUserId,
-                                            password = password,
-                                            session = flowResponse.session
-                                    )
+                                UserPasswordAuth(
+                                    user = existingSession!!.myUserId,
+                                    password = password,
+                                    session = flowResponse.session
+                                )
                             )
                         }
                     },
                     passphrase = passphrase,
                     setupMode = SetupMode.NORMAL
-            ))
+                )
+            )
         }
     }
 
@@ -116,8 +119,8 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         // Thread.sleep(6000)
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
             onView(withId(R.id.roomListContainer))
-                    .check(matches(isDisplayed()))
-                    .perform(closeSoftKeyboard())
+                .check(matches(isDisplayed()))
+                .perform(closeSoftKeyboard())
         }
 
         val activity = EspressoHelper.getCurrentActivity()!!
@@ -125,7 +128,7 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
 
         withIdlingResource(initialSyncIdlingResource(uiSession)) {
             onView(withId(R.id.roomListContainer))
-                    .check(matches(isDisplayed()))
+                .check(matches(isDisplayed()))
         }
 
         // THIS IS THE ONLY WAY I FOUND TO CLICK ON ALERTERS... :(
@@ -137,43 +140,43 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
         }
 
         onView(withId(R.id.bottomSheetFragmentContainer))
-                .check(matches(isDisplayed()))
+            .check(matches(isDisplayed()))
 
         onView(isRoot()).perform(SleepViewAction.sleep(2000))
 
         onView(withText(R.string.use_latest_app))
-                .check(matches(isDisplayed()))
+            .check(matches(isDisplayed()))
 
         // 4S is not setup so passphrase option should be hidden
         onView(withId(R.id.bottomSheetFragmentContainer))
-                .check(matches(hasDescendant(withText(R.string.verification_cannot_access_other_session))))
+            .check(matches(hasDescendant(withText(R.string.verification_cannot_access_other_session))))
 
         onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                .perform(
-                        actionOnItem<RecyclerView.ViewHolder>(
-                                hasDescendant(withText(R.string.verification_cannot_access_other_session)),
-                                click()
-                        )
+            .perform(
+                actionOnItem<RecyclerView.ViewHolder>(
+                    hasDescendant(withText(R.string.verification_cannot_access_other_session)),
+                    click()
                 )
+            )
 
         withIdlingResource(activityIdlingResource(SharedSecureStorageActivity::class.java)) {
             onView(withId(R.id.ssss__root)).check(matches(isDisplayed()))
         }
 
         onView(withId(R.id.ssss_passphrase_enter_edittext))
-                .perform(typeText(passphrase))
+            .perform(typeText(passphrase))
 
         onView(withId(R.id.ssss_passphrase_submit))
-                .perform(click())
+            .perform(click())
 
         System.out.println("*** passphrase 1")
 
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
             System.out.println("*** passphrase 1.1")
             onView(withId(R.id.bottomSheetVerificationRecyclerView))
-                    .check(
-                            matches(hasDescendant(withText(R.string.verification_conclusion_ok_self_notice)))
-                    )
+                .check(
+                    matches(hasDescendant(withText(R.string.verification_conclusion_ok_self_notice)))
+                )
         }
 
         System.out.println("*** passphrase 2")

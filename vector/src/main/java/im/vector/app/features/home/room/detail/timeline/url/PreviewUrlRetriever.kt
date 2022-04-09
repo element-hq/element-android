@@ -25,14 +25,16 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLatestEventId
 
-class PreviewUrlRetriever(session: Session,
-                          private val coroutineScope: CoroutineScope) {
+class PreviewUrlRetriever(
+    session: Session,
+    private val coroutineScope: CoroutineScope
+) {
     private val mediaService = session.mediaService()
 
     private data class EventIdPreviewUrlUiState(
-            // Id of the latest event in the case of an edited event, or the eventId for an event which has not been edited
-            val latestEventId: String,
-            val previewUrlUiState: PreviewUrlUiState
+        // Id of the latest event in the case of an edited event, or the eventId for an event which has not been edited
+        val latestEventId: String,
+        val previewUrlUiState: PreviewUrlUiState
     )
 
     // Keys are the main eventId
@@ -52,8 +54,8 @@ class PreviewUrlRetriever(session: Session,
                 // The event is not known or it has been edited
                 // Keep only the first URL for the moment
                 val url = mediaService.extractUrls(event)
-                        .firstOrNull { canShowUrlPreview(it) }
-                        ?.takeIf { it !in blockedUrl }
+                    .firstOrNull { canShowUrlPreview(it) }
+                    ?.takeIf { it !in blockedUrl }
                 if (url == null) {
                     updateState(eventId, latestEventId, PreviewUrlUiState.NoUrl)
                     null
@@ -73,26 +75,26 @@ class PreviewUrlRetriever(session: Session,
             coroutineScope.launch {
                 runCatching {
                     mediaService.getPreviewUrl(
-                            url = urlToRetrieve,
-                            timestamp = null,
-                            cacheStrategy = if (BuildConfig.DEBUG) CacheStrategy.NoCache else CacheStrategy.TtlCache(CACHE_VALIDITY, false)
+                        url = urlToRetrieve,
+                        timestamp = null,
+                        cacheStrategy = if (BuildConfig.DEBUG) CacheStrategy.NoCache else CacheStrategy.TtlCache(CACHE_VALIDITY, false)
                     )
                 }.fold(
-                        {
-                            synchronized(data) {
-                                // Blocked after the request has been sent?
-                                if (urlToRetrieve in blockedUrl) {
-                                    updateState(eventId, latestEventId, PreviewUrlUiState.NoUrl)
-                                } else {
-                                    updateState(eventId, latestEventId, PreviewUrlUiState.Data(eventId, urlToRetrieve, it))
-                                }
-                            }
-                        },
-                        {
-                            synchronized(data) {
-                                updateState(eventId, latestEventId, PreviewUrlUiState.Error(it))
+                    {
+                        synchronized(data) {
+                            // Blocked after the request has been sent?
+                            if (urlToRetrieve in blockedUrl) {
+                                updateState(eventId, latestEventId, PreviewUrlUiState.NoUrl)
+                            } else {
+                                updateState(eventId, latestEventId, PreviewUrlUiState.Data(eventId, urlToRetrieve, it))
                             }
                         }
+                    },
+                    {
+                        synchronized(data) {
+                            updateState(eventId, latestEventId, PreviewUrlUiState.Error(it))
+                        }
+                    }
                 )
             }
         }
@@ -108,10 +110,10 @@ class PreviewUrlRetriever(session: Session,
         // Notify the listener
         synchronized(data) {
             data[eventId]
-                    ?.takeIf { it.previewUrlUiState is PreviewUrlUiState.Data && it.previewUrlUiState.url == url }
-                    ?.let {
-                        updateState(eventId, it.latestEventId, PreviewUrlUiState.NoUrl)
-                    }
+                ?.takeIf { it.previewUrlUiState is PreviewUrlUiState.Data && it.previewUrlUiState.url == url }
+                ?.let {
+                    updateState(eventId, it.latestEventId, PreviewUrlUiState.NoUrl)
+                }
         }
     }
 
@@ -149,10 +151,10 @@ class PreviewUrlRetriever(session: Session,
         private const val CACHE_VALIDITY = 604_800_000L // 7 * 24 * 3_600 * 1_000
 
         private val blockedDomains = listOf(
-                "https://matrix.to",
-                "https://app.element.io",
-                "https://staging.element.io",
-                "https://develop.element.io"
+            "https://matrix.to",
+            "https://app.element.io",
+            "https://staging.element.io",
+            "https://develop.element.io"
         )
     }
 }

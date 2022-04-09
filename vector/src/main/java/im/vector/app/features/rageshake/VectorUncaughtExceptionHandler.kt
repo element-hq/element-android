@@ -31,10 +31,10 @@ import javax.inject.Singleton
 
 @Singleton
 class VectorUncaughtExceptionHandler @Inject constructor(
-        context: Context,
-        private val bugReporter: BugReporter,
-        private val versionProvider: VersionProvider,
-        private val versionCodeProvider: VersionCodeProvider
+    context: Context,
+    private val bugReporter: BugReporter,
+    private val versionProvider: VersionProvider,
+    private val versionCodeProvider: VersionCodeProvider
 ) : Thread.UncaughtExceptionHandler {
 
     // key to save the crash status

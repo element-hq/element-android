@@ -30,13 +30,13 @@ import im.vector.app.databinding.FragmentSpaceCreateChoosePrivateModelBinding
 import javax.inject.Inject
 
 class ChoosePrivateSpaceTypeFragment @Inject constructor(
-        private val stringProvider: StringProvider
+    private val stringProvider: StringProvider
 ) : VectorBaseFragment<FragmentSpaceCreateChoosePrivateModelBinding>(), OnBackPressed {
 
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentSpaceCreateChoosePrivateModelBinding.inflate(layoutInflater, container, false)
+        FragmentSpaceCreateChoosePrivateModelBinding.inflate(layoutInflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

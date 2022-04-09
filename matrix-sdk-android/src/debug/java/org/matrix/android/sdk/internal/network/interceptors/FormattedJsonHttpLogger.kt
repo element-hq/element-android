@@ -63,8 +63,8 @@ class FormattedJsonHttpLogger : HttpLoggingInterceptor.Logger {
 
     private fun logJson(formattedJson: String) {
         formattedJson
-                .lines()
-                .dropLastWhile { it.isEmpty() }
-                .forEach { Timber.v(it) }
+            .lines()
+            .dropLastWhile { it.isEmpty() }
+            .forEach { Timber.v(it) }
     }
 }

@@ -24,12 +24,12 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class ValidationCodeBody(
-        @Json(name = "client_secret")
-        val clientSecret: String,
+    @Json(name = "client_secret")
+    val clientSecret: String,
 
-        @Json(name = "sid")
-        val sid: String,
+    @Json(name = "sid")
+    val sid: String,
 
-        @Json(name = "token")
-        val code: String
+    @Json(name = "token")
+    val code: String
 )

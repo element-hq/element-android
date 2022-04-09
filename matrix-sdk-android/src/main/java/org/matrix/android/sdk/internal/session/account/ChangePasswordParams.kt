@@ -25,17 +25,17 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
  */
 @JsonClass(generateAdapter = true)
 internal data class ChangePasswordParams(
-        @Json(name = "auth")
-        val auth: UserPasswordAuth? = null,
+    @Json(name = "auth")
+    val auth: UserPasswordAuth? = null,
 
-        @Json(name = "new_password")
-        val newPassword: String? = null
+    @Json(name = "new_password")
+    val newPassword: String? = null
 ) {
     companion object {
         fun create(userId: String, oldPassword: String, newPassword: String): ChangePasswordParams {
             return ChangePasswordParams(
-                    auth = UserPasswordAuth(user = userId, password = oldPassword),
-                    newPassword = newPassword
+                auth = UserPasswordAuth(user = userId, password = oldPassword),
+                newPassword = newPassword
             )
         }
     }

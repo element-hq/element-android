@@ -36,10 +36,10 @@ import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import javax.inject.Inject
 
 class UploadsMediaController @Inject constructor(
-        private val errorFormatter: ErrorFormatter,
-        private val imageContentRenderer: ImageContentRenderer,
-        private val stringProvider: StringProvider,
-        dimensionConverter: DimensionConverter
+    private val errorFormatter: ErrorFormatter,
+    private val imageContentRenderer: ImageContentRenderer,
+    private val stringProvider: StringProvider,
+    dimensionConverter: DimensionConverter
 ) : TypedEpoxyController<RoomUploadsViewState>() {
 
     interface Listener {
@@ -107,15 +107,15 @@ class UploadsMediaController @Inject constructor(
         val messageContent = (contentWithAttachmentContent as? MessageImageContent) ?: return null
 
         return ImageContentRenderer.Data(
-                eventId = eventId,
-                filename = messageContent.body,
-                url = messageContent.getFileUrl(),
-                mimeType = messageContent.mimeType,
-                elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                height = messageContent.info?.height,
-                maxHeight = itemSize,
-                width = messageContent.info?.width,
-                maxWidth = itemSize
+            eventId = eventId,
+            filename = messageContent.body,
+            url = messageContent.getFileUrl(),
+            mimeType = messageContent.mimeType,
+            elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
+            height = messageContent.info?.height,
+            maxHeight = itemSize,
+            width = messageContent.info?.width,
+            maxWidth = itemSize
         )
     }
 
@@ -123,24 +123,24 @@ class UploadsMediaController @Inject constructor(
         val messageContent = (contentWithAttachmentContent as? MessageVideoContent) ?: return null
 
         val thumbnailData = ImageContentRenderer.Data(
-                eventId = eventId,
-                filename = messageContent.body,
-                mimeType = messageContent.mimeType,
-                url = messageContent.videoInfo?.getThumbnailUrl(),
-                elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
-                height = messageContent.videoInfo?.height,
-                maxHeight = itemSize,
-                width = messageContent.videoInfo?.width,
-                maxWidth = itemSize
+            eventId = eventId,
+            filename = messageContent.body,
+            mimeType = messageContent.mimeType,
+            url = messageContent.videoInfo?.getThumbnailUrl(),
+            elementToDecrypt = messageContent.videoInfo?.thumbnailFile?.toElementToDecrypt(),
+            height = messageContent.videoInfo?.height,
+            maxHeight = itemSize,
+            width = messageContent.videoInfo?.width,
+            maxWidth = itemSize
         )
 
         return VideoContentRenderer.Data(
-                eventId = eventId,
-                filename = messageContent.body,
-                mimeType = messageContent.mimeType,
-                url = messageContent.getFileUrl(),
-                elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
-                thumbnailMediaData = thumbnailData
+            eventId = eventId,
+            filename = messageContent.body,
+            mimeType = messageContent.mimeType,
+            url = messageContent.getFileUrl(),
+            elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt(),
+            thumbnailMediaData = thumbnailData
         )
     }
 }

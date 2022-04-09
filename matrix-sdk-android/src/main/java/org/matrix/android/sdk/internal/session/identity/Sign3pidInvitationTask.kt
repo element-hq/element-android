@@ -27,23 +27,23 @@ import javax.inject.Inject
 
 internal interface Sign3pidInvitationTask : Task<Sign3pidInvitationTask.Params, SignInvitationResult> {
     data class Params(
-            val token: String,
-            val url: String,
-            val privateKey: String
+        val token: String,
+        val url: String,
+        val privateKey: String
     )
 }
 
 internal class DefaultSign3pidInvitationTask @Inject constructor(
-        @Unauthenticated
-        private val okHttpClient: Lazy<OkHttpClient>,
-        private val retrofitFactory: RetrofitFactory,
-        @UserId private val userId: String
+    @Unauthenticated
+    private val okHttpClient: Lazy<OkHttpClient>,
+    private val retrofitFactory: RetrofitFactory,
+    @UserId private val userId: String
 ) : Sign3pidInvitationTask {
 
     override suspend fun execute(params: Sign3pidInvitationTask.Params): SignInvitationResult {
         val identityAPI = retrofitFactory
-                .create(okHttpClient, "https://${params.url}")
-                .create(IdentityAPI::class.java)
+            .create(okHttpClient, "https://${params.url}")
+            .create(IdentityAPI::class.java)
         return identityAPI.signInvitationDetails(params.token, params.privateKey, userId)
     }
 }

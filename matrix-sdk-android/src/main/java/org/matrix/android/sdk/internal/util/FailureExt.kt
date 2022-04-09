@@ -26,11 +26,11 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
  */
 internal fun Throwable.toMatrixErrorStr(): String {
     return (this as? Failure.ServerError)
-            ?.let {
-                // Serialize the MatrixError in this case
-                val adapter = MoshiProvider.providesMoshi().adapter(MatrixError::class.java)
-                tryOrNull { adapter.toJson(error) }
-            }
-            ?: localizedMessage
-            ?: "error"
+        ?.let {
+            // Serialize the MatrixError in this case
+            val adapter = MoshiProvider.providesMoshi().adapter(MatrixError::class.java)
+            tryOrNull { adapter.toJson(error) }
+        }
+        ?: localizedMessage
+        ?: "error"
 }

@@ -64,28 +64,28 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
         val args = intent?.getParcelableExtra<GenericIdArgs>(Mavericks.KEY_ARG)
         if (isFirstCreation()) {
             replaceFragment(
-                    views.simpleFragmentContainer,
-                    SpacePeopleFragment::class.java,
-                    args
+                views.simpleFragmentContainer,
+                SpacePeopleFragment::class.java,
+                args
             )
         }
 
         sharedActionViewModel = viewModelProvider.get(SpacePeopleSharedActionViewModel::class.java)
         sharedActionViewModel
-                .stream()
-                .onEach { sharedAction ->
-                    when (sharedAction) {
-                        SpacePeopleSharedAction.Dismiss             -> finish()
-                        is SpacePeopleSharedAction.NavigateToRoom   -> navigateToRooms(sharedAction)
-                        SpacePeopleSharedAction.HideModalLoading    -> hideWaitingView()
-                        SpacePeopleSharedAction.ShowModalLoading    -> {
-                            showWaitingView()
-                        }
-                        is SpacePeopleSharedAction.NavigateToInvite -> {
-                            ShareSpaceBottomSheet.show(supportFragmentManager, sharedAction.spaceId)
-                        }
+            .stream()
+            .onEach { sharedAction ->
+                when (sharedAction) {
+                    SpacePeopleSharedAction.Dismiss -> finish()
+                    is SpacePeopleSharedAction.NavigateToRoom -> navigateToRooms(sharedAction)
+                    SpacePeopleSharedAction.HideModalLoading -> hideWaitingView()
+                    SpacePeopleSharedAction.ShowModalLoading -> {
+                        showWaitingView()
                     }
-                }.launchIn(lifecycleScope)
+                    is SpacePeopleSharedAction.NavigateToInvite -> {
+                        ShareSpaceBottomSheet.show(supportFragmentManager, sharedAction.spaceId)
+                    }
+                }
+            }.launchIn(lifecycleScope)
     }
 
     private fun navigateToRooms(action: SpacePeopleSharedAction.NavigateToRoom) {

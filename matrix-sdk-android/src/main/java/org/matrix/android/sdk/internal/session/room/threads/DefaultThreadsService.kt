@@ -35,13 +35,13 @@ import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThread
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 
 internal class DefaultThreadsService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        @UserId private val userId: String,
-        private val fetchThreadTimelineTask: FetchThreadTimelineTask,
-        private val fetchThreadSummariesTask: FetchThreadSummariesTask,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val timelineEventMapper: TimelineEventMapper,
-        private val threadSummaryMapper: ThreadSummaryMapper
+    @Assisted private val roomId: String,
+    @UserId private val userId: String,
+    private val fetchThreadTimelineTask: FetchThreadTimelineTask,
+    private val fetchThreadSummariesTask: FetchThreadSummariesTask,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val timelineEventMapper: TimelineEventMapper,
+    private val threadSummaryMapper: ThreadSummaryMapper
 ) : ThreadsService {
 
     @AssistedFactory
@@ -51,17 +51,17 @@ internal class DefaultThreadsService @AssistedInject constructor(
 
     override fun getAllThreadSummariesLive(): LiveData<List<ThreadSummary>> {
         return monarchy.findAllMappedWithChanges(
-                { ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId) },
-                {
-                    threadSummaryMapper.map(it)
-                }
+            { ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId) },
+            {
+                threadSummaryMapper.map(it)
+            }
         )
     }
 
     override fun getAllThreadSummaries(): List<ThreadSummary> {
         return monarchy.fetchAllMappedSync(
-                { ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId) },
-                { threadSummaryMapper.map(it) }
+            { ThreadSummaryEntity.findAllThreadsForRoomId(it, roomId = roomId) },
+            { threadSummaryMapper.map(it) }
         )
     }
 
@@ -72,17 +72,21 @@ internal class DefaultThreadsService @AssistedInject constructor(
     }
 
     override suspend fun fetchThreadTimeline(rootThreadEventId: String, from: String, limit: Int) {
-        fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(
+        fetchThreadTimelineTask.execute(
+            FetchThreadTimelineTask.Params(
                 roomId = roomId,
                 rootThreadEventId = rootThreadEventId,
                 from = from,
                 limit = limit
-        ))
+            )
+        )
     }
 
     override suspend fun fetchThreadSummaries() {
-        fetchThreadSummariesTask.execute(FetchThreadSummariesTask.Params(
+        fetchThreadSummariesTask.execute(
+            FetchThreadSummariesTask.Params(
                 roomId = roomId
-        ))
+            )
+        )
     }
 }

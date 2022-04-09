@@ -59,21 +59,21 @@ abstract class FormEditableSquareAvatarItem : EpoxyModelWithHolder<FormEditableS
         super.bind(holder)
         holder.imageContainer.onClick(clickListener?.takeIf { enabled })
         when {
-            imageUri != null   -> {
+            imageUri != null -> {
                 val corner = TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        8f,
-                        holder.view.resources.displayMetrics
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    8f,
+                    holder.view.resources.displayMetrics
                 ).toInt()
                 GlideApp.with(holder.image)
-                        .load(imageUri)
-                        .transform(MultiTransformation(CenterCrop(), RoundedCorners(corner)))
-                        .into(holder.image)
+                    .load(imageUri)
+                    .transform(MultiTransformation(CenterCrop(), RoundedCorners(corner)))
+                    .into(holder.image)
             }
             matrixItem != null -> {
                 avatarRenderer?.render(matrixItem!!, holder.image)
             }
-            else               -> {
+            else -> {
                 avatarRenderer?.clear(holder.image)
             }
         }

@@ -20,7 +20,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseViewHolder constructor(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    RecyclerView.ViewHolder(itemView) {
 
     open fun onRecycled() {
         boundResourceUid = null
@@ -42,4 +42,4 @@ abstract class BaseViewHolder constructor(itemView: View) :
 }
 
 class UnsupportedViewHolder constructor(itemView: View) :
-        BaseViewHolder(itemView)
+    BaseViewHolder(itemView)

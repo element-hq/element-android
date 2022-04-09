@@ -20,8 +20,8 @@ package im.vector.app.core.platform
  * Model to display a Waiting View
  */
 data class WaitingViewData(
-        val message: String,
-        val progress: Int? = null,
-        val progressTotal: Int? = null,
-        val isIndeterminate: Boolean = false
+    val message: String,
+    val progress: Int? = null,
+    val progressTotal: Int? = null,
+    val isIndeterminate: Boolean = false
 )

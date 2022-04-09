@@ -28,9 +28,9 @@ import im.vector.app.R
 import im.vector.app.databinding.ViewJoinConferenceBinding
 
 class JoinConferenceView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     var views: ViewJoinConferenceBinding? = null

@@ -23,21 +23,21 @@ import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
 
 @JsonClass(generateAdapter = true)
 data class LiveLocationBeaconContent(
-        /**
-         * Indicates user's intent to share ephemeral location.
-         */
-        @Json(name = "org.matrix.msc3672.beacon_info") val unstableBeaconInfo: BeaconInfo? = null,
-        @Json(name = "m.beacon_info") val beaconInfo: BeaconInfo? = null,
-        /**
-         * Beacon creation timestamp.
-         */
-        @Json(name = "org.matrix.msc3488.ts") val unstableTimestampAsMilliseconds: Long? = null,
-        @Json(name = "m.ts") val timestampAsMilliseconds: Long? = null,
-        /**
-         * Live location asset type.
-         */
-        @Json(name = "org.matrix.msc3488.asset") val unstableLocationAsset: LocationAsset = LocationAsset(LocationAssetType.SELF),
-        @Json(name = "m.asset") val locationAsset: LocationAsset? = null
+    /**
+     * Indicates user's intent to share ephemeral location.
+     */
+    @Json(name = "org.matrix.msc3672.beacon_info") val unstableBeaconInfo: BeaconInfo? = null,
+    @Json(name = "m.beacon_info") val beaconInfo: BeaconInfo? = null,
+    /**
+     * Beacon creation timestamp.
+     */
+    @Json(name = "org.matrix.msc3488.ts") val unstableTimestampAsMilliseconds: Long? = null,
+    @Json(name = "m.ts") val timestampAsMilliseconds: Long? = null,
+    /**
+     * Live location asset type.
+     */
+    @Json(name = "org.matrix.msc3488.asset") val unstableLocationAsset: LocationAsset = LocationAsset(LocationAssetType.SELF),
+    @Json(name = "m.asset") val locationAsset: LocationAsset? = null
 ) {
 
     fun getBestBeaconInfo() = beaconInfo ?: unstableBeaconInfo

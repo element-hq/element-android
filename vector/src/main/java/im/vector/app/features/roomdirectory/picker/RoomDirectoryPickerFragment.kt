@@ -39,10 +39,11 @@ import im.vector.app.features.roomdirectory.RoomDirectoryViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
-class RoomDirectoryPickerFragment @Inject constructor(private val roomDirectoryPickerController: RoomDirectoryPickerController
+class RoomDirectoryPickerFragment @Inject constructor(
+    private val roomDirectoryPickerController: RoomDirectoryPickerController
 ) : VectorBaseFragment<FragmentRoomDirectoryPickerBinding>(),
-        OnBackPressed,
-        RoomDirectoryPickerController.Callback {
+    OnBackPressed,
+    RoomDirectoryPickerController.Callback {
 
     private val viewModel: RoomDirectoryViewModel by activityViewModel()
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
@@ -61,8 +62,8 @@ class RoomDirectoryPickerFragment @Inject constructor(private val roomDirectoryP
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.toolbar)
-                .setTitle(R.string.select_room_directory)
-                .allowBack()
+            .setTitle(R.string.select_room_directory)
+            .allowBack()
 
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()

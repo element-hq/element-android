@@ -21,8 +21,8 @@ import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesServi
 import javax.inject.Inject
 
 internal class DefaultHomeServerCapabilitiesService @Inject constructor(
-        private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
-        private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask
+    private val homeServerCapabilitiesDataSource: HomeServerCapabilitiesDataSource,
+    private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask
 ) : HomeServerCapabilitiesService {
 
     override suspend fun refreshHomeServerCapabilities() {
@@ -31,6 +31,6 @@ internal class DefaultHomeServerCapabilitiesService @Inject constructor(
 
     override fun getHomeServerCapabilities(): HomeServerCapabilities {
         return homeServerCapabilitiesDataSource.getHomeServerCapabilities()
-                ?: HomeServerCapabilities()
+            ?: HomeServerCapabilities()
     }
 }

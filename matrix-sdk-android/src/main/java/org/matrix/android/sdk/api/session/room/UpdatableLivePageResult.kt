@@ -27,7 +27,7 @@ interface UpdatableLivePageResult {
 }
 
 data class ResultBoundaries(
-        val frontLoaded: Boolean = false,
-        val endLoaded: Boolean = false,
-        val zeroItemLoaded: Boolean = false
+    val frontLoaded: Boolean = false,
+    val endLoaded: Boolean = false,
+    val zeroItemLoaded: Boolean = false
 )

@@ -41,8 +41,8 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class RoomWidgetsBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
-        RoomWidgetsController.Listener {
+    VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
+    RoomWidgetsController.Listener {
 
     @Inject lateinit var epoxyController: RoomWidgetsController
     @Inject lateinit var colorProvider: ColorProvider

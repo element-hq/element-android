@@ -31,7 +31,9 @@ interface AccountDataAPI {
      * @param params the put params
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/account_data/{type}")
-    suspend fun setAccountData(@Path("userId") userId: String,
-                               @Path("type") type: String,
-                               @Body params: Any)
+    suspend fun setAccountData(
+        @Path("userId") userId: String,
+        @Path("type") type: String,
+        @Body params: Any
+    )
 }

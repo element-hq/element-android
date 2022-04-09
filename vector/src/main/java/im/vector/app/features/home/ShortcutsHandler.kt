@@ -44,12 +44,12 @@ import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 class ShortcutsHandler @Inject constructor(
-        private val context: Context,
-        private val stringProvider: StringProvider,
-        private val appDispatchers: CoroutineDispatchers,
-        private val shortcutCreator: ShortcutCreator,
-        private val activeSessionHolder: ActiveSessionHolder,
-        private val pinCodeStore: PinCodeStore
+    private val context: Context,
+    private val stringProvider: StringProvider,
+    private val appDispatchers: CoroutineDispatchers,
+    private val shortcutCreator: ShortcutCreator,
+    private val activeSessionHolder: ActiveSessionHolder,
+    private val pinCodeStore: PinCodeStore
 ) : PinCodeStoreListener {
 
     private val isRequestPinShortcutSupported = ShortcutManagerCompat.isRequestPinShortcutSupported(context)
@@ -66,28 +66,28 @@ class ShortcutsHandler @Inject constructor(
         hasPinCode.set(pinCodeStore.getEncodedPin() != null)
         val session = activeSessionHolder.getSafeActiveSession() ?: return Job()
         return session.flow().liveRoomSummaries(
-                roomSummaryQueryParams {
-                    memberships = listOf(Membership.JOIN)
-                },
-                sortOrder = RoomSortOrder.PRIORITY_AND_ACTIVITY
+            roomSummaryQueryParams {
+                memberships = listOf(Membership.JOIN)
+            },
+            sortOrder = RoomSortOrder.PRIORITY_AND_ACTIVITY
         )
-                .onStart { pinCodeStore.addListener(this@ShortcutsHandler) }
-                .onCompletion { pinCodeStore.removeListener(this@ShortcutsHandler) }
-                .onEach { rooms ->
-                    // Remove dead shortcuts (i.e. deleted rooms)
-                    removeDeadShortcuts(rooms.map { it.roomId })
+            .onStart { pinCodeStore.addListener(this@ShortcutsHandler) }
+            .onCompletion { pinCodeStore.removeListener(this@ShortcutsHandler) }
+            .onEach { rooms ->
+                // Remove dead shortcuts (i.e. deleted rooms)
+                removeDeadShortcuts(rooms.map { it.roomId })
 
-                    // Create shortcuts
-                    createShortcuts(rooms)
-                }
-                .flowOn(appDispatchers.computation)
-                .launchIn(coroutineScope)
+                // Create shortcuts
+                createShortcuts(rooms)
+            }
+            .flowOn(appDispatchers.computation)
+            .launchIn(coroutineScope)
     }
 
     private fun removeDeadShortcuts(roomIds: List<String>) {
         val deadShortcutIds = ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_DYNAMIC)
-                .map { it.id }
-                .filter { !roomIds.contains(it) }
+            .map { it.id }
+            .filter { !roomIds.contains(it) }
 
         if (deadShortcutIds.isNotEmpty()) {
             Timber.d("Removing shortcut(s) $deadShortcutIds")
@@ -95,9 +95,9 @@ class ShortcutsHandler @Inject constructor(
             if (isRequestPinShortcutSupported) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                     ShortcutManagerCompat.disableShortcuts(
-                            context,
-                            deadShortcutIds,
-                            stringProvider.getString(R.string.shortcut_disabled_reason_room_left)
+                        context,
+                        deadShortcutIds,
+                        stringProvider.getString(R.string.shortcut_disabled_reason_room_left)
                     )
                 }
             }
@@ -110,10 +110,10 @@ class ShortcutsHandler @Inject constructor(
             ShortcutManagerCompat.removeAllDynamicShortcuts(context)
         } else {
             val shortcuts = rooms
-                    .take(maxShortcutCountPerActivity)
-                    .mapIndexed { index, room ->
-                        shortcutCreator.create(room, index)
-                    }
+                .take(maxShortcutCountPerActivity)
+                .mapIndexed { index, room ->
+                    shortcutCreator.create(room, index)
+                }
 
             shortcuts.forEach { shortcut ->
                 ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
@@ -137,16 +137,16 @@ class ShortcutsHandler @Inject constructor(
         if (isRequestPinShortcutSupported) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 context.getSystemService<ShortcutManager>()
-                        ?.pinnedShortcuts
-                        ?.takeIf { it.isNotEmpty() }
-                        ?.map { pinnedShortcut -> pinnedShortcut.id }
-                        ?.let { shortcutIdsToDisable ->
-                            ShortcutManagerCompat.disableShortcuts(
-                                    context,
-                                    shortcutIdsToDisable,
-                                    stringProvider.getString(R.string.shortcut_disabled_reason_sign_out)
-                            )
-                        }
+                    ?.pinnedShortcuts
+                    ?.takeIf { it.isNotEmpty() }
+                    ?.map { pinnedShortcut -> pinnedShortcut.id }
+                    ?.let { shortcutIdsToDisable ->
+                        ShortcutManagerCompat.disableShortcuts(
+                            context,
+                            shortcutIdsToDisable,
+                            stringProvider.getString(R.string.shortcut_disabled_reason_sign_out)
+                        )
+                    }
             }
         }
     }

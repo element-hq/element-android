@@ -29,7 +29,7 @@ class CreateSpaceParams : CreateRoomParams() {
         // Space-rooms should be created with a power level for events_default of 100,
         // to prevent the rooms accidentally/maliciously clogging up with messages from random members of the space.
         powerLevelContentOverride = PowerLevelsContent(
-                eventsDefault = 100
+            eventsDefault = 100
         )
     }
 }

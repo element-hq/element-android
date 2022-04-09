@@ -25,7 +25,7 @@ fun MatrixItem.getBestName(): String {
         id
     } else {
         displayName
-                ?.takeIf { it.isNotBlank() }
-                ?: VectorMatrixItemDisplayNameFallbackProvider.getDefaultName(this)
+            ?.takeIf { it.isNotBlank() }
+            ?: VectorMatrixItemDisplayNameFallbackProvider.getDefaultName(this)
     }
 }

@@ -49,7 +49,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class RealmSessionStoreMigration @Inject constructor(
-        private val normalizer: Normalizer
+    private val normalizer: Normalizer
 ) : RealmMigration {
     /**
      * Forces all RealmSessionStoreMigration instances to be equal

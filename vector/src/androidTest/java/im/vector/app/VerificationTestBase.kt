@@ -41,10 +41,12 @@ abstract class VerificationTestBase {
 
     protected val uiTestBase = OnboardingRobot()
 
-    fun createAccountAndSync(matrix: Matrix,
-                             userName: String,
-                             password: String,
-                             withInitialSync: Boolean): Session {
+    fun createAccountAndSync(
+        matrix: Matrix,
+        userName: String,
+        password: String,
+        withInitialSync: Boolean
+    ): Session {
         val hs = createHomeServerConfig()
 
         runBlockingTest {
@@ -53,15 +55,15 @@ abstract class VerificationTestBase {
 
         runBlockingTest {
             matrix.authenticationService()
-                    .getRegistrationWizard()
-                    .createAccount(userName, password, null)
+                .getRegistrationWizard()
+                .createAccount(userName, password, null)
         }
 
         // Perform dummy step
         val registrationResult = runBlockingTest {
             matrix.authenticationService()
-                    .getRegistrationWizard()
-                    .dummy()
+                .getRegistrationWizard()
+                .dummy()
         }
 
         Assert.assertTrue(registrationResult is RegistrationResult.Success)
@@ -75,8 +77,8 @@ abstract class VerificationTestBase {
 
     private fun createHomeServerConfig(): HomeServerConnectionConfig {
         return HomeServerConnectionConfig.Builder()
-                .withHomeServerUri(Uri.parse(homeServerUrl))
-                .build()
+            .withHomeServerUri(Uri.parse(homeServerUrl))
+            .build()
     }
 
     protected fun <T> runBlockingTest(timeout: Long = 20_000, block: suspend () -> T): T {

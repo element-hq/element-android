@@ -25,6 +25,6 @@ sealed class RegistrationResult {
 }
 
 data class FlowResult(
-        val missingStages: List<Stage>,
-        val completedStages: List<Stage>
+    val missingStages: List<Stage>,
+    val completedStages: List<Stage>
 )

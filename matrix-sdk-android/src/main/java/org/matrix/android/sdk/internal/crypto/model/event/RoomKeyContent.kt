@@ -24,19 +24,19 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class RoomKeyContent(
 
-        @Json(name = "algorithm")
-        val algorithm: String? = null,
+    @Json(name = "algorithm")
+    val algorithm: String? = null,
 
-        @Json(name = "room_id")
-        val roomId: String? = null,
+    @Json(name = "room_id")
+    val roomId: String? = null,
 
-        @Json(name = "session_id")
-        val sessionId: String? = null,
+    @Json(name = "session_id")
+    val sessionId: String? = null,
 
-        @Json(name = "session_key")
-        val sessionKey: String? = null,
+    @Json(name = "session_key")
+    val sessionKey: String? = null,
 
-        // should be a Long but it is sometimes a double
-        @Json(name = "chain_index")
-        val chainIndex: Any? = null
+    // should be a Long but it is sometimes a double
+    @Json(name = "chain_index")
+    val chainIndex: Any? = null
 )

@@ -65,7 +65,7 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
     private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
         when (loginViewEvents) {
             is LoginViewEvents.Failure -> showFailure(loginViewEvents.throwable)
-            else                       ->
+            else ->
                 // This is handled by the Activity
                 Unit
         }
@@ -78,23 +78,23 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
         }
 
         when (throwable) {
-            is CancellationException                  ->
+            is CancellationException ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
-            is Failure.ServerError                    ->
+            is Failure.ServerError ->
                 if (throwable.error.code == MatrixError.M_FORBIDDEN &&
-                        throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
+                    throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                     MaterialAlertDialogBuilder(requireActivity())
-                            .setTitle(R.string.dialog_title_error)
-                            .setMessage(getString(R.string.login_registration_disabled))
-                            .setPositiveButton(R.string.ok, null)
-                            .show()
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(getString(R.string.login_registration_disabled))
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
                 } else {
                     onError(throwable)
                 }
             is Failure.UnrecognizedCertificateFailure ->
                 showUnrecognizedCertificateFailure(throwable)
-            else                                      ->
+            else ->
                 onError(throwable)
         }
     }
@@ -102,22 +102,22 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
     private fun showUnrecognizedCertificateFailure(failure: Failure.UnrecognizedCertificateFailure) {
         // Ask the user to accept the certificate
         unrecognizedCertificateDialog.show(requireActivity(),
-                failure.fingerprint,
-                failure.url,
-                object : UnrecognizedCertificateDialog.Callback {
-                    override fun onAccept() {
-                        // User accept the certificate
-                        loginViewModel.handle(LoginAction.UserAcceptCertificate(failure.fingerprint))
-                    }
+            failure.fingerprint,
+            failure.url,
+            object : UnrecognizedCertificateDialog.Callback {
+                override fun onAccept() {
+                    // User accept the certificate
+                    loginViewModel.handle(LoginAction.UserAcceptCertificate(failure.fingerprint))
+                }
 
-                    override fun onIgnore() {
-                        // Cannot happen in this case
-                    }
+                override fun onIgnore() {
+                    // Cannot happen in this case
+                }
 
-                    override fun onReject() {
-                        // Nothing to do in this case
-                    }
-                })
+                override fun onReject() {
+                    // Nothing to do in this case
+                }
+            })
     }
 
     open fun onError(throwable: Throwable) {
@@ -129,32 +129,32 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
             displayCancelDialog && loginViewModel.isRegistrationStarted -> {
                 // Ask for confirmation before cancelling the registration
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.login_signup_cancel_confirmation_title)
-                        .setMessage(R.string.login_signup_cancel_confirmation_content)
-                        .setPositiveButton(R.string.yes) { _, _ ->
-                            displayCancelDialog = false
-                            vectorBaseActivity.onBackPressed()
-                        }
-                        .setNegativeButton(R.string.no, null)
-                        .show()
+                    .setTitle(R.string.login_signup_cancel_confirmation_title)
+                    .setMessage(R.string.login_signup_cancel_confirmation_content)
+                    .setPositiveButton(R.string.yes) { _, _ ->
+                        displayCancelDialog = false
+                        vectorBaseActivity.onBackPressed()
+                    }
+                    .setNegativeButton(R.string.no, null)
+                    .show()
 
                 true
             }
-            displayCancelDialog && isResetPasswordStarted               -> {
+            displayCancelDialog && isResetPasswordStarted -> {
                 // Ask for confirmation before cancelling the reset password
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.login_reset_password_cancel_confirmation_title)
-                        .setMessage(R.string.login_reset_password_cancel_confirmation_content)
-                        .setPositiveButton(R.string.yes) { _, _ ->
-                            displayCancelDialog = false
-                            vectorBaseActivity.onBackPressed()
-                        }
-                        .setNegativeButton(R.string.no, null)
-                        .show()
+                    .setTitle(R.string.login_reset_password_cancel_confirmation_title)
+                    .setMessage(R.string.login_reset_password_cancel_confirmation_content)
+                    .setPositiveButton(R.string.yes) { _, _ ->
+                        displayCancelDialog = false
+                        vectorBaseActivity.onBackPressed()
+                    }
+                    .setNegativeButton(R.string.no, null)
+                    .show()
 
                 true
             }
-            else                                                        -> {
+            else -> {
                 resetViewModel()
                 // Do not consume the Back event
                 false

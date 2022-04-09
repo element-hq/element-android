@@ -23,8 +23,8 @@ import org.matrix.android.sdk.api.session.events.model.Event
 @JsonClass(generateAdapter = true)
 data class PresenceSyncResponse(
 
-        /**
-         * List of presence events (array of Event with type m.presence).
-         */
-        val events: List<Event>? = null
+    /**
+     * List of presence events (array of Event with type m.presence).
+     */
+    val events: List<Event>? = null
 )

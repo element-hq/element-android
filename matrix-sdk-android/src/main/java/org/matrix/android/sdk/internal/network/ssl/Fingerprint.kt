@@ -23,8 +23,8 @@ import java.security.cert.X509Certificate
 
 @JsonClass(generateAdapter = true)
 data class Fingerprint(
-        val bytes: ByteArray,
-        val hashType: HashType
+    val bytes: ByteArray,
+    val hashType: HashType
 ) {
 
     val displayableHexRepr: String by lazy {
@@ -35,7 +35,7 @@ data class Fingerprint(
     internal fun matchesCert(cert: X509Certificate): Boolean {
         val o: Fingerprint? = when (hashType) {
             HashType.SHA256 -> newSha256Fingerprint(cert)
-            HashType.SHA1   -> newSha1Fingerprint(cert)
+            HashType.SHA1 -> newSha1Fingerprint(cert)
         }
         return equals(o)
     }
@@ -62,16 +62,16 @@ data class Fingerprint(
         @Throws(CertificateException::class)
         fun newSha256Fingerprint(cert: X509Certificate): Fingerprint {
             return Fingerprint(
-                    CertUtil.generateSha256Fingerprint(cert),
-                    HashType.SHA256
+                CertUtil.generateSha256Fingerprint(cert),
+                HashType.SHA256
             )
         }
 
         @Throws(CertificateException::class)
         fun newSha1Fingerprint(cert: X509Certificate): Fingerprint {
             return Fingerprint(
-                    CertUtil.generateSha1Fingerprint(cert),
-                    HashType.SHA1
+                CertUtil.generateSha1Fingerprint(cert),
+                HashType.SHA1
             )
         }
     }

@@ -35,8 +35,8 @@ import javax.inject.Inject
  */
 
 internal class ImageExifTagRemover @Inject constructor(
-        private val temporaryFileCreator: TemporaryFileCreator,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+    private val temporaryFileCreator: TemporaryFileCreator,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
 
     /**
@@ -74,13 +74,13 @@ internal class ImageExifTagRemover @Inject constructor(
                 ExifRewriter().updateExifMetadataLossless(jpegImageFile, outputStream, outputSet)
             }
         }.fold(
-                onSuccess = {
-                    scrubbedFile
-                },
-                onFailure = {
-                    scrubbedFile.delete()
-                    jpegImageFile
-                }
+            onSuccess = {
+                scrubbedFile
+            },
+            onFailure = {
+                scrubbedFile.delete()
+                jpegImageFile
+            }
         )
     }
 }

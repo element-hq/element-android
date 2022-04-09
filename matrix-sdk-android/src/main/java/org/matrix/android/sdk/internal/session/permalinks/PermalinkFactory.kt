@@ -29,10 +29,10 @@ import org.matrix.android.sdk.internal.di.UserId
 import javax.inject.Inject
 
 internal class PermalinkFactory @Inject constructor(
-        @UserId
-        private val userId: String,
-        private val viaParameterFinder: ViaParameterFinder,
-        private val matrixConfiguration: MatrixConfiguration
+    @UserId
+    private val userId: String,
+    private val viaParameterFinder: ViaParameterFinder,
+    private val matrixConfiguration: MatrixConfiguration
 ) {
 
     fun createPermalink(event: Event, forceMatrixTo: Boolean): String? {
@@ -44,15 +44,15 @@ internal class PermalinkFactory @Inject constructor(
 
     fun createPermalink(id: String, forceMatrixTo: Boolean): String? {
         return when {
-            id.isEmpty()                    -> null
+            id.isEmpty() -> null
             !useClientFormat(forceMatrixTo) -> MATRIX_TO_URL_BASE + escape(id)
-            else                            -> {
+            else -> {
                 buildString {
                     append(matrixConfiguration.clientPermalinkBaseUrl)
                     when {
                         MatrixPatterns.isRoomId(id) || MatrixPatterns.isRoomAlias(id) -> append(ROOM_PATH)
-                        MatrixPatterns.isUserId(id)                                   -> append(USER_PATH)
-                        MatrixPatterns.isGroupId(id)                                  -> append(GROUP_PATH)
+                        MatrixPatterns.isUserId(id) -> append(USER_PATH)
+                        MatrixPatterns.isGroupId(id) -> append(GROUP_PATH)
                     }
                     append(escape(id))
                 }
@@ -71,8 +71,8 @@ internal class PermalinkFactory @Inject constructor(
                 }
                 append(escape(roomId))
                 append(
-                        via?.takeIf { it.isNotEmpty() }?.let { viaParameterFinder.asUrlViaParameters(it) }
-                                ?: viaParameterFinder.computeViaParams(userId, roomId)
+                    via?.takeIf { it.isNotEmpty() }?.let { viaParameterFinder.asUrlViaParameters(it) }
+                        ?: viaParameterFinder.computeViaParams(userId, roomId)
                 )
             }
         }
@@ -94,24 +94,24 @@ internal class PermalinkFactory @Inject constructor(
     fun getLinkedId(url: String): String? {
         val clientBaseUrl = matrixConfiguration.clientPermalinkBaseUrl
         return when {
-            url.startsWith(MATRIX_TO_URL_BASE)                     -> url.substring(MATRIX_TO_URL_BASE.length)
+            url.startsWith(MATRIX_TO_URL_BASE) -> url.substring(MATRIX_TO_URL_BASE.length)
             clientBaseUrl != null && url.startsWith(clientBaseUrl) -> {
                 when (PermalinkParser.parse(url)) {
                     is PermalinkData.GroupLink -> url.substring(clientBaseUrl.length + GROUP_PATH.length)
-                    is PermalinkData.RoomLink  -> url.substring(clientBaseUrl.length + ROOM_PATH.length)
-                    is PermalinkData.UserLink  -> url.substring(clientBaseUrl.length + USER_PATH.length)
-                    else                       -> null
+                    is PermalinkData.RoomLink -> url.substring(clientBaseUrl.length + ROOM_PATH.length)
+                    is PermalinkData.UserLink -> url.substring(clientBaseUrl.length + USER_PATH.length)
+                    else -> null
                 }
             }
-            else                                                   -> null
+            else -> null
         }
-                ?.substringBeforeLast("?")
+            ?.substringBeforeLast("?")
     }
 
     fun createMentionSpanTemplate(type: PermalinkService.SpanTemplateType, forceMatrixTo: Boolean): String {
         return buildString {
             when (type) {
-                HTML     -> append(MENTION_SPAN_TO_HTML_TEMPLATE_BEGIN)
+                HTML -> append(MENTION_SPAN_TO_HTML_TEMPLATE_BEGIN)
                 MARKDOWN -> append(MENTION_SPAN_TO_MD_TEMPLATE_BEGIN)
             }
             append(baseUrl(forceMatrixTo))
@@ -119,7 +119,7 @@ internal class PermalinkFactory @Inject constructor(
                 append(USER_PATH)
             }
             when (type) {
-                HTML     -> append(MENTION_SPAN_TO_HTML_TEMPLATE_END)
+                HTML -> append(MENTION_SPAN_TO_HTML_TEMPLATE_END)
                 MARKDOWN -> append(MENTION_SPAN_TO_MD_TEMPLATE_END)
             }
         }
@@ -155,8 +155,8 @@ internal class PermalinkFactory @Inject constructor(
      */
     private fun baseUrl(forceMatrixTo: Boolean): String {
         return matrixConfiguration.clientPermalinkBaseUrl
-                ?.takeUnless { forceMatrixTo }
-                ?: MATRIX_TO_URL_BASE
+            ?.takeUnless { forceMatrixTo }
+            ?: MATRIX_TO_URL_BASE
     }
 
     private fun useClientFormat(forceMatrixTo: Boolean): Boolean {

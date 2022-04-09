@@ -59,29 +59,29 @@ import javax.net.ssl.HttpsURLConnection
 
 @SessionScope
 internal class DefaultIdentityService @Inject constructor(
-        private val identityStore: IdentityStore,
-        private val ensureIdentityTokenTask: EnsureIdentityTokenTask,
-        private val getOpenIdTokenTask: GetOpenIdTokenTask,
-        private val identityBulkLookupTask: IdentityBulkLookupTask,
-        private val identityRegisterTask: IdentityRegisterTask,
-        private val identityPingTask: IdentityPingTask,
-        private val identityDisconnectTask: IdentityDisconnectTask,
-        private val identityRequestTokenForBindingTask: IdentityRequestTokenForBindingTask,
-        @UnauthenticatedWithCertificate
-        private val unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
-        @AuthenticatedIdentity
-        private val okHttpClient: Lazy<OkHttpClient>,
-        private val retrofitFactory: RetrofitFactory,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val bindThreePidsTask: BindThreePidsTask,
-        private val submitTokenForBindingTask: IdentitySubmitTokenForBindingTask,
-        private val unbindThreePidsTask: UnbindThreePidsTask,
-        private val identityApiProvider: IdentityApiProvider,
-        private val accountDataDataSource: UserAccountDataDataSource,
-        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
-        private val sign3pidInvitationTask: Sign3pidInvitationTask,
-        private val sessionParams: SessionParams
+    private val identityStore: IdentityStore,
+    private val ensureIdentityTokenTask: EnsureIdentityTokenTask,
+    private val getOpenIdTokenTask: GetOpenIdTokenTask,
+    private val identityBulkLookupTask: IdentityBulkLookupTask,
+    private val identityRegisterTask: IdentityRegisterTask,
+    private val identityPingTask: IdentityPingTask,
+    private val identityDisconnectTask: IdentityDisconnectTask,
+    private val identityRequestTokenForBindingTask: IdentityRequestTokenForBindingTask,
+    @UnauthenticatedWithCertificate
+    private val unauthenticatedOkHttpClient: Lazy<OkHttpClient>,
+    @AuthenticatedIdentity
+    private val okHttpClient: Lazy<OkHttpClient>,
+    private val retrofitFactory: RetrofitFactory,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+    private val updateUserAccountDataTask: UpdateUserAccountDataTask,
+    private val bindThreePidsTask: BindThreePidsTask,
+    private val submitTokenForBindingTask: IdentitySubmitTokenForBindingTask,
+    private val unbindThreePidsTask: UnbindThreePidsTask,
+    private val identityApiProvider: IdentityApiProvider,
+    private val accountDataDataSource: UserAccountDataDataSource,
+    private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+    private val sign3pidInvitationTask: Sign3pidInvitationTask,
+    private val sessionParams: SessionParams
 ) : IdentityService, SessionLifecycleObserver {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
@@ -93,10 +93,10 @@ internal class DefaultIdentityService @Inject constructor(
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         // Observe the account data change
         accountDataDataSource
-                .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_IDENTITY_SERVER)
-                .observeNotNull(lifecycleOwner) {
-                    notifyIdentityServerUrlChange(it.getOrNull()?.content?.toModel<IdentityServerContent>()?.baseUrl)
-                }
+            .getLiveAccountDataEvent(UserAccountDataTypes.TYPE_IDENTITY_SERVER)
+            .observeNotNull(lifecycleOwner) {
+                notifyIdentityServerUrlChange(it.getOrNull()?.content?.toModel<IdentityServerContent>()?.baseUrl)
+            }
 
         // Init identityApi
         updateIdentityAPI(identityStore.getIdentityData()?.identityServerUrl)
@@ -125,8 +125,8 @@ internal class DefaultIdentityService @Inject constructor(
      */
     override fun getDefaultIdentityServer(): String? {
         return sessionParams.defaultIdentityServerUrl
-                ?.takeIf { it.isNotEmpty() }
-                ?: homeServerCapabilitiesService.getHomeServerCapabilities().defaultIdentityServerUrl
+            ?.takeIf { it.isNotEmpty() }
+            ?: homeServerCapabilitiesService.getHomeServerCapabilities().defaultIdentityServerUrl
     }
 
     override fun getCurrentIdentityServerUrl(): String? {
@@ -195,7 +195,7 @@ internal class DefaultIdentityService @Inject constructor(
             // In case of error when configuring the new identity server, this is not a big deal,
             // we will ask for a new token on the previous identity server
             runCatching { identityDisconnectTask.execute(Unit) }
-                    .onFailure { Timber.w(it, "Unable to disconnect identity server") }
+                .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
             // Try to get a token
             val token = getNewIdentityServerToken(urlCandidate)
@@ -218,9 +218,11 @@ internal class DefaultIdentityService @Inject constructor(
             listeners.toList().forEach { tryOrNull { it.onIdentityServerChange() } }
         }
 
-        updateUserAccountDataTask.execute(UpdateUserAccountDataTask.IdentityParams(
+        updateUserAccountDataTask.execute(
+            UpdateUserAccountDataTask.IdentityParams(
                 identityContent = IdentityServerContent(baseUrl = url)
-        ))
+            )
+        )
     }
 
     override fun getUserConsent(): Boolean {
@@ -281,8 +283,8 @@ internal class DefaultIdentityService @Inject constructor(
                     identityStore.setToken(null)
                     lookUpInternal(false, threePids)
                 }
-                throwable.isTermsNotSigned()           -> throw IdentityServiceError.TermsNotSignedException
-                else                                   -> throw throwable
+                throwable.isTermsNotSigned() -> throw IdentityServiceError.TermsNotSignedException
+                else -> throw throwable
             }
         }
     }
@@ -297,11 +299,13 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override suspend fun sign3pidInvitation(identiyServer: String, token: String, secret: String): SignInvitationResult {
-        return sign3pidInvitationTask.execute(Sign3pidInvitationTask.Params(
+        return sign3pidInvitationTask.execute(
+            Sign3pidInvitationTask.Params(
                 url = identiyServer,
                 token = token,
                 privateKey = secret
-        ))
+            )
+        )
     }
 
     override fun addListener(listener: IdentityServiceListener) {
@@ -314,8 +318,8 @@ internal class DefaultIdentityService @Inject constructor(
 
     private fun updateIdentityAPI(url: String?) {
         identityApiProvider.identityApi = url
-                ?.let { retrofitFactory.create(okHttpClient, it) }
-                ?.create(IdentityAPI::class.java)
+            ?.let { retrofitFactory.create(okHttpClient, it) }
+            ?.create(IdentityAPI::class.java)
     }
 }
 

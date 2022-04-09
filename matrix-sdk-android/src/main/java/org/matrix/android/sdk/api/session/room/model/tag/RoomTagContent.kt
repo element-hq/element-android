@@ -21,5 +21,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class RoomTagContent(
-        @Json(name = "tags") val tags: Map<String, Map<String, Any>> = emptyMap()
+    @Json(name = "tags") val tags: Map<String, Map<String, Any>> = emptyMap()
 )

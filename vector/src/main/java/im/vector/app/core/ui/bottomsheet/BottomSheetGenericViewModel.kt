@@ -22,7 +22,7 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 
 abstract class BottomSheetGenericViewModel<State : MavericksState>(initialState: State) :
-        VectorViewModel<State, EmptyAction, EmptyViewEvents>(initialState) {
+    VectorViewModel<State, EmptyAction, EmptyViewEvents>(initialState) {
 
     override fun handle(action: EmptyAction) {
         // No op

@@ -39,8 +39,8 @@ import javax.inject.Inject
  * In this screen, the user is viewing an introduction to what he can do with this application
  */
 class FtueAuthSplashFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
-        private val vectorFeatures: VectorFeatures
+    private val vectorPreferences: VectorPreferences,
+    private val vectorFeatures: VectorFeatures
 ) : AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthSplashBinding {
@@ -88,18 +88,19 @@ class FtueAuthSplashFragment @Inject constructor(
 
     override fun onError(throwable: Throwable) {
         if (throwable is Failure.NetworkConnection &&
-                throwable.ioException is UnknownHostException) {
+            throwable.ioException is UnknownHostException
+        ) {
             // Invalid homeserver from URL config
             val url = viewModel.getInitialHomeServerUrl().orEmpty()
             MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.dialog_title_error)
-                    .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
-                    .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
-                        val flow = withState(viewModel) { it.onboardingFlow } ?: OnboardingFlow.SignInSignUp
-                        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = true, flow))
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
+                .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
+                    val flow = withState(viewModel) { it.onboardingFlow } ?: OnboardingFlow.SignInSignUp
+                    viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = true, flow))
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
         } else {
             super.onError(throwable)
         }

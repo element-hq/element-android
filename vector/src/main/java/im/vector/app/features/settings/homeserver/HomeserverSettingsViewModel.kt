@@ -31,8 +31,8 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 
 class HomeserverSettingsViewModel @AssistedInject constructor(
-        @Assisted initialState: HomeServerSettingsViewState,
-        private val session: Session
+    @Assisted initialState: HomeServerSettingsViewState,
+    private val session: Session
 ) : VectorViewModel<HomeServerSettingsViewState, HomeserverSettingsAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -45,9 +45,9 @@ class HomeserverSettingsViewModel @AssistedInject constructor(
     init {
         setState {
             copy(
-                    homeserverUrl = session.sessionParams.homeServerUrl,
-                    homeserverClientServerApiUrl = session.sessionParams.homeServerUrlBase,
-                    homeServerCapabilities = session.getHomeServerCapabilities()
+                homeserverUrl = session.sessionParams.homeServerUrl,
+                homeserverClientServerApiUrl = session.sessionParams.homeServerUrlBase,
+                homeServerCapabilities = session.getHomeServerCapabilities()
             )
         }
         fetchHomeserverVersion()
@@ -62,7 +62,7 @@ class HomeserverSettingsViewModel @AssistedInject constructor(
 
             setState {
                 copy(
-                        homeServerCapabilities = session.getHomeServerCapabilities()
+                    homeServerCapabilities = session.getHomeServerCapabilities()
                 )
             }
         }
@@ -71,7 +71,7 @@ class HomeserverSettingsViewModel @AssistedInject constructor(
     private fun fetchHomeserverVersion() {
         setState {
             copy(
-                    federationVersion = Loading()
+                federationVersion = Loading()
             )
         }
 
@@ -80,13 +80,13 @@ class HomeserverSettingsViewModel @AssistedInject constructor(
                 val federationVersion = session.federationService().getFederationVersion()
                 setState {
                     copy(
-                            federationVersion = Success(federationVersion)
+                        federationVersion = Success(federationVersion)
                     )
                 }
             } catch (failure: Throwable) {
                 setState {
                     copy(
-                            federationVersion = Fail(failure)
+                        federationVersion = Fail(failure)
                     )
                 }
             }

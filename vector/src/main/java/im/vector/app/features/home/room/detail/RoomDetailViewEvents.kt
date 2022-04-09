@@ -55,14 +55,14 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     object HideWaitingView : RoomDetailViewEvents()
 
     data class DownloadFileState(
-            val mimeType: String?,
-            val file: File?,
-            val throwable: Throwable?
+        val mimeType: String?,
+        val file: File?,
+        val throwable: Throwable?
     ) : RoomDetailViewEvents()
 
     data class OpenFile(
-            val uri: Uri,
-            val mimeType: String?
+        val uri: Uri,
+        val mimeType: String?
     ) : RoomDetailViewEvents()
 
     data class DisplayAndAcceptCall(val call: WebRtcCall) : RoomDetailViewEvents()
@@ -75,9 +75,11 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
 
     object OpenIntegrationManager : RoomDetailViewEvents()
     object OpenActiveWidgetBottomSheet : RoomDetailViewEvents()
-    data class RequestNativeWidgetPermission(val widget: Widget,
-                                             val domain: String,
-                                             val grantedEvents: RoomDetailViewEvents) : RoomDetailViewEvents()
+    data class RequestNativeWidgetPermission(
+        val widget: Widget,
+        val domain: String,
+        val grantedEvents: RoomDetailViewEvents
+    ) : RoomDetailViewEvents()
 
     data class StartChatEffect(val type: ChatEffect) : RoomDetailViewEvents()
     object StopChatEffects : RoomDetailViewEvents()

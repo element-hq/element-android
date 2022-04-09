@@ -26,9 +26,9 @@ import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import javax.inject.Inject
 
 internal class DefaultToDeviceService @Inject constructor(
-        private val sendToDeviceTask: SendToDeviceTask,
-        private val messageEncrypter: MessageEncrypter,
-        private val cryptoStore: IMXCryptoStore
+    private val sendToDeviceTask: SendToDeviceTask,
+    private val messageEncrypter: MessageEncrypter,
+    private val cryptoStore: IMXCryptoStore
 ) : ToDeviceService {
 
     override suspend fun sendToDevice(eventType: String, targets: Map<String, List<String>>, content: Content, txnId: String?) {
@@ -43,19 +43,19 @@ internal class DefaultToDeviceService @Inject constructor(
 
     override suspend fun sendToDevice(eventType: String, contentMap: MXUsersDevicesMap<Any>, txnId: String?) {
         sendToDeviceTask.executeRetry(
-                SendToDeviceTask.Params(
-                        eventType = eventType,
-                        contentMap = contentMap,
-                        transactionId = txnId
-                ),
-                3
+            SendToDeviceTask.Params(
+                eventType = eventType,
+                contentMap = contentMap,
+                transactionId = txnId
+            ),
+            3
         )
     }
 
     override suspend fun sendEncryptedToDevice(eventType: String, targets: Map<String, List<String>>, content: Content, txnId: String?) {
         val payloadJson = mapOf(
-                "type" to eventType,
-                "content" to content
+            "type" to eventType,
+            "content" to content
         )
         val sendToDeviceMap = MXUsersDevicesMap<Any>()
 

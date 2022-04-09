@@ -116,14 +116,14 @@ class OlmInboundGroupSessionWrapper : Serializable {
             }
 
             MegolmSessionData(
-                    senderClaimedEd25519Key = keysClaimed?.get("ed25519"),
-                    forwardingCurve25519KeyChain = ArrayList(forwardingCurve25519KeyChain!!),
-                    senderKey = senderKey,
-                    senderClaimedKeys = keysClaimed,
-                    roomId = roomId,
-                    sessionId = olmInboundGroupSession!!.sessionIdentifier(),
-                    sessionKey = olmInboundGroupSession!!.export(olmInboundGroupSession!!.firstKnownIndex),
-                    algorithm = MXCRYPTO_ALGORITHM_MEGOLM
+                senderClaimedEd25519Key = keysClaimed?.get("ed25519"),
+                forwardingCurve25519KeyChain = ArrayList(forwardingCurve25519KeyChain!!),
+                senderKey = senderKey,
+                senderClaimedKeys = keysClaimed,
+                roomId = roomId,
+                sessionId = olmInboundGroupSession!!.sessionIdentifier(),
+                sessionKey = olmInboundGroupSession!!.export(olmInboundGroupSession!!.firstKnownIndex),
+                algorithm = MXCRYPTO_ALGORITHM_MEGOLM
             )
         } catch (e: Exception) {
             Timber.e(e, "## export() : senderKey $senderKey failed")

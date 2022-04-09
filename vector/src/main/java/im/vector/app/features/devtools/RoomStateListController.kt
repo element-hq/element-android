@@ -28,8 +28,8 @@ import org.json.JSONObject
 import javax.inject.Inject
 
 class RoomStateListController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider
 ) : TypedEpoxyController<RoomDevToolViewState>() {
 
     var interactionListener: DevToolsInteractionListener? = null
@@ -37,7 +37,7 @@ class RoomStateListController @Inject constructor(
     override fun buildModels(data: RoomDevToolViewState?) {
         val host = this
         when (data?.displayMode) {
-            RoomDevToolViewState.Mode.StateEventList       -> {
+            RoomDevToolViewState.Mode.StateEventList -> {
                 val stateEventsGroups = data.stateEvents.invoke().orEmpty().groupBy { it.getClearType() }
 
                 if (stateEventsGroups.isEmpty()) {
@@ -98,7 +98,7 @@ class RoomStateListController @Inject constructor(
                     }
                 }
             }
-            else                                           -> {
+            else -> {
                 // nop
             }
         }

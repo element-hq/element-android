@@ -29,8 +29,8 @@ import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 import javax.inject.Inject
 
 internal class DefaultContentUrlResolver @Inject constructor(
-        homeServerConnectionConfig: HomeServerConnectionConfig,
-        private val scannerService: ContentScannerService
+    homeServerConnectionConfig: HomeServerConnectionConfig,
+    private val scannerService: ContentScannerService
 ) : ContentUrlResolver {
 
     private val baseUrl = homeServerConnectionConfig.homeServerUriBase.toString().ensureTrailingSlash()
@@ -45,10 +45,10 @@ internal class DefaultContentUrlResolver @Inject constructor(
             val url = baseUrl + sep + NetworkConstants.URI_API_PREFIX_PATH_MEDIA_PROXY_UNSTABLE + "download_encrypted"
 
             ContentUrlResolver.ResolvedMethod.POST(
-                    url = url,
-                    jsonBody = ScanEncryptorUtils
-                            .getDownloadBodyAndEncryptIfNeeded(scannerService.serverPublicKey, contentUrl ?: "", elementToDecrypt)
-                            .toJson()
+                url = url,
+                jsonBody = ScanEncryptorUtils
+                    .getDownloadBodyAndEncryptIfNeeded(scannerService.serverPublicKey, contentUrl ?: "", elementToDecrypt)
+                    .toJson()
             )
         } else {
             resolveFullSize(contentUrl)?.let { ContentUrlResolver.ResolvedMethod.GET(it) }
@@ -57,32 +57,34 @@ internal class DefaultContentUrlResolver @Inject constructor(
 
     override fun resolveFullSize(contentUrl: String?): String? {
         return contentUrl
-                // do not allow non-mxc content URLs
-                ?.takeIf { it.isMxcUrl() }
-                ?.let {
-                    resolve(
-                            contentUrl = it,
-                            toThumbnail = false
-                    )
-                }
+            // do not allow non-mxc content URLs
+            ?.takeIf { it.isMxcUrl() }
+            ?.let {
+                resolve(
+                    contentUrl = it,
+                    toThumbnail = false
+                )
+            }
     }
 
     override fun resolveThumbnail(contentUrl: String?, width: Int, height: Int, method: ContentUrlResolver.ThumbnailMethod): String? {
         return contentUrl
-                // do not allow non-mxc content URLs
-                ?.takeIf { it.isMxcUrl() }
-                ?.let {
-                    resolve(
-                            contentUrl = it,
-                            toThumbnail = true,
-                            params = "?width=$width&height=$height&method=${method.value}"
-                    )
-                }
+            // do not allow non-mxc content URLs
+            ?.takeIf { it.isMxcUrl() }
+            ?.let {
+                resolve(
+                    contentUrl = it,
+                    toThumbnail = true,
+                    params = "?width=$width&height=$height&method=${method.value}"
+                )
+            }
     }
 
-    private fun resolve(contentUrl: String,
-                        toThumbnail: Boolean,
-                        params: String = ""): String {
+    private fun resolve(
+        contentUrl: String,
+        toThumbnail: Boolean,
+        params: String = ""
+    ): String {
         var serverAndMediaId = contentUrl.removeMxcPrefix()
 
         val apiPath = if (scannerService.isScannerEnabled()) {

@@ -29,15 +29,15 @@ import javax.inject.Inject
 
 internal interface DeleteDeviceTask : Task<DeleteDeviceTask.Params, Unit> {
     data class Params(
-            val deviceId: String,
-            val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor?,
-            val userAuthParam: UIABaseAuth?
+        val deviceId: String,
+        val userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor?,
+        val userAuthParam: UIABaseAuth?
     )
 }
 
 internal class DefaultDeleteDeviceTask @Inject constructor(
-        private val cryptoApi: CryptoApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val cryptoApi: CryptoApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : DeleteDeviceTask {
 
     override suspend fun execute(params: DeleteDeviceTask.Params) {
@@ -47,13 +47,13 @@ internal class DefaultDeleteDeviceTask @Inject constructor(
             }
         } catch (throwable: Throwable) {
             if (params.userInteractiveAuthInterceptor == null ||
-                    !handleUIA(
-                            failure = throwable,
-                            interceptor = params.userInteractiveAuthInterceptor,
-                            retryBlock = { authUpdate ->
-                                execute(params.copy(userAuthParam = authUpdate))
-                            }
-                    )
+                !handleUIA(
+                    failure = throwable,
+                    interceptor = params.userInteractiveAuthInterceptor,
+                    retryBlock = { authUpdate ->
+                        execute(params.copy(userAuthParam = authUpdate))
+                    }
+                )
             ) {
                 Timber.d("## UIA: propagate failure")
                 throw throwable

@@ -44,7 +44,7 @@ import javax.inject.Inject
 
 @Parcelize
 data class SpaceBottomSheetSettingsArgs(
-        val spaceId: String
+    val spaceId: String
 ) : Parcelable
 
 @AndroidEntryPoint
@@ -90,7 +90,7 @@ class SpaceSettingsMenuBottomSheet : VectorBaseBottomSheetDialogFragment<BottomS
         }
 
         views.spaceSettings.views.bottomSheetActionClickableZone.debouncedClicks {
-//            navigator.openRoomProfile(requireContext(), spaceArgs.spaceId)
+            //            navigator.openRoomProfile(requireContext(), spaceArgs.spaceId)
             startActivity(SpaceManageActivity.newIntent(requireActivity(), spaceArgs.spaceId, ManageType.Settings))
         }
 

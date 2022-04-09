@@ -16,16 +16,16 @@
 package org.matrix.android.sdk.api.session.pushers
 
 data class Pusher(
-        val pushKey: String,
-        val kind: String,
-        val appId: String,
-        val appDisplayName: String?,
-        val deviceDisplayName: String?,
-        val profileTag: String? = null,
-        val lang: String?,
-        val data: PusherData,
+    val pushKey: String,
+    val kind: String,
+    val appId: String,
+    val appDisplayName: String?,
+    val deviceDisplayName: String?,
+    val profileTag: String? = null,
+    val lang: String?,
+    val data: PusherData,
 
-        val state: PusherState
+    val state: PusherState
 ) {
     companion object {
 
@@ -44,6 +44,6 @@ enum class PusherState {
 }
 
 data class PusherData(
-        val url: String? = null,
-        val format: String? = null
+    val url: String? = null,
+    val format: String? = null
 )

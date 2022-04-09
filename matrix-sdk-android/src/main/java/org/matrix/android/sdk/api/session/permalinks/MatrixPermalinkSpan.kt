@@ -25,8 +25,10 @@ import org.matrix.android.sdk.api.session.permalinks.MatrixPermalinkSpan.Callbac
  * @param url the permalink url tied to the span
  * @param callback the callback to use.
  */
-class MatrixPermalinkSpan(private val url: String,
-                          private val callback: Callback? = null) : ClickableSpan() {
+class MatrixPermalinkSpan(
+    private val url: String,
+    private val callback: Callback? = null
+) : ClickableSpan() {
 
     interface Callback {
         fun onUrlClicked(url: String)

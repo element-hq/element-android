@@ -26,10 +26,10 @@ import im.vector.app.databinding.EmojiChooserFragmentBinding
 import javax.inject.Inject
 
 class EmojiChooserFragment @Inject constructor(
-        private val emojiRecyclerAdapter: EmojiRecyclerAdapter
+    private val emojiRecyclerAdapter: EmojiRecyclerAdapter
 ) : VectorBaseFragment<EmojiChooserFragmentBinding>(),
-        EmojiRecyclerAdapter.InteractionListener,
-        ReactionClickListener {
+    EmojiRecyclerAdapter.InteractionListener,
+    ReactionClickListener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): EmojiChooserFragmentBinding {
         return EmojiChooserFragmentBinding.inflate(inflater, container, false)

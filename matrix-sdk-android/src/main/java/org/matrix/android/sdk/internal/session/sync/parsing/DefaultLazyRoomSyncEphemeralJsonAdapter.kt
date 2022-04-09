@@ -44,8 +44,8 @@ internal class DefaultLazyRoomSyncEphemeralJsonAdapter {
 }
 
 internal class SplitLazyRoomSyncEphemeralJsonAdapter(
-        private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
-        private val syncStrategy: InitialSyncStrategy.Optimized
+    private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
+    private val syncStrategy: InitialSyncStrategy.Optimized
 ) {
     @FromJson
     fun fromJson(reader: JsonReader, delegate: JsonAdapter<RoomSyncEphemeral>): LazyRoomSyncEphemeral? {

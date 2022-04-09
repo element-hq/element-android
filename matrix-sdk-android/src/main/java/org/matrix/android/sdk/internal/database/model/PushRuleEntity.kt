@@ -21,18 +21,18 @@ import io.realm.RealmResults
 import io.realm.annotations.LinkingObjects
 
 internal open class PushRuleEntity(
-        // Required. The actions to perform when this rule is matched.
-        var actionsStr: String? = null,
-        // Required. Whether this is a default rule, or has been set explicitly.
-        var default: Boolean = false,
-        // Required. Whether the push rule is enabled or not.
-        var enabled: Boolean = true,
-        // Required. The ID of this rule.
-        var ruleId: String = "",
-        // The conditions that must hold true for an event in order for a rule to be applied to an event
-        var conditions: RealmList<PushConditionEntity>? = RealmList(),
-        // The glob-style pattern to match against. Only applicable to content rules.
-        var pattern: String? = null
+    // Required. The actions to perform when this rule is matched.
+    var actionsStr: String? = null,
+    // Required. Whether this is a default rule, or has been set explicitly.
+    var default: Boolean = false,
+    // Required. Whether the push rule is enabled or not.
+    var enabled: Boolean = true,
+    // Required. The ID of this rule.
+    var ruleId: String = "",
+    // The conditions that must hold true for an event in order for a rule to be applied to an event
+    var conditions: RealmList<PushConditionEntity>? = RealmList(),
+    // The glob-style pattern to match against. Only applicable to content rules.
+    var pattern: String? = null
 ) : RealmObject() {
 
     @LinkingObjects("pushRules")

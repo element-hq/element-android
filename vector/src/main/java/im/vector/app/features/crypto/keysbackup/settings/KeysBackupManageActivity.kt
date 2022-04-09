@@ -51,20 +51,20 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
         // Observe the deletion of keys backup
         viewModel.onEach(KeysBackupSettingViewState::deleteBackupRequest) { asyncDelete ->
             when (asyncDelete) {
-                is Fail    -> {
+                is Fail -> {
                     updateWaitingView(null)
 
                     MaterialAlertDialogBuilder(this)
-                            .setTitle(R.string.unknown_error)
-                            .setMessage(getString(R.string.keys_backup_get_version_error, asyncDelete.error.localizedMessage))
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.ok, null)
-                            .show()
+                        .setTitle(R.string.unknown_error)
+                        .setMessage(getString(R.string.keys_backup_get_version_error, asyncDelete.error.localizedMessage))
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
                 }
                 is Loading -> {
                     updateWaitingView(WaitingViewData(getString(R.string.keys_backup_settings_deleting_backup)))
                 }
-                else       -> {
+                else -> {
                     updateWaitingView(null)
                 }
             }

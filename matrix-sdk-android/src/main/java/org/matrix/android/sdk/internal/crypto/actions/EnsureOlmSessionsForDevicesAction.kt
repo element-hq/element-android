@@ -37,9 +37,10 @@ private val loggerTag = LoggerTag("EnsureOlmSessionsForDevicesAction", LoggerTag
 
 @SessionScope
 internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
-        private val olmDevice: MXOlmDevice,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
+    private val olmDevice: MXOlmDevice,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers,
+    private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask
+) {
 
     private val ensureMutex = Mutex()
 
@@ -52,7 +53,7 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
             val results = MXUsersDevicesMap<MXOlmSessionResult>()
             val deviceList = devicesByUser.flatMap { it.value }
             Timber.tag(loggerTag.value)
-                    .d("ensure olm forced:$force for ${deviceList.joinToString { it.shortDebugString() }}")
+                .d("ensure olm forced:$force for ${deviceList.joinToString { it.shortDebugString() }}")
             val devicesToCreateSessionWith = mutableListOf<CryptoDeviceInfo>()
             if (force) {
                 // we take all devices and will query otk for them
@@ -112,8 +113,8 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
                         results.setObject(userId, deviceId, olmSessionResult)
                     } else {
                         Timber
-                                .tag(loggerTag.value)
-                                .d("## CRYPTO | cant unwedge failed to create outbound ${deviceInfo.shortDebugString()}")
+                            .tag(loggerTag.value)
+                            .d("## CRYPTO | cant unwedge failed to create outbound ${deviceInfo.shortDebugString()}")
                     }
                 }
             }
@@ -137,10 +138,14 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
                 olmDevice.verifySignature(fingerprint, oneTimeKey.signalableJSONDictionary(), signature)
                 isVerified = true
             } catch (e: Exception) {
-                Timber.tag(loggerTag.value).d(e, "verifyKeyAndStartSession() : Verify error for otk: ${oneTimeKey.signalableJSONDictionary()}," +
-                        " signature:$signature fingerprint:$fingerprint")
-                Timber.tag(loggerTag.value).e("verifyKeyAndStartSession() : Verify error for ${deviceInfo.userId}|${deviceInfo.deviceId} " +
-                        " - signable json ${oneTimeKey.signalableJSONDictionary()}")
+                Timber.tag(loggerTag.value).d(
+                    e, "verifyKeyAndStartSession() : Verify error for otk: ${oneTimeKey.signalableJSONDictionary()}," +
+                            " signature:$signature fingerprint:$fingerprint"
+                )
+                Timber.tag(loggerTag.value).e(
+                    "verifyKeyAndStartSession() : Verify error for ${deviceInfo.userId}|${deviceInfo.deviceId} " +
+                            " - signable json ${oneTimeKey.signalableJSONDictionary()}"
+                )
                 errorMessage = e.message
             }
 

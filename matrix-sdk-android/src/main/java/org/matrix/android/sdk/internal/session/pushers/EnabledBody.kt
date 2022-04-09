@@ -20,6 +20,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class EnabledBody(
-        @Json(name = "enabled")
-        val enabled: Boolean
+    @Json(name = "enabled")
+    val enabled: Boolean
 )

@@ -29,27 +29,27 @@ class MigrateSessionTo021(realm: DynamicRealm) : RealmMigrator(realm, 21) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("RoomSummaryEntity")
-                ?.addField(RoomSummaryEntityFields.E2E_ALGORITHM, String::class.java)
-                ?.transform { obj ->
+            ?.addField(RoomSummaryEntityFields.E2E_ALGORITHM, String::class.java)
+            ?.transform { obj ->
 
-                    val encryptionContentAdapter = MoshiProvider.providesMoshi().adapter(EncryptionEventContent::class.java)
+                val encryptionContentAdapter = MoshiProvider.providesMoshi().adapter(EncryptionEventContent::class.java)
 
-                    val encryptionEvent = realm.where("CurrentStateEventEntity")
-                            .equalTo(CurrentStateEventEntityFields.ROOM_ID, obj.getString(RoomSummaryEntityFields.ROOM_ID))
-                            .equalTo(CurrentStateEventEntityFields.TYPE, EventType.STATE_ROOM_ENCRYPTION)
-                            .findFirst()
+                val encryptionEvent = realm.where("CurrentStateEventEntity")
+                    .equalTo(CurrentStateEventEntityFields.ROOM_ID, obj.getString(RoomSummaryEntityFields.ROOM_ID))
+                    .equalTo(CurrentStateEventEntityFields.TYPE, EventType.STATE_ROOM_ENCRYPTION)
+                    .findFirst()
 
-                    val encryptionEventRoot = encryptionEvent?.getObject(CurrentStateEventEntityFields.ROOT.`$`)
-                    val algorithm = encryptionEventRoot
-                            ?.getString(EventEntityFields.CONTENT)?.let {
-                                encryptionContentAdapter.fromJson(it)?.algorithm
-                            }
-
-                    obj.setString(RoomSummaryEntityFields.E2E_ALGORITHM, algorithm)
-                    obj.setBoolean(RoomSummaryEntityFields.IS_ENCRYPTED, encryptionEvent != null)
-                    encryptionEventRoot?.getLong(EventEntityFields.ORIGIN_SERVER_TS)?.let {
-                        obj.setLong(RoomSummaryEntityFields.ENCRYPTION_EVENT_TS, it)
+                val encryptionEventRoot = encryptionEvent?.getObject(CurrentStateEventEntityFields.ROOT.`$`)
+                val algorithm = encryptionEventRoot
+                    ?.getString(EventEntityFields.CONTENT)?.let {
+                        encryptionContentAdapter.fromJson(it)?.algorithm
                     }
+
+                obj.setString(RoomSummaryEntityFields.E2E_ALGORITHM, algorithm)
+                obj.setBoolean(RoomSummaryEntityFields.IS_ENCRYPTED, encryptionEvent != null)
+                encryptionEventRoot?.getLong(EventEntityFields.ORIGIN_SERVER_TS)?.let {
+                    obj.setLong(RoomSummaryEntityFields.ENCRYPTION_EVENT_TS, it)
                 }
+            }
     }
 }

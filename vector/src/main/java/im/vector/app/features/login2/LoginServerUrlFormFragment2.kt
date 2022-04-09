@@ -63,11 +63,11 @@ class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2
 
     private fun setupHomeServerField() {
         views.loginServerUrlFormHomeServerUrl.textChanges()
-                .onEach {
-                    views.loginServerUrlFormHomeServerUrlTil.error = null
-                    views.loginServerUrlFormSubmit.isEnabled = it.isNotBlank()
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                views.loginServerUrlFormHomeServerUrlTil.error = null
+                views.loginServerUrlFormSubmit.isEnabled = it.isNotBlank()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.loginServerUrlFormHomeServerUrl.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -81,14 +81,16 @@ class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2
 
     private fun setupUi(state: LoginViewState2) {
         val completions = state.knownCustomHomeServersUrls + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
-        views.loginServerUrlFormHomeServerUrl.setAdapter(ArrayAdapter(
+        views.loginServerUrlFormHomeServerUrl.setAdapter(
+            ArrayAdapter(
                 requireContext(),
                 R.layout.item_completion_homeserver,
                 completions
-        ))
+            )
+        )
         views.loginServerUrlFormHomeServerUrlTil.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                .takeIf { completions.isNotEmpty() }
-                ?: TextInputLayout.END_ICON_NONE
+            .takeIf { completions.isNotEmpty() }
+            ?: TextInputLayout.END_ICON_NONE
 
         views.loginServerUrlFormClearHistory.isInvisible = state.knownCustomHomeServersUrls.isEmpty()
     }
@@ -112,7 +114,7 @@ class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2
             serverUrl.isBlank() -> {
                 views.loginServerUrlFormHomeServerUrlTil.error = getString(R.string.login_error_invalid_home_server)
             }
-            else                -> {
+            else -> {
                 views.loginServerUrlFormHomeServerUrl.setText(serverUrl, false /* to avoid completion dialog flicker*/)
                 loginViewModel.handle(LoginAction2.UpdateHomeServer(serverUrl))
             }
@@ -126,13 +128,14 @@ class LoginServerUrlFormFragment2 @Inject constructor() : AbstractLoginFragment2
 
     override fun onError(throwable: Throwable) {
         views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection &&
-                throwable.ioException is UnknownHostException) {
+            throwable.ioException is UnknownHostException
+        ) {
             // Invalid homeserver?
             getString(R.string.login_error_homeserver_not_found)
         } else {
             if (throwable is Failure.ServerError &&
-                    throwable.error.code == MatrixError.M_FORBIDDEN &&
-                    throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
+                throwable.error.code == MatrixError.M_FORBIDDEN &&
+                throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                 getString(R.string.login_registration_disabled)
             } else {
                 errorFormatter.toHumanReadable(throwable)

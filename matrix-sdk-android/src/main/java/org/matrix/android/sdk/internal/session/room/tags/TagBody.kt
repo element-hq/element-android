@@ -21,9 +21,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class TagBody(
-        /**
-         * A number in a range [0,1] describing a relative position of the room under the given tag.
-         */
-        @Json(name = "order")
-        val order: Double?
+    /**
+     * A number in a range [0,1] describing a relative position of the room under the given tag.
+     */
+    @Json(name = "order")
+    val order: Double?
 )

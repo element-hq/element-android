@@ -31,8 +31,8 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class SpaceAdd3pidEpoxyController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider
 ) : TypedEpoxyController<CreateSpaceState>() {
 
     var listener: Listener? = null
@@ -82,9 +82,9 @@ class SpaceAdd3pidEpoxyController @Inject constructor(
                 inputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
                 endIconMode(TextInputLayout.END_ICON_CLEAR_TEXT)
                 errorMessage(
-                        if (data.emailValidationResult?.get(index) == false) {
-                            host.stringProvider.getString(R.string.does_not_look_like_valid_email)
-                        } else null
+                    if (data.emailValidationResult?.get(index) == false) {
+                        host.stringProvider.getString(R.string.does_not_look_like_valid_email)
+                    } else null
                 )
                 onTextChange { text ->
                     host.listener?.on3pidChange(index, text)

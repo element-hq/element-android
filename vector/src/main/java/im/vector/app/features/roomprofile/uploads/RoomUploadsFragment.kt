@@ -42,8 +42,8 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomUploadsFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val notificationUtils: NotificationUtils
+    private val avatarRenderer: AvatarRenderer,
+    private val notificationUtils: NotificationUtils
 ) : VectorBaseFragment<FragmentRoomUploadsBinding>() {
 
     private val roomProfileArgs: RoomProfileArgs by args()
@@ -73,22 +73,22 @@ class RoomUploadsFragment @Inject constructor(
         }.attach()
 
         setupToolbar(views.roomUploadsToolbar)
-                .allowBack()
+            .allowBack()
 
         viewModel.observeViewEvents {
             when (it) {
                 is RoomUploadsViewEvents.FileReadyForSharing -> {
                     shareMedia(requireContext(), it.file, getMimeTypeFromUri(requireContext(), it.file.toUri()))
                 }
-                is RoomUploadsViewEvents.FileReadyForSaving  -> {
+                is RoomUploadsViewEvents.FileReadyForSaving -> {
                     lifecycleScope.launch {
                         runCatching {
                             saveMedia(
-                                    context = requireContext(),
-                                    file = it.file,
-                                    title = it.title,
-                                    mediaMimeType = getMimeTypeFromUri(requireContext(), it.file.toUri()),
-                                    notificationUtils = notificationUtils
+                                context = requireContext(),
+                                file = it.file,
+                                title = it.title,
+                                mediaMimeType = getMimeTypeFromUri(requireContext(), it.file.toUri()),
+                                notificationUtils = notificationUtils
                             )
                         }.onFailure { failure ->
                             if (!isAdded) return@onFailure
@@ -97,7 +97,7 @@ class RoomUploadsFragment @Inject constructor(
                     }
                     Unit
                 }
-                is RoomUploadsViewEvents.Failure             -> showFailure(it.throwable)
+                is RoomUploadsViewEvents.Failure -> showFailure(it.throwable)
             }
         }
     }

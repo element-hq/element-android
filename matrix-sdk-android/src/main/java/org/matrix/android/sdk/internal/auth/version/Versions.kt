@@ -39,11 +39,11 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class Versions(
-        @Json(name = "versions")
-        val supportedVersions: List<String>? = null,
+    @Json(name = "versions")
+    val supportedVersions: List<String>? = null,
 
-        @Json(name = "unstable_features")
-        val unstableFeatures: Map<String, Boolean>? = null
+    @Json(name = "unstable_features")
+    val unstableFeatures: Map<String, Boolean>? = null
 )
 
 // MatrixVersionsFeature
@@ -113,7 +113,7 @@ private fun Versions.doesServerSeparatesAddAndBind(): Boolean {
 
 private fun Versions.getMaxVersion(): HomeServerVersion {
     return supportedVersions
-            ?.mapNotNull { HomeServerVersion.parse(it) }
-            ?.maxOrNull()
-            ?: HomeServerVersion.r0_0_0
+        ?.mapNotNull { HomeServerVersion.parse(it) }
+        ?.maxOrNull()
+        ?: HomeServerVersion.r0_0_0
 }

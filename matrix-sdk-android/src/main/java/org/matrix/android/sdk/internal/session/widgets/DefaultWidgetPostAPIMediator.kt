@@ -28,8 +28,10 @@ import java.lang.reflect.Type
 import java.util.HashMap
 import javax.inject.Inject
 
-internal class DefaultWidgetPostAPIMediator @Inject constructor(private val moshi: Moshi,
-                                                                private val widgetPostMessageAPIProvider: WidgetPostMessageAPIProvider) :
+internal class DefaultWidgetPostAPIMediator @Inject constructor(
+    private val moshi: Moshi,
+    private val widgetPostMessageAPIProvider: WidgetPostMessageAPIProvider
+) :
     WidgetPostAPIMediator {
 
     private val jsonAdapter = moshi.adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)

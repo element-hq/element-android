@@ -28,8 +28,8 @@ internal interface GetDeviceInfoTask : Task<GetDeviceInfoTask.Params, DeviceInfo
 }
 
 internal class DefaultGetDeviceInfoTask @Inject constructor(
-        private val cryptoApi: CryptoApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val cryptoApi: CryptoApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetDeviceInfoTask {
 
     override suspend fun execute(params: GetDeviceInfoTask.Params): DeviceInfo {

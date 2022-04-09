@@ -29,8 +29,8 @@ import im.vector.app.features.settings.VectorLocale
 import kotlinx.coroutines.launch
 
 class LocalePickerViewModel @AssistedInject constructor(
-        @Assisted initialState: LocalePickerViewState,
-        private val vectorConfiguration: VectorConfiguration
+    @Assisted initialState: LocalePickerViewState,
+    private val vectorConfiguration: VectorConfiguration
 ) : VectorViewModel<LocalePickerViewState, LocalePickerAction, LocalePickerViewEvents>(initialState) {
 
     @AssistedFactory
@@ -44,7 +44,7 @@ class LocalePickerViewModel @AssistedInject constructor(
 
             setState {
                 copy(
-                        locales = Success(result)
+                    locales = Success(result)
                 )
             }
         }

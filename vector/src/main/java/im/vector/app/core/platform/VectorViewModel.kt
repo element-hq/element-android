@@ -22,7 +22,7 @@ import im.vector.app.core.utils.DataSource
 import im.vector.app.core.utils.PublishDataSource
 
 abstract class VectorViewModel<S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents>(initialState: S) :
-        MavericksViewModel<S>(initialState) {
+    MavericksViewModel<S>(initialState) {
 
     // Used to post transient events to the View
     protected val _viewEvents = PublishDataSource<VE>()

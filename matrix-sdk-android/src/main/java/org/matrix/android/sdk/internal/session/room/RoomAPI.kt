@@ -58,8 +58,9 @@ internal interface RoomAPI {
      * Ref: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-publicrooms
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "publicRooms")
-    suspend fun publicRooms(@Query("server") server: String?,
-                            @Body publicRoomsParams: PublicRoomsParams
+    suspend fun publicRooms(
+        @Query("server") server: String?,
+        @Body publicRoomsParams: PublicRoomsParams
     ): PublicRoomsResponse
 
     /**
@@ -84,11 +85,12 @@ internal interface RoomAPI {
      * @param filter A JSON RoomEventFilter to filter returned events with. Optional.
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/messages")
-    suspend fun getRoomMessagesFrom(@Path("roomId") roomId: String,
-                                    @Query("from") from: String,
-                                    @Query("dir") dir: String,
-                                    @Query("limit") limit: Int?,
-                                    @Query("filter") filter: String?
+    suspend fun getRoomMessagesFrom(
+        @Path("roomId") roomId: String,
+        @Query("from") from: String,
+        @Query("dir") dir: String,
+        @Query("limit") limit: Int?,
+        @Query("filter") filter: String?
     ): PaginationResponse
 
     /**
@@ -100,10 +102,11 @@ internal interface RoomAPI {
      * @param notMembership to exclude one type of membership (optional)
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/members")
-    suspend fun getMembers(@Path("roomId") roomId: String,
-                           @Query("at") syncToken: String?,
-                           @Query("membership") membership: Membership?,
-                           @Query("not_membership") notMembership: Membership?
+    suspend fun getMembers(
+        @Path("roomId") roomId: String,
+        @Query("at") syncToken: String?,
+        @Query("membership") membership: Membership?,
+        @Query("not_membership") notMembership: Membership?
     ): RoomMembersResponse
 
     /**
@@ -115,10 +118,11 @@ internal interface RoomAPI {
      * @param content   the event content
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/send/{eventType}/{txId}")
-    suspend fun send(@Path("txId") txId: String,
-                     @Path("roomId") roomId: String,
-                     @Path("eventType") eventType: String,
-                     @Body content: Content?
+    suspend fun send(
+        @Path("txId") txId: String,
+        @Path("roomId") roomId: String,
+        @Path("eventType") eventType: String,
+        @Body content: Content?
     ): SendResponse
 
     /**
@@ -130,10 +134,12 @@ internal interface RoomAPI {
      * @param filter  A JSON RoomEventFilter to filter returned events with. Optional.
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/context/{eventId}")
-    suspend fun getContextOfEvent(@Path("roomId") roomId: String,
-                                  @Path("eventId") eventId: String,
-                                  @Query("limit") limit: Int,
-                                  @Query("filter") filter: String? = null): EventContextResponse
+    suspend fun getContextOfEvent(
+        @Path("roomId") roomId: String,
+        @Path("eventId") eventId: String,
+        @Query("limit") limit: Int,
+        @Query("filter") filter: String? = null
+    ): EventContextResponse
 
     /**
      * Retrieve an event from its room id / events id
@@ -142,8 +148,10 @@ internal interface RoomAPI {
      * @param eventId the event Id
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/event/{eventId}")
-    suspend fun getEvent(@Path("roomId") roomId: String,
-                         @Path("eventId") eventId: String): Event
+    suspend fun getEvent(
+        @Path("roomId") roomId: String,
+        @Path("eventId") eventId: String
+    ): Event
 
     /**
      * Send read markers.
@@ -152,17 +160,21 @@ internal interface RoomAPI {
      * @param markers the read markers
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/read_markers")
-    suspend fun sendReadMarker(@Path("roomId") roomId: String,
-                               @Body markers: Map<String, String>)
+    suspend fun sendReadMarker(
+        @Path("roomId") roomId: String,
+        @Body markers: Map<String, String>
+    )
 
     /**
      * Send receipt to a room
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/receipt/{receiptType}/{eventId}")
-    suspend fun sendReceipt(@Path("roomId") roomId: String,
-                            @Path("receiptType") receiptType: String,
-                            @Path("eventId") eventId: String,
-                            @Body body: JsonDict = emptyMap())
+    suspend fun sendReceipt(
+        @Path("roomId") roomId: String,
+        @Path("receiptType") receiptType: String,
+        @Path("eventId") eventId: String,
+        @Body body: JsonDict = emptyMap()
+    )
 
     /**
      * Invite a user to the given room.
@@ -172,8 +184,10 @@ internal interface RoomAPI {
      * @param body   a object that just contains a user id
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
-    suspend fun invite(@Path("roomId") roomId: String,
-                       @Body body: InviteBody)
+    suspend fun invite(
+        @Path("roomId") roomId: String,
+        @Body body: InviteBody
+    )
 
     /**
      * Invite a user to a room, using a ThreePid
@@ -181,8 +195,10 @@ internal interface RoomAPI {
      * @param roomId Required. The room identifier (not alias) to which to invite the user.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
-    suspend fun invite3pid(@Path("roomId") roomId: String,
-                           @Body body: ThreePidInviteBody)
+    suspend fun invite3pid(
+        @Path("roomId") roomId: String,
+        @Body body: ThreePidInviteBody
+    )
 
     /**
      * Send a generic state event
@@ -192,9 +208,11 @@ internal interface RoomAPI {
      * @param params         the request parameters
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state/{state_event_type}")
-    suspend fun sendStateEvent(@Path("roomId") roomId: String,
-                               @Path("state_event_type") stateEventType: String,
-                               @Body params: JsonDict)
+    suspend fun sendStateEvent(
+        @Path("roomId") roomId: String,
+        @Path("state_event_type") stateEventType: String,
+        @Body params: JsonDict
+    )
 
     /**
      * Send a generic state event
@@ -205,10 +223,12 @@ internal interface RoomAPI {
      * @param params         the request parameters
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state/{state_event_type}/{state_key}")
-    suspend fun sendStateEvent(@Path("roomId") roomId: String,
-                               @Path("state_event_type") stateEventType: String,
-                               @Path("state_key") stateKey: String,
-                               @Body params: JsonDict)
+    suspend fun sendStateEvent(
+        @Path("roomId") roomId: String,
+        @Path("state_event_type") stateEventType: String,
+        @Path("state_key") stateKey: String,
+        @Body params: JsonDict
+    )
 
     /**
      * Get state events of a room
@@ -223,13 +243,14 @@ internal interface RoomAPI {
      * @param eventType filter for this event type
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/relations/{eventId}/{relationType}/{eventType}")
-    suspend fun getRelations(@Path("roomId") roomId: String,
-                             @Path("eventId") eventId: String,
-                             @Path("relationType") relationType: String,
-                             @Path("eventType") eventType: String,
-                             @Query("from") from: String? = null,
-                             @Query("to") to: String? = null,
-                             @Query("limit") limit: Int? = null
+    suspend fun getRelations(
+        @Path("roomId") roomId: String,
+        @Path("eventId") eventId: String,
+        @Path("relationType") relationType: String,
+        @Path("eventType") eventType: String,
+        @Query("from") from: String? = null,
+        @Query("to") to: String? = null,
+        @Query("limit") limit: Int? = null
     ): RelationsResponse
 
     /**
@@ -237,12 +258,13 @@ internal interface RoomAPI {
      * @param relationType filter for this relation type
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/relations/{eventId}/{relationType}")
-    suspend fun getThreadsRelations(@Path("roomId") roomId: String,
-                                    @Path("eventId") eventId: String,
-                                    @Path("relationType") relationType: String = RelationType.THREAD,
-                                    @Query("from") from: String? = null,
-                                    @Query("to") to: String? = null,
-                                    @Query("limit") limit: Int? = null
+    suspend fun getThreadsRelations(
+        @Path("roomId") roomId: String,
+        @Path("eventId") eventId: String,
+        @Path("relationType") relationType: String = RelationType.THREAD,
+        @Query("from") from: String? = null,
+        @Query("to") to: String? = null,
+        @Query("limit") limit: Int? = null
     ): RelationsResponse
 
     /**
@@ -253,9 +275,11 @@ internal interface RoomAPI {
      * @param params the request body
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "join/{roomIdOrAlias}")
-    suspend fun join(@Path("roomIdOrAlias") roomIdOrAlias: String,
-                     @Query("server_name") viaServers: List<String>,
-                     @Body params: JsonDict): JoinRoomResponse
+    suspend fun join(
+        @Path("roomIdOrAlias") roomIdOrAlias: String,
+        @Query("server_name") viaServers: List<String>,
+        @Body params: JsonDict
+    ): JoinRoomResponse
 
     /**
      * Leave the given room.
@@ -264,8 +288,10 @@ internal interface RoomAPI {
      * @param params the request body
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/leave")
-    suspend fun leave(@Path("roomId") roomId: String,
-                      @Body params: Map<String, String?>)
+    suspend fun leave(
+        @Path("roomId") roomId: String,
+        @Body params: Map<String, String?>
+    )
 
     /**
      * Ban a user from the given room.
@@ -274,8 +300,10 @@ internal interface RoomAPI {
      * @param userIdAndReason the banned user object (userId and reason for ban)
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/ban")
-    suspend fun ban(@Path("roomId") roomId: String,
-                    @Body userIdAndReason: UserIdAndReason)
+    suspend fun ban(
+        @Path("roomId") roomId: String,
+        @Body userIdAndReason: UserIdAndReason
+    )
 
     /**
      * unban a user from the given room.
@@ -284,8 +312,10 @@ internal interface RoomAPI {
      * @param userIdAndReason the unbanned user object (userId and reason for unban)
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/unban")
-    suspend fun unban(@Path("roomId") roomId: String,
-                      @Body userIdAndReason: UserIdAndReason)
+    suspend fun unban(
+        @Path("roomId") roomId: String,
+        @Body userIdAndReason: UserIdAndReason
+    )
 
     /**
      * Kick a user from the given room.
@@ -294,8 +324,10 @@ internal interface RoomAPI {
      * @param userIdAndReason the kicked user object (userId and reason for kicking)
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/kick")
-    suspend fun kick(@Path("roomId") roomId: String,
-                     @Body userIdAndReason: UserIdAndReason)
+    suspend fun kick(
+        @Path("roomId") roomId: String,
+        @Body userIdAndReason: UserIdAndReason
+    )
 
     /**
      * Strips all information out of an event which isn't critical to the integrity of the server-side representation of the room.
@@ -309,10 +341,10 @@ internal interface RoomAPI {
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/redact/{eventId}/{txnId}")
     suspend fun redactEvent(
-            @Path("txnId") txId: String,
-            @Path("roomId") roomId: String,
-            @Path("eventId") eventId: String,
-            @Body reason: Map<String, String>
+        @Path("txnId") txId: String,
+        @Path("roomId") roomId: String,
+        @Path("eventId") eventId: String,
+        @Body reason: Map<String, String>
     ): SendResponse
 
     /**
@@ -323,9 +355,11 @@ internal interface RoomAPI {
      * @param body    body containing score and reason
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/report/{eventId}")
-    suspend fun reportContent(@Path("roomId") roomId: String,
-                              @Path("eventId") eventId: String,
-                              @Body body: ReportContentBody)
+    suspend fun reportContent(
+        @Path("roomId") roomId: String,
+        @Path("eventId") eventId: String,
+        @Body body: ReportContentBody
+    )
 
     /**
      * Get a list of aliases maintained by the local server for the given room.
@@ -338,9 +372,11 @@ internal interface RoomAPI {
      * Inform that the user is starting to type or has stopped typing
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/typing/{userId}")
-    suspend fun sendTypingState(@Path("roomId") roomId: String,
-                                @Path("userId") userId: String,
-                                @Body body: TypingBody)
+    suspend fun sendTypingState(
+        @Path("roomId") roomId: String,
+        @Path("userId") userId: String,
+        @Body body: TypingBody
+    )
 
     /**
      * Room tagging
@@ -350,27 +386,33 @@ internal interface RoomAPI {
      * Add a tag to a room.
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/rooms/{roomId}/tags/{tag}")
-    suspend fun putTag(@Path("userId") userId: String,
-                       @Path("roomId") roomId: String,
-                       @Path("tag") tag: String,
-                       @Body body: TagBody)
+    suspend fun putTag(
+        @Path("userId") userId: String,
+        @Path("roomId") roomId: String,
+        @Path("tag") tag: String,
+        @Body body: TagBody
+    )
 
     /**
      * Delete a tag from a room.
      */
     @DELETE(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/rooms/{roomId}/tags/{tag}")
-    suspend fun deleteTag(@Path("userId") userId: String,
-                          @Path("roomId") roomId: String,
-                          @Path("tag") tag: String)
+    suspend fun deleteTag(
+        @Path("userId") userId: String,
+        @Path("roomId") roomId: String,
+        @Path("tag") tag: String
+    )
 
     /**
      * Set an AccountData event to the room.
      */
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "user/{userId}/rooms/{roomId}/account_data/{type}")
-    suspend fun setRoomAccountData(@Path("userId") userId: String,
-                                   @Path("roomId") roomId: String,
-                                   @Path("type") type: String,
-                                   @Body content: JsonDict)
+    suspend fun setRoomAccountData(
+        @Path("userId") userId: String,
+        @Path("roomId") roomId: String,
+        @Path("type") type: String,
+        @Body content: JsonDict
+    )
 
     /**
      * Upgrades the given room to a particular room version.
@@ -380,8 +422,10 @@ internal interface RoomAPI {
      * 403: The user is not permitted to upgrade the room.(M_FORBIDDEN)
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/upgrade")
-    suspend fun upgradeRoom(@Path("roomId") roomId: String,
-                            @Body body: RoomUpgradeBody): RoomUpgradeResponse
+    suspend fun upgradeRoom(
+        @Path("roomId") roomId: String,
+        @Body body: RoomUpgradeBody
+    ): RoomUpgradeResponse
 
     /**
      * The API returns the summary of the specified room, if the room could be found and the client should be able to view
@@ -390,6 +434,8 @@ internal interface RoomAPI {
      * https://github.com/deepbluev7/matrix-doc/blob/room-summaries/proposals/3266-room-summary.md
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "im.nheko.summary/rooms/{roomIdOrAlias}/summary")
-    suspend fun getRoomSummary(@Path("roomIdOrAlias") roomidOrAlias: String,
-                               @Query("via") viaServers: List<String>?): RoomStrippedState
+    suspend fun getRoomSummary(
+        @Path("roomIdOrAlias") roomidOrAlias: String,
+        @Query("via") viaServers: List<String>?
+    ): RoomStrippedState
 }

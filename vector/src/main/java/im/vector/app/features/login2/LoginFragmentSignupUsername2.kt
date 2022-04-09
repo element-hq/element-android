@@ -98,11 +98,11 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
             views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                 override fun onProviderSelected(id: String?) {
                     loginViewModel.getSsoUrl(
-                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                            deviceId = state.deviceId,
-                            providerId = id
+                        redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                        deviceId = state.deviceId,
+                        providerId = id
                     )
-                            ?.let { openInCustomTab(it) }
+                        ?.let { openInCustomTab(it) }
                 }
             }
         } else {
@@ -114,13 +114,13 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
         views.loginField.textChanges()
-                .map { it.trim() }
-                .onEach { text ->
-                    val isNotEmpty = text.isNotEmpty()
-                    views.loginFieldTil.error = null
-                    views.loginSubmit.isEnabled = isNotEmpty
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .map { it.trim() }
+            .onEach { text ->
+                val isNotEmpty = text.isNotEmpty()
+                views.loginFieldTil.error = null
+                views.loginSubmit.isEnabled = isNotEmpty
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun resetViewModel() {

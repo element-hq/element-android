@@ -23,6 +23,6 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class Predecessor(
-        @Json(name = "room_id") val roomId: String? = null,
-        @Json(name = "event_id") val eventId: String? = null
+    @Json(name = "room_id") val roomId: String? = null,
+    @Json(name = "event_id") val eventId: String? = null
 )

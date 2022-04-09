@@ -20,7 +20,7 @@ import android.view.View
 import im.vector.lib.attachmentviewer.databinding.ItemAnimatedImageAttachmentBinding
 
 class AnimatedImageViewHolder constructor(itemView: View) :
-        BaseViewHolder(itemView) {
+    BaseViewHolder(itemView) {
 
     val views = ItemAnimatedImageAttachmentBinding.bind(itemView)
 

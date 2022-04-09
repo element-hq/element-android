@@ -41,24 +41,24 @@ enum class WidgetKind(@StringRes val nameRes: Int, val screenId: String?) {
 }
 
 data class WidgetViewState(
-        val roomId: String,
-        val baseUrl: String,
-        val urlParams: Map<String, String> = emptyMap(),
-        val widgetId: String? = null,
-        val widgetKind: WidgetKind,
-        val status: WidgetStatus = WidgetStatus.UNKNOWN,
-        val formattedURL: Async<String> = Uninitialized,
-        val webviewLoadedUrl: Async<String> = Uninitialized,
-        val widgetName: String = "",
-        val canManageWidgets: Boolean = false,
-        val asyncWidget: Async<Widget> = Uninitialized
+    val roomId: String,
+    val baseUrl: String,
+    val urlParams: Map<String, String> = emptyMap(),
+    val widgetId: String? = null,
+    val widgetKind: WidgetKind,
+    val status: WidgetStatus = WidgetStatus.UNKNOWN,
+    val formattedURL: Async<String> = Uninitialized,
+    val webviewLoadedUrl: Async<String> = Uninitialized,
+    val widgetName: String = "",
+    val canManageWidgets: Boolean = false,
+    val asyncWidget: Async<Widget> = Uninitialized
 ) : MavericksState {
 
     constructor(widgetArgs: WidgetArgs) : this(
-            widgetKind = widgetArgs.kind,
-            baseUrl = widgetArgs.baseUrl,
-            roomId = widgetArgs.roomId,
-            widgetId = widgetArgs.widgetId,
-            urlParams = widgetArgs.urlParams
+        widgetKind = widgetArgs.kind,
+        baseUrl = widgetArgs.baseUrl,
+        roomId = widgetArgs.roomId,
+        widgetId = widgetArgs.widgetId,
+        urlParams = widgetArgs.urlParams
     )
 }

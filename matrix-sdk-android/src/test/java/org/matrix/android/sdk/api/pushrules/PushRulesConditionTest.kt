@@ -39,10 +39,11 @@ class PushRulesConditionTest : MatrixTest {
 
     private fun createSimpleTextEvent(text: String): Event {
         return Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.text", text).toContent(),
-                originServerTs = 0)
+            type = "m.room.message",
+            eventId = "mx0",
+            content = MessageTextContent("m.text", text).toContent(),
+            originServerTs = 0
+        )
     }
 
     @Test
@@ -52,16 +53,17 @@ class PushRulesConditionTest : MatrixTest {
         val simpleTextEvent = createSimpleTextEvent("Yo wtf?")
 
         val rm = RoomMemberContent(
-                Membership.INVITE,
-                displayName = "Foo",
-                avatarUrl = "mxc://matrix.org/EqMZYbREvHXvYFyfxOlkf"
+            Membership.INVITE,
+            displayName = "Foo",
+            avatarUrl = "mxc://matrix.org/EqMZYbREvHXvYFyfxOlkf"
         )
         val simpleRoomMemberEvent = Event(
-                type = "m.room.member",
-                eventId = "mx0",
-                stateKey = "@foo:matrix.org",
-                content = rm.toContent(),
-                originServerTs = 0)
+            type = "m.room.member",
+            eventId = "mx0",
+            stateKey = "@foo:matrix.org",
+            content = rm.toContent(),
+            originServerTs = 0
+        )
 
         assert(condition.isSatisfied(simpleTextEvent))
         assert(!condition.isSatisfied(simpleRoomMemberEvent))
@@ -76,15 +78,15 @@ class PushRulesConditionTest : MatrixTest {
         assert(condition.isSatisfied(simpleTextEvent))
 
         Event(
-                type = "m.room.member",
-                eventId = "mx0",
-                stateKey = "@foo:matrix.org",
-                content = RoomMemberContent(
-                        Membership.INVITE,
-                        displayName = "Foo",
-                        avatarUrl = "mxc://matrix.org/EqMZYbREvHXvYFyfxOlkf"
-                ).toContent(),
-                originServerTs = 0
+            type = "m.room.member",
+            eventId = "mx0",
+            stateKey = "@foo:matrix.org",
+            content = RoomMemberContent(
+                Membership.INVITE,
+                displayName = "Foo",
+                avatarUrl = "mxc://matrix.org/EqMZYbREvHXvYFyfxOlkf"
+            ).toContent(),
+            originServerTs = 0
         ).apply {
             assert(EventMatchCondition("content.membership", "invite", false).isSatisfied(this))
         }
@@ -126,11 +128,12 @@ class PushRulesConditionTest : MatrixTest {
         val conditionEqual = EventMatchCondition("content.msgtype", "m.notice", false)
 
         Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.notice", "A").toContent(),
-                originServerTs = 0,
-                roomId = "2joined").also {
+            type = "m.room.message",
+            eventId = "mx0",
+            content = MessageTextContent("m.notice", "A").toContent(),
+            originServerTs = 0,
+            roomId = "2joined"
+        ).also {
             assertTrue("Notice", conditionEqual.isSatisfied(it))
         }
     }
@@ -162,22 +165,24 @@ class PushRulesConditionTest : MatrixTest {
         }
 
         Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.text", "A").toContent(),
-                originServerTs = 0,
-                roomId = room2JoinedId).also {
+            type = "m.room.message",
+            eventId = "mx0",
+            content = MessageTextContent("m.text", "A").toContent(),
+            originServerTs = 0,
+            roomId = room2JoinedId
+        ).also {
             assertFalse("This room does not have 3 members", conditionEqual3.isSatisfied(it, roomGetterStub))
             assertFalse("This room does not have 3 members", conditionEqual3Bis.isSatisfied(it, roomGetterStub))
             assertTrue("This room has less than 3 members", conditionLessThan3.isSatisfied(it, roomGetterStub))
         }
 
         Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.text", "A").toContent(),
-                originServerTs = 0,
-                roomId = room3JoinedId).also {
+            type = "m.room.message",
+            eventId = "mx0",
+            content = MessageTextContent("m.text", "A").toContent(),
+            originServerTs = 0,
+            roomId = room3JoinedId
+        ).also {
             assertTrue("This room has 3 members", conditionEqual3.isSatisfied(it, roomGetterStub))
             assertTrue("This room has 3 members", conditionEqual3Bis.isSatisfied(it, roomGetterStub))
             assertFalse("This room has more than 3 members", conditionLessThan3.isSatisfied(it, roomGetterStub))
@@ -193,11 +198,12 @@ class PushRulesConditionTest : MatrixTest {
         val condition = ContainsDisplayNameCondition()
 
         val event = Event(
-                type = "m.room.message",
-                eventId = "mx0",
-                content = MessageTextContent("m.text", "How was the cake benoit?").toContent(),
-                originServerTs = 0,
-                roomId = "2joined")
+            type = "m.room.message",
+            eventId = "mx0",
+            content = MessageTextContent("m.text", "How was the cake benoit?").toContent(),
+            originServerTs = 0,
+            roomId = "2joined"
+        )
 
         condition.isSatisfied(event, "how") shouldBe true
         condition.isSatisfied(event, "How") shouldBe true

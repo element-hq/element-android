@@ -39,9 +39,9 @@ internal class SendVerificationMessageWorker(context: Context, params: WorkerPar
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val sessionId: String,
-            val eventId: String,
-            override val lastFailureMessage: String? = null
+        override val sessionId: String,
+        val eventId: String,
+        override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var sendVerificationMessageTask: SendVerificationMessageTask
@@ -59,17 +59,17 @@ internal class SendVerificationMessageWorker(context: Context, params: WorkerPar
 
         if (cancelSendTracker.isCancelRequestedFor(localEventId, roomId)) {
             return Result.success()
-                    .also {
-                        cancelSendTracker.markCancelled(localEventId, roomId)
-                        Timber.e("## SendEvent: Event sending has been cancelled $localEventId")
-                    }
+                .also {
+                    cancelSendTracker.markCancelled(localEventId, roomId)
+                    Timber.e("## SendEvent: Event sending has been cancelled $localEventId")
+                }
         }
 
         return try {
             val resultEventId = sendVerificationMessageTask.execute(
-                    SendVerificationMessageTask.Params(
-                            event = localEvent
-                    )
+                SendVerificationMessageTask.Params(
+                    event = localEvent
+                )
             )
 
             Result.success(Data.Builder().putString(localEventId, resultEventId).build())

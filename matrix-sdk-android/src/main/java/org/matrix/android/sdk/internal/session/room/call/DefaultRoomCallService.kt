@@ -24,8 +24,8 @@ import org.matrix.android.sdk.api.session.room.call.RoomCallService
 import org.matrix.android.sdk.internal.session.room.RoomGetter
 
 internal class DefaultRoomCallService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        private val roomGetter: RoomGetter
+    @Assisted private val roomId: String,
+    private val roomGetter: RoomGetter
 ) : RoomCallService {
 
     @AssistedFactory

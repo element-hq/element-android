@@ -67,9 +67,9 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
 
         if (isFirstCreation()) {
             replaceFragment(
-                    views.simpleFragmentContainer,
-                    SpaceLeaveAdvancedFragment::class.java,
-                    args
+                views.simpleFragmentContainer,
+                SpaceLeaveAdvancedFragment::class.java,
+                args
             )
         }
     }
@@ -86,17 +86,17 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
                     setResult(RESULT_OK)
                     finish()
                 }
-                is Fail    -> {
+                is Fail -> {
                     hideWaitingView()
                     MaterialAlertDialogBuilder(this)
-                            .setTitle(R.string.dialog_title_error)
-                            .setMessage(errorFormatter.toHumanReadable(state.leaveState.error))
-                            .setPositiveButton(R.string.ok) { _, _ ->
-                                leaveViewModel.handle(SpaceLeaveAdvanceViewAction.ClearError)
-                            }
-                            .show()
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(errorFormatter.toHumanReadable(state.leaveState.error))
+                        .setPositiveButton(R.string.ok) { _, _ ->
+                            leaveViewModel.handle(SpaceLeaveAdvanceViewAction.ClearError)
+                        }
+                        .show()
                 }
-                else       -> {
+                else -> {
                     hideWaitingView()
                 }
             }

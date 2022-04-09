@@ -23,8 +23,8 @@ import io.realm.annotations.RealmClass
  * Keep all the editions of a message
  */
 internal open class EditAggregatedSummaryEntity(
-        // The list of the editions used to build the summary (might be out of sync if chunked received from message chunk)
-        var editions: RealmList<EditionOfEvent> = RealmList()
+    // The list of the editions used to build the summary (might be out of sync if chunked received from message chunk)
+    var editions: RealmList<EditionOfEvent> = RealmList()
 ) : RealmObject() {
 
     companion object
@@ -32,9 +32,9 @@ internal open class EditAggregatedSummaryEntity(
 
 @RealmClass(embedded = true)
 internal open class EditionOfEvent(
-        var senderId: String = "",
-        var eventId: String = "",
-        var content: String? = null,
-        var timestamp: Long = 0,
-        var isLocalEcho: Boolean = false
+    var senderId: String = "",
+    var eventId: String = "",
+    var content: String? = null,
+    var timestamp: Long = 0,
+    var isLocalEcho: Boolean = false
 ) : RealmObject()

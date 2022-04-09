@@ -21,16 +21,16 @@ import org.jitsi.meet.sdk.JitsiMeetUserInfo
 
 sealed class JitsiCallViewEvents : VectorViewEvents {
     data class JoinConference(
-            val enableVideo: Boolean,
-            val jitsiUrl: String,
-            val subject: String,
-            val confId: String,
-            val userInfo: JitsiMeetUserInfo,
-            val token: String?
+        val enableVideo: Boolean,
+        val jitsiUrl: String,
+        val subject: String,
+        val confId: String,
+        val userInfo: JitsiMeetUserInfo,
+        val token: String?
     ) : JitsiCallViewEvents()
 
     data class ConfirmSwitchingConference(
-            val args: VectorJitsiActivity.Args
+        val args: VectorJitsiActivity.Args
     ) : JitsiCallViewEvents()
 
     object LeaveConference : JitsiCallViewEvents()

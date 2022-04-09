@@ -45,12 +45,13 @@ sealed class KeyRequestEvents : VectorViewEvents {
 }
 
 data class KeyRequestViewState(
-        val exporting: Async<Unit> = Uninitialized
+    val exporting: Async<Unit> = Uninitialized
 ) : MavericksState
 
 class KeyRequestViewModel @AssistedInject constructor(
-        @Assisted initialState: KeyRequestViewState,
-        private val session: Session) :
+    @Assisted initialState: KeyRequestViewState,
+    private val session: Session
+) :
     VectorViewModel<KeyRequestViewState, KeyRequestAction, KeyRequestEvents>(initialState) {
 
     @AssistedFactory

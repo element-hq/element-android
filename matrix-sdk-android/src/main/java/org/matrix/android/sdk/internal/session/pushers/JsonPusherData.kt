@@ -20,20 +20,20 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class JsonPusherData(
-        /**
-         * Required if kind is http. The URL to use to send notifications to.
-         * MUST be an HTTPS URL with a path of /_matrix/push/v1/notify.
-         */
-        @Json(name = "url")
-        val url: String? = null,
+    /**
+     * Required if kind is http. The URL to use to send notifications to.
+     * MUST be an HTTPS URL with a path of /_matrix/push/v1/notify.
+     */
+    @Json(name = "url")
+    val url: String? = null,
 
-        /**
-         * The format to send notifications in to Push Gateways if the kind is http.
-         * Currently the only format available is 'event_id_only'.
-         */
-        @Json(name = "format")
-        val format: String? = null,
+    /**
+     * The format to send notifications in to Push Gateways if the kind is http.
+     * Currently the only format available is 'event_id_only'.
+     */
+    @Json(name = "format")
+    val format: String? = null,
 
-        @Json(name = "brand")
-        val brand: String? = null
+    @Json(name = "brand")
+    val brand: String? = null
 )

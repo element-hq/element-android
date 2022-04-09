@@ -31,7 +31,7 @@ import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import javax.inject.Inject
 
 class AccountDataEpoxyController @Inject constructor(
-        private val stringProvider: StringProvider
+    private val stringProvider: StringProvider
 ) : TypedEpoxyController<AccountDataViewState>() {
 
     interface InteractionListener {
@@ -51,7 +51,7 @@ class AccountDataEpoxyController @Inject constructor(
                     loadingText(host.stringProvider.getString(R.string.loading))
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 genericFooterItem {
                     id("fail")
                     text(data.accountData.error.localizedMessage?.toEpoxyCharSequence())
@@ -80,7 +80,7 @@ class AccountDataEpoxyController @Inject constructor(
                     }
                 }
             }
-            else       -> Unit
+            else -> Unit
         }
     }
 }

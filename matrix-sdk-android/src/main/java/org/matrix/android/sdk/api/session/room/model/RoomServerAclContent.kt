@@ -25,32 +25,32 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class RoomServerAclContent(
-        /**
-         * True to allow server names that are IP address literals. False to deny.
-         * Defaults to true if missing or otherwise not a boolean.
-         * This is strongly recommended to be set to false as servers running with IP literal names are strongly
-         * discouraged in order to require legitimate homeservers to be backed by a valid registered domain name.
-         */
-        @Json(name = "allow_ip_literals")
-        val allowIpLiterals: Boolean = true,
+    /**
+     * True to allow server names that are IP address literals. False to deny.
+     * Defaults to true if missing or otherwise not a boolean.
+     * This is strongly recommended to be set to false as servers running with IP literal names are strongly
+     * discouraged in order to require legitimate homeservers to be backed by a valid registered domain name.
+     */
+    @Json(name = "allow_ip_literals")
+    val allowIpLiterals: Boolean = true,
 
-        /**
-         * The server names to allow in the room, excluding any port information. Wildcards may be used to cover
-         * a wider range of hosts, where * matches zero or more characters and ? matches exactly one character.
-         *
-         * This defaults to an empty list when not provided, effectively disallowing every server.
-         */
-        @Json(name = "allow")
-        val allowList: List<String> = emptyList(),
+    /**
+     * The server names to allow in the room, excluding any port information. Wildcards may be used to cover
+     * a wider range of hosts, where * matches zero or more characters and ? matches exactly one character.
+     *
+     * This defaults to an empty list when not provided, effectively disallowing every server.
+     */
+    @Json(name = "allow")
+    val allowList: List<String> = emptyList(),
 
-        /**
-         * The server names to disallow in the room, excluding any port information. Wildcards may be used to cover
-         * a wider range of hosts, where * matches zero or more characters and ? matches exactly one character.
-         *
-         * This defaults to an empty list when not provided.
-         */
-        @Json(name = "deny")
-        val denyList: List<String> = emptyList()
+    /**
+     * The server names to disallow in the room, excluding any port information. Wildcards may be used to cover
+     * a wider range of hosts, where * matches zero or more characters and ? matches exactly one character.
+     *
+     * This defaults to an empty list when not provided.
+     */
+    @Json(name = "deny")
+    val denyList: List<String> = emptyList()
 
 ) {
     companion object {

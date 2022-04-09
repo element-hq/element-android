@@ -20,9 +20,9 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class SetAvatarUrlBody(
-        /**
-         * The new avatar url for this user.
-         */
-        @Json(name = "avatar_url")
-        val avatarUrl: String
+    /**
+     * The new avatar url for this user.
+     */
+    @Json(name = "avatar_url")
+    val avatarUrl: String
 )

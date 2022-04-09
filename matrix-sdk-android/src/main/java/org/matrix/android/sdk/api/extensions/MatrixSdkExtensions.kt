@@ -24,8 +24,8 @@ import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
  * ========================================================================================== */
 
 fun CryptoDeviceInfo.getFingerprintHumanReadable() = fingerprint()
-        ?.chunked(4)
-        ?.joinToString(separator = " ")
+    ?.chunked(4)
+    ?.joinToString(separator = " ")
 
 /* ==========================================================================================
  * DeviceInfo

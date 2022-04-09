@@ -31,40 +31,40 @@ class MigrateSessionTo010(realm: DynamicRealm) : RealmMigrator(realm, 10) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.create("SpaceChildSummaryEntity")
-                ?.addField(SpaceChildSummaryEntityFields.ORDER, String::class.java)
-                ?.addField(SpaceChildSummaryEntityFields.CHILD_ROOM_ID, String::class.java)
-                ?.addField(SpaceChildSummaryEntityFields.AUTO_JOIN, Boolean::class.java)
-                ?.setNullable(SpaceChildSummaryEntityFields.AUTO_JOIN, true)
-                ?.addRealmObjectField(SpaceChildSummaryEntityFields.CHILD_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
-                ?.addRealmListField(SpaceChildSummaryEntityFields.VIA_SERVERS.`$`, String::class.java)
+            ?.addField(SpaceChildSummaryEntityFields.ORDER, String::class.java)
+            ?.addField(SpaceChildSummaryEntityFields.CHILD_ROOM_ID, String::class.java)
+            ?.addField(SpaceChildSummaryEntityFields.AUTO_JOIN, Boolean::class.java)
+            ?.setNullable(SpaceChildSummaryEntityFields.AUTO_JOIN, true)
+            ?.addRealmObjectField(SpaceChildSummaryEntityFields.CHILD_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
+            ?.addRealmListField(SpaceChildSummaryEntityFields.VIA_SERVERS.`$`, String::class.java)
 
         realm.schema.create("SpaceParentSummaryEntity")
-                ?.addField(SpaceParentSummaryEntityFields.PARENT_ROOM_ID, String::class.java)
-                ?.addField(SpaceParentSummaryEntityFields.CANONICAL, Boolean::class.java)
-                ?.setNullable(SpaceParentSummaryEntityFields.CANONICAL, true)
-                ?.addRealmObjectField(SpaceParentSummaryEntityFields.PARENT_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
-                ?.addRealmListField(SpaceParentSummaryEntityFields.VIA_SERVERS.`$`, String::class.java)
+            ?.addField(SpaceParentSummaryEntityFields.PARENT_ROOM_ID, String::class.java)
+            ?.addField(SpaceParentSummaryEntityFields.CANONICAL, Boolean::class.java)
+            ?.setNullable(SpaceParentSummaryEntityFields.CANONICAL, true)
+            ?.addRealmObjectField(SpaceParentSummaryEntityFields.PARENT_SUMMARY_ENTITY.`$`, realm.schema.get("RoomSummaryEntity")!!)
+            ?.addRealmListField(SpaceParentSummaryEntityFields.VIA_SERVERS.`$`, String::class.java)
 
         val creationContentAdapter = MoshiProvider.providesMoshi().adapter(RoomCreateContent::class.java)
         realm.schema.get("RoomSummaryEntity")
-                ?.addField(RoomSummaryEntityFields.ROOM_TYPE, String::class.java)
-                ?.addField(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, String::class.java)
-                ?.addField(RoomSummaryEntityFields.GROUP_IDS, String::class.java)
-                ?.transform { obj ->
+            ?.addField(RoomSummaryEntityFields.ROOM_TYPE, String::class.java)
+            ?.addField(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, String::class.java)
+            ?.addField(RoomSummaryEntityFields.GROUP_IDS, String::class.java)
+            ?.transform { obj ->
 
-                    val creationEvent = realm.where("CurrentStateEventEntity")
-                            .equalTo(CurrentStateEventEntityFields.ROOM_ID, obj.getString(RoomSummaryEntityFields.ROOM_ID))
-                            .equalTo(CurrentStateEventEntityFields.TYPE, EventType.STATE_ROOM_CREATE)
-                            .findFirst()
+                val creationEvent = realm.where("CurrentStateEventEntity")
+                    .equalTo(CurrentStateEventEntityFields.ROOM_ID, obj.getString(RoomSummaryEntityFields.ROOM_ID))
+                    .equalTo(CurrentStateEventEntityFields.TYPE, EventType.STATE_ROOM_CREATE)
+                    .findFirst()
 
-                    val roomType = creationEvent?.getObject(CurrentStateEventEntityFields.ROOT.`$`)
-                            ?.getString(EventEntityFields.CONTENT)?.let {
-                                creationContentAdapter.fromJson(it)?.type
-                            }
+                val roomType = creationEvent?.getObject(CurrentStateEventEntityFields.ROOT.`$`)
+                    ?.getString(EventEntityFields.CONTENT)?.let {
+                        creationContentAdapter.fromJson(it)?.type
+                    }
 
-                    obj.setString(RoomSummaryEntityFields.ROOM_TYPE, roomType)
-                }
-                ?.addRealmListField(RoomSummaryEntityFields.PARENTS.`$`, realm.schema.get("SpaceParentSummaryEntity")!!)
-                ?.addRealmListField(RoomSummaryEntityFields.CHILDREN.`$`, realm.schema.get("SpaceChildSummaryEntity")!!)
+                obj.setString(RoomSummaryEntityFields.ROOM_TYPE, roomType)
+            }
+            ?.addRealmListField(RoomSummaryEntityFields.PARENTS.`$`, realm.schema.get("SpaceParentSummaryEntity")!!)
+            ?.addRealmListField(RoomSummaryEntityFields.CHILDREN.`$`, realm.schema.get("SpaceChildSummaryEntity")!!)
     }
 }

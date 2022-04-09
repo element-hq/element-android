@@ -35,7 +35,7 @@ import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.toJson
 
 class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
-        VectorSettingsPushRuleNotificationPreferenceFragment() {
+    VectorSettingsPushRuleNotificationPreferenceFragment() {
 
     override var titleRes: Int = R.string.settings_notification_mentions_and_keywords
 
@@ -119,10 +119,12 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
             val results = keywords.map {
                 runCatching {
                     withContext(Dispatchers.Default) {
-                        session.updatePushRuleActions(RuleKind.CONTENT,
-                                it,
-                                enabled,
-                                newActions)
+                        session.updatePushRuleActions(
+                            RuleKind.CONTENT,
+                            it,
+                            enabled,
+                            newActions
+                        )
                     }
                 }
             }
@@ -180,8 +182,8 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
     }
 
     override val prefKeyToPushRuleId = mapOf(
-            "SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
-            "SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_USER_NAME,
-            "SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY" to RuleIds.RULE_ID_ROOM_NOTIF
+        "SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
+        "SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_USER_NAME,
+        "SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY" to RuleIds.RULE_ID_ROOM_NOTIF
     )
 }

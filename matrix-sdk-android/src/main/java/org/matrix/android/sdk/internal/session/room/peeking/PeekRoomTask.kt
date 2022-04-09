@@ -42,16 +42,16 @@ import javax.inject.Inject
 
 internal interface PeekRoomTask : Task<PeekRoomTask.Params, PeekResult> {
     data class Params(
-            val roomIdOrAlias: String
+        val roomIdOrAlias: String
     )
 }
 
 internal class DefaultPeekRoomTask @Inject constructor(
-        private val getRoomIdByAliasTask: GetRoomIdByAliasTask,
-        private val getRoomDirectoryVisibilityTask: GetRoomDirectoryVisibilityTask,
-        private val getPublicRoomTask: GetPublicRoomTask,
-        private val getRoomSummaryTask: GetRoomSummaryTask,
-        private val resolveRoomStateTask: ResolveRoomStateTask
+    private val getRoomIdByAliasTask: GetRoomIdByAliasTask,
+    private val getRoomDirectoryVisibilityTask: GetRoomDirectoryVisibilityTask,
+    private val getPublicRoomTask: GetPublicRoomTask,
+    private val getRoomSummaryTask: GetRoomSummaryTask,
+    private val resolveRoomStateTask: ResolveRoomStateTask
 ) : PeekRoomTask {
 
     override suspend fun execute(params: PeekRoomTask.Params): PeekResult {
@@ -61,9 +61,9 @@ internal class DefaultPeekRoomTask @Inject constructor(
         if (isAlias) {
             // get alias description
             val aliasDescription = getRoomIdByAliasTask
-                    .execute(GetRoomIdByAliasTask.Params(params.roomIdOrAlias, true))
-                    .getOrNull()
-                    ?: return PeekResult.UnknownAlias
+                .execute(GetRoomIdByAliasTask.Params(params.roomIdOrAlias, true))
+                .getOrNull()
+                ?: return PeekResult.UnknownAlias
 
             roomId = aliasDescription.roomId
             serverList = aliasDescription.servers
@@ -78,16 +78,16 @@ internal class DefaultPeekRoomTask @Inject constructor(
         }
         if (strippedState != null) {
             return PeekResult.Success(
-                    roomId = strippedState.roomId,
-                    alias = strippedState.getPrimaryAlias() ?: params.roomIdOrAlias.takeIf { isAlias },
-                    avatarUrl = strippedState.avatarUrl,
-                    name = strippedState.name,
-                    topic = strippedState.topic,
-                    numJoinedMembers = strippedState.numJoinedMembers,
-                    viaServers = serverList,
-                    roomType = strippedState.roomType,
-                    someMembers = null,
-                    isPublic = strippedState.worldReadable
+                roomId = strippedState.roomId,
+                alias = strippedState.getPrimaryAlias() ?: params.roomIdOrAlias.takeIf { isAlias },
+                avatarUrl = strippedState.avatarUrl,
+                name = strippedState.name,
+                topic = strippedState.topic,
+                numJoinedMembers = strippedState.numJoinedMembers,
+                viaServers = serverList,
+                roomType = strippedState.roomType,
+                someMembers = null,
+                isPublic = strippedState.worldReadable
             )
         }
 
@@ -103,15 +103,15 @@ internal class DefaultPeekRoomTask @Inject constructor(
 
                 tryOrNull("## PEEK: failed to GetPublicRoomTask") {
                     getPublicRoomTask.execute(GetPublicRoomTask.Params(
-                            server = serverList.firstOrNull(),
-                            publicRoomsParams = PublicRoomsParams(
-                                    filter = filter,
-                                    limit = 20.takeIf { filter != null } ?: 100
-                            )
+                        server = serverList.firstOrNull(),
+                        publicRoomsParams = PublicRoomsParams(
+                            filter = filter,
+                            limit = 20.takeIf { filter != null } ?: 100
+                        )
                     ))
                 }?.chunk?.firstOrNull { it.roomId == roomId }
             }
-            else                           -> {
+            else -> {
                 // RoomDirectoryVisibility.PRIVATE or null
                 // We cannot resolve this room :/
                 null
@@ -120,16 +120,16 @@ internal class DefaultPeekRoomTask @Inject constructor(
 
         if (publicRepoResult != null) {
             return PeekResult.Success(
-                    roomId = roomId,
-                    alias = publicRepoResult.getPrimaryAlias() ?: params.roomIdOrAlias.takeIf { isAlias },
-                    avatarUrl = publicRepoResult.avatarUrl,
-                    name = publicRepoResult.name,
-                    topic = publicRepoResult.topic,
-                    numJoinedMembers = publicRepoResult.numJoinedMembers,
-                    viaServers = serverList,
-                    roomType = null, // would be nice to get that from directory...
-                    someMembers = null,
-                    isPublic = true
+                roomId = roomId,
+                alias = publicRepoResult.getPrimaryAlias() ?: params.roomIdOrAlias.takeIf { isAlias },
+                avatarUrl = publicRepoResult.avatarUrl,
+                name = publicRepoResult.name,
+                topic = publicRepoResult.topic,
+                numJoinedMembers = publicRepoResult.numJoinedMembers,
+                viaServers = serverList,
+                roomType = null, // would be nice to get that from directory...
+                someMembers = null,
+                isPublic = true
             )
         }
 
@@ -138,28 +138,28 @@ internal class DefaultPeekRoomTask @Inject constructor(
         try {
             val stateEvents = resolveRoomStateTask.execute(ResolveRoomStateTask.Params(roomId))
             val name = stateEvents
-                    .lastOrNull { it.type == EventType.STATE_ROOM_NAME && it.stateKey == "" }
-                    ?.let { it.content?.toModel<RoomNameContent>()?.name }
+                .lastOrNull { it.type == EventType.STATE_ROOM_NAME && it.stateKey == "" }
+                ?.let { it.content?.toModel<RoomNameContent>()?.name }
 
             val topic = stateEvents
-                    .lastOrNull { it.type == EventType.STATE_ROOM_TOPIC && it.stateKey == "" }
-                    ?.let { it.content?.toModel<RoomTopicContent>()?.topic }
+                .lastOrNull { it.type == EventType.STATE_ROOM_TOPIC && it.stateKey == "" }
+                ?.let { it.content?.toModel<RoomTopicContent>()?.topic }
 
             val avatarUrl = stateEvents
-                    .lastOrNull { it.type == EventType.STATE_ROOM_AVATAR }
-                    ?.let { it.content?.toModel<RoomAvatarContent>()?.avatarUrl }
+                .lastOrNull { it.type == EventType.STATE_ROOM_AVATAR }
+                ?.let { it.content?.toModel<RoomAvatarContent>()?.avatarUrl }
 
             val alias = stateEvents
-                    .lastOrNull { it.type == EventType.STATE_ROOM_CANONICAL_ALIAS }
-                    ?.let { it.content?.toModel<RoomCanonicalAliasContent>()?.canonicalAlias }
+                .lastOrNull { it.type == EventType.STATE_ROOM_CANONICAL_ALIAS }
+                ?.let { it.content?.toModel<RoomCanonicalAliasContent>()?.canonicalAlias }
 
             // not sure if it's the right way to do that :/
             val membersEvent = stateEvents
-                    .filter { it.type == EventType.STATE_ROOM_MEMBER && it.stateKey?.isNotEmpty() == true }
+                .filter { it.type == EventType.STATE_ROOM_MEMBER && it.stateKey?.isNotEmpty() == true }
 
             val memberCount = membersEvent
-                    .distinctBy { it.stateKey }
-                    .count()
+                .distinctBy { it.stateKey }
+                .count()
 
             val someMembers = membersEvent.mapNotNull { ev ->
                 ev.content?.toModel<RoomMemberContent>()?.let {
@@ -168,35 +168,35 @@ internal class DefaultPeekRoomTask @Inject constructor(
             }
 
             val historyVisibility =
-                    stateEvents
-                            .lastOrNull { it.type == EventType.STATE_ROOM_HISTORY_VISIBILITY && it.stateKey?.isNotEmpty() == true }
-                            ?.let { it.content?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility }
+                stateEvents
+                    .lastOrNull { it.type == EventType.STATE_ROOM_HISTORY_VISIBILITY && it.stateKey?.isNotEmpty() == true }
+                    ?.let { it.content?.toModel<RoomHistoryVisibilityContent>()?.historyVisibility }
 
             val roomType = stateEvents
-                    .lastOrNull { it.type == EventType.STATE_ROOM_CREATE }
-                    ?.content
-                    ?.toModel<RoomCreateContent>()
-                    ?.type
+                .lastOrNull { it.type == EventType.STATE_ROOM_CREATE }
+                ?.content
+                ?.toModel<RoomCreateContent>()
+                ?.type
 
             return PeekResult.Success(
-                    roomId = roomId,
-                    alias = alias,
-                    avatarUrl = avatarUrl,
-                    name = name,
-                    topic = topic,
-                    numJoinedMembers = memberCount,
-                    roomType = roomType,
-                    viaServers = serverList,
-                    someMembers = someMembers,
-                    isPublic = historyVisibility == RoomHistoryVisibility.WORLD_READABLE
+                roomId = roomId,
+                alias = alias,
+                avatarUrl = avatarUrl,
+                name = name,
+                topic = topic,
+                numJoinedMembers = memberCount,
+                roomType = roomType,
+                viaServers = serverList,
+                someMembers = someMembers,
+                isPublic = historyVisibility == RoomHistoryVisibility.WORLD_READABLE
             )
         } catch (failure: Throwable) {
             // Would be M_FORBIDDEN if cannot peek :/
             // User XXX not in room !XXX, and room previews are disabled
             return PeekResult.PeekingNotAllowed(
-                    roomId = roomId,
-                    alias = params.roomIdOrAlias.takeIf { isAlias },
-                    viaServers = serverList
+                roomId = roomId,
+                alias = params.roomIdOrAlias.takeIf { isAlias },
+                viaServers = serverList
             )
         }
     }

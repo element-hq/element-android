@@ -25,7 +25,7 @@ import java.io.File
 import javax.inject.Inject
 
 class VoicePlayerHelper @Inject constructor(
-        context: Context
+    context: Context
 ) {
     private val outputDirectory: File by lazy {
         File(context.cacheDir, "voice_records").also {
@@ -55,11 +55,11 @@ class VoicePlayerHelper @Inject constructor(
                     // SUCCESS
                     targetFile
                 }
-                ReturnCode.isCancel(session.returnCode)  -> {
+                ReturnCode.isCancel(session.returnCode) -> {
                     // CANCEL
                     null
                 }
-                else                                     -> {
+                else -> {
                     // FAILURE
                     Timber.e("Command failed with state ${session.state} and rc ${session.returnCode}.${session.failStackTrace}")
                     // TODO throw?

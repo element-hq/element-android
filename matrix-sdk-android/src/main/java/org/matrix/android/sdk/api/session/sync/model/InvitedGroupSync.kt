@@ -21,13 +21,13 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class InvitedGroupSync(
-        /**
-         * The identifier of the inviter.
-         */
-        @Json(name = "inviter") val inviter: String? = null,
+    /**
+     * The identifier of the inviter.
+     */
+    @Json(name = "inviter") val inviter: String? = null,
 
-        /**
-         * The group profile.
-         */
-        @Json(name = "profile") val profile: GroupSyncProfile? = null
+    /**
+     * The group profile.
+     */
+    @Json(name = "profile") val profile: GroupSyncProfile? = null
 )

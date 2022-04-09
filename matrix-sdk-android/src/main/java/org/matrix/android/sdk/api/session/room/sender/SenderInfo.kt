@@ -19,19 +19,19 @@ package org.matrix.android.sdk.api.session.room.sender
 import org.matrix.android.sdk.internal.util.replaceSpaceChars
 
 data class SenderInfo(
-        val userId: String,
-        /**
-         * Consider using [disambiguatedDisplayName]
-         */
-        val displayName: String?,
-        val isUniqueDisplayName: Boolean,
-        val avatarUrl: String?
+    val userId: String,
+    /**
+     * Consider using [disambiguatedDisplayName]
+     */
+    val displayName: String?,
+    val isUniqueDisplayName: Boolean,
+    val avatarUrl: String?
 ) {
     val disambiguatedDisplayName: String
         get() = when {
-            displayName == null                       -> userId
+            displayName == null -> userId
             displayName.replaceSpaceChars().isBlank() -> "$displayName ($userId)"
-            isUniqueDisplayName                       -> displayName
-            else                                      -> "$displayName ($userId)"
+            isUniqueDisplayName -> displayName
+            else -> "$displayName ($userId)"
         }
 }

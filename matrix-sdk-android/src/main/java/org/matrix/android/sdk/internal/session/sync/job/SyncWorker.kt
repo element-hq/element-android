@@ -46,14 +46,14 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
-            override val sessionId: String,
-            // In seconds
-            val timeout: Long = DEFAULT_LONG_POOL_TIMEOUT_SECONDS,
-            // In milliseconds
-            val delay: Long = DEFAULT_DELAY_MILLIS,
-            val periodic: Boolean = false,
-            val forceImmediate: Boolean = false,
-            override val lastFailureMessage: String? = null
+        override val sessionId: String,
+        // In seconds
+        val timeout: Long = DEFAULT_LONG_POOL_TIMEOUT_SECONDS,
+        // In milliseconds
+        val delay: Long = DEFAULT_DELAY_MILLIS,
+        val periodic: Boolean = false,
+        val forceImmediate: Boolean = false,
+        override val lastFailureMessage: String? = null
     ) : SessionWorkerParams
 
     @Inject lateinit var syncTask: SyncTask
@@ -69,37 +69,37 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
         return runCatching {
             doSync(if (params.forceImmediate) 0 else params.timeout)
         }.fold(
-                { hasToDeviceEvents ->
-                    Result.success().also {
-                        if (params.periodic) {
-                            // we want to schedule another one after a delay, or immediately if hasToDeviceEvents
-                            automaticallyBackgroundSync(
-                                    workManagerProvider = workManagerProvider,
-                                    sessionId = params.sessionId,
-                                    serverTimeoutInSeconds = params.timeout,
-                                    delayInSeconds = params.delay,
-                                    forceImmediate = hasToDeviceEvents
-                            )
-                        } else if (hasToDeviceEvents) {
-                            // Previous response has toDevice events, request an immediate sync request
-                            requireBackgroundSync(
-                                    workManagerProvider = workManagerProvider,
-                                    sessionId = params.sessionId,
-                                    serverTimeoutInSeconds = 0
-                            )
-                        }
-                    }
-                },
-                { failure ->
-                    if (failure.isTokenError()) {
-                        Result.failure()
-                    } else {
-                        // If the worker was stopped (when going back in foreground), a JobCancellation exception is sent
-                        // but in this case the result is ignored, as the work is considered stopped,
-                        // so don't worry of the retry here for this case
-                        Result.retry()
+            { hasToDeviceEvents ->
+                Result.success().also {
+                    if (params.periodic) {
+                        // we want to schedule another one after a delay, or immediately if hasToDeviceEvents
+                        automaticallyBackgroundSync(
+                            workManagerProvider = workManagerProvider,
+                            sessionId = params.sessionId,
+                            serverTimeoutInSeconds = params.timeout,
+                            delayInSeconds = params.delay,
+                            forceImmediate = hasToDeviceEvents
+                        )
+                    } else if (hasToDeviceEvents) {
+                        // Previous response has toDevice events, request an immediate sync request
+                        requireBackgroundSync(
+                            workManagerProvider = workManagerProvider,
+                            sessionId = params.sessionId,
+                            serverTimeoutInSeconds = 0
+                        )
                     }
                 }
+            },
+            { failure ->
+                if (failure.isTokenError()) {
+                    Result.failure()
+                } else {
+                    // If the worker was stopped (when going back in foreground), a JobCancellation exception is sent
+                    // but in this case the result is ignored, as the work is considered stopped,
+                    // so don't worry of the retry here for this case
+                    Result.retry()
+                }
+            }
         )
     }
 
@@ -119,54 +119,58 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
     companion object {
         private const val BG_SYNC_WORK_NAME = "BG_SYNCP"
 
-        fun requireBackgroundSync(workManagerProvider: WorkManagerProvider,
-                                  sessionId: String,
-                                  serverTimeoutInSeconds: Long = 0) {
+        fun requireBackgroundSync(
+            workManagerProvider: WorkManagerProvider,
+            sessionId: String,
+            serverTimeoutInSeconds: Long = 0
+        ) {
             val data = WorkerParamsFactory.toData(
-                    Params(
-                            sessionId = sessionId,
-                            timeout = serverTimeoutInSeconds,
-                            delay = 0L,
-                            periodic = false
-                    )
+                Params(
+                    sessionId = sessionId,
+                    timeout = serverTimeoutInSeconds,
+                    delay = 0L,
+                    periodic = false
+                )
             )
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
-                    .setConstraints(WorkManagerProvider.workConstraints)
-                    .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                    .setInputData(data)
-                    .build()
+                .setConstraints(WorkManagerProvider.workConstraints)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                .setInputData(data)
+                .build()
             workManagerProvider.workManager
-                    .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
+                .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
         }
 
-        fun automaticallyBackgroundSync(workManagerProvider: WorkManagerProvider,
-                                        sessionId: String,
-                                        serverTimeoutInSeconds: Long = 0,
-                                        delayInSeconds: Long = 30,
-                                        forceImmediate: Boolean = false) {
+        fun automaticallyBackgroundSync(
+            workManagerProvider: WorkManagerProvider,
+            sessionId: String,
+            serverTimeoutInSeconds: Long = 0,
+            delayInSeconds: Long = 30,
+            forceImmediate: Boolean = false
+        ) {
             val data = WorkerParamsFactory.toData(
-                    Params(
-                            sessionId = sessionId,
-                            timeout = serverTimeoutInSeconds,
-                            delay = delayInSeconds,
-                            periodic = true,
-                            forceImmediate = forceImmediate
-                    )
+                Params(
+                    sessionId = sessionId,
+                    timeout = serverTimeoutInSeconds,
+                    delay = delayInSeconds,
+                    periodic = true,
+                    forceImmediate = forceImmediate
+                )
             )
             val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SyncWorker>()
-                    .setConstraints(WorkManagerProvider.workConstraints)
-                    .setInputData(data)
-                    .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                    .setInitialDelay(if (forceImmediate) 0 else delayInSeconds, TimeUnit.SECONDS)
-                    .build()
+                .setConstraints(WorkManagerProvider.workConstraints)
+                .setInputData(data)
+                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                .setInitialDelay(if (forceImmediate) 0 else delayInSeconds, TimeUnit.SECONDS)
+                .build()
             // Avoid risking multiple chains of syncs by replacing the existing chain
             workManagerProvider.workManager
-                    .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
+                .enqueueUniqueWork(BG_SYNC_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
         }
 
         fun stopAnyBackgroundSync(workManagerProvider: WorkManagerProvider) {
             workManagerProvider.workManager
-                    .cancelUniqueWork(BG_SYNC_WORK_NAME)
+                .cancelUniqueWork(BG_SYNC_WORK_NAME)
         }
     }
 }

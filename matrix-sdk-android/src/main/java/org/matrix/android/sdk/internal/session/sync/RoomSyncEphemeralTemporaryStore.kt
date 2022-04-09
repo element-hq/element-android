@@ -35,8 +35,8 @@ internal interface RoomSyncEphemeralTemporaryStore {
 }
 
 internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
-        @SessionFilesDirectory fileDirectory: File,
-        moshi: Moshi
+    @SessionFilesDirectory fileDirectory: File,
+    moshi: Moshi
 ) : RoomSyncEphemeralTemporaryStore {
 
     private val workingDir: File by lazy {
@@ -60,11 +60,11 @@ internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
      */
     override fun read(roomId: String): RoomSyncEphemeral? {
         return getFile(roomId)
-                .takeIf { it.exists() }
-                ?.inputStream()
-                ?.use { pos ->
-                    roomSyncEphemeralAdapter.fromJson(JsonReader.of(pos.source().buffer()))
-                }
+            .takeIf { it.exists() }
+            ?.inputStream()
+            ?.use { pos ->
+                roomSyncEphemeralAdapter.fromJson(JsonReader.of(pos.source().buffer()))
+            }
     }
 
     override fun delete(roomId: String) {

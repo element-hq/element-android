@@ -47,7 +47,7 @@ import javax.net.ssl.HttpsURLConnection
  * - He also can reset his password
  */
 class LoginFragmentSigninPassword2 @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+    private val avatarRenderer: AvatarRenderer
 ) : AbstractSSOLoginFragment2<FragmentLoginSigninPassword2Binding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSigninPassword2Binding {
@@ -105,30 +105,30 @@ class LoginFragmentSigninPassword2 @Inject constructor(
     private fun setupUi(state: LoginViewState2) {
         // Name and avatar
         views.loginWelcomeBack.text = getString(
-                R.string.login_welcome_back,
-                state.loginProfileInfo()?.displayName?.takeIf { it.isNotBlank() } ?: state.userIdentifier()
+            R.string.login_welcome_back,
+            state.loginProfileInfo()?.displayName?.takeIf { it.isNotBlank() } ?: state.userIdentifier()
         )
 
         avatarRenderer.render(
-                profileInfo = state.loginProfileInfo() ?: LoginProfileInfo(state.userIdentifier(), null, null),
-                imageView = views.loginUserIcon
+            profileInfo = state.loginProfileInfo() ?: LoginProfileInfo(state.userIdentifier(), null, null),
+            imageView = views.loginUserIcon
         )
 
         views.loginWelcomeBackWarning.isVisible = ((state.loginProfileInfo as? Fail)
-                ?.error as? Failure.ServerError)
-                ?.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */
+            ?.error as? Failure.ServerError)
+            ?.httpCode == HttpsURLConnection.HTTP_NOT_FOUND /* 404 */
     }
 
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
         views.passwordField
-                .textChanges()
-                .map { it.isNotEmpty() }
-                .onEach {
-                    views.passwordFieldTil.error = null
-                    views.loginSubmit.isEnabled = it
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .textChanges()
+            .map { it.isNotEmpty() }
+            .onEach {
+                views.passwordFieldTil.error = null
+                views.loginSubmit.isEnabled = it
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun forgetPasswordClicked() {

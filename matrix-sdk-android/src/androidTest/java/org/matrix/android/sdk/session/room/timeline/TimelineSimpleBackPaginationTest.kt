@@ -61,9 +61,10 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
         // Alice sends X messages
         val message = "Message from Alice"
         commonTestHelper.sendTextMessage(
-                roomFromAlicePOV,
-                message,
-                numberOfMessagesToSent)
+            roomFromAlicePOV,
+            message,
+            numberOfMessagesToSent
+        )
 
         val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(30))
         bobTimeline.start()
@@ -92,11 +93,11 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
         val onlySentEvents = runBlocking {
             bobTimeline.getSnapshot()
         }
-                .filter {
-                    it.root.isTextMessage()
-                }.filter {
-                    (it.root.content.toModel<MessageTextContent>())?.body?.startsWith(message).orFalse()
-                }
+            .filter {
+                it.root.isTextMessage()
+            }.filter {
+                (it.root.content.toModel<MessageTextContent>())?.body?.startsWith(message).orFalse()
+            }
         assertEquals(numberOfMessagesToSent, onlySentEvents.size)
 
         bobTimeline.dispose()

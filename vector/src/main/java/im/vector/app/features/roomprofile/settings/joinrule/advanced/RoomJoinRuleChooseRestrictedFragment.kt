@@ -37,27 +37,27 @@ import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class RoomJoinRuleChooseRestrictedFragment @Inject constructor(
-        val controller: ChooseRestrictedController,
-        val avatarRenderer: AvatarRenderer
+    val controller: ChooseRestrictedController,
+    val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentSpaceRestrictedSelectBinding>(),
-        ChooseRestrictedController.Listener,
-        OnBackPressed {
+    ChooseRestrictedController.Listener,
+    OnBackPressed {
 
     private val viewModel: RoomJoinRuleChooseRestrictedViewModel by activityViewModel(RoomJoinRuleChooseRestrictedViewModel::class)
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentSpaceRestrictedSelectBinding.inflate(inflater, container, false)
+        FragmentSpaceRestrictedSelectBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         controller.listener = this
         views.recyclerView.configureWith(controller)
         views.roomsFilter.queryTextChanges()
-                .debounce(500)
-                .onEach {
-                    viewModel.handle(RoomJoinRuleChooseRestrictedActions.FilterWith(it.toString()))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .debounce(500)
+            .onEach {
+                viewModel.handle(RoomJoinRuleChooseRestrictedActions.FilterWith(it.toString()))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.okButton.debouncedClicks {
             parentFragmentManager.popBackStack()

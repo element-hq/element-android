@@ -38,13 +38,14 @@ internal class PendingSessionMapper @Inject constructor(moshi: Moshi) {
         val threePidData = entity.currentThreePidDataJson?.let { threePidDataAdapter.fromJson(it) }
 
         return PendingSessionData(
-                homeServerConnectionConfig = homeServerConnectionConfig,
-                clientSecret = entity.clientSecret,
-                sendAttempt = entity.sendAttempt,
-                resetPasswordData = resetPasswordData,
-                currentSession = entity.currentSession,
-                isRegistrationStarted = entity.isRegistrationStarted,
-                currentThreePidData = threePidData)
+            homeServerConnectionConfig = homeServerConnectionConfig,
+            clientSecret = entity.clientSecret,
+            sendAttempt = entity.sendAttempt,
+            resetPasswordData = resetPasswordData,
+            currentSession = entity.currentSession,
+            isRegistrationStarted = entity.isRegistrationStarted,
+            currentThreePidData = threePidData
+        )
     }
 
     fun map(sessionData: PendingSessionData?): PendingSessionEntity? {
@@ -57,13 +58,13 @@ internal class PendingSessionMapper @Inject constructor(moshi: Moshi) {
         val currentThreePidDataJson = threePidDataAdapter.toJson(sessionData.currentThreePidData)
 
         return PendingSessionEntity(
-                homeServerConnectionConfigJson = homeServerConnectionConfigJson,
-                clientSecret = sessionData.clientSecret,
-                sendAttempt = sessionData.sendAttempt,
-                resetPasswordDataJson = resetPasswordDataJson,
-                currentSession = sessionData.currentSession,
-                isRegistrationStarted = sessionData.isRegistrationStarted,
-                currentThreePidDataJson = currentThreePidDataJson
+            homeServerConnectionConfigJson = homeServerConnectionConfigJson,
+            clientSecret = sessionData.clientSecret,
+            sendAttempt = sessionData.sendAttempt,
+            resetPasswordDataJson = resetPasswordDataJson,
+            currentSession = sessionData.currentSession,
+            isRegistrationStarted = sessionData.isRegistrationStarted,
+            currentThreePidDataJson = currentThreePidDataJson
         )
     }
 }

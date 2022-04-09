@@ -27,8 +27,8 @@ import java.io.File
 import javax.inject.Inject
 
 internal class InitialSyncResponseParser @Inject constructor(
-        private val moshi: Moshi,
-        private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
+    private val moshi: Moshi,
+    private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
 ) {
 
     fun parse(syncStrategy: InitialSyncStrategy.Optimized, workingFile: File): SyncResponse {
@@ -37,8 +37,8 @@ internal class InitialSyncResponseParser @Inject constructor(
         val shouldSplit = syncResponseLength >= syncStrategy.minSizeToSplit
         Timber.d("INIT_SYNC should split in several files: $shouldSplit")
         return getMoshi(syncStrategy, shouldSplit)
-                .adapter(SyncResponse::class.java)
-                .fromJson(workingFile.source().buffer())!!
+            .adapter(SyncResponse::class.java)
+            .fromJson(workingFile.source().buffer())!!
     }
 
     private fun getMoshi(syncStrategy: InitialSyncStrategy.Optimized, shouldSplit: Boolean): Moshi {
@@ -46,7 +46,7 @@ internal class InitialSyncResponseParser @Inject constructor(
         if (!shouldSplit) return moshi
         // Otherwise, we create a new adapter for handling Map of Lazy sync
         return moshi.newBuilder()
-                .add(SplitLazyRoomSyncEphemeralJsonAdapter(roomSyncEphemeralTemporaryStore, syncStrategy))
-                .build()
+            .add(SplitLazyRoomSyncEphemeralJsonAdapter(roomSyncEphemeralTemporaryStore, syncStrategy))
+            .build()
     }
 }

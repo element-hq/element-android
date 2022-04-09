@@ -52,11 +52,11 @@ class VoiceRecorderL(context: Context) : AbstractVoiceRecorder(context, "mp4") {
                 // SUCCESS
                 targetFile
             }
-            ReturnCode.isCancel(session.returnCode)  -> {
+            ReturnCode.isCancel(session.returnCode) -> {
                 // CANCEL
                 null
             }
-            else                                     -> {
+            else -> {
                 // FAILURE
                 Timber.e("Command failed with state ${session.state} and rc ${session.returnCode}.${session.failStackTrace}")
                 // TODO throw?

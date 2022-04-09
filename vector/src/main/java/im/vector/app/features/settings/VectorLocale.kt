@@ -62,9 +62,10 @@ object VectorLocale {
         val preferences = DefaultSharedPreferences.getInstance(context)
 
         if (preferences.contains(APPLICATION_LOCALE_LANGUAGE_KEY)) {
-            applicationLocale = Locale(preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
-                    preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, "")!!,
-                    preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")!!
+            applicationLocale = Locale(
+                preferences.getString(APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
+                preferences.getString(APPLICATION_LOCALE_COUNTRY_KEY, "")!!,
+                preferences.getString(APPLICATION_LOCALE_VARIANT_KEY, "")!!
             )
         } else {
             applicationLocale = Locale.getDefault()
@@ -147,31 +148,31 @@ object VectorLocale {
 
             for (locale in availableLocales) {
                 knownLocalesSet.add(
-                        Triple(
-                                getString(context, locale, R.string.resources_language),
-                                getString(context, locale, R.string.resources_country_code),
-                                getString(context, locale, R.string.resources_script)
-                        )
+                    Triple(
+                        getString(context, locale, R.string.resources_language),
+                        getString(context, locale, R.string.resources_country_code),
+                        getString(context, locale, R.string.resources_script)
+                    )
                 )
             }
         } catch (e: Exception) {
             Timber.e(e, "## getApplicationLocales() : failed")
             knownLocalesSet.add(
-                    Triple(
-                            context.getString(R.string.resources_language),
-                            context.getString(R.string.resources_country_code),
-                            context.getString(R.string.resources_script)
-                    )
+                Triple(
+                    context.getString(R.string.resources_language),
+                    context.getString(R.string.resources_country_code),
+                    context.getString(R.string.resources_script)
+                )
             )
         }
 
         val list = knownLocalesSet.mapNotNull { (language, country, script) ->
             try {
                 Locale.Builder()
-                        .setLanguage(language)
-                        .setRegion(country)
-                        .setScript(script)
-                        .build()
+                    .setLanguage(language)
+                    .setRegion(country)
+                    .setScript(script)
+                    .build()
             } catch (exception: IllformedLocaleException) {
                 if (BuildConfig.DEBUG) {
                     throw exception
@@ -180,8 +181,8 @@ object VectorLocale {
                 null
             }
         }
-                // sort by human display names
-                .sortedBy { localeToLocalisedString(it).lowercase(it) }
+            // sort by human display names
+            .sortedBy { localeToLocalisedString(it).lowercase(it) }
 
         supportedLocales.clear()
         supportedLocales.addAll(list)

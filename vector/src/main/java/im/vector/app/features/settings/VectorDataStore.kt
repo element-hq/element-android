@@ -29,7 +29,7 @@ import javax.inject.Inject
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "vector_settings")
 
 class VectorDataStore @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
 
     private val pushCounter = intPreferencesKey("push_counter")

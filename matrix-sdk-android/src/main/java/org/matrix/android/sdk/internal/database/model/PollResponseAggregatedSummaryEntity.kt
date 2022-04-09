@@ -22,18 +22,18 @@ import io.realm.RealmObject
  * Keep the latest state of a poll
  */
 internal open class PollResponseAggregatedSummaryEntity(
-        // For now we persist this a JSON for greater flexibility
-        // #see PollSummaryContent
-        var aggregatedContent: String? = null,
+    // For now we persist this a JSON for greater flexibility
+    // #see PollSummaryContent
+    var aggregatedContent: String? = null,
 
-        // If set the poll is closed (Clients SHOULD NOT consider responses after the close event)
-        var closedTime: Long? = null,
-        // Clients SHOULD validate that the option in the relationship is a valid option, and ignore the response if invalid
-        var nbOptions: Int = 0,
+    // If set the poll is closed (Clients SHOULD NOT consider responses after the close event)
+    var closedTime: Long? = null,
+    // Clients SHOULD validate that the option in the relationship is a valid option, and ignore the response if invalid
+    var nbOptions: Int = 0,
 
-        // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
-        var sourceEvents: RealmList<String> = RealmList(),
-        var sourceLocalEchoEvents: RealmList<String> = RealmList()
+    // The list of the eventIDs used to build the summary (might be out of sync if chunked received from message chunk)
+    var sourceEvents: RealmList<String> = RealmList(),
+    var sourceLocalEchoEvents: RealmList<String> = RealmList()
 ) : RealmObject() {
 
     companion object

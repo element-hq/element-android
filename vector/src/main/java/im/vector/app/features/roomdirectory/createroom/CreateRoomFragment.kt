@@ -53,20 +53,20 @@ import javax.inject.Inject
 
 @Parcelize
 data class CreateRoomArgs(
-        val initialName: String,
-        val parentSpaceId: String? = null,
-        val isSpace: Boolean = false,
-        val openAfterCreate: Boolean = true
+    val initialName: String,
+    val parentSpaceId: String? = null,
+    val isSpace: Boolean = false,
+    val openAfterCreate: Boolean = true
 ) : Parcelable
 
 class CreateRoomFragment @Inject constructor(
-        private val createRoomController: CreateRoomController,
-        private val createSpaceController: CreateSubSpaceController,
-        colorProvider: ColorProvider
+    private val createRoomController: CreateRoomController,
+    private val createSpaceController: CreateSubSpaceController,
+    colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentCreateRoomBinding>(),
-        CreateRoomController.Listener,
-        GalleryOrCameraDialogHelper.Listener,
-        OnBackPressed {
+    CreateRoomController.Listener,
+    GalleryOrCameraDialogHelper.Listener,
+    OnBackPressed {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
     private val viewModel: CreateRoomViewModel by fragmentViewModel()
@@ -87,11 +87,11 @@ class CreateRoomFragment @Inject constructor(
         setupWaitingView()
         setupRecyclerView()
         setupToolbar(views.createRoomToolbar)
-                .setTitle(if (args.isSpace) R.string.create_new_space else R.string.create_new_room)
-                .allowBack(useCross = true)
+            .setTitle(if (args.isSpace) R.string.create_new_space else R.string.create_new_room)
+            .allowBack(useCross = true)
         viewModel.observeViewEvents {
             when (it) {
-                CreateRoomViewEvents.Quit       -> vectorBaseActivity.onBackPressed()
+                CreateRoomViewEvents.Quit -> vectorBaseActivity.onBackPressed()
                 is CreateRoomViewEvents.Failure -> showFailure(it.throwable)
             }
         }
@@ -100,11 +100,11 @@ class CreateRoomFragment @Inject constructor(
     private fun setupRoomJoinRuleSharedActionViewModel() {
         roomJoinRuleSharedActionViewModel = activityViewModelProvider.get(RoomJoinRuleSharedActionViewModel::class.java)
         roomJoinRuleSharedActionViewModel
-                .stream()
-                .onEach { action ->
-                    viewModel.handle(CreateRoomAction.SetVisibility(action.roomJoinRule))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .stream()
+            .onEach { action ->
+                viewModel.handle(CreateRoomAction.SetVisibility(action.roomJoinRule))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun showFailure(throwable: Throwable) {
@@ -117,7 +117,7 @@ class CreateRoomFragment @Inject constructor(
     private fun setupWaitingView() {
         views.waitingView.waitingStatusText.isVisible = true
         views.waitingView.waitingStatusText.setText(
-                if (args.isSpace) R.string.create_space_in_progress else R.string.create_room_in_progress
+            if (args.isSpace) R.string.create_space_in_progress else R.string.create_room_in_progress
         )
     }
 
@@ -166,16 +166,17 @@ class CreateRoomFragment @Inject constructor(
         } else {
             listOf(RoomJoinRules.INVITE, RoomJoinRules.PUBLIC)
         }
-        RoomJoinRuleBottomSheet.newInstance(state.roomJoinRules,
-                allowed.map { it.toOption(false) },
-                state.isSubSpace,
-                state.parentSpaceSummary?.displayName
+        RoomJoinRuleBottomSheet.newInstance(
+            state.roomJoinRules,
+            allowed.map { it.toOption(false) },
+            state.isSubSpace,
+            state.parentSpaceSummary?.displayName
         )
-                .show(childFragmentManager, "RoomJoinRuleBottomSheet")
+            .show(childFragmentManager, "RoomJoinRuleBottomSheet")
     }
-//    override fun setIsPublic(isPublic: Boolean) {
-//        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
-//    }
+    //    override fun setIsPublic(isPublic: Boolean) {
+    //        viewModel.handle(CreateRoomAction.SetIsPublic(isPublic))
+    //    }
 
     override fun setAliasLocalPart(aliasLocalPart: String) {
         viewModel.handle(CreateRoomAction.SetRoomAliasLocalPart(aliasLocalPart))
@@ -201,13 +202,13 @@ class CreateRoomFragment @Inject constructor(
         return withState(viewModel) {
             return@withState if (!it.isEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.dialog_title_warning)
-                        .setMessage(R.string.warning_room_not_created_yet)
-                        .setPositiveButton(R.string.yes) { _, _ ->
-                            viewModel.handle(CreateRoomAction.Reset)
-                        }
-                        .setNegativeButton(R.string.no, null)
-                        .show()
+                    .setTitle(R.string.dialog_title_warning)
+                    .setMessage(R.string.warning_room_not_created_yet)
+                    .setPositiveButton(R.string.yes) { _, _ ->
+                        viewModel.handle(CreateRoomAction.Reset)
+                    }
+                    .setNegativeButton(R.string.no, null)
+                    .show()
                 true
             } else {
                 false
@@ -223,9 +224,9 @@ class CreateRoomFragment @Inject constructor(
             if (state.openAfterCreate) {
                 if (state.isSubSpace) {
                     navigator.switchToSpace(
-                            requireContext(),
-                            async(),
-                            Navigator.PostSwitchSpaceAction.None
+                        requireContext(),
+                        async(),
+                        Navigator.PostSwitchSpaceAction.None
                     )
                 } else {
                     navigator.openRoom(requireActivity(), async())

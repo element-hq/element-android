@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class KeysBackupRestoreFromKeyViewModel @Inject constructor(
-        private val stringProvider: StringProvider
+    private val stringProvider: StringProvider
 ) : ViewModel() {
 
     var recoveryCode: MutableLiveData<String?> = MutableLiveData(null)

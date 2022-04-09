@@ -82,8 +82,8 @@ class SecurityBootstrapTest : VerificationTestBase() {
         // Thread.sleep(6000)
         withIdlingResource(activityIdlingResource(HomeActivity::class.java)) {
             onView(withId(R.id.roomListContainer))
-                    .check(matches(isDisplayed()))
-                    .perform(closeSoftKeyboard())
+                .check(matches(isDisplayed()))
+                .perform(closeSoftKeyboard())
         }
 
         val activity = EspressoHelper.getCurrentActivity()!!
@@ -91,7 +91,7 @@ class SecurityBootstrapTest : VerificationTestBase() {
 
         withIdlingResource(initialSyncIdlingResource(uiSession)) {
             onView(withId(R.id.roomListContainer))
-                    .check(matches(isDisplayed()))
+                .check(matches(isDisplayed()))
         }
 
         activity.navigator.open4SSetup(activity, SetupMode.NORMAL)
@@ -99,14 +99,14 @@ class SecurityBootstrapTest : VerificationTestBase() {
         Thread.sleep(1000)
 
         onView(withId(R.id.bootstrapSetupSecureUseSecurityKey))
-                .check(matches(isDisplayed()))
+            .check(matches(isDisplayed()))
 
         onView(withId(R.id.bootstrapSetupSecureUseSecurityPassphrase))
-                .check(matches(isDisplayed()))
-                .perform(click())
+            .check(matches(isDisplayed()))
+            .perform(click())
 
         onView(isRoot())
-                .perform(waitForView(withText(R.string.bootstrap_info_text_2)))
+            .perform(waitForView(withText(R.string.bootstrap_info_text_2)))
 
         // test back
         onView(isRoot()).perform(pressBack())
@@ -114,49 +114,49 @@ class SecurityBootstrapTest : VerificationTestBase() {
         Thread.sleep(1000)
 
         onView(withId(R.id.bootstrapSetupSecureUseSecurityKey))
-                .check(matches(isDisplayed()))
+            .check(matches(isDisplayed()))
 
         onView(withId(R.id.bootstrapSetupSecureUseSecurityPassphrase))
-                .check(matches(isDisplayed()))
-                .perform(click())
+            .check(matches(isDisplayed()))
+            .perform(click())
 
         onView(isRoot())
-                .perform(waitForView(withText(R.string.bootstrap_info_text_2)))
+            .perform(waitForView(withText(R.string.bootstrap_info_text_2)))
 
         onView(withId(R.id.ssss_passphrase_enter_edittext))
-                .perform(typeText("person woman man camera tv"))
+            .perform(typeText("person woman man camera tv"))
 
         onView(withId(R.id.bootstrapSubmit))
-                .perform(closeSoftKeyboard(), click())
+            .perform(closeSoftKeyboard(), click())
 
         // test bad pass
         onView(withId(R.id.ssss_passphrase_enter_edittext))
-                .perform(typeText("person woman man cmera tv"))
+            .perform(typeText("person woman man cmera tv"))
 
         onView(withId(R.id.bootstrapSubmit))
-                .perform(closeSoftKeyboard(), click())
+            .perform(closeSoftKeyboard(), click())
 
         onView(withText(R.string.passphrase_passphrase_does_not_match)).check(matches(isDisplayed()))
 
         onView(withId(R.id.ssss_passphrase_enter_edittext))
-                .perform(replaceText("person woman man camera tv"))
+            .perform(replaceText("person woman man camera tv"))
 
         onView(withId(R.id.bootstrapSubmit))
-                .perform(closeSoftKeyboard(), click())
+            .perform(closeSoftKeyboard(), click())
 
         onView(withId(R.id.bottomSheetScrollView))
-                .perform(waitForView(withText(R.string.bottom_sheet_save_your_recovery_key_content)))
+            .perform(waitForView(withText(R.string.bottom_sheet_save_your_recovery_key_content)))
 
         intending(hasAction(Intent.ACTION_SEND)).respondWith(ActivityResult(Activity.RESULT_OK, null))
 
         onView(withId(R.id.recoveryCopy))
-                .perform(click())
+            .perform(click())
 
         // Dismiss dialog
         onView(withText(R.string.ok)).inRoot(RootMatchers.isDialog()).perform(click())
 
         onView(withId(R.id.bottomSheetScrollView))
-                .perform(waitForView(withText(R.string.bottom_sheet_save_your_recovery_key_content)))
+            .perform(waitForView(withText(R.string.bottom_sheet_save_your_recovery_key_content)))
 
         onView(withText(R.string._continue)).perform(click())
 

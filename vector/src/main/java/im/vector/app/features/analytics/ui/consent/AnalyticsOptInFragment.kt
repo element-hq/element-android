@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 class AnalyticsOptInFragment @Inject constructor() :
     VectorBaseFragment<FragmentAnalyticsOptinBinding>(),
-        OnBackPressed {
+    OnBackPressed {
 
     // Share the view model with the Activity so that the Activity
     // can decide what to do when the data has been saved
@@ -59,11 +59,11 @@ class AnalyticsOptInFragment @Inject constructor() :
 
     private fun setupLink() {
         views.subtitle.setTextWithColoredPart(
-                fullTextRes = R.string.analytics_opt_in_content,
-                coloredTextRes = R.string.analytics_opt_in_content_link,
-                onClick = {
-                    openUrlInChromeCustomTab(requireContext(), null, analyticsConfig.policyLink)
-                }
+            fullTextRes = R.string.analytics_opt_in_content,
+            coloredTextRes = R.string.analytics_opt_in_content_link,
+            onClick = {
+                openUrlInChromeCustomTab(requireContext(), null, analyticsConfig.policyLink)
+            }
         )
     }
 

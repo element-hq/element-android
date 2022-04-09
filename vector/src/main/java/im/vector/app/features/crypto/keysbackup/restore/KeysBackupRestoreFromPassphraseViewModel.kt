@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class KeysBackupRestoreFromPassphraseViewModel @Inject constructor(
-        private val stringProvider: StringProvider
+    private val stringProvider: StringProvider
 ) : ViewModel() {
 
     var passphrase: MutableLiveData<String?> = MutableLiveData(null)

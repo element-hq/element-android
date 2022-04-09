@@ -36,11 +36,13 @@ import org.matrix.android.sdk.internal.database.query.where
 /**
  * This class takes care of handling case where local echo is replaced by the synced event in the db.
  */
-internal class LiveTimelineEvent(private val monarchy: Monarchy,
-                                 private val coroutineScope: CoroutineScope,
-                                 private val timelineEventMapper: TimelineEventMapper,
-                                 private val roomId: String,
-                                 private val eventId: String) :
+internal class LiveTimelineEvent(
+    private val monarchy: Monarchy,
+    private val coroutineScope: CoroutineScope,
+    private val timelineEventMapper: TimelineEventMapper,
+    private val roomId: String,
+    private val eventId: String
+) :
     MediatorLiveData<Optional<TimelineEvent>>() {
 
     init {
@@ -52,8 +54,8 @@ internal class LiveTimelineEvent(private val monarchy: Monarchy,
     // Makes sure it's made on the main thread
     private fun buildAndObserveQuery() = coroutineScope.launch(Dispatchers.Main) {
         val liveData = monarchy.findAllMappedWithChanges(
-                { TimelineEventEntity.where(it, roomId = roomId, eventId = eventId) },
-                { timelineEventMapper.map(it) }
+            { TimelineEventEntity.where(it, roomId = roomId, eventId = eventId) },
+            { timelineEventMapper.map(it) }
         )
         addSource(liveData) { newValue ->
             value = newValue.firstOrNull().toOptional()
@@ -66,8 +68,8 @@ internal class LiveTimelineEvent(private val monarchy: Monarchy,
 
     private fun observeTimelineEventWithTxId() {
         val liveData = monarchy.findAllMappedWithChanges(
-                { it.queryTimelineEventWithTxId() },
-                { timelineEventMapper.map(it) }
+            { it.queryTimelineEventWithTxId() },
+            { timelineEventMapper.map(it) }
         )
         addSource(liveData) { newValue ->
             val optionalValue = newValue.firstOrNull().toOptional()
@@ -80,7 +82,7 @@ internal class LiveTimelineEvent(private val monarchy: Monarchy,
 
     private fun Realm.queryTimelineEventWithTxId(): RealmQuery<TimelineEventEntity> {
         return where(TimelineEventEntity::class.java)
-                .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
-                .like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, """{*"transaction_id":*"$eventId"*}""")
+            .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+            .like(TimelineEventEntityFields.ROOT.UNSIGNED_DATA, """{*"transaction_id":*"$eventId"*}""")
     }
 }

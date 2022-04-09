@@ -48,12 +48,12 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 class ThreadListFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val bugReporter: BugReporter,
-        private val threadListController: ThreadListController,
-        val threadListViewModelFactory: ThreadListViewModel.Factory
+    private val avatarRenderer: AvatarRenderer,
+    private val bugReporter: BugReporter,
+    private val threadListController: ThreadListController,
+    val threadListViewModelFactory: ThreadListViewModel.Factory
 ) : VectorBaseFragment<FragmentThreadListBinding>(),
-        ThreadListController.Listener {
+    ThreadListController.Listener {
 
     private val threadListViewModel: ThreadListViewModel by fragmentViewModel()
 
@@ -76,14 +76,14 @@ class ThreadListFragment @Inject constructor(
                 ThreadListBottomSheet().show(childFragmentManager, "Filtering")
                 true
             }
-            else                         -> super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(threadListViewModel) { state ->
             when (threadListViewModel.canHomeserverUseThreading()) {
-                true  -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.threadSummaryList.invoke().isNullOrEmpty()
+                true -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.threadSummaryList.invoke().isNullOrEmpty()
                 false -> menu.findItem(R.id.menu_thread_list_filter).isVisible = !state.rootThreadEventList.invoke().isNullOrEmpty()
             }
         }
@@ -111,8 +111,9 @@ class ThreadListFragment @Inject constructor(
 
     private fun initTextConstants() {
         views.threadListEmptyNoticeTextView.text = String.format(
-                resources.getString(R.string.thread_list_empty_notice),
-                resources.getString(R.string.reply_in_thread))
+            resources.getString(R.string.thread_list_empty_notice),
+            resources.getString(R.string.reply_in_thread)
+        )
     }
 
     private fun initBetaFeedback() {
@@ -122,6 +123,7 @@ class ThreadListFragment @Inject constructor(
             bugReporter.openBugReportScreen(requireActivity(), reportType = ReportType.THREADS_BETA_FEEDBACK)
         }
     }
+
     override fun invalidate() = withState(threadListViewModel) { state ->
         invalidateOptionsMenu()
         renderEmptyStateIfNeeded(state)
@@ -144,27 +146,29 @@ class ThreadListFragment @Inject constructor(
 
     override fun onThreadSummaryClicked(threadSummary: ThreadSummary) {
         val roomThreadDetailArgs = ThreadTimelineArgs(
-                roomId = threadSummary.roomId,
-                displayName = threadSummary.rootThreadSenderInfo.displayName,
-                avatarUrl = threadSummary.rootThreadSenderInfo.avatarUrl,
-                roomEncryptionTrustLevel = null,
-                rootThreadEventId = threadSummary.rootEventId)
+            roomId = threadSummary.roomId,
+            displayName = threadSummary.rootThreadSenderInfo.displayName,
+            avatarUrl = threadSummary.rootThreadSenderInfo.avatarUrl,
+            roomEncryptionTrustLevel = null,
+            rootThreadEventId = threadSummary.rootEventId
+        )
         (activity as? ThreadsActivity)?.navigateToThreadTimeline(roomThreadDetailArgs)
     }
 
     override fun onThreadListClicked(timelineEvent: TimelineEvent) {
         val threadTimelineArgs = ThreadTimelineArgs(
-                roomId = timelineEvent.roomId,
-                displayName = timelineEvent.senderInfo.displayName,
-                avatarUrl = timelineEvent.senderInfo.avatarUrl,
-                roomEncryptionTrustLevel = null,
-                rootThreadEventId = timelineEvent.eventId)
+            roomId = timelineEvent.roomId,
+            displayName = timelineEvent.senderInfo.displayName,
+            avatarUrl = timelineEvent.senderInfo.avatarUrl,
+            roomEncryptionTrustLevel = null,
+            rootThreadEventId = timelineEvent.eventId
+        )
         (activity as? ThreadsActivity)?.navigateToThreadTimeline(threadTimelineArgs)
     }
 
     private fun renderEmptyStateIfNeeded(state: ThreadListViewState) {
         when (threadListViewModel.canHomeserverUseThreading()) {
-            true  -> views.threadListEmptyConstraintLayout.isVisible = state.threadSummaryList.invoke().isNullOrEmpty()
+            true -> views.threadListEmptyConstraintLayout.isVisible = state.threadSummaryList.invoke().isNullOrEmpty()
             false -> views.threadListEmptyConstraintLayout.isVisible = state.rootThreadEventList.invoke().isNullOrEmpty()
         }
     }

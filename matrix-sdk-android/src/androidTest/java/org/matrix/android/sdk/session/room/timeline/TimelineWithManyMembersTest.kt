@@ -62,10 +62,10 @@ class TimelineWithManyMembersTest : InstrumentedTest {
 
         val firstMessage = "First messages from Alice"
         commonTestHelper.sendTextMessage(
-                roomForFirstMember,
-                firstMessage,
-                1,
-                600_000
+            roomForFirstMember,
+            firstMessage,
+            1,
+            600_000
         )
 
         for (index in 1 until cryptoTestData.sessions.size) {
@@ -80,17 +80,17 @@ class TimelineWithManyMembersTest : InstrumentedTest {
                 val lock = CountDownLatch(1)
                 val eventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
                     snapshot
-                            .find { it.isEncrypted() }
-                            ?.let {
-                                val body = it.root.getClearContent()?.toModel<MessageContent>()?.body
-                                if (body?.startsWith(firstMessage).orFalse()) {
-                                    println("User " + session.myUserId + " decrypted as " + body)
-                                    return@createEventListener true
-                                } else {
-                                    fail("User " + session.myUserId + " decrypted as " + body + " CryptoError: " + it.root.mCryptoError)
-                                    false
-                                }
-                            } ?: return@createEventListener false
+                        .find { it.isEncrypted() }
+                        ?.let {
+                            val body = it.root.getClearContent()?.toModel<MessageContent>()?.body
+                            if (body?.startsWith(firstMessage).orFalse()) {
+                                println("User " + session.myUserId + " decrypted as " + body)
+                                return@createEventListener true
+                            } else {
+                                fail("User " + session.myUserId + " decrypted as " + body + " CryptoError: " + it.root.mCryptoError)
+                                false
+                            }
+                        } ?: return@createEventListener false
                 }
                 timelineForCurrentMember.addListener(eventsListener)
                 commonTestHelper.await(lock, 600_000)

@@ -56,13 +56,13 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
         val startDrawable = when (attributes.shieldUIState) {
             ShieldUIState.GREEN -> R.drawable.ic_shield_trusted
             ShieldUIState.BLACK -> R.drawable.ic_shield_black
-            ShieldUIState.RED   -> R.drawable.ic_shield_warning
-            ShieldUIState.ERROR   -> R.drawable.ic_warning_badge
+            ShieldUIState.RED -> R.drawable.ic_shield_warning
+            ShieldUIState.ERROR -> R.drawable.ic_warning_badge
         }
 
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(holder.view.context, startDrawable),
-                null, null, null
+            ContextCompat.getDrawable(holder.view.context, startDrawable),
+            null, null, null
         )
 
         renderSendState(holder.view, null, holder.failedToSendIndicator)
@@ -83,18 +83,18 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
      * This class holds all the common attributes for timeline items.
      */
     data class Attributes(
-            val shieldUIState: ShieldUIState,
-            val title: String,
-            val description: String,
-            override val informationData: MessageInformationData,
-            override val avatarRenderer: AvatarRenderer,
-            override val messageColorProvider: MessageColorProvider,
-            override val itemLongClickListener: View.OnLongClickListener? = null,
-            override val itemClickListener: ClickListener? = null,
-            override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
-            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val emojiTypeFace: Typeface? = null,
-            override val reactionsSummaryEvents: ReactionsSummaryEvents? = null
+        val shieldUIState: ShieldUIState,
+        val title: String,
+        val description: String,
+        override val informationData: MessageInformationData,
+        override val avatarRenderer: AvatarRenderer,
+        override val messageColorProvider: MessageColorProvider,
+        override val itemLongClickListener: View.OnLongClickListener? = null,
+        override val itemClickListener: ClickListener? = null,
+        override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
+        override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
+        val emojiTypeFace: Typeface? = null,
+        override val reactionsSummaryEvents: ReactionsSummaryEvents? = null
     ) : AbsBaseMessageItem.Attributes
 
     enum class ShieldUIState {

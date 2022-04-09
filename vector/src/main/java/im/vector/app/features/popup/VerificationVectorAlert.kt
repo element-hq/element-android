@@ -25,19 +25,22 @@ import im.vector.app.databinding.AlerterVerificationLayoutBinding
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
-class VerificationVectorAlert(uid: String,
-                              title: String,
-                              override val description: String,
-                              @DrawableRes override val iconId: Int?,
-                              /**
-                               * Alert are displayed by default, but let this lambda return false to prevent displaying
-                               */
-                              override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
+class VerificationVectorAlert(
+    uid: String,
+    title: String,
+    override val description: String,
+    @DrawableRes override val iconId: Int?,
+    /**
+     * Alert are displayed by default, but let this lambda return false to prevent displaying
+     */
+    override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
 ) : DefaultVectorAlert(uid, title, description, iconId, shouldBeDisplayedIn) {
     override val layoutRes = R.layout.alerter_verification_layout
 
-    class ViewBinder(private val matrixItem: MatrixItem?,
-                     private val avatarRenderer: AvatarRenderer) : VectorAlert.ViewBinder {
+    class ViewBinder(
+        private val matrixItem: MatrixItem?,
+        private val avatarRenderer: AvatarRenderer
+    ) : VectorAlert.ViewBinder {
 
         override fun bind(view: View) {
             val views = AlerterVerificationLayoutBinding.bind(view)

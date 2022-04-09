@@ -40,9 +40,10 @@ import javax.inject.Singleton
  */
 @Singleton
 class IncomingVerificationRequestHandler @Inject constructor(
-        private val context: Context,
-        private var avatarRenderer: Provider<AvatarRenderer>,
-        private val popupAlertManager: PopupAlertManager) : VerificationService.Listener {
+    private val context: Context,
+    private var avatarRenderer: Provider<AvatarRenderer>,
+    private val popupAlertManager: PopupAlertManager
+) : VerificationService.Listener {
 
     private var session: Session? = null
 
@@ -66,53 +67,53 @@ class IncomingVerificationRequestHandler @Inject constructor(
                 val user = session?.getUser(tx.otherUserId)
                 val name = user?.toMatrixItem()?.getBestName() ?: tx.otherUserId
                 val alert = VerificationVectorAlert(
-                        uid,
-                        context.getString(R.string.sas_incoming_request_notif_title),
-                        context.getString(R.string.sas_incoming_request_notif_content, name),
-                        R.drawable.ic_shield_black,
-                        shouldBeDisplayedIn = { activity ->
-                            if (activity is VectorBaseActivity<*>) {
-                                // TODO a bit too ugly :/
-                                activity.supportFragmentManager.findFragmentByTag(VerificationBottomSheet.WAITING_SELF_VERIF_TAG)?.let {
-                                    false.also {
-                                        popupAlertManager.cancelAlert(uid)
-                                    }
-                                } ?: true
-                            } else true
-                        }
+                    uid,
+                    context.getString(R.string.sas_incoming_request_notif_title),
+                    context.getString(R.string.sas_incoming_request_notif_content, name),
+                    R.drawable.ic_shield_black,
+                    shouldBeDisplayedIn = { activity ->
+                        if (activity is VectorBaseActivity<*>) {
+                            // TODO a bit too ugly :/
+                            activity.supportFragmentManager.findFragmentByTag(VerificationBottomSheet.WAITING_SELF_VERIF_TAG)?.let {
+                                false.also {
+                                    popupAlertManager.cancelAlert(uid)
+                                }
+                            } ?: true
+                        } else true
+                    }
                 )
-                        .apply {
-                            viewBinder = VerificationVectorAlert.ViewBinder(user?.toMatrixItem(), avatarRenderer.get())
-                            contentAction = Runnable {
+                    .apply {
+                        viewBinder = VerificationVectorAlert.ViewBinder(user?.toMatrixItem(), avatarRenderer.get())
+                        contentAction = Runnable {
+                            (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
+                                it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
+                            }
+                        }
+                        dismissedAction = Runnable {
+                            tx.cancel()
+                        }
+                        addButton(
+                            context.getString(R.string.action_ignore),
+                            { tx.cancel() }
+                        )
+                        addButton(
+                            context.getString(R.string.action_open),
+                            {
                                 (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
                                     it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
                                 }
                             }
-                            dismissedAction = Runnable {
-                                tx.cancel()
-                            }
-                            addButton(
-                                    context.getString(R.string.action_ignore),
-                                    { tx.cancel() }
-                            )
-                            addButton(
-                                    context.getString(R.string.action_open),
-                                    {
-                                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
-                                            it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
-                                        }
-                                    }
-                            )
-                            // 10mn expiration
-                            expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
-                        }
+                        )
+                        // 10mn expiration
+                        expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
+                    }
                 popupAlertManager.postVectorAlert(alert)
             }
             is VerificationTxState.TerminalTxState -> {
                 // cancel related notification
                 popupAlertManager.cancelAlert(uid)
             }
-            else                                   -> Unit
+            else -> Unit
         }
     }
 
@@ -136,40 +137,41 @@ class IncomingVerificationRequestHandler @Inject constructor(
             }
 
             val alert = VerificationVectorAlert(
-                    uniqueIdForVerificationRequest(pr),
-                    context.getString(R.string.sas_incoming_request_notif_title),
-                    description,
-                    R.drawable.ic_shield_black,
-                    shouldBeDisplayedIn = { activity ->
-                        if (activity is RoomDetailActivity) {
-                            activity.intent?.extras?.getParcelable<TimelineArgs>(RoomDetailActivity.EXTRA_ROOM_DETAIL_ARGS)?.let {
-                                it.roomId != pr.roomId
-                            } ?: true
-                        } else true
-                    }
+                uniqueIdForVerificationRequest(pr),
+                context.getString(R.string.sas_incoming_request_notif_title),
+                description,
+                R.drawable.ic_shield_black,
+                shouldBeDisplayedIn = { activity ->
+                    if (activity is RoomDetailActivity) {
+                        activity.intent?.extras?.getParcelable<TimelineArgs>(RoomDetailActivity.EXTRA_ROOM_DETAIL_ARGS)?.let {
+                            it.roomId != pr.roomId
+                        } ?: true
+                    } else true
+                }
             )
-                    .apply {
-                        viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer.get())
-                        contentAction = Runnable {
-                            (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
-                                val roomId = pr.roomId
-                                if (roomId.isNullOrBlank()) {
-                                    it.navigator.waitSessionVerification(it)
-                                } else {
-                                    it.navigator.openRoom(it, roomId, pr.transactionId)
-                                }
+                .apply {
+                    viewBinder = VerificationVectorAlert.ViewBinder(user, avatarRenderer.get())
+                    contentAction = Runnable {
+                        (weakCurrentActivity?.get() as? VectorBaseActivity<*>)?.let {
+                            val roomId = pr.roomId
+                            if (roomId.isNullOrBlank()) {
+                                it.navigator.waitSessionVerification(it)
+                            } else {
+                                it.navigator.openRoom(it, roomId, pr.transactionId)
                             }
                         }
-                        dismissedAction = Runnable {
-                            session?.cryptoService()?.verificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
-                                    pr.transactionId ?: "",
-                                    pr.roomId ?: ""
-                            )
-                        }
-                        colorAttribute = R.attr.vctr_notice_secondary
-                        // 5mn expiration
-                        expirationTimestamp = System.currentTimeMillis() + (5 * 60 * 1000L)
                     }
+                    dismissedAction = Runnable {
+                        session?.cryptoService()?.verificationService()?.declineVerificationRequestInDMs(
+                            pr.otherUserId,
+                            pr.transactionId ?: "",
+                            pr.roomId ?: ""
+                        )
+                    }
+                    colorAttribute = R.attr.vctr_notice_secondary
+                    // 5mn expiration
+                    expirationTimestamp = System.currentTimeMillis() + (5 * 60 * 1000L)
+                }
             popupAlertManager.postVectorAlert(alert)
         }
     }
@@ -182,5 +184,5 @@ class IncomingVerificationRequestHandler @Inject constructor(
     }
 
     private fun uniqueIdForVerificationRequest(pr: PendingVerificationRequest) =
-            "verificationRequest_${pr.transactionId}"
+        "verificationRequest_${pr.transactionId}"
 }

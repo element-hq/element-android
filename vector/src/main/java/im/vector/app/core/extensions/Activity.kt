@@ -37,40 +37,44 @@ fun ComponentActivity.registerStartForActivityResult(onResult: (ActivityResult) 
 }
 
 fun AppCompatActivity.addFragment(
-        container: ViewGroup,
-        fragment: Fragment,
-        allowStateLoss: Boolean = false) {
+    container: ViewGroup,
+    fragment: Fragment,
+    allowStateLoss: Boolean = false
+) {
     supportFragmentManager.commitTransaction(allowStateLoss) { add(container.id, fragment) }
 }
 
 fun <T : Fragment> AppCompatActivity.addFragment(
-        container: ViewGroup,
-        fragmentClass: Class<T>,
-        params: Parcelable? = null,
-        tag: String? = null,
-        allowStateLoss: Boolean = false) {
+    container: ViewGroup,
+    fragmentClass: Class<T>,
+    params: Parcelable? = null,
+    tag: String? = null,
+    allowStateLoss: Boolean = false
+) {
     supportFragmentManager.commitTransaction(allowStateLoss) {
         add(container.id, fragmentClass, params.toMvRxBundle(), tag)
     }
 }
 
 fun AppCompatActivity.replaceFragment(
-        container: ViewGroup,
-        fragment: Fragment,
-        tag: String? = null,
-        allowStateLoss: Boolean = false) {
+    container: ViewGroup,
+    fragment: Fragment,
+    tag: String? = null,
+    allowStateLoss: Boolean = false
+) {
     supportFragmentManager.commitTransaction(allowStateLoss) {
         replace(container.id, fragment, tag)
     }
 }
 
 fun <T : Fragment> AppCompatActivity.replaceFragment(
-        container: ViewGroup,
-        fragmentClass: Class<T>,
-        params: Parcelable? = null,
-        tag: String? = null,
-        allowStateLoss: Boolean = false,
-        useCustomAnimation: Boolean = false) {
+    container: ViewGroup,
+    fragmentClass: Class<T>,
+    params: Parcelable? = null,
+    tag: String? = null,
+    allowStateLoss: Boolean = false,
+    useCustomAnimation: Boolean = false
+) {
     supportFragmentManager.commitTransaction(allowStateLoss) {
         if (useCustomAnimation) {
             setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
@@ -80,22 +84,24 @@ fun <T : Fragment> AppCompatActivity.replaceFragment(
 }
 
 fun AppCompatActivity.addFragmentToBackstack(
-        container: ViewGroup,
-        fragment: Fragment,
-        tag: String? = null,
-        allowStateLoss: Boolean = false) {
+    container: ViewGroup,
+    fragment: Fragment,
+    tag: String? = null,
+    allowStateLoss: Boolean = false
+) {
     supportFragmentManager.commitTransaction(allowStateLoss) {
         replace(container.id, fragment).addToBackStack(tag)
     }
 }
 
 fun <T : Fragment> AppCompatActivity.addFragmentToBackstack(
-        container: ViewGroup,
-        fragmentClass: Class<T>,
-        params: Parcelable? = null,
-        tag: String? = null,
-        allowStateLoss: Boolean = false,
-        option: ((FragmentTransaction) -> Unit)? = null) {
+    container: ViewGroup,
+    fragmentClass: Class<T>,
+    params: Parcelable? = null,
+    tag: String? = null,
+    allowStateLoss: Boolean = false,
+    option: ((FragmentTransaction) -> Unit)? = null
+) {
     supportFragmentManager.commitTransaction(allowStateLoss) {
         option?.invoke(this)
         replace(container.id, fragmentClass, params.toMvRxBundle(), tag).addToBackStack(tag)

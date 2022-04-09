@@ -45,9 +45,9 @@ import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class SpaceMenuViewModel @AssistedInject constructor(
-        @Assisted val initialState: SpaceMenuState,
-        val session: Session,
-        val appStateHandler: AppStateHandler
+    @Assisted val initialState: SpaceMenuState,
+    val session: Session,
+    val appStateHandler: AppStateHandler
 ) : VectorViewModel<SpaceMenuState, SpaceLeaveViewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -79,48 +79,48 @@ class SpaceMenuViewModel @AssistedInject constructor(
             }.launchIn(viewModelScope)
 
             PowerLevelsFlowFactory(room)
-                    .createFlow()
-                    .onEach {
-                        val powerLevelsHelper = PowerLevelsHelper(it)
+                .createFlow()
+                .onEach {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
 
-                        val canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
-                        val canAddChild = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_SPACE_CHILD)
+                    val canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
+                    val canAddChild = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_SPACE_CHILD)
 
-                        val canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR)
-                        val canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME)
-                        val canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC)
+                    val canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR)
+                    val canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME)
+                    val canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC)
 
-                        val isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin
-                        val otherAdminCount = roomSummary?.otherMemberIds
-                                ?.map { powerLevelsHelper.getUserRole(it) }
-                                ?.count { it is Role.Admin }
-                                ?: 0
-                        val isLastAdmin = isAdmin && otherAdminCount == 0
+                    val isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin
+                    val otherAdminCount = roomSummary?.otherMemberIds
+                        ?.map { powerLevelsHelper.getUserRole(it) }
+                        ?.count { it is Role.Admin }
+                        ?: 0
+                    val isLastAdmin = isAdmin && otherAdminCount == 0
 
-                        setState {
-                            copy(
-                                    canEditSettings = canChangeAvatar || canChangeName || canChangeTopic,
-                                    canInvite = canInvite,
-                                    canAddChild = canAddChild,
-                                    isLastAdmin = isLastAdmin
-                            )
-                        }
-                    }.launchIn(viewModelScope)
+                    setState {
+                        copy(
+                            canEditSettings = canChangeAvatar || canChangeName || canChangeTopic,
+                            canInvite = canInvite,
+                            canAddChild = canAddChild,
+                            isLastAdmin = isLastAdmin
+                        )
+                    }
+                }.launchIn(viewModelScope)
         }
     }
 
     override fun handle(action: SpaceLeaveViewAction) {
         when (action) {
-            SpaceLeaveViewAction.SetAutoLeaveAll      -> setState {
+            SpaceLeaveViewAction.SetAutoLeaveAll -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_ALL, leavingState = Uninitialized)
             }
-            SpaceLeaveViewAction.SetAutoLeaveNone     -> setState {
+            SpaceLeaveViewAction.SetAutoLeaveNone -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_NONE, leavingState = Uninitialized)
             }
             SpaceLeaveViewAction.SetAutoLeaveSelected -> setState {
                 copy(leaveMode = SpaceMenuState.LeaveMode.LEAVE_SELECTED, leavingState = Uninitialized)
             }
-            SpaceLeaveViewAction.LeaveSpace           -> handleLeaveSpace()
+            SpaceLeaveViewAction.LeaveSpace -> handleLeaveSpace()
         }
     }
 
@@ -136,11 +136,11 @@ class SpaceMenuViewModel @AssistedInject constructor(
                     // need to find all child rooms that i have joined
 
                     session.getRoomSummaries(
-                            roomSummaryQueryParams {
-                                excludeType = null
-                                activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
-                                memberships = listOf(Membership.JOIN)
-                            }
+                        roomSummaryQueryParams {
+                            excludeType = null
+                            activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
+                            memberships = listOf(Membership.JOIN)
+                        }
                     ).forEach {
                         try {
                             session.spaceService().leaveSpace(it.roomId)

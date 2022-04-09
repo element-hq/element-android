@@ -24,20 +24,20 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 internal data class FederationGetVersionResult(
-        @Json(name = "server")
-        val server: FederationGetVersionServer?
+    @Json(name = "server")
+    val server: FederationGetVersionServer?
 )
 
 @JsonClass(generateAdapter = true)
 internal data class FederationGetVersionServer(
-        /**
-         * Arbitrary name that identify this implementation.
-         */
-        @Json(name = "name")
-        val name: String?,
-        /**
-         * Version of this implementation. The version format depends on the implementation.
-         */
-        @Json(name = "version")
-        val version: String?
+    /**
+     * Arbitrary name that identify this implementation.
+     */
+    @Json(name = "name")
+    val name: String?,
+    /**
+     * Version of this implementation. The version format depends on the implementation.
+     */
+    @Json(name = "version")
+    val version: String?
 )

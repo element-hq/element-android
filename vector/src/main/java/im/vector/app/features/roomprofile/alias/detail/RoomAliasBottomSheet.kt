@@ -34,11 +34,11 @@ import javax.inject.Inject
 
 @Parcelize
 data class RoomAliasBottomSheetArgs(
-        val alias: String,
-        val isPublished: Boolean,
-        val isMainAlias: Boolean,
-        val isLocal: Boolean,
-        val canEditCanonicalAlias: Boolean
+    val alias: String,
+    val isPublished: Boolean,
+    val isMainAlias: Boolean,
+    val isLocal: Boolean,
+    val canEditCanonicalAlias: Boolean
 ) : Parcelable
 
 /**
@@ -46,8 +46,8 @@ data class RoomAliasBottomSheetArgs(
  */
 @AndroidEntryPoint
 class RoomAliasBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
-        RoomAliasBottomSheetController.Listener {
+    VectorBaseBottomSheetDialogFragment<BottomSheetGenericListBinding>(),
+    RoomAliasBottomSheetController.Listener {
 
     private lateinit var sharedActionViewModel: RoomAliasBottomSheetSharedActionViewModel
     @Inject lateinit var sharedViewPool: RecyclerView.RecycledViewPool
@@ -86,19 +86,23 @@ class RoomAliasBottomSheet :
     }
 
     companion object {
-        fun newInstance(alias: String,
-                        isPublished: Boolean,
-                        isMainAlias: Boolean,
-                        isLocal: Boolean,
-                        canEditCanonicalAlias: Boolean): RoomAliasBottomSheet {
+        fun newInstance(
+            alias: String,
+            isPublished: Boolean,
+            isMainAlias: Boolean,
+            isLocal: Boolean,
+            canEditCanonicalAlias: Boolean
+        ): RoomAliasBottomSheet {
             return RoomAliasBottomSheet().apply {
-                setArguments(RoomAliasBottomSheetArgs(
+                setArguments(
+                    RoomAliasBottomSheetArgs(
                         alias = alias,
                         isPublished = isPublished,
                         isMainAlias = isMainAlias,
                         isLocal = isLocal,
                         canEditCanonicalAlias = canEditCanonicalAlias
-                ))
+                    )
+                )
             }
         }
     }

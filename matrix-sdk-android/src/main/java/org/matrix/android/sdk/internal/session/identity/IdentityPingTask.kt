@@ -25,7 +25,7 @@ import javax.net.ssl.HttpsURLConnection
 
 internal interface IdentityPingTask : Task<IdentityPingTask.Params, Unit> {
     data class Params(
-            val identityAuthAPI: IdentityAuthAPI
+        val identityAuthAPI: IdentityAuthAPI
     )
 }
 

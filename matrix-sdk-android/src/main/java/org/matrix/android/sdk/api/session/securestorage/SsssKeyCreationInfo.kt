@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.api.session.securestorage
 
 data class SsssKeyCreationInfo(
-        val keyId: String = "",
-        var content: SecretStorageKeyContent?,
-        val recoveryKey: String = "",
-        val keySpec: SsssKeySpec
+    val keyId: String = "",
+    var content: SecretStorageKeyContent?,
+    val recoveryKey: String = "",
+    val keySpec: SsssKeySpec
 )

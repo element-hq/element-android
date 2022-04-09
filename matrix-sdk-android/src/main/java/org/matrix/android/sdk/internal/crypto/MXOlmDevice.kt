@@ -50,12 +50,12 @@ private val loggerTag = LoggerTag("MXOlmDevice", LoggerTag.CRYPTO)
 // The libolm wrapper.
 @SessionScope
 internal class MXOlmDevice @Inject constructor(
-        /**
-         * The store where crypto data is saved.
-         */
-        private val store: IMXCryptoStore,
-        private val olmSessionStore: OlmSessionStore,
-        private val inboundGroupSessionStore: InboundGroupSessionStore
+    /**
+     * The store where crypto data is saved.
+     */
+    private val store: IMXCryptoStore,
+    private val olmSessionStore: OlmSessionStore,
+    private val inboundGroupSessionStore: InboundGroupSessionStore
 ) {
 
     val mutex = Mutex()
@@ -76,8 +76,8 @@ internal class MXOlmDevice @Inject constructor(
     private var olmUtility: OlmUtility? = null
 
     private data class GroupSessionCacheItem(
-            val groupId: String,
-            val groupSession: OlmOutboundGroupSession
+        val groupId: String,
+        val groupSession: OlmOutboundGroupSession
     )
 
     // The outbound group session.
@@ -416,8 +416,8 @@ internal class MXOlmDevice @Inject constructor(
                     olmSessionWrapper.olmSession.encryptMessage(payloadString)
                 }
                 return mapOf(
-                        "body" to olmMessage.mCipherText,
-                        "type" to olmMessage.mType,
+                    "body" to olmMessage.mCipherText,
+                    "type" to olmMessage.mType,
                 ).also {
                     olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
                 }
@@ -452,11 +452,11 @@ internal class MXOlmDevice @Inject constructor(
             olmMessage.mType = messageType.toLong()
 
             payloadString =
-                    olmSessionWrapper.mutex.withLock {
-                        olmSessionWrapper.olmSession.decryptMessage(olmMessage).also {
-                            olmSessionWrapper.onMessageReceived()
-                        }
+                olmSessionWrapper.mutex.withLock {
+                    olmSessionWrapper.olmSession.decryptMessage(olmMessage).also {
+                        olmSessionWrapper.onMessageReceived()
                     }
+                }
             olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
         }
 
@@ -518,9 +518,9 @@ internal class MXOlmDevice @Inject constructor(
             outboundGroupSessionCache[sessionId] = GroupSessionCacheItem(roomId, restoredOutboundGroupSession.outboundGroupSession)
 
             return MXOutboundSessionInfo(
-                    sessionId = sessionId,
-                    sharedWithHelper = SharedWithHelper(roomId, sessionId, store),
-                    restoredOutboundGroupSession.creationTime
+                sessionId = sessionId,
+                sharedWithHelper = SharedWithHelper(roomId, sessionId, store),
+                restoredOutboundGroupSession.creationTime
             )
         }
         return null
@@ -598,13 +598,15 @@ internal class MXOlmDevice @Inject constructor(
      * @param exportFormat                 true if the megolm keys are in export format
      * @return true if the operation succeeds.
      */
-    fun addInboundGroupSession(sessionId: String,
-                               sessionKey: String,
-                               roomId: String,
-                               senderKey: String,
-                               forwardingCurve25519KeyChain: List<String>,
-                               keysClaimed: Map<String, String>,
-                               exportFormat: Boolean): Boolean {
+    fun addInboundGroupSession(
+        sessionId: String,
+        sessionKey: String,
+        roomId: String,
+        senderKey: String,
+        forwardingCurve25519KeyChain: List<String>,
+        keysClaimed: Map<String, String>,
+        exportFormat: Boolean
+    ): Boolean {
         val candidateSession = OlmInboundGroupSessionWrapper2(sessionKey, exportFormat)
         val existingSessionHolder = tryOrNull { getInboundGroupSession(sessionId, senderKey, roomId) }
         val existingSession = existingSessionHolder?.wrapper
@@ -724,7 +726,7 @@ internal class MXOlmDevice @Inject constructor(
                     // should not happen?
                     candidateSessionToImport.olmInboundGroupSession?.releaseSession()
                     Timber.tag(loggerTag.value)
-                            .w("## importInboundGroupSession() : Can't check session null index $existingFirstKnown/$candidateFirstKnownIndex")
+                        .w("## importInboundGroupSession() : Can't check session null index $existingFirstKnown/$candidateFirstKnownIndex")
                 } else {
                     if (existingFirstKnown <= candidateSessionToImport.firstKnownIndex!!) {
                         // Ignore this, keep existing
@@ -732,10 +734,10 @@ internal class MXOlmDevice @Inject constructor(
                     } else {
                         // update cache with better session
                         inboundGroupSessionStore.replaceGroupSession(
-                                existingSessionHolder,
-                                InboundGroupSessionHolder(candidateSessionToImport),
-                                sessionId,
-                                senderKey
+                            existingSessionHolder,
+                            InboundGroupSessionHolder(candidateSessionToImport),
+                            sessionId,
+                            senderKey
                         )
                         sessions.add(candidateSessionToImport)
                     }
@@ -759,15 +761,17 @@ internal class MXOlmDevice @Inject constructor(
      * @return the decrypting result. Nil if the sessionId is unknown.
      */
     @Throws(MXCryptoError::class)
-    suspend fun decryptGroupMessage(body: String,
-                                    roomId: String,
-                                    timeline: String?,
-                                    sessionId: String,
-                                    senderKey: String): OlmDecryptionResult {
+    suspend fun decryptGroupMessage(
+        body: String,
+        roomId: String,
+        timeline: String?,
+        sessionId: String,
+        senderKey: String
+    ): OlmDecryptionResult {
         val sessionHolder = getInboundGroupSession(sessionId, senderKey, roomId)
         val wrapper = sessionHolder.wrapper
         val inboundGroupSession = wrapper.olmInboundGroupSession
-                ?: throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, "Session is null")
+            ?: throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, "Session is null")
         // Check that the room id matches the original one for the session. This stops
         // the HS pretending a message was targeting a different room.
         if (roomId == wrapper.roomId) {
@@ -805,10 +809,10 @@ internal class MXOlmDevice @Inject constructor(
             }
 
             return OlmDecryptionResult(
-                    payload,
-                    wrapper.keysClaimed,
-                    senderKey,
-                    wrapper.forwardingCurve25519KeyChain
+                payload,
+                wrapper.keysClaimed,
+                senderKey,
+                wrapper.forwardingCurve25519KeyChain
             )
         } else {
             val reason = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, wrapper.roomId)
@@ -828,7 +832,7 @@ internal class MXOlmDevice @Inject constructor(
         }
     }
 
-//  Utilities
+    //  Utilities
 
     /**
      * Verify an ed25519 signature on a JSON object.

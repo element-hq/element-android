@@ -41,9 +41,9 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class HomeDrawerFragment @Inject constructor(
-        private val session: Session,
-        private val vectorPreferences: VectorPreferences,
-        private val avatarRenderer: AvatarRenderer
+    private val session: Session,
+    private val vectorPreferences: VectorPreferences,
+    private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentHomeDrawerBinding>() {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -87,11 +87,11 @@ class HomeDrawerFragment @Inject constructor(
         views.homeDrawerQRCodeButton.debouncedClicks {
             UserCodeActivity.newIntent(requireContext(), sharedActionViewModel.session.myUserId).let {
                 val options =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                requireActivity(),
-                                views.homeDrawerHeaderAvatarView,
-                                ViewCompat.getTransitionName(views.homeDrawerHeaderAvatarView) ?: ""
-                        )
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        views.homeDrawerHeaderAvatarView,
+                        ViewCompat.getTransitionName(views.homeDrawerHeaderAvatarView) ?: ""
+                    )
                 startActivity(it, options.toBundle())
             }
         }
@@ -102,11 +102,11 @@ class HomeDrawerFragment @Inject constructor(
                 val text = getString(R.string.invite_friends_text, permalink)
 
                 startSharePlainTextIntent(
-                        fragment = this,
-                        activityResultLauncher = null,
-                        chooserTitle = getString(R.string.invite_friends),
-                        text = text,
-                        extraTitle = getString(R.string.invite_friends_rich_title)
+                    fragment = this,
+                    activityResultLauncher = null,
+                    chooserTitle = getString(R.string.invite_friends),
+                    text = text,
+                    extraTitle = getString(R.string.invite_friends_rich_title)
                 )
             }
         }

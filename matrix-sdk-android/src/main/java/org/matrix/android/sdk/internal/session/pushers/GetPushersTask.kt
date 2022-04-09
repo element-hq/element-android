@@ -30,9 +30,9 @@ import javax.inject.Inject
 internal interface GetPushersTask : Task<Unit, Unit>
 
 internal class DefaultGetPushersTask @Inject constructor(
-        private val pushersAPI: PushersAPI,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val pushersAPI: PushersAPI,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetPushersTask {
 
     override suspend fun execute(params: Unit) {
@@ -42,8 +42,8 @@ internal class DefaultGetPushersTask @Inject constructor(
         monarchy.awaitTransaction { realm ->
             // clear existings?
             realm.where(PusherEntity::class.java)
-                    .findAll()
-                    .forEach { it.deleteOnCascade() }
+                .findAll()
+                .forEach { it.deleteOnCascade() }
             response.pushers?.forEach { jsonPusher ->
                 jsonPusher.toEntity().also {
                     it.state = PusherState.REGISTERED

@@ -50,13 +50,13 @@ import javax.inject.Inject
  * We should consider using SupportMapFragment for a out of the box lifecycle handling
  */
 class LocationSharingFragment @Inject constructor(
-        private val urlMapProvider: UrlMapProvider,
-        private val avatarRenderer: AvatarRenderer,
-        private val matrixItemColorProvider: MatrixItemColorProvider,
-        private val vectorFeatures: VectorFeatures,
+    private val urlMapProvider: UrlMapProvider,
+    private val avatarRenderer: AvatarRenderer,
+    private val matrixItemColorProvider: MatrixItemColorProvider,
+    private val vectorFeatures: VectorFeatures,
 ) : VectorBaseFragment<FragmentLocationSharingBinding>(),
-        LocationTargetChangeListener,
-        VectorBaseBottomSheetDialogFragment.ResultListener {
+    LocationTargetChangeListener,
+    VectorBaseBottomSheetDialogFragment.ResultListener {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
@@ -79,8 +79,8 @@ class LocationSharingFragment @Inject constructor(
 
         lifecycleScope.launchWhenCreated {
             views.mapView.initialize(
-                    url = urlMapProvider.getMapUrl(),
-                    locationTargetChangeListener = this@LocationSharingFragment
+                url = urlMapProvider.getMapUrl(),
+                locationTargetChangeListener = this@LocationSharingFragment
             )
         }
 
@@ -89,9 +89,9 @@ class LocationSharingFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                LocationSharingViewEvents.Close                       -> locationSharingNavigator.quit()
-                LocationSharingViewEvents.LocationNotAvailableError   -> handleLocationNotAvailableError()
-                is LocationSharingViewEvents.ZoomToUserLocation       -> handleZoomToUserLocationEvent(it)
+                LocationSharingViewEvents.Close -> locationSharingNavigator.quit()
+                LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
+                is LocationSharingViewEvents.ZoomToUserLocation -> handleZoomToUserLocationEvent(it)
                 is LocationSharingViewEvents.StartLiveLocationService -> handleStartLiveLocationService(it)
             }
         }
@@ -153,25 +153,25 @@ class LocationSharingFragment @Inject constructor(
 
     private fun handleLocationNotAvailableError() {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.location_not_available_dialog_title)
-                .setMessage(R.string.location_not_available_dialog_content)
-                .setPositiveButton(R.string.ok) { _, _ ->
-                    locationSharingNavigator.quit()
-                }
-                .setCancelable(false)
-                .show()
+            .setTitle(R.string.location_not_available_dialog_title)
+            .setMessage(R.string.location_not_available_dialog_content)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                locationSharingNavigator.quit()
+            }
+            .setCancelable(false)
+            .show()
     }
 
     private fun handleMissingBackgroundLocationPermission() {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.location_in_background_missing_permission_dialog_title)
-                .setMessage(R.string.location_in_background_missing_permission_dialog_content)
-                .setPositiveButton(R.string.settings) { _, _ ->
-                    locationSharingNavigator.goToAppSettings()
-                }
-                .setNegativeButton(R.string.action_not_now, null)
-                .setCancelable(false)
-                .show()
+            .setTitle(R.string.location_in_background_missing_permission_dialog_title)
+            .setMessage(R.string.location_in_background_missing_permission_dialog_content)
+            .setPositiveButton(R.string.settings) { _, _ ->
+                locationSharingNavigator.goToAppSettings()
+            }
+            .setNegativeButton(R.string.action_not_now, null)
+            .setCancelable(false)
+            .show()
     }
 
     private fun initLocateButton() {
@@ -188,10 +188,10 @@ class LocationSharingFragment @Inject constructor(
         val args = LocationSharingService.RoomArgs(event.sessionId, event.roomId, event.durationMillis)
 
         Intent(requireContext(), LocationSharingService::class.java)
-                .putExtra(LocationSharingService.EXTRA_ROOM_ARGS, args)
-                .also {
-                    ContextCompat.startForegroundService(requireContext(), it)
-                }
+            .putExtra(LocationSharingService.EXTRA_ROOM_ARGS, args)
+            .also {
+                ContextCompat.startForegroundService(requireContext(), it)
+            }
 
         vectorBaseActivity.finish()
     }
@@ -230,19 +230,20 @@ class LocationSharingFragment @Inject constructor(
     private fun tryStartLiveLocationSharing() {
         // we need to re-check foreground location to be sure it has not changed after landing on this screen
         if (checkPermissions(PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING, requireActivity(), foregroundLocationResultLauncher) &&
-                checkPermissions(
-                        PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING,
-                        requireActivity(),
-                        backgroundLocationResultLauncher,
-                        R.string.location_in_background_missing_permission_dialog_content
-                )) {
+            checkPermissions(
+                PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING,
+                requireActivity(),
+                backgroundLocationResultLauncher,
+                R.string.location_in_background_missing_permission_dialog_content
+            )
+        ) {
             startLiveLocationSharing()
         }
     }
 
     private fun startLiveLocationSharing() {
         ChooseLiveDurationBottomSheet.newInstance(this)
-                .show(requireActivity().supportFragmentManager, "DISPLAY_CHOOSE_DURATION_OPTIONS")
+            .show(requireActivity().supportFragmentManager, "DISPLAY_CHOOSE_DURATION_OPTIONS")
     }
 
     override fun onBottomSheetResult(resultCode: Int, data: Any?) {
@@ -254,7 +255,7 @@ class LocationSharingFragment @Inject constructor(
     private fun updateMap(state: LocationSharingViewState) {
         // first, update the options view
         val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
-            true  -> {
+            true -> {
                 if (vectorFeatures.isLiveLocationEnabled()) {
                     setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
                 } else {
@@ -262,27 +263,27 @@ class LocationSharingFragment @Inject constructor(
                 }
             }
             false -> setOf(LocationSharingOption.PINNED)
-            else  -> emptySet()
+            else -> emptySet()
         }
         views.shareLocationOptionsPicker.render(options)
 
         // then, update the map using the height of the options view after it has been rendered
         views.shareLocationOptionsPicker.post {
             val mapState = state
-                    .toMapState()
-                    .copy(logoMarginBottom = views.shareLocationOptionsPicker.height)
+                .toMapState()
+                .copy(logoMarginBottom = views.shareLocationOptionsPicker.height)
             views.mapView.render(mapState)
         }
     }
 
     private fun updateUserAvatar(userItem: MatrixItem.UserItem?) {
         userItem?.takeUnless { hasRenderedUserAvatar }
-                ?.let {
-                    hasRenderedUserAvatar = true
-                    avatarRenderer.render(it, views.shareLocationOptionsPicker.optionUserCurrent.iconView)
-                    val tintColor = matrixItemColorProvider.getColor(it)
-                    views.shareLocationOptionsPicker.optionUserCurrent.setIconBackgroundTint(tintColor)
-                }
+            ?.let {
+                hasRenderedUserAvatar = true
+                avatarRenderer.render(it, views.shareLocationOptionsPicker.optionUserCurrent.iconView)
+                val tintColor = matrixItemColorProvider.getColor(it)
+                views.shareLocationOptionsPicker.optionUserCurrent.setIconBackgroundTint(tintColor)
+            }
     }
 
     private fun updateLocationTargetPin(drawable: Drawable) {

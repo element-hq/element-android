@@ -17,44 +17,44 @@
 package org.matrix.android.sdk.api.session.homeserver
 
 data class HomeServerCapabilities(
-        /**
-         * True if it is possible to change the password of the account.
-         */
-        val canChangePassword: Boolean = true,
-        /**
-         * True if it is possible to change the display name of the account.
-         */
-        val canChangeDisplayName: Boolean = true,
-        /**
-         * True if it is possible to change the avatar of the account.
-         */
-        val canChangeAvatar: Boolean = true,
-        /**
-         * True if it is possible to change the 3pid associations of the account.
-         */
-        val canChange3pid: Boolean = true,
-        /**
-         * Max size of file which can be uploaded to the homeserver in bytes. [MAX_UPLOAD_FILE_SIZE_UNKNOWN] if unknown or not retrieved yet
-         */
-        val maxUploadFileSize: Long = MAX_UPLOAD_FILE_SIZE_UNKNOWN,
-        /**
-         * Last version identity server and binding supported
-         */
-        val lastVersionIdentityServerSupported: Boolean = false,
-        /**
-         * Default identity server url, provided in Wellknown
-         */
-        val defaultIdentityServerUrl: String? = null,
-        /**
-         * Room versions supported by the server
-         * This capability describes the default and available room versions a server supports, and at what level of stability.
-         * Clients should make use of this capability to determine if users need to be encouraged to upgrade their rooms.
-         */
-        val roomVersions: RoomVersionCapabilities? = null,
-        /**
-         * True if the home server support threading
-         */
-        var canUseThreading: Boolean = false
+    /**
+     * True if it is possible to change the password of the account.
+     */
+    val canChangePassword: Boolean = true,
+    /**
+     * True if it is possible to change the display name of the account.
+     */
+    val canChangeDisplayName: Boolean = true,
+    /**
+     * True if it is possible to change the avatar of the account.
+     */
+    val canChangeAvatar: Boolean = true,
+    /**
+     * True if it is possible to change the 3pid associations of the account.
+     */
+    val canChange3pid: Boolean = true,
+    /**
+     * Max size of file which can be uploaded to the homeserver in bytes. [MAX_UPLOAD_FILE_SIZE_UNKNOWN] if unknown or not retrieved yet
+     */
+    val maxUploadFileSize: Long = MAX_UPLOAD_FILE_SIZE_UNKNOWN,
+    /**
+     * Last version identity server and binding supported
+     */
+    val lastVersionIdentityServerSupported: Boolean = false,
+    /**
+     * Default identity server url, provided in Wellknown
+     */
+    val defaultIdentityServerUrl: String? = null,
+    /**
+     * Room versions supported by the server
+     * This capability describes the default and available room versions a server supports, and at what level of stability.
+     * Clients should make use of this capability to determine if users need to be encouraged to upgrade their rooms.
+     */
+    val roomVersions: RoomVersionCapabilities? = null,
+    /**
+     * True if the home server support threading
+     */
+    var canUseThreading: Boolean = false
 ) {
 
     enum class RoomCapabilitySupport {
@@ -81,13 +81,13 @@ data class HomeServerCapabilities(
         val versionCap = roomVersions.supportedVersion.firstOrNull { it.version == preferred }
 
         return when {
-            versionCap == null                            -> {
+            versionCap == null -> {
                 RoomCapabilitySupport.UNKNOWN
             }
             versionCap.status == RoomVersionStatus.STABLE -> {
                 RoomCapabilitySupport.SUPPORTED
             }
-            else                                          -> {
+            else -> {
                 RoomCapabilitySupport.SUPPORTED_UNSTABLE
             }
         }

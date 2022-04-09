@@ -29,8 +29,8 @@ internal interface VerificationInfoKey : VerificationInfo<ValidVerificationInfoK
         val validKey = key?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationInfoKey(
-                validTransactionId,
-                validKey
+            validTransactionId,
+            validKey
         )
     }
 }
@@ -40,6 +40,6 @@ internal interface VerificationInfoKeyFactory {
 }
 
 internal data class ValidVerificationInfoKey(
-        val transactionId: String,
-        val key: String
+    val transactionId: String,
+    val key: String
 )

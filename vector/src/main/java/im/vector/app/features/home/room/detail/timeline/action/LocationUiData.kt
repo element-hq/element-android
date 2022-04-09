@@ -22,7 +22,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
  * Data used to display Location data in the message bottom sheet
  */
 data class LocationUiData(
-        val locationUrl: String,
-        val locationOwnerId: String?,
-        val locationPinProvider: LocationPinProvider,
+    val locationUrl: String,
+    val locationOwnerId: String?,
+    val locationPinProvider: LocationPinProvider,
 )

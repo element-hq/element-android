@@ -27,7 +27,7 @@ import im.vector.lib.attachmentviewer.AttachmentEventListener
 import im.vector.lib.attachmentviewer.AttachmentEvents
 
 class AttachmentOverlayView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), AttachmentEventListener {
 
     var interactionListener: AttachmentInteractionListener? = null

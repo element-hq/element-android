@@ -47,11 +47,11 @@ import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class SpaceManageRoomsFragment @Inject constructor(
-        private val epoxyController: SpaceManageRoomsController
+    private val epoxyController: SpaceManageRoomsController
 ) : VectorBaseFragment<FragmentSpaceAddRoomsBinding>(),
-        OnBackPressed,
-        SpaceManageRoomsController.Listener,
-        Callback {
+    OnBackPressed,
+    SpaceManageRoomsController.Listener,
+    Callback {
 
     private val viewModel by fragmentViewModel(SpaceManageRoomsViewModel::class)
     private val sharedViewModel: SpaceManageSharedViewModel by activityViewModel()
@@ -68,8 +68,8 @@ class SpaceManageRoomsFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.addRoomToSpaceToolbar)
-                .setTitle(R.string.space_manage_rooms_and_spaces)
-                .allowBack()
+            .setTitle(R.string.space_manage_rooms_and_spaces)
+            .allowBack()
 
         views.createNewRoom.isVisible = false
         epoxyController.listener = this
@@ -77,18 +77,18 @@ class SpaceManageRoomsFragment @Inject constructor(
         epoxyVisibilityTracker.attach(views.roomList)
 
         views.publicRoomsFilter.queryTextChanges()
-                .debounce(200)
-                .onEach {
-                    viewModel.handle(SpaceManageRoomViewAction.UpdateFilter(it.toString()))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .debounce(200)
+            .onEach {
+                viewModel.handle(SpaceManageRoomViewAction.UpdateFilter(it.toString()))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.onEach(SpaceManageRoomViewState::actionState) { actionState ->
             when (actionState) {
                 is Loading -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.ShowLoading)
                 }
-                else       -> {
+                else -> {
                     sharedViewModel.handle(SpaceManagedSharedAction.HideLoading)
                 }
             }
@@ -124,8 +124,8 @@ class SpaceManageRoomsFragment @Inject constructor(
             } else {
                 toolbar?.title = resources.getQuantityString(R.plurals.room_details_selected, state.selectedRooms.size, state.selectedRooms.size)
             }
-//            views.addRoomToSpaceToolbar.isVisible = false
-//            views.addRoomToSpaceToolbar.startActionMode(this)
+            //            views.addRoomToSpaceToolbar.isVisible = false
+            //            views.addRoomToSpaceToolbar.startActionMode(this)
         } else {
             currentActionMode?.finish()
         }
@@ -161,7 +161,7 @@ class SpaceManageRoomsFragment @Inject constructor(
         withState(viewModel) { state ->
             // check if we show mark as suggested or not
             val areAllSuggested = state.childrenInfo.invoke()?.children.orEmpty().filter { state.selectedRooms.contains(it.childRoomId) }
-                    .all { it.suggested == true }
+                .all { it.suggested == true }
             menu?.findItem(R.id.action_mark_as_suggested)?.isVisible = !areAllSuggested
             menu?.findItem(R.id.action_mark_as_not_suggested)?.isVisible = areAllSuggested
         }
@@ -171,16 +171,16 @@ class SpaceManageRoomsFragment @Inject constructor(
 
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.action_delete                -> {
+            R.id.action_delete -> {
                 handleDeleteSelection()
             }
-            R.id.action_mark_as_suggested     -> {
+            R.id.action_mark_as_suggested -> {
                 viewModel.handle(SpaceManageRoomViewAction.MarkAllAsSuggested(true))
             }
             R.id.action_mark_as_not_suggested -> {
                 viewModel.handle(SpaceManageRoomViewAction.MarkAllAsSuggested(false))
             }
-            else                              -> {
+            else -> {
             }
         }
         mode?.finish()

@@ -72,14 +72,14 @@ interface VectorAlert {
  * Dataclass to describe an important alert with actions.
  */
 open class DefaultVectorAlert(
-        override val uid: String,
-        override val title: String,
-        override val description: String,
-        @DrawableRes override val iconId: Int?,
-        /**
-         * Alert are displayed by default, but let this lambda return false to prevent displaying
-         */
-        override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
+    override val uid: String,
+    override val title: String,
+    override val description: String,
+    @DrawableRes override val iconId: Int?,
+    /**
+     * Alert are displayed by default, but let this lambda return false to prevent displaying
+     */
+    override val shouldBeDisplayedIn: ((Activity) -> Boolean) = { true }
 ) : VectorAlert {
 
     // will be set by manager, and accessible by actions at runtime

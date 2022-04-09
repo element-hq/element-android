@@ -25,5 +25,5 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
  */
 @JsonClass(generateAdapter = true)
 data class MessageEndPollContent(
-        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent? = null
+    @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent? = null
 )

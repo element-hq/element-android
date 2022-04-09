@@ -33,10 +33,10 @@ internal interface AddPusherTask : Task<AddPusherTask.Params, Unit> {
 }
 
 internal class DefaultAddPusherTask @Inject constructor(
-        private val pushersAPI: PushersAPI,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val requestExecutor: RequestExecutor,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val pushersAPI: PushersAPI,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val requestExecutor: RequestExecutor,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : AddPusherTask {
     override suspend fun execute(params: AddPusherTask.Params) {
         val pusher = params.pusher

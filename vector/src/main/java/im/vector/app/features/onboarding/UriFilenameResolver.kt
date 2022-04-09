@@ -28,14 +28,14 @@ class UriFilenameResolver @Inject constructor(private val context: Context) {
         val fallback = uri.path?.substringAfterLast('/')
         return when (uri.scheme) {
             "content" -> readResolvedDisplayName(uri) ?: fallback
-            else      -> fallback
+            else -> fallback
         }
     }
 
     private fun readResolvedDisplayName(uri: Uri): String? {
         return context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
             cursor.takeIf { cursor.moveToFirst() }
-                    ?.readStringColumnOrNull(OpenableColumns.DISPLAY_NAME)
+                ?.readStringColumnOrNull(OpenableColumns.DISPLAY_NAME)
         }
     }
 }

@@ -22,35 +22,35 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoInfoMapper
 
 @JsonClass(generateAdapter = true)
 internal data class RestKeyInfo(
-        /**
-         * The user who owns the key
-         */
-        @Json(name = "user_id")
-        val userId: String,
+    /**
+     * The user who owns the key
+     */
+    @Json(name = "user_id")
+    val userId: String,
 
-        /**
-         * Allowed uses for the key.
-         * Must contain "master" for master keys, "self_signing" for self-signing keys, and "user_signing" for user-signing keys.
-         * See CrossSigningKeyInfo#KEY_USAGE_* constants
-         */
-        @Json(name = "usage")
-        val usages: List<String>?,
+    /**
+     * Allowed uses for the key.
+     * Must contain "master" for master keys, "self_signing" for self-signing keys, and "user_signing" for user-signing keys.
+     * See CrossSigningKeyInfo#KEY_USAGE_* constants
+     */
+    @Json(name = "usage")
+    val usages: List<String>?,
 
-        /**
-         * An object that must have one entry,
-         * whose name is "ed25519:" followed by the unpadded base64 encoding of the public key,
-         * and whose value is the unpadded base64 encoding of the public key.
-         */
-        @Json(name = "keys")
-        val keys: Map<String, String>?,
+    /**
+     * An object that must have one entry,
+     * whose name is "ed25519:" followed by the unpadded base64 encoding of the public key,
+     * and whose value is the unpadded base64 encoding of the public key.
+     */
+    @Json(name = "keys")
+    val keys: Map<String, String>?,
 
-        /**
-         *  Signatures of the key.
-         *  A self-signing or user-signing key must be signed by the master key.
-         *  A master key may be signed by a device.
-         */
-        @Json(name = "signatures")
-        val signatures: Map<String, Map<String, String>>? = null
+    /**
+     *  Signatures of the key.
+     *  A self-signing or user-signing key must be signed by the master key.
+     *  A master key may be signed by a device.
+     */
+    @Json(name = "signatures")
+    val signatures: Map<String, Map<String, String>>? = null
 ) {
     fun toCryptoModel(): CryptoCrossSigningKey {
         return CryptoInfoMapper.map(this)

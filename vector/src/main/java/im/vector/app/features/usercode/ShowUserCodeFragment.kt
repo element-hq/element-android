@@ -33,7 +33,7 @@ import im.vector.app.features.home.AvatarRenderer
 import javax.inject.Inject
 
 class ShowUserCodeFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+    private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentUserCodeShowBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentUserCodeShowBinding {
@@ -53,7 +53,7 @@ class ShowUserCodeFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.showUserCodeToolBar)
-                .allowBack(useCross = true)
+            .allowBack(useCross = true)
 
         views.showUserCodeScanButton.debouncedClicks {
             if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
@@ -67,11 +67,11 @@ class ShowUserCodeFragment @Inject constructor(
         sharedViewModel.observeViewEvents {
             if (it is UserCodeShareViewEvents.SharePlainText) {
                 startSharePlainTextIntent(
-                        fragment = this,
-                        activityResultLauncher = null,
-                        chooserTitle = it.title,
-                        text = it.text,
-                        extraTitle = it.richPlainText
+                    fragment = this,
+                    activityResultLauncher = null,
+                    chooserTitle = it.title,
+                    text = it.text,
+                    extraTitle = it.richPlainText
                 )
             }
         }

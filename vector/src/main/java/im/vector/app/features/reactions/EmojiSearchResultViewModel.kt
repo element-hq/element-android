@@ -29,13 +29,14 @@ import im.vector.app.features.reactions.data.EmojiItem
 import kotlinx.coroutines.launch
 
 data class EmojiSearchResultViewState(
-        val query: String = "",
-        val results: List<EmojiItem> = emptyList()
+    val query: String = "",
+    val results: List<EmojiItem> = emptyList()
 ) : MavericksState
 
 class EmojiSearchResultViewModel @AssistedInject constructor(
-        @Assisted initialState: EmojiSearchResultViewState,
-        private val dataSource: EmojiDataSource) :
+    @Assisted initialState: EmojiSearchResultViewState,
+    private val dataSource: EmojiDataSource
+) :
     VectorViewModel<EmojiSearchResultViewState, EmojiSearchAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -56,8 +57,8 @@ class EmojiSearchResultViewModel @AssistedInject constructor(
             val results = dataSource.filterWith(action.queryString)
             setState {
                 copy(
-                        query = action.queryString,
-                        results = results
+                    query = action.queryString,
+                    results = results
                 )
             }
         }

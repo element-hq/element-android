@@ -29,12 +29,12 @@ object ManuallyVerifyDialog {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_device_verify, null)
         val views = DialogDeviceVerifyBinding.bind(dialogLayout)
         val builder = MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.cross_signing_verify_by_text)
-                .setView(dialogLayout)
-                .setPositiveButton(R.string.encryption_information_verify) { _, _ ->
-                    onVerified()
-                }
-                .setNegativeButton(R.string.action_cancel, null)
+            .setTitle(R.string.cross_signing_verify_by_text)
+            .setView(dialogLayout)
+            .setPositiveButton(R.string.encryption_information_verify) { _, _ ->
+                onVerified()
+            }
+            .setNegativeButton(R.string.action_cancel, null)
 
         views.encryptedDeviceInfoDeviceName.text = cryptoDeviceInfo.displayName()
         views.encryptedDeviceInfoDeviceId.text = cryptoDeviceInfo.deviceId

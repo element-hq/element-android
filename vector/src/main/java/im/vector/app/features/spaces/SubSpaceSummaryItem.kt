@@ -57,9 +57,10 @@ abstract class SubSpaceSummaryItem : VectorEpoxyModel<SubSpaceSummaryItem.Holder
         holder.moreView.onClick(onMore)
 
         holder.collapseIndicator.setImageDrawable(
-                ContextCompat.getDrawable(holder.view.context,
-                        if (expanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more
-                )
+            ContextCompat.getDrawable(
+                holder.view.context,
+                if (expanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more
+            )
         )
         holder.collapseIndicator.onClick(toggleExpand)
         holder.collapseIndicator.isVisible = hasChildren

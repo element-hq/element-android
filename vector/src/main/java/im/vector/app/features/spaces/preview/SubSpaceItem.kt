@@ -49,8 +49,8 @@ abstract class SubSpaceItem : VectorEpoxyModel<SubSpaceItem.Holder>() {
         holder.nameText.text = title
 
         avatarRenderer.render(
-                MatrixItem.SpaceItem(roomId, title, avatarUrl),
-                holder.avatarImageView
+            MatrixItem.SpaceItem(roomId, title, avatarUrl),
+            holder.avatarImageView
         )
         holder.tabView.tabDepth = depth
     }

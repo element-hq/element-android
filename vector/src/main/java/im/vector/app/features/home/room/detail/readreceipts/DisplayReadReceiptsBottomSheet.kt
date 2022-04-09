@@ -36,7 +36,7 @@ import javax.inject.Inject
 
 @Parcelize
 data class DisplayReadReceiptArgs(
-        val readReceipts: List<ReadReceiptData>
+    val readReceipts: List<ReadReceiptData>
 ) : Parcelable
 
 /**
@@ -44,8 +44,8 @@ data class DisplayReadReceiptArgs(
  */
 @AndroidEntryPoint
 class DisplayReadReceiptsBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
-        DisplayReadReceiptsController.Listener {
+    VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
+    DisplayReadReceiptsController.Listener {
 
     @Inject lateinit var epoxyController: DisplayReadReceiptsController
 

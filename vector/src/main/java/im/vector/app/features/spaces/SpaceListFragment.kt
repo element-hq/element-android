@@ -39,7 +39,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 class SpaceListFragment @Inject constructor(
-        private val spaceController: SpaceSummaryController
+    private val spaceController: SpaceSummaryController
 ) : VectorBaseFragment<FragmentGroupListBinding>(), SpaceSummaryController.Callback {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
@@ -56,59 +56,59 @@ class SpaceListFragment @Inject constructor(
         views.stateView.contentView = views.groupListView
         views.groupListView.configureWith(spaceController)
         EpoxyTouchHelper.initDragging(spaceController)
-                .withRecyclerView(views.groupListView)
-                .forVerticalList()
-                .withTarget(SpaceSummaryItem::class.java)
-                .andCallbacks(object : EpoxyTouchHelper.DragCallbacks<SpaceSummaryItem>() {
-                    var toPositionM: Int? = null
-                    var fromPositionM: Int? = null
-                    var initialElevation: Float? = null
+            .withRecyclerView(views.groupListView)
+            .forVerticalList()
+            .withTarget(SpaceSummaryItem::class.java)
+            .andCallbacks(object : EpoxyTouchHelper.DragCallbacks<SpaceSummaryItem>() {
+                var toPositionM: Int? = null
+                var fromPositionM: Int? = null
+                var initialElevation: Float? = null
 
-                    override fun onDragStarted(model: SpaceSummaryItem?, itemView: View?, adapterPosition: Int) {
-                        toPositionM = null
-                        fromPositionM = null
-                        model?.matrixItem?.id?.let {
-                            viewModel.handle(SpaceListAction.OnStartDragging(it, model.expanded))
-                        }
-                        itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                        initialElevation = itemView?.elevation
-                        itemView?.elevation = 6f
+                override fun onDragStarted(model: SpaceSummaryItem?, itemView: View?, adapterPosition: Int) {
+                    toPositionM = null
+                    fromPositionM = null
+                    model?.matrixItem?.id?.let {
+                        viewModel.handle(SpaceListAction.OnStartDragging(it, model.expanded))
                     }
+                    itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                    initialElevation = itemView?.elevation
+                    itemView?.elevation = 6f
+                }
 
-                    override fun onDragReleased(model: SpaceSummaryItem?, itemView: View?) {
-//                        Timber.v("VAL: onModelMoved from $fromPositionM to $toPositionM ${model?.matrixItem?.getBestName()}")
-                        if (toPositionM == null || fromPositionM == null) return
-                        val movingSpace = model?.matrixItem?.id ?: return
-                        viewModel.handle(SpaceListAction.MoveSpace(movingSpace, toPositionM!! - fromPositionM!!))
-                    }
+                override fun onDragReleased(model: SpaceSummaryItem?, itemView: View?) {
+                    //                        Timber.v("VAL: onModelMoved from $fromPositionM to $toPositionM ${model?.matrixItem?.getBestName()}")
+                    if (toPositionM == null || fromPositionM == null) return
+                    val movingSpace = model?.matrixItem?.id ?: return
+                    viewModel.handle(SpaceListAction.MoveSpace(movingSpace, toPositionM!! - fromPositionM!!))
+                }
 
-                    override fun clearView(model: SpaceSummaryItem?, itemView: View?) {
-//                        Timber.v("VAL: clearView ${model?.matrixItem?.getBestName()}")
-                        itemView?.elevation = initialElevation ?: 0f
-                    }
+                override fun clearView(model: SpaceSummaryItem?, itemView: View?) {
+                    //                        Timber.v("VAL: clearView ${model?.matrixItem?.getBestName()}")
+                    itemView?.elevation = initialElevation ?: 0f
+                }
 
-                    override fun onModelMoved(fromPosition: Int, toPosition: Int, modelBeingMoved: SpaceSummaryItem?, itemView: View?) {
-//                        Timber.v("VAL: onModelMoved incremental from $fromPosition to $toPosition ${modelBeingMoved?.matrixItem?.getBestName()}")
-                        if (fromPositionM == null) {
-                            fromPositionM = fromPosition
-                        }
-                        toPositionM = toPosition
-                        itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                override fun onModelMoved(fromPosition: Int, toPosition: Int, modelBeingMoved: SpaceSummaryItem?, itemView: View?) {
+                    //                        Timber.v("VAL: onModelMoved incremental from $fromPosition to $toPosition ${modelBeingMoved?.matrixItem?.getBestName()}")
+                    if (fromPositionM == null) {
+                        fromPositionM = fromPosition
                     }
+                    toPositionM = toPosition
+                    itemView?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                }
 
-                    override fun isDragEnabledForModel(model: SpaceSummaryItem?): Boolean {
-//                        Timber.v("VAL: isDragEnabledForModel ${model?.matrixItem?.getBestName()}")
-                        return model?.canDrag == true
-                    }
-                })
+                override fun isDragEnabledForModel(model: SpaceSummaryItem?): Boolean {
+                    //                        Timber.v("VAL: isDragEnabledForModel ${model?.matrixItem?.getBestName()}")
+                    return model?.canDrag == true
+                }
+            })
 
         viewModel.observeViewEvents {
             when (it) {
                 is SpaceListViewEvents.OpenSpaceSummary -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpacePreview(it.id))
-                is SpaceListViewEvents.OpenSpace        -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
-                is SpaceListViewEvents.AddSpace         -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
-                is SpaceListViewEvents.OpenGroup        -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
-                is SpaceListViewEvents.OpenSpaceInvite  -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
+                is SpaceListViewEvents.OpenSpace -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
+                is SpaceListViewEvents.AddSpace -> sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
+                is SpaceListViewEvents.OpenGroup -> sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(it.groupingMethodHasChanged))
+                is SpaceListViewEvents.OpenSpaceInvite -> sharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(it.id))
             }
         }
     }
@@ -124,7 +124,7 @@ class SpaceListFragment @Inject constructor(
             Uninitialized,
             is Loading -> views.stateView.state = StateView.State.Loading
             is Success -> views.stateView.state = StateView.State.Content
-            else       -> Unit
+            else -> Unit
         }
         spaceController.update(state)
     }

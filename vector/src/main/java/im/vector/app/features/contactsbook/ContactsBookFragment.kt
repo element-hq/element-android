@@ -45,7 +45,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class ContactsBookFragment @Inject constructor(
-        private val contactsBookController: ContactsBookController
+    private val contactsBookController: ContactsBookController
 ) : VectorBaseFragment<FragmentContactsBookBinding>(), ContactsBookController.Callback {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentContactsBookBinding {
@@ -67,10 +67,10 @@ class ContactsBookFragment @Inject constructor(
         setupConsentView()
         setupOnlyBoundContactsView()
         setupToolbar(views.phoneBookToolbar)
-                .allowBack(useCross = true)
+            .allowBack(useCross = true)
         contactsBookViewModel.observeViewEvents {
             when (it) {
-                is ContactsBookViewEvents.Failure             -> showFailure(it.throwable)
+                is ContactsBookViewEvents.Failure -> showFailure(it.throwable)
                 is ContactsBookViewEvents.OnPoliciesRetrieved -> showConsentDialog(it)
             }
         }
@@ -84,28 +84,28 @@ class ContactsBookFragment @Inject constructor(
 
     private fun showConsentDialog(event: ContactsBookViewEvents.OnPoliciesRetrieved) {
         requireContext().showIdentityServerConsentDialog(
-                event.identityServerWithTerms,
-                consentCallBack = { contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted) }
+            event.identityServerWithTerms,
+            consentCallBack = { contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted) }
         )
     }
 
     private fun setupOnlyBoundContactsView() {
         views.phoneBookOnlyBoundContacts.checkedChanges()
-                .onEach {
-                    contactsBookViewModel.handle(ContactsBookAction.OnlyBoundContacts(it))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                contactsBookViewModel.handle(ContactsBookAction.OnlyBoundContacts(it))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupFilterView() {
         views.phoneBookFilter
-                .textChanges()
-                .skipInitialValue()
-                .debounce(300)
-                .onEach {
-                    contactsBookViewModel.handle(ContactsBookAction.FilterWith(it.toString()))
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .textChanges()
+            .skipInitialValue()
+            .debounce(300)
+            .onEach {
+                contactsBookViewModel.handle(ContactsBookAction.FilterWith(it.toString()))
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onDestroyView() {

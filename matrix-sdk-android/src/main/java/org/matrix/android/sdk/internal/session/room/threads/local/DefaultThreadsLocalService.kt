@@ -38,10 +38,10 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.util.awaitTransaction
 
 internal class DefaultThreadsLocalService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        @UserId private val userId: String,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val timelineEventMapper: TimelineEventMapper,
+    @Assisted private val roomId: String,
+    @UserId private val userId: String,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val timelineEventMapper: TimelineEventMapper,
 ) : ThreadsLocalService {
 
     @AssistedFactory
@@ -51,39 +51,40 @@ internal class DefaultThreadsLocalService @AssistedInject constructor(
 
     override fun getMarkedThreadNotificationsLive(): LiveData<List<TimelineEvent>> {
         return monarchy.findAllMappedWithChanges(
-                { TimelineEventEntity.findAllLocalThreadNotificationsForRoomId(it, roomId = roomId) },
-                { timelineEventMapper.map(it) }
+            { TimelineEventEntity.findAllLocalThreadNotificationsForRoomId(it, roomId = roomId) },
+            { timelineEventMapper.map(it) }
         )
     }
 
     override fun getMarkedThreadNotifications(): List<TimelineEvent> {
         return monarchy.fetchAllMappedSync(
-                { TimelineEventEntity.findAllLocalThreadNotificationsForRoomId(it, roomId = roomId) },
-                { timelineEventMapper.map(it) }
+            { TimelineEventEntity.findAllLocalThreadNotificationsForRoomId(it, roomId = roomId) },
+            { timelineEventMapper.map(it) }
         )
     }
 
     override fun getAllThreadsLive(): LiveData<List<TimelineEvent>> {
         return monarchy.findAllMappedWithChanges(
-                { TimelineEventEntity.findAllThreadsForRoomId(it, roomId = roomId) },
-                { timelineEventMapper.map(it) }
+            { TimelineEventEntity.findAllThreadsForRoomId(it, roomId = roomId) },
+            { timelineEventMapper.map(it) }
         )
     }
 
     override fun getAllThreads(): List<TimelineEvent> {
         return monarchy.fetchAllMappedSync(
-                { TimelineEventEntity.findAllThreadsForRoomId(it, roomId = roomId) },
-                { timelineEventMapper.map(it) }
+            { TimelineEventEntity.findAllThreadsForRoomId(it, roomId = roomId) },
+            { timelineEventMapper.map(it) }
         )
     }
 
     override fun isUserParticipatingInThread(rootThreadEventId: String): Boolean {
         return Realm.getInstance(monarchy.realmConfiguration).use {
             TimelineEventEntity.isUserParticipatingInThread(
-                    realm = it,
-                    roomId = roomId,
-                    rootThreadEventId = rootThreadEventId,
-                    senderId = userId)
+                realm = it,
+                roomId = roomId,
+                rootThreadEventId = rootThreadEventId,
+                senderId = userId
+            )
         }
     }
 
@@ -96,8 +97,9 @@ internal class DefaultThreadsLocalService @AssistedInject constructor(
     override suspend fun markThreadAsRead(rootThreadEventId: String) {
         monarchy.awaitTransaction {
             EventEntity.where(
-                    realm = it,
-                    eventId = rootThreadEventId).findFirst()?.threadNotificationState = ThreadNotificationState.NO_NEW_MESSAGE
+                realm = it,
+                eventId = rootThreadEventId
+            ).findFirst()?.threadNotificationState = ThreadNotificationState.NO_NEW_MESSAGE
         }
     }
 }

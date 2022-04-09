@@ -68,9 +68,9 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         imageContentRenderer.render(mediaData, mode, holder.imageView, imageCornerTransformation)
         if (!attributes.informationData.sendState.hasFailed()) {
             contentUploadStateTrackerBinder.bind(
-                    attributes.informationData.eventId,
-                    LocalFilesHelper(holder.view.context).isLocalFile(mediaData.url),
-                    holder.progressLayout
+                attributes.informationData.eventId,
+                LocalFilesHelper(holder.view.context).isLocalFile(mediaData.url),
+                holder.progressLayout
             )
         } else {
             holder.progressLayout.isVisible = false

@@ -47,10 +47,12 @@ import javax.inject.Inject
  * TODO Update this comment
  * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
  */
-class MessageInformationDataFactory @Inject constructor(private val session: Session,
-                                                        private val dateFormatter: VectorDateFormatter,
-                                                        private val messageLayoutFactory: TimelineMessageLayoutFactory,
-                                                        private val reactionsSummaryFactory: ReactionsSummaryFactory) {
+class MessageInformationDataFactory @Inject constructor(
+    private val session: Session,
+    private val dateFormatter: VectorDateFormatter,
+    private val messageLayoutFactory: TimelineMessageLayoutFactory,
+    private val reactionsSummaryFactory: ReactionsSummaryFactory
+) {
 
     fun create(params: TimelineItemFactoryParams): MessageInformationData {
         val event = params.event
@@ -74,9 +76,9 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         // SendState Decoration
         val sendStateDecoration = if (isSentByMe) {
             getSendStateDecoration(
-                    event = event,
-                    lastSentEventWithoutReadReceipts = params.lastSentEventIdWithoutReadReceipts,
-                    isMedia = event.root.isAttachmentMessage()
+                event = event,
+                lastSentEventWithoutReadReceipts = params.lastSentEventIdWithoutReadReceipts,
+                isMedia = event.root.isAttachmentMessage()
             )
         } else {
             SendStateDecoration.NONE
@@ -85,47 +87,49 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val messageLayout = messageLayoutFactory.create(params)
 
         return MessageInformationData(
-                eventId = eventId,
-                senderId = event.root.senderId ?: "",
-                sendState = event.root.sendState,
-                time = time,
-                ageLocalTS = event.root.ageLocalTs,
-                avatarUrl = event.senderInfo.avatarUrl,
-                memberName = event.senderInfo.disambiguatedDisplayName,
-                messageLayout = messageLayout,
-                reactionsSummary = reactionsSummaryFactory.create(event),
-                pollResponseAggregatedSummary = event.annotations?.pollResponseSummary?.let {
-                    PollResponseData(
-                            myVote = it.aggregatedContent?.myVote,
-                            isClosed = it.closedTime != null,
-                            votes = it.aggregatedContent?.votesSummary?.mapValues { votesSummary ->
-                                PollVoteSummaryData(
-                                        total = votesSummary.value.total,
-                                        percentage = votesSummary.value.percentage
-                                )
-                            },
-                            winnerVoteCount = it.aggregatedContent?.winnerVoteCount ?: 0,
-                            totalVotes = it.aggregatedContent?.totalVotes ?: 0
-                    )
-                },
-                hasBeenEdited = event.hasBeenEdited(),
-                hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false,
-                referencesInfoData = event.annotations?.referencesAggregatedSummary?.let { referencesAggregatedSummary ->
-                    val verificationState = referencesAggregatedSummary.content.toModel<ReferencesAggregatedContent>()?.verificationState
-                            ?: VerificationState.REQUEST
-                    ReferencesInfoData(verificationState)
-                },
-                sentByMe = isSentByMe,
-                isFirstFromThisSender = isFirstFromThisSender,
-                isLastFromThisSender = isLastFromThisSender,
-                e2eDecoration = e2eDecoration,
-                sendStateDecoration = sendStateDecoration
+            eventId = eventId,
+            senderId = event.root.senderId ?: "",
+            sendState = event.root.sendState,
+            time = time,
+            ageLocalTS = event.root.ageLocalTs,
+            avatarUrl = event.senderInfo.avatarUrl,
+            memberName = event.senderInfo.disambiguatedDisplayName,
+            messageLayout = messageLayout,
+            reactionsSummary = reactionsSummaryFactory.create(event),
+            pollResponseAggregatedSummary = event.annotations?.pollResponseSummary?.let {
+                PollResponseData(
+                    myVote = it.aggregatedContent?.myVote,
+                    isClosed = it.closedTime != null,
+                    votes = it.aggregatedContent?.votesSummary?.mapValues { votesSummary ->
+                        PollVoteSummaryData(
+                            total = votesSummary.value.total,
+                            percentage = votesSummary.value.percentage
+                        )
+                    },
+                    winnerVoteCount = it.aggregatedContent?.winnerVoteCount ?: 0,
+                    totalVotes = it.aggregatedContent?.totalVotes ?: 0
+                )
+            },
+            hasBeenEdited = event.hasBeenEdited(),
+            hasPendingEdits = event.annotations?.editSummary?.localEchos?.any() ?: false,
+            referencesInfoData = event.annotations?.referencesAggregatedSummary?.let { referencesAggregatedSummary ->
+                val verificationState = referencesAggregatedSummary.content.toModel<ReferencesAggregatedContent>()?.verificationState
+                    ?: VerificationState.REQUEST
+                ReferencesInfoData(verificationState)
+            },
+            sentByMe = isSentByMe,
+            isFirstFromThisSender = isFirstFromThisSender,
+            isLastFromThisSender = isLastFromThisSender,
+            e2eDecoration = e2eDecoration,
+            sendStateDecoration = sendStateDecoration
         )
     }
 
-    private fun getSendStateDecoration(event: TimelineEvent,
-                                       lastSentEventWithoutReadReceipts: String?,
-                                       isMedia: Boolean): SendStateDecoration {
+    private fun getSendStateDecoration(
+        event: TimelineEvent,
+        lastSentEventWithoutReadReceipts: String?,
+        isMedia: Boolean
+    ): SendStateDecoration {
         val eventSendState = event.root.sendState
         return if (eventSendState.isSending()) {
             if (isMedia) SendStateDecoration.SENDING_MEDIA else SendStateDecoration.SENDING_NON_MEDIA
@@ -140,10 +144,11 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
     private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration {
         return if (
-                event.root.sendState == SendState.SYNCED &&
-                roomSummary?.isEncrypted.orFalse() &&
-                // is user verified
-                session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true) {
+            event.root.sendState == SendState.SYNCED &&
+            roomSummary?.isEncrypted.orFalse() &&
+            // is user verified
+            session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true
+        ) {
             val ts = roomSummary?.encryptionEventTs ?: 0
             val eventTs = event.root.originServerTs ?: 0
             if (event.isEncrypted()) {
@@ -152,24 +157,24 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                     E2EDecoration.NONE
                 } else {
                     val sendingDevice = event.root.content
-                            .toModel<EncryptedEventContent>()
-                            ?.deviceId
-                            ?.let { deviceId ->
-                                session.cryptoService().getDeviceInfo(event.root.senderId ?: "", deviceId)
-                            }
+                        .toModel<EncryptedEventContent>()
+                        ?.deviceId
+                        ?.let { deviceId ->
+                            session.cryptoService().getDeviceInfo(event.root.senderId ?: "", deviceId)
+                        }
                     when {
-                        sendingDevice == null                            -> {
+                        sendingDevice == null -> {
                             // For now do not decorate this with warning
                             // maybe it's a deleted session
                             E2EDecoration.NONE
                         }
-                        sendingDevice.trustLevel == null                 -> {
+                        sendingDevice.trustLevel == null -> {
                             E2EDecoration.WARN_SENT_BY_UNKNOWN
                         }
                         sendingDevice.trustLevel?.isVerified().orFalse() -> {
                             E2EDecoration.NONE
                         }
-                        else                                             -> {
+                        else -> {
                             E2EDecoration.WARN_SENT_BY_UNVERIFIED
                         }
                     }
@@ -196,10 +201,10 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         return when (event?.root?.getClearType()) {
             EventType.KEY_VERIFICATION_DONE,
             EventType.KEY_VERIFICATION_CANCEL -> true
-            EventType.MESSAGE                 -> {
+            EventType.MESSAGE -> {
                 event.getLastMessageContent() is MessageVerificationRequestContent
             }
-            else                              -> false
+            else -> false
         }
     }
 }

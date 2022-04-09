@@ -34,14 +34,14 @@ class BluetoothHeadsetReceiver : BroadcastReceiver() {
     var delegate: WeakReference<EventListener>? = null
 
     data class BTHeadsetPlugEvent(
-            val plugged: Boolean,
-            val headsetName: String?,
-            /**
-             * BluetoothClass.Device.AUDIO_VIDEO_HANDSFREE
-             * BluetoothClass.Device.AUDIO_VIDEO_CAR_AUDIO
-             * AUDIO_VIDEO_WEARABLE_HEADSET
-             */
-            val deviceClass: Int
+        val plugged: Boolean,
+        val headsetName: String?,
+        /**
+         * BluetoothClass.Device.AUDIO_VIDEO_HANDSFREE
+         * BluetoothClass.Device.AUDIO_VIDEO_CAR_AUDIO
+         * AUDIO_VIDEO_WEARABLE_HEADSET
+         */
+        val deviceClass: Int
     )
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -53,9 +53,9 @@ class BluetoothHeadsetReceiver : BroadcastReceiver() {
         // STATE_DISCONNECTED}, STATE_CONNECTING, STATE_CONNECTED, STATE_DISCONNECTING
 
         val headsetConnected = when (intent?.getIntExtra(BluetoothAdapter.EXTRA_CONNECTION_STATE, -1)) {
-            BluetoothAdapter.STATE_CONNECTED    -> true
+            BluetoothAdapter.STATE_CONNECTED -> true
             BluetoothAdapter.STATE_DISCONNECTED -> false
-            else                                -> return // ignore intermediate states
+            else -> return // ignore intermediate states
         }
 
         val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
@@ -66,14 +66,14 @@ class BluetoothHeadsetReceiver : BroadcastReceiver() {
             BluetoothClass.Device.AUDIO_VIDEO_WEARABLE_HEADSET -> {
                 // filter only device that we care about for
                 delegate?.get()?.onBTHeadsetEvent(
-                        BTHeadsetPlugEvent(
-                                plugged = headsetConnected,
-                                headsetName = deviceName,
-                                deviceClass = device.bluetoothClass.deviceClass
-                        )
+                    BTHeadsetPlugEvent(
+                        plugged = headsetConnected,
+                        headsetName = deviceName,
+                        deviceClass = device.bluetoothClass.deviceClass
+                    )
                 )
             }
-            else                                               -> return
+            else -> return
         }
     }
 

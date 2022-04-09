@@ -36,7 +36,7 @@ private val A_SUMMARY_NOTIFICATION = SummaryNotification.Update(mockk())
 private val A_REMOVE_SUMMARY_NOTIFICATION = SummaryNotification.Removed
 private val A_NOTIFICATION = mockk<Notification>()
 private val MESSAGE_META = RoomNotification.Message.Meta(
-        summaryLine = "ignored", messageCount = 1, latestTimestamp = -1, roomId = A_ROOM_ID, shouldBing = false
+    summaryLine = "ignored", messageCount = 1, latestTimestamp = -1, roomId = A_ROOM_ID, shouldBing = false
 )
 private val ONE_SHOT_META = OneShotNotification.Append.Meta(key = "ignored", summaryLine = "ignored", isNoisy = false, timestamp = -1)
 
@@ -47,9 +47,9 @@ class NotificationRendererTest {
     private val notificationFactory = FakeNotificationFactory()
 
     private val notificationRenderer = NotificationRenderer(
-            notificationDisplayer = notificationDisplayer.instance,
-            notificationFactory = notificationFactory.instance,
-            appContext = context.instance
+        notificationDisplayer = notificationDisplayer.instance,
+        notificationFactory = notificationFactory.instance,
+        appContext = context.instance
     )
 
     @Test
@@ -88,10 +88,14 @@ class NotificationRendererTest {
 
     @Test
     fun `given a room message group notification is added when rendering then show the message notification and update summary`() {
-        givenNotifications(roomNotifications = listOf(RoomNotification.Message(
-                A_NOTIFICATION,
-                MESSAGE_META
-        )))
+        givenNotifications(
+            roomNotifications = listOf(
+                RoomNotification.Message(
+                    A_NOTIFICATION,
+                    MESSAGE_META
+                )
+            )
+        )
 
         renderEventsAsNotifications()
 
@@ -127,10 +131,14 @@ class NotificationRendererTest {
 
     @Test
     fun `given a simple notification is added when rendering then show the simple notification and update summary`() {
-        givenNotifications(simpleNotifications = listOf(OneShotNotification.Append(
-                A_NOTIFICATION,
-                ONE_SHOT_META.copy(key = AN_EVENT_ID)
-        )))
+        givenNotifications(
+            simpleNotifications = listOf(
+                OneShotNotification.Append(
+                    A_NOTIFICATION,
+                    ONE_SHOT_META.copy(key = AN_EVENT_ID)
+                )
+            )
+        )
 
         renderEventsAsNotifications()
 
@@ -166,10 +174,14 @@ class NotificationRendererTest {
 
     @Test
     fun `given an invitation notification is added when rendering then show the invitation notification and update summary`() {
-        givenNotifications(simpleNotifications = listOf(OneShotNotification.Append(
-                A_NOTIFICATION,
-                ONE_SHOT_META.copy(key = A_ROOM_ID)
-        )))
+        givenNotifications(
+            simpleNotifications = listOf(
+                OneShotNotification.Append(
+                    A_NOTIFICATION,
+                    ONE_SHOT_META.copy(key = A_ROOM_ID)
+                )
+            )
+        )
 
         renderEventsAsNotifications()
 
@@ -181,11 +193,11 @@ class NotificationRendererTest {
 
     private fun renderEventsAsNotifications() {
         notificationRenderer.render(
-                myUserId = MY_USER_ID,
-                myUserDisplayName = MY_USER_DISPLAY_NAME,
-                myUserAvatarUrl = MY_USER_AVATAR_URL,
-                useCompleteNotificationFormat = USE_COMPLETE_NOTIFICATION_FORMAT,
-                eventsToProcess = AN_EVENT_LIST
+            myUserId = MY_USER_ID,
+            myUserDisplayName = MY_USER_DISPLAY_NAME,
+            myUserAvatarUrl = MY_USER_AVATAR_URL,
+            useCompleteNotificationFormat = USE_COMPLETE_NOTIFICATION_FORMAT,
+            eventsToProcess = AN_EVENT_LIST
         )
     }
 
@@ -193,21 +205,23 @@ class NotificationRendererTest {
         givenNotifications(emptyList(), emptyList(), emptyList(), USE_COMPLETE_NOTIFICATION_FORMAT, A_REMOVE_SUMMARY_NOTIFICATION)
     }
 
-    private fun givenNotifications(roomNotifications: List<RoomNotification> = emptyList(),
-                                   invitationNotifications: List<OneShotNotification> = emptyList(),
-                                   simpleNotifications: List<OneShotNotification> = emptyList(),
-                                   useCompleteNotificationFormat: Boolean = USE_COMPLETE_NOTIFICATION_FORMAT,
-                                   summaryNotification: SummaryNotification = A_SUMMARY_NOTIFICATION) {
+    private fun givenNotifications(
+        roomNotifications: List<RoomNotification> = emptyList(),
+        invitationNotifications: List<OneShotNotification> = emptyList(),
+        simpleNotifications: List<OneShotNotification> = emptyList(),
+        useCompleteNotificationFormat: Boolean = USE_COMPLETE_NOTIFICATION_FORMAT,
+        summaryNotification: SummaryNotification = A_SUMMARY_NOTIFICATION
+    ) {
         notificationFactory.givenNotificationsFor(
-                groupedEvents = A_PROCESSED_EVENTS,
-                myUserId = MY_USER_ID,
-                myUserDisplayName = MY_USER_DISPLAY_NAME,
-                myUserAvatarUrl = MY_USER_AVATAR_URL,
-                useCompleteNotificationFormat = useCompleteNotificationFormat,
-                roomNotifications = roomNotifications,
-                invitationNotifications = invitationNotifications,
-                simpleNotifications = simpleNotifications,
-                summaryNotification = summaryNotification
+            groupedEvents = A_PROCESSED_EVENTS,
+            myUserId = MY_USER_ID,
+            myUserDisplayName = MY_USER_DISPLAY_NAME,
+            myUserAvatarUrl = MY_USER_AVATAR_URL,
+            useCompleteNotificationFormat = useCompleteNotificationFormat,
+            roomNotifications = roomNotifications,
+            invitationNotifications = invitationNotifications,
+            simpleNotifications = simpleNotifications,
+            summaryNotification = summaryNotification
         )
     }
 }

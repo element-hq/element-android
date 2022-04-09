@@ -35,7 +35,7 @@ import javax.inject.Inject
 
 // Referenced in vector_settings_notifications.xml
 class PushGatewaysFragment @Inject constructor(
-        private val epoxyController: PushGateWayController
+    private val epoxyController: PushGateWayController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {
@@ -52,7 +52,7 @@ class PushGatewaysFragment @Inject constructor(
                 viewModel.handle(PushGatewayAction.Refresh)
                 true
             }
-            else         ->
+            else ->
                 super.onOptionsItemSelected(item)
         }
     }
@@ -72,10 +72,10 @@ class PushGatewaysFragment @Inject constructor(
             when (it) {
                 is PushGatewayViewEvents.RemovePusherFailed -> {
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(R.string.dialog_title_error)
-                            .setMessage(errorFormatter.toHumanReadable(it.cause))
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show()
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(errorFormatter.toHumanReadable(it.cause))
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show()
                 }
             }
         }

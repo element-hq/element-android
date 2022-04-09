@@ -20,33 +20,33 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class ThirdPartyIdentifier(
-        /**
-         * Required. The medium of the third party identifier. One of: ["email", "msisdn"]
-         */
-        @Json(name = "medium")
-        val medium: String? = null,
+    /**
+     * Required. The medium of the third party identifier. One of: ["email", "msisdn"]
+     */
+    @Json(name = "medium")
+    val medium: String? = null,
 
-        /**
-         * Required. The third party identifier address.
-         */
-        @Json(name = "address")
-        val address: String? = null,
+    /**
+     * Required. The third party identifier address.
+     */
+    @Json(name = "address")
+    val address: String? = null,
 
-        /**
-         * Required. The timestamp in milliseconds when this 3PID has been validated.
-         * Define as Object because it should be Long and it is a Double.
-         * So, it might change.
-         */
-        @Json(name = "validated_at")
-        val validatedAt: Any? = null,
+    /**
+     * Required. The timestamp in milliseconds when this 3PID has been validated.
+     * Define as Object because it should be Long and it is a Double.
+     * So, it might change.
+     */
+    @Json(name = "validated_at")
+    val validatedAt: Any? = null,
 
-        /**
-         * Required. The timestamp in milliseconds when this 3PID has been added to the user account.
-         * Define as Object because it should be Long and it is a Double.
-         * So, it might change.
-         */
-        @Json(name = "added_at")
-        val addedAt: Any? = null
+    /**
+     * Required. The timestamp in milliseconds when this 3PID has been added to the user account.
+     * Define as Object because it should be Long and it is a Double.
+     * So, it might change.
+     */
+    @Json(name = "added_at")
+    val addedAt: Any? = null
 ) {
     companion object {
         const val MEDIUM_EMAIL = "email"

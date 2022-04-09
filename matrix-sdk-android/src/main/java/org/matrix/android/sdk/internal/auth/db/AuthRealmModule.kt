@@ -21,9 +21,11 @@ import io.realm.annotations.RealmModule
 /**
  * Realm module for authentication classes
  */
-@RealmModule(library = true,
-        classes = [
-            SessionParamsEntity::class,
-            PendingSessionEntity::class
-        ])
+@RealmModule(
+    library = true,
+    classes = [
+        SessionParamsEntity::class,
+        PendingSessionEntity::class
+    ]
+)
 internal class AuthRealmModule

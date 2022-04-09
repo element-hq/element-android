@@ -28,11 +28,11 @@ class MigrateSessionTo015(realm: DynamicRealm) : RealmMigrator(realm, 15) {
         // fix issue with flattenParentIds on DM that kept growing with duplicate
         // so we reset it, will be updated next sync
         realm.where("RoomSummaryEntity")
-                .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
-                .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                .findAll()
-                .onEach {
-                    it.setString(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, null)
-                }
+            .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
+            .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            .findAll()
+            .onEach {
+                it.setString(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, null)
+            }
     }
 }

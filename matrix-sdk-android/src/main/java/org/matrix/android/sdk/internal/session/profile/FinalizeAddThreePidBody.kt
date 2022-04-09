@@ -20,21 +20,21 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class FinalizeAddThreePidBody(
-        /**
-         * Required. The client secret used in the session with the homeserver.
-         */
-        @Json(name = "client_secret")
-        val clientSecret: String,
+    /**
+     * Required. The client secret used in the session with the homeserver.
+     */
+    @Json(name = "client_secret")
+    val clientSecret: String,
 
-        /**
-         * Required. The session identifier given by the homeserver.
-         */
-        @Json(name = "sid")
-        val sid: String,
+    /**
+     * Required. The session identifier given by the homeserver.
+     */
+    @Json(name = "sid")
+    val sid: String,
 
-        /**
-         * Additional authentication information for the user-interactive authentication API.
-         */
-        @Json(name = "auth")
-        val auth: Map<String, *>? = null
+    /**
+     * Additional authentication information for the user-interactive authentication API.
+     */
+    @Json(name = "auth")
+    val auth: Map<String, *>? = null
 )

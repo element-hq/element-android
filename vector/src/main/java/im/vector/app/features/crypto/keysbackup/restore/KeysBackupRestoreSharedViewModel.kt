@@ -42,12 +42,12 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class KeysBackupRestoreSharedViewModel @Inject constructor(
-        private val stringProvider: StringProvider
+    private val stringProvider: StringProvider
 ) : ViewModel() {
 
     data class KeySource(
-            val isInMemory: Boolean,
-            val isInQuadS: Boolean
+        val isInMemory: Boolean,
+        val isInQuadS: Boolean
     )
 
     companion object {
@@ -83,29 +83,45 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     val progressObserver = object : StepProgressListener {
         override fun onStepProgress(step: StepProgressListener.Step) {
             when (step) {
-                is StepProgressListener.Step.ComputingKey   -> {
-                    loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                            "\n" + stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                is StepProgressListener.Step.ComputingKey -> {
+                    loadingEvent.postValue(
+                        WaitingViewData(
+                            stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
+                                    "\n" + stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
                             step.progress,
-                            step.total))
+                            step.total
+                        )
+                    )
                 }
                 is StepProgressListener.Step.DownloadingKey -> {
-                    loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                            "\n" + stringProvider.getString(R.string.keys_backup_restoring_downloading_backup_waiting_message),
-                            isIndeterminate = true))
+                    loadingEvent.postValue(
+                        WaitingViewData(
+                            stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
+                                    "\n" + stringProvider.getString(R.string.keys_backup_restoring_downloading_backup_waiting_message),
+                            isIndeterminate = true
+                        )
+                    )
                 }
-                is StepProgressListener.Step.ImportingKey   -> {
+                is StepProgressListener.Step.ImportingKey -> {
                     Timber.d("backupKeys.ImportingKey.progress: ${step.progress}")
                     // Progress 0 can take a while, display an indeterminate progress in this case
                     if (step.progress == 0) {
-                        loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
-                                isIndeterminate = true))
+                        loadingEvent.postValue(
+                            WaitingViewData(
+                                stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
+                                        "\n" + stringProvider.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                                isIndeterminate = true
+                            )
+                        )
                     } else {
-                        loadingEvent.postValue(WaitingViewData(stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
-                                "\n" + stringProvider.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
+                        loadingEvent.postValue(
+                            WaitingViewData(
+                                stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
+                                        "\n" + stringProvider.getString(R.string.keys_backup_restoring_importing_keys_waiting_message),
                                 step.progress,
-                                step.total))
+                                step.total
+                            )
+                        )
                     }
                 }
             }
@@ -136,26 +152,26 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                 if (savedSecret != null && savedSecret.version == version.version) {
                     // key is in memory!
                     keySourceModel.postValue(
-                            KeySource(isInMemory = true, isInQuadS = true)
+                        KeySource(isInMemory = true, isInQuadS = true)
                     )
                     // Go and use it!!
                     try {
                         recoverUsingBackupRecoveryKey(savedSecret.recoveryKey)
                     } catch (failure: Throwable) {
                         keySourceModel.postValue(
-                                KeySource(isInMemory = false, isInQuadS = true)
+                            KeySource(isInMemory = false, isInQuadS = true)
                         )
                     }
                 } else if (isBackupKeyInQuadS) {
                     // key is in QuadS!
                     keySourceModel.postValue(
-                            KeySource(isInMemory = false, isInQuadS = true)
+                        KeySource(isInMemory = false, isInQuadS = true)
                     )
                     _navigateEvent.postValue(LiveEvent(NAVIGATE_TO_4S))
                 } else {
                     // we need to restore directly
                     keySourceModel.postValue(
-                            KeySource(isInMemory = false, isInQuadS = false)
+                        KeySource(isInMemory = false, isInQuadS = false)
                     )
                 }
 
@@ -174,7 +190,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME)
                 if (secret == null) {
                     _navigateEvent.postValue(
-                            LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)
+                        LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)
                     )
                     return
                 }
@@ -185,14 +201,14 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                         recoverUsingBackupRecoveryKey(computeRecoveryKey(secret.fromBase64()))
                     } catch (failure: Throwable) {
                         _navigateEvent.postValue(
-                                LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)
+                            LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)
                         )
                     }
                 }
             }
         } catch (failure: Throwable) {
             _navigateEvent.postValue(
-                    LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)
+                LiveEvent(NAVIGATE_FAILED_TO_LOAD_4S)
             )
         }
     }
@@ -205,12 +221,13 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
 
         try {
             val result = awaitCallback<ImportRoomKeysResult> {
-                keysBackup.restoreKeyBackupWithPassword(keyVersion,
-                        passphrase,
-                        null,
-                        session.myUserId,
-                        progressObserver,
-                        it
+                keysBackup.restoreKeyBackupWithPassword(
+                    keyVersion,
+                    passphrase,
+                    null,
+                    session.myUserId,
+                    progressObserver,
+                    it
                 )
             }
             loadingEvent.postValue(null)
@@ -230,12 +247,13 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
 
         try {
             val result = awaitCallback<ImportRoomKeysResult> {
-                keysBackup.restoreKeysWithRecoveryKey(keyVersion,
-                        recoveryKey,
-                        null,
-                        session.myUserId,
-                        progressObserver,
-                        it
+                keysBackup.restoreKeysWithRecoveryKey(
+                    keyVersion,
+                    recoveryKey,
+                    null,
+                    session.myUserId,
+                    progressObserver,
+                    it
                 )
             }
             loadingEvent.postValue(null)
@@ -249,23 +267,23 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
 
     private fun isBackupKeyInQuadS(): Boolean {
         val sssBackupSecret = session.accountDataService().getUserAccountDataEvent(KEYBACKUP_SECRET_SSSS_NAME)
-                ?: return false
+            ?: return false
 
         // Some sanity ?
         val defaultKeyResult = session.sharedSecretStorageService.getDefaultKey()
         val keyInfo = (defaultKeyResult as? KeyInfoResult.Success)?.keyInfo
-                ?: return false
+            ?: return false
 
         return (sssBackupSecret.content["encrypted"] as? Map<*, *>)?.containsKey(keyInfo.id) == true
     }
 
     private fun trustOnDecrypt(keysBackup: KeysBackupService, keysVersionResult: KeysVersionResult) {
         keysBackup.trustKeysBackupVersion(keysVersionResult, true,
-                object : MatrixCallback<Unit> {
-                    override fun onSuccess(data: Unit) {
-                        Timber.v("##### trustKeysBackupVersion onSuccess")
-                    }
-                })
+            object : MatrixCallback<Unit> {
+                override fun onSuccess(data: Unit) {
+                    Timber.v("##### trustKeysBackupVersion onSuccess")
+                }
+            })
     }
 
     fun moveToRecoverWithKey() {

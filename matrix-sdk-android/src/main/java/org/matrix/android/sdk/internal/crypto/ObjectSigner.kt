@@ -19,8 +19,10 @@ package org.matrix.android.sdk.internal.crypto
 import org.matrix.android.sdk.api.auth.data.Credentials
 import javax.inject.Inject
 
-internal class ObjectSigner @Inject constructor(private val credentials: Credentials,
-                                                private val olmDevice: MXOlmDevice) {
+internal class ObjectSigner @Inject constructor(
+    private val credentials: Credentials,
+    private val olmDevice: MXOlmDevice
+) {
 
     /**
      * Sign Object
@@ -43,7 +45,7 @@ internal class ObjectSigner @Inject constructor(private val credentials: Credent
         val content = HashMap<String, String>()
 
         content["ed25519:" + credentials.deviceId] = olmDevice.signMessage(strToSign)
-                ?: "" // null reported by rageshake if happens during logout
+            ?: "" // null reported by rageshake if happens during logout
 
         result[credentials.userId] = content
 

@@ -36,7 +36,7 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class ViewEditHistoryBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>() {
+    VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>() {
 
     private val viewModel: ViewEditHistoryViewModel by fragmentViewModel(ViewEditHistoryViewModel::class)
 
@@ -49,9 +49,10 @@ class ViewEditHistoryBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.bottomSheetRecyclerView.configureWith(
-                epoxyController,
-                dividerDrawable = R.drawable.divider_horizontal_on_secondary,
-                hasFixedSize = false)
+            epoxyController,
+            dividerDrawable = R.drawable.divider_horizontal_on_secondary,
+            hasFixedSize = false
+        )
         views.bottomSheetTitle.text = context?.getString(R.string.message_edits)
     }
 
@@ -68,11 +69,13 @@ class ViewEditHistoryBottomSheet :
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): ViewEditHistoryBottomSheet {
             return ViewEditHistoryBottomSheet().apply {
-                setArguments(TimelineEventFragmentArgs(
+                setArguments(
+                    TimelineEventFragmentArgs(
                         eventId = informationData.eventId,
                         roomId = roomId,
                         informationData = informationData
-                ))
+                    )
+                )
             }
         }
     }

@@ -31,7 +31,7 @@ import javax.inject.Inject
  * in the session DB, this class encapsulate this functionality
  */
 internal class CryptoSessionInfoProvider @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy
+    @SessionDatabase private val monarchy: Monarchy
 ) {
 
     fun isRoomEncrypted(roomId: String): Boolean {
@@ -39,8 +39,8 @@ internal class CryptoSessionInfoProvider @Inject constructor(
         // the latest one or if it is well formed
         val encryptionEvent = monarchy.fetchCopied { realm ->
             EventEntity.whereType(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
-                    .isEmpty(EventEntityFields.STATE_KEY)
-                    .findFirst()
+                .isEmpty(EventEntityFields.STATE_KEY)
+                .findFirst()
         }
         return encryptionEvent != null
     }
@@ -48,7 +48,7 @@ internal class CryptoSessionInfoProvider @Inject constructor(
     /**
      * @param allActive if true return joined as well as invited, if false, only joined
      */
-     fun getRoomUserIds(roomId: String, allActive: Boolean): List<String> {
+    fun getRoomUserIds(roomId: String, allActive: Boolean): List<String> {
         var userIds: List<String> = emptyList()
         monarchy.doWithRealm { realm ->
             userIds = if (allActive) {

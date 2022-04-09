@@ -24,9 +24,9 @@ import org.matrix.android.sdk.api.session.room.uploads.GetUploadsResult
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
 
 internal class DefaultUploadsService @AssistedInject constructor(
-        @Assisted private val roomId: String,
-        private val getUploadsTask: GetUploadsTask,
-        private val cryptoService: CryptoService
+    @Assisted private val roomId: String,
+    private val getUploadsTask: GetUploadsTask,
+    private val cryptoService: CryptoService
 ) : UploadsService {
 
     @AssistedFactory

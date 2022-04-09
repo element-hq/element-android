@@ -28,12 +28,12 @@ import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
  * or may be choosing to not send the megolm key to devices that they have not verified yet.
  */
 internal open class WithHeldSessionEntity(
-        var roomId: String? = null,
-        var algorithm: String? = null,
-        @Index var sessionId: String? = null,
-        @Index var senderKey: String? = null,
-        var codeString: String? = null,
-        var reason: String? = null
+    var roomId: String? = null,
+    var algorithm: String? = null,
+    @Index var sessionId: String? = null,
+    @Index var senderKey: String? = null,
+    var codeString: String? = null,
+    var reason: String? = null
 ) : RealmObject() {
 
     var code: WithHeldCode?

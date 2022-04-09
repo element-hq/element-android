@@ -25,13 +25,13 @@ import javax.inject.Inject
 
 internal interface ResolveRoomStateTask : Task<ResolveRoomStateTask.Params, List<Event>> {
     data class Params(
-            val roomId: String
+        val roomId: String
     )
 }
 
 internal class DefaultResolveRoomStateTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : ResolveRoomStateTask {
 
     override suspend fun execute(params: ResolveRoomStateTask.Params): List<Event> {

@@ -25,9 +25,9 @@ class MigrateSessionTo001(realm: DynamicRealm) : RealmMigrator(realm, 1) {
     override fun doMigrate(realm: DynamicRealm) {
         // Add hasFailedSending in RoomSummary and a small warning icon on room list
         realm.schema.get("RoomSummaryEntity")
-                ?.addField(RoomSummaryEntityFields.HAS_FAILED_SENDING, Boolean::class.java)
-                ?.transform { obj ->
-                    obj.setBoolean(RoomSummaryEntityFields.HAS_FAILED_SENDING, false)
-                }
+            ?.addField(RoomSummaryEntityFields.HAS_FAILED_SENDING, Boolean::class.java)
+            ?.transform { obj ->
+                obj.setBoolean(RoomSummaryEntityFields.HAS_FAILED_SENDING, false)
+            }
     }
 }

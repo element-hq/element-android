@@ -19,23 +19,23 @@ package im.vector.app.features.notifications
 import timber.log.Timber
 
 data class NotificationEventQueue(
-        private val queue: MutableList<NotifiableEvent>,
+    private val queue: MutableList<NotifiableEvent>,
 
-        /**
-         * An in memory FIFO cache of the seen events.
-         * Acts as a notification debouncer to stop already dismissed push notifications from
-         * displaying again when the /sync response is delayed.
-         */
-        private val seenEventIds: CircularCache<String>
+    /**
+     * An in memory FIFO cache of the seen events.
+     * Acts as a notification debouncer to stop already dismissed push notifications from
+     * displaying again when the /sync response is delayed.
+     */
+    private val seenEventIds: CircularCache<String>
 ) {
 
     fun markRedacted(eventIds: List<String>) {
         eventIds.forEach { redactedId ->
             queue.replace(redactedId) {
                 when (it) {
-                    is InviteNotifiableEvent  -> it.copy(isRedacted = true)
+                    is InviteNotifiableEvent -> it.copy(isRedacted = true)
                     is NotifiableMessageEvent -> it.copy(isRedacted = true)
-                    is SimpleNotifiableEvent  -> it.copy(isRedacted = true)
+                    is SimpleNotifiableEvent -> it.copy(isRedacted = true)
                 }
             }
         }
@@ -46,8 +46,8 @@ data class NotificationEventQueue(
             queue.removeAll {
                 when (it) {
                     is NotifiableMessageEvent -> roomsLeft.contains(it.roomId)
-                    is InviteNotifiableEvent  -> roomsLeft.contains(it.roomId) || roomsJoined.contains(it.roomId)
-                    else                      -> false
+                    is InviteNotifiableEvent -> roomsLeft.contains(it.roomId) || roomsJoined.contains(it.roomId)
+                    else -> false
                 }
             }
         }
@@ -68,7 +68,7 @@ data class NotificationEventQueue(
         val existing = findExistingById(notifiableEvent)
         val edited = findEdited(notifiableEvent)
         when {
-            existing != null                               -> {
+            existing != null -> {
                 if (existing.canBeReplaced) {
                     // Use the event coming from the event stream as it may contains more info than
                     // the fcm one (like type/content/clear text) (e.g when an encrypted message from
@@ -83,7 +83,7 @@ data class NotificationEventQueue(
                     // keep the existing one, do not replace
                 }
             }
-            edited != null                                 -> {
+            edited != null -> {
                 // Replace the existing notification with the new content
                 replace(replace = edited, with = notifiableEvent)
             }
@@ -91,7 +91,7 @@ data class NotificationEventQueue(
                 // we've already seen the event, lets skip
                 Timber.d("onNotifiableEventReceived(): skipping event, already seen")
             }
-            else                                           -> {
+            else -> {
                 seenEventIds.put(notifiableEvent.eventId)
                 queue.add(notifiableEvent)
             }

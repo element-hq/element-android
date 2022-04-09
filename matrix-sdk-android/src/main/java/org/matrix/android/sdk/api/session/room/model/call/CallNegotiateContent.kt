@@ -24,39 +24,39 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class CallNegotiateContent(
-        /**
-         * Required. The ID of the call this event relates to.
-         */
-        @Json(name = "call_id") override val callId: String,
-        /**
-         * Required. ID to let user identify remote echo of their own events
-         */
-        @Json(name = "party_id") override val partyId: String? = null,
-        /**
-         * Required. The time in milliseconds that the negotiation is valid for. Once exceeded the sender
-         * of the negotiate event should consider the negotiation failed (timed out) and the recipient should ignore it.
-         **/
-        @Json(name = "lifetime") val lifetime: Int?,
-        /**
-         * Required. The session description object
-         */
-        @Json(name = "description") val description: Description? = null,
+    /**
+     * Required. The ID of the call this event relates to.
+     */
+    @Json(name = "call_id") override val callId: String,
+    /**
+     * Required. ID to let user identify remote echo of their own events
+     */
+    @Json(name = "party_id") override val partyId: String? = null,
+    /**
+     * Required. The time in milliseconds that the negotiation is valid for. Once exceeded the sender
+     * of the negotiate event should consider the negotiation failed (timed out) and the recipient should ignore it.
+     **/
+    @Json(name = "lifetime") val lifetime: Int?,
+    /**
+     * Required. The session description object
+     */
+    @Json(name = "description") val description: Description? = null,
 
-        /**
-         * Required. The version of the VoIP specification this message adheres to.
-         */
-        @Json(name = "version") override val version: String?
+    /**
+     * Required. The version of the VoIP specification this message adheres to.
+     */
+    @Json(name = "version") override val version: String?
 
-        ) : CallSignalingContent  {
+) : CallSignalingContent {
     @JsonClass(generateAdapter = true)
     data class Description(
-            /**
-             * Required. The type of session description.
-             */
-            @Json(name = "type") val type: SdpType?,
-            /**
-             * Required. The SDP text of the session description.
-             */
-            @Json(name = "sdp") val sdp: String?
+        /**
+         * Required. The type of session description.
+         */
+        @Json(name = "type") val type: SdpType?,
+        /**
+         * Required. The SDP text of the session description.
+         */
+        @Json(name = "sdp") val sdp: String?
     )
 }

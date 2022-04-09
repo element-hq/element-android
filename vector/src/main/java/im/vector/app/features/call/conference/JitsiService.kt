@@ -41,11 +41,12 @@ import java.util.UUID
 import javax.inject.Inject
 
 class JitsiService @Inject constructor(
-        private val session: Session,
-        private val rawService: RawService,
-        private val stringProvider: StringProvider,
-        private val themeProvider: ThemeProvider,
-        private val jitsiJWTFactory: JitsiJWTFactory) {
+    private val session: Session,
+    private val rawService: RawService,
+    private val stringProvider: StringProvider,
+    private val themeProvider: ThemeProvider,
+    private val jitsiJWTFactory: JitsiJWTFactory
+) {
 
     companion object {
         const val JITSI_OPEN_ID_TOKEN_JWT_AUTH = "openidtoken-jwt"
@@ -62,8 +63,8 @@ class JitsiService @Inject constructor(
         val widgetId: String = WidgetType.Jitsi.preferred + "_" + session.myUserId + "_" + System.currentTimeMillis()
         val preferredJitsiDomain = tryOrNull {
             rawService.getElementWellknown(session.sessionParams)
-                    ?.jitsiServer
-                    ?.preferredDomain
+                ?.jitsiServer
+                ?.preferredDomain
         }
         val jitsiDomain = preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain)
         val jitsiAuth = getJitsiAuth(jitsiDomain)
@@ -88,12 +89,12 @@ class JitsiService @Inject constructor(
             }
         }
         val widgetEventContent = mapOf(
-                "url" to url,
-                "type" to WidgetType.Jitsi.legacy,
-                "data" to JitsiWidgetData(jitsiDomain, confId, !withVideo, jitsiAuth),
-                "creatorUserId" to session.myUserId,
-                "id" to widgetId,
-                "name" to "jitsi"
+            "url" to url,
+            "type" to WidgetType.Jitsi.legacy,
+            "data" to JitsiWidgetData(jitsiDomain, confId, !withVideo, jitsiAuth),
+            "creatorUserId" to session.myUserId,
+            "id" to widgetId,
+            "name" to "jitsi"
         )
         return session.widgetService().createRoomWidget(roomId, widgetId, widgetEventContent)
     }
@@ -114,12 +115,12 @@ class JitsiService @Inject constructor(
             null
         }
         return JitsiCallViewEvents.JoinConference(
-                enableVideo = enableVideo,
-                jitsiUrl = widgetData.domain.ensureProtocol(),
-                subject = roomName ?: "",
-                confId = widgetData.confId,
-                userInfo = userInfo,
-                token = token
+            enableVideo = enableVideo,
+            jitsiUrl = widgetData.domain.ensureProtocol(),
+            subject = roomName ?: "",
+            confId = widgetData.confId,
+            userInfo = userInfo,
+            token = token
         )
     }
 
@@ -136,11 +137,11 @@ class JitsiService @Inject constructor(
     private suspend fun getOpenIdJWTToken(roomId: String, domain: String, userDisplayName: String, userAvatar: String): String {
         val openIdToken = session.openIdService().getOpenIdToken()
         return jitsiJWTFactory.create(
-                openIdToken = openIdToken,
-                jitsiServerDomain = domain,
-                roomId = roomId,
-                userAvatarUrl = userAvatar,
-                userDisplayName = userDisplayName
+            openIdToken = openIdToken,
+            jitsiServerDomain = domain,
+            roomId = roomId,
+            userAvatarUrl = userAvatar,
+            userDisplayName = userDisplayName
         )
     }
 

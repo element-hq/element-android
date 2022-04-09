@@ -36,28 +36,28 @@ import javax.inject.Inject
 
 @SessionScope
 internal class RealmContentScannerStore @Inject constructor(
-        @ContentScannerDatabase
-        private val realmConfiguration: RealmConfiguration
+    @ContentScannerDatabase
+    private val realmConfiguration: RealmConfiguration
 ) : ContentScannerStore {
 
     private val monarchy = Monarchy.Builder()
-            .setRealmConfiguration(realmConfiguration)
-            .build()
+        .setRealmConfiguration(realmConfiguration)
+        .build()
 
     override fun getScannerUrl(): String? {
         return monarchy.fetchAllMappedSync(
-                { realm ->
-                    realm.where<ContentScannerInfoEntity>()
-                }, {
-            it.serverUrl
-        }
+            { realm ->
+                realm.where<ContentScannerInfoEntity>()
+            }, {
+                it.serverUrl
+            }
         ).firstOrNull()
     }
 
     override fun setScannerUrl(url: String?) {
         monarchy.runTransactionSync { realm ->
             val info = realm.where<ContentScannerInfoEntity>().findFirst()
-                    ?: realm.createObject()
+                ?: realm.createObject()
             info.serverUrl = url
         }
     }
@@ -65,18 +65,18 @@ internal class RealmContentScannerStore @Inject constructor(
     override fun enableScanner(enabled: Boolean) {
         monarchy.runTransactionSync { realm ->
             val info = realm.where<ContentScannerInfoEntity>().findFirst()
-                    ?: realm.createObject()
+                ?: realm.createObject()
             info.enabled = enabled
         }
     }
 
     override fun isScanEnabled(): Boolean {
         return monarchy.fetchAllMappedSync(
-                { realm ->
-                    realm.where<ContentScannerInfoEntity>()
-                }, {
-            it.enabled.orFalse() && it.serverUrl?.isValidUrl().orFalse()
-        }
+            { realm ->
+                realm.where<ContentScannerInfoEntity>()
+            }, {
+                it.enabled.orFalse() && it.serverUrl?.isValidUrl().orFalse()
+            }
         ).firstOrNull().orFalse()
     }
 
@@ -104,7 +104,7 @@ internal class RealmContentScannerStore @Inject constructor(
                 ScanState.IN_PROGRESS,
                 ScanState.TRUSTED,
                 ScanState.INFECTED -> true
-                else               -> false
+                else -> false
             }
         }
         return isKnown
@@ -113,28 +113,28 @@ internal class RealmContentScannerStore @Inject constructor(
     override fun getScanResult(mxcUrl: String): ScanStatusInfo? {
         return monarchy.fetchAllMappedSync({ realm ->
             realm.where<ContentScanResultEntity>()
-                    .equalTo(ContentScanResultEntityFields.MEDIA_URL, mxcUrl)
-                    .apply {
-                        getScannerUrl()?.let {
-                            equalTo(ContentScanResultEntityFields.SCANNER_URL, it)
-                        }
+                .equalTo(ContentScanResultEntityFields.MEDIA_URL, mxcUrl)
+                .apply {
+                    getScannerUrl()?.let {
+                        equalTo(ContentScanResultEntityFields.SCANNER_URL, it)
                     }
+                }
         }, {
             it.toModel()
         })
-                .firstOrNull()
+            .firstOrNull()
     }
 
     override fun getLiveScanResult(mxcUrl: String): LiveData<Optional<ScanStatusInfo>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm: Realm ->
-                    realm.where<ContentScanResultEntity>()
-                            .equalTo(ContentScanResultEntityFields.MEDIA_URL, mxcUrl)
-                            .equalTo(ContentScanResultEntityFields.SCANNER_URL, getScannerUrl())
-                },
-                { entity ->
-                    entity.toModel()
-                }
+            { realm: Realm ->
+                realm.where<ContentScanResultEntity>()
+                    .equalTo(ContentScanResultEntityFields.MEDIA_URL, mxcUrl)
+                    .equalTo(ContentScanResultEntityFields.SCANNER_URL, getScannerUrl())
+            },
+            { entity ->
+                entity.toModel()
+            }
         )
         return Transformations.map(liveData) {
             it.firstOrNull().toOptional()

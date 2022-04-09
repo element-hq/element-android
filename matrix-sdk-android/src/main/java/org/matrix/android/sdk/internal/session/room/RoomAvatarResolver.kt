@@ -41,11 +41,11 @@ internal class RoomAvatarResolver @Inject constructor(@UserId private val userId
      */
     fun resolve(realm: Realm, roomId: String): String? {
         val roomName = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_AVATAR, stateKey = "")
-                ?.root
-                ?.asDomain()
-                ?.content
-                ?.toModel<RoomAvatarContent>()
-                ?.avatarUrl
+            ?.root
+            ?.asDomain()
+            ?.content
+            ?.toModel<RoomAvatarContent>()
+            ?.avatarUrl
         if (!roomName.isNullOrEmpty()) {
             return roomName
         }
@@ -58,9 +58,9 @@ internal class RoomAvatarResolver @Inject constructor(@UserId private val userId
             if (members.size == 1) {
                 // Use avatar of a left user
                 val firstLeftAvatarUrl = roomMembers.queryLeftRoomMembersEvent()
-                        .findAll()
-                        .firstOrNull { !it.avatarUrl.isNullOrEmpty() }
-                        ?.avatarUrl
+                    .findAll()
+                    .firstOrNull { !it.avatarUrl.isNullOrEmpty() }
+                    ?.avatarUrl
 
                 return firstLeftAvatarUrl ?: members.firstOrNull()?.avatarUrl
             } else if (members.size == 2) {

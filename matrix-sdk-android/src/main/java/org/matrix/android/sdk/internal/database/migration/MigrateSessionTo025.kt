@@ -25,9 +25,9 @@ class MigrateSessionTo025(realm: DynamicRealm) : RealmMigrator(realm, 25) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("HomeServerCapabilitiesEntity")
-                ?.addField(HomeServerCapabilitiesEntityFields.CAN_CHANGE_DISPLAY_NAME, Boolean::class.java)
-                ?.addField(HomeServerCapabilitiesEntityFields.CAN_CHANGE_AVATAR, Boolean::class.java)
-                ?.addField(HomeServerCapabilitiesEntityFields.CAN_CHANGE3PID, Boolean::class.java)
-                ?.forceRefreshOfHomeServerCapabilities()
+            ?.addField(HomeServerCapabilitiesEntityFields.CAN_CHANGE_DISPLAY_NAME, Boolean::class.java)
+            ?.addField(HomeServerCapabilitiesEntityFields.CAN_CHANGE_AVATAR, Boolean::class.java)
+            ?.addField(HomeServerCapabilitiesEntityFields.CAN_CHANGE3PID, Boolean::class.java)
+            ?.forceRefreshOfHomeServerCapabilities()
     }
 }

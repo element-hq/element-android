@@ -40,9 +40,9 @@ import javax.inject.Inject
  * - or to cleanup all the data
  */
 class SoftLogoutFragment @Inject constructor(
-        private val softLogoutController: SoftLogoutController
+    private val softLogoutController: SoftLogoutController
 ) : AbstractLoginFragment<FragmentGenericRecyclerBinding>(),
-        SoftLogoutController.Listener {
+    SoftLogoutController.Listener {
 
     private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
@@ -59,28 +59,34 @@ class SoftLogoutFragment @Inject constructor(
             softLogoutController.update(softLogoutViewState)
             when (val mode = softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
                 is LoginMode.SsoAndPassword -> {
-                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                    loginViewModel.handle(
+                        LoginAction.SetupSsoForSessionRecovery(
                             softLogoutViewState.homeServerUrl,
                             softLogoutViewState.deviceId,
                             mode.ssoIdentityProviders
-                    ))
+                        )
+                    )
                 }
                 is LoginMode.Sso -> {
-                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                    loginViewModel.handle(
+                        LoginAction.SetupSsoForSessionRecovery(
                             softLogoutViewState.homeServerUrl,
                             softLogoutViewState.deviceId,
                             mode.ssoIdentityProviders
-                    ))
+                        )
+                    )
                 }
                 LoginMode.Unsupported -> {
                     // Prepare the loginViewModel for a SSO/login fallback recovery
-                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
+                    loginViewModel.handle(
+                        LoginAction.SetupSsoForSessionRecovery(
                             softLogoutViewState.homeServerUrl,
                             softLogoutViewState.deviceId,
                             null
-                    ))
+                        )
+                    )
                 }
-                else                  -> Unit
+                else -> Unit
             }
         }
     }
@@ -125,13 +131,13 @@ class SoftLogoutFragment @Inject constructor(
             }
 
             MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
-                    .setTitle(R.string.soft_logout_clear_data_dialog_title)
-                    .setMessage(messageResId)
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .setPositiveButton(R.string.soft_logout_clear_data_submit) { _, _ ->
-                        softLogoutViewModel.handle(SoftLogoutAction.ClearData)
-                    }
-                    .show()
+                .setTitle(R.string.soft_logout_clear_data_dialog_title)
+                .setMessage(messageResId)
+                .setNegativeButton(R.string.action_cancel, null)
+                .setPositiveButton(R.string.soft_logout_clear_data_submit) { _, _ ->
+                    softLogoutViewModel.handle(SoftLogoutAction.ClearData)
+                }
+                .show()
         }
     }
 

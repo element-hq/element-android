@@ -33,9 +33,10 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
 
 class ContactsBookController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val avatarRenderer: AvatarRenderer,
-        private val errorFormatter: ErrorFormatter) : EpoxyController() {
+    private val stringProvider: StringProvider,
+    private val avatarRenderer: AvatarRenderer,
+    private val errorFormatter: ErrorFormatter
+) : EpoxyController() {
 
     private var state: ContactsBookViewState? = null
 
@@ -50,9 +51,9 @@ class ContactsBookController @Inject constructor(
         val currentState = state ?: return
         when (val asyncMappedContacts = currentState.mappedContacts) {
             is Uninitialized -> renderEmptyState(false)
-            is Loading       -> renderLoading()
-            is Success       -> renderSuccess(currentState)
-            is Fail          -> renderFailure(asyncMappedContacts.error)
+            is Loading -> renderLoading()
+            is Success -> renderSuccess(currentState)
+            is Fail -> renderFailure(asyncMappedContacts.error)
         }
     }
 
@@ -91,39 +92,39 @@ class ContactsBookController @Inject constructor(
                 avatarRenderer(host.avatarRenderer)
             }
             mappedContact.emails
-                    .forEachIndexed { index, email ->
-                        if (onlyBoundContacts && email.matrixId == null) return@forEachIndexed
+                .forEachIndexed { index, email ->
+                    if (onlyBoundContacts && email.matrixId == null) return@forEachIndexed
 
-                        contactDetailItem {
-                            id("${mappedContact.id}-e-$index-${email.email}")
-                            threePid(email.email)
-                            matrixId(email.matrixId)
-                            clickListener {
-                                if (email.matrixId != null) {
-                                    host.callback?.onMatrixIdClick(email.matrixId)
-                                } else {
-                                    host.callback?.onThreePidClick(ThreePid.Email(email.email))
-                                }
+                    contactDetailItem {
+                        id("${mappedContact.id}-e-$index-${email.email}")
+                        threePid(email.email)
+                        matrixId(email.matrixId)
+                        clickListener {
+                            if (email.matrixId != null) {
+                                host.callback?.onMatrixIdClick(email.matrixId)
+                            } else {
+                                host.callback?.onThreePidClick(ThreePid.Email(email.email))
                             }
                         }
                     }
+                }
             mappedContact.msisdns
-                    .forEachIndexed { index, msisdn ->
-                        if (onlyBoundContacts && msisdn.matrixId == null) return@forEachIndexed
+                .forEachIndexed { index, msisdn ->
+                    if (onlyBoundContacts && msisdn.matrixId == null) return@forEachIndexed
 
-                        contactDetailItem {
-                            id("${mappedContact.id}-m-$index-${msisdn.phoneNumber}")
-                            threePid(msisdn.phoneNumber)
-                            matrixId(msisdn.matrixId)
-                            clickListener {
-                                if (msisdn.matrixId != null) {
-                                    host.callback?.onMatrixIdClick(msisdn.matrixId)
-                                } else {
-                                    host.callback?.onThreePidClick(ThreePid.Msisdn(msisdn.phoneNumber))
-                                }
+                    contactDetailItem {
+                        id("${mappedContact.id}-m-$index-${msisdn.phoneNumber}")
+                        threePid(msisdn.phoneNumber)
+                        matrixId(msisdn.matrixId)
+                        clickListener {
+                            if (msisdn.matrixId != null) {
+                                host.callback?.onMatrixIdClick(msisdn.matrixId)
+                            } else {
+                                host.callback?.onThreePidClick(ThreePid.Msisdn(msisdn.phoneNumber))
                             }
                         }
                     }
+                }
         }
     }
 

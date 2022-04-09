@@ -49,9 +49,9 @@ import javax.inject.Inject
 
 @Parcelize
 data class FtueAuthGenericTextInputFormFragmentArgument(
-        val mode: TextInputFormFragmentMode,
-        val mandatory: Boolean,
-        val extra: String = ""
+    val mode: TextInputFormFragmentMode,
+    val mandatory: Boolean,
+    val extra: String = ""
 ) : Parcelable
 
 /**
@@ -83,41 +83,41 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
     private fun setupAutoFill() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             views.loginGenericTextInputFormTextInput.setAutofillHints(
-                    when (params.mode) {
-                        TextInputFormFragmentMode.SetEmail      -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
-                        TextInputFormFragmentMode.SetMsisdn     -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
-                        TextInputFormFragmentMode.ConfirmMsisdn -> HintConstants.AUTOFILL_HINT_SMS_OTP
-                    }
+                when (params.mode) {
+                    TextInputFormFragmentMode.SetEmail -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
+                    TextInputFormFragmentMode.SetMsisdn -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
+                    TextInputFormFragmentMode.ConfirmMsisdn -> HintConstants.AUTOFILL_HINT_SMS_OTP
+                }
             )
         }
     }
 
     private fun setupTil() {
         views.loginGenericTextInputFormTextInput.textChanges()
-                .onEach {
-                    views.loginGenericTextInputFormTil.error = null
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                views.loginGenericTextInputFormTil.error = null
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupUi() {
         when (params.mode) {
-            TextInputFormFragmentMode.SetEmail      -> {
+            TextInputFormFragmentMode.SetEmail -> {
                 views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_email_title)
                 views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_email_notice)
                 views.loginGenericTextInputFormNotice2.setTextOrHide(null)
                 views.loginGenericTextInputFormTil.hint =
-                        getString(if (params.mandatory) R.string.login_set_email_mandatory_hint else R.string.login_set_email_optional_hint)
+                    getString(if (params.mandatory) R.string.login_set_email_mandatory_hint else R.string.login_set_email_optional_hint)
                 views.loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                 views.loginGenericTextInputFormOtherButton.isVisible = false
                 views.loginGenericTextInputFormSubmit.text = getString(R.string.login_set_email_submit)
             }
-            TextInputFormFragmentMode.SetMsisdn     -> {
+            TextInputFormFragmentMode.SetMsisdn -> {
                 views.loginGenericTextInputFormTitle.text = getString(R.string.login_set_msisdn_title)
                 views.loginGenericTextInputFormNotice.text = getString(R.string.login_set_msisdn_notice)
                 views.loginGenericTextInputFormNotice2.setTextOrHide(getString(R.string.login_set_msisdn_notice2))
                 views.loginGenericTextInputFormTil.hint =
-                        getString(if (params.mandatory) R.string.login_set_msisdn_mandatory_hint else R.string.login_set_msisdn_optional_hint)
+                    getString(if (params.mandatory) R.string.login_set_msisdn_mandatory_hint else R.string.login_set_msisdn_optional_hint)
                 views.loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_PHONE
                 views.loginGenericTextInputFormOtherButton.isVisible = false
                 views.loginGenericTextInputFormSubmit.text = getString(R.string.login_set_msisdn_submit)
@@ -127,7 +127,7 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
                 views.loginGenericTextInputFormNotice.text = getString(R.string.login_msisdn_confirm_notice, params.extra)
                 views.loginGenericTextInputFormNotice2.setTextOrHide(null)
                 views.loginGenericTextInputFormTil.hint =
-                        getString(R.string.login_msisdn_confirm_hint)
+                    getString(R.string.login_msisdn_confirm_hint)
                 views.loginGenericTextInputFormTextInput.inputType = InputType.TYPE_CLASS_NUMBER
                 views.loginGenericTextInputFormOtherButton.isVisible = true
                 views.loginGenericTextInputFormOtherButton.text = getString(R.string.login_msisdn_confirm_send_again)
@@ -141,7 +141,7 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
             TextInputFormFragmentMode.ConfirmMsisdn -> {
                 viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid))
             }
-            else                                    -> {
+            else -> {
                 // Should not happen, button is not displayed
             }
         }
@@ -156,10 +156,10 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
             viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.RegisterDummy))
         } else {
             when (params.mode) {
-                TextInputFormFragmentMode.SetEmail      -> {
+                TextInputFormFragmentMode.SetEmail -> {
                     viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Email(text))))
                 }
-                TextInputFormFragmentMode.SetMsisdn     -> {
+                TextInputFormFragmentMode.SetMsisdn -> {
                     getCountryCodeOrShowError(text)?.let { countryCode ->
                         viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.AddThreePid(RegisterThreePid.Msisdn(text, countryCode))))
                     }
@@ -196,10 +196,10 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
     private fun setupSubmitButton() {
         views.loginGenericTextInputFormSubmit.isEnabled = false
         views.loginGenericTextInputFormTextInput.textChanges()
-                .onEach {
-                    views.loginGenericTextInputFormSubmit.isEnabled = isInputValid(it)
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                views.loginGenericTextInputFormSubmit.isEnabled = isInputValid(it)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun isInputValid(input: CharSequence): Boolean {
@@ -207,10 +207,10 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
             true
         } else {
             when (params.mode) {
-                TextInputFormFragmentMode.SetEmail      -> {
+                TextInputFormFragmentMode.SetEmail -> {
                     input.isEmail()
                 }
-                TextInputFormFragmentMode.SetMsisdn     -> {
+                TextInputFormFragmentMode.SetMsisdn -> {
                     input.isNotBlank()
                 }
                 TextInputFormFragmentMode.ConfirmMsisdn -> {
@@ -222,7 +222,7 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
 
     override fun onError(throwable: Throwable) {
         when (params.mode) {
-            TextInputFormFragmentMode.SetEmail      -> {
+            TextInputFormFragmentMode.SetEmail -> {
                 if (throwable.is401()) {
                     // This is normal use case, we go to the mail waiting screen
                     viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendEmailSuccess(viewModel.currentThreePid ?: "")))
@@ -230,7 +230,7 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
                     views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
                 }
             }
-            TextInputFormFragmentMode.SetMsisdn     -> {
+            TextInputFormFragmentMode.SetMsisdn -> {
                 if (throwable.is401()) {
                     // This is normal use case, we go to the enter code screen
                     viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendMsisdnSuccess(viewModel.currentThreePid ?: "")))
@@ -243,10 +243,10 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
                     throwable is Failure.SuccessError ->
                         // The entered code is not correct
                         views.loginGenericTextInputFormTil.error = getString(R.string.login_validation_code_is_not_correct)
-                    throwable.is401()                 ->
+                    throwable.is401() ->
                         // It can happen if user request again the 3pid
                         Unit
-                    else                              ->
+                    else ->
                         views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
                 }
             }

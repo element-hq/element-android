@@ -42,12 +42,12 @@ import java.util.Calendar
 import javax.inject.Inject
 
 class SearchResultController @Inject constructor(
-        private val session: Session,
-        private val avatarRenderer: AvatarRenderer,
-        private val stringProvider: StringProvider,
-        private val dateFormatter: VectorDateFormatter,
-        private val displayableEventFormatter: DisplayableEventFormatter,
-        private val userPreferencesProvider: UserPreferencesProvider
+    private val session: Session,
+    private val avatarRenderer: AvatarRenderer,
+    private val stringProvider: StringProvider,
+    private val dateFormatter: VectorDateFormatter,
+    private val displayableEventFormatter: DisplayableEventFormatter,
+    private val userPreferencesProvider: UserPreferencesProvider
 ) : TypedEpoxyController<SearchViewState>() {
 
     var listener: Listener? = null
@@ -113,24 +113,25 @@ class SearchResultController @Inject constructor(
             }
             if (lastDate?.get(Calendar.DAY_OF_YEAR) != eventDate.get(Calendar.DAY_OF_YEAR)) {
                 GenericHeaderItem_()
-                        .id(eventDate.hashCode())
-                        .text(dateFormatter.format(eventDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
-                        .let { result.add(it) }
+                    .id(eventDate.hashCode())
+                    .text(dateFormatter.format(eventDate.timeInMillis, DateFormatKind.EDIT_HISTORY_HEADER))
+                    .let { result.add(it) }
             }
             lastDate = eventDate
 
             SearchResultItem_()
-                    .id(eventAndSender.event.eventId)
-                    .avatarRenderer(avatarRenderer)
-                    .formattedDate(dateFormatter.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE))
-                    .spannable(spannable.toEpoxyCharSequence())
-                    .sender(eventAndSender.sender
-                            ?: eventAndSender.event.senderId?.let { session.getRoomMember(it, data.roomId) }?.toMatrixItem())
-                    .threadDetails(event.threadDetails)
-                    .threadSummaryFormatted(displayableEventFormatter.formatThreadSummary(event.threadDetails?.threadSummaryLatestEvent).toString())
-                    .areThreadMessagesEnabled(userPreferencesProvider.areThreadMessagesEnabled())
-                    .listener { listener?.onItemClicked(eventAndSender.event) }
-                    .let { result.add(it) }
+                .id(eventAndSender.event.eventId)
+                .avatarRenderer(avatarRenderer)
+                .formattedDate(dateFormatter.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE))
+                .spannable(spannable.toEpoxyCharSequence())
+                .sender(eventAndSender.sender
+                    ?: eventAndSender.event.senderId?.let { session.getRoomMember(it, data.roomId) }?.toMatrixItem()
+                )
+                .threadDetails(event.threadDetails)
+                .threadSummaryFormatted(displayableEventFormatter.formatThreadSummary(event.threadDetails?.threadSummaryLatestEvent).toString())
+                .areThreadMessagesEnabled(userPreferencesProvider.areThreadMessagesEnabled())
+                .listener { listener?.onItemClicked(eventAndSender.event) }
+                .let { result.add(it) }
         }
 
         return result

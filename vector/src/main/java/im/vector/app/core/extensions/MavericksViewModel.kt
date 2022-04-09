@@ -26,10 +26,10 @@ import com.airbnb.mvrx.MavericksViewModelProvider
 inline fun <reified VM : MavericksViewModel<S>, reified S : MavericksState> ComponentActivity.lazyViewModel(): Lazy<VM> {
     return lazy(mode = LazyThreadSafetyMode.NONE) {
         MavericksViewModelProvider.get(
-                viewModelClass = VM::class.java,
-                stateClass = S::class.java,
-                viewModelContext = ActivityViewModelContext(this, intent.extras?.get(Mavericks.KEY_ARG)),
-                key = VM::class.java.name
+            viewModelClass = VM::class.java,
+            stateClass = S::class.java,
+            viewModelContext = ActivityViewModelContext(this, intent.extras?.get(Mavericks.KEY_ARG)),
+            key = VM::class.java.name
         )
     }
 }

@@ -22,7 +22,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 class SystemLocaleProvider @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
 
     /**

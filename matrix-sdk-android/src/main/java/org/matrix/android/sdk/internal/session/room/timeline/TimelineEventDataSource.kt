@@ -33,10 +33,12 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
 
-internal class TimelineEventDataSource @Inject constructor(private val realmSessionProvider: RealmSessionProvider,
-                                                           private val timelineEventMapper: TimelineEventMapper,
-                                                           private val taskExecutor: TaskExecutor,
-                                                           @SessionDatabase private val monarchy: Monarchy) {
+internal class TimelineEventDataSource @Inject constructor(
+    private val realmSessionProvider: RealmSessionProvider,
+    private val timelineEventMapper: TimelineEventMapper,
+    private val taskExecutor: TaskExecutor,
+    @SessionDatabase private val monarchy: Monarchy
+) {
 
     fun getTimelineEvent(roomId: String, eventId: String): TimelineEvent? {
         return realmSessionProvider.withRealm { realm ->
@@ -54,11 +56,11 @@ internal class TimelineEventDataSource @Inject constructor(private val realmSess
         // TODO pretty bad query.. maybe we should denormalize clear type in base?
         return realmSessionProvider.withRealm { realm ->
             realm.where<TimelineEventEntity>()
-                    .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
-                    .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
-                    .findAll()
-                    ?.mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }
-                    .orEmpty()
+                .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+                .findAll()
+                ?.mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }
+                .orEmpty()
         }
     }
 }

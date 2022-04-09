@@ -44,7 +44,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         holder.avatarImageView.onClick(attributes.avatarClickListener)
 
         when (attributes.informationData.e2eDecoration) {
-            E2EDecoration.NONE                 -> {
+            E2EDecoration.NONE -> {
                 holder.e2EDecorationView.render(null)
             }
             E2EDecoration.WARN_IN_CLEAR,
@@ -73,13 +73,13 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
     }
 
     data class Attributes(
-            val avatarRenderer: AvatarRenderer,
-            val informationData: MessageInformationData,
-            val noticeText: EpoxyCharSequence,
-            val itemLongClickListener: View.OnLongClickListener? = null,
-            val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val avatarClickListener: ClickListener? = null,
-            val threadSummaryClickListener: ClickListener? = null
+        val avatarRenderer: AvatarRenderer,
+        val informationData: MessageInformationData,
+        val noticeText: EpoxyCharSequence,
+        val itemLongClickListener: View.OnLongClickListener? = null,
+        val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
+        val avatarClickListener: ClickListener? = null,
+        val threadSummaryClickListener: ClickListener? = null
     )
 
     companion object {

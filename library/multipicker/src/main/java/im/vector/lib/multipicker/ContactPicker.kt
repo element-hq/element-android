@@ -39,17 +39,17 @@ class ContactPicker : Picker<MultiPickerContactType>() {
 
         data?.data?.let { selectedUri ->
             val projection = arrayOf(
-                    ContactsContract.Contacts.DISPLAY_NAME,
-                    ContactsContract.Contacts.PHOTO_URI,
-                    ContactsContract.Contacts._ID
+                ContactsContract.Contacts.DISPLAY_NAME,
+                ContactsContract.Contacts.PHOTO_URI,
+                ContactsContract.Contacts._ID
             )
 
             context.contentResolver.query(
-                    selectedUri,
-                    projection,
-                    null,
-                    null,
-                    null
+                selectedUri,
+                projection,
+                null,
+                null,
+                null
             )?.use { cursor ->
                 if (cursor.moveToFirst()) {
                     val idColumn = cursor.getColumnIndexOrNull(ContactsContract.Contacts._ID) ?: return@use
@@ -67,14 +67,14 @@ class ContactPicker : Picker<MultiPickerContactType>() {
                         val selectionArgs = arrayOf(rawContactId.toString())
 
                         context.contentResolver.query(
-                                ContactsContract.Data.CONTENT_URI,
-                                arrayOf(
-                                        ContactsContract.Data.MIMETYPE,
-                                        ContactsContract.Data.DATA1
-                                ),
-                                selection,
-                                selectionArgs,
-                                null
+                            ContactsContract.Data.CONTENT_URI,
+                            arrayOf(
+                                ContactsContract.Data.MIMETYPE,
+                                ContactsContract.Data.DATA1
+                            ),
+                            selection,
+                            selectionArgs,
+                            null
                         )?.use inner@{ innerCursor ->
                             val mimeTypeColumnIndex = innerCursor.getColumnIndexOrNull(ContactsContract.Data.MIMETYPE) ?: return@inner
                             val data1ColumnIndex = innerCursor.getColumnIndexOrNull(ContactsContract.Data.DATA1) ?: return@inner
@@ -96,12 +96,12 @@ class ContactPicker : Picker<MultiPickerContactType>() {
                         }
                     }
                     contactList.add(
-                            MultiPickerContactType(
-                                    name,
-                                    photoUri,
-                                    phoneNumberList,
-                                    emailList
-                            )
+                        MultiPickerContactType(
+                            name,
+                            photoUri,
+                            phoneNumberList,
+                            emailList
+                        )
                     )
                 }
             }
@@ -115,15 +115,15 @@ class ContactPicker : Picker<MultiPickerContactType>() {
         val selection = ContactsContract.RawContacts.CONTACT_ID + " = ?"
         val selectionArgs = arrayOf(contactId.toString() + "")
         return contentResolver.query(
-                ContactsContract.RawContacts.CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                null
+            ContactsContract.RawContacts.CONTENT_URI,
+            projection,
+            selection,
+            selectionArgs,
+            null
         )?.use { cursor ->
             return if (cursor.moveToFirst()) {
                 cursor.getColumnIndexOrNull(ContactsContract.RawContacts._ID)
-                        ?.let { cursor.getIntOrNull(it) }
+                    ?.let { cursor.getIntOrNull(it) }
             } else null
         }
     }

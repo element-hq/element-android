@@ -33,23 +33,23 @@ import im.vector.app.databinding.ViewLocationSharingOptionBinding
  * Custom view to display a location sharing option.
  */
 class LocationSharingOptionView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     val iconView: ImageView
         get() = binding.shareLocationOptionIcon
 
     private val binding = ViewLocationSharingOptionBinding.inflate(
-            LayoutInflater.from(context),
-            this
+        LayoutInflater.from(context),
+        this
     )
 
     init {
         context.theme.obtainStyledAttributes(
-                attrs,
-                R.styleable.LocationSharingOptionView,
-                0,
-                0
+            attrs,
+            R.styleable.LocationSharingOptionView,
+            0,
+            0
         ).run {
             try {
                 setIcon(this)
@@ -68,12 +68,12 @@ class LocationSharingOptionView @JvmOverloads constructor(
         val icon = typedArray.getDrawable(R.styleable.LocationSharingOptionView_locShareIcon)
         val background = typedArray.getDrawable(R.styleable.LocationSharingOptionView_locShareIconBackground)
         val backgroundTint = typedArray.getColor(
-                R.styleable.LocationSharingOptionView_locShareIconBackgroundTint,
-                ContextCompat.getColor(context, android.R.color.transparent)
+            R.styleable.LocationSharingOptionView_locShareIconBackgroundTint,
+            ContextCompat.getColor(context, android.R.color.transparent)
         )
         val padding = typedArray.getDimensionPixelOffset(
-                R.styleable.LocationSharingOptionView_locShareIconPadding,
-                context.resources.getDimensionPixelOffset(R.dimen.location_sharing_option_default_padding)
+            R.styleable.LocationSharingOptionView_locShareIconPadding,
+            context.resources.getDimensionPixelOffset(R.dimen.location_sharing_option_default_padding)
         )
         val description = typedArray.getString(R.styleable.LocationSharingOptionView_locShareIconDescription)
 

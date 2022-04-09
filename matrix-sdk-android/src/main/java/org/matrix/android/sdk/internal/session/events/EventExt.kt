@@ -26,8 +26,8 @@ internal fun Event.getFixedRoomMemberContent(): RoomMemberContent? {
     return if (content?.membership?.isLeft() == true) {
         val prevContent = resolvedPrevContent().toModel<RoomMemberContent>()
         content.copy(
-                displayName = prevContent?.displayName,
-                avatarUrl = prevContent?.avatarUrl
+            displayName = prevContent?.displayName,
+            avatarUrl = prevContent?.avatarUrl
         )
     } else {
         content

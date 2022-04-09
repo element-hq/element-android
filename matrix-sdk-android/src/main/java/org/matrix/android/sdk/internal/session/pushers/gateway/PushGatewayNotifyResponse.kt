@@ -21,6 +21,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class PushGatewayNotifyResponse(
-        @Json(name = "rejected")
-        val rejectedPushKeys: List<String>
+    @Json(name = "rejected")
+    val rejectedPushKeys: List<String>
 )

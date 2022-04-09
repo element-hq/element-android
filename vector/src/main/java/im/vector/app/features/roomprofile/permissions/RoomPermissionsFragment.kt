@@ -39,11 +39,11 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomPermissionsFragment @Inject constructor(
-        private val controller: RoomPermissionsController,
-        private val avatarRenderer: AvatarRenderer
+    private val controller: RoomPermissionsController,
+    private val avatarRenderer: AvatarRenderer
 ) :
-        VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
-        RoomPermissionsController.Callback {
+    VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
+    RoomPermissionsController.Callback {
 
     private val viewModel: RoomPermissionsViewModel by fragmentViewModel()
 
@@ -63,7 +63,7 @@ class RoomPermissionsFragment @Inject constructor(
 
         controller.callback = this
         setupToolbar(views.roomSettingsToolbar)
-                .allowBack()
+            .allowBack()
         views.roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true
@@ -71,7 +71,7 @@ class RoomPermissionsFragment @Inject constructor(
         viewModel.observeViewEvents {
             when (it) {
                 is RoomPermissionsViewEvents.Failure -> showFailure(it.throwable)
-                RoomPermissionsViewEvents.Success    -> showSuccess()
+                RoomPermissionsViewEvents.Success -> showSuccess()
             }
         }
     }

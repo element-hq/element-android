@@ -45,8 +45,8 @@ class FakePostHog {
     fun verifyIdentifies(analyticsId: String, userProperties: UserProperties?) {
         verify {
             val postHogProperties = userProperties?.getProperties()
-                    ?.let { rawProperties -> Properties().also { it.putAll(rawProperties) } }
-                    ?.takeIf { it.isNotEmpty() }
+                ?.let { rawProperties -> Properties().also { it.putAll(rawProperties) } }
+                ?.takeIf { it.isNotEmpty() }
             instance.identify(analyticsId, postHogProperties, null)
         }
     }

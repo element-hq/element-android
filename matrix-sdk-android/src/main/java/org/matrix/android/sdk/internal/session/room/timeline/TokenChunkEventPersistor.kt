@@ -50,10 +50,11 @@ import javax.inject.Inject
  * Insert Chunk in DB, and eventually link next and previous chunk in db.
  */
 internal class TokenChunkEventPersistor @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        @UserId private val userId: String,
-        private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val liveEventManager: Lazy<StreamEventsManager>) {
+    @SessionDatabase private val monarchy: Monarchy,
+    @UserId private val userId: String,
+    private val lightweightSettingsStorage: LightweightSettingsStorage,
+    private val liveEventManager: Lazy<StreamEventsManager>
+) {
 
     enum class Result {
         SHOULD_FETCH_MORE,
@@ -61,42 +62,44 @@ internal class TokenChunkEventPersistor @Inject constructor(
         SUCCESS
     }
 
-    suspend fun insertInDb(receivedChunk: TokenChunkEvent,
-                           roomId: String,
-                           direction: PaginationDirection): Result {
+    suspend fun insertInDb(
+        receivedChunk: TokenChunkEvent,
+        roomId: String,
+        direction: PaginationDirection
+    ): Result {
         monarchy
-                .awaitTransaction { realm ->
-                    Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
+            .awaitTransaction { realm ->
+                Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
 
-                    val nextToken: String?
-                    val prevToken: String?
-                    if (direction == PaginationDirection.FORWARDS) {
-                        nextToken = receivedChunk.end
-                        prevToken = receivedChunk.start
-                    } else {
-                        nextToken = receivedChunk.start
-                        prevToken = receivedChunk.end
-                    }
-
-                    val existingChunk = ChunkEntity.find(realm, roomId, prevToken = prevToken, nextToken = nextToken)
-                    if (existingChunk != null) {
-                        Timber.v("This chunk is already in the db, returns")
-                        return@awaitTransaction
-                    }
-                    val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
-                    val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
-                    val currentChunk = ChunkEntity.create(realm, prevToken = prevToken, nextToken = nextToken).apply {
-                        this.nextChunk = nextChunk
-                        this.prevChunk = prevChunk
-                    }
-                    nextChunk?.prevChunk = currentChunk
-                    prevChunk?.nextChunk = currentChunk
-                    if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
-                        handleReachEnd(roomId, direction, currentChunk)
-                    } else {
-                        handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
-                    }
+                val nextToken: String?
+                val prevToken: String?
+                if (direction == PaginationDirection.FORWARDS) {
+                    nextToken = receivedChunk.end
+                    prevToken = receivedChunk.start
+                } else {
+                    nextToken = receivedChunk.start
+                    prevToken = receivedChunk.end
                 }
+
+                val existingChunk = ChunkEntity.find(realm, roomId, prevToken = prevToken, nextToken = nextToken)
+                if (existingChunk != null) {
+                    Timber.v("This chunk is already in the db, returns")
+                    return@awaitTransaction
+                }
+                val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
+                val nextChunk = ChunkEntity.find(realm, roomId, prevToken = nextToken)
+                val currentChunk = ChunkEntity.create(realm, prevToken = prevToken, nextToken = nextToken).apply {
+                    this.nextChunk = nextChunk
+                    this.prevChunk = prevChunk
+                }
+                nextChunk?.prevChunk = currentChunk
+                prevChunk?.nextChunk = currentChunk
+                if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
+                    handleReachEnd(roomId, direction, currentChunk)
+                } else {
+                    handlePagination(realm, roomId, direction, receivedChunk, currentChunk)
+                }
+            }
 
         return if (receivedChunk.events.isEmpty()) {
             if (receivedChunk.hasMore()) {
@@ -119,11 +122,11 @@ internal class TokenChunkEventPersistor @Inject constructor(
     }
 
     private fun handlePagination(
-            realm: Realm,
-            roomId: String,
-            direction: PaginationDirection,
-            receivedChunk: TokenChunkEvent,
-            currentChunk: ChunkEntity
+        realm: Realm,
+        roomId: String,
+        direction: PaginationDirection,
+        receivedChunk: TokenChunkEvent,
+        currentChunk: ChunkEntity
     ) {
         Timber.v("Add ${receivedChunk.events.size} events in chunk(${currentChunk.nextToken} | ${currentChunk.prevToken}")
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
@@ -149,9 +152,9 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 // We check for the timeline event with this id, but not in the thread chunk
                 val eventId = event.eventId
                 val existingTimelineEvent = TimelineEventEntity
-                        .where(realm, roomId, eventId)
-                        .equalTo(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, false)
-                        .findFirst()
+                    .where(realm, roomId, eventId)
+                    .equalTo(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, false)
+                    .findFirst()
                 // If it exists, we want to stop here, just link the prevChunk
                 val existingChunk = existingTimelineEvent?.chunk?.firstOrNull()
                 if (existingChunk != null) {
@@ -164,7 +167,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                                 existingChunk.nextChunk = currentChunk
                             }
                         }
-                        PaginationDirection.FORWARDS  -> {
+                        PaginationDirection.FORWARDS -> {
                             if (currentChunk.prevChunk == existingChunk) {
                                 Timber.w("Avoid double link, shouldn't happen in an ideal world")
                             } else {
@@ -188,10 +191,11 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 }
                 liveEventManager.get().dispatchPaginatedEventReceived(event, roomId)
                 currentChunk.addTimelineEvent(
-                        roomId = roomId,
-                        eventEntity = eventEntity,
-                        direction = direction,
-                        roomMemberContentsByUser = roomMemberContentsByUser)
+                    roomId = roomId,
+                    eventEntity = eventEntity,
+                    direction = direction,
+                    roomMemberContentsByUser = roomMemberContentsByUser
+                )
                 if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
                     eventEntity.rootThreadEventId?.let {
                         // This is a thread event
@@ -209,10 +213,10 @@ internal class TokenChunkEventPersistor @Inject constructor(
 
         if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
             optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
-                    roomId = roomId,
-                    realm = realm,
-                    currentUserId = userId,
-                    chunkEntity = currentChunk
+                roomId = roomId,
+                realm = realm,
+                currentUserId = userId,
+                chunkEntity = currentChunk
             )
         }
     }

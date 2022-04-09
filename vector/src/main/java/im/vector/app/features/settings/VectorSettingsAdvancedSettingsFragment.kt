@@ -58,7 +58,7 @@ class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
 
         if (isRageShakeAvailable) {
             findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_USE_RAGE_SHAKE_KEY)!!
-                    .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
 
                 if (newValue as? Boolean == true) {
                     rageshake?.start()
@@ -70,7 +70,7 @@ class VectorSettingsAdvancedSettingsFragment : VectorSettingsBaseFragment() {
             }
 
             findPreference<SeekBarPreference>(VectorPreferences.SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY)!!
-                    .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                .onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 (activity as? VectorBaseActivity<*>)?.let {
                     val newValueAsInt = newValue as? Int ?: return@OnPreferenceChangeListener true
 

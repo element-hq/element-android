@@ -28,9 +28,9 @@ import javax.inject.Inject
  * not for large data sets
  */
 
-class LightweightSettingsStorage  @Inject constructor(
-        context: Context,
-        private val matrixConfiguration: MatrixConfiguration
+class LightweightSettingsStorage @Inject constructor(
+    context: Context,
+    private val matrixConfiguration: MatrixConfiguration
 ) {
 
     private val sdkDefaultPrefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)

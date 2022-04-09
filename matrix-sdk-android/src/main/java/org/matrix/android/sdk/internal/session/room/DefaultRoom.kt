@@ -53,51 +53,52 @@ import org.matrix.android.sdk.internal.session.space.DefaultSpace
 import org.matrix.android.sdk.internal.util.awaitCallback
 import java.security.InvalidParameterException
 
-internal class DefaultRoom(override val roomId: String,
-                           private val roomSummaryDataSource: RoomSummaryDataSource,
-                           private val timelineService: TimelineService,
-                           private val threadsService: ThreadsService,
-                           private val threadsLocalService: ThreadsLocalService,
-                           private val sendService: SendService,
-                           private val draftService: DraftService,
-                           private val stateService: StateService,
-                           private val uploadsService: UploadsService,
-                           private val reportingService: ReportingService,
-                           private val roomCallService: RoomCallService,
-                           private val readService: ReadService,
-                           private val typingService: TypingService,
-                           private val aliasService: AliasService,
-                           private val tagsService: TagsService,
-                           private val cryptoService: CryptoService,
-                           private val relationService: RelationService,
-                           private val roomMembersService: MembershipService,
-                           private val roomPushRuleService: RoomPushRuleService,
-                           private val roomAccountDataService: RoomAccountDataService,
-                           private val roomVersionService: RoomVersionService,
-                           private val sendStateTask: SendStateTask,
-                           private val viaParameterFinder: ViaParameterFinder,
-                           private val searchTask: SearchTask,
-                           override val coroutineDispatchers: MatrixCoroutineDispatchers
+internal class DefaultRoom(
+    override val roomId: String,
+    private val roomSummaryDataSource: RoomSummaryDataSource,
+    private val timelineService: TimelineService,
+    private val threadsService: ThreadsService,
+    private val threadsLocalService: ThreadsLocalService,
+    private val sendService: SendService,
+    private val draftService: DraftService,
+    private val stateService: StateService,
+    private val uploadsService: UploadsService,
+    private val reportingService: ReportingService,
+    private val roomCallService: RoomCallService,
+    private val readService: ReadService,
+    private val typingService: TypingService,
+    private val aliasService: AliasService,
+    private val tagsService: TagsService,
+    private val cryptoService: CryptoService,
+    private val relationService: RelationService,
+    private val roomMembersService: MembershipService,
+    private val roomPushRuleService: RoomPushRuleService,
+    private val roomAccountDataService: RoomAccountDataService,
+    private val roomVersionService: RoomVersionService,
+    private val sendStateTask: SendStateTask,
+    private val viaParameterFinder: ViaParameterFinder,
+    private val searchTask: SearchTask,
+    override val coroutineDispatchers: MatrixCoroutineDispatchers
 ) :
-        Room,
-        TimelineService by timelineService,
-        ThreadsService by threadsService,
-        ThreadsLocalService by threadsLocalService,
-        SendService by sendService,
-        DraftService by draftService,
-        StateService by stateService,
-        UploadsService by uploadsService,
-        ReportingService by reportingService,
-        RoomCallService by roomCallService,
-        ReadService by readService,
-        TypingService by typingService,
-        AliasService by aliasService,
-        TagsService by tagsService,
-        RelationService by relationService,
-        MembershipService by roomMembersService,
-        RoomPushRuleService by roomPushRuleService,
-        RoomAccountDataService by roomAccountDataService,
-        RoomVersionService by roomVersionService {
+    Room,
+    TimelineService by timelineService,
+    ThreadsService by threadsService,
+    ThreadsLocalService by threadsLocalService,
+    SendService by sendService,
+    DraftService by draftService,
+    StateService by stateService,
+    UploadsService by uploadsService,
+    ReportingService by reportingService,
+    RoomCallService by roomCallService,
+    ReadService by readService,
+    TypingService by typingService,
+    AliasService by aliasService,
+    TagsService by tagsService,
+    RelationService by relationService,
+    MembershipService by roomMembersService,
+    RoomPushRuleService by roomPushRuleService,
+    RoomAccountDataService by roomAccountDataService,
+    RoomVersionService by roomVersionService {
 
     override fun getRoomSummaryLive(): LiveData<Optional<RoomSummary>> {
         return roomSummaryDataSource.getRoomSummaryLive(roomId)
@@ -130,41 +131,44 @@ internal class DefaultRoom(override val roomId: String,
             (!force && isEncrypted() && encryptionAlgorithm() == MXCRYPTO_ALGORITHM_MEGOLM) -> {
                 throw IllegalStateException("Encryption is already enabled for this room")
             }
-            (!force && algorithm != MXCRYPTO_ALGORITHM_MEGOLM)                              -> {
+            (!force && algorithm != MXCRYPTO_ALGORITHM_MEGOLM) -> {
                 throw InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported")
             }
-            else                                                                            -> {
+            else -> {
                 val params = SendStateTask.Params(
-                        roomId = roomId,
-                        stateKey = "",
-                        eventType = EventType.STATE_ROOM_ENCRYPTION,
-                        body = mapOf(
-                                "algorithm" to algorithm
-                        ))
+                    roomId = roomId,
+                    stateKey = "",
+                    eventType = EventType.STATE_ROOM_ENCRYPTION,
+                    body = mapOf(
+                        "algorithm" to algorithm
+                    )
+                )
 
                 sendStateTask.execute(params)
             }
         }
     }
 
-    override suspend fun search(searchTerm: String,
-                                nextBatch: String?,
-                                orderByRecent: Boolean,
-                                limit: Int,
-                                beforeLimit: Int,
-                                afterLimit: Int,
-                                includeProfile: Boolean): SearchResult {
+    override suspend fun search(
+        searchTerm: String,
+        nextBatch: String?,
+        orderByRecent: Boolean,
+        limit: Int,
+        beforeLimit: Int,
+        afterLimit: Int,
+        includeProfile: Boolean
+    ): SearchResult {
         return searchTask.execute(
-                SearchTask.Params(
-                        searchTerm = searchTerm,
-                        roomId = roomId,
-                        nextBatch = nextBatch,
-                        orderByRecent = orderByRecent,
-                        limit = limit,
-                        beforeLimit = beforeLimit,
-                        afterLimit = afterLimit,
-                        includeProfile = includeProfile
-                )
+            SearchTask.Params(
+                searchTerm = searchTerm,
+                roomId = roomId,
+                nextBatch = nextBatch,
+                orderByRecent = orderByRecent,
+                limit = limit,
+                beforeLimit = beforeLimit,
+                afterLimit = afterLimit,
+                includeProfile = includeProfile
+            )
         )
     }
 

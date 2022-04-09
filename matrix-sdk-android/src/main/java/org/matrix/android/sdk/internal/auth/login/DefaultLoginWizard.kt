@@ -36,40 +36,42 @@ import org.matrix.android.sdk.internal.session.content.DefaultContentUrlResolver
 import org.matrix.android.sdk.internal.session.contentscanner.DisabledContentScannerService
 
 internal class DefaultLoginWizard(
-        private val authAPI: AuthAPI,
-        private val sessionCreator: SessionCreator,
-        private val pendingSessionStore: PendingSessionStore
+    private val authAPI: AuthAPI,
+    private val sessionCreator: SessionCreator,
+    private val pendingSessionStore: PendingSessionStore
 ) : LoginWizard {
 
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
 
     private val getProfileTask: GetProfileTask = DefaultGetProfileTask(
-            authAPI,
-            DefaultContentUrlResolver(pendingSessionData.homeServerConnectionConfig, DisabledContentScannerService())
+        authAPI,
+        DefaultContentUrlResolver(pendingSessionData.homeServerConnectionConfig, DisabledContentScannerService())
     )
 
     override suspend fun getProfileInfo(matrixId: String): LoginProfileInfo {
         return getProfileTask.execute(GetProfileTask.Params(matrixId))
     }
 
-    override suspend fun login(login: String,
-                               password: String,
-                               initialDeviceName: String,
-                               deviceId: String?): Session {
+    override suspend fun login(
+        login: String,
+        password: String,
+        initialDeviceName: String,
+        deviceId: String?
+    ): Session {
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
             PasswordLoginParams.thirdPartyIdentifier(
-                    medium = ThreePidMedium.EMAIL,
-                    address = login,
-                    password = password,
-                    deviceDisplayName = initialDeviceName,
-                    deviceId = deviceId
+                medium = ThreePidMedium.EMAIL,
+                address = login,
+                password = password,
+                deviceDisplayName = initialDeviceName,
+                deviceId = deviceId
             )
         } else {
             PasswordLoginParams.userIdentifier(
-                    user = login,
-                    password = password,
-                    deviceDisplayName = initialDeviceName,
-                    deviceId = deviceId
+                user = login,
+                password = password,
+                deviceDisplayName = initialDeviceName,
+                deviceId = deviceId
             )
         }
         val credentials = executeRequest(null) {
@@ -84,7 +86,7 @@ internal class DefaultLoginWizard(
      */
     override suspend fun loginWithToken(loginToken: String): Session {
         val loginParams = TokenLoginParams(
-                token = loginToken
+            token = loginToken
         )
         val credentials = executeRequest(null) {
             authAPI.login(loginParams)
@@ -103,30 +105,30 @@ internal class DefaultLoginWizard(
 
     override suspend fun resetPassword(email: String, newPassword: String) {
         val param = RegisterAddThreePidTask.Params(
-                RegisterThreePid.Email(email),
-                pendingSessionData.clientSecret,
-                pendingSessionData.sendAttempt
+            RegisterThreePid.Email(email),
+            pendingSessionData.clientSecret,
+            pendingSessionData.sendAttempt
         )
 
         pendingSessionData = pendingSessionData.copy(sendAttempt = pendingSessionData.sendAttempt + 1)
-                .also { pendingSessionStore.savePendingSessionData(it) }
+            .also { pendingSessionStore.savePendingSessionData(it) }
 
         val result = executeRequest(null) {
             authAPI.resetPassword(AddThreePidRegistrationParams.from(param))
         }
 
         pendingSessionData = pendingSessionData.copy(resetPasswordData = ResetPasswordData(newPassword, result))
-                .also { pendingSessionStore.savePendingSessionData(it) }
+            .also { pendingSessionStore.savePendingSessionData(it) }
     }
 
     override suspend fun resetPasswordMailConfirmed() {
         val safeResetPasswordData = pendingSessionData.resetPasswordData
-                ?: throw IllegalStateException("developer error, no reset password in progress")
+            ?: throw IllegalStateException("developer error, no reset password in progress")
 
         val param = ResetPasswordMailConfirmed.create(
-                pendingSessionData.clientSecret,
-                safeResetPasswordData.addThreePidRegistrationResponse.sid,
-                safeResetPasswordData.newPassword
+            pendingSessionData.clientSecret,
+            safeResetPasswordData.addThreePidRegistrationResponse.sid,
+            safeResetPasswordData.newPassword
         )
 
         executeRequest(null) {

@@ -83,7 +83,7 @@ abstract class SyncService : Service() {
                     stopMe()
                 }
             }
-            else        -> {
+            else -> {
                 val isInit = initialize(intent)
                 onStart(isInitialSync)
                 if (isInit) {
@@ -120,9 +120,9 @@ abstract class SyncService : Service() {
         if (!preventReschedule && periodic && sessionId != null && backgroundDetectionObserver.isInBackground) {
             Timber.d("## Sync: Reschedule service in $syncDelaySeconds sec")
             onRescheduleAsked(
-                    sessionId = sessionId ?: "",
-                    syncTimeoutSeconds = syncTimeoutSeconds,
-                    syncDelaySeconds = syncDelaySeconds
+                sessionId = sessionId ?: "",
+                syncTimeoutSeconds = syncTimeoutSeconds,
+                syncDelaySeconds = syncDelaySeconds
             )
         }
         super.onDestroy()
@@ -181,10 +181,10 @@ abstract class SyncService : Service() {
                 preventReschedule = true
                 // Instead start a work to restart background sync when network is on
                 onNetworkError(
-                        sessionId = sessionId ?: "",
-                        syncTimeoutSeconds = syncTimeoutSeconds,
-                        syncDelaySeconds = syncDelaySeconds,
-                        isPeriodic = periodic
+                    sessionId = sessionId ?: "",
+                    syncTimeoutSeconds = syncTimeoutSeconds,
+                    syncDelaySeconds = syncDelaySeconds,
+                    isPeriodic = periodic
                 )
             }
             // JobCancellation could be caught here when onDestroy cancels the coroutine context
@@ -205,7 +205,7 @@ abstract class SyncService : Service() {
         syncDelaySeconds = intent.getIntExtra(EXTRA_DELAY_SECONDS, getDefaultSyncDelaySeconds())
         try {
             val sessionComponent = matrix.sessionManager.getSessionComponent(safeSessionId)
-                    ?: throw IllegalStateException("## Sync: You should have a session to make it work")
+                ?: throw IllegalStateException("## Sync: You should have a session to make it work")
             session = sessionComponent.session()
             sessionId = safeSessionId
             syncTask = sessionComponent.syncTask()

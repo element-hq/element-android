@@ -79,18 +79,18 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
     private fun setupSubmitButton() {
         views.createAccountSubmit.setOnClickListener { submit() }
         observeInputFields()
-                .onEach {
-                    views.createAccountPasswordInput.error = null
-                    views.createAccountInput.error = null
-                    views.createAccountSubmit.isEnabled = it
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach {
+                views.createAccountPasswordInput.error = null
+                views.createAccountInput.error = null
+                views.createAccountSubmit.isEnabled = it
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun observeInputFields() = combine(
-            views.createAccountInput.hasContentFlow { it.trim() },
-            views.createAccountPasswordInput.hasContentFlow(),
-            transform = { isLoginNotEmpty, isPasswordNotEmpty -> isLoginNotEmpty && isPasswordNotEmpty }
+        views.createAccountInput.hasContentFlow { it.trim() },
+        views.createAccountPasswordInput.hasContentFlow(),
+        transform = { isLoginNotEmpty, isPasswordNotEmpty -> isLoginNotEmpty && isPasswordNotEmpty }
     )
 
     private fun submit() {
@@ -135,26 +135,26 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         // Trick to display the error without text.
         views.createAccountInput.error = " "
         when {
-            throwable.isUsernameInUse() || throwable.isInvalidUsername()                             -> {
+            throwable.isUsernameInUse() || throwable.isInvalidUsername() -> {
                 views.createAccountInput.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isLoginEmailUnknown()                                                          -> {
+            throwable.isLoginEmailUnknown() -> {
                 views.createAccountInput.error = getString(R.string.login_login_with_email_error)
             }
             throwable.isInvalidPassword() && views.createAccountPasswordInput.hasSurroundingSpaces() -> {
                 views.createAccountPasswordInput.error = getString(R.string.auth_invalid_login_param_space_in_password)
             }
-            throwable.isWeakPassword() || throwable.isInvalidPassword()                              -> {
+            throwable.isWeakPassword() || throwable.isInvalidPassword() -> {
                 views.createAccountPasswordInput.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isRegistrationDisabled()                                                       -> {
+            throwable.isRegistrationDisabled() -> {
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.dialog_title_error)
-                        .setMessage(getString(R.string.login_registration_disabled))
-                        .setPositiveButton(R.string.ok, null)
-                        .show()
+                    .setTitle(R.string.dialog_title_error)
+                    .setMessage(getString(R.string.login_registration_disabled))
+                    .setPositiveButton(R.string.ok, null)
+                    .show()
             }
-            else                                                                                     -> {
+            else -> {
                 super.onError(throwable)
             }
         }
@@ -173,7 +173,7 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
     private fun setupUi(state: OnboardingViewState) {
         when (state.loginMode) {
             is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.loginMode.ssoIdentityProviders)
-            else                        -> hideSsoProviders()
+            else -> hideSsoProviders()
         }
     }
 
@@ -183,9 +183,9 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         views.ssoButtons.ssoIdentityProviders = ssoProviders?.sorted()
         views.ssoButtons.listener = SocialLoginButtonsView.InteractionListener { id ->
             viewModel.getSsoUrl(
-                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                    deviceId = deviceId,
-                    providerId = id
+                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                deviceId = deviceId,
+                providerId = id
             )?.let { openInCustomTab(it) }
         }
     }

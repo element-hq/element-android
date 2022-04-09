@@ -69,14 +69,14 @@ abstract class BottomSheetQuickReactionsItem : VectorEpoxyModel<BottomSheetQuick
 
         val textViews
             get() = listOf(
-                    quickReaction0,
-                    quickReaction1,
-                    quickReaction2,
-                    quickReaction3,
-                    quickReaction4,
-                    quickReaction5,
-                    quickReaction6,
-                    quickReaction7
+                quickReaction0,
+                quickReaction1,
+                quickReaction2,
+                quickReaction3,
+                quickReaction4,
+                quickReaction5,
+                quickReaction6,
+                quickReaction7
             )
     }
 

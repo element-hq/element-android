@@ -52,11 +52,11 @@ class LoginSsoOnlyFragment2 @Inject constructor() : AbstractSSOLoginFragment2<Fr
 
     private fun submit() = withState(loginViewModel) { state ->
         loginViewModel.getSsoUrl(
-                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
-                deviceId = state.deviceId,
-                providerId = null
+            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+            deviceId = state.deviceId,
+            providerId = null
         )
-                ?.let { openInCustomTab(it) }
+            ?.let { openInCustomTab(it) }
     }
 
     override fun resetViewModel() {

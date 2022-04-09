@@ -30,7 +30,7 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
 class IncomingKeyRequestListFragment @Inject constructor(
-        private val epoxyController: IncomingKeyRequestPagedController
+    private val epoxyController: IncomingKeyRequestPagedController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {

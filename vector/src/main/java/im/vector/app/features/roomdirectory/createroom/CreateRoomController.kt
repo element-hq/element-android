@@ -36,8 +36,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
 
 class CreateRoomController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val roomAliasErrorFormatter: RoomAliasErrorFormatter
+    private val stringProvider: StringProvider,
+    private val roomAliasErrorFormatter: RoomAliasErrorFormatter
 ) : TypedEpoxyController<CreateRoomViewState>() {
 
     var listener: Listener? = null
@@ -94,37 +94,37 @@ class CreateRoomController @Inject constructor(
         }
 
         when (viewState.roomJoinRules) {
-            RoomJoinRules.INVITE     -> {
+            RoomJoinRules.INVITE -> {
                 buildProfileAction(
-                        id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_private_title),
-                        subtitle = stringProvider.getString(R.string.room_settings_room_access_private_description),
-                        divider = false,
-                        editable = true,
-                        action = { host.listener?.selectVisibility() }
+                    id = "joinRule",
+                    title = stringProvider.getString(R.string.room_settings_room_access_private_title),
+                    subtitle = stringProvider.getString(R.string.room_settings_room_access_private_description),
+                    divider = false,
+                    editable = true,
+                    action = { host.listener?.selectVisibility() }
                 )
             }
-            RoomJoinRules.PUBLIC     -> {
+            RoomJoinRules.PUBLIC -> {
                 buildProfileAction(
-                        id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_public_title),
-                        subtitle = stringProvider.getString(R.string.room_settings_room_access_public_description),
-                        divider = false,
-                        editable = true,
-                        action = { host.listener?.selectVisibility() }
+                    id = "joinRule",
+                    title = stringProvider.getString(R.string.room_settings_room_access_public_title),
+                    subtitle = stringProvider.getString(R.string.room_settings_room_access_public_description),
+                    divider = false,
+                    editable = true,
+                    action = { host.listener?.selectVisibility() }
                 )
             }
             RoomJoinRules.RESTRICTED -> {
                 buildProfileAction(
-                        id = "joinRule",
-                        title = stringProvider.getString(R.string.room_settings_room_access_restricted_title),
-                        subtitle = stringProvider.getString(R.string.room_create_member_of_space_name_can_join, viewState.parentSpaceSummary?.displayName),
-                        divider = false,
-                        editable = true,
-                        action = { host.listener?.selectVisibility() }
+                    id = "joinRule",
+                    title = stringProvider.getString(R.string.room_settings_room_access_restricted_title),
+                    subtitle = stringProvider.getString(R.string.room_create_member_of_space_name_can_join, viewState.parentSpaceSummary?.displayName),
+                    divider = false,
+                    editable = true,
+                    action = { host.listener?.selectVisibility() }
                 )
             }
-            else                     -> {
+            else -> {
                 // not yet supported
             }
         }
@@ -145,8 +145,9 @@ class CreateRoomController @Inject constructor(
                 maxLength(MatrixConstants.maxAliasLocalPartLength(viewState.homeServerName))
                 hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                 errorMessage(
-                        host.roomAliasErrorFormatter.format(
-                                (((viewState.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError)
+                    host.roomAliasErrorFormatter.format(
+                        (((viewState.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError
+                    )
                 )
                 onTextChange { value ->
                     host.listener?.setAliasLocalPart(value)
@@ -162,11 +163,11 @@ class CreateRoomController @Inject constructor(
                 enabled(enableFormElement)
                 title(host.stringProvider.getString(R.string.create_room_encryption_title))
                 summary(
-                        if (viewState.hsAdminHasDisabledE2E) {
-                            host.stringProvider.getString(R.string.settings_hs_admin_e2e_disabled)
-                        } else {
-                            host.stringProvider.getString(R.string.create_room_encryption_description)
-                        }
+                    if (viewState.hsAdminHasDisabledE2E) {
+                        host.stringProvider.getString(R.string.settings_hs_admin_e2e_disabled)
+                    } else {
+                        host.stringProvider.getString(R.string.create_room_encryption_description)
+                    }
                 )
 
                 switchChecked(viewState.isEncrypted ?: viewState.defaultEncrypted[viewState.roomJoinRules].orFalse())
@@ -177,9 +178,9 @@ class CreateRoomController @Inject constructor(
             }
         }
 
-//        dividerItem {
-//            id("divider1")
-//        }
+        //        dividerItem {
+        //            id("divider1")
+        //        }
         formAdvancedToggleItem {
             id("showAdvanced")
             title(host.stringProvider.getString(if (viewState.showAdvanced) R.string.hide_advanced else R.string.show_advanced))

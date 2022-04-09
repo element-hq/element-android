@@ -27,16 +27,17 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class RoomGroupMessageCreator @Inject constructor(
-        private val bitmapLoader: NotificationBitmapLoader,
-        private val stringProvider: StringProvider,
-        private val notificationUtils: NotificationUtils
+    private val bitmapLoader: NotificationBitmapLoader,
+    private val stringProvider: StringProvider,
+    private val notificationUtils: NotificationUtils
 ) {
 
     fun createRoomMessage(events: List<NotifiableMessageEvent>, roomId: String, userDisplayName: String, userAvatarUrl: String?): RoomNotification.Message {
         val firstKnownRoomEvent = events[0]
         val roomName = firstKnownRoomEvent.roomName ?: firstKnownRoomEvent.senderName ?: ""
         val roomIsGroup = !firstKnownRoomEvent.roomIsDirect
-        val style = NotificationCompat.MessagingStyle(Person.Builder()
+        val style = NotificationCompat.MessagingStyle(
+            Person.Builder()
                 .setName(userDisplayName)
                 .setIcon(bitmapLoader.getUserIcon(userAvatarUrl))
                 .setKey(firstKnownRoomEvent.matrixID)
@@ -59,26 +60,26 @@ class RoomGroupMessageCreator @Inject constructor(
         val smartReplyErrors = events.filter { it.isSmartReplyError() }
         val messageCount = (events.size - smartReplyErrors.size)
         val meta = RoomNotification.Message.Meta(
-                summaryLine = createRoomMessagesGroupSummaryLine(events, roomName, roomIsDirect = !roomIsGroup),
-                messageCount = messageCount,
-                latestTimestamp = lastMessageTimestamp,
-                roomId = roomId,
-                shouldBing = events.any { it.noisy }
+            summaryLine = createRoomMessagesGroupSummaryLine(events, roomName, roomIsDirect = !roomIsGroup),
+            messageCount = messageCount,
+            latestTimestamp = lastMessageTimestamp,
+            roomId = roomId,
+            shouldBing = events.any { it.noisy }
         )
         return RoomNotification.Message(
-                notificationUtils.buildMessagesListNotification(
-                        style,
-                        RoomEventGroupInfo(roomId, roomName, isDirect = !roomIsGroup).also {
-                            it.hasSmartReplyError = smartReplyErrors.isNotEmpty()
-                            it.shouldBing = meta.shouldBing
-                            it.customSound = events.last().soundName
-                        },
-                        largeIcon = largeBitmap,
-                        lastMessageTimestamp,
-                        userDisplayName,
-                        tickerText
-                ),
-                meta
+            notificationUtils.buildMessagesListNotification(
+                style,
+                RoomEventGroupInfo(roomId, roomName, isDirect = !roomIsGroup).also {
+                    it.hasSmartReplyError = smartReplyErrors.isNotEmpty()
+                    it.shouldBing = meta.shouldBing
+                    it.customSound = events.last().soundName
+                },
+                largeIcon = largeBitmap,
+                lastMessageTimestamp,
+                userDisplayName,
+                tickerText
+            ),
+            meta
         )
     }
 
@@ -88,14 +89,14 @@ class RoomGroupMessageCreator @Inject constructor(
                 null
             } else {
                 Person.Builder()
-                        .setName(event.senderName)
-                        .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath))
-                        .setKey(event.senderId)
-                        .build()
+                    .setName(event.senderName)
+                    .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath))
+                    .setKey(event.senderId)
+                    .build()
             }
             when {
                 event.isSmartReplyError() -> addMessage(stringProvider.getString(R.string.notification_inline_reply_failed), event.timestamp, senderPerson)
-                else                      -> {
+                else -> {
                     val message = NotificationCompat.MessagingStyle.Message(event.body, event.timestamp, senderPerson).also { message ->
                         event.imageUri?.let {
                             message.setData("image/", it)
@@ -110,13 +111,13 @@ class RoomGroupMessageCreator @Inject constructor(
     private fun createRoomMessagesGroupSummaryLine(events: List<NotifiableMessageEvent>, roomName: String, roomIsDirect: Boolean): CharSequence {
         return try {
             when (events.size) {
-                1    -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
+                1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
                 else -> {
                     stringProvider.getQuantityString(
-                            R.plurals.notification_compat_summary_line_for_room,
-                            events.size,
-                            roomName,
-                            events.size
+                        R.plurals.notification_compat_summary_line_for_room,
+                        events.size,
+                        roomName,
+                        events.size
                     )
                 }
             }
@@ -150,8 +151,8 @@ class RoomGroupMessageCreator @Inject constructor(
     private fun getRoomBitmap(events: List<NotifiableMessageEvent>): Bitmap? {
         // Use the last event (most recent?)
         return events.lastOrNull()
-                ?.roomAvatarPath
-                ?.let { bitmapLoader.getRoomBitmap(it) }
+            ?.roomAvatarPath
+            ?.let { bitmapLoader.getRoomBitmap(it) }
     }
 }
 

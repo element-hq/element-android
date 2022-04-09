@@ -36,8 +36,8 @@ class VectorFullTransitionSet : TransitionSet {
     private fun init() {
         ordering = ORDERING_TOGETHER
         addTransition(Fade(Fade.OUT))
-                .addTransition(ChangeBounds())
-                .addTransition(ChangeTransform())
-                .addTransition(Fade(Fade.IN))
+            .addTransition(ChangeBounds())
+            .addTransition(ChangeTransform())
+            .addTransition(Fade(Fade.IN))
     }
 }

@@ -81,9 +81,11 @@ interface CryptoService {
 
     fun getDeviceTrackingStatus(userId: String): Int
 
-    suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
-                               password: String,
-                               progressListener: ProgressListener?): ImportRoomKeysResult
+    suspend fun importRoomKeys(
+        roomKeysAsArray: ByteArray,
+        password: String,
+        progressListener: ProgressListener?
+    ): ImportRoomKeysResult
 
     suspend fun exportRoomKeys(password: String): ByteArray
 
@@ -113,10 +115,12 @@ interface CryptoService {
 
     fun isRoomEncrypted(roomId: String): Boolean
 
-    fun encryptEventContent(eventContent: Content,
-                            eventType: String,
-                            roomId: String,
-                            callback: MatrixCallback<MXEncryptEventContentResult>)
+    fun encryptEventContent(
+        eventContent: Content,
+        eventType: String,
+        roomId: String,
+        callback: MatrixCallback<MXEncryptEventContentResult>
+    )
 
     fun discardOutboundSession(roomId: String)
 

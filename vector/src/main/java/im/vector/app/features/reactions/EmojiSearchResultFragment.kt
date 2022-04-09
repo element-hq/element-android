@@ -30,7 +30,7 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
 class EmojiSearchResultFragment @Inject constructor(
-        private val epoxyController: EmojiSearchResultController
+    private val epoxyController: EmojiSearchResultController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(), ReactionClickListener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGenericRecyclerBinding {

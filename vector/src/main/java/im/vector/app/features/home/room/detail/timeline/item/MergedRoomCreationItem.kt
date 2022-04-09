@@ -109,15 +109,15 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
                 }
                 holder.e2eTitleDescriptionView.textAlignment = View.TEXT_ALIGNMENT_CENTER
                 holder.e2eTitleTextView.setCompoundDrawablesWithIntrinsicBounds(
-                        ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_black),
-                        null, null, null
+                    ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_black),
+                    null, null, null
                 )
             } else {
                 holder.e2eTitleTextView.text = holder.expandView.resources.getString(R.string.encryption_not_enabled)
                 holder.e2eTitleDescriptionView.text = holder.expandView.resources.getString(R.string.encryption_unknown_algorithm_tile_description)
                 holder.e2eTitleTextView.setCompoundDrawablesWithIntrinsicBounds(
-                        ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_warning),
-                        null, null, null
+                    ContextCompat.getDrawable(holder.view.context, R.drawable.ic_shield_warning),
+                    null, null, null
                 )
             }
         } else {
@@ -155,12 +155,12 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             }
         } else {
             holder.roomTopicText.setTextOrHide(
-                    span {
-                        span(holder.view.resources.getString(R.string.topic_prefix)) {
-                            textStyle = "bold"
-                        }
-                        +topic.linkify(attributes.callback)
+                span {
+                    span(holder.view.resources.getString(R.string.topic_prefix)) {
+                        textStyle = "bold"
                     }
+                    +topic.linkify(attributes.callback)
+                }
             )
         }
         holder.roomTopicText.movementMethod = movementMethod
@@ -220,18 +220,18 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
     }
 
     data class Attributes(
-            override val isCollapsed: Boolean,
-            override val mergeData: List<Data>,
-            override val avatarRenderer: AvatarRenderer,
-            override val onCollapsedStateChanged: (Boolean) -> Unit,
-            val callback: TimelineEventController.Callback? = null,
-            val currentUserId: String,
-            val hasEncryptionEvent: Boolean,
-            val isEncryptionAlgorithmSecure: Boolean,
-            val roomSummary: RoomSummary?,
-            val canInvite: Boolean = false,
-            val canChangeAvatar: Boolean = false,
-            val canChangeName: Boolean = false,
-            val canChangeTopic: Boolean = false
+        override val isCollapsed: Boolean,
+        override val mergeData: List<Data>,
+        override val avatarRenderer: AvatarRenderer,
+        override val onCollapsedStateChanged: (Boolean) -> Unit,
+        val callback: TimelineEventController.Callback? = null,
+        val currentUserId: String,
+        val hasEncryptionEvent: Boolean,
+        val isEncryptionAlgorithmSecure: Boolean,
+        val roomSummary: RoomSummary?,
+        val canInvite: Boolean = false,
+        val canChangeAvatar: Boolean = false,
+        val canChangeName: Boolean = false,
+        val canChangeTopic: Boolean = false
     ) : BasedMergedItem.Attributes
 }

@@ -116,12 +116,12 @@ class ElementRobot {
                 settings(shouldGoBack = false) {
                     labs(shouldGoBack = false) {
                         onView(withText(R.string.labs_enable_thread_messages))
-                                .check(ViewAssertions.matches(isDisplayed()))
-                                .perform(ViewActions.closeSoftKeyboard(), click())
+                            .check(ViewAssertions.matches(isDisplayed()))
+                            .perform(ViewActions.closeSoftKeyboard(), click())
                     }
                 }
             }
-            else                       -> {
+            else -> {
             }
         }
     }

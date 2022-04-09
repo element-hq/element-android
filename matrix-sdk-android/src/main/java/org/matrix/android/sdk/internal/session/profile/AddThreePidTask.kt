@@ -29,19 +29,20 @@ import javax.inject.Inject
 
 internal abstract class AddThreePidTask : Task<AddThreePidTask.Params, Unit> {
     data class Params(
-            val threePid: ThreePid
+        val threePid: ThreePid
     )
 }
 
 internal class DefaultAddThreePidTask @Inject constructor(
-        private val profileAPI: ProfileAPI,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val pendingThreePidMapper: PendingThreePidMapper,
-        private val globalErrorReceiver: GlobalErrorReceiver) : AddThreePidTask() {
+    private val profileAPI: ProfileAPI,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val pendingThreePidMapper: PendingThreePidMapper,
+    private val globalErrorReceiver: GlobalErrorReceiver
+) : AddThreePidTask() {
 
     override suspend fun execute(params: Params) {
         when (params.threePid) {
-            is ThreePid.Email  -> addEmail(params.threePid)
+            is ThreePid.Email -> addEmail(params.threePid)
             is ThreePid.Msisdn -> addMsisdn(params.threePid)
         }
     }
@@ -51,9 +52,9 @@ internal class DefaultAddThreePidTask @Inject constructor(
         val sendAttempt = 1
 
         val body = AddEmailBody(
-                clientSecret = clientSecret,
-                email = threePid.email,
-                sendAttempt = sendAttempt
+            clientSecret = clientSecret,
+            email = threePid.email,
+            sendAttempt = sendAttempt
         )
 
         val result = executeRequest(globalErrorReceiver) {
@@ -63,14 +64,14 @@ internal class DefaultAddThreePidTask @Inject constructor(
         // Store as a pending three pid
         monarchy.awaitTransaction { realm ->
             PendingThreePid(
-                    threePid = threePid,
-                    clientSecret = clientSecret,
-                    sendAttempt = sendAttempt,
-                    sid = result.sid,
-                    submitUrl = null
+                threePid = threePid,
+                clientSecret = clientSecret,
+                sendAttempt = sendAttempt,
+                sid = result.sid,
+                submitUrl = null
             )
-                    .let { pendingThreePidMapper.map(it) }
-                    .let { realm.copyToRealm(it) }
+                .let { pendingThreePidMapper.map(it) }
+                .let { realm.copyToRealm(it) }
         }
     }
 
@@ -86,10 +87,10 @@ internal class DefaultAddThreePidTask @Inject constructor(
         val country = phoneNumberUtil.getRegionCodeForCountryCode(countryCode)
 
         val body = AddMsisdnBody(
-                clientSecret = clientSecret,
-                country = country,
-                phoneNumber = parsedNumber.nationalNumber.toString(),
-                sendAttempt = sendAttempt
+            clientSecret = clientSecret,
+            country = country,
+            phoneNumber = parsedNumber.nationalNumber.toString(),
+            sendAttempt = sendAttempt
         )
 
         val result = executeRequest(globalErrorReceiver) {
@@ -99,14 +100,14 @@ internal class DefaultAddThreePidTask @Inject constructor(
         // Store as a pending three pid
         monarchy.awaitTransaction { realm ->
             PendingThreePid(
-                    threePid = threePid,
-                    clientSecret = clientSecret,
-                    sendAttempt = sendAttempt,
-                    sid = result.sid,
-                    submitUrl = result.submitUrl
+                threePid = threePid,
+                clientSecret = clientSecret,
+                sendAttempt = sendAttempt,
+                sid = result.sid,
+                submitUrl = result.submitUrl
             )
-                    .let { pendingThreePidMapper.map(it) }
-                    .let { realm.copyToRealm(it) }
+                .let { pendingThreePidMapper.map(it) }
+                .let { realm.copyToRealm(it) }
         }
     }
 }

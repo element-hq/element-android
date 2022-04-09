@@ -31,7 +31,7 @@ import im.vector.app.features.onboarding.OnboardingViewState
 import javax.inject.Inject
 
 class FtueAuthAccountCreatedFragment @Inject constructor(
-        private val activeSessionHolder: ActiveSessionHolder
+    private val activeSessionHolder: ActiveSessionHolder
 ) : AbstractFtueAuthFragment<FragmentFtueAccountCreatedBinding>() {
 
     private var hasPlayedConfetti = false

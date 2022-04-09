@@ -31,12 +31,13 @@ private const val SALT_LENGTH = 32
 private const val DEFAULT_ITERATION = 500_000
 
 data class GeneratePrivateKeyResult(
-        // The private key
-        val privateKey: ByteArray,
-        // the salt used to generate the private key
-        val salt: String,
-        // number of key derivations done on the generated private key.
-        val iterations: Int)
+    // The private key
+    val privateKey: ByteArray,
+    // the salt used to generate the private key
+    val salt: String,
+    // number of key derivations done on the generated private key.
+    val iterations: Int
+)
 
 /**
  * Compute a private key from a password.
@@ -65,10 +66,12 @@ fun generatePrivateKeyWithPassword(password: String, progressListener: ProgressL
  * @return a private key.
  */
 @WorkerThread
-fun retrievePrivateKeyWithPassword(password: String,
-                                   salt: String,
-                                   iterations: Int,
-                                   progressListener: ProgressListener? = null): ByteArray {
+fun retrievePrivateKeyWithPassword(
+    password: String,
+    salt: String,
+    iterations: Int,
+    progressListener: ProgressListener? = null
+): ByteArray {
     return deriveKey(password, salt, iterations, progressListener)
 }
 
@@ -83,10 +86,12 @@ fun retrievePrivateKeyWithPassword(password: String,
  * @return a private key.
  */
 @WorkerThread
-fun deriveKey(password: String,
-              salt: String,
-              iterations: Int,
-              progressListener: ProgressListener?): ByteArray {
+fun deriveKey(
+    password: String,
+    salt: String,
+    iterations: Int,
+    progressListener: ProgressListener?
+): ByteArray {
     // Note: copied and adapted from MXMegolmExportEncryption
     val t0 = System.currentTimeMillis()
 

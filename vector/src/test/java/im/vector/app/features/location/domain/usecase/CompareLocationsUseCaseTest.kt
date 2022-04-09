@@ -45,14 +45,14 @@ class CompareLocationsUseCaseTest {
     fun `given 2 very near locations when calling execute then these locations are considered as equal`() = runTest {
         // Given
         val location1 = LocationData(
-                latitude = 48.858269,
-                longitude = 2.294551,
-                uncertainty = null
+            latitude = 48.858269,
+            longitude = 2.294551,
+            uncertainty = null
         )
         val location2 = LocationData(
-                latitude = 48.858275,
-                longitude = 2.294547,
-                uncertainty = null
+            latitude = 48.858275,
+            longitude = 2.294547,
+            uncertainty = null
         )
         // When
         val areEqual = compareLocationsUseCase.execute(location1, location2)
@@ -65,14 +65,14 @@ class CompareLocationsUseCaseTest {
     fun `given 2 far away locations when calling execute then these locations are considered as not equal`() = runTest {
         // Given
         val location1 = LocationData(
-                latitude = 48.858269,
-                longitude = 2.294551,
-                uncertainty = null
+            latitude = 48.858269,
+            longitude = 2.294551,
+            uncertainty = null
         )
         val location2 = LocationData(
-                latitude = 48.861777,
-                longitude = 2.289348,
-                uncertainty = null
+            latitude = 48.861777,
+            longitude = 2.289348,
+            uncertainty = null
         )
         // When
         val areEqual = compareLocationsUseCase.execute(location1, location2)

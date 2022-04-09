@@ -84,10 +84,10 @@ abstract class FormEditTextWithDeleteItem : VectorEpoxyModel<FormEditTextWithDel
         holder.textInputEditText.isSingleLine = singleLine
 
         holder.textInputEditText.imeOptions =
-                imeOptions ?: when (singleLine) {
-                    true  -> EditorInfo.IME_ACTION_NEXT
-                    false -> EditorInfo.IME_ACTION_NONE
-                }
+            imeOptions ?: when (singleLine) {
+                true -> EditorInfo.IME_ACTION_NEXT
+                false -> EditorInfo.IME_ACTION_NONE
+            }
 
         holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
 

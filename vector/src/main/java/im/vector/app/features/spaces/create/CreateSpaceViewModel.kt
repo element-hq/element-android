@@ -42,11 +42,11 @@ import org.matrix.android.sdk.api.session.room.AliasAvailabilityResult
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 
 class CreateSpaceViewModel @AssistedInject constructor(
-        @Assisted initialState: CreateSpaceState,
-        private val session: Session,
-        private val stringProvider: StringProvider,
-        private val createSpaceViewModelTask: CreateSpaceViewModelTask,
-        private val errorFormatter: ErrorFormatter
+    @Assisted initialState: CreateSpaceState,
+    private val session: Session,
+    private val stringProvider: StringProvider,
+    private val createSpaceViewModelTask: CreateSpaceViewModelTask,
+    private val errorFormatter: ErrorFormatter
 ) : VectorViewModel<CreateSpaceState, CreateSpaceAction, CreateSpaceEvents>(initialState) {
 
     private val identityService = session.identityService()
@@ -56,7 +56,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
             val identityServerUrl = identityService.getCurrentIdentityServerUrl()
             setState {
                 copy(
-                        canInviteByMail = identityServerUrl != null
+                    canInviteByMail = identityServerUrl != null
                 )
             }
         }
@@ -66,8 +66,8 @@ class CreateSpaceViewModel @AssistedInject constructor(
         val identityServerUrl = identityService.getCurrentIdentityServerUrl()
         setState {
             copy(
-                    homeServerName = session.myUserId.getDomain(),
-                    canInviteByMail = identityServerUrl != null
+                homeServerName = session.myUserId.getDomain(),
+                canInviteByMail = identityServerUrl != null
             )
         }
         startListenToIdentityManager()
@@ -95,100 +95,100 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
         override fun initialState(viewModelContext: ViewModelContext): CreateSpaceState {
             return CreateSpaceState(
-                    defaultRooms = mapOf(
-                            0 to viewModelContext.activity.getString(R.string.create_spaces_default_public_room_name),
-                            1 to viewModelContext.activity.getString(R.string.create_spaces_default_public_random_room_name)
-                    )
+                defaultRooms = mapOf(
+                    0 to viewModelContext.activity.getString(R.string.create_spaces_default_public_room_name),
+                    1 to viewModelContext.activity.getString(R.string.create_spaces_default_public_random_room_name)
+                )
             )
         }
     }
 
     override fun handle(action: CreateSpaceAction) {
         when (action) {
-            is CreateSpaceAction.SetRoomType              -> {
+            is CreateSpaceAction.SetRoomType -> {
                 setState {
                     copy(
-                            step = CreateSpaceState.Step.SetDetails,
-                            spaceType = action.type
+                        step = CreateSpaceState.Step.SetDetails,
+                        spaceType = action.type
                     )
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToDetails)
             }
-            is CreateSpaceAction.NameChanged              -> {
+            is CreateSpaceAction.NameChanged -> {
                 setState {
                     if (aliasManuallyModified) {
                         copy(
-                                nameInlineError = null,
-                                name = action.name,
-                                aliasVerificationTask = Uninitialized
+                            nameInlineError = null,
+                            name = action.name,
+                            aliasVerificationTask = Uninitialized
                         )
                     } else {
                         val tentativeAlias =
-                                MatrixPatterns.candidateAliasFromRoomName(action.name, homeServerName)
+                            MatrixPatterns.candidateAliasFromRoomName(action.name, homeServerName)
                         copy(
-                                nameInlineError = null,
-                                name = action.name,
-                                aliasLocalPart = tentativeAlias,
-                                aliasVerificationTask = Uninitialized
+                            nameInlineError = null,
+                            name = action.name,
+                            aliasLocalPart = tentativeAlias,
+                            aliasVerificationTask = Uninitialized
                         )
                     }
                 }
             }
-            is CreateSpaceAction.TopicChanged             -> {
+            is CreateSpaceAction.TopicChanged -> {
                 setState {
                     copy(
-                            topic = action.topic
+                        topic = action.topic
                     )
                 }
             }
-            is CreateSpaceAction.SpaceAliasChanged        -> {
+            is CreateSpaceAction.SpaceAliasChanged -> {
                 // This called only when the alias is change manually
                 // not when programmatically changed via a change on name
                 setState {
                     copy(
-                            aliasManuallyModified = true,
-                            aliasLocalPart = action.aliasLocalPart,
-                            aliasVerificationTask = Uninitialized
+                        aliasManuallyModified = true,
+                        aliasLocalPart = action.aliasLocalPart,
+                        aliasVerificationTask = Uninitialized
                     )
                 }
             }
-            CreateSpaceAction.OnBackPressed               -> {
+            CreateSpaceAction.OnBackPressed -> {
                 handleBackNavigation()
             }
-            CreateSpaceAction.NextFromDetails             -> {
+            CreateSpaceAction.NextFromDetails -> {
                 handleNextFromDetails()
             }
-            CreateSpaceAction.NextFromDefaultRooms        -> {
+            CreateSpaceAction.NextFromDefaultRooms -> {
                 handleNextFromDefaultRooms()
             }
-            CreateSpaceAction.NextFromAdd3pid             -> {
+            CreateSpaceAction.NextFromAdd3pid -> {
                 handleNextFrom3pid()
             }
-            is CreateSpaceAction.DefaultRoomNameChanged   -> {
+            is CreateSpaceAction.DefaultRoomNameChanged -> {
                 setState {
                     copy(
-                            defaultRooms = defaultRooms.orEmpty().toMutableMap().apply {
-                                this[action.index] = action.name
-                            }
+                        defaultRooms = defaultRooms.orEmpty().toMutableMap().apply {
+                            this[action.index] = action.name
+                        }
                     )
                 }
             }
             is CreateSpaceAction.DefaultInvite3pidChanged -> {
                 setState {
                     copy(
-                            default3pidInvite = default3pidInvite.orEmpty().toMutableMap().apply {
-                                this[action.index] = action.email
-                            },
-                            emailValidationResult = emailValidationResult.orEmpty().toMutableMap().apply {
-                                this.remove(action.index)
-                            }
+                        default3pidInvite = default3pidInvite.orEmpty().toMutableMap().apply {
+                            this[action.index] = action.email
+                        },
+                        emailValidationResult = emailValidationResult.orEmpty().toMutableMap().apply {
+                            this.remove(action.index)
+                        }
                     )
                 }
             }
-            is CreateSpaceAction.SetAvatar                -> {
+            is CreateSpaceAction.SetAvatar -> {
                 setState { copy(avatarUri = action.uri) }
             }
-            is CreateSpaceAction.SetSpaceTopology         -> {
+            is CreateSpaceAction.SetSpaceTopology -> {
                 handleSetTopology(action)
             }
         }
@@ -196,11 +196,11 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
     private fun handleSetTopology(action: CreateSpaceAction.SetSpaceTopology) {
         when (action.topology) {
-            SpaceTopology.JustMe         -> {
+            SpaceTopology.JustMe -> {
                 setState {
                     copy(
-                            spaceTopology = SpaceTopology.JustMe,
-                            defaultRooms = emptyMap()
+                        spaceTopology = SpaceTopology.JustMe,
+                        defaultRooms = emptyMap()
                     )
                 }
                 handleNextFromDefaultRooms()
@@ -208,8 +208,8 @@ class CreateSpaceViewModel @AssistedInject constructor(
             SpaceTopology.MeAndTeammates -> {
                 setState {
                     copy(
-                            spaceTopology = SpaceTopology.MeAndTeammates,
-                            step = CreateSpaceState.Step.AddEmailsOrInvites
+                        spaceTopology = SpaceTopology.MeAndTeammates,
+                        step = CreateSpaceState.Step.AddEmailsOrInvites
                     )
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToAdd3Pid)
@@ -219,41 +219,41 @@ class CreateSpaceViewModel @AssistedInject constructor(
 
     private fun handleBackNavigation() = withState { state ->
         when (state.step) {
-            CreateSpaceState.Step.ChooseType         -> {
+            CreateSpaceState.Step.ChooseType -> {
                 _viewEvents.post(CreateSpaceEvents.Dismiss)
             }
-            CreateSpaceState.Step.SetDetails         -> {
+            CreateSpaceState.Step.SetDetails -> {
                 setState {
                     copy(
-                            step = CreateSpaceState.Step.ChooseType,
-                            nameInlineError = null,
-                            creationResult = Uninitialized
+                        step = CreateSpaceState.Step.ChooseType,
+                        nameInlineError = null,
+                        creationResult = Uninitialized
                     )
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToChooseType)
             }
-            CreateSpaceState.Step.AddRooms           -> {
+            CreateSpaceState.Step.AddRooms -> {
                 if (state.spaceType == SpaceType.Private && state.spaceTopology == SpaceTopology.MeAndTeammates) {
                     setState {
                         copy(
-                                spaceTopology = null,
-                                step = CreateSpaceState.Step.AddEmailsOrInvites
+                            spaceTopology = null,
+                            step = CreateSpaceState.Step.AddEmailsOrInvites
                         )
                     }
                     _viewEvents.post(CreateSpaceEvents.NavigateToAdd3Pid)
                 } else {
                     setState {
                         copy(
-                                step = CreateSpaceState.Step.SetDetails
+                            step = CreateSpaceState.Step.SetDetails
                         )
                     }
                     _viewEvents.post(CreateSpaceEvents.NavigateToDetails)
                 }
             }
-            CreateSpaceState.Step.ChoosePrivateType  -> {
+            CreateSpaceState.Step.ChoosePrivateType -> {
                 setState {
                     copy(
-                            step = CreateSpaceState.Step.SetDetails
+                        step = CreateSpaceState.Step.SetDetails
                     )
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToDetails)
@@ -261,7 +261,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
             CreateSpaceState.Step.AddEmailsOrInvites -> {
                 setState {
                     copy(
-                            step = CreateSpaceState.Step.ChoosePrivateType
+                        step = CreateSpaceState.Step.ChoosePrivateType
                     )
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToChoosePrivateType)
@@ -278,14 +278,14 @@ class CreateSpaceViewModel @AssistedInject constructor(
         if (emailValidation?.all { it.value } != false) {
             setState {
                 copy(
-                        step = CreateSpaceState.Step.AddRooms
+                    step = CreateSpaceState.Step.AddRooms
                 )
             }
             _viewEvents.post(CreateSpaceEvents.NavigateToAddRooms)
         } else {
             setState {
                 copy(
-                        emailValidationResult = emailValidation
+                    emailValidationResult = emailValidation
                 )
             }
         }
@@ -295,14 +295,14 @@ class CreateSpaceViewModel @AssistedInject constructor(
         if (state.name.isNullOrBlank()) {
             setState {
                 copy(
-                        nameInlineError = stringProvider.getString(R.string.create_space_error_empty_field_space_name)
+                    nameInlineError = stringProvider.getString(R.string.create_space_error_empty_field_space_name)
                 )
             }
         } else {
             if (state.spaceType == SpaceType.Private) {
                 setState {
                     copy(
-                            step = CreateSpaceState.Step.ChoosePrivateType
+                        step = CreateSpaceState.Step.ChoosePrivateType
                     )
                 }
                 _viewEvents.post(CreateSpaceEvents.NavigateToChoosePrivateType)
@@ -316,10 +316,10 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 viewModelScope.launch {
                     try {
                         when (val result = session.checkAliasAvailability(aliasLocalPart)) {
-                            AliasAvailabilityResult.Available       -> {
+                            AliasAvailabilityResult.Available -> {
                                 setState {
                                     copy(
-                                            step = CreateSpaceState.Step.AddRooms
+                                        step = CreateSpaceState.Step.AddRooms
                                     )
                                 }
                                 _viewEvents.post(CreateSpaceEvents.HideModalLoading)
@@ -354,57 +354,57 @@ class CreateSpaceViewModel @AssistedInject constructor(
                     state.aliasLocalPart
                 } else null
                 val result = createSpaceViewModelTask.execute(
-                        CreateSpaceTaskParams(
-                                spaceName = spaceName,
-                                spaceTopic = state.topic,
-                                spaceAvatar = state.avatarUri,
-                                isPublic = state.spaceType == SpaceType.Public,
-                                defaultRooms = state.defaultRooms
-                                        ?.entries
-                                        ?.sortedBy { it.key }
-                                        ?.mapNotNull { it.value }
-                                        .orEmpty(),
-                                spaceAlias = alias,
-                                defaultEmailToInvite = state.default3pidInvite
-                                        ?.values
-                                        ?.mapNotNull { it.takeIf { it?.isEmail() == true } }
-                                        ?.takeIf { state.spaceTopology == SpaceTopology.MeAndTeammates }
-                                        .orEmpty()
-                        )
+                    CreateSpaceTaskParams(
+                        spaceName = spaceName,
+                        spaceTopic = state.topic,
+                        spaceAvatar = state.avatarUri,
+                        isPublic = state.spaceType == SpaceType.Public,
+                        defaultRooms = state.defaultRooms
+                            ?.entries
+                            ?.sortedBy { it.key }
+                            ?.mapNotNull { it.value }
+                            .orEmpty(),
+                        spaceAlias = alias,
+                        defaultEmailToInvite = state.default3pidInvite
+                            ?.values
+                            ?.mapNotNull { it.takeIf { it?.isEmail() == true } }
+                            ?.takeIf { state.spaceTopology == SpaceTopology.MeAndTeammates }
+                            .orEmpty()
+                    )
                 )
                 when (result) {
-                    is  CreateSpaceTaskResult.Success             -> {
+                    is CreateSpaceTaskResult.Success -> {
                         setState {
                             copy(creationResult = Success(result.spaceId))
                         }
                         _viewEvents.post(
-                                CreateSpaceEvents.FinishSuccess(
-                                        result.spaceId,
-                                        result.childIds.firstOrNull(),
-                                        state.spaceTopology
-                                )
+                            CreateSpaceEvents.FinishSuccess(
+                                result.spaceId,
+                                result.childIds.firstOrNull(),
+                                state.spaceTopology
+                            )
                         )
                     }
-                    is CreateSpaceTaskResult.PartialSuccess      -> {
+                    is CreateSpaceTaskResult.PartialSuccess -> {
                         // XXX what can we do here?
                         setState {
                             copy(creationResult = Success(result.spaceId))
                         }
                         _viewEvents.post(
-                                CreateSpaceEvents.FinishSuccess(
-                                        result.spaceId,
-                                        result.childIds.firstOrNull(),
-                                        state.spaceTopology
-                                )
+                            CreateSpaceEvents.FinishSuccess(
+                                result.spaceId,
+                                result.childIds.firstOrNull(),
+                                state.spaceTopology
+                            )
                         )
                     }
                     is CreateSpaceTaskResult.FailedToCreateSpace -> {
                         if (result.failure is CreateRoomFailure.AliasError) {
                             setState {
                                 copy(
-                                        step = CreateSpaceState.Step.SetDetails,
-                                        aliasVerificationTask = Fail(result.failure.aliasError),
-                                        creationResult = Uninitialized
+                                    step = CreateSpaceState.Step.SetDetails,
+                                    aliasVerificationTask = Fail(result.failure.aliasError),
+                                    creationResult = Uninitialized
                                 )
                             }
                             _viewEvents.post(CreateSpaceEvents.HideModalLoading)

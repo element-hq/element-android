@@ -31,7 +31,7 @@ class ChooseSpaceTypeFragment @Inject constructor() : VectorBaseFragment<Fragmen
     private val sharedViewModel: CreateSpaceViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
-            FragmentSpaceCreateChooseTypeBinding.inflate(layoutInflater, container, false)
+        FragmentSpaceCreateChooseTypeBinding.inflate(layoutInflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

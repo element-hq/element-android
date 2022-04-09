@@ -26,16 +26,16 @@ import javax.inject.Inject
 internal interface GetContextOfEventTask : Task<GetContextOfEventTask.Params, TokenChunkEventPersistor.Result> {
 
     data class Params(
-            val roomId: String,
-            val eventId: String
+        val roomId: String,
+        val eventId: String
     )
 }
 
 internal class DefaultGetContextOfEventTask @Inject constructor(
-        private val roomAPI: RoomAPI,
-        private val filterRepository: FilterRepository,
-        private val tokenChunkEventPersistor: TokenChunkEventPersistor,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomAPI: RoomAPI,
+    private val filterRepository: FilterRepository,
+    private val tokenChunkEventPersistor: TokenChunkEventPersistor,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetContextOfEventTask {
 
     override suspend fun execute(params: GetContextOfEventTask.Params): TokenChunkEventPersistor.Result {

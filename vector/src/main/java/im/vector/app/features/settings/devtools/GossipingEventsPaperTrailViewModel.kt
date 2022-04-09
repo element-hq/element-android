@@ -35,11 +35,13 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 
 data class GossipingEventsPaperTrailState(
-        val events: Async<PagedList<Event>> = Uninitialized
+    val events: Async<PagedList<Event>> = Uninitialized
 ) : MavericksState
 
-class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted initialState: GossipingEventsPaperTrailState,
-                                                                     private val session: Session) :
+class GossipingEventsPaperTrailViewModel @AssistedInject constructor(
+    @Assisted initialState: GossipingEventsPaperTrailState,
+    private val session: Session
+) :
     VectorViewModel<GossipingEventsPaperTrailState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
@@ -51,10 +53,10 @@ class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted i
             copy(events = Loading())
         }
         session.cryptoService().getGossipingEventsTrail()
-                .asFlow()
-                .execute {
-                    copy(events = it)
-                }
+            .asFlow()
+            .execute {
+                copy(events = it)
+            }
     }
 
     override fun handle(action: EmptyAction) {}

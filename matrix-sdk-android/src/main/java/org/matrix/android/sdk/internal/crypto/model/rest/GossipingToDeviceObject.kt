@@ -38,7 +38,7 @@ interface GossipingToDeviceObject : SendToDeviceObject {
 
 @JsonClass(generateAdapter = true)
 data class GossipingDefaultContent(
-        @Json(name = "action") override val action: String?,
-        @Json(name = "requesting_device_id") override val requestingDeviceId: String?,
-        @Json(name = "m.request_id") override val requestId: String? = null
+    @Json(name = "action") override val action: String?,
+    @Json(name = "requesting_device_id") override val requestingDeviceId: String?,
+    @Json(name = "m.request_id") override val requestId: String? = null
 ) : GossipingToDeviceObject

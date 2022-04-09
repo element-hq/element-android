@@ -56,9 +56,10 @@ class ThreadMessagingTest : InstrumentedTest {
         // Let's send a message in the normal timeline
         val textMessage = "This is a normal timeline message"
         val sentMessages = commonTestHelper.sendTextMessage(
-                room = aliceRoom,
-                message = textMessage,
-                nbOfMessages = 1)
+            room = aliceRoom,
+            message = textMessage,
+            nbOfMessages = 1
+        )
 
         val initMessage = sentMessages.first()
 
@@ -69,10 +70,11 @@ class ThreadMessagingTest : InstrumentedTest {
 
         // Let's reply in timeline to that message
         val repliesInThread = commonTestHelper.replyInThreadMessage(
-                room = aliceRoom,
-                message = "Reply In the above thread",
-                numberOfMessages = 1,
-                rootThreadEventId = initMessage.root.eventId.orEmpty())
+            room = aliceRoom,
+            message = "Reply In the above thread",
+            numberOfMessages = 1,
+            rootThreadEventId = initMessage.root.eventId.orEmpty()
+        )
 
         val replyInThread = repliesInThread.first()
         replyInThread.root.isThread().shouldBeTrue()
@@ -113,9 +115,10 @@ class ThreadMessagingTest : InstrumentedTest {
         // Let's send a message in the normal timeline
         val textMessage = "This is a normal timeline message"
         val sentMessages = commonTestHelper.sendTextMessage(
-                room = aliceRoom,
-                message = textMessage,
-                nbOfMessages = 1)
+            room = aliceRoom,
+            message = textMessage,
+            nbOfMessages = 1
+        )
 
         val initMessage = sentMessages.first()
 
@@ -130,10 +133,11 @@ class ThreadMessagingTest : InstrumentedTest {
         val bobRoom = bobSession.getRoom(bobRoomId)!!
 
         val repliesInThread = commonTestHelper.replyInThreadMessage(
-                room = bobRoom,
-                message = "Reply In the above thread",
-                numberOfMessages = 1,
-                rootThreadEventId = initMessage.root.eventId.orEmpty())
+            room = bobRoom,
+            message = "Reply In the above thread",
+            numberOfMessages = 1,
+            rootThreadEventId = initMessage.root.eventId.orEmpty()
+        )
 
         val replyInThread = repliesInThread.first()
         replyInThread.root.isThread().shouldBeTrue()
@@ -187,9 +191,10 @@ class ThreadMessagingTest : InstrumentedTest {
         // Let's send 5 messages in the normal timeline
         val textMessage = "This is a normal timeline message"
         val sentMessages = commonTestHelper.sendTextMessage(
-                room = aliceRoom,
-                message = textMessage,
-                nbOfMessages = 5)
+            room = aliceRoom,
+            message = textMessage,
+            nbOfMessages = 5
+        )
 
         sentMessages.forEach {
             it.root.isThread().shouldBeFalse()
@@ -202,10 +207,11 @@ class ThreadMessagingTest : InstrumentedTest {
 
         // Let's reply 40 times in the timeline to the second message
         val repliesInThread = commonTestHelper.replyInThreadMessage(
-                room = aliceRoom,
-                message = "Reply In the above thread",
-                numberOfMessages = 40,
-                rootThreadEventId = selectedInitMessage.root.eventId.orEmpty())
+            room = aliceRoom,
+            message = "Reply In the above thread",
+            numberOfMessages = 40,
+            rootThreadEventId = selectedInitMessage.root.eventId.orEmpty()
+        )
 
         repliesInThread.forEach {
             it.root.isThread().shouldBeTrue()
@@ -250,9 +256,10 @@ class ThreadMessagingTest : InstrumentedTest {
         // Let's send 5 messages in the normal timeline
         val textMessage = "This is a normal timeline message"
         val sentMessages = commonTestHelper.sendTextMessage(
-                room = aliceRoom,
-                message = textMessage,
-                nbOfMessages = 5)
+            room = aliceRoom,
+            message = textMessage,
+            nbOfMessages = 5
+        )
 
         sentMessages.forEach {
             it.root.isThread().shouldBeFalse()
@@ -266,10 +273,11 @@ class ThreadMessagingTest : InstrumentedTest {
 
         // Alice will reply in thread to the second message 35 times
         val aliceThreadRepliesInSecondMessage = commonTestHelper.replyInThreadMessage(
-                room = aliceRoom,
-                message = "Alice reply In the above second thread message",
-                numberOfMessages = 35,
-                rootThreadEventId = secondMessage.root.eventId.orEmpty())
+            room = aliceRoom,
+            message = "Alice reply In the above second thread message",
+            numberOfMessages = 35,
+            rootThreadEventId = secondMessage.root.eventId.orEmpty()
+        )
 
         // Let's reply in timeline to that message from another user
         val bobSession = cryptoTestData.secondSession!!
@@ -278,17 +286,19 @@ class ThreadMessagingTest : InstrumentedTest {
 
         // Bob will reply in thread to the first message 35 times
         val bobThreadRepliesInFirstMessage = commonTestHelper.replyInThreadMessage(
-                room = bobRoom,
-                message = "Bob reply In the above first thread message",
-                numberOfMessages = 42,
-                rootThreadEventId = firstMessage.root.eventId.orEmpty())
+            room = bobRoom,
+            message = "Bob reply In the above first thread message",
+            numberOfMessages = 42,
+            rootThreadEventId = firstMessage.root.eventId.orEmpty()
+        )
 
         // Bob will also reply in second thread 5 times
         val bobThreadRepliesInSecondMessage = commonTestHelper.replyInThreadMessage(
-                room = bobRoom,
-                message = "Another Bob reply In the above second thread message",
-                numberOfMessages = 20,
-                rootThreadEventId = secondMessage.root.eventId.orEmpty())
+            room = bobRoom,
+            message = "Another Bob reply In the above second thread message",
+            numberOfMessages = 20,
+            rootThreadEventId = secondMessage.root.eventId.orEmpty()
+        )
 
         aliceThreadRepliesInSecondMessage.forEach {
             it.root.isThread().shouldBeTrue()

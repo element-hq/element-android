@@ -25,16 +25,16 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class DiscoveryInformation(
-        /**
-         * Required. Used by clients to discover homeserver information.
-         */
-        @Json(name = "m.homeserver")
-        val homeServer: WellKnownBaseConfig? = null,
+    /**
+     * Required. Used by clients to discover homeserver information.
+     */
+    @Json(name = "m.homeserver")
+    val homeServer: WellKnownBaseConfig? = null,
 
-        /**
-         * Used by clients to discover identity server information.
-         * Note: matrix.org does not send this field
-         */
-        @Json(name = "m.identity_server")
-        val identityServer: WellKnownBaseConfig? = null
+    /**
+     * Used by clients to discover identity server information.
+     * Note: matrix.org does not send this field
+     */
+    @Json(name = "m.identity_server")
+    val identityServer: WellKnownBaseConfig? = null
 )

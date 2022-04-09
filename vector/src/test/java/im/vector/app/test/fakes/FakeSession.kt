@@ -29,10 +29,10 @@ import io.mockk.mockkStatic
 import org.matrix.android.sdk.api.session.Session
 
 class FakeSession(
-        val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
-        val fakeProfileService: FakeProfileService = FakeProfileService(),
-        val fakeHomeServerCapabilitiesService: FakeHomeServerCapabilitiesService = FakeHomeServerCapabilitiesService(),
-        val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService()
+    val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
+    val fakeProfileService: FakeProfileService = FakeProfileService(),
+    val fakeHomeServerCapabilitiesService: FakeHomeServerCapabilitiesService = FakeHomeServerCapabilitiesService(),
+    val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService()
 ) : Session by mockk(relaxed = true) {
 
     init {

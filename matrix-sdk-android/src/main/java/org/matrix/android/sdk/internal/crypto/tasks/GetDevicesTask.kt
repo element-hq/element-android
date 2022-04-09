@@ -26,8 +26,8 @@ import javax.inject.Inject
 internal interface GetDevicesTask : Task<Unit, DevicesListResponse>
 
 internal class DefaultGetDevicesTask @Inject constructor(
-        private val cryptoApi: CryptoApi,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val cryptoApi: CryptoApi,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : GetDevicesTask {
 
     override suspend fun execute(params: Unit): DevicesListResponse {

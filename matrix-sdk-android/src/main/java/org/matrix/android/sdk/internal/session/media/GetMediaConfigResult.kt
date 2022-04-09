@@ -21,10 +21,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 internal data class GetMediaConfigResult(
-        /**
-         * The maximum size an upload can be in bytes. Clients SHOULD use this as a guide when uploading content.
-         * If not listed or null, the size limit should be treated as unknown.
-         */
-        @Json(name = "m.upload.size")
-        val maxUploadSize: Long? = null
+    /**
+     * The maximum size an upload can be in bytes. Clients SHOULD use this as a guide when uploading content.
+     * If not listed or null, the size limit should be treated as unknown.
+     */
+    @Json(name = "m.upload.size")
+    val maxUploadSize: Long? = null
 )

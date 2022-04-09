@@ -51,31 +51,33 @@ internal interface VerificationInfoAccept : VerificationInfo<ValidVerificationIn
         val validCommitment = commitment?.takeIf { it.isNotEmpty() } ?: return null
 
         return ValidVerificationInfoAccept(
-                validTransactionId,
-                validKeyAgreementProtocol,
-                validHash,
-                validMessageAuthenticationCode,
-                validShortAuthenticationStrings,
-                validCommitment
+            validTransactionId,
+            validKeyAgreementProtocol,
+            validHash,
+            validMessageAuthenticationCode,
+            validShortAuthenticationStrings,
+            validCommitment
         )
     }
 }
 
 internal interface VerificationInfoAcceptFactory {
 
-    fun create(tid: String,
-               keyAgreementProtocol: String,
-               hash: String,
-               commitment: String,
-               messageAuthenticationCode: String,
-               shortAuthenticationStrings: List<String>): VerificationInfoAccept
+    fun create(
+        tid: String,
+        keyAgreementProtocol: String,
+        hash: String,
+        commitment: String,
+        messageAuthenticationCode: String,
+        shortAuthenticationStrings: List<String>
+    ): VerificationInfoAccept
 }
 
 internal data class ValidVerificationInfoAccept(
-        val transactionId: String,
-        val keyAgreementProtocol: String,
-        val hash: String,
-        val messageAuthenticationCode: String,
-        val shortAuthenticationStrings: List<String>,
-        var commitment: String?
+    val transactionId: String,
+    val keyAgreementProtocol: String,
+    val hash: String,
+    val messageAuthenticationCode: String,
+    val shortAuthenticationStrings: List<String>,
+    var commitment: String?
 )

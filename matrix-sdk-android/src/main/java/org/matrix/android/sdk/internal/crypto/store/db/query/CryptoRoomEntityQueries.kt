@@ -34,6 +34,6 @@ internal fun CryptoRoomEntity.Companion.getOrCreate(realm: Realm, roomId: String
  */
 internal fun CryptoRoomEntity.Companion.getById(realm: Realm, roomId: String): CryptoRoomEntity? {
     return realm.where<CryptoRoomEntity>()
-            .equalTo(CryptoRoomEntityFields.ROOM_ID, roomId)
-            .findFirst()
+        .equalTo(CryptoRoomEntityFields.ROOM_ID, roomId)
+        .findFirst()
 }

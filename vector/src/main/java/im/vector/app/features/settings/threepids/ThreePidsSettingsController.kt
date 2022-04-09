@@ -43,9 +43,9 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
 
 class ThreePidsSettingsController @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider,
-        private val errorFormatter: ErrorFormatter
+    private val stringProvider: StringProvider,
+    private val colorProvider: ColorProvider,
+    private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<ThreePidsSettingsViewState>() {
 
     interface InteractionListener {
@@ -83,7 +83,7 @@ class ThreePidsSettingsController @Inject constructor(
                     loadingText(host.stringProvider.getString(R.string.loading))
                 }
             }
-            is Fail    -> {
+            is Fail -> {
                 genericFooterItem {
                     id("fail")
                     text(data.threePids.error.localizedMessage?.toEpoxyCharSequence())
@@ -93,7 +93,7 @@ class ThreePidsSettingsController @Inject constructor(
                 val dataList = data.threePids.invoke()
                 buildThreePids(dataList, data)
             }
-            else       -> Unit
+            else -> Unit
         }
     }
 
@@ -112,28 +112,28 @@ class ThreePidsSettingsController @Inject constructor(
 
         // Pending emails
         data.pendingThreePids.invoke()
-                ?.filterIsInstance(ThreePid.Email::class.java)
-                .orEmpty()
-                .let { pendingList ->
-                    if (pendingList.isEmpty() && emails.isEmpty()) {
-                        noResultItem {
-                            id("noEmail")
-                            text(host.stringProvider.getString(R.string.settings_emails_empty))
-                        }
+            ?.filterIsInstance(ThreePid.Email::class.java)
+            .orEmpty()
+            .let { pendingList ->
+                if (pendingList.isEmpty() && emails.isEmpty()) {
+                    noResultItem {
+                        id("noEmail")
+                        text(host.stringProvider.getString(R.string.settings_emails_empty))
                     }
-
-                    pendingList.forEach { buildPendingThreePid(data, "p_email ", it) }
                 }
 
+                pendingList.forEach { buildPendingThreePid(data, "p_email ", it) }
+            }
+
         when (data.uiState) {
-            ThreePidsSettingsUiState.Idle                 ->
+            ThreePidsSettingsUiState.Idle ->
                 genericButtonItem {
                     id("addEmail")
                     text(host.stringProvider.getString(R.string.settings_add_email_address))
                     textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     buttonClickAction { host.interactionListener?.addEmail() }
                 }
-            is ThreePidsSettingsUiState.AddingEmail       -> {
+            is ThreePidsSettingsUiState.AddingEmail -> {
                 settingsEditTextItem {
                     id("addingEmail")
                     inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
@@ -171,28 +171,28 @@ class ThreePidsSettingsController @Inject constructor(
 
         // Pending msisdn
         data.pendingThreePids.invoke()
-                ?.filterIsInstance(ThreePid.Msisdn::class.java)
-                .orEmpty()
-                .let { pendingList ->
-                    if (pendingList.isEmpty() && msisdn.isEmpty()) {
-                        noResultItem {
-                            id("noMsisdn")
-                            text(host.stringProvider.getString(R.string.settings_phone_number_empty))
-                        }
+            ?.filterIsInstance(ThreePid.Msisdn::class.java)
+            .orEmpty()
+            .let { pendingList ->
+                if (pendingList.isEmpty() && msisdn.isEmpty()) {
+                    noResultItem {
+                        id("noMsisdn")
+                        text(host.stringProvider.getString(R.string.settings_phone_number_empty))
                     }
-
-                    pendingList.forEach { buildPendingThreePid(data, "p_msisdn ", it) }
                 }
 
+                pendingList.forEach { buildPendingThreePid(data, "p_msisdn ", it) }
+            }
+
         when (data.uiState) {
-            ThreePidsSettingsUiState.Idle                 ->
+            ThreePidsSettingsUiState.Idle ->
                 genericButtonItem {
                     id("addMsisdn")
                     text(host.stringProvider.getString(R.string.settings_add_phone_number))
                     textColor(host.colorProvider.getColorFromAttribute(R.attr.colorPrimary))
                     buttonClickAction { host.interactionListener?.addMsisdn() }
                 }
-            is ThreePidsSettingsUiState.AddingEmail       -> Unit
+            is ThreePidsSettingsUiState.AddingEmail -> Unit
             is ThreePidsSettingsUiState.AddingPhoneNumber -> {
                 settingsInfoItem {
                     id("addingMsisdnInfo")
@@ -247,7 +247,7 @@ class ThreePidsSettingsController @Inject constructor(
         }
 
         when (threePid) {
-            is ThreePid.Email  -> {
+            is ThreePid.Email -> {
                 settingsInformationItem {
                     id("info" + idPrefix + threePid.value)
                     message(host.stringProvider.getString(R.string.account_email_validation_message))
@@ -297,8 +297,9 @@ class ThreePidsSettingsController @Inject constructor(
         // Wrong code?
         // See https://github.com/matrix-org/synapse/issues/8218
         return if (failure is Failure.ServerError &&
-                failure.httpCode == 400 &&
-                failure.error.code == MatrixError.M_UNKNOWN) {
+            failure.httpCode == 400 &&
+            failure.error.code == MatrixError.M_UNKNOWN
+        ) {
             stringProvider.getString(R.string.settings_text_message_sent_wrong_code)
         } else {
             errorFormatter.toHumanReadable(failure)

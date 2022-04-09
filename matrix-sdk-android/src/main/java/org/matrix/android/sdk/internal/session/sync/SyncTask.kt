@@ -54,29 +54,29 @@ private val loggerTag = LoggerTag("SyncTask", LoggerTag.SYNC)
 internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 
     data class Params(
-            val timeout: Long,
-            val presence: SyncPresence?,
-            val afterPause: Boolean
+        val timeout: Long,
+        val presence: SyncPresence?,
+        val afterPause: Boolean
     )
 }
 
 internal class DefaultSyncTask @Inject constructor(
-        private val syncAPI: SyncAPI,
-        @UserId private val userId: String,
-        private val filterRepository: FilterRepository,
-        private val syncResponseHandler: SyncResponseHandler,
-        private val defaultSyncStatusService: DefaultSyncStatusService,
-        private val syncTokenStore: SyncTokenStore,
-        private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
-        private val userStore: UserStore,
-        private val session: Session,
-        private val sessionListeners: SessionListeners,
-        private val syncTaskSequencer: SyncTaskSequencer,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        @SessionFilesDirectory
-        private val fileDirectory: File,
-        private val syncResponseParser: InitialSyncResponseParser,
-        private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
+    private val syncAPI: SyncAPI,
+    @UserId private val userId: String,
+    private val filterRepository: FilterRepository,
+    private val syncResponseHandler: SyncResponseHandler,
+    private val defaultSyncStatusService: DefaultSyncStatusService,
+    private val syncTokenStore: SyncTokenStore,
+    private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
+    private val userStore: UserStore,
+    private val session: Session,
+    private val sessionListeners: SessionListeners,
+    private val syncTaskSequencer: SyncTaskSequencer,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    @SessionFilesDirectory
+    private val fileDirectory: File,
+    private val syncResponseParser: InitialSyncResponseParser,
+    private val roomSyncEphemeralTemporaryStore: RoomSyncEphemeralTemporaryStore
 ) : SyncTask {
 
     private val workingDir = File(fileDirectory, "is")
@@ -107,9 +107,10 @@ internal class DefaultSyncTask @Inject constructor(
             // We might want to get the user information in parallel too
             val user = tryOrNull { session.getProfileAsUser(userId) }
             userStore.createOrUpdate(
-                    userId = userId,
-                    displayName = user?.displayName,
-                    avatarUrl = user?.avatarUrl)
+                userId = userId,
+                displayName = user?.displayName,
+                avatarUrl = user?.avatarUrl
+            )
             defaultSyncStatusService.startRoot(InitSyncStep.ImportingAccount, 100)
         }
         // Maybe refresh the homeserver capabilities data we know
@@ -136,8 +137,8 @@ internal class DefaultSyncTask @Inject constructor(
                     val syncResponse = logDuration("INIT_SYNC Request", loggerTag) {
                         executeRequest(globalErrorReceiver) {
                             syncAPI.sync(
-                                    params = requestParams,
-                                    readTimeOut = readTimeOut
+                                params = requestParams,
+                                readTimeOut = readTimeOut
                             )
                         }
                     }
@@ -157,8 +158,8 @@ internal class DefaultSyncTask @Inject constructor(
             val syncResponse = try {
                 executeRequest(globalErrorReceiver) {
                     syncAPI.sync(
-                            params = requestParams,
-                            readTimeOut = readTimeOut
+                        params = requestParams,
+                        readTimeOut = readTimeOut
                     )
                 }
             } catch (throwable: Throwable) {
@@ -172,10 +173,12 @@ internal class DefaultSyncTask @Inject constructor(
             Timber.tag(loggerTag.value).d(
                 "Incremental sync request parsing, $nbRooms room(s) $nbToDevice toDevice(s). Got nextBatch: $nextBatch"
             )
-            defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncParsing(
+            defaultSyncStatusService.setStatus(
+                SyncStatusService.Status.IncrementalSyncParsing(
                     rooms = nbRooms,
                     toDevice = nbToDevice
-            ))
+                )
+            )
             syncResponseHandler.handleResponse(syncResponse, token, null)
             syncResponseToReturn = syncResponse
             Timber.tag(loggerTag.value).d("Incremental sync done")
@@ -217,7 +220,7 @@ internal class DefaultSyncTask @Inject constructor(
                 }
             } else {
                 throw syncResponse.toFailure(globalErrorReceiver)
-                        .also { Timber.tag(loggerTag.value).w("INIT_SYNC request failure: $this") }
+                    .also { Timber.tag(loggerTag.value).w("INIT_SYNC request failure: $this") }
             }
             syncStatisticsData.downloadInitSyncTime = SystemClock.elapsedRealtime()
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_DOWNLOADED)
@@ -231,7 +234,7 @@ internal class DefaultSyncTask @Inject constructor(
             retry--
             try {
                 return syncAPI.syncStream(
-                        params = requestParams
+                    params = requestParams
                 ).awaitResponse()
             } catch (throwable: Throwable) {
                 if (throwable is SocketTimeoutException && retry > 0) {
@@ -267,8 +270,8 @@ internal class DefaultSyncTask @Inject constructor(
      * Aggregator to send stat event.
      */
     class SyncStatisticsData(
-            val isInitSync: Boolean,
-            val isAfterPause: Boolean
+        val isInitSync: Boolean,
+        val isAfterPause: Boolean
     ) {
         val startTime = SystemClock.elapsedRealtime()
         var requestInitSyncTime = startTime
@@ -279,20 +282,20 @@ internal class DefaultSyncTask @Inject constructor(
 
     private fun sendStatistics(data: SyncStatisticsData) {
         sendStatisticEvent(
-                if (data.isInitSync) {
-                    (StatisticEvent.InitialSyncRequest(
-                            requestDurationMs = (data.requestInitSyncTime - data.startTime).toInt(),
-                            downloadDurationMs = (data.downloadInitSyncTime - data.requestInitSyncTime).toInt(),
-                            treatmentDurationMs = (data.treatmentSyncTime - data.downloadInitSyncTime).toInt(),
-                            nbOfJoinedRooms = data.nbOfRooms,
-                    ))
-                } else {
-                    StatisticEvent.SyncTreatment(
-                            durationMs = (data.treatmentSyncTime - data.startTime).toInt(),
-                            afterPause = data.isAfterPause,
-                            nbOfJoinedRooms = data.nbOfRooms
-                    )
-                }
+            if (data.isInitSync) {
+                (StatisticEvent.InitialSyncRequest(
+                    requestDurationMs = (data.requestInitSyncTime - data.startTime).toInt(),
+                    downloadDurationMs = (data.downloadInitSyncTime - data.requestInitSyncTime).toInt(),
+                    treatmentDurationMs = (data.treatmentSyncTime - data.downloadInitSyncTime).toInt(),
+                    nbOfJoinedRooms = data.nbOfRooms,
+                ))
+            } else {
+                StatisticEvent.SyncTreatment(
+                    durationMs = (data.treatmentSyncTime - data.startTime).toInt(),
+                    afterPause = data.isAfterPause,
+                    nbOfJoinedRooms = data.nbOfRooms
+                )
+            }
         )
     }
 

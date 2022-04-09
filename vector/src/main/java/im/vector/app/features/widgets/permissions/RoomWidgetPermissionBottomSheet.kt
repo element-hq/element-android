@@ -36,7 +36,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RoomWidgetPermissionBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetRoomWidgetPermissionBinding>() {
+    VectorBaseBottomSheetDialogFragment<BottomSheetRoomWidgetPermissionBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetRoomWidgetPermissionBinding {
         return BottomSheetRoomWidgetPermissionBinding.inflate(inflater, container, false)
@@ -72,11 +72,11 @@ class RoomWidgetPermissionBottomSheet :
 
         val domain = permissionData.widgetDomain ?: ""
         val infoBuilder = SpannableStringBuilder()
-                .append(getString(
-                        R.string.room_widget_permission_webview_shared_info_title
-                                .takeIf { permissionData.isWebviewWidget }
-                                ?: R.string.room_widget_permission_shared_info_title,
-                        "'$domain'"))
+            .append(getString(
+                R.string.room_widget_permission_webview_shared_info_title
+                    .takeIf { permissionData.isWebviewWidget }
+                    ?: R.string.room_widget_permission_shared_info_title,
+                "'$domain'"))
         infoBuilder.append("\n")
         permissionData.permissionsList.forEach {
             infoBuilder.append("\n")

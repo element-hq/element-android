@@ -21,7 +21,7 @@ import okhttp3.Response
 import javax.inject.Inject
 
 internal class DownloadProgressInterceptor @Inject constructor(
-        private val downloadStateTracker: DefaultContentDownloadStateTracker
+    private val downloadStateTracker: DefaultContentDownloadStateTracker
 ) : Interceptor {
 
     companion object {
@@ -33,8 +33,8 @@ internal class DownloadProgressInterceptor @Inject constructor(
         val mxcURl = chain.request().header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER)
 
         val request = chain.request().newBuilder()
-                .removeHeader(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER)
-                .build()
+            .removeHeader(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER)
+            .build()
 
         val originalResponse = chain.proceed(request)
         if (!originalResponse.isSuccessful) {
@@ -43,7 +43,7 @@ internal class DownloadProgressInterceptor @Inject constructor(
         }
         val responseBody = originalResponse.body ?: return originalResponse
         return originalResponse.newBuilder()
-                .body(ProgressResponseBody(responseBody, mxcURl ?: url.toExternalForm(), downloadStateTracker))
-                .build()
+            .body(ProgressResponseBody(responseBody, mxcURl ?: url.toExternalForm(), downloadStateTracker))
+            .build()
     }
 }

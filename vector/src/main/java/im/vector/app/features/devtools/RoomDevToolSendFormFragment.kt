@@ -29,7 +29,7 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
 class RoomDevToolSendFormFragment @Inject constructor(
-        private val epoxyController: RoomDevToolSendFormController
+    private val epoxyController: RoomDevToolSendFormController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(), DevToolsInteractionListener {
 
     val sharedViewModel: RoomDevToolViewModel by activityViewModel()

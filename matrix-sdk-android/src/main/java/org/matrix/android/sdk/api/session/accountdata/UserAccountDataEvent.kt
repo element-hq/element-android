@@ -26,6 +26,6 @@ import org.matrix.android.sdk.api.session.events.model.Content
  */
 @JsonClass(generateAdapter = true)
 data class UserAccountDataEvent(
-        @Json(name = "type") val type: String,
-        @Json(name = "content") val content: Content
+    @Json(name = "type") val type: String,
+    @Json(name = "content") val content: Content
 )

@@ -27,16 +27,16 @@ import javax.inject.Inject
 internal interface UpdateRoomAccountDataTask : Task<UpdateRoomAccountDataTask.Params, Unit> {
 
     data class Params(
-            val roomId: String,
-            val type: String,
-            val content: JsonDict
+        val roomId: String,
+        val type: String,
+        val content: JsonDict
     )
 }
 
 internal class DefaultUpdateRoomAccountDataTask @Inject constructor(
-        private val roomApi: RoomAPI,
-        @UserId private val userId: String,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val roomApi: RoomAPI,
+    @UserId private val userId: String,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : UpdateRoomAccountDataTask {
 
     override suspend fun execute(params: UpdateRoomAccountDataTask.Params) {

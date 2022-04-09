@@ -20,10 +20,10 @@ import com.airbnb.mvrx.MavericksState
 import org.matrix.android.sdk.api.util.MatrixItem
 
 data class UserCodeState(
-        val userId: String,
-        val matrixItem: MatrixItem? = null,
-        val shareLink: String? = null,
-        val mode: Mode = Mode.SHOW
+    val userId: String,
+    val matrixItem: MatrixItem? = null,
+    val shareLink: String? = null,
+    val mode: Mode = Mode.SHOW
 ) : MavericksState {
     sealed class Mode {
         object SHOW : Mode()
@@ -32,6 +32,6 @@ data class UserCodeState(
     }
 
     constructor(args: UserCodeActivity.Args) : this(
-            userId = args.userId
+        userId = args.userId
     )
 }

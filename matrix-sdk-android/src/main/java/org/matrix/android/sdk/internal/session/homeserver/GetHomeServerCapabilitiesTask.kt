@@ -45,20 +45,20 @@ import javax.inject.Inject
 
 internal interface GetHomeServerCapabilitiesTask : Task<GetHomeServerCapabilitiesTask.Params, Unit> {
     data class Params(
-            val forceRefresh: Boolean
+        val forceRefresh: Boolean
     )
 }
 
 internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
-        private val capabilitiesAPI: CapabilitiesAPI,
-        private val mediaAPI: MediaAPI,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val globalErrorReceiver: GlobalErrorReceiver,
-        private val getWellknownTask: GetWellknownTask,
-        private val configExtractor: IntegrationManagerConfigExtractor,
-        private val homeServerConnectionConfig: HomeServerConnectionConfig,
-        @UserId
-        private val userId: String
+    private val capabilitiesAPI: CapabilitiesAPI,
+    private val mediaAPI: MediaAPI,
+    @SessionDatabase private val monarchy: Monarchy,
+    private val globalErrorReceiver: GlobalErrorReceiver,
+    private val getWellknownTask: GetWellknownTask,
+    private val configExtractor: IntegrationManagerConfigExtractor,
+    private val homeServerConnectionConfig: HomeServerConnectionConfig,
+    @UserId
+    private val userId: String
 ) : GetHomeServerCapabilitiesTask {
 
     override suspend fun execute(params: GetHomeServerCapabilitiesTask.Params) {
@@ -94,19 +94,23 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
         }.getOrNull()
 
         val wellknownResult = runCatching {
-            getWellknownTask.execute(GetWellknownTask.Params(
+            getWellknownTask.execute(
+                GetWellknownTask.Params(
                     domain = userId.getDomain(),
                     homeServerConnectionConfig = homeServerConnectionConfig
-            ))
+                )
+            )
         }.getOrNull()
 
         insertInDb(capabilities, mediaConfig, versions, wellknownResult)
     }
 
-    private suspend fun insertInDb(getCapabilitiesResult: GetCapabilitiesResult?,
-                                   getMediaConfigResult: GetMediaConfigResult?,
-                                   getVersionResult: Versions?,
-                                   getWellknownResult: WellknownResult?) {
+    private suspend fun insertInDb(
+        getCapabilitiesResult: GetCapabilitiesResult?,
+        getMediaConfigResult: GetMediaConfigResult?,
+        getVersionResult: Versions?,
+        getWellknownResult: WellknownResult?
+    ) {
         monarchy.awaitTransaction { realm ->
             val homeServerCapabilitiesEntity = HomeServerCapabilitiesEntity.getOrCreate(realm)
 
@@ -124,12 +128,12 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                     MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).toJson(it)
                 }
                 homeServerCapabilitiesEntity.canUseThreading = /* capabilities?.threads?.enabled.orFalse() || */
-                        getVersionResult?.doesServerSupportThreads().orFalse()
+                    getVersionResult?.doesServerSupportThreads().orFalse()
             }
 
             if (getMediaConfigResult != null) {
                 homeServerCapabilitiesEntity.maxUploadFileSize = getMediaConfigResult.maxUploadSize
-                        ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
+                    ?: HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
             }
 
             if (getVersionResult != null) {

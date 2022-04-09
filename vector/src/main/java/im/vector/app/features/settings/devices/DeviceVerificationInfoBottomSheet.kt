@@ -34,14 +34,14 @@ import javax.inject.Inject
 
 @Parcelize
 data class DeviceVerificationInfoArgs(
-        val userId: String,
-        val deviceId: String
+    val userId: String,
+    val deviceId: String
 ) : Parcelable
 
 @AndroidEntryPoint
 class DeviceVerificationInfoBottomSheet :
-        VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
-        DeviceVerificationInfoBottomSheetController.Callback {
+    VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
+    DeviceVerificationInfoBottomSheetController.Callback {
 
     private val viewModel: DeviceVerificationInfoBottomSheetViewModel by fragmentViewModel(DeviceVerificationInfoBottomSheetViewModel::class)
 
@@ -56,8 +56,8 @@ class DeviceVerificationInfoBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.bottomSheetRecyclerView.configureWith(
-                controller,
-                hasFixedSize = false
+            controller,
+            hasFixedSize = false
         )
         controller.callback = this
         views.bottomSheetTitle.isVisible = false

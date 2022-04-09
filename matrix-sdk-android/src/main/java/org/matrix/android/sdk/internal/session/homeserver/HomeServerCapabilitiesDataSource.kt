@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import javax.inject.Inject
 
 internal class HomeServerCapabilitiesDataSource @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy
+    @SessionDatabase private val monarchy: Monarchy
 ) {
     fun getHomeServerCapabilities(): HomeServerCapabilities? {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->

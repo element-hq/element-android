@@ -27,7 +27,7 @@ import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 
 class CallTransferPagerAdapter(
-        private val fragmentActivity: FragmentActivity
+    private val fragmentActivity: FragmentActivity
 ) : FragmentStateAdapter(fragmentActivity) {
 
     companion object {
@@ -47,12 +47,12 @@ class CallTransferPagerAdapter(
         if (position == 0) {
             fragment = fragmentActivity.supportFragmentManager.fragmentFactory.instantiate(fragmentActivity.classLoader, UserListFragment::class.java.name)
             fragment.arguments = UserListFragmentArgs(
-                    title = "",
-                    menuResId = -1,
-                    singleSelection = true,
-                    showInviteActions = false,
-                    showToolbar = false,
-                    showContactBookAction = false
+                title = "",
+                menuResId = -1,
+                singleSelection = true,
+                showInviteActions = false,
+                showToolbar = false,
+                showContactBookAction = false
             ).toMvRxBundle()
         } else {
             fragment = fragmentActivity.supportFragmentManager.fragmentFactory.instantiate(fragmentActivity.classLoader, DialPadFragment::class.java.name)

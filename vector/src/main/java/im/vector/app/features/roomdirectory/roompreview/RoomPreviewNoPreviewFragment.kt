@@ -52,7 +52,7 @@ import javax.inject.Inject
  * Note: this Fragment is also used for world readable room for the moment
  */
 class RoomPreviewNoPreviewFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+    private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomPreviewNoPreviewBinding>() {
 
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()
@@ -65,7 +65,7 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.roomPreviewNoPreviewToolbar)
-                .allowBack()
+            .allowBack()
 
         views.roomPreviewNoPreviewJoin.commonClicked = { roomPreviewViewModel.handle(RoomPreviewAction.Join) }
     }
@@ -78,12 +78,12 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
     override fun invalidate() = withState(roomPreviewViewModel) { state ->
 
         views.roomPreviewNoPreviewJoin.render(
-                when (state.roomJoinState) {
-                    JoinState.NOT_JOINED    -> ButtonStateView.State.Button
-                    JoinState.JOINING       -> ButtonStateView.State.Loading
-                    JoinState.JOINED        -> ButtonStateView.State.Loaded
-                    JoinState.JOINING_ERROR -> ButtonStateView.State.Error
-                }
+            when (state.roomJoinState) {
+                JoinState.NOT_JOINED -> ButtonStateView.State.Button
+                JoinState.JOINING -> ButtonStateView.State.Loading
+                JoinState.JOINED -> ButtonStateView.State.Loaded
+                JoinState.JOINING_ERROR -> ButtonStateView.State.Error
+            }
         )
 
         if (state.lastError == null) {
@@ -113,40 +113,40 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
             is Success -> {
                 views.roomPreviewPeekingProgress.isVisible = false
                 when (state.peekingState.invoke()) {
-                    PeekingState.FOUND     -> {
+                    PeekingState.FOUND -> {
                         // show join buttons
                         views.roomPreviewNoPreviewJoin.isVisible = true
                         renderState(bestName, state.matrixItem(), state.roomTopic)
                         if (state.fromEmailInvite != null && !state.isEmailBoundToAccount) {
                             views.roomPreviewNoPreviewLabel.text =
+                                span {
                                     span {
-                                        span {
-                                            textColor = ThemeUtils.getColor(requireContext(), R.attr.vctr_content_primary)
-                                            text = if (state.roomType == RoomType.SPACE) {
-                                                getString(R.string.this_invite_to_this_space_was_sent, state.fromEmailInvite.email)
-                                            } else {
-                                                getString(R.string.this_invite_to_this_room_was_sent, state.fromEmailInvite.email)
-                                            }
-                                                    .toSpannable()
-                                                    .styleMatchingText(state.fromEmailInvite.email, Typeface.BOLD)
+                                        textColor = ThemeUtils.getColor(requireContext(), R.attr.vctr_content_primary)
+                                        text = if (state.roomType == RoomType.SPACE) {
+                                            getString(R.string.this_invite_to_this_space_was_sent, state.fromEmailInvite.email)
+                                        } else {
+                                            getString(R.string.this_invite_to_this_room_was_sent, state.fromEmailInvite.email)
                                         }
-                                        +"\n"
-                                        span {
-                                            text = getString(
-                                                    R.string.link_this_email_with_your_account,
-                                                    getString(R.string.link_this_email_settings_link)
-                                            )
-                                                    .toSpannable()
-                                                    .tappableMatchingText(getString(R.string.link_this_email_settings_link), object : ClickableSpan() {
-                                                        override fun onClick(widget: View) {
-                                                            navigator.openSettings(
-                                                                    requireContext(),
-                                                                    VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
-                                                            )
-                                                        }
-                                                    })
-                                        }
+                                            .toSpannable()
+                                            .styleMatchingText(state.fromEmailInvite.email, Typeface.BOLD)
                                     }
+                                    +"\n"
+                                    span {
+                                        text = getString(
+                                            R.string.link_this_email_with_your_account,
+                                            getString(R.string.link_this_email_settings_link)
+                                        )
+                                            .toSpannable()
+                                            .tappableMatchingText(getString(R.string.link_this_email_settings_link), object : ClickableSpan() {
+                                                override fun onClick(widget: View) {
+                                                    navigator.openSettings(
+                                                        requireContext(),
+                                                        VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
+                                                    )
+                                                }
+                                            })
+                                    }
+                                }
                             views.roomPreviewNoPreviewLabel.movementMethod = LinkMovementMethod.getInstance()
                             views.roomPreviewNoPreviewJoin.commonClicked = {
                                 roomPreviewViewModel.handle(RoomPreviewAction.JoinThirdParty)
@@ -159,7 +159,7 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
                         views.roomPreviewNoPreviewLabel.setText(R.string.room_preview_no_preview_join)
                         renderState(bestName, state.matrixItem().takeIf { state.roomAlias != null }, state.roomTopic)
                     }
-                    else                   -> {
+                    else -> {
                         views.roomPreviewNoPreviewJoin.isVisible = false
                         views.roomPreviewNoPreviewLabel.isVisible = true
                         views.roomPreviewNoPreviewLabel.setText(R.string.room_preview_not_found)
@@ -167,7 +167,7 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
                     }
                 }
             }
-            else       -> {
+            else -> {
                 // Render with initial state, no peeking
                 views.roomPreviewPeekingProgress.isVisible = false
                 views.roomPreviewNoPreviewJoin.isVisible = true

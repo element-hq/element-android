@@ -67,7 +67,7 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
             is OnboardingViewEvents.Failure -> showFailure(viewEvents.throwable)
-            else                            ->
+            else ->
                 // This is handled by the Activity
                 Unit
         }
@@ -80,33 +80,33 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
         }
 
         when (throwable) {
-            is CancellationException                  ->
+            is CancellationException ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
             is Failure.UnrecognizedCertificateFailure -> showUnrecognizedCertificateFailure(throwable)
-            else                                      -> onError(throwable)
+            else -> onError(throwable)
         }
     }
 
     private fun showUnrecognizedCertificateFailure(failure: Failure.UnrecognizedCertificateFailure) {
         // Ask the user to accept the certificate
         unrecognizedCertificateDialog.show(requireActivity(),
-                failure.fingerprint,
-                failure.url,
-                object : UnrecognizedCertificateDialog.Callback {
-                    override fun onAccept() {
-                        // User accept the certificate
-                        viewModel.handle(OnboardingAction.UserAcceptCertificate(failure.fingerprint))
-                    }
+            failure.fingerprint,
+            failure.url,
+            object : UnrecognizedCertificateDialog.Callback {
+                override fun onAccept() {
+                    // User accept the certificate
+                    viewModel.handle(OnboardingAction.UserAcceptCertificate(failure.fingerprint))
+                }
 
-                    override fun onIgnore() {
-                        // Cannot happen in this case
-                    }
+                override fun onIgnore() {
+                    // Cannot happen in this case
+                }
 
-                    override fun onReject() {
-                        // Nothing to do in this case
-                    }
-                })
+                override fun onReject() {
+                    // Nothing to do in this case
+                }
+            })
     }
 
     open fun onError(throwable: Throwable) {
@@ -118,32 +118,32 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
             displayCancelDialog && viewModel.isRegistrationStarted -> {
                 // Ask for confirmation before cancelling the registration
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.login_signup_cancel_confirmation_title)
-                        .setMessage(R.string.login_signup_cancel_confirmation_content)
-                        .setPositiveButton(R.string.yes) { _, _ ->
-                            displayCancelDialog = false
-                            vectorBaseActivity.onBackPressed()
-                        }
-                        .setNegativeButton(R.string.no, null)
-                        .show()
+                    .setTitle(R.string.login_signup_cancel_confirmation_title)
+                    .setMessage(R.string.login_signup_cancel_confirmation_content)
+                    .setPositiveButton(R.string.yes) { _, _ ->
+                        displayCancelDialog = false
+                        vectorBaseActivity.onBackPressed()
+                    }
+                    .setNegativeButton(R.string.no, null)
+                    .show()
 
                 true
             }
-            displayCancelDialog && isResetPasswordStarted          -> {
+            displayCancelDialog && isResetPasswordStarted -> {
                 // Ask for confirmation before cancelling the reset password
                 MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.login_reset_password_cancel_confirmation_title)
-                        .setMessage(R.string.login_reset_password_cancel_confirmation_content)
-                        .setPositiveButton(R.string.yes) { _, _ ->
-                            displayCancelDialog = false
-                            vectorBaseActivity.onBackPressed()
-                        }
-                        .setNegativeButton(R.string.no, null)
-                        .show()
+                    .setTitle(R.string.login_reset_password_cancel_confirmation_title)
+                    .setMessage(R.string.login_reset_password_cancel_confirmation_content)
+                    .setPositiveButton(R.string.yes) { _, _ ->
+                        displayCancelDialog = false
+                        vectorBaseActivity.onBackPressed()
+                    }
+                    .setNegativeButton(R.string.no, null)
+                    .show()
 
                 true
             }
-            else                                                   -> {
+            else -> {
                 resetViewModel()
                 // Do not consume the Back event
                 false

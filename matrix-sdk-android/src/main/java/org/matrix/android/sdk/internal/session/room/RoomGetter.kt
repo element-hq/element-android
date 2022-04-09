@@ -35,8 +35,8 @@ internal interface RoomGetter {
 
 @SessionScope
 internal class DefaultRoomGetter @Inject constructor(
-        private val realmSessionProvider: RealmSessionProvider,
-        private val roomFactory: RoomFactory
+    private val realmSessionProvider: RealmSessionProvider,
+    private val roomFactory: RoomFactory
 ) : RoomGetter {
 
     override fun getRoom(roomId: String): Room? {
@@ -48,16 +48,16 @@ internal class DefaultRoomGetter @Inject constructor(
     override fun getDirectRoomWith(otherUserId: String): String? {
         return realmSessionProvider.withRealm { realm ->
             RoomSummaryEntity.where(realm)
-                    .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                    .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
-                    .findAll()
-                    .firstOrNull { dm -> dm.otherMemberIds.size == 1 && dm.otherMemberIds.first(null) == otherUserId }
-                    ?.roomId
+                .equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                .equalTo(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.JOIN.name)
+                .findAll()
+                .firstOrNull { dm -> dm.otherMemberIds.size == 1 && dm.otherMemberIds.first(null) == otherUserId }
+                ?.roomId
         }
     }
 
     private fun createRoom(realm: Realm, roomId: String): Room? {
         return RoomEntity.where(realm, roomId).findFirst()
-                ?.let { roomFactory.create(roomId) }
+            ?.let { roomFactory.create(roomId) }
     }
 }

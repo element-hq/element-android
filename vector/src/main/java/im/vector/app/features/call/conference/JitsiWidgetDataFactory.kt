@@ -45,17 +45,17 @@ class JitsiWidgetDataFactory(private val fallbackJitsiDomain: String, private va
     private fun createFromUrl(url: String): JitsiWidgetData {
         val configString = tryOrNull { URL(url) }?.query
         val configs = configString?.split("&")
-                ?.map { it.split("=") }
-                ?.filter { it.size == 2 }
-                ?.map { (key, value) -> key to URLDecoder.decode(value, "UTF-8") }
-                ?.toMap()
-                .orEmpty()
+            ?.map { it.split("=") }
+            ?.filter { it.size == 2 }
+            ?.map { (key, value) -> key to URLDecoder.decode(value, "UTF-8") }
+            ?.toMap()
+            .orEmpty()
 
         return JitsiWidgetData(
-                domain = configs["conferenceDomain"] ?: fallbackJitsiDomain,
-                confId = configs["conferenceId"] ?: configs["confId"] ?: throw IllegalStateException(),
-                isAudioOnly = configs["isAudioOnly"].toBoolean(),
-                auth = configs["auth"]
+            domain = configs["conferenceDomain"] ?: fallbackJitsiDomain,
+            confId = configs["conferenceId"] ?: configs["confId"] ?: throw IllegalStateException(),
+            isAudioOnly = configs["isAudioOnly"].toBoolean(),
+            auth = configs["auth"]
         )
     }
 }

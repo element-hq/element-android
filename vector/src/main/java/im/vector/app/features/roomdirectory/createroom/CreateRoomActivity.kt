@@ -48,9 +48,9 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         if (isFirstCreation()) {
             val fragmentArgs: CreateRoomArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
             addFragment(
-                    views.simpleFragmentContainer,
-                    CreateRoomFragment::class.java,
-                    fragmentArgs
+                views.simpleFragmentContainer,
+                CreateRoomFragment::class.java,
+                fragmentArgs
             )
         }
     }
@@ -60,39 +60,43 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         analyticsScreenName = MobileScreen.ScreenName.CreateRoom
         sharedActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         sharedActionViewModel
-                .stream()
-                .onEach { sharedAction ->
-                    when (sharedAction) {
-                        is RoomDirectorySharedAction.Back,
-                        is RoomDirectorySharedAction.Close             -> finish()
-                        is RoomDirectorySharedAction.CreateRoomSuccess -> {
-                            setResult(Activity.RESULT_OK, Intent().apply { putExtra(RESULT_CREATED_ROOM_ID, sharedAction.createdRoomId) })
-                            finish()
-                        }
-                        else                                           -> {
-                            // nop
-                        }
+            .stream()
+            .onEach { sharedAction ->
+                when (sharedAction) {
+                    is RoomDirectorySharedAction.Back,
+                    is RoomDirectorySharedAction.Close -> finish()
+                    is RoomDirectorySharedAction.CreateRoomSuccess -> {
+                        setResult(Activity.RESULT_OK, Intent().apply { putExtra(RESULT_CREATED_ROOM_ID, sharedAction.createdRoomId) })
+                        finish()
+                    }
+                    else -> {
+                        // nop
                     }
                 }
-                .launchIn(lifecycleScope)
+            }
+            .launchIn(lifecycleScope)
     }
 
     companion object {
 
         private const val RESULT_CREATED_ROOM_ID = "RESULT_CREATED_ROOM_ID"
 
-        fun getIntent(context: Context,
-                      initialName: String = "",
-                      isSpace: Boolean = false,
-                      openAfterCreate: Boolean = true,
-                      currentSpaceId: String? = null): Intent {
+        fun getIntent(
+            context: Context,
+            initialName: String = "",
+            isSpace: Boolean = false,
+            openAfterCreate: Boolean = true,
+            currentSpaceId: String? = null
+        ): Intent {
             return Intent(context, CreateRoomActivity::class.java).apply {
-                putExtra(Mavericks.KEY_ARG, CreateRoomArgs(
+                putExtra(
+                    Mavericks.KEY_ARG, CreateRoomArgs(
                         initialName = initialName,
                         isSpace = isSpace,
                         openAfterCreate = openAfterCreate,
                         parentSpaceId = currentSpaceId
-                ))
+                    )
+                )
             }
         }
 

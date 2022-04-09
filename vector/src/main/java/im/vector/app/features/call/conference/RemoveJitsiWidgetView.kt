@@ -31,9 +31,9 @@ import im.vector.app.features.home.room.detail.RoomDetailViewState
 import org.matrix.android.sdk.api.session.room.model.Membership
 
 @SuppressLint("ClickableViewAccessibility") class RemoveJitsiWidgetView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private sealed class State {
@@ -53,7 +53,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
         views.removeJitsiSlidingContainer.setOnTouchListener { _, event ->
             val currentState = state
             return@setOnTouchListener when (event.action) {
-                MotionEvent.ACTION_DOWN   -> {
+                MotionEvent.ACTION_DOWN -> {
                     if (currentState == State.Idle) {
                         val initialX = views.removeJitsiSlidingContainer.x - event.rawX
                         updateState(State.Sliding(initialX, 0f, false))
@@ -71,7 +71,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
                     }
                     true
                 }
-                MotionEvent.ACTION_MOVE   -> {
+                MotionEvent.ACTION_MOVE -> {
                     if (currentState is State.Sliding) {
                         val translationX = (currentState.initialX + event.rawX).coerceAtLeast(0f)
                         val hasReachedActivationThreshold = translationX >= views.root.width / 4
@@ -79,7 +79,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
                     }
                     true
                 }
-                else                      -> false
+                else -> false
             }
         }
         renderInternalState(state)
@@ -88,9 +88,10 @@ import org.matrix.android.sdk.api.session.room.model.Membership
     fun render(roomDetailViewState: RoomDetailViewState) {
         val summary = roomDetailViewState.asyncRoomSummary()
         val newState = if (summary?.membership != Membership.JOIN ||
-                roomDetailViewState.isCallOptionAvailable() ||
-                !roomDetailViewState.isAllowedToManageWidgets ||
-                roomDetailViewState.jitsiState.widgetId == null) {
+            roomDetailViewState.isCallOptionAvailable() ||
+            !roomDetailViewState.isAllowedToManageWidgets ||
+            roomDetailViewState.jitsiState.widgetId == null
+        ) {
             State.Unmount
         } else if (roomDetailViewState.jitsiState.deleteWidgetInProgress) {
             State.Progress
@@ -119,12 +120,12 @@ import org.matrix.android.sdk.api.session.room.model.Membership
     private fun renderInternalState(state: State) {
         isVisible = state != State.Unmount
         when (state) {
-            State.Progress   -> {
+            State.Progress -> {
                 isVisible = true
                 views.updateVisibilities(true)
                 views.updateHangupColors(true)
             }
-            State.Idle       -> {
+            State.Idle -> {
                 isVisible = true
                 views.updateVisibilities(false)
                 views.removeJitsiSlidingContainer.translationX = 0f
@@ -136,7 +137,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
                 views.removeJitsiSlidingContainer.translationX = state.translationX
                 views.updateHangupColors(state.hasReachedActivationThreshold)
             }
-            else             -> Unit
+            else -> Unit
         }
     }
 

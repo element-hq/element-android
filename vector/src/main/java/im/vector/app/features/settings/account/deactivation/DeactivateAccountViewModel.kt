@@ -39,11 +39,13 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 data class DeactivateAccountViewState(
-        val dummy: Boolean = false
+    val dummy: Boolean = false
 ) : MavericksState
 
-class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private val initialState: DeactivateAccountViewState,
-                                                             private val session: Session) :
+class DeactivateAccountViewModel @AssistedInject constructor(
+    @Assisted private val initialState: DeactivateAccountViewState,
+    private val session: Session
+) :
     VectorViewModel<DeactivateAccountViewState, DeactivateAccountAction, DeactivateAccountViewEvents>(initialState) {
 
     @AssistedFactory
@@ -68,11 +70,11 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
             is DeactivateAccountAction.PasswordAuthDone -> {
                 val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
-                        UserPasswordAuth(
-                                session = pendingAuth?.session,
-                                password = decryptedPass,
-                                user = session.myUserId
-                        )
+                    UserPasswordAuth(
+                        session = pendingAuth?.session,
+                        password = decryptedPass,
+                        user = session.myUserId
+                    )
                 )
             }
             DeactivateAccountAction.ReAuthCancelled -> {
@@ -90,14 +92,14 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
         viewModelScope.launch {
             val event = try {
                 session.deactivateAccount(
-                        action.eraseAllData,
-                        object : UserInteractiveAuthInterceptor {
-                            override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                _viewEvents.post(DeactivateAccountViewEvents.RequestReAuth(flowResponse, errCode))
-                                pendingAuth = DefaultBaseAuth(session = flowResponse.session)
-                                uiaContinuation = promise
-                            }
+                    action.eraseAllData,
+                    object : UserInteractiveAuthInterceptor {
+                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                            _viewEvents.post(DeactivateAccountViewEvents.RequestReAuth(flowResponse, errCode))
+                            pendingAuth = DefaultBaseAuth(session = flowResponse.session)
+                            uiaContinuation = promise
                         }
+                    }
                 )
                 DeactivateAccountViewEvents.Done
             } catch (failure: Exception) {

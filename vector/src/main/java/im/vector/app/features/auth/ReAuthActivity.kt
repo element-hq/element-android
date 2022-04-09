@@ -47,11 +47,11 @@ class ReAuthActivity : SimpleFragmentActivity() {
 
     @Parcelize
     data class Args(
-            val flowType: String?,
-            val title: String?,
-            val session: String?,
-            val lastErrorCode: String?,
-            val resultKeyStoreAlias: String
+        val flowType: String?,
+        val title: String?,
+        val session: String?,
+        val lastErrorCode: String?,
+        val resultKeyStoreAlias: String
     ) : Parcelable
 
     // For sso
@@ -71,7 +71,7 @@ class ReAuthActivity : SimpleFragmentActivity() {
         val title = intent.extras?.getString(EXTRA_REASON_TITLE) ?: getString(R.string.re_authentication_activity_title)
         supportActionBar?.setTitle(title) ?: run { setTitle(title) }
 
-//        val authArgs = intent.getParcelableExtra<Args>(Mavericks.KEY_ARG)
+        //        val authArgs = intent.getParcelableExtra<Args>(Mavericks.KEY_ARG)
 
         // For the sso flow we can for now only rely on the fallback flow, that handles all
         // the UI, due to the sandbox nature of CCT (chrome custom tab) we cannot get much information
@@ -79,8 +79,8 @@ class ReAuthActivity : SimpleFragmentActivity() {
         // so we assume that after the user close the tab we return success and let caller retry the UIA flow :/
         if (isFirstCreation()) {
             addFragment(
-                    views.container,
-                    PromptFragment::class.java
+                views.container,
+                PromptFragment::class.java
             )
         }
 
@@ -136,21 +136,21 @@ class ReAuthActivity : SimpleFragmentActivity() {
                 override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
                     Timber.d("## CustomTab onCustomTabsServiceConnected($name)")
                     customTabsClient = client
-                            .also { it.warmup(0L) }
+                        .also { it.warmup(0L) }
                     customTabsSession = customTabsClient?.newSession(object : CustomTabsCallback() {
-//                        override fun onPostMessage(message: String, extras: Bundle?) {
-//                            Timber.v("## CustomTab onPostMessage($message)")
-//                        }
-//
-//                        override fun onMessageChannelReady(extras: Bundle?) {
-//                            Timber.v("## CustomTab onMessageChannelReady()")
-//                        }
+                        //                        override fun onPostMessage(message: String, extras: Bundle?) {
+                        //                            Timber.v("## CustomTab onPostMessage($message)")
+                        //                        }
+                        //
+                        //                        override fun onMessageChannelReady(extras: Bundle?) {
+                        //                            Timber.v("## CustomTab onMessageChannelReady()")
+                        //                        }
 
                         override fun onNavigationEvent(navigationEvent: Int, extras: Bundle?) {
                             Timber.v("## CustomTab onNavigationEvent($navigationEvent), $extras")
                             super.onNavigationEvent(navigationEvent, extras)
                             if (navigationEvent == NAVIGATION_FINISHED) {
-//                                sharedViewModel.handle(ReAuthActions.FallBackPageLoaded)
+                                //                                sharedViewModel.handle(ReAuthActions.FallBackPageLoaded)
                             }
                         }
 
@@ -166,10 +166,10 @@ class ReAuthActivity : SimpleFragmentActivity() {
                 }
             }.also {
                 CustomTabsClient.bindCustomTabsService(
-                        this,
-                        // Despite the API, packageName cannot be null
-                        packageName,
-                        it
+                    this,
+                    // Despite the API, packageName cannot be null
+                    packageName,
+                    it
                 )
             }
         }
@@ -196,11 +196,13 @@ class ReAuthActivity : SimpleFragmentActivity() {
         const val RESULT_VALUE = "RESULT_VALUE"
         const val DEFAULT_RESULT_KEYSTORE_ALIAS = "ReAuthActivity"
 
-        fun newIntent(context: Context,
-                      fromError: RegistrationFlowResponse,
-                      lastErrorCode: String?,
-                      reasonTitle: String?,
-                      resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
+        fun newIntent(
+            context: Context,
+            fromError: RegistrationFlowResponse,
+            lastErrorCode: String?,
+            reasonTitle: String?,
+            resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS
+        ): Intent {
             val authType = when (fromError.nextUncompletedStage()) {
                 LoginFlowTypes.PASSWORD -> {
                     LoginFlowTypes.PASSWORD
@@ -208,7 +210,7 @@ class ReAuthActivity : SimpleFragmentActivity() {
                 LoginFlowTypes.SSO -> {
                     LoginFlowTypes.SSO
                 }
-                else                    -> {
+                else -> {
                     // TODO, support more auth type?
                     null
                 }

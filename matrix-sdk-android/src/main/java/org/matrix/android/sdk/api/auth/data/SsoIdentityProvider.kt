@@ -24,29 +24,29 @@ import kotlinx.parcelize.Parcelize
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class SsoIdentityProvider(
-        /**
-         * The id field would be opaque with the accepted characters matching unreserved URI characters as defined in RFC3986
-         * - this was chosen to avoid having to encode special characters in the URL. Max length 128.
-         */
-        @Json(name = "id") val id: String,
-        /**
-         * The name field should be the human readable string intended for printing by the client.
-         */
-        @Json(name = "name") val name: String?,
-        /**
-         * The icon field is the only optional field and should point to an icon representing the IdP.
-         * If present then it must be an HTTPS URL to an image resource.
-         * This should be hosted by the homeserver service provider to not leak the client's IP address unnecessarily.
-         */
-        @Json(name = "icon") val iconUrl: String?,
+    /**
+     * The id field would be opaque with the accepted characters matching unreserved URI characters as defined in RFC3986
+     * - this was chosen to avoid having to encode special characters in the URL. Max length 128.
+     */
+    @Json(name = "id") val id: String,
+    /**
+     * The name field should be the human readable string intended for printing by the client.
+     */
+    @Json(name = "name") val name: String?,
+    /**
+     * The icon field is the only optional field and should point to an icon representing the IdP.
+     * If present then it must be an HTTPS URL to an image resource.
+     * This should be hosted by the homeserver service provider to not leak the client's IP address unnecessarily.
+     */
+    @Json(name = "icon") val iconUrl: String?,
 
-        /**
-         * The `brand` field is **optional**. It allows the client to style the login
-         * button to suit a particular brand. It should be a string matching the
-         * "Common namespaced identifier grammar" as defined in
-         * [MSC2758](https://github.com/matrix-org/matrix-doc/pull/2758).
-         */
-        @Json(name = "brand") val brand: String?
+    /**
+     * The `brand` field is **optional**. It allows the client to style the login
+     * button to suit a particular brand. It should be a string matching the
+     * "Common namespaced identifier grammar" as defined in
+     * [MSC2758](https://github.com/matrix-org/matrix-doc/pull/2758).
+     */
+    @Json(name = "brand") val brand: String?
 
 ) : Parcelable, Comparable<SsoIdentityProvider> {
 
@@ -66,17 +66,17 @@ data class SsoIdentityProvider(
     private fun toPriority(): Int {
         return when (brand) {
             // We are on Android, so user is more likely to have a Google account
-            BRAND_GOOGLE   -> 5
+            BRAND_GOOGLE -> 5
             // Facebook is also an important SSO provider
             BRAND_FACEBOOK -> 4
             // Twitter is more for professionals
-            BRAND_TWITTER  -> 3
+            BRAND_TWITTER -> 3
             // Here it's very for techie people
             BRAND_GITHUB,
-            BRAND_GITLAB   -> 2
+            BRAND_GITLAB -> 2
             // And finally, if the account has been created with an iPhone...
-            BRAND_APPLE    -> 1
-            else           -> 0
+            BRAND_APPLE -> 1
+            else -> 0
         }
     }
 }

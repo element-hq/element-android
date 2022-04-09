@@ -68,40 +68,41 @@ import org.matrix.android.sdk.internal.session.widgets.WidgetModule
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.system.SystemModule
 
-@Component(dependencies = [MatrixComponent::class],
-        modules = [
-            SessionModule::class,
-            RoomModule::class,
-            SyncModule::class,
-            HomeServerCapabilitiesModule::class,
-            SignOutModule::class,
-            GroupModule::class,
-            UserModule::class,
-            FilterModule::class,
-            GroupModule::class,
-            ContentModule::class,
-            CacheModule::class,
-            MediaModule::class,
-            CryptoModule::class,
-            SystemModule::class,
-            PushersModule::class,
-            OpenIdModule::class,
-            WidgetModule::class,
-            IntegrationManagerModule::class,
-            IdentityModule::class,
-            TermsModule::class,
-            AccountDataModule::class,
-            ProfileModule::class,
-            AccountModule::class,
-            FederationModule::class,
-            CallModule::class,
-            ContentScannerModule::class,
-            SearchModule::class,
-            ThirdPartyModule::class,
-            SpaceModule::class,
-            PresenceModule::class,
-            RequestModule::class
-        ]
+@Component(
+    dependencies = [MatrixComponent::class],
+    modules = [
+        SessionModule::class,
+        RoomModule::class,
+        SyncModule::class,
+        HomeServerCapabilitiesModule::class,
+        SignOutModule::class,
+        GroupModule::class,
+        UserModule::class,
+        FilterModule::class,
+        GroupModule::class,
+        ContentModule::class,
+        CacheModule::class,
+        MediaModule::class,
+        CryptoModule::class,
+        SystemModule::class,
+        PushersModule::class,
+        OpenIdModule::class,
+        WidgetModule::class,
+        IntegrationManagerModule::class,
+        IdentityModule::class,
+        TermsModule::class,
+        AccountDataModule::class,
+        ProfileModule::class,
+        AccountModule::class,
+        FederationModule::class,
+        CallModule::class,
+        ContentScannerModule::class,
+        SearchModule::class,
+        ThirdPartyModule::class,
+        SpaceModule::class,
+        PresenceModule::class,
+        RequestModule::class
+    ]
 )
 @SessionScope
 internal interface SessionComponent {
@@ -145,7 +146,8 @@ internal interface SessionComponent {
     @Component.Factory
     interface Factory {
         fun create(
-                matrixComponent: MatrixComponent,
-                @BindsInstance sessionParams: SessionParams): SessionComponent
+            matrixComponent: MatrixComponent,
+            @BindsInstance sessionParams: SessionParams
+        ): SessionComponent
     }
 }

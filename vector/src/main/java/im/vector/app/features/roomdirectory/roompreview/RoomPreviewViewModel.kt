@@ -47,9 +47,9 @@ import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class RoomPreviewViewModel @AssistedInject constructor(
-        @Assisted private val initialState: RoomPreviewViewState,
-        private val analyticsTracker: AnalyticsTracker,
-        private val session: Session
+    @Assisted private val initialState: RoomPreviewViewState,
+    private val analyticsTracker: AnalyticsTracker,
+    private val session: Session
 ) : VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -72,8 +72,8 @@ class RoomPreviewViewModel @AssistedInject constructor(
                 // we might want to check if the mail is bound to this account?
                 // if it is the invite
                 val threePids = session
-                        .getThreePids()
-                        .filterIsInstance<ThreePid.Email>()
+                    .getThreePids()
+                    .filterIsInstance<ThreePid.Email>()
 
                 val status = if (threePids.any { it.email == initialState.fromEmailInvite.email }) {
                     try {
@@ -84,15 +84,15 @@ class RoomPreviewViewModel @AssistedInject constructor(
                         // id server from the one in the email invite, we consider the mails as not bound
                         emptyMap()
                     }.firstNotNullOfOrNull { if (it.key.value == initialState.fromEmailInvite.email) it.value else null }
-                            ?: SharedState.NOT_SHARED
+                        ?: SharedState.NOT_SHARED
                 } else {
                     SharedState.NOT_SHARED
                 }
 
                 setState {
                     copy(
-                            isEmailBoundToAccount = status == SharedState.SHARED,
-                            peekingState = Success(PeekingState.FOUND)
+                        isEmailBoundToAccount = status == SharedState.SHARED,
+                        peekingState = Success(PeekingState.FOUND)
                     )
                 }
             }
@@ -111,7 +111,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
             }
 
             when (peekResult) {
-                is PeekResult.Success           -> {
+                is PeekResult.Success -> {
                     setState {
                         // Do not override what we had from the permalink
                         val newHomeServers = if (homeServers.isEmpty()) {
@@ -120,12 +120,12 @@ class RoomPreviewViewModel @AssistedInject constructor(
                             homeServers
                         }
                         copy(
-                                roomId = peekResult.roomId,
-                                avatarUrl = peekResult.avatarUrl,
-                                roomAlias = peekResult.alias ?: initialState.roomAlias,
-                                roomTopic = peekResult.topic,
-                                homeServers = newHomeServers,
-                                peekingState = Success(PeekingState.FOUND)
+                            roomId = peekResult.roomId,
+                            avatarUrl = peekResult.avatarUrl,
+                            roomAlias = peekResult.alias ?: initialState.roomAlias,
+                            roomTopic = peekResult.topic,
+                            homeServers = newHomeServers,
+                            peekingState = Success(PeekingState.FOUND)
                         )
                     }
                 }
@@ -138,18 +138,18 @@ class RoomPreviewViewModel @AssistedInject constructor(
                             homeServers
                         }
                         copy(
-                                roomId = peekResult.roomId,
-                                roomAlias = peekResult.alias ?: initialState.roomAlias,
-                                homeServers = newHomeServers,
-                                peekingState = Success(PeekingState.NO_ACCESS)
+                            roomId = peekResult.roomId,
+                            roomAlias = peekResult.alias ?: initialState.roomAlias,
+                            homeServers = newHomeServers,
+                            peekingState = Success(PeekingState.NO_ACCESS)
                         )
                     }
                 }
                 PeekResult.UnknownAlias,
-                null                            -> {
+                null -> {
                     setState {
                         copy(
-                                peekingState = Success(PeekingState.NOT_FOUND)
+                            peekingState = Success(PeekingState.NOT_FOUND)
                         )
                     }
                 }
@@ -163,45 +163,45 @@ class RoomPreviewViewModel @AssistedInject constructor(
             excludeType = null
         }
         session
-                .flow()
-                .liveRoomSummaries(queryParams)
-                .onEach { list ->
-                    val isRoomJoined = list.any {
-                        it.membership == Membership.JOIN
-                    }
-                    list.firstOrNull { it.roomId == initialState.roomId }?.roomType?.let {
-                        setState {
-                            copy(roomType = it)
-                        }
-                    }
-                    if (isRoomJoined) {
-                        setState { copy(roomJoinState = JoinState.JOINED) }
+            .flow()
+            .liveRoomSummaries(queryParams)
+            .onEach { list ->
+                val isRoomJoined = list.any {
+                    it.membership == Membership.JOIN
+                }
+                list.firstOrNull { it.roomId == initialState.roomId }?.roomType?.let {
+                    setState {
+                        copy(roomType = it)
                     }
                 }
-                .launchIn(viewModelScope)
+                if (isRoomJoined) {
+                    setState { copy(roomJoinState = JoinState.JOINED) }
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun observeMembershipChanges() {
         session.flow()
-                .liveRoomChangeMembershipState()
-                .onEach {
-                    val changeMembership = it[initialState.roomId] ?: ChangeMembershipState.Unknown
-                    val joinState = when (changeMembership) {
-                        is ChangeMembershipState.Joining       -> JoinState.JOINING
-                        is ChangeMembershipState.FailedJoining -> JoinState.JOINING_ERROR
-                        // Other cases are handled by room summary
-                        else                                   -> null
-                    }
-                    if (joinState != null) {
-                        setState { copy(roomJoinState = joinState) }
-                    }
+            .liveRoomChangeMembershipState()
+            .onEach {
+                val changeMembership = it[initialState.roomId] ?: ChangeMembershipState.Unknown
+                val joinState = when (changeMembership) {
+                    is ChangeMembershipState.Joining -> JoinState.JOINING
+                    is ChangeMembershipState.FailedJoining -> JoinState.JOINING_ERROR
+                    // Other cases are handled by room summary
+                    else -> null
                 }
-                .launchIn(viewModelScope)
+                if (joinState != null) {
+                    setState { copy(roomJoinState = joinState) }
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handle(action: RoomPreviewAction) {
         when (action) {
-            is RoomPreviewAction.Join        -> handleJoinRoom()
+            is RoomPreviewAction.Join -> handleJoinRoom()
             RoomPreviewAction.JoinThirdParty -> handleJoinRoomThirdParty()
         }
     }
@@ -221,17 +221,17 @@ class RoomPreviewViewModel @AssistedInject constructor(
                 // XXX this could be done locally, but the spec is incomplete and it's not clear
                 // what needs to be signed with what?
                 val thirdPartySigned = session.identityService().sign3pidInvitation(
-                        state.fromEmailInvite?.identityServer ?: "",
-                        state.fromEmailInvite?.token ?: "",
-                        state.fromEmailInvite?.privateKey ?: ""
+                    state.fromEmailInvite?.identityServer ?: "",
+                    state.fromEmailInvite?.token ?: "",
+                    state.fromEmailInvite?.privateKey ?: ""
                 )
 
                 session.joinRoom(state.roomId, reason = null, thirdPartySigned)
             } catch (failure: Throwable) {
                 setState {
                     copy(
-                            roomJoinState = JoinState.JOINING_ERROR,
-                            lastError = failure
+                        roomJoinState = JoinState.JOINING_ERROR,
+                        lastError = failure
                     )
                 }
             }
@@ -247,12 +247,14 @@ class RoomPreviewViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.joinRoom(state.roomId, viaServers = state.homeServers)
-                analyticsTracker.capture(JoinedRoom(
+                analyticsTracker.capture(
+                    JoinedRoom(
                         // Always false in this case (?)
                         isDM = false,
                         isSpace = false,
                         roomSize = state.numJoinMembers.toAnalyticsRoomSize(),
-                ))
+                    )
+                )
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
             } catch (failure: Throwable) {

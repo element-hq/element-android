@@ -26,8 +26,8 @@ import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import javax.inject.Inject
 
 class TestBatteryOptimization @Inject constructor(
-        private val context: FragmentActivity,
-        private val stringProvider: StringProvider
+    private val context: FragmentActivity,
+    private val stringProvider: StringProvider
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_battery_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {

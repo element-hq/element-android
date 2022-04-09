@@ -27,13 +27,15 @@ import com.airbnb.epoxy.EpoxyVisibilityTracker
 /**
  * Apply a Vertical LinearLayout Manager to the recyclerView and set the adapter from the epoxy controller
  */
-fun RecyclerView.configureWith(epoxyController: EpoxyController,
-                               itemAnimator: RecyclerView.ItemAnimator? = null,
-                               viewPool: RecyclerView.RecycledViewPool? = null,
-                               @DrawableRes
-                               dividerDrawable: Int? = null,
-                               hasFixedSize: Boolean = true,
-                               disableItemAnimation: Boolean = false) {
+fun RecyclerView.configureWith(
+    epoxyController: EpoxyController,
+    itemAnimator: RecyclerView.ItemAnimator? = null,
+    viewPool: RecyclerView.RecycledViewPool? = null,
+    @DrawableRes
+    dividerDrawable: Int? = null,
+    hasFixedSize: Boolean = true,
+    disableItemAnimation: Boolean = false
+) {
     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false).apply {
         recycleChildrenOnDetach = viewPool != null
     }
@@ -45,11 +47,11 @@ fun RecyclerView.configureWith(epoxyController: EpoxyController,
     }
     dividerDrawable?.let { divider ->
         addItemDecoration(
-                DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
-                    ContextCompat.getDrawable(context, divider)?.let {
-                        setDrawable(it)
-                    }
+            DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
+                ContextCompat.getDrawable(context, divider)?.let {
+                    setDrawable(it)
                 }
+            }
         )
     }
     setHasFixedSize(hasFixedSize)

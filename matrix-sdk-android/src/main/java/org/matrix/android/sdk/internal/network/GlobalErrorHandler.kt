@@ -28,9 +28,9 @@ import javax.inject.Inject
 
 @SessionScope
 internal class GlobalErrorHandler @Inject constructor(
-        private val taskExecutor: TaskExecutor,
-        private val sessionParamsStore: SessionParamsStore,
-        @SessionId private val sessionId: String
+    private val taskExecutor: TaskExecutor,
+    private val sessionParamsStore: SessionParamsStore,
+    @SessionId private val sessionId: String
 ) : GlobalErrorReceiver {
 
     var listener: Listener? = null

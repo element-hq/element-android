@@ -22,7 +22,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class SupportedVerificationMethodsProvider @Inject constructor(
-        private val hardwareInfo: HardwareInfo
+    private val hardwareInfo: HardwareInfo
 ) {
     /**
      * Provide the list of supported method by Element, with or without the QR_CODE_SCAN, depending if a back camera
@@ -30,18 +30,19 @@ class SupportedVerificationMethodsProvider @Inject constructor(
      */
     fun provide(): List<VerificationMethod> {
         return mutableListOf(
-                // Element supports SAS verification
-                VerificationMethod.SAS,
-                // Element is able to show QR codes
-                VerificationMethod.QR_CODE_SHOW)
-                .apply {
-                    if (hardwareInfo.hasBackCamera()) {
-                        // Element is able to scan QR codes, and a Camera is available
-                        add(VerificationMethod.QR_CODE_SCAN)
-                    } else {
-                        // This quite uncommon
-                        Timber.w("No back Camera detected")
-                    }
+            // Element supports SAS verification
+            VerificationMethod.SAS,
+            // Element is able to show QR codes
+            VerificationMethod.QR_CODE_SHOW
+        )
+            .apply {
+                if (hardwareInfo.hasBackCamera()) {
+                    // Element is able to scan QR codes, and a Camera is available
+                    add(VerificationMethod.QR_CODE_SCAN)
+                } else {
+                    // This quite uncommon
+                    Timber.w("No back Camera detected")
                 }
+            }
     }
 }

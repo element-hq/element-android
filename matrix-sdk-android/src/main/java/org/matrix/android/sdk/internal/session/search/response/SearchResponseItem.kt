@@ -22,21 +22,21 @@ import org.matrix.android.sdk.api.session.events.model.Event
 
 @JsonClass(generateAdapter = true)
 internal data class SearchResponseItem(
-        /**
-         *  A number that describes how closely this result matches the search. Higher is closer.
-         */
-        @Json(name = "rank")
-        val rank: Double? = null,
+    /**
+     *  A number that describes how closely this result matches the search. Higher is closer.
+     */
+    @Json(name = "rank")
+    val rank: Double? = null,
 
-        /**
-         * The event that matched.
-         */
-        @Json(name = "result")
-        val event: Event,
+    /**
+     * The event that matched.
+     */
+    @Json(name = "result")
+    val event: Event,
 
-        /**
-         * Context for result, if requested.
-         */
-        @Json(name = "context")
-        val context: SearchResponseEventContext? = null
+    /**
+     * Context for result, if requested.
+     */
+    @Json(name = "context")
+    val context: SearchResponseEventContext? = null
 )

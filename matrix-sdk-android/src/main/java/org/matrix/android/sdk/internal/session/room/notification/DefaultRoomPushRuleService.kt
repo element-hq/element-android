@@ -29,9 +29,11 @@ import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 
-internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                      private val setRoomNotificationStateTask: SetRoomNotificationStateTask,
-                                                                      @SessionDatabase private val monarchy: Monarchy) :
+internal class DefaultRoomPushRuleService @AssistedInject constructor(
+    @Assisted private val roomId: String,
+    private val setRoomNotificationStateTask: SetRoomNotificationStateTask,
+    @SessionDatabase private val monarchy: Monarchy
+) :
     RoomPushRuleService {
 
     @AssistedFactory
@@ -51,12 +53,12 @@ internal class DefaultRoomPushRuleService @AssistedInject constructor(@Assisted 
 
     private fun getPushRuleForRoom(): LiveData<RoomPushRule?> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm ->
-                    PushRuleEntity.where(realm, scope = RuleScope.GLOBAL, ruleId = roomId)
-                },
-                { result ->
-                    result.toRoomPushRule()
-                }
+            { realm ->
+                PushRuleEntity.where(realm, scope = RuleScope.GLOBAL, ruleId = roomId)
+            },
+            { result ->
+                result.toRoomPushRule()
+            }
         )
         return Transformations.map(liveData) { results ->
             results.firstOrNull()

@@ -26,9 +26,18 @@ class StringOrderTest {
 
     @Test
     fun testbasing() {
-        assertEquals("a", StringOrderUtils.baseToString(StringOrderUtils.stringToBase("a", StringOrderUtils.DEFAULT_ALPHABET), StringOrderUtils.DEFAULT_ALPHABET))
-        assertEquals("element", StringOrderUtils.baseToString(StringOrderUtils.stringToBase("element", StringOrderUtils.DEFAULT_ALPHABET), StringOrderUtils.DEFAULT_ALPHABET))
-        assertEquals("matrix", StringOrderUtils.baseToString(StringOrderUtils.stringToBase("matrix", StringOrderUtils.DEFAULT_ALPHABET), StringOrderUtils.DEFAULT_ALPHABET))
+        assertEquals(
+            "a",
+            StringOrderUtils.baseToString(StringOrderUtils.stringToBase("a", StringOrderUtils.DEFAULT_ALPHABET), StringOrderUtils.DEFAULT_ALPHABET)
+        )
+        assertEquals(
+            "element",
+            StringOrderUtils.baseToString(StringOrderUtils.stringToBase("element", StringOrderUtils.DEFAULT_ALPHABET), StringOrderUtils.DEFAULT_ALPHABET)
+        )
+        assertEquals(
+            "matrix",
+            StringOrderUtils.baseToString(StringOrderUtils.stringToBase("matrix", StringOrderUtils.DEFAULT_ALPHABET), StringOrderUtils.DEFAULT_ALPHABET)
+        )
     }
 
     @Test
@@ -45,19 +54,19 @@ class StringOrderTest {
         assert(!MatrixPatterns.isValidOrderString(Char(' '.code - 1).toString()))
 
         assert(!MatrixPatterns.isValidOrderString(
-                buildString {
-                    for (i in 0..49) {
-                        append(StringOrderUtils.DEFAULT_ALPHABET.random())
-                    }
+            buildString {
+                for (i in 0..49) {
+                    append(StringOrderUtils.DEFAULT_ALPHABET.random())
                 }
+            }
         ))
 
         assert(MatrixPatterns.isValidOrderString(
-                buildString {
-                    for (i in 0..48) {
-                        append(StringOrderUtils.DEFAULT_ALPHABET.random())
-                    }
+            buildString {
+                for (i in 0..48) {
+                    append(StringOrderUtils.DEFAULT_ALPHABET.random())
                 }
+            }
         ))
     }
 

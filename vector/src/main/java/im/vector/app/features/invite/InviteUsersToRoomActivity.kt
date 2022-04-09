@@ -66,28 +66,28 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
 
         sharedActionViewModel = viewModelProvider.get(UserListSharedActionViewModel::class.java)
         sharedActionViewModel
-                .stream()
-                .onEach { sharedAction ->
-                    when (sharedAction) {
-                        UserListSharedAction.Close                 -> finish()
-                        UserListSharedAction.GoBack                -> onBackPressed()
-                        is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
-                        UserListSharedAction.OpenPhoneBook         -> openPhoneBook()
-                        // not exhaustive because it's a sharedAction
-                        else                                       -> Unit
-                    }
+            .stream()
+            .onEach { sharedAction ->
+                when (sharedAction) {
+                    UserListSharedAction.Close -> finish()
+                    UserListSharedAction.GoBack -> onBackPressed()
+                    is UserListSharedAction.OnMenuItemSelected -> onMenuItemSelected(sharedAction)
+                    UserListSharedAction.OpenPhoneBook -> openPhoneBook()
+                    // not exhaustive because it's a sharedAction
+                    else -> Unit
                 }
-                .launchIn(lifecycleScope)
+            }
+            .launchIn(lifecycleScope)
         if (isFirstCreation()) {
             addFragment(
-                    views.container,
-                    UserListFragment::class.java,
-                    UserListFragmentArgs(
-                            title = getString(R.string.invite_users_to_room_title),
-                            menuResId = R.menu.vector_invite_users_to_room,
-                            excludedUserIds = viewModel.getUserIdsOfRoomMembers(),
-                            showInviteActions = false
-                    )
+                views.container,
+                UserListFragment::class.java,
+                UserListFragmentArgs(
+                    title = getString(R.string.invite_users_to_room_title),
+                    menuResId = R.menu.vector_invite_users_to_room,
+                    excludedUserIds = viewModel.getUserIdsOfRoomMembers(),
+                    showInviteActions = false
+                )
             )
         }
 
@@ -136,9 +136,9 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
             errorFormatter.toHumanReadable(error)
         }
         MaterialAlertDialogBuilder(this)
-                .setMessage(message)
-                .setPositiveButton(R.string.ok, null)
-                .show()
+            .setMessage(message)
+            .setPositiveButton(R.string.ok, null)
+            .show()
     }
 
     private fun renderInvitationSuccess(successMessage: String) {

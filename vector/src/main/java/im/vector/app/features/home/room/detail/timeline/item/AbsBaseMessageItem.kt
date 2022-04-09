@@ -80,7 +80,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         super.bind(holder)
         renderReactions(holder, baseAttributes.informationData.reactionsSummary)
         when (baseAttributes.informationData.e2eDecoration) {
-            E2EDecoration.NONE                 -> {
+            E2EDecoration.NONE -> {
                 holder.e2EDecorationView.render(null)
             }
             E2EDecoration.WARN_IN_CLEAR,
@@ -190,16 +190,16 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
         //        val avatarCallback: TimelineEventController.AvatarCallback?
         val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback?
-//        val emojiTypeFace: Typeface?
+        //        val emojiTypeFace: Typeface?
     }
 
-//    data class AbsAttributes(
-//            override val informationData: MessageInformationData,
-//            override val avatarRenderer: AvatarRenderer,
-//            override val colorProvider: ColorProvider,
-//            override val itemLongClickListener: View.OnLongClickListener? = null,
-//            override val itemClickListener: ClickListener? = null,
-//            override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
-//            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
-//    ) : Attributes
+    //    data class AbsAttributes(
+    //            override val informationData: MessageInformationData,
+    //            override val avatarRenderer: AvatarRenderer,
+    //            override val colorProvider: ColorProvider,
+    //            override val itemLongClickListener: View.OnLongClickListener? = null,
+    //            override val itemClickListener: ClickListener? = null,
+    //            override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
+    //            override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null
+    //    ) : Attributes
 }

@@ -23,26 +23,26 @@ import org.matrix.android.sdk.api.util.JsonDict
  */
 data class MXEventDecryptionResult(
 
-        /**
-         * The plaintext payload for the event (typically containing "type" and "content" fields).
-         */
-        val clearEvent: JsonDict,
+    /**
+     * The plaintext payload for the event (typically containing "type" and "content" fields).
+     */
+    val clearEvent: JsonDict,
 
-        /**
-         * Key owned by the sender of this event.
-         * See MXEvent.senderKey.
-         */
-        val senderCurve25519Key: String? = null,
+    /**
+     * Key owned by the sender of this event.
+     * See MXEvent.senderKey.
+     */
+    val senderCurve25519Key: String? = null,
 
-        /**
-         * Ed25519 key claimed by the sender of this event.
-         * See MXEvent.claimedEd25519Key.
-         */
-        val claimedEd25519Key: String? = null,
+    /**
+     * Ed25519 key claimed by the sender of this event.
+     * See MXEvent.claimedEd25519Key.
+     */
+    val claimedEd25519Key: String? = null,
 
-        /**
-         * List of curve25519 keys involved in telling us about the senderCurve25519Key and
-         * claimedEd25519Key. See MXEvent.forwardingCurve25519KeyChain.
-         */
-        val forwardingCurve25519KeyChain: List<String> = emptyList()
+    /**
+     * List of curve25519 keys involved in telling us about the senderCurve25519Key and
+     * claimedEd25519Key. See MXEvent.forwardingCurve25519KeyChain.
+     */
+    val forwardingCurve25519KeyChain: List<String> = emptyList()
 )

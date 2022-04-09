@@ -31,31 +31,34 @@ import org.matrix.android.sdk.InstrumentedTest
 class QrCodeTest : InstrumentedTest {
 
     private val qrCode1 = QrCodeData.VerifyingAnotherUser(
-            transactionId = "MaTransaction",
-            userMasterCrossSigningPublicKey = "ktEwcUP6su1xh+GuE+CYkQ3H6W/DIl+ybHFdaEOrolU",
-            otherUserMasterCrossSigningPublicKey = "TXluZKTZLvSRWOTPlOqLq534bA+/K4zLFKSu9cGLQaU",
-            sharedSecret = "MTIzNDU2Nzg"
+        transactionId = "MaTransaction",
+        userMasterCrossSigningPublicKey = "ktEwcUP6su1xh+GuE+CYkQ3H6W/DIl+ybHFdaEOrolU",
+        otherUserMasterCrossSigningPublicKey = "TXluZKTZLvSRWOTPlOqLq534bA+/K4zLFKSu9cGLQaU",
+        sharedSecret = "MTIzNDU2Nzg"
     )
 
-    private val value1 = "MATRIX\u0002\u0000\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
+    private val value1 =
+        "MATRIX\u0002\u0000\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
 
     private val qrCode2 = QrCodeData.SelfVerifyingMasterKeyTrusted(
-            transactionId = "MaTransaction",
-            userMasterCrossSigningPublicKey = "ktEwcUP6su1xh+GuE+CYkQ3H6W/DIl+ybHFdaEOrolU",
-            otherDeviceKey = "TXluZKTZLvSRWOTPlOqLq534bA+/K4zLFKSu9cGLQaU",
-            sharedSecret = "MTIzNDU2Nzg"
+        transactionId = "MaTransaction",
+        userMasterCrossSigningPublicKey = "ktEwcUP6su1xh+GuE+CYkQ3H6W/DIl+ybHFdaEOrolU",
+        otherDeviceKey = "TXluZKTZLvSRWOTPlOqLq534bA+/K4zLFKSu9cGLQaU",
+        sharedSecret = "MTIzNDU2Nzg"
     )
 
-    private val value2 = "MATRIX\u0002\u0001\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
+    private val value2 =
+        "MATRIX\u0002\u0001\u0000\u000DMaTransaction\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢UMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥12345678"
 
     private val qrCode3 = QrCodeData.SelfVerifyingMasterKeyNotTrusted(
-            transactionId = "MaTransaction",
-            deviceKey = "TXluZKTZLvSRWOTPlOqLq534bA+/K4zLFKSu9cGLQaU",
-            userMasterCrossSigningPublicKey = "ktEwcUP6su1xh+GuE+CYkQ3H6W/DIl+ybHFdaEOrolU",
-            sharedSecret = "MTIzNDU2Nzg"
+        transactionId = "MaTransaction",
+        deviceKey = "TXluZKTZLvSRWOTPlOqLq534bA+/K4zLFKSu9cGLQaU",
+        userMasterCrossSigningPublicKey = "ktEwcUP6su1xh+GuE+CYkQ3H6W/DIl+ybHFdaEOrolU",
+        sharedSecret = "MTIzNDU2Nzg"
     )
 
-    private val value3 = "MATRIX\u0002\u0002\u0000\u000DMaTransactionMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢U12345678"
+    private val value3 =
+        "MATRIX\u0002\u0002\u0000\u000DMaTransactionMynd¤Ù.ô\u0091XäÏ\u0094ê\u008B«\u009Døl\u000F¿+\u008CË\u0014¤®õÁ\u008BA¥\u0092Ñ0qCú²íq\u0087á®\u0013à\u0098\u0091\u000DÇéoÃ\"_²lq]hC«¢U12345678"
 
     private val sharedSecretByteArray = "12345678".toByteArray(Charsets.ISO_8859_1)
 

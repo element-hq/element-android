@@ -38,23 +38,23 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
  * - analytics Id (String)
  */
 class AnalyticsStore @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
     private val userConsent = booleanPreferencesKey("user_consent")
     private val didAskUserConsent = booleanPreferencesKey("did_ask_user_consent")
     private val analyticsId = stringPreferencesKey("analytics_id")
 
     val userConsentFlow: Flow<Boolean> = context.dataStore.data
-            .map { preferences -> preferences[userConsent].orFalse() }
-            .distinctUntilChanged()
+        .map { preferences -> preferences[userConsent].orFalse() }
+        .distinctUntilChanged()
 
     val didAskUserConsentFlow: Flow<Boolean> = context.dataStore.data
-            .map { preferences -> preferences[didAskUserConsent].orFalse() }
-            .distinctUntilChanged()
+        .map { preferences -> preferences[didAskUserConsent].orFalse() }
+        .distinctUntilChanged()
 
     val analyticsIdFlow: Flow<String> = context.dataStore.data
-            .map { preferences -> preferences[analyticsId].orEmpty() }
-            .distinctUntilChanged()
+        .map { preferences -> preferences[analyticsId].orEmpty() }
+        .distinctUntilChanged()
 
     suspend fun setUserConsent(newUserConsent: Boolean) {
         context.dataStore.edit { settings ->

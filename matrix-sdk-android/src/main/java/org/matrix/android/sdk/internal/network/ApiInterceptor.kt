@@ -61,10 +61,10 @@ internal class ApiInterceptor @Inject constructor() : Interceptor {
 
     private fun findApiPath(path: String, method: String): ApiPath? {
         return apiResponseListenersMap
-                .keys
-                .find { apiPath ->
-                    apiPath.method === method && isTheSamePath(apiPath.path, path)
-                }
+            .keys
+            .find { apiPath ->
+                apiPath.method === method && isTheSamePath(apiPath.path, path)
+            }
     }
 
     private fun isTheSamePath(pattern: String, path: String): Boolean {
@@ -84,7 +84,7 @@ internal class ApiInterceptor @Inject constructor() : Interceptor {
     fun addListener(path: ApiPath, listener: ApiInterceptorListener) {
         synchronized(apiResponseListenersMap) {
             apiResponseListenersMap.getOrPut(path) { mutableListOf() }
-                    .add(listener)
+                .add(listener)
         }
     }
 

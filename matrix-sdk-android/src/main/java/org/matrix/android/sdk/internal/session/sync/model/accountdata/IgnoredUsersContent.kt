@@ -22,16 +22,16 @@ import org.matrix.android.sdk.api.util.emptyJsonDict
 
 @JsonClass(generateAdapter = true)
 internal data class IgnoredUsersContent(
-        /**
-         * Required. The map of users to ignore. UserId -> empty object for future enhancement
-         */
-        @Json(name = "ignored_users") val ignoredUsers: Map<String, Any>
+    /**
+     * Required. The map of users to ignore. UserId -> empty object for future enhancement
+     */
+    @Json(name = "ignored_users") val ignoredUsers: Map<String, Any>
 ) {
 
     companion object {
         fun createWithUserIds(userIds: List<String>): IgnoredUsersContent {
             return IgnoredUsersContent(
-                    ignoredUsers = userIds.associateWith { emptyJsonDict }
+                ignoredUsers = userIds.associateWith { emptyJsonDict }
             )
         }
     }

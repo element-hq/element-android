@@ -33,15 +33,16 @@ import kotlin.reflect.KMutableProperty0
  * Be aware it wont work properly with permalink.
  */
 class MergedTimelines(
-        private val coroutineScope: CoroutineScope,
-        private val mainTimeline: Timeline,
-        private val secondaryTimelineParams: SecondaryTimelineParams) : Timeline by mainTimeline {
+    private val coroutineScope: CoroutineScope,
+    private val mainTimeline: Timeline,
+    private val secondaryTimelineParams: SecondaryTimelineParams
+) : Timeline by mainTimeline {
 
     data class SecondaryTimelineParams(
-            val timeline: Timeline,
-            val disableReadReceipts: Boolean = true,
-            val shouldFilterTypes: Boolean = false,
-            val allowedTypes: List<String> = emptyList()
+        val timeline: Timeline,
+        val disableReadReceipts: Boolean = true,
+        val shouldFilterTypes: Boolean = false,
+        val allowedTypes: List<String> = emptyList()
     )
 
     private var mainIsInit = false
@@ -57,11 +58,11 @@ class MergedTimelines(
     private val processingSemaphore = Semaphore(1)
 
     private class ListenerInterceptor(
-            var timeline: Timeline?,
-            private val wrappedListener: Timeline.Listener,
-            private val shouldFilterTypes: Boolean,
-            private val allowedTypes: List<String>,
-            private val onTimelineUpdate: (List<TimelineEvent>) -> Unit
+        var timeline: Timeline?,
+        private val wrappedListener: Timeline.Listener,
+        private val shouldFilterTypes: Boolean,
+        private val allowedTypes: List<String>,
+        private val onTimelineUpdate: (List<TimelineEvent>) -> Unit
     ) : Timeline.Listener by wrappedListener {
 
         override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
@@ -78,17 +79,19 @@ class MergedTimelines(
 
     override fun addListener(listener: Timeline.Listener): Boolean {
         val mainTimelineListener = ListenerInterceptor(
-                timeline = mainTimeline,
-                wrappedListener = listener,
-                shouldFilterTypes = false,
-                allowedTypes = emptyList()) {
+            timeline = mainTimeline,
+            wrappedListener = listener,
+            shouldFilterTypes = false,
+            allowedTypes = emptyList()
+        ) {
             processTimelineUpdates(::mainIsInit, mainTimelineEvents, it)
         }
         val secondaryTimelineListener = ListenerInterceptor(
-                timeline = secondaryTimeline,
-                wrappedListener = listener,
-                shouldFilterTypes = secondaryTimelineParams.shouldFilterTypes,
-                allowedTypes = secondaryTimelineParams.allowedTypes) {
+            timeline = secondaryTimeline,
+            wrappedListener = listener,
+            shouldFilterTypes = secondaryTimelineParams.shouldFilterTypes,
+            allowedTypes = secondaryTimelineParams.allowedTypes
+        ) {
             processTimelineUpdates(::secondaryIsInit, secondaryTimelineEvents, it)
         }
         listenersMapping[listener] = listOf(mainTimelineListener, secondaryTimelineListener)
@@ -198,8 +201,8 @@ class MergedTimelines(
 
     private fun TimelineEvent.correctBeforeMerging(correctedSenderInfo: SenderInfo?): TimelineEvent {
         return copy(
-                senderInfo = correctedSenderInfo ?: senderInfo,
-                readReceipts = if (secondaryTimelineParams.disableReadReceipts) emptyList() else readReceipts
+            senderInfo = correctedSenderInfo ?: senderInfo,
+            readReceipts = if (secondaryTimelineParams.disableReadReceipts) emptyList() else readReceipts
         )
     }
 }

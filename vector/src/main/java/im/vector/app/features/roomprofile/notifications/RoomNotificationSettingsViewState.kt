@@ -26,11 +26,11 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 
 data class RoomNotificationSettingsViewState(
-        val roomId: String,
-        val roomSummary: Async<RoomSummary> = Uninitialized,
-        val isLoading: Boolean = false,
-        val notificationState: Async<RoomNotificationState> = Uninitialized
-)  : MavericksState {
+    val roomId: String,
+    val roomSummary: Async<RoomSummary> = Uninitialized,
+    val isLoading: Boolean = false,
+    val notificationState: Async<RoomNotificationState> = Uninitialized
+) : MavericksState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
     constructor(args: RoomListActionsArgs) : this(roomId = args.roomId)
 }
@@ -46,9 +46,9 @@ val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotific
              * Also in the new settings there is no notion of notifications without sound so it maps to noisy also
              */
             (roomSummary()?.isEncrypted == true && notificationState() == RoomNotificationState.MENTIONS_ONLY)
-                                                                      -> Success(RoomNotificationState.MUTE)
+            -> Success(RoomNotificationState.MUTE)
             notificationState() == RoomNotificationState.ALL_MESSAGES -> Success(RoomNotificationState.ALL_MESSAGES_NOISY)
-            else                                                      -> notificationState
+            else -> notificationState
         }
     }
 

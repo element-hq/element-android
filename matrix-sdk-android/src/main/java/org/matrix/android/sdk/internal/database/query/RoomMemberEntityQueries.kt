@@ -25,8 +25,8 @@ import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntit
 
 internal fun RoomMemberSummaryEntity.Companion.where(realm: Realm, roomId: String, userId: String? = null): RealmQuery<RoomMemberSummaryEntity> {
     val query = realm
-            .where<RoomMemberSummaryEntity>()
-            .equalTo(RoomMemberSummaryEntityFields.ROOM_ID, roomId)
+        .where<RoomMemberSummaryEntity>()
+        .equalTo(RoomMemberSummaryEntityFields.ROOM_ID, roomId)
 
     if (userId != null) {
         query.equalTo(RoomMemberSummaryEntityFields.USER_ID, userId)
@@ -36,10 +36,10 @@ internal fun RoomMemberSummaryEntity.Companion.where(realm: Realm, roomId: Strin
 
 internal fun RoomMemberSummaryEntity.Companion.updateUserPresence(realm: Realm, userId: String, userPresenceEntity: UserPresenceEntity) {
     realm.where<RoomMemberSummaryEntity>()
-            .equalTo(RoomMemberSummaryEntityFields.USER_ID, userId)
-            .isNull(RoomMemberSummaryEntityFields.USER_PRESENCE_ENTITY.`$`)
-            .findAll()
-            .map {
-                it.userPresenceEntity = userPresenceEntity
-            }
+        .equalTo(RoomMemberSummaryEntityFields.USER_ID, userId)
+        .isNull(RoomMemberSummaryEntityFields.USER_PRESENCE_ENTITY.`$`)
+        .findAll()
+        .map {
+            it.userPresenceEntity = userPresenceEntity
+        }
 }

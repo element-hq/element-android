@@ -59,9 +59,9 @@ abstract class FormEditableAvatarItem : EpoxyModelWithHolder<FormEditableAvatarI
             avatarRenderer?.render(matrixItem!!, holder.image)
         } else {
             GlideApp.with(holder.image)
-                    .load(imageUri)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(holder.image)
+                .load(imageUri)
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.image)
         }
         holder.delete.isVisible = enabled && (imageUri != null || matrixItem?.avatarUrl?.isNotEmpty() == true)
         holder.delete.onClick(deleteListener?.takeIf { enabled })

@@ -31,23 +31,23 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class AddRoomListController @Inject constructor(
-        private val avatarRenderer: AvatarRenderer
+    private val avatarRenderer: AvatarRenderer
 ) : PagedListEpoxyController<RoomSummary>(
-        // Important it must match the PageList builder notify Looper
-        modelBuildingHandler = createUIHandler(),
+    // Important it must match the PageList builder notify Looper
+    modelBuildingHandler = createUIHandler(),
 
-        itemDiffCallback = object : DiffUtil.ItemCallback<RoomSummary>() {
+    itemDiffCallback = object : DiffUtil.ItemCallback<RoomSummary>() {
 
-            override fun areItemsTheSame(oldItem: RoomSummary, newItem: RoomSummary): Boolean {
-                return oldItem.roomId == newItem.roomId
-            }
-
-            override fun areContentsTheSame(oldItem: RoomSummary, newItem: RoomSummary): Boolean {
-                // for this use case we can test less things
-                return oldItem.displayName == newItem.displayName &&
-                        oldItem.avatarUrl == newItem.avatarUrl
-            }
+        override fun areItemsTheSame(oldItem: RoomSummary, newItem: RoomSummary): Boolean {
+            return oldItem.roomId == newItem.roomId
         }
+
+        override fun areContentsTheSame(oldItem: RoomSummary, newItem: RoomSummary): Boolean {
+            // for this use case we can test less things
+            return oldItem.displayName == newItem.displayName &&
+                    oldItem.avatarUrl == newItem.avatarUrl
+        }
+    }
 ) {
 
     interface Listener {
@@ -124,23 +124,23 @@ class AddRoomListController @Inject constructor(
         val somethingToShow = filteredModel.isNotEmpty() || !initialLoadOccurred
         if (somethingToShow || filteredModel.isNotEmpty()) {
             add(
-                    RoomCategoryItem_().apply {
-                        id("header")
-                        title(host.sectionName.orEmpty())
-                        itemCount(host.totalSize)
-                        expanded(host.expanded)
-                        listener {
-                            host.expanded = !host.expanded
-                        }
+                RoomCategoryItem_().apply {
+                    id("header")
+                    title(host.sectionName.orEmpty())
+                    itemCount(host.totalSize)
+                    expanded(host.expanded)
+                    listener {
+                        host.expanded = !host.expanded
                     }
+                }
             )
             if (expanded && subHeaderText != null) {
                 add(
-                        GenericPillItem_().apply {
-                            id("sub_header")
-                            text(host.subHeaderText?.toEpoxyCharSequence())
-                            imageRes(R.drawable.ic_info)
-                        }
+                    GenericPillItem_().apply {
+                        id("sub_header")
+                        text(host.subHeaderText?.toEpoxyCharSequence())
+                        imageRes(R.drawable.ic_info)
+                    }
                 )
             }
         }
@@ -148,7 +148,7 @@ class AddRoomListController @Inject constructor(
             super.addModels(filteredModel)
             if (!initialLoadOccurred) {
                 add(
-                        RoomSelectionPlaceHolderItem_().apply { id("loading") }
+                    RoomSelectionPlaceHolderItem_().apply { id("loading") }
                 )
             }
         }

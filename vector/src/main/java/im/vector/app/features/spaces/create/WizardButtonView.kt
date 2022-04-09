@@ -66,7 +66,7 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         }
 
-//    var action: (() -> Unit)? = null
+    //    var action: (() -> Unit)? = null
 
     init {
         val content = inflate(context, R.layout.view_space_type_button, this)
@@ -84,7 +84,7 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
             subTitle = getString(R.styleable.WizardButtonView_subTitle)
             icon = getDrawable(R.styleable.WizardButtonView_icon)
             tint = getColor(R.styleable.WizardButtonView_iconTint, -1)
-                    .takeIf { it != -1 }
+                .takeIf { it != -1 }
         }
 
         val outValue = TypedValue()
@@ -93,10 +93,10 @@ class WizardButtonView @JvmOverloads constructor(context: Context, attrs: Attrib
             this.foreground = getDrawable(context, outValue.resourceId)
         }
 
-//        views.content.isClickable = true
-//        views.content.isFocusable = true
-//        views.content.setOnClickListener {
-//            action?.invoke()
-//        }
+        //        views.content.isClickable = true
+        //        views.content.isFocusable = true
+        //        views.content.setOnClickListener {
+        //            action?.invoke()
+        //        }
     }
 }

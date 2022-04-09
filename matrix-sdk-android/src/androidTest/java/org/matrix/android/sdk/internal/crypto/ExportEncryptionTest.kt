@@ -83,7 +83,8 @@ class ExportEncryptionTest {
     @Test
     fun checkExportDecrypt1() {
         val password = "password"
-        val input = "-----BEGIN MEGOLM SESSION DATA-----\nAXNhbHRzYWx0c2FsdHNhbHSIiIiIiIiIiIiIiIiIiIiIAAAACmIRUW2OjZ3L2l6j9h0lHlV3M2dx\n" + "cissyYBxjsfsAndErh065A8=\n-----END MEGOLM SESSION DATA-----"
+        val input =
+            "-----BEGIN MEGOLM SESSION DATA-----\nAXNhbHRzYWx0c2FsdHNhbHSIiIiIiIiIiIiIiIiIiIiIAAAACmIRUW2OjZ3L2l6j9h0lHlV3M2dx\n" + "cissyYBxjsfsAndErh065A8=\n-----END MEGOLM SESSION DATA-----"
         val expectedString = "plain"
 
         var decodedString: String? = null
@@ -93,15 +94,18 @@ class ExportEncryptionTest {
             fail("## checkExportDecrypt1() failed : " + e.message)
         }
 
-        assertEquals("## checkExportDecrypt1() : expectedString $expectedString -- decodedString $decodedString",
-                expectedString,
-                decodedString)
+        assertEquals(
+            "## checkExportDecrypt1() : expectedString $expectedString -- decodedString $decodedString",
+            expectedString,
+            decodedString
+        )
     }
 
     @Test
     fun checkExportDecrypt2() {
         val password = "betterpassword"
-        val input = "-----BEGIN MEGOLM SESSION DATA-----\nAW1vcmVzYWx0bW9yZXNhbHT//////////wAAAAAAAAAAAAAD6KyBpe1Niv5M5NPm4ZATsJo5nghk\n" + "KYu63a0YQ5DRhUWEKk7CcMkrKnAUiZny\n-----END MEGOLM SESSION DATA-----"
+        val input =
+            "-----BEGIN MEGOLM SESSION DATA-----\nAW1vcmVzYWx0bW9yZXNhbHT//////////wAAAAAAAAAAAAAD6KyBpe1Niv5M5NPm4ZATsJo5nghk\n" + "KYu63a0YQ5DRhUWEKk7CcMkrKnAUiZny\n-----END MEGOLM SESSION DATA-----"
         val expectedString = "Hello, World"
 
         var decodedString: String? = null
@@ -111,15 +115,18 @@ class ExportEncryptionTest {
             fail("## checkExportDecrypt2() failed : " + e.message)
         }
 
-        assertEquals("## checkExportDecrypt2() : expectedString $expectedString -- decodedString $decodedString",
-                expectedString,
-                decodedString)
+        assertEquals(
+            "## checkExportDecrypt2() : expectedString $expectedString -- decodedString $decodedString",
+            expectedString,
+            decodedString
+        )
     }
 
     @Test
     fun checkExportDecrypt3() {
         val password = "SWORDFISH"
-        val input = "-----BEGIN MEGOLM SESSION DATA-----\nAXllc3NhbHR5Z29vZG5lc3P//////////wAAAAAAAAAAAAAD6OIW+Je7gwvjd4kYrb+49gKCfExw\n" + "MgJBMD4mrhLkmgAngwR1pHjbWXaoGybtiAYr0moQ93GrBQsCzPbvl82rZhaXO3iH5uHo/RCEpOqp\nPgg29363BGR+/Ripq/VCLKGNbw==\n-----END MEGOLM SESSION DATA-----"
+        val input =
+            "-----BEGIN MEGOLM SESSION DATA-----\nAXllc3NhbHR5Z29vZG5lc3P//////////wAAAAAAAAAAAAAD6OIW+Je7gwvjd4kYrb+49gKCfExw\n" + "MgJBMD4mrhLkmgAngwR1pHjbWXaoGybtiAYr0moQ93GrBQsCzPbvl82rZhaXO3iH5uHo/RCEpOqp\nPgg29363BGR+/Ripq/VCLKGNbw==\n-----END MEGOLM SESSION DATA-----"
         val expectedString = "alphanumericallyalphanumericallyalphanumericallyalphanumerically"
 
         var decodedString: String? = null
@@ -129,9 +136,11 @@ class ExportEncryptionTest {
             fail("## checkExportDecrypt3() failed : " + e.message)
         }
 
-        assertEquals("## checkExportDecrypt3() : expectedString $expectedString -- decodedString $decodedString",
-                expectedString,
-                decodedString)
+        assertEquals(
+            "## checkExportDecrypt3() : expectedString $expectedString -- decodedString $decodedString",
+            expectedString,
+            decodedString
+        )
     }
 
     @Test
@@ -142,14 +151,16 @@ class ExportEncryptionTest {
 
         try {
             decodedString = MXMegolmExportEncryption
-                    .decryptMegolmKeyFile(MXMegolmExportEncryption.encryptMegolmKeyFile(expectedString, password, 1000), password)
+                .decryptMegolmKeyFile(MXMegolmExportEncryption.encryptMegolmKeyFile(expectedString, password, 1000), password)
         } catch (e: Exception) {
             fail("## checkExportEncrypt1() failed : " + e.message)
         }
 
-        assertEquals("## checkExportEncrypt1() : expectedString $expectedString -- decodedString $decodedString",
-                expectedString,
-                decodedString)
+        assertEquals(
+            "## checkExportEncrypt1() : expectedString $expectedString -- decodedString $decodedString",
+            expectedString,
+            decodedString
+        )
     }
 
     @Test
@@ -160,14 +171,16 @@ class ExportEncryptionTest {
 
         try {
             decodedString = MXMegolmExportEncryption
-                    .decryptMegolmKeyFile(MXMegolmExportEncryption.encryptMegolmKeyFile(expectedString, password, 1000), password)
+                .decryptMegolmKeyFile(MXMegolmExportEncryption.encryptMegolmKeyFile(expectedString, password, 1000), password)
         } catch (e: Exception) {
             fail("## checkExportEncrypt2() failed : " + e.message)
         }
 
-        assertEquals("## checkExportEncrypt2() : expectedString $expectedString -- decodedString $decodedString",
-                expectedString,
-                decodedString)
+        assertEquals(
+            "## checkExportEncrypt2() : expectedString $expectedString -- decodedString $decodedString",
+            expectedString,
+            decodedString
+        )
     }
 
     @Test
@@ -178,31 +191,36 @@ class ExportEncryptionTest {
 
         try {
             decodedString = MXMegolmExportEncryption
-                    .decryptMegolmKeyFile(MXMegolmExportEncryption.encryptMegolmKeyFile(expectedString, password, 1000), password)
+                .decryptMegolmKeyFile(MXMegolmExportEncryption.encryptMegolmKeyFile(expectedString, password, 1000), password)
         } catch (e: Exception) {
             fail("## checkExportEncrypt3() failed : " + e.message)
         }
 
-        assertEquals("## checkExportEncrypt3() : expectedString $expectedString -- decodedString $decodedString",
-                expectedString,
-                decodedString)
+        assertEquals(
+            "## checkExportEncrypt3() : expectedString $expectedString -- decodedString $decodedString",
+            expectedString,
+            decodedString
+        )
     }
 
     @Test
     fun checkExportEncrypt4() {
-        val password = "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword" + "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword"
+        val password =
+            "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword" + "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword"
         val expectedString = "alphanumericallyalphanumericallyalphanumericallyalphanumerically"
         var decodedString: String? = null
 
         try {
             decodedString = MXMegolmExportEncryption
-                    .decryptMegolmKeyFile(MXMegolmExportEncryption.encryptMegolmKeyFile(expectedString, password, 1000), password)
+                .decryptMegolmKeyFile(MXMegolmExportEncryption.encryptMegolmKeyFile(expectedString, password, 1000), password)
         } catch (e: Exception) {
             fail("## checkExportEncrypt4() failed : " + e.message)
         }
 
-        assertEquals("## checkExportEncrypt4() : expectedString $expectedString -- decodedString $decodedString",
-                expectedString,
-                decodedString)
+        assertEquals(
+            "## checkExportEncrypt4() : expectedString $expectedString -- decodedString $decodedString",
+            expectedString,
+            decodedString
+        )
     }
 }

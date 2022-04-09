@@ -35,22 +35,22 @@ class EmojiCompatWrapper @Inject constructor(private val context: Context) : Emo
     fun init(fontRequest: FontRequest) {
         // Use emoji compat for the benefit of emoji spans
         val config = FontRequestEmojiCompatConfig(context, fontRequest)
-                // we want to replace all emojis with selected font
-                .setReplaceAll(true)
+            // we want to replace all emojis with selected font
+            .setReplaceAll(true)
         // Debug options
-//                .setEmojiSpanIndicatorEnabled(true)
-//                .setEmojiSpanIndicatorColor(Color.GREEN)
+        //                .setEmojiSpanIndicatorEnabled(true)
+        //                .setEmojiSpanIndicatorColor(Color.GREEN)
         EmojiCompat.init(config)
-                .registerInitCallback(object : EmojiCompat.InitCallback() {
-                    override fun onInitialized() {
-                        Timber.v("Emoji compat onInitialized success ")
-                        initialized = true
-                    }
+            .registerInitCallback(object : EmojiCompat.InitCallback() {
+                override fun onInitialized() {
+                    Timber.v("Emoji compat onInitialized success ")
+                    initialized = true
+                }
 
-                    override fun onFailed(throwable: Throwable?) {
-                        Timber.e(throwable, "Failed to init EmojiCompat")
-                    }
-                })
+                override fun onFailed(throwable: Throwable?) {
+                    Timber.e(throwable, "Failed to init EmojiCompat")
+                }
+            })
     }
 
     override fun spanify(sequence: CharSequence): CharSequence {

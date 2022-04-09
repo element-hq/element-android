@@ -38,8 +38,8 @@ abstract class NotificationSettingsFooterItem : VectorEpoxyModel<NotificationSet
         super.bind(holder)
         val accountSettingsString = holder.view.context.getString(R.string.room_settings_room_notifications_account_settings)
         val manageNotificationsString = holder.view.context.getString(
-                R.string.room_settings_room_notifications_manage_notifications,
-                accountSettingsString
+            R.string.room_settings_room_notifications_manage_notifications,
+            accountSettingsString
         )
         val manageNotificationsBuilder = StringBuilder(manageNotificationsString)
         if (encrypted) {
@@ -48,9 +48,9 @@ abstract class NotificationSettingsFooterItem : VectorEpoxyModel<NotificationSet
         }
 
         holder.textView.setTextWithColoredPart(
-                manageNotificationsBuilder.toString(),
-                accountSettingsString,
-                underline = true
+            manageNotificationsBuilder.toString(),
+            accountSettingsString,
+            underline = true
         ) {
             clickListener?.invoke(holder.textView)
         }

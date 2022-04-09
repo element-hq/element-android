@@ -29,11 +29,11 @@ import org.matrix.android.sdk.internal.session.user.accountdata.AccountDataConte
  */
 @JsonClass(generateAdapter = true)
 data class EncryptedSecretContent(
-        /** unpadded base64-encoded ciphertext */
-        @Json(name = "ciphertext") val ciphertext: String? = null,
-        @Json(name = "mac") val mac: String? = null,
-        @Json(name = "ephemeral") val ephemeral: String? = null,
-        @Json(name = "iv") val initializationVector: String? = null
+    /** unpadded base64-encoded ciphertext */
+    @Json(name = "ciphertext") val ciphertext: String? = null,
+    @Json(name = "mac") val mac: String? = null,
+    @Json(name = "ephemeral") val ephemeral: String? = null,
+    @Json(name = "iv") val initializationVector: String? = null
 ) : AccountDataContent {
     companion object {
         /**
@@ -42,8 +42,8 @@ data class EncryptedSecretContent(
          */
         fun fromJson(obj: Any?): EncryptedSecretContent? {
             return MoshiProvider.providesMoshi()
-                    .adapter(EncryptedSecretContent::class.java)
-                    .fromJsonValue(obj)
+                .adapter(EncryptedSecretContent::class.java)
+                .fromJsonValue(obj)
         }
     }
 }

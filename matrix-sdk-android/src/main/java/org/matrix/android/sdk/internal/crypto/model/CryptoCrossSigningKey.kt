@@ -20,15 +20,15 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 
 data class CryptoCrossSigningKey(
-        override val userId: String,
+    override val userId: String,
 
-        val usages: List<String>?,
+    val usages: List<String>?,
 
-        override val keys: Map<String, String>,
+    override val keys: Map<String, String>,
 
-        override val signatures: Map<String, Map<String, String>>?,
+    override val signatures: Map<String, Map<String, String>>?,
 
-        var trustLevel: DeviceTrustLevel? = null
+    var trustLevel: DeviceTrustLevel? = null
 ) : CryptoInfo {
 
     override fun signalableJSONDictionary(): Map<String, Any> {
@@ -49,25 +49,25 @@ data class CryptoCrossSigningKey(
     fun addSignatureAndCopy(userId: String, signedWithNoPrefix: String, signature: String): CryptoCrossSigningKey {
         val updated = (signatures?.toMutableMap() ?: HashMap())
         val userMap = updated[userId]?.toMutableMap()
-                ?: HashMap<String, String>().also { updated[userId] = it }
+            ?: HashMap<String, String>().also { updated[userId] = it }
         userMap["ed25519:$signedWithNoPrefix"] = signature
 
         return this.copy(
-                signatures = updated
+            signatures = updated
         )
     }
 
     fun copyForSignature(userId: String, signedWithNoPrefix: String, signature: String): CryptoCrossSigningKey {
         return this.copy(
-                signatures = mapOf(userId to mapOf("ed25519:$signedWithNoPrefix" to signature))
+            signatures = mapOf(userId to mapOf("ed25519:$signedWithNoPrefix" to signature))
         )
     }
 
     internal data class Builder(
-            val userId: String,
-            val usage: KeyUsage,
-            private var base64Pkey: String? = null,
-            private val signatures: ArrayList<Triple<String, String, String>> = ArrayList()
+        val userId: String,
+        val usage: KeyUsage,
+        private var base64Pkey: String? = null,
+        private val signatures: ArrayList<Triple<String, String, String>> = ArrayList()
     ) {
 
         fun key(publicKeyBase64: String) = apply {
@@ -84,15 +84,16 @@ data class CryptoCrossSigningKey(
             val signMap = HashMap<String, HashMap<String, String>>()
             signatures.forEach { info ->
                 val uMap = signMap[info.first]
-                        ?: HashMap<String, String>().also { signMap[info.first] = it }
+                    ?: HashMap<String, String>().also { signMap[info.first] = it }
                 uMap["ed25519:${info.second}"] = info.third
             }
 
             return CryptoCrossSigningKey(
-                    userId = userId,
-                    usages = listOf(usage.value),
-                    keys = mapOf("ed25519:$b64key" to b64key),
-                    signatures = signMap)
+                userId = userId,
+                usages = listOf(usage.value),
+                keys = mapOf("ed25519:$b64key" to b64key),
+                signatures = signMap
+            )
         }
     }
 }

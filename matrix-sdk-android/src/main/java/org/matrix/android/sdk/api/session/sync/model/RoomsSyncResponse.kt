@@ -22,18 +22,18 @@ import com.squareup.moshi.JsonClass
 // RoomsSyncResponse represents the rooms list in server sync v2 response.
 @JsonClass(generateAdapter = true)
 data class RoomsSyncResponse(
-        /**
-         * Joined rooms: keys are rooms ids.
-         */
-        @Json(name = "join") val join: Map<String, RoomSync> = emptyMap(),
+    /**
+     * Joined rooms: keys are rooms ids.
+     */
+    @Json(name = "join") val join: Map<String, RoomSync> = emptyMap(),
 
-        /**
-         * Invitations. The rooms that the user has been invited to: keys are rooms ids.
-         */
-        @Json(name = "invite") val invite: Map<String, InvitedRoomSync> = emptyMap(),
+    /**
+     * Invitations. The rooms that the user has been invited to: keys are rooms ids.
+     */
+    @Json(name = "invite") val invite: Map<String, InvitedRoomSync> = emptyMap(),
 
-        /**
-         * Left rooms. The rooms that the user has left or been banned from: keys are rooms ids.
-         */
-        @Json(name = "leave") val leave: Map<String, RoomSync> = emptyMap()
+    /**
+     * Left rooms. The rooms that the user has left or been banned from: keys are rooms ids.
+     */
+    @Json(name = "leave") val leave: Map<String, RoomSync> = emptyMap()
 )

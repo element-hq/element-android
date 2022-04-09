@@ -27,8 +27,8 @@ import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityField
  */
 internal fun PreviewUrlCacheEntity.Companion.get(realm: Realm, url: String): PreviewUrlCacheEntity? {
     return realm.where<PreviewUrlCacheEntity>()
-            .equalTo(PreviewUrlCacheEntityFields.URL, url)
-            .findFirst()
+        .equalTo(PreviewUrlCacheEntityFields.URL, url)
+        .findFirst()
 }
 
 /**

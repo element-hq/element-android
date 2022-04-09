@@ -30,8 +30,8 @@ import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 
 class CreatePollViewModel @AssistedInject constructor(
-        @Assisted private val initialState: CreatePollViewState,
-        session: Session
+    @Assisted private val initialState: CreatePollViewState,
+    session: Session
 ) : VectorViewModel<CreatePollViewState, CreatePollAction, CreatePollViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -56,13 +56,13 @@ class CreatePollViewModel @AssistedInject constructor(
 
     private fun observeState() {
         onEach(
-                CreatePollViewState::question,
-                CreatePollViewState::options
+            CreatePollViewState::question,
+            CreatePollViewState::options
         ) { question, options ->
             setState {
                 copy(
-                        canCreatePoll = canCreatePoll(question, options),
-                        canAddMoreOptions = options.size < MAX_OPTIONS_COUNT
+                    canCreatePoll = canCreatePoll(question, options),
+                    canAddMoreOptions = options.size < MAX_OPTIONS_COUNT
                 )
             }
         }
@@ -79,19 +79,19 @@ class CreatePollViewModel @AssistedInject constructor(
 
         setState {
             copy(
-                    question = question,
-                    options = options,
-                    pollType = pollType
+                question = question,
+                options = options,
+                pollType = pollType
             )
         }
     }
 
     override fun handle(action: CreatePollAction) {
         when (action) {
-            CreatePollAction.OnCreatePoll         -> handleOnCreatePoll()
-            CreatePollAction.OnAddOption          -> handleOnAddOption()
-            is CreatePollAction.OnDeleteOption    -> handleOnDeleteOption(action.index)
-            is CreatePollAction.OnOptionChanged   -> handleOnOptionChanged(action.index, action.option)
+            CreatePollAction.OnCreatePoll -> handleOnCreatePoll()
+            CreatePollAction.OnAddOption -> handleOnAddOption()
+            is CreatePollAction.OnDeleteOption -> handleOnDeleteOption(action.index)
+            is CreatePollAction.OnOptionChanged -> handleOnOptionChanged(action.index, action.option)
             is CreatePollAction.OnQuestionChanged -> handleOnQuestionChanged(action.question)
             is CreatePollAction.OnPollTypeChanged -> handleOnPollTypeChanged(action.pollType)
         }
@@ -100,16 +100,16 @@ class CreatePollViewModel @AssistedInject constructor(
     private fun handleOnCreatePoll() = withState { state ->
         val nonEmptyOptions = state.options.filter { it.isNotEmpty() }
         when {
-            state.question.isEmpty()                 -> {
+            state.question.isEmpty() -> {
                 _viewEvents.post(CreatePollViewEvents.EmptyQuestionError)
             }
             nonEmptyOptions.size < MIN_OPTIONS_COUNT -> {
                 _viewEvents.post(CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = MIN_OPTIONS_COUNT))
             }
-            else                                     -> {
+            else -> {
                 when (state.mode) {
                     PollMode.CREATE -> room.sendPoll(state.pollType, state.question, nonEmptyOptions)
-                    PollMode.EDIT   -> sendEditedPoll(state.editedEventId!!, state.pollType, state.question, nonEmptyOptions)
+                    PollMode.EDIT -> sendEditedPoll(state.editedEventId!!, state.pollType, state.question, nonEmptyOptions)
                 }
                 _viewEvents.post(CreatePollViewEvents.Success)
             }
@@ -125,7 +125,7 @@ class CreatePollViewModel @AssistedInject constructor(
         setState {
             val extendedOptions = options + ""
             copy(
-                    options = extendedOptions
+                options = extendedOptions
             )
         }
     }
@@ -134,7 +134,7 @@ class CreatePollViewModel @AssistedInject constructor(
         setState {
             val filteredOptions = options.filterIndexed { ind, _ -> ind != index }
             copy(
-                    options = filteredOptions
+                options = filteredOptions
             )
         }
     }
@@ -143,7 +143,7 @@ class CreatePollViewModel @AssistedInject constructor(
         setState {
             val changedOptions = options.mapIndexed { ind, s -> if (ind == index) option else s }
             copy(
-                    options = changedOptions
+                options = changedOptions
             )
         }
     }
@@ -151,7 +151,7 @@ class CreatePollViewModel @AssistedInject constructor(
     private fun handleOnQuestionChanged(question: String) {
         setState {
             copy(
-                    question = question
+                question = question
             )
         }
     }
@@ -159,7 +159,7 @@ class CreatePollViewModel @AssistedInject constructor(
     private fun handleOnPollTypeChanged(pollType: PollType) {
         setState {
             copy(
-                    pollType = pollType
+                pollType = pollType
             )
         }
     }

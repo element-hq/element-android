@@ -83,8 +83,8 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * [ToolbarConfig] instance from host activity
      * */
     protected var toolbar: ToolbarConfig? = null
-            get() = (activity as? VectorBaseActivity<*>)?.toolbar
-            private set
+        get() = (activity as? VectorBaseActivity<*>)?.toolbar
+        private set
     /* ==========================================================================================
      * View model
      * ========================================================================================== */
@@ -222,7 +222,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     protected fun showLoadingDialog(message: CharSequence? = null) {
         progress?.dismiss()
         progress = MaterialProgressDialog(requireContext())
-                .show(message ?: getString(R.string.please_wait))
+            .show(message ?: getString(R.string.please_wait))
     }
 
     protected fun dismissLoadingDialog() {
@@ -248,12 +248,12 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
         viewEvents
-                .stream()
-                .onEach {
-                    dismissLoadingDialog()
-                    observer(it)
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .stream()
+            .onEach {
+                dismissLoadingDialog()
+                observer(it)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     /* ==========================================================================================
@@ -262,8 +262,8 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .onEach { onClicked() }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            .onEach { onClicked() }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     /* ==========================================================================================
@@ -289,9 +289,9 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     protected fun displayErrorDialog(throwable: Throwable) {
         MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(errorFormatter.toHumanReadable(throwable))
-                .setPositiveButton(R.string.ok, null)
-                .show()
+            .setTitle(R.string.dialog_title_error)
+            .setMessage(errorFormatter.toHumanReadable(throwable))
+            .setPositiveButton(R.string.ok, null)
+            .show()
     }
 }

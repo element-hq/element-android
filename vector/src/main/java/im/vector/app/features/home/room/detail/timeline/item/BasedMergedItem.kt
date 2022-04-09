@@ -54,12 +54,12 @@ abstract class BasedMergedItem<H : BasedMergedItem.Holder> : BaseEventItem<H>() 
     }
 
     data class Data(
-            val localId: Long,
-            val eventId: String,
-            val userId: String,
-            val memberName: String,
-            val avatarUrl: String?,
-            val isDirectRoom: Boolean
+        val localId: Long,
+        val eventId: String,
+        val userId: String,
+        val memberName: String,
+        val avatarUrl: String?,
+        val isDirectRoom: Boolean
     )
 
     fun Data.toMatrixItem() = MatrixItem.UserItem(userId, memberName, avatarUrl)

@@ -37,14 +37,16 @@ import javax.inject.Inject
  * https://developer.android.com/training/notify-user/group
  */
 class SummaryGroupMessageCreator @Inject constructor(
-        private val stringProvider: StringProvider,
-        private val notificationUtils: NotificationUtils
+    private val stringProvider: StringProvider,
+    private val notificationUtils: NotificationUtils
 ) {
 
-    fun createSummaryNotification(roomNotifications: List<RoomNotification.Message.Meta>,
-                                  invitationNotifications: List<OneShotNotification.Append.Meta>,
-                                  simpleNotifications: List<OneShotNotification.Append.Meta>,
-                                  useCompleteNotificationFormat: Boolean): Notification {
+    fun createSummaryNotification(
+        roomNotifications: List<RoomNotification.Message.Meta>,
+        invitationNotifications: List<OneShotNotification.Append.Meta>,
+        simpleNotifications: List<OneShotNotification.Append.Meta>,
+        useCompleteNotificationFormat: Boolean
+    ): Notification {
         val summaryInboxStyle = NotificationCompat.InboxStyle().also { style ->
             roomNotifications.forEach { style.addLine(it.summaryLine) }
             invitationNotifications.forEach { style.addLine(it.summaryLine) }
@@ -58,40 +60,42 @@ class SummaryGroupMessageCreator @Inject constructor(
         val messageCount = roomNotifications.fold(initial = 0) { acc, current -> acc + current.messageCount }
 
         val lastMessageTimestamp = roomNotifications.lastOrNull()?.latestTimestamp
-                ?: invitationNotifications.lastOrNull()?.timestamp
-                ?: simpleNotifications.last().timestamp
+            ?: invitationNotifications.lastOrNull()?.timestamp
+            ?: simpleNotifications.last().timestamp
 
         // FIXME roomIdToEventMap.size is not correct, this is the number of rooms
         val nbEvents = roomNotifications.size + simpleNotifications.size
         val sumTitle = stringProvider.getQuantityString(R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
         summaryInboxStyle.setBigContentTitle(sumTitle)
-                // TODO get latest event?
-                .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
+            // TODO get latest event?
+            .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents))
         return if (useCompleteNotificationFormat) {
             notificationUtils.buildSummaryListNotification(
-                    summaryInboxStyle,
-                    sumTitle,
-                    noisy = summaryIsNoisy,
-                    lastMessageTimestamp = lastMessageTimestamp
+                summaryInboxStyle,
+                sumTitle,
+                noisy = summaryIsNoisy,
+                lastMessageTimestamp = lastMessageTimestamp
             )
         } else {
             processSimpleGroupSummary(
-                    summaryIsNoisy,
-                    messageCount,
-                    simpleNotifications.size,
-                    invitationNotifications.size,
-                    roomNotifications.size,
-                    lastMessageTimestamp
+                summaryIsNoisy,
+                messageCount,
+                simpleNotifications.size,
+                invitationNotifications.size,
+                roomNotifications.size,
+                lastMessageTimestamp
             )
         }
     }
 
-    private fun processSimpleGroupSummary(summaryIsNoisy: Boolean,
-                                          messageEventsCount: Int,
-                                          simpleEventsCount: Int,
-                                          invitationEventsCount: Int,
-                                          roomCount: Int,
-                                          lastMessageTimestamp: Long): Notification {
+    private fun processSimpleGroupSummary(
+        summaryIsNoisy: Boolean,
+        messageEventsCount: Int,
+        simpleEventsCount: Int,
+        invitationEventsCount: Int,
+        roomCount: Int,
+        lastMessageTimestamp: Long
+    ): Notification {
         // Add the simple events as message (?)
         val messageNotificationCount = messageEventsCount + simpleEventsCount
 
@@ -99,24 +103,28 @@ class SummaryGroupMessageCreator @Inject constructor(
             val invitationsStr = stringProvider.getQuantityString(R.plurals.notification_invitations, invitationEventsCount, invitationEventsCount)
             if (messageNotificationCount > 0) {
                 // Invitation and message
-                val messageStr = stringProvider.getQuantityString(R.plurals.room_new_messages_notification,
-                        messageNotificationCount, messageNotificationCount)
+                val messageStr = stringProvider.getQuantityString(
+                    R.plurals.room_new_messages_notification,
+                    messageNotificationCount, messageNotificationCount
+                )
                 if (roomCount > 1) {
                     // In several rooms
-                    val roomStr = stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms,
-                            roomCount, roomCount)
+                    val roomStr = stringProvider.getQuantityString(
+                        R.plurals.notification_unread_notified_messages_in_room_rooms,
+                        roomCount, roomCount
+                    )
                     stringProvider.getString(
-                            R.string.notification_unread_notified_messages_in_room_and_invitation,
-                            messageStr,
-                            roomStr,
-                            invitationsStr
+                        R.string.notification_unread_notified_messages_in_room_and_invitation,
+                        messageStr,
+                        roomStr,
+                        invitationsStr
                     )
                 } else {
                     // In one room
                     stringProvider.getString(
-                            R.string.notification_unread_notified_messages_and_invitation,
-                            messageStr,
-                            invitationsStr
+                        R.string.notification_unread_notified_messages_and_invitation,
+                        messageStr,
+                        invitationsStr
                     )
                 }
             } else {
@@ -125,8 +133,10 @@ class SummaryGroupMessageCreator @Inject constructor(
             }
         } else {
             // No invitation, only messages
-            val messageStr = stringProvider.getQuantityString(R.plurals.room_new_messages_notification,
-                    messageNotificationCount, messageNotificationCount)
+            val messageStr = stringProvider.getQuantityString(
+                R.plurals.room_new_messages_notification,
+                messageNotificationCount, messageNotificationCount
+            )
             if (roomCount > 1) {
                 // In several rooms
                 val roomStr = stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages_in_room_rooms, roomCount, roomCount)
@@ -137,10 +147,10 @@ class SummaryGroupMessageCreator @Inject constructor(
             }
         }
         return notificationUtils.buildSummaryListNotification(
-                style = null,
-                compatSummary = privacyTitle,
-                noisy = summaryIsNoisy,
-                lastMessageTimestamp = lastMessageTimestamp
+            style = null,
+            compatSummary = privacyTitle,
+            noisy = summaryIsNoisy,
+            lastMessageTimestamp = lastMessageTimestamp
         )
     }
 }

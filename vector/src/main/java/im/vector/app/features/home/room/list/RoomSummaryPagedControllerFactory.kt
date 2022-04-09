@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.list
 import javax.inject.Inject
 
 class RoomSummaryPagedControllerFactory @Inject constructor(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory
+    private val roomSummaryItemFactory: RoomSummaryItemFactory
 ) {
 
     fun createRoomSummaryPagedController(): RoomSummaryPagedController {

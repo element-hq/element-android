@@ -41,23 +41,23 @@ class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         super.onCreate(savedInstanceState)
         sharedActionViewModel = viewModelProvider.get(SpacePreviewSharedActionViewModel::class.java)
         sharedActionViewModel
-                .stream()
-                .onEach { action ->
-                    when (action) {
-                        SpacePreviewSharedAction.DismissAction       -> finish()
-                        SpacePreviewSharedAction.ShowModalLoading    -> showWaitingView()
-                        SpacePreviewSharedAction.HideModalLoading    -> hideWaitingView()
-                        is SpacePreviewSharedAction.ShowErrorMessage -> action.error?.let { showSnackbar(it) }
-                    }
+            .stream()
+            .onEach { action ->
+                when (action) {
+                    SpacePreviewSharedAction.DismissAction -> finish()
+                    SpacePreviewSharedAction.ShowModalLoading -> showWaitingView()
+                    SpacePreviewSharedAction.HideModalLoading -> hideWaitingView()
+                    is SpacePreviewSharedAction.ShowErrorMessage -> action.error?.let { showSnackbar(it) }
                 }
-                .launchIn(lifecycleScope)
+            }
+            .launchIn(lifecycleScope)
 
         if (isFirstCreation()) {
             val args = intent?.getParcelableExtra<SpacePreviewArgs>(Mavericks.KEY_ARG)
             replaceFragment(
-                    views.simpleFragmentContainer,
-                    SpacePreviewFragment::class.java,
-                    args
+                views.simpleFragmentContainer,
+                SpacePreviewFragment::class.java,
+                args
             )
         }
     }

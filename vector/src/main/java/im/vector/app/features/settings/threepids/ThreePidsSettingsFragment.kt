@@ -42,11 +42,11 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import javax.inject.Inject
 
 class ThreePidsSettingsFragment @Inject constructor(
-        private val epoxyController: ThreePidsSettingsController
+    private val epoxyController: ThreePidsSettingsController
 ) :
-        VectorBaseFragment<FragmentGenericRecyclerBinding>(),
-        OnBackPressed,
-        ThreePidsSettingsController.InteractionListener {
+    VectorBaseFragment<FragmentGenericRecyclerBinding>(),
+    OnBackPressed,
+    ThreePidsSettingsController.InteractionListener {
 
     private val viewModel: ThreePidsSettingsViewModel by fragmentViewModel()
 
@@ -68,13 +68,16 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     private fun askAuthentication(event: ThreePidsSettingsViewEvents.RequestReAuth) {
-        ReAuthActivity.newIntent(requireContext(),
-                event.registrationFlowResponse,
-                event.lastErrorCode,
-                getString(R.string.settings_add_email_address)).let { intent ->
+        ReAuthActivity.newIntent(
+            requireContext(),
+            event.registrationFlowResponse,
+            event.lastErrorCode,
+            getString(R.string.settings_add_email_address)
+        ).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }
     }
+
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
@@ -85,7 +88,7 @@ class ThreePidsSettingsFragment @Inject constructor(
                     val password = activityResult.data?.extras?.getString(ReAuthActivity.RESULT_VALUE) ?: ""
                     viewModel.handle(ThreePidsSettingsAction.PasswordAuthDone(password))
                 }
-                else                    -> {
+                else -> {
                     viewModel.handle(ThreePidsSettingsAction.ReAuthCancelled)
                 }
             }
@@ -145,14 +148,14 @@ class ThreePidsSettingsFragment @Inject constructor(
         // Check that phone number is valid
         if (!msisdn.startsWith("+")) {
             viewModel.handle(
-                    ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingPhoneNumber(getString(R.string.login_msisdn_error_not_international)))
+                ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingPhoneNumber(getString(R.string.login_msisdn_error_not_international)))
             )
             return
         }
 
         if (!msisdn.isMsisdn()) {
             viewModel.handle(
-                    ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingPhoneNumber(getString(R.string.login_msisdn_error_other)))
+                ThreePidsSettingsAction.ChangeUiState(ThreePidsSettingsUiState.AddingPhoneNumber(getString(R.string.login_msisdn_error_other)))
             )
             return
         }
@@ -182,12 +185,12 @@ class ThreePidsSettingsFragment @Inject constructor(
 
     override fun deleteThreePid(threePid: ThreePid) {
         MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
-                .setMessage(getString(R.string.settings_remove_three_pid_confirmation_content, threePid.getFormattedValue()))
-                .setPositiveButton(R.string.action_remove) { _, _ ->
-                    viewModel.handle(ThreePidsSettingsAction.DeleteThreePid(threePid))
-                }
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
+            .setMessage(getString(R.string.settings_remove_three_pid_confirmation_content, threePid.getFormattedValue()))
+            .setPositiveButton(R.string.action_remove) { _, _ ->
+                viewModel.handle(ThreePidsSettingsAction.DeleteThreePid(threePid))
+            }
+            .setNegativeButton(R.string.action_cancel, null)
+            .show()
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

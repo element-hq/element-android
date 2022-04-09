@@ -59,29 +59,29 @@ object PermalinkParser {
 
         // we are limiting to 2 params
         val params = safeFragment
-                .split(MatrixPatterns.SEP_REGEX)
-                .filter { it.isNotEmpty() }
-                .map { URLDecoder.decode(it, "UTF-8") }
-                .take(2)
+            .split(MatrixPatterns.SEP_REGEX)
+            .filter { it.isNotEmpty() }
+            .map { URLDecoder.decode(it, "UTF-8") }
+            .take(2)
 
         val identifier = params.getOrNull(0)
         val extraParameter = params.getOrNull(1)
         return when {
-            identifier.isNullOrEmpty()             -> PermalinkData.FallbackLink(uri)
-            MatrixPatterns.isUserId(identifier)    -> PermalinkData.UserLink(userId = identifier)
-            MatrixPatterns.isGroupId(identifier)   -> PermalinkData.GroupLink(groupId = identifier)
-            MatrixPatterns.isRoomId(identifier)    -> {
+            identifier.isNullOrEmpty() -> PermalinkData.FallbackLink(uri)
+            MatrixPatterns.isUserId(identifier) -> PermalinkData.UserLink(userId = identifier)
+            MatrixPatterns.isGroupId(identifier) -> PermalinkData.GroupLink(groupId = identifier)
+            MatrixPatterns.isRoomId(identifier) -> {
                 handleRoomIdCase(fragment, identifier, matrixToUri, extraParameter, viaQueryParameters)
             }
             MatrixPatterns.isRoomAlias(identifier) -> {
                 PermalinkData.RoomLink(
-                        roomIdOrAlias = identifier,
-                        isRoomAlias = true,
-                        eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
-                        viaParameters = viaQueryParameters
+                    roomIdOrAlias = identifier,
+                    isRoomAlias = true,
+                    eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
+                    viaParameters = viaQueryParameters
                 )
             }
-            else                                   -> PermalinkData.FallbackLink(uri)
+            else -> PermalinkData.FallbackLink(uri)
         }
     }
 
@@ -97,16 +97,16 @@ object PermalinkParser {
                 val token = signValidUri.getQueryParameter("token") ?: throw IllegalArgumentException()
                 val privateKey = signValidUri.getQueryParameter("private_key") ?: throw IllegalArgumentException()
                 PermalinkData.RoomEmailInviteLink(
-                        roomId = identifier,
-                        email = email!!,
-                        signUrl = signUrl!!,
-                        roomName = paramList.firstOrNull { it.first == "room_name" }?.second,
-                        inviterName = paramList.firstOrNull { it.first == "inviter_name" }?.second,
-                        roomAvatarUrl = paramList.firstOrNull { it.first == "room_avatar_url" }?.second,
-                        roomType = paramList.firstOrNull { it.first == "room_type" }?.second,
-                        identityServer = identityServerHost,
-                        token = token,
-                        privateKey = privateKey
+                    roomId = identifier,
+                    email = email!!,
+                    signUrl = signUrl!!,
+                    roomName = paramList.firstOrNull { it.first == "room_name" }?.second,
+                    inviterName = paramList.firstOrNull { it.first == "inviter_name" }?.second,
+                    roomAvatarUrl = paramList.firstOrNull { it.first == "room_avatar_url" }?.second,
+                    roomType = paramList.firstOrNull { it.first == "room_type" }?.second,
+                    identityServer = identityServerHost,
+                    token = token,
+                    privateKey = privateKey
                 )
             } catch (failure: Throwable) {
                 Timber.i("## Permalink: Failed to parse permalink $signUrl")
@@ -114,29 +114,29 @@ object PermalinkParser {
             }
         } else {
             PermalinkData.RoomLink(
-                    roomIdOrAlias = identifier,
-                    isRoomAlias = false,
-                    eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
-                    viaParameters = viaQueryParameters
+                roomIdOrAlias = identifier,
+                isRoomAlias = false,
+                eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
+                viaParameters = viaQueryParameters
             )
         }
     }
 
     private fun safeExtractParams(fragment: String) =
-            fragment.substringAfter("?").split('&').mapNotNull {
-                val splitNameValue = it.split("=")
-                if (splitNameValue.size == 2) {
-                    Pair(splitNameValue[0], URLDecoder.decode(splitNameValue[1], "UTF-8"))
-                } else null
-            }
+        fragment.substringAfter("?").split('&').mapNotNull {
+            val splitNameValue = it.split("=")
+            if (splitNameValue.size == 2) {
+                Pair(splitNameValue[0], URLDecoder.decode(splitNameValue[1], "UTF-8"))
+            } else null
+        }
 
     private fun String.getViaParameters(): List<String> {
         return UrlQuerySanitizer(this)
-                .parameterList
-                .filter {
-                    it.mParameter == "via"
-                }.map {
-                    URLDecoder.decode(it.mValue, "UTF-8")
-                }
+            .parameterList
+            .filter {
+                it.mParameter == "via"
+            }.map {
+                URLDecoder.decode(it.mValue, "UTF-8")
+            }
     }
 }

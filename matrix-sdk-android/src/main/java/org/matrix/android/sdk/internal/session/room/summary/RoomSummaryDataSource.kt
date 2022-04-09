@@ -56,84 +56,92 @@ import org.matrix.android.sdk.internal.util.fetchCopyMap
 import javax.inject.Inject
 
 internal class RoomSummaryDataSource @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy,
-        private val realmSessionProvider: RealmSessionProvider,
-        private val roomSummaryMapper: RoomSummaryMapper,
-        private val queryStringValueProcessor: QueryStringValueProcessor,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+    @SessionDatabase private val monarchy: Monarchy,
+    private val realmSessionProvider: RealmSessionProvider,
+    private val roomSummaryMapper: RoomSummaryMapper,
+    private val queryStringValueProcessor: QueryStringValueProcessor,
+    private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
 
     fun getRoomSummary(roomIdOrAlias: String): RoomSummary? {
         return monarchy
-                .fetchCopyMap({
-                    if (roomIdOrAlias.startsWith("!")) {
-                        // It's a roomId
-                        RoomSummaryEntity.where(it, roomId = roomIdOrAlias).findFirst()
-                    } else {
-                        // Assume it's a room alias
-                        RoomSummaryEntity.findByAlias(it, roomIdOrAlias)
-                    }
-                }, { entity, _ ->
-                    roomSummaryMapper.map(entity)
-                })
+            .fetchCopyMap({
+                if (roomIdOrAlias.startsWith("!")) {
+                    // It's a roomId
+                    RoomSummaryEntity.where(it, roomId = roomIdOrAlias).findFirst()
+                } else {
+                    // Assume it's a room alias
+                    RoomSummaryEntity.findByAlias(it, roomIdOrAlias)
+                }
+            }, { entity, _ ->
+                roomSummaryMapper.map(entity)
+            })
     }
 
     fun getRoomSummaryLive(roomId: String): LiveData<Optional<RoomSummary>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
-                { roomSummaryMapper.map(it) }
+            { realm -> RoomSummaryEntity.where(realm, roomId).isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME) },
+            { roomSummaryMapper.map(it) }
         )
         return Transformations.map(liveData) { results ->
             results.firstOrNull().toOptional()
         }
     }
 
-    fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
-                         sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary> {
+    fun getRoomSummaries(
+        queryParams: RoomSummaryQueryParams,
+        sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): List<RoomSummary> {
         return monarchy.fetchAllMappedSync(
-                { roomSummariesQuery(it, queryParams).process(sortOrder) },
-                { roomSummaryMapper.map(it) }
+            { roomSummariesQuery(it, queryParams).process(sortOrder) },
+            { roomSummaryMapper.map(it) }
         )
     }
 
-    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                             sortOrder: RoomSortOrder = RoomSortOrder.NONE): LiveData<List<RoomSummary>> {
+    fun getRoomSummariesLive(
+        queryParams: RoomSummaryQueryParams,
+        sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
-                {
-                    roomSummariesQuery(it, queryParams).process(sortOrder)
-                },
-                { roomSummaryMapper.map(it) }
+            {
+                roomSummariesQuery(it, queryParams).process(sortOrder)
+            },
+            { roomSummaryMapper.map(it) }
         )
     }
 
-    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams,
-                              sortOrder: RoomSortOrder = RoomSortOrder.NONE): LiveData<List<RoomSummary>> {
+    fun getSpaceSummariesLive(
+        queryParams: SpaceSummaryQueryParams,
+        sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): LiveData<List<RoomSummary>> {
         return getRoomSummariesLive(queryParams, sortOrder)
     }
 
     fun getSpaceSummary(roomIdOrAlias: String): RoomSummary? {
         return getRoomSummary(roomIdOrAlias)
-                ?.takeIf { it.roomType == RoomType.SPACE }
+            ?.takeIf { it.roomType == RoomType.SPACE }
     }
 
     fun getSpaceSummaryLive(roomId: String): LiveData<Optional<RoomSummary>> {
         val liveData = monarchy.findAllMappedWithChanges(
-                { realm ->
-                    RoomSummaryEntity.where(realm, roomId)
-                            .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
-                            .equalTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
-                },
-                {
-                    roomSummaryMapper.map(it)
-                }
+            { realm ->
+                RoomSummaryEntity.where(realm, roomId)
+                    .isNotEmpty(RoomSummaryEntityFields.DISPLAY_NAME)
+                    .equalTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
+            },
+            {
+                roomSummaryMapper.map(it)
+            }
         )
         return Transformations.map(liveData) { results ->
             results.firstOrNull().toOptional()
         }
     }
 
-    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams,
-                          sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary> {
+    fun getSpaceSummaries(
+        spaceSummaryQueryParams: SpaceSummaryQueryParams,
+        sortOrder: RoomSortOrder = RoomSortOrder.NONE
+    ): List<RoomSummary> {
         return getRoomSummaries(spaceSummaryQueryParams, sortOrder)
     }
 
@@ -141,42 +149,44 @@ internal class RoomSummaryDataSource @Inject constructor(
         return getRoomSummaries(spaceSummaryQueryParams {
             memberships = listOf(Membership.JOIN)
         })
-                .let { allJoinedSpace ->
-                    val allFlattenChildren = arrayListOf<RoomSummary>()
-                    allJoinedSpace.forEach {
-                        flattenSubSpace(it, emptyList(), allFlattenChildren, listOf(Membership.JOIN), false)
-                    }
-                    val knownNonOrphan = allFlattenChildren.map { it.roomId }.distinct()
-                    // keep only root rooms
-                    allJoinedSpace.filter { candidate ->
-                        !knownNonOrphan.contains(candidate.roomId)
-                    }
+            .let { allJoinedSpace ->
+                val allFlattenChildren = arrayListOf<RoomSummary>()
+                allJoinedSpace.forEach {
+                    flattenSubSpace(it, emptyList(), allFlattenChildren, listOf(Membership.JOIN), false)
                 }
+                val knownNonOrphan = allFlattenChildren.map { it.roomId }.distinct()
+                // keep only root rooms
+                allJoinedSpace.filter { candidate ->
+                    !knownNonOrphan.contains(candidate.roomId)
+                }
+            }
     }
 
     fun getBreadcrumbs(queryParams: RoomSummaryQueryParams): List<RoomSummary> {
         return monarchy.fetchAllMappedSync(
-                { breadcrumbsQuery(it, queryParams) },
-                { roomSummaryMapper.map(it) }
+            { breadcrumbsQuery(it, queryParams) },
+            { roomSummaryMapper.map(it) }
         )
     }
 
     fun getBreadcrumbsLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>> {
         return monarchy.findAllMappedWithChanges(
-                { breadcrumbsQuery(it, queryParams) },
-                { roomSummaryMapper.map(it) }
+            { breadcrumbsQuery(it, queryParams) },
+            { roomSummaryMapper.map(it) }
         )
     }
 
     private fun breadcrumbsQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
         return roomSummariesQuery(realm, queryParams)
-                .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
-                .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
+            .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
+            .sort(RoomSummaryEntityFields.BREADCRUMBS_INDEX)
     }
 
-    fun getSortedPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                        pagedListConfig: PagedList.Config,
-                                        sortOrder: RoomSortOrder): LiveData<PagedList<RoomSummary>> {
+    fun getSortedPagedRoomSummariesLive(
+        queryParams: RoomSummaryQueryParams,
+        pagedListConfig: PagedList.Config,
+        sortOrder: RoomSortOrder
+    ): LiveData<PagedList<RoomSummary>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams).process(sortOrder)
         }
@@ -184,14 +194,16 @@ internal class RoomSummaryDataSource @Inject constructor(
             roomSummaryMapper.map(it)
         }
         return monarchy.findAllPagedWithChanges(
-                realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory, pagedListConfig)
+            realmDataSourceFactory,
+            LivePagedListBuilder(dataSourceFactory, pagedListConfig)
         )
     }
 
-    fun getUpdatablePagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
-                                           pagedListConfig: PagedList.Config,
-                                           sortOrder: RoomSortOrder): UpdatableLivePageResult {
+    fun getUpdatablePagedRoomSummariesLive(
+        queryParams: RoomSummaryQueryParams,
+        pagedListConfig: PagedList.Config,
+        sortOrder: RoomSortOrder
+    ): UpdatableLivePageResult {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
             roomSummariesQuery(realm, queryParams).process(sortOrder)
         }
@@ -202,22 +214,22 @@ internal class RoomSummaryDataSource @Inject constructor(
         val boundaries = MutableLiveData(ResultBoundaries())
 
         val mapped = monarchy.findAllPagedWithChanges(
-                realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory, pagedListConfig).also {
-                    it.setBoundaryCallback(object : PagedList.BoundaryCallback<RoomSummary>() {
-                        override fun onItemAtEndLoaded(itemAtEnd: RoomSummary) {
-                            boundaries.postValue(boundaries.value?.copy(frontLoaded = true))
-                        }
+            realmDataSourceFactory,
+            LivePagedListBuilder(dataSourceFactory, pagedListConfig).also {
+                it.setBoundaryCallback(object : PagedList.BoundaryCallback<RoomSummary>() {
+                    override fun onItemAtEndLoaded(itemAtEnd: RoomSummary) {
+                        boundaries.postValue(boundaries.value?.copy(frontLoaded = true))
+                    }
 
-                        override fun onItemAtFrontLoaded(itemAtFront: RoomSummary) {
-                            boundaries.postValue(boundaries.value?.copy(endLoaded = true))
-                        }
+                    override fun onItemAtFrontLoaded(itemAtFront: RoomSummary) {
+                        boundaries.postValue(boundaries.value?.copy(endLoaded = true))
+                    }
 
-                        override fun onZeroItemsLoaded() {
-                            boundaries.postValue(boundaries.value?.copy(zeroItemLoaded = true))
-                        }
-                    })
-                }
+                    override fun onZeroItemsLoaded() {
+                        boundaries.postValue(boundaries.value?.copy(zeroItemLoaded = true))
+                    }
+                })
+            }
         )
 
         return object : UpdatableLivePageResult {
@@ -252,8 +264,8 @@ internal class RoomSummaryDataSource @Inject constructor(
             val notifCount = roomSummariesQuery.sum(RoomSummaryEntityFields.NOTIFICATION_COUNT).toInt()
             val highlightCount = roomSummariesQuery.sum(RoomSummaryEntityFields.HIGHLIGHT_COUNT).toInt()
             notificationCount = RoomAggregateNotificationCount(
-                    notifCount,
-                    highlightCount
+                notifCount,
+                highlightCount
             )
         }
         return notificationCount!!
@@ -262,25 +274,25 @@ internal class RoomSummaryDataSource @Inject constructor(
     private fun roomSummariesQuery(realm: Realm, queryParams: RoomSummaryQueryParams): RealmQuery<RoomSummaryEntity> {
         val query = with(queryStringValueProcessor) {
             RoomSummaryEntity.where(realm)
-                    .process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
-                    .let {
-                        if (queryParams.displayName.isNormalized()) {
-                            it.process(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, queryParams.displayName)
-                        } else {
-                            it.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-                        }
+                .process(RoomSummaryEntityFields.ROOM_ID, queryParams.roomId)
+                .let {
+                    if (queryParams.displayName.isNormalized()) {
+                        it.process(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, queryParams.displayName)
+                    } else {
+                        it.process(RoomSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
                     }
-                    .process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
-                    .process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-                    .equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
+                }
+                .process(RoomSummaryEntityFields.CANONICAL_ALIAS, queryParams.canonicalAlias)
+                .process(RoomSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+                .equalTo(RoomSummaryEntityFields.IS_HIDDEN_FROM_USER, false)
         }
 
         queryParams.roomCategoryFilter?.let {
             when (it) {
-                RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-                RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+                RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                 RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-                RoomCategoryFilter.ALL                     -> {
+                RoomCategoryFilter.ALL -> {
                     // nop
                 }
             }
@@ -304,16 +316,16 @@ internal class RoomSummaryDataSource @Inject constructor(
             query.equalTo(RoomSummaryEntityFields.ROOM_TYPE, it)
         }
         when (queryParams.roomCategoryFilter) {
-            RoomCategoryFilter.ONLY_DM                 -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
-            RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+            RoomCategoryFilter.ONLY_DM -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, true)
+            RoomCategoryFilter.ONLY_ROOMS -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
             RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
-            RoomCategoryFilter.ALL                     -> Unit // nop
-            null                                       -> Unit
+            RoomCategoryFilter.ALL -> Unit // nop
+            null -> Unit
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")
         when (queryParams.activeSpaceFilter) {
-            is ActiveSpaceFilter.ActiveSpace  -> {
+            is ActiveSpaceFilter.ActiveSpace -> {
                 // It's annoying but for now realm java does not support querying in primitive list :/
                 // https://github.com/realm/realm-java/issues/5361
                 if (queryParams.activeSpaceFilter.currentSpaceId == null) {
@@ -326,7 +338,7 @@ internal class RoomSummaryDataSource @Inject constructor(
             is ActiveSpaceFilter.ExcludeSpace -> {
                 query.not().contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, queryParams.activeSpaceFilter.spaceId)
             }
-            else                              -> {
+            else -> {
                 // nop
             }
         }
@@ -351,35 +363,35 @@ internal class RoomSummaryDataSource @Inject constructor(
 
         return Transformations.switchMap(mediatorLiveData) { allIds ->
             monarchy.findAllMappedWithChanges(
-                    {
-                        it.where<RoomSummaryEntity>()
-                                .`in`(RoomSummaryEntityFields.ROOM_ID, allIds.toTypedArray())
-                                .`in`(RoomSummaryEntityFields.MEMBERSHIP_STR, memberShips.map { it.name }.toTypedArray())
-                                .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
-                    },
-                    {
-                        roomSummaryMapper.map(it)
-                    })
+                {
+                    it.where<RoomSummaryEntity>()
+                        .`in`(RoomSummaryEntityFields.ROOM_ID, allIds.toTypedArray())
+                        .`in`(RoomSummaryEntityFields.MEMBERSHIP_STR, memberShips.map { it.name }.toTypedArray())
+                        .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
+                },
+                {
+                    roomSummaryMapper.map(it)
+                })
         }
     }
 
     fun getFlattenOrphanRooms(): List<RoomSummary> {
         return getRoomSummaries(
-                roomSummaryQueryParams {
-                    memberships = Membership.activeMemberships()
-                    excludeType = listOf(RoomType.SPACE)
-                    roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                }
+            roomSummaryQueryParams {
+                memberships = Membership.activeMemberships()
+                excludeType = listOf(RoomType.SPACE)
+                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            }
         ).filter { isOrphan(it) }
     }
 
     fun getFlattenOrphanRoomsLive(): LiveData<List<RoomSummary>> {
         return Transformations.map(
-                getRoomSummariesLive(roomSummaryQueryParams {
-                    memberships = Membership.activeMemberships()
-                    excludeType = listOf(RoomType.SPACE)
-                    roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
-                })
+            getRoomSummariesLive(roomSummaryQueryParams {
+                memberships = Membership.activeMemberships()
+                excludeType = listOf(RoomType.SPACE)
+                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
+            })
         ) {
             it.filter { isOrphan(it) }
         }
@@ -431,11 +443,13 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
     }
 
-    fun flattenSubSpace(current: RoomSummary,
-                        parenting: List<String>,
-                        output: MutableList<RoomSummary>,
-                        memberShips: List<Membership>,
-                        includeCurrent: Boolean = true) {
+    fun flattenSubSpace(
+        current: RoomSummary,
+        parenting: List<String>,
+        output: MutableList<RoomSummary>,
+        memberShips: List<Membership>,
+        includeCurrent: Boolean = true
+    ) {
         if (includeCurrent) {
             output.add(current)
         }

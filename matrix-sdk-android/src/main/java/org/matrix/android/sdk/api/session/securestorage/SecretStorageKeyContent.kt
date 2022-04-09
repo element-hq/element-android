@@ -45,36 +45,36 @@ import org.matrix.android.sdk.internal.util.JsonCanonicalizer
  */
 
 data class KeyInfo(
-        val id: String,
-        val content: SecretStorageKeyContent
+    val id: String,
+    val content: SecretStorageKeyContent
 )
 
 @JsonClass(generateAdapter = true)
 data class SecretStorageKeyContent(
-        /** Currently support m.secret_storage.v1.curve25519-aes-sha2 */
-        @Json(name = "algorithm") val algorithm: String? = null,
-        @Json(name = "name") val name: String? = null,
-        @Json(name = "passphrase") val passphrase: SsssPassphrase? = null,
-        @Json(name = "pubkey") val publicKey: String? = null,
-        @Json(name = "signatures") val signatures: Map<String, Map<String, String>>? = null
+    /** Currently support m.secret_storage.v1.curve25519-aes-sha2 */
+    @Json(name = "algorithm") val algorithm: String? = null,
+    @Json(name = "name") val name: String? = null,
+    @Json(name = "passphrase") val passphrase: SsssPassphrase? = null,
+    @Json(name = "pubkey") val publicKey: String? = null,
+    @Json(name = "signatures") val signatures: Map<String, Map<String, String>>? = null
 ) {
 
     private fun signalableJSONDictionary(): Map<String, Any> {
         return mutableMapOf<String, Any>().apply {
             algorithm
-                    ?.let { this["algorithm"] = it }
+                ?.let { this["algorithm"] = it }
             name
-                    ?.let { this["name"] = it }
+                ?.let { this["name"] = it }
             publicKey
-                    ?.let { this["pubkey"] = it }
+                ?.let { this["pubkey"] = it }
             passphrase
-                    ?.let { ssssPassphrase ->
-                        this["passphrase"] = mapOf(
-                                "algorithm" to ssssPassphrase.algorithm,
-                                "iterations" to ssssPassphrase.iterations,
-                                "salt" to ssssPassphrase.salt
-                        )
-                    }
+                ?.let { ssssPassphrase ->
+                    this["passphrase"] = mapOf(
+                        "algorithm" to ssssPassphrase.algorithm,
+                        "iterations" to ssssPassphrase.iterations,
+                        "salt" to ssssPassphrase.salt
+                    )
+                }
         }
     }
 
@@ -89,15 +89,15 @@ data class SecretStorageKeyContent(
          */
         fun fromJson(obj: Any?): SecretStorageKeyContent? {
             return MoshiProvider.providesMoshi()
-                    .adapter(SecretStorageKeyContent::class.java)
-                    .fromJsonValue(obj)
+                .adapter(SecretStorageKeyContent::class.java)
+                .fromJsonValue(obj)
         }
     }
 }
 
 @JsonClass(generateAdapter = true)
 data class SsssPassphrase(
-        @Json(name = "algorithm") val algorithm: String?,
-        @Json(name = "iterations") val iterations: Int,
-        @Json(name = "salt") val salt: String?
+    @Json(name = "algorithm") val algorithm: String?,
+    @Json(name = "iterations") val iterations: Int,
+    @Json(name = "salt") val salt: String?
 )

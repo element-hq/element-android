@@ -30,18 +30,18 @@ import javax.inject.Inject
 
 @Parcelize
 data class JoinRulesOptionSupport(
-        val rule: RoomJoinRules,
-        val needUpgrade: Boolean = false
+    val rule: RoomJoinRules,
+    val needUpgrade: Boolean = false
 ) : Parcelable
 
 fun RoomJoinRules.toOption(needUpgrade: Boolean) = JoinRulesOptionSupport(this, needUpgrade)
 
 @Parcelize
 data class RoomJoinRuleBottomSheetArgs(
-        val currentRoomJoinRule: RoomJoinRules,
-        val allowedJoinedRules: List<JoinRulesOptionSupport>,
-        val isSpace: Boolean = false,
-        val parentSpaceName: String?
+    val currentRoomJoinRule: RoomJoinRules,
+    val allowedJoinedRules: List<JoinRulesOptionSupport>,
+    val isSpace: Boolean = false,
+    val parentSpaceName: String?
 ) : Parcelable
 
 @AndroidEntryPoint
@@ -69,16 +69,17 @@ class RoomJoinRuleBottomSheet : BottomSheetGeneric<RoomJoinRuleState, RoomJoinRu
     }
 
     companion object {
-        fun newInstance(currentRoomJoinRule: RoomJoinRules,
-                        allowedJoinedRules: List<JoinRulesOptionSupport> = listOf(
-                                RoomJoinRules.INVITE, RoomJoinRules.PUBLIC
-                        ).map { it.toOption(true) },
-                        isSpace: Boolean = false,
-                        parentSpaceName: String? = null
+        fun newInstance(
+            currentRoomJoinRule: RoomJoinRules,
+            allowedJoinedRules: List<JoinRulesOptionSupport> = listOf(
+                RoomJoinRules.INVITE, RoomJoinRules.PUBLIC
+            ).map { it.toOption(true) },
+            isSpace: Boolean = false,
+            parentSpaceName: String? = null
         ): RoomJoinRuleBottomSheet {
             return RoomJoinRuleBottomSheet().apply {
                 setArguments(
-                        RoomJoinRuleBottomSheetArgs(currentRoomJoinRule, allowedJoinedRules, isSpace, parentSpaceName)
+                    RoomJoinRuleBottomSheetArgs(currentRoomJoinRule, allowedJoinedRules, isSpace, parentSpaceName)
                 )
             }
         }

@@ -24,30 +24,30 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class EventFilter(
-        /**
-         * The maximum number of events to return.
-         */
-        @Json(name = "limit") val limit: Int? = null,
-        /**
-         * A list of senders IDs to include. If this list is absent then all senders are included.
-         */
-        @Json(name = "senders") val senders: List<String>? = null,
-        /**
-         * A list of sender IDs to exclude. If this list is absent then no senders are excluded.
-         * A matching sender will be excluded even if it is listed in the 'senders' filter.
-         */
-        @Json(name = "not_senders") val notSenders: List<String>? = null,
-        /**
-         * A list of event types to include. If this list is absent then all event types are included.
-         * A '*' can be used as a wildcard to match any sequence of characters.
-         */
-        @Json(name = "types") val types: List<String>? = null,
-        /**
-         * A list of event types to exclude. If this list is absent then no event types are excluded.
-         * A matching type will be excluded even if it is listed in the 'types' filter.
-         * A '*' can be used as a wildcard to match any sequence of characters.
-         */
-        @Json(name = "not_types") val notTypes: List<String>? = null
+    /**
+     * The maximum number of events to return.
+     */
+    @Json(name = "limit") val limit: Int? = null,
+    /**
+     * A list of senders IDs to include. If this list is absent then all senders are included.
+     */
+    @Json(name = "senders") val senders: List<String>? = null,
+    /**
+     * A list of sender IDs to exclude. If this list is absent then no senders are excluded.
+     * A matching sender will be excluded even if it is listed in the 'senders' filter.
+     */
+    @Json(name = "not_senders") val notSenders: List<String>? = null,
+    /**
+     * A list of event types to include. If this list is absent then all event types are included.
+     * A '*' can be used as a wildcard to match any sequence of characters.
+     */
+    @Json(name = "types") val types: List<String>? = null,
+    /**
+     * A list of event types to exclude. If this list is absent then no event types are excluded.
+     * A matching type will be excluded even if it is listed in the 'types' filter.
+     * A '*' can be used as a wildcard to match any sequence of characters.
+     */
+    @Json(name = "not_types") val notTypes: List<String>? = null
 ) {
     fun hasData(): Boolean {
         return limit != null ||

@@ -23,9 +23,10 @@ import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.di.AuthDatabase
 import javax.inject.Inject
 
-internal class RealmPendingSessionStore @Inject constructor(private val mapper: PendingSessionMapper,
-                                                            @AuthDatabase
-                                                            private val realmConfiguration: RealmConfiguration
+internal class RealmPendingSessionStore @Inject constructor(
+    private val mapper: PendingSessionMapper,
+    @AuthDatabase
+    private val realmConfiguration: RealmConfiguration
 ) : PendingSessionStore {
 
     override suspend fun savePendingSessionData(pendingSessionData: PendingSessionData) {
@@ -33,8 +34,8 @@ internal class RealmPendingSessionStore @Inject constructor(private val mapper: 
             val entity = mapper.map(pendingSessionData)
             if (entity != null) {
                 realm.where(PendingSessionEntity::class.java)
-                        .findAll()
-                        .deleteAllFromRealm()
+                    .findAll()
+                    .deleteAllFromRealm()
 
                 realm.insert(entity)
             }
@@ -44,18 +45,18 @@ internal class RealmPendingSessionStore @Inject constructor(private val mapper: 
     override fun getPendingSessionData(): PendingSessionData? {
         return Realm.getInstance(realmConfiguration).use { realm ->
             realm
-                    .where(PendingSessionEntity::class.java)
-                    .findAll()
-                    .map { mapper.map(it) }
-                    .firstOrNull()
+                .where(PendingSessionEntity::class.java)
+                .findAll()
+                .map { mapper.map(it) }
+                .firstOrNull()
         }
     }
 
     override suspend fun delete() {
         awaitTransaction(realmConfiguration) {
             it.where(PendingSessionEntity::class.java)
-                    .findAll()
-                    .deleteAllFromRealm()
+                .findAll()
+                .deleteAllFromRealm()
         }
     }
 }

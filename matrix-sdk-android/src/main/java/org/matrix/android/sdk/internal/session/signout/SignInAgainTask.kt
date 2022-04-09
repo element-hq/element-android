@@ -26,31 +26,31 @@ import javax.inject.Inject
 
 internal interface SignInAgainTask : Task<SignInAgainTask.Params, Unit> {
     data class Params(
-            val password: String
+        val password: String
     )
 }
 
 internal class DefaultSignInAgainTask @Inject constructor(
-        private val signOutAPI: SignOutAPI,
-        private val sessionParams: SessionParams,
-        private val sessionParamsStore: SessionParamsStore,
-        private val globalErrorReceiver: GlobalErrorReceiver
+    private val signOutAPI: SignOutAPI,
+    private val sessionParams: SessionParams,
+    private val sessionParamsStore: SessionParamsStore,
+    private val globalErrorReceiver: GlobalErrorReceiver
 ) : SignInAgainTask {
 
     override suspend fun execute(params: SignInAgainTask.Params) {
         val newCredentials = executeRequest(globalErrorReceiver) {
             signOutAPI.loginAgain(
-                    PasswordLoginParams.userIdentifier(
-                            // Reuse the same userId
-                            user = sessionParams.userId,
-                            password = params.password,
-                            // The spec says the initial device name will be ignored
-                            // https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-login
-                            // but https://github.com/matrix-org/synapse/issues/6525
-                            deviceDisplayName = null,
-                            // Reuse the same deviceId
-                            deviceId = sessionParams.deviceId
-                    )
+                PasswordLoginParams.userIdentifier(
+                    // Reuse the same userId
+                    user = sessionParams.userId,
+                    password = params.password,
+                    // The spec says the initial device name will be ignored
+                    // https://matrix.org/docs/spec/client_server/latest#post-matrix-client-r0-login
+                    // but https://github.com/matrix-org/synapse/issues/6525
+                    deviceDisplayName = null,
+                    // Reuse the same deviceId
+                    deviceId = sessionParams.deviceId
+                )
             )
         }
 

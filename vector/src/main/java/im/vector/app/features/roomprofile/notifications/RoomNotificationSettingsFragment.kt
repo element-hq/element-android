@@ -36,11 +36,11 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomNotificationSettingsFragment @Inject constructor(
-        val viewModelFactory: RoomNotificationSettingsViewModel.Factory,
-        private val roomNotificationSettingsController: RoomNotificationSettingsController,
-        private val avatarRenderer: AvatarRenderer
+    val viewModelFactory: RoomNotificationSettingsViewModel.Factory,
+    private val roomNotificationSettingsController: RoomNotificationSettingsController,
+    private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
-        RoomNotificationSettingsController.Callback {
+    RoomNotificationSettingsController.Callback {
 
     private val viewModel: RoomNotificationSettingsViewModel by fragmentViewModel()
 
@@ -56,7 +56,7 @@ class RoomNotificationSettingsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.roomSettingsToolbar)
-                .allowBack()
+            .allowBack()
         roomNotificationSettingsController.callback = this
         views.roomSettingsRecyclerView.configureWith(roomNotificationSettingsController, hasFixedSize = true)
         setupWaitingView()

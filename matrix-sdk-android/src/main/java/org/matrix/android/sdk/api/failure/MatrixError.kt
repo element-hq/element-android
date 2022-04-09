@@ -28,33 +28,33 @@ import org.matrix.android.sdk.internal.auth.data.InteractiveAuthenticationFlow
  */
 @JsonClass(generateAdapter = true)
 data class MatrixError(
-        /** unique string which can be used to handle an error message */
-        @Json(name = "errcode") val code: String,
-        /** human-readable error message */
-        @Json(name = "error") val message: String,
+    /** unique string which can be used to handle an error message */
+    @Json(name = "errcode") val code: String,
+    /** human-readable error message */
+    @Json(name = "error") val message: String,
 
-        // For M_CONSENT_NOT_GIVEN
-        @Json(name = "consent_uri") val consentUri: String? = null,
-        // For M_RESOURCE_LIMIT_EXCEEDED
-        @Json(name = "limit_type") val limitType: String? = null,
-        @Json(name = "admin_contact") val adminUri: String? = null,
-        // For M_LIMIT_EXCEEDED
-        @Json(name = "retry_after_ms") val retryAfterMillis: Long? = null,
-        // For M_UNKNOWN_TOKEN
-        @Json(name = "soft_logout") val isSoftLogout: Boolean? = null,
-        // For M_INVALID_PEPPER
-        // {"error": "pepper does not match 'erZvr'", "lookup_pepper": "pQgMS", "algorithm": "sha256", "errcode": "M_INVALID_PEPPER"}
-        @Json(name = "lookup_pepper") val newLookupPepper: String? = null,
+    // For M_CONSENT_NOT_GIVEN
+    @Json(name = "consent_uri") val consentUri: String? = null,
+    // For M_RESOURCE_LIMIT_EXCEEDED
+    @Json(name = "limit_type") val limitType: String? = null,
+    @Json(name = "admin_contact") val adminUri: String? = null,
+    // For M_LIMIT_EXCEEDED
+    @Json(name = "retry_after_ms") val retryAfterMillis: Long? = null,
+    // For M_UNKNOWN_TOKEN
+    @Json(name = "soft_logout") val isSoftLogout: Boolean? = null,
+    // For M_INVALID_PEPPER
+    // {"error": "pepper does not match 'erZvr'", "lookup_pepper": "pQgMS", "algorithm": "sha256", "errcode": "M_INVALID_PEPPER"}
+    @Json(name = "lookup_pepper") val newLookupPepper: String? = null,
 
-        // For M_FORBIDDEN UIA
-        @Json(name = "session")
-        val session: String? = null,
-        @Json(name = "completed")
-        val completedStages: List<String>? = null,
-        @Json(name = "flows")
-        val flows: List<InteractiveAuthenticationFlow>? = null,
-        @Json(name = "params")
-        val params: JsonDict? = null
+    // For M_FORBIDDEN UIA
+    @Json(name = "session")
+    val session: String? = null,
+    @Json(name = "completed")
+    val completedStages: List<String>? = null,
+    @Json(name = "flows")
+    val flows: List<InteractiveAuthenticationFlow>? = null,
+    @Json(name = "params")
+    val params: JsonDict? = null
 ) {
 
     companion object {

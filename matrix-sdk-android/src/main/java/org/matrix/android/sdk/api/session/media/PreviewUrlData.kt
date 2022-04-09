@@ -38,18 +38,18 @@ package org.matrix.android.sdk.api.session.media
  * </pre>
  */
 data class PreviewUrlData(
-        // Value of field "og:url". If not provided, this is the value passed in parameter
-        val url: String,
-        // Value of field "og:site_name"
-        val siteName: String?,
-        // Value of field "og:title"
-        val title: String?,
-        // Value of field "og:description"
-        val description: String?,
-        // Value of field "og:image"
-        val mxcUrl: String?,
-        // Value of field "og:image:width"
-        val imageWidth: Int?,
-        // Value of field "og:image:height"
-        val imageHeight: Int?
+    // Value of field "og:url". If not provided, this is the value passed in parameter
+    val url: String,
+    // Value of field "og:site_name"
+    val siteName: String?,
+    // Value of field "og:title"
+    val title: String?,
+    // Value of field "og:description"
+    val description: String?,
+    // Value of field "og:image"
+    val mxcUrl: String?,
+    // Value of field "og:image:width"
+    val imageWidth: Int?,
+    // Value of field "og:image:height"
+    val imageHeight: Int?
 )

@@ -25,10 +25,10 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 internal data class GroupSummaryRoomsSection(
 
-        @Json(name = "total_room_count_estimate") val totalRoomCountEstimate: Int? = null,
+    @Json(name = "total_room_count_estimate") val totalRoomCountEstimate: Int? = null,
 
-        @Json(name = "rooms") val rooms: List<String> = emptyList()
+    @Json(name = "rooms") val rooms: List<String> = emptyList()
 
-        // @TODO: Check the meaning and the usage of these categories. This dictionary is empty FTM.
-        // public Map<Object, Object> categories;
+    // @TODO: Check the meaning and the usage of these categories. This dictionary is empty FTM.
+    // public Map<Object, Object> categories;
 )

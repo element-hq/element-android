@@ -35,11 +35,13 @@ import javax.inject.Inject
 
 private const val PERSISTENCE_KEY = "ManagedBySender"
 
-internal class QueueMemento @Inject constructor(context: Context,
-                                                @SessionId sessionId: String,
-                                                private val queuedTaskFactory: QueuedTaskFactory,
-                                                private val localEchoRepository: LocalEchoRepository,
-                                                private val cryptoService: CryptoService) {
+internal class QueueMemento @Inject constructor(
+    context: Context,
+    @SessionId sessionId: String,
+    private val queuedTaskFactory: QueuedTaskFactory,
+    private val localEchoRepository: LocalEchoRepository,
+    private val cryptoService: CryptoService
+) {
 
     private val storage = context.getSharedPreferences("QueueMemento_$sessionId", Context.MODE_PRIVATE)
     private val trackedTasks = mutableListOf<QueuedTask>()
@@ -62,23 +64,23 @@ internal class QueueMemento @Inject constructor(context: Context,
             toTaskInfo(queuedTask, index)?.let { TaskInfo.map(it) }
         }.toSet().let { set ->
             storage.edit()
-                    .putStringSet(PERSISTENCE_KEY, set)
-                    .apply()
+                .putStringSet(PERSISTENCE_KEY, set)
+                .apply()
         }
     }
 
     private fun toTaskInfo(task: QueuedTask, order: Int): TaskInfo? {
         return when (task) {
             is SendEventQueuedTask -> SendEventTaskInfo(
-                    localEchoId = task.event.eventId ?: "",
-                    encrypt = task.encrypt,
-                    order = order
+                localEchoId = task.event.eventId ?: "",
+                encrypt = task.encrypt,
+                order = order
             )
             is RedactQueuedTask -> RedactEventTaskInfo(
-                    redactionLocalEcho = task.redactionLocalEchoId,
-                    order = order
+                redactionLocalEcho = task.redactionLocalEchoId,
+                order = order
             )
-            else                   -> null
+            else -> null
         }
     }
 
@@ -88,35 +90,35 @@ internal class QueueMemento @Inject constructor(context: Context,
             Timber.d("## Send - Recovering unsent events $pending")
             pending.mapNotNull { tryOrNull { TaskInfo.map(it) } }
         }
-                ?.sortedBy { it.order }
-                ?.forEach { info ->
-                    try {
-                        when (info) {
-                            is SendEventTaskInfo -> {
-                                localEchoRepository.getUpToDateEcho(info.localEchoId)?.let {
-                                    if (it.sendState.isSending() && it.eventId != null && it.roomId != null) {
-                                        localEchoRepository.updateSendState(it.eventId, it.roomId, SendState.UNSENT)
-                                        Timber.d("## Send -Reschedule send $info")
-                                        eventProcessor.postTask(queuedTaskFactory.createSendTask(it, info.encrypt ?: cryptoService.isRoomEncrypted(it.roomId)))
-                                    }
+            ?.sortedBy { it.order }
+            ?.forEach { info ->
+                try {
+                    when (info) {
+                        is SendEventTaskInfo -> {
+                            localEchoRepository.getUpToDateEcho(info.localEchoId)?.let {
+                                if (it.sendState.isSending() && it.eventId != null && it.roomId != null) {
+                                    localEchoRepository.updateSendState(it.eventId, it.roomId, SendState.UNSENT)
+                                    Timber.d("## Send -Reschedule send $info")
+                                    eventProcessor.postTask(queuedTaskFactory.createSendTask(it, info.encrypt ?: cryptoService.isRoomEncrypted(it.roomId)))
                                 }
-                            }
-                            is RedactEventTaskInfo -> {
-                                info.redactionLocalEcho?.let { localEchoRepository.getUpToDateEcho(it) }?.let {
-                                    localEchoRepository.updateSendState(it.eventId!!, it.roomId, SendState.UNSENT)
-                                    // try to get reason
-                                    val reason = it.content?.get("reason") as? String
-                                    if (it.redacts != null && it.roomId != null) {
-                                        Timber.d("## Send -Reschedule redact $info")
-                                        eventProcessor.postTask(queuedTaskFactory.createRedactTask(it.eventId, it.redacts, it.roomId, reason))
-                                    }
-                                }
-                                // postTask(queuedTaskFactory.createRedactTask(info.eventToRedactId, info.)
                             }
                         }
-                    } catch (failure: Throwable) {
-                        Timber.e("failed to restore task $info")
+                        is RedactEventTaskInfo -> {
+                            info.redactionLocalEcho?.let { localEchoRepository.getUpToDateEcho(it) }?.let {
+                                localEchoRepository.updateSendState(it.eventId!!, it.roomId, SendState.UNSENT)
+                                // try to get reason
+                                val reason = it.content?.get("reason") as? String
+                                if (it.redacts != null && it.roomId != null) {
+                                    Timber.d("## Send -Reschedule redact $info")
+                                    eventProcessor.postTask(queuedTaskFactory.createRedactTask(it.eventId, it.redacts, it.roomId, reason))
+                                }
+                            }
+                            // postTask(queuedTaskFactory.createRedactTask(info.eventToRedactId, info.)
+                        }
                     }
+                } catch (failure: Throwable) {
+                    Timber.e("failed to restore task $info")
                 }
+            }
     }
 }

@@ -23,8 +23,8 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 
 internal fun IdentityPendingBindingEntity.Companion.get(realm: Realm, threePid: ThreePid): IdentityPendingBindingEntity? {
     return realm.where<IdentityPendingBindingEntity>()
-            .equalTo(IdentityPendingBindingEntityFields.THREE_PID, threePid.toPrimaryKey())
-            .findFirst()
+        .equalTo(IdentityPendingBindingEntityFields.THREE_PID, threePid.toPrimaryKey())
+        .findFirst()
 }
 
 internal fun IdentityPendingBindingEntity.Companion.getOrCreate(realm: Realm, threePid: ThreePid): IdentityPendingBindingEntity {
@@ -37,6 +37,6 @@ internal fun IdentityPendingBindingEntity.Companion.delete(realm: Realm, threePi
 
 internal fun IdentityPendingBindingEntity.Companion.deleteAll(realm: Realm) {
     realm.where<IdentityPendingBindingEntity>()
-            .findAll()
-            .deleteAllFromRealm()
+        .findAll()
+        .deleteAllFromRealm()
 }

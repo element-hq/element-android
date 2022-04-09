@@ -33,12 +33,12 @@ import javax.inject.Inject
  */
 internal interface SaveBreadcrumbsTask : Task<SaveBreadcrumbsTask.Params, Unit> {
     data class Params(
-            val recentRoomIds: List<String>
+        val recentRoomIds: List<String>
     )
 }
 
 internal class DefaultSaveBreadcrumbsTask @Inject constructor(
-        @SessionDatabase private val monarchy: Monarchy
+    @SessionDatabase private val monarchy: Monarchy
 ) : SaveBreadcrumbsTask {
 
     override suspend fun execute(params: SaveBreadcrumbsTask.Params) {
@@ -52,17 +52,17 @@ internal class DefaultSaveBreadcrumbsTask @Inject constructor(
             // Update the room summaries
             // Reset all the indexes...
             RoomSummaryEntity.where(realm)
-                    .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
-                    .findAll()
-                    .forEach {
-                        it.breadcrumbsIndex = RoomSummary.NOT_IN_BREADCRUMBS
-                    }
+                .greaterThan(RoomSummaryEntityFields.BREADCRUMBS_INDEX, RoomSummary.NOT_IN_BREADCRUMBS)
+                .findAll()
+                .forEach {
+                    it.breadcrumbsIndex = RoomSummary.NOT_IN_BREADCRUMBS
+                }
 
             // ...and apply new indexes
             params.recentRoomIds.forEachIndexed { index, roomId ->
                 RoomSummaryEntity.where(realm, roomId)
-                        .findFirst()
-                        ?.breadcrumbsIndex = index
+                    .findFirst()
+                    ?.breadcrumbsIndex = index
             }
         }
     }

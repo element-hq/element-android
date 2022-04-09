@@ -23,9 +23,11 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class EnsureOlmSessionsForUsersAction @Inject constructor(private val olmDevice: MXOlmDevice,
-                                                                   private val cryptoStore: IMXCryptoStore,
-                                                                   private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction) {
+internal class EnsureOlmSessionsForUsersAction @Inject constructor(
+    private val olmDevice: MXOlmDevice,
+    private val cryptoStore: IMXCryptoStore,
+    private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction
+) {
 
     /**
      * Try to make sure we have established olm sessions for the given users.

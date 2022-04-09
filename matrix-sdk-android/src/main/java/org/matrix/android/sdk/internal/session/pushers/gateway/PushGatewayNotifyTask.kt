@@ -26,38 +26,38 @@ import javax.inject.Inject
 
 internal interface PushGatewayNotifyTask : Task<PushGatewayNotifyTask.Params, Unit> {
     data class Params(
-            val url: String,
-            val appId: String,
-            val pushKey: String,
-            val eventId: String
+        val url: String,
+        val appId: String,
+        val pushKey: String,
+        val eventId: String
     )
 }
 
 internal class DefaultPushGatewayNotifyTask @Inject constructor(
-        private val retrofitFactory: RetrofitFactory,
-        @Unauthenticated private val unauthenticatedOkHttpClient: OkHttpClient
+    private val retrofitFactory: RetrofitFactory,
+    @Unauthenticated private val unauthenticatedOkHttpClient: OkHttpClient
 ) : PushGatewayNotifyTask {
 
     override suspend fun execute(params: PushGatewayNotifyTask.Params) {
         val sygnalApi = retrofitFactory.create(
-                unauthenticatedOkHttpClient,
-                params.url.substringBefore(NetworkConstants.URI_PUSH_GATEWAY_PREFIX_PATH)
+            unauthenticatedOkHttpClient,
+            params.url.substringBefore(NetworkConstants.URI_PUSH_GATEWAY_PREFIX_PATH)
         )
-                .create(PushGatewayAPI::class.java)
+            .create(PushGatewayAPI::class.java)
 
         val response = executeRequest(null) {
             sygnalApi.notify(
-                    PushGatewayNotifyBody(
-                            PushGatewayNotification(
-                                    eventId = params.eventId,
-                                    devices = listOf(
-                                            PushGatewayDevice(
-                                                    params.appId,
-                                                    params.pushKey
-                                            )
-                                    )
+                PushGatewayNotifyBody(
+                    PushGatewayNotification(
+                        eventId = params.eventId,
+                        devices = listOf(
+                            PushGatewayDevice(
+                                params.appId,
+                                params.pushKey
                             )
+                        )
                     )
+                )
             )
         }
 
