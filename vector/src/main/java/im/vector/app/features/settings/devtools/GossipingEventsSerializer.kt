@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.session.events.model.content.SecretSendEventCo
 import org.matrix.android.sdk.api.session.crypto.model.ForwardedRoomKeyContent
 import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyShareRequest
-import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
+import org.matrix.android.sdk.api.session.crypto.model.SecretShareRequest
 import org.threeten.bp.format.DateTimeFormatter
 
 class GossipingEventsSerializer {
