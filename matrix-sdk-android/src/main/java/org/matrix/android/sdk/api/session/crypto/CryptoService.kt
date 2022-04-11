@@ -35,7 +35,7 @@ import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.NewSessionListener
 import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap

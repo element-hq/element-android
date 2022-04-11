@@ -23,7 +23,7 @@ import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
 import org.matrix.android.sdk.internal.crypto.RoomDecryptorProvider
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmDecryption
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber

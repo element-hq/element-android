@@ -44,7 +44,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import java.util.Collections
 import java.util.concurrent.CountDownLatch
 

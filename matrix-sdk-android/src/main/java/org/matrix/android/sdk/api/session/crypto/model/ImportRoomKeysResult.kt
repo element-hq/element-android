@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.model
+package org.matrix.android.sdk.api.session.crypto.model
 
-data class ImportRoomKeysResult(val totalNumberOfKeys: Int,
-                                val successfullyNumberOfImportedKeys: Int)
+data class ImportRoomKeysResult(
+        val totalNumberOfKeys: Int,
+        val successfullyNumberOfImportedKeys: Int
+)

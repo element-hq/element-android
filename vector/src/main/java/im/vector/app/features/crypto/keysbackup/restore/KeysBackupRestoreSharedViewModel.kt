@@ -37,7 +37,7 @@ import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupLastVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -68,7 +68,7 @@ import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncrypti
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.internal.crypto.model.MXKey.Companion.KEY_SIGNED_CURVE_25519_TYPE
