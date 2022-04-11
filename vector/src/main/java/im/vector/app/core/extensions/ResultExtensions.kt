@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.extensions
 
-import org.matrix.android.sdk.api.MatrixCallback
+package im.vector.app.core.extensions
 
-internal fun <A> Result<A>.foldToCallback(callback: MatrixCallback<A>): Unit = fold(
-        { callback.onSuccess(it) },
-        { callback.onFailure(it) }
-)
+@Suppress("UNCHECKED_CAST") // We're casting null failure results to R
+inline fun <T, R> Result<T>.andThen(block: (T) -> Result<R>): Result<R> {
+    return when (val result = getOrNull()) {
+        null -> this as Result<R>
+        else -> block(result)
+    }
+}
