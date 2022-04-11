@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.api.session.crypto.crosssigning
 
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
-
 sealed class UserTrustResult {
     object Success : UserTrustResult()
 

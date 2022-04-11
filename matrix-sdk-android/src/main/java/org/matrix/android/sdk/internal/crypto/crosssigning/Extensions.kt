@@ -17,7 +17,7 @@ package org.matrix.android.sdk.internal.crypto.crosssigning
 
 import android.util.Base64
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import timber.log.Timber
 

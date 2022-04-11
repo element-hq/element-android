@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.model
+package org.matrix.android.sdk.api.session.crypto.crosssigning
 
-import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.internal.crypto.model.CryptoInfo
+import org.matrix.android.sdk.internal.crypto.model.CryptoInfoMapper
 import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 
 data class CryptoCrossSigningKey(
