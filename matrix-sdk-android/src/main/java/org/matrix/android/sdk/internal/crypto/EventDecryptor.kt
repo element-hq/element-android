@@ -25,11 +25,11 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.OlmEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.extensions.foldToCallback

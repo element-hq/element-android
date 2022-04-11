@@ -13,48 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.crypto.model.event
+package org.matrix.android.sdk.api.session.events.model.content
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
 /**
  * Class representing an encrypted event content
  */
 @JsonClass(generateAdapter = true)
-data class EncryptedEventContent(
-
+data class OlmEventContent(
         /**
-         * the used algorithm
-         */
-        @Json(name = "algorithm")
-        val algorithm: String? = null,
-
-        /**
-         * The encrypted event
+         *
          */
         @Json(name = "ciphertext")
-        val ciphertext: String? = null,
-
-        /**
-         * The device id
-         */
-        @Json(name = "device_id")
-        val deviceId: String? = null,
+        val ciphertext: Map<String, Any>? = null,
 
         /**
          * the sender key
          */
         @Json(name = "sender_key")
-        val senderKey: String? = null,
-
-        /**
-         * The session id
-         */
-        @Json(name = "session_id")
-        val sessionId: String? = null,
-
-        // Relation context is in clear in encrypted message
-        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent? = null
+        val senderKey: String? = null
 )

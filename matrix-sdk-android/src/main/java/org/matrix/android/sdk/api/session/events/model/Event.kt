@@ -22,6 +22,7 @@ import org.json.JSONObject
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -35,7 +36,6 @@ import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import org.matrix.android.sdk.api.util.ContentUtils
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.presence.model.PresenceContent
 import timber.log.Timber

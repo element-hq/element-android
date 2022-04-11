@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
+import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields

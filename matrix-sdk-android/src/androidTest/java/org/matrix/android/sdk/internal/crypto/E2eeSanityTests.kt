@@ -31,6 +31,7 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
@@ -48,7 +49,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreat
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)

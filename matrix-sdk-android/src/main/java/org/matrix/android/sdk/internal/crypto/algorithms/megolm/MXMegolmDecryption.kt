@@ -25,6 +25,9 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.content.RoomKeyContent
+import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
 import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
@@ -38,9 +41,6 @@ import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXWithHeldExtension
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
-import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore

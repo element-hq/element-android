@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
@@ -55,7 +56,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreat
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 
@@ -112,7 +112,7 @@ class KeyShareTests : InstrumentedTest {
 
         var outGoingRequestId: String? = null
 
-        commonTestHelper.waitWithLatch {  latch ->
+        commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
                         .filter { req ->

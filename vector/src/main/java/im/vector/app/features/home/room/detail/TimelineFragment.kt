@@ -236,8 +236,8 @@ import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import reactivecircus.flowbinding.android.view.focusChanges
 import reactivecircus.flowbinding.android.widget.textChanges
 import timber.log.Timber

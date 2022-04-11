@@ -22,7 +22,7 @@ import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.call.webrtc.WebRtcCall
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import java.io.File
 
 /**

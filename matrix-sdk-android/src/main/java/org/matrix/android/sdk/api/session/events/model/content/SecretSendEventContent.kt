@@ -13,30 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.crypto.model.event
+package org.matrix.android.sdk.api.session.events.model.content
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Class representing an sharekey content
+ * Class representing an encrypted event content
  */
 @JsonClass(generateAdapter = true)
-data class RoomKeyContent(
-
-        @Json(name = "algorithm")
-        val algorithm: String? = null,
-
-        @Json(name = "room_id")
-        val roomId: String? = null,
-
-        @Json(name = "session_id")
-        val sessionId: String? = null,
-
-        @Json(name = "session_key")
-        val sessionKey: String? = null,
-
-        // should be a Long but it is sometimes a double
-        @Json(name = "chain_index")
-        val chainIndex: Any? = null
+data class SecretSendEventContent(
+        @Json(name = "request_id") val requestId: String,
+        @Json(name = "secret") val secretValue: String
 )

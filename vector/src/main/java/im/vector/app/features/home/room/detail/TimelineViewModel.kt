@@ -104,7 +104,7 @@ import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
-import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 

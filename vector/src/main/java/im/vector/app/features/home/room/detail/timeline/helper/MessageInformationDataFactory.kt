@@ -40,7 +40,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import javax.inject.Inject
 
 /**
