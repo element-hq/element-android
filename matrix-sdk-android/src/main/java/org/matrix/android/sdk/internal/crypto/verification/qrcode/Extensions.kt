@@ -23,7 +23,7 @@ import org.matrix.android.sdk.internal.extensions.toUnsignedInt
 // MATRIX
 private val prefix = "MATRIX".toByteArray(Charsets.ISO_8859_1)
 
-fun QrCodeData.toEncodedString(): String {
+internal fun QrCodeData.toEncodedString(): String {
     var result = ByteArray(0)
 
     // MATRIX
@@ -67,7 +67,7 @@ fun QrCodeData.toEncodedString(): String {
     return result.toString(Charsets.ISO_8859_1)
 }
 
-fun String.toQrCodeData(): QrCodeData? {
+internal fun String.toQrCodeData(): QrCodeData? {
     val byteArray = toByteArray(Charsets.ISO_8859_1)
 
     // Size should be min 6 + 1 + 1 + 2 + ? + 32 + 32 + ? = 74 + transactionLength + secretLength
