@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.keysbackup.util
+package org.matrix.android.sdk.api.session.crypto.keysbackup
 
+import org.matrix.android.sdk.internal.crypto.keysbackup.util.base58decode
+import org.matrix.android.sdk.internal.crypto.keysbackup.util.base58encode
 import kotlin.experimental.xor
 
 /**

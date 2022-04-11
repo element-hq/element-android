@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
+import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.securestorage.EncryptedSecretContent
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
@@ -41,7 +42,6 @@ import org.matrix.android.sdk.internal.crypto.SSSS_ALGORITHM_CURVE25519_AES_SHA2
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.keysbackup.generatePrivateKeyWithPassword
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
 import org.matrix.android.sdk.internal.crypto.tools.HkdfSha256
 import org.matrix.android.sdk.internal.crypto.tools.withOlmDecryption
 import org.matrix.android.sdk.internal.di.UserId
