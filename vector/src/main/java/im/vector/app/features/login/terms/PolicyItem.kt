@@ -26,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.setHorizontalPadding
 
 @EpoxyModelClass(layout = R.layout.item_policy)
 abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
@@ -50,12 +51,7 @@ abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.let {
-            it.view.setPadding(
-                    horizontalPadding ?: it.view.paddingLeft,
-                    it.view.paddingTop,
-                    horizontalPadding ?: it.view.paddingRight,
-                    it.view.paddingBottom
-            )
+            it.view.setHorizontalPadding(horizontalPadding)
             it.checkbox.isChecked = checked
             it.checkbox.setOnCheckedChangeListener(checkChangeListener)
             it.title.text = title
