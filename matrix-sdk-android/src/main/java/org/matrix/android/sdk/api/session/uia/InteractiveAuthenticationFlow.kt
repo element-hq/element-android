@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.data
+package org.matrix.android.sdk.api.session.uia
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
