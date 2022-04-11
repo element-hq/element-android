@@ -16,16 +16,12 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-enum class GossipingRequestState {
-    NONE,
-    PENDING,
-    REJECTED,
-    ACCEPTING,
-    ACCEPTED,
-    FAILED_TO_ACCEPTED,
-
-    // USER_REJECTED,
-    UNABLE_TO_PROCESS,
-    CANCELLED_BY_REQUESTER,
-    RE_REQUESTED
+enum class OutgoingGossipingRequestState {
+    UNSENT,
+    SENDING,
+    SENT,
+    CANCELLING,
+    CANCELLED,
+    FAILED_TO_SEND,
+    FAILED_TO_CANCEL
 }
