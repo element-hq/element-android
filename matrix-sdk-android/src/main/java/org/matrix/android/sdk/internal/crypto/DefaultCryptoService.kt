@@ -45,6 +45,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NA
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -67,7 +68,6 @@ import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncrypti
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult

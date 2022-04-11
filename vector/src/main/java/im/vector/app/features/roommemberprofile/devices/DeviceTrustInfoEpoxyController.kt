@@ -29,7 +29,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationA
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
 class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvider: StringProvider,

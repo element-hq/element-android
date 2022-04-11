@@ -34,7 +34,9 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
@@ -51,10 +53,8 @@ import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.GossipingRequestState
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume

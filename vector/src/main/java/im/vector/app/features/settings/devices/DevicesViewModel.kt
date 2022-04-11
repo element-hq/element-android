@@ -54,13 +54,13 @@ import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.api.util.awaitCallback

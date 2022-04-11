@@ -21,6 +21,7 @@ import androidx.paging.PagedList
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.util.Optional
@@ -32,7 +33,6 @@ import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
 import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.OutgoingSecretRequest
 import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
