@@ -56,7 +56,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBa
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeyBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
