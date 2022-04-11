@@ -49,8 +49,10 @@
         android:id="@+id/locationLiveMessageBanner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/staticMapImageView"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/staticMapImageView"
         app:layout_constraintEnd_toEndOf="@id/staticMapImageView"
-        app:layout_constraintBottom_toBottomOf="@id/staticMapImageView" />
+        app:layout_constraintStart_toStartOf="@id/staticMapImageView"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
