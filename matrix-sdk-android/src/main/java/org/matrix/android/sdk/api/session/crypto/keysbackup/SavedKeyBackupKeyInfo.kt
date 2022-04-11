@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.store
+package org.matrix.android.sdk.api.session.crypto.keysbackup
 
 data class SavedKeyBackupKeyInfo(
         val recoveryKey: String,

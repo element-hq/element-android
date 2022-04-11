@@ -25,7 +25,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreat
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
 
 interface KeysBackupService {
     /**
