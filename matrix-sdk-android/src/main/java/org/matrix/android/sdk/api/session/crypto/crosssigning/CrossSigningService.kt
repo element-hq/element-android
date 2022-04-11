@@ -19,9 +19,9 @@ package org.matrix.android.sdk.api.session.crypto.crosssigning
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.crypto.crosssigning.DeviceTrustResult
+import org.matrix.android.sdk.api.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustResult
-import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 
 interface CrossSigningService {

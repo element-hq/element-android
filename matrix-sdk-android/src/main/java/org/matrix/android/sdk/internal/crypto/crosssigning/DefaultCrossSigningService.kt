@@ -24,6 +24,12 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.crypto.crosssigning.DeviceTrustResult
+import org.matrix.android.sdk.api.crypto.crosssigning.UserTrustResult
+import org.matrix.android.sdk.api.crypto.crosssigning.isCrossSignedVerified
+import org.matrix.android.sdk.api.crypto.crosssigning.isLocallyVerified
+import org.matrix.android.sdk.api.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
