@@ -32,7 +32,7 @@ import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
 
 data class KeyRequestListViewState(
