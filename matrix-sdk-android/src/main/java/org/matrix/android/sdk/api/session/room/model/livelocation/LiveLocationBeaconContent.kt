@@ -20,6 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
 import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
+import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
 
 @JsonClass(generateAdapter = true)
 data class LiveLocationBeaconContent(
@@ -37,7 +38,12 @@ data class LiveLocationBeaconContent(
          * Live location asset type.
          */
         @Json(name = "org.matrix.msc3488.asset") val unstableLocationAsset: LocationAsset = LocationAsset(LocationAssetType.SELF),
-        @Json(name = "m.asset") val locationAsset: LocationAsset? = null
+        @Json(name = "m.asset") val locationAsset: LocationAsset? = null,
+
+        /**
+         * Client side tracking of the last location
+         */
+        var lastLocationContent: MessageLiveLocationContent? = null
 ) {
 
     fun getBestBeaconInfo() = beaconInfo ?: unstableBeaconInfo

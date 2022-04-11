@@ -42,11 +42,11 @@ data class MessageLiveLocationContent(
         /**
          * Exact time that the data in the event refers to (milliseconds since the UNIX epoch)
          */
-        @Json(name = "org.matrix.msc3488.ts") val unstableTs: Long? = null,
-        @Json(name = "m.ts") val ts: Long? = null
+        @Json(name = "org.matrix.msc3488.ts") val unstableTimestampAsMilliseconds: Long? = null,
+        @Json(name = "m.ts") val timestampAsMilliseconds: Long? = null
 ) : MessageContent {
 
     fun getBestLocationInfo() = locationInfo ?: unstableLocationInfo
 
-    fun getBestTs() = ts ?: unstableTs
+    fun getBestTimestampAsMilliseconds() = timestampAsMilliseconds ?: unstableTimestampAsMilliseconds
 }
