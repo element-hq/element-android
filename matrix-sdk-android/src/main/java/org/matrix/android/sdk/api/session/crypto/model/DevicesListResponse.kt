@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.crypto.model.rest
+
+package org.matrix.android.sdk.api.session.crypto.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 
 /**
  * This class describes the response to https://matrix.org/docs/spec/client_server/r0.4.0.html#get-matrix-client-r0-devices

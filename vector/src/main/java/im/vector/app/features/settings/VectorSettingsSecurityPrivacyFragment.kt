@@ -75,7 +75,7 @@ import org.matrix.android.sdk.api.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
+import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
