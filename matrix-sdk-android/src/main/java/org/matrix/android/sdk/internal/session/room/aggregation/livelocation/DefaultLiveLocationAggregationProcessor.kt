@@ -66,11 +66,12 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
         // Check if beacon info is outdated
         if (isBeaconInfoOutdated(beaconInfoContent, content)) {
             Timber.v("## LIVE LOCATION. Beacon info has timeout")
-            return
+            beaconInfoContent.hasTimedOut = true
+        } else {
+            // Update last location info of the beacon state event
+            beaconInfoContent.lastLocationContent = content
         }
 
-        // Update last location info of the beacon state event
-        beaconInfoContent.lastLocationContent = content
         beaconInfoEntity.root?.content = ContentMapper.map(beaconInfoContent.toContent())
     }
 

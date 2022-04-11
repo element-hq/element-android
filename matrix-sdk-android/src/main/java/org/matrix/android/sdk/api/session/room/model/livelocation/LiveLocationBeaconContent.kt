@@ -21,8 +21,8 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
 import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
@@ -57,7 +57,12 @@ data class LiveLocationBeaconContent(
         /**
          * Client side tracking of the last location
          */
-        var lastLocationContent: MessageLiveLocationContent? = null
+        var lastLocationContent: MessageLiveLocationContent? = null,
+
+        /**
+         * Client side tracking of whether the beacon has timed out.
+         */
+        var hasTimedOut: Boolean = false
 ) : MessageContent {
 
     fun getBestBeaconInfo() = beaconInfo ?: unstableBeaconInfo

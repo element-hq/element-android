@@ -17,7 +17,6 @@
 package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.core.epoxy.VectorEpoxyModel
-import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
@@ -25,10 +24,7 @@ import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.temporal.ChronoUnit
 import javax.inject.Inject
 
 class LiveLocationMessageItemFactory @Inject constructor(
@@ -50,19 +46,7 @@ class LiveLocationMessageItemFactory @Inject constructor(
     }
 
     private fun isLiveRunning(liveLocationContent: LiveLocationBeaconContent): Boolean {
-        return liveLocationContent.getBestBeaconInfo()?.isLive.orFalse() && hasTimeoutElapsed(liveLocationContent).not()
-    }
-
-    private fun hasTimeoutElapsed(liveLocationContent: LiveLocationBeaconContent): Boolean {
-        return liveLocationContent
-                .getBestTimestampAsMilliseconds()
-                ?.let { startTimestamp ->
-                    val now = LocalDateTime.now()
-                    val startOfLive = DateProvider.toLocalDateTime(startTimestamp)
-                    val timeout = liveLocationContent.getBestBeaconInfo()?.timeout ?: 0L
-                    val endOfLive = startOfLive.plus(timeout, ChronoUnit.MILLIS)
-                    now.isAfter(endOfLive)
-                }.orTrue()
+        return liveLocationContent.getBestBeaconInfo()?.isLive.orFalse() && liveLocationContent.hasTimedOut.not()
     }
 
     private fun buildStartLiveItem(
