@@ -41,8 +41,12 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
         }
 
         // A beacon info state event has to be sent before sending location
-        val beaconInfoEntity = CurrentStateEventEntity.getOrNull(realm, roomId, locationSenderId, EventType.STATE_ROOM_BEACON_INFO.first())
-                ?: CurrentStateEventEntity.getOrNull(realm, roomId, locationSenderId, EventType.STATE_ROOM_BEACON_INFO.last())
+        var beaconInfoEntity: CurrentStateEventEntity? = null
+        val eventTypesIterator = EventType.STATE_ROOM_BEACON_INFO.iterator()
+        while (beaconInfoEntity == null && eventTypesIterator.hasNext()) {
+            beaconInfoEntity = CurrentStateEventEntity.getOrNull(realm, roomId, locationSenderId, eventTypesIterator.next())
+        }
+
         if (beaconInfoEntity == null) {
             Timber.v("## LIVE LOCATION. There is not any beacon info which should be emitted before sending location updates")
             return
