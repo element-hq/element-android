@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.internal.crypto.keysbackup.tasks
 
 import org.matrix.android.sdk.api.failure.is404
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.api.RoomKeysApi
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupLastVersionResult
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task

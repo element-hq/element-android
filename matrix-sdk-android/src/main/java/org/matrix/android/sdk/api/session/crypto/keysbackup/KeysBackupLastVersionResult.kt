@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.keysbackup.model
-
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
+package org.matrix.android.sdk.api.session.crypto.keysbackup
 
 sealed interface KeysBackupLastVersionResult {
     // No Keys backup found (404 error)
