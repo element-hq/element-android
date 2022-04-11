@@ -41,7 +41,7 @@ import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXWithHeldExtension
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
+import org.matrix.android.sdk.api.session.crypto.model.ForwardedRoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask

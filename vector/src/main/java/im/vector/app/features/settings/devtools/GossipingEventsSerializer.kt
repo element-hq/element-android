@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.events.model.content.OlmEventContent
 import org.matrix.android.sdk.api.session.events.model.content.SecretSendEventContent
-import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
+import org.matrix.android.sdk.api.session.crypto.model.ForwardedRoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyShareRequest
 import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
