@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.crypto.model.rest
+
+package org.matrix.android.sdk.api.session.crypto.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
+import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 
 /**
  * Class representing a room key request content
