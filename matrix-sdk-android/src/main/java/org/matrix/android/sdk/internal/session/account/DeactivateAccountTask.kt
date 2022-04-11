@@ -18,12 +18,14 @@ package org.matrix.android.sdk.internal.session.account
 
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.internal.auth.registration.UiaResult
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.cleanup.CleanupSession
 import org.matrix.android.sdk.internal.session.identity.IdentityDisconnectTask
 import org.matrix.android.sdk.internal.task.Task
+import org.matrix.android.sdk.internal.util.exceptions.UiaCancelledException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -51,18 +53,24 @@ internal class DefaultDeactivateAccountTask @Inject constructor(
             }
             true
         } catch (throwable: Throwable) {
-            if (!handleUIA(
-                            failure = throwable,
-                            interceptor = params.userInteractiveAuthInterceptor,
-                            retryBlock = { authUpdate ->
-                                execute(params.copy(userAuthParam = authUpdate))
-                            }
-                    )
-            ) {
-                Timber.d("## UIA: propagate failure")
-                throw throwable
-            } else {
-                false
+            when (handleUIA(
+                    failure = throwable,
+                    interceptor = params.userInteractiveAuthInterceptor,
+                    retryBlock = { authUpdate ->
+                        execute(params.copy(userAuthParam = authUpdate))
+                    }
+            )) {
+                UiaResult.SUCCESS   -> {
+                    false
+                }
+                UiaResult.FAILURE   -> {
+                    Timber.d("## UIA: propagate failure")
+                    throw throwable
+                }
+                UiaResult.CANCELLED -> {
+                    Timber.d("## UIA: cancelled")
+                    throw UiaCancelledException()
+                }
             }
         }
 
