@@ -98,7 +98,7 @@ import org.matrix.android.sdk.internal.session.securestorage.DefaultSecureStorag
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
-import org.matrix.android.sdk.internal.util.md5
+import org.matrix.android.sdk.api.util.md5
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Provider

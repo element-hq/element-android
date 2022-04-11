@@ -22,7 +22,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import im.vector.app.core.extensions.dataStoreProvider
 import im.vector.app.features.onboarding.FtueUseCase
 import kotlinx.coroutines.flow.first
-import org.matrix.android.sdk.internal.util.md5
+import org.matrix.android.sdk.api.util.md5
 
 /**
  * User session scoped storage for:
