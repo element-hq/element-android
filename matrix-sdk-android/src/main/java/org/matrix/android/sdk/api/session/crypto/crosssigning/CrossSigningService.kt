@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.crosssigning.DeviceTrustResult
 import org.matrix.android.sdk.api.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 
 interface CrossSigningService {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.store
+package org.matrix.android.sdk.api.session.crypto.crosssigning
 
 data class PrivateKeysInfo(
         val master: String? = null,

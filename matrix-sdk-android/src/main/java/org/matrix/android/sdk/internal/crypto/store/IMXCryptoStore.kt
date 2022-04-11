@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.store
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.GossipingRequestState

@@ -48,9 +48,9 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.hamcrest.StringDescription
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import java.util.concurrent.TimeoutException
 
 object EspressoHelper {
