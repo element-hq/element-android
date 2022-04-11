@@ -41,7 +41,7 @@ import org.matrix.android.sdk.internal.crypto.GossipingRequestState
 import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.IncomingSecretShareRequest
 import org.matrix.android.sdk.internal.crypto.IncomingShareRequestCommon
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
 import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.OutgoingSecretRequest

@@ -41,7 +41,7 @@ import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.internal.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
+import org.matrix.android.sdk.api.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
 
 @RunWith(AndroidJUnit4::class)

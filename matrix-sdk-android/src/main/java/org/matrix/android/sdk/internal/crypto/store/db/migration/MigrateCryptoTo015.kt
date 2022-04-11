@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 

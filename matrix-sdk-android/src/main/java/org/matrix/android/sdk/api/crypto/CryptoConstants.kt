@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto
+package org.matrix.android.sdk.api.crypto
 
 /**
  * Matrix algorithm value for olm.
