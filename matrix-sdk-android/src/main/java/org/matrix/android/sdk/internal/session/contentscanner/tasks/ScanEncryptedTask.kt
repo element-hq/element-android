@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.contentscanner.tasks
 
-import org.matrix.android.sdk.api.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.failure.toScanFailure
 import org.matrix.android.sdk.api.session.contentscanner.ScanState
 import org.matrix.android.sdk.internal.network.executeRequest

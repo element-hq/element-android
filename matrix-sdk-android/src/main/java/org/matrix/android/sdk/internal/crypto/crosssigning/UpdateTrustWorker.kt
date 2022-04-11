@@ -22,10 +22,10 @@ import com.squareup.moshi.JsonClass
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
-import org.matrix.android.sdk.api.crypto.crosssigning.UserTrustResult
-import org.matrix.android.sdk.api.crypto.crosssigning.isCrossSignedVerified
-import org.matrix.android.sdk.api.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isCrossSignedVerified
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.internal.SessionManager

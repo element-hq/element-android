@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session.contentscanner
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.matrix.android.sdk.api.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
 import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
 import org.matrix.android.sdk.api.util.Optional

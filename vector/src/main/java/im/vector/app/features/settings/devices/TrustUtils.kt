@@ -16,8 +16,8 @@
 
 package im.vector.app.features.settings.devices
 
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
-import org.matrix.android.sdk.api.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 
 object TrustUtils {
 

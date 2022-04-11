@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.crypto.attachments
+package org.matrix.android.sdk.api.session.crypto.attachments
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

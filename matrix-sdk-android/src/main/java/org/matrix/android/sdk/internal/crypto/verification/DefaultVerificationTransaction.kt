@@ -16,7 +16,7 @@
 package org.matrix.android.sdk.internal.crypto.verification
 
 import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState

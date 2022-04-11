@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.matrix.android.sdk.api.session.crypto.crosssigning
 
-package org.matrix.android.sdk.api.crypto
-
-enum class VerificationState {
-    REQUEST,
-    WAITING,
-    CANCELED_BY_ME,
-    CANCELED_BY_OTHER,
-    DONE
-}
-
-fun VerificationState.isCanceled(): Boolean {
-    return this == VerificationState.CANCELED_BY_ME || this == VerificationState.CANCELED_BY_OTHER
+data class DeviceTrustLevel(
+        val crossSigningVerified: Boolean,
+        val locallyVerified: Boolean?
+) {
+    fun isVerified() = crossSigningVerified || locallyVerified == true
+    fun isCrossSigningVerified() = crossSigningVerified
+    fun isLocallyVerified() = locallyVerified
 }

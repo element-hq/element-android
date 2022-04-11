@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.attachments
 
 import android.util.Base64
-import org.matrix.android.sdk.api.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileKey
 import org.matrix.android.sdk.internal.util.base64ToBase64Url

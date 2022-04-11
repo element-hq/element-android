@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.crypto.model
 
-import org.matrix.android.sdk.api.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 

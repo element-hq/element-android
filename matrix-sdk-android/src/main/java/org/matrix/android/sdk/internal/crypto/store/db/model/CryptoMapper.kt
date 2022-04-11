@@ -17,7 +17,7 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import org.matrix.android.sdk.api.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo

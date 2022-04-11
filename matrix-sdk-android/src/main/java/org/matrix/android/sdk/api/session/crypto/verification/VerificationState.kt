@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.home.room.threads.arguments
+package org.matrix.android.sdk.api.session.crypto.verification
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+enum class VerificationState {
+    REQUEST,
+    WAITING,
+    CANCELED_BY_ME,
+    CANCELED_BY_OTHER,
+    DONE
+}
 
-@Parcelize
-data class ThreadTimelineArgs(
-        val roomId: String,
-        val displayName: String?,
-        val avatarUrl: String?,
-        val roomEncryptionTrustLevel: RoomEncryptionTrustLevel?,
-        val rootThreadEventId: String? = null,
-        val startsThread: Boolean = false
-) : Parcelable
+fun VerificationState.isCanceled(): Boolean {
+    return this == VerificationState.CANCELED_BY_ME || this == VerificationState.CANCELED_BY_OTHER
+}
