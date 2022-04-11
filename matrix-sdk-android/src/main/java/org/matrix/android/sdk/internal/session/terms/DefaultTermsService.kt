@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.terms.GetTermsResponse
+import org.matrix.android.sdk.api.session.terms.TermsResponse
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate

@@ -19,7 +19,7 @@ package im.vector.app.features.discovery
 import im.vector.app.core.utils.ensureProtocol
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.terms.TermsService
-import org.matrix.android.sdk.internal.session.terms.TermsResponse
+import org.matrix.android.sdk.api.session.terms.TermsResponse
 
 suspend fun Session.fetchIdentityServerWithTerms(userLanguage: String): ServerAndPolicies? {
     return identityService().getCurrentIdentityServerUrl()
