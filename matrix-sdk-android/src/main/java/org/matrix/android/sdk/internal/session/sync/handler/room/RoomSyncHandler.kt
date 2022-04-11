@@ -31,6 +31,8 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummaryUpdateType
+import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.session.sync.model.InvitedRoomSync
 import org.matrix.android.sdk.api.session.sync.model.LazyRoomSyncEphemeral
 import org.matrix.android.sdk.api.session.sync.model.RoomSync
@@ -74,9 +76,7 @@ import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryUpdater
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.session.room.timeline.TimelineInput
 import org.matrix.android.sdk.internal.session.room.typing.TypingEventContent
-import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
-import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.internal.session.sync.parsing.RoomSyncAccountDataHandler
 import org.matrix.android.sdk.internal.util.computeBestChunkSize
 import timber.log.Timber
