@@ -34,7 +34,6 @@ import im.vector.app.databinding.ViewLocationLiveMessageBannerBinding
 import im.vector.app.features.themes.ThemeUtils
 import org.threeten.bp.Duration
 
-// TODO should it be moved to timeline.item package?
 sealed class LocationLiveMessageBannerViewState(
         open val bottomStartCornerRadiusInDp: Float,
         open val bottomEndCornerRadiusInDp: Float,
