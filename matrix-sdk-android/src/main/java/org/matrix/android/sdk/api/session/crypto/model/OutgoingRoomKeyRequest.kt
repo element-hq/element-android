@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto
+package org.matrix.android.sdk.api.session.crypto.model
 
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequest
+import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 
 /**
