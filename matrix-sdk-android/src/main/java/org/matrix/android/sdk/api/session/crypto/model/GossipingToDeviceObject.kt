@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.model.rest
+package org.matrix.android.sdk.api.session.crypto.model
+
+import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceObject
 
 /**
  * Interface representing an room key action request

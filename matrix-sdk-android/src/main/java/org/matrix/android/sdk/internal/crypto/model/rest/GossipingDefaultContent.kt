@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
 
 @JsonClass(generateAdapter = true)
 data class GossipingDefaultContent(

@@ -18,7 +18,6 @@ package org.matrix.android.sdk.api.session.crypto.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 
 /**
