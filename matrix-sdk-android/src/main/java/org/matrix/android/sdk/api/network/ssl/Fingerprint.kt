@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.network.ssl
+package org.matrix.android.sdk.api.network.ssl
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.internal.network.ssl.CertUtil
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 
