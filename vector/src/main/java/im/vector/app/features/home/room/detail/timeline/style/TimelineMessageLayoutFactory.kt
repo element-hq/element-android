@@ -61,7 +61,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 MessageType.MSGTYPE_EMOTE,
                 MessageType.MSGTYPE_LIVE_LOCATION_STATE,
         )
-        private val MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY = setOf(
+        private val MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE = setOf(
                 MessageType.MSGTYPE_IMAGE,
                 MessageType.MSGTYPE_VIDEO,
                 MessageType.MSGTYPE_LIVE_LOCATION_STATE,
@@ -126,7 +126,8 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                             isIncoming = !isSentByMe,
                             cornersRadius = cornersRadius,
                             isPseudoBubble = messageContent.isPseudoBubble(),
-                            timestampAsOverlay = messageContent.timestampAsOverlay()
+                            timestampInsideMessage = messageContent.timestampInsideMessage(),
+                            addMessageOverlay = messageContent.shouldAddMessageOverlay(),
                     )
                 } else {
                     buildModernLayout(showInformation)
@@ -142,10 +143,18 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         return this.msgType in MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT
     }
 
-    private fun MessageContent?.timestampAsOverlay(): Boolean {
+    private fun MessageContent?.timestampInsideMessage(): Boolean {
         if (this == null) return false
         if (msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
-        return this.msgType in MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY
+        return this.msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+    }
+
+    private fun MessageContent?.shouldAddMessageOverlay(): Boolean {
+        return when {
+            this == null || msgType == MessageType.MSGTYPE_LIVE_LOCATION_STATE -> false
+            msgType == MessageType.MSGTYPE_LOCATION                            -> vectorPreferences.labsRenderLocationsInTimeline()
+            else                                                               -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+        }
     }
 
     private fun TimelineEvent.shouldBuildBubbleLayout(): Boolean {
