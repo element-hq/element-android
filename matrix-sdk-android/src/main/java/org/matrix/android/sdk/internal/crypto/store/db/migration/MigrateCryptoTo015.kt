@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFie
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 // Version 15L adds wasEncryptedOnce field to CryptoRoomEntity
-class MigrateCryptoTo015(realm: DynamicRealm) : RealmMigrator(realm, 15) {
+internal class MigrateCryptoTo015(realm: DynamicRealm) : RealmMigrator(realm, 15) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("CryptoRoomEntity")

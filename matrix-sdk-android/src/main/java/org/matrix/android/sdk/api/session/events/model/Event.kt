@@ -412,7 +412,7 @@ fun Event.isEdition(): Boolean {
     return getRelationContentForType(RelationType.REPLACE)?.eventId != null
 }
 
-fun Event.getPresenceContent(): PresenceContent? {
+internal fun Event.getPresenceContent(): PresenceContent? {
     return content.toModel<PresenceContent>()
 }
 

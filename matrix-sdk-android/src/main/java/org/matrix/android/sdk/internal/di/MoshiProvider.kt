@@ -37,6 +37,9 @@ import org.matrix.android.sdk.internal.network.parsing.TlsVersionMoshiAdapter
 import org.matrix.android.sdk.internal.network.parsing.UriMoshiAdapter
 import org.matrix.android.sdk.internal.session.sync.parsing.DefaultLazyRoomSyncEphemeralJsonAdapter
 
+/**
+ * TODO Find a way to keep this internal
+ */
 object MoshiProvider {
 
     private val moshi: Moshi = Moshi.Builder()

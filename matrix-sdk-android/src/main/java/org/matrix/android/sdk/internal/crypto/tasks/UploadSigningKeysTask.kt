@@ -42,7 +42,7 @@ internal interface UploadSigningKeysTask : Task<UploadSigningKeysTask.Params, Un
     )
 }
 
-data class UploadSigningKeys(val failures: Map<String, Any>?) : Failure.FeatureFailure()
+internal data class UploadSigningKeys(val failures: Map<String, Any>?) : Failure.FeatureFailure()
 
 internal class DefaultUploadSigningKeysTask @Inject constructor(
         private val cryptoApi: CryptoApi,

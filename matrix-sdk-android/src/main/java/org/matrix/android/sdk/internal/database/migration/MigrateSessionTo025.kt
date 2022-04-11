@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEnti
 import org.matrix.android.sdk.internal.extensions.forceRefreshOfHomeServerCapabilities
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo025(realm: DynamicRealm) : RealmMigrator(realm, 25) {
+internal class MigrateSessionTo025(realm: DynamicRealm) : RealmMigrator(realm, 25) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("HomeServerCapabilitiesEntity")

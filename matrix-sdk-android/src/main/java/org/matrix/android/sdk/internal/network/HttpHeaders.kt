@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.network
 
-object HttpHeaders {
+internal object HttpHeaders {
 
     const val Authorization = "Authorization"
     const val UserAgent = "User-Agent"

@@ -33,7 +33,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
 // Version 4L added Cross Signing info persistence
-class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
+internal class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
 
     override fun doMigrate(realm: DynamicRealm) {
         if (realm.schema.contains("TrustLevelEntity")) {

@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue.ContentQueryStringValue
 import org.matrix.android.sdk.internal.util.Normalizer
 import javax.inject.Inject
 
-class QueryStringValueProcessor @Inject constructor(
+internal class QueryStringValueProcessor @Inject constructor(
         private val normalizer: Normalizer
 ) {
 

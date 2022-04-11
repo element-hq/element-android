@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
 // Version 13L delete unreferenced TrustLevelEntity
-class MigrateCryptoTo013(realm: DynamicRealm) : RealmMigrator(realm, 13) {
+internal class MigrateCryptoTo013(realm: DynamicRealm) : RealmMigrator(realm, 13) {
 
     override fun doMigrate(realm: DynamicRealm) {
         // Use a trick to do that... Ref: https://stackoverflow.com/questions/55221366

@@ -28,7 +28,7 @@ import java.util.TreeSet
  * Build canonical Json
  * Doc: https://matrix.org/docs/spec/appendices.html#canonical-json
  */
-object JsonCanonicalizer {
+internal object JsonCanonicalizer {
 
     fun <T> getCanonicalJson(type: Class<T>, o: T): String {
         val adapter = MoshiProvider.providesMoshi().adapter<T>(type)
