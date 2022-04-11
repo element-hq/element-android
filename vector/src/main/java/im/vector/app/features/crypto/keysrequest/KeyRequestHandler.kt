@@ -35,7 +35,7 @@ import org.matrix.android.sdk.api.session.crypto.model.IncomingRequestCancellati
 import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.IncomingSecretShareRequest
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
