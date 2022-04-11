@@ -17,7 +17,7 @@
 package im.vector.app.features.login.terms
 
 import org.matrix.android.sdk.api.auth.registration.TermPolicies
-import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
+import org.matrix.android.sdk.api.auth.data.LocalizedFlowDataLoginTerms
 
 /**
  * This method extract the policies from the login terms parameter, regarding the user language.
