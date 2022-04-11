@@ -50,7 +50,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionR
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
-import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.api.util.awaitCallback
 import java.io.OutputStream
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume

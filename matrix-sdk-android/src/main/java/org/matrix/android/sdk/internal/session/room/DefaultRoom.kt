@@ -50,7 +50,7 @@ import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.search.SearchTask
 import org.matrix.android.sdk.internal.session.space.DefaultSpace
-import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.api.util.awaitCallback
 import java.security.InvalidParameterException
 
 internal class DefaultRoom(override val roomId: String,

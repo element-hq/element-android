@@ -63,7 +63,7 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.api.util.awaitCallback
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation

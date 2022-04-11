@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.api.util.awaitCallback
 import javax.inject.Inject
 
 internal interface EncryptEventTask : Task<EncryptEventTask.Params, Event> {

@@ -86,7 +86,7 @@ import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
-import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmPkDecryption
 import org.matrix.olm.OlmPkEncryption

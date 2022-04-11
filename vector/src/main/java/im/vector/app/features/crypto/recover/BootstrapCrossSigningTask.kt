@@ -38,7 +38,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreat
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
-import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.api.util.awaitCallback
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject

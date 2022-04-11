@@ -28,7 +28,7 @@ import org.matrix.android.sdk.internal.session.room.accountdata.RoomAccountDataD
 import org.matrix.android.sdk.internal.session.sync.handler.UserAccountDataSyncHandler
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
-import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.api.util.awaitCallback
 import javax.inject.Inject
 
 internal class DefaultSessionAccountDataService @Inject constructor(

@@ -32,7 +32,7 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.keysbackup.deriveKey
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
-import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.api.util.awaitCallback
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject

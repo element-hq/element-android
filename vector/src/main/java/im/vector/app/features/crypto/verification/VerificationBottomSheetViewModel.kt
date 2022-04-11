@@ -56,7 +56,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupLastVer
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.util.awaitCallback
+import org.matrix.android.sdk.api.util.awaitCallback
 import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
