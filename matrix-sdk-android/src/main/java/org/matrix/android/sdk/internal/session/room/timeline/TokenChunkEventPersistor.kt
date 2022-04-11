@@ -82,25 +82,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     val existingChunk = ChunkEntity.find(realm, roomId, prevToken = prevToken, nextToken = nextToken)
                     if (existingChunk != null) {
                         Timber.v("This chunk is already in the db, checking if this might be caused by broken links")
-                        if (direction == PaginationDirection.FORWARDS) {
-                            val prevChunks = ChunkEntity.findAll(realm, roomId, nextToken = prevToken)
-                            Timber.v("Found ${prevChunks?.size} prevChunks")
-                            prevChunks?.forEach {
-                                if (it.nextChunk != existingChunk) {
-                                    Timber.i("Set nextChunk for ${it.identifier()} from ${it.nextChunk?.identifier()} to ${existingChunk.identifier()}")
-                                    it.nextChunk = existingChunk
-                                }
-                            }
-                        } else {
-                            val nextChunks = ChunkEntity.findAll(realm, roomId, prevToken = nextToken)
-                            Timber.v("Found ${nextChunks?.size} nextChunks")
-                            nextChunks?.forEach {
-                                if (it.prevChunk != existingChunk) {
-                                    Timber.i("Set prevChunk for ${it.identifier()} from ${it.prevChunk?.identifier()} to ${existingChunk.identifier()}")
-                                    it.prevChunk = existingChunk
-                                }
-                            }
-                        }
+                        existingChunk.fixChunkLinks(realm, roomId, direction, prevToken, nextToken)
                         return@awaitTransaction
                     }
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
@@ -132,6 +114,34 @@ internal class TokenChunkEventPersistor @Inject constructor(
             }
         } else {
             Result.SUCCESS
+        }
+    }
+
+    private fun ChunkEntity.fixChunkLinks(
+            realm: Realm,
+            roomId: String,
+            direction: PaginationDirection,
+            prevToken: String?,
+            nextToken: String?,
+    ) {
+        if (direction == PaginationDirection.FORWARDS) {
+            val prevChunks = ChunkEntity.findAll(realm, roomId, nextToken = prevToken)
+            Timber.v("Found ${prevChunks?.size} prevChunks")
+            prevChunks?.forEach {
+                if (it.nextChunk != this) {
+                    Timber.i("Set nextChunk for ${it.identifier()} from ${it.nextChunk?.identifier()} to ${identifier()}")
+                    it.nextChunk = this
+                }
+            }
+        } else {
+            val nextChunks = ChunkEntity.findAll(realm, roomId, prevToken = nextToken)
+            Timber.v("Found ${nextChunks?.size} nextChunks")
+            nextChunks?.forEach {
+                if (it.prevChunk != this) {
+                    Timber.i("Set prevChunk for ${it.identifier()} from ${it.prevChunk?.identifier()} to ${identifier()}")
+                    it.prevChunk = this
+                }
+            }
         }
     }
 
