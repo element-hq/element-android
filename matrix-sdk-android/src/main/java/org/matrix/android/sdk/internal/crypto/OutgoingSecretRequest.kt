@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto
 
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestState
 
 /**
  * Represents an outgoing room key request

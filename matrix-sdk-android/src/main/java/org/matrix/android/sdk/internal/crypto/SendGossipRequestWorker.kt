@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
+import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestState
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyShareRequest
 import org.matrix.android.sdk.api.session.crypto.model.SecretShareRequest
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
