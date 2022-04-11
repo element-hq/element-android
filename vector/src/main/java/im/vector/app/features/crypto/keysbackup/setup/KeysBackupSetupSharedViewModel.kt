@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import timber.log.Timber
 import javax.inject.Inject

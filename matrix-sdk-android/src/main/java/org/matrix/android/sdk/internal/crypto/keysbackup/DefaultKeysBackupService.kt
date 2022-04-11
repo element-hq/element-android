@@ -49,7 +49,7 @@ import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrustSignature
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody

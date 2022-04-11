@@ -27,7 +27,7 @@ import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.assertDictEquals
 import org.matrix.android.sdk.common.assertListEquals
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import java.util.concurrent.CountDownLatch
 

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.keysbackup.model
+package org.matrix.android.sdk.api.session.crypto.keysbackup
+
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
 
 /**
  * Data retrieved from Olm library. algorithm and authData will be send to the homeserver, and recoveryKey will be displayed to the user

@@ -45,7 +45,7 @@ import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult

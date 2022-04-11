@@ -42,7 +42,7 @@ import org.matrix.android.sdk.common.TestMatrixCallback
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import java.util.Collections

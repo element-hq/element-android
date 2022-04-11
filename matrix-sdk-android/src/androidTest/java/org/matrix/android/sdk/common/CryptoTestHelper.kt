@@ -45,7 +45,7 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import java.util.UUID
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
