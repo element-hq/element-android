@@ -32,7 +32,6 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
-import org.matrix.android.sdk.internal.crypto.keysbackup.deriveKey
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -72,14 +71,18 @@ class BackupToQuadSMigrationTask @Inject constructor(
                         extractCurveKeyFromRecoveryKey(params.recoveryKey)
                     } else if (!params.passphrase.isNullOrEmpty() && version.getAuthDataAsMegolmBackupAuthData()?.privateKeySalt != null) {
                         version.getAuthDataAsMegolmBackupAuthData()?.let { authData ->
-                            deriveKey(params.passphrase, authData.privateKeySalt!!, authData.privateKeyIterations!!, object : ProgressListener {
-                                override fun onProgress(progress: Int, total: Int) {
-                                    params.progressListener?.onProgress(WaitingViewData(
-                                            stringProvider.getString(R.string.bootstrap_progress_checking_backup_with_info,
-                                                    "$progress/$total")
-                                    ))
-                                }
-                            })
+                            keysBackupService.computePrivateKey(
+                                    params.passphrase,
+                                    authData.privateKeySalt!!,
+                                    authData.privateKeyIterations!!,
+                                    object : ProgressListener {
+                                        override fun onProgress(progress: Int, total: Int) {
+                                            params.progressListener?.onProgress(WaitingViewData(
+                                                    stringProvider.getString(R.string.bootstrap_progress_checking_backup_with_info,
+                                                            "$progress/$total")
+                                            ))
+                                        }
+                                    })
                         }
                     } else null)
                             ?: return Result.IllegalParams

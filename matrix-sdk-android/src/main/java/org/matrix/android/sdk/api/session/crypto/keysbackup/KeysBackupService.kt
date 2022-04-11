@@ -214,4 +214,9 @@ interface KeysBackupService {
     fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
 
     fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String, callback: MatrixCallback<Boolean>)
+
+    fun computePrivateKey(passphrase: String,
+                          privateKeySalt: String,
+                          privateKeyIterations: Int,
+                          progressListener: ProgressListener): ByteArray
 }

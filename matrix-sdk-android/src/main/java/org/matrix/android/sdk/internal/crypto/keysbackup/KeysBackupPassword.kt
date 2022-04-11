@@ -30,13 +30,14 @@ import kotlin.experimental.xor
 private const val SALT_LENGTH = 32
 private const val DEFAULT_ITERATION = 500_000
 
-data class GeneratePrivateKeyResult(
+internal data class GeneratePrivateKeyResult(
         // The private key
         val privateKey: ByteArray,
         // the salt used to generate the private key
         val salt: String,
         // number of key derivations done on the generated private key.
-        val iterations: Int)
+        val iterations: Int
+)
 
 /**
  * Compute a private key from a password.
@@ -46,7 +47,9 @@ data class GeneratePrivateKeyResult(
  * @return a {privateKey, salt, iterations} tuple.
  */
 @WorkerThread
-fun generatePrivateKeyWithPassword(password: String, progressListener: ProgressListener?): GeneratePrivateKeyResult {
+internal fun generatePrivateKeyWithPassword(password: String,
+                                            progressListener: ProgressListener?
+): GeneratePrivateKeyResult {
     val salt = generateSalt()
     val iterations = DEFAULT_ITERATION
     val privateKey = deriveKey(password, salt, iterations, progressListener)
@@ -65,10 +68,10 @@ fun generatePrivateKeyWithPassword(password: String, progressListener: ProgressL
  * @return a private key.
  */
 @WorkerThread
-fun retrievePrivateKeyWithPassword(password: String,
-                                   salt: String,
-                                   iterations: Int,
-                                   progressListener: ProgressListener? = null): ByteArray {
+internal fun retrievePrivateKeyWithPassword(password: String,
+                                            salt: String,
+                                            iterations: Int,
+                                            progressListener: ProgressListener? = null): ByteArray {
     return deriveKey(password, salt, iterations, progressListener)
 }
 
@@ -83,10 +86,10 @@ fun retrievePrivateKeyWithPassword(password: String,
  * @return a private key.
  */
 @WorkerThread
-fun deriveKey(password: String,
-              salt: String,
-              iterations: Int,
-              progressListener: ProgressListener?): ByteArray {
+internal fun deriveKey(password: String,
+                       salt: String,
+                       iterations: Int,
+                       progressListener: ProgressListener?): ByteArray {
     // Note: copied and adapted from MXMegolmExportEncryption
     val t0 = System.currentTimeMillis()
 

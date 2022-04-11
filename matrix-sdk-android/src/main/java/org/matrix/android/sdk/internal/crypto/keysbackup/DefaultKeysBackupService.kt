@@ -36,9 +36,15 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersio
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
@@ -46,18 +52,13 @@ import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.ObjectSigner
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrustSignature
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
-import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeyBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
-import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
-import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
@@ -74,7 +75,6 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreRoomSessionD
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreRoomSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
-import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
@@ -1097,6 +1097,13 @@ internal class DefaultKeysBackupService @Inject constructor(
                 callback.onSuccess(it)
             }
         }
+    }
+
+    override fun computePrivateKey(passphrase: String,
+                                   privateKeySalt: String,
+                                   privateKeyIterations: Int,
+                                   progressListener: ProgressListener): ByteArray {
+         return deriveKey(passphrase, privateKeySalt, privateKeyIterations, progressListener)
     }
 
     /**
