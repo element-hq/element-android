@@ -41,7 +41,7 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 import java.net.URLDecoder
 import java.util.Formatter
@@ -175,7 +175,7 @@ class FtueAuthCaptchaFragment @Inject constructor(
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
-                        javascriptResponse = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java).fromJson(json)
+                        javascriptResponse = MatrixJsonParser.getMoshi().adapter(JavascriptResponse::class.java).fromJson(json)
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading(): failed")
                     }

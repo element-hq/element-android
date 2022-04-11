@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import org.matrix.android.sdk.api.util.ContentUtils
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.presence.model.PresenceContent
@@ -46,7 +47,7 @@ typealias Content = JsonDict
  * This methods is a facility method to map a json content to a model.
  */
 inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
-    val moshi = MoshiProvider.providesMoshi()
+    val moshi = MatrixJsonParser.getMoshi()
     val moshiAdapter = moshi.adapter(T::class.java)
     return try {
         moshiAdapter.fromJsonValue(this)
@@ -65,7 +66,7 @@ inline fun <reified T> Content?.toModel(catchError: Boolean = true): T? {
  */
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T> T.toContent(): Content {
-    val moshi = MoshiProvider.providesMoshi()
+    val moshi = MatrixJsonParser.getMoshi()
     val moshiAdapter = moshi.adapter(T::class.java)
     return moshiAdapter.toJsonValue(this) as Content
 }

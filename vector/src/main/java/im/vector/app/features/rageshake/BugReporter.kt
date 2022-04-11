@@ -51,8 +51,8 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.matrix.android.sdk.api.util.MimeTypes
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -98,7 +98,7 @@ class BugReporter @Inject constructor(
     // boolean to cancel the bug report
     private val mIsCancelled = false
 
-    val adapter = MoshiProvider.providesMoshi()
+    val adapter = MatrixJsonParser.getMoshi()
             .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
 
     /**
