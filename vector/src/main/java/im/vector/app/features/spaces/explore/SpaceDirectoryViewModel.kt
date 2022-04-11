@@ -215,7 +215,14 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                     _viewEvents.post(SpaceDirectoryViewEvents.NavigateToCreateNewRoom(state.currentRootSummary?.roomId ?: initialState.spaceId))
                 }
             }
+            is SpaceDirectoryViewAction.FilterRooms              -> {
+                filter(action.query)
+            }
         }
+    }
+
+    private fun filter(query: String?) {
+        setState { copy(currentFilter = query ?: "") }
     }
 
     private fun handleBack() = withState { state ->

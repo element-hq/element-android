@@ -17,6 +17,7 @@
 package im.vector.app.features.spaces.explore
 
 import android.view.View
+import androidx.core.util.Predicate
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
@@ -34,8 +35,10 @@ import im.vector.app.core.ui.list.genericEmptyWithActionItem
 import im.vector.app.core.ui.list.genericPillItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.spaceChildInfoItem
+import im.vector.app.features.home.room.list.spaceDirectoryFilterNoResults
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError.Companion.M_UNRECOGNIZED
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -52,6 +55,7 @@ class SpaceDirectoryController @Inject constructor(
 ) : TypedEpoxyController<SpaceDirectoryState>() {
 
     interface InteractionListener {
+        fun onFilterQueryChanged(query: String?)
         fun onButtonClick(spaceChildInfo: SpaceChildInfo)
         fun onSpaceChildClick(spaceChildInfo: SpaceChildInfo)
         fun onRoomClick(spaceChildInfo: SpaceChildInfo)
@@ -61,6 +65,7 @@ class SpaceDirectoryController @Inject constructor(
     }
 
     var listener: InteractionListener? = null
+    private val matchFilter = RoomSearchMatchFilter()
 
     override fun buildModels(data: SpaceDirectoryState?) {
         val host = this
@@ -131,42 +136,51 @@ class SpaceDirectoryController @Inject constructor(
                     }
                 }
             } else {
-                flattenChildInfo.forEach { info ->
-                    val isSpace = info.roomType == RoomType.SPACE
-                    val isJoined = data?.joinedRoomsIds?.contains(info.childRoomId) == true
-                    val isLoading = data?.changeMembershipStates?.get(info.childRoomId)?.isInProgress() ?: false
-                    val error = (data?.changeMembershipStates?.get(info.childRoomId) as? ChangeMembershipState.FailedJoining)?.throwable
-                    // if it's known use that matrixItem because it would have a better computed name
-                    val matrixItem = data?.knownRoomSummaries?.find { it.roomId == info.childRoomId }?.toMatrixItem()
-                            ?: info.toMatrixItem()
+                matchFilter.filter = data?.currentFilter ?: ""
+                val filteredChildInfo = flattenChildInfo.filter { matchFilter.test(it) }
 
-                    spaceChildInfoItem {
-                        id(info.childRoomId)
-                        matrixItem(matrixItem)
-                        avatarRenderer(host.avatarRenderer)
-                        topic(info.topic)
-                        errorLabel(
-                                error?.let {
-                                    host.stringProvider.getString(R.string.error_failed_to_join_room, host.errorFormatter.toHumanReadable(it))
+                if (filteredChildInfo.isEmpty()) {
+                    spaceDirectoryFilterNoResults {
+                        id("no results")
+                    }
+                } else {
+                    filteredChildInfo.forEach { info ->
+                        val isSpace = info.roomType == RoomType.SPACE
+                        val isJoined = data?.joinedRoomsIds?.contains(info.childRoomId) == true
+                        val isLoading = data?.changeMembershipStates?.get(info.childRoomId)?.isInProgress() ?: false
+                        val error = (data?.changeMembershipStates?.get(info.childRoomId) as? ChangeMembershipState.FailedJoining)?.throwable
+                        // if it's known use that matrixItem because it would have a better computed name
+                        val matrixItem = data?.knownRoomSummaries?.find { it.roomId == info.childRoomId }?.toMatrixItem()
+                                ?: info.toMatrixItem()
+
+                        spaceChildInfoItem {
+                            id(info.childRoomId)
+                            matrixItem(matrixItem)
+                            avatarRenderer(host.avatarRenderer)
+                            topic(info.topic)
+                            errorLabel(
+                                    error?.let {
+                                        host.stringProvider.getString(R.string.error_failed_to_join_room, host.errorFormatter.toHumanReadable(it))
+                                    }
+                            )
+                            memberCount(info.activeMemberCount ?: 0)
+                            loading(isLoading)
+                            buttonLabel(
+                                    when {
+                                        error != null -> host.stringProvider.getString(R.string.global_retry)
+                                        isJoined      -> host.stringProvider.getString(R.string.action_open)
+                                        else          -> host.stringProvider.getString(R.string.action_join)
+                                    }
+                            )
+                            apply {
+                                if (isSpace) {
+                                    itemClickListener { host.listener?.onSpaceChildClick(info) }
+                                } else {
+                                    itemClickListener { host.listener?.onRoomClick(info) }
                                 }
-                        )
-                        memberCount(info.activeMemberCount ?: 0)
-                        loading(isLoading)
-                        buttonLabel(
-                                when {
-                                    error != null -> host.stringProvider.getString(R.string.global_retry)
-                                    isJoined      -> host.stringProvider.getString(R.string.action_open)
-                                    else          -> host.stringProvider.getString(R.string.action_join)
-                                }
-                        )
-                        apply {
-                            if (isSpace) {
-                                itemClickListener { host.listener?.onSpaceChildClick(info) }
-                            } else {
-                                itemClickListener { host.listener?.onRoomClick(info) }
                             }
+                            buttonClickListener { host.listener?.onButtonClick(info) }
                         }
-                        buttonClickListener { host.listener?.onButtonClick(info) }
                     }
                 }
             }
@@ -191,6 +205,22 @@ class SpaceDirectoryController @Inject constructor(
                         }
                     }
                 }
+            }
+        }
+    }
+
+    class RoomSearchMatchFilter : Predicate<SpaceChildInfo> {
+        var filter: String = ""
+
+        override fun test(spaceChildInfo: SpaceChildInfo): Boolean {
+            if (filter.isEmpty()) {
+                // No filter
+                return true
+            }
+            // if filter is "Jo Do", it should match "John Doe"
+            return filter.split(" ").all {
+                spaceChildInfo.name?.contains(it, ignoreCase = true).orFalse() ||
+                        spaceChildInfo.topic?.contains(it, ignoreCase = true).orFalse()
             }
         }
     }

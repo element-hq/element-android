@@ -2842,6 +2842,9 @@
     <string name="leave_specific_ones">Leave specific rooms and spaces…</string>
     <string name="pick_tings_to_leave">Pick things to leave</string>
 
+    <string name="space_explore_filter_no_result_title">No results found</string>
+    <string name="space_explore_filter_no_result_description">Some results may be hidden because they’re private and you need an invite to them.</string>
+
     <string name="space_add_existing_rooms">Add existing rooms and space</string>
     <string name="space_add_existing_rooms_only">Add existing rooms</string>
     <string name="space_add_existing_spaces">Add existing spaces</string>
