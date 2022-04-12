@@ -18,6 +18,7 @@ package im.vector.app.features.location.live
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.os.CountDownTimer
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.Button
@@ -53,6 +54,8 @@ sealed class LocationLiveMessageBannerViewState(
     ) : LocationLiveMessageBannerViewState(bottomStartCornerRadiusInDp, bottomEndCornerRadiusInDp)
 }
 
+private const val REMAINING_TIME_COUNTER_INTERVAL_IN_MS = 1000L
+
 class LocationLiveMessageBannerView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
@@ -76,6 +79,8 @@ class LocationLiveMessageBannerView @JvmOverloads constructor(
     private val subTitle: TextView
         get() = binding.locationLiveMessageBannerSubTitle
 
+    private var countDownTimer: CountDownTimer? = null
+
     fun render(viewState: LocationLiveMessageBannerViewState) {
         when (viewState) {
             is LocationLiveMessageBannerViewState.Emitter -> renderEmitter(viewState)
@@ -91,8 +96,19 @@ class LocationLiveMessageBannerView @JvmOverloads constructor(
     private fun renderEmitter(viewState: LocationLiveMessageBannerViewState.Emitter) {
         stopButton.isVisible = true
         title.text = context.getString(R.string.location_share_live_enabled)
-        val duration = Duration.ofMillis(viewState.remainingTimeInMillis.coerceAtLeast(0L))
-        subTitle.text = context.getString(R.string.location_share_live_remaining_time, TextUtils.formatDurationWithUnits(context, duration))
+
+        countDownTimer?.cancel()
+        countDownTimer = object : CountDownTimer(viewState.remainingTimeInMillis, REMAINING_TIME_COUNTER_INTERVAL_IN_MS) {
+            override fun onTick(millisUntilFinished: Long) {
+                val duration = Duration.ofMillis(millisUntilFinished.coerceAtLeast(0L))
+                subTitle.text = context.getString(R.string.location_share_live_remaining_time, TextUtils.formatDurationWithUnits(context, duration))
+            }
+
+            override fun onFinish() {
+                subTitle.text = context.getString(R.string.location_share_live_remaining_time, TextUtils.formatDurationWithUnits(context, Duration.ofMillis(0L)))
+            }
+        }
+        countDownTimer?.start()
 
         val rootLayout: ConstraintLayout? = (binding.root as? ConstraintLayout)
         rootLayout?.let { parentLayout ->
