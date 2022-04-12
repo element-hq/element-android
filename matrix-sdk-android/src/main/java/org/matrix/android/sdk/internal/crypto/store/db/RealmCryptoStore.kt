@@ -271,12 +271,13 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     override fun deviceWithIdentityKey(identityKey: String): CryptoDeviceInfo? {
-        return doWithRealm(realmConfiguration) {
-            it.where<DeviceInfoEntity>()
-                    .equalTo(DeviceInfoEntityFields.IDENTITY_KEY, identityKey)
-                    .findFirst()
-                    ?.let { deviceInfo ->
-                        CryptoMapper.mapToModel(deviceInfo)
+        return doWithRealm(realmConfiguration) { realm ->
+            realm.where<DeviceInfoEntity>()
+                    .contains(DeviceInfoEntityFields.KEYS_MAP_JSON, identityKey)
+                    .findAll()
+                    .mapNotNull { CryptoMapper.mapToModel(it)  }
+                    .firstOrNull {
+                        it.identityKey() == identityKey
                     }
         }
     }

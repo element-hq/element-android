@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomKeyShareRequest
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -68,6 +69,7 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         private val cryptoConfig: MXCryptoConfig,
         private val inboundGroupSessionStore: InboundGroupSessionStore,
         private val sendToDeviceTask: DefaultSendToDeviceTask,
+        private val deviceListManager: DeviceListManager,
         private val perSessionBackupQueryRateLimiter: PerSessionBackupQueryRateLimiter) {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
@@ -215,6 +217,41 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         outgoingRequestScope.launch {
             sequencer.post {
                 Timber.tag(loggerTag.value).d("Withheld received for $sessionId from ${event.senderId}|$fromDevice")
+                Timber.tag(loggerTag.value).v("Withheld content ${event.getClearContent()}")
+
+                // We want to store withheld code from the sender of the message (owner of the megolm session), not from
+                // other devices that might gossip the key. If not the initial reason might be overridden
+                // by a request to one of our session.
+                event.getClearContent().toModel<RoomKeyWithHeldContent>()?.let { withheld ->
+                    withContext(coroutineDispatchers.crypto) {
+                        tryOrNull {
+                            deviceListManager.downloadKeys(listOf(event.senderId ?: ""), false)
+                        }
+                        cryptoStore.getUserDeviceList(event.senderId ?: "")
+                                .also { devices ->
+                                    Timber.tag(loggerTag.value).v("Withheld Devices for ${event.senderId} are ${devices.orEmpty().joinToString { it.identityKey() ?: "" }}")
+                                }
+                                ?.firstOrNull {
+                                    it.identityKey() == senderKey
+                                }
+                    }.also {
+                        Timber.tag(loggerTag.value).v("Withheld device for sender key $senderKey is from ${it?.shortDebugString()}")
+                    }?.let {
+                        if (it.userId == event.senderId) {
+                            if (fromDevice != null) {
+                                if (it.deviceId == fromDevice) {
+                                    Timber.tag(loggerTag.value).v("Storing sender Withheld code ${withheld.code} for ${withheld.sessionId}")
+                                    cryptoStore.addWithHeldMegolmSession(withheld)
+                                }
+                            } else {
+                                Timber.tag(loggerTag.value).v("Storing sender Withheld code ${withheld.code} for ${withheld.sessionId}")
+                                cryptoStore.addWithHeldMegolmSession(withheld)
+                            }
+                        }
+                    }
+                }
+
+                // Here we store the replies from a given request
                 cryptoStore.updateOutgoingRoomKeyReply(
                         roomId = roomId,
                         sessionId = sessionId,

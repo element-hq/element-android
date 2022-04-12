@@ -102,9 +102,20 @@ internal class MXMegolmDecryption(
                             if (throwable is MXCryptoError.OlmError) {
                                 // TODO Check the value of .message
                                 if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
+                                    // So we know that session, but it's ratcheted and we can't decrypt at that index
+
                                     if (requestKeysOnFail) {
                                         requestKeysForEvent(event)
                                     }
+                                    // Check if partially withheld
+                                    val withHeldInfo = cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)
+                                    if (withHeldInfo != null) {
+                                        // Encapsulate as withHeld exception
+                                        throw MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD,
+                                                withHeldInfo.code?.value ?: "",
+                                                withHeldInfo.reason)
+                                    }
+
                                     throw MXCryptoError.Base(
                                             MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX,
                                             "UNKNOWN_MESSAGE_INDEX",
@@ -121,6 +132,18 @@ internal class MXMegolmDecryption(
                             }
                             if (throwable is MXCryptoError.Base) {
                                 if (throwable.errorType == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
+                                    // Check if it was withheld by sender to enrich error code
+                                    val withHeldInfo = cryptoStore.getWithHeldMegolmSession(event.roomId, encryptedEventContent.sessionId)
+                                    if (withHeldInfo != null) {
+                                        if (requestKeysOnFail) {
+                                            requestKeysForEvent(event)
+                                        }
+                                        // Encapsulate as withHeld exception
+                                        throw MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD,
+                                                withHeldInfo.code?.value ?: "",
+                                                withHeldInfo.reason)
+                                    }
+
                                     if (requestKeysOnFail) {
                                         requestKeysForEvent(event)
                                     }

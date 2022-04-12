@@ -328,7 +328,8 @@ internal class MXMegolmEncryption(
                 senderKey = senderKey,
                 algorithm = MXCRYPTO_ALGORITHM_MEGOLM,
                 sessionId = sessionId,
-                codeString = code.value
+                codeString = code.value,
+                fromDevice = myDeviceId
         )
         val params = SendToDeviceTask.Params(
                 EventType.ROOM_KEY_WITHHELD,
