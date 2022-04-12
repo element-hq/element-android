@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
+
 /**
  * For `set_presence` parameter in the /sync request
  *
@@ -27,5 +29,16 @@ package org.matrix.android.sdk.internal.session.sync
 enum class SyncPresence(val value: String) {
     Offline("offline"),
     Online("online"),
-    Unavailable("unavailable")
+    Unavailable("unavailable");
+
+    companion object {
+        fun from(presenceEnum: PresenceEnum): SyncPresence {
+            return when (presenceEnum) {
+                PresenceEnum.ONLINE -> Online
+                PresenceEnum.OFFLINE -> Offline
+                PresenceEnum.UNAVAILABLE -> Unavailable
+            }
+        }
+        fun from(s: String?): SyncPresence? = values().find { it.value == s }
+    }
 }

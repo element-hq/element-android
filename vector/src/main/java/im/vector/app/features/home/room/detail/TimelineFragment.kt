@@ -210,7 +210,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -266,8 +265,7 @@ class TimelineFragment @Inject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
-        private val clock: Clock,
-        private val matrixConfiguration: MatrixConfiguration
+        private val clock: Clock
 ) :
         VectorBaseFragment<FragmentTimelineBinding>(),
         TimelineEventController.Callback,
@@ -1650,7 +1648,7 @@ class TimelineFragment @Inject constructor(
                 views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
                 views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
                 avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
-                val showPresence = roomSummary.isDirect && matrixConfiguration.presenceSyncEnabled
+                val showPresence = roomSummary.isDirect
                 views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
                 val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
                 shieldView.render(roomSummary.roomEncryptionTrustLevel)

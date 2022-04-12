@@ -1056,6 +1056,11 @@
     <string name="media_saving_period_1_month">1 month</string>
     <string name="media_saving_period_forever">Forever</string>
 
+    <!-- Presence settings -->
+    <string name="settings_presence">Presence</string>
+    <string name="settings_presence_user_always_appears_offline">Offline mode</string>
+    <string name="settings_presence_user_always_appears_offline_summary">If enabled, you will always appear offline to other users, even when using the application.</string>
+
     <!-- Room Settings -->
 
     <!-- room global settings-->
