@@ -42,7 +42,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupServic
 import org.matrix.android.sdk.api.session.crypto.model.ForwardedRoomKeyContent
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.session.StreamEventsManager

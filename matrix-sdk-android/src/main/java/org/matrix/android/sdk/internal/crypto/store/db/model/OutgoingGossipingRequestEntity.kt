@@ -25,8 +25,8 @@ import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestS
 import org.matrix.android.sdk.internal.crypto.GossipRequestType
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequest
 import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequest
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.OutgoingSecretRequest
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 internal open class OutgoingGossipingRequestEntity(

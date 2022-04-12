@@ -23,8 +23,8 @@ import org.matrix.android.sdk.api.session.crypto.model.GossipingRequestState
 import org.matrix.android.sdk.internal.crypto.GossipRequestType
 import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.IncomingSecretShareRequest
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.IncomingShareRequestCommon
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 
 internal open class IncomingGossipingRequestEntity(@Index var requestId: String? = "",
                                                    @Index var typeStr: String? = null,

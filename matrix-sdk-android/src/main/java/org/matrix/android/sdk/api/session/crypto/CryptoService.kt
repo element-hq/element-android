@@ -40,7 +40,7 @@ import org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 
 interface CryptoService {
 
