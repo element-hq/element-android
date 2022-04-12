@@ -29,14 +29,6 @@ internal fun CryptoCrossSigningKey.canonicalSignable(): String {
     return JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableJSONDictionary())
 }
 
-fun ByteArray.toBase64NoPadding(): String {
-    return Base64.encodeToString(this, Base64.NO_PADDING or Base64.NO_WRAP)
-}
-
-fun String.fromBase64(): ByteArray {
-    return Base64.decode(this, Base64.DEFAULT)
-}
-
 /**
  * Decode the base 64. Return null in case of bad format. Should be used when parsing received data from external source
  */

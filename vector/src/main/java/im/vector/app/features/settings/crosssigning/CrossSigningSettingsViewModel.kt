@@ -38,9 +38,9 @@ import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.api.util.fromBase64
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume

@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto.verification.qrcode
 
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
+import org.matrix.android.sdk.api.util.fromBase64
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.extensions.toUnsignedInt
 
 // MATRIX
