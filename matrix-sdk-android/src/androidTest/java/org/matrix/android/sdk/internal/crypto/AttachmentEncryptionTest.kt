@@ -26,9 +26,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.api.session.crypto.attachments.toElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileKey
 import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileKey
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 

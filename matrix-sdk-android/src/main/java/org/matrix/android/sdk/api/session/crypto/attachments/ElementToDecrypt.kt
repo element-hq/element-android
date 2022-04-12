@@ -18,7 +18,7 @@ package org.matrix.android.sdk.api.session.crypto.attachments
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 
 fun EncryptedFileInfo.toElementToDecrypt(): ElementToDecrypt? {
     // Check the validity of some fields
