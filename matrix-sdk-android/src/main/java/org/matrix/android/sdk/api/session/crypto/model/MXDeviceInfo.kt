@@ -144,19 +144,6 @@ data class MXDeviceInfo(
         return map
     }
 
-    /**
-     * @return a dictionary of the parameters
-     */
-    fun toDeviceKeys(): DeviceKeys {
-        return DeviceKeys(
-                userId = userId,
-                deviceId = deviceId,
-                algorithms = algorithms!!,
-                keys = keys!!,
-                signatures = signatures!!
-        )
-    }
-
     override fun toString(): String {
         return "MXDeviceInfo $userId:$deviceId"
     }
