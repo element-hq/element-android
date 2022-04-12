@@ -16,19 +16,13 @@
 package org.matrix.android.sdk.internal.network.parsing
 
 import com.squareup.moshi.JsonAdapter
-import org.matrix.android.sdk.internal.network.parsing.RuntimeJsonAdapterFactory
-import com.squareup.moshi.Moshi
-import org.matrix.android.sdk.internal.network.parsing.RuntimeJsonAdapterFactory.RuntimeJsonAdapter
-import kotlin.Throws
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
+import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import java.io.IOException
-import java.lang.IllegalArgumentException
-import java.lang.NullPointerException
 import java.lang.reflect.Type
-import java.util.LinkedHashMap
 import javax.annotation.CheckReturnValue
 
 /**
@@ -36,8 +30,12 @@ import javax.annotation.CheckReturnValue
  * decoding the JSON. This factory's adapters expect JSON in the format of a JSON object with a
  * key whose value is a label that determines the type to which to map the JSON object.
  */
-class RuntimeJsonAdapterFactory<T> internal constructor(val baseType: Class<T>, val labelKey: String, val fallbackType: Class<*>?) : JsonAdapter.Factory {
-    val labelToType: MutableMap<String, Type> = LinkedHashMap()
+internal class RuntimeJsonAdapterFactory<T>(
+        private val baseType: Class<T>,
+        private val labelKey: String,
+        private val fallbackType: Class<*>
+) : JsonAdapter.Factory {
+    private val labelToType: MutableMap<String, Type> = LinkedHashMap()
 
     /**
      * Register the subtype that can be created based on the label. When an unknown type is found
@@ -69,8 +67,11 @@ class RuntimeJsonAdapterFactory<T> internal constructor(val baseType: Class<T>, 
                 objectJsonAdapter, fallbackAdapter).nullSafe()
     }
 
-    internal class RuntimeJsonAdapter(val labelKey: String, val labelToAdapter: Map<String, JsonAdapter<Any>>,
-                                      val typeToLabel: Map<Type, String>, val objectJsonAdapter: JsonAdapter<Any>,
+    @Suppress("UNCHECKED_CAST")
+    internal class RuntimeJsonAdapter(val labelKey: String,
+                                      val labelToAdapter: Map<String, JsonAdapter<Any>>,
+                                      val typeToLabel: Map<Type, String>,
+                                      val objectJsonAdapter: JsonAdapter<Any>,
                                       val fallbackAdapter: JsonAdapter<Any>) : JsonAdapter<Any?>() {
         @Throws(IOException::class)
         override fun fromJson(reader: JsonReader): Any? {
@@ -117,9 +118,7 @@ class RuntimeJsonAdapterFactory<T> internal constructor(val baseType: Class<T>, 
          * JSON object.
          */
         @CheckReturnValue
-        fun <T> of(baseType: Class<T>?, labelKey: String?, fallbackType: Class<out T>?): RuntimeJsonAdapterFactory<T> {
-            if (baseType == null) throw NullPointerException("baseType == null")
-            if (labelKey == null) throw NullPointerException("labelKey == null")
+        fun <T> of(baseType: Class<T>, labelKey: String, fallbackType: Class<out T>): RuntimeJsonAdapterFactory<T> {
             require(baseType != Any::class.java) { "The base type must not be Object. Consider using a marker interface." }
             return RuntimeJsonAdapterFactory(baseType, labelKey, fallbackType)
         }
