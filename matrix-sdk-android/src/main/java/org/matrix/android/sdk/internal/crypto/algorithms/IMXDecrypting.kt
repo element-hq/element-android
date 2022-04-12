@@ -20,7 +20,7 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.IncomingSecretShareRequest
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 
 /**

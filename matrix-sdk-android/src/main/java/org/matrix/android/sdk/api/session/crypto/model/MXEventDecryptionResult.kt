@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto
+package org.matrix.android.sdk.api.session.crypto.model
 
 import org.matrix.android.sdk.api.util.JsonDict
 
@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.util.JsonDict
  * The result of a (successful) call to decryptEvent.
  */
 data class MXEventDecryptionResult(
-
         /**
          * The plaintext payload for the event (typically containing "type" and "content" fields).
          */
