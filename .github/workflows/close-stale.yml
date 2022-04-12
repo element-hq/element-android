@@ -1,0 +1,20 @@
+name: 'Close stale issues and PRs'
+on:
+  pull_request: { }
+  push:
+    branches: [ feature/adm/stale-prs ]
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: sonia-corporation/stale@1.54.0
+        with:
+          dry-run: true
+          issue-processing: false
+          pull-request-days-before-stale: 30
+          pull-request-days-before-close: 14
+          pull-request-stale-label: Z-Stale
+          pull-request-stale-comment: 'PR marked as stale due to 30 days of inactivity and will be closed in 14 days if there is no further activity. Comment or commit to reset the inactivity counter'
+          pull-request-ignore-any-labels: |
+            Z-Community-PR
