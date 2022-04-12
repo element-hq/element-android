@@ -71,7 +71,7 @@ internal class StreamEventsManager @Inject constructor() {
         coroutineScope.launch {
             listeners.forEach {
                 tryOrNull {
-                    it.onEventDecrypted(event.eventId ?: "", event.roomId ?: "", result.clearEvent)
+                    it.onEventDecrypted(event, result.clearEvent)
                 }
             }
         }
@@ -82,7 +82,7 @@ internal class StreamEventsManager @Inject constructor() {
         coroutineScope.launch {
             listeners.forEach {
                 tryOrNull {
-                    it.onEventDecryptionError(event.eventId ?: "", event.roomId ?: "", error)
+                    it.onEventDecryptionError(event, error)
                 }
             }
         }
