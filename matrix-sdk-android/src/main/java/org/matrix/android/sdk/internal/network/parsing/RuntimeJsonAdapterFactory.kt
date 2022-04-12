@@ -77,8 +77,8 @@ internal class RuntimeJsonAdapterFactory<T>(
         override fun fromJson(reader: JsonReader): Any? {
             val peekedToken = reader.peek()
             if (peekedToken != JsonReader.Token.BEGIN_OBJECT) {
-                throw JsonDataException("Expected BEGIN_OBJECT but was " + peekedToken
-                        + " at path " + reader.path)
+                throw JsonDataException("Expected BEGIN_OBJECT but was " + peekedToken +
+                        " at path " + reader.path)
             }
             val jsonValue = reader.readJsonValue()
             val jsonObject = jsonValue as Map<String, Any>?
@@ -91,13 +91,13 @@ internal class RuntimeJsonAdapterFactory<T>(
         override fun toJson(writer: JsonWriter, value: Any?) {
             val type: Class<*> = value!!.javaClass
             val label = typeToLabel[type]
-                    ?: throw IllegalArgumentException("Expected one of "
-                            + typeToLabel.keys
-                            + " but found "
-                            + value
-                            + ", a "
-                            + value.javaClass
-                            + ". Register this subtype.")
+                    ?: throw IllegalArgumentException("Expected one of " +
+                            typeToLabel.keys +
+                            " but found " +
+                            value +
+                            ", a " +
+                            value.javaClass +
+                            ". Register this subtype.")
             val adapter = labelToAdapter[label]!!
             val jsonValue = adapter.toJsonValue(value) as Map<String, Any>?
             val valueWithLabel: MutableMap<String, Any> = LinkedHashMap(1 + jsonValue!!.size)

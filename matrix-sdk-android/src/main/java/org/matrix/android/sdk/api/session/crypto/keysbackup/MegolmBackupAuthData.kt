@@ -77,4 +77,3 @@ data class MegolmBackupAuthData(
                 .signalableJSONDictionary()
     }
 }
-
