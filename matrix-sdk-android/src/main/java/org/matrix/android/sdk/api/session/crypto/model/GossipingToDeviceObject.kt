@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.api.session.crypto.model
 
-import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceObject
-
 /**
  * Interface representing an room key action request
  * Note: this class cannot be abstract because of [org.matrix.androidsdk.core.JsonUtils.toRoomKeyShare]
