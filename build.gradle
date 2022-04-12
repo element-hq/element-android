@@ -105,6 +105,7 @@ allprojects {
         // display the corresponding rule
         verbose = true
         disabledRules = [
+                "indent",
                 "spacing-between-declarations-with-comments",
                 "no-multi-spaces",
                 "experimental:spacing-between-declarations-with-annotations",
