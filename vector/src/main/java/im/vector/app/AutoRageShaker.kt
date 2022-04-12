@@ -264,7 +264,7 @@ class AutoRageShaker @Inject constructor(
         session.getSyncStatusLive()
                 .asFlow()
                 .onEach {
-                    hasSynced = it !is SyncStatusService.Status.Progressing
+                    hasSynced = it !is SyncStatusService.Status.InitialSyncProgressing
                 }
                 .launchIn(session.coroutineScope)
         activeSessionIds.add(sessionId)
