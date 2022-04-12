@@ -1650,7 +1650,7 @@
     <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
     <string name="feedback_failed">The feedback failed to be sent (%s)</string>
     <!-- TODO TO BE REMOVED -->
-    <string name="give_feedback">Give Feedback</string>
+    <string name="give_feedback" tools:ignore="UnusedResources">Give Feedback</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">"Show complete history in encrypted rooms"</string>
