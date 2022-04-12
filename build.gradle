@@ -105,8 +105,12 @@ allprojects {
         // display the corresponding rule
         verbose = true
         disabledRules = [
+                // TODO: Re-enable these 4 rules after reformatting project
                 "indent",
                 "experimental:argument-list-wrapping",
+                "max-line-length",
+                "parameter-list-wrapping",
+
                 "spacing-between-declarations-with-comments",
                 "no-multi-spaces",
                 "experimental:spacing-between-declarations-with-annotations",
