@@ -26,7 +26,7 @@ import java.io.Serializable
  * This class adds more context to a OlmInboundGroupSession object.
  * This allows additional checks. The class implements Serializable so that the context can be stored.
  */
-class OlmInboundGroupSessionWrapper2 : Serializable {
+internal class OlmInboundGroupSessionWrapper2 : Serializable {
 
     // The associated olm inbound group session.
     var olmInboundGroupSession: OlmInboundGroupSession? = null

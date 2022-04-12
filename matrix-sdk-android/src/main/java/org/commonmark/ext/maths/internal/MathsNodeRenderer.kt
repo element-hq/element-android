@@ -21,7 +21,7 @@ import org.commonmark.node.Node
 import org.commonmark.renderer.NodeRenderer
 import java.util.HashSet
 
-abstract class MathsNodeRenderer : NodeRenderer {
+internal abstract class MathsNodeRenderer : NodeRenderer {
     override fun getNodeTypes(): Set<Class<out Node>> {
         val types: MutableSet<Class<out Node>> = HashSet()
         types.add(InlineMaths::class.java)

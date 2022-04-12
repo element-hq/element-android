@@ -33,7 +33,7 @@ import javax.inject.Inject
 // value : dict key $UserId
 //              value dict key ts
 //                    dict value ts value
-typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
+internal typealias ReadReceiptContent = Map<String, Map<String, Map<String, Map<String, Double>>>>
 
 private const val READ_KEY = "m.read"
 private const val TIMESTAMP_KEY = "ts"

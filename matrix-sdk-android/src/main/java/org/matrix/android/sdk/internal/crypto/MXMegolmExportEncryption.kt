@@ -33,7 +33,7 @@ import kotlin.math.min
 /**
  * Utility class to import/export the crypto data
  */
-object MXMegolmExportEncryption {
+internal object MXMegolmExportEncryption {
     private const val HEADER_LINE = "-----BEGIN MEGOLM SESSION DATA-----"
     private const val TRAILER_LINE = "-----END MEGOLM SESSION DATA-----"
 

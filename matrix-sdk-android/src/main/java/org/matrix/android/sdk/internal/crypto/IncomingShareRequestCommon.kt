@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-interface IncomingShareRequestCommon {
+internal interface IncomingShareRequestCommon {
     /**
      * The user id
      */

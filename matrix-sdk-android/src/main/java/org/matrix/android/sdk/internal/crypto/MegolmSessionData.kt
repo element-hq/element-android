@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * The type of object we use for importing and exporting megolm session data.
  */
 @JsonClass(generateAdapter = true)
-data class MegolmSessionData(
+internal data class MegolmSessionData(
         /**
          * The algorithm used.
          */

@@ -31,7 +31,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreation
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import java.util.concurrent.CountDownLatch
 
-class KeysBackupTestHelper(
+internal class KeysBackupTestHelper(
         private val testHelper: CommonTestHelper,
         private val cryptoTestHelper: CryptoTestHelper) {
 

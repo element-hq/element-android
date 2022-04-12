@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class EncryptedMessage(
+internal data class EncryptedMessage(
         @Json(name = "algorithm")
         val algorithm: String? = null,
 

@@ -24,10 +24,12 @@ import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrappe
 /**
  * Data class to store result of [KeysBackupTestHelper.createKeysBackupScenarioWithPassword]
  */
-data class KeysBackupScenarioData(val cryptoTestData: CryptoTestData,
-                                  val aliceKeys: List<OlmInboundGroupSessionWrapper2>,
-                                  val prepareKeysBackupDataResult: PrepareKeysBackupDataResult,
-                                  val aliceSession2: Session) {
+internal data class KeysBackupScenarioData(
+        val cryptoTestData: CryptoTestData,
+        val aliceKeys: List<OlmInboundGroupSessionWrapper2>,
+        val prepareKeysBackupDataResult: PrepareKeysBackupDataResult,
+        val aliceSession2: Session
+) {
     fun cleanUp(testHelper: CommonTestHelper) {
         cryptoTestData.cleanUp(testHelper)
         testHelper.signOutAndClose(aliceSession2)
