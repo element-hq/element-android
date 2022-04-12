@@ -93,15 +93,21 @@ object TextUtils {
         when {
             hours > 0   -> {
                 appendHours(context, builder, hours)
-                builder.append(" ")
-                appendMinutes(context, builder, minutes)
-                builder.append(" ")
-                appendSeconds(context, builder, seconds)
+                if(minutes > 0) {
+                    builder.append(" ")
+                    appendMinutes(context, builder, minutes)
+                }
+                if(seconds > 0) {
+                    builder.append(" ")
+                    appendSeconds(context, builder, seconds)
+                }
             }
             minutes > 0 -> {
                 appendMinutes(context, builder, minutes)
-                builder.append(" ")
-                appendSeconds(context, builder, seconds)
+                if(seconds > 0) {
+                    builder.append(" ")
+                    appendSeconds(context, builder, seconds)
+                }
             }
             else        -> {
                 appendSeconds(context, builder, seconds)
