@@ -34,10 +34,10 @@ import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldCo
 import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
@@ -112,6 +112,7 @@ interface CryptoService {
 
     fun isRoomEncrypted(roomId: String): Boolean
 
+    // TODO This could be removed from this interface
     fun encryptEventContent(eventContent: Content,
                             eventType: String,
                             roomId: String,
