@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.crypto.keysbackup
+package org.matrix.android.sdk.internal.crypto.keysbackup.model
 
-/**
- * Data retrieved from Olm library. algorithm and authData will be send to the homeserver, and recoveryKey will be displayed to the user
- */
-data class MegolmBackupCreationInfo(
-        /**
-         * The algorithm used for storing backups [org.matrix.androidsdk.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP].
-         */
-        val algorithm: String,
+import org.matrix.android.sdk.api.util.JsonDict
 
-        /**
-         * Authentication data.
-         */
-        val authData: MegolmBackupAuthData,
+internal data class SignalableMegolmBackupAuthData(
+        val publicKey: String,
+        val privateKeySalt: String? = null,
+        val privateKeyIterations: Int? = null
+) {
+    fun signalableJSONDictionary(): JsonDict = HashMap<String, Any>().apply {
+        put("public_key", publicKey)
 
-        /**
-         * The Base58 recovery key.
-         */
-        val recoveryKey: String
-)
+        privateKeySalt?.let {
+            put("private_key_salt", it)
+        }
+        privateKeyIterations?.let {
+            put("private_key_iterations", it)
+        }
+    }
+}

@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.keysbackup.model
+package org.matrix.android.sdk.api.session.crypto.keysbackup
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 /**
@@ -54,7 +55,7 @@ data class MegolmBackupAuthData(
         val signatures: Map<String, Map<String, String>>? = null
 ) {
 
-    fun toJsonDict(): JsonDict {
+    internal fun toJsonDict(): JsonDict {
         val moshi = MoshiProvider.providesMoshi()
         val adapter = moshi.adapter(Map::class.java)
 
@@ -67,7 +68,7 @@ data class MegolmBackupAuthData(
                 }
     }
 
-    fun signalableJSONDictionary(): JsonDict {
+    internal fun signalableJSONDictionary(): JsonDict {
         return SignalableMegolmBackupAuthData(
                 publicKey = publicKey,
                 privateKeySalt = privateKeySalt,
@@ -77,19 +78,3 @@ data class MegolmBackupAuthData(
     }
 }
 
-internal data class SignalableMegolmBackupAuthData(
-        val publicKey: String,
-        val privateKeySalt: String? = null,
-        val privateKeyIterations: Int? = null
-) {
-    fun signalableJSONDictionary(): JsonDict = HashMap<String, Any>().apply {
-        put("public_key", publicKey)
-
-        privateKeySalt?.let {
-            put("private_key_salt", it)
-        }
-        privateKeyIterations?.let {
-            put("private_key_iterations", it)
-        }
-    }
-}
