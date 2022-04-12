@@ -106,6 +106,7 @@ allprojects {
         verbose = true
         disabledRules = [
                 "indent",
+                "experimental:argument-list-wrapping",
                 "spacing-between-declarations-with-comments",
                 "no-multi-spaces",
                 "experimental:spacing-between-declarations-with-annotations",
