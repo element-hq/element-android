@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.network.parsing.ForceToBoolean
  * Backup data for one key.
  */
 @JsonClass(generateAdapter = true)
-data class KeyBackupData(
+internal data class KeyBackupData(
         /**
          * Required. The index of the first message in the session that the key can decrypt.
          */

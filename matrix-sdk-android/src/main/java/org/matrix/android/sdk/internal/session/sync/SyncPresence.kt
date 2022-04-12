@@ -26,7 +26,7 @@ import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
  * parameter is set to "offline" then the client is not marked as being online when it uses this API.
  * When set to "unavailable", the client is marked as being idle. One of: ["offline", "online", "unavailable"]
  */
-enum class SyncPresence(val value: String) {
+internal enum class SyncPresence(val value: String) {
     Offline("offline"),
     Online("online"),
     Unavailable("unavailable");

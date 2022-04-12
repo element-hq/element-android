@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
  * https://matrix.org/docs/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
  */
 @JsonClass(generateAdapter = true)
-data class RoomEventFilter(
+internal data class RoomEventFilter(
         /**
          * The maximum number of events to return.
          */

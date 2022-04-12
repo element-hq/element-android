@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.crypto.verification
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceObject
 
-interface VerificationInfo<ValidObjectType> {
+internal interface VerificationInfo<ValidObjectType> {
     fun toEventContent(): Content? = null
     fun toSendToDeviceObject(): SendToDeviceObject? = null
 

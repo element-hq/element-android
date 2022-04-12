@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
  * Represents an outgoing room key request
  */
 @JsonClass(generateAdapter = true)
-class OutgoingSecretRequest(
+internal class OutgoingSecretRequest(
         // Secret Name
         val secretName: String?,
         // list of recipients for the request

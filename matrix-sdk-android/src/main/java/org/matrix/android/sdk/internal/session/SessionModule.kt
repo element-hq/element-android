@@ -106,7 +106,7 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class MockHttpInterceptor
+internal annotation class MockHttpInterceptor
 
 @Module
 internal abstract class SessionModule {

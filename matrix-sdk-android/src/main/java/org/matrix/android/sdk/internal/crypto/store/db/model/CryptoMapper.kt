@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 import org.matrix.android.sdk.internal.di.SerializeNulls
 import timber.log.Timber
 
-object CryptoMapper {
+internal object CryptoMapper {
 
     private val moshi = Moshi.Builder().add(SerializeNulls.JSON_ADAPTER_FACTORY).build()
     private val listMigrationAdapter = moshi.adapter<List<String>>(Types.newParameterizedType(

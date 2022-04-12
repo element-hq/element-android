@@ -28,7 +28,7 @@ import java.util.zip.GZIPOutputStream
 /**
  * Get realm, invoke the action, close realm, and return the result of the action
  */
-fun <T> doWithRealm(realmConfiguration: RealmConfiguration, action: (Realm) -> T): T {
+internal fun <T> doWithRealm(realmConfiguration: RealmConfiguration, action: (Realm) -> T): T {
     return Realm.getInstance(realmConfiguration).use { realm ->
         action.invoke(realm)
     }
@@ -37,7 +37,7 @@ fun <T> doWithRealm(realmConfiguration: RealmConfiguration, action: (Realm) -> T
 /**
  * Get realm, do the query, copy from realm, close realm, and return the copied result
  */
-fun <T : RealmObject> doRealmQueryAndCopy(realmConfiguration: RealmConfiguration, action: (Realm) -> T?): T? {
+internal fun <T : RealmObject> doRealmQueryAndCopy(realmConfiguration: RealmConfiguration, action: (Realm) -> T?): T? {
     return Realm.getInstance(realmConfiguration).use { realm ->
         action.invoke(realm)?.let { realm.copyFromRealm(it) }
     }
@@ -46,7 +46,7 @@ fun <T : RealmObject> doRealmQueryAndCopy(realmConfiguration: RealmConfiguration
 /**
  * Get realm, do the list query, copy from realm, close realm, and return the copied result
  */
-fun <T : RealmObject> doRealmQueryAndCopyList(realmConfiguration: RealmConfiguration, action: (Realm) -> Iterable<T>): Iterable<T> {
+internal fun <T : RealmObject> doRealmQueryAndCopyList(realmConfiguration: RealmConfiguration, action: (Realm) -> Iterable<T>): Iterable<T> {
     return Realm.getInstance(realmConfiguration).use { realm ->
         action.invoke(realm).let { realm.copyFromRealm(it) }
     }
@@ -55,13 +55,13 @@ fun <T : RealmObject> doRealmQueryAndCopyList(realmConfiguration: RealmConfigura
 /**
  * Get realm instance, invoke the action in a transaction and close realm
  */
-fun doRealmTransaction(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
+internal fun doRealmTransaction(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
     Realm.getInstance(realmConfiguration).use { realm ->
         realm.executeTransaction { action.invoke(it) }
     }
 }
 
-fun doRealmTransactionAsync(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
+internal fun doRealmTransactionAsync(realmConfiguration: RealmConfiguration, action: (Realm) -> Unit) {
     Realm.getInstance(realmConfiguration).use { realm ->
         realm.executeTransactionAsync { action.invoke(it) }
     }
@@ -70,7 +70,7 @@ fun doRealmTransactionAsync(realmConfiguration: RealmConfiguration, action: (Rea
 /**
  * Serialize any Serializable object, zip it and convert to Base64 String
  */
-fun serializeForRealm(o: Any?): String? {
+internal fun serializeForRealm(o: Any?): String? {
     if (o == null) {
         return null
     }
@@ -88,7 +88,7 @@ fun serializeForRealm(o: Any?): String? {
  * Do the opposite of serializeForRealm.
  */
 @Suppress("UNCHECKED_CAST")
-fun <T> deserializeFromRealm(string: String?): T? {
+internal fun <T> deserializeFromRealm(string: String?): T? {
     if (string == null) {
         return null
     }
