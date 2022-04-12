@@ -19,8 +19,8 @@ package org.matrix.android.sdk.internal.crypto.store.db.migration
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import io.realm.DynamicRealm
+import org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields

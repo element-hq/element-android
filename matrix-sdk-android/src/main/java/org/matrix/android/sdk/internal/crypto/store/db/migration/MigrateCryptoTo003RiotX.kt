@@ -40,7 +40,7 @@ internal class MigrateCryptoTo003RiotX(realm: DynamicRealm) : RealmMigrator(real
                     try {
                         val oldSerializedData = obj.getString("deviceInfoData")
                         deserializeFromRealm<MXDeviceInfo>(oldSerializedData)?.let { legacyMxDeviceInfo ->
-                            val newMxDeviceInfo = org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo(
+                            val newMxDeviceInfo = org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo(
                                     deviceId = legacyMxDeviceInfo.deviceId,
                                     userId = legacyMxDeviceInfo.userId,
                                     algorithms = legacyMxDeviceInfo.algorithms,
