@@ -26,15 +26,15 @@ import im.vector.app.core.ui.list.GenericItem_
 import im.vector.app.core.utils.createUIHandler
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
-import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.events.model.content.OlmEventContent
-import org.matrix.android.sdk.api.session.events.model.content.SecretSendEventContent
 import org.matrix.android.sdk.api.session.crypto.model.ForwardedRoomKeyContent
 import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyShareRequest
 import org.matrix.android.sdk.api.session.crypto.model.SecretShareRequest
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.OlmEventContent
+import org.matrix.android.sdk.api.session.events.model.content.SecretSendEventContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import javax.inject.Inject
 
 class GossipingTrailPagedEpoxyController @Inject constructor(

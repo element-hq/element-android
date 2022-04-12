@@ -18,8 +18,8 @@ package org.matrix.android.sdk.api.session.terms
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.auth.data.LocalizedFlowDataLoginTerms
+import org.matrix.android.sdk.api.util.JsonDict
 
 /**
  * This class represent a localized privacy policy for registration Flow.

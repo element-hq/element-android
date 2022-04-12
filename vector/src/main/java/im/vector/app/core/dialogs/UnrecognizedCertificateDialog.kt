@@ -23,8 +23,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.DialogSslFingerprintBinding
 import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import timber.log.Timber
-import java.util.HashMap
-import java.util.HashSet
 import javax.inject.Inject
 
 /**

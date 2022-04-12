@@ -22,10 +22,10 @@ import io.realm.RealmObject
 import io.realm.annotations.Index
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestState
-import org.matrix.android.sdk.internal.crypto.GossipRequestType
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequest
 import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequest
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
+import org.matrix.android.sdk.internal.crypto.GossipRequestType
+import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequest
 import org.matrix.android.sdk.internal.crypto.OutgoingSecretRequest
 import org.matrix.android.sdk.internal.di.MoshiProvider
 

@@ -39,8 +39,6 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
-import java.util.ArrayList
-import java.util.HashMap
 
 class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roomId: String,
                                                        private val stringProvider: StringProvider,

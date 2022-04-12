@@ -19,7 +19,6 @@ import org.commonmark.ext.maths.DisplayMaths
 import org.commonmark.ext.maths.InlineMaths
 import org.commonmark.node.Node
 import org.commonmark.renderer.NodeRenderer
-import java.util.HashSet
 
 internal abstract class MathsNodeRenderer : NodeRenderer {
     override fun getNodeTypes(): Set<Class<out Node>> {

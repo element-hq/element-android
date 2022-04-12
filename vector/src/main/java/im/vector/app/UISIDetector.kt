@@ -19,9 +19,9 @@ package im.vector.app
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.LiveEventListener
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask

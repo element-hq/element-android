@@ -27,7 +27,6 @@ import im.vector.app.core.services.BluetoothHeadsetReceiver
 import im.vector.app.core.services.WiredHeadsetStateReceiver
 import org.matrix.android.sdk.api.logger.LoggerTag
 import timber.log.Timber
-import java.util.HashSet
 
 private val loggerTag = LoggerTag("API21AudioDeviceDetector", LoggerTag.VOIP)
 
