@@ -24,18 +24,9 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
 import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromHtmlReply
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
+import org.matrix.android.sdk.api.util.TextContent
 
-/**
- * Contains a text and eventually a formatted text
- */
-data class TextContent(
-        val text: String,
-        val formattedText: String? = null
-) {
-    fun takeFormatted() = formattedText ?: text
-}
-
-fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
+internal fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
     return MessageTextContent(
             msgType = msgType,
             format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
@@ -49,7 +40,7 @@ fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT)
  * latestThreadEventId in order for the clients without threads enabled to render it appropriately
  * If latest event not found, we pass rootThreadEventId
  */
-fun TextContent.toThreadTextContent(
+internal fun TextContent.toThreadTextContent(
         rootThreadEventId: String,
         latestThreadEventId: String,
         msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
@@ -68,7 +59,7 @@ fun TextContent.toThreadTextContent(
     )
 }
 
-fun TextContent.removeInReplyFallbacks(): TextContent {
+internal fun TextContent.removeInReplyFallbacks(): TextContent {
     return copy(
             text = extractUsefulTextFromReply(this.text),
             formattedText = this.formattedText?.let { extractUsefulTextFromHtmlReply(it) }
