@@ -1111,9 +1111,13 @@ class TimelineViewModel @AssistedInject constructor(
             computeUnreadState(timelineEvents, roomSummary)
         }
                 // We don't want live update of unread so we skip when we already had a HasUnread or HasNoUnread
+                // However, we want to update an existing HasUnread, if the readMarkerId hasn't changed,
+                // as we might be loading new events to fill gaps in the timeline.
                 .distinctUntilChanged { previous, current ->
                     when {
                         previous is UnreadState.Unknown || previous is UnreadState.ReadMarkerNotLoaded -> false
+                        previous is UnreadState.HasUnread && current is UnreadState.HasUnread &&
+                                previous.readMarkerId == current.readMarkerId                          -> false
                         current is UnreadState.HasUnread || current is UnreadState.HasNoUnread         -> true
                         else                                                                           -> false
                     }
@@ -1132,12 +1136,17 @@ class TimelineViewModel @AssistedInject constructor(
                 } else {
                     UnreadState.Unknown
                 }
+        // If the read marker is at the bottom-most event, this doesn't mean we read all, in case we just haven't loaded more events.
+        // Avoid incorrectly returning HasNoUnread in this case.
+        if (firstDisplayableEventIndex == 0 && timeline.hasMoreToLoad(Timeline.Direction.FORWARDS)) {
+            return UnreadState.Unknown
+        }
         for (i in (firstDisplayableEventIndex - 1) downTo 0) {
             val timelineEvent = events.getOrNull(i) ?: return UnreadState.Unknown
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown
             val isFromMe = timelineEvent.root.senderId == session.myUserId
             if (!isFromMe) {
-                return UnreadState.HasUnread(eventId)
+                return UnreadState.HasUnread(eventId, readMarkerIdSnapshot)
             }
         }
         return UnreadState.HasNoUnread
