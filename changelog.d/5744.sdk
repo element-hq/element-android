@@ -1,0 +1,3 @@
+A lot of classes which were exposed to the clients and were located in the package `org.matrix.android.sdk.internal` have been moved to the package `org.matrix.android.sdk.api`.
+All the classes which are in the package `org.matrix.android.sdk.internal` should now be declared `internal`.
+Some unused code and classes have been removed.
