@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.crypto.keysbackup
 
 /**
  * Data model for response to [KeysBackup.getKeysBackupTrust()].
+ * TODO Members should be only val
  */
 data class KeysBackupVersionTrust(
         /**

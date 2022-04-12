@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 
 /**
  * A signature in a `KeysBackupVersionTrust` object.
+ * TODO Make it a data class with only val
  */
 class KeysBackupVersionTrustSignature {
 
