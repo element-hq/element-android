@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import androidx.core.view.isVisible
+import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
@@ -28,6 +29,8 @@ import im.vector.app.features.location.live.LocationLiveMessageBannerViewState
 abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocationItem.Holder>() {
 
     // TODO define the needed attributes
+    @EpoxyAttribute
+    var currentUserId: String? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -35,33 +38,57 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
     }
 
     private fun bindLocationLiveBanner(holder: Holder) {
+        // TODO add check on device id to confirm that is the one that sent the beacon
+        val isEmitter = currentUserId != null && currentUserId == userId
         val messageLayout = attributes.informationData.messageLayout
-        val viewState = if (messageLayout is TimelineMessageLayout.Bubble) {
-            LocationLiveMessageBannerViewState.Emitter(
-                    remainingTimeInMillis = 4000 * 1000L,
-                    bottomStartCornerRadiusInDp = messageLayout.cornersRadius.bottomStartRadius,
-                    bottomEndCornerRadiusInDp = messageLayout.cornersRadius.bottomEndRadius,
-                    isStopButtonCenteredVertically = false
-            )
-        } else {
-            val dimensionConverter = DimensionConverter(holder.view.resources)
-            val cornerRadius = dimensionConverter.dpToPx(8).toFloat()
-//            LocationLiveMessageBannerViewState.Watcher(
-//                    bottomStartCornerRadiusInDp = cornerRadius,
-//                    bottomEndCornerRadiusInDp = cornerRadius,
-//                    formattedLocalTimeOfEndOfLive = "12:34",
-//            )
-            LocationLiveMessageBannerViewState.Emitter(
-                    remainingTimeInMillis = 4000 * 1000L,
-                    bottomStartCornerRadiusInDp = cornerRadius,
-                    bottomEndCornerRadiusInDp = cornerRadius,
-                    isStopButtonCenteredVertically = true
-            )
-        }
+        val viewState = buildViewState(holder, messageLayout, isEmitter)
         holder.locationLiveMessageBanner.isVisible = true
         holder.locationLiveMessageBanner.render(viewState)
-
         // TODO adjust Copyright map placement if needed
+    }
+
+    private fun buildViewState(
+            holder: Holder,
+            messageLayout: TimelineMessageLayout,
+            isEmitter: Boolean
+    ): LocationLiveMessageBannerViewState {
+        return when {
+            messageLayout is TimelineMessageLayout.Bubble && isEmitter ->
+                LocationLiveMessageBannerViewState.Emitter(
+                        remainingTimeInMillis = 4000 * 1000L,
+                        bottomStartCornerRadiusInDp = messageLayout.cornersRadius.bottomStartRadius,
+                        bottomEndCornerRadiusInDp = messageLayout.cornersRadius.bottomEndRadius,
+                        isStopButtonCenteredVertically = false
+                )
+            messageLayout is TimelineMessageLayout.Bubble              ->
+                LocationLiveMessageBannerViewState.Watcher(
+                        bottomStartCornerRadiusInDp = messageLayout.cornersRadius.bottomStartRadius,
+                        bottomEndCornerRadiusInDp = messageLayout.cornersRadius.bottomEndRadius,
+                        formattedLocalTimeOfEndOfLive = "12:34",
+                )
+            isEmitter                                                  -> {
+                val cornerRadius = getBannerCornerRadiusForDefaultLayout(holder)
+                LocationLiveMessageBannerViewState.Emitter(
+                        remainingTimeInMillis = 4000 * 1000L,
+                        bottomStartCornerRadiusInDp = cornerRadius,
+                        bottomEndCornerRadiusInDp = cornerRadius,
+                        isStopButtonCenteredVertically = true
+                )
+            }
+            else                                                       -> {
+                val cornerRadius = getBannerCornerRadiusForDefaultLayout(holder)
+                LocationLiveMessageBannerViewState.Watcher(
+                        bottomStartCornerRadiusInDp = cornerRadius,
+                        bottomEndCornerRadiusInDp = cornerRadius,
+                        formattedLocalTimeOfEndOfLive = "12:34",
+                )
+            }
+        }
+    }
+
+    private fun getBannerCornerRadiusForDefaultLayout(holder: Holder): Float {
+        val dimensionConverter = DimensionConverter(holder.view.resources)
+        return dimensionConverter.dpToPx(8).toFloat()
     }
 
     class Holder : AbsMessageLocationItem.Holder() {
