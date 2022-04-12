@@ -251,7 +251,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     sum = realm.createObject(ReactionAggregatedSummaryEntity::class.java)
                     sum.key = reaction
                     sum.firstTimestamp = event.originServerTs ?: 0
-                    Timber.v("Adding synced reaction $reaction")
+                    Timber.v("Adding synced reaction")
                     sum.count = 1
                     // reactionEventId not included in the /relations API
 //                    sum.sourceEvents.add(reactionEventId)

@@ -597,11 +597,11 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 sum.key = reaction
                 sum.firstTimestamp = event.originServerTs ?: 0
                 if (isLocalEcho) {
-                    Timber.v("Adding local echo reaction $reaction")
+                    Timber.v("Adding local echo reaction")
                     sum.sourceLocalEcho.add(txId)
                     sum.count = 1
                 } else {
-                    Timber.v("Adding synced reaction $reaction")
+                    Timber.v("Adding synced reaction")
                     sum.count = 1
                     sum.sourceEvents.add(reactionEventId)
                 }
@@ -613,16 +613,16 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                     // check if it's not the sync of a local echo
                     if (!isLocalEcho && sum.sourceLocalEcho.contains(txId)) {
                         // ok it has already been counted, just sync the list, do not touch count
-                        Timber.v("Ignoring synced of local echo for reaction $reaction")
+                        Timber.v("Ignoring synced of local echo for reaction")
                         sum.sourceLocalEcho.remove(txId)
                         sum.sourceEvents.add(reactionEventId)
                     } else {
                         sum.count += 1
                         if (isLocalEcho) {
-                            Timber.v("Adding local echo reaction $reaction")
+                            Timber.v("Adding local echo reaction")
                             sum.sourceLocalEcho.add(txId)
                         } else {
-                            Timber.v("Adding synced reaction $reaction")
+                            Timber.v("Adding synced reaction")
                             sum.sourceEvents.add(reactionEventId)
                         }
 

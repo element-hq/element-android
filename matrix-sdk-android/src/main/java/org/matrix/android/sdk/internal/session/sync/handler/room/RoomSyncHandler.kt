@@ -107,7 +107,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                        isInitialSync: Boolean,
                        aggregator: SyncResponsePostTreatmentAggregator,
                        reporter: ProgressReporter? = null) {
-        Timber.v("Execute transaction from $this")
         handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, aggregator, reporter)
         handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, aggregator, reporter)
         handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, aggregator, reporter)
