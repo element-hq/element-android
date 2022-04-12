@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.database.lightweight
+package org.matrix.android.sdk.internal.settings
 
 import android.content.Context
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import javax.inject.Inject
 
@@ -28,21 +29,20 @@ import javax.inject.Inject
  * on the sdk without using the database. This should be used just for sdk/user preferences and
  * not for large data sets
  */
-
-class LightweightSettingsStorage  @Inject constructor(
+internal class DefaultLightweightSettingsStorage @Inject constructor(
         context: Context,
         private val matrixConfiguration: MatrixConfiguration
-) {
+) : LightweightSettingsStorage {
 
     private val sdkDefaultPrefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
 
-    fun setThreadMessagesEnabled(enabled: Boolean) {
+    override fun setThreadMessagesEnabled(enabled: Boolean) {
         sdkDefaultPrefs.edit {
             putBoolean(MATRIX_SDK_SETTINGS_THREAD_MESSAGES_ENABLED, enabled)
         }
     }
 
-    fun areThreadMessagesEnabled(): Boolean {
+    override fun areThreadMessagesEnabled(): Boolean {
         return sdkDefaultPrefs.getBoolean(MATRIX_SDK_SETTINGS_THREAD_MESSAGES_ENABLED, matrixConfiguration.threadMessagesEnabledDefault)
     }
 

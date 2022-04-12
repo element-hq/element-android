@@ -24,7 +24,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.settings.VectorPreferences
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Inject
 
 /**
