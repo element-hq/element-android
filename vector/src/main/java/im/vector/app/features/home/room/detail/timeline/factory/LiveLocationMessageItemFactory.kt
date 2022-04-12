@@ -54,7 +54,7 @@ class LiveLocationMessageItemFactory @Inject constructor(
             attributes: AbsMessageItem.Attributes,
     ): MessageLiveLocationStartItem {
         val width = timelineMediaSizeProvider.getMaxSize().first
-        val height = dimensionConverter.dpToPx(200)
+        val height = dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
         return MessageLiveLocationStartItem_()
                 .attributes(attributes)

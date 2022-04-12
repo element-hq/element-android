@@ -229,7 +229,7 @@ class MessageItemFactory @Inject constructor(
         attributes: AbsMessageItem.Attributes,
     ): MessageLocationItem? {
         val width = timelineMediaSizeProvider.getMaxSize().first
-        val height = dimensionConverter.dpToPx(200)
+        val height = dimensionConverter.dpToPx(MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
         val locationUrl = locationContent.toLocationData()?.let {
             urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
@@ -777,5 +777,6 @@ class MessageItemFactory @Inject constructor(
 
     companion object {
         private const val MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT = 5
+        const val MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP = 200
     }
 }
