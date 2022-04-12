@@ -16,8 +16,6 @@
 
 package org.matrix.android.sdk.api.session.crypto.keysbackup
 
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrustSignature
-
 /**
  * Data model for response to [KeysBackup.getKeysBackupTrust()].
  */
