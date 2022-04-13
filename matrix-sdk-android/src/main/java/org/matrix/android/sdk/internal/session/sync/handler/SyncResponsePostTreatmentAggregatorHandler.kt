@@ -79,7 +79,9 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
     }
 
     private suspend fun fetchAndUpdateUsers(userIdsToFetch: List<String>) {
-        fetchUsers(userIdsToFetch).saveLocally()
+        fetchUsers(userIdsToFetch)
+                .takeIf { it.isNotEmpty() }
+                ?.saveLocally()
     }
 
     private suspend fun fetchUsers(userIdsToFetch: List<String>) = userIdsToFetch.mapNotNull {
@@ -91,11 +93,8 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
 
     private fun List<User>.saveLocally() {
         val userEntities = map { user -> UserEntityFactory.create(user) }
-
-        if (userEntities.isNotEmpty()) {
-            monarchy.doWithRealm {
-                it.insertOrUpdate(userEntities)
-            }
+        monarchy.doWithRealm {
+            it.insertOrUpdate(userEntities)
         }
     }
 }
