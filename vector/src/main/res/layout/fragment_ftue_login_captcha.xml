@@ -82,7 +82,6 @@
         app:layout_constraintHeight_percent="0.03"
         app:layout_constraintTop_toBottomOf="@id/captchaHeaderSubtitle" />
 
-    <!-- contentDescription does not work on WebView? -->
     <WebView
         android:id="@+id/loginCaptchaWevView"
         android:layout_width="0dp"
@@ -105,5 +104,3 @@
         tools:ignore="UnknownId,NotSibling" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

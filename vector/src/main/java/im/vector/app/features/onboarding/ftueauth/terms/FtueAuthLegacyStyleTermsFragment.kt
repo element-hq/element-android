@@ -88,8 +88,6 @@ class FtueAuthLegacyStyleTermsFragment @Inject constructor(
 
     private fun renderState() {
         policyController.setData(loginTermsViewState.localizedFlowDataLoginTermsChecked)
-
-        // Button is enabled only if all checkboxes are checked
         views.loginTermsSubmit.isEnabled = loginTermsViewState.allChecked()
     }
 
