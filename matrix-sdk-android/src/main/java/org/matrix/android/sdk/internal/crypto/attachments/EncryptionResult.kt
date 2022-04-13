@@ -20,9 +20,8 @@ import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 
 /**
  * Define the result of an encryption file
- * TODO var should be val
  */
 internal data class EncryptionResult(
-        var encryptedFileInfo: EncryptedFileInfo,
-        var encryptedByteArray: ByteArray
+        val encryptedFileInfo: EncryptedFileInfo,
+        val encryptedByteArray: ByteArray
 )
