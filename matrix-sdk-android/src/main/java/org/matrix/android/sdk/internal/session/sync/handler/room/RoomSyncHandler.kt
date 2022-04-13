@@ -206,6 +206,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                          syncLocalTimestampMillis: Long,
                                          aggregator: SyncResponsePostTreatmentAggregator): RoomEntity {
         Timber.v("Handle join sync for room $roomId")
+        val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
         val ephemeralResult = (roomSync.ephemeral as? LazyRoomSyncEphemeral.Parsed)
                 ?._roomSyncEphemeral
@@ -240,7 +241,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 }
                 // Give info to crypto module
                 cryptoService.onStateEvent(roomId, event)
-                roomMemberEventHandler.handle(realm, roomId, event, aggregator)
+                roomMemberEventHandler.handle(realm, roomId, event, isInitialSync, aggregator)
             }
         }
         if (roomSync.timeline?.events?.isNotEmpty() == true) {
@@ -282,6 +283,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                   insertType: EventInsertType,
                                   syncLocalTimestampMillis: Long): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
+        val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
         roomEntity.membership = Membership.INVITE
         if (roomSync.inviteState != null && roomSync.inviteState.events.isNotEmpty()) {
@@ -295,7 +297,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     eventId = eventEntity.eventId
                     root = eventEntity
                 }
-                roomMemberEventHandler.handle(realm, roomId, event)
+                roomMemberEventHandler.handle(realm, roomId, event, isInitialSync)
             }
         }
         val inviterEvent = roomSync.inviteState?.events?.lastOrNull {
@@ -311,6 +313,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                roomSync: RoomSync,
                                insertType: EventInsertType,
                                syncLocalTimestampMillis: Long): RoomEntity {
+        val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
         for (event in roomSync.state?.events.orEmpty()) {
             if (event.eventId == null || event.stateKey == null || event.type == null) {
@@ -322,7 +325,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 eventId = event.eventId
                 root = eventEntity
             }
-            roomMemberEventHandler.handle(realm, roomId, event)
+            roomMemberEventHandler.handle(realm, roomId, event, isInitialSync)
         }
         for (event in roomSync.timeline?.events.orEmpty()) {
             if (event.eventId == null || event.senderId == null || event.type == null) {
@@ -336,7 +339,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     root = eventEntity
                 }
                 if (event.type == EventType.STATE_ROOM_MEMBER) {
-                    roomMemberEventHandler.handle(realm, roomEntity.roomId, event)
+                    roomMemberEventHandler.handle(realm, roomEntity.roomId, event, isInitialSync)
                 }
             }
         }
@@ -380,10 +383,10 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 continue
             }
 
-            eventIds.add(event.eventId)
-            liveEventService.get().dispatchLiveEventReceived(event, roomId, insertType == EventInsertType.INITIAL_SYNC)
-
             val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
+
+            eventIds.add(event.eventId)
+            liveEventService.get().dispatchLiveEventReceived(event, roomId, isInitialSync)
 
             if (event.isEncrypted() && !isInitialSync) {
                 runBlocking {
@@ -403,9 +406,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     root = eventEntity
                 }
                 if (event.type == EventType.STATE_ROOM_MEMBER) {
-                    val fixedContent = event.getFixedRoomMemberContent()
-                    roomMemberContentsByUser[event.stateKey] = fixedContent
-                    roomMemberEventHandler.handle(realm, roomEntity.roomId, event.stateKey, fixedContent, aggregator)
+                    roomMemberContentsByUser[event.stateKey] = event.getFixedRoomMemberContent()
+                    roomMemberEventHandler.handle(realm, roomEntity.roomId, event, isInitialSync, aggregator)
                 }
             }
 
