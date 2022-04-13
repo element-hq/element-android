@@ -28,6 +28,7 @@ import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -131,6 +132,10 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     fun stopSharingLocation(roomId: String) {
         Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
+
+        // Send a new beacon info state by setting live field as false
+        updateStoppedBeaconInfo(roomId)
+
         synchronized(roomArgsList) {
             roomArgsList.removeAll { it.roomId == roomId }
             if (roomArgsList.isEmpty()) {
@@ -138,6 +143,25 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 destroyMe()
             }
         }
+    }
+
+    private fun updateStoppedBeaconInfo(roomId: String) {
+        activeSessionHolder
+                .getSafeActiveSession()
+                ?.let { session ->
+                    session.coroutineScope.launch(session.coroutineDispatchers.io) {
+                        val room = session.getRoom(roomId)
+                        EventType
+                                .STATE_ROOM_BEACON_INFO
+                                .mapNotNull {
+                                    room?.getStateEvent(it, QueryStringValue.Equals(session.myUserId))
+                                }
+                                .firstOrNull()
+                                ?.let { beaconInfoEvent ->
+                                    room?.stopLiveLocation(beaconInfoEvent)
+                                }
+                    }
+                }
     }
 
     override fun onLocationUpdate(locationData: LocationData) {

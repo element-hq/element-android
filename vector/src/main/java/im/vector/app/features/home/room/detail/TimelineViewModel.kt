@@ -1095,20 +1095,7 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleStopLiveLocationSharing() {
-        viewModelScope.launch {
-            EventType
-                    .STATE_ROOM_BEACON_INFO
-                    .mapNotNull {
-                        room.getStateEvent(it, QueryStringValue.Equals(session.myUserId))
-                    }
-                    .firstOrNull()
-                    ?.let { beaconInfoEvent ->
-                        room.stopLiveLocation(beaconInfoEvent)
-                    }
-                    ?.also {
-                        locationSharingServiceConnection.stopLiveLocationSharing(room.roomId)
-                    }
-        }
+        locationSharingServiceConnection.stopLiveLocationSharing(room.roomId)
     }
 
     private fun observeRoomSummary() {
