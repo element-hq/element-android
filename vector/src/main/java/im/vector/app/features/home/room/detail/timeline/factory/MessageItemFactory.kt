@@ -96,6 +96,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
@@ -145,6 +146,7 @@ class MessageItemFactory @Inject constructor(
     private val locationPinProvider: LocationPinProvider,
     private val vectorPreferences: VectorPreferences,
     private val urlMapProvider: UrlMapProvider,
+    private val liveLocationMessageItemFactory: LiveLocationMessageItemFactory,
 ) {
 
     // TODO inject this properly?
@@ -212,6 +214,7 @@ class MessageItemFactory @Inject constructor(
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
             }
+            is LiveLocationBeaconContent -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
             else -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
@@ -226,7 +229,7 @@ class MessageItemFactory @Inject constructor(
         attributes: AbsMessageItem.Attributes,
     ): MessageLocationItem? {
         val width = timelineMediaSizeProvider.getMaxSize().first
-        val height = dimensionConverter.dpToPx(200)
+        val height = dimensionConverter.dpToPx(MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
 
         val locationUrl = locationContent.toLocationData()?.let {
             urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
@@ -774,5 +777,6 @@ class MessageItemFactory @Inject constructor(
 
     companion object {
         private const val MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT = 5
+        const val MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP = 200
     }
 }

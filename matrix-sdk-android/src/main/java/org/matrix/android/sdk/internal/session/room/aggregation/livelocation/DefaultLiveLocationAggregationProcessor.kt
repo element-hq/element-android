@@ -41,6 +41,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
         }
 
         // A beacon info state event has to be sent before sending location
+        // TODO handle missing check of m_relatesTo field
         var beaconInfoEntity: CurrentStateEventEntity? = null
         val eventTypesIterator = EventType.STATE_ROOM_BEACON_INFO.iterator()
         while (beaconInfoEntity == null && eventTypesIterator.hasNext()) {
@@ -66,11 +67,11 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
         // Check if beacon info is outdated
         if (isBeaconInfoOutdated(beaconInfoContent, content)) {
             Timber.v("## LIVE LOCATION. Beacon info has timeout")
-            return
+            beaconInfoContent.hasTimedOut = true
+        } else {
+            beaconInfoContent.lastLocationContent = content
         }
 
-        // Update last location info of the beacon state event
-        beaconInfoContent.lastLocationContent = content
         beaconInfoEntity.root?.content = ContentMapper.map(beaconInfoContent.toContent())
     }
 
