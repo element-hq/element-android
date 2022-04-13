@@ -30,6 +30,17 @@ In any case, it is better to explicitly declare in the description why the PR is
 
 Also, draft PR should not stay indefinitely in this state. It may be removed if it is the case and the submitter does not update it after a few days.
 
+##### Base branch
+
+The `develop` branch is generally the base branch for every PRs.
+
+Exceptions can occur:
+
+- if a feature implementation is split into multiple PRs. We can have a chain of PRs in this case. PR can be merged one by one on develop, and GitHub change the target branch to `develop` for the next PR automatically.
+- we want to merge a PR from the community, but there is still work to do, and the PR is not updated by the submitter. In this case, we can create a new branch, push it, and change the target branch of the PR to this new branch. The PR can then be merged, and we can add more commits to fix the issues. After that a new PR can be created with `develop` as a target branch.
+
+**Important notice:** Releases are created from the `develop` branch. So `develop` branch should always contain a "releasable" source code. So when a feature is being implemented with several PRs, it has to be disabled by default, until the feature is fully implemented. A last PR to enable the feature can then be created.
+
 ##### PR Review Assignment
 
 We use automatic assignment for PR reviews. A PR is automatically routed by GitHub to a team member using the round robin algorithm. The process is the following:
