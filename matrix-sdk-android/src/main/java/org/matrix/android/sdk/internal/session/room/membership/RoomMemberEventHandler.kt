@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import io.realm.Realm
+import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -122,24 +123,20 @@ internal class RoomMemberEventHandler @Inject constructor(
                                       roomId: String,
                                       eventUserId: String,
                                       roomMember: RoomMemberContent,
-                                      prevContent: Map<String, Any>?,
+                                      prevContent: Content?,
                                       aggregator: SyncResponsePostTreatmentAggregator?): Boolean {
-        val previousDisplayName = prevContent?.get("displayname")
-        val previousAvatar = prevContent?.get("avatar_url")
+        if (aggregator != null) {
+            val previousDisplayName = prevContent?.get("displayname") as? String
+            val previousAvatar = prevContent?.get("avatar_url") as? String
 
-        if (previousDisplayName.isDifferentFrom(roomMember.displayName) ||
-                previousAvatar.isDifferentFrom(roomMember.avatarUrl)) {
-            aggregator?.userIdsToFetch?.add(eventUserId)
+            if (previousDisplayName != roomMember.displayName || previousAvatar != roomMember.avatarUrl) {
+                aggregator.userIdsToFetch.add(eventUserId)
+            }
         }
 
         saveRoomMemberEntityLocally(realm, roomId, eventUserId, roomMember)
         // At the end of the sync, fetch all the profiles from the aggregator
         updateDirectChatsIfNecessary(roomId, roomMember, aggregator)
         return true
-    }
-
-    private fun Any?.isDifferentFrom(value: Any?) = when {
-        this == null || this == value -> false
-        else                          -> true
     }
 }
