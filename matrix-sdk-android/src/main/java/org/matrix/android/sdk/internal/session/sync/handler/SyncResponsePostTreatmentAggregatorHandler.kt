@@ -68,9 +68,9 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
                         }
 
                 // remove roomId from currentDirectUserId entry
-                hasUpdate = hasUpdate or(directChats[currentDirectUserId]?.remove(roomId) == true)
+                hasUpdate = hasUpdate or (directChats[currentDirectUserId]?.remove(roomId) == true)
                 // remove currentDirectUserId entry if there is no attached room anymore
-                hasUpdate = hasUpdate or(directChats.takeIf { it[currentDirectUserId].isNullOrEmpty() }?.remove(currentDirectUserId) != null)
+                hasUpdate = hasUpdate or (directChats.takeIf { it[currentDirectUserId].isNullOrEmpty() }?.remove(currentDirectUserId) != null)
             }
         }
         if (hasUpdate) {
@@ -79,11 +79,11 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
     }
 
     private suspend fun fetchAndUpdateUsers(userIdsToFetch: List<String>) {
-        fetchUsers(userIdsToFetch)?.saveLocally()
+        fetchUsers(userIdsToFetch).saveLocally()
     }
 
-    private suspend fun fetchUsers(userIdsToFetch: List<String>) = tryOrNull {
-        userIdsToFetch.map {
+    private suspend fun fetchUsers(userIdsToFetch: List<String>) = userIdsToFetch.mapNotNull {
+        tryOrNull {
             val profileJson = getProfileInfoTask.execute(GetProfileInfoTask.Params(it))
             User.fromJson(it, profileJson)
         }
