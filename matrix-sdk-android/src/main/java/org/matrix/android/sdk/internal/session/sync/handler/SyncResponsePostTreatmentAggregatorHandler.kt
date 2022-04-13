@@ -77,13 +77,12 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         }
     }
 
-    private suspend fun fetchAndUpdateUsers(usersToFetch: MutableList<String>) {
+    private suspend fun fetchAndUpdateUsers(usersToFetch: List<String>) {
         val userProfiles = fetchUsers(usersToFetch)
         userProfiles.forEach { saveUserLocally(monarchy, it) }
-        usersToFetch.clear()
     }
 
-    private suspend fun fetchUsers(usersToFetch: MutableList<String>) = usersToFetch.map {
+    private suspend fun fetchUsers(usersToFetch: List<String>) = usersToFetch.map {
         val profileJson = profileService.getProfile(it)
         User.fromJson(it, profileJson)
     }
