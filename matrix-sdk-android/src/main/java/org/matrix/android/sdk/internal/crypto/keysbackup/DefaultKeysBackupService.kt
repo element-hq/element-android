@@ -409,19 +409,21 @@ internal class DefaultKeysBackupService @Inject constructor(
      */
     @WorkerThread
     private fun getKeysBackupTrustBg(keysBackupVersion: KeysVersionResult): KeysBackupVersionTrust {
-        val keysBackupVersionTrust = KeysBackupVersionTrust()
         val authData = keysBackupVersion.getAuthDataAsMegolmBackupAuthData()
 
         if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
-            return keysBackupVersionTrust
+            return KeysBackupVersionTrust()
         }
 
         val mySigs = authData.signatures[userId]
         if (mySigs.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Ignoring key backup because it lacks any signatures from this user")
-            return keysBackupVersionTrust
+            return KeysBackupVersionTrust()
         }
+
+        var keysBackupVersionTrustIsUsable = false
+        val keysBackupVersionTrustSignatures = mutableListOf<KeysBackupVersionTrustSignature>()
 
         for ((keyId, mySignature) in mySigs) {
             // XXX: is this how we're supposed to get the device id?
@@ -449,7 +451,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                     }
 
                     if (isSignatureValid && device.isVerified) {
-                        keysBackupVersionTrust.usable = true
+                        keysBackupVersionTrustIsUsable = true
                     }
                 }
 
@@ -457,11 +459,14 @@ internal class DefaultKeysBackupService @Inject constructor(
                 signature.device = device
                 signature.valid = isSignatureValid
                 signature.deviceId = deviceId
-                keysBackupVersionTrust.signatures.add(signature)
+                keysBackupVersionTrustSignatures.add(signature)
             }
         }
 
-        return keysBackupVersionTrust
+        return KeysBackupVersionTrust(
+                usable = keysBackupVersionTrustIsUsable,
+                signatures = keysBackupVersionTrustSignatures
+        )
     }
 
     override fun trustKeysBackupVersion(keysBackupVersion: KeysVersionResult,

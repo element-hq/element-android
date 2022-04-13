@@ -18,17 +18,16 @@ package org.matrix.android.sdk.api.session.crypto.keysbackup
 
 /**
  * Data model for response to [KeysBackup.getKeysBackupTrust()].
- * TODO Members should be only val
  */
 data class KeysBackupVersionTrust(
         /**
          * Flag to indicate if the backup is trusted.
          * true if there is a signature that is valid & from a trusted device.
          */
-        var usable: Boolean = false,
+        val usable: Boolean = false,
 
         /**
          * Signatures found in the backup version.
          */
-        var signatures: MutableList<KeysBackupVersionTrustSignature> = ArrayList()
+        val signatures: List<KeysBackupVersionTrustSignature> = emptyList()
 )
