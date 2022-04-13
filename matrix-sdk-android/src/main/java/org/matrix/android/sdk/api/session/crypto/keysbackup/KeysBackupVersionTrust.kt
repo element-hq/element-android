@@ -24,7 +24,7 @@ data class KeysBackupVersionTrust(
          * Flag to indicate if the backup is trusted.
          * true if there is a signature that is valid & from a trusted device.
          */
-        val usable: Boolean = false,
+        val usable: Boolean,
 
         /**
          * Signatures found in the backup version.

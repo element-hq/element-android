@@ -413,13 +413,13 @@ internal class DefaultKeysBackupService @Inject constructor(
 
         if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
-            return KeysBackupVersionTrust()
+            return KeysBackupVersionTrust(usable = false)
         }
 
         val mySigs = authData.signatures[userId]
         if (mySigs.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Ignoring key backup because it lacks any signatures from this user")
-            return KeysBackupVersionTrust()
+            return KeysBackupVersionTrust(usable = false)
         }
 
         var keysBackupVersionTrustIsUsable = false
