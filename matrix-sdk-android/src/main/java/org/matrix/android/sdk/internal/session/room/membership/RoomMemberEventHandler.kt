@@ -41,8 +41,8 @@ internal class RoomMemberEventHandler @Inject constructor(
         if (event.type != EventType.STATE_ROOM_MEMBER) {
             return false
         }
-        val roomMember = event.getFixedRoomMemberContent() ?: return false
         val eventUserId = event.stateKey ?: return false
+        val roomMember = event.getFixedRoomMemberContent() ?: return false
 
         return if (isInitialSync) {
             handleInitialSync(realm, roomId, myUserId, eventUserId, roomMember, aggregator)
