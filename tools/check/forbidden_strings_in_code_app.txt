@@ -14,5 +14,5 @@
 # limitations under the License.
 #
 
-### You should not use code from internal SDK package. Either move them to the API package, or add a proper API to access this code, and add internal keyword SDK side.
+### You should not use code from the SDK package `org.matrix.android.sdk.internal`. Either move the code to the package `org.matrix.android.sdk.api`, or add a proper API to access this code, and add `internal` keyword SDK side.
 import org.matrix.android.sdk.internal
