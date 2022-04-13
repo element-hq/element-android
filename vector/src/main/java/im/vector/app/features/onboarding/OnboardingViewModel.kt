@@ -615,10 +615,10 @@ class OnboardingViewModel @AssistedInject constructor(
                         onAuthenticationStartedSuccess(homeServerConnectionConfig, it, serverTypeOverride)
                     },
                     onFailure = {
-                        setState { copy(isLoading = false) }
                         _viewEvents.post(OnboardingViewEvents.Failure(it))
                     }
             )
+            setState { copy(isLoading = false) }
         }
     }
 
@@ -632,7 +632,6 @@ class OnboardingViewModel @AssistedInject constructor(
             copy(
                     serverType = alignServerTypeAfterSubmission(config, serverTypeOverride),
                     selectedHomeserver = authResult.selectedHomeserver,
-                    isLoading = false
             )
         }
         val state = awaitState()
