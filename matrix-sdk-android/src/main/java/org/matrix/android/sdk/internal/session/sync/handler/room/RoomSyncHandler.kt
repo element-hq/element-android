@@ -283,6 +283,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                   roomSync: InvitedRoomSync,
                                   insertType: EventInsertType,
                                   syncLocalTimestampMillis: Long): RoomEntity {
+        Timber.v("Handle invited sync for room $roomId")
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
         roomEntity.membership = Membership.INVITE
