@@ -19,9 +19,9 @@ package org.matrix.android.sdk.internal.crypto
 import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestState
 
 internal interface OutgoingGossipingRequest {
-    var recipients: Map<String, List<String>>
-    var requestId: String
-    var state: OutgoingGossipingRequestState
+    val recipients: Map<String, List<String>>
+    val requestId: String
+    val state: OutgoingGossipingRequestState
     // transaction id for the cancellation, if any
     // var cancellationTxnId: String?
 }

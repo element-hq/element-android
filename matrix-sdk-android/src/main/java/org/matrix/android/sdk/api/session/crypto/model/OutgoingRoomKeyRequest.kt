@@ -25,14 +25,14 @@ import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequest
 @JsonClass(generateAdapter = true)
 data class OutgoingRoomKeyRequest(
         // RequestBody
-        var requestBody: RoomKeyRequestBody?,
+        val requestBody: RoomKeyRequestBody?,
         // list of recipients for the request
-        override var recipients: Map<String, List<String>>,
+        override val recipients: Map<String, List<String>>,
         // Unique id for this request. Used for both
         // an id within the request for later pairing with a cancellation, and for
         // the transaction id when sending the to_device messages to our local
-        override var requestId: String, // current state of this request
-        override var state: OutgoingGossipingRequestState
+        override val requestId: String, // current state of this request
+        override val state: OutgoingGossipingRequestState
         // transaction id for the cancellation, if any
         // override var cancellationTxnId: String? = null
 ) : OutgoingGossipingRequest {
@@ -43,9 +43,7 @@ data class OutgoingRoomKeyRequest(
      * @return the room id.
      */
     val roomId: String?
-        get() = if (null != requestBody) {
-            requestBody!!.roomId
-        } else null
+        get() = requestBody?.roomId
 
     /**
      * Used only for log.
@@ -53,7 +51,5 @@ data class OutgoingRoomKeyRequest(
      * @return the session id
      */
     val sessionId: String?
-        get() = if (null != requestBody) {
-            requestBody!!.sessionId
-        } else null
+        get() = requestBody?.sessionId
 }

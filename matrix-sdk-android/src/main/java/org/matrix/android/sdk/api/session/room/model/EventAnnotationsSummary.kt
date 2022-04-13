@@ -16,9 +16,9 @@
 package org.matrix.android.sdk.api.session.room.model
 
 data class EventAnnotationsSummary(
-        var eventId: String,
-        var reactionsSummary: List<ReactionAggregatedSummary> = emptyList(),
-        var editSummary: EditAggregatedSummary? = null,
-        var pollResponseSummary: PollResponseAggregatedSummary? = null,
-        var referencesAggregatedSummary: ReferencesAggregatedSummary? = null
+        val eventId: String,
+        val reactionsSummary: List<ReactionAggregatedSummary> = emptyList(),
+        val editSummary: EditAggregatedSummary? = null,
+        val pollResponseSummary: PollResponseAggregatedSummary? = null,
+        val referencesAggregatedSummary: ReferencesAggregatedSummary? = null
 )

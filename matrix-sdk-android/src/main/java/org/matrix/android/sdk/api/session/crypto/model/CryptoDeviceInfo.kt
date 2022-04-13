@@ -22,12 +22,12 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoInfo
 data class CryptoDeviceInfo(
         val deviceId: String,
         override val userId: String,
-        var algorithms: List<String>? = null,
+        val algorithms: List<String>? = null,
         override val keys: Map<String, String>? = null,
         override val signatures: Map<String, Map<String, String>>? = null,
         val unsigned: UnsignedDeviceInfo? = null,
         var trustLevel: DeviceTrustLevel? = null,
-        var isBlocked: Boolean = false,
+        val isBlocked: Boolean = false,
         val firstTimeSeenLocalTs: Long? = null
 ) : CryptoInfo {
 
