@@ -73,8 +73,6 @@ class CaptchaWebview @Inject constructor(
                 if (!container.isAdded) {
                     return
                 }
-
-                // Show loader
                 progressView.isVisible = true
             }
 
@@ -84,66 +82,29 @@ class CaptchaWebview @Inject constructor(
                 if (!container.isAdded) {
                     return
                 }
-
-                // Hide loader
                 progressView.isVisible = false
             }
 
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
                 Timber.d("## onReceivedSslError() : ${error.certificate}")
-
                 if (!container.isAdded) {
                     return
                 }
-
-                MaterialAlertDialogBuilder(container.requireActivity())
-                        .setMessage(R.string.ssl_could_not_verify)
-                        .setPositiveButton(R.string.ssl_trust) { _, _ ->
-                            Timber.d("## onReceivedSslError() : the user trusted")
-                            handler.proceed()
-                        }
-                        .setNegativeButton(R.string.ssl_do_not_trust) { _, _ ->
-                            Timber.d("## onReceivedSslError() : the user did not trust")
-                            handler.cancel()
-                        }
-                        .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                            if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                                handler.cancel()
-                                Timber.d("## onReceivedSslError() : the user dismisses the trust dialog.")
-                                dialog.dismiss()
-                                return@OnKeyListener true
-                            }
-                            false
-                        })
-                        .setCancelable(false)
-                        .show()
+                showSslErrorDialog(container, handler)
             }
 
-            // common error message
             private fun onError(errorMessage: String) {
                 Timber.e("## onError() : $errorMessage")
-
-                // TODO
-                // Toast.makeText(this@AccountCreationCaptchaActivity, errorMessage, Toast.LENGTH_LONG).show()
-
-                // on error case, close this activity
-                // runOnUiThread(Runnable { finish() })
             }
 
             @SuppressLint("NewApi")
             override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, errorResponse: WebResourceResponse) {
                 super.onReceivedHttpError(view, request, errorResponse)
-
                 if (request.url.toString().endsWith("favicon.ico")) {
                     // Ignore this error
                     return
                 }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    onError(errorResponse.reasonPhrase)
-                } else {
-                    onError(errorResponse.toString())
-                }
+                onError(errorResponse.toText())
             }
 
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
@@ -154,17 +115,7 @@ class CaptchaWebview @Inject constructor(
 
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (url?.startsWith("js:") == true) {
-                    var json = url.substring(3)
-                    var javascriptResponse: JavascriptResponse? = null
-
-                    try {
-                        // URL decode
-                        json = URLDecoder.decode(json, "UTF-8")
-                        javascriptResponse = MatrixJsonParser.getMoshi().adapter(JavascriptResponse::class.java).fromJson(json)
-                    } catch (e: Exception) {
-                        Timber.e(e, "## shouldOverrideUrlLoading(): failed")
-                    }
-
+                    val javascriptResponse = parseJsonFromUrl(url)
                     val response = javascriptResponse?.response
                     if (javascriptResponse?.action == "verifyCallback" && response != null) {
                         onSuccess(response)
@@ -172,6 +123,42 @@ class CaptchaWebview @Inject constructor(
                 }
                 return true
             }
+
+            private fun parseJsonFromUrl(url: String): JavascriptResponse? {
+                return try {
+                    val json = URLDecoder.decode(url.substringAfter("js:"), "UTF-8")
+                    MatrixJsonParser.getMoshi().adapter(JavascriptResponse::class.java).fromJson(json)
+                } catch (e: Exception) {
+                    Timber.e(e, "## shouldOverrideUrlLoading(): failed")
+                    null
+                }
+            }
         }
     }
+
+    private fun showSslErrorDialog(container: Fragment, handler: SslErrorHandler) {
+        MaterialAlertDialogBuilder(container.requireActivity())
+                .setMessage(R.string.ssl_could_not_verify)
+                .setPositiveButton(R.string.ssl_trust) { _, _ ->
+                    Timber.d("## onReceivedSslError() : the user trusted")
+                    handler.proceed()
+                }
+                .setNegativeButton(R.string.ssl_do_not_trust) { _, _ ->
+                    Timber.d("## onReceivedSslError() : the user did not trust")
+                    handler.cancel()
+                }
+                .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
+                    if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                        handler.cancel()
+                        Timber.d("## onReceivedSslError() : the user dismisses the trust dialog.")
+                        dialog.dismiss()
+                        return@OnKeyListener true
+                    }
+                    false
+                })
+                .setCancelable(false)
+                .show()
+    }
 }
+
+private fun WebResourceResponse.toText() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) reasonPhrase else toString()
