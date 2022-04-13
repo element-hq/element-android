@@ -1,0 +1,1 @@
+Fix endless loading if the event from a permalink is not found

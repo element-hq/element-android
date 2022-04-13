@@ -179,11 +179,11 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .asFlow()
                 .onEach { status ->
                     when (status) {
-                        is SyncStatusService.Status.Progressing -> {
+                        is SyncStatusService.Status.InitialSyncProgressing -> {
                             // Schedule a check of the bootstrap when the init sync will be finished
                             checkBootstrap = true
                         }
-                        is SyncStatusService.Status.Idle        -> {
+                        is SyncStatusService.Status.Idle                   -> {
                             if (checkBootstrap) {
                                 checkBootstrap = false
                                 maybeBootstrapCrossSigningAfterInitialSync()

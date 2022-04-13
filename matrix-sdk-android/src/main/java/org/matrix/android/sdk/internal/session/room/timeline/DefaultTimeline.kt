@@ -223,7 +223,15 @@ internal class DefaultTimeline(private val roomId: String,
         updateState(direction) {
             it.copy(loading = true)
         }
-        val loadMoreResult = strategy.loadMore(count, direction, fetchOnServerIfNeeded)
+        val loadMoreResult = try {
+            strategy.loadMore(count, direction, fetchOnServerIfNeeded)
+        } catch (throwable: Throwable) {
+            // Timeline could not be loaded with a (likely) permanent issue, such as the
+            // server now knowing the initialEventId, so we want to show an error message
+            // and possibly restart without initialEventId.
+            onTimelineFailure(throwable)
+            return false
+        }
         Timber.v("$baseLogMessage: result $loadMoreResult")
         val hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END
         updateState(direction) {
@@ -338,6 +346,14 @@ internal class DefaultTimeline(private val roomId: String,
             Timber.v("Post $direction pagination state: $state ")
             listeners.forEach {
                 tryOrNull { it.onStateUpdated(direction, state) }
+            }
+        }
+    }
+
+    private fun onTimelineFailure(throwable: Throwable) {
+        timelineScope.launch(coroutineDispatchers.main) {
+            listeners.forEach {
+                tryOrNull { it.onTimelineFailure(throwable) }
             }
         }
     }

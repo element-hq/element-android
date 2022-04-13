@@ -226,6 +226,9 @@ internal fun ChunkEntity.isMoreRecentThan(chunkToCheck: ChunkEntity): Boolean {
     if (chunkToCheck.doesNextChunksVerifyCondition { it == this }) {
         return true
     }
+    if (this.doesNextChunksVerifyCondition { it == chunkToCheck }) {
+        return false
+    }
     // Otherwise check if this chunk is linked to last forward
     if (this.doesNextChunksVerifyCondition { it.isLastForward }) {
         return true

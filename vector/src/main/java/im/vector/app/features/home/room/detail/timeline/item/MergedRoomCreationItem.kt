@@ -133,7 +133,10 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         val membersCount = roomSummary?.otherMemberIds?.size ?: 0
 
         if (isDirect) {
-            holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_dm, roomSummary?.displayName ?: "")
+            holder.roomDescriptionText.text = holder.view.resources.getString(
+                    R.string.this_is_the_beginning_of_dm,
+                    distinctMergeData.lastOrNull()?.memberName ?: ""
+            )
         } else if (roomDisplayName.isNullOrBlank() || roomSummary.name.isBlank()) {
             holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)
         } else {

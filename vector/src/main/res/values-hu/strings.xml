@@ -457,7 +457,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
         <item quantity="one">%d tagság változás</item>
         <item quantity="other">%d tagság változás</item>
     </plurals>
-    <string name="list_members">Tagok listázása</string>
+    <string name="list_members">Tagok</string>
     <plurals name="room_title_members">
         <item quantity="one">%d tag</item>
         <item quantity="other">%d tag</item>
@@ -1785,7 +1785,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="space_leave_prompt_msg_as_admin">Ön az egyetlen adminisztrátora a térnek. Ha kilép, senki nem tudja irányítani.</string>
     <string name="space_leave_prompt_msg_private">Amíg nem hívnak meg újra nem tudsz újracsatlakozni.</string>
     <string name="space_leave_prompt_msg_only_you">Csak te van itt. Ha kilépsz, akkor a jövőben senki nem tud majd ide belépni, beleértve téged is.</string>
-    <string name="leave_space">Tér elhagyása</string>
+    <string name="leave_space">Elhagyás</string>
     <string name="space_add_child_title">Szobák hozzáadása</string>
     <string name="space_explore_activity_title">Szobák felderítése</string>
     <plurals name="space_people_you_know">
@@ -2419,4 +2419,23 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s és mások</string>
     <string name="room_notification_two_users_are_typing">%1$s és %2$s</string>
+    <string name="location_in_background_missing_permission_dialog_content">Ha folyamatosan meg akarod osztani a földrajzi pozíciódat ahhoz a(z) ${app_name} alkalmazásnak hozzá kell férnie a helyadatokhoz akkor is ha a háttérben fut.
+\nCsak az általad megadott idő intervallumban férünk hozzá a helyadatokhoz.</string>
+    <string name="threads_notice_migration_message">Egyre közelebb kerülünk ahhoz, hogy publikus béta állapotba kerüljenek az üzenetszálak.
+\n
+\nAz előkészületekkel be kell vezetnünk pár változtatást: az eddig a pontig készített üzenetszálak hagyományos válaszokként fognak megjelenni.
+\n
+\nEz egy egyszeri változtatás ahogy az üzenetszálak ezentúl a Matrix specifikáció részét képezik.</string>
+    <string name="location_share_live_stop">Állj</string>
+    <string name="location_share_live_enabled">Folyamatos pozíció megosztás engedélyezve</string>
+    <string name="location_in_background_missing_permission_dialog_title">Hozzáférés engedélyezése</string>
+    <string name="a11y_location_share_option_pinned_icon">Ennek a földrajzi helynek a megosztása</string>
+    <string name="location_share_option_pinned">Ennek a földrajzi helynek a megosztása</string>
+    <string name="a11y_location_share_option_user_live_icon">Pozícióm folyamatos megosztása</string>
+    <string name="location_share_option_user_live">Pozícióm folyamatos megosztása</string>
+    <string name="a11y_location_share_option_user_current_icon">Jelenlegi pozícióm megosztása</string>
+    <string name="location_share_option_user_current">Jelenlegi pozícióm megosztása</string>
+    <string name="a11y_location_share_locate_button">Ugrás a jelenlegi pozícióra</string>
+    <string name="a11y_location_share_pin_on_map">Kiválasztott hely rögzítése a térképen</string>
+    <string name="threads_notice_migration_title">Üzenetszálak lassan béta állapotba kerülnek 🎉</string>
 </resources>

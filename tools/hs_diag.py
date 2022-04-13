@@ -65,6 +65,6 @@ for item in items:
     print("# " + item[0] + " (" + item[1] + ")")
     print("====================================================================================================")
     if item[2]:
-        os.system("curl -s -X GET '" + item[1] + "' | python -m json.tool")
+        os.system("curl -s -X GET '" + item[1] + "' | python3 -m json.tool")
     else:
-        os.system("curl -s -X POST --data $'{}' '" + item[1] + "' | python -m json.tool")
+        os.system("curl -s -X POST --data $'{}' '" + item[1] + "' | python3 -m json.tool")

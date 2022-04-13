@@ -87,6 +87,8 @@ import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationMan
 import org.matrix.android.sdk.internal.session.openid.DefaultOpenIdService
 import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkService
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DefaultLiveLocationAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.create.RoomCreateEventProcessor
 import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcessor
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
@@ -390,4 +392,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindEventSenderProcessor(processor: EventSenderProcessorCoroutine): EventSenderProcessor
+
+    @Binds
+    abstract fun bindLiveLocationAggregationProcessor(processor: DefaultLiveLocationAggregationProcessor): LiveLocationAggregationProcessor
 }

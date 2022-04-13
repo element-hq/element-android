@@ -52,7 +52,8 @@ import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupLastVersionResult
+import org.matrix.android.sdk.internal.crypto.keysbackup.model.toKeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.util.awaitCallback
@@ -426,9 +427,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     Timber.v("## Keybackup secret not restored from SSSS")
                 }
 
-                val version = awaitCallback<KeysVersionResult?> {
+                val version = awaitCallback<KeysBackupLastVersionResult> {
                     session.cryptoService().keysBackupService().getCurrentVersion(it)
-                } ?: return@launch
+                }.toKeysVersionResult() ?: return@launch
 
                 awaitCallback<ImportRoomKeysResult> {
                     session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(

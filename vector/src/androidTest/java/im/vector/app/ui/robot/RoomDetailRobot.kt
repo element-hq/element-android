@@ -56,8 +56,10 @@ class RoomDetailRobot {
         // Menu
         openMenu()
         pressBack()
+        /* TODO something has changed in the menu :/
         clickMenu(R.id.voice_call)
         pressBack()
+         */
         clickMenu(R.id.video_call)
         pressBack()
     }

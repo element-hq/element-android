@@ -59,7 +59,7 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
     }
 
     private fun setupUi(state: OnboardingViewState) {
-        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
+        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.selectedHomeserver.userFacingUrl.toReducedUrl())
     }
 
     private fun setupSubmitButton() {

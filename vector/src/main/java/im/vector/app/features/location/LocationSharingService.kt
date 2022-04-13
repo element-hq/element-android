@@ -17,12 +17,22 @@
 package im.vector.app.features.location
 
 import android.content.Intent
+import android.os.Binder
 import android.os.IBinder
 import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorService
+import im.vector.app.core.time.Clock
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.room.model.livelocation.BeaconInfo
+import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
@@ -40,6 +50,10 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var locationTracker: LocationTracker
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var clock: Clock
+
+    private val binder = LocalBinder()
 
     private var roomArgsList = mutableListOf<RoomArgs>()
     private var timers = mutableListOf<Timer>()
@@ -67,9 +81,37 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
             // Schedule a timer to stop sharing
             scheduleTimer(roomArgs.roomId, roomArgs.durationMillis)
+
+            // Send beacon info state event
+            activeSessionHolder
+                    .getSafeActiveSession()
+                    ?.let { session ->
+                        session.coroutineScope.launch(session.coroutineDispatchers.io) {
+                            sendBeaconInfo(session, roomArgs)
+                        }
+                    }
         }
 
         return START_STICKY
+    }
+
+    private suspend fun sendBeaconInfo(session: Session, roomArgs: RoomArgs) {
+        val beaconContent = LiveLocationBeaconContent(
+                unstableBeaconInfo = BeaconInfo(
+                        timeout = roomArgs.durationMillis,
+                        isLive = true
+                ),
+                unstableTimestampAsMilliseconds = clock.epochMillis()
+        ).toContent()
+
+        val stateKey = session.myUserId
+        session
+                .getRoom(roomArgs.roomId)
+                ?.sendStateEvent(
+                        eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
+                        stateKey = stateKey,
+                        body = beaconContent
+                )
     }
 
     private fun scheduleTimer(roomId: String, durationMillis: Long) {
@@ -100,6 +142,26 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     override fun onLocationUpdate(locationData: LocationData) {
         Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
+
+        // Emit location update to all rooms in which live location sharing is active
+        roomArgsList.toList().forEach { roomArg ->
+            sendLiveLocation(roomArg.roomId, locationData)
+        }
+    }
+
+    private fun sendLiveLocation(roomId: String, locationData: LocationData) {
+        val room = activeSessionHolder.getSafeActiveSession()?.getRoom(roomId)
+        room
+                ?.getStateEvent(EventType.STATE_ROOM_BEACON_INFO.first())
+                ?.eventId
+                ?.let {
+                    room.sendLiveLocation(
+                            beaconInfoEventId = it,
+                            latitude = locationData.latitude,
+                            longitude = locationData.longitude,
+                            uncertainty = locationData.uncertainty
+                    )
+                }
     }
 
     override fun onLocationProviderIsNotAvailable() {
@@ -120,8 +182,12 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         destroyMe()
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
+    override fun onBind(intent: Intent?): IBinder {
+        return binder
+    }
+
+    inner class LocalBinder : Binder() {
+        fun getService(): LocationSharingService = this@LocationSharingService
     }
 
     companion object {

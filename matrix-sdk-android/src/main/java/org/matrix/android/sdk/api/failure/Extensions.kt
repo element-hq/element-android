@@ -29,6 +29,11 @@ fun Throwable.is401() =
                 httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED && /* 401 */
                 error.code == MatrixError.M_UNAUTHORIZED
 
+fun Throwable.is404() =
+        this is Failure.ServerError &&
+                httpCode == HttpsURLConnection.HTTP_NOT_FOUND && /* 404 */
+                error.code == MatrixError.M_NOT_FOUND
+
 fun Throwable.isTokenError() =
         this is Failure.ServerError &&
                 (error.code == MatrixError.M_UNKNOWN_TOKEN ||

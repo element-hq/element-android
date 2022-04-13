@@ -1,1 +1,0 @@
-Update Jitsi lib from 3.10.0 to 5.0.2

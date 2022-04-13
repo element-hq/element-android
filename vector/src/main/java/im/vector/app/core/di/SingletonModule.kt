@@ -121,7 +121,6 @@ object VectorStaticModule {
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
                 threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
-                presenceSyncEnabled = BuildConfig.PRESENCE_SYNC_ENABLED
         )
     }
 

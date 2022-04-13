@@ -49,6 +49,8 @@ object EventType {
     const val STATE_ROOM_JOIN_RULES = "m.room.join_rules"
     const val STATE_ROOM_GUEST_ACCESS = "m.room.guest_access"
     const val STATE_ROOM_POWER_LEVELS = "m.room.power_levels"
+    val STATE_ROOM_BEACON_INFO = listOf("org.matrix.msc3672.beacon_info", "m.beacon_info")
+    val BEACON_LOCATION_DATA = listOf("org.matrix.msc3672.beacon", "m.beacon")
 
     const val STATE_SPACE_CHILD = "m.space.child"
 

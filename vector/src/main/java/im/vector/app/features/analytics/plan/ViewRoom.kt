@@ -64,6 +64,11 @@ data class ViewRoom(
         MessageUser,
 
         /**
+         * Room accessed via space explore
+         */
+        MobileExploreRooms,
+
+        /**
          * Room switched due to user interacting with a file search result.
          */
         MobileFileSearch,
@@ -74,10 +79,25 @@ data class ViewRoom(
         MobileInCall,
 
         /**
+         * Room accessed during external sharing
+         */
+        MobileLinkShare,
+
+        /**
+         * Room accessed via link
+         */
+        MobilePermalink,
+
+        /**
          * Room accessed via interacting with direct chat item in the room
          * contact detail screen.
          */
         MobileRoomMemberDetail,
+
+        /**
+         * Room accessed via preview
+         */
+        MobileRoomPreview,
 
         /**
          * Room switched due to user interacting with a room search result.
@@ -95,6 +115,11 @@ data class ViewRoom(
          * contact detail screen.
          */
         MobileSpaceMemberDetail,
+
+        /**
+         * Room accessed via space members list
+         */
+        MobileSpaceMembers,
 
         /**
          * Space accessed via interacting with the space menu.
