@@ -91,8 +91,11 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
 
     private fun List<User>.saveLocally() {
         val userEntities = map { user -> UserEntityFactory.create(user) }
-        monarchy.doWithRealm {
-            it.insertOrUpdate(userEntities)
+
+        if (userEntities.isNotEmpty()) {
+            monarchy.doWithRealm {
+                it.insertOrUpdate(userEntities)
+            }
         }
     }
 }
