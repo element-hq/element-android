@@ -20,23 +20,21 @@ import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 
 /**
  * A signature in a `KeysBackupVersionTrust` object.
- * TODO Make it a data class with only val
  */
-class KeysBackupVersionTrustSignature {
+data class KeysBackupVersionTrustSignature(
+        /**
+         * The id of the device that signed the backup version.
+         */
+        val deviceId: String?,
 
-    /**
-     * The id of the device that signed the backup version.
-     */
-    var deviceId: String? = null
+        /**
+         * The device that signed the backup version.
+         * Can be null if the device is not known.
+         */
+        val device: CryptoDeviceInfo?,
 
-    /**
-     * The device that signed the backup version.
-     * Can be null if the device is not known.
-     */
-    var device: CryptoDeviceInfo? = null
-
-    /**
-     * Flag to indicate the signature from this device is valid.
-     */
-    var valid = false
-}
+        /**
+         * Flag to indicate the signature from this device is valid.
+         */
+        val valid: Boolean,
+)

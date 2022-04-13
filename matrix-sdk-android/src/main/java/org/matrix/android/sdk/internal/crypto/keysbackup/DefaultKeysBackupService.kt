@@ -455,10 +455,11 @@ internal class DefaultKeysBackupService @Inject constructor(
                     }
                 }
 
-                val signature = KeysBackupVersionTrustSignature()
-                signature.device = device
-                signature.valid = isSignatureValid
-                signature.deviceId = deviceId
+                val signature = KeysBackupVersionTrustSignature(
+                        deviceId = deviceId,
+                        device = device,
+                        valid = isSignatureValid,
+                )
                 keysBackupVersionTrustSignatures.add(signature)
             }
         }
