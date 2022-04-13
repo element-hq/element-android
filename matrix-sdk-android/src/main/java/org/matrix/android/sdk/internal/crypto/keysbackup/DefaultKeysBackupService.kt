@@ -1108,7 +1108,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                                    privateKeySalt: String,
                                    privateKeyIterations: Int,
                                    progressListener: ProgressListener): ByteArray {
-         return deriveKey(passphrase, privateKeySalt, privateKeyIterations, progressListener)
+        return deriveKey(passphrase, privateKeySalt, privateKeyIterations, progressListener)
     }
 
     /**
