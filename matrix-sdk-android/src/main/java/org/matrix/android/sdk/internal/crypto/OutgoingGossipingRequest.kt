@@ -16,7 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-interface OutgoingGossipingRequest {
+import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestState
+
+internal interface OutgoingGossipingRequest {
     var recipients: Map<String, List<String>>
     var requestId: String
     var state: OutgoingGossipingRequestState

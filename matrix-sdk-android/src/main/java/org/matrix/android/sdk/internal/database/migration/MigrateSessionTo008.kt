@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntit
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo008(realm: DynamicRealm) : RealmMigrator(realm, 8) {
+internal class MigrateSessionTo008(realm: DynamicRealm) : RealmMigrator(realm, 8) {
 
     override fun doMigrate(realm: DynamicRealm) {
         val editionOfEventSchema = realm.schema.create("EditionOfEvent")

@@ -46,6 +46,7 @@ import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.CancelableBag
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.NoOpCancellable
+import org.matrix.android.sdk.api.util.TextContent
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider

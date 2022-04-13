@@ -31,7 +31,7 @@ import im.vector.app.features.login.AbstractLoginFragment
 import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginViewState
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
+import org.matrix.android.sdk.api.auth.data.LocalizedFlowDataLoginTerms
 import javax.inject.Inject
 
 @Parcelize

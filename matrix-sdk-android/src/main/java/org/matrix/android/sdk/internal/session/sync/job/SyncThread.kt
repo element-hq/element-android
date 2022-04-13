@@ -37,10 +37,10 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
 import org.matrix.android.sdk.internal.session.call.ActiveCallHandler
 import org.matrix.android.sdk.internal.session.sync.SyncTask
+import org.matrix.android.sdk.internal.settings.DefaultLightweightSettingsStorage
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
 import org.matrix.android.sdk.internal.util.Debouncer
 import org.matrix.android.sdk.internal.util.createUIHandler
@@ -60,7 +60,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                                               private val networkConnectivityChecker: NetworkConnectivityChecker,
                                               private val backgroundDetectionObserver: BackgroundDetectionObserver,
                                               private val activeCallHandler: ActiveCallHandler,
-                                              private val lightweightSettingsStorage: LightweightSettingsStorage
+                                              private val lightweightSettingsStorage: DefaultLightweightSettingsStorage
 ) : Thread("SyncThread"), NetworkConnectivityChecker.Listener, BackgroundDetectionObserver.Listener {
 
     private var state: SyncState = SyncState.Idle

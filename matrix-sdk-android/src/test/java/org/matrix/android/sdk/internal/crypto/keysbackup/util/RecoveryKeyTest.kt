@@ -22,6 +22,9 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.matrix.android.sdk.MatrixTest
+import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.isValidRecoveryKey
 
 class RecoveryKeyTest : MatrixTest {
 

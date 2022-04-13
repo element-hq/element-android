@@ -79,9 +79,9 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
+import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
-import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
 import timber.log.Timber
 import javax.inject.Inject
 

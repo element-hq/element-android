@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'realm-android'
+apply plugin: "org.jetbrains.dokka"
 
 buildscript {
     repositories {
@@ -73,6 +74,10 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += [
+                // Disabled for now, there are too many errors. Could be handled in another dedicated PR
+                // '-Xexplicit-api=strict', // or warning
+        ]
     }
 
     sourceSets {

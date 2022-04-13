@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * https://matrix.org/docs/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
  */
 @JsonClass(generateAdapter = true)
-data class EventFilter(
+internal data class EventFilter(
         /**
          * The maximum number of events to return.
          */

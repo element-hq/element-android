@@ -22,7 +22,7 @@ import im.vector.app.core.ui.list.GenericItem_
 import im.vector.app.core.utils.createUIHandler
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
-import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequest
+import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequest
 import javax.inject.Inject
 
 class OutgoingKeyRequestPagedController @Inject constructor() : PagedListEpoxyController<OutgoingRoomKeyRequest>(

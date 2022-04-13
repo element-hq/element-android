@@ -27,7 +27,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.BottomSheetGenericListBinding
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
 
 class DeviceListFragment @Inject constructor(

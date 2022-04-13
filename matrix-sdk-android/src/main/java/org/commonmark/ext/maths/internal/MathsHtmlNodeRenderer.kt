@@ -22,7 +22,7 @@ import org.commonmark.renderer.html.HtmlNodeRendererContext
 import org.commonmark.renderer.html.HtmlWriter
 import java.util.Collections
 
-class MathsHtmlNodeRenderer(private val context: HtmlNodeRendererContext) : MathsNodeRenderer() {
+internal class MathsHtmlNodeRenderer(private val context: HtmlNodeRendererContext) : MathsNodeRenderer() {
     private val html: HtmlWriter = context.writer
     override fun render(node: Node) {
         val display = node.javaClass == DisplayMaths::class.java

@@ -22,7 +22,7 @@ import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.internal.network.ssl.Fingerprint
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 
 sealed interface OnboardingAction : VectorViewModelAction {
     data class OnGetStarted(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction

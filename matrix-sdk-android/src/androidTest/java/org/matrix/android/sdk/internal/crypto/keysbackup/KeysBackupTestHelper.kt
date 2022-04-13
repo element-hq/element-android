@@ -22,16 +22,16 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.assertDictEquals
 import org.matrix.android.sdk.common.assertListEquals
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import java.util.concurrent.CountDownLatch
 
-class KeysBackupTestHelper(
+internal class KeysBackupTestHelper(
         private val testHelper: CommonTestHelper,
         private val cryptoTestHelper: CryptoTestHelper) {
 

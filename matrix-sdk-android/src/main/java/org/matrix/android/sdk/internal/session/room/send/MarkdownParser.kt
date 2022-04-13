@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import org.matrix.android.sdk.api.util.TextContent
 import org.matrix.android.sdk.internal.session.room.AdvancedCommonmarkParser
 import org.matrix.android.sdk.internal.session.room.SimpleCommonmarkParser
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils

@@ -16,10 +16,11 @@
 
 package org.matrix.android.sdk.internal.crypto.attachments
 
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 
 /**
  * Define the result of an encryption file
+ * TODO var should be val
  */
 internal data class EncryptionResult(
         var encryptedFileInfo: EncryptedFileInfo,

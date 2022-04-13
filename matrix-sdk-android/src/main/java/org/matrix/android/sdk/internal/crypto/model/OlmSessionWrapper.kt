@@ -22,7 +22,7 @@ import org.matrix.olm.OlmSession
 /**
  * Encapsulate a OlmSession and a last received message Timestamp
  */
-data class OlmSessionWrapper(
+internal data class OlmSessionWrapper(
         // The associated olm session.
         val olmSession: OlmSession,
         // Timestamp at which the session last received a message.

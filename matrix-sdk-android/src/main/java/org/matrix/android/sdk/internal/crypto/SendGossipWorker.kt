@@ -21,14 +21,15 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.failure.shouldBeRetried
+import org.matrix.android.sdk.api.session.crypto.model.GossipingRequestState
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.SecretSendEventContent
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
@@ -38,8 +39,11 @@ import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class SendGossipWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<SendGossipWorker.Params>(context, params, sessionManager, Params::class.java) {
+internal class SendGossipWorker(
+        context: Context,
+        params: WorkerParameters,
+        sessionManager: SessionManager
+) : SessionSafeCoroutineWorker<SendGossipWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

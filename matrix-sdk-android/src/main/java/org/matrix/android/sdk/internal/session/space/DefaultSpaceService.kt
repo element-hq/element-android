@@ -43,6 +43,7 @@ import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
 import org.matrix.android.sdk.api.session.space.model.SpaceParentContent
+import org.matrix.android.sdk.api.session.space.peeking.SpacePeekResult
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomGetter
 import org.matrix.android.sdk.internal.session.room.SpaceGetter
@@ -51,7 +52,6 @@ import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoom
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.space.peeking.PeekSpaceTask
-import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
 import javax.inject.Inject
 
 internal class DefaultSpaceService @Inject constructor(

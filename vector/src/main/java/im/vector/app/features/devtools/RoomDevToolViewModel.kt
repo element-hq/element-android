@@ -38,8 +38,8 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.util.JsonDict
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.di.MoshiProvider
 
 class RoomDevToolViewModel @AssistedInject constructor(
         @Assisted val initialState: RoomDevToolViewState,
@@ -75,7 +75,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                 }
             }
             is RoomDevToolAction.ShowStateEvent            -> {
-                val jsonString = MoshiProvider.providesMoshi()
+                val jsonString = MatrixJsonParser.getMoshi()
                         .adapter(Event::class.java)
                         .toJson(action.event)
 
@@ -168,7 +168,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                 val room = session.getRoom(initialState.roomId)
                         ?: throw IllegalArgumentException(stringProvider.getString(R.string.room_error_not_found))
 
-                val adapter = MoshiProvider.providesMoshi()
+                val adapter = MatrixJsonParser.getMoshi()
                         .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
                 val json = adapter.fromJson(state.editedContent ?: "")
                         ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_content))
@@ -202,7 +202,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                 val room = session.getRoom(initialState.roomId)
                         ?: throw IllegalArgumentException(stringProvider.getString(R.string.room_error_not_found))
 
-                val adapter = MoshiProvider.providesMoshi()
+                val adapter = MatrixJsonParser.getMoshi()
                         .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
                 val json = adapter.fromJson(state.sendEventDraft?.content ?: "")
                         ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_content))

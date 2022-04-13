@@ -33,9 +33,9 @@ import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import org.matrix.android.sdk.api.util.appendParamToUrl
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import java.net.URL
 import java.util.UUID
 import javax.inject.Inject
@@ -168,7 +168,7 @@ class JitsiService @Inject constructor(
         return tryOrNull {
             val response = session.getOkHttpClient().newCall(request).await()
             val json = response.body?.string() ?: return null
-            MoshiProvider.providesMoshi().adapter(JitsiWellKnown::class.java).fromJson(json)?.auth
+            MatrixJsonParser.getMoshi().adapter(JitsiWellKnown::class.java).fromJson(json)?.auth
         }
     }
 }

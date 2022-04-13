@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntit
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-class MigrateCryptoTo006(realm: DynamicRealm) : RealmMigrator(realm, 6) {
+internal class MigrateCryptoTo006(realm: DynamicRealm) : RealmMigrator(realm, 6) {
 
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Updating CryptoMetadataEntity table")

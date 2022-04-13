@@ -19,7 +19,7 @@ package im.vector.app.test.fakes
 import androidx.lifecycle.MutableLiveData
 import io.mockk.mockk
 import org.matrix.android.sdk.api.session.crypto.CryptoService
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 
 class FakeCryptoService : CryptoService by mockk() {
 

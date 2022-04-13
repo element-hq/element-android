@@ -21,7 +21,6 @@ import android.media.AudioManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import timber.log.Timber
-import java.util.HashSet
 
 @RequiresApi(Build.VERSION_CODES.M)
 internal class API23AudioDeviceDetector(private val audioManager: AudioManager,

@@ -23,7 +23,7 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.platform.GenericIdArgs
 import im.vector.app.features.roomprofile.RoomProfileArgs
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary

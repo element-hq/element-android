@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo023(realm: DynamicRealm) : RealmMigrator(realm, 23) {
+internal class MigrateSessionTo023(realm: DynamicRealm) : RealmMigrator(realm, 23) {
 
     override fun doMigrate(realm: DynamicRealm) {
         val eventEntity = realm.schema.get("TimelineEventEntity") ?: return

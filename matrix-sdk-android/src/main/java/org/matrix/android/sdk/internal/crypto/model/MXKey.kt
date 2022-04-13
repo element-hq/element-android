@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.crypto.model
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 
-data class MXKey(
+internal data class MXKey(
         /**
          * The type of the key (in the example: "signed_curve25519").
          */
