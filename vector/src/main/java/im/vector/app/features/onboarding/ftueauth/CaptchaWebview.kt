@@ -69,28 +69,23 @@ class CaptchaWebview @Inject constructor(
         webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
-
-                if (!container.isAdded) {
-                    return
+                if (container.isAdded) {
+                    progressView.isVisible = true
                 }
-                progressView.isVisible = true
             }
 
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
-
-                if (!container.isAdded) {
-                    return
+                if (container.isAdded) {
+                    progressView.isVisible = false
                 }
-                progressView.isVisible = false
             }
 
             override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
                 Timber.d("## onReceivedSslError() : ${error.certificate}")
-                if (!container.isAdded) {
-                    return
+                if (container.isAdded) {
+                    showSslErrorDialog(container, handler)
                 }
-                showSslErrorDialog(container, handler)
             }
 
             private fun onError(errorMessage: String) {
@@ -100,11 +95,12 @@ class CaptchaWebview @Inject constructor(
             @SuppressLint("NewApi")
             override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, errorResponse: WebResourceResponse) {
                 super.onReceivedHttpError(view, request, errorResponse)
-                if (request.url.toString().endsWith("favicon.ico")) {
-                    // Ignore this error
-                    return
+                when {
+                    request.url.toString().endsWith("favicon.ico") -> {
+                        // ignore favicon errors
+                    }
+                    else                                           -> onError(errorResponse.toText())
                 }
-                onError(errorResponse.toText())
             }
 
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
