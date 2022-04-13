@@ -129,7 +129,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 }
     }
 
-    private fun stopSharingLocation(roomId: String) {
+    fun stopSharingLocation(roomId: String) {
         Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
         synchronized(roomArgsList) {
             roomArgsList.removeAll { it.roomId == roomId }
