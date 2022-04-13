@@ -129,7 +129,7 @@ internal class RoomMemberEventHandler @Inject constructor(
 
         if (previousDisplayName.isDifferentFrom(roomMember.displayName) ||
                 previousAvatar.isDifferentFrom(roomMember.avatarUrl)) {
-            aggregator?.usersToFetch?.add(eventUserId)
+            aggregator?.userIdsToFetch?.add(eventUserId)
         }
 
         saveRoomMemberEntityLocally(realm, roomId, eventUserId, roomMember)

@@ -24,5 +24,5 @@ internal class SyncResponsePostTreatmentAggregator {
     val directChatsToCheck = mutableMapOf<String, String>()
 
     // List of userIds to fetch and update at the end of incremental syncs
-    val usersToFetch = mutableListOf<String>()
+    val userIdsToFetch = mutableListOf<String>()
 }

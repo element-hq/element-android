@@ -18,9 +18,10 @@ package org.matrix.android.sdk.internal.session.sync.handler
 
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.MatrixPatterns
-import org.matrix.android.sdk.api.session.profile.ProfileService
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
 import org.matrix.android.sdk.internal.session.sync.RoomSyncEphemeralTemporaryStore
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
@@ -33,13 +34,13 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val ephemeralTemporaryStore: RoomSyncEphemeralTemporaryStore,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
-        private val profileService: ProfileService,
+        private val getProfileInfoTask: GetProfileInfoTask,
         @SessionDatabase private val monarchy: Monarchy,
 ) {
     suspend fun handle(aggregator: SyncResponsePostTreatmentAggregator) {
         cleanupEphemeralFiles(aggregator.ephemeralFilesToDelete)
         updateDirectUserIds(aggregator.directChatsToCheck)
-        fetchAndUpdateUsers(aggregator.usersToFetch)
+        fetchAndUpdateUsers(aggregator.userIdsToFetch)
     }
 
     private fun cleanupEphemeralFiles(ephemeralFilesToDelete: List<String>) {
@@ -77,20 +78,21 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         }
     }
 
-    private suspend fun fetchAndUpdateUsers(usersToFetch: List<String>) {
-        val userProfiles = fetchUsers(usersToFetch)
-        userProfiles.forEach { saveUserLocally(monarchy, it) }
+    private suspend fun fetchAndUpdateUsers(userIdsToFetch: List<String>) {
+        fetchUsers(userIdsToFetch)?.saveLocally()
     }
 
-    private suspend fun fetchUsers(usersToFetch: List<String>) = usersToFetch.map {
-        val profileJson = profileService.getProfile(it)
-        User.fromJson(it, profileJson)
+    private suspend fun fetchUsers(userIdsToFetch: List<String>) = tryOrNull {
+        userIdsToFetch.map {
+            val profileJson = getProfileInfoTask.execute(GetProfileInfoTask.Params(it))
+            User.fromJson(it, profileJson)
+        }
     }
 
-    private fun saveUserLocally(monarchy: Monarchy, user: User) {
-        val userEntity = UserEntityFactory.create(user)
+    private fun List<User>.saveLocally() {
+        val userEntities = map { user -> UserEntityFactory.create(user) }
         monarchy.doWithRealm {
-            it.insertOrUpdate(userEntity)
+            it.insertOrUpdate(userEntities)
         }
     }
 }
