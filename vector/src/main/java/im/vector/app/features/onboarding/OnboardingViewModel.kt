@@ -349,18 +349,17 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleUpdateSignMode(action: OnboardingAction.UpdateSignMode) {
-        setState {
-            copy(
-                    signMode = action.signMode
-            )
-        }
-
+        updateSignMode(action.signMode)
         when (action.signMode) {
             SignMode.SignUp             -> handleRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
             SignMode.SignIn             -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown            -> Unit
         }
+    }
+
+    private fun updateSignMode(signMode: SignMode) {
+        setState { copy(signMode = signMode) }
     }
 
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
@@ -644,8 +643,14 @@ class OnboardingViewModel @AssistedInject constructor(
                 updateServerSelection(config, serverTypeOverride, authResult)
                 if (authResult.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
                     when (awaitState().onboardingFlow) {
-                        OnboardingFlow.SignIn -> internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
-                        OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+                        OnboardingFlow.SignIn -> {
+                            updateSignMode(SignMode.SignIn)
+                            internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+                        }
+                        OnboardingFlow.SignUp -> {
+                            updateSignMode(SignMode.SignUp)
+                            internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+                        }
                         OnboardingFlow.SignInSignUp,
                         null                  -> {
                             _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
