@@ -100,7 +100,7 @@ interface CryptoService {
 
     fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
 
-    fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
+    suspend fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
 
     fun isRoomEncrypted(roomId: String): Boolean
 

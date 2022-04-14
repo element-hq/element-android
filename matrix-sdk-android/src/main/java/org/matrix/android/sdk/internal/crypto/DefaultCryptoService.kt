@@ -132,7 +132,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val sender: RequestSender,
+        private val requestSender: RequestSender,
         private val crossSigningService: CrossSigningService,
         private val verificationService: RustVerificationService,
         private val keysBackupService: RustKeyBackupService,
@@ -248,7 +248,7 @@ internal class DefaultCryptoService @Inject constructor(
                 .executeBy(taskExecutor)
     }
 
-    override fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
+    override suspend fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
         return if (onlyBackedUp) {
             keysBackupService.getTotalNumbersOfBackedUpKeys()
         } else {
@@ -594,7 +594,6 @@ internal class DefaultCryptoService @Inject constructor(
 //                Timber.e(throwable, "## CRYPTO | onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
 //            } finally {
             val userIds = getRoomUserIds(roomId)
-            olmMachine.updateTrackedUsers(userIds)
             setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), userIds)
 //            }
         }
@@ -758,14 +757,18 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private suspend fun uploadKeys(request: Request.KeysUpload) {
-        val response = this.sender.uploadKeys(request)
-        this.olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_UPLOAD, response)
+        try {
+            val response = requestSender.uploadKeys(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_UPLOAD, response)
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO uploadKeys(): error")
+        }
     }
 
     private suspend fun queryKeys(request: Request.KeysQuery) {
         try {
-            val response = this.sender.queryKeys(request)
-            this.olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_QUERY, response)
+            val response = requestSender.queryKeys(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_QUERY, response)
 
             // Update the shields!
             cryptoCoroutineScope.launch {
@@ -781,18 +784,38 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private suspend fun sendToDevice(request: Request.ToDevice) {
-        this.sender.sendToDevice(request)
-        olmMachine.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")
+        try {
+            requestSender.sendToDevice(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO sendToDevice(): error")
+        }
     }
 
     private suspend fun claimKeys(request: Request.KeysClaim) {
-        val response = this.sender.claimKeys(request)
-        olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, response)
+        try {
+            val response = requestSender.claimKeys(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, response)
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO claimKeys(): error")
+        }
     }
 
     private suspend fun signatureUpload(request: Request.SignatureUpload) {
-        this.sender.sendSignatureUpload(request)
-        olmMachine.markRequestAsSent(request.requestId, RequestType.SIGNATURE_UPLOAD, "{}")
+        try {
+            requestSender.sendSignatureUpload(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.SIGNATURE_UPLOAD, "{}")
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO signatureUpload(): error")
+        }
+    }
+
+    private suspend fun sendRoomMessage(request: Request.RoomMessage){
+        try {
+            requestSender.sendRoomMessage(request)
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO sendRoomMessage(): error")
+        }
     }
 
     private suspend fun sendOutgoingRequests() {
@@ -822,7 +845,7 @@ internal class DefaultCryptoService @Inject constructor(
                         }
                         is Request.RoomMessage     -> {
                             async {
-                                sender.sendRoomMessage(it)
+                                sendRoomMessage(it)
                             }
                         }
                         is Request.SignatureUpload -> {

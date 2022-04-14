@@ -833,21 +833,24 @@ internal class OlmMachine(
     }
 
     @Throws(CryptoStoreException::class)
-    fun roomKeyCounts(): RoomKeyCounts {
-        // TODO convert this to a suspendable method
-        return inner.roomKeyCounts()
+    suspend fun roomKeyCounts(): RoomKeyCounts {
+        return withContext(Dispatchers.Default) {
+            inner.roomKeyCounts()
+        }
     }
 
     @Throws(CryptoStoreException::class)
-    fun getBackupKeys(): BackupKeys? {
-        // TODO this needs to be suspendable
-        return inner.getBackupKeys()
+    suspend fun getBackupKeys(): BackupKeys? {
+        return withContext(Dispatchers.Default) {
+            inner.getBackupKeys()
+        }
     }
 
     @Throws(CryptoStoreException::class)
-    fun saveRecoveryKey(key: String?, version: String?) {
-        // TODO convert this to a suspendable method
-        inner.saveRecoveryKey(key, version)
+    suspend fun saveRecoveryKey(key: String?, version: String?) {
+        withContext(Dispatchers.Default) {
+            inner.saveRecoveryKey(key, version)
+        }
     }
 
     @Throws(CryptoStoreException::class)

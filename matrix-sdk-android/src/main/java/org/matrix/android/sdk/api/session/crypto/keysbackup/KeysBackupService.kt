@@ -26,6 +26,7 @@ import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
 
 interface KeysBackupService {
+
     /**
      * Retrieve the current version of the backup from the homeserver
      *
@@ -45,12 +46,12 @@ interface KeysBackupService {
     /**
      * Facility method to get the total number of locally stored keys
      */
-    fun getTotalNumbersOfKeys(): Int
+    suspend fun getTotalNumbersOfKeys(): Int
 
     /**
      * Facility method to get the number of backed up keys
      */
-    fun getTotalNumbersOfBackedUpKeys(): Int
+    suspend fun getTotalNumbersOfBackedUpKeys(): Int
 
 //    /**
 //     * Start to back up keys immediately.
@@ -71,7 +72,7 @@ interface KeysBackupService {
     /**
      * Return the current progress of the backup
      */
-    fun getBackupProgress(progressListener: ProgressListener)
+    suspend fun getBackupProgress(progressListener: ProgressListener)
 
     /**
      * Get information about a backup version defined on the homeserver.
@@ -128,7 +129,7 @@ interface KeysBackupService {
      * Ask if the backup on the server contains keys that we may do not have locally.
      * This should be called when entering in the state READY_TO_BACKUP
      */
-    fun canRestoreKeys(): Boolean
+    suspend fun canRestoreKeys(): Boolean
 
     /**
      * Set trust on a keys backup version.
@@ -199,7 +200,7 @@ interface KeysBackupService {
 
     // For gossiping
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
-    fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
+    suspend fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo?
 
     suspend fun isValidRecoveryKeyForCurrentVersion(recoveryKey: String): Boolean
 }

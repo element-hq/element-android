@@ -80,6 +80,7 @@ class HomeDrawerFragment @Inject constructor(
         }
         // Sign out
         views.homeDrawerHeaderSignoutView.debouncedClicks {
+            signout()
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             SignOutUiWorker(requireActivity()).perform()
         }
@@ -117,5 +118,9 @@ class HomeDrawerFragment @Inject constructor(
             sharedActionViewModel.post(HomeActivitySharedAction.CloseDrawer)
             navigator.openDebug(requireActivity())
         }
+    }
+
+    private fun signout() {
+
     }
 }

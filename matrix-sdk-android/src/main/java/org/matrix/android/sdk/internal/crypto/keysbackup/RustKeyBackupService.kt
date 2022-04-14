@@ -237,7 +237,7 @@ internal class RustKeyBackupService @Inject constructor(
         }
     }
 
-    override fun canRestoreKeys(): Boolean {
+    override suspend fun canRestoreKeys(): Boolean {
         val keyCountOnServer = keysBackupVersion?.count ?: return false
         val keyCountLocally = getTotalNumbersOfKeys()
 
@@ -246,11 +246,11 @@ internal class RustKeyBackupService @Inject constructor(
         return keyCountLocally < keyCountOnServer
     }
 
-    override fun getTotalNumbersOfKeys(): Int {
+    override suspend fun getTotalNumbersOfKeys(): Int {
         return olmMachine.roomKeyCounts().total.toInt()
     }
 
-    override fun getTotalNumbersOfBackedUpKeys(): Int {
+    override suspend fun getTotalNumbersOfBackedUpKeys(): Int {
         return olmMachine.roomKeyCounts().backedUp.toInt()
     }
 
@@ -405,7 +405,7 @@ internal class RustKeyBackupService @Inject constructor(
         }
     }
 
-    override fun getBackupProgress(progressListener: ProgressListener) {
+    override suspend fun getBackupProgress(progressListener: ProgressListener) {
         val backedUpKeys = getTotalNumbersOfBackedUpKeys()
         val total = getTotalNumbersOfKeys()
 
@@ -725,7 +725,7 @@ internal class RustKeyBackupService @Inject constructor(
         }
     }
 
-    override fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
+    override suspend fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
         val info = olmMachine.getBackupKeys() ?: return null
         return SavedKeyBackupKeyInfo(info.recoveryKey, info.backupVersion)
     }

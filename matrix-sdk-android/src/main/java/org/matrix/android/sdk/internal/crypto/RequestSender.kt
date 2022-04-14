@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import dagger.Lazy
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -80,6 +81,7 @@ internal class RequestSender @Inject constructor(
         private val getSessionsDataTask: GetSessionsDataTask,
         private val getRoomSessionsDataTask: GetRoomSessionsDataTask,
         private val getRoomSessionDataTask: GetRoomSessionDataTask,
+        private val moshi: Moshi
 ) {
     companion object {
         const val REQUEST_RETRY_COUNT = 3
@@ -97,16 +99,16 @@ internal class RequestSender @Inject constructor(
     suspend fun queryKeys(request: Request.KeysQuery): String {
         val params = DownloadKeysForUsersTask.Params(request.users, null)
         val response = downloadKeysForUsersTask.executeRetry(params, REQUEST_RETRY_COUNT)
-        val adapter = MoshiProvider.providesMoshi().adapter(KeysQueryResponse::class.java)
+        val adapter = moshi.adapter(KeysQueryResponse::class.java)
         return adapter.toJson(response)!!
     }
 
     suspend fun uploadKeys(request: Request.KeysUpload): String {
-        val body = MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java).fromJson(request.body)!!
+        val body = moshi.adapter<JsonDict>(Map::class.java).fromJson(request.body)!!
         val params = UploadKeysTask.Params(body)
 
         val response = uploadKeysTask.executeRetry(params, REQUEST_RETRY_COUNT)
-        val adapter = MoshiProvider.providesMoshi().adapter(KeysUploadResponse::class.java)
+        val adapter = moshi.adapter(KeysUploadResponse::class.java)
 
         return adapter.toJson(response)!!
     }
@@ -127,7 +129,7 @@ internal class RequestSender @Inject constructor(
     }
 
     suspend fun sendRoomMessage(eventType: String, roomId: String, content: String, transactionId: String): String {
-        val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
+        val adapter = moshi.adapter<Content>(Map::class.java)
         val jsonContent = adapter.fromJson(content)
         val event = Event(eventType, transactionId, jsonContent, roomId = roomId)
         val params = SendVerificationMessageTask.Params(event)
@@ -143,7 +145,7 @@ internal class RequestSender @Inject constructor(
     }
 
     private suspend fun sendSignatureUpload(body: String) {
-        val adapter = MoshiProvider.providesMoshi().adapter<Map<String, Map<String, Any>>>(Map::class.java)
+        val adapter = moshi.adapter<Map<String, Map<String, Any>>>(Map::class.java)
         val signatures = adapter.fromJson(body)!!
         val params = UploadSignaturesTask.Params(signatures)
         this.signaturesUploadTask.executeRetry(params, REQUEST_RETRY_COUNT)
@@ -153,7 +155,7 @@ internal class RequestSender @Inject constructor(
             request: UploadSigningKeysRequest,
             interactiveAuthInterceptor: UserInteractiveAuthInterceptor?
     ) {
-        val adapter = MoshiProvider.providesMoshi().adapter(RestKeyInfo::class.java)
+        val adapter = moshi.adapter(RestKeyInfo::class.java)
         val masterKey = adapter.fromJson(request.masterKey)!!.toCryptoModel()
         val selfSigningKey = adapter.fromJson(request.selfSigningKey)!!.toCryptoModel()
         val userSigningKey = adapter.fromJson(request.userSigningKey)!!.toCryptoModel()
@@ -195,8 +197,7 @@ internal class RequestSender @Inject constructor(
     }
 
     suspend fun sendToDevice(eventType: String, body: String, transactionId: String) {
-        val adapter = MoshiProvider
-                .providesMoshi()
+        val adapter = moshi
                 .newBuilder()
                 .add(CheckNumberType.JSON_ADAPTER_FACTORY)
                 .build()
@@ -252,7 +253,7 @@ internal class RequestSender @Inject constructor(
         val keys = adapter.fromJson(request.rooms)!!
         val params = StoreSessionsDataTask.Params(request.version, KeysBackupData(keys))
         val response = backupRoomKeysTask.executeRetry(params, REQUEST_RETRY_COUNT)
-        val responseAdapter = MoshiProvider.providesMoshi().adapter(BackupKeysResult::class.java)
+        val responseAdapter = moshi.adapter(BackupKeysResult::class.java)
         return responseAdapter.toJson(response)!!
     }
 
