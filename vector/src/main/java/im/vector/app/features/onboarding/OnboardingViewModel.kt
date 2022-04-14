@@ -41,6 +41,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -601,7 +602,11 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun startAuthenticationFlow(trigger: OnboardingAction?, homeServerConnectionConfig: HomeServerConnectionConfig, serverTypeOverride: ServerType? = null) {
+    private fun startAuthenticationFlow(
+            trigger: OnboardingAction?,
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            serverTypeOverride: ServerType? = null
+    ) {
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
         currentJob = viewModelScope.launch {
@@ -617,7 +622,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private suspend fun onAuthenticationStartedSuccess(
             trigger: OnboardingAction?,
             config: HomeServerConnectionConfig,
-            authResult: StartAuthenticationFlowUseCase.StartAuthenticationResult,
+            authResult: StartAuthenticationResult,
             serverTypeOverride: ServerType?
     ) {
         rememberHomeServer(config.homeServerUri.toString())
@@ -657,7 +662,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun updateServerSelection(config: HomeServerConnectionConfig, serverTypeOverride: ServerType?, authResult: StartAuthenticationFlowUseCase.StartAuthenticationResult) {
+    private fun updateServerSelection(config: HomeServerConnectionConfig, serverTypeOverride: ServerType?, authResult: StartAuthenticationResult) {
         setState {
             copy(
                     serverType = alignServerTypeAfterSubmission(config, serverTypeOverride),
