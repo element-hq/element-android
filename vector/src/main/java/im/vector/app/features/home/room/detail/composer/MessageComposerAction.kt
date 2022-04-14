@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.composer
 
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
@@ -30,6 +31,7 @@ sealed class MessageComposerAction : VectorViewModelAction {
     data class UserIsTyping(val isTyping: Boolean) : MessageComposerAction()
     data class OnTextChanged(val text: CharSequence) : MessageComposerAction()
     data class OnEntersBackground(val composerText: String) : MessageComposerAction()
+    data class SlashCommandConfirmed(val parsedCommand: ParsedCommand) : MessageComposerAction()
 
     // Voice Message
     data class InitializeVoiceRecorder(val attachmentData: ContentAttachmentData) : MessageComposerAction()
