@@ -385,6 +385,7 @@ class TimelineFragment @Inject constructor(
         setupEmojiButton()
         setupRemoveJitsiWidgetView()
         setupVoiceMessageView()
+        setupLiveLocationIndicator()
 
         views.includeRoomToolbar.roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), timelineArgs.roomId)
@@ -807,6 +808,12 @@ class TimelineFragment @Inject constructor(
                 messageComposerViewModel.handle(
                         MessageComposerAction.OnVoiceRecordingUiStateChanged(state))
             }
+        }
+    }
+
+    private fun setupLiveLocationIndicator() {
+        views.locationLiveStatusIndicator.stopButton.debouncedClicks {
+            timelineViewModel.handle(RoomDetailAction.StopLiveLocationSharing)
         }
     }
 

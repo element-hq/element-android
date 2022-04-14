@@ -87,7 +87,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                     .getSafeActiveSession()
                     ?.let { session ->
                         session.coroutineScope.launch(session.coroutineDispatchers.io) {
-                            sendBeaconInfo(session, roomArgs)
+                            sendLiveBeaconInfo(session, roomArgs)
                         }
                     }
         }
@@ -95,7 +95,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         return START_STICKY
     }
 
-    private suspend fun sendBeaconInfo(session: Session, roomArgs: RoomArgs) {
+    private suspend fun sendLiveBeaconInfo(session: Session, roomArgs: RoomArgs) {
         val beaconContent = LiveLocationBeaconContent(
                 unstableBeaconInfo = BeaconInfo(
                         timeout = roomArgs.durationMillis,
@@ -129,8 +129,12 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 }
     }
 
-    private fun stopSharingLocation(roomId: String) {
+    fun stopSharingLocation(roomId: String) {
         Timber.i("### LocationSharingService.stopSharingLocation for $roomId")
+
+        // Send a new beacon info state by setting live field as false
+        sendStoppedBeaconInfo(roomId)
+
         synchronized(roomArgsList) {
             roomArgsList.removeAll { it.roomId == roomId }
             if (roomArgsList.isEmpty()) {
@@ -140,19 +144,39 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         }
     }
 
+    private fun sendStoppedBeaconInfo(roomId: String) {
+        activeSessionHolder
+                .getSafeActiveSession()
+                ?.let { session ->
+                    session.coroutineScope.launch(session.coroutineDispatchers.io) {
+                        session.getRoom(roomId)?.stopLiveLocation(session.myUserId)
+                    }
+                }
+    }
+
     override fun onLocationUpdate(locationData: LocationData) {
         Timber.i("### LocationSharingService.onLocationUpdate. Uncertainty: ${locationData.uncertainty}")
 
+        val session = activeSessionHolder.getSafeActiveSession()
         // Emit location update to all rooms in which live location sharing is active
-        roomArgsList.toList().forEach { roomArg ->
-            sendLiveLocation(roomArg.roomId, locationData)
+        session?.coroutineScope?.launch(session.coroutineDispatchers.io) {
+            roomArgsList.toList().forEach { roomArg ->
+                sendLiveLocation(roomArg.roomId, locationData)
+            }
         }
     }
 
-    private fun sendLiveLocation(roomId: String, locationData: LocationData) {
-        val room = activeSessionHolder.getSafeActiveSession()?.getRoom(roomId)
+    private suspend fun sendLiveLocation(roomId: String, locationData: LocationData) {
+        val session = activeSessionHolder.getSafeActiveSession()
+        val room = session?.getRoom(roomId)
+        val userId = session?.myUserId
+
+        if (room == null || userId == null) {
+            return
+        }
+
         room
-                ?.getStateEvent(EventType.STATE_ROOM_BEACON_INFO.first())
+                .getLiveLocationBeaconInfo(userId, true)
                 ?.eventId
                 ?.let {
                     room.sendLiveLocation(
