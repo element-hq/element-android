@@ -872,4 +872,14 @@
     <string name="message_view_reaction">اعرض الانفعالات</string>
     <string name="message_add_reaction">أضف انفعالًا</string>
     <string name="title_activity_emoji_reaction_picker">الانفعالات</string>
+    <string name="decide_who_can_find_and_join">اختر من يمكنهم العثور على الغرفة والانضمام إليها.</string>
+    <string name="tap_to_edit_spaces">اضغط لتعديل الفضاءات</string>
+    <string name="select_spaces">اختر الفضاءات</string>
+    <string name="room_create_member_of_space_name_can_join">أعضاء فضاء %s يمكنهم العثور على الغرفة ومعاينتها والانضمام إليها.</string>
+    <string name="room_settings_room_access_restricted_title">أعضاء الفضاء فقك</string>
+    <string name="room_settings_space_access_public_description">يمكن لأي كان العثور على الفضاء والانضمام إليه</string>
+    <string name="room_settings_room_access_public_description">يمكن لأي كان الانضمام للغرفة</string>
+    <string name="room_settings_room_access_public_title">علنيّة</string>
+    <string name="room_settings_room_access_private_invite_only_title">خاصة (عبر الدعوة فقط)</string>
+    <string name="room_settings_room_access_private_title">خاصة</string>
 </resources>
