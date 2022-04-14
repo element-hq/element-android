@@ -64,6 +64,7 @@ class LocationSharingServiceConnection @Inject constructor(
 
     override fun onServiceDisconnected(className: ComponentName) {
         isBound = false
+        locationSharingService = null
         callback?.onLocationServiceStopped()
     }
 }
