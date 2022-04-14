@@ -33,11 +33,11 @@ fun View.showKeyboard(andRequestFocus: Boolean = false) {
     imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
 }
 
-fun View.setHorizontalPadding(padding: Int?) {
+fun View.setHorizontalPadding(padding: Int) {
     setPadding(
-            padding ?: paddingLeft,
+            padding,
             paddingTop,
-            padding ?: paddingRight,
+            padding,
             paddingBottom
     )
 }

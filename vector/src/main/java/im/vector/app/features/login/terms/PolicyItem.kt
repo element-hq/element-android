@@ -50,14 +50,12 @@ abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.let {
-            it.view.setHorizontalPadding(horizontalPadding)
-            it.checkbox.isChecked = checked
-            it.checkbox.setOnCheckedChangeListener(checkChangeListener)
-            it.title.text = title
-            it.subtitle.text = subtitle
-            it.view.onClick(clickListener)
-        }
+        horizontalPadding?.let { holder.view.setHorizontalPadding(it) }
+        holder.checkbox.isChecked = checked
+        holder.checkbox.setOnCheckedChangeListener(checkChangeListener)
+        holder.title.text = title
+        holder.subtitle.text = subtitle
+        holder.view.onClick(clickListener)
     }
 
     // Ensure checkbox behaves as expected (remove the listener)
