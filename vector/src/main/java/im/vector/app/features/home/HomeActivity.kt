@@ -580,7 +580,7 @@ class HomeActivity :
     }
 
     override fun spaceInviteBottomSheetOnAccept(spaceId: String) {
-        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.OpenRoomList)
     }
 
     override fun spaceInviteBottomSheetOnDecline(spaceId: String) {
