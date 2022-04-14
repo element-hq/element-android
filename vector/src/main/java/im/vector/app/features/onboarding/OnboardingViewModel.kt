@@ -628,24 +628,33 @@ class OnboardingViewModel @AssistedInject constructor(
             _viewEvents.post(OnboardingViewEvents.OutdatedHomeserver)
         }
 
-        setState {
-            copy(
-                    serverType = alignServerTypeAfterSubmission(config, serverTypeOverride),
-                    selectedHomeserver = authResult.selectedHomeserver,
-            )
-        }
         val state = awaitState()
+
         when (lastAction) {
             is OnboardingAction.HomeServerChange.EditHomeServer   -> {
                 when (state.onboardingFlow) {
-                    OnboardingFlow.SignUp -> handleRegisterAction(RegisterAction.StartRegistration) { _ ->
+                    OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) { _ ->
+                        setState {
+                            copy(
+                                    serverType = alignServerTypeAfterSubmission(config, serverTypeOverride),
+                                    selectedHomeserver = authResult.selectedHomeserver,
+                            )
+                        }
                         _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
                     }
                     else                  -> throw IllegalArgumentException("developer error")
                 }
             }
             is OnboardingAction.HomeServerChange.SelectHomeServer -> {
-                if (state.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
+                setState {
+                    copy(
+                            serverType = alignServerTypeAfterSubmission(config, serverTypeOverride),
+                            selectedHomeserver = authResult.selectedHomeserver,
+                    )
+                }
+
+
+                if (authResult.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
                     when (state.onboardingFlow) {
                         OnboardingFlow.SignIn -> internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
                         OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
