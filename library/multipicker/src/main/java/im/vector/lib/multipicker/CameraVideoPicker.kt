@@ -23,8 +23,8 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
-import im.vector.lib.multipicker.utils.MediaFileUtils.MediaType.VIDEO
-import im.vector.lib.multipicker.utils.MediaFileUtils.createTemporaryMediaFile
+import im.vector.lib.multipicker.utils.MediaType
+import im.vector.lib.multipicker.utils.createTemporaryMediaFile
 import im.vector.lib.multipicker.utils.toMultiPickerVideoType
 
 /**
@@ -61,7 +61,7 @@ class CameraVideoPicker {
 
     companion object {
         fun createVideoUri(context: Context): Uri {
-            val file = createTemporaryMediaFile(context, VIDEO)
+            val file = createTemporaryMediaFile(context, MediaType.VIDEO)
             val authority = context.packageName + ".multipicker.fileprovider"
             return FileProvider.getUriForFile(context, authority, file)
         }
