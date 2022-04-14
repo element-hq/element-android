@@ -613,6 +613,6 @@ class HomeActivity :
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {
-        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.OpenRoomList)
     }
 }
