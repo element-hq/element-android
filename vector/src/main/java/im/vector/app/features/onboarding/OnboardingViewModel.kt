@@ -625,32 +625,20 @@ class OnboardingViewModel @AssistedInject constructor(
             _viewEvents.post(OnboardingViewEvents.OutdatedHomeserver)
         }
 
-        val state = awaitState()
-
         when (trigger) {
             is OnboardingAction.HomeServerChange.EditHomeServer   -> {
-                when (state.onboardingFlow) {
+                when (awaitState().onboardingFlow) {
                     OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) { _ ->
-                        setState {
-                            copy(
-                                    serverType = alignServerTypeAfterSubmission(config, serverTypeOverride),
-                                    selectedHomeserver = authResult.selectedHomeserver,
-                            )
-                        }
+                        updateServerSelection(config, serverTypeOverride, authResult)
                         _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
                     }
                     else                  -> throw IllegalArgumentException("developer error")
                 }
             }
             is OnboardingAction.HomeServerChange.SelectHomeServer -> {
-                setState {
-                    copy(
-                            serverType = alignServerTypeAfterSubmission(config, serverTypeOverride),
-                            selectedHomeserver = authResult.selectedHomeserver,
-                    )
-                }
+                updateServerSelection(config, serverTypeOverride, authResult)
                 if (authResult.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
-                    when (state.onboardingFlow) {
+                    when (awaitState().onboardingFlow) {
                         OnboardingFlow.SignIn -> internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
                         OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
                         OnboardingFlow.SignInSignUp,
@@ -662,7 +650,19 @@ class OnboardingViewModel @AssistedInject constructor(
                     _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
                 }
             }
-            else                                                  -> _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+            else                                                  -> {
+                updateServerSelection(config, serverTypeOverride, authResult)
+                _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+            }
+        }
+    }
+
+    private fun updateServerSelection(config: HomeServerConnectionConfig, serverTypeOverride: ServerType?, authResult: StartAuthenticationFlowUseCase.StartAuthenticationResult) {
+        setState {
+            copy(
+                    serverType = alignServerTypeAfterSubmission(config, serverTypeOverride),
+                    selectedHomeserver = authResult.selectedHomeserver,
+            )
         }
     }
 
