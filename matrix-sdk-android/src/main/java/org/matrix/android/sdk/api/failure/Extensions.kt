@@ -22,6 +22,7 @@ import org.matrix.android.sdk.api.session.contentscanner.ContentScannerError
 import org.matrix.android.sdk.api.session.contentscanner.ScanFailure
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import java.io.IOException
+import java.net.UnknownHostException
 import javax.net.ssl.HttpsURLConnection
 
 fun Throwable.is401() =
@@ -97,6 +98,11 @@ fun Throwable.isInvalidUIAAuth(): Boolean {
     return this is Failure.ServerError &&
             error.code == MatrixError.M_FORBIDDEN &&
             error.flows != null
+}
+
+fun Throwable.isHomeserverUnavailable(): Boolean {
+    return this is Failure.NetworkConnection &&
+            this.ioException is UnknownHostException
 }
 
 /**

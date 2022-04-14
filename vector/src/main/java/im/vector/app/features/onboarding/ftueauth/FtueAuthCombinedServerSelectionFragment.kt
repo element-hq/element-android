@@ -36,9 +36,8 @@ import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import reactivecircus.flowbinding.android.widget.textChanges
-import java.net.UnknownHostException
 import javax.inject.Inject
 
 class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueServerSelectionCombinedBinding>() {
@@ -88,11 +87,9 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
     }
 
     override fun onError(throwable: Throwable) {
-        views.chooseServerInput.error = if (throwable is Failure.NetworkConnection &&
-                throwable.ioException is UnknownHostException) {
-            getString(R.string.login_error_homeserver_not_found)
-        } else {
-            errorFormatter.toHumanReadable(throwable)
+        views.chooseServerInput.error = when {
+            throwable.isHomeserverUnavailable() -> getString(R.string.login_error_homeserver_not_found)
+            else                                -> errorFormatter.toHumanReadable(throwable)
         }
     }
 
