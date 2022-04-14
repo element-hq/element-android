@@ -50,6 +50,7 @@ ext.groups = [
                         'com.beust',
                         'com.davemorrissey.labs',
                         'com.dropbox.core',
+                        'com.soywiz.korlibs.korte',
                         'com.facebook.fbjni',
                         'com.facebook.fresco',
                         'com.facebook.infer.annotation',

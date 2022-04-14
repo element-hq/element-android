@@ -24,8 +24,8 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class LocalizedFlowDataLoginTerms(
-        var policyName: String? = null,
-        var version: String? = null,
-        var localizedUrl: String? = null,
-        var localizedName: String? = null
+        val policyName: String?,
+        val version: String?,
+        val localizedUrl: String?,
+        val localizedName: String?
 ) : Parcelable
