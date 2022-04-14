@@ -177,11 +177,7 @@ class DefaultNavigator @Inject constructor(
                 startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
             Navigator.PostSwitchSpaceAction.OpenRoomList -> {
-                startActivity(
-                        context = context,
-                        intent = SpaceExploreActivity.newIntent(context, spaceId),
-                        buildTask = false
-                )
+                startActivity(context, SpaceExploreActivity.newIntent(context, spaceId), buildTask = false)
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom   -> {
                 val args = TimelineArgs(
