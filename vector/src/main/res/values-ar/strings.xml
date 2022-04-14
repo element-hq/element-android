@@ -882,4 +882,17 @@
     <string name="room_settings_room_access_public_title">علنيّة</string>
     <string name="room_settings_room_access_private_invite_only_title">خاصة (عبر الدعوة فقط)</string>
     <string name="room_settings_room_access_private_title">خاصة</string>
+    <string name="settings_show_join_leave_messages">أظهر حدثيْ الانضمام والمغادرة</string>
+    <string name="settings_send_typing_notifs_summary">أعلم المستخدمين أنك تكتب.</string>
+    <string name="settings_send_typing_notifs">أرسل إخطارات عند الكتابة</string>
+    <string name="settings_cryptography_manage_keys">إدارة مفاتيح التعميّة</string>
+    <string name="settings_integrations">تَكامُل</string>
+    <plurals name="seconds">
+        <item quantity="zero">الآن</item>
+        <item quantity="one">ثانية واحدة</item>
+        <item quantity="two">ثانيتان</item>
+        <item quantity="few">%d ثوان</item>
+        <item quantity="many">%d ثانية</item>
+        <item quantity="other">%d ثانية</item>
+    </plurals>
 </resources>
