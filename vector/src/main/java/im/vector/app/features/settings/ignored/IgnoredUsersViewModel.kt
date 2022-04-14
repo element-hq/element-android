@@ -62,9 +62,14 @@ class IgnoredUsersViewModel @AssistedInject constructor(
     private fun handleUnIgnore(action: IgnoredUsersAction.UnIgnore) {
         setState { copy(isLoading = true) }
         viewModelScope.launch {
-            val result = runCatching { session.unIgnoreUserIds(listOf(action.userId)) }
+            val viewEvent = try {
+                session.unIgnoreUserIds(listOf(action.userId))
+                IgnoredUsersViewEvents.Success
+            } catch (throwable: Throwable) {
+                IgnoredUsersViewEvents.Failure(throwable)
+            }
             setState { copy(isLoading = false) }
-            result.onFailure { _viewEvents.post(IgnoredUsersViewEvents.Failure(it)) }
+            _viewEvents.post(viewEvent)
         }
     }
 }
