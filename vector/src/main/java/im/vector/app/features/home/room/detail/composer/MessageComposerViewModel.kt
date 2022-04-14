@@ -110,6 +110,7 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.VoiceWaveformTouchedUp         -> handleVoiceWaveformTouchedUp(action)
             is MessageComposerAction.VoiceWaveformMovedTo           -> handleVoiceWaveformMovedTo(action)
             is MessageComposerAction.AudioSeekBarMovedTo            -> handleAudioSeekBarMovedTo(action)
+            is MessageComposerAction.SlashCommandConfirmed          -> handleSlashCommandConfirmed(action)
         }
     }
 
@@ -255,8 +256,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                         }
                         is ParsedCommand.SetMarkdown                       -> {
                             vectorPreferences.setMarkdownEnabled(parsedCommand.enable)
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(
-                                    if (parsedCommand.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
                         is ParsedCommand.BanUser                           -> {
@@ -291,7 +291,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             } else {
                                 room.sendTextMessage(parsedCommand.message, msgType = MessageType.MSGTYPE_EMOTE, autoMarkdown = action.autoMarkdown)
                             }
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
                         is ParsedCommand.SendRainbow                       -> {
@@ -304,7 +304,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             } else {
                                 room.sendFormattedTextMessage(message, rainbowGenerator.generate(message))
                             }
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
                         is ParsedCommand.SendRainbowEmote                  -> {
@@ -319,7 +319,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 room.sendFormattedTextMessage(message, rainbowGenerator.generate(message), MessageType.MSGTYPE_EMOTE)
                             }
 
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
                         is ParsedCommand.SendSpoiler                       -> {
@@ -335,22 +335,22 @@ class MessageComposerViewModel @AssistedInject constructor(
                                         text,
                                         formattedText)
                             }
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
                         is ParsedCommand.SendShrug                         -> {
                             sendPrefixedMessage("¯\\_(ツ)_/¯", parsedCommand.message, state.rootThreadEventId)
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
                         is ParsedCommand.SendLenny                         -> {
                             sendPrefixedMessage("( ͡° ͜ʖ ͡°)", parsedCommand.message, state.rootThreadEventId)
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
                         is ParsedCommand.SendChatEffect                    -> {
                             sendChatEffect(parsedCommand)
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
                         is ParsedCommand.ChangeTopic                       -> {
@@ -369,17 +369,17 @@ class MessageComposerViewModel @AssistedInject constructor(
                             handleChangeAvatarForRoomSlashCommand(parsedCommand)
                         }
                         is ParsedCommand.ShowUser                          -> {
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             handleWhoisSlashCommand(parsedCommand)
                             popDraft()
                         }
                         is ParsedCommand.DiscardSession                    -> {
                             if (room.isEncrypted()) {
                                 session.cryptoService().discardOutboundSession(room.roomId)
-                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                                 popDraft()
                             } else {
-                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                                _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                                 _viewEvents.post(
                                         MessageComposerViewEvents
                                                 .ShowMessage(stringProvider.getString(R.string.command_description_discard_session_not_handled))
@@ -403,7 +403,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                                     true
                                             )
                                     popDraft()
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                                 } catch (failure: Throwable) {
                                     _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
                                 }
@@ -422,7 +422,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                                     false
                                             )
                                     popDraft()
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                                 } catch (failure: Throwable) {
                                     _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
                                 }
@@ -435,7 +435,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 try {
                                     session.spaceService().joinSpace(parsedCommand.spaceIdOrAlias)
                                     popDraft()
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                                 } catch (failure: Throwable) {
                                     _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
                                 }
@@ -447,7 +447,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 try {
                                     session.leaveRoom(parsedCommand.roomId)
                                     popDraft()
-                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                                    _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                                 } catch (failure: Throwable) {
                                     _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
                                 }
@@ -461,7 +461,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                             room.roomSummary()?.isPublic ?: false
                                     )
                             )
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
                         }
                     }
@@ -644,19 +644,19 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeTopicSlashCommand(changeTopic: ParsedCommand.ChangeTopic) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(changeTopic) {
             room.updateTopic(changeTopic.topic)
         }
     }
 
     private fun handleInviteSlashCommand(invite: ParsedCommand.Invite) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(invite) {
             room.invite(invite.userId, invite.reason)
         }
     }
 
     private fun handleInvite3pidSlashCommand(invite: ParsedCommand.Invite3Pid) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(invite) {
             room.invite3pid(invite.threePid)
         }
     }
@@ -669,19 +669,19 @@ class MessageComposerViewModel @AssistedInject constructor(
                 ?.toContent()
                 ?: return
 
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(setUserPowerLevel) {
             room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent)
         }
     }
 
     private fun handleChangeDisplayNameSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayName) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(changeDisplayName) {
             session.setDisplayName(session.myUserId, changeDisplayName.displayName)
         }
     }
 
     private fun handlePartSlashCommand(command: ParsedCommand.PartRoom) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(command) {
             if (command.roomAlias == null) {
                 // Leave the current room
                 room
@@ -697,25 +697,25 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleRemoveSlashCommand(removeUser: ParsedCommand.RemoveUser) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(removeUser) {
             room.remove(removeUser.userId, removeUser.reason)
         }
     }
 
     private fun handleBanSlashCommand(ban: ParsedCommand.BanUser) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(ban) {
             room.ban(ban.userId, ban.reason)
         }
     }
 
     private fun handleUnbanSlashCommand(unban: ParsedCommand.UnbanUser) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(unban) {
             room.unban(unban.userId, unban.reason)
         }
     }
 
     private fun handleChangeRoomNameSlashCommand(changeRoomName: ParsedCommand.ChangeRoomName) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(changeRoomName) {
             room.updateName(changeRoomName.name)
         }
     }
@@ -727,7 +727,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeDisplayNameForRoomSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayNameForRoom) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(changeDisplayName) {
             getMyRoomMemberContent()
                     ?.copy(displayName = changeDisplayName.displayName)
                     ?.toContent()
@@ -738,13 +738,13 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleChangeRoomAvatarSlashCommand(changeAvatar: ParsedCommand.ChangeRoomAvatar) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(changeAvatar) {
             room.sendStateEvent(EventType.STATE_ROOM_AVATAR, stateKey = "", RoomAvatarContent(changeAvatar.url).toContent())
         }
     }
 
     private fun handleChangeAvatarForRoomSlashCommand(changeAvatar: ParsedCommand.ChangeAvatarForRoom) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(changeAvatar) {
             getMyRoomMemberContent()
                     ?.copy(avatarUrl = changeAvatar.url)
                     ?.toContent()
@@ -755,13 +755,24 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleIgnoreSlashCommand(ignore: ParsedCommand.IgnoreUser) {
-        launchSlashCommandFlowSuspendable {
+        launchSlashCommandFlowSuspendable(ignore) {
             session.ignoreUserIds(listOf(ignore.userId))
         }
     }
 
     private fun handleUnignoreSlashCommand(unignore: ParsedCommand.UnignoreUser) {
-        launchSlashCommandFlowSuspendable {
+        _viewEvents.post(MessageComposerViewEvents.SlashCommandConfirmationRequest(unignore))
+    }
+
+    private fun handleSlashCommandConfirmed(action: MessageComposerAction.SlashCommandConfirmed) {
+        when (action.parsedCommand) {
+            is ParsedCommand.UnignoreUser -> handleUnignoreSlashCommandConfirmed(action.parsedCommand)
+            else                          -> TODO("Not handled yet")
+        }
+    }
+
+    private fun handleUnignoreSlashCommandConfirmed(unignore: ParsedCommand.UnignoreUser) {
+        launchSlashCommandFlowSuspendable(unignore) {
             session.unIgnoreUserIds(listOf(unignore.userId))
         }
     }
@@ -900,13 +911,13 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun launchSlashCommandFlowSuspendable(block: suspend () -> Unit) {
+    private fun launchSlashCommandFlowSuspendable(parsedCommand: ParsedCommand, block: suspend () -> Unit) {
         _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
         viewModelScope.launch {
             val event = try {
                 block()
                 popDraft()
-                MessageComposerViewEvents.SlashCommandResultOk()
+                MessageComposerViewEvents.SlashCommandResultOk(parsedCommand)
             } catch (failure: Throwable) {
                 MessageComposerViewEvents.SlashCommandResultError(failure)
             }

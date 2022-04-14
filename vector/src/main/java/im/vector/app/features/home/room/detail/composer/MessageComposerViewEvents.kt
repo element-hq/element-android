@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.composer
 import androidx.annotation.StringRes
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.command.Command
+import im.vector.app.features.command.ParsedCommand
 
 sealed class MessageComposerViewEvents : VectorViewEvents {
 
@@ -35,8 +36,10 @@ sealed class MessageComposerViewEvents : VectorViewEvents {
     data class SlashCommandNotSupportedInThreads(val command: Command) : SendMessageResult()
     data class SlashCommandHandled(@StringRes val messageRes: Int? = null) : SendMessageResult()
     object SlashCommandLoading : SendMessageResult()
-    data class SlashCommandResultOk(@StringRes val messageRes: Int? = null) : SendMessageResult()
+    data class SlashCommandResultOk(val parsedCommand: ParsedCommand) : SendMessageResult()
     data class SlashCommandResultError(val throwable: Throwable) : SendMessageResult()
+
+    data class SlashCommandConfirmationRequest(val parsedCommand: ParsedCommand) : MessageComposerViewEvents()
 
     data class OpenRoomMemberProfile(val userId: String) : MessageComposerViewEvents()
 

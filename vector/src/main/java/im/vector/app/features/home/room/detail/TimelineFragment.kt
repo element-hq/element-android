@@ -119,6 +119,8 @@ import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentTimelineBinding
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -136,6 +138,7 @@ import im.vector.app.features.call.conference.ConferenceEventObserver
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.command.Command
+import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
@@ -437,6 +440,7 @@ class TimelineFragment @Inject constructor(
         messageComposerViewModel.observeViewEvents {
             when (it) {
                 is MessageComposerViewEvents.JoinRoomCommandSuccess          -> handleJoinedToAnotherRoom(it)
+                is MessageComposerViewEvents.SlashCommandConfirmationRequest -> handleSlashCommandConfirmationRequest(it)
                 is MessageComposerViewEvents.SendMessageResult               -> renderSendMessageResult(it)
                 is MessageComposerViewEvents.ShowMessage                     -> showSnackWithMessage(it.message)
                 is MessageComposerViewEvents.ShowRoomUpgradeDialog           -> handleShowRoomUpgradeDialog(it)
@@ -493,6 +497,25 @@ class TimelineFragment @Inject constructor(
             handleShareData()
             handleSpaceShare()
         }
+    }
+
+    private fun handleSlashCommandConfirmationRequest(action: MessageComposerViewEvents.SlashCommandConfirmationRequest) {
+        when (action.parsedCommand) {
+            is ParsedCommand.UnignoreUser -> promptUnignoreUser(action.parsedCommand)
+            else                          -> TODO("Add case for ${action.parsedCommand.javaClass.simpleName}")
+        }
+        lockSendButton = false
+    }
+
+    private fun promptUnignoreUser(command: ParsedCommand.UnignoreUser) {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.room_participants_action_unignore_title)
+                .setMessage(getString(R.string.settings_unignore_user, command.userId))
+                .setPositiveButton(R.string.unignore) { _, _ ->
+                    messageComposerViewModel.handle(MessageComposerAction.SlashCommandConfirmed(command))
+                }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
     }
 
     private fun renderVoiceMessageMode(content: String) {
@@ -1679,9 +1702,7 @@ class TimelineFragment @Inject constructor(
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
             is MessageComposerViewEvents.SlashCommandResultOk              -> {
-                dismissLoadingDialog()
-                views.composerLayout.setTextIfDifferent("")
-                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
+                handleSlashCommandResultOk(sendMessageResult.parsedCommand)
             }
             is MessageComposerViewEvents.SlashCommandResultError           -> {
                 dismissLoadingDialog()
@@ -1696,6 +1717,21 @@ class TimelineFragment @Inject constructor(
         }
 
         lockSendButton = false
+    }
+
+    private fun handleSlashCommandResultOk(parsedCommand: ParsedCommand) {
+        dismissLoadingDialog()
+        views.composerLayout.setTextIfDifferent("")
+        when (parsedCommand) {
+            is ParsedCommand.SetMarkdown  -> {
+                showSnackWithMessage(getString(if (parsedCommand.enable) R.string.markdown_has_been_enabled else R.string.markdown_has_been_disabled))
+            }
+            is ParsedCommand.UnignoreUser -> {
+                // A user has been un-ignored, perform a initial sync
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
+            }
+            else                          -> Unit
+        }
     }
 
     private fun displayCommandError(message: String) {
@@ -2411,23 +2447,23 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun displayThreadsBetaOptInDialog() {
-            activity?.let {
-                MaterialAlertDialogBuilder(it)
-                        .setTitle(R.string.threads_beta_enable_notice_title)
-                        .setMessage(threadsManager.getBetaEnableThreadsMessage())
-                        .setCancelable(true)
-                        .setNegativeButton(R.string.action_not_now) { _, _ -> }
-                        .setPositiveButton(R.string.action_try_it_out) { _, _ ->
-                            threadsManager.enableThreadsAndRestart(it)
-                        }
-                        .show()
-                        ?.findViewById<TextView>(android.R.id.message)
-                        ?.apply {
-                            linksClickable = true
-                            movementMethod = LinkMovementMethod.getInstance()
-                        }
-            }
+        activity?.let {
+            MaterialAlertDialogBuilder(it)
+                    .setTitle(R.string.threads_beta_enable_notice_title)
+                    .setMessage(threadsManager.getBetaEnableThreadsMessage())
+                    .setCancelable(true)
+                    .setNegativeButton(R.string.action_not_now) { _, _ -> }
+                    .setPositiveButton(R.string.action_try_it_out) { _, _ ->
+                        threadsManager.enableThreadsAndRestart(it)
+                    }
+                    .show()
+                    ?.findViewById<TextView>(android.R.id.message)
+                    ?.apply {
+                        linksClickable = true
+                        movementMethod = LinkMovementMethod.getInstance()
+                    }
         }
+    }
 
     /**
      * Navigate to Threads list for the current room
