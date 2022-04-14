@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.lifecycle.lifecycleScope
 import im.vector.app.R
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
@@ -33,6 +34,10 @@ import im.vector.app.databinding.FragmentFtueServerSelectionCombinedBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueServerSelectionCombinedBinding>() {
@@ -61,6 +66,9 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
         }
         views.chooseServerGetInTouch.debouncedClicks { openUrlInExternalBrowser(requireContext(), getString(R.string.ftue_ems_url)) }
         views.chooseServerSubmit.debouncedClicks { updateServerUrl() }
+        views.chooseServerInput.editText().textChanges()
+                .onEach { views.chooseServerInput.error = null }
+                .launchIn(lifecycleScope)
     }
 
     private fun updateServerUrl() {
@@ -75,6 +83,13 @@ class FtueAuthCombinedServerSelectionFragment @Inject constructor() : AbstractFt
         if (views.chooseServerInput.content().isEmpty()) {
             val userUrlInput = state.selectedHomeserver.userFacingUrl?.toReducedUrlKeepingSchemaIfInsecure()
             views.chooseServerInput.editText().setText(userUrlInput)
+        }
+    }
+
+    override fun onError(throwable: Throwable) {
+        views.chooseServerInput.error = when {
+            throwable.isHomeserverUnavailable() -> getString(R.string.login_error_homeserver_not_found)
+            else                                -> errorFormatter.toHumanReadable(throwable)
         }
     }
 
