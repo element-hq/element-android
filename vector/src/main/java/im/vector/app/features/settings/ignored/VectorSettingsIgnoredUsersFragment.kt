@@ -80,11 +80,12 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
 
     override fun onUserIdClicked(userId: String) {
         MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.room_participants_action_unignore_title)
                 .setMessage(getString(R.string.settings_unignore_user, userId))
-                .setPositiveButton(R.string.yes) { _, _ ->
+                .setPositiveButton(R.string.unignore) { _, _ ->
                     viewModel.handle(IgnoredUsersAction.UnIgnore(userId))
                 }
-                .setNegativeButton(R.string.no, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 
