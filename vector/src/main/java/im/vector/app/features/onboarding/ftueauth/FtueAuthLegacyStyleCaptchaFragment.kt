@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
-import im.vector.app.databinding.FragmentFtueLoginCaptchaBinding
+import im.vector.app.databinding.FragmentLoginCaptchaBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
@@ -28,22 +28,22 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 @Parcelize
-data class FtueAuthCaptchaFragmentArgument(
+data class FtueAuthLegacyStyleCaptchaFragmentArgument(
         val siteKey: String
 ) : Parcelable
 
 /**
  * In this screen, the user is asked to confirm they are not a robot
  */
-class FtueAuthCaptchaFragment @Inject constructor(
+class FtueAuthLegacyStyleCaptchaFragment @Inject constructor(
         private val captchaWebview: CaptchaWebview
-) : AbstractFtueAuthFragment<FragmentFtueLoginCaptchaBinding>() {
+) : AbstractFtueAuthFragment<FragmentLoginCaptchaBinding>() {
 
-    private val params: FtueAuthCaptchaFragmentArgument by args()
+    private val params: FtueAuthLegacyStyleCaptchaFragmentArgument by args()
     private var isWebViewLoaded = false
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueLoginCaptchaBinding {
-        return FragmentFtueLoginCaptchaBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginCaptchaBinding {
+        return FragmentLoginCaptchaBinding.inflate(inflater, container, false)
     }
 
     override fun resetViewModel() {

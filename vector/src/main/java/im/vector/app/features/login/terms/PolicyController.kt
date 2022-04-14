@@ -24,6 +24,7 @@ class PolicyController @Inject constructor() : TypedEpoxyController<List<Localiz
 
     var listener: PolicyControllerListener? = null
 
+    var horizontalPadding: Int? = null
     var homeServer: String? = null
 
     override fun buildModels(data: List<LocalizedFlowDataLoginTermsChecked>) {
@@ -32,6 +33,7 @@ class PolicyController @Inject constructor() : TypedEpoxyController<List<Localiz
             policyItem {
                 id(entry.localizedFlowDataLoginTerms.policyName)
                 checked(entry.checked)
+                horizontalPadding(host.horizontalPadding)
                 title(entry.localizedFlowDataLoginTerms.localizedName)
                 subtitle(host.homeServer)
                 clickListener { host.listener?.openPolicy(entry.localizedFlowDataLoginTerms) }

@@ -37,7 +37,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
 import im.vector.app.core.extensions.toReducedUrl
-import im.vector.app.databinding.FragmentFtueSignUpCombinedBinding
+import im.vector.app.databinding.FragmentFtueCombinedRegisterBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
@@ -56,10 +56,10 @@ import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import javax.inject.Inject
 
-class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueSignUpCombinedBinding>() {
+class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueCombinedRegisterBinding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSignUpCombinedBinding {
-        return FragmentFtueSignUpCombinedBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedRegisterBinding {
+        return FragmentFtueCombinedRegisterBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

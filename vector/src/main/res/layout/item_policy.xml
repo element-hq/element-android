@@ -6,24 +6,22 @@
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="72dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
     tools:viewBindingIgnore="true">
 
     <CheckBox
         android:id="@+id/adapter_item_policy_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:buttonTint="@color/checkbox_tint_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/adapter_item_policy_title"
-        style="@style/Widget.Vector.TextView.Body"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawablePadding="8dp"
         android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@id/adapter_item_policy_subtitle"
         app:layout_constraintEnd_toStartOf="@id/adapter_item_policy_arrow"
@@ -50,16 +48,15 @@
     <ImageView
         android:id="@+id/adapter_item_policy_arrow"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="16dp"
+        android:adjustViewBounds="true"
         android:importantForAccessibility="no"
-        android:paddingStart="8dp"
-        android:paddingEnd="0dp"
         android:rotationY="@integer/rtl_mirror_flip"
         android:src="@drawable/ic_arrow_right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?vctr_content_secondary"
+        app:tint="?vctr_content_tertiary"
         tools:ignore="MissingPrefix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
