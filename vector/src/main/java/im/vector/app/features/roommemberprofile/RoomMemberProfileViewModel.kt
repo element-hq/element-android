@@ -390,7 +390,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
                 } else {
                     session.ignoreUserIds(listOf(state.userId))
                 }
-                RoomMemberProfileViewEvents.OnIgnoreActionSuccess
+                RoomMemberProfileViewEvents.OnIgnoreActionSuccess(isIgnored)
             } catch (failure: Throwable) {
                 RoomMemberProfileViewEvents.Failure(failure)
             }
