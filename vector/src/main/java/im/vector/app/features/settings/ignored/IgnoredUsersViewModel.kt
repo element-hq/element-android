@@ -16,10 +16,7 @@
 
 package im.vector.app.features.settings.ignored
 
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -63,19 +60,10 @@ class IgnoredUsersViewModel @AssistedInject constructor(
     }
 
     private fun handleUnIgnore(action: IgnoredUsersAction.UnIgnore) {
-        setState {
-            copy(
-                    unIgnoreRequest = Loading()
-            )
-        }
-
+        setState { copy(isLoading = true) }
         viewModelScope.launch {
             val result = runCatching { session.unIgnoreUserIds(listOf(action.userId)) }
-            setState {
-                copy(
-                        unIgnoreRequest = result.fold(::Success, ::Fail)
-                )
-            }
+            setState { copy(isLoading = false) }
             result.onFailure { _viewEvents.post(IgnoredUsersViewEvents.Failure(it)) }
         }
     }

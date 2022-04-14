@@ -22,8 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -95,14 +93,6 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) { state ->
         ignoredUsersController.update(state)
-
-        handleUnIgnoreRequestStatus(state.unIgnoreRequest)
-    }
-
-    private fun handleUnIgnoreRequestStatus(unIgnoreRequest: Async<Unit>) {
-        views.waitingView.root.isVisible = when (unIgnoreRequest) {
-            is Loading -> true
-            else       -> false
-        }
+        views.waitingView.root.isVisible = state.isLoading
     }
 }

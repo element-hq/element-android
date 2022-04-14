@@ -16,12 +16,10 @@
 
 package im.vector.app.features.settings.ignored
 
-import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.user.model.User
 
 data class IgnoredUsersViewState(
         val ignoredUsers: List<User> = emptyList(),
-        val unIgnoreRequest: Async<Unit> = Uninitialized
+        val isLoading: Boolean = false
 ) : MavericksState
