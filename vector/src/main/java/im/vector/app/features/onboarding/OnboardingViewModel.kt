@@ -140,7 +140,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
-            is OnboardingAction.HomeServerChange           -> withAction(action) { handleHomeserverChange(action.homeServerUrl) }
+            is OnboardingAction.HomeServerChange           -> withAction(action) { handleHomeserverChange(action) }
             is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
             is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
@@ -175,7 +175,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
         return when (val config = loginConfig.toHomeserverConfig()) {
             null -> continueToPageAfterSplash(onboardingFlow)
-            else -> startAuthenticationFlow(config, ServerType.Other)
+            else -> startAuthenticationFlow(trigger = null, config, ServerType.Other)
         }
     }
 
@@ -209,7 +209,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.HomeServerChange.SelectHomeServer -> {
                 currentHomeServerConnectionConfig
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
-                        ?.let { startAuthenticationFlow(it) }
+                        ?.let { startAuthenticationFlow(finalLastAction, it) }
             }
             is OnboardingAction.LoginOrRegister                   ->
                 handleDirectLogin(
@@ -594,35 +594,35 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleHomeserverChange(homeserverUrl: String) {
-        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(homeserverUrl)
+    private fun handleHomeserverChange(action: OnboardingAction.HomeServerChange) {
+        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
         if (homeServerConnectionConfig == null) {
             // This is invalid
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
-            startAuthenticationFlow(homeServerConnectionConfig)
+            startAuthenticationFlow(action, homeServerConnectionConfig)
         }
     }
 
-    private fun startAuthenticationFlow(homeServerConnectionConfig: HomeServerConnectionConfig, serverTypeOverride: ServerType? = null) {
+    private fun startAuthenticationFlow(trigger: OnboardingAction?, homeServerConnectionConfig: HomeServerConnectionConfig, serverTypeOverride: ServerType? = null) {
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
         currentJob = viewModelScope.launch {
             setState { copy(isLoading = true) }
-
             runCatching { startAuthenticationFlowUseCase.execute(homeServerConnectionConfig) }.fold(
-                    onSuccess = {
-                        onAuthenticationStartedSuccess(homeServerConnectionConfig, it, serverTypeOverride)
-                    },
-                    onFailure = {
-                        _viewEvents.post(OnboardingViewEvents.Failure(it))
-                    }
+                    onSuccess = { onAuthenticationStartedSuccess(trigger, homeServerConnectionConfig, it, serverTypeOverride) },
+                    onFailure = { _viewEvents.post(OnboardingViewEvents.Failure(it)) }
             )
             setState { copy(isLoading = false) }
         }
     }
 
-    private suspend fun onAuthenticationStartedSuccess(config: HomeServerConnectionConfig, authResult: StartAuthenticationFlowUseCase.StartAuthenticationResult, serverTypeOverride: ServerType?) {
+    private suspend fun onAuthenticationStartedSuccess(
+            trigger: OnboardingAction?,
+            config: HomeServerConnectionConfig,
+            authResult: StartAuthenticationFlowUseCase.StartAuthenticationResult,
+            serverTypeOverride: ServerType?
+    ) {
         rememberHomeServer(config.homeServerUri.toString())
         if (authResult.isHomeserverOutdated) {
             _viewEvents.post(OnboardingViewEvents.OutdatedHomeserver)
@@ -630,7 +630,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
         val state = awaitState()
 
-        when (lastAction) {
+        when (trigger) {
             is OnboardingAction.HomeServerChange.EditHomeServer   -> {
                 when (state.onboardingFlow) {
                     OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) { _ ->
@@ -652,8 +652,6 @@ class OnboardingViewModel @AssistedInject constructor(
                             selectedHomeserver = authResult.selectedHomeserver,
                     )
                 }
-
-
                 if (authResult.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
                     when (state.onboardingFlow) {
                         OnboardingFlow.SignIn -> internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
