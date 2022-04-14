@@ -1,0 +1,1 @@
+Some data classes are now immutable, using `val` instead of `var`
