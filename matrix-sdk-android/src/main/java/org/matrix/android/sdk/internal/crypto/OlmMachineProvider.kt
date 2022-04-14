@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
@@ -28,8 +29,9 @@ internal class OlmMachineProvider @Inject constructor(
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?,
         @SessionFilesDirectory private val dataDir: File,
-        requestSender: RequestSender
+        requestSender: RequestSender,
+        coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
 
-    var olmMachine: OlmMachine = OlmMachine(userId, deviceId!!, dataDir, requestSender)
+    var olmMachine: OlmMachine = OlmMachine(userId, deviceId!!, dataDir, requestSender, coroutineDispatchers)
 }
