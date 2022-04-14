@@ -257,15 +257,15 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleRegisterAction(action: RegisterAction, onNextRegistrationStepAction: (FlowResult) -> Unit) {
         currentJob = viewModelScope.launch {
+            if (action.hasLoadingState()) {
+                setState { copy(isLoading = true) }
+            }
             internalRegisterAction(action, onNextRegistrationStepAction)
+            setState { copy(isLoading = false) }
         }
     }
 
     private suspend fun internalRegisterAction(action: RegisterAction, onNextRegistrationStepAction: (FlowResult) -> Unit) {
-        if (action.hasLoadingState()) {
-            setState { copy(isLoading = true) }
-        }
-
         runCatching { registrationActionHandler.handleRegisterAction(registrationWizard, action) }
                 .fold(
                         onSuccess = {
@@ -285,7 +285,6 @@ class OnboardingViewModel @AssistedInject constructor(
                             }
                         }
                 )
-        setState { copy(isLoading = false) }
     }
 
     private fun emitFlowResultViewEvent(flowResult: FlowResult) {
@@ -293,17 +292,15 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleRegisterWith(action: OnboardingAction.Register) {
-        currentJob = viewModelScope.launch {
-            reAuthHelper.data = action.password
-            internalRegisterAction(
-                    RegisterAction.CreateAccount(
-                            action.username,
-                            action.password,
-                            action.initialDeviceName
-                    ),
-                    ::emitFlowResultViewEvent
-            )
-        }
+        reAuthHelper.data = action.password
+        handleRegisterAction(
+                RegisterAction.CreateAccount(
+                        action.username,
+                        action.password,
+                        action.initialDeviceName
+                ),
+                ::emitFlowResultViewEvent
+        )
     }
 
     private fun handleResetAction(action: OnboardingAction.ResetAction) {
