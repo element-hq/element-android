@@ -30,29 +30,29 @@ import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.NewSessionListener
+import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
+import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
+import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.ForwardInfo
+import org.matrix.android.sdk.api.session.crypto.model.IncomingKeyRequestInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
+import org.matrix.android.sdk.api.session.crypto.model.TrailType
+import org.matrix.android.sdk.api.session.crypto.model.WithheldInfo
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequest
-import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequestState
-import org.matrix.android.sdk.internal.crypto.model.AuditTrail
-import org.matrix.android.sdk.internal.crypto.model.ForwardInfo
-import org.matrix.android.sdk.internal.crypto.model.IncomingKeyRequestInfo
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
-import org.matrix.android.sdk.internal.crypto.model.TrailType
-import org.matrix.android.sdk.internal.crypto.model.WithheldInfo
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.AuditTrailEntity
@@ -275,7 +275,7 @@ internal class RealmCryptoStore @Inject constructor(
             realm.where<DeviceInfoEntity>()
                     .contains(DeviceInfoEntityFields.KEYS_MAP_JSON, identityKey)
                     .findAll()
-                    .mapNotNull { CryptoMapper.mapToModel(it)  }
+                    .mapNotNull { CryptoMapper.mapToModel(it) }
                     .firstOrNull {
                         it.identityKey() == identityKey
                     }
@@ -741,7 +741,7 @@ internal class RealmCryptoStore @Inject constructor(
                 if (sessionIdentifier != null) {
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, session.senderKey)
 
-                    val existing =  realm.where<OlmInboundGroupSessionEntity>()
+                    val existing = realm.where<OlmInboundGroupSessionEntity>()
                             .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
                             .findFirst()
 
@@ -894,7 +894,7 @@ internal class RealmCryptoStore @Inject constructor(
                             sessionIdentifier,
                             olmInboundGroupSessionWrapper.senderKey)
 
-                    val existing =  realm.where<OlmInboundGroupSessionEntity>()
+                    val existing = realm.where<OlmInboundGroupSessionEntity>()
                             .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
                             .findFirst()
 

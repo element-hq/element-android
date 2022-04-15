@@ -28,6 +28,8 @@ import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
+import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
+import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
 import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
@@ -229,7 +231,8 @@ internal class OutgoingKeyRequestManager @Inject constructor(
                         }
                         cryptoStore.getUserDeviceList(event.senderId ?: "")
                                 .also { devices ->
-                                    Timber.tag(loggerTag.value).v("Withheld Devices for ${event.senderId} are ${devices.orEmpty().joinToString { it.identityKey() ?: "" }}")
+                                    Timber.tag(loggerTag.value)
+                                            .v("Withheld Devices for ${event.senderId} are ${devices.orEmpty().joinToString { it.identityKey() ?: "" }}")
                                 }
                                 ?.firstOrNull {
                                     it.identityKey() == senderKey

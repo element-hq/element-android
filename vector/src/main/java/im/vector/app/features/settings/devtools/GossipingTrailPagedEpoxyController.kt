@@ -25,12 +25,10 @@ import im.vector.app.core.ui.list.GenericItem_
 import im.vector.app.core.utils.createUIHandler
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
-
-import org.matrix.android.sdk.internal.crypto.model.AuditTrail
-import org.matrix.android.sdk.internal.crypto.model.ForwardInfo
-import org.matrix.android.sdk.internal.crypto.model.TrailType
-import org.matrix.android.sdk.internal.crypto.model.WithheldInfo
-
+import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
+import org.matrix.android.sdk.api.session.crypto.model.ForwardInfo
+import org.matrix.android.sdk.api.session.crypto.model.TrailType
+import org.matrix.android.sdk.api.session.crypto.model.WithheldInfo
 import javax.inject.Inject
 
 class GossipingTrailPagedEpoxyController @Inject constructor(

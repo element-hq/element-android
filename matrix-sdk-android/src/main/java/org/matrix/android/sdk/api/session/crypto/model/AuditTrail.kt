@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.model
+package org.matrix.android.sdk.api.session.crypto.model
 
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode

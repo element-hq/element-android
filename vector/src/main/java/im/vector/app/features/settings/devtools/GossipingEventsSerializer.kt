@@ -17,10 +17,10 @@
 package im.vector.app.features.settings.devtools
 
 import im.vector.app.core.resources.DateProvider
-import org.matrix.android.sdk.internal.crypto.model.AuditTrail
-import org.matrix.android.sdk.internal.crypto.model.ForwardInfo
-import org.matrix.android.sdk.internal.crypto.model.TrailType
-import org.matrix.android.sdk.internal.crypto.model.WithheldInfo
+import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
+import org.matrix.android.sdk.api.session.crypto.model.ForwardInfo
+import org.matrix.android.sdk.api.session.crypto.model.TrailType
+import org.matrix.android.sdk.api.session.crypto.model.WithheldInfo
 import org.threeten.bp.format.DateTimeFormatter
 
 class GossipingEventsSerializer {

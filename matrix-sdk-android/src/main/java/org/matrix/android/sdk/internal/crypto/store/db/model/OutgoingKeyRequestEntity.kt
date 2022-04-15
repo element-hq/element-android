@@ -22,15 +22,15 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
+import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
+import org.matrix.android.sdk.api.session.crypto.RequestReply
+import org.matrix.android.sdk.api.session.crypto.RequestResult
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequest
-import org.matrix.android.sdk.internal.crypto.OutgoingRoomKeyRequestState
-import org.matrix.android.sdk.internal.crypto.RequestReply
-import org.matrix.android.sdk.internal.crypto.RequestResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 internal open class OutgoingKeyRequestEntity(

@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
+
 interface OutgoingGossipingRequest {
     var recipients: Map<String, List<String>>
     var requestId: String

@@ -28,7 +28,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-import org.matrix.android.sdk.internal.crypto.model.AuditTrail
+import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import javax.inject.Inject
 
 class GossipingEventsPaperTrailFragment @Inject constructor(

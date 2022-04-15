@@ -16,10 +16,6 @@
 
 package org.matrix.android.sdk.api.session.crypto.model
 
-import org.matrix.android.sdk.internal.crypto.model.AuditTrail
-import org.matrix.android.sdk.internal.crypto.model.IncomingKeyRequestInfo
-import org.matrix.android.sdk.internal.crypto.model.TrailType
-
 /**
  * IncomingRoomKeyRequest class defines the incoming room keys request.
  */
