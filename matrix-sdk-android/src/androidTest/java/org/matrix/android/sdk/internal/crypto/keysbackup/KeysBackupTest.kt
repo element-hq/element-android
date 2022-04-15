@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.keysbackup
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -164,17 +165,22 @@ class KeysBackupTest : InstrumentedTest {
 
         val latch = CountDownLatch(1)
 
-        assertEquals(2, cryptoTestData.firstSession.cryptoService().inboundGroupSessionsCount(false))
-        assertEquals(0, cryptoTestData.firstSession.cryptoService().inboundGroupSessionsCount(true))
-
+        runBlocking {
+            assertEquals(2, cryptoTestData.firstSession.cryptoService().inboundGroupSessionsCount(false))
+            assertEquals(0, cryptoTestData.firstSession.cryptoService().inboundGroupSessionsCount(true))
+        }
         val stateObserver = StateObserver(keysBackup, latch, 5)
 
         keysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup)
 
         testHelper.await(latch)
 
-        val nbOfKeys = cryptoTestData.firstSession.cryptoService().inboundGroupSessionsCount(false)
-        val backedUpKeys = cryptoTestData.firstSession.cryptoService().inboundGroupSessionsCount(true)
+        val nbOfKeys = runBlocking {
+            cryptoTestData.firstSession.cryptoService().inboundGroupSessionsCount(false)
+        }
+        val backedUpKeys = runBlocking {
+            cryptoTestData.firstSession.cryptoService().inboundGroupSessionsCount(true)
+        }
 
         assertEquals(2, nbOfKeys)
         assertEquals("All keys must have been marked as backed up", nbOfKeys, backedUpKeys)
@@ -833,9 +839,12 @@ class KeysBackupTest : InstrumentedTest {
         assertEquals(1, keysBackupVersionTrust.signatures.size)
 
         val signature = keysBackupVersionTrust.signatures[0]
+        val device = runBlocking {
+            cryptoTestData.firstSession.cryptoService().getMyDevice()
+        }
         assertTrue(signature.valid)
         assertNotNull(signature.device)
-        assertEquals(cryptoTestData.firstSession.cryptoService().getMyDevice().deviceId, signature.deviceId)
+        assertEquals(device.deviceId, signature.deviceId)
         assertEquals(signature.device!!.deviceId, cryptoTestData.firstSession.sessionParams.deviceId)
 
         stateObserver.stopAndCheckStates(null)

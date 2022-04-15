@@ -19,6 +19,7 @@ package org.matrix.android.sdk.common
 import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.Observer
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -275,7 +276,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
     }
 
     fun initializeCrossSigning(session: Session) {
-        testHelper.doSync<Unit> {
+        testHelper.runBlockingTest {
             session.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -288,7 +289,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
                                             )
                                     )
                                 }
-                            }, it)
+                            })
         }
     }
 
@@ -300,12 +301,14 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         val aliceVerificationService = alice.cryptoService().verificationService()
         val bobVerificationService = bob.cryptoService().verificationService()
 
-        aliceVerificationService.beginKeyVerificationInDMs(
-                VerificationMethod.SAS,
-                requestID,
-                roomId,
-                bob.myUserId,
-                bob.sessionParams.credentials.deviceId!!)
+        runBlocking {
+            aliceVerificationService.beginKeyVerificationInDMs(
+                    VerificationMethod.SAS,
+                    requestID,
+                    roomId,
+                    bob.myUserId,
+                    bob.sessionParams.credentials.deviceId!!)
+        }
 
         // we should reach SHOW SAS on both
         var alicePovTx: OutgoingSasVerificationTransaction? = null
@@ -346,8 +349,10 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
 
         assertEquals("SAS code do not match", alicePovTx!!.getDecimalCodeRepresentation(), bobPovTx!!.getDecimalCodeRepresentation())
 
-        bobPovTx!!.userHasVerifiedShortCode()
-        alicePovTx!!.userHasVerifiedShortCode()
+        runBlocking {
+            bobPovTx!!.userHasVerifiedShortCode()
+            alicePovTx!!.userHasVerifiedShortCode()
+        }
 
         testHelper.waitWithLatch {
             testHelper.retryPeriodicallyWithLatch(it) {

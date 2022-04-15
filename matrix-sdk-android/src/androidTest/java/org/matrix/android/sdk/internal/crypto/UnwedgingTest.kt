@@ -144,9 +144,12 @@ class UnwedgingTest : InstrumentedTest {
         //  - Store the olm session between A&B devices
         // Let us pickle our session with bob here so we can later unpickle it
         // and wedge our session.
-        val sessionIdsForBob = aliceCryptoStore.getDeviceSessionIds(bobSession.cryptoService().getMyDevice().identityKey()!!)
+        var myDevice = testHelper.runBlockingTest {
+            bobSession.cryptoService().getMyDevice()
+        }
+        val sessionIdsForBob = aliceCryptoStore.getDeviceSessionIds(myDevice.identityKey()!!)
         sessionIdsForBob!!.size shouldBe 1
-        val olmSession = aliceCryptoStore.getDeviceSession(sessionIdsForBob.first(), bobSession.cryptoService().getMyDevice().identityKey()!!)!!
+        val olmSession = aliceCryptoStore.getDeviceSession(sessionIdsForBob.first(),myDevice.identityKey()!!)!!
 
         val oldSession = serializeForRealm(olmSession.olmSession)
 
@@ -174,7 +177,10 @@ class UnwedgingTest : InstrumentedTest {
         // Let us wedge the session now. Set crypto state like after the first message
         Timber.i("## CRYPTO | testUnwedging: wedge the session now. Set crypto state like after the first message")
 
-        aliceCryptoStore.storeSession(OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!), bobSession.cryptoService().getMyDevice().identityKey()!!)
+        myDevice = testHelper.runBlockingTest {
+            bobSession.cryptoService().getMyDevice()
+        }
+        aliceCryptoStore.storeSession(OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!), myDevice.identityKey()!!)
         Thread.sleep(6_000)
 
         // Force new session, and key share
@@ -207,7 +213,7 @@ class UnwedgingTest : InstrumentedTest {
         bobTimeline.removeListener(bobHasThreeDecryptedEventsListener)
 
         // It's a trick to force key request on fail to decrypt
-        testHelper.doSync<Unit> {
+        testHelper.runBlockingTest {
             bobSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -220,7 +226,7 @@ class UnwedgingTest : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            })
         }
 
         // Wait until we received back the key
