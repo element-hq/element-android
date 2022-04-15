@@ -62,14 +62,9 @@ class VectorSettingsIgnoredUsersFragment @Inject constructor(
             when (it) {
                 is IgnoredUsersViewEvents.Loading -> showLoading(it.message)
                 is IgnoredUsersViewEvents.Failure -> showFailure(it.throwable)
-                IgnoredUsersViewEvents.Success    -> handleSuccess()
+                IgnoredUsersViewEvents.Success    -> Unit
             }
         }
-    }
-
-    private fun handleSuccess() {
-        // A user has been un-ignored, perform a initial sync
-        MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
     }
 
     override fun onDestroyView() {
