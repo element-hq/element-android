@@ -6,7 +6,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.likethesalad.stem'
-apply plugin: 'dagger.hilt.android.plugin'
 
 kapt {
     correctErrorTypes = true
@@ -373,7 +372,6 @@ dependencies {
     // FlowBinding
     implementation libs.github.flowBinding
     implementation libs.github.flowBindingAppcompat
-    implementation libs.github.flowBindingMaterial
 
     implementation libs.airbnb.epoxy
     implementation libs.airbnb.epoxyGlide
@@ -448,7 +446,6 @@ dependencies {
     implementation 'com.github.jetradarmobile:android-snowfall:1.2.1'
     // DI
     implementation libs.dagger.hilt
-    kapt libs.dagger.hiltCompiler
 
     // Analytics
     implementation 'com.posthog.android:posthog:1.1.2'

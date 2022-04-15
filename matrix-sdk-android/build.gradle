@@ -109,7 +109,6 @@ dependencies {
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
-    implementation libs.androidx.appCompat
     implementation libs.androidx.core
 
     // Lifecycle
@@ -128,12 +127,11 @@ dependencies {
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection'
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
 
-    implementation libs.markwon.core
+    api "com.atlassian.commonmark:commonmark:0.13.0"
 
     // Image
     implementation libs.androidx.exifinterface
@@ -148,10 +146,6 @@ dependencies {
 
     // Work
     implementation libs.androidx.work
-
-    // FP
-    implementation libs.arrow.core
-    implementation libs.arrow.instances
 
     // olm lib is now hosted in MavenCentral
     implementation 'org.matrix.android:olm-sdk:3.2.10'
@@ -174,8 +168,6 @@ dependencies {
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.46'
 
     testImplementation libs.tests.junit
-    testImplementation 'org.robolectric:robolectric:4.7.3'
-    //testImplementation 'org.robolectric:shadows-support-v4:3.0'
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
     testImplementation libs.mockk.mockk
     testImplementation libs.tests.kluent

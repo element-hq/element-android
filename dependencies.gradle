@@ -81,7 +81,7 @@ ext.libs = [
                 'hiltCompiler'            : "com.google.dagger:hilt-compiler:$dagger"
         ],
         squareup    : [
-                'moshi'                  : "com.squareup.moshi:moshi-adapters:$moshi",
+                'moshi'                  : "com.squareup.moshi:moshi:$moshi",
                 'moshiKotlin'            : "com.squareup.moshi:moshi-kotlin-codegen:$moshi",
                 'retrofit'               : "com.squareup.retrofit2:retrofit:$retrofit",
                 'retrofitMoshi'          : "com.squareup.retrofit2:converter-moshi:$retrofit"

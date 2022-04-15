@@ -31,6 +31,7 @@ buildscript {
 // ktlint Plugin
 plugins {
     id "org.jlleitschuh.gradle.ktlint" version "10.2.1"
+    id 'com.autonomousapps.dependency-analysis' version "1.0.0"
 }
 
 // https://github.com/jeremylong/DependencyCheck
@@ -193,3 +194,19 @@ project(":library:diff-match-patch") {
 //        }
 //    }
 //}
+
+dependencyAnalysis {
+    dependencies {
+        bundle("kotlin-stdlib") {
+            includeGroup("org.jetbrains.kotlin")
+        }
+        bundle("react") {
+            includeGroup("com.facebook.react")
+        }
+    }
+    issues {
+        all {
+            ignoreKtx(true) // default is false
+        }
+    }
+}

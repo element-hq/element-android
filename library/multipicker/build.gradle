@@ -39,8 +39,8 @@ android {
 
 dependencies {
     implementation libs.androidx.appCompat
-    implementation libs.androidx.fragmentKtx
     implementation libs.androidx.exifinterface
+    implementation libs.androidx.core
 
     // Log
     implementation libs.jakewharton.timber
