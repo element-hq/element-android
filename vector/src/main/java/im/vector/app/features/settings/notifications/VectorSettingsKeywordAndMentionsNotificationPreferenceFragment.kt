@@ -29,10 +29,10 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.RuleKind
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.pushrules.toJson
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.RuleKind
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.toJson
 
 class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
         VectorSettingsPushRuleNotificationPreferenceFragment() {

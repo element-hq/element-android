@@ -19,9 +19,9 @@ package org.matrix.android.sdk.internal.session.pushers
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import org.matrix.android.sdk.api.pushrules.ConditionResolver
-import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.pushers.PushersService
+import org.matrix.android.sdk.api.session.pushrules.ConditionResolver
+import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.internal.session.notification.DefaultProcessEventForPushTask
 import org.matrix.android.sdk.internal.session.notification.DefaultPushRuleService
 import org.matrix.android.sdk.internal.session.notification.ProcessEventForPushTask

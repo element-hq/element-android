@@ -18,7 +18,7 @@ package im.vector.app.features.settings.notifications
 
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreferenceCategory
-import org.matrix.android.sdk.api.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
 
 class VectorSettingsOtherNotificationPreferenceFragment :
     VectorSettingsPushRuleNotificationPreferenceFragment() {

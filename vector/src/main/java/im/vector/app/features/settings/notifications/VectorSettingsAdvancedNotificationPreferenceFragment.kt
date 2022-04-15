@@ -23,8 +23,8 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.toast
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 import javax.inject.Inject
 
 class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor() :

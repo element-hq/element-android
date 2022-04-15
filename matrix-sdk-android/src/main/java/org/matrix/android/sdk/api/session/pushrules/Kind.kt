@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.pushrules
+package org.matrix.android.sdk.api.session.pushrules
 
 enum class Kind(val value: String) {
     EventMatch("event_match"),

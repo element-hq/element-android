@@ -18,9 +18,9 @@ package org.matrix.android.sdk.internal.session.sync
 
 import androidx.work.ExistingPeriodicWorkPolicy
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.pushrules.PushRuleService
-import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
+import org.matrix.android.sdk.api.session.pushrules.PushRuleService
+import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
