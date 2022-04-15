@@ -62,10 +62,12 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         private val cryptoCoroutineScope: CoroutineScope
 ) : SharedSecretStorageService {
 
-    override suspend fun generateKey(keyId: String,
-                                     key: SsssKeySpec?,
-                                     keyName: String,
-                                     keySigner: KeySigner?): SsssKeyCreationInfo {
+    override suspend fun generateKey(
+            keyId: String,
+            key: SsssKeySpec?,
+            keyName: String,
+            keySigner: KeySigner?
+    ): SsssKeyCreationInfo {
         return withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.main) {
             val bytes = (key as? RawBytesKeySpec)?.privateKey
                     ?: ByteArray(32).also {
@@ -94,11 +96,13 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         }
     }
 
-    override suspend fun generateKeyWithPassphrase(keyId: String,
-                                                   keyName: String,
-                                                   passphrase: String,
-                                                   keySigner: KeySigner,
-                                                   progressListener: ProgressListener?): SsssKeyCreationInfo {
+    override suspend fun generateKeyWithPassphrase(
+            keyId: String,
+            keyName: String,
+            passphrase: String,
+            keySigner: KeySigner,
+            progressListener: ProgressListener?
+    ): SsssKeyCreationInfo {
         return withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.main) {
             val privatePart = generatePrivateKeyWithPassword(passphrase, progressListener)
 
@@ -174,7 +178,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                             throw SharedSecretStorageError.UnknownAlgorithm(key.keyInfo.content.algorithm ?: "")
                         }
                     }
-                    is KeyInfoResult.Error -> throw key.error
+                    is KeyInfoResult.Error   -> throw key.error
                 }
             }
 

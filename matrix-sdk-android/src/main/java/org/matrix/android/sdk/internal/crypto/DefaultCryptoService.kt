@@ -584,10 +584,12 @@ internal class DefaultCryptoService @Inject constructor(
      * @param membersId          list of members to start tracking their devices
      * @return true if the operation succeeds.
      */
-    private suspend fun setEncryptionInRoom(roomId: String,
-                                            algorithm: String?,
-                                            inhibitDeviceQuery: Boolean,
-                                            membersId: List<String>): Boolean {
+    private suspend fun setEncryptionInRoom(
+            roomId: String,
+            algorithm: String?,
+            inhibitDeviceQuery: Boolean,
+            membersId: List<String>
+    ): Boolean {
         // If we already have encryption in this room, we should ignore this event
         // (for now at least. Maybe we should alert the user somehow?)
         val existingAlgorithm = cryptoStore.getRoomAlgorithm(roomId)
@@ -683,10 +685,12 @@ internal class DefaultCryptoService @Inject constructor(
      * @param roomId       the room identifier the event will be sent.
      * @param callback     the asynchronous callback
      */
-    override fun encryptEventContent(eventContent: Content,
-                                     eventType: String,
-                                     roomId: String,
-                                     callback: MatrixCallback<MXEncryptEventContentResult>) {
+    override fun encryptEventContent(
+            eventContent: Content,
+            eventType: String,
+            roomId: String,
+            callback: MatrixCallback<MXEncryptEventContentResult>
+    ) {
         // moved to crypto scope to have uptodate values
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             val userIds = getRoomUserIds(roomId)
@@ -1016,9 +1020,11 @@ internal class DefaultCryptoService @Inject constructor(
      * @param progressListener the progress listener
      * @return the result ImportRoomKeysResult
      */
-    override suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
-                                        password: String,
-                                        progressListener: ProgressListener?): ImportRoomKeysResult {
+    override suspend fun importRoomKeys(
+            roomKeysAsArray: ByteArray,
+            password: String,
+            progressListener: ProgressListener?
+    ): ImportRoomKeysResult {
         return withContext(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).v("importRoomKeys starts")
 

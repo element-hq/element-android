@@ -32,8 +32,10 @@ private fun IdentityDataEntity.Companion.getOrCreate(realm: Realm): IdentityData
     return get(realm) ?: realm.createObject()
 }
 
-internal fun IdentityDataEntity.Companion.setUrl(realm: Realm,
-                                                 url: String?) {
+internal fun IdentityDataEntity.Companion.setUrl(
+        realm: Realm,
+        url: String?
+) {
     realm.where<IdentityDataEntity>().findAll().deleteAllFromRealm()
     // Delete all pending binding if any
     IdentityPendingBindingEntity.deleteAll(realm)
@@ -45,23 +47,29 @@ internal fun IdentityDataEntity.Companion.setUrl(realm: Realm,
     }
 }
 
-internal fun IdentityDataEntity.Companion.setToken(realm: Realm,
-                                                   newToken: String?) {
+internal fun IdentityDataEntity.Companion.setToken(
+        realm: Realm,
+        newToken: String?
+) {
     get(realm)?.apply {
         token = newToken
     }
 }
 
-internal fun IdentityDataEntity.Companion.setUserConsent(realm: Realm,
-                                                         newConsent: Boolean) {
+internal fun IdentityDataEntity.Companion.setUserConsent(
+        realm: Realm,
+        newConsent: Boolean
+) {
     get(realm)?.apply {
         userConsent = newConsent
     }
 }
 
-internal fun IdentityDataEntity.Companion.setHashDetails(realm: Realm,
-                                                         pepper: String,
-                                                         algorithms: List<String>) {
+internal fun IdentityDataEntity.Companion.setHashDetails(
+        realm: Realm,
+        pepper: String,
+        algorithms: List<String>
+) {
     get(realm)?.apply {
         hashLookupPepper = pepper
         hashLookupAlgorithm = RealmList<String>().apply { addAll(algorithms) }

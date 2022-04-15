@@ -96,13 +96,15 @@ interface Room :
      * @param includeProfile requests that the server returns the historic profile information for the users that sent the events that were returned.
      * @return The search result
      */
-    suspend fun search(searchTerm: String,
-                       nextBatch: String?,
-                       orderByRecent: Boolean,
-                       limit: Int,
-                       beforeLimit: Int,
-                       afterLimit: Int,
-                       includeProfile: Boolean): SearchResult
+    suspend fun search(
+            searchTerm: String,
+            nextBatch: String?,
+            orderByRecent: Boolean,
+            limit: Int,
+            beforeLimit: Int,
+            afterLimit: Int,
+            includeProfile: Boolean
+    ): SearchResult
 
     /**
      * Use this room as a Space, if the type is correct.

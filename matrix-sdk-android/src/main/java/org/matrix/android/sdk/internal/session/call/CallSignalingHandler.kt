@@ -41,9 +41,11 @@ private val loggerTag = LoggerTag("CallSignalingHandler", LoggerTag.VOIP)
 private const val MAX_AGE_TO_RING = 40_000
 
 @SessionScope
-internal class CallSignalingHandler @Inject constructor(private val activeCallHandler: ActiveCallHandler,
-                                                        private val mxCallFactory: MxCallFactory,
-                                                        @UserId private val userId: String) {
+internal class CallSignalingHandler @Inject constructor(
+        private val activeCallHandler: ActiveCallHandler,
+        private val mxCallFactory: MxCallFactory,
+        @UserId private val userId: String
+) {
 
     private val invitedCallIds = mutableSetOf<String>()
     private val callListeners = mutableSetOf<CallListener>()

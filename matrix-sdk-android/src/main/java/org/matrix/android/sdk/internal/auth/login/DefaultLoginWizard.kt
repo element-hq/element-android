@@ -52,10 +52,12 @@ internal class DefaultLoginWizard(
         return getProfileTask.execute(GetProfileTask.Params(matrixId))
     }
 
-    override suspend fun login(login: String,
-                               password: String,
-                               initialDeviceName: String,
-                               deviceId: String?): Session {
+    override suspend fun login(
+            login: String,
+            password: String,
+            initialDeviceName: String,
+            deviceId: String?
+    ): Session {
         val loginParams = if (Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
             PasswordLoginParams.thirdPartyIdentifier(
                     medium = ThreePidMedium.EMAIL,

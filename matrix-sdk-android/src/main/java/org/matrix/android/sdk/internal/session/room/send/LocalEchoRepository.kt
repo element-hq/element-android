@@ -47,12 +47,14 @@ import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
-internal class LocalEchoRepository @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                       private val taskExecutor: TaskExecutor,
-                                                       private val realmSessionProvider: RealmSessionProvider,
-                                                       private val roomSummaryUpdater: RoomSummaryUpdater,
-                                                       private val timelineInput: TimelineInput,
-                                                       private val timelineEventMapper: TimelineEventMapper) {
+internal class LocalEchoRepository @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val taskExecutor: TaskExecutor,
+        private val realmSessionProvider: RealmSessionProvider,
+        private val roomSummaryUpdater: RoomSummaryUpdater,
+        private val timelineInput: TimelineInput,
+        private val timelineEventMapper: TimelineEventMapper
+) {
 
     fun createLocalEcho(event: Event) {
         val roomId = event.roomId ?: throw IllegalStateException("You should have set a roomId for your event")

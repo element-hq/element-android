@@ -49,30 +49,32 @@ internal interface RoomFactory {
 }
 
 @SessionScope
-internal class DefaultRoomFactory @Inject constructor(private val cryptoService: CryptoService,
-                                                      private val roomSummaryDataSource: RoomSummaryDataSource,
-                                                      private val timelineServiceFactory: DefaultTimelineService.Factory,
-                                                      private val threadsServiceFactory: DefaultThreadsService.Factory,
-                                                      private val threadsLocalServiceFactory: DefaultThreadsLocalService.Factory,
-                                                      private val sendServiceFactory: DefaultSendService.Factory,
-                                                      private val draftServiceFactory: DefaultDraftService.Factory,
-                                                      private val stateServiceFactory: DefaultStateService.Factory,
-                                                      private val uploadsServiceFactory: DefaultUploadsService.Factory,
-                                                      private val reportingServiceFactory: DefaultReportingService.Factory,
-                                                      private val roomCallServiceFactory: DefaultRoomCallService.Factory,
-                                                      private val readServiceFactory: DefaultReadService.Factory,
-                                                      private val typingServiceFactory: DefaultTypingService.Factory,
-                                                      private val aliasServiceFactory: DefaultAliasService.Factory,
-                                                      private val tagsServiceFactory: DefaultTagsService.Factory,
-                                                      private val relationServiceFactory: DefaultRelationService.Factory,
-                                                      private val membershipServiceFactory: DefaultMembershipService.Factory,
-                                                      private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory,
-                                                      private val roomVersionServiceFactory: DefaultRoomVersionService.Factory,
-                                                      private val roomAccountDataServiceFactory: DefaultRoomAccountDataService.Factory,
-                                                      private val sendStateTask: SendStateTask,
-                                                      private val viaParameterFinder: ViaParameterFinder,
-                                                      private val searchTask: SearchTask,
-                                                      private val coroutineDispatchers: MatrixCoroutineDispatchers) :
+internal class DefaultRoomFactory @Inject constructor(
+        private val cryptoService: CryptoService,
+        private val roomSummaryDataSource: RoomSummaryDataSource,
+        private val timelineServiceFactory: DefaultTimelineService.Factory,
+        private val threadsServiceFactory: DefaultThreadsService.Factory,
+        private val threadsLocalServiceFactory: DefaultThreadsLocalService.Factory,
+        private val sendServiceFactory: DefaultSendService.Factory,
+        private val draftServiceFactory: DefaultDraftService.Factory,
+        private val stateServiceFactory: DefaultStateService.Factory,
+        private val uploadsServiceFactory: DefaultUploadsService.Factory,
+        private val reportingServiceFactory: DefaultReportingService.Factory,
+        private val roomCallServiceFactory: DefaultRoomCallService.Factory,
+        private val readServiceFactory: DefaultReadService.Factory,
+        private val typingServiceFactory: DefaultTypingService.Factory,
+        private val aliasServiceFactory: DefaultAliasService.Factory,
+        private val tagsServiceFactory: DefaultTagsService.Factory,
+        private val relationServiceFactory: DefaultRelationService.Factory,
+        private val membershipServiceFactory: DefaultMembershipService.Factory,
+        private val roomPushRuleServiceFactory: DefaultRoomPushRuleService.Factory,
+        private val roomVersionServiceFactory: DefaultRoomVersionService.Factory,
+        private val roomAccountDataServiceFactory: DefaultRoomAccountDataService.Factory,
+        private val sendStateTask: SendStateTask,
+        private val viaParameterFinder: ViaParameterFinder,
+        private val searchTask: SearchTask,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
+) :
         RoomFactory {
 
     override fun create(roomId: String): Room {

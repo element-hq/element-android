@@ -37,7 +37,8 @@ internal class DefaultAddThreePidTask @Inject constructor(
         private val profileAPI: ProfileAPI,
         @SessionDatabase private val monarchy: Monarchy,
         private val pendingThreePidMapper: PendingThreePidMapper,
-        private val globalErrorReceiver: GlobalErrorReceiver) : AddThreePidTask() {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : AddThreePidTask() {
 
     override suspend fun execute(params: Params) {
         when (params.threePid) {

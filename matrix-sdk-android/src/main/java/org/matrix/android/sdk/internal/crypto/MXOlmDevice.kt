@@ -598,13 +598,15 @@ internal class MXOlmDevice @Inject constructor(
      * @param exportFormat                 true if the megolm keys are in export format
      * @return true if the operation succeeds.
      */
-    fun addInboundGroupSession(sessionId: String,
-                               sessionKey: String,
-                               roomId: String,
-                               senderKey: String,
-                               forwardingCurve25519KeyChain: List<String>,
-                               keysClaimed: Map<String, String>,
-                               exportFormat: Boolean): Boolean {
+    fun addInboundGroupSession(
+            sessionId: String,
+            sessionKey: String,
+            roomId: String,
+            senderKey: String,
+            forwardingCurve25519KeyChain: List<String>,
+            keysClaimed: Map<String, String>,
+            exportFormat: Boolean
+    ): Boolean {
         val candidateSession = OlmInboundGroupSessionWrapper2(sessionKey, exportFormat)
         val existingSessionHolder = tryOrNull { getInboundGroupSession(sessionId, senderKey, roomId) }
         val existingSession = existingSessionHolder?.wrapper
@@ -759,11 +761,13 @@ internal class MXOlmDevice @Inject constructor(
      * @return the decrypting result. Nil if the sessionId is unknown.
      */
     @Throws(MXCryptoError::class)
-    suspend fun decryptGroupMessage(body: String,
-                                    roomId: String,
-                                    timeline: String?,
-                                    sessionId: String,
-                                    senderKey: String): OlmDecryptionResult {
+    suspend fun decryptGroupMessage(
+            body: String,
+            roomId: String,
+            timeline: String?,
+            sessionId: String,
+            senderKey: String
+    ): OlmDecryptionResult {
         val sessionHolder = getInboundGroupSession(sessionId, senderKey, roomId)
         val wrapper = sessionHolder.wrapper
         val inboundGroupSession = wrapper.olmInboundGroupSession

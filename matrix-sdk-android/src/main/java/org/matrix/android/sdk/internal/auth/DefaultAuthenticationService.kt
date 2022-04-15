@@ -368,13 +368,17 @@ internal class DefaultAuthenticationService @Inject constructor(
         pendingSessionStore.delete()
     }
 
-    override suspend fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                              credentials: Credentials): Session {
+    override suspend fun createSessionFromSso(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            credentials: Credentials
+    ): Session {
         return sessionCreator.createSession(credentials, homeServerConnectionConfig)
     }
 
-    override suspend fun getWellKnownData(matrixId: String,
-                                          homeServerConnectionConfig: HomeServerConnectionConfig?): WellknownResult {
+    override suspend fun getWellKnownData(
+            matrixId: String,
+            homeServerConnectionConfig: HomeServerConnectionConfig?
+    ): WellknownResult {
         if (!MatrixPatterns.isUserId(matrixId)) {
             throw MatrixIdFailure.InvalidMatrixId
         }
@@ -385,11 +389,13 @@ internal class DefaultAuthenticationService @Inject constructor(
         )
     }
 
-    override suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                              matrixId: String,
-                                              password: String,
-                                              initialDeviceName: String,
-                                              deviceId: String?): Session {
+    override suspend fun directAuthentication(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            matrixId: String,
+            password: String,
+            initialDeviceName: String,
+            deviceId: String?
+    ): Session {
         return directLoginTask.execute(DirectLoginTask.Params(
                 homeServerConnectionConfig = homeServerConnectionConfig,
                 userId = matrixId,

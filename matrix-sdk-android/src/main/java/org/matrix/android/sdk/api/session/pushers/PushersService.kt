@@ -58,12 +58,14 @@ interface PushersService {
      *                          email pushers since we don't want to stop other accounts notifying to the same email address.
      * @throws [InvalidParameterException] if a parameter is not correct
      */
-    suspend fun addEmailPusher(email: String,
-                               lang: String,
-                               emailBranding: String,
-                               appDisplayName: String,
-                               deviceDisplayName: String,
-                               append: Boolean = true)
+    suspend fun addEmailPusher(
+            email: String,
+            lang: String,
+            emailBranding: String,
+            appDisplayName: String,
+            deviceDisplayName: String,
+            append: Boolean = true
+    )
 
     /**
      * Directly ask the push gateway to send a push to this device
@@ -75,10 +77,12 @@ interface PushersService {
      * @param pushkey the FCM token
      * @param eventId the eventId which will be sent in the Push message. Use a fake eventId.
      */
-    suspend fun testPush(url: String,
-                         appId: String,
-                         pushkey: String,
-                         eventId: String)
+    suspend fun testPush(
+            url: String,
+            appId: String,
+            pushkey: String,
+            eventId: String
+    )
 
     /**
      * Remove a registered pusher

@@ -29,10 +29,12 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class MegolmSessionDataImporter @Inject constructor(private val olmDevice: MXOlmDevice,
-                                                             private val roomDecryptorProvider: RoomDecryptorProvider,
-                                                             private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-                                                             private val cryptoStore: IMXCryptoStore) {
+internal class MegolmSessionDataImporter @Inject constructor(
+        private val olmDevice: MXOlmDevice,
+        private val roomDecryptorProvider: RoomDecryptorProvider,
+        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+        private val cryptoStore: IMXCryptoStore
+) {
 
     /**
      * Import a list of megolm session keys.
@@ -44,9 +46,11 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
      * @return import room keys result
      */
     @WorkerThread
-    fun handle(megolmSessionsData: List<MegolmSessionData>,
-               fromBackup: Boolean,
-               progressListener: ProgressListener?): ImportRoomKeysResult {
+    fun handle(
+            megolmSessionsData: List<MegolmSessionData>,
+            fromBackup: Boolean,
+            progressListener: ProgressListener?
+    ): ImportRoomKeysResult {
         val t0 = System.currentTimeMillis()
 
         val totalNumbersOfKeys = megolmSessionsData.size

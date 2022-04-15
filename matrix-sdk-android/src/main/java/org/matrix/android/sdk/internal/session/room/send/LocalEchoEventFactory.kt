@@ -118,12 +118,14 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, textContent.toMessageTextContent(msgType))
     }
 
-    fun createReplaceTextEvent(roomId: String,
-                               targetEventId: String,
-                               newBodyText: CharSequence,
-                               newBodyAutoMarkdown: Boolean,
-                               msgType: String,
-                               compatibilityText: String): Event {
+    fun createReplaceTextEvent(
+            roomId: String,
+            targetEventId: String,
+            newBodyText: CharSequence,
+            newBodyAutoMarkdown: Boolean,
+            msgType: String,
+            compatibilityText: String
+    ): Event {
         return createMessageEvent(roomId,
                 MessageTextContent(
                         msgType = msgType,
@@ -135,9 +137,11 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
-    private fun createPollContent(question: String,
-                                  options: List<String>,
-                                  pollType: PollType): MessagePollContent {
+    private fun createPollContent(
+            question: String,
+            options: List<String>,
+            pollType: PollType
+    ): MessagePollContent {
         return MessagePollContent(
                 unstablePollCreationInfo = PollCreationInfo(
                         question = PollQuestion(unstableQuestion = question),
@@ -149,11 +153,13 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createPollReplaceEvent(roomId: String,
-                               pollType: PollType,
-                               targetEventId: String,
-                               question: String,
-                               options: List<String>): Event {
+    fun createPollReplaceEvent(
+            roomId: String,
+            pollType: PollType,
+            targetEventId: String,
+            question: String,
+            options: List<String>
+    ): Event {
         val newContent = MessagePollContent(
                 relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
                 newContent = createPollContent(question, options, pollType).toContent()
@@ -169,9 +175,11 @@ internal class LocalEchoEventFactory @Inject constructor(
         )
     }
 
-    fun createPollReplyEvent(roomId: String,
-                             pollEventId: String,
-                             answerId: String): Event {
+    fun createPollReplyEvent(
+            roomId: String,
+            pollEventId: String,
+            answerId: String
+    ): Event {
         val content = MessagePollResponseContent(
                 body = answerId,
                 relatesTo = RelationDefaultContent(
@@ -191,10 +199,12 @@ internal class LocalEchoEventFactory @Inject constructor(
                 unsignedData = UnsignedData(age = null, transactionId = localId))
     }
 
-    fun createPollEvent(roomId: String,
-                        pollType: PollType,
-                        question: String,
-                        options: List<String>): Event {
+    fun createPollEvent(
+            roomId: String,
+            pollType: PollType,
+            question: String,
+            options: List<String>
+    ): Event {
         val content = createPollContent(question, options, pollType)
         val localId = LocalEcho.createLocalEchoId()
         return Event(
@@ -207,8 +217,10 @@ internal class LocalEchoEventFactory @Inject constructor(
                 unsignedData = UnsignedData(age = null, transactionId = localId))
     }
 
-    fun createEndPollEvent(roomId: String,
-                           eventId: String): Event {
+    fun createEndPollEvent(
+            roomId: String,
+            eventId: String
+    ): Event {
         val content = MessageEndPollContent(
                 relatesTo = RelationDefaultContent(
                         type = RelationType.REFERENCE,
@@ -226,11 +238,13 @@ internal class LocalEchoEventFactory @Inject constructor(
                 unsignedData = UnsignedData(age = null, transactionId = localId))
     }
 
-    fun createLocationEvent(roomId: String,
-                            latitude: Double,
-                            longitude: Double,
-                            uncertainty: Double?,
-                            isUserLocation: Boolean): Event {
+    fun createLocationEvent(
+            roomId: String,
+            latitude: Double,
+            longitude: Double,
+            uncertainty: Double?,
+            isUserLocation: Boolean
+    ): Event {
         val geoUri = buildGeoUri(latitude, longitude, uncertainty)
         val assetType = if (isUserLocation) LocationAssetType.SELF else LocationAssetType.PIN
         val content = MessageLocationContent(
@@ -244,11 +258,13 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    fun createLiveLocationEvent(beaconInfoEventId: String,
-                                roomId: String,
-                                latitude: Double,
-                                longitude: Double,
-                                uncertainty: Double?): Event {
+    fun createLiveLocationEvent(
+            beaconInfoEventId: String,
+            roomId: String,
+            latitude: Double,
+            longitude: Double,
+            uncertainty: Double?
+    ): Event {
         val geoUri = buildGeoUri(latitude, longitude, uncertainty)
         val content = MessageLiveLocationContent(
                 body = geoUri,
@@ -270,13 +286,15 @@ internal class LocalEchoEventFactory @Inject constructor(
                 unsignedData = UnsignedData(age = null, transactionId = localId))
     }
 
-    fun createReplaceTextOfReply(roomId: String,
-                                 eventReplaced: TimelineEvent,
-                                 originalEvent: TimelineEvent,
-                                 newBodyText: String,
-                                 autoMarkdown: Boolean,
-                                 msgType: String,
-                                 compatibilityText: String): Event {
+    fun createReplaceTextOfReply(
+            roomId: String,
+            eventReplaced: TimelineEvent,
+            originalEvent: TimelineEvent,
+            newBodyText: String,
+            autoMarkdown: Boolean,
+            msgType: String,
+            compatibilityText: String
+    ): Event {
         val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "", false)
         val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it, false) } ?: ""
 
@@ -312,9 +330,10 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
-    fun createMediaEvent(roomId: String,
-                         attachment: ContentAttachmentData,
-                         rootThreadEventId: String?
+    fun createMediaEvent(
+            roomId: String,
+            attachment: ContentAttachmentData,
+            rootThreadEventId: String?
     ): Event {
         return when (attachment.type) {
             ContentAttachmentData.Type.IMAGE         -> createImageEvent(roomId, attachment, rootThreadEventId)
@@ -425,10 +444,11 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    private fun createAudioEvent(roomId: String,
-                                 attachment: ContentAttachmentData,
-                                 isVoiceMessage: Boolean,
-                                 rootThreadEventId: String?
+    private fun createAudioEvent(
+            roomId: String,
+            attachment: ContentAttachmentData,
+            isVoiceMessage: Boolean,
+            rootThreadEventId: String?
     ): Event {
         val content = MessageAudioContent(
                 msgType = MessageType.MSGTYPE_AUDIO,
@@ -524,7 +544,8 @@ internal class LocalEchoEventFactory @Inject constructor(
             text: CharSequence,
             msgType: String,
             autoMarkdown: Boolean,
-            formattedText: String?): Event {
+            formattedText: String?
+    ): Event {
         val content = formattedText?.let { TextContent(text.toString(), it) } ?: createTextContent(text, autoMarkdown)
         return createEvent(
                 roomId,
@@ -543,12 +564,14 @@ internal class LocalEchoEventFactory @Inject constructor(
     /**
      * Creates a reply to a regular timeline Event or a thread Event if needed
      */
-    fun createReplyTextEvent(roomId: String,
-                             eventReplied: TimelineEvent,
-                             replyText: CharSequence,
-                             autoMarkdown: Boolean,
-                             rootThreadEventId: String? = null,
-                             showInThread: Boolean): Event? {
+    fun createReplyTextEvent(
+            roomId: String,
+            eventReplied: TimelineEvent,
+            replyText: CharSequence,
+            autoMarkdown: Boolean,
+            rootThreadEventId: String? = null,
+            showInThread: Boolean
+    ): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null

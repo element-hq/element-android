@@ -26,12 +26,13 @@ import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.GossipRequestType
 import org.matrix.android.sdk.internal.crypto.IncomingShareRequestCommon
 
-internal open class IncomingGossipingRequestEntity(@Index var requestId: String? = "",
-                                                   @Index var typeStr: String? = null,
-                                                   var otherUserId: String? = null,
-                                                   var requestedInfoStr: String? = null,
-                                                   var otherDeviceId: String? = null,
-                                                   var localCreationTimestamp: Long? = null
+internal open class IncomingGossipingRequestEntity(
+        @Index var requestId: String? = "",
+        @Index var typeStr: String? = null,
+        var otherUserId: String? = null,
+        var requestedInfoStr: String? = null,
+        var otherDeviceId: String? = null,
+        var localCreationTimestamp: Long? = null
 ) : RealmObject() {
 
     fun getRequestedSecretName(): String? = if (type == GossipRequestType.SECRET) {

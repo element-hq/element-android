@@ -44,11 +44,13 @@ internal class DefaultSpace(
         return spaceSummaryDataSource.getSpaceSummary(room.roomId)
     }
 
-    override suspend fun addChildren(roomId: String,
-                                     viaServers: List<String>?,
-                                     order: String?,
+    override suspend fun addChildren(
+            roomId: String,
+            viaServers: List<String>?,
+            order: String?,
 //                                     autoJoin: Boolean,
-                                     suggested: Boolean?) {
+            suggested: Boolean?
+    ) {
         // Find best via
         val bestVia = viaServers
                 ?: (spaceSummaryDataSource.getRoomSummary(roomId)

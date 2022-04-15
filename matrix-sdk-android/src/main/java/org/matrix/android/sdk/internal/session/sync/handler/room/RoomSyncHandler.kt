@@ -82,19 +82,21 @@ import org.matrix.android.sdk.internal.util.computeBestChunkSize
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class RoomSyncHandler @Inject constructor(private val readReceiptHandler: ReadReceiptHandler,
-                                                   private val roomSummaryUpdater: RoomSummaryUpdater,
-                                                   private val roomAccountDataHandler: RoomSyncAccountDataHandler,
-                                                   private val cryptoService: DefaultCryptoService,
-                                                   private val roomMemberEventHandler: RoomMemberEventHandler,
-                                                   private val roomTypingUsersHandler: RoomTypingUsersHandler,
-                                                   private val threadsAwarenessHandler: ThreadsAwarenessHandler,
-                                                   private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
-                                                   @UserId private val userId: String,
-                                                   private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
-                                                   private val lightweightSettingsStorage: LightweightSettingsStorage,
-                                                   private val timelineInput: TimelineInput,
-                                                   private val liveEventService: Lazy<StreamEventsManager>) {
+internal class RoomSyncHandler @Inject constructor(
+        private val readReceiptHandler: ReadReceiptHandler,
+        private val roomSummaryUpdater: RoomSummaryUpdater,
+        private val roomAccountDataHandler: RoomSyncAccountDataHandler,
+        private val cryptoService: DefaultCryptoService,
+        private val roomMemberEventHandler: RoomMemberEventHandler,
+        private val roomTypingUsersHandler: RoomTypingUsersHandler,
+        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
+        @UserId private val userId: String,
+        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
+        private val timelineInput: TimelineInput,
+        private val liveEventService: Lazy<StreamEventsManager>
+) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -102,11 +104,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         data class LEFT(val data: Map<String, RoomSync>) : HandlingStrategy()
     }
 
-    suspend fun handle(realm: Realm,
-                       roomsSyncResponse: RoomsSyncResponse,
-                       isInitialSync: Boolean,
-                       aggregator: SyncResponsePostTreatmentAggregator,
-                       reporter: ProgressReporter? = null) {
+    suspend fun handle(
+            realm: Realm,
+            roomsSyncResponse: RoomsSyncResponse,
+            isInitialSync: Boolean,
+            aggregator: SyncResponsePostTreatmentAggregator,
+            reporter: ProgressReporter? = null
+    ) {
         handleRoomSync(realm, HandlingStrategy.JOINED(roomsSyncResponse.join), isInitialSync, aggregator, reporter)
         handleRoomSync(realm, HandlingStrategy.INVITED(roomsSyncResponse.invite), isInitialSync, aggregator, reporter)
         handleRoomSync(realm, HandlingStrategy.LEFT(roomsSyncResponse.leave), isInitialSync, aggregator, reporter)
@@ -120,11 +124,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
     }
     // PRIVATE METHODS *****************************************************************************
 
-    private suspend fun handleRoomSync(realm: Realm,
-                                       handlingStrategy: HandlingStrategy,
-                                       isInitialSync: Boolean,
-                                       aggregator: SyncResponsePostTreatmentAggregator,
-                                       reporter: ProgressReporter?) {
+    private suspend fun handleRoomSync(
+            realm: Realm,
+            handlingStrategy: HandlingStrategy,
+            isInitialSync: Boolean,
+            aggregator: SyncResponsePostTreatmentAggregator,
+            reporter: ProgressReporter?
+    ) {
         val insertType = if (isInitialSync) {
             EventInsertType.INITIAL_SYNC
         } else {
@@ -157,11 +163,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         realm.insertOrUpdate(rooms)
     }
 
-    private suspend fun insertJoinRoomsFromInitSync(realm: Realm,
-                                                    handlingStrategy: HandlingStrategy.JOINED,
-                                                    syncLocalTimeStampMillis: Long,
-                                                    aggregator: SyncResponsePostTreatmentAggregator,
-                                                    reporter: ProgressReporter?) {
+    private suspend fun insertJoinRoomsFromInitSync(
+            realm: Realm,
+            handlingStrategy: HandlingStrategy.JOINED,
+            syncLocalTimeStampMillis: Long,
+            aggregator: SyncResponsePostTreatmentAggregator,
+            reporter: ProgressReporter?
+    ) {
         val bestChunkSize = computeBestChunkSize(
                 listSize = handlingStrategy.data.keys.size,
                 limit = (initialSyncStrategy as? InitialSyncStrategy.Optimized)?.maxRoomsToInsert ?: Int.MAX_VALUE
@@ -199,12 +207,14 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
     }
 
-    private suspend fun handleJoinedRoom(realm: Realm,
-                                         roomId: String,
-                                         roomSync: RoomSync,
-                                         insertType: EventInsertType,
-                                         syncLocalTimestampMillis: Long,
-                                         aggregator: SyncResponsePostTreatmentAggregator): RoomEntity {
+    private suspend fun handleJoinedRoom(
+            realm: Realm,
+            roomId: String,
+            roomSync: RoomSync,
+            insertType: EventInsertType,
+            syncLocalTimestampMillis: Long,
+            aggregator: SyncResponsePostTreatmentAggregator
+    ): RoomEntity {
         Timber.v("Handle join sync for room $roomId")
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
@@ -277,11 +287,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         return roomEntity
     }
 
-    private fun handleInvitedRoom(realm: Realm,
-                                  roomId: String,
-                                  roomSync: InvitedRoomSync,
-                                  insertType: EventInsertType,
-                                  syncLocalTimestampMillis: Long): RoomEntity {
+    private fun handleInvitedRoom(
+            realm: Realm,
+            roomId: String,
+            roomSync: InvitedRoomSync,
+            insertType: EventInsertType,
+            syncLocalTimestampMillis: Long
+    ): RoomEntity {
         Timber.v("Handle invited sync for room $roomId")
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
@@ -308,11 +320,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         return roomEntity
     }
 
-    private fun handleLeftRoom(realm: Realm,
-                               roomId: String,
-                               roomSync: RoomSync,
-                               insertType: EventInsertType,
-                               syncLocalTimestampMillis: Long): RoomEntity {
+    private fun handleLeftRoom(
+            realm: Realm,
+            roomId: String,
+            roomSync: RoomSync,
+            insertType: EventInsertType,
+            syncLocalTimestampMillis: Long
+    ): RoomEntity {
         val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
         val roomEntity = RoomEntity.getOrCreate(realm, roomId)
         for (event in roomSync.state?.events.orEmpty()) {
@@ -353,15 +367,17 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         return roomEntity
     }
 
-    private suspend fun handleTimelineEvents(realm: Realm,
-                                             roomId: String,
-                                             roomEntity: RoomEntity,
-                                             eventList: List<Event>,
-                                             prevToken: String? = null,
-                                             isLimited: Boolean = true,
-                                             insertType: EventInsertType,
-                                             syncLocalTimestampMillis: Long,
-                                             aggregator: SyncResponsePostTreatmentAggregator): ChunkEntity {
+    private suspend fun handleTimelineEvents(
+            realm: Realm,
+            roomId: String,
+            roomEntity: RoomEntity,
+            eventList: List<Event>,
+            prevToken: String? = null,
+            isLimited: Boolean = true,
+            insertType: EventInsertType,
+            syncLocalTimestampMillis: Long,
+            aggregator: SyncResponsePostTreatmentAggregator
+    ): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
         if (isLimited && lastChunk != null) {
             lastChunk.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
@@ -487,11 +503,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
      * Adds new event to the appropriate thread chunk. If the event is already in
      * the thread timeline and /relations api, we should not added it
      */
-    private fun addToThreadChunkIfNeeded(realm: Realm,
-                                         roomId: String,
-                                         threadId: String,
-                                         timelineEventEntity: TimelineEventEntity?,
-                                         roomEntity: RoomEntity) {
+    private fun addToThreadChunkIfNeeded(
+            realm: Realm,
+            roomId: String,
+            threadId: String,
+            timelineEventEntity: TimelineEventEntity?,
+            roomEntity: RoomEntity
+    ) {
         val eventId = timelineEventEntity?.eventId ?: return
 
         ChunkEntity.findLastForwardChunkOfThread(realm, roomId, threadId)?.let { threadChunk ->
@@ -527,11 +545,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             val typingUserIds: List<String> = emptyList()
     )
 
-    private fun handleEphemeral(realm: Realm,
-                                roomId: String,
-                                ephemeralEvents: List<Event>,
-                                isInitialSync: Boolean,
-                                aggregator: SyncResponsePostTreatmentAggregator): EphemeralResult {
+    private fun handleEphemeral(
+            realm: Realm,
+            roomId: String,
+            ephemeralEvents: List<Event>,
+            isInitialSync: Boolean,
+            aggregator: SyncResponsePostTreatmentAggregator
+    ): EphemeralResult {
         var result = EphemeralResult()
         for (event in ephemeralEvents) {
             when (event.type) {

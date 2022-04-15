@@ -311,11 +311,13 @@ internal abstract class SASDefaultVerificationTransaction(
         transport.cancelTransaction(transactionId, otherUserId, otherDeviceId ?: "", code)
     }
 
-    protected fun <T> sendToOther(type: String,
-                                  keyToDevice: VerificationInfo<T>,
-                                  nextState: VerificationTxState,
-                                  onErrorReason: CancelCode,
-                                  onDone: (() -> Unit)?) {
+    protected fun <T> sendToOther(
+            type: String,
+            keyToDevice: VerificationInfo<T>,
+            nextState: VerificationTxState,
+            onErrorReason: CancelCode,
+            onDone: (() -> Unit)?
+    ) {
         transport.sendToOther(type, keyToDevice, nextState, onErrorReason, onDone)
     }
 

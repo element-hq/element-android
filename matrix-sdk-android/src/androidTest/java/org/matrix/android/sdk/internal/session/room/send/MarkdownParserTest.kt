@@ -287,9 +287,11 @@ class MarkdownParserTest : InstrumentedTest {
         markdownParser.parse(text).expect(text, null)
     }
 
-    private fun testType(name: String,
-                         markdownPattern: String,
-                         htmlExpectedTag: String) {
+    private fun testType(
+            name: String,
+            markdownPattern: String,
+            htmlExpectedTag: String
+    ) {
         // Test simple case
         "$markdownPattern$name$markdownPattern"
                 .let {
@@ -358,10 +360,12 @@ class MarkdownParserTest : InstrumentedTest {
                 }
     }
 
-    private fun testTypeNewLines(name: String,
-                                 markdownPattern: String,
-                                 htmlExpectedTag: String,
-                                 softBreak: String = "<br />") {
+    private fun testTypeNewLines(
+            name: String,
+            markdownPattern: String,
+            htmlExpectedTag: String,
+            softBreak: String = "<br />"
+    ) {
         // With new line inside the block
         "$markdownPattern$name\n$name$markdownPattern"
                 .let {

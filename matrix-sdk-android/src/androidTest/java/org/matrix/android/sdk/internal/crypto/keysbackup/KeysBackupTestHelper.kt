@@ -33,7 +33,8 @@ import java.util.concurrent.CountDownLatch
 
 internal class KeysBackupTestHelper(
         private val testHelper: CommonTestHelper,
-        private val cryptoTestHelper: CryptoTestHelper) {
+        private val cryptoTestHelper: CryptoTestHelper
+) {
 
     fun waitForKeybackUpBatching() {
         Thread.sleep(400)
@@ -94,8 +95,10 @@ internal class KeysBackupTestHelper(
                 aliceSession2)
     }
 
-    fun prepareAndCreateKeysBackupData(keysBackup: KeysBackupService,
-                                       password: String? = null): PrepareKeysBackupDataResult {
+    fun prepareAndCreateKeysBackupData(
+            keysBackup: KeysBackupService,
+            password: String? = null
+    ): PrepareKeysBackupDataResult {
         val stateObserver = StateObserver(keysBackup)
 
         val megolmBackupCreationInfo = testHelper.doSync<MegolmBackupCreationInfo> {
@@ -167,9 +170,11 @@ internal class KeysBackupTestHelper(
      * - The new device must have the same count of megolm keys
      * - Alice must have the same keys on both devices
      */
-    fun checkRestoreSuccess(testData: KeysBackupScenarioData,
-                            total: Int,
-                            imported: Int) {
+    fun checkRestoreSuccess(
+            testData: KeysBackupScenarioData,
+            total: Int,
+            imported: Int
+    ) {
         // - Imported keys number must be correct
         Assert.assertEquals(testData.aliceKeys.size, total)
         Assert.assertEquals(total, imported)

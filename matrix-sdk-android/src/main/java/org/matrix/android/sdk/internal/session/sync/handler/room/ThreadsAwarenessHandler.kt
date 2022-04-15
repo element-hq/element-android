@@ -156,10 +156,12 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * Handle events mainly coming from the RoomSyncHandler
      * @return The content to inject in the roomSyncHandler live events
      */
-    fun makeEventThreadAware(realm: Realm,
-                             roomId: String?,
-                             event: Event?,
-                             eventEntity: EventEntity? = null): String? {
+    fun makeEventThreadAware(
+            realm: Realm,
+            roomId: String?,
+            event: Event?,
+            eventEntity: EventEntity? = null
+    ): String? {
         event ?: return null
         roomId ?: return null
         if (lightweightSettingsStorage.areThreadMessagesEnabled() && !isReplyEvent(event)) return null
@@ -264,10 +266,12 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * Actual update the eventEntity with the new payload
      * @return the content to inject when this is executed by RoomSyncHandler
      */
-    private fun updateEventEntity(event: Event,
-                                  eventEntity: EventEntity?,
-                                  eventPayload: MutableMap<String, Any>,
-                                  messageTextContent: Content): String? {
+    private fun updateEventEntity(
+            event: Event,
+            eventEntity: EventEntity?,
+            eventPayload: MutableMap<String, Any>,
+            messageTextContent: Content
+    ): String? {
         eventPayload["content"] = messageTextContent
 
         if (event.isEncrypted()) {
@@ -294,11 +298,12 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * @param eventBody the actual event body
      * @return The final content with the injected event
      */
-    private fun injectEvent(roomId: String,
-                            eventBody: String,
-                            eventToInject: Event,
-                            eventToInjectBody: String,
-                            threadRelation: RelationDefaultContent?
+    private fun injectEvent(
+            roomId: String,
+            eventBody: String,
+            eventToInject: Event,
+            eventToInjectBody: String,
+            threadRelation: RelationDefaultContent?
     ): Content? {
         val eventToInjectId = eventToInject.eventId ?: return null
         val eventIdToInjectSenderId = eventToInject.senderId.orEmpty()
@@ -323,11 +328,13 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     /**
      * Integrate fallback Quote reply
      */
-    private fun injectFallbackIndicator(event: Event,
-                                        eventBody: String,
-                                        eventEntity: EventEntity?,
-                                        eventPayload: MutableMap<String, Any>,
-                                        threadRelation: RelationDefaultContent?): String? {
+    private fun injectFallbackIndicator(
+            event: Event,
+            eventBody: String,
+            eventEntity: EventEntity?,
+            eventPayload: MutableMap<String, Any>,
+            threadRelation: RelationDefaultContent?
+    ): String? {
         val replyFormatted = LocalEchoEventFactory.QUOTE_PATTERN.format(
                 "In reply to a thread",
                 eventBody)

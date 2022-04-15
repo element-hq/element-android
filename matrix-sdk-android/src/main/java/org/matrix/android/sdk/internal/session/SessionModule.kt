@@ -167,9 +167,11 @@ internal abstract class SessionModule {
         @Provides
         @SessionFilesDirectory
         @SessionScope
-        fun providesFilesDir(@UserMd5 userMd5: String,
-                             @SessionId sessionId: String,
-                             context: Context): File {
+        fun providesFilesDir(
+                @UserMd5 userMd5: String,
+                @SessionId sessionId: String,
+                context: Context
+        ): File {
             // Temporary code for migration
             val old = File(context.filesDir, userMd5)
             if (old.exists()) {
@@ -182,8 +184,10 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionDownloadsDirectory
-        fun providesDownloadsCacheDir(@SessionId sessionId: String,
-                                      @CacheDirectory cacheFile: File): File {
+        fun providesDownloadsCacheDir(
+                @SessionId sessionId: String,
+                @CacheDirectory cacheFile: File
+        ): File {
             return File(cacheFile, "downloads/$sessionId")
         }
 
@@ -209,8 +213,10 @@ internal abstract class SessionModule {
         @Provides
         @SessionScope
         @UnauthenticatedWithCertificate
-        fun providesOkHttpClientWithCertificate(@Unauthenticated okHttpClient: OkHttpClient,
-                                                homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
+        fun providesOkHttpClientWithCertificate(
+                @Unauthenticated okHttpClient: OkHttpClient,
+                homeServerConnectionConfig: HomeServerConnectionConfig
+        ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
                     .addSocketFactory(homeServerConnectionConfig)
@@ -221,10 +227,12 @@ internal abstract class SessionModule {
         @Provides
         @SessionScope
         @Authenticated
-        fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
-                                 @Authenticated accessTokenProvider: AccessTokenProvider,
-                                 @SessionId sessionId: String,
-                                 @MockHttpInterceptor testInterceptor: TestInterceptor?): OkHttpClient {
+        fun providesOkHttpClient(
+                @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+                @Authenticated accessTokenProvider: AccessTokenProvider,
+                @SessionId sessionId: String,
+                @MockHttpInterceptor testInterceptor: TestInterceptor?
+        ): OkHttpClient {
             return okHttpClient
                     .newBuilder()
                     .addAccessTokenInterceptor(accessTokenProvider)
@@ -241,8 +249,10 @@ internal abstract class SessionModule {
         @Provides
         @SessionScope
         @UnauthenticatedWithCertificateWithProgress
-        fun providesProgressOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
-                                         downloadProgressInterceptor: DownloadProgressInterceptor): OkHttpClient {
+        fun providesProgressOkHttpClient(
+                @UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
+                downloadProgressInterceptor: DownloadProgressInterceptor
+        ): OkHttpClient {
             return okHttpClient.newBuilder()
                     .apply {
                         // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
@@ -261,9 +271,11 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesRetrofit(@Authenticated okHttpClient: Lazy<OkHttpClient>,
-                             sessionParams: SessionParams,
-                             retrofitFactory: RetrofitFactory): Retrofit {
+        fun providesRetrofit(
+                @Authenticated okHttpClient: Lazy<OkHttpClient>,
+                sessionParams: SessionParams,
+                retrofitFactory: RetrofitFactory
+        ): Retrofit {
             return retrofitFactory
                     .create(okHttpClient, sessionParams.homeServerConnectionConfig.homeServerUriBase.toString())
         }
@@ -271,8 +283,9 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionScope
-        fun providesNetworkCallbackStrategy(fallbackNetworkCallbackStrategy: Provider<FallbackNetworkCallbackStrategy>,
-                                            preferredNetworkCallbackStrategy: Provider<PreferredNetworkCallbackStrategy>
+        fun providesNetworkCallbackStrategy(
+                fallbackNetworkCallbackStrategy: Provider<FallbackNetworkCallbackStrategy>,
+                preferredNetworkCallbackStrategy: Provider<PreferredNetworkCallbackStrategy>
         ): NetworkCallbackStrategy {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 preferredNetworkCallbackStrategy.get()

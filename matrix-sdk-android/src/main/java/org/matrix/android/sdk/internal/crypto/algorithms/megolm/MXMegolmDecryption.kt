@@ -50,17 +50,18 @@ import timber.log.Timber
 
 private val loggerTag = LoggerTag("MXMegolmDecryption", LoggerTag.CRYPTO)
 
-internal class MXMegolmDecryption(private val userId: String,
-                                  private val olmDevice: MXOlmDevice,
-                                  private val deviceListManager: DeviceListManager,
-                                  private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-                                  private val messageEncrypter: MessageEncrypter,
-                                  private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
-                                  private val cryptoStore: IMXCryptoStore,
-                                  private val sendToDeviceTask: SendToDeviceTask,
-                                  private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                  private val cryptoCoroutineScope: CoroutineScope,
-                                  private val liveEventManager: Lazy<StreamEventsManager>
+internal class MXMegolmDecryption(
+        private val userId: String,
+        private val olmDevice: MXOlmDevice,
+        private val deviceListManager: DeviceListManager,
+        private val outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
+        private val messageEncrypter: MessageEncrypter,
+        private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
+        private val cryptoStore: IMXCryptoStore,
+        private val sendToDeviceTask: SendToDeviceTask,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val cryptoCoroutineScope: CoroutineScope,
+        private val liveEventManager: Lazy<StreamEventsManager>
 ) : IMXDecrypting, IMXWithHeldExtension {
 
     var newSessionListener: NewSessionListener? = null

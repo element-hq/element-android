@@ -38,7 +38,8 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val gossipingWorkManager: GossipingWorkManager) {
+        private val gossipingWorkManager: GossipingWorkManager
+) {
 
     /**
      * Send off a room key request, if we haven't already done so.

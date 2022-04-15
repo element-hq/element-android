@@ -23,9 +23,11 @@ import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
 
 internal interface UpdatePushRuleEnableStatusTask : Task<UpdatePushRuleEnableStatusTask.Params, Unit> {
-    data class Params(val kind: RuleKind,
-                      val pushRule: PushRule,
-                      val enabled: Boolean)
+    data class Params(
+            val kind: RuleKind,
+            val pushRule: PushRule,
+            val enabled: Boolean
+    )
 }
 
 internal class DefaultUpdatePushRuleEnableStatusTask @Inject constructor(

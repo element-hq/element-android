@@ -41,8 +41,10 @@ internal fun TimelineEventEntity.Companion.where(realm: Realm, roomId: String, e
             .`in`(TimelineEventEntityFields.EVENT_ID, eventIds.toTypedArray())
 }
 
-internal fun TimelineEventEntity.Companion.whereRoomId(realm: Realm,
-                                                       roomId: String): RealmQuery<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.whereRoomId(
+        realm: Realm,
+        roomId: String
+): RealmQuery<TimelineEventEntity> {
     return realm.where<TimelineEventEntity>()
             .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
 }
@@ -53,10 +55,12 @@ internal fun TimelineEventEntity.Companion.findWithSenderMembershipEvent(realm: 
             .findAll()
 }
 
-internal fun TimelineEventEntity.Companion.latestEvent(realm: Realm,
-                                                       roomId: String,
-                                                       includesSending: Boolean,
-                                                       filters: TimelineEventFilters = TimelineEventFilters()): TimelineEventEntity? {
+internal fun TimelineEventEntity.Companion.latestEvent(
+        realm: Realm,
+        roomId: String,
+        includesSending: Boolean,
+        filters: TimelineEventFilters = TimelineEventFilters()
+): TimelineEventEntity? {
     val roomEntity = RoomEntity.where(realm, roomId).findFirst() ?: return null
     val sendingTimelineEvents = roomEntity.sendingTimelineEvents.where().filterEvents(filters)
 
@@ -120,9 +124,11 @@ internal fun RealmList<TimelineEventEntity>.find(eventId: String): TimelineEvent
             .findFirst()
 }
 
-internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(realm: Realm,
-                                                                       roomId: String,
-                                                                       sendStates: List<SendState>): RealmResults<TimelineEventEntity> {
+internal fun TimelineEventEntity.Companion.findAllInRoomWithSendStates(
+        realm: Realm,
+        roomId: String,
+        sendStates: List<SendState>
+): RealmResults<TimelineEventEntity> {
     return whereRoomId(realm, roomId)
             .filterSendStates(sendStates)
             .findAll()

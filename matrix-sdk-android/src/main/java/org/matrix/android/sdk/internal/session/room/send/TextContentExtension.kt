@@ -43,7 +43,8 @@ internal fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGT
 internal fun TextContent.toThreadTextContent(
         rootThreadEventId: String,
         latestThreadEventId: String,
-        msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
+        msgType: String = MessageType.MSGTYPE_TEXT
+): MessageTextContent {
     return MessageTextContent(
             msgType = msgType,
             format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },

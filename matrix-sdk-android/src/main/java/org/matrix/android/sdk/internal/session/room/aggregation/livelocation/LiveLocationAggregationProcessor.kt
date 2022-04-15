@@ -21,9 +21,11 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
 
 internal interface LiveLocationAggregationProcessor {
-    fun handleLiveLocation(realm: Realm,
-                           event: Event,
-                           content: MessageLiveLocationContent,
-                           roomId: String,
-                           isLocalEcho: Boolean)
+    fun handleLiveLocation(
+            realm: Realm,
+            event: Event,
+            content: MessageLiveLocationContent,
+            roomId: String,
+            isLocalEcho: Boolean
+    )
 }

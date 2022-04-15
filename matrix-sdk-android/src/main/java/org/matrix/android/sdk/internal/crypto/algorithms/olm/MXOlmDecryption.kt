@@ -38,7 +38,8 @@ internal class MXOlmDecryption(
         // The olm device interface
         private val olmDevice: MXOlmDevice,
         // the matrix userId
-        private val userId: String) :
+        private val userId: String
+) :
         IMXDecrypting {
 
     @Throws(MXCryptoError::class)

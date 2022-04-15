@@ -38,4 +38,5 @@ data class RoomSyncUnreadNotifications(
         /**
          * The number of highlighted unread messages (subset of notifications).
          */
-        @Json(name = "highlight_count") val highlightCount: Int? = null)
+        @Json(name = "highlight_count") val highlightCount: Int? = null
+)

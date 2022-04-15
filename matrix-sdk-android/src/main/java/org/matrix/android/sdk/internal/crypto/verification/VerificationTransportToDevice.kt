@@ -44,12 +44,14 @@ internal class VerificationTransportToDevice(
         private var taskExecutor: TaskExecutor
 ) : VerificationTransport {
 
-    override fun sendVerificationRequest(supportedMethods: List<String>,
-                                         localId: String,
-                                         otherUserId: String,
-                                         roomId: String?,
-                                         toDevices: List<String>?,
-                                         callback: (String?, ValidVerificationInfoRequest?) -> Unit) {
+    override fun sendVerificationRequest(
+            supportedMethods: List<String>,
+            localId: String,
+            otherUserId: String,
+            roomId: String?,
+            toDevices: List<String>?,
+            callback: (String?, ValidVerificationInfoRequest?) -> Unit
+    ) {
         Timber.d("## SAS sending verification request with supported methods: $supportedMethods")
         val contentMap = MXUsersDevicesMap<Any>()
         val validKeyReq = ValidVerificationInfoRequest(
@@ -83,10 +85,12 @@ internal class VerificationTransportToDevice(
                 .executeBy(taskExecutor)
     }
 
-    override fun sendVerificationReady(keyReq: VerificationInfoReady,
-                                       otherUserId: String,
-                                       otherDeviceId: String?,
-                                       callback: (() -> Unit)?) {
+    override fun sendVerificationReady(
+            keyReq: VerificationInfoReady,
+            otherUserId: String,
+            otherDeviceId: String?,
+            callback: (() -> Unit)?
+    ) {
         Timber.d("## SAS sending verification ready with methods: ${keyReq.methods}")
         val contentMap = MXUsersDevicesMap<Any>()
 
@@ -108,11 +112,13 @@ internal class VerificationTransportToDevice(
                 .executeBy(taskExecutor)
     }
 
-    override fun <T> sendToOther(type: String,
-                                 verificationInfo: VerificationInfo<T>,
-                                 nextState: VerificationTxState,
-                                 onErrorReason: CancelCode,
-                                 onDone: (() -> Unit)?) {
+    override fun <T> sendToOther(
+            type: String,
+            verificationInfo: VerificationInfo<T>,
+            nextState: VerificationTxState,
+            onErrorReason: CancelCode,
+            onDone: (() -> Unit)?
+    ) {
         Timber.d("## SAS sending msg type $type")
         Timber.v("## SAS sending msg info $verificationInfo")
         val stateBeforeCall = tx?.state
@@ -190,12 +196,14 @@ internal class VerificationTransportToDevice(
                 .executeBy(taskExecutor)
     }
 
-    override fun createAccept(tid: String,
-                              keyAgreementProtocol: String,
-                              hash: String,
-                              commitment: String,
-                              messageAuthenticationCode: String,
-                              shortAuthenticationStrings: List<String>): VerificationInfoAccept = KeyVerificationAccept.create(
+    override fun createAccept(
+            tid: String,
+            keyAgreementProtocol: String,
+            hash: String,
+            commitment: String,
+            messageAuthenticationCode: String,
+            shortAuthenticationStrings: List<String>
+    ): VerificationInfoAccept = KeyVerificationAccept.create(
             tid,
             keyAgreementProtocol,
             hash,
@@ -207,12 +215,14 @@ internal class VerificationTransportToDevice(
 
     override fun createMac(tid: String, mac: Map<String, String>, keys: String) = KeyVerificationMac.create(tid, mac, keys)
 
-    override fun createStartForSas(fromDevice: String,
-                                   transactionId: String,
-                                   keyAgreementProtocols: List<String>,
-                                   hashes: List<String>,
-                                   messageAuthenticationCodes: List<String>,
-                                   shortAuthenticationStrings: List<String>): VerificationInfoStart {
+    override fun createStartForSas(
+            fromDevice: String,
+            transactionId: String,
+            keyAgreementProtocols: List<String>,
+            hashes: List<String>,
+            messageAuthenticationCodes: List<String>,
+            shortAuthenticationStrings: List<String>
+    ): VerificationInfoStart {
         return KeyVerificationStart(
                 fromDevice,
                 VERIFICATION_METHOD_SAS,
@@ -224,9 +234,11 @@ internal class VerificationTransportToDevice(
                 null)
     }
 
-    override fun createStartForQrCode(fromDevice: String,
-                                      transactionId: String,
-                                      sharedSecret: String): VerificationInfoStart {
+    override fun createStartForQrCode(
+            fromDevice: String,
+            transactionId: String,
+            sharedSecret: String
+    ): VerificationInfoStart {
         return KeyVerificationStart(
                 fromDevice,
                 VERIFICATION_METHOD_RECIPROCATE,

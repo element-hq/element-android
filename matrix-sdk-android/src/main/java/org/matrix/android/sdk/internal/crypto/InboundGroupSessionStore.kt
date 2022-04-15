@@ -44,7 +44,8 @@ private val loggerTag = LoggerTag("InboundGroupSessionStore", LoggerTag.CRYPTO)
 internal class InboundGroupSessionStore @Inject constructor(
         private val store: IMXCryptoStore,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers) {
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
+) {
 
     private data class CacheKey(
             val sessionId: String,
@@ -75,15 +76,15 @@ internal class InboundGroupSessionStore @Inject constructor(
 
     @Synchronized
     fun getInboundGroupSession(sessionId: String, senderKey: String): InboundGroupSessionHolder? {
-            val known = sessionCache[CacheKey(sessionId, senderKey)]
-            Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession  $sessionId in cache ${known != null}")
-            return known
-                    ?: store.getInboundGroupSession(sessionId, senderKey)?.also {
-                Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession cache populate ${it.roomId}")
-                sessionCache.put(CacheKey(sessionId, senderKey), InboundGroupSessionHolder(it))
-            }?.let {
-                InboundGroupSessionHolder(it)
-            }
+        val known = sessionCache[CacheKey(sessionId, senderKey)]
+        Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession  $sessionId in cache ${known != null}")
+        return known
+                ?: store.getInboundGroupSession(sessionId, senderKey)?.also {
+                    Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession cache populate ${it.roomId}")
+                    sessionCache.put(CacheKey(sessionId, senderKey), InboundGroupSessionHolder(it))
+                }?.let {
+                    InboundGroupSessionHolder(it)
+                }
     }
 
     @Synchronized

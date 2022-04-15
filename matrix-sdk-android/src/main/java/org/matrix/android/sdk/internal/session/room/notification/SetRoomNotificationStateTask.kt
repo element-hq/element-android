@@ -35,10 +35,12 @@ internal interface SetRoomNotificationStateTask : Task<SetRoomNotificationStateT
     )
 }
 
-internal class DefaultSetRoomNotificationStateTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                                       private val removePushRuleTask: RemovePushRuleTask,
-                                                                       private val addPushRuleTask: AddPushRuleTask) :
-    SetRoomNotificationStateTask {
+internal class DefaultSetRoomNotificationStateTask @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val removePushRuleTask: RemovePushRuleTask,
+        private val addPushRuleTask: AddPushRuleTask
+) :
+        SetRoomNotificationStateTask {
 
     override suspend fun execute(params: SetRoomNotificationStateTask.Params) {
         val currentRoomPushRule = Realm.getInstance(monarchy.realmConfiguration).use {

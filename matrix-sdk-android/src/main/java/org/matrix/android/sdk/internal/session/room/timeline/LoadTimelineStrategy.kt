@@ -57,7 +57,8 @@ internal class LoadTimelineStrategy(
         private val roomId: String,
         private val timelineId: String,
         private val mode: Mode,
-        private val dependencies: Dependencies) {
+        private val dependencies: Dependencies
+) {
 
     sealed interface Mode {
         object Live : Mode

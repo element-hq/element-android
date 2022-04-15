@@ -24,6 +24,8 @@ interface EventService {
      * Ask the homeserver for an event content. The SDK will try to decrypt it if it is possible
      * The result will not be stored into cache
      */
-    suspend fun getEvent(roomId: String,
-                         eventId: String): Event
+    suspend fun getEvent(
+            roomId: String,
+            eventId: String
+    ): Event
 }

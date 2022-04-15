@@ -90,10 +90,12 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
      * This worker is launched by the factory with the isCreatedByMatrixWorkerFactory flag to true.
      * If the MatrixWorkerFactory is not set up, it will default to the other constructor and it will throw
      */
-    class CheckFactoryWorker(context: Context,
-                             workerParameters: WorkerParameters,
-                             private val isCreatedByMatrixWorkerFactory: Boolean) :
-        CoroutineWorker(context, workerParameters) {
+    class CheckFactoryWorker(
+            context: Context,
+            workerParameters: WorkerParameters,
+            private val isCreatedByMatrixWorkerFactory: Boolean
+    ) :
+            CoroutineWorker(context, workerParameters) {
 
         // Called by WorkManager if there is no MatrixWorkerFactory
         constructor(context: Context, workerParameters: WorkerParameters) : this(context,

@@ -319,10 +319,12 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun storeUserCrossSigningKeys(userId: String,
-                                           masterKey: CryptoCrossSigningKey?,
-                                           selfSigningKey: CryptoCrossSigningKey?,
-                                           userSigningKey: CryptoCrossSigningKey?) {
+    override fun storeUserCrossSigningKeys(
+            userId: String,
+            masterKey: CryptoCrossSigningKey?,
+            selfSigningKey: CryptoCrossSigningKey?,
+            userSigningKey: CryptoCrossSigningKey?
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             UserEntity.getOrCreate(realm, userId)
                     .let { userEntity ->
@@ -1261,10 +1263,12 @@ internal class RealmCryptoStore @Inject constructor(
 //        }
 //    }
 
-    override fun updateGossipingRequestState(requestUserId: String?,
-                                             requestDeviceId: String?,
-                                             requestId: String?,
-                                             state: GossipingRequestState) {
+    override fun updateGossipingRequestState(
+            requestUserId: String?,
+            requestDeviceId: String?,
+            requestId: String?,
+            state: GossipingRequestState
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             realm.where<IncomingGossipingRequestEntity>()
                     .equalTo(IncomingGossipingRequestEntityFields.OTHER_USER_ID, requestUserId)
@@ -1652,12 +1656,14 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markedSessionAsShared(roomId: String?,
-                                       sessionId: String,
-                                       userId: String,
-                                       deviceId: String,
-                                       deviceIdentityKey: String,
-                                       chainIndex: Int) {
+    override fun markedSessionAsShared(
+            roomId: String?,
+            sessionId: String,
+            userId: String,
+            deviceId: String,
+            deviceIdentityKey: String,
+            chainIndex: Int
+    ) {
         doRealmTransaction(realmConfiguration) { realm ->
             SharedSessionEntity.create(
                     realm = realm,

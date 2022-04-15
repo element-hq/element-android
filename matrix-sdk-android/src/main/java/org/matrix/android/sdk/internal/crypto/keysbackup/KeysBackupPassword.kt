@@ -47,8 +47,9 @@ internal data class GeneratePrivateKeyResult(
  * @return a {privateKey, salt, iterations} tuple.
  */
 @WorkerThread
-internal fun generatePrivateKeyWithPassword(password: String,
-                                            progressListener: ProgressListener?
+internal fun generatePrivateKeyWithPassword(
+        password: String,
+        progressListener: ProgressListener?
 ): GeneratePrivateKeyResult {
     val salt = generateSalt()
     val iterations = DEFAULT_ITERATION
@@ -68,10 +69,12 @@ internal fun generatePrivateKeyWithPassword(password: String,
  * @return a private key.
  */
 @WorkerThread
-internal fun retrievePrivateKeyWithPassword(password: String,
-                                            salt: String,
-                                            iterations: Int,
-                                            progressListener: ProgressListener? = null): ByteArray {
+internal fun retrievePrivateKeyWithPassword(
+        password: String,
+        salt: String,
+        iterations: Int,
+        progressListener: ProgressListener? = null
+): ByteArray {
     return deriveKey(password, salt, iterations, progressListener)
 }
 
@@ -86,10 +89,12 @@ internal fun retrievePrivateKeyWithPassword(password: String,
  * @return a private key.
  */
 @WorkerThread
-internal fun deriveKey(password: String,
-                       salt: String,
-                       iterations: Int,
-                       progressListener: ProgressListener?): ByteArray {
+internal fun deriveKey(
+        password: String,
+        salt: String,
+        iterations: Int,
+        progressListener: ProgressListener?
+): ByteArray {
     // Note: copied and adapted from MXMegolmExportEncryption
     val t0 = System.currentTimeMillis()
 

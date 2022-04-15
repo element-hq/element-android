@@ -33,12 +33,14 @@ import timber.log.Timber
  * (room key request, or sss secret sharing, as well as cancellations)
  *
  */
-internal open class GossipingEventEntity(@Index var type: String? = "",
-                                         var content: String? = null,
-                                         @Index var sender: String? = null,
-                                         var decryptionResultJson: String? = null,
-                                         var decryptionErrorCode: String? = null,
-                                         var ageLocalTs: Long? = null) : RealmObject() {
+internal open class GossipingEventEntity(
+        @Index var type: String? = "",
+        var content: String? = null,
+        @Index var sender: String? = null,
+        var decryptionResultJson: String? = null,
+        var decryptionErrorCode: String? = null,
+        var ageLocalTs: Long? = null
+) : RealmObject() {
 
     private var sendStateStr: String = SendState.UNKNOWN.name
 

@@ -32,9 +32,11 @@ import kotlin.coroutines.suspendCoroutine
  * provided authUpdate
  * @return true if UIA is handled without error
  */
-internal suspend fun handleUIA(failure: Throwable,
-                               interceptor: UserInteractiveAuthInterceptor,
-                               retryBlock: suspend (UIABaseAuth) -> Unit): Boolean {
+internal suspend fun handleUIA(
+        failure: Throwable,
+        interceptor: UserInteractiveAuthInterceptor,
+        retryBlock: suspend (UIABaseAuth) -> Unit
+): Boolean {
     Timber.d("## UIA: check error ${failure.message}")
     val flowResponse = failure.toRegistrationFlowResponse()
             ?: return false.also {

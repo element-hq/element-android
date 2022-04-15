@@ -33,8 +33,9 @@ import org.matrix.android.sdk.internal.database.query.where
  * It allows to get the live membership of a user.
  */
 
-internal class RoomMemberHelper(private val realm: Realm,
-                                private val roomId: String
+internal class RoomMemberHelper(
+        private val realm: Realm,
+        private val roomId: String
 ) {
 
     private val roomSummary: RoomSummaryEntity? by lazy {

@@ -21,8 +21,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.session.room.reporting.ReportingService
 
-internal class DefaultReportingService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                                   private val reportContentTask: ReportContentTask
+internal class DefaultReportingService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val reportContentTask: ReportContentTask
 ) : ReportingService {
 
     @AssistedFactory

@@ -26,9 +26,10 @@ import org.matrix.android.sdk.api.session.room.send.DraftService
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.util.Optional
 
-internal class DefaultDraftService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                               private val draftRepository: DraftRepository,
-                                                               private val coroutineDispatchers: MatrixCoroutineDispatchers
+internal class DefaultDraftService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val draftRepository: DraftRepository,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : DraftService {
 
     @AssistedFactory

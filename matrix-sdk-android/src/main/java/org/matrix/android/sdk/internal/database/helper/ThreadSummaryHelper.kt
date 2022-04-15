@@ -53,7 +53,8 @@ internal fun ThreadSummaryEntity.updateThreadSummary(
         numberOfThreads: Int?,
         latestThreadEventEntity: EventEntity?,
         isUserParticipating: Boolean,
-        roomMemberContentsByUser: HashMap<String, RoomMemberContent?>) {
+        roomMemberContentsByUser: HashMap<String, RoomMemberContent?>
+) {
     updateThreadSummaryRootEvent(rootThreadEventEntity, roomMemberContentsByUser)
     updateThreadSummaryLatestEvent(latestThreadEventEntity, roomMemberContentsByUser)
     this.isUserParticipating = isUserParticipating
@@ -271,7 +272,8 @@ private fun createLatestEventEntity(
         roomId: String,
         rootThreadEvent: Event,
         roomMemberContentsByUser: HashMap<String, RoomMemberContent?>,
-        realm: Realm): EventEntity? {
+        realm: Realm
+): EventEntity? {
     return getLatestEvent(rootThreadEvent)?.let {
         it.senderId?.let { senderId ->
             roomMemberContentsByUser.addSenderState(realm, roomId, senderId)

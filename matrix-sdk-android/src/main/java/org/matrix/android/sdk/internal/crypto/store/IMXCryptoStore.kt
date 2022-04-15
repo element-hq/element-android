@@ -198,10 +198,12 @@ internal interface IMXCryptoStore {
      */
     fun storeUserDevices(userId: String, devices: Map<String, CryptoDeviceInfo>?)
 
-    fun storeUserCrossSigningKeys(userId: String,
-                                  masterKey: CryptoCrossSigningKey?,
-                                  selfSigningKey: CryptoCrossSigningKey?,
-                                  userSigningKey: CryptoCrossSigningKey?)
+    fun storeUserCrossSigningKeys(
+            userId: String,
+            masterKey: CryptoCrossSigningKey?,
+            selfSigningKey: CryptoCrossSigningKey?,
+            userSigningKey: CryptoCrossSigningKey?
+    )
 
     /**
      * Retrieve the known devices for a user.
@@ -402,10 +404,12 @@ internal interface IMXCryptoStore {
         )
     }
 
-    fun updateGossipingRequestState(requestUserId: String?,
-                                    requestDeviceId: String?,
-                                    requestId: String?,
-                                    state: GossipingRequestState)
+    fun updateGossipingRequestState(
+            requestUserId: String?,
+            requestDeviceId: String?,
+            requestId: String?,
+            state: GossipingRequestState
+    )
 
     /**
      * Search an IncomingRoomKeyRequest
@@ -461,8 +465,10 @@ internal interface IMXCryptoStore {
     fun addWithHeldMegolmSession(withHeldContent: RoomKeyWithHeldContent)
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
 
-    fun markedSessionAsShared(roomId: String?, sessionId: String, userId: String, deviceId: String,
-                              deviceIdentityKey: String, chainIndex: Int)
+    fun markedSessionAsShared(
+            roomId: String?, sessionId: String, userId: String, deviceId: String,
+            deviceIdentityKey: String, chainIndex: Int
+    )
 
     /**
      * Query for information on this session sharing history.

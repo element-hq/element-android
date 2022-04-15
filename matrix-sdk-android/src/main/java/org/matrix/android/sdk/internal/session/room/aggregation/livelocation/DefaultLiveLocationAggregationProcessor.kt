@@ -75,8 +75,10 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
         beaconInfoEntity.root?.content = ContentMapper.map(beaconInfoContent.toContent())
     }
 
-    private fun isBeaconInfoOutdated(beaconInfoContent: LiveLocationBeaconContent,
-                                     liveLocationContent: MessageLiveLocationContent): Boolean {
+    private fun isBeaconInfoOutdated(
+            beaconInfoContent: LiveLocationBeaconContent,
+            liveLocationContent: MessageLiveLocationContent
+    ): Boolean {
         val beaconInfoStartTime = beaconInfoContent.getBestTimestampAsMilliseconds() ?: 0
         val liveLocationEventTime = liveLocationContent.getBestTimestampAsMilliseconds() ?: 0
         val timeout = beaconInfoContent.getBestBeaconInfo()?.timeout ?: 0

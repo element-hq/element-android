@@ -39,7 +39,8 @@ private val loggerTag = LoggerTag("EnsureOlmSessionsForDevicesAction", LoggerTag
 internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
         private val olmDevice: MXOlmDevice,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
+        private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask
+) {
 
     private val ensureMutex = Mutex()
 

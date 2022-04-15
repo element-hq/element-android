@@ -31,7 +31,8 @@ internal data class PasswordLoginParams(
         @Json(name = "password") val password: String,
         @Json(name = "type") override val type: String,
         @Json(name = "initial_device_display_name") val deviceDisplayName: String?,
-        @Json(name = "device_id") val deviceId: String?) : LoginParams {
+        @Json(name = "device_id") val deviceId: String?
+) : LoginParams {
 
     companion object {
         private const val IDENTIFIER_KEY_TYPE = "type"
@@ -47,10 +48,12 @@ internal data class PasswordLoginParams(
         private const val IDENTIFIER_KEY_COUNTRY = "country"
         private const val IDENTIFIER_KEY_PHONE = "phone"
 
-        fun userIdentifier(user: String,
-                           password: String,
-                           deviceDisplayName: String?,
-                           deviceId: String?): PasswordLoginParams {
+        fun userIdentifier(
+                user: String,
+                password: String,
+                deviceDisplayName: String?,
+                deviceId: String?
+        ): PasswordLoginParams {
             return PasswordLoginParams(
                     identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_USER,
@@ -63,11 +66,13 @@ internal data class PasswordLoginParams(
             )
         }
 
-        fun thirdPartyIdentifier(medium: String,
-                                 address: String,
-                                 password: String,
-                                 deviceDisplayName: String?,
-                                 deviceId: String?): PasswordLoginParams {
+        fun thirdPartyIdentifier(
+                medium: String,
+                address: String,
+                password: String,
+                deviceDisplayName: String?,
+                deviceId: String?
+        ): PasswordLoginParams {
             return PasswordLoginParams(
                     identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_THIRD_PARTY,
@@ -81,11 +86,13 @@ internal data class PasswordLoginParams(
             )
         }
 
-        fun phoneIdentifier(country: String,
-                            phone: String,
-                            password: String,
-                            deviceDisplayName: String?,
-                            deviceId: String?): PasswordLoginParams {
+        fun phoneIdentifier(
+                country: String,
+                phone: String,
+                password: String,
+                deviceDisplayName: String?,
+                deviceId: String?
+        ): PasswordLoginParams {
             return PasswordLoginParams(
                     identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_PHONE,

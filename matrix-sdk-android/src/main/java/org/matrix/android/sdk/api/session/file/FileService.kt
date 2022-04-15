@@ -44,10 +44,12 @@ interface FileService {
      * Download a file if necessary and ensure that if the file is encrypted, the file is decrypted.
      * Result will be a decrypted file, stored in the cache folder. url parameter will be used to create unique filename to avoid name collision.
      */
-    suspend fun downloadFile(fileName: String,
-                     mimeType: String?,
-                     url: String?,
-                     elementToDecrypt: ElementToDecrypt?): File
+    suspend fun downloadFile(
+            fileName: String,
+            mimeType: String?,
+            url: String?,
+            elementToDecrypt: ElementToDecrypt?
+    ): File
 
     suspend fun downloadFile(messageContent: MessageWithAttachmentContent): File =
             downloadFile(
@@ -57,10 +59,11 @@ interface FileService {
                     elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
             )
 
-    fun isFileInCache(mxcUrl: String?,
-                      fileName: String,
-                      mimeType: String?,
-                      elementToDecrypt: ElementToDecrypt?
+    fun isFileInCache(
+            mxcUrl: String?,
+            fileName: String,
+            mimeType: String?,
+            elementToDecrypt: ElementToDecrypt?
     ): Boolean
 
     fun isFileInCache(messageContent: MessageWithAttachmentContent) =
@@ -74,10 +77,12 @@ interface FileService {
      * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION
      * (if not other app won't be able to access it)
      */
-    fun getTemporarySharableURI(mxcUrl: String?,
-                                fileName: String,
-                                mimeType: String?,
-                                elementToDecrypt: ElementToDecrypt?): Uri?
+    fun getTemporarySharableURI(
+            mxcUrl: String?,
+            fileName: String,
+            mimeType: String?,
+            elementToDecrypt: ElementToDecrypt?
+    ): Uri?
 
     fun getTemporarySharableURI(messageContent: MessageWithAttachmentContent): Uri? =
             getTemporarySharableURI(
@@ -91,10 +96,12 @@ interface FileService {
      * Get information on the given file.
      * Mimetype should be the same one as passed to downloadFile (limitation for now)
      */
-    fun fileState(mxcUrl: String?,
-                  fileName: String,
-                  mimeType: String?,
-                  elementToDecrypt: ElementToDecrypt?): FileState
+    fun fileState(
+            mxcUrl: String?,
+            fileName: String,
+            mimeType: String?,
+            elementToDecrypt: ElementToDecrypt?
+    ): FileState
 
     fun fileState(messageContent: MessageWithAttachmentContent): FileState =
             fileState(

@@ -53,31 +53,32 @@ import org.matrix.android.sdk.internal.session.search.SearchTask
 import org.matrix.android.sdk.internal.session.space.DefaultSpace
 import java.security.InvalidParameterException
 
-internal class DefaultRoom(override val roomId: String,
-                           private val roomSummaryDataSource: RoomSummaryDataSource,
-                           private val timelineService: TimelineService,
-                           private val threadsService: ThreadsService,
-                           private val threadsLocalService: ThreadsLocalService,
-                           private val sendService: SendService,
-                           private val draftService: DraftService,
-                           private val stateService: StateService,
-                           private val uploadsService: UploadsService,
-                           private val reportingService: ReportingService,
-                           private val roomCallService: RoomCallService,
-                           private val readService: ReadService,
-                           private val typingService: TypingService,
-                           private val aliasService: AliasService,
-                           private val tagsService: TagsService,
-                           private val cryptoService: CryptoService,
-                           private val relationService: RelationService,
-                           private val roomMembersService: MembershipService,
-                           private val roomPushRuleService: RoomPushRuleService,
-                           private val roomAccountDataService: RoomAccountDataService,
-                           private val roomVersionService: RoomVersionService,
-                           private val sendStateTask: SendStateTask,
-                           private val viaParameterFinder: ViaParameterFinder,
-                           private val searchTask: SearchTask,
-                           override val coroutineDispatchers: MatrixCoroutineDispatchers
+internal class DefaultRoom(
+        override val roomId: String,
+        private val roomSummaryDataSource: RoomSummaryDataSource,
+        private val timelineService: TimelineService,
+        private val threadsService: ThreadsService,
+        private val threadsLocalService: ThreadsLocalService,
+        private val sendService: SendService,
+        private val draftService: DraftService,
+        private val stateService: StateService,
+        private val uploadsService: UploadsService,
+        private val reportingService: ReportingService,
+        private val roomCallService: RoomCallService,
+        private val readService: ReadService,
+        private val typingService: TypingService,
+        private val aliasService: AliasService,
+        private val tagsService: TagsService,
+        private val cryptoService: CryptoService,
+        private val relationService: RelationService,
+        private val roomMembersService: MembershipService,
+        private val roomPushRuleService: RoomPushRuleService,
+        private val roomAccountDataService: RoomAccountDataService,
+        private val roomVersionService: RoomVersionService,
+        private val sendStateTask: SendStateTask,
+        private val viaParameterFinder: ViaParameterFinder,
+        private val searchTask: SearchTask,
+        override val coroutineDispatchers: MatrixCoroutineDispatchers
 ) :
         Room,
         TimelineService by timelineService,
@@ -147,13 +148,15 @@ internal class DefaultRoom(override val roomId: String,
         }
     }
 
-    override suspend fun search(searchTerm: String,
-                                nextBatch: String?,
-                                orderByRecent: Boolean,
-                                limit: Int,
-                                beforeLimit: Int,
-                                afterLimit: Int,
-                                includeProfile: Boolean): SearchResult {
+    override suspend fun search(
+            searchTerm: String,
+            nextBatch: String?,
+            orderByRecent: Boolean,
+            limit: Int,
+            beforeLimit: Int,
+            afterLimit: Int,
+            includeProfile: Boolean
+    ): SearchResult {
         return searchTask.execute(
                 SearchTask.Params(
                         searchTerm = searchTerm,

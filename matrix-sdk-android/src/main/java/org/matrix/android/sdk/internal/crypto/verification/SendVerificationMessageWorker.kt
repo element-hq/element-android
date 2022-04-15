@@ -35,7 +35,7 @@ import javax.inject.Inject
  * Possible next worker    : None
  */
 internal class SendVerificationMessageWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<SendVerificationMessageWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<SendVerificationMessageWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

@@ -39,11 +39,13 @@ import java.io.IOException
  * @param maxRetriesCount the max number of retries
  * @param requestBlock a suspend lambda to perform the network request
  */
-internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                                  canRetry: Boolean = false,
-                                                  maxDelayBeforeRetry: Long = 32_000L,
-                                                  maxRetriesCount: Int = 4,
-                                                  noinline requestBlock: suspend () -> DATA): DATA {
+internal suspend inline fun <DATA> executeRequest(
+        globalErrorReceiver: GlobalErrorReceiver?,
+        canRetry: Boolean = false,
+        maxDelayBeforeRetry: Long = 32_000L,
+        maxRetriesCount: Int = 4,
+        noinline requestBlock: suspend () -> DATA
+): DATA {
     var currentRetryCount = 0
     var currentDelay = 1_000L
 

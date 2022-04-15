@@ -24,10 +24,12 @@ import org.matrix.android.sdk.internal.database.model.ReadMarkerEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 
-internal fun isEventRead(realmConfiguration: RealmConfiguration,
-                         userId: String?,
-                         roomId: String?,
-                         eventId: String?): Boolean {
+internal fun isEventRead(
+        realmConfiguration: RealmConfiguration,
+        userId: String?,
+        roomId: String?,
+        eventId: String?
+): Boolean {
     if (userId.isNullOrBlank() || roomId.isNullOrBlank() || eventId.isNullOrBlank()) {
         return false
     }
@@ -77,9 +79,11 @@ private fun Realm.hasReadReceiptInLatestChunk(latestChunkEntity: ChunkEntity, ro
     } != null
 }
 
-internal fun isReadMarkerMoreRecent(realmConfiguration: RealmConfiguration,
-                                    roomId: String?,
-                                    eventId: String?): Boolean {
+internal fun isReadMarkerMoreRecent(
+        realmConfiguration: RealmConfiguration,
+        roomId: String?,
+        eventId: String?
+): Boolean {
     if (roomId.isNullOrBlank() || eventId.isNullOrBlank()) {
         return false
     }

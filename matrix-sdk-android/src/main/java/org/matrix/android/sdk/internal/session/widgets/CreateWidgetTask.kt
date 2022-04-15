@@ -40,10 +40,12 @@ internal interface CreateWidgetTask : Task<CreateWidgetTask.Params, Unit> {
     )
 }
 
-internal class DefaultCreateWidgetTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                           private val roomAPI: RoomAPI,
-                                                           @UserId private val userId: String,
-                                                           private val globalErrorReceiver: GlobalErrorReceiver) : CreateWidgetTask {
+internal class DefaultCreateWidgetTask @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val roomAPI: RoomAPI,
+        @UserId private val userId: String,
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : CreateWidgetTask {
 
     override suspend fun execute(params: CreateWidgetTask.Params) {
         executeRequest(globalErrorReceiver) {

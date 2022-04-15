@@ -36,14 +36,16 @@ import javax.inject.Inject
 
 // Legacy name: MXDeviceList
 @SessionScope
-internal class DeviceListManager @Inject constructor(private val cryptoStore: IMXCryptoStore,
-                                                     private val olmDevice: MXOlmDevice,
-                                                     private val syncTokenStore: SyncTokenStore,
-                                                     private val credentials: Credentials,
-                                                     private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
-                                                     private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-                                                     coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                     private val taskExecutor: TaskExecutor) {
+internal class DeviceListManager @Inject constructor(
+        private val cryptoStore: IMXCryptoStore,
+        private val olmDevice: MXOlmDevice,
+        private val syncTokenStore: SyncTokenStore,
+        private val credentials: Credentials,
+        private val downloadKeysForUsersTask: DownloadKeysForUsersTask,
+        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+        coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val taskExecutor: TaskExecutor
+) {
 
     interface UserDevicesUpdateListener {
         fun onUsersDeviceUpdate(userIds: List<String>)

@@ -42,7 +42,8 @@ internal class MXMegolmEncryptionFactory @Inject constructor(
         private val messageEncrypter: MessageEncrypter,
         private val warnOnUnknownDevicesRepository: WarnOnUnknownDeviceRepository,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val cryptoCoroutineScope: CoroutineScope) {
+        private val cryptoCoroutineScope: CoroutineScope
+) {
 
     fun create(roomId: String): MXMegolmEncryption {
         return MXMegolmEncryption(

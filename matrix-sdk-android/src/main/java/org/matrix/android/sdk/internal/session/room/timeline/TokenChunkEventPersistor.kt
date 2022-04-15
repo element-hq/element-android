@@ -54,7 +54,8 @@ internal class TokenChunkEventPersistor @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         @UserId private val userId: String,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val liveEventManager: Lazy<StreamEventsManager>) {
+        private val liveEventManager: Lazy<StreamEventsManager>
+) {
 
     enum class Result {
         SHOULD_FETCH_MORE,
@@ -62,9 +63,11 @@ internal class TokenChunkEventPersistor @Inject constructor(
         SUCCESS
     }
 
-    suspend fun insertInDb(receivedChunk: TokenChunkEvent,
-                           roomId: String,
-                           direction: PaginationDirection): Result {
+    suspend fun insertInDb(
+            receivedChunk: TokenChunkEvent,
+            roomId: String,
+            direction: PaginationDirection
+    ): Result {
         monarchy
                 .awaitTransaction { realm ->
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")

@@ -26,8 +26,10 @@ import okio.buffer
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import java.io.IOException
 
-internal class ProgressRequestBody(private val delegate: RequestBody,
-                                   private val listener: Listener) : RequestBody() {
+internal class ProgressRequestBody(
+        private val delegate: RequestBody,
+        private val listener: Listener
+) : RequestBody() {
 
     private lateinit var countingSink: CountingSink
 

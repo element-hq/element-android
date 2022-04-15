@@ -29,4 +29,5 @@ internal data class SecretKeyAndVersion(
         /**
          * The android version when the key has been generated
          */
-        val androidVersionWhenTheKeyHasBeenGenerated: Int)
+        val androidVersionWhenTheKeyHasBeenGenerated: Int
+)

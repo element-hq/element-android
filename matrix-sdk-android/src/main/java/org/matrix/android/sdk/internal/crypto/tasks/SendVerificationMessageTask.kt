@@ -37,7 +37,8 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
         private val encryptEventTask: EncryptEventTask,
         private val roomAPI: RoomAPI,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-        private val globalErrorReceiver: GlobalErrorReceiver) : SendVerificationMessageTask {
+        private val globalErrorReceiver: GlobalErrorReceiver
+) : SendVerificationMessageTask {
 
     override suspend fun execute(params: SendVerificationMessageTask.Params): String {
         val event = handleEncryption(params)

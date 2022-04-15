@@ -266,12 +266,14 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     // OPT OUT serer aggregation until API mature enough
     private val SHOULD_HANDLE_SERVER_AGREGGATION = false // should be true to work with e2e
 
-    private fun handleReplace(realm: Realm,
-                              event: Event,
-                              content: MessageContent,
-                              roomId: String,
-                              isLocalEcho: Boolean,
-                              relatedEventId: String? = null) {
+    private fun handleReplace(
+            realm: Realm,
+            event: Event,
+            content: MessageContent,
+            roomId: String,
+            isLocalEcho: Boolean,
+            relatedEventId: String? = null
+    ) {
         val eventId = event.eventId ?: return
         val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
         val newContent = content.newContent ?: return
@@ -371,9 +373,11 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
      * @param editedEvent The event that will be changed
      * @param replaceEvent The new event
      */
-    private fun handleThreadSummaryEdition(editedEvent: EventEntity?,
-                                           replaceEvent: TimelineEventEntity?,
-                                           editions: List<EditionOfEvent>?) {
+    private fun handleThreadSummaryEdition(
+            editedEvent: EventEntity?,
+            replaceEvent: TimelineEventEntity?,
+            editions: List<EditionOfEvent>?
+    ) {
         replaceEvent ?: return
         editedEvent ?: return
         editedEvent.findRootThreadEvent()?.apply {
@@ -386,12 +390,14 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
     }
 
-    private fun handleResponse(realm: Realm,
-                               event: Event,
-                               content: MessagePollResponseContent,
-                               roomId: String,
-                               isLocalEcho: Boolean,
-                               relatedEventId: String? = null) {
+    private fun handleResponse(
+            realm: Realm,
+            event: Event,
+            content: MessagePollResponseContent,
+            roomId: String,
+            isLocalEcho: Boolean,
+            relatedEventId: String? = null
+    ) {
         val eventId = event.eventId ?: return
         val senderId = event.senderId ?: return
         val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
@@ -499,11 +505,13 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         existingPollSummary.aggregatedContent = ContentMapper.map(newSumModel.toContent())
     }
 
-    private fun handleEndPoll(realm: Realm,
-                              event: Event,
-                              content: MessageEndPollContent,
-                              roomId: String,
-                              isLocalEcho: Boolean) {
+    private fun handleEndPoll(
+            realm: Realm,
+            event: Event,
+            content: MessageEndPollContent,
+            roomId: String,
+            isLocalEcho: Boolean
+    ) {
         val pollEventId = content.relatesTo?.eventId ?: return
         val pollOwnerId = getPollEvent(roomId, pollEventId)?.root?.senderId
         val isPollOwner = pollOwnerId == event.senderId
@@ -555,10 +563,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
     }
 
-    private fun handleInitialAggregatedRelations(realm: Realm,
-                                                 event: Event,
-                                                 roomId: String,
-                                                 aggregation: AggregatedAnnotation) {
+    private fun handleInitialAggregatedRelations(
+            realm: Realm,
+            event: Event,
+            roomId: String,
+            aggregation: AggregatedAnnotation
+    ) {
         if (SHOULD_HANDLE_SERVER_AGREGGATION) {
             aggregation.chunk?.forEach {
                 if (it.type == EventType.REACTION) {
@@ -580,10 +590,12 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
     }
 
-    private fun handleReaction(realm: Realm,
-                               event: Event,
-                               roomId: String,
-                               isLocalEcho: Boolean) {
+    private fun handleReaction(
+            realm: Realm,
+            event: Event,
+            roomId: String,
+            isLocalEcho: Boolean
+    ) {
         val content = event.content.toModel<ReactionContent>()
         if (content == null) {
             Timber.e("Malformed reaction content ${event.content}")
@@ -648,9 +660,11 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
     /**
      * Called when an event is deleted
      */
-    private fun handleRedactionOfReplace(realm: Realm,
-                                         redacted: EventEntity,
-                                         relatedEventId: String) {
+    private fun handleRedactionOfReplace(
+            realm: Realm,
+            redacted: EventEntity,
+            relatedEventId: String
+    ) {
         Timber.d("Handle redaction of m.replace")
         val eventSummary = EventAnnotationsSummaryEntity.where(realm, redacted.roomId, relatedEventId).findFirst()
         if (eventSummary == null) {
@@ -666,8 +680,10 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         sourceToDiscard.deleteFromRealm()
     }
 
-    private fun handleReactionRedact(realm: Realm,
-                                     eventToPrune: EventEntity) {
+    private fun handleReactionRedact(
+            realm: Realm,
+            eventToPrune: EventEntity
+    ) {
         Timber.v("REDACTION of reaction ${eventToPrune.eventId}")
         // delete a reaction, need to update the annotation summary if any
         val reactionContent: ReactionContent = EventMapper.map(eventToPrune).content.toModel() ?: return

@@ -21,12 +21,13 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.matrix.android.sdk.api.session.room.model.Membership
 
-internal open class GroupSummaryEntity(@PrimaryKey var groupId: String = "",
-                                       var displayName: String = "",
-                                       var shortDescription: String = "",
-                                       var avatarUrl: String = "",
-                                       var roomIds: RealmList<String> = RealmList(),
-                                       var userIds: RealmList<String> = RealmList()
+internal open class GroupSummaryEntity(
+        @PrimaryKey var groupId: String = "",
+        var displayName: String = "",
+        var shortDescription: String = "",
+        var avatarUrl: String = "",
+        var roomIds: RealmList<String> = RealmList(),
+        var userIds: RealmList<String> = RealmList()
 ) : RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
