@@ -66,7 +66,7 @@ interface CryptoService {
 
     suspend fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo>
 
-    fun getMyDevice(): CryptoDeviceInfo
+    suspend fun getMyDevice(): CryptoDeviceInfo
 
     fun getGlobalBlacklistUnverifiedDevices(): Boolean
 
@@ -104,10 +104,9 @@ interface CryptoService {
 
     fun isRoomEncrypted(roomId: String): Boolean
 
-    fun encryptEventContent(eventContent: Content,
+    suspend fun encryptEventContent(eventContent: Content,
                             eventType: String,
-                            roomId: String,
-                            callback: MatrixCallback<MXEncryptEventContentResult>)
+                            roomId: String): MXEncryptEventContentResult
 
     fun discardOutboundSession(roomId: String)
 
@@ -151,7 +150,7 @@ interface CryptoService {
      * Perform any background tasks that can be done before a message is ready to
      * send, in order to speed up sending of the message.
      */
-    fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
+    suspend fun prepareToEncrypt(roomId: String)
 
     /**
      * When LL all room members might not be loaded when setting up encryption.

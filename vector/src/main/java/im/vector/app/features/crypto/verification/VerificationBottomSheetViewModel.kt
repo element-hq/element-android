@@ -16,8 +16,6 @@
 package im.vector.app.features.crypto.verification
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
@@ -358,44 +356,21 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
 
     private fun handleRequestVerificationByDM(roomId: String?, otherUserId: String) {
         viewModelScope.launch {
-            if (roomId == null) {
-                val localId = LocalEcho.createLocalEchoId()
-                setState {
-                    copy(
-                            pendingLocalId = localId,
-                            pendingRequest = Loading()
-                    )
-                }
-                try {
-                    val dmRoomId = session.createDirectRoom(otherUserId)
-                    val pendingRequest = session
-                            .cryptoService()
-                            .verificationService()
-                            .requestKeyVerificationInDMs(
-                                    supportedVerificationMethodsProvider.provide(),
-                                    otherUserId,
-                                    dmRoomId,
-                                    localId
-                            )
-                    setState {
-                        copy(
-                                roomId = dmRoomId,
-                                pendingRequest = Success(pendingRequest)
-                        )
-                    }
-                } catch (failure: Throwable) {
-                    setState {
-                        copy(pendingRequest = Fail(failure))
-                    }
-                }
-            } else {
-                val pendingRequest = session
+            val localId = LocalEcho.createLocalEchoId()
+            val dmRoomId = roomId ?: session.createDirectRoom(otherUserId)
+            setState { copy(pendingLocalId = localId, roomId = dmRoomId) }
+            suspend {
+                session
                         .cryptoService()
                         .verificationService()
-                        .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
-                setState {
-                    copy(pendingRequest = Success(pendingRequest))
-                }
+                        .requestKeyVerificationInDMs(
+                                supportedVerificationMethodsProvider.provide(),
+                                otherUserId,
+                                dmRoomId,
+                                localId
+                        )
+            }.execute {
+                copy(pendingRequest = it, roomId = dmRoomId)
             }
         }
     }

@@ -22,11 +22,9 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
-import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.internal.util.awaitCallback
 import javax.inject.Inject
 
 internal interface EncryptEventTask : Task<EncryptEventTask.Params, Event> {
@@ -56,47 +54,44 @@ internal class DefaultEncryptEventTask @Inject constructor(
             localMutableContent.remove(it)
         }
 
-//        try {
         // let it throws
-        awaitCallback<MXEncryptEventContentResult> {
-            cryptoService.encryptEventContent(localMutableContent, localEvent.type, params.roomId, it)
-        }.let { result ->
-            val modifiedContent = HashMap(result.eventContent)
-            params.keepKeys?.forEach { toKeep ->
-                localEvent.content?.get(toKeep)?.let {
-                    // put it back in the encrypted thing
-                    modifiedContent[toKeep] = it
-                }
-            }
-            val safeResult = result.copy(eventContent = modifiedContent)
-            // Better handling of local echo, to avoid decrypting transition on remote echo
-            // Should I only do it for text messages?
-            val decryptionLocalEcho = if (result.eventContent["algorithm"] == MXCRYPTO_ALGORITHM_MEGOLM) {
-                MXEventDecryptionResult(
-                        clearEvent = Event(
-                                type = localEvent.type,
-                                content = localEvent.content,
-                                roomId = localEvent.roomId
-                        ).toContent(),
-                        forwardingCurve25519KeyChain = emptyList(),
-                        senderCurve25519Key = result.eventContent["sender_key"] as? String,
-                        claimedEd25519Key = cryptoService.getMyDevice().fingerprint()
-                )
-            } else {
-                null
-            }
+        val result = cryptoService.encryptEventContent(localMutableContent, localEvent.type, params.roomId)
 
-            localEchoRepository.updateEcho(localEvent.eventId) { _, localEcho ->
-                localEcho.type = EventType.ENCRYPTED
-                localEcho.content = ContentMapper.map(modifiedContent)
-                decryptionLocalEcho?.also {
-                    localEcho.setDecryptionResult(it)
-                }
+        val modifiedContent = HashMap(result.eventContent)
+        params.keepKeys?.forEach { toKeep ->
+            localEvent.content?.get(toKeep)?.let {
+                // put it back in the encrypted thing
+                modifiedContent[toKeep] = it
             }
-            return localEvent.copy(
-                    type = safeResult.eventType,
-                    content = safeResult.eventContent
-            )
         }
+        val safeResult = result.copy(eventContent = modifiedContent)
+        // Better handling of local echo, to avoid decrypting transition on remote echo
+        // Should I only do it for text messages?
+        val decryptionLocalEcho = if (result.eventContent["algorithm"] == MXCRYPTO_ALGORITHM_MEGOLM) {
+            MXEventDecryptionResult(
+                    clearEvent = Event(
+                            type = localEvent.type,
+                            content = localEvent.content,
+                            roomId = localEvent.roomId
+                    ).toContent(),
+                    forwardingCurve25519KeyChain = emptyList(),
+                    senderCurve25519Key = result.eventContent["sender_key"] as? String,
+                    claimedEd25519Key = cryptoService.getMyDevice().fingerprint()
+            )
+        } else {
+            null
+        }
+
+        localEchoRepository.updateEcho(localEvent.eventId) { _, localEcho ->
+            localEcho.type = EventType.ENCRYPTED
+            localEcho.content = ContentMapper.map(modifiedContent)
+            decryptionLocalEcho?.also {
+                localEcho.setDecryptionResult(it)
+            }
+        }
+        return localEvent.copy(
+                type = safeResult.eventType,
+                content = safeResult.eventContent
+        )
     }
 }

@@ -22,13 +22,13 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -76,7 +76,6 @@ import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.verification.RustVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
@@ -219,8 +218,8 @@ internal class DefaultCryptoService @Inject constructor(
         return if (longFormat) "Rust SDK 0.3" else "0.3"
     }
 
-    override fun getMyDevice(): CryptoDeviceInfo {
-        return runBlocking { olmMachine.ownDevice() }
+    override suspend fun getMyDevice(): CryptoDeviceInfo {
+        return olmMachine.ownDevice()
     }
 
     override suspend fun fetchDevicesList(): List<DeviceInfo> {
@@ -344,9 +343,13 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Close the crypto
      */
-    fun close() = runBlocking(coroutineDispatchers.crypto) {
+    fun close() {
         cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
-        cryptoStore.close()
+        cryptoCoroutineScope.launch {
+            withContext(coroutineDispatchers.crypto + NonCancellable) {
+                cryptoStore.close()
+            }
+        }
     }
 
     // Always enabled on Matrix Android SDK2
@@ -513,34 +516,29 @@ internal class DefaultCryptoService @Inject constructor(
      * @param eventContent the content of the event.
      * @param eventType    the type of the event.
      * @param roomId       the room identifier the event will be sent.
-     * @param callback     the asynchronous callback
      */
-    override fun encryptEventContent(eventContent: Content,
-                                     eventType: String,
-                                     roomId: String,
-                                     callback: MatrixCallback<MXEncryptEventContentResult>) {
+    override suspend fun encryptEventContent(eventContent: Content,
+                                             eventType: String,
+                                             roomId: String): MXEncryptEventContentResult {
         // moved to crypto scope to have up to date values
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        return withContext(coroutineDispatchers.crypto) {
             val algorithm = getEncryptionAlgorithm(roomId)
-
             if (algorithm != null) {
                 val userIds = getRoomUserIds(roomId)
                 val t0 = System.currentTimeMillis()
                 Timber.tag(loggerTag.value).v("encryptEventContent() starts")
-                runCatching {
-                    measureTimeMillis {
-                        preshareRoomKey(roomId, userIds)
-                    }.also {
-                        Timber.d("Shared room key in room $roomId took $it ms")
-                    }
-                    val content = encrypt(roomId, eventType, eventContent)
-                    Timber.tag(loggerTag.value).v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
-                    MXEncryptEventContentResult(content, EventType.ENCRYPTED)
-                }.foldToCallback(callback)
+                measureTimeMillis {
+                    preshareRoomKey(roomId, userIds)
+                }.also {
+                    Timber.d("Shared room key in room $roomId took $it ms")
+                }
+                val content = encrypt(roomId, eventType, eventContent)
+                Timber.tag(loggerTag.value).v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
+                MXEncryptEventContentResult(content, EventType.ENCRYPTED)
             } else {
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
                 Timber.tag(loggerTag.value).e("encryptEventContent() : failed $reason")
-                callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason)))
+                throw Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason))
             }
         }
     }
@@ -707,26 +705,12 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private suspend fun preshareRoomKey(roomId: String, roomMembers: List<String>) {
-        keyClaimLock.withLock {
-            val request = this.olmMachine.getMissingSessions(roomMembers)
-            // This request can only be a keys claim request.
-            if (request != null) {
-                when (request) {
-                    is Request.KeysClaim -> {
-                        claimKeys(request)
-                    }
-                    else                 -> {
-                    }
-                }
-            }
-        }
-
-        val keyShareLock = roomKeyShareLocks.getOrPut(roomId, { Mutex() })
+        claimMissingKeys(roomMembers)
+        val keyShareLock = roomKeyShareLocks.getOrPut(roomId) { Mutex() }
         var sharedKey = false
-
         keyShareLock.withLock {
             coroutineScope {
-                this@DefaultCryptoService.olmMachine.shareRoomKey(roomId, roomMembers).map {
+                olmMachine.shareRoomKey(roomId, roomMembers).map {
                     when (it) {
                         is Request.ToDevice -> {
                             sharedKey = true
@@ -749,6 +733,18 @@ internal class DefaultCryptoService @Inject constructor(
         // Try to back the key up
         if (sharedKey) {
             keysBackupService.maybeBackupKeys()
+        }
+    }
+
+    private suspend fun claimMissingKeys(roomMembers: List<String>) = keyClaimLock.withLock {
+        val request = this.olmMachine.getMissingSessions(roomMembers)
+        // This request can only be a keys claim request.
+        when (request) {
+            is Request.KeysClaim -> {
+                claimKeys(request)
+            }
+            else                 -> {
+            }
         }
     }
 
@@ -810,7 +806,7 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    private suspend fun sendRoomMessage(request: Request.RoomMessage){
+    private suspend fun sendRoomMessage(request: Request.RoomMessage) {
         try {
             requestSender.sendRoomMessage(request)
         } catch (throwable: Throwable) {
@@ -1083,18 +1079,16 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.logDbUsageInfo()
     }
 
-    override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+    override suspend fun prepareToEncrypt(roomId: String) {
+        withContext(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId Check room members up to date")
             // Ensure to load all room members
             try {
                 loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
             } catch (failure: Throwable) {
                 Timber.tag(loggerTag.value).e("prepareToEncrypt() : Failed to load room members")
-                callback.onFailure(failure)
-                return@launch
+                throw failure
             }
-
             val userIds = getRoomUserIds(roomId)
 
             val algorithm = getEncryptionAlgorithm(roomId)
@@ -1102,19 +1096,13 @@ internal class DefaultCryptoService @Inject constructor(
             if (algorithm == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
                 Timber.tag(loggerTag.value).e("prepareToEncrypt() : $reason")
-                callback.onFailure(IllegalArgumentException("Missing algorithm"))
-                return@launch
+                throw IllegalArgumentException("Missing algorithm")
             }
-
-            runCatching {
+            try {
                 preshareRoomKey(roomId, userIds)
-            }.fold(
-                    { callback.onSuccess(Unit) },
-                    {
-                        Timber.tag(loggerTag.value).e(it, "prepareToEncrypt() failed.")
-                        callback.onFailure(it)
-                    }
-            )
+            }catch (failure: Throwable){
+                Timber.tag(loggerTag.value).e("prepareToEncrypt() : Failed to PreshareRoomKey")
+            }
         }
     }
 
