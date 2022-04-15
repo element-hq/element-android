@@ -484,7 +484,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // check that new bob can't currently decrypt
         Log.v("#E2E TEST", "check that new bob can't currently decrypt")
-        cryptoTestHelper.ensureCannotDecrypt(listOf(firstEventId), newBobSession, e2eRoomID, MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
+        cryptoTestHelper.ensureCannotDecrypt(listOf(firstEventId), newBobSession, e2eRoomID, null)
 
         // Now let alice send a new message. this time the new bob session will be able to decrypt
         var secondEventId: String
@@ -518,9 +518,8 @@ class E2eeSanityTests : InstrumentedTest {
             try {
                 newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
                 fail("Should not be able to decrypt event")
-            } catch (error: MXCryptoError) {
-                val errorType = (error as? MXCryptoError.Base)?.errorType
-                assertEquals(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, errorType)
+            } catch (_: MXCryptoError) {
+
             }
         }
 
