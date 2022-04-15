@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.internal.crypto.CryptoModule
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
-import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixComponent
 import org.matrix.android.sdk.internal.federation.FederationModule
 import org.matrix.android.sdk.internal.network.NetworkConnectivityChecker
@@ -128,8 +127,6 @@ internal interface SessionComponent {
     fun inject(worker: SyncWorker)
 
     fun inject(worker: AddPusherWorker)
-
-    fun inject(worker: SendVerificationMessageWorker)
 
     fun inject(worker: UpdateTrustWorker)
 

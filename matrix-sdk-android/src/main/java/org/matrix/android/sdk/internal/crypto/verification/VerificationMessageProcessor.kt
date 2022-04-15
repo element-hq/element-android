@@ -15,13 +15,9 @@
  */
 package org.matrix.android.sdk.internal.crypto.verification
 
-import io.realm.Realm
-import org.matrix.android.sdk.api.session.crypto.MXCryptoError
-import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
@@ -29,20 +25,16 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationReadyContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationStartContent
-import org.matrix.android.sdk.internal.crypto.EventDecryptor
-import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class VerificationMessageProcessor @Inject constructor(
-        private val eventDecryptor: EventDecryptor,
         private val verificationService: DefaultVerificationService,
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?
-) : EventInsertLiveProcessor {
+) {
 
     private val transactionsHandledByOtherDevice = ArrayList<String>()
 
@@ -58,41 +50,20 @@ internal class VerificationMessageProcessor @Inject constructor(
             EventType.ENCRYPTED
     )
 
-    override fun shouldProcess(eventId: String, eventType: String, insertType: EventInsertType): Boolean {
-        if (insertType != EventInsertType.INCREMENTAL_SYNC) {
-            return false
-        }
-        return allowedTypes.contains(eventType) && !LocalEcho.isLocalEchoId(eventId)
+    fun shouldProcess(eventType: String): Boolean {
+        return allowedTypes.contains(eventType)
     }
 
-    override suspend fun process(realm: Realm, event: Event) {
-        Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.type} from ${event.senderId}")
+    suspend fun process(event: Event) {
+        Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} msgtype: ${event.getClearType()} from ${event.senderId}")
 
         // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
         // the message should be ignored by the receiver.
 
-        if (!VerificationService.isValidRequest(event.ageLocalTs
-                        ?: event.originServerTs)) return Unit.also {
-            Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is outdated")
+        if (event.ageLocalTs != null && !VerificationService.isValidRequest(event.ageLocalTs)) return Unit.also {
+            Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is outdated age:$event.ageLocalTs ms")
         }
 
-        // decrypt if needed?
-        if (event.isEncrypted() && event.mxDecryptionResult == null) {
-            // TODO use a global event decryptor? attache to session and that listen to new sessionId?
-            // for now decrypt sync
-            try {
-                val result = eventDecryptor.decryptEvent(event, "")
-                event.mxDecryptionResult = OlmDecryptionResult(
-                        payload = result.clearEvent,
-                        senderKey = result.senderCurve25519Key,
-                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                )
-            } catch (e: MXCryptoError) {
-                Timber.e("## SAS Failed to decrypt event: ${event.eventId}")
-                verificationService.onPotentiallyInterestingEventRoomFailToDecrypt(event)
-            }
-        }
         Timber.v("## SAS Verification live observer: received msgId: ${event.eventId} type: ${event.getClearType()}")
 
         // Relates to is not encrypted
@@ -101,7 +72,6 @@ internal class VerificationMessageProcessor @Inject constructor(
         if (event.senderId == userId) {
             // If it's send from me, we need to keep track of Requests or Start
             // done from another device of mine
-
             if (EventType.MESSAGE == event.getClearType()) {
                 val msgType = event.getClearContent().toModel<MessageContent>()?.msgType
                 if (MessageType.MSGTYPE_VERIFICATION_REQUEST == msgType) {
@@ -136,6 +106,8 @@ internal class VerificationMessageProcessor @Inject constructor(
                     transactionsHandledByOtherDevice.remove(it)
                     verificationService.onRoomRequestHandledByOtherDevice(event)
                 }
+            } else if (EventType.ENCRYPTED == event.getClearType()) {
+                verificationService.onPotentiallyInterestingEventRoomFailToDecrypt(event)
             }
 
             Timber.v("## SAS Verification ignoring message sent by me: ${event.eventId} type: ${event.getClearType()}")

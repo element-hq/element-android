@@ -378,7 +378,10 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
         val optimizedThreadSummaryMap = hashMapOf<String, EventEntity>()
-        for (event in eventList) {
+        for (rawEvent in eventList) {
+            // It's annoying roomId is not there, but lot of code rely on it.
+            // And had to do it now as copy would delete all decryption results..
+            val event = rawEvent.copy(roomId = roomId)
             if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
             }
@@ -445,7 +448,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 }
             }
             // Give info to crypto module
-            cryptoService.onLiveEvent(roomEntity.roomId, event)
+            cryptoService.onLiveEvent(roomEntity.roomId, event, isInitialSync)
 
             // Try to remove local echo
             event.unsignedData?.transactionId?.also {

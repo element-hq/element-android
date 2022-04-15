@@ -97,6 +97,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
 import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
+import org.matrix.android.sdk.internal.crypto.verification.VerificationMessageProcessor
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
@@ -183,6 +184,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,
         private val eventDecryptor: EventDecryptor,
+        private val verificationMessageProcessor: VerificationMessageProcessor,
         private val liveEventManager: Lazy<StreamEventsManager>
 ) : CryptoService {
 
@@ -197,13 +199,22 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    fun onLiveEvent(roomId: String, event: Event) {
+    fun onLiveEvent(roomId: String, event: Event, isInitialSync: Boolean) {
         // handle state events
         if (event.isStateEvent()) {
             when (event.type) {
                 EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
                 EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
                 EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
+            }
+        }
+
+        // handle verification
+        if (!isInitialSync) {
+            if (event.type != null && verificationMessageProcessor.shouldProcess(event.type)) {
+                cryptoCoroutineScope.launch(coroutineDispatchers.dmVerif) {
+                    verificationMessageProcessor.process(event)
+                }
             }
         }
     }

@@ -23,7 +23,6 @@ import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.crosssigning.UpdateTrustWorker
-import org.matrix.android.sdk.internal.crypto.verification.SendVerificationMessageWorker
 import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
@@ -61,8 +60,6 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
                 RedactEventWorker(appContext, workerParameters, sessionManager)
             SendEventWorker::class.java.name                      ->
                 SendEventWorker(appContext, workerParameters, sessionManager)
-            SendVerificationMessageWorker::class.java.name        ->
-                SendVerificationMessageWorker(appContext, workerParameters, sessionManager)
             SyncWorker::class.java.name                           ->
                 SyncWorker(appContext, workerParameters, sessionManager)
             UpdateTrustWorker::class.java.name                    ->
