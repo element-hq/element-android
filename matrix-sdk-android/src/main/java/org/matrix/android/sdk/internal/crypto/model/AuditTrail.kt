@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.model
 
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 
 enum class TrailType {
     OutgoingKeyForward,

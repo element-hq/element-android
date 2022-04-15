@@ -57,12 +57,10 @@ import org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyShareRequest
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyContent
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -81,13 +79,7 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningSe
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.model.AuditTrail
 import org.matrix.android.sdk.internal.crypto.model.MXKey.Companion.KEY_SIGNED_CURVE_25519_TYPE
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.TrailType
-import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
-import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyShareRequest
 import org.matrix.android.sdk.internal.crypto.model.toRest
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore

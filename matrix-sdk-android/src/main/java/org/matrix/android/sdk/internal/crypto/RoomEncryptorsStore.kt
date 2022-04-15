@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_OLM
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFactory

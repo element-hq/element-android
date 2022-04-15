@@ -21,7 +21,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import org.junit.Assert
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -45,12 +44,11 @@ import org.matrix.android.sdk.common.TestConstants
 @LargeTest
 class WithHeldTests : InstrumentedTest {
 
-    private val testHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(testHelper)
-
     @Test
-    @Ignore("This test will be ignored until it is fixed")
     fun test_WithHeldUnverifiedReason() {
+        val testHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(testHelper)
+
         // =============================
         // ARRANGE
         // =============================
@@ -138,8 +136,10 @@ class WithHeldTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
-    fun test_WithHeldNoOlm() {
+    fun  test_WithHeldNoOlm() {
+        val testHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(testHelper)
+
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!
@@ -211,8 +211,10 @@ class WithHeldTests : InstrumentedTest {
     }
 
     @Test
-    @Ignore("This test will be ignored until it is fixed")
-    fun test_WithHeldKeyRequest() {
+    fun  test_WithHeldKeyRequest() {
+        val testHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(testHelper)
+
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!
@@ -258,5 +260,8 @@ class WithHeldTests : InstrumentedTest {
                 wc?.code == WithHeldCode.UNAUTHORISED
             }
         }
+
+        testHelper.signOutAndClose(aliceSession)
+        testHelper.signOutAndClose(bobSecondSession)
     }
 }

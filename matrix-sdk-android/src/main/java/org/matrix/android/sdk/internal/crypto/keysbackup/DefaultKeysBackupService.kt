@@ -590,9 +590,14 @@ internal class DefaultKeysBackupService @Inject constructor(
 
         cryptoCoroutineScope.launch(coroutineDispatchers.io) {
             try {
-                when (val keysBackupLastVersionResult = getKeysBackupLastVersionTask.execute(Unit)) {
-                    KeysBackupLastVersionResult.NoKeysBackup  -> {
-                        Timber.d("No keys backup found")
+                val keysBackupVersion = getKeysBackupLastVersionTask.execute(Unit).toKeysVersionResult()
+                        ?: return@launch Unit.also {
+                            Timber.d("Failed to get backup last version")
+                        }
+                val recoveryKey = computeRecoveryKey(secret.fromBase64())
+                if (isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)) {
+                    awaitCallback<Unit> {
+                        trustKeysBackupVersion(keysBackupVersion, true, it)
                     }
                     // we don't want to start immediately downloading all as it can take very long
 

@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import org.matrix.android.sdk.api.session.crypto.model.OutgoingRoomKeyRequestState
 import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 
