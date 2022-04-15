@@ -739,6 +739,9 @@
     <string name="threads_beta_enable_notice_title">Threads Beta</string>
     <!-- %s will be replaced with action_learn_more string resource that will be clickable(url redirection)  -->
     <string name="threads_beta_enable_notice_message">Threads help keep your conversations on-topic and easy to track. %sEnabling threads will refresh the app. This may take longer for some accounts.</string>
+    <string name="threads_labs_enable_notice_title">Threads Beta</string>
+    <string name="threads_labs_enable_notice_message">Your homeserver does not currently support threads, so this feature may be unreliable. Some threaded messages may not be reliably available. %sDo you want to enable threads anyway?</string>
+
 
     <!-- Search -->
     <string name="search_hint">Search</string>
