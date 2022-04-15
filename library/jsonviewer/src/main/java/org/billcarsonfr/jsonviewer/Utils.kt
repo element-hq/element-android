@@ -22,9 +22,9 @@ import android.util.TypedValue
 internal object Utils {
     fun dpToPx(dp: Int, context: Context): Int {
         return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp.toFloat(),
-            context.resources.displayMetrics
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp.toFloat(),
+                context.resources.displayMetrics
         ).toInt()
     }
 }
