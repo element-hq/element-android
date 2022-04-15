@@ -298,6 +298,7 @@ interface Session :
          * Possible cases:
          * - The access token is not valid anymore,
          * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver
+         * See [GlobalError] for all the possible cases
          */
         fun onGlobalError(session: Session, globalError: GlobalError) = Unit
     }

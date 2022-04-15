@@ -176,6 +176,9 @@
     <string name="initial_sync_start_importing_account_groups">Initial sync:\nImporting communities</string>
     <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
+    <string name="initial_sync_request_title">Initial sync request</string>
+    <string name="initial_sync_request_content">${app_name} needs to perform a clear cache to be up to date, for the following reason:\n%s\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="initial_sync_request_reason_unignored_users">- Some users have been unignored</string>
 
     <string name="event_status_sent_message">Message sent</string>
     <string name="event_status_sending_message">Sending message…</string>
