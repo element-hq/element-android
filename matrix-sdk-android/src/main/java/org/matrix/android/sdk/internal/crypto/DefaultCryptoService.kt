@@ -988,18 +988,17 @@ internal class DefaultCryptoService @Inject constructor(
             val cancellation = requestPair.cancellation
             val request = requestPair.keyRequest
 
-            if (cancellation != null) {
-                when (cancellation) {
-                    is Request.ToDevice -> {
-                        sendToDevice(cancellation)
-                    }
+            when (cancellation) {
+                is Request.ToDevice -> {
+                    sendToDevice(cancellation)
                 }
+                else -> Unit
             }
-
             when (request) {
                 is Request.ToDevice -> {
                     sendToDevice(request)
                 }
+                else -> Unit
             }
         }
     }
@@ -1100,7 +1099,7 @@ internal class DefaultCryptoService @Inject constructor(
             }
             try {
                 preshareRoomKey(roomId, userIds)
-            }catch (failure: Throwable){
+            } catch (failure: Throwable) {
                 Timber.tag(loggerTag.value).e("prepareToEncrypt() : Failed to PreshareRoomKey")
             }
         }

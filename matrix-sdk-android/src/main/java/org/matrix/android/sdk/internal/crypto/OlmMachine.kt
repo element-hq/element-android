@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -102,7 +103,8 @@ internal class OlmMachine(
         device_id: String,
         path: File,
         private val requestSender: RequestSender,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val moshi: Moshi
 ) {
     private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
     internal val verificationListeners = ArrayList<VerificationService.Listener>()
@@ -110,21 +112,21 @@ internal class OlmMachine(
 
     /** Get our own user ID. */
     fun userId(): String {
-        return this.inner.userId()
+        return inner.userId()
     }
 
     /** Get our own device ID. */
     fun deviceId(): String {
-        return this.inner.deviceId()
+        return inner.deviceId()
     }
 
     /** Get our own public identity keys ID. */
     fun identityKeys(): Map<String, String> {
-        return this.inner.identityKeys()
+        return inner.identityKeys()
     }
 
     fun inner(): InnerMachine {
-        return this.inner
+        return inner
     }
 
     private suspend fun updateLiveDevices() {
@@ -142,7 +144,7 @@ internal class OlmMachine(
     }
 
     private suspend fun updateLivePrivateKeys() {
-        val keys = this.exportCrossSigningKeys().toOptional()
+        val keys = exportCrossSigningKeys().toOptional()
         for (privateKeyCollector in flowCollectors.privateKeyCollectors) {
             privateKeyCollector.send(keys)
         }
@@ -152,18 +154,18 @@ internal class OlmMachine(
      * Get our own device info as [CryptoDeviceInfo].
      */
     suspend fun ownDevice(): CryptoDeviceInfo {
-        val deviceId = this.deviceId()
+        val deviceId = deviceId()
 
-        val keys = this.identityKeys().map { (keyId, key) -> "$keyId:$deviceId" to key }.toMap()
+        val keys = identityKeys().map { (keyId, key) -> "$keyId:$deviceId" to key }.toMap()
 
-        val crossSigningVerified = when (val ownIdentity = this.getIdentity(this.userId())) {
+        val crossSigningVerified = when (val ownIdentity = getIdentity(userId())) {
             is OwnUserIdentity -> ownIdentity.trustsOurOwnDevice()
             else               -> false
         }
 
         return CryptoDeviceInfo(
-                this.deviceId(),
-                this.userId(),
+                deviceId(),
+                userId(),
                 // TODO pass the algorithms here.
                 listOf(),
                 keys,
@@ -238,7 +240,7 @@ internal class OlmMachine(
             val devices =
                     DeviceLists(deviceChanges?.changed.orEmpty(), deviceChanges?.left.orEmpty())
             val adapter =
-                    MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
+                    moshi.adapter(ToDeviceSyncResponse::class.java)
             val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
 
             // TODO once our sync response type parses the unused fallback key
@@ -247,7 +249,7 @@ internal class OlmMachine(
         }
 
         // We may get cross signing keys over a to-device event, update our listeners.
-        this.updateLivePrivateKeys()
+        updateLivePrivateKeys()
 
         return response
     }
@@ -270,7 +272,7 @@ internal class OlmMachine(
      */
     @Throws(CryptoStoreException::class)
     fun isUserTracked(userId: String): Boolean {
-        return this.inner.isUserTracked(userId)
+        return inner.isUserTracked(userId)
     }
 
     /**
@@ -344,7 +346,7 @@ internal class OlmMachine(
     @Throws(CryptoStoreException::class)
     suspend fun encrypt(roomId: String, eventType: String, content: Content): Content =
             withContext(coroutineDispatchers.io) {
-                val adapter = MoshiProvider.providesMoshi().adapter<Content>(Map::class.java)
+                val adapter = moshi.adapter<Content>(Map::class.java)
                 val contentString = adapter.toJson(content)
                 val encrypted = inner.encrypt(roomId, eventType, contentString)
                 adapter.fromJson(encrypted)!!
@@ -362,7 +364,7 @@ internal class OlmMachine(
     @Throws(MXCryptoError::class)
     suspend fun decryptRoomEvent(event: Event): MXEventDecryptionResult =
             withContext(coroutineDispatchers.io) {
-                val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
+                val adapter = moshi.adapter(Event::class.java)
                 try {
                     if (event.roomId.isNullOrBlank()) {
                         throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
@@ -371,7 +373,7 @@ internal class OlmMachine(
                     val decrypted = inner.decryptRoomEvent(serializedEvent, event.roomId)
 
                     val deserializationAdapter =
-                            MoshiProvider.providesMoshi().adapter<JsonDict>(Map::class.java)
+                            moshi.adapter<JsonDict>(Map::class.java)
                     val clearEvent = deserializationAdapter.fromJson(decrypted.clearEvent)
                             ?: throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
 
@@ -402,7 +404,7 @@ internal class OlmMachine(
     @Throws(DecryptionException::class)
     suspend fun requestRoomKey(event: Event): KeyRequestPair =
             withContext(coroutineDispatchers.io) {
-                val adapter = MoshiProvider.providesMoshi().adapter(Event::class.java)
+                val adapter = moshi.adapter(Event::class.java)
                 val serializedEvent = adapter.toJson(event)
 
                 inner.requestRoomKey(serializedEvent, event.roomId!!)
@@ -453,7 +455,7 @@ internal class OlmMachine(
             listener: ProgressListener?
     ): ImportRoomKeysResult =
             withContext(coroutineDispatchers.io) {
-                val adapter = MoshiProvider.providesMoshi().adapter(List::class.java)
+                val adapter = moshi.adapter(List::class.java)
 
                 // If the key backup is too big we take the risk of causing OOM
                 // when serializing to json
@@ -485,22 +487,28 @@ internal class OlmMachine(
         val identity = withContext(coroutineDispatchers.io) {
             inner.getIdentity(userId)
         }
-        val adapter = MoshiProvider.providesMoshi().adapter(RestKeyInfo::class.java)
+        val adapter = moshi.adapter(RestKeyInfo::class.java)
 
         return when (identity) {
             is RustUserIdentity.Other -> {
-                val verified = this.inner().isIdentityVerified(userId)
+                val verified = inner().isIdentityVerified(userId)
                 val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel().apply {
                     trustLevel = DeviceTrustLevel(verified, verified)
                 }
                 val selfSigningKey = adapter.fromJson(identity.selfSigningKey)!!.toCryptoModel().apply {
                     trustLevel = DeviceTrustLevel(verified, verified)
                 }
-
-                UserIdentity(identity.userId, masterKey, selfSigningKey, this, this.requestSender)
+                UserIdentity(
+                        userId = identity.userId,
+                        masterKey = masterKey,
+                        selfSigningKey = selfSigningKey,
+                        olmMachine = this,
+                        requestSender = requestSender,
+                        coroutineDispatchers = coroutineDispatchers
+                )
             }
             is RustUserIdentity.Own   -> {
-                val verified = this.inner().isIdentityVerified(userId)
+                val verified = inner().isIdentityVerified(userId)
 
                 val masterKey = adapter.fromJson(identity.masterKey)!!.toCryptoModel().apply {
                     trustLevel = DeviceTrustLevel(verified, verified)
@@ -511,13 +519,14 @@ internal class OlmMachine(
                 val userSigningKey = adapter.fromJson(identity.userSigningKey)!!.toCryptoModel()
 
                 OwnUserIdentity(
-                        identity.userId,
-                        masterKey,
-                        selfSigningKey,
-                        userSigningKey,
-                        identity.trustsOurOwnDevice,
-                        this,
-                        this.requestSender
+                        userId = identity.userId,
+                        masterKey = masterKey,
+                        selfSigningKey = selfSigningKey,
+                        userSigningKey = userSigningKey,
+                        trustsOurOwnDevice = identity.trustsOurOwnDevice,
+                        olmMachine = this,
+                        requestSender = requestSender,
+                        coroutineDispatchers = coroutineDispatchers
                 )
             }
             null                      -> null
@@ -552,12 +561,26 @@ internal class OlmMachine(
             inner.getDevice(userId, deviceId)
         } ?: return null
 
-        return Device(this.inner, device, this.requestSender, this.verificationListeners)
+        return Device(
+                machine = inner,
+                inner = device,
+                sender = requestSender,
+                coroutineDispatchers = coroutineDispatchers,
+                listeners = verificationListeners
+        )
     }
 
     suspend fun getUserDevices(userId: String): List<Device> {
         return withContext(coroutineDispatchers.io) {
-            inner.getUserDevices(userId).map { Device(inner, it, requestSender, verificationListeners) }
+            inner.getUserDevices(userId).map {
+                Device(
+                        machine = inner,
+                        inner = it,
+                        sender = requestSender,
+                        coroutineDispatchers = coroutineDispatchers,
+                        listeners = verificationListeners
+                )
+            }
         }
     }
 
@@ -570,12 +593,12 @@ internal class OlmMachine(
      */
     @Throws(CryptoStoreException::class)
     suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        val devices = this.getUserDevices(userId).map { it.toCryptoDeviceInfo() }.toMutableList()
+        val devices = getUserDevices(userId).map { it.toCryptoDeviceInfo() }.toMutableList()
 
         // EA doesn't differentiate much between our own and other devices of
         // while the rust-sdk does, append our own device here.
-        if (userId == this.userId()) {
-            devices.add(this.ownDevice())
+        if (userId == userId()) {
+            devices.add(ownDevice())
         }
 
         return devices
@@ -592,7 +615,7 @@ internal class OlmMachine(
         val plainDevices: ArrayList<CryptoDeviceInfo> = arrayListOf()
 
         for (user in userIds) {
-            val devices = this.getCryptoDeviceInfo(user)
+            val devices = getCryptoDeviceInfo(user)
             plainDevices.addAll(devices)
         }
 
@@ -612,7 +635,7 @@ internal class OlmMachine(
         val userMap = MXUsersDevicesMap<CryptoDeviceInfo>()
 
         for (user in userIds) {
-            val devices = this.getCryptoDeviceInfo(user)
+            val devices = getCryptoDeviceInfo(user)
 
             for (device in devices) {
                 userMap.setObject(user, device.deviceId, device)
@@ -703,26 +726,27 @@ internal class OlmMachine(
      * @return The list of [VerificationRequest] that we share with the given user
      */
     fun getVerificationRequests(userId: String): List<VerificationRequest> {
-        return this.inner.getVerificationRequests(userId).map {
+        return inner.getVerificationRequests(userId).map {
             VerificationRequest(
-                    this.inner,
-                    it,
-                    this.requestSender,
-                    this.verificationListeners,
+                    machine = inner,
+                    inner = it,
+                    sender = requestSender,
+                    coroutineDispatchers = coroutineDispatchers,
+                    listeners = verificationListeners,
             )
         }
     }
 
     /** Get a verification request for the given user with the given flow ID */
     fun getVerificationRequest(userId: String, flowId: String): VerificationRequest? {
-        val request = this.inner.getVerificationRequest(userId, flowId)
-
+        val request = inner.getVerificationRequest(userId, flowId)
         return if (request != null) {
             VerificationRequest(
-                    this.inner,
-                    request,
-                    requestSender,
-                    this.verificationListeners,
+                    machine = inner,
+                    inner = request,
+                    sender = requestSender,
+                    coroutineDispatchers = coroutineDispatchers,
+                    listeners = verificationListeners,
             )
         } else {
             null
@@ -735,13 +759,26 @@ internal class OlmMachine(
      * verification.
      */
     fun getVerification(userId: String, flowId: String): VerificationTransaction? {
-        return when (val verification = this.inner.getVerification(userId, flowId)) {
+        return when (val verification = inner.getVerification(userId, flowId)) {
             is uniffi.olm.Verification.QrCodeV1 -> {
-                val request = this.getVerificationRequest(userId, flowId) ?: return null
-                QrCodeVerification(inner, request, verification.qrcode, requestSender, verificationListeners)
+                val request = getVerificationRequest(userId, flowId) ?: return null
+                QrCodeVerification(
+                        machine = inner,
+                        request = request,
+                        inner = verification.qrcode,
+                        sender = requestSender,
+                        coroutineDispatchers = coroutineDispatchers,
+                        listeners = verificationListeners
+                )
             }
             is uniffi.olm.Verification.SasV1    -> {
-                SasVerification(inner, verification.sas, requestSender, verificationListeners)
+                SasVerification(
+                        machine = inner,
+                        inner = verification.sas,
+                        sender = requestSender,
+                        coroutineDispatchers = coroutineDispatchers,
+                        listeners = verificationListeners
+                )
             }
             null                                -> {
                 // This branch exists because scanning a QR code is tied to the QrCodeVerification,
@@ -751,7 +788,14 @@ internal class OlmMachine(
                 val request = getVerificationRequest(userId, flowId) ?: return null
 
                 if (request.canScanQrCodes()) {
-                    QrCodeVerification(inner, request, null, requestSender, verificationListeners)
+                    QrCodeVerification(
+                            machine = inner,
+                            request = request,
+                            inner = null,
+                            sender = requestSender,
+                            coroutineDispatchers = coroutineDispatchers,
+                            listeners = verificationListeners
+                    )
                 } else {
                     null
                 }
@@ -763,16 +807,15 @@ internal class OlmMachine(
         val requests = withContext(coroutineDispatchers.io) {
             inner.bootstrapCrossSigning()
         }
-
-        this.requestSender.uploadCrossSigningKeys(requests.uploadSigningKeysRequest, uiaInterceptor)
-        this.requestSender.sendSignatureUpload(requests.signatureRequest)
+        requestSender.uploadCrossSigningKeys(requests.uploadSigningKeysRequest, uiaInterceptor)
+        requestSender.sendSignatureUpload(requests.signatureRequest)
     }
 
     /**
      * Get the status of our private cross signing keys, i.e. which private keys do we have stored locally.
      */
     fun crossSigningStatus(): CrossSigningStatus {
-        return this.inner.crossSigningStatus()
+        return inner.crossSigningStatus()
     }
 
     suspend fun exportCrossSigningKeys(): PrivateKeysInfo? {
@@ -867,8 +910,7 @@ internal class OlmMachine(
     @Throws(CryptoStoreException::class)
     suspend fun checkAuthDataSignature(authData: MegolmBackupAuthData): Boolean {
         return withContext(coroutineDispatchers.computation) {
-            val adapter = MoshiProvider
-                    .providesMoshi()
+            val adapter = moshi
                     .newBuilder()
                     .add(CheckNumberType.JSON_ADAPTER_FACTORY)
                     .build()

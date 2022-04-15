@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.NoOpMatrixCallback
@@ -31,7 +30,6 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.extensions.foldToCallback
 import javax.inject.Inject
 
 internal class RustCrossSigningService @Inject constructor(
@@ -54,7 +52,7 @@ internal class RustCrossSigningService @Inject constructor(
 
     override suspend fun isUserTrusted(otherUserId: String): Boolean {
         // This seems to be used only in tests.
-        return this.checkUserTrust(otherUserId).isVerified()
+        return checkUserTrust(otherUserId).isVerified()
     }
 
     /**
@@ -136,13 +134,13 @@ internal class RustCrossSigningService @Inject constructor(
      * Returning true means that we have the private self-signing and user-signing keys at hand.
      */
     override fun canCrossSign(): Boolean {
-        val status = this.olmMachine.crossSigningStatus()
+        val status = olmMachine.crossSigningStatus()
 
         return status.hasSelfSigning && status.hasUserSigning
     }
 
     override fun allPrivateKeysKnown(): Boolean {
-        val status = this.olmMachine.crossSigningStatus()
+        val status = olmMachine.crossSigningStatus()
 
         return status.hasMaster && status.hasSelfSigning && status.hasUserSigning
     }
@@ -163,7 +161,7 @@ internal class RustCrossSigningService @Inject constructor(
     /** Mark our own master key as trusted */
     override suspend fun markMyMasterKeyAsTrusted() {
         // This doesn't seem to be used?
-        this.trustUser(this.olmMachine.userId(), NoOpMatrixCallback())
+        trustUser(olmMachine.userId(), NoOpMatrixCallback())
     }
 
     /**
@@ -213,7 +211,7 @@ internal class RustCrossSigningService @Inject constructor(
     }
 
     override fun onSecretUSKGossip(uskPrivateKey: String) {
-        // And this.
+        // And 
     }
 
     override suspend fun shieldForGroup(userIds: List<String>): RoomEncryptionTrustLevel {

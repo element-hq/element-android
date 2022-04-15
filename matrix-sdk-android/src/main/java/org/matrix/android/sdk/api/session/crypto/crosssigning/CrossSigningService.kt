@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.crypto.crosssigning
 
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -62,8 +61,8 @@ interface CrossSigningService {
      * by the server and if they do so
      */
     suspend fun checkTrustFromPrivateKeys(masterKeyPrivateKey: String?,
-                                  uskKeyPrivateKey: String?,
-                                  sskPrivateKey: String?): UserTrustResult
+                                          uskKeyPrivateKey: String?,
+                                          sskPrivateKey: String?): UserTrustResult
 
     /**
      * Get the public cross signing keys for the given user
@@ -94,7 +93,7 @@ interface CrossSigningService {
 
     /** Mark a user identity as trusted and sign and upload signatures of our user-signing key to the server */
     suspend fun trustUser(otherUserId: String,
-                  callback: MatrixCallback<Unit>)
+                          callback: MatrixCallback<Unit>)
 
     /** Mark our own master key as trusted */
     suspend fun markMyMasterKeyAsTrusted()
@@ -115,9 +114,9 @@ interface CrossSigningService {
      * key of another user.
      */
     suspend fun checkDeviceTrust(otherUserId: String,
-                         otherDeviceId: String,
-                         // TODO what is locallyTrusted used for?
-                         locallyTrusted: Boolean?): DeviceTrustResult
+                                 otherDeviceId: String,
+            // TODO what is locallyTrusted used for?
+                                 locallyTrusted: Boolean?): DeviceTrustResult
 
     // FIXME Those method do not have to be in the service
     // TODO those three methods doesn't seem to be used anywhere?

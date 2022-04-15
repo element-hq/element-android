@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
@@ -36,13 +36,15 @@ internal class QrCodeVerification(
         private var request: VerificationRequest,
         private var inner: QrCode?,
         private val sender: RequestSender,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         listeners: ArrayList<VerificationService.Listener>
 ) : QrCodeVerificationTransaction {
+
     private val dispatcher = UpdateDispatcher(listeners)
 
     private fun dispatchTxUpdated() {
         refreshData()
-        this.dispatcher.dispatchTxUpdated(this)
+        dispatcher.dispatchTxUpdated(this)
     }
 
     /** Generate, if possible, data that should be encoded as a QR code for QR code verification.
@@ -59,7 +61,7 @@ internal class QrCodeVerification(
      */
     override val qrCodeText: String?
         get() {
-            val data = this.inner?.let { this.machine.generateQrCode(it.otherUserId, it.flowId) }
+            val data = inner?.let { machine.generateQrCode(it.otherUserId, it.flowId) }
 
             // TODO Why are we encoding this to ISO_8859_1? If we're going to encode, why not base64?
             return data?.fromBase64()?.toString(Charsets.ISO_8859_1)
@@ -85,7 +87,7 @@ internal class QrCodeVerification(
     override var state: VerificationTxState
         get() {
             refreshData()
-            val inner = this.inner
+            val inner = inner
             val cancelInfo = inner?.cancelInfo
 
             return if (inner != null) {
@@ -111,22 +113,22 @@ internal class QrCodeVerification(
 
     /** Get the unique id of this verification */
     override val transactionId: String
-        get() = this.request.flowId()
+        get() = request.flowId()
 
     /** Get the user id of the other user participating in this verification flow */
     override val otherUserId: String
-        get() = this.request.otherUser()
+        get() = request.otherUser()
 
     /** Get the device id of the other user's device participating in this verification flow */
     override var otherDeviceId: String?
-        get() = this.request.otherDeviceId()
+        get() = request.otherDeviceId()
         @Suppress("UNUSED_PARAMETER")
         set(value) {
         }
 
     /** Did the other side initiate this verification flow */
     override val isIncoming: Boolean
-        get() = !this.request.weStarted()
+        get() = !request.weStarted()
 
     /** Cancel the verification flow
      *
@@ -158,7 +160,7 @@ internal class QrCodeVerification(
 
     /** Is this verification happening over to-device messages */
     override fun isToDeviceTransport(): Boolean {
-        return this.request.roomId() == null
+        return request.roomId() == null
     }
 
     /** Confirm the QR code verification
@@ -171,24 +173,24 @@ internal class QrCodeVerification(
      */
     @Throws(CryptoStoreException::class)
     private suspend fun confirm() {
-        val result = withContext(Dispatchers.IO) {
+        val result = withContext(coroutineDispatchers.io) {
             machine.confirmVerification(request.otherUser(), request.flowId())
         }
 
         if (result != null) {
-            this.sender.sendVerificationRequest(result.request)
+            sender.sendVerificationRequest(result.request)
             dispatchTxUpdated()
 
             val signatureRequest = result.signatureRequest
 
             if (signatureRequest != null) {
-                this.sender.sendSignatureUpload(signatureRequest)
+                sender.sendSignatureUpload(signatureRequest)
             }
         }
     }
 
     private suspend fun cancelHelper(code: CancelCode) {
-        val request = this.machine.cancelVerification(this.request.otherUser(), this.request.flowId(), code.value)
+        val request = machine.cancelVerification(request.otherUser(), request.flowId(), code.value)
 
         if (request != null) {
             sender.sendVerificationRequest(request)
@@ -198,9 +200,9 @@ internal class QrCodeVerification(
 
     /** Fetch fresh data from the Rust side for our verification flow */
     private fun refreshData() {
-        when (val verification = this.machine.getVerification(this.request.otherUser(), this.request.flowId())) {
+        when (val verification = machine.getVerification(request.otherUser(), request.flowId())) {
             is Verification.QrCodeV1 -> {
-                this.inner = verification.qrcode
+                inner = verification.qrcode
             }
             else                     -> {
             }
