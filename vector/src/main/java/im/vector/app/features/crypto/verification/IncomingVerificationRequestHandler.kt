@@ -42,7 +42,8 @@ import javax.inject.Singleton
 class IncomingVerificationRequestHandler @Inject constructor(
         private val context: Context,
         private var avatarRenderer: Provider<AvatarRenderer>,
-        private val popupAlertManager: PopupAlertManager) : VerificationService.Listener {
+        private val popupAlertManager: PopupAlertManager
+) : VerificationService.Listener {
 
     private var session: Session? = null
 
@@ -61,7 +62,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // TODO maybe check also if
         val uid = "kvr_${tx.transactionId}"
         when (tx.state) {
-            is VerificationTxState.OnStarted -> {
+            is VerificationTxState.OnStarted       -> {
                 // Add a notification for every incoming request
                 val user = session?.getUser(tx.otherUserId)
                 val name = user?.toMatrixItem()?.getBestName() ?: tx.otherUserId

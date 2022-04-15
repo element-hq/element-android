@@ -646,13 +646,15 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             }
         }
 
-        fun newIntent(context: Context,
-                      callId: String,
-                      signalingRoomId: String,
-                      otherUserId: String,
-                      isIncomingCall: Boolean,
-                      isVideoCall: Boolean,
-                      mode: String?): Intent {
+        fun newIntent(
+                context: Context,
+                callId: String,
+                signalingRoomId: String,
+                otherUserId: String,
+                isIncomingCall: Boolean,
+                isVideoCall: Boolean,
+                mode: String?
+        ): Intent {
             val callArgs = CallArgs(signalingRoomId, callId, otherUserId, isIncomingCall, isVideoCall)
             return Intent(context, VectorCallActivity::class.java).apply {
                 // what could be the best flags?

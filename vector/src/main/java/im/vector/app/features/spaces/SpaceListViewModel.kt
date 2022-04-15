@@ -63,12 +63,13 @@ import org.matrix.android.sdk.api.session.space.model.TopLevelSpaceComparator
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 
-class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: SpaceListViewState,
-                                                     private val appStateHandler: AppStateHandler,
-                                                     private val session: Session,
-                                                     private val vectorPreferences: VectorPreferences,
-                                                     private val autoAcceptInvites: AutoAcceptInvites,
-                                                     private val analyticsTracker: AnalyticsTracker
+class SpaceListViewModel @AssistedInject constructor(
+        @Assisted initialState: SpaceListViewState,
+        private val appStateHandler: AppStateHandler,
+        private val session: Session,
+        private val vectorPreferences: VectorPreferences,
+        private val autoAcceptInvites: AutoAcceptInvites,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory

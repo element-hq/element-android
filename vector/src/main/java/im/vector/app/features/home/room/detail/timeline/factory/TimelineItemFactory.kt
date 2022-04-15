@@ -154,11 +154,13 @@ class TimelineItemFactory @Inject constructor(
                 params.isFromThreadTimeline())
     }
 
-    private fun buildEmptyItem(timelineEvent: TimelineEvent,
-                               prevEvent: TimelineEvent?,
-                               highlightedEventId: String?,
-                               rootThreadEventId: String?,
-                               isFromThreadTimeline: Boolean): TimelineEmptyItem {
+    private fun buildEmptyItem(
+            timelineEvent: TimelineEvent,
+            prevEvent: TimelineEvent?,
+            highlightedEventId: String?,
+            rootThreadEventId: String?,
+            isFromThreadTimeline: Boolean
+    ): TimelineEmptyItem {
         val isNotBlank = prevEvent == null || timelineEventVisibilityHelper.shouldShowEvent(
                 timelineEvent = prevEvent,
                 highlightedEventId = highlightedEventId,

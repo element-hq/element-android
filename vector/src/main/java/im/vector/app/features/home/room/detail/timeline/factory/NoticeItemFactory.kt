@@ -26,10 +26,12 @@ import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
-class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEventFormatter,
-                                            private val avatarRenderer: AvatarRenderer,
-                                            private val informationDataFactory: MessageInformationDataFactory,
-                                            private val avatarSizeProvider: AvatarSizeProvider) {
+class NoticeItemFactory @Inject constructor(
+        private val eventFormatter: NoticeEventFormatter,
+        private val avatarRenderer: AvatarRenderer,
+        private val informationDataFactory: MessageInformationDataFactory,
+        private val avatarSizeProvider: AvatarSizeProvider
+) {
 
     fun create(params: TimelineItemFactoryParams): NoticeItem? {
         val event = params.event

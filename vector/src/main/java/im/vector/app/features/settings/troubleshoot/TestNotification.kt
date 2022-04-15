@@ -27,10 +27,12 @@ import javax.inject.Inject
 /**
  * Checks if notifications can be displayed and clicked by the user
  */
-class TestNotification @Inject constructor(private val context: Context,
-                                           private val notificationUtils: NotificationUtils,
-                                           private val stringProvider: StringProvider) :
-    TroubleshootTest(R.string.settings_troubleshoot_test_notification_title) {
+class TestNotification @Inject constructor(
+        private val context: Context,
+        private val notificationUtils: NotificationUtils,
+        private val stringProvider: StringProvider
+) :
+        TroubleshootTest(R.string.settings_troubleshoot_test_notification_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         // Display the notification right now

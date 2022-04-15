@@ -72,9 +72,11 @@ import kotlin.random.Random
  * Note: Cannot inject ColorProvider in the constructor, because it requires an Activity
  */
 @Singleton
-class NotificationUtils @Inject constructor(private val context: Context,
-                                            private val stringProvider: StringProvider,
-                                            private val vectorPreferences: VectorPreferences) {
+class NotificationUtils @Inject constructor(
+        private val context: Context,
+        private val stringProvider: StringProvider,
+        private val vectorPreferences: VectorPreferences
+) {
 
     companion object {
         /* ==========================================================================================
@@ -292,9 +294,11 @@ class NotificationUtils @Inject constructor(private val context: Context,
      * @return the call notification.
      */
     @SuppressLint("NewApi")
-    fun buildIncomingCallNotification(call: WebRtcCall,
-                                      title: String,
-                                      fromBg: Boolean): Notification {
+    fun buildIncomingCallNotification(
+            call: WebRtcCall,
+            title: String,
+            fromBg: Boolean
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val notificationChannel = if (fromBg) CALL_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
         val builder = NotificationCompat.Builder(context, notificationChannel)
@@ -365,8 +369,10 @@ class NotificationUtils @Inject constructor(private val context: Context,
         return builder.build()
     }
 
-    fun buildOutgoingRingingCallNotification(call: WebRtcCall,
-                                             title: String): Notification {
+    fun buildOutgoingRingingCallNotification(
+            call: WebRtcCall,
+            title: String
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
@@ -423,8 +429,10 @@ class NotificationUtils @Inject constructor(private val context: Context,
      * @return the call notification.
      */
     @SuppressLint("NewApi")
-    fun buildPendingCallNotification(call: WebRtcCall,
-                                     title: String): Notification {
+    fun buildPendingCallNotification(
+            call: WebRtcCall,
+            title: String
+    ): Notification {
         val builder = NotificationCompat.Builder(context, SILENT_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(ensureTitleNotEmpty(title))
                 .apply {
@@ -561,12 +569,14 @@ class NotificationUtils @Inject constructor(private val context: Context,
     /**
      * Build a notification for a Room
      */
-    fun buildMessagesListNotification(messageStyle: NotificationCompat.MessagingStyle,
-                                      roomInfo: RoomEventGroupInfo,
-                                      largeIcon: Bitmap?,
-                                      lastMessageTimestamp: Long,
-                                      senderDisplayNameForReplyCompat: String?,
-                                      tickerText: String): Notification {
+    fun buildMessagesListNotification(
+            messageStyle: NotificationCompat.MessagingStyle,
+            roomInfo: RoomEventGroupInfo,
+            largeIcon: Bitmap?,
+            lastMessageTimestamp: Long,
+            senderDisplayNameForReplyCompat: String?,
+            tickerText: String
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val openRoomIntent = buildOpenRoomIntent(roomInfo.roomId)
@@ -673,8 +683,10 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .build()
     }
 
-    fun buildRoomInvitationNotification(inviteNotifiableEvent: InviteNotifiableEvent,
-                                        matrixId: String): Notification {
+    fun buildRoomInvitationNotification(
+            inviteNotifiableEvent: InviteNotifiableEvent,
+            matrixId: String
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val smallIcon = R.drawable.ic_status_bar
@@ -747,8 +759,10 @@ class NotificationUtils @Inject constructor(private val context: Context,
                 .build()
     }
 
-    fun buildSimpleEventNotification(simpleNotifiableEvent: SimpleNotifiableEvent,
-                                     matrixId: String): Notification {
+    fun buildSimpleEventNotification(
+            simpleNotifiableEvent: SimpleNotifiableEvent,
+            matrixId: String
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val smallIcon = R.drawable.ic_status_bar
@@ -858,10 +872,12 @@ class NotificationUtils @Inject constructor(private val context: Context,
     /**
      * Build the summary notification
      */
-    fun buildSummaryListNotification(style: NotificationCompat.InboxStyle?,
-                                     compatSummary: String,
-                                     noisy: Boolean,
-                                     lastMessageTimestamp: Long): Notification {
+    fun buildSummaryListNotification(
+            style: NotificationCompat.InboxStyle?,
+            compatSummary: String,
+            noisy: Boolean,
+            lastMessageTimestamp: Long
+    ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val smallIcon = R.drawable.ic_status_bar
 

@@ -64,8 +64,8 @@ class SpacePreviewViewModel @AssistedInject constructor(
 
     override fun handle(action: SpacePreviewViewAction) {
         when (action) {
-            SpacePreviewViewAction.ViewReady -> handleReady()
-            SpacePreviewViewAction.AcceptInvite -> handleAcceptInvite()
+            SpacePreviewViewAction.ViewReady     -> handleReady()
+            SpacePreviewViewAction.AcceptInvite  -> handleAcceptInvite()
             SpacePreviewViewAction.DismissInvite -> handleDismissInvite()
         }
     }
@@ -103,7 +103,7 @@ class SpacePreviewViewModel @AssistedInject constructor(
                         // For now we don't handle partial success, it's just success
                         _viewEvents.post(SpacePreviewViewEvents.JoinSuccess)
                     }
-                    is JoinSpaceResult.Fail -> {
+                    is JoinSpaceResult.Fail           -> {
                         _viewEvents.post(SpacePreviewViewEvents.JoinFailure(errorFormatter.toHumanReadable(joinResult.error)))
                     }
                 }

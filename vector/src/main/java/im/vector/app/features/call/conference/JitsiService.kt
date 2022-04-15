@@ -45,7 +45,8 @@ class JitsiService @Inject constructor(
         private val rawService: RawService,
         private val stringProvider: StringProvider,
         private val themeProvider: ThemeProvider,
-        private val jitsiJWTFactory: JitsiJWTFactory) {
+        private val jitsiJWTFactory: JitsiJWTFactory
+) {
 
     companion object {
         const val JITSI_OPEN_ID_TOKEN_JWT_AUTH = "openidtoken-jwt"

@@ -28,7 +28,7 @@ import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.sync.SyncState
 
 class SyncStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-    LinearLayout(context, attrs, defStyle) {
+        LinearLayout(context, attrs, defStyle) {
 
     private val views: ViewSyncStateBinding
 
@@ -39,10 +39,11 @@ class SyncStateView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     @SuppressLint("SetTextI18n")
-    fun render(newState: SyncState,
-               incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus,
-               pushCounter: Int,
-               showDebugInfo: Boolean
+    fun render(
+            newState: SyncState,
+            incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus,
+            pushCounter: Int,
+            showDebugInfo: Boolean
     ) {
         views.syncStateDebugInfo.isVisible = showDebugInfo
         if (showDebugInfo) {

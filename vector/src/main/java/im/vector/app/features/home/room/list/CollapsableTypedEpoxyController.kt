@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.list
 import com.airbnb.epoxy.EpoxyController
 
 abstract class CollapsableTypedEpoxyController<T> :
-    EpoxyController(), CollapsableControllerExtension {
+        EpoxyController(), CollapsableControllerExtension {
 
     private var currentData: T? = null
     private var allowModelBuildRequests = false

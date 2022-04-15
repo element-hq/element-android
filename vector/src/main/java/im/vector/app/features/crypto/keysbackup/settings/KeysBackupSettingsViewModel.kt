@@ -35,8 +35,9 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
 
-class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
-                                                              session: Session
+class KeysBackupSettingsViewModel @AssistedInject constructor(
+        @Assisted initialState: KeysBackupSettingViewState,
+        session: Session
 ) : VectorViewModel<KeysBackupSettingViewState, KeyBackupSettingsAction, EmptyViewEvents>(initialState),
         KeysBackupStateListener {
 

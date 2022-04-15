@@ -37,13 +37,15 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import javax.inject.Inject
 
 // This class handles timeline events who haven't been successfully decrypted
-class EncryptedItemFactory @Inject constructor(private val messageInformationDataFactory: MessageInformationDataFactory,
-                                               private val colorProvider: ColorProvider,
-                                               private val stringProvider: StringProvider,
-                                               private val avatarSizeProvider: AvatarSizeProvider,
-                                               private val drawableProvider: DrawableProvider,
-                                               private val attributesFactory: MessageItemAttributesFactory,
-                                               private val vectorPreferences: VectorPreferences) {
+class EncryptedItemFactory @Inject constructor(
+        private val messageInformationDataFactory: MessageInformationDataFactory,
+        private val colorProvider: ColorProvider,
+        private val stringProvider: StringProvider,
+        private val avatarSizeProvider: AvatarSizeProvider,
+        private val drawableProvider: DrawableProvider,
+        private val attributesFactory: MessageItemAttributesFactory,
+        private val vectorPreferences: VectorPreferences
+) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event

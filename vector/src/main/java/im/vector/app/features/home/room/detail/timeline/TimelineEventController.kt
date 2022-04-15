@@ -78,19 +78,20 @@ import javax.inject.Inject
 import kotlin.math.min
 import kotlin.system.measureTimeMillis
 
-class TimelineEventController @Inject constructor(private val dateFormatter: VectorDateFormatter,
-                                                  private val vectorPreferences: VectorPreferences,
-                                                  private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
-                                                  private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
-                                                  private val timelineItemFactory: TimelineItemFactory,
-                                                  private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
-                                                  private val mergedHeaderItemFactory: MergedHeaderItemFactory,
-                                                  private val session: Session,
-                                                  @TimelineEventControllerHandler
-                                                  private val backgroundHandler: Handler,
-                                                  private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper,
-                                                  private val readReceiptsItemFactory: ReadReceiptsItemFactory,
-                                                  private val reactionListFactory: ReactionsSummaryFactory
+class TimelineEventController @Inject constructor(
+        private val dateFormatter: VectorDateFormatter,
+        private val vectorPreferences: VectorPreferences,
+        private val contentUploadStateTrackerBinder: ContentUploadStateTrackerBinder,
+        private val contentDownloadStateTrackerBinder: ContentDownloadStateTrackerBinder,
+        private val timelineItemFactory: TimelineItemFactory,
+        private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
+        private val mergedHeaderItemFactory: MergedHeaderItemFactory,
+        private val session: Session,
+        @TimelineEventControllerHandler
+        private val backgroundHandler: Handler,
+        private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper,
+        private val readReceiptsItemFactory: ReadReceiptsItemFactory,
+        private val reactionListFactory: ReactionsSummaryFactory
 ) : EpoxyController(backgroundHandler, backgroundHandler), Timeline.Listener, EpoxyController.Interceptor {
 
     /**
@@ -128,10 +129,13 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun onEventVisible(event: TimelineEvent)
         fun onRoomCreateLinkClicked(url: String)
         fun onEncryptedMessageClicked(informationData: MessageInformationData, view: View)
-        fun onImageMessageClicked(messageImageContent: MessageImageInfoContent,
-                                  mediaData: ImageContentRenderer.Data,
-                                  view: View,
-                                  inMemory: List<AttachmentData>)
+        fun onImageMessageClicked(
+                messageImageContent: MessageImageInfoContent,
+                mediaData: ImageContentRenderer.Data,
+                view: View,
+                inMemory: List<AttachmentData>
+        )
+
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
 
         //        fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)
@@ -460,10 +464,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         )
     }
 
-    private fun CacheItemData.enrichWithModels(event: TimelineEvent,
-                                               nextEvent: TimelineEvent?,
-                                               position: Int,
-                                               receiptsByEvents: Map<String, List<ReadReceipt>>): CacheItemData {
+    private fun CacheItemData.enrichWithModels(
+            event: TimelineEvent,
+            nextEvent: TimelineEvent?,
+            position: Int,
+            receiptsByEvents: Map<String, List<ReadReceipt>>
+    ): CacheItemData {
         val wantsDateSeparator = wantsDateSeparator(event, nextEvent)
         val mergedHeaderModel = mergedHeaderItemFactory.create(event,
                 nextEvent = nextEvent,

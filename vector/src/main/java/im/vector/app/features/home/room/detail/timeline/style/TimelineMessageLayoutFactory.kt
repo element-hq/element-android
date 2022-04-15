@@ -34,11 +34,13 @@ import org.matrix.android.sdk.api.session.room.timeline.isEdition
 import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import javax.inject.Inject
 
-class TimelineMessageLayoutFactory @Inject constructor(private val session: Session,
-                                                       private val layoutSettingsProvider: TimelineLayoutSettingsProvider,
-                                                       private val localeProvider: LocaleProvider,
-                                                       private val resources: Resources,
-                                                       private val vectorPreferences: VectorPreferences) {
+class TimelineMessageLayoutFactory @Inject constructor(
+        private val session: Session,
+        private val layoutSettingsProvider: TimelineLayoutSettingsProvider,
+        private val localeProvider: LocaleProvider,
+        private val resources: Resources,
+        private val vectorPreferences: VectorPreferences
+) {
 
     companion object {
         // Can be rendered in bubbles, other types will fallback to default
@@ -174,9 +176,11 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         )
     }
 
-    private fun buildCornersRadius(isIncoming: Boolean,
-                                   isFirstFromThisSender: Boolean,
-                                   isLastFromThisSender: Boolean): TimelineMessageLayout.Bubble.CornersRadius {
+    private fun buildCornersRadius(
+            isIncoming: Boolean,
+            isFirstFromThisSender: Boolean,
+            isLastFromThisSender: Boolean
+    ): TimelineMessageLayout.Bubble.CornersRadius {
         return if ((isIncoming && !isRTL) || (!isIncoming && isRTL)) {
             TimelineMessageLayout.Bubble.CornersRadius(
                     topStartRadius = if (isFirstFromThisSender) cornerRadius else 0f,

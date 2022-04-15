@@ -47,10 +47,12 @@ import javax.inject.Inject
  * TODO Update this comment
  * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
  */
-class MessageInformationDataFactory @Inject constructor(private val session: Session,
-                                                        private val dateFormatter: VectorDateFormatter,
-                                                        private val messageLayoutFactory: TimelineMessageLayoutFactory,
-                                                        private val reactionsSummaryFactory: ReactionsSummaryFactory) {
+class MessageInformationDataFactory @Inject constructor(
+        private val session: Session,
+        private val dateFormatter: VectorDateFormatter,
+        private val messageLayoutFactory: TimelineMessageLayoutFactory,
+        private val reactionsSummaryFactory: ReactionsSummaryFactory
+) {
 
     fun create(params: TimelineItemFactoryParams): MessageInformationData {
         val event = params.event
@@ -123,9 +125,11 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         )
     }
 
-    private fun getSendStateDecoration(event: TimelineEvent,
-                                       lastSentEventWithoutReadReceipts: String?,
-                                       isMedia: Boolean): SendStateDecoration {
+    private fun getSendStateDecoration(
+            event: TimelineEvent,
+            lastSentEventWithoutReadReceipts: String?,
+            isMedia: Boolean
+    ): SendStateDecoration {
         val eventSendState = event.root.sendState
         return if (eventSendState.isSending()) {
             if (isMedia) SendStateDecoration.SENDING_MEDIA else SendStateDecoration.SENDING_NON_MEDIA

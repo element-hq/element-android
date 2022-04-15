@@ -36,8 +36,10 @@ class NotificationState(
         private val renderedEvents: MutableList<ProcessedEvent<NotifiableEvent>>,
 ) {
 
-    fun <T> updateQueuedEvents(drawerManager: NotificationDrawerManager,
-                               action: NotificationDrawerManager.(NotificationEventQueue, List<ProcessedEvent<NotifiableEvent>>) -> T): T {
+    fun <T> updateQueuedEvents(
+            drawerManager: NotificationDrawerManager,
+            action: NotificationDrawerManager.(NotificationEventQueue, List<ProcessedEvent<NotifiableEvent>>) -> T
+    ): T {
         return synchronized(queuedEvents) {
             action(drawerManager, queuedEvents, renderedEvents)
         }

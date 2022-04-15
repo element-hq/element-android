@@ -54,8 +54,10 @@ object FcmHelper {
      * @param context android context
      * @param token   the token to store
      */
-    fun storeFcmToken(context: Context,
-                      token: String?) {
+    fun storeFcmToken(
+            context: Context,
+            token: String?
+    ) {
         DefaultSharedPreferences.getInstance(context).edit {
             putString(PREFS_KEY_FCM_TOKEN, token)
         }

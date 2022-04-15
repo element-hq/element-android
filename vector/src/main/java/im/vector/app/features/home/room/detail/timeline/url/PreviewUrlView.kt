@@ -60,9 +60,11 @@ class PreviewUrlView @JvmOverloads constructor(
      *
      * @param newState the newState representing the view
      */
-    fun render(newState: PreviewUrlUiState,
-               imageContentRenderer: ImageContentRenderer,
-               force: Boolean = false) {
+    fun render(
+            newState: PreviewUrlUiState,
+            imageContentRenderer: ImageContentRenderer,
+            force: Boolean = false
+    ) {
         if (newState == state && !force) {
             return
         }

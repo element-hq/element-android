@@ -26,9 +26,11 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.settings.troubleshoot.TroubleshootTest
 import javax.inject.Inject
 
-class TestBackgroundRestrictions @Inject constructor(private val context: FragmentActivity,
-                                                     private val stringProvider: StringProvider) :
-    TroubleshootTest(R.string.settings_troubleshoot_test_bg_restricted_title) {
+class TestBackgroundRestrictions @Inject constructor(
+        private val context: FragmentActivity,
+        private val stringProvider: StringProvider
+) :
+        TroubleshootTest(R.string.settings_troubleshoot_test_bg_restricted_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         context.getSystemService<ConnectivityManager>()!!.apply {

@@ -26,8 +26,10 @@ import im.vector.app.features.home.room.list.RoomSummaryItemFactory
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
-class IncomingShareController @Inject constructor(private val roomSummaryItemFactory: RoomSummaryItemFactory,
-                                                  private val stringProvider: StringProvider) : TypedEpoxyController<IncomingShareViewState>() {
+class IncomingShareController @Inject constructor(
+        private val roomSummaryItemFactory: RoomSummaryItemFactory,
+        private val stringProvider: StringProvider
+) : TypedEpoxyController<IncomingShareViewState>() {
 
     interface Callback {
         fun onRoomClicked(roomSummary: RoomSummary)

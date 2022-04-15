@@ -26,10 +26,12 @@ class FakeRoomGroupMessageCreator {
 
     val instance = mockk<RoomGroupMessageCreator>()
 
-    fun givenCreatesRoomMessageFor(events: List<NotifiableMessageEvent>,
-                                   roomId: String,
-                                   userDisplayName: String,
-                                   userAvatarUrl: String?): RoomNotification.Message {
+    fun givenCreatesRoomMessageFor(
+            events: List<NotifiableMessageEvent>,
+            roomId: String,
+            userDisplayName: String,
+            userAvatarUrl: String?
+    ): RoomNotification.Message {
         val mockMessage = mockk<RoomNotification.Message>()
         every { instance.createRoomMessage(events, roomId, userDisplayName, userAvatarUrl) } returns mockMessage
         return mockMessage

@@ -27,15 +27,19 @@ import im.vector.app.features.home.room.detail.timeline.item.DefaultItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import javax.inject.Inject
 
-class DefaultItemFactory @Inject constructor(private val avatarSizeProvider: AvatarSizeProvider,
-                                             private val avatarRenderer: AvatarRenderer,
-                                             private val stringProvider: StringProvider,
-                                             private val informationDataFactory: MessageInformationDataFactory) {
+class DefaultItemFactory @Inject constructor(
+        private val avatarSizeProvider: AvatarSizeProvider,
+        private val avatarRenderer: AvatarRenderer,
+        private val stringProvider: StringProvider,
+        private val informationDataFactory: MessageInformationDataFactory
+) {
 
-    fun create(text: String,
-               informationData: MessageInformationData,
-               highlight: Boolean,
-               callback: TimelineEventController.Callback?): DefaultItem {
+    fun create(
+            text: String,
+            informationData: MessageInformationData,
+            highlight: Boolean,
+            callback: TimelineEventController.Callback?
+    ): DefaultItem {
         val attributes = DefaultItem.Attributes(
                 avatarRenderer = avatarRenderer,
                 informationData = informationData,

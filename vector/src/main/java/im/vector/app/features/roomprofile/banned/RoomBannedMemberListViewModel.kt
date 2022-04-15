@@ -40,9 +40,11 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
-class RoomBannedMemberListViewModel @AssistedInject constructor(@Assisted initialState: RoomBannedMemberListViewState,
-                                                                private val stringProvider: StringProvider,
-                                                                private val session: Session) :
+class RoomBannedMemberListViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomBannedMemberListViewState,
+        private val stringProvider: StringProvider,
+        private val session: Session
+) :
         VectorViewModel<RoomBannedMemberListViewState, RoomBannedMemberListAction, RoomBannedMemberListViewEvents>(initialState) {
 
     @AssistedFactory

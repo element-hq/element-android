@@ -31,8 +31,10 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
 
-class BreadcrumbsViewModel @AssistedInject constructor(@Assisted initialState: BreadcrumbsViewState,
-                                                       private val session: Session) :
+class BreadcrumbsViewModel @AssistedInject constructor(
+        @Assisted initialState: BreadcrumbsViewState,
+        private val session: Session
+) :
         VectorViewModel<BreadcrumbsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory

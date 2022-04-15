@@ -28,10 +28,12 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import javax.inject.Inject
 
-class RoomCreateItemFactory @Inject constructor(private val stringProvider: StringProvider,
-                                                private val userPreferencesProvider: UserPreferencesProvider,
-                                                private val session: Session,
-                                                private val noticeItemFactory: NoticeItemFactory) {
+class RoomCreateItemFactory @Inject constructor(
+        private val stringProvider: StringProvider,
+        private val userPreferencesProvider: UserPreferencesProvider,
+        private val session: Session,
+        private val noticeItemFactory: NoticeItemFactory
+) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event

@@ -30,8 +30,10 @@ class RoomDirectoryListCreator @Inject constructor(
         private val session: Session
 ) {
 
-    fun computeDirectories(thirdPartyProtocolData: Map<String, ThirdPartyProtocol>,
-                           customHomeservers: Set<String>): List<RoomDirectoryServer> {
+    fun computeDirectories(
+            thirdPartyProtocolData: Map<String, ThirdPartyProtocol>,
+            customHomeservers: Set<String>
+    ): List<RoomDirectoryServer> {
         val result = ArrayList<RoomDirectoryServer>()
 
         val protocols = ArrayList<RoomDirectoryData>()

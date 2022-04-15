@@ -28,9 +28,11 @@ import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class VectorDateFormatter @Inject constructor(private val context: Context,
-                                              private val localeProvider: LocaleProvider,
-                                              private val dateFormatterProviders: DateFormatterProviders) {
+class VectorDateFormatter @Inject constructor(
+        private val context: Context,
+        private val localeProvider: LocaleProvider,
+        private val dateFormatterProviders: DateFormatterProviders
+) {
 
     private val hourFormatter by lazy {
         if (DateFormat.is24HourFormat(context)) {

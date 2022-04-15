@@ -40,9 +40,11 @@ import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 
-class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roomId: String,
-                                                       private val stringProvider: StringProvider,
-                                                       private val session: Session) : WidgetPostAPIMediator.Handler {
+class WidgetPostAPIHandler @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val stringProvider: StringProvider,
+        private val session: Session
+) : WidgetPostAPIMediator.Handler {
 
     @AssistedFactory
     interface Factory {

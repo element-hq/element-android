@@ -25,8 +25,10 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLatestEventId
 
-class PreviewUrlRetriever(session: Session,
-                          private val coroutineScope: CoroutineScope) {
+class PreviewUrlRetriever(
+        session: Session,
+        private val coroutineScope: CoroutineScope
+) {
     private val mediaService = session.mediaService()
 
     private data class EventIdPreviewUrlUiState(

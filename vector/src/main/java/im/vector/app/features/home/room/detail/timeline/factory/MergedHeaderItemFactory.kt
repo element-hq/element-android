@@ -44,10 +44,12 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
-class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                                  private val avatarRenderer: AvatarRenderer,
-                                                  private val avatarSizeProvider: AvatarSizeProvider,
-                                                  private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper) {
+class MergedHeaderItemFactory @Inject constructor(
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val avatarRenderer: AvatarRenderer,
+        private val avatarSizeProvider: AvatarSizeProvider,
+        private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper
+) {
 
     private val collapsedEventIds = linkedSetOf<Long>()
     private val mergeItemCollapseStates = HashMap<Long, Boolean>()
@@ -56,15 +58,17 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
      * @param nextEvent is an older event than event
      * @param items all known items, sorted from newer event to oldest event
      */
-    fun create(event: TimelineEvent,
-               nextEvent: TimelineEvent?,
-               items: List<TimelineEvent>,
-               partialState: TimelineEventController.PartialState,
-               addDaySeparator: Boolean,
-               currentPosition: Int,
-               eventIdToHighlight: String?,
-               callback: TimelineEventController.Callback?,
-               requestModelBuild: () -> Unit): BasedMergedItem<*>? {
+    fun create(
+            event: TimelineEvent,
+            nextEvent: TimelineEvent?,
+            items: List<TimelineEvent>,
+            partialState: TimelineEventController.PartialState,
+            addDaySeparator: Boolean,
+            currentPosition: Int,
+            eventIdToHighlight: String?,
+            callback: TimelineEventController.Callback?,
+            requestModelBuild: () -> Unit
+    ): BasedMergedItem<*>? {
         return if (nextEvent?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
                 event.isRoomConfiguration(nextEvent.root.getClearContent()?.toModel<RoomCreateContent>()?.creator)) {
             // It's the first item before room.create
@@ -77,13 +81,15 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
         }
     }
 
-    private fun buildMembershipEventsMergedSummary(currentPosition: Int,
-                                                   items: List<TimelineEvent>,
-                                                   partialState: TimelineEventController.PartialState,
-                                                   event: TimelineEvent,
-                                                   eventIdToHighlight: String?,
-                                                   requestModelBuild: () -> Unit,
-                                                   callback: TimelineEventController.Callback?): MergedSimilarEventsItem_? {
+    private fun buildMembershipEventsMergedSummary(
+            currentPosition: Int,
+            items: List<TimelineEvent>,
+            partialState: TimelineEventController.PartialState,
+            event: TimelineEvent,
+            eventIdToHighlight: String?,
+            requestModelBuild: () -> Unit,
+            callback: TimelineEventController.Callback?
+    ): MergedSimilarEventsItem_? {
         val mergedEvents = timelineEventVisibilityHelper.prevSameTypeEvents(
                 items,
                 currentPosition,
@@ -151,13 +157,15 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
         }
     }
 
-    private fun buildRoomCreationMergedSummary(currentPosition: Int,
-                                               items: List<TimelineEvent>,
-                                               partialState: TimelineEventController.PartialState,
-                                               event: TimelineEvent,
-                                               eventIdToHighlight: String?,
-                                               requestModelBuild: () -> Unit,
-                                               callback: TimelineEventController.Callback?): MergedRoomCreationItem_? {
+    private fun buildRoomCreationMergedSummary(
+            currentPosition: Int,
+            items: List<TimelineEvent>,
+            partialState: TimelineEventController.PartialState,
+            event: TimelineEvent,
+            eventIdToHighlight: String?,
+            requestModelBuild: () -> Unit,
+            callback: TimelineEventController.Callback?
+    ): MergedRoomCreationItem_? {
         var prevEvent = items.prevOrNull(currentPosition)
         var tmpPos = currentPosition - 1
         val mergedEvents = mutableListOf(event)

@@ -62,8 +62,10 @@ sealed class BannerState {
     object BackingUp : BannerState()
 }
 
-class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialState: ServerBackupStatusViewState,
-                                                              private val session: Session) :
+class ServerBackupStatusViewModel @AssistedInject constructor(
+        @Assisted initialState: ServerBackupStatusViewState,
+        private val session: Session
+) :
         VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
     @AssistedFactory

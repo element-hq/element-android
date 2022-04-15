@@ -29,8 +29,10 @@ import kotlin.math.sin
  * This view will draw dots floating around the center of it's view
  * As describe in http://frogermcs.github.io/twitters-like-animation-in-android-alternative/
  */
-class DotsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                         defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+class DotsView @JvmOverloads constructor(
+        context: Context, attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     private var COLOR_1 = -0x3ef9
     private var COLOR_2 = -0x6800

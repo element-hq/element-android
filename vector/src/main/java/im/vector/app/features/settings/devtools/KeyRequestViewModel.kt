@@ -50,8 +50,9 @@ data class KeyRequestViewState(
 
 class KeyRequestViewModel @AssistedInject constructor(
         @Assisted initialState: KeyRequestViewState,
-        private val session: Session) :
-    VectorViewModel<KeyRequestViewState, KeyRequestAction, KeyRequestEvents>(initialState) {
+        private val session: Session
+) :
+        VectorViewModel<KeyRequestViewState, KeyRequestAction, KeyRequestEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<KeyRequestViewModel, KeyRequestViewState> {

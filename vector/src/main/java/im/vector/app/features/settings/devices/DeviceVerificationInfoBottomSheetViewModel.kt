@@ -30,8 +30,9 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.flow.flow
 
-class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
-                                                                             val session: Session
+class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(
+        @Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
+        val session: Session
 ) : VectorViewModel<DeviceVerificationInfoBottomSheetViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory

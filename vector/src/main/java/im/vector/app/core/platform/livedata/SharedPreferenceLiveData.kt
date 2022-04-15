@@ -19,9 +19,11 @@ package im.vector.app.core.platform.livedata
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 
-abstract class SharedPreferenceLiveData<T>(protected val sharedPrefs: SharedPreferences,
-                                           protected val key: String,
-                                           private val defValue: T) : LiveData<T>() {
+abstract class SharedPreferenceLiveData<T>(
+        protected val sharedPrefs: SharedPreferences,
+        protected val key: String,
+        private val defValue: T
+) : LiveData<T>() {
 
     private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         if (key == this.key) {

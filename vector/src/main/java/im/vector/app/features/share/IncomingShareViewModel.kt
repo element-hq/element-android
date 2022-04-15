@@ -41,8 +41,9 @@ import org.matrix.android.sdk.flow.flow
 class IncomingShareViewModel @AssistedInject constructor(
         @Assisted initialState: IncomingShareViewState,
         private val session: Session,
-        private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator) :
-    VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
+        private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator
+) :
+        VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {
@@ -141,10 +142,12 @@ class IncomingShareViewModel @AssistedInject constructor(
         }
     }
 
-    private fun shareAttachments(attachmentData: List<ContentAttachmentData>,
-                                 selectedRoomIds: Set<String>,
-                                 proposeMediaEdition: Boolean,
-                                 compressMediaBeforeSending: Boolean) {
+    private fun shareAttachments(
+            attachmentData: List<ContentAttachmentData>,
+            selectedRoomIds: Set<String>,
+            proposeMediaEdition: Boolean,
+            compressMediaBeforeSending: Boolean
+    ) {
         if (proposeMediaEdition) {
             val grouped = attachmentData.toGroupedContentAttachmentData()
             if (grouped.notPreviewables.isNotEmpty()) {

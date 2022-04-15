@@ -19,8 +19,10 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import androidx.recyclerview.widget.DiffUtil
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
-class TimelineEventDiffUtilCallback(private val oldList: List<TimelineEvent>,
-                                    private val newList: List<TimelineEvent>) : DiffUtil.Callback() {
+class TimelineEventDiffUtilCallback(
+        private val oldList: List<TimelineEvent>,
+        private val newList: List<TimelineEvent>
+) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
         return oldList.size

@@ -37,7 +37,8 @@ class WidgetItemFactory @Inject constructor(
         private val avatarSizeProvider: AvatarSizeProvider,
         private val messageColorProvider: MessageColorProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val userPreferencesProvider: UserPreferencesProvider) {
+        private val userPreferencesProvider: UserPreferencesProvider
+) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event

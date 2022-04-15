@@ -148,10 +148,12 @@ class SharedSecureStorageActivity :
         const val EXTRA_DATA_RESET = "EXTRA_DATA_RESET"
         const val DEFAULT_RESULT_KEYSTORE_ALIAS = "SharedSecureStorageActivity"
 
-        fun newIntent(context: Context,
-                      keyId: String? = null,
-                      requestedSecrets: List<String>,
-                      resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS): Intent {
+        fun newIntent(
+                context: Context,
+                keyId: String? = null,
+                requestedSecrets: List<String>,
+                resultKeyStoreAlias: String = DEFAULT_RESULT_KEYSTORE_ALIAS
+        ): Intent {
             require(requestedSecrets.isNotEmpty())
             return Intent(context, SharedSecureStorageActivity::class.java).also {
                 it.putExtra(Mavericks.KEY_ARG, Args(

@@ -126,9 +126,11 @@ class RoomListSectionBuilderGroup(
         return sections
     }
 
-    private fun buildRoomsSections(sections: MutableList<RoomsSection>,
-                                   activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
-                                   actualGroupId: String?) {
+    private fun buildRoomsSections(
+            sections: MutableList<RoomsSection>,
+            activeSpaceAwareQueries: MutableList<UpdatableLivePageResult>,
+            actualGroupId: String?
+    ) {
         if (autoAcceptInvites.showInvites()) {
             addSection(
                     sections,
@@ -245,11 +247,13 @@ class RoomListSectionBuilderGroup(
         }
     }
 
-    private fun addSection(sections: MutableList<RoomsSection>,
-                           activeSpaceUpdaters: MutableList<UpdatableLivePageResult>,
-                           @StringRes nameRes: Int,
-                           notifyOfLocalEcho: Boolean = false,
-                           query: (RoomSummaryQueryParams.Builder) -> Unit) {
+    private fun addSection(
+            sections: MutableList<RoomsSection>,
+            activeSpaceUpdaters: MutableList<UpdatableLivePageResult>,
+            @StringRes nameRes: Int,
+            notifyOfLocalEcho: Boolean = false,
+            query: (RoomSummaryQueryParams.Builder) -> Unit
+    ) {
         withQueryParams(query) { roomQueryParams ->
             val name = stringProvider.getString(nameRes)
             session.getFilteredPagedRoomSummariesLive(roomQueryParams)

@@ -30,7 +30,7 @@ import androidx.core.view.setMargins
 import im.vector.app.R
 
 class TypingMessageDotsView(context: Context, attrs: AttributeSet) :
-    LinearLayout(context, attrs) {
+        LinearLayout(context, attrs) {
 
     companion object {
         const val DEFAULT_CIRCLE_DURATION = 1000L

@@ -165,10 +165,12 @@ class RoomPermissionsController @Inject constructor(
         }
     }
 
-    private fun buildPermission(editablePermission: EditablePermission,
-                                content: PowerLevelsContent,
-                                editable: Boolean,
-                                isSpace: Boolean) {
+    private fun buildPermission(
+            editablePermission: EditablePermission,
+            content: PowerLevelsContent,
+            editable: Boolean,
+            isSpace: Boolean
+    ) {
         val currentRole = getCurrentRole(editablePermission, content)
         buildProfileAction(
                 id = editablePermission.labelResId.toString(),

@@ -40,11 +40,13 @@ import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class UserListController @Inject constructor(private val session: Session,
-                                             private val avatarRenderer: AvatarRenderer,
-                                             private val stringProvider: StringProvider,
-                                             private val colorProvider: ColorProvider,
-                                             private val errorFormatter: ErrorFormatter) : EpoxyController() {
+class UserListController @Inject constructor(
+        private val session: Session,
+        private val avatarRenderer: AvatarRenderer,
+        private val stringProvider: StringProvider,
+        private val colorProvider: ColorProvider,
+        private val errorFormatter: ErrorFormatter
+) : EpoxyController() {
 
     private var state: UserListViewState? = null
 

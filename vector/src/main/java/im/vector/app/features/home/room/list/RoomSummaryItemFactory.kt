@@ -36,17 +36,21 @@ import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class RoomSummaryItemFactory @Inject constructor(private val displayableEventFormatter: DisplayableEventFormatter,
-                                                 private val dateFormatter: VectorDateFormatter,
-                                                 private val stringProvider: StringProvider,
-                                                 private val typingHelper: TypingHelper,
-                                                 private val avatarRenderer: AvatarRenderer,
-                                                 private val errorFormatter: ErrorFormatter) {
+class RoomSummaryItemFactory @Inject constructor(
+        private val displayableEventFormatter: DisplayableEventFormatter,
+        private val dateFormatter: VectorDateFormatter,
+        private val stringProvider: StringProvider,
+        private val typingHelper: TypingHelper,
+        private val avatarRenderer: AvatarRenderer,
+        private val errorFormatter: ErrorFormatter
+) {
 
-    fun create(roomSummary: RoomSummary,
-               roomChangeMembershipStates: Map<String, ChangeMembershipState>,
-               selectedRoomIds: Set<String>,
-               listener: RoomListListener?): VectorEpoxyModel<*> {
+    fun create(
+            roomSummary: RoomSummary,
+            roomChangeMembershipStates: Map<String, ChangeMembershipState>,
+            selectedRoomIds: Set<String>,
+            listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
@@ -56,9 +60,11 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         }
     }
 
-    fun createSuggestion(spaceChildInfo: SpaceChildInfo,
-                         suggestedRoomJoiningStates: Map<String, Async<Unit>>,
-                         listener: RoomListListener?): VectorEpoxyModel<*> {
+    fun createSuggestion(
+            spaceChildInfo: SpaceChildInfo,
+            suggestedRoomJoiningStates: Map<String, Async<Unit>>,
+            listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
         val error = (suggestedRoomJoiningStates[spaceChildInfo.childRoomId] as? Fail)?.error
         return SpaceChildInfoItem_()
                 .id("sug_${spaceChildInfo.childRoomId}")
@@ -80,9 +86,11 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .itemClickListener { listener?.onSuggestedRoomClicked(spaceChildInfo) }
     }
 
-    private fun createInvitationItem(roomSummary: RoomSummary,
-                                     changeMembershipState: ChangeMembershipState,
-                                     listener: RoomListListener?): VectorEpoxyModel<*> {
+    private fun createInvitationItem(
+            roomSummary: RoomSummary,
+            changeMembershipState: ChangeMembershipState,
+            listener: RoomListListener?
+    ): VectorEpoxyModel<*> {
         val secondLine = if (roomSummary.isDirect) {
             roomSummary.inviterId
         } else {

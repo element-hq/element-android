@@ -65,9 +65,11 @@ interface AttachmentData : Parcelable {
 private const val URL_PREVIEW_IMAGE_MIN_FULL_WIDTH_PX = 600
 private const val URL_PREVIEW_IMAGE_MIN_FULL_HEIGHT_PX = 315
 
-class ImageContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
-                                               private val activeSessionHolder: ActiveSessionHolder,
-                                               private val dimensionConverter: DimensionConverter) {
+class ImageContentRenderer @Inject constructor(
+        private val localFilesHelper: LocalFilesHelper,
+        private val activeSessionHolder: ActiveSessionHolder,
+        private val dimensionConverter: DimensionConverter
+) {
 
     @Parcelize
     data class Data(
@@ -179,19 +181,23 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
 
         createGlideRequest(data, mode, imageView, size)
                 .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(e: GlideException?,
-                                              model: Any?,
-                                              target: Target<Drawable>?,
-                                              isFirstResource: Boolean): Boolean {
+                    override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                    ): Boolean {
                         callback?.invoke(false)
                         return false
                     }
 
-                    override fun onResourceReady(resource: Drawable?,
-                                                 model: Any?,
-                                                 target: Target<Drawable>?,
-                                                 dataSource: DataSource?,
-                                                 isFirstResource: Boolean): Boolean {
+                    override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                    ): Boolean {
                         callback?.invoke(true)
                         return false
                     }
@@ -222,19 +228,23 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
         }
 
         req.listener(object : RequestListener<Drawable> {
-            override fun onLoadFailed(e: GlideException?,
-                                      model: Any?,
-                                      target: Target<Drawable>?,
-                                      isFirstResource: Boolean): Boolean {
+            override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+            ): Boolean {
                 callback?.invoke(false)
                 return false
             }
 
-            override fun onResourceReady(resource: Drawable?,
-                                         model: Any?,
-                                         target: Target<Drawable>?,
-                                         dataSource: DataSource?,
-                                         isFirstResource: Boolean): Boolean {
+            override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+            ): Boolean {
                 callback?.invoke(true)
                 return false
             }

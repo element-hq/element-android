@@ -47,8 +47,10 @@ data class DeviceListViewState(
         val selectedDevice: CryptoDeviceInfo? = null
 ) : MavericksState
 
-class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted private val initialState: DeviceListViewState,
-                                                                 private val session: Session) :
+class DeviceListBottomSheetViewModel @AssistedInject constructor(
+        @Assisted private val initialState: DeviceListViewState,
+        private val session: Session
+) :
         VectorViewModel<DeviceListViewState, DeviceListAction, DeviceListBottomSheetViewEvents>(initialState) {
 
     @AssistedFactory

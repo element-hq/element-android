@@ -41,10 +41,12 @@ abstract class VerificationTestBase {
 
     protected val uiTestBase = OnboardingRobot()
 
-    fun createAccountAndSync(matrix: Matrix,
-                             userName: String,
-                             password: String,
-                             withInitialSync: Boolean): Session {
+    fun createAccountAndSync(
+            matrix: Matrix,
+            userName: String,
+            password: String,
+            withInitialSync: Boolean
+    ): Session {
         val hs = createHomeServerConfig()
 
         runBlockingTest {

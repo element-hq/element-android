@@ -21,7 +21,8 @@ import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 
 sealed class LoginMode : Parcelable
-/** because persist state */ {
+/** because persist state */
+{
     @Parcelize object Unknown : LoginMode()
     @Parcelize object Password : LoginMode()
     @Parcelize data class Sso(val ssoIdentityProviders: List<SsoIdentityProvider>?) : LoginMode()

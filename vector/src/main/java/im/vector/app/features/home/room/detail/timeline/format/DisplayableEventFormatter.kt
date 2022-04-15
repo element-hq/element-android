@@ -146,7 +146,8 @@ class DisplayableEventFormatter @Inject constructor(
 
     fun formatThreadSummary(
             event: Event?,
-            latestEdition: String? = null): CharSequence {
+            latestEdition: String? = null
+    ): CharSequence {
         event ?: return ""
 
         // There event have been edited
