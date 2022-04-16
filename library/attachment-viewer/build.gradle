@@ -55,5 +55,6 @@ dependencies {
     implementation libs.androidx.appCompat
     implementation libs.androidx.recyclerview
 
-    implementation libs.google.material
+    api "androidx.viewpager2:viewpager2:1.0.0"
+    implementation "androidx.transition:transition:1.2.0"
 }
