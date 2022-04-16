@@ -667,7 +667,7 @@
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nNa zariadení máte množstvo aplikácií zaregistrovaných na doručovanie okamžitých oznámení cez služby Google play. Konfigurácia ${app_name} nemá vplyv na výskyt tejto chyby. Podľa Google sa môže vyskytovať len pri veľmi vysokom počte nainštalovaných aplikácií. Bežní používatelia by týmto nemali byť postihnutí.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nKonfigurácia ${app_name} nemá vplyv na zobrazenie tejto chyby. Táto chyba sa môže zobraziť z niekoľkých dôvodov. Uistite sa že máte správne nastavený systémový čas a že ste v nastaveniach systému aplikácii služby Google play neobmedzili používanie prístupu na internet. Chyba sa tiež môže zobrazovať na vlastných zostaveniach (ROM), alebo sa chyba môže samovoľne prestať zobrazovať neskôr.</string>
+\nTáto chyba sa vymkla spod kontroly aplikácie ${app_name}. Môže sa vyskytnúť z niekoľkých dôvodov. Možno to bude fungovať, ak to neskôr skúsite znova, môžete tiež skontrolovať, či služba Google Play nemá v systémových nastaveniach obmedzené používanie dát, alebo či sú hodiny vášho zariadenia správne, prípadne sa to môže stať na vlastnej ROM.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia ${app_name} nemá vplyv na zobrazenie tejto chyby.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Pridať účet</string>
@@ -1005,7 +1005,7 @@
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Formát:</string>
     <string name="preference_voice_and_video">Zvuk a video</string>
-    <string name="preference_root_help_about">Pomoc a O aplikácii</string>
+    <string name="preference_root_help_about">Pomoc a o aplikácii</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Zaregistrovať token</string>
     <string name="send_suggestion">Poslať návrh</string>
     <string name="send_suggestion_content">Nižšie napíšte obsah návrhu.</string>
