@@ -2452,4 +2452,9 @@
     <string name="ftue_account_created_personalize">Personnaliser le profil</string>
     <string name="threads_notice_migration_title">Les fils de discussion se rapproche de la bêta 🎉</string>
     <string name="action_disable">Désactiver</string>
+    <string name="threads_notice_migration_message">Nous nous approchons d’une publication en bêta des fils de discussions.
+\n
+\nPour nous y préparer, nous avons besoin de faire certains changements : les fils créés avant maintenant seront affichés comme des réponses classiques.
+\n
+\nCette transition sera unique, maintenant que les fils de discussions ont intégré la spécification de Matrix.</string>
 </resources>
