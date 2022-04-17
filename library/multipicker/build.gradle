@@ -38,7 +38,7 @@ android {
 }
 
 dependencies {
-    implementation libs.androidx.appCompat
+    api libs.androidx.activity
     implementation libs.androidx.exifinterface
     implementation libs.androidx.core
 
