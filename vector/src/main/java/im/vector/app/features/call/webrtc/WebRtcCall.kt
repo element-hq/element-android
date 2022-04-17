@@ -19,6 +19,8 @@ package im.vector.app.features.call.webrtc
 import android.content.Context
 import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
+import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.services.CallService
 import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.core.utils.TextUtils.formatDuration
@@ -35,6 +37,7 @@ import im.vector.app.features.call.utils.awaitSetLocalDescription
 import im.vector.app.features.call.utils.awaitSetRemoteDescription
 import im.vector.app.features.call.utils.mapToCallCandidate
 import im.vector.app.features.session.coroutineScope
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.flow.chunk
 import im.vector.lib.core.utils.timer.CountUpTimer
 import kotlinx.coroutines.CoroutineScope
@@ -111,7 +114,9 @@ class WebRtcCall(
         private val sessionProvider: Provider<Session?>,
         private val peerConnectionFactoryProvider: Provider<PeerConnectionFactory?>,
         private val onCallBecomeActive: (WebRtcCall) -> Unit,
-        private val onCallEnded: (String, EndCallReason, Boolean) -> Unit
+        private val onCallEnded: (String, EndCallReason, Boolean) -> Unit,
+        private var vectorPreferences: VectorPreferences,
+        private val stringProvider: StringProvider
 ) : MxCall.StateListener {
 
     interface Listener : MxCall.StateListener {
@@ -294,6 +299,14 @@ class WebRtcCall(
                                     .createIceServer()
                     )
                 }
+            }
+            if ((turnServerResponse == null || turnServerResponse.uris.isNullOrEmpty()) && vectorPreferences.useFallbackTurnServer()) {
+                add(
+                        PeerConnection
+                                .IceServer
+                                .builder("stun:" + stringProvider.getString(R.string.fallback_stun_server_url))
+                                .createIceServer()
+                )
             }
         }
         Timber.tag(loggerTag.value).v("creating peer connection...with iceServers $iceServers ")

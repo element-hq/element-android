@@ -43,6 +43,9 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
     private val mCallRingtonePreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY)!!
     }
+    private val useDefaultStunPreference by lazy {
+        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_CALL_USE_FALLBACK_CALL_ASSIST_SERVER_KEY)!!
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +57,11 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
         mUseRiotCallRingtonePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let { setUseRiotDefaultRingtone(it, mUseRiotCallRingtonePreference.isChecked) }
             false
+        }
+
+        useDefaultStunPreference.let {
+            val stun = getString(R.string.fallback_stun_server_url)
+            it.summary = getString(R.string.settings_call_ringtone_use_default_stun_summary, stun)
         }
 
         mCallRingtonePreference.let {

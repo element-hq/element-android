@@ -548,6 +548,8 @@
     <string name="settings_call_category">Calls</string>
     <string name="settings_call_show_confirmation_dialog_title">Prevent accidental call</string>
     <string name="settings_call_show_confirmation_dialog_summary">Ask for confirmation before starting a call</string>
+    <string name="settings_call_ringtone_use_default_stun_title">Allow fallback call assist server</string>
+    <string name="settings_call_ringtone_use_default_stun_summary">Will use %s as assist when your homeserver does not offer one (your IP address will be seen by the stun server during a call)</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="settings_call_ringtone_use_app_ringtone">Use default ${app_name} ringtone for incoming calls</string>
     <string name="settings_call_ringtone_title">Incoming call ringtone</string>

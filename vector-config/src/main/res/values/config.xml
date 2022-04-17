@@ -5,6 +5,7 @@
 
     <!-- server urls -->
     <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
+    <string name="fallback_stun_server_url" translatable="false">turn.matrix.org</string>
 
     <!-- Rageshake configuration -->
     <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
