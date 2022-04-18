@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.util.JsonDict
  * Class to pass parameters to the custom registration types for /register.
  */
 @JsonClass(generateAdapter = true)
-internal data class RegistrationOtherParams(
+internal data class RegistrationCustomParams(
         // authentication parameters
         @Json(name = "auth")
         val auth: JsonDict? = null,

@@ -23,20 +23,20 @@ import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 
-internal interface RegisterOtherTask : Task<RegisterOtherTask.Params, Credentials> {
+internal interface RegisterCustomTask : Task<RegisterCustomTask.Params, Credentials> {
     data class Params(
-            val registrationOtherParams: RegistrationOtherParams
+            val registrationCustomParams: RegistrationCustomParams
     )
 }
 
-internal class DefaultRegisterOtherTask(
+internal class DefaultRegisterCustomTask(
         private val authAPI: AuthAPI
-) : RegisterOtherTask {
+) : RegisterCustomTask {
 
-    override suspend fun execute(params: RegisterOtherTask.Params): Credentials {
+    override suspend fun execute(params: RegisterCustomTask.Params): Credentials {
         try {
             return executeRequest(null) {
-                authAPI.registerOther(params.registrationOtherParams)
+                authAPI.registerCustom(params.registrationCustomParams)
             }
         } catch (throwable: Throwable) {
             throw throwable.toRegistrationFlowResponse()

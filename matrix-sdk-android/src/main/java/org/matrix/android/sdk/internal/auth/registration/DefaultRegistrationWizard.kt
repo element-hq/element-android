@@ -47,7 +47,7 @@ internal class DefaultRegistrationWizard(
     private val registerAvailableTask: RegisterAvailableTask = DefaultRegisterAvailableTask(authAPI)
     private val registerAddThreePidTask: RegisterAddThreePidTask = DefaultRegisterAddThreePidTask(authAPI)
     private val validateCodeTask: ValidateCodeTask = DefaultValidateCodeTask(authAPI)
-    private val registerOtherTask: RegisterOtherTask = DefaultRegisterOtherTask(authAPI)
+    private val registerCustomTask: RegisterCustomTask = DefaultRegisterCustomTask(authAPI)
 
     override val currentThreePid: String?
         get() {
@@ -199,7 +199,7 @@ internal class DefaultRegistrationWizard(
         val mutableParams = authParams.toMutableMap()
         mutableParams["session"] = safeSession
 
-        val params = RegistrationOtherParams(auth = mutableParams)
+        val params = RegistrationCustomParams(auth = mutableParams)
         return performRegistrationOtherRequest(params)
     }
 
@@ -212,9 +212,9 @@ internal class DefaultRegistrationWizard(
     }
 
     private suspend fun performRegistrationOtherRequest(
-            registrationOtherParams: RegistrationOtherParams
+            registrationCustomParams: RegistrationCustomParams
     ): RegistrationResult {
-        return register { registerOtherTask.execute(RegisterOtherTask.Params(registrationOtherParams)) }
+        return register { registerCustomTask.execute(RegisterCustomTask.Params(registrationCustomParams)) }
     }
 
     private suspend fun register(
