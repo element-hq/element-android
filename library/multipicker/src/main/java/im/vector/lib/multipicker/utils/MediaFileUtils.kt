@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun createTemporaryMediaFile(context: Context, mediaType: MediaType): File {
+internal fun createTemporaryMediaFile(context: Context, mediaType: MediaType): File {
     val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
     val storageDir: File = context.filesDir.also { it.mkdirs() }
     val fileSuffix = when (mediaType) {
