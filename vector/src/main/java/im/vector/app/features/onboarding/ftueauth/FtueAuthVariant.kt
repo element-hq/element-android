@@ -252,16 +252,7 @@ class FtueAuthVariant(
     }
 
     private fun FlowResult.orderedStages() = when {
-        vectorFeatures.isOnboardingCombinedRegisterEnabled() -> missingStages.sortedBy {
-            when (it) {
-                is Stage.Email     -> 0
-                is Stage.Msisdn    -> 1
-                is Stage.Terms     -> 2
-                is Stage.ReCaptcha -> 3
-                is Stage.Other     -> 4
-                is Stage.Dummy     -> 5
-            }
-        }
+        vectorFeatures.isOnboardingCombinedRegisterEnabled() -> missingStages.sortedWith(FtueMissingRegistrationStagesComparator())
         else                                                 -> missingStages
     }
 
