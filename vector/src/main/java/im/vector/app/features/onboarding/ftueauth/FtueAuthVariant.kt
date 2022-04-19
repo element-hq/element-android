@@ -239,16 +239,30 @@ class FtueAuthVariant(
 
     private fun onRegistrationFlow(viewEvents: OnboardingViewEvents.RegistrationFlowResult) {
         when {
-            registrationShouldFallback(viewEvents) -> displayFallbackWebDialog()
-            viewEvents.isRegistrationStarted -> handleRegistrationNavigation(viewEvents.flowResult)
+            registrationShouldFallback(viewEvents)               -> displayFallbackWebDialog()
+            viewEvents.isRegistrationStarted                     -> handleRegistrationNavigation(viewEvents.flowResult.orderedStages())
             vectorFeatures.isOnboardingCombinedRegisterEnabled() -> openStartCombinedRegister()
-            else -> {
+            else                                                 -> {
                 // First ask for login and password
                 // I add a tag to indicate that this fragment is a registration stage.
                 // This way it will be automatically popped in when starting the next registration stage
                 openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
             }
         }
+    }
+
+    private fun FlowResult.orderedStages() = when {
+        vectorFeatures.isOnboardingCombinedRegisterEnabled() -> missingStages.sortedBy {
+            when (it) {
+                is Stage.Email     -> 0
+                is Stage.Msisdn    -> 1
+                is Stage.Terms     -> 2
+                is Stage.ReCaptcha -> 3
+                is Stage.Other     -> 4
+                is Stage.Dummy     -> 5
+            }
+        }
+        else                                                 -> missingStages
     }
 
     private fun openStartCombinedRegister() {
@@ -370,15 +384,15 @@ class FtueAuthVariant(
                 ?.let { onboardingViewModel.handle(OnboardingAction.LoginWithToken(it)) }
     }
 
-    private fun handleRegistrationNavigation(flowResult: FlowResult) {
+    private fun handleRegistrationNavigation(remainingStages: List<Stage>) {
         // Complete all mandatory stages first
-        val mandatoryStage = flowResult.missingStages.firstOrNull { it.mandatory }
+        val mandatoryStage = remainingStages.firstOrNull { it.mandatory }
 
         if (mandatoryStage != null) {
             doStage(mandatoryStage)
         } else {
             // Consider optional stages
-            val optionalStage = flowResult.missingStages.firstOrNull { !it.mandatory && it !is Stage.Dummy }
+            val optionalStage = remainingStages.firstOrNull { !it.mandatory && it !is Stage.Dummy }
             if (optionalStage == null) {
                 // Should not happen...
             } else {
