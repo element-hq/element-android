@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.util.exceptions
+package org.matrix.android.sdk.api.session.uia.exceptions
 
 class UiaCancelledException(message: String? = null) : Exception(message)
