@@ -23,7 +23,7 @@ import org.matrix.android.sdk.internal.database.model.KnownServerUrlEntity
 import org.matrix.android.sdk.internal.di.GlobalDatabase
 import javax.inject.Inject
 
-class DefaultHomeServerHistoryService @Inject constructor(
+internal class DefaultHomeServerHistoryService @Inject constructor(
         @GlobalDatabase private val monarchy: Monarchy
 ) : HomeServerHistoryService {
 

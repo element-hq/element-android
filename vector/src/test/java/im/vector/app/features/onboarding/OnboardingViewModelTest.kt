@@ -18,8 +18,10 @@ package im.vector.app.features.onboarding
 
 import android.net.Uri
 import com.airbnb.mvrx.test.MvRxTestRule
+import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.SignMode
+import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAnalyticsTracker
 import im.vector.app.test.fakes.FakeAuthenticationService
@@ -30,6 +32,7 @@ import im.vector.app.test.fakes.FakeHomeServerHistoryService
 import im.vector.app.test.fakes.FakeRegisterActionHandler
 import im.vector.app.test.fakes.FakeRegistrationWizard
 import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fakes.FakeStartAuthenticationFlowUseCase
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeUri
 import im.vector.app.test.fakes.FakeUriFilenameResolver
@@ -41,6 +44,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
@@ -58,6 +62,9 @@ private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplay
 private val AN_IGNORED_FLOW_RESULT = FlowResult(missingStages = emptyList(), completedStages = emptyList())
 private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationResult.FlowResponse(AN_IGNORED_FLOW_RESULT)
 private val A_LOGIN_OR_REGISTER_ACTION = OnboardingAction.LoginOrRegister("@a-user:id.org", "a-password", "a-device-name")
+private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
+private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
+private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password)
 
 class OnboardingViewModelTest {
 
@@ -74,6 +81,9 @@ class OnboardingViewModelTest {
     private val fakeRegisterActionHandler = FakeRegisterActionHandler()
     private val fakeDirectLoginUseCase = FakeDirectLoginUseCase()
     private val fakeVectorFeatures = FakeVectorFeatures()
+    private val fakeHomeServerConnectionConfigFactory = FakeHomeServerConnectionConfigFactory()
+    private val fakeStartAuthenticationFlowUseCase = FakeStartAuthenticationFlowUseCase()
+    private val fakeHomeServerHistoryService = FakeHomeServerHistoryService()
 
     lateinit var viewModel: OnboardingViewModel
 
@@ -221,6 +231,25 @@ class OnboardingViewModelTest {
                         { copy(isLoading = false) }
                 )
                 .assertNoEvents()
+                .finish()
+    }
+
+    @Test
+    fun `given when editing homeserver, then updates selected homeserver state and emits edited event`() = runTest {
+        val test = viewModel.test()
+        fakeHomeServerConnectionConfigFactory.givenConfigFor(A_HOMESERVER_URL, A_HOMESERVER_CONFIG)
+        fakeStartAuthenticationFlowUseCase.givenResult(A_HOMESERVER_CONFIG, StartAuthenticationResult(false, SELECTED_HOMESERVER_STATE))
+        fakeHomeServerHistoryService.expectUrlToBeAdded(A_HOMESERVER_CONFIG.homeServerUri.toString())
+
+        viewModel.handle(OnboardingAction.HomeServerChange.EditHomeServer(A_HOMESERVER_URL))
+
+        test
+                .assertStatesChanges(
+                        initialState,
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, selectedHomeserver = SELECTED_HOMESERVER_STATE) },
+                )
+                .assertEvents(OnboardingViewEvents.OnHomeserverEdited)
                 .finish()
     }
 
@@ -383,15 +412,16 @@ class OnboardingViewModelTest {
                 fakeContext.instance,
                 fakeAuthenticationService,
                 fakeActiveSessionHolder.instance,
-                FakeHomeServerConnectionConfigFactory().instance,
+                fakeHomeServerConnectionConfigFactory.instance,
                 ReAuthHelper(),
                 FakeStringProvider().instance,
-                FakeHomeServerHistoryService(),
+                fakeHomeServerHistoryService,
                 fakeVectorFeatures,
                 FakeAnalyticsTracker(),
                 fakeUriFilenameResolver.instance,
                 fakeRegisterActionHandler.instance,
                 fakeDirectLoginUseCase.instance,
+                fakeStartAuthenticationFlowUseCase.instance,
                 FakeVectorOverrides()
         )
     }

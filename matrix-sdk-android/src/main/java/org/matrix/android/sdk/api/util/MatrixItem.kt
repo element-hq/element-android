@@ -37,6 +37,7 @@ sealed class MatrixItem(
                         override val displayName: String? = null,
                         override val avatarUrl: String? = null) :
             MatrixItem(id, displayName?.removeSuffix(IRC_PATTERN), avatarUrl) {
+
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -200,7 +201,7 @@ fun RoomMemberSummary.toMatrixItem() = MatrixItem.UserItem(userId, displayName, 
 
 fun SenderInfo.toMatrixItem() = MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl)
 
-fun SenderInfo.toMatrixItemOrNull() = tryOrNull {  MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl) }
+fun SenderInfo.toMatrixItemOrNull() = tryOrNull { MatrixItem.UserItem(userId, disambiguatedDisplayName, avatarUrl) }
 
 fun SpaceChildInfo.toMatrixItem() = if (roomType == RoomType.SPACE) {
     MatrixItem.SpaceItem(childRoomId, name ?: canonicalAlias, avatarUrl)

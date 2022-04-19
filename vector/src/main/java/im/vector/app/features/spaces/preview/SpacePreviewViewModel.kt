@@ -16,7 +16,6 @@
 
 package im.vector.app.features.spaces.preview
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -35,8 +34,8 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
-import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
-import org.matrix.android.sdk.internal.session.space.peeking.SpaceSubChildPeekResult
+import org.matrix.android.sdk.api.session.space.peeking.SpacePeekResult
+import org.matrix.android.sdk.api.session.space.peeking.SpaceSubChildPeekResult
 import timber.log.Timber
 
 class SpacePreviewViewModel @AssistedInject constructor(

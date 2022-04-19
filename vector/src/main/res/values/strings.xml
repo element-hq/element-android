@@ -1056,6 +1056,11 @@
     <string name="media_saving_period_1_month">1 month</string>
     <string name="media_saving_period_forever">Forever</string>
 
+    <!-- Presence settings -->
+    <string name="settings_presence">Presence</string>
+    <string name="settings_presence_user_always_appears_offline">Offline mode</string>
+    <string name="settings_presence_user_always_appears_offline_summary">If enabled, you will always appear offline to other users, even when using the application.</string>
+
     <!-- Room Settings -->
 
     <!-- room global settings-->
@@ -2116,6 +2121,7 @@
     <string name="sent_a_reaction">Reacted with: %s</string>
     <string name="sent_verification_conclusion">Verification Conclusion</string>
     <string name="sent_location">Shared their location</string>
+    <string name="sent_live_location">Shared their live location</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
@@ -2993,6 +2999,7 @@
     <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
+    <string name="location_share_live_started">Loading live location…</string>
     <string name="location_share_live_stop">Stop</string>
     <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>

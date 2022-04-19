@@ -233,6 +233,14 @@ class FtueAuthVariant(
             OnboardingViewEvents.OnChooseProfilePicture                        -> onChooseProfilePicture()
             OnboardingViewEvents.OnPersonalizationComplete                     -> onPersonalizationComplete()
             OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
+            OnboardingViewEvents.EditServerSelection                           -> {
+                activity.addFragmentToBackstack(
+                        views.loginFragmentContainer,
+                        FtueAuthCombinedServerSelectionFragment::class.java,
+                        option = commonOption
+                )
+            }
+            OnboardingViewEvents.OnHomeserverEdited                            -> activity.popBackstack()
         }
     }
 
@@ -299,18 +307,18 @@ class FtueAuthVariant(
 
     private fun handleSignInSelected(state: OnboardingViewState) {
         if (isForceLoginFallbackEnabled) {
-            onLoginModeNotSupported(state.loginModeSupportedTypes)
+            onLoginModeNotSupported(state.selectedHomeserver.supportedLoginTypes)
         } else {
             disambiguateLoginMode(state)
         }
     }
 
-    private fun disambiguateLoginMode(state: OnboardingViewState) = when (state.loginMode) {
+    private fun disambiguateLoginMode(state: OnboardingViewState) = when (state.selectedHomeserver.preferredLoginMode) {
         LoginMode.Unknown,
         is LoginMode.Sso      -> error("Developer error")
         is LoginMode.SsoAndPassword,
         LoginMode.Password    -> openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
-        LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
+        LoginMode.Unsupported -> onLoginModeNotSupported(state.selectedHomeserver.supportedLoginTypes)
     }
 
     private fun openAuthLoginFragmentWithTag(tag: String) {
@@ -331,7 +339,7 @@ class FtueAuthVariant(
 
     private fun handleSignInWithMatrixId(state: OnboardingViewState) {
         if (isForceLoginFallbackEnabled) {
-            onLoginModeNotSupported(state.loginModeSupportedTypes)
+            onLoginModeNotSupported(state.selectedHomeserver.supportedLoginTypes)
         } else {
             openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
         }

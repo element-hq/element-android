@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: gradle/wrapper-validation-action@v1
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
           java-version: 11
@@ -196,7 +196,7 @@ jobs:
             - `[org.matrix.android.sdk.PermalinkParserTest]`<br>${{ steps.get-comment-body-permalink.outputs.permalink }}
           edit-mode: replace
       - name: Upload Test Report Log
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: integrationtest-error-results
@@ -235,7 +235,7 @@ jobs:
           uploadLogs: true
           httpPort: 8080
           disableRateLimiting: true
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
           java-version: '11'
@@ -256,7 +256,7 @@ jobs:
             adb logcat >> emulator.log &
             ./gradlew $CI_GRADLE_ARG_PROPERTIES connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || (adb pull storage/emulated/0/Pictures/failure_screenshots && exit 1 )
       - name: Upload Test Report Log
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: uitest-error-results
@@ -269,7 +269,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with: 
           distribution: 'adopt'
           java-version: '11'
@@ -283,7 +283,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - run: ./gradlew allCodeCoverageReport $CI_GRADLE_ARG_PROPERTIES
       - name: Upload Codecov data
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: codecov-xml
@@ -298,7 +298,7 @@ jobs:
       - codecov-units
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
           java-version: '11'

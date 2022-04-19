@@ -20,7 +20,7 @@ import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo013(realm: DynamicRealm) : RealmMigrator(realm, 13) {
+internal class MigrateSessionTo013(realm: DynamicRealm) : RealmMigrator(realm, 13) {
 
     override fun doMigrate(realm: DynamicRealm) {
         // Fix issue with the nightly build. Eventually play again the migration which has been included in migrateTo12()

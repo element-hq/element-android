@@ -23,7 +23,7 @@ import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.plan.MobileScreen
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Inject
 
 class VectorSettingsLabsFragment @Inject constructor(

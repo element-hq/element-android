@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  * https://matrix.org/docs/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
  */
 @JsonClass(generateAdapter = true)
-data class FilterResponse(
+internal data class FilterResponse(
         /**
          * Required. The ID of the filter that was created. Cannot start with a { as this character
          * is used to determine if the filter provided is inline JSON or a previously declared

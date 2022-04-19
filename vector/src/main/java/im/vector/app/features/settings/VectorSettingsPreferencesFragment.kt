@@ -21,6 +21,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.CheckedTextView
 import androidx.core.view.children
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
@@ -36,6 +37,8 @@ import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.themes.ThemeUtils
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
 import javax.inject.Inject
 
 class VectorSettingsPreferencesFragment @Inject constructor(
@@ -75,6 +78,17 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 true
             } else {
                 false
+            }
+        }
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE)!!.let { pref ->
+            pref.isChecked = vectorPreferences.userAlwaysAppearsOffline()
+            pref.setOnPreferenceChangeListener { _, newValue ->
+                val presenceOfflineModeEnabled = newValue as? Boolean ?: false
+                lifecycleScope.launch {
+                    session.setMyPresence(if (presenceOfflineModeEnabled) PresenceEnum.OFFLINE else PresenceEnum.ONLINE)
+                }
+                true
             }
         }
 

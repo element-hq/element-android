@@ -38,19 +38,20 @@ sealed interface TimelineMessageLayout : Parcelable {
 
     @Parcelize
     data class Bubble(
-        override val showAvatar: Boolean,
-        override val showDisplayName: Boolean,
-        override val showTimestamp: Boolean = true,
-        val addTopMargin: Boolean = false,
-        val isIncoming: Boolean,
-        val isPseudoBubble: Boolean,
-        val cornersRadius: CornersRadius,
-        val timestampAsOverlay: Boolean,
-        override val layoutRes: Int = if (isIncoming) {
-            R.layout.item_timeline_event_bubble_incoming_base
-        } else {
-            R.layout.item_timeline_event_bubble_outgoing_base
-        },
+            override val showAvatar: Boolean,
+            override val showDisplayName: Boolean,
+            override val showTimestamp: Boolean = true,
+            val addTopMargin: Boolean = false,
+            val isIncoming: Boolean,
+            val isPseudoBubble: Boolean,
+            val cornersRadius: CornersRadius,
+            val timestampInsideMessage: Boolean,
+            val addMessageOverlay: Boolean,
+            override val layoutRes: Int = if (isIncoming) {
+                R.layout.item_timeline_event_bubble_incoming_base
+            } else {
+                R.layout.item_timeline_event_bubble_outgoing_base
+            },
     ) : TimelineMessageLayout {
 
         @Parcelize

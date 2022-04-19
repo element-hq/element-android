@@ -1,3 +1,11 @@
+Changes in Element v1.4.11 (2022-04-07)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Choosing "leave all rooms and spaces" while leaving Space won't cause leaving DMs in this Space anymore ([#5609](https://github.com/vector-im/element-android/issues/5609))
+
+
 Changes in Element v1.4.10 (2022-04-05)
 =======================================
 

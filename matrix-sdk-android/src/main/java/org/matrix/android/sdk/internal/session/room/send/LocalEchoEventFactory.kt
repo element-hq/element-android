@@ -65,6 +65,7 @@ import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.isReply
+import org.matrix.android.sdk.api.util.TextContent
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
@@ -256,7 +257,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         eventId = beaconInfoEventId
                 ),
                 unstableLocationInfo = LocationInfo(geoUri = geoUri, description = geoUri),
-                unstableTs = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()),
+                unstableTimestampAsMilliseconds = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()),
         )
         val localId = LocalEcho.createLocalEchoId()
         return Event(

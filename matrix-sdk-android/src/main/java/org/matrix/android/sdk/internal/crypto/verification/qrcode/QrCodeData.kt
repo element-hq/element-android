@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.crypto.verification.qrcode
 /**
  * Ref: https://github.com/uhoreg/matrix-doc/blob/qr_key_verification/proposals/1543-qr_code_key_verification.md#qr-code-format
  */
-sealed class QrCodeData(
+internal sealed class QrCodeData(
         /**
          * the event ID or transaction_id of the associated verification
          */

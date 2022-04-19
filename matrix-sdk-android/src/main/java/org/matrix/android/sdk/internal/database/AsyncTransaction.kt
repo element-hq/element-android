@@ -35,7 +35,7 @@ internal fun <T> CoroutineScope.asyncTransaction(realmConfiguration: RealmConfig
     }
 }
 
-suspend fun <T> awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> T): T {
+internal suspend fun <T> awaitTransaction(config: RealmConfiguration, transaction: suspend (realm: Realm) -> T): T {
     return withContext(Realm.WRITE_EXECUTOR.asCoroutineDispatcher()) {
         Realm.getInstance(config).use { bgRealm ->
             bgRealm.beginTransaction()

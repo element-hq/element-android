@@ -25,7 +25,7 @@ import java.lang.reflect.Type
 
 @Retention(AnnotationRetention.RUNTIME)
 @JsonQualifier
-annotation class SerializeNulls {
+internal annotation class SerializeNulls {
     companion object {
         val JSON_ADAPTER_FACTORY: JsonAdapter.Factory = object : JsonAdapter.Factory {
             @Nullable

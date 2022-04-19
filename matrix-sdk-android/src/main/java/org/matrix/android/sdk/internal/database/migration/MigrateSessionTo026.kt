@@ -31,7 +31,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
  * Live thread list: using enhanced /messages api MSC3440
  * Live thread timeline: using /relations api
  */
-class MigrateSessionTo026(realm: DynamicRealm) : RealmMigrator(realm, 26) {
+internal class MigrateSessionTo026(realm: DynamicRealm) : RealmMigrator(realm, 26) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("ChunkEntity")

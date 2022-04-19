@@ -31,8 +31,8 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.failure.isInvalidUIAAuth
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.internal.util.exceptions.UiaCancelledException
 import timber.log.Timber
 import kotlin.coroutines.Continuation
@@ -45,7 +45,7 @@ data class DeactivateAccountViewState(
 
 class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private val initialState: DeactivateAccountViewState,
                                                              private val session: Session) :
-        VectorViewModel<DeactivateAccountViewState, DeactivateAccountAction, DeactivateAccountViewEvents>(initialState) {
+    VectorViewModel<DeactivateAccountViewState, DeactivateAccountAction, DeactivateAccountViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<DeactivateAccountViewModel, DeactivateAccountViewState> {
@@ -58,7 +58,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
     override fun handle(action: DeactivateAccountAction) {
         when (action) {
             is DeactivateAccountAction.DeactivateAccount -> handleDeactivateAccount(action)
-            DeactivateAccountAction.SsoAuthDone          -> {
+            DeactivateAccountAction.SsoAuthDone -> {
                 Timber.d("## UIA - FallBack success")
                 _viewEvents.post(DeactivateAccountViewEvents.Loading())
                 if (pendingAuth != null) {
@@ -67,7 +67,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
                     uiaContinuation?.resumeWithException(IllegalArgumentException())
                 }
             }
-            is DeactivateAccountAction.PasswordAuthDone  -> {
+            is DeactivateAccountAction.PasswordAuthDone -> {
                 _viewEvents.post(DeactivateAccountViewEvents.Loading())
                 val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(

@@ -16,21 +16,16 @@
 
 package im.vector.app
 
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.LiveEventListener
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
 import java.util.concurrent.Executors
-
-enum class UISIEventSource {
-    INITIAL_SYNC,
-    INCREMENTAL_SYNC,
-    PAGINATION
-}
 
 data class E2EMessageDetected(
         val eventId: String,
@@ -38,11 +33,11 @@ data class E2EMessageDetected(
         val senderUserId: String,
         val senderDeviceId: String,
         val senderKey: String,
-        val sessionId: String,
-        val source: UISIEventSource) {
+        val sessionId: String
+        ) {
 
     companion object {
-        fun fromEvent(event: Event, roomId: String, source: UISIEventSource): E2EMessageDetected {
+        fun fromEvent(event: Event, roomId: String): E2EMessageDetected {
             val encryptedContent = event.content.toModel<EncryptedEventContent>()
 
             return E2EMessageDetected(
@@ -51,8 +46,7 @@ data class E2EMessageDetected(
                     senderUserId = event.senderId ?: "",
                     senderDeviceId = encryptedContent?.deviceId ?: "",
                     senderKey = encryptedContent?.senderKey ?: "",
-                    sessionId = encryptedContent?.sessionId ?: "",
-                    source = source
+                    sessionId = encryptedContent?.sessionId ?: ""
             )
         }
     }
@@ -61,6 +55,7 @@ data class E2EMessageDetected(
 class UISIDetector : LiveEventListener {
 
     interface UISIDetectorCallback {
+        val enabled: Boolean
         val reciprocateToDeviceEventType: String
         fun uisiDetected(source: E2EMessageDetected)
         fun uisiReciprocateRequest(source: Event)
@@ -68,30 +63,16 @@ class UISIDetector : LiveEventListener {
 
     var callback: UISIDetectorCallback? = null
 
-    private val trackedEvents = mutableListOf<Pair<E2EMessageDetected, TimerTask>>()
+    private val trackedEvents = mutableMapOf<String, TimerTask>()
     private val executor = Executors.newSingleThreadExecutor()
     private val timer = Timer()
     private val timeoutMillis = 30_000L
-    var enabled = false
+    private val enabled: Boolean get() = callback?.enabled.orFalse()
 
-    override fun onLiveEvent(roomId: String, event: Event) {
-        if (!enabled) return
-        if (!event.isEncrypted()) return
-        executor.execute {
-            handleEventReceived(E2EMessageDetected.fromEvent(event, roomId, UISIEventSource.INCREMENTAL_SYNC))
-        }
-    }
-
-    override fun onPaginatedEvent(roomId: String, event: Event) {
-        if (!enabled) return
-        if (!event.isEncrypted()) return
-        executor.execute {
-            handleEventReceived(E2EMessageDetected.fromEvent(event, roomId, UISIEventSource.PAGINATION))
-        }
-    }
-
-    override fun onEventDecrypted(eventId: String, roomId: String, clearEvent: JsonDict) {
-        if (!enabled) return
+    override fun onEventDecrypted(event: Event, clearEvent: JsonDict) {
+        val eventId = event.eventId
+        val roomId = event.roomId
+        if (!enabled || eventId == null || roomId == null) return
         executor.execute {
             unTrack(eventId, roomId)
         }
@@ -104,41 +85,35 @@ class UISIDetector : LiveEventListener {
         }
     }
 
-    override fun onEventDecryptionError(eventId: String, roomId: String, throwable: Throwable) {
-        if (!enabled) return
-        executor.execute {
-            unTrack(eventId, roomId)?.let {
-                triggerUISI(it)
-            }
-//            if (throwable is MXCryptoError.OlmError) {
-//                if (throwable.olmException.message == "UNKNOWN_MESSAGE_INDEX") {
-//                    unTrack(eventId, roomId)?.let {
-//                        triggerUISI(it)
-//                    }
-//                }
-//            }
-        }
-    }
+    override fun onEventDecryptionError(event: Event, throwable: Throwable) {
+        val eventId = event.eventId
+        val roomId = event.roomId
+        if (!enabled || eventId == null || roomId == null) return
 
-    private fun handleEventReceived(detectorEvent: E2EMessageDetected) {
-        if (!enabled) return
-        if (trackedEvents.any { it.first == detectorEvent }) {
-            Timber.w("## UISIDetector: Event ${detectorEvent.eventId} is already tracked")
-        } else {
-            // track it and start timer
-            val timeoutTask = object : TimerTask() {
-                override fun run() {
-                    executor.execute {
-                        unTrack(detectorEvent.eventId, detectorEvent.roomId)
-                        Timber.v("## UISIDetector: Timeout on ${detectorEvent.eventId} ")
-                        triggerUISI(detectorEvent)
-                    }
+        val trackerId: String = trackerId(eventId, roomId)
+        if (trackedEvents.containsKey(trackerId)) {
+            Timber.w("## UISIDetector: Event $eventId is already tracked")
+            return
+        }
+        // track it and start timer
+        val timeoutTask = object : TimerTask() {
+            override fun run() {
+                executor.execute {
+                    unTrack(eventId, roomId)
+                    Timber.v("## UISIDetector: Timeout on $eventId")
+                    triggerUISI(E2EMessageDetected.fromEvent(event, roomId))
                 }
             }
-            trackedEvents.add(detectorEvent to timeoutTask)
-            timer.schedule(timeoutTask, timeoutMillis)
         }
+        trackedEvents[trackerId] = timeoutTask
+        timer.schedule(timeoutTask, timeoutMillis)
     }
+
+    override fun onLiveEvent(roomId: String, event: Event) { }
+
+    override fun onPaginatedEvent(roomId: String, event: Event) { }
+
+    private fun trackerId(eventId: String, roomId: String): String = "$roomId-$eventId"
 
     private fun triggerUISI(source: E2EMessageDetected) {
         if (!enabled) return
@@ -146,15 +121,7 @@ class UISIDetector : LiveEventListener {
         callback?.uisiDetected(source)
     }
 
-    private fun unTrack(eventId: String, roomId: String): E2EMessageDetected? {
-        val index = trackedEvents.indexOfFirst { it.first.eventId == eventId && it.first.roomId == roomId }
-        return if (index != -1) {
-            trackedEvents.removeAt(index).let {
-                it.second.cancel()
-                it.first
-            }
-        } else {
-            null
-        }
+    private fun unTrack(eventId: String, roomId: String) {
+        trackedEvents.remove(trackerId(eventId, roomId))?.cancel()
     }
 }

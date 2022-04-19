@@ -109,7 +109,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="@string/ftue_auth_create_account_matrix_dot_org_server_name"
             android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@id/selectedServerDescription"
             app:layout_constraintEnd_toStartOf="@id/editServerButton"
@@ -122,7 +121,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="@string/ftue_auth_create_account_matrix_dot_org_server_description"
             android:textColor="?vctr_content_tertiary"
             app:layout_constraintBottom_toTopOf="@id/serverSelectionSpacing"
             app:layout_constraintEnd_toStartOf="@id/editServerButton"
@@ -139,7 +137,6 @@
             android:paddingEnd="12dp"
             android:text="@string/ftue_auth_create_account_edit_server_selection"
             android:textAllCaps="true"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/selectedServerDescription"
             app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
             app:layout_constraintTop_toTopOf="@id/chooseYourServerHeader" />
@@ -176,6 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:imeOptions="actionNext"
+                android:nextFocusForward="@id/createAccountPasswordInput"
                 android:inputType="text"
                 android:maxLines="1" />
 

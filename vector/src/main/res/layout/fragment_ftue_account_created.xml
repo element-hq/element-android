@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     android:background="?colorSecondary">
 
-    <nl.dionsegijn.konfetti.xml.KonfettiView
-        android:id="@+id/viewKonfetti"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/ftueAuthGutterStart"
         android:layout_width="wrap_content"
@@ -167,5 +161,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.05"
         app:layout_constraintTop_toBottomOf="@id/ctaBottomBarrier" />
+
+    <nl.dionsegijn.konfetti.xml.KonfettiView
+        android:id="@+id/viewKonfetti"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

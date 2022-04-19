@@ -20,7 +20,7 @@ import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.database.model.EventInsertEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo017(realm: DynamicRealm) : RealmMigrator(realm, 17) {
+internal class MigrateSessionTo017(realm: DynamicRealm) : RealmMigrator(realm, 17) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("EventInsertEntity")

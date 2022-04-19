@@ -57,7 +57,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorPr
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LoginFormScrollView"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:fillViewport="true"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chooseServerRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/chooseServerGutterStart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/chooseServerGutterEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/chooseServerToolbar"
+            style="@style/Widget.Vector.Toolbar.Settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerHeaderIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:navigationIcon="@drawable/ic_close_24dp" />
+
+        <ImageView
+            android:id="@+id/chooseServerHeaderIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/circle"
+            android:backgroundTint="?colorSecondary"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_choose_server"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerHeaderTitle"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintHeight_percent="0.10"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerToolbar"
+            app:tint="@color/palette_white" />
+
+        <TextView
+            android:id="@+id/chooseServerHeaderTitle"
+            style="@style/Widget.Vector.TextView.Title.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/ftue_auth_choose_server_title"
+            android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerHeaderSubtitle"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerHeaderIcon" />
+
+        <TextView
+            android:id="@+id/chooseServerHeaderSubtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/ftue_auth_choose_server_subtitle"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerHeaderTitle" />
+
+        <Space
+            android:id="@+id/titleContentSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerInput"
+            app:layout_constraintHeight_percent="0.03"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerHeaderSubtitle" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/chooseServerInput"
+            style="@style/Widget.Vector.TextInputLayout.Username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/ftue_auth_choose_server_entry_hint"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerEntryFooter"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/titleContentSpacing">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/chooseServerEntryFooter"
+            style="@style/Widget.Vector.TextView.Micro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/ftue_auth_choose_server_entry_footer"
+            app:layout_constraintBottom_toTopOf="@id/actionSpacing"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerInput" />
+
+        <Space
+            android:id="@+id/actionSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerSubmit"
+            app:layout_constraintHeight_percent="0.02"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerEntryFooter" />
+
+        <Button
+            android:id="@+id/chooseServerSubmit"
+            style="@style/Widget.Vector.Button.Login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/login_signup_submit"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerEmsContainer"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/actionSpacing" />
+
+        <Space
+            android:id="@+id/submitSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/emsTopSpacing"
+            app:layout_constraintHeight_percent="0.02"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerSubmit" />
+
+        <View
+            android:id="@+id/chooseServerEmsContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rounded_rect_shape_8"
+            android:backgroundTint="?vctr_system"
+            app:layout_constraintBottom_toBottomOf="@id/emsCtaSpacing"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toTopOf="@id/emsTopSpacing"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Space
+            android:id="@+id/emsTopSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerEmsIcon"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerSubmit"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageView
+            android:id="@+id/chooseServerEmsIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="22dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/palette_ems"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_ems_logo"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerEmsTitle"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/emsTopSpacing"
+            app:layout_constraintVertical_bias="1"
+            app:tint="@color/palette_white" />
+
+        <TextView
+            android:id="@+id/chooseServerEmsTitle"
+            style="@style/Widget.Vector.TextView.HeadlineMedium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:text="@string/ftue_auth_choose_server_ems_title"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerEmsSubtitle"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerEmsIcon" />
+
+        <TextView
+            android:id="@+id/chooseServerEmsSubtitle"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:autoLink="web"
+            android:gravity="center"
+            android:text="@string/ftue_auth_choose_server_ems_subtitle"
+            app:layout_constraintBottom_toTopOf="@id/chooseServerGetInTouch"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerEmsTitle" />
+
+        <Button
+            android:id="@+id/chooseServerGetInTouch"
+            style="@style/Widget.Vector.Button.Login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/palette_ems"
+            android:text="@string/ftue_auth_choose_server_ems_cta"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toTopOf="@id/emsCtaSpacing"
+            app:layout_constraintEnd_toEndOf="@id/chooseServerGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/chooseServerGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerEmsSubtitle" />
+
+        <Space
+            android:id="@+id/emsCtaSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            app:layout_constraintBottom_toTopOf="@id/footerSpacing"
+            app:layout_constraintTop_toBottomOf="@id/chooseServerGetInTouch" />
+
+        <Space
+            android:id="@+id/footerSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_percent="0.03"
+            app:layout_constraintTop_toBottomOf="@id/emsCtaSpacing" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

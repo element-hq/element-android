@@ -210,10 +210,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -237,8 +238,6 @@ import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import reactivecircus.flowbinding.android.view.focusChanges
 import reactivecircus.flowbinding.android.widget.textChanges
 import timber.log.Timber
@@ -266,8 +265,7 @@ class TimelineFragment @Inject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
-        private val clock: Clock,
-        private val matrixConfiguration: MatrixConfiguration
+        private val clock: Clock
 ) :
         VectorBaseFragment<FragmentTimelineBinding>(),
         TimelineEventController.Callback,
@@ -1650,7 +1648,7 @@ class TimelineFragment @Inject constructor(
                 views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
                 views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
                 avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
-                val showPresence = roomSummary.isDirect && matrixConfiguration.presenceSyncEnabled
+                val showPresence = roomSummary.isDirect
                 views.includeRoomToolbar.roomToolbarPresenceImageView.render(showPresence, roomSummary.directUserPresence)
                 val shieldView = if (showPresence) views.includeRoomToolbar.roomToolbarTitleShield else views.includeRoomToolbar.roomToolbarAvatarShield
                 shieldView.render(roomSummary.roomEncryptionTrustLevel)

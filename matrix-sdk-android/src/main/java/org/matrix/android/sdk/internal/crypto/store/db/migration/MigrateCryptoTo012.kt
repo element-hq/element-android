@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.OutboundGroupSessio
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 // Version 12L added outbound group session persistence
-class MigrateCryptoTo012(realm: DynamicRealm) : RealmMigrator(realm, 12) {
+internal class MigrateCryptoTo012(realm: DynamicRealm) : RealmMigrator(realm, 12) {
 
     override fun doMigrate(realm: DynamicRealm) {
         val outboundEntitySchema = realm.schema.create("OutboundGroupSessionInfoEntity")

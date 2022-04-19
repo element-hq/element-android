@@ -33,7 +33,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
 
 class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
                                                               session: Session

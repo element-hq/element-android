@@ -59,6 +59,11 @@
         android:layout_height="wrap_content"
         android:layout="@layout/item_timeline_event_location_stub" />
 
+    <ViewStub
+        android:id="@+id/messageContentLiveLocationStartStub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout="@layout/item_timeline_event_live_location_start_stub" />
 
 </FrameLayout>
 

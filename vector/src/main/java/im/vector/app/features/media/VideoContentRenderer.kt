@@ -31,7 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject

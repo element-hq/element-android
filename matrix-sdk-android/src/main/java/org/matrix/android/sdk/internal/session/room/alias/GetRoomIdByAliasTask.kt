@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room.alias
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.query.findByAlias

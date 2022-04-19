@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.session.presence.model.PresenceEnum
  * Class representing the EventType.PRESENCE event content
  */
 @JsonClass(generateAdapter = true)
-data class PresenceContent(
+internal data class PresenceContent(
         /**
          * Required. The presence state for this user. One of: ["online", "offline", "unavailable"]
          */

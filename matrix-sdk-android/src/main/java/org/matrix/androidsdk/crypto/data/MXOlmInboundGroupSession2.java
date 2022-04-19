@@ -23,11 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/*
- * IMPORTANT: This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
- */
-
 /**
+ * <b>IMPORTANT:</b> This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
+ *
  * This class adds more context to a OLMInboundGroupSession object.
  * This allows additional checks. The class implements NSCoding so that the context can be stored.
  */

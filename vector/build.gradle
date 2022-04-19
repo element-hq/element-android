@@ -151,7 +151,6 @@ android {
 
         buildConfigField "Boolean", "enableLocationSharing", "true"
         buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
-        buildConfigField "Boolean", "PRESENCE_SYNC_ENABLED", "true"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -230,7 +229,6 @@ android {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             // Set to true if you want to enable strict mode in debug
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-            buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "true"
 
             signingConfig signingConfigs.debug
         }
@@ -240,7 +238,6 @@ android {
 
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-            buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "false"
 
             postprocessing {
                 removeUnusedCode true
