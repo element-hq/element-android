@@ -28,10 +28,8 @@ internal class TemporaryFileCreator @Inject constructor(
 ) {
     suspend fun create(): File {
         return withContext(Dispatchers.IO) {
-            runCatching {
-                File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
-                        .apply { mkdirs() }
-            }.getOrThrow()
+            File.createTempFile(UUID.randomUUID().toString(), null, context.cacheDir)
+                    .apply { mkdirs() }
         }
     }
 }
