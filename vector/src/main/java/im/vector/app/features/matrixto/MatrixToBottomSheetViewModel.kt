@@ -297,13 +297,12 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             try {
-                session.joinRoom(action.roomIdOrAlias, null, action.viaServers?.take(3) ?: emptyList())
-                val roomId: String = if (MatrixPatterns.isRoomAlias(action.roomIdOrAlias)) {
-                    session.getRoomIdByAlias(action.roomIdOrAlias, true).get().roomId
-                } else {
-                    action.roomIdOrAlias
-                }
-                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(roomId))
+                session.joinRoom(
+                        roomIdOrAlias = action.roomIdOrAlias,
+                        reason = null,
+                        viaServers = action.viaServers?.take(3) ?: emptyList()
+                )
+                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(getRoomIdFromRoomIdOrAlias(action.roomIdOrAlias)))
             } catch (failure: Throwable) {
                 _viewEvents.post(MatrixToViewEvents.ShowModalError(errorFormatter.toHumanReadable(failure)))
             } finally {
@@ -313,6 +312,12 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun getRoomIdFromRoomIdOrAlias(roomIdOrAlias: String): String {
+        return if (MatrixPatterns.isRoomAlias(roomIdOrAlias)) {
+            session.getRoomIdByAlias(roomIdOrAlias, true).get().roomId
+        } else roomIdOrAlias
     }
 
     private fun handleStartChatting(action: MatrixToAction.StartChattingWithUser) {
