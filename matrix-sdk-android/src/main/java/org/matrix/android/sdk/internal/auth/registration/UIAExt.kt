@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
+import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.internal.util.exceptions.UiaCancelledException
 import timber.log.Timber
 import kotlin.coroutines.suspendCoroutine

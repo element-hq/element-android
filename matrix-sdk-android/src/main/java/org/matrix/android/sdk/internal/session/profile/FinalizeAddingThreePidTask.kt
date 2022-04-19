@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.internal.auth.registration.UiaResult
+import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntity
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields

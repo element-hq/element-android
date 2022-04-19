@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.registration
+package org.matrix.android.sdk.api.session.uia
 
 enum class UiaResult {
     SUCCESS,
