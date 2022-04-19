@@ -18,7 +18,6 @@ package im.vector.app.features.matrixto
 
 import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.analytics.plan.ViewRoom
-import java.lang.IllegalArgumentException
 
 enum class OriginOfMatrixTo {
     LINK,
@@ -30,7 +29,7 @@ enum class OriginOfMatrixTo {
 }
 
 fun OriginOfMatrixTo.toJoinedRoomTrigger(): JoinedRoom.Trigger {
-    return when(this) {
+    return when (this) {
         OriginOfMatrixTo.LINK          -> JoinedRoom.Trigger.MobilePermalink
         OriginOfMatrixTo.NOTIFICATION  -> JoinedRoom.Trigger.Notification
         OriginOfMatrixTo.TIMELINE      -> JoinedRoom.Trigger.Timeline
@@ -41,7 +40,7 @@ fun OriginOfMatrixTo.toJoinedRoomTrigger(): JoinedRoom.Trigger {
 }
 
 fun OriginOfMatrixTo.toViewRoomTrigger(): ViewRoom.Trigger {
-    return when(this) {
+    return when (this) {
         OriginOfMatrixTo.LINK          -> ViewRoom.Trigger.MobilePermalink
         OriginOfMatrixTo.NOTIFICATION  -> ViewRoom.Trigger.Notification
         OriginOfMatrixTo.TIMELINE      -> ViewRoom.Trigger.Timeline
@@ -50,4 +49,3 @@ fun OriginOfMatrixTo.toViewRoomTrigger(): ViewRoom.Trigger {
         OriginOfMatrixTo.USER_CODE     -> throw IllegalArgumentException("can't map source to view room trigger")
     }
 }
-

@@ -19,7 +19,6 @@ import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer

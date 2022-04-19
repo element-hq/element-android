@@ -37,7 +37,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentIncomingShareBinding
-import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity

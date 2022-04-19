@@ -34,7 +34,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPublicRoomsBinding
-import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler

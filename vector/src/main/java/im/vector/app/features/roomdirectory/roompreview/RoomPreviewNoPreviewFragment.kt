@@ -38,9 +38,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.core.utils.tappableMatchingText
 import im.vector.app.databinding.FragmentRoomPreviewNoPreviewBinding
-import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
-import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.JoinState

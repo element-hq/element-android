@@ -39,7 +39,6 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentCreateRoomBinding
-import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
