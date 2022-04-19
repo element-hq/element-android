@@ -1660,7 +1660,8 @@
     <string name="you_may_contact_me">You may contact me if you have any follow up questions</string>
     <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
     <string name="feedback_failed">The feedback failed to be sent (%s)</string>
-    <string name="give_feedback">Give Feedback</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="give_feedback" tools:ignore="UnusedResources">Give Feedback</string>
     <string name="give_feedback_threads">Give Feedback</string>
     <string name="send_feedback_threads_title">Threads Beta feedback</string>
     <string name="send_feedback_threads_info">Threads are a work in progress with new, exciting upcoming features, such as improved notifications. We’d love to hear your feedback!</string>
