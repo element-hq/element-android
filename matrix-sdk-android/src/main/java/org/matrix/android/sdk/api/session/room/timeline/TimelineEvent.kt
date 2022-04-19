@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
+import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
@@ -55,7 +56,7 @@ data class TimelineEvent(
          * It's not unique on the timeline as it's reset on each chunk.
          */
         val displayIndex: Int,
-        var ownedByThreadChunk: Boolean = false,
+        val ownedByThreadChunk: Boolean = false,
         val senderInfo: SenderInfo,
         val annotations: EventAnnotationsSummary? = null,
         val readReceipts: List<ReadReceipt> = emptyList()
@@ -136,9 +137,10 @@ fun TimelineEvent.getEditedEventId(): String? {
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return when (root.getClearType()) {
-        EventType.STICKER       -> root.getClearContent().toModel<MessageStickerContent>()
-        in EventType.POLL_START -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
-        else                    -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
+        EventType.STICKER                   -> root.getClearContent().toModel<MessageStickerContent>()
+        in EventType.POLL_START             -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
+        in EventType.STATE_ROOM_BEACON_INFO -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<LiveLocationBeaconContent>()
+        else                                -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
 }
 

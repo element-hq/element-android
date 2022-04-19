@@ -160,7 +160,7 @@
     <string name="start_video_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחת וידאו\?</string>
     <string name="start_voice_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחה קולית\?</string>
     <string name="room_jump_to_first_unread">עבור להודעה שלא נקראה</string>
-    <string name="list_members">חברי רשימה</string>
+    <string name="list_members">שותפים</string>
     <string name="action_reject">דחייה</string>
     <string name="action_join">הצטרף</string>
     <string name="action_remove">הסר</string>
@@ -203,8 +203,8 @@
     <string name="settings_notifications_targets">יעדי התראות</string>
     <string name="settings_cryptography_manage_keys">ניהול מפתחות קריפטוגרפיה</string>
     <string name="settings_cryptography">קריפטוגרפיה</string>
-    <string name="settings_integrations_summary">השתמש במנהל אינטגרציה לניהול בוטים, גשרים, ווידג\'טים וחבילות מדבקות.
-\nמנהלי אינטגרציה מקבלים נתוני תצורה ויכולים לשנות ווידג\'טים, לשלוח הזמנות לחדר ולהגדיר רמות כוח מטעמכם.</string>
+    <string name="settings_integrations_summary">השתמש במנהל אינטגרציה כדי לנהל בוטים, גשרים, ווידג\'טים וחבילות מדבקות.
+\nמנהלי אינטגרציה מקבלים נתוני תצורה, ויכולים לשנות ווידג\'טים, לשלוח הזמנות לחדר ולהגדיר רמות כוח בשמך.</string>
     <string name="settings_integrations">אינטגרציות</string>
     <string name="settings_advanced">מתקדם</string>
     <string name="settings_other">אחר</string>
@@ -276,9 +276,9 @@
     <string name="settings_troubleshoot_test_push_loop_title">בדיקת שליחה בדחיפה (PUSH)</string>
     <string name="settings_troubleshoot_test_push_loop_success">היישום מקבל PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">היישום ממתין ל- PUSH</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">נכשל רישום אסימון FCM ל- HomeServer:
+    <string name="settings_troubleshoot_test_token_registration_failed">רישום אסימון FCM לשרת הבית נכשל:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_token_registration_success">אסימון FCM נרשם בהצלחה ל- HomeServer.</string>
+    <string name="settings_troubleshoot_test_token_registration_success">אסימון FCM נרשם בהצלחה לשרת הבית.</string>
     <string name="settings_troubleshoot_test_token_registration_title">רישום אסימונים</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">הוסף חשבון</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
@@ -484,10 +484,10 @@
     <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s ב %2$s ו %3$s</string>
     <string name="notification_unread_notified_messages_in_room">%1$s ב %2$s</string>
     <plurals name="notification_compat_summary_title">
-        <item quantity="one">%d</item>
-        <item quantity="two">%d</item>
-        <item quantity="many">%d</item>
-        <item quantity="other">%d</item>
+        <item quantity="one">התראה %d</item>
+        <item quantity="two">התראות %d</item>
+        <item quantity="many">התראות %d</item>
+        <item quantity="other">התראות %d</item>
     </plurals>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">הודעה %1$s: %2$d</item>
@@ -653,7 +653,7 @@
     <string name="room_tombstone_predecessor_link">לחץ כאן לצפייה בהודעות ישנות יותר</string>
     <string name="room_tombstone_continuation_description">החדר הזה הוא המשך לשיחה אחרת</string>
     <string name="room_tombstone_continuation_link">השיחה נמשכת כאן</string>
-    <string name="room_tombstone_versioned_description">חדר זה הוחלף ואינו פעיל יותר</string>
+    <string name="room_tombstone_versioned_description">חדר זה הוחלף ואינו פעיל יותר.</string>
     <string name="error_empty_field_your_password">אנא הזינו את סיסמה שלכם.</string>
     <string name="error_empty_field_enter_user_name">אהא הזינו שם משתמש.</string>
     <string name="deactivate_account_submit">השבת חשבון</string>
@@ -686,7 +686,7 @@
     <string name="command_description_remove_user">בועט משתמש עם מזהה נתון</string>
     <string name="command_description_topic">הגדר את נושא החדר</string>
     <string name="command_description_part_room">עזוב חדר</string>
-    <string name="command_description_join_room">מצטרף לחדר עם כתובת ידועה</string>
+    <string name="command_description_join_room">מצטרף לחדר עם כתובת נתונה</string>
     <string name="command_description_invite_user">מזמין משתמש עם זיהוי נתון לחדר הנוכחי</string>
     <string name="command_description_deop_user">משתמש מבוטל עם מזהה נתון</string>
     <string name="command_description_op_user">הגדר את רמת ההרשאה של המשתמש</string>
@@ -1188,7 +1188,7 @@
     <string name="reply">השב</string>
     <string name="edit">עריכה</string>
     <string name="error_user_already_logged_in">נראה שאתה מנסה להתחבר לשרת בית אחר. האם אתה רוצה לצאת\?</string>
-    <string name="identity_server_not_defined">אינך משתמש באף שרת זהות</string>
+    <string name="identity_server_not_defined">אינך משתמש בשרת זהות כלשהו</string>
     <string name="sas_error_unknown">שגיאה לא ידועה</string>
     <string name="sas_incoming_request_notif_content">%s רוצה לאמת את ההפעלה שלך</string>
     <string name="sas_incoming_request_notif_title">בקשת אימות</string>
@@ -1318,10 +1318,10 @@
     <string name="room_widget_failed_to_load">טעינת היישומון נכשלה.
 \n%s</string>
     <plurals name="room_settings_banned_users_count">
-        <item quantity="one">%b משתמש נחסם</item>
-        <item quantity="two">%b משתמשים נחסמו</item>
-        <item quantity="many">%b משתמשים נחסמו</item>
-        <item quantity="other">%b משתמשים אחרים נחסמו</item>
+        <item quantity="one">%d משתמש חסום</item>
+        <item quantity="two">%d משתמשים חסומים</item>
+        <item quantity="many">%d משתמשים חסומים</item>
+        <item quantity="other">%d משתמשים אחרים שחסומים</item>
     </plurals>
     <string name="account_phone_number_already_used_error">מספר הטלפון הזה כבר נמצא בשימוש.</string>
     <string name="account_email_already_used_error">כתובת דוא\"ל זו כבר נמצאת בשימוש.</string>
@@ -1331,10 +1331,10 @@
     <string name="settings_user_interface">ממשק משתמש</string>
     <string name="disabled_integration_dialog_content">הפעל את \'אפשר שילובים\' בהגדרות כדי לעשות זאת.</string>
     <string name="disabled_integration_dialog_title">שילובים מושבתים</string>
-    <string name="settings_integration_manager">מנהל אינטגרציה</string>
+    <string name="settings_integration_manager">מנהל האינטגרציה</string>
     <string name="settings_integration_allow">אפשר שילובים</string>
-    <string name="settings_identity_server">שרת הזדהות</string>
-    <string name="settings_home_server">שרת ביתי</string>
+    <string name="settings_identity_server">שרת ההזדהות</string>
+    <string name="settings_home_server">שרת בית</string>
     <string name="settings_logged_in">מחובר כ</string>
     <string name="devices_delete_dialog_title">הזדהות</string>
     <string name="devices_details_last_seen_title">נראה לאחרונה</string>
@@ -1521,7 +1521,7 @@
     <string name="this_is_the_beginning_of_dm">זוהי ההתחלה של היסטוריית ההודעות הישירות שלך עם%s.</string>
     <string name="this_is_the_beginning_of_room_no_name">זו תחילתה של השיחה הזו.</string>
     <string name="this_is_the_beginning_of_room">זו ההתחלה ש ל%s.</string>
-    <string name="direct_room_created_summary_item_by_you">הצתרפתם.</string>
+    <string name="direct_room_created_summary_item_by_you">הצטרפתם.</string>
     <string name="direct_room_created_summary_item">%s הצטרף.</string>
     <string name="room_created_summary_item_by_you">יצרת ותגדרת את החדר.</string>
     <string name="room_created_summary_item">%s יצר את החדר והגדיר אותו.</string>
@@ -2124,9 +2124,9 @@
     <string name="room_message_notify_everyone">להודיע לכל החדר</string>
     <plurals name="message_reaction_show_more">
         <item quantity="one">%1$d יותר</item>
-        <item quantity="two"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="two">%1$d יותר</item>
+        <item quantity="many">%1$d יותר</item>
+        <item quantity="other">%1$d יותר</item>
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s ואחרים</string>
     <string name="room_notification_two_users_are_typing">%1$s ו %2$s</string>
@@ -2158,10 +2158,10 @@
     <string name="create_poll_button">צור משאל</string>
     <string name="create_poll_add_option">הוסף אפשרות</string>
     <string name="create_poll_options_hint">אפשרות %1$d</string>
-    <string name="create_poll_options_title">צור אפשריות</string>
+    <string name="create_poll_options_title">צור אפשרויות</string>
     <string name="create_poll_question_hint">שאלה או נושא</string>
-    <string name="create_poll_question_title">שאלה או נושא המשאל</string>
-    <string name="create_poll_title">צור משאל</string>
+    <string name="create_poll_question_title">שאלה או נושא הסקר</string>
+    <string name="create_poll_title">צור סקר</string>
     <string name="restart_the_application_to_apply_changes">אתחל את הישומון כדי שהשינויים יכנסו לתוקף.</string>
     <string name="join_anyway">הצטרף בכל מקרה</string>
     <string name="join_space">הצטרף למרחב</string>
@@ -2318,28 +2318,28 @@
     <string name="does_not_look_like_valid_email">נראה שכתובת הדואר האלקטרוני אינה תקפה</string>
     <string name="ftue_auth_use_case_connect_to_server">התחבר לשרת</string>
     <string name="ftue_auth_use_case_join_existing_server">מחפש להצטרף לשרת קיים \?</string>
-    <string name="ftue_auth_use_case_skip">עדיין לא בטוח \? אתה יכול %s</string>
+    <string name="ftue_auth_use_case_skip">עדיין לא בטוח\? אתה יכול %s</string>
     <string name="ftue_auth_use_case_option_three">קהילות</string>
     <string name="ftue_auth_use_case_option_two">צוותים</string>
     <string name="ftue_auth_use_case_option_one">חברים ומשפחה</string>
-    <string name="ftue_auth_use_case_subtitle">נעזור לך להיות מחובר.</string>
+    <string name="ftue_auth_use_case_subtitle">נעזור לך להתחבר.</string>
     <string name="ftue_auth_use_case_title">עם מי תדברו הכי הרבה\?</string>
-    <string name="ftue_auth_carousel_encrypted_body">הצפנה קצה לקצה ולא נדרש מספר טלפון. אין פרסומות או כריית מידע.</string>
-    <string name="ftue_auth_carousel_control_body">בחירת מקום שמירת השיחה שלך , נותנת לך בקרה ועצמאות . מחובר דרך מטריקס.</string>
+    <string name="ftue_auth_carousel_encrypted_body">מוצפן מקצה לקצה ואין צורך במספר טלפון. ללא פרסומות או עיבוד נתונים.</string>
+    <string name="ftue_auth_carousel_control_body">בחר היכן השיחות שלך נשמרות, נותן לך שליטה ועצמאות. מחובר דרך Matrix.</string>
     <string name="ftue_auth_carousel_secure_body">תקשורת מאובטחת ועצמאית המעניקה לך את אותה רמת פרטיות כמו שיחה פנים אל פנים בבית שלך.</string>
     <string name="ftue_auth_carousel_workplace_title">הודעות לקבוצתך.</string>
-    <string name="ftue_auth_carousel_control_title">אתה בבקרה.</string>
-    <string name="ftue_auth_carousel_secure_title">שיחות בבעלותך.</string>
+    <string name="ftue_auth_carousel_control_title">אתה בשליטה.</string>
+    <string name="ftue_auth_carousel_secure_title">הבעלים של השיחות שלך.</string>
     <string name="room_list_quick_actions_room_settings">הגדרות חדר</string>
     <string name="attachment_type_poll">סקר</string>
     <string name="error_file_too_big_simple">הקובץ גדול מדי להעלאה.</string>
     <string name="identity_server_consent_dialog_content_question">האם אתה מאשר את שליחת המידע \?</string>
     <string name="identity_server_consent_dialog_title_2">שליחת דואר אלקטרוני ומספרי טלפון אל %s</string>
-    <string name="settings_discovery_consent_notice_off_2">רשימת אנשי הקשר שלך הינה פרטית. לחשיפת משתמשים מרשימת אנשי הקשר שלך , נדרש אישורך לשליחת מידע על איש הקשר לשרת ההזדהות.</string>
+    <string name="settings_discovery_consent_notice_off_2">אנשי הקשר שלך פרטיים. כדי לגלות משתמשים מאנשי הקשר שלך, אנו זקוקים להרשאתך לשלוח פרטי איש קשר לשרת הזהות שלך.</string>
     <string name="settings_discovery_no_policy_provided">לא סופקה מדיניות על ידי שרת הזדהות</string>
     <string name="settings_discovery_hide_identity_server_policy_title">הסתר מדיניות שרת הזדהות</string>
     <string name="settings_discovery_show_identity_server_policy_title">הראה מדיניות שרת הזדהות</string>
-    <string name="open_discovery_settings">פתח הגדרות</string>
+    <string name="open_discovery_settings">פתח את הגדרות גילוי</string>
     <string name="send_feedback_space_title">משוב על מרחבים</string>
     <string name="preference_system_settings">הגדרות מערכת</string>
     <string name="preference_versions">גרסאות</string>
@@ -2350,7 +2350,7 @@
     <string name="navigate_to_thread_when_already_in_the_thread">אתה צופה בת\'רד זה!</string>
     <string name="create_new_space">יצירת מרחב חדש</string>
     <string name="view_in_room">צפייה בחדר</string>
-    <string name="reply_in_thread">מענה בת\'רד</string>
+    <string name="reply_in_thread">השב בשרשור</string>
     <string name="command_description_whois">הצגת מידע על המשתמש</string>
     <string name="command_description_avatar_for_room">משנה את האווטר שלך בחדר הנוכחי בלבד</string>
     <string name="command_description_room_avatar">משנה את האווטר בחדר הנוכחי</string>
@@ -2361,60 +2361,170 @@
 \n ניתן לקרוא את כל התנאים %s.</string>
     <plurals name="poll_total_vote_count_after_ended">
         <item quantity="one">התוצאה הסופית מתבססת על הצבעה %1$d</item>
-        <item quantity="two"></item>
-        <item quantity="many">התוצאה הסופית מתבססת על הצבעות %1$d</item>
-        <item quantity="other"></item>
+        <item quantity="two">התוצאות הסופיות מתבססות על %1$d הצבעות</item>
+        <item quantity="many">התוצאות הסופיות מתבססות על %1$d הצבעות</item>
+        <item quantity="other">התוצאות הסופיות מתבססות על %1$d הצבעות</item>
     </plurals>
-    <string name="decide_which_spaces_can_access">בחר אילו מרחבים יכולים לגשת לחדר זה. בבחירת מרחב החברים יוכלו למצוא ולהצטרף לחדר.</string>
+    <string name="decide_which_spaces_can_access">החליטו אילו מרחבים יכולים לגשת לחדר זה. אם מרחב נבחר חבריו יוכלו למצוא את שם החדר ולהצטרף אליו.</string>
     <string name="room_create_member_of_space_name_can_join">חברים במרחב %s יכולים למצוא , לצפות ולהצטרף.</string>
-    <string name="room_settings_room_access_restricted_description">כל אחד במרחב בחדר זה יכול להצטרף. רק מנהלי מערכת של החדר יכולים להוסיף למרחב.</string>
+    <string name="room_settings_room_access_restricted_description">כל מי שנמצא במרחב עם החדר הזה יכול למצוא אותו ולהצטרף אליו. רק מנהלי חדר זה יכולים להוסיף אותו למרחב.</string>
     <string name="analytics_opt_in_list_item_2">אנחנו <b> לא </b> משתפים מידע עם חברות צד שלישי</string>
     <string name="analytics_opt_in_list_item_1">אנחנו <b> לא</b> מקליטים או עושים פרופיל מנתוני החשבון</string>
     <string name="command_description_unignore_user">הפסק להתעלם ממשתמש , אשר הודעותיו נראות</string>
     <string name="command_description_room_name">הגדר את שם החדר</string>
-    <string name="command_description_ignore_user">התעלם ממשתמש , אשר מעלים הודעות ממך</string>
+    <string name="command_description_ignore_user">מתעלם ממשתמש, מסתיר ממך את ההודעות שלו</string>
     <string name="jitsi_leave_conf_to_join_another_one_content">האם מאושרת עזיבת שיחת הועידה הנוכחית ומעבר לשיחת ועידה אחרת \?</string>
     <string name="error_jitsi_join_conf">מצטערים , אירעה שגיאה בניסיון הצטרפות לשיחת הועידה</string>
     <string name="directory_add_a_new_server_error_already_added">השרת כבר נמצא ברשימה</string>
-    <string name="directory_add_a_new_server_error">לא ניתן למצוא את השרת או את רשימת החדשים</string>
-    <string name="directory_add_a_new_server_prompt">הכנס את שם השרת החדש שיחשף</string>
+    <string name="directory_add_a_new_server_error">לא מוצא את השרת הזה או את רשימת החדרים שלו</string>
+    <string name="directory_add_a_new_server_prompt">הזן את השם של שרת חדש שברצונך לחקור.</string>
     <string name="directory_add_a_new_server">הוספת שרת חדש</string>
     <string name="directory_your_server">השרת שלך</string>
     <string name="room_settings_room_version_title">גרסת חדר</string>
-    <string name="other_spaces_or_rooms_you_might_not_know">מרחבים או חדרים שאינכם מכירים</string>
-    <string name="space_you_know_that_contains_this_room">מרחב שמכיל את החדר</string>
+    <string name="other_spaces_or_rooms_you_might_not_know">מרחבים או חדרים אחרים שאולי לא הכרתם</string>
+    <string name="space_you_know_that_contains_this_room">שטח שאתה מכיר שמכיל את החדר הזה</string>
     <string name="select_spaces">בחרו מרחבים</string>
-    <string name="spaces_which_can_access">מרחבים פתוחים</string>
-    <string name="allow_space_member_to_find_and_access">אפשרו לחברים במרחב להצטרף.</string>
-    <string name="room_settings_room_access_restricted_title">מרחב לחברים בלבד</string>
+    <string name="spaces_which_can_access">מרחבים שניתן לגשת אליהם</string>
+    <string name="allow_space_member_to_find_and_access">אפשר לחברי המרחב למצוא ולגשת.</string>
+    <string name="room_settings_room_access_restricted_title">חברי המרחב בלבד</string>
     <string name="room_settings_space_access_public_description">כל אחד יכול למצוא את המרחב ולהצטרף</string>
-    <string name="room_settings_room_access_public_description">כל אחד יכול להצטרף</string>
+    <string name="room_settings_room_access_public_description">כל אחד יכול למצוא את החדר ולהצטרף</string>
     <string name="room_settings_room_access_public_title">ציבורי</string>
-    <string name="room_settings_room_access_private_description">רק מוזמנים יכולים להצטרף</string>
+    <string name="room_settings_room_access_private_description">רק אנשים שהוזמנו יכולים למצוא ולהצטרף</string>
     <string name="room_settings_room_access_private_invite_only_title">פרטי (מוזמן בלבד)</string>
     <string name="room_settings_room_access_private_title">פרטי</string>
-    <string name="room_settings_room_access_entry_unknown">הגדרת גישה לא ידועה(%s)</string>
-    <string name="room_settings_room_access_entry_knock">כל אחד יכול לבקש להצטרף לחדר , החברים יוכלו לאשר או לדחות זאת</string>
+    <string name="room_settings_room_access_entry_unknown">הגדרת גישה לא ידועה (%s)</string>
+    <string name="room_settings_room_access_entry_knock">כל אחד יכול לדפוק לחדר, ואז החברים יכולים לקבל או לדחות</string>
     <string name="space_settings_alias_subtitle">סדר כתובות במרחב זה.</string>
     <string name="space_settings_alias_title">מרחב כתובות</string>
     <string name="room_settings_guest_access_title">אפשר לאורחים להצטרף</string>
-    <string name="room_settings_space_access_title">מרחב גישה</string>
-    <string name="room_settings_access_rules_pref_dialog_title">למי יש גישה\?</string>
+    <string name="room_settings_space_access_title">גישה למרחב</string>
+    <string name="room_settings_access_rules_pref_dialog_title">מי יכול לגשת\?</string>
     <string name="room_settings_room_notifications_account_settings">הגדרות חשבון</string>
-    <string name="room_settings_room_notifications_manage_notifications">ניתן לסדר את ההתראות ב-%1$s.</string>
-    <string name="room_settings_room_notifications_encryption_notice">שימו לב שהתראות על מילים מוזכרות לא זמינות בחדרים מוצפנים בטלפון הנייד</string>
-    <string name="room_settings_room_notifications_notify_me">הודע לי עבור</string>
-    <string name="legals_no_policy_provided">אין מדיניות לשרת זה</string>
-    <string name="legals_third_party_notices">ספריות חברות צד שלישי</string>
-    <string name="legals_identity_server_title">מדיניות שרת ההזדהות שלך</string>
-    <string name="legals_home_server_title">מדיניות השרת הביתי שלך</string>
+    <string name="room_settings_room_notifications_manage_notifications">ניתן לסדר את ההתראות ב- %1$s.</string>
+    <string name="room_settings_room_notifications_encryption_notice">לידיעתך, אזכורים והתראות על מילות מפתח אינם זמינים בחדרים מוצפנים בנייד.</string>
+    <string name="room_settings_room_notifications_notify_me">תודיע לי על</string>
+    <string name="legals_no_policy_provided">שרת זה אינו מספק מדיניות כלשהי.</string>
+    <string name="legals_third_party_notices">ספריות צד שלישי</string>
+    <string name="legals_identity_server_title">מדיניות שרת הזהות שלך</string>
+    <string name="legals_home_server_title">מדיניות שרת הבית שלך</string>
     <string name="legals_application_title">מדיניות ${app_name}</string>
-    <string name="analytics_opt_in_list_item_3">ניתן לסגור בכל זמן בהגדרות</string>
+    <string name="analytics_opt_in_list_item_3">אתה יכול לכבות את זה בכל עת בהגדרות</string>
     <string name="analytics_opt_in_content_link">כאן</string>
-    <string name="analytics_opt_in_title">עזרה בשיפור ${app_name}</string>
+    <string name="analytics_opt_in_title">עזור לשפר את ${app_name}</string>
     <string name="settings_mentions_and_keywords_encryption_notice">לא תתקבלנה התראות על מילים המוזכרות בחדרים מוצפנים בטלפון הנייד.</string>
     <string name="settings_messages_by_bot">הודעות על ידי בוט</string>
     <string name="settings_mentions_at_room">חדר@</string>
     <string name="settings_group_messages">הודעות קבוצתיות</string>
     <string name="settings_encrypted_direct_messages">הודעות ישירות מוצפנות</string>
+    <string name="this_invite_to_this_space_was_sent">ההזמנה למרחב זה נשלחה מ%s אשר אינו משוייך לחשבונך</string>
+    <string name="this_invite_to_this_room_was_sent">ההזמנה לחדר זה נשלחה מ%s אשר אינו משוייך לחשבונך</string>
+    <string name="voice_message_reply_content">הודעה קולית (%1$s)</string>
+    <string name="error_voice_message_cannot_reply_or_edit">לא ניתן להשיב או לערוך במהלך הודעה קולית</string>
+    <string name="error_voice_message_unable_to_record">לא ניתן להקליט את ההודעה הקולית</string>
+    <string name="error_voice_message_unable_to_play">לא ניתן לנגן את ההודעה הקולית</string>
+    <string name="voice_message_tap_to_stop_toast">לחץ על הקלטה כדי לעצור או להאזין</string>
+    <string name="voice_message_n_seconds_warning_toast">נשארו עוד %1$d שניות</string>
+    <string name="voice_message_release_to_send_toast">החזק להקלטה, שחרר לשיחה</string>
+    <string name="a11y_play_voice_message">נגן הודעה קולית</string>
+    <string name="a11y_pause_voice_message">השהה הודעה קולית</string>
+    <string name="a11y_delete_recorded_voice_message">מחיקת הקלטה</string>
+    <string name="a11y_recording_voice_message">מקליט הודעה קולית</string>
+    <string name="a11y_stop_voice_message">עצור הקלטה</string>
+    <string name="voice_message_slide_to_cancel">החלק לביטול</string>
+    <string name="a11y_start_voice_message">הקלט שיחה קולית</string>
+    <string name="error_failed_to_join_room">סליחה , אירעה שגיאה בזמן נסיון ההצטרפות לחדר:%s</string>
+    <string name="room_upgrade_to_recommended_version">שדרג לגרסת החדר המומלצת</string>
+    <string name="room_using_unstable_room_version">חדר זה נמצא בשדרוג גרסה %s , לכן הוא לא יציב .</string>
+    <string name="upgrade_room_no_power_to_manage">נדרשת הרשאה לשדרוג החדר</string>
+    <string name="upgrade_room_update_parent_space">אחראי המרחב מעודכן אוטומטית</string>
+    <string name="upgrade_room_auto_invite">הזמן משתמשים אוטומטית</string>
+    <string name="upgrade_public_room_from_to">תשדרג את החדר מ%1$s ל%2$s.</string>
+    <string name="upgrade_private_room">שדרג חדר פרטי</string>
+    <string name="upgrade_public_room">שדרג חדר ציבורי</string>
+    <string name="upgrade_required">נדרש שדרוג</string>
+    <string name="upgrade">שדרוג</string>
+    <string name="it_may_take_some_time">אנא המתן, זה יכול לקחת קצת זמן.</string>
+    <string name="joining_replacement_room">הצטרפו לחדר שהוחלף</string>
+    <plurals name="entries">
+        <item quantity="one">כניסה %d</item>
+        <item quantity="two">שתי כניסות %d</item>
+        <item quantity="many">%d כניסות</item>
+        <item quantity="other">%d כניסות</item>
+    </plurals>
+    <string name="encryption_misconfigured">ההצפנה מוגדרת בצורה שגויה</string>
+    <string name="threads_notice_migration_title">שרשורים מתקרבים לגרסת ביטא 🎉</string>
+    <string name="send_images_and_video_with_original_size">שלח את המדיה בגודלה המקורי</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="one">שלח סרט וידאו בגודל המקורי</item>
+        <item quantity="two">שלח שני סרטי וידאו בגודל המקורי</item>
+        <item quantity="many">שלח סרטי וידאו בגודלם המקורי</item>
+        <item quantity="other">שלח סרט וידאו בגודל המקורי</item>
+    </plurals>
+    <string name="settings_server_room_version_unstable">לא יציב</string>
+    <string name="settings_server_room_version_stable">יציב</string>
+    <string name="settings_server_default_room_version">גרסת ברירת מחדל</string>
+    <string name="settings_server_room_versions">גרסאות חדר 👓</string>
+    <string name="settings_server_upload_size_unknown">המגבלה אינה ידועה.</string>
+    <string name="settings_server_upload_size_content">שרת הבית שלך מקבל קבצים מצורפים (קבצים, מדיה וכו\') בגודל של עד %s.</string>
+    <string name="settings_server_upload_size_title">מגבלת העלאת קובץ לשרת</string>
+    <string name="settings_server_version">גרסת שרת</string>
+    <string name="settings_server_name">שם שרת</string>
+    <string name="room_member_override_nick_color">ביטול צבע</string>
+    <string name="room_profile_section_restore_security">שחזור הצפנה</string>
+    <string name="contact_admin_to_restore_encryption">אנא צור קשר עם מנהל המערכת לשחזור ההצפנה למצב תקין .</string>
+    <string name="unnamed_room">חדר ללא שם</string>
+    <string name="this_space_has_no_rooms_admin">חלק מהחדרים עשויים להיות מוסתרים כי הם פרטיים ואתה זקוק להזמנה.</string>
+    <string name="this_space_has_no_rooms_not_admin">חלק מהחדרים עשויים להיות מוסתרים כי הם פרטיים ואתה זקוק להזמנה.
+\nאין לך הרשאה להוסיף חדרים.</string>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">הצבעה %1$d. הצביעו כדי לראות את התוצאות</item>
+        <item quantity="two">הצבעות %1$d. הצביעו כדי לראות את התוצאות</item>
+        <item quantity="many">הצבעות %1$d. הצביעו כדי לראות את התוצאות</item>
+        <item quantity="other">הצבעות %1$d. הצביעו כדי לראות את התוצאות</item>
+    </plurals>
+    <string name="poll_no_votes_cast">אין הצבעות</string>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">מבוסס על %1$d הצבעה</item>
+        <item quantity="two">מבוסס על %1$d הצבעות</item>
+        <item quantity="many">מבוסס על %1$d הצבעות</item>
+        <item quantity="other">מבוסס על %1$d הצבעות</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d הצבעה</item>
+        <item quantity="two">%1$d הצבעות</item>
+        <item quantity="many">%1$d הצבעות</item>
+        <item quantity="other">%1$d הצבעות</item>
+    </plurals>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">נדרשת אפשרות %1$s לפחות</item>
+        <item quantity="two">נדרשות %1$s אפשרויות לפחות</item>
+        <item quantity="many">נדרשות %1$s אפשרויות לפחות</item>
+        <item quantity="other">נדרשות %1$s אפשרויות לפחות</item>
+    </plurals>
+    <string name="link_this_email_with_your_account">%s בהגדרות כדי לקבל הזמנות ישירות ב-${app_name}.</string>
+    <string name="location_in_background_missing_permission_dialog_content">אם תרצה לשתף את המיקום החי שלך, ${app_name} זקוק לגישה למיקום כל הזמן כשהאפליקציה נמצאת ברקע.
+\nאנו ניגשים למיקום שלך רק למשך הזמן שתבחר.</string>
+    <string name="location_in_background_missing_permission_dialog_title">אפשר גישה</string>
+    <string name="a11y_location_share_option_pinned_icon">שתף מיקום זה</string>
+    <string name="location_share_option_pinned">שתף מיקום זה</string>
+    <string name="a11y_location_share_option_user_live_icon">שתף מיקום בזמן אמת</string>
+    <string name="location_share_option_user_live">שתף מיקום בזמן אמת</string>
+    <string name="a11y_location_share_option_user_current_icon">שתף את המיקום הנוכחי</string>
+    <string name="location_share_option_user_current">שתף את המיקום הנוכחי</string>
+    <string name="a11y_location_share_locate_button">זום למיקום הנוכחי</string>
+    <string name="a11y_location_share_pin_on_map">קיבוע של המיקום שנבחר במפה</string>
+    <string name="location_share_live_stop">עצור</string>
+    <string name="location_share_live_enabled">מיקום בזמן אמת מופעל</string>
+    <string name="upgrade_room_warning">שדרוג חדר הוא פעולה מתקדמת ומומלץ לרוב כאשר החדר אינו יציב עקב באגים, תכונות חסרות או פרצות אבטחה.
+\nזה בדרך כלל משפיע רק על אופן עיבוד החדר בשרת.</string>
+    <string name="upgrade_room_for_restricted">כל מי שנמצא ב%s יוכל למצוא או להצטרף לחדר- אין צורך להזמין משתתפים. ניתן לשנות את הגדרת החדר בכל זמן.</string>
+    <string name="labs_enable_latex_maths">אפשר LaTeX mathematics</string>
+    <string name="link_this_email_settings_link">שייך את הדואר האלקטרוני לחשבונך</string>
+    <string name="identity_server_consent_dialog_content_3">כדי לגלות אנשי קשר קיימים, עליך לשלוח פרטי איש קשר (אימייל ומספרי טלפון) לשרת הזהות שלך. אנו משייכים את הנתונים שלך לפני השליחה לצורך פרטיות.</string>
+    <string name="threads_notice_migration_message">אנחנו מתקרבים לשחרור גרסת ביטא ציבורית לשרשורים.
+\n
+\nבזמן שאנו מתכוננים לכך, עלינו לבצע מספר שינויים: שרשורים שנוצרו לפני נקודה זו יוצגו כתשובות רגילות.
+\n
+\nזה יהיה מעבר חד פעמי שכן שרשורים הם כעת חלק ממפרט Matrix.</string>
 </resources>

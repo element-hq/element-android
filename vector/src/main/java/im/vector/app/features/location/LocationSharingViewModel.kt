@@ -120,7 +120,7 @@ class LocationSharingViewModel @AssistedInject constructor(
             is LocationSharingAction.PinnedLocationSharing    -> handlePinnedLocationSharingAction(action)
             is LocationSharingAction.LocationTargetChange     -> handleLocationTargetChangeAction(action)
             LocationSharingAction.ZoomToUserLocation          -> handleZoomToUserLocationAction()
-            is LocationSharingAction.StartLiveLocationSharing -> handleStartLiveLocationSharingAction(action.duration)
+            is LocationSharingAction.StartLiveLocationSharing -> handleStartLiveLocationSharingAction(action.durationMillis)
         }
     }
 
@@ -158,11 +158,11 @@ class LocationSharingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleStartLiveLocationSharingAction(duration: Long) {
+    private fun handleStartLiveLocationSharingAction(durationMillis: Long) {
         _viewEvents.post(LocationSharingViewEvents.StartLiveLocationService(
                 sessionId = session.sessionId,
                 roomId = room.roomId,
-                duration = duration
+                durationMillis = durationMillis
         ))
     }
 

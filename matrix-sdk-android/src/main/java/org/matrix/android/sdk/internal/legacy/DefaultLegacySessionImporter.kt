@@ -26,13 +26,13 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.WellKnownBaseConfig
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
+import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.legacy.riot.LoginStorage
-import org.matrix.android.sdk.internal.network.ssl.Fingerprint
-import org.matrix.android.sdk.internal.util.md5
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject

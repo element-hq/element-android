@@ -22,7 +22,7 @@ import okhttp3.CipherSuite
 import okhttp3.ConnectionSpec
 import okhttp3.TlsVersion
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig.Builder
-import org.matrix.android.sdk.internal.network.ssl.Fingerprint
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
 
 /**

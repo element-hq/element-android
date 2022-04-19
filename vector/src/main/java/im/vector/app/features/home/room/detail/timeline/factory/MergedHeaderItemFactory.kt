@@ -32,16 +32,16 @@ import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationI
 import im.vector.app.features.home.room.detail.timeline.item.MergedSimilarEventsItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedSimilarEventsItem_
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
 import javax.inject.Inject
 
 class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,

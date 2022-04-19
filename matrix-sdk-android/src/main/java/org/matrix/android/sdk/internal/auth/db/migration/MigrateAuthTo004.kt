@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-class MigrateAuthTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
+internal class MigrateAuthTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
 
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Update SessionParamsEntity to add HomeServerConnectionConfig.homeServerUriBase value")

@@ -26,7 +26,7 @@ import org.matrix.android.sdk.internal.database.model.SpaceChildSummaryEntityFie
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo012(realm: DynamicRealm) : RealmMigrator(realm, 12) {
+internal class MigrateSessionTo012(realm: DynamicRealm) : RealmMigrator(realm, 12) {
 
     override fun doMigrate(realm: DynamicRealm) {
         val joinRulesContentAdapter = MoshiProvider.providesMoshi().adapter(RoomJoinRulesContent::class.java)

@@ -312,7 +312,7 @@
     <string name="action_remove">Hiqe</string>
     <string name="action_join">Hyni</string>
     <string name="action_reject">Hidheni tej</string>
-    <string name="list_members">Anëtarë liste</string>
+    <string name="list_members">Anëtarë</string>
     <string name="room_jump_to_first_unread">Hidhu te të palexuarit</string>
     <string name="room_participants_leave_prompt_title">Dilni nga dhoma</string>
     <string name="room_participants_leave_prompt_msg">Jeni i sigurt se doni të dilni nga dhoma?</string>
@@ -1946,7 +1946,7 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Hapësirat janë mënyra për të grupuar dhoma dhe persona.</string>
     <string name="you_are_invited">Jeni ftuar</string>
     <string name="space_add_existing_rooms">Shtoni dhoma ekzistuese dhe hapësira</string>
-    <string name="leave_space">Braktiseni Hapësirën</string>
+    <string name="leave_space">Braktiseni</string>
     <string name="space_add_child_title">Shtoni dhoma</string>
     <string name="space_explore_activity_title">Eksploroni dhoma</string>
     <plurals name="space_people_you_know">
@@ -2408,4 +2408,21 @@
     </plurals>
     <string name="room_message_autocomplete_notification">Njoftim dhome</string>
     <string name="message_reaction_show_less">Shfaq më pak</string>
+    <string name="location_share_live_stop">Ndale</string>
+    <string name="location_share_live_enabled">Vendndodhje Drejtpërsëdrejti e aktivizuar</string>
+    <string name="location_in_background_missing_permission_dialog_content">Nëse do të donit të tregonit Vendndodhjen tuaj Drejtpërsëdrejti, ${app_name} lyp njohje të vendndodhjes gjithë kohën, kur aplikacioni gjenden në prapaskenë.
+\nDo ta njohim vendndodhjen tuaj vetëm për kohëzgjatjen që zgjidhni ju.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Lejoni hyrje</string>
+    <string name="a11y_location_share_option_pinned_icon">Tregoje këtë vendndodhje</string>
+    <string name="location_share_option_pinned">Tregoje këtë vendndodhje</string>
+    <string name="a11y_location_share_option_user_current_icon">Tregoje vendndodhjen time të tanishme</string>
+    <string name="location_share_option_user_current">Tregoje vendndodhjen time të tanishme</string>
+    <string name="a11y_location_share_locate_button">“Zoom” te vendndodhja e tanishme</string>
+    <string name="a11y_location_share_pin_on_map">Piketë e vendndodhjes së përzgjedhur në hartë</string>
+    <string name="threads_notice_migration_message">Po i afrohemi hedhjes publike në qarkullim Beta për Rrjedha.
+\n
+\nTeksa përgatitemi për të, na duhet të bëjmë disa ndryshime: rrjedha të krijuara para kësaj pike do të shfaqen si përgjigje të rregullta.
+\n
+\nKy do të jetë tranzicion vetëm për një herë, meqë tanimë Rrjedhat janë pjesë e protokollit Matrix.</string>
+    <string name="threads_notice_migration_title">Rrjedhat Po i Afrohen Beta-s 🎉</string>
 </resources>

@@ -21,7 +21,7 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.internal.util.md5
+import org.matrix.android.sdk.api.util.md5
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID

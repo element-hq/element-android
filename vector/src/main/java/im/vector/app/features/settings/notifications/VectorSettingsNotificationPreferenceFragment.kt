@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Bundle
 import android.os.Parcelable
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -38,8 +39,10 @@ import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.services.GuardServiceStarter
+import im.vector.app.core.utils.combineLatest
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.BackgroundSyncModeChooserDialog
@@ -55,7 +58,6 @@ import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
-import org.matrix.android.sdk.internal.extensions.combineLatest
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -71,6 +73,11 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
     override val preferenceXmlRes = R.xml.vector_settings_notifications
 
     private var interactionListener: VectorSettingsFragmentInteractionListener? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SettingsNotifications
+    }
 
     override fun bindPref() {
         findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY)!!.let { pref ->

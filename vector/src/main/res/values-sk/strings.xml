@@ -472,7 +472,7 @@
         <item quantity="few">%d zmeny členstva</item>
         <item quantity="other">%d zmien členstva</item>
     </plurals>
-    <string name="list_members">Zobraziť členov</string>
+    <string name="list_members">Členovia</string>
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členovia</item>
@@ -1316,7 +1316,7 @@
     <string name="a11y_public_room">Verejná miestnosť</string>
     <string name="send_file_step_compressing_image">Kompresia obrázku…</string>
     <string name="option_always_ask">Vždy sa opýtať</string>
-    <string name="leave_space">Opustiť priestor</string>
+    <string name="leave_space">Opustiť</string>
     <string name="space_add_child_title">Pridať miestnosti</string>
     <string name="space_explore_activity_title">Preskúmať miestnosti</string>
     <string name="join_space">Pripojiť sa k priestoru</string>
@@ -2466,4 +2466,23 @@
     <string name="command_description_leave_room">Opustiť miestnosť s daným id (alebo aktuálnu miestnosť, ak je prázdna)</string>
     <string name="a11y_trust_level_warning">Varovná úroveň dôveryhodnosti</string>
     <string name="call_transfer_connect_action">Pripojiť</string>
+    <string name="location_share_live_stop">Zastaviť</string>
+    <string name="location_share_live_enabled">Poloha v reálnom čase zapnutá</string>
+    <string name="location_in_background_missing_permission_dialog_content">Ak chcete zdieľať svoju polohu v reálnom čase, ${app_name} potrebuje prístup k polohe po celý čas, kým je aplikácia na pozadí.
+\nPrístup k vašej polohe bude len počas obdobia, ktoré si zvolíte.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Povoliť prístup</string>
+    <string name="a11y_location_share_option_pinned_icon">Zdieľať túto polohu</string>
+    <string name="location_share_option_pinned">Zdieľať túto polohu</string>
+    <string name="a11y_location_share_option_user_live_icon">Zdieľať polohu v reálnom čase</string>
+    <string name="location_share_option_user_live">Zdieľať polohu v reálnom čase</string>
+    <string name="a11y_location_share_option_user_current_icon">Zdieľať moju aktuálnu polohu</string>
+    <string name="location_share_option_user_current">Zdieľať moju aktuálnu polohu</string>
+    <string name="a11y_location_share_locate_button">Priblížiť k aktuálnej polohe</string>
+    <string name="a11y_location_share_pin_on_map">Označiť vybranú lokalitu na mape</string>
+    <string name="threads_notice_migration_message">Blížime sa k vydaniu verejnej beta verzie pre vlákna.
+\n
+\nV rámci príprav na ňu musíme urobiť niekoľko zmien: vlákna vytvorené pred týmto bodom sa budú zobrazovať ako bežné odpovede.
+\n
+\nPôjde o jednorazový prechod, keďže vlákna sú teraz súčasťou špecifikácie Matrix.</string>
+    <string name="threads_notice_migration_title">Vlákna sa blížia k beta verzii 🎉</string>
 </resources>

@@ -17,7 +17,7 @@ def initializeReport(report, projects, classExcludes) {
         projects.each { project ->
             switch (project) {
                 case { project.plugins.hasPlugin("com.android.application") }:
-                    androidClassDirs.add("${project.buildDir}/tmp/kotlin-classes/debug")
+                    androidClassDirs.add("${project.buildDir}/tmp/kotlin-classes/gplayDebug")
                     androidSourceDirs.add("${project.projectDir}/src/main/kotlin")
                     androidSourceDirs.add("${project.projectDir}/src/main/java")
                     break

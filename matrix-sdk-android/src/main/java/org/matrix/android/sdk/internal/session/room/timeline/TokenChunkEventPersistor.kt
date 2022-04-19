@@ -23,11 +23,11 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addStateEvent
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.helper.updateThreadSummaryIfNeeded
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
@@ -38,6 +38,7 @@ import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.find
+import org.matrix.android.sdk.internal.database.query.findAll
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
@@ -80,7 +81,8 @@ internal class TokenChunkEventPersistor @Inject constructor(
 
                     val existingChunk = ChunkEntity.find(realm, roomId, prevToken = prevToken, nextToken = nextToken)
                     if (existingChunk != null) {
-                        Timber.v("This chunk is already in the db, returns")
+                        Timber.v("This chunk is already in the db, checking if this might be caused by broken links")
+                        existingChunk.fixChunkLinks(realm, roomId, direction, prevToken, nextToken)
                         return@awaitTransaction
                     }
                     val prevChunk = ChunkEntity.find(realm, roomId, nextToken = prevToken)
@@ -89,8 +91,14 @@ internal class TokenChunkEventPersistor @Inject constructor(
                         this.nextChunk = nextChunk
                         this.prevChunk = prevChunk
                     }
-                    nextChunk?.prevChunk = currentChunk
-                    prevChunk?.nextChunk = currentChunk
+                    val allNextChunks = ChunkEntity.findAll(realm, roomId, prevToken = nextToken)
+                    val allPrevChunks = ChunkEntity.findAll(realm, roomId, nextToken = prevToken)
+                    allNextChunks?.forEach {
+                        it.prevChunk = currentChunk
+                    }
+                    allPrevChunks?.forEach {
+                        it.nextChunk = currentChunk
+                    }
                     if (receivedChunk.events.isEmpty() && !receivedChunk.hasMore()) {
                         handleReachEnd(roomId, direction, currentChunk)
                     } else {
@@ -106,6 +114,34 @@ internal class TokenChunkEventPersistor @Inject constructor(
             }
         } else {
             Result.SUCCESS
+        }
+    }
+
+    private fun ChunkEntity.fixChunkLinks(
+            realm: Realm,
+            roomId: String,
+            direction: PaginationDirection,
+            prevToken: String?,
+            nextToken: String?,
+    ) {
+        if (direction == PaginationDirection.FORWARDS) {
+            val prevChunks = ChunkEntity.findAll(realm, roomId, nextToken = prevToken)
+            Timber.v("Found ${prevChunks?.size} prevChunks")
+            prevChunks?.forEach {
+                if (it.nextChunk != this) {
+                    Timber.i("Set nextChunk for ${it.identifier()} from ${it.nextChunk?.identifier()} to ${identifier()}")
+                    it.nextChunk = this
+                }
+            }
+        } else {
+            val nextChunks = ChunkEntity.findAll(realm, roomId, prevToken = nextToken)
+            Timber.v("Found ${nextChunks?.size} nextChunks")
+            nextChunks?.forEach {
+                if (it.prevChunk != this) {
+                    Timber.i("Set prevChunk for ${it.identifier()} from ${it.prevChunk?.identifier()} to ${identifier()}")
+                    it.prevChunk = this
+                }
+            }
         }
     }
 

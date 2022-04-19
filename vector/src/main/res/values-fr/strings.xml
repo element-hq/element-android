@@ -1580,8 +1580,8 @@
     <string name="call_failed_no_connection">Appel échoué</string>
     <string name="direct_room_encryption_enabled_tile_description">Les messages de ce salon sont chiffrés de bout en bout.</string>
     <string name="room_created_summary_item_by_you">Vous avez créé et configuré ce salon.</string>
-    <string name="settings_security_pin_code_grace_period_summary_off">Le code est requis à l’ouverture d’${app_name}.</string>
-    <string name="settings_security_pin_code_grace_period_summary_on">Le code est demandé après 2 minutes d\'inutilisation d’${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Le code est requis à l’ouverture de ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Le code est demandé après 2 minutes d\'inutilisation de ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Demander le code après 2 minutes</string>
     <string name="settings_security_pin_code_notifications_summary_off">Afficher uniquement le numéro de messages non-lus dans une simple notification.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Afficher les détails comme les noms des salons et le contenu du message.</string>

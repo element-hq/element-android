@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-class MigrateAuthTo003(realm: DynamicRealm) : RealmMigrator(realm, 3) {
+internal class MigrateAuthTo003(realm: DynamicRealm) : RealmMigrator(realm, 3) {
 
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Update SessionParamsEntity primary key, to allow several sessions with the same userId")

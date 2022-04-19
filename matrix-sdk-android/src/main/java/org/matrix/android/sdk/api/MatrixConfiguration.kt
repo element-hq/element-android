@@ -62,10 +62,6 @@ data class MatrixConfiguration(
          */
         val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider,
         /**
-         * True to enable presence information sync (if available). False to disable regardless of server setting.
-         */
-        val presenceSyncEnabled: Boolean = true,
-        /**
          * Thread messages default enable/disabled value
          */
         val threadMessagesEnabledDefault: Boolean = false,

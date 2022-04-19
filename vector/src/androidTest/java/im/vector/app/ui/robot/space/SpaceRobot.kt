@@ -24,7 +24,7 @@ class SpaceRobot {
 
     fun createSpace(block: SpaceCreateRobot.() -> Unit) {
         openDrawer()
-        clickOn(R.string.add_space)
+        clickOn(R.string.create_space)
         block(SpaceCreateRobot())
     }
 

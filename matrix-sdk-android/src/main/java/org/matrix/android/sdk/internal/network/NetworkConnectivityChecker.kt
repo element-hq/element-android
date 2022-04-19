@@ -25,7 +25,7 @@ import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
-interface NetworkConnectivityChecker {
+internal interface NetworkConnectivityChecker {
     /**
      * Returns true when internet is available
      */

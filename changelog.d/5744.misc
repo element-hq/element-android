@@ -1,0 +1,1 @@
+Setup Dokka to be able to generate documentation of the SDK module. Run `./gradlew matrix-sdk-android:dokkaHtml` to do it.

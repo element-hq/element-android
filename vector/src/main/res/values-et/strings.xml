@@ -682,7 +682,7 @@
     <string name="login_error_ssl_peer_unverified">SSL\'i viga: teise osapoole identiteeti ei õnnestu kontrollida.</string>
     <string name="settings_call_show_confirmation_dialog_title">Väldi juhuslikke kõnesid</string>
     <string name="settings_call_show_confirmation_dialog_summary">Enne kõne algatamist küsi kinnitust</string>
-    <string name="list_members">Osalejate loend</string>
+    <string name="list_members">Osalejad</string>
     <plurals name="room_title_members">
         <item quantity="one">%d osaleja</item>
         <item quantity="other">%d osalejat</item>
@@ -1957,7 +1957,7 @@
     <string name="you_are_invited">Sa oled saanud kutse</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
-    <string name="leave_space">Lahku kogukonnakeskusest</string>
+    <string name="leave_space">Lahku kogukonnast</string>
     <string name="space_add_child_title">Lisa jututuba</string>
     <string name="space_explore_activity_title">Tutvu jututubadega</string>
     <plurals name="space_people_you_know">
@@ -2419,4 +2419,23 @@
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s ning teised kasutajad</string>
     <string name="room_notification_two_users_are_typing">%1$s ja %2$s</string>
+    <string name="location_share_live_stop">Lõpeta asukoha jagamine</string>
+    <string name="location_share_live_enabled">Reaalajas asukoha jagamine on kasutusel</string>
+    <string name="location_in_background_missing_permission_dialog_content">Kui sa soovid reaalajas oma asukohta jagada, siis ${app_name} vajab alati õigus asukohta tuvastada. Seda ka siis kui rakendus töötab taustal.
+\nLigipääs asukohale on saadaval vaid sinu valitud ajavahemiku vältel.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Luba ligipääs asukohale</string>
+    <string name="a11y_location_share_option_pinned_icon">Jaga seda asukohta</string>
+    <string name="location_share_option_pinned">Jaga seda asukohta</string>
+    <string name="a11y_location_share_option_user_live_icon">Jaga asukohta reaalajas</string>
+    <string name="location_share_option_user_live">Jaga asukohta reaalajas</string>
+    <string name="a11y_location_share_option_user_current_icon">Jaga minu praegust asukohta</string>
+    <string name="location_share_option_user_current">Jaga minu praegust asukohta</string>
+    <string name="a11y_location_share_locate_button">Suumi praeguse asukohani</string>
+    <string name="a11y_location_share_pin_on_map">Valitud asukoha marker kaardil</string>
+    <string name="threads_notice_migration_message">Me oleme valmis avaldama jutulõngade funktsionaalsuse beetaversiooni.
+\n
+\nValmistudes järgnevaks, me peame tegema natuke muudatusi: enne seda hetke loodud jutulõngad kuvatakse tavaliste vastustena.
+\n
+\nKuna jutulõngad on nüüd osa Matrix\'i spetsifikatsioonist, siis see on ühekordne muudatus.</string>
+    <string name="threads_notice_migration_title">Jutulõngad on peaaegu valmis 🎉</string>
 </resources>

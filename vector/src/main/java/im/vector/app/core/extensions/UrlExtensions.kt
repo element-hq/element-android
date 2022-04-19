@@ -19,8 +19,8 @@ package im.vector.app.core.extensions
 /**
  * Ex: "https://matrix.org/" -> "matrix.org"
  */
-fun String?.toReducedUrl(): String {
+fun String?.toReducedUrl(keepSchema: Boolean = false): String {
     return (this ?: "")
-            .substringAfter("://")
+            .run { if (keepSchema) this else substringAfter("://") }
             .trim { it == '/' }
 }

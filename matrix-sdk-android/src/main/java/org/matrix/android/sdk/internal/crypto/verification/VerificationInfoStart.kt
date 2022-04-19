@@ -103,7 +103,7 @@ internal interface VerificationInfoStart : VerificationInfo<ValidVerificationInf
     }
 }
 
-sealed class ValidVerificationInfoStart(
+internal sealed class ValidVerificationInfoStart(
         open val transactionId: String,
         open val fromDevice: String) {
     data class SasVerificationInfoStart(

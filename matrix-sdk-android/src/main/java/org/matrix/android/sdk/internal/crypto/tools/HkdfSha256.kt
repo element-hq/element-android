@@ -26,7 +26,7 @@ import kotlin.math.ceil
  * HMAC-based Extract-and-Expand Key Derivation Function (HkdfSha256)
  * [RFC-5869] https://tools.ietf.org/html/rfc5869
  */
-object HkdfSha256 {
+internal object HkdfSha256 {
 
     fun deriveSecret(inputKeyMaterial: ByteArray, salt: ByteArray?, info: ByteArray, outputLength: Int): ByteArray {
         return expand(extract(salt, inputKeyMaterial), info, outputLength)

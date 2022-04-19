@@ -123,7 +123,7 @@ internal class DefaultLoadRoomMembersTask @Inject constructor(
                     eventId = roomMemberEvent.eventId
                     root = eventEntity
                 }
-                roomMemberEventHandler.handle(realm, roomId, roomMemberEvent)
+                roomMemberEventHandler.handle(realm, roomId, roomMemberEvent, false)
             }
             roomEntity.membersLoadStatus = RoomMembersLoadStatusType.LOADED
             roomSummaryUpdater.update(realm, roomId, updateMembers = true)

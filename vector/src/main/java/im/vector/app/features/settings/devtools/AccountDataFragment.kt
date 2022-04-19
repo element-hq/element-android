@@ -33,7 +33,7 @@ import im.vector.app.core.utils.createJSonViewerStyleProvider
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import javax.inject.Inject
 
 class AccountDataFragment @Inject constructor(
@@ -70,7 +70,7 @@ class AccountDataFragment @Inject constructor(
     }
 
     override fun didTap(data: UserAccountDataEvent) {
-        val jsonString = MoshiProvider.providesMoshi()
+        val jsonString = MatrixJsonParser.getMoshi()
                 .adapter(UserAccountDataEvent::class.java)
                 .toJson(data)
         JSonViewerDialog.newInstance(

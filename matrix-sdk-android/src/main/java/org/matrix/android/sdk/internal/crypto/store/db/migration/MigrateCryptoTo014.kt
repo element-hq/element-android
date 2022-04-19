@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntity
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 // Version 14L Update the way we remember key sharing
-class MigrateCryptoTo014(realm: DynamicRealm) : RealmMigrator(realm, 14) {
+internal class MigrateCryptoTo014(realm: DynamicRealm) : RealmMigrator(realm, 14) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("SharedSessionEntity")

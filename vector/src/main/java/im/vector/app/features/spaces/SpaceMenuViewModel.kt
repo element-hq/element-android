@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -140,6 +141,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
                                 excludeType = null
                                 activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
                                 memberships = listOf(Membership.JOIN)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                             }
                     ).forEach {
                         try {

@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEnti
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 // Version 10L added WithHeld Keys Info (MSC2399)
-class MigrateCryptoTo010(realm: DynamicRealm) : RealmMigrator(realm, 10) {
+internal class MigrateCryptoTo010(realm: DynamicRealm) : RealmMigrator(realm, 10) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.create("WithHeldSessionEntity")

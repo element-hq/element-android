@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'realm-android'
+apply plugin: "org.jetbrains.dokka"
 
 buildscript {
     repositories {
@@ -31,7 +32,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.4.10\""
+        buildConfigField "String", "SDK_VERSION", "\"1.4.12\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -73,6 +74,10 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += [
+                // Disabled for now, there are too many errors. Could be handled in another dedicated PR
+                // '-Xexplicit-api=strict', // or warning
+        ]
     }
 
     sourceSets {

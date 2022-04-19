@@ -80,6 +80,17 @@
         app:titleTextColor="?vctr_content_primary" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
+        android:id="@+id/exploreRooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/space_explore_activity_title"
+        app:leftIcon="@drawable/ic_explore"
+        app:tint="?vctr_content_secondary"
+        app:titleTextColor="?vctr_content_primary"
+        tools:actionDescription="" />
+
+
+    <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/showMemberList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -97,16 +108,6 @@
         app:leftIcon="@drawable/ic_settings_root_general"
         app:tint="?vctr_content_secondary"
         app:titleTextColor="?vctr_content_primary" />
-
-    <im.vector.app.core.ui.views.BottomSheetActionButton
-        android:id="@+id/exploreRooms"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:actionTitle="@string/space_explore_activity_title"
-        app:leftIcon="@drawable/ic_explore"
-        app:tint="?vctr_content_secondary"
-        app:titleTextColor="?vctr_content_primary"
-        tools:actionDescription="" />
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/addRooms"

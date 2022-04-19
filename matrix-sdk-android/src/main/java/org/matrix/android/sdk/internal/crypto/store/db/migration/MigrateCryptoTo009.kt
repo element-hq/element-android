@@ -23,7 +23,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
 // Fixes duplicate devices in UserEntity#devices
-class MigrateCryptoTo009(realm: DynamicRealm) : RealmMigrator(realm, 9) {
+internal class MigrateCryptoTo009(realm: DynamicRealm) : RealmMigrator(realm, 9) {
 
     override fun doMigrate(realm: DynamicRealm) {
         val userEntities = realm.where("UserEntity").findAll()

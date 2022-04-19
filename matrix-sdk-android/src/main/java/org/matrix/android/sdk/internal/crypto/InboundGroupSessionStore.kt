@@ -30,7 +30,7 @@ import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
 
-data class InboundGroupSessionHolder(
+internal data class InboundGroupSessionHolder(
         val wrapper: OlmInboundGroupSessionWrapper2,
         val mutex: Mutex = Mutex()
 )

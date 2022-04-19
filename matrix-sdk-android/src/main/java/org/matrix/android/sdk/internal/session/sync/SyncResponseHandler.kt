@@ -26,7 +26,6 @@ import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
@@ -42,7 +41,6 @@ import org.matrix.android.sdk.internal.session.sync.handler.PresenceSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.SyncResponsePostTreatmentAggregatorHandler
 import org.matrix.android.sdk.internal.session.sync.handler.UserAccountDataSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomSyncHandler
-import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
@@ -65,10 +63,8 @@ internal class SyncResponseHandler @Inject constructor(
         private val aggregatorHandler: SyncResponsePostTreatmentAggregatorHandler,
         private val cryptoService: DefaultCryptoService,
         private val tokenStore: SyncTokenStore,
-        private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
-        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
         private val presenceSyncHandler: PresenceSyncHandler
 ) {
 

@@ -29,21 +29,22 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.listeners.StepProgressListener
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import java.util.Collections
 import java.util.concurrent.CountDownLatch
 
@@ -403,9 +404,9 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(testData.aliceSession2.cryptoService().keysBackupService().isEnabled)
 
         // - Retrieve the last version from the server
-        val keysVersionResult = testHelper.doSync<KeysVersionResult?> {
+        val keysVersionResult = testHelper.doSync<KeysBackupLastVersionResult> {
             testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion(it)
-        }
+        }.toKeysVersionResult()
 
         // - It must be the same
         assertEquals(testData.prepareKeysBackupDataResult.version, keysVersionResult!!.version)
@@ -463,9 +464,9 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(testData.aliceSession2.cryptoService().keysBackupService().isEnabled)
 
         // - Retrieve the last version from the server
-        val keysVersionResult = testHelper.doSync<KeysVersionResult?> {
+        val keysVersionResult = testHelper.doSync<KeysBackupLastVersionResult> {
             testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion(it)
-        }
+        }.toKeysVersionResult()
 
         // - It must be the same
         assertEquals(testData.prepareKeysBackupDataResult.version, keysVersionResult!!.version)
@@ -565,9 +566,9 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(testData.aliceSession2.cryptoService().keysBackupService().isEnabled)
 
         // - Retrieve the last version from the server
-        val keysVersionResult = testHelper.doSync<KeysVersionResult?> {
+        val keysVersionResult = testHelper.doSync<KeysBackupLastVersionResult> {
             testData.aliceSession2.cryptoService().keysBackupService().getCurrentVersion(it)
-        }
+        }.toKeysVersionResult()
 
         // - It must be the same
         assertEquals(testData.prepareKeysBackupDataResult.version, keysVersionResult!!.version)
@@ -835,9 +836,9 @@ class KeysBackupTest : InstrumentedTest {
         keysBackupTestHelper.prepareAndCreateKeysBackupData(keysBackup)
 
         // Get key backup version from the homeserver
-        val keysVersionResult = testHelper.doSync<KeysVersionResult?> {
+        val keysVersionResult = testHelper.doSync<KeysBackupLastVersionResult> {
             keysBackup.getCurrentVersion(it)
-        }
+        }.toKeysVersionResult()
 
         // - Check the returned KeyBackupVersion is trusted
         val keysBackupVersionTrust = testHelper.doSync<KeysBackupVersionTrust> {

@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.DeviceInfoEntityFie
 import org.matrix.android.sdk.internal.crypto.store.db.model.MyDeviceLastSeenInfoEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateCryptoTo008(realm: DynamicRealm) : RealmMigrator(realm, 8) {
+internal class MigrateCryptoTo008(realm: DynamicRealm) : RealmMigrator(realm, 8) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.create("MyDeviceLastSeenInfoEntity")

@@ -28,6 +28,8 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
@@ -53,6 +55,7 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.session.space.SpaceOrderUtils
 import org.matrix.android.sdk.api.session.space.model.SpaceOrderContent
@@ -64,7 +67,8 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                                                      private val appStateHandler: AppStateHandler,
                                                      private val session: Session,
                                                      private val vectorPreferences: VectorPreferences,
-                                                     private val autoAcceptInvites: AutoAcceptInvites
+                                                     private val autoAcceptInvites: AutoAcceptInvites,
+                                                     private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
 
     @AssistedFactory
@@ -225,9 +229,12 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
     private fun handleSelectSpace(action: SpaceListAction.SelectSpace) = withState { state ->
         val groupingMethod = state.selectedGroupingMethod
         if (groupingMethod is RoomGroupingMethod.ByLegacyGroup || groupingMethod.space()?.roomId != action.spaceSummary?.roomId) {
+            analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSwitchSpace))
             setState { copy(selectedGroupingMethod = RoomGroupingMethod.BySpace(action.spaceSummary)) }
             appStateHandler.setCurrentSpace(action.spaceSummary?.roomId)
             _viewEvents.post(SpaceListViewEvents.OpenSpace(groupingMethod is RoomGroupingMethod.ByLegacyGroup))
+        } else {
+            analyticsTracker.capture(Interaction(null, null, Interaction.Name.SpacePanelSelectedSpace))
         }
     }
 
@@ -266,11 +273,9 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
     }
 
     private fun observeSpaceSummaries() {
-        val spaceSummaryQueryParams = roomSummaryQueryParams {
+        val params = spaceSummaryQueryParams {
             memberships = listOf(Membership.JOIN, Membership.INVITE)
             displayName = QueryStringValue.IsNotEmpty
-            excludeType = listOf(/**RoomType.MESSAGING,$*/
-                    null)
         }
 
         val flowSession = session.flow()
@@ -282,7 +287,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                             it.getOrNull()
                         },
                 flowSession
-                        .liveSpaceSummaries(spaceSummaryQueryParams),
+                        .liveSpaceSummaries(params),
                 session
                         .accountDataService()
                         .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))

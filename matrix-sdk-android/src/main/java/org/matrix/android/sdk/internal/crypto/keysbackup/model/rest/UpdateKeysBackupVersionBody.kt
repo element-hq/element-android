@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.util.JsonDict
 
 @JsonClass(generateAdapter = true)
-data class UpdateKeysBackupVersionBody(
+internal data class UpdateKeysBackupVersionBody(
         /**
          * The algorithm used for storing backups. Currently, only "m.megolm_backup.v1.curve25519-aes-sha2" is defined
          */

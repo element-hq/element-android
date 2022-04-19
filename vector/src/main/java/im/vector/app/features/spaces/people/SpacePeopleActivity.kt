@@ -25,6 +25,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.AppStateHandler
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.replaceFragment
@@ -88,7 +89,7 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
                         is SpacePeopleSharedAction.NavigateToRoom   -> navigateToRooms(sharedAction)
                         SpacePeopleSharedAction.HideModalLoading    -> hideWaitingView()
                         SpacePeopleSharedAction.ShowModalLoading    -> {
-                            showWaitingView()
+                            showWaitingView(getString(R.string.please_wait))
                         }
                         is SpacePeopleSharedAction.NavigateToInvite -> {
                             ShareSpaceBottomSheet.show(supportFragmentManager, sharedAction.spaceId)

@@ -70,7 +70,6 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
         }.attach()
         setupToolbar(views.callTransferToolbar)
                 .allowBack()
-        views.callTransferToolbar.title = getString(R.string.call_transfer_title)
         setupConnectAction()
     }
 

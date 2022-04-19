@@ -33,6 +33,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.shareText
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheet
@@ -59,6 +60,11 @@ class RoomAliasFragment @Inject constructor(
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomSettingGenericBinding {
         return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomAddresses
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

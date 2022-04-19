@@ -28,6 +28,8 @@
 
     <bool name="settings_interface_bubble_visible">true</bool>
     <bool name="settings_interface_bubble_default">false</bool>
+    <bool name="settings_presence_visible">false</bool>
+    <bool name="settings_presence_user_always_appears_offline_default">false</bool>
 
     <!-- Level 1: Voice and video -->
 

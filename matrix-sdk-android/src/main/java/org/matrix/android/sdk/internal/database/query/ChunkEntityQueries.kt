@@ -40,6 +40,17 @@ internal fun ChunkEntity.Companion.find(realm: Realm, roomId: String, prevToken:
     return query.findFirst()
 }
 
+internal fun ChunkEntity.Companion.findAll(realm: Realm, roomId: String, prevToken: String? = null, nextToken: String? = null): RealmResults<ChunkEntity>? {
+    val query = where(realm, roomId)
+    if (prevToken != null) {
+        query.equalTo(ChunkEntityFields.PREV_TOKEN, prevToken)
+    }
+    if (nextToken != null) {
+        query.equalTo(ChunkEntityFields.NEXT_TOKEN, nextToken)
+    }
+    return query.findAll()
+}
+
 internal fun ChunkEntity.Companion.findLastForwardChunkOfRoom(realm: Realm, roomId: String): ChunkEntity? {
     return where(realm, roomId)
             .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)

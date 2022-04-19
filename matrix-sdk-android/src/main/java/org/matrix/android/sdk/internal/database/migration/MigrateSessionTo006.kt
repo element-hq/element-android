@@ -20,7 +20,7 @@ import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.database.model.PreviewUrlCacheEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo006(realm: DynamicRealm) : RealmMigrator(realm, 6) {
+internal class MigrateSessionTo006(realm: DynamicRealm) : RealmMigrator(realm, 6) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.create("PreviewUrlCacheEntity")

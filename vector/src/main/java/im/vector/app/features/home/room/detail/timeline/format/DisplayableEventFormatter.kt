@@ -59,7 +59,7 @@ class DisplayableEventFormatter @Inject constructor(
         val senderName = timelineEvent.senderInfo.disambiguatedDisplayName
 
         return when (timelineEvent.root.getClearType()) {
-            EventType.MESSAGE               -> {
+            EventType.MESSAGE                   -> {
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
                         MessageType.MSGTYPE_TEXT                 -> {
@@ -100,17 +100,17 @@ class DisplayableEventFormatter @Inject constructor(
                     }
                 } ?: span { }
             }
-            EventType.STICKER               -> {
+            EventType.STICKER                   -> {
                 simpleFormat(senderName, stringProvider.getString(R.string.send_a_sticker), appendAuthor)
             }
-            EventType.REACTION              -> {
+            EventType.REACTION                  -> {
                 timelineEvent.root.getClearContent().toModel<ReactionContent>()?.relatesTo?.let {
                     val emojiSpanned = emojiSpanify.spanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
                     simpleFormat(senderName, emojiSpanned, appendAuthor)
                 } ?: span { }
             }
             EventType.KEY_VERIFICATION_CANCEL,
-            EventType.KEY_VERIFICATION_DONE -> {
+            EventType.KEY_VERIFICATION_DONE     -> {
                 // cancel and done can appear in timeline, so should have representation
                 simpleFormat(senderName, stringProvider.getString(R.string.sent_verification_conclusion), appendAuthor)
             }
@@ -119,20 +119,23 @@ class DisplayableEventFormatter @Inject constructor(
             EventType.KEY_VERIFICATION_MAC,
             EventType.KEY_VERIFICATION_KEY,
             EventType.KEY_VERIFICATION_READY,
-            EventType.CALL_CANDIDATES       -> {
+            EventType.CALL_CANDIDATES           -> {
                 span { }
             }
-            in EventType.POLL_START         -> {
+            in EventType.POLL_START             -> {
                 timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.getBestPollCreationInfo()?.question?.getBestQuestion()
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            in EventType.POLL_RESPONSE      -> {
+            in EventType.POLL_RESPONSE          -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            in EventType.POLL_END           -> {
+            in EventType.POLL_END               -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
-            else                            -> {
+            in EventType.STATE_ROOM_BEACON_INFO -> {
+                simpleFormat(senderName, stringProvider.getString(R.string.sent_live_location), appendAuthor)
+            }
+            else                                -> {
                 span {
                     text = noticeEventFormatter.format(timelineEvent, isDm) ?: ""
                     textStyle = "italic"
@@ -167,7 +170,7 @@ class DisplayableEventFormatter @Inject constructor(
         }
 
         return when (event.getClearType()) {
-            EventType.MESSAGE       -> {
+            EventType.MESSAGE                   -> {
                 (event.getClearContent().toModel() as? MessageContent)?.let { messageContent ->
                     when (messageContent.msgType) {
                         MessageType.MSGTYPE_TEXT                 -> {
@@ -208,25 +211,28 @@ class DisplayableEventFormatter @Inject constructor(
                     }
                 } ?: span { }
             }
-            EventType.STICKER       -> {
+            EventType.STICKER                   -> {
                 stringProvider.getString(R.string.send_a_sticker)
             }
-            EventType.REACTION      -> {
+            EventType.REACTION                  -> {
                 event.getClearContent().toModel<ReactionContent>()?.relatesTo?.let {
                     emojiSpanify.spanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
                 } ?: span { }
             }
-            in EventType.POLL_START    -> {
+            in EventType.POLL_START             -> {
                 event.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
-            in EventType.POLL_RESPONSE -> {
+            in EventType.POLL_RESPONSE          -> {
                 stringProvider.getString(R.string.poll_response_room_list_preview)
             }
-            in EventType.POLL_END      -> {
+            in EventType.POLL_END               -> {
                 stringProvider.getString(R.string.poll_end_room_list_preview)
             }
-            else                    -> {
+            in EventType.STATE_ROOM_BEACON_INFO -> {
+                stringProvider.getString(R.string.sent_live_location)
+            }
+            else                                -> {
                 span {
                 }
             }

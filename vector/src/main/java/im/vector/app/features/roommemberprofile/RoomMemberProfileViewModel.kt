@@ -55,7 +55,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
-import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
@@ -112,8 +112,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         session.flow().liveUserCryptoDevices(initialState.userId)
                 .map {
                     Pair(
-                            it.fold(true, { prev, dev -> prev && dev.isVerified }),
-                            it.fold(true, { prev, dev -> prev && (dev.trustLevel?.crossSigningVerified == true) })
+                            it.fold(true) { prev, dev -> prev && dev.isVerified },
+                            it.fold(true) { prev, dev -> prev && (dev.trustLevel?.crossSigningVerified == true) }
                     )
                 }
                 .execute { it ->
@@ -327,14 +327,9 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
 
     private suspend fun fetchProfileInfo() {
         val result = runCatchingToAsync {
-            session.getProfileAsUser(initialState.userId)
-                    .let {
-                        MatrixItem.UserItem(
-                                id = initialState.userId,
-                                displayName = it.displayName,
-                                avatarUrl = it.avatarUrl
-                        )
-                    }
+            session.getProfile(initialState.userId)
+                    .let { User.fromJson(initialState.userId, it) }
+                    .toMatrixItem()
         }
 
         setState {
@@ -395,7 +390,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
                 } else {
                     session.ignoreUserIds(listOf(state.userId))
                 }
-                RoomMemberProfileViewEvents.OnIgnoreActionSuccess
+                RoomMemberProfileViewEvents.OnIgnoreActionSuccess(isIgnored)
             } catch (failure: Throwable) {
                 RoomMemberProfileViewEvents.Failure(failure)
             }

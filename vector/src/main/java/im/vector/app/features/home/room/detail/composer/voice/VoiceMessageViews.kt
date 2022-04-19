@@ -35,7 +35,7 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.DraggingState
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.voice.AudioWaveformView
 
@@ -303,7 +303,7 @@ class VoiceMessageViews(
         views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.clear() }
     }
 
-    fun renderPlaying(state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
+    fun renderPlaying(state: AudioMessagePlaybackTracker.Listener.State.Playing) {
         views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
         views.voicePlaybackControlButton.contentDescription = resources.getString(R.string.a11y_pause_voice_message)
         val formattedTimerText = DateUtils.formatElapsedTime((state.playbackTime / 1000).toLong())

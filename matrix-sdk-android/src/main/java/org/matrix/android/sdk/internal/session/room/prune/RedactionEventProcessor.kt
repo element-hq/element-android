@@ -86,9 +86,9 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
 //                    }
 
                     val modified = unsignedData.copy(redactedEvent = redactionEvent)
-                    // I Commented the line below, it should not be empty while we lose all the previous info about
-                    // the redacted event
-//                    eventToPrune.content = ContentMapper.map(emptyMap())
+                    // Deleting the content of a thread message will result to delete the thread relation, however threads are now dynamic
+                    // so there is not much of a problem
+                    eventToPrune.content = ContentMapper.map(emptyMap())
                     eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
                     eventToPrune.decryptionResultJson = null
                     eventToPrune.decryptionErrorCode = null

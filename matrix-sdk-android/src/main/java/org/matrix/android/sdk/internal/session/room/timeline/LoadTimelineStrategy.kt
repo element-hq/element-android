@@ -24,12 +24,14 @@ import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.CompletableDeferred
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
@@ -194,6 +196,10 @@ internal class LoadTimelineStrategy(
                 getContextLatch?.await()
                 getContextLatch = null
             } catch (failure: Throwable) {
+                if (failure is Failure.ServerError && failure.error.code in listOf(MatrixError.M_NOT_FOUND, MatrixError.M_FORBIDDEN)) {
+                    // This failure is likely permanent, so handle in DefaultTimeline to restart without eventId
+                    throw failure
+                }
                 return LoadMoreResult.FAILURE
             }
         }

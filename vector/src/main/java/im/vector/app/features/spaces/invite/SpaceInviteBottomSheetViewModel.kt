@@ -16,7 +16,6 @@
 
 package im.vector.app.features.spaces.invite
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory

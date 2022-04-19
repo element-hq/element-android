@@ -17,15 +17,7 @@ package org.matrix.android.sdk.internal.extensions
 
 import org.matrix.android.sdk.api.MatrixCallback
 
-fun <A> Result<A>.foldToCallback(callback: MatrixCallback<A>): Unit = fold(
+internal fun <A> Result<A>.foldToCallback(callback: MatrixCallback<A>): Unit = fold(
         { callback.onSuccess(it) },
         { callback.onFailure(it) }
 )
-
-@Suppress("UNCHECKED_CAST") // We're casting null failure results to R
-inline fun <T, R> Result<T>.andThen(block: (T) -> Result<R>): Result<R> {
-    return when (val result = getOrNull()) {
-        null -> this as Result<R>
-        else -> block(result)
-    }
-}

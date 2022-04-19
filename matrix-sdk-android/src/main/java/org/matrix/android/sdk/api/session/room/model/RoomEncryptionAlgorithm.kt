@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.model
 
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
 sealed class RoomEncryptionAlgorithm {
 
