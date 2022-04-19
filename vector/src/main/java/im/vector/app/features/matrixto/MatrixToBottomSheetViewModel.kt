@@ -278,7 +278,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 val joinResult = session.spaceService().joinSpace(joinSpace.spaceID, null, joinSpace.viaServers?.take(3) ?: emptyList())
                 withState { state ->
                     session.getRoomSummary(joinSpace.spaceID)?.let { summary ->
-                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.source.toJoinedRoomTrigger()))
+                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.origin.toJoinedRoomTrigger()))
                     }
                 }
                 if (joinResult.isSuccess()) {
@@ -307,7 +307,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 session.joinRoom(action.roomId, null, action.viaServers?.take(3) ?: emptyList())
                 withState { state ->
                     session.getRoomSummary(action.roomId)?.let { summary ->
-                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.source.toJoinedRoomTrigger()))
+                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.origin.toJoinedRoomTrigger()))
                     }
                 }
                 _viewEvents.post(MatrixToViewEvents.NavigateToRoom(action.roomId))

@@ -51,7 +51,7 @@ import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewMode
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
-import im.vector.app.features.matrixto.MatrixToSource
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.permalink.NavigationInterceptor
@@ -78,7 +78,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -245,7 +244,7 @@ class HomeActivity :
         }
         if (args?.inviteNotificationRoomId != null) {
             activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(args.inviteNotificationRoomId)?.let {
-                navigator.openMatrixToBottomSheet(this, it, MatrixToSource.NOTIFICATION)
+                navigator.openMatrixToBottomSheet(this, it, OriginOfMatrixTo.NOTIFICATION)
             }
         }
 
@@ -481,7 +480,7 @@ class HomeActivity :
         if (parcelableExtra?.inviteNotificationRoomId != null) {
             activeSessionHolder.getSafeActiveSession()?.permalinkService()
                     ?.createPermalink(parcelableExtra.inviteNotificationRoomId)?.let {
-                        navigator.openMatrixToBottomSheet(this, it, MatrixToSource.NOTIFICATION)
+                        navigator.openMatrixToBottomSheet(this, it, OriginOfMatrixTo.NOTIFICATION)
                     }
         }
         handleIntent(intent)
@@ -568,14 +567,14 @@ class HomeActivity :
 
     override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
         // TODO check if there is already one??
-        MatrixToBottomSheet.withLink(deepLink.toString(), MatrixToSource.LINK)
+        MatrixToBottomSheet.withLink(deepLink.toString(), OriginOfMatrixTo.LINK)
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }
 
     override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
         if (roomId == null) return false
-        MatrixToBottomSheet.withLink(deepLink.toString(), MatrixToSource.LINK)
+        MatrixToBottomSheet.withLink(deepLink.toString(), OriginOfMatrixTo.LINK)
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }

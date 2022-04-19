@@ -144,13 +144,12 @@ class SearchFragment @Inject constructor(
     }
 
     private fun openRoom(roomId: String, eventId: String?) {
-        analyticsTracker.capture(
-                session.getRoomSummary(roomId).toAnalyticsViewRoom(
-                        trigger = ViewRoom.Trigger.MessageSearch,
-                        groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
-                )
+        navigator.openRoom(
+                context = requireContext(),
+                roomId = roomId,
+                eventId = eventId,
+                trigger = ViewRoom.Trigger.MessageSearch
         )
-        navigator.openRoom(requireContext(), roomId, eventId)
     }
 
     override fun loadMore() {

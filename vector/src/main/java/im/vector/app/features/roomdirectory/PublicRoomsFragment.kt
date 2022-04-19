@@ -147,13 +147,11 @@ class PublicRoomsFragment @Inject constructor(
         withState(viewModel) { state ->
             when (joinState) {
                 JoinState.JOINED -> {
-                    analyticsTracker.capture(
-                            publicRoom.toAnalyticsViewRoom(
-                                    trigger = ViewRoom.Trigger.RoomDirectory,
-                                    groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
-                            )
+                    navigator.openRoom(
+                            context = requireActivity(),
+                            roomId = publicRoom.roomId,
+                            trigger = ViewRoom.Trigger.RoomDirectory
                     )
-                    navigator.openRoom(requireActivity(), publicRoom.roomId)
                 }
                 else             -> {
                     // ROOM PREVIEW

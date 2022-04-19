@@ -31,13 +31,13 @@ data class MatrixToBottomSheetState(
         val startChattingState: Async<Unit> = Uninitialized,
         val roomPeekResult: Async<RoomInfoResult> = Uninitialized,
         val peopleYouKnow: Async<List<MatrixItem.UserItem>> = Uninitialized,
-        val source: MatrixToSource
+        val origin: OriginOfMatrixTo
 ) : MavericksState {
 
     constructor(args: MatrixToBottomSheet.MatrixToArgs) : this(
             deepLink = args.matrixToLink,
             linkType = PermalinkParser.parse(args.matrixToLink),
-            source = args.source
+            origin = args.origin
     )
 }
 

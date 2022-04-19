@@ -100,13 +100,13 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
             if (state.roomType == RoomType.SPACE) {
                 navigator.switchToSpace(requireActivity(), state.roomId, Navigator.PostSwitchSpaceAction.None)
             } else {
-                analyticsTracker.capture(
-                    session.getRoomSummary(state.roomId).toAnalyticsViewRoom(
-                            trigger = ViewRoom.Trigger.MobileRoomPreview,
-                            groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
-                    )
+                navigator.openRoom(
+                        context = requireActivity(),
+                        roomId = state.roomId,
+                        eventId = roomPreviewData.eventId,
+                        buildTask = roomPreviewData.buildTask,
+                        trigger = ViewRoom.Trigger.MobileRoomPreview
                 )
-                navigator.openRoom(requireActivity(), state.roomId, roomPreviewData.eventId, roomPreviewData.buildTask)
             }
         }
 

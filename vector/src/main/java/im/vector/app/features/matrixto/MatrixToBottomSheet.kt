@@ -48,7 +48,7 @@ class MatrixToBottomSheet :
     @Parcelize
     data class MatrixToArgs(
             val matrixToLink: String,
-            val source: MatrixToSource
+            val origin: OriginOfMatrixTo
     ) : Parcelable
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
@@ -107,7 +107,7 @@ class MatrixToBottomSheet :
                     withState(viewModel) { state ->
                         analyticsTracker.capture(
                                 session.getRoomSummary(it.roomId).toAnalyticsViewRoom(
-                                    trigger = state.source.toViewRoomTrigger(),
+                                    trigger = state.origin.toViewRoomTrigger(),
                                     groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
                                 )
                         )
@@ -130,9 +130,9 @@ class MatrixToBottomSheet :
     }
 
     companion object {
-        fun withLink(matrixToLink: String, source: MatrixToSource): MatrixToBottomSheet {
+        fun withLink(matrixToLink: String, origin: OriginOfMatrixTo): MatrixToBottomSheet {
             return MatrixToBottomSheet().apply {
-                setArguments(MatrixToArgs(matrixToLink = matrixToLink, source = source))
+                setArguments(MatrixToArgs(matrixToLink = matrixToLink, origin = origin))
             }
         }
     }

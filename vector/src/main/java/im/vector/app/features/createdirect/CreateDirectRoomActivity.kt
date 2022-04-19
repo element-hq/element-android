@@ -212,13 +212,11 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
     }
 
     private fun renderCreationSuccess(roomId: String) {
-        analyticsTracker.capture(
-                session.getRoomSummary(roomId).toAnalyticsViewRoom(
-                        trigger = ViewRoom.Trigger.MessageUser,
-                        groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
-                )
+        navigator.openRoom(
+                context = this,
+                roomId = roomId,
+                trigger = ViewRoom.Trigger.MessageUser
         )
-        navigator.openRoom(this, roomId)
         finish()
     }
 

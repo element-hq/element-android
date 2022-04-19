@@ -161,12 +161,12 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 if (roomId.isNullOrBlank()) {
                                     it.navigator.waitSessionVerification(it)
                                 } else {
-                                    analyticsTracker.capture(
-                                            session?.getRoomSummary(roomId).toAnalyticsViewRoom(
-                                                    trigger = ViewRoom.Trigger.VerificationRequest
-                                            )
+                                    it.navigator.openRoom(
+                                            context = it,
+                                            roomId = roomId,
+                                            eventId = pr.transactionId,
+                                            trigger = ViewRoom.Trigger.VerificationRequest
                                     )
-                                    it.navigator.openRoom(it, roomId, pr.transactionId)
                                 }
                             }
                         }

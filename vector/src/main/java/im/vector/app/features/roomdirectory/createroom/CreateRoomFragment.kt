@@ -235,13 +235,11 @@ class CreateRoomFragment @Inject constructor(
                             Navigator.PostSwitchSpaceAction.None
                     )
                 } else {
-                    analyticsTracker.capture(
-                            session.getRoomSummary(roomId).toAnalyticsViewRoom(
-                                    trigger = ViewRoom.Trigger.Created,
-                                    groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
-                            )
+                    navigator.openRoom(
+                            context = requireActivity(),
+                            roomId = roomId,
+                            trigger = ViewRoom.Trigger.Created
                     )
-                    navigator.openRoom(requireActivity(), roomId)
                 }
             }
 

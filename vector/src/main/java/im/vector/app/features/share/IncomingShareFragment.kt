@@ -128,12 +128,11 @@ class IncomingShareFragment @Inject constructor(
 
     private fun handleMultipleRoomsShareDone(viewEvent: IncomingShareViewEvents.MultipleRoomsShareDone) {
         requireActivity().let {
-            analyticsTracker.capture(
-                    session.getRoomSummary(viewEvent.roomId).toAnalyticsViewRoom(
-                            trigger = ViewRoom.Trigger.MobileLinkShare
-                    )
+            navigator.openRoom(
+                    context = it,
+                    roomId = viewEvent.roomId,
+                    trigger = ViewRoom.Trigger.MobileLinkShare
             )
-            navigator.openRoom(it, viewEvent.roomId)
             it.finish()
         }
     }

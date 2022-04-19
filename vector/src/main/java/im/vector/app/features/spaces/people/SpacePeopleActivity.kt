@@ -98,13 +98,10 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
     }
 
     private fun navigateToRooms(action: SpacePeopleSharedAction.NavigateToRoom) {
-        navigator.openRoom(this, action.roomId)
-
-        analyticsTracker.capture(
-                session.getRoomSummary(action.roomId).toAnalyticsViewRoom(
-                        trigger = ViewRoom.Trigger.MobileSpaceMembers,
-                        groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
-                )
+        navigator.openRoom(
+                context = this,
+                roomId = action.roomId,
+                trigger = ViewRoom.Trigger.MobileSpaceMembers
         )
         finish()
     }
