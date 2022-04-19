@@ -19,13 +19,13 @@ package org.matrix.android.sdk.internal.session.account
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.uia.UiaResult
+import org.matrix.android.sdk.api.session.uia.exceptions.UiaCancelledException
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.cleanup.CleanupSession
 import org.matrix.android.sdk.internal.session.identity.IdentityDisconnectTask
 import org.matrix.android.sdk.internal.task.Task
-import org.matrix.android.sdk.api.session.uia.exceptions.UiaCancelledException
 import timber.log.Timber
 import javax.inject.Inject
 
