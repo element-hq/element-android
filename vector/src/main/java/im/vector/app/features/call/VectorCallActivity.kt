@@ -24,6 +24,7 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.res.Configuration
 import android.graphics.Color
+import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -512,20 +513,21 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.tag(loggerTag.value).v("handleViewEvents $event")
         when (event) {
-            is VectorCallViewEvents.ConnectionTimeout      -> {
+            is VectorCallViewEvents.ConnectionTimeout                 -> {
                 onErrorTimoutConnect(event.turn)
             }
-            is VectorCallViewEvents.ShowDialPad            -> {
+            is VectorCallViewEvents.ShowDialPad                       -> {
                 CallDialPadBottomSheet.newInstance(false).apply {
                     callback = dialPadCallback
                 }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
             }
-            is VectorCallViewEvents.ShowCallTransferScreen -> {
+            is VectorCallViewEvents.ShowCallTransferScreen            -> {
                 val callId = withState(callViewModel) { it.callId }
                 navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
-            is VectorCallViewEvents.FailToTransfer         -> showSnackbar(getString(R.string.call_transfer_failure))
-            else                                           -> Unit
+            is VectorCallViewEvents.FailToTransfer                    -> showSnackbar(getString(R.string.call_transfer_failure))
+            is VectorCallViewEvents.ShowScreenSharingPermissionDialog -> handleShowScreenSharingPermissionDialog()
+            else                                                      -> Unit
         }
     }
 
@@ -625,6 +627,18 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                             or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
             )
+        }
+    }
+
+    private val screenSharingPermissionActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            callViewModel.handle(VectorCallViewActions.StartScreenSharing)
+        }
+    }
+
+    private fun handleShowScreenSharingPermissionDialog() {
+        getSystemService<MediaProjectionManager>()?.let {
+            navigator.openScreenSharingPermissionDialog(it.createScreenCaptureIntent(), screenSharingPermissionActivityResultLauncher)
         }
     }
 

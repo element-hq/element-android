@@ -770,6 +770,10 @@ class WebRtcCall(
         return currentCaptureFormat
     }
 
+    fun shareScreen() {
+        // TODO. Will be handled within the next PR.
+    }
+
     private suspend fun release() {
         listeners.clear()
         mxCall.removeListener(this)

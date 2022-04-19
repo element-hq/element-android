@@ -66,6 +66,11 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             callViewModel.handle(VectorCallViewActions.InitiateCallTransfer)
             dismiss()
         }
+
+        views.callControlsShareScreen.views.bottomSheetActionClickableZone.debouncedClicks {
+            callViewModel.handle(VectorCallViewActions.InitiateScreenSharing)
+            dismiss()
+        }
     }
 
     private fun renderState(state: VectorCallViewState) {
