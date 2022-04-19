@@ -18,20 +18,23 @@ package im.vector.app.features.spaces.leave
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.widget.SearchView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.ToggleableAppBarLayoutBehavior
 import im.vector.app.databinding.FragmentSpaceLeaveAdvancedBinding
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import reactivecircus.flowbinding.appcompat.queryTextChanges
 import javax.inject.Inject
 
 class SpaceLeaveAdvancedFragment @Inject constructor(
@@ -44,11 +47,38 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
 
     val viewModel: SpaceLeaveAdvancedViewModel by activityViewModel()
 
+    override fun getMenuRes() = R.menu.menu_space_leave
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(views.toolbar)
-                .allowBack()
+
         controller.listener = this
+
+        withState(viewModel) { state ->
+            setupToolbar(views.toolbar)
+                    .setSubtitle(state.spaceSummary?.name)
+                    .allowBack()
+
+            views.spaceLeaveRadioButtonsTitle.text = getString(R.string.space_leave_radio_buttons_title, state.spaceSummary?.name)
+
+            state.spaceSummary?.let { summary ->
+                val warningMessage: CharSequence? = if (summary.otherMemberIds.isEmpty()) {
+                    getString(R.string.space_leave_prompt_msg_only_you)
+                } else if (state.isLastAdmin) {
+                    getString(R.string.space_leave_prompt_msg_as_admin)
+                } else if (!summary.isPublic) {
+                    getString(R.string.space_leave_prompt_msg_private)
+                } else {
+                    null
+                }
+
+                views.spaceLeavePromptDescription.isVisible = warningMessage != null
+                views.spaceLeavePromptDescription.text = warningMessage
+            }
+
+            views.spaceLeavePromptTitle.text = getString(R.string.space_leave_prompt_msg_with_name, state.spaceSummary?.name ?: "")
+        }
+
         views.roomList.configureWith(controller)
         views.spaceLeaveCancel.debouncedClicks { requireActivity().finish() }
 
@@ -56,12 +86,49 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
             viewModel.handle(SpaceLeaveAdvanceViewAction.DoLeave)
         }
 
-        views.publicRoomsFilter.queryTextChanges()
-                .debounce(100)
-                .onEach {
-                    viewModel.handle(SpaceLeaveAdvanceViewAction.UpdateFilter(it.toString()))
+        views.spaceLeaveSelectGroup.setOnCheckedChangeListener { _, optionId ->
+            run {
+                when (optionId) {
+                    R.id.spaceLeaveSelectAll  -> {
+                        viewModel.handle(SpaceLeaveAdvanceViewAction.SelectAll)
+                    }
+                    R.id.spaceLeaveSelectNone -> {
+                        viewModel.handle(SpaceLeaveAdvanceViewAction.SelectNone)
+                    }
                 }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            }
+        }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.menu_space_leave_search)?.let { searchItem ->
+
+            searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                    viewModel.handle(SpaceLeaveAdvanceViewAction.SetFilteringEnabled(isEnabled = true))
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                    viewModel.handle(SpaceLeaveAdvanceViewAction.SetFilteringEnabled(isEnabled = false))
+                    return true
+                }
+            })
+
+            val searchView = searchItem.actionView as SearchView
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.handle(SpaceLeaveAdvanceViewAction.UpdateFilter(newText ?: ""))
+                    return true
+                }
+            })
+        }
+
+        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onDestroyView() {
@@ -72,10 +139,38 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
+
+        if (state.isFilteringEnabled) {
+            views.appBarLayout.setExpanded(false)
+        }
+
+        val behavior = (views.appBarLayout.layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? ToggleableAppBarLayoutBehavior
+        behavior?.let {
+            it.isEnabled = !state.isFilteringEnabled
+        }
+
+        updateRadioButtons()
+
         controller.setData(state)
     }
 
     override fun onItemSelected(roomSummary: RoomSummary) {
         viewModel.handle(SpaceLeaveAdvanceViewAction.ToggleSelection(roomSummary.roomId))
+    }
+
+    private fun updateRadioButtons() = withState(viewModel) { state ->
+        (state.allChildren as? Success)?.invoke()?.size?.let { allChildrenCount ->
+            when (state.selectedRooms.size) {
+                0                -> {
+                    views.spaceLeaveSelectNone.isChecked = true
+                }
+                allChildrenCount -> {
+                    views.spaceLeaveSelectAll.isChecked = true
+                }
+                else             -> {
+                    views.spaceLeaveSelectSemi.isChecked = true
+                }
+            }
+        }
     }
 }

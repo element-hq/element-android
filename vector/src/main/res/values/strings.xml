@@ -2832,13 +2832,25 @@
     <string name="space_explore_activity_title">Explore rooms</string>
     <string name="space_add_child_title">Add rooms</string>
     <string name="leave_space">Leave</string>
+
+    <string name="space_leave_">Leave space</string>
+
+    <string name="space_leave_radio_buttons_title">Things in %s</string>
+    <string name="space_leave_radio_button_all">Leave all</string>
+    <string name="space_leave_radio_button_none">Leave none</string>
+
     <string name="space_leave_prompt_msg_with_name">Are you sure you want to leave %s?</string>
     <string name="space_leave_prompt_msg_only_you">You are the only person here. If you leave, no one will be able to join in the future, including you.</string>
     <string name="space_leave_prompt_msg_private">You won\'t be able to rejoin unless you are re-invited.</string>
     <string name="space_leave_prompt_msg_as_admin">You\'re the only admin of this space. Leaving it will mean no one has control over it.</string>
+
+    <!-- TODO delete -->
     <string name="leave_all_rooms_and_spaces">Leave all rooms and spaces</string>
+    <!-- TODO delete -->
     <string name="dont_leave_any">Don’t leave any rooms and spaces</string>
+    <!-- TODO delete -->
     <string name="leave_specific_ones">Leave specific rooms and spaces…</string>
+    <!-- TODO delete -->
     <string name="pick_tings_to_leave">Pick things to leave</string>
 
     <string name="space_add_existing_rooms">Add existing rooms and space</string>

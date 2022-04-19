@@ -36,9 +36,14 @@ import okhttp3.internal.toImmutableList
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.getRoomSummary
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
@@ -61,14 +66,14 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
                 }
                 setState {
                     copy(
-                            selectedRooms = existing.toImmutableList()
+                            selectedRooms = existing.toImmutableList(),
                     )
                 }
             }
-            is SpaceLeaveAdvanceViewAction.UpdateFilter    -> {
+            is SpaceLeaveAdvanceViewAction.UpdateFilter -> {
                 setState { copy(currentFilter = action.filter) }
             }
-            SpaceLeaveAdvanceViewAction.DoLeave            -> {
+            SpaceLeaveAdvanceViewAction.DoLeave -> {
                 setState { copy(leaveState = Loading()) }
                 viewModelScope.launch {
                     try {
@@ -88,14 +93,57 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
                     }
                 }
             }
-            SpaceLeaveAdvanceViewAction.ClearError         -> {
+            SpaceLeaveAdvanceViewAction.ClearError -> {
                 setState { copy(leaveState = Uninitialized) }
+            }
+            SpaceLeaveAdvanceViewAction.SelectAll -> {
+                val filteredRooms = (state.allChildren as? Success)?.invoke()?.filter {
+                    it.name.contains(state.currentFilter, true)
+                }
+
+                filteredRooms?.let {
+                    setState {
+                        copy(
+                                selectedRooms = it.map { it.roomId },
+                        )
+                    }
+                }
+            }
+            SpaceLeaveAdvanceViewAction.SelectNone -> {
+                setState {
+                    copy(
+                            selectedRooms = emptyList(),
+                    )
+                }
+            }
+            is SpaceLeaveAdvanceViewAction.SetFilteringEnabled -> {
+                setState {
+                    copy(
+                            isFilteringEnabled = action.isEnabled
+                    )
+                }
             }
         }
     }
 
     init {
-        val spaceSummary = session.getRoomSummary(initialState.spaceId)
+        val space = session.getRoom(initialState.spaceId)
+        val spaceSummary = space?.roomSummary()
+
+        val powerLevelsEvent = space?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS)
+        powerLevelsEvent?.content?.toModel<PowerLevelsContent>()?.let { powerLevelsContent ->
+            val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
+            val isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin
+            val otherAdminCount = spaceSummary?.otherMemberIds
+                    ?.map { powerLevelsHelper.getUserRole(it) }
+                    ?.count { it is Role.Admin }
+                    ?: 0
+            val isLastAdmin = isAdmin && otherAdminCount == 0
+            setState {
+                copy(isLastAdmin = isLastAdmin)
+            }
+        }
+
         setState { copy(spaceSummary = spaceSummary) }
         session.getRoom(initialState.spaceId)?.let { room ->
             room.flow().liveRoomSummary()
