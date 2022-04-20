@@ -501,7 +501,7 @@
         <item quantity="one">%d nouveau message</item>
         <item quantity="other">%d nouveaux messages</item>
     </plurals>
-    <string name="list_members">Liste les membres</string>
+    <string name="list_members">Membres</string>
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d message notifié non lu</item>
         <item quantity="other">%d messages notifiés non lus</item>
@@ -1978,7 +1978,7 @@
     <string name="you_are_invited">Vous êtes invité</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Les espaces sont une nouvelle manière de regrouper les salons et les gens.</string>
     <string name="space_add_existing_rooms">Ajouter des salons et espaces existants</string>
-    <string name="leave_space">Quitter l’espace</string>
+    <string name="leave_space">Quitter</string>
     <string name="space_add_child_title">Ajouter des salons</string>
     <string name="space_explore_activity_title">Parcourir les salons</string>
     <plurals name="space_people_you_know">
@@ -2419,4 +2419,42 @@
         <item quantity="one">%d changement des ACL du serveur</item>
         <item quantity="other">%d changements des ACL du serveur</item>
     </plurals>
+    <string name="live_location_sharing_notification_description">Partage de la position en cours</string>
+    <string name="live_location_sharing_notification_title">Position en temps réel de ${app_name}</string>
+    <string name="location_share_live_stop">Arrêter</string>
+    <string name="location_share_live_enabled">Position en temps réel activée</string>
+    <string name="location_in_background_missing_permission_dialog_content">Si vous souhaitez partager votre position en temps réel, ${app_name} a besoin de l’autorisation d’accès permanent à la position quand l’application est en arrière-plan.
+\nNous accèderons à votre position seulement pendant la durée que vous définissez.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Autoriser l’accès</string>
+    <string name="a11y_location_share_option_pinned_icon">Partager cet emplacement</string>
+    <string name="location_share_option_pinned">Partager cet emplacement</string>
+    <string name="a11y_location_share_option_user_live_icon">Partager la position en temps réel</string>
+    <string name="location_share_option_user_live">Partager la position en temps réel</string>
+    <string name="a11y_location_share_option_user_current_icon">Partager ma position actuelle</string>
+    <string name="location_share_option_user_current">Partager ma position actuelle</string>
+    <string name="a11y_location_share_locate_button">Agrandir jusqu’à l’emplacement actuel</string>
+    <string name="a11y_location_share_pin_on_map">Épingle de l’emplacement sélectionné sur la carte</string>
+    <string name="error_forbidden_digits_only_username">Le serveur hôte n’accepte pas de nom d’utilisateur avec seulement des chiffres.</string>
+    <string name="ftue_personalize_skip_this_step">Ignorer cette étape</string>
+    <string name="ftue_personalize_submit">Enregistrer et continuer</string>
+    <string name="ftue_personalize_complete_subtitle">Vos préférences ont été enregistrées.</string>
+    <string name="ftue_personalize_complete_title">Tout est prêt !</string>
+    <string name="ftue_personalize_lets_go">Allons-y</string>
+    <string name="ftue_profile_picture_subtitle">Vous pouvez la changer à tout moment.</string>
+    <string name="ftue_profile_picture_title">Ajouter une photo de profil</string>
+    <string name="ftue_display_name_entry_footer">Vous pourrez le changer plus tard</string>
+    <string name="ftue_display_name_entry_title">Nom d’affichage</string>
+    <string name="ftue_display_name_subtitle">Il sera affiché quand vous enverrez des messages.</string>
+    <string name="ftue_display_name_title">Choisissez un nom d’affichage</string>
+    <string name="ftue_account_created_subtitle">Votre compte %s a été créé.</string>
+    <string name="ftue_account_created_congratulations_title">Félicitations !</string>
+    <string name="ftue_account_created_take_me_home">Aller à l’accueil</string>
+    <string name="ftue_account_created_personalize">Personnaliser le profil</string>
+    <string name="threads_notice_migration_title">Les fils de discussion se rapproche de la bêta 🎉</string>
+    <string name="action_disable">Désactiver</string>
+    <string name="threads_notice_migration_message">Nous nous approchons d’une publication en bêta des fils de discussions.
+\n
+\nPour nous y préparer, nous avons besoin de faire certains changements : les fils créés avant maintenant seront affichés comme des réponses classiques.
+\n
+\nCette transition sera unique, maintenant que les fils de discussions ont intégré la spécification de Matrix.</string>
 </resources>

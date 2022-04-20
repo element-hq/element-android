@@ -2485,4 +2485,23 @@
 \n
 \nPůjde o jednorázový přechod, protože vlákna jsou nyní součástí Matrix specifikace.</string>
     <string name="threads_notice_migration_title">Vlákna se blíží k betaverzi 🎉</string>
+    <string name="live_location_sharing_notification_description">Probíhá sdílení polohy</string>
+    <string name="live_location_sharing_notification_title">${app_name} poloha živě</string>
+    <string name="error_forbidden_digits_only_username">Domovský server neakceptuje uživatelská jména obsahující pouze číslice.</string>
+    <string name="ftue_personalize_skip_this_step">Přeskočit tento krok</string>
+    <string name="ftue_personalize_submit">Uložit a pokračovat</string>
+    <string name="ftue_personalize_complete_subtitle">Vaše předvolby byly uloženy.</string>
+    <string name="ftue_personalize_complete_title">Vše je připraveno!</string>
+    <string name="ftue_personalize_lets_go">Jdeme na to</string>
+    <string name="ftue_profile_picture_subtitle">Tuto můžete kdykoli změnit.</string>
+    <string name="ftue_profile_picture_title">Přidat profilový obrázek</string>
+    <string name="ftue_display_name_entry_footer">Později to můžete změnit</string>
+    <string name="ftue_display_name_entry_title">Zobrazované jméno</string>
+    <string name="ftue_display_name_subtitle">Toto se zobrazí při odesílání zpráv.</string>
+    <string name="ftue_display_name_title">Zvolte si zobrazované jméno</string>
+    <string name="ftue_account_created_subtitle">Váš účet %s byl založen.</string>
+    <string name="ftue_account_created_congratulations_title">Gratulujeme!</string>
+    <string name="ftue_account_created_take_me_home">Vezmi mě domů</string>
+    <string name="ftue_account_created_personalize">Přizpůsobit profil</string>
+    <string name="action_disable">Zakázat</string>
 </resources>
