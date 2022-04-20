@@ -129,8 +129,8 @@
     <string name="power_level_default">Predvolený</string>
     <string name="power_level_custom">Vlastná úroveň (%1$d)</string>
     <string name="power_level_custom_no_value">Vlastná úroveň</string>
-    <string name="notice_power_level_changed_by_you">Zmenili ste úroveň moci používateľa %1$s.</string>
-    <string name="notice_power_level_changed">%1$s zmenil úroveň moci používateľa %2$s.</string>
+    <string name="notice_power_level_changed_by_you">Zmenili ste úroveň oprávnenia používateľa %1$s.</string>
+    <string name="notice_power_level_changed">%1$s zmenil úroveň oprávnenia používateľa %2$s.</string>
     <string name="notice_power_level_diff">%1$s z %2$s na %3$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Pozvanie od vás. Dôvod: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">Pozvali ste %1$s. Dôvod: %2$s</string>
@@ -284,7 +284,7 @@
     <string name="room_participants_action_ignore">Skryť všetky správy od tohoto používateľa</string>
     <string name="room_participants_action_unignore">Zobraziť všetky správy od tohoto používateľa</string>
     <string name="room_participants_action_mention">Zmieniť sa</string>
-    <string name="room_participants_power_level_prompt">Túto zmenu nebudete môcť vrátiť späť, pretože tomuto používateľovi udeľujete rovnakú úroveň moci, akú máte vy.
+    <string name="room_participants_power_level_prompt">Túto zmenu nebudete môcť vrátiť späť, pretože tomuto používateľovi udeľujete rovnakú úroveň oprávnenia, akú máte vy.
 \nSte si istí\?</string>
     <string name="room_one_user_is_typing">%s píše…</string>
     <string name="room_two_users_are_typing">%1$s a %2$s píšu…</string>
@@ -427,7 +427,7 @@
     <string name="widget_delete_message_confirmation">Ste si istí, že chcete odstrániť widget z tejto miestnosti?</string>
     <string name="widget_integration_unable_to_create">Nie je možné vytvoriť widget.</string>
     <string name="widget_integration_failed_to_send_request">Nepodarilo sa odoslať požiadavku.</string>
-    <string name="widget_integration_positive_power_level">Úroveň moci musí byť kladné celé číslo.</string>
+    <string name="widget_integration_positive_power_level">Úroveň oprávnenia musí byť kladné celé číslo.</string>
     <string name="widget_integration_must_be_in_room">Nenachádzate sa v tejto miestnosti.</string>
     <string name="widget_integration_no_permission_in_room">V tejto miestnosti nemáte oprávnenie na vykonanie takejto akcie.</string>
     <string name="widget_integration_missing_room_id">V požiadavke chýba room_id.</string>
@@ -536,8 +536,8 @@
     <string name="command_description_emote">Zobrazí akciu</string>
     <string name="command_description_ban_user">Zakáže vstup zadanému používateľovi</string>
     <string name="command_description_unban_user">Povolí vstup zadanému používateľovi</string>
-    <string name="command_description_op_user">Určuje úroveň moci pre zadaného používateľa</string>
-    <string name="command_description_deop_user">Znižuje úroveň moci pre zadaného používateľa</string>
+    <string name="command_description_op_user">Určuje úroveň oprávnenia pre zadaného používateľa</string>
+    <string name="command_description_deop_user">Odstráni používateľa s daným ID</string>
     <string name="command_description_invite_user">Pozve zadaného používateľa do aktuálnej miestnosti</string>
     <string name="command_description_join_room">Pripojí sa do miestnosti s danou adresou</string>
     <string name="command_description_part_room">Opustí aktuálnu miestnosť</string>
@@ -743,8 +743,8 @@
     <string name="settings_call_show_confirmation_dialog_title">Zabrániť neúmyselnému telefonovaniu</string>
     <string name="settings_call_show_confirmation_dialog_summary">Žiadať potvrdenie pred uskutočnením hovoru</string>
     <string name="room_participants_action_cancel_invite">Zrušiť pozvanie</string>
-    <string name="room_participants_power_level_demote_warning_title">Znížiť vlastnú úroveň moci\?</string>
-    <string name="room_participants_power_level_demote_warning_prompt">Túto zmenu nebudete môcť vrátiť späť, pretože znižujete vašu vlastnú úroveň moci. Ak ste jediný poverený používateľ v miestnosti, nebudete môcť znovu získať úroveň, akú máte teraz.</string>
+    <string name="room_participants_power_level_demote_warning_title">Znížiť vlastnú úroveň oprávnenia\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Túto zmenu nebudete môcť vrátiť späť, pretože znižujete vašu vlastnú úroveň oprávnenia. Ak ste jediný poverený používateľ v miestnosti, nebudete môcť znovu získať úroveň, akú máte teraz.</string>
     <string name="room_participants_power_level_demote">Znížiť</string>
     <string name="room_participants_action_ignore_title">Ignorovať používateľa</string>
     <string name="room_participants_action_ignore_prompt_msg">Ignorovaním tohoto používateľa odstránite všetky jeho správy vo vašich spoločných miestnostiach.
@@ -900,7 +900,7 @@
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Záloha s %d kľúčom obnovená.</item>
         <item quantity="few">Záloha s %d kľúčmi obnovená.</item>
-        <item quantity="other">Záloha s %d kľúčami obnovená.</item>
+        <item quantity="other">Záloha s %d kľúčmi obnovená.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d nový kľúč bol pridaný do tejto relácie.</item>
@@ -1652,8 +1652,8 @@
     <string name="verification_no_scan_emoji_title">Overiť porovnaním emotikonov</string>
     <string name="verification_scan_self_emoji_subtitle">Namiesto toho overte porovnaním emotikonov</string>
     <string name="verification_scan_emoji_subtitle">Ak nie ste osobne, porovnajte namiesto toho emotikony</string>
-    <string name="verification_scan_with_this_device">Skenovať pomocou tohto zariadenia</string>
-    <string name="verification_scan_self_notice">Naskenujte kód pomocou iného zariadenia alebo prepnite a skenujte pomocou tohto zariadenia</string>
+    <string name="verification_scan_with_this_device">Naskenovať pomocou tohto zariadenia</string>
+    <string name="verification_scan_self_notice">Naskenujte kód pomocou iného zariadenia alebo prepnite a naskenujte pomocou tohto zariadenia</string>
     <string name="verification_scan_notice">Naskenujte kód pomocou zariadenia druhého používateľa, aby ste sa navzájom bezpečne overili</string>
     <string name="sent_verification_conclusion">Záver overovania</string>
     <string name="verification_conclusion_compromised">Môže byť narušená jedna z nasledujúcich vecí:
