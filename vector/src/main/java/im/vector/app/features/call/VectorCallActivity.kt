@@ -57,6 +57,7 @@ import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.call.utils.EglUtils
+import im.vector.app.features.call.webrtc.ScreenCaptureService
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.displayname.getBestName
@@ -633,6 +634,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private val screenSharingPermissionActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             callViewModel.handle(VectorCallViewActions.StartScreenSharing)
+            // We need to start a foreground service with a sticky notification during screen sharing
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ContextCompat.startForegroundService(
+                        this,
+                        Intent(this, ScreenCaptureService::class.java)
+                )
+            }
         }
     }
 
