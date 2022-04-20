@@ -1002,7 +1002,9 @@
     <string name="room_participants_remove_title">Вилучити користувача</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ви впевнені, що бажаєте скасувати запрошення для цього користувача\?</string>
     <string name="room_participants_action_cancel_invite_title">Скасувати запрошення</string>
-    <string name="room_participants_action_unignore_prompt_msg">Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.
+\n
+\nЗауважте, що ця дія перезапустить застосунок, а це може тривати деякий час.</string>
     <string name="room_participants_action_unignore_title">Рознехтувати користувача</string>
     <string name="room_participants_action_ignore_prompt_msg">Нехтування цього користувача призведе до вилучення його повідомлень з усіх спільних кімнат.
 \n
@@ -2549,4 +2551,32 @@
     <string name="ftue_account_created_take_me_home">На головну</string>
     <string name="ftue_account_created_personalize">Персоналізувати профіль</string>
     <string name="action_disable">Вимкнути</string>
+    <string name="location_share_live_started">Завантаження місцеперебування наживо…</string>
+    <string name="location_share_live_select_duration_option_3">8 годин</string>
+    <string name="location_share_live_select_duration_option_2">1 годину</string>
+    <string name="location_share_live_select_duration_option_1">15 хвилин</string>
+    <string name="location_share_live_select_duration_title">Ділитися своїм місцеперебуванням наживо</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Неможливо відтворити %1$s</string>
+    <string name="a11y_pause_audio_message">Зупинити %1$s</string>
+    <string name="a11y_play_audio_message">Відтворити %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d хвилин %2$d секунд</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Ділиться своїм місцеперебуванням наживо</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} також чудово підходить для роботи. Йому довіряють найтаємніші організації світу.</string>
+    <string name="beta">БЕТА</string>
+    <string name="send_feedback_threads_info">Треди — це поточна розробка з новими, захопливими майбутніми функціями, такими як вдосконалені сповіщення. Ми хотіли б почути ваш відгук!</string>
+    <string name="send_feedback_threads_title">Відгук про Треди бета</string>
+    <string name="give_feedback_threads">Надіслати відгук</string>
+    <string name="beta_title_bottom_sheet_action">БЕТА</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Якщо ввімкнено, ви завжди будете видимі в режимі офлайн для інших користувачів, навіть коли користуєтеся застосунком.</string>
+    <string name="settings_presence_user_always_appears_offline">Офлайн режим</string>
+    <string name="settings_presence">Присутність</string>
+    <string name="threads_labs_enable_notice_message">Ваш домашній сервер не підтримує тредів, тому ця функція може бути ненадійною. Деякі треди повідомлень можуть бути недоступними. %sУсе одно хочете ввімкнути треди\?</string>
+    <string name="threads_labs_enable_notice_title">Треди бета</string>
+    <string name="threads_beta_enable_notice_message">Треди допомагають упорядкувати свої розмови за темами та легко стежити за ними. %sУвімкнення тредів перезавантажить застосунок. Це може тривати більше часу для деяких облікових записів.</string>
+    <string name="threads_beta_enable_notice_title">Треди бета</string>
+    <string name="action_learn_more">Докладніше</string>
+    <string name="action_try_it_out">Спробувати</string>
 </resources>
