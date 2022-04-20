@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.create
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -24,7 +25,6 @@ import org.matrix.android.sdk.api.session.identity.toMedium
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider

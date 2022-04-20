@@ -48,7 +48,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         private val locationTracker: LocationTracker,
         private val locationPinProvider: LocationPinProvider,
         private val session: Session,
-        private val compareLocationsUseCase: CompareLocationsUseCase
+        private val compareLocationsUseCase: CompareLocationsUseCase,
 ) : VectorViewModel<LocationSharingViewState, LocationSharingAction, LocationSharingViewEvents>(initialState), LocationTracker.Callback {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -120,7 +120,7 @@ class LocationSharingViewModel @AssistedInject constructor(
             is LocationSharingAction.PinnedLocationSharing    -> handlePinnedLocationSharingAction(action)
             is LocationSharingAction.LocationTargetChange     -> handleLocationTargetChangeAction(action)
             LocationSharingAction.ZoomToUserLocation          -> handleZoomToUserLocationAction()
-            is LocationSharingAction.StartLiveLocationSharing -> handleStartLiveLocationSharingAction(action.duration)
+            is LocationSharingAction.StartLiveLocationSharing -> handleStartLiveLocationSharingAction(action.durationMillis)
         }
     }
 
@@ -158,11 +158,11 @@ class LocationSharingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleStartLiveLocationSharingAction(duration: Long) {
+    private fun handleStartLiveLocationSharingAction(durationMillis: Long) {
         _viewEvents.post(LocationSharingViewEvents.StartLiveLocationService(
                 sessionId = session.sessionId,
                 roomId = room.roomId,
-                duration = duration
+                durationMillis = durationMillis
         ))
     }
 

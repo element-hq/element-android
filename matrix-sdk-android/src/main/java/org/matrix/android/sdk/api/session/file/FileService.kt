@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.api.session.file
 
 import android.net.Uri
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import java.io.File
 
 /**

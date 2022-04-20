@@ -29,7 +29,6 @@ import org.matrix.android.sdk.internal.session.room.timeline.TimelineSendEventWo
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.startChain
 import timber.log.Timber
 import javax.inject.Inject
 

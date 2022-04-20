@@ -37,7 +37,7 @@ import org.matrix.android.sdk.internal.network.parsing.TlsVersionMoshiAdapter
 import org.matrix.android.sdk.internal.network.parsing.UriMoshiAdapter
 import org.matrix.android.sdk.internal.session.sync.parsing.DefaultLazyRoomSyncEphemeralJsonAdapter
 
-object MoshiProvider {
+internal object MoshiProvider {
 
     private val moshi: Moshi = Moshi.Builder()
             .add(UriMoshiAdapter())

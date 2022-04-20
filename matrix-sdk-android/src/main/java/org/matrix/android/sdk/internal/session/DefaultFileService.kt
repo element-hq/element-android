@@ -30,14 +30,14 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProgress
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
 import org.matrix.android.sdk.internal.util.file.AtomicFileCreator
-import org.matrix.android.sdk.internal.util.md5
 import org.matrix.android.sdk.internal.util.writeToFile
 import timber.log.Timber
 import java.io.File

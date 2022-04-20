@@ -36,7 +36,7 @@ import im.vector.app.core.platform.PendingIntentCompat
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.internal.session.sync.job.SyncService
+import org.matrix.android.sdk.api.session.sync.job.SyncService
 import timber.log.Timber
 import javax.inject.Inject
 

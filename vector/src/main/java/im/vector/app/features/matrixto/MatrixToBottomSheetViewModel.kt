@@ -33,6 +33,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -296,8 +297,12 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             try {
-                session.joinRoom(action.roomId, null, action.viaServers?.take(3) ?: emptyList())
-                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(action.roomId))
+                session.joinRoom(
+                        roomIdOrAlias = action.roomIdOrAlias,
+                        reason = null,
+                        viaServers = action.viaServers?.take(3) ?: emptyList()
+                )
+                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(getRoomIdFromRoomIdOrAlias(action.roomIdOrAlias)))
             } catch (failure: Throwable) {
                 _viewEvents.post(MatrixToViewEvents.ShowModalError(errorFormatter.toHumanReadable(failure)))
             } finally {
@@ -307,6 +312,12 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun getRoomIdFromRoomIdOrAlias(roomIdOrAlias: String): String {
+        return if (MatrixPatterns.isRoomAlias(roomIdOrAlias)) {
+            session.getRoomIdByAlias(roomIdOrAlias, true).get().roomId
+        } else roomIdOrAlias
     }
 
     private fun handleStartChatting(action: MatrixToAction.StartChattingWithUser) {

@@ -79,9 +79,9 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
+import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
-import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -352,7 +352,7 @@ class HomeActivity :
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.syncStatusServiceStatus) {
-            is SyncStatusService.Status.Progressing -> {
+            is SyncStatusService.Status.InitialSyncProgressing -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
@@ -580,7 +580,7 @@ class HomeActivity :
     }
 
     override fun spaceInviteBottomSheetOnAccept(spaceId: String) {
-        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.OpenRoomList)
     }
 
     override fun spaceInviteBottomSheetOnDecline(spaceId: String) {
@@ -613,6 +613,6 @@ class HomeActivity :
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {
-        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.OpenRoomList)
     }
 }

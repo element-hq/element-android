@@ -88,7 +88,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
     fun render(roomDetailViewState: RoomDetailViewState) {
         val summary = roomDetailViewState.asyncRoomSummary()
         val newState = if (summary?.membership != Membership.JOIN ||
-                roomDetailViewState.isWebRTCCallOptionAvailable() ||
+                roomDetailViewState.isCallOptionAvailable() ||
                 !roomDetailViewState.isAllowedToManageWidgets ||
                 roomDetailViewState.jitsiState.widgetId == null) {
             State.Unmount

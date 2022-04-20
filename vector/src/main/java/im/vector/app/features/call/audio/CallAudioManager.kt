@@ -25,7 +25,6 @@ import androidx.core.content.getSystemService
 import im.vector.app.R
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
-import java.util.HashSet
 import java.util.concurrent.Executors
 
 class CallAudioManager(private val context: Context, val configChange: (() -> Unit)?) {

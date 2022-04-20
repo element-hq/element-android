@@ -29,16 +29,18 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.mapboxsdk.maps.MapView
-import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.PERMISSIONS_FOR_BACKGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.FragmentLocationSharingBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.location.live.duration.ChooseLiveDurationBottomSheet
 import im.vector.app.features.location.option.LocationSharingOption
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
@@ -50,8 +52,11 @@ import javax.inject.Inject
 class LocationSharingFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val avatarRenderer: AvatarRenderer,
-        private val matrixItemColorProvider: MatrixItemColorProvider
-) : VectorBaseFragment<FragmentLocationSharingBinding>(), LocationTargetChangeListener {
+        private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val vectorFeatures: VectorFeatures,
+) : VectorBaseFragment<FragmentLocationSharingBinding>(),
+        LocationTargetChangeListener,
+        VectorBaseBottomSheetDialogFragment.ResultListener {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
@@ -180,13 +185,15 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun handleStartLiveLocationService(event: LocationSharingViewEvents.StartLiveLocationService) {
-        val args = LocationSharingService.RoomArgs(event.sessionId, event.roomId, event.duration)
+        val args = LocationSharingService.RoomArgs(event.sessionId, event.roomId, event.durationMillis)
 
         Intent(requireContext(), LocationSharingService::class.java)
                 .putExtra(LocationSharingService.EXTRA_ROOM_ARGS, args)
                 .also {
                     ContextCompat.startForegroundService(requireContext(), it)
                 }
+
+        vectorBaseActivity.finish()
     }
 
     private fun initOptionsPicker() {
@@ -234,16 +241,21 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun startLiveLocationSharing() {
-        // TODO. Get duration from user
-        val duration = 30 * 1000L
-        viewModel.handle(LocationSharingAction.StartLiveLocationSharing(duration))
+        ChooseLiveDurationBottomSheet.newInstance(this)
+                .show(requireActivity().supportFragmentManager, "DISPLAY_CHOOSE_DURATION_OPTIONS")
+    }
+
+    override fun onBottomSheetResult(resultCode: Int, data: Any?) {
+        if (resultCode == VectorBaseBottomSheetDialogFragment.ResultListener.RESULT_OK) {
+            (data as? Long)?.let { viewModel.handle(LocationSharingAction.StartLiveLocationSharing(it)) }
+        }
     }
 
     private fun updateMap(state: LocationSharingViewState) {
         // first, update the options view
         val options: Set<LocationSharingOption> = when (state.areTargetAndUserLocationEqual) {
             true  -> {
-                if (BuildConfig.ENABLE_LIVE_LOCATION_SHARING) {
+                if (vectorFeatures.isLiveLocationEnabled()) {
                     setOf(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
                 } else {
                     setOf(LocationSharingOption.USER_CURRENT)

@@ -111,4 +111,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     // Poll
     data class EndPoll(val eventId: String) : RoomDetailAction()
+
+    // Live Location
+    object StopLiveLocationSharing : RoomDetailAction()
 }

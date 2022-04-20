@@ -54,8 +54,9 @@ interface Navigator {
 
     sealed class PostSwitchSpaceAction {
         object None : PostSwitchSpaceAction()
-        data class OpenDefaultRoom(val roomId: String, val showShareSheet: Boolean) : PostSwitchSpaceAction()
         object OpenAddExistingRooms : PostSwitchSpaceAction()
+        object OpenRoomList : PostSwitchSpaceAction()
+        data class OpenDefaultRoom(val roomId: String, val showShareSheet: Boolean) : PostSwitchSpaceAction()
     }
 
     fun switchToSpace(context: Context, spaceId: String, postSwitchSpaceAction: PostSwitchSpaceAction)

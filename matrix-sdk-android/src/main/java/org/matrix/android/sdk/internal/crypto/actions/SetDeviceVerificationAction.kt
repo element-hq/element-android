@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.actions
 
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.di.UserId

@@ -48,6 +48,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -88,9 +89,16 @@ class HomeDetailViewModel @AssistedInject constructor(
         }
     }
 
+    private val refreshRoomSummariesOnCryptoSessionChange = object : NewSessionListener {
+        override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
+            session.refreshJoinedRoomSummaryPreviews(roomId)
+        }
+    }
+
     init {
         observeSyncState()
         observeRoomGroupingMethod()
+        session.cryptoService().addNewSessionListener(refreshRoomSummariesOnCryptoSessionChange)
         observeRoomSummaries()
         updatePstnSupportFlag()
         observeDataStore()
@@ -150,6 +158,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     override fun onCleared() {
         super.onCleared()
         callManager.removeProtocolsCheckerListener(this)
+        session.cryptoService().removeSessionListener(refreshRoomSummariesOnCryptoSessionChange)
     }
 
     override fun onPSTNSupportUpdated() {

@@ -29,7 +29,7 @@ jobs:
           ./gradlew ktlintCheck --continue
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ktlinting-report
           path: |
@@ -59,7 +59,7 @@ jobs:
           fi
       - name: Find Comment
         if: always() && github.event_name == 'pull_request'
-        uses: peter-evans/find-comment@v1
+        uses: peter-evans/find-comment@v2
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -67,7 +67,7 @@ jobs:
           body-includes: Ktlint Results
       - name: Add comment if needed
         if: always() && github.event_name == 'pull_request' && steps.ktlint-results.outputs.add_comment == 'true'
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
@@ -109,7 +109,7 @@ jobs:
         run: ./gradlew clean :vector:lint --stacktrace
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: lint-report
           path: |
@@ -142,7 +142,7 @@ jobs:
         run: ./gradlew clean lint${{ matrix.target }}Release --stacktrace
       - name: Upload ${{ matrix.target }} linting report
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: release-lint-report-${{ matrix.target }}
           path: |

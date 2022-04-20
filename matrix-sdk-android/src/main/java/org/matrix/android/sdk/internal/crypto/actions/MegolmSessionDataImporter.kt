@@ -18,12 +18,13 @@ package org.matrix.android.sdk.internal.crypto.actions
 
 import androidx.annotation.WorkerThread
 import org.matrix.android.sdk.api.listeners.ProgressListener
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
 import org.matrix.android.sdk.internal.crypto.RoomDecryptorProvider
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
+import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmDecryption
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import javax.inject.Inject
@@ -76,7 +77,11 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
                     outgoingGossipingRequestManager.cancelRoomKeyRequest(roomKeyRequestBody)
 
                     // Have another go at decrypting events sent with this session
-                    decrypting.onNewSession(megolmSessionData.senderKey!!, sessionId!!)
+                    when (decrypting) {
+                        is MXMegolmDecryption -> {
+                            decrypting.onNewSession(megolmSessionData.roomId, megolmSessionData.senderKey!!, sessionId!!)
+                        }
+                    }
                 } catch (e: Exception) {
                     Timber.e(e, "## importRoomKeys() : onNewSession failed")
                 }

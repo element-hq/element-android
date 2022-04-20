@@ -25,7 +25,7 @@
         android:title="@string/action_video_call"
         android:visible="false"
         app:iconTint="?colorPrimary"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         tools:visible="true" />
 
     <item
@@ -34,19 +34,20 @@
         android:title="@string/call"
         android:visible="false"
         app:iconTint="?colorPrimary"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         tools:visible="true" />
 
     <item
         android:id="@+id/menu_timeline_thread_list"
         android:title="@string/action_view_threads"
         android:visible="false"
-        app:iconTint="?colorPrimary"
         app:actionLayout="@layout/view_thread_notification_badge"
+        app:iconTint="?colorPrimary"
         app:showAsAction="always"
         tools:visible="true" />
 
-    <item android:id="@+id/join_conference"
+    <item
+        android:id="@+id/join_conference"
         android:title="@string/action_join"
         app:actionLayout="@layout/layout_join_conference_action"
         app:showAsAction="always" />
@@ -66,35 +67,23 @@
         tools:visible="true" />
 
     <item
-        android:id="@+id/menu_thread_timeline_more"
-        android:icon="@drawable/ic_more_vertical"
+        android:id="@+id/menu_thread_timeline_view_in_room"
+        android:icon="@drawable/ic_thread_view_in_room_menu_item"
         android:title="@string/action_thread_view_in_room"
         app:iconTint="?vctr_content_secondary"
-        app:showAsAction="always">
+        app:showAsAction="withText" />
 
-        <menu>
-            <item
-                android:id="@+id/menu_thread_timeline_view_in_room"
-                android:icon="@drawable/ic_thread_view_in_room_menu_item"
-                android:title="@string/action_thread_view_in_room"
-                app:iconTint="?vctr_content_secondary"
-                app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_thread_timeline_copy_link"
+        android:icon="@drawable/ic_thread_link_menu_item"
+        android:title="@string/action_thread_copy_link_to_thread"
+        app:iconTint="?vctr_content_secondary"
+        app:showAsAction="withText" />
 
-            <item
-                android:id="@+id/menu_thread_timeline_copy_link"
-                android:icon="@drawable/ic_thread_link_menu_item"
-                android:title="@string/action_thread_copy_link_to_thread"
-                app:iconTint="?vctr_content_secondary"
-                app:showAsAction="ifRoom" />
-
-            <item
-                android:id="@+id/menu_thread_timeline_share"
-                android:icon="@drawable/ic_thread_share_menu_item"
-                android:title="@string/action_share"
-                app:iconTint="?vctr_content_secondary"
-                app:showAsAction="ifRoom" />
-        </menu>
-    </item>
-
-
+    <item
+        android:id="@+id/menu_thread_timeline_share"
+        android:icon="@drawable/ic_thread_share_menu_item"
+        android:title="@string/action_share"
+        app:iconTint="?vctr_content_secondary"
+        app:showAsAction="withText" />
 </menu>

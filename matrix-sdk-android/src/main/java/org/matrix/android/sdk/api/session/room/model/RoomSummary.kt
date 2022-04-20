@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.model
 
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.send.UserDraft

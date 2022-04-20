@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.IncomingGossipingRe
 import org.matrix.android.sdk.internal.crypto.store.db.model.OutgoingGossipingRequestEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateCryptoTo005(realm: DynamicRealm) : RealmMigrator(realm, 5) {
+internal class MigrateCryptoTo005(realm: DynamicRealm) : RealmMigrator(realm, 5) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.remove("OutgoingRoomKeyRequestEntity")

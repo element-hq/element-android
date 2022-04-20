@@ -50,7 +50,6 @@ class DiscoverySettingsController @Inject constructor(
 
     override fun buildModels(data: DiscoverySettingsState) {
         when (data.identityServer) {
-            Uninitialized,
             is Loading -> {
                 loadingItem {
                     id("identityServerLoading")
@@ -71,6 +70,7 @@ class DiscoverySettingsController @Inject constructor(
                     buildMsisdnSection(data.phoneNumbersList)
                 }
             }
+            else       -> Unit
         }
     }
 
@@ -356,7 +356,6 @@ class DiscoverySettingsController @Inject constructor(
             colorProvider(host.colorProvider)
             stringProvider(host.stringProvider)
             when (pidInfo.isShared) {
-                Uninitialized,
                 is Loading -> {
                     buttonIndeterminate(true)
                 }
@@ -390,6 +389,7 @@ class DiscoverySettingsController @Inject constructor(
                     }
                     null                            -> Unit
                 }
+                else       -> Unit
             }
         }
     }

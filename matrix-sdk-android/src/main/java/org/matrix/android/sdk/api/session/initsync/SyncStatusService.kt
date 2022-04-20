@@ -28,7 +28,7 @@ interface SyncStatusService {
         abstract class InitialSyncStatus : Status()
 
         object Idle : InitialSyncStatus()
-        data class Progressing(
+        data class InitialSyncProgressing(
                 val initSyncStep: InitSyncStep,
                 val percentProgress: Int = 0
         ) : InitialSyncStatus()

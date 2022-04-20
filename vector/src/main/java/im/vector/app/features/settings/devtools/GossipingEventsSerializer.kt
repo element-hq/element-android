@@ -18,15 +18,15 @@ package im.vector.app.features.settings.devtools
 
 import im.vector.app.core.resources.DateProvider
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.session.crypto.model.ForwardedRoomKeyContent
+import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyShareRequest
+import org.matrix.android.sdk.api.session.crypto.model.SecretShareRequest
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.OlmEventContent
+import org.matrix.android.sdk.api.session.events.model.content.SecretSendEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
-import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
-import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
-import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyShareRequest
-import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
 import org.threeten.bp.format.DateTimeFormatter
 
 class GossipingEventsSerializer {

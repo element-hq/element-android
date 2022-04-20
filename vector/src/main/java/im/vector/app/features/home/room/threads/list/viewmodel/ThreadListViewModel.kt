@@ -113,7 +113,15 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
 
     private fun fetchThreadList() {
         viewModelScope.launch {
+            setLoading(true)
             room?.fetchThreadSummaries()
+            setLoading(false)
+        }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        setState {
+            copy(isLoading = isLoading)
         }
     }
 

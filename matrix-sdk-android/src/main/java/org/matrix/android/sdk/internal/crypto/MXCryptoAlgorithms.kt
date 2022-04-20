@@ -16,6 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_OLM
+
 // TODO Update comment
 internal object MXCryptoAlgorithms {
 

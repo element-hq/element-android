@@ -34,12 +34,14 @@ import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isCrossSignedVerified
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 

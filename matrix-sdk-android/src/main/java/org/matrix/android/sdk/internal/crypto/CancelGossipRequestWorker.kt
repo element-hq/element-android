@@ -21,11 +21,12 @@ import androidx.work.WorkerParameters
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.failure.shouldBeRetried
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.OutgoingGossipingRequestState
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.ShareRequestCancellation
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask

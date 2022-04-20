@@ -24,7 +24,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import im.vector.app.R
 import im.vector.app.databinding.ViewBooleanDropdownBinding
 
 class OverrideDropdownView @JvmOverloads constructor(

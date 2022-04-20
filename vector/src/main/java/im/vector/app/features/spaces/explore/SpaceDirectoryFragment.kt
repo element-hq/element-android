@@ -42,6 +42,7 @@ import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.databinding.FragmentSpaceDirectoryBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.matrixto.SpaceCardRenderer
 import im.vector.app.features.permalink.PermalinkHandler
@@ -79,6 +80,7 @@ class SpaceDirectoryFragment @Inject constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SpaceExploreRooms
         childFragmentManager.setFragmentResultListener(SpaceAddRoomSpaceChooserBottomSheet.REQUEST_KEY, this) { _, bundle ->
 
             bundle.getString(SpaceAddRoomSpaceChooserBottomSheet.BUNDLE_KEY_ACTION)?.let { action ->

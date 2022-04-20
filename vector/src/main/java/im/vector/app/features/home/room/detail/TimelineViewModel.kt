@@ -52,6 +52,7 @@ import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandle
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
+import im.vector.app.features.location.LocationSharingServiceConnection
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
@@ -79,6 +80,7 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -103,7 +105,6 @@ import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
-import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -124,10 +125,11 @@ class TimelineViewModel @AssistedInject constructor(
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
         private val decryptionFailureTracker: DecryptionFailureTracker,
         private val notificationDrawerManager: NotificationDrawerManager,
+        private val locationSharingServiceConnection: LocationSharingServiceConnection,
         timelineFactory: TimelineFactory,
         appStateHandler: AppStateHandler
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
-        Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
+        Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener, LocationSharingServiceConnection.Callback {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
@@ -219,6 +221,9 @@ class TimelineViewModel @AssistedInject constructor(
 
         // Threads
         initThreads()
+
+        // Observe location service lifecycle to be able to warn the user
+        locationSharingServiceConnection.bind(this)
     }
 
     /**
@@ -439,6 +444,7 @@ class TimelineViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
             is RoomDetailAction.EndPoll                          -> handleEndPoll(action.eventId)
+            RoomDetailAction.StopLiveLocationSharing             -> handleStopLiveLocationSharing()
         }
     }
 
@@ -705,18 +711,20 @@ class TimelineViewModel @AssistedInject constructor(
 
         if (initialState.isThreadTimeline()) {
             when (itemId) {
-                R.id.menu_thread_timeline_more -> true
-                else                           -> false
+                R.id.menu_thread_timeline_view_in_room,
+                R.id.menu_thread_timeline_copy_link,
+                R.id.menu_thread_timeline_share -> true
+                else                            -> false
             }
         } else {
             when (itemId) {
                 R.id.timeline_setting          -> true
                 R.id.invite                    -> state.canInvite
                 R.id.open_matrix_apps          -> true
-                R.id.voice_call                -> state.isWebRTCCallOptionAvailable()
-                R.id.video_call                -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+                R.id.voice_call                -> state.isCallOptionAvailable()
+                R.id.video_call                -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
                 // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-                R.id.join_conference           -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
+                R.id.join_conference           -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
                 R.id.search                    -> state.isSearchAvailable()
                 R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()
                 R.id.dev_tools                 -> vectorPreferences.developerMode()
@@ -1086,6 +1094,10 @@ class TimelineViewModel @AssistedInject constructor(
                 }
     }
 
+    private fun handleStopLiveLocationSharing() {
+        locationSharingServiceConnection.stopLiveLocationSharing(room.roomId)
+    }
+
     private fun observeRoomSummary() {
         room.flow().liveRoomSummary()
                 .unwrap()
@@ -1104,9 +1116,13 @@ class TimelineViewModel @AssistedInject constructor(
             computeUnreadState(timelineEvents, roomSummary)
         }
                 // We don't want live update of unread so we skip when we already had a HasUnread or HasNoUnread
+                // However, we want to update an existing HasUnread, if the readMarkerId hasn't changed,
+                // as we might be loading new events to fill gaps in the timeline.
                 .distinctUntilChanged { previous, current ->
                     when {
                         previous is UnreadState.Unknown || previous is UnreadState.ReadMarkerNotLoaded -> false
+                        previous is UnreadState.HasUnread && current is UnreadState.HasUnread &&
+                                previous.readMarkerId == current.readMarkerId                          -> false
                         current is UnreadState.HasUnread || current is UnreadState.HasNoUnread         -> true
                         else                                                                           -> false
                     }
@@ -1125,12 +1141,17 @@ class TimelineViewModel @AssistedInject constructor(
                 } else {
                     UnreadState.Unknown
                 }
+        // If the read marker is at the bottom-most event, this doesn't mean we read all, in case we just haven't loaded more events.
+        // Avoid incorrectly returning HasNoUnread in this case.
+        if (firstDisplayableEventIndex == 0 && timeline.hasMoreToLoad(Timeline.Direction.FORWARDS)) {
+            return UnreadState.Unknown
+        }
         for (i in (firstDisplayableEventIndex - 1) downTo 0) {
             val timelineEvent = events.getOrNull(i) ?: return UnreadState.Unknown
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown
             val isFromMe = timelineEvent.root.senderId == session.myUserId
             if (!isFromMe) {
-                return UnreadState.HasUnread(eventId)
+                return UnreadState.HasUnread(eventId, readMarkerIdSnapshot)
             }
         }
         return UnreadState.HasNoUnread
@@ -1218,6 +1239,16 @@ class TimelineViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.OnNewTimelineEvents(eventIds))
     }
 
+    override fun onLocationServiceRunning() {
+        _viewEvents.post(RoomDetailViewEvents.ChangeLocationIndicator(isVisible = true))
+    }
+
+    override fun onLocationServiceStopped() {
+        _viewEvents.post(RoomDetailViewEvents.ChangeLocationIndicator(isVisible = false))
+        // Bind again in case user decides to share live location without leaving the room
+        locationSharingServiceConnection.bind(this)
+    }
+
     override fun onCleared() {
         timeline.dispose()
         timeline.removeAllListeners()
@@ -1231,6 +1262,7 @@ class TimelineViewModel @AssistedInject constructor(
         // we should also mark it as read here, for the scenario that the user
         // is already in the thread timeline
         markThreadTimelineAsReadLocal()
+        locationSharingServiceConnection.unbind()
         super.onCleared()
     }
 }

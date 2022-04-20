@@ -56,10 +56,10 @@ data class ReactionInfo(
 /**
  * Used to display the list of members that reacted to a given event
  */
-class ViewReactionsViewModel @AssistedInject constructor(@Assisted
-                                                         initialState: DisplayReactionsViewState,
-                                                         session: Session,
-                                                         private val dateFormatter: VectorDateFormatter
+class ViewReactionsViewModel @AssistedInject constructor(
+        @Assisted initialState: DisplayReactionsViewState,
+        session: Session,
+        private val dateFormatter: VectorDateFormatter
 ) : VectorViewModel<DisplayReactionsViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     private val roomId = initialState.roomId

@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.crypto.algorithms
 
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
+import org.matrix.android.sdk.api.session.crypto.model.IncomingSecretShareRequest
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
-import org.matrix.android.sdk.internal.crypto.IncomingSecretShareRequest
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 
 /**
@@ -44,14 +44,6 @@ internal interface IMXDecrypting {
      * @param event the key event.
      */
     fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {}
-
-    /**
-     * Check if the some messages can be decrypted with a new session
-     *
-     * @param senderKey the session sender key
-     * @param sessionId the session id
-     */
-    fun onNewSession(senderKey: String, sessionId: String) {}
 
     /**
      * Determine if we have the keys necessary to respond to a room key request

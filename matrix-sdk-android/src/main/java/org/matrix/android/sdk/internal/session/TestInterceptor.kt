@@ -18,6 +18,6 @@ package org.matrix.android.sdk.internal.session
 
 import okhttp3.Interceptor
 
-interface TestInterceptor : Interceptor {
+internal interface TestInterceptor : Interceptor {
     var sessionId: String?
 }

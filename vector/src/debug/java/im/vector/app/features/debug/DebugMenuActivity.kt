@@ -49,7 +49,6 @@ import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesDarkActivity
 import im.vector.lib.ui.styles.debug.DebugVectorButtonStylesLightActivity
 import im.vector.lib.ui.styles.debug.DebugVectorTextViewDarkActivity
 import im.vector.lib.ui.styles.debug.DebugVectorTextViewLightActivity
-import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -251,7 +250,7 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
             // renderQrCode(QrCodeScannerActivity.getResultText(data) ?: "")
             val result = QrCodeScannerActivity.getResultText(activityResult.data)!!
 
-            val qrCodeData = result.toQrCodeData()
+            val qrCodeData = null // This is now internal: result.toQrCodeData()
             Timber.e("qrCodeData: $qrCodeData")
 
             if (result.length != buffer.size) {
@@ -265,6 +264,8 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
                     }
                 }
             }
+            // Ensure developer will see that this cannot work anymore
+            error("toQrCodeData() is now internal")
         }
     }
 }

@@ -36,7 +36,7 @@ sealed class UnreadState {
     object Unknown : UnreadState()
     object HasNoUnread : UnreadState()
     data class ReadMarkerNotLoaded(val readMarkerId: String) : UnreadState()
-    data class HasUnread(val firstUnreadEventId: String) : UnreadState()
+    data class HasUnread(val firstUnreadEventId: String, val readMarkerId: String) : UnreadState()
 }
 
 data class JitsiState(
@@ -87,7 +87,7 @@ data class RoomDetailViewState(
             rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
     )
 
-    fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2
+    fun isCallOptionAvailable() = asyncRoomSummary.invoke()?.isDirect ?: true
 
     fun isSearchAvailable() = asyncRoomSummary()?.isEncrypted == false
 

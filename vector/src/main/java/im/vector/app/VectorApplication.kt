@@ -230,13 +230,13 @@ class VectorApplication :
         val sdkVersion = Matrix.getSdkVersion()
         val date = SimpleDateFormat("MM-dd HH:mm:ss.SSSZ", Locale.US).format(Date())
 
-        Timber.v("----------------------------------------------------------------")
-        Timber.v("----------------------------------------------------------------")
-        Timber.v(" Application version: $appVersion")
-        Timber.v(" SDK version: $sdkVersion")
-        Timber.v(" Local time: $date")
-        Timber.v("----------------------------------------------------------------")
-        Timber.v("----------------------------------------------------------------\n\n\n\n")
+        Timber.d("----------------------------------------------------------------")
+        Timber.d("----------------------------------------------------------------")
+        Timber.d(" Application version: $appVersion")
+        Timber.d(" SDK version: $sdkVersion")
+        Timber.d(" Local time: $date")
+        Timber.d("----------------------------------------------------------------")
+        Timber.d("----------------------------------------------------------------\n\n\n\n")
     }
 
     override fun attachBaseContext(base: Context) {

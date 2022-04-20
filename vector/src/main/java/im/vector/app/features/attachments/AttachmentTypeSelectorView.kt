@@ -41,6 +41,7 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_FOREGROUND_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.databinding.ViewAttachmentTypeSelectorBinding
+import im.vector.app.features.attachments.AttachmentTypeSelectorView.Callback
 import kotlin.math.max
 
 private const val ANIMATION_DURATION = 250

@@ -20,8 +20,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
 import org.matrix.android.sdk.api.session.contentscanner.ScanStatusInfo
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 

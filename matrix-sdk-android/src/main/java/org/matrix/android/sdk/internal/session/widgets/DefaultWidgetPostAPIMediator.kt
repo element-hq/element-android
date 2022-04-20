@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.util.createUIHandler
 import timber.log.Timber
 import java.lang.reflect.Type
-import java.util.HashMap
 import javax.inject.Inject
 
 internal class DefaultWidgetPostAPIMediator @Inject constructor(private val moshi: Moshi,
@@ -88,10 +87,10 @@ internal class DefaultWidgetPostAPIMediator @Inject constructor(private val mosh
     }
 
     /*
-   * *********************************************************************************************
-   * Message sending methods
-   * *********************************************************************************************
-   */
+     * *********************************************************************************************
+     * Message sending methods
+     * *********************************************************************************************
+     */
 
     /**
      * Send a boolean response

@@ -38,7 +38,7 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
-import org.matrix.android.sdk.internal.session.room.send.TextContent
+import org.matrix.android.sdk.api.util.TextContent
 import java.util.Calendar
 import javax.inject.Inject
 

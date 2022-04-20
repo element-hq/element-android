@@ -26,17 +26,19 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
 import javax.inject.Inject
 
-class TimelineItemFactory @Inject constructor(private val messageItemFactory: MessageItemFactory,
-                                              private val encryptedItemFactory: EncryptedItemFactory,
-                                              private val noticeItemFactory: NoticeItemFactory,
-                                              private val defaultItemFactory: DefaultItemFactory,
-                                              private val encryptionItemFactory: EncryptionItemFactory,
-                                              private val roomCreateItemFactory: RoomCreateItemFactory,
-                                              private val widgetItemFactory: WidgetItemFactory,
-                                              private val verificationConclusionItemFactory: VerificationItemFactory,
-                                              private val callItemFactory: CallItemFactory,
-                                              private val decryptionFailureTracker: DecryptionFailureTracker,
-                                              private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper) {
+class TimelineItemFactory @Inject constructor(
+        private val messageItemFactory: MessageItemFactory,
+        private val encryptedItemFactory: EncryptedItemFactory,
+        private val noticeItemFactory: NoticeItemFactory,
+        private val defaultItemFactory: DefaultItemFactory,
+        private val encryptionItemFactory: EncryptionItemFactory,
+        private val roomCreateItemFactory: RoomCreateItemFactory,
+        private val widgetItemFactory: WidgetItemFactory,
+        private val verificationConclusionItemFactory: VerificationItemFactory,
+        private val callItemFactory: CallItemFactory,
+        private val decryptionFailureTracker: DecryptionFailureTracker,
+        private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper,
+) {
 
     /**
      * Reminder: nextEvent is older and prevEvent is newer.
@@ -75,16 +77,17 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                     EventType.STATE_ROOM_ALIASES,
                     EventType.STATE_SPACE_CHILD,
                     EventType.STATE_SPACE_PARENT,
-                    EventType.STATE_ROOM_POWER_LEVELS -> {
+                    EventType.STATE_ROOM_POWER_LEVELS   -> {
                         noticeItemFactory.create(params)
                     }
                     EventType.STATE_ROOM_WIDGET_LEGACY,
-                    EventType.STATE_ROOM_WIDGET       -> widgetItemFactory.create(params)
-                    EventType.STATE_ROOM_ENCRYPTION   -> encryptionItemFactory.create(params)
+                    EventType.STATE_ROOM_WIDGET         -> widgetItemFactory.create(params)
+                    EventType.STATE_ROOM_ENCRYPTION     -> encryptionItemFactory.create(params)
                     // State room create
-                    EventType.STATE_ROOM_CREATE       -> roomCreateItemFactory.create(params)
+                    EventType.STATE_ROOM_CREATE         -> roomCreateItemFactory.create(params)
+                    in EventType.STATE_ROOM_BEACON_INFO -> messageItemFactory.create(params)
                     // Unhandled state event types
-                    else                              -> {
+                    else                                -> {
                         // Should only happen when shouldShowHiddenEvents() settings is ON
                         Timber.v("State event type ${event.root.type} not handled")
                         defaultItemFactory.create(params)

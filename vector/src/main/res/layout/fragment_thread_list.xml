@@ -30,12 +30,28 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?android:colorBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/threadsFeedBackConstraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/threadListAppBarLayout"
         tools:listitem="@layout/item_thread"
         tools:visibility="gone" />
+
+
+        <ProgressBar
+            android:id="@+id/threadListProgressBar"
+            style="@style/Widget.Vector.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:indeterminate="true"
+            android:visibility="gone"
+            tools:ignore="NegativeMargin"
+            android:layout_marginTop="-6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/threadListAppBarLayout"
+            tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/threadListEmptyConstraintLayout"
@@ -54,7 +70,6 @@
             android:id="@+id/threadListEmptyImageView"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/bg_rounded_button"
@@ -75,13 +90,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:text="@string/thread_list_empty_title"
             android:textColor="?vctr_content_primary"
             app:layout_constraintBottom_toTopOf="@id/threadListEmptySubtitleTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/threadListEmptyImageView"
-            android:text="@string/thread_list_empty_title" />
+            app:layout_constraintTop_toBottomOf="@id/threadListEmptyImageView" />
 
         <TextView
             android:id="@+id/threadListEmptySubtitleTextView"
@@ -90,12 +105,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:gravity="center"
+            android:text="@string/thread_list_empty_subtitle"
             android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/threadListEmptyNoticeTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/threadListEmptyTitleTextView"
-            android:text="@string/thread_list_empty_subtitle" />
+            app:layout_constraintTop_toBottomOf="@id/threadListEmptyTitleTextView" />
 
         <TextView
             android:id="@+id/threadListEmptyNoticeTextView"
@@ -112,4 +127,59 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/threadFeedbackDivider"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/bg_shadow_divider"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/threadsFeedBackConstraintLayout"
+        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/threadsFeedBackConstraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/threadsBetaFeedbackIcon"
+            style="@style/Widget.Vector.TextView.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/notification_badge"
+            android:backgroundTint="@color/palette_azure"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="3dp"
+            android:text="@string/beta"
+            android:textColor="@color/palette_white"
+            app:layout_constraintBottom_toBottomOf="@id/threadsBetaFeedbackButton"
+            app:layout_constraintEnd_toStartOf="@id/threadsBetaFeedbackButton"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/threadsBetaFeedbackButton" />
+
+        <TextView
+            android:id="@+id/threadsBetaFeedbackButton"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/give_feedback_threads"
+            android:textColor="@color/vector_info_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/threadsBetaFeedbackIcon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

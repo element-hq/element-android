@@ -20,7 +20,7 @@ import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo020(realm: DynamicRealm) : RealmMigrator(realm, 20) {
+internal class MigrateSessionTo020(realm: DynamicRealm) : RealmMigrator(realm, 20) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("ChunkEntity")?.apply {

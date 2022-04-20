@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.appbar.AppBarLayout
@@ -47,11 +46,11 @@ import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewState
+import org.matrix.android.sdk.api.session.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import javax.inject.Inject
 
 class RoomUploadsMediaFragment @Inject constructor(
@@ -189,7 +188,6 @@ class RoomUploadsMediaFragment @Inject constructor(
     override fun invalidate() = withState(uploadsViewModel) { state ->
         if (state.mediaEvents.isEmpty()) {
             when (state.asyncEventsRequest) {
-                Uninitialized,
                 is Loading -> {
                     views.genericStateViewListStateView.state = StateView.State.Loading
                 }
@@ -207,6 +205,7 @@ class RoomUploadsMediaFragment @Inject constructor(
                         )
                     }
                 }
+                else       -> Unit
             }
         } else {
             views.genericStateViewListStateView.state = StateView.State.Content
