@@ -2438,4 +2438,23 @@
 \nMedan vi förbereder den så behöver vi göra några ändringar: trådar skapade innan den här tidpunkten kommer att visas som vanliga svar.
 \n
 \nDet kommer att vara en engångshändelse, eftersom trådar nu är en del av Matrixspecifikationen.</string>
+    <string name="live_location_sharing_notification_description">Platsdelning pågår</string>
+    <string name="live_location_sharing_notification_title">${app_name} Kontinuerlig plats</string>
+    <string name="error_forbidden_digits_only_username">Hemservern accepterar inte användarnamn med bara siffror.</string>
+    <string name="ftue_personalize_skip_this_step">Hoppa över det här steget</string>
+    <string name="ftue_personalize_submit">Spara och fortsätt</string>
+    <string name="ftue_personalize_complete_subtitle">Dina inställningar har sparats.</string>
+    <string name="ftue_personalize_complete_title">Du är redo!</string>
+    <string name="ftue_personalize_lets_go">Nu kör vi</string>
+    <string name="ftue_profile_picture_subtitle">Du kan ändra detta när som helst.</string>
+    <string name="ftue_profile_picture_title">Lägg till en profilbild</string>
+    <string name="ftue_display_name_entry_footer">Du kan ändra detta senare</string>
+    <string name="ftue_display_name_entry_title">Visningsnamn</string>
+    <string name="ftue_display_name_subtitle">Det här kommer att visas när du skickar meddelanden.</string>
+    <string name="ftue_display_name_title">Välj ett visningsnamn</string>
+    <string name="ftue_account_created_subtitle">Ditt konto %s har skapats.</string>
+    <string name="ftue_account_created_congratulations_title">Grattis!</string>
+    <string name="ftue_account_created_take_me_home">För mig hem</string>
+    <string name="ftue_account_created_personalize">Anpassa profil</string>
+    <string name="action_disable">Inaktivera</string>
 </resources>
