@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.failure
 
-import org.matrix.android.sdk.internal.network.ssl.Fingerprint
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 
 // This class will be sent to the bus
 sealed class GlobalError {

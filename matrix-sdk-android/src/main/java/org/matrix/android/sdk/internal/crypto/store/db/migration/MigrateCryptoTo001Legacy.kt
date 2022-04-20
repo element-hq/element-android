@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntityFie
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-class MigrateCryptoTo001Legacy(realm: DynamicRealm) : RealmMigrator(realm, 1) {
+internal class MigrateCryptoTo001Legacy(realm: DynamicRealm) : RealmMigrator(realm, 1) {
 
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Add field lastReceivedMessageTs (Long) and set the value to 0")

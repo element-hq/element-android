@@ -139,7 +139,7 @@ class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFrag
             }
             else                -> {
                 views.loginServerUrlFormHomeServerUrl.setText(serverUrl, false /* to avoid completion dialog flicker*/)
-                viewModel.handle(OnboardingAction.UpdateHomeServer(serverUrl))
+                viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(serverUrl))
             }
         }
     }

@@ -43,9 +43,9 @@ import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 
 class MessageBubbleView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0,
 ) : RelativeLayout(context, attrs, defStyleAttr), TimelineMessageLayoutRenderer {
 
     private var isIncoming: Boolean = false
@@ -89,21 +89,21 @@ class MessageBubbleView @JvmOverloads constructor(
             outlineProvider = ViewOutlineProvider.BACKGROUND
             clipToOutline = true
             background = RippleDrawable(
-                ContextCompat.getColorStateList(context, R.color.mtrl_btn_ripple_color) ?: ColorStateList.valueOf(Color.TRANSPARENT),
-                bubbleDrawable,
-                rippleMaskDrawable)
+                    ContextCompat.getColorStateList(context, R.color.mtrl_btn_ripple_color) ?: ColorStateList.valueOf(Color.TRANSPARENT),
+                    bubbleDrawable,
+                    rippleMaskDrawable)
         }
     }
 
     override fun renderMessageLayout(messageLayout: TimelineMessageLayout) {
         (messageLayout as? TimelineMessageLayout.Bubble)
-            ?.updateDrawables()
-            ?.setConstraintsAndColor()
-            ?.toggleMessageOverlay()
-            ?.setPadding()
-            ?.setMargins()
-            ?.setAdditionalTopSpace()
-            ?: Timber.v("Can't render messageLayout $messageLayout")
+                ?.updateDrawables()
+                ?.setConstraints()
+                ?.toggleMessageOverlay()
+                ?.setPadding()
+                ?.setMargins()
+                ?.setAdditionalTopSpace()
+                ?: Timber.v("Can't render messageLayout $messageLayout")
     }
 
     private fun TimelineMessageLayout.Bubble.updateDrawables() = apply {
@@ -121,17 +121,13 @@ class MessageBubbleView @JvmOverloads constructor(
         rippleMaskDrawable.shapeAppearanceModel = shapeAppearanceModel
     }
 
-    private fun TimelineMessageLayout.Bubble.setConstraintsAndColor() = apply {
+    private fun TimelineMessageLayout.Bubble.setConstraints() = apply {
         ConstraintSet().apply {
             clone(views.bubbleView)
             clear(R.id.viewStubContainer, ConstraintSet.END)
-            if (timestampAsOverlay) {
-                val timeColor = ContextCompat.getColor(context, R.color.palette_white)
-                views.messageTimeView.setTextColor(timeColor)
+            if (timestampInsideMessage) {
                 connect(R.id.viewStubContainer, ConstraintSet.END, R.id.parent, ConstraintSet.END, 0)
             } else {
-                val timeColor = ThemeUtils.getColor(context, R.attr.vctr_content_tertiary)
-                views.messageTimeView.setTextColor(timeColor)
                 connect(R.id.viewStubContainer, ConstraintSet.END, R.id.messageTimeView, ConstraintSet.START, 0)
             }
             applyTo(views.bubbleView)
@@ -139,16 +135,20 @@ class MessageBubbleView @JvmOverloads constructor(
     }
 
     private fun TimelineMessageLayout.Bubble.toggleMessageOverlay() = apply {
-        if (timestampAsOverlay) {
+        if (addMessageOverlay) {
+            val timeColor = ContextCompat.getColor(context, R.color.palette_white)
+            views.messageTimeView.setTextColor(timeColor)
             views.messageOverlayView.isVisible = true
             (views.messageOverlayView.background as? GradientDrawable)?.cornerRadii = cornersRadius.toFloatArray()
         } else {
+            val timeColor = ThemeUtils.getColor(context, R.attr.vctr_content_tertiary)
+            views.messageTimeView.setTextColor(timeColor)
             views.messageOverlayView.isVisible = false
         }
     }
 
     private fun TimelineMessageLayout.Bubble.setPadding() = apply {
-        if (isPseudoBubble && timestampAsOverlay) {
+        if (isPseudoBubble && timestampInsideMessage) {
             views.viewStubContainer.root.setPadding(0, 0, 0, 0)
         } else {
             views.viewStubContainer.root.setPadding(horizontalStubPadding, verticalStubPadding, horizontalStubPadding, verticalStubPadding)

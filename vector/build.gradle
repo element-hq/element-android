@@ -18,7 +18,7 @@ ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 11
+ext.versionPatch = 12
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -151,7 +151,6 @@ android {
 
         buildConfigField "Boolean", "enableLocationSharing", "true"
         buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
-        buildConfigField "Boolean", "PRESENCE_SYNC_ENABLED", "true"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -230,7 +229,6 @@ android {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             // Set to true if you want to enable strict mode in debug
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-            buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "true"
 
             signingConfig signingConfigs.debug
         }
@@ -240,7 +238,6 @@ android {
 
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
-            buildConfigField "Boolean", "ENABLE_LIVE_LOCATION_SHARING", "false"
 
             postprocessing {
                 removeUnusedCode true
@@ -446,7 +443,8 @@ dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 
     // Chat effects
-    implementation 'nl.dionsegijn:konfetti:1.3.2'
+    implementation 'nl.dionsegijn:konfetti-xml:2.0.2'
+
     implementation 'com.github.jetradarmobile:android-snowfall:1.2.1'
     // DI
     implementation libs.dagger.hilt

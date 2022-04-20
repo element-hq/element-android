@@ -19,26 +19,27 @@ package org.matrix.android.sdk.internal.crypto.algorithms.olm
 import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.content.OlmEventContent
+import org.matrix.android.sdk.api.session.events.model.content.OlmPayloadContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
-import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
-import org.matrix.android.sdk.internal.crypto.model.event.OlmPayloadContent
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.convertFromUTF8
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("MXOlmDecryption", LoggerTag.CRYPTO)
+
 internal class MXOlmDecryption(
         // The olm device interface
         private val olmDevice: MXOlmDevice,
         // the matrix userId
         private val userId: String) :
-    IMXDecrypting {
+        IMXDecrypting {
 
     @Throws(MXCryptoError::class)
     override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {

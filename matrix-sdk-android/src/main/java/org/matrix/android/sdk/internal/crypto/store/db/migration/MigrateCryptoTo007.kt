@@ -28,7 +28,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-class MigrateCryptoTo007(realm: DynamicRealm) : RealmMigrator(realm, 7) {
+internal class MigrateCryptoTo007(realm: DynamicRealm) : RealmMigrator(realm, 7) {
 
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Updating KeyInfoEntity table")

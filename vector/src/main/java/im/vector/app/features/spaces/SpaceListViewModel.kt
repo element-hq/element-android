@@ -55,6 +55,7 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.session.space.SpaceOrderUtils
 import org.matrix.android.sdk.api.session.space.model.SpaceOrderContent
@@ -272,11 +273,9 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
     }
 
     private fun observeSpaceSummaries() {
-        val spaceSummaryQueryParams = roomSummaryQueryParams {
+        val params = spaceSummaryQueryParams {
             memberships = listOf(Membership.JOIN, Membership.INVITE)
             displayName = QueryStringValue.IsNotEmpty
-            excludeType = listOf(/**RoomType.MESSAGING,$*/
-                    null)
         }
 
         val flowSession = session.flow()
@@ -288,7 +287,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                             it.getOrNull()
                         },
                 flowSession
-                        .liveSpaceSummaries(spaceSummaryQueryParams),
+                        .liveSpaceSummaries(params),
                 session
                         .accountDataService()
                         .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))

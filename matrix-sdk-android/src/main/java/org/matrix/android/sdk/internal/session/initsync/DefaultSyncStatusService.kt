@@ -72,7 +72,7 @@ internal class DefaultSyncStatusService @Inject constructor() :
                 // Update the progress of the leaf and all its parents
                 leaf.setProgress(progress)
                 // Then update the live data using leaf wording and root progress
-                status.postValue(SyncStatusService.Status.Progressing(leaf.initSyncStep, root.currentProgress.toInt()))
+                status.postValue(SyncStatusService.Status.InitialSyncProgressing(leaf.initSyncStep, root.currentProgress.toInt()))
             }
         }
     }

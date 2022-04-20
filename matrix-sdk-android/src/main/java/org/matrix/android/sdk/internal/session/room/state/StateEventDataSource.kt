@@ -32,7 +32,6 @@ import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
-import org.matrix.android.sdk.internal.query.process
 import javax.inject.Inject
 
 internal class StateEventDataSource @Inject constructor(

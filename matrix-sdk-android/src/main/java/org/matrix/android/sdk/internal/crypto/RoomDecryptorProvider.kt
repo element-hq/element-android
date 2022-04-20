@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmDecryptionFactory
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmDecryptionFactory
@@ -74,7 +76,7 @@ internal class RoomDecryptorProvider @Inject constructor(
                     this.newSessionListener = object : NewSessionListener {
                         override fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
                             // PR reviewer: the parameter has been renamed so is now in conflict with the parameter of getOrCreateRoomDecryptor
-                            newSessionListeners.forEach {
+                            newSessionListeners.toList().forEach {
                                 try {
                                     it.onNewSession(roomId, senderKey, sessionId)
                                 } catch (e: Throwable) {

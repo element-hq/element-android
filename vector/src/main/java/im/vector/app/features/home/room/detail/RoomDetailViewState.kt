@@ -36,7 +36,7 @@ sealed class UnreadState {
     object Unknown : UnreadState()
     object HasNoUnread : UnreadState()
     data class ReadMarkerNotLoaded(val readMarkerId: String) : UnreadState()
-    data class HasUnread(val firstUnreadEventId: String) : UnreadState()
+    data class HasUnread(val firstUnreadEventId: String, val readMarkerId: String) : UnreadState()
 }
 
 data class JitsiState(

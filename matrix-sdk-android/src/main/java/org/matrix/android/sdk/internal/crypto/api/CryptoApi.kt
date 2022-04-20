@@ -15,9 +15,9 @@
  */
 package org.matrix.android.sdk.internal.crypto.api
 
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDeviceParams
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyChangesResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimBody
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse

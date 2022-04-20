@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.user
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.Optional
@@ -37,16 +36,10 @@ internal class DefaultUserService @Inject constructor(private val userDataSource
     }
 
     override suspend fun resolveUser(userId: String): User {
-        val known = getUser(userId)
-        if (known != null) {
-            return known
-        } else {
+        return getUser(userId) ?: run {
             val params = GetProfileInfoTask.Params(userId)
-            val data = getProfileInfoTask.execute(params)
-            return User(
-                    userId,
-                    data[ProfileService.DISPLAY_NAME_KEY] as? String,
-                    data[ProfileService.AVATAR_URL_KEY] as? String)
+            val json = getProfileInfoTask.execute(params)
+            User.fromJson(userId, json)
         }
     }
 

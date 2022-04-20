@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.terms
 
+import org.matrix.android.sdk.api.session.terms.TermsResponse
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.emptyJsonDict
 import org.matrix.android.sdk.internal.network.HttpHeaders

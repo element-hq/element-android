@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.identity
 
-import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
+import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 
 /**
  * Provides access to the identity server configuration and services identity server can provide

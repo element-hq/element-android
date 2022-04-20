@@ -46,8 +46,8 @@ import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.session.events.model.isLocationMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -80,12 +80,7 @@ class MessageActionsEpoxyController @Inject constructor(
         val formattedDate = dateFormatter.format(date, DateFormatKind.MESSAGE_DETAIL)
         val body = state.messageBody.linkify(host.listener)
         val bindingOptions = spanUtils.getBindingOptions(body)
-
-        val locationContent = state.timelineEvent()?.root?.getClearContent()
-                ?.toModel<MessageLocationContent>(catchError = true)
-        val locationUrl = locationContent?.toLocationData()
-                ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
-        val locationOwnerId = if (locationContent?.isSelfLocation().orTrue()) state.informationData.matrixItem.id else null
+        val locationUiData = buildLocationUiData(state)
 
         bottomSheetMessagePreviewItem {
             id("preview")
@@ -99,9 +94,7 @@ class MessageActionsEpoxyController @Inject constructor(
             body(body.toEpoxyCharSequence())
             bodyDetails(host.eventDetailsFormatter.format(state.timelineEvent()?.root)?.toEpoxyCharSequence())
             time(formattedDate)
-            locationUrl(locationUrl)
-            locationPinProvider(host.locationPinProvider)
-            locationOwnerId(locationOwnerId)
+            locationUiData(locationUiData)
         }
 
         // Send state
@@ -220,6 +213,23 @@ class MessageActionsEpoxyController @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun buildLocationUiData(state: MessageActionState): LocationUiData? {
+        if (state.timelineEvent()?.root?.isLocationMessage() != true) return null
+
+        val locationContent = state.timelineEvent()?.root?.getClearContent().toModel<MessageLocationContent>(catchError = true)
+                ?: return null
+        val locationUrl = locationContent.toLocationData()
+                ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
+                ?: return null
+        val locationOwnerId = if (locationContent.isSelfLocation()) state.informationData.matrixItem.id else null
+
+        return LocationUiData(
+                locationUrl = locationUrl,
+                locationOwnerId = locationOwnerId,
+                locationPinProvider = locationPinProvider,
+        )
     }
 
     private fun EventSharedAction.shouldShowBetaLabel(): Boolean =

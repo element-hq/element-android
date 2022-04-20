@@ -17,7 +17,18 @@
     <string name="ftue_auth_create_account_choose_server_header">Choose your server to store your data</string>
     <string name="ftue_auth_create_account_sso_section_header">Or</string>
     <string name="ftue_auth_create_account_matrix_dot_org_server_description">Join millions for free on the largest public server</string>
-    <string name="ftue_auth_create_account_matrix_dot_org_server_name">matrix.org</string>
     <string name="ftue_auth_create_account_edit_server_selection">Edit</string>
+
+    <string name="ftue_auth_choose_server_title">Choose your server</string>
+    <string name="ftue_auth_choose_server_subtitle">What is the address of your server? Server is like a home for all your data.</string>
+    <string name="ftue_auth_choose_server_entry_hint">Server URL</string>
+    <string name="ftue_auth_choose_server_entry_footer">You can only connect to a server that has already been set up</string>
+    <string name="ftue_auth_choose_server_ems_title">Want to host your own server?</string>
+
+    <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) is a robust and reliable hosting service for fast, secure and real time communication. Find out how on <a href="${ftue_ems_url}">element.io/ems</a></string>
+    <string name="ftue_auth_choose_server_ems_cta">Get in touch</string>
+
+    <string name="ftue_auth_terms_title">Privacy policy</string>
+    <string name="ftue_auth_terms_subtitle">Please read through T&amp;C. You must accept in order to continue.</string>
 
 </resources>

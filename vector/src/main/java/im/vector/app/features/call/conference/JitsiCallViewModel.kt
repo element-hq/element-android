@@ -17,7 +17,6 @@
 package im.vector.app.features.call.conference
 
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success

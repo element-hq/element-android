@@ -634,7 +634,7 @@
     <string name="room_participants_action_ignore">Ignore</string>
 
     <string name="room_participants_action_unignore_title">Unignore user</string>
-    <string name="room_participants_action_unignore_prompt_msg">Unignoring this user will show all messages from them again.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Unignoring this user will show all messages from them again.\n\nNote that this action will restart the app and it may take some time.</string>
     <string name="room_participants_action_unignore">Unignore</string>
 
     <string name="room_participants_action_cancel_invite_title">Cancel invite</string>
@@ -739,6 +739,9 @@
     <string name="threads_beta_enable_notice_title">Threads Beta</string>
     <!-- %s will be replaced with action_learn_more string resource that will be clickable(url redirection)  -->
     <string name="threads_beta_enable_notice_message">Threads help keep your conversations on-topic and easy to track. %sEnabling threads will refresh the app. This may take longer for some accounts.</string>
+    <string name="threads_labs_enable_notice_title">Threads Beta</string>
+    <string name="threads_labs_enable_notice_message">Your homeserver does not currently support threads, so this feature may be unreliable. Some threaded messages may not be reliably available. %sDo you want to enable threads anyway?</string>
+
 
     <!-- Search -->
     <string name="search_hint">Search</string>
@@ -1055,6 +1058,11 @@
     <string name="media_saving_period_1_week">1 week</string>
     <string name="media_saving_period_1_month">1 month</string>
     <string name="media_saving_period_forever">Forever</string>
+
+    <!-- Presence settings -->
+    <string name="settings_presence">Presence</string>
+    <string name="settings_presence_user_always_appears_offline">Offline mode</string>
+    <string name="settings_presence_user_always_appears_offline_summary">If enabled, you will always appear offline to other users, even when using the application.</string>
 
     <!-- Room Settings -->
 
@@ -1655,7 +1663,8 @@
     <string name="you_may_contact_me">You may contact me if you have any follow up questions</string>
     <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
     <string name="feedback_failed">The feedback failed to be sent (%s)</string>
-    <string name="give_feedback">Give Feedback</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="give_feedback" tools:ignore="UnusedResources">Give Feedback</string>
     <string name="give_feedback_threads">Give Feedback</string>
     <string name="send_feedback_threads_title">Threads Beta feedback</string>
     <string name="send_feedback_threads_info">Threads are a work in progress with new, exciting upcoming features, such as improved notifications. We’d love to hear your feedback!</string>
@@ -1862,7 +1871,7 @@
     <string name="ftue_auth_carousel_control_body">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
     <string name="ftue_auth_carousel_encrypted_body">End-to-end encrypted and no phone number required. No ads or datamining.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="ftue_auth_carousel_workplace_body" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 
     <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
     <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected.</string>
@@ -2116,6 +2125,7 @@
     <string name="sent_a_reaction">Reacted with: %s</string>
     <string name="sent_verification_conclusion">Verification Conclusion</string>
     <string name="sent_location">Shared their location</string>
+    <string name="sent_live_location">Shared their live location</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
@@ -2892,6 +2902,14 @@
     <string name="error_voice_message_cannot_reply_or_edit">Cannot reply or edit while voice message is active</string>
     <string name="voice_message_reply_content">Voice Message (%1$s)</string>
 
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string> <!-- filename, duration, file size -->
+    <string name="a11y_audio_playback_duration">%1$d minutes %2$d seconds</string>
+    <string name="a11y_play_audio_message">Play %1$s</string>
+    <string name="a11y_pause_audio_message">Pause %1$s</string>
+    <string name="error_audio_message_unable_to_play">Unable to play %1$s</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
 
@@ -2985,6 +3003,7 @@
     <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
+    <string name="location_share_live_started">Loading live location…</string>
     <string name="location_share_live_stop">Stop</string>
     <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
     <string name="live_location_sharing_notification_description">Location sharing is in progress</string>

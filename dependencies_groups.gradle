@@ -50,6 +50,7 @@ ext.groups = [
                         'com.beust',
                         'com.davemorrissey.labs',
                         'com.dropbox.core',
+                        'com.soywiz.korlibs.korte',
                         'com.facebook.fbjni',
                         'com.facebook.fresco',
                         'com.facebook.infer.annotation',
@@ -59,6 +60,9 @@ ext.groups = [
                         'com.fasterxml',
                         'com.fasterxml.jackson',
                         'com.fasterxml.jackson.core',
+                        'com.fasterxml.jackson.dataformat',
+                        'com.fasterxml.jackson.module',
+                        'com.fasterxml.woodstox',
                         'com.gabrielittner.threetenbp',
                         'com.getkeepsafe.relinker',
                         'com.github.bumptech.glide',
@@ -157,12 +161,14 @@ ext.groups = [
                         'org.codehaus',
                         'org.codehaus.groovy',
                         'org.codehaus.mojo',
+                        'org.codehaus.woodstox',
                         'org.eclipse.ee4j',
                         'org.ec4j.core',
                         'org.glassfish.jaxb',
                         'org.hamcrest',
                         'org.jacoco',
                         'org.jetbrains',
+                        'org.jetbrains.dokka',
                         'org.jetbrains.intellij.deps',
                         'org.jetbrains.kotlin',
                         'org.jetbrains.kotlinx',
@@ -208,4 +214,3 @@ ext.groups = [
                 ]
         ]
 ]
-

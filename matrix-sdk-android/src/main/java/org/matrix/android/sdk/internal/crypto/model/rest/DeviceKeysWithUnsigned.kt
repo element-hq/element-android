@@ -18,9 +18,10 @@ package org.matrix.android.sdk.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
 
 @JsonClass(generateAdapter = true)
-data class DeviceKeysWithUnsigned(
+internal data class DeviceKeysWithUnsigned(
         /**
          * Required. The ID of the user the device belongs to. Must match the user ID used when logging in.
          */

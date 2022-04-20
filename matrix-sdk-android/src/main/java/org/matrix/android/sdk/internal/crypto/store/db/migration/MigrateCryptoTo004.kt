@@ -19,8 +19,8 @@ package org.matrix.android.sdk.internal.crypto.store.db.migration
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import io.realm.DynamicRealm
+import org.matrix.android.sdk.api.session.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.CrossSigningInfoEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntityFields
@@ -33,7 +33,7 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
 // Version 4L added Cross Signing info persistence
-class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
+internal class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
 
     override fun doMigrate(realm: DynamicRealm) {
         if (realm.schema.contains("TrustLevelEntity")) {

@@ -37,7 +37,7 @@ jobs:
       - name: Assemble ${{ matrix.target }} debug apk
         run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES --stacktrace
       - name: Upload ${{ matrix.target }} debug APKs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: vector-${{ matrix.target }}-debug
           path: |
@@ -61,7 +61,7 @@ jobs:
       - name: Assemble GPlay unsigned apk
         run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES  --stacktrace
       - name: Upload Gplay unsigned APKs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: vector-gplay-release-unsigned
           path: |

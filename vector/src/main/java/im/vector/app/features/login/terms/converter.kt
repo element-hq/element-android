@@ -16,8 +16,8 @@
 
 package im.vector.app.features.login.terms
 
+import org.matrix.android.sdk.api.auth.data.LocalizedFlowDataLoginTerms
 import org.matrix.android.sdk.api.auth.registration.TermPolicies
-import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 
 /**
  * This method extract the policies from the login terms parameter, regarding the user language.
@@ -48,15 +48,17 @@ fun TermPolicies.toLocalizedLoginTerms(userLanguage: String,
     val policies = get("policies")
     if (policies is Map<*, *>) {
         policies.keys.forEach { policyName ->
-            val localizedFlowDataLoginTerms = LocalizedFlowDataLoginTerms()
-            localizedFlowDataLoginTerms.policyName = policyName as String
+            val localizedFlowDataLoginTermsPolicyName = policyName as String
+            var localizedFlowDataLoginTermsVersion: String? = null
+            var localizedFlowDataLoginTermsLocalizedUrl: String? = null
+            var localizedFlowDataLoginTermsLocalizedName: String? = null
 
             val policy = policies[policyName]
 
             // Enter this policy
             if (policy is Map<*, *>) {
                 // Version
-                localizedFlowDataLoginTerms.version = policy["version"] as String?
+                localizedFlowDataLoginTermsVersion = policy["version"] as String?
 
                 var userLanguageUrlAndName: UrlAndName? = null
                 var defaultLanguageUrlAndName: UrlAndName? = null
@@ -86,21 +88,26 @@ fun TermPolicies.toLocalizedLoginTerms(userLanguage: String,
                 // Copy found language data by priority
                 when {
                     userLanguageUrlAndName != null    -> {
-                        localizedFlowDataLoginTerms.localizedUrl = userLanguageUrlAndName!!.url
-                        localizedFlowDataLoginTerms.localizedName = userLanguageUrlAndName!!.name
+                        localizedFlowDataLoginTermsLocalizedUrl = userLanguageUrlAndName!!.url
+                        localizedFlowDataLoginTermsLocalizedName = userLanguageUrlAndName!!.name
                     }
                     defaultLanguageUrlAndName != null -> {
-                        localizedFlowDataLoginTerms.localizedUrl = defaultLanguageUrlAndName!!.url
-                        localizedFlowDataLoginTerms.localizedName = defaultLanguageUrlAndName!!.name
+                        localizedFlowDataLoginTermsLocalizedUrl = defaultLanguageUrlAndName!!.url
+                        localizedFlowDataLoginTermsLocalizedName = defaultLanguageUrlAndName!!.name
                     }
                     firstUrlAndName != null           -> {
-                        localizedFlowDataLoginTerms.localizedUrl = firstUrlAndName!!.url
-                        localizedFlowDataLoginTerms.localizedName = firstUrlAndName!!.name
+                        localizedFlowDataLoginTermsLocalizedUrl = firstUrlAndName!!.url
+                        localizedFlowDataLoginTermsLocalizedName = firstUrlAndName!!.name
                     }
                 }
             }
 
-            result.add(localizedFlowDataLoginTerms)
+            result.add(LocalizedFlowDataLoginTerms(
+                    policyName = localizedFlowDataLoginTermsPolicyName,
+                    version = localizedFlowDataLoginTermsVersion,
+                    localizedUrl = localizedFlowDataLoginTermsLocalizedUrl,
+                    localizedName = localizedFlowDataLoginTermsLocalizedName
+            ))
         }
     }
 

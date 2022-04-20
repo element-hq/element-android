@@ -36,12 +36,13 @@ import im.vector.app.core.extensions.hasSurroundingSpaces
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
-import im.vector.app.databinding.FragmentFtueSignUpCombinedBinding
+import im.vector.app.core.extensions.toReducedUrl
+import im.vector.app.databinding.FragmentFtueCombinedRegisterBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
-import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -55,17 +56,19 @@ import org.matrix.android.sdk.api.failure.isUsernameInUse
 import org.matrix.android.sdk.api.failure.isWeakPassword
 import javax.inject.Inject
 
-class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueSignUpCombinedBinding>() {
+class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueCombinedRegisterBinding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSignUpCombinedBinding {
-        return FragmentFtueSignUpCombinedBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedRegisterBinding {
+        return FragmentFtueCombinedRegisterBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupSubmitButton()
-
         views.createAccountRoot.realignPercentagesToParent()
+        views.editServerButton.debouncedClicks {
+            viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection))
+        }
 
         views.createAccountPasswordInput.editText().setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -164,6 +167,9 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         setupUi(state)
         setupAutoFill()
 
+        views.selectedServerName.text = state.selectedHomeserver.userFacingUrl.toReducedUrl()
+        views.selectedServerDescription.text = state.selectedHomeserver.description
+
         if (state.isLoading) {
             // Ensure password is hidden
             views.createAccountPasswordInput.editText().hidePassword()
@@ -171,8 +177,8 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
     }
 
     private fun setupUi(state: OnboardingViewState) {
-        when (state.loginMode) {
-            is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.loginMode.ssoIdentityProviders)
+        when (state.selectedHomeserver.preferredLoginMode) {
+            is LoginMode.SsoAndPassword -> renderSsoProviders(state.deviceId, state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders)
             else                        -> hideSsoProviders()
         }
     }
@@ -201,6 +207,6 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
             views.createAccountPasswordInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
         }
     }
-}
 
-private fun OnboardingViewState.isNumericOnlyUserIdForbidden() = serverType == ServerType.MatrixOrg
+    private fun OnboardingViewState.isNumericOnlyUserIdForbidden() = selectedHomeserver.userFacingUrl == getString(R.string.matrix_org_server_url)
+}

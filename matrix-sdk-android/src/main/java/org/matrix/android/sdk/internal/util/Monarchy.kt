@@ -26,7 +26,7 @@ internal suspend fun <T> Monarchy.awaitTransaction(transaction: suspend (realm: 
     return awaitTransaction(realmConfiguration, transaction)
 }
 
-fun <T : RealmModel> Monarchy.fetchCopied(query: (Realm) -> T?): T? {
+internal fun <T : RealmModel> Monarchy.fetchCopied(query: (Realm) -> T?): T? {
     val ref = AtomicReference<T>()
     doWithRealm { realm ->
         val result = query.invoke(realm)?.let {
@@ -37,7 +37,7 @@ fun <T : RealmModel> Monarchy.fetchCopied(query: (Realm) -> T?): T? {
     return ref.get()
 }
 
-fun <U, T : RealmModel> Monarchy.fetchCopyMap(query: (Realm) -> T?, map: (T, realm: Realm) -> U): U? {
+internal fun <U, T : RealmModel> Monarchy.fetchCopyMap(query: (Realm) -> T?, map: (T, realm: Realm) -> U): U? {
     val ref = AtomicReference<U?>()
     doWithRealm { realm ->
         val result = query.invoke(realm)?.let {

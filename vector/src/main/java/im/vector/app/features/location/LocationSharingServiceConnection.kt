@@ -34,6 +34,7 @@ class LocationSharingServiceConnection @Inject constructor(
 
     private var callback: Callback? = null
     private var isBound = false
+    private var locationSharingService: LocationSharingService? = null
 
     fun bind(callback: Callback) {
         this.callback = callback
@@ -51,13 +52,19 @@ class LocationSharingServiceConnection @Inject constructor(
         callback = null
     }
 
+    fun stopLiveLocationSharing(roomId: String) {
+        locationSharingService?.stopSharingLocation(roomId)
+    }
+
     override fun onServiceConnected(className: ComponentName, binder: IBinder) {
+        locationSharingService = (binder as LocationSharingService.LocalBinder).getService()
         isBound = true
         callback?.onLocationServiceRunning()
     }
 
     override fun onServiceDisconnected(className: ComponentName) {
         isBound = false
+        locationSharingService = null
         callback?.onLocationServiceStopped()
     }
 }

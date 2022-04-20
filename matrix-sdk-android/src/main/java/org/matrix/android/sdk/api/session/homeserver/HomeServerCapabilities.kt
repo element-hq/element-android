@@ -54,7 +54,7 @@ data class HomeServerCapabilities(
         /**
          * True if the home server support threading
          */
-        var canUseThreading: Boolean = false
+        val canUseThreading: Boolean = false
 ) {
 
     enum class RoomCapabilitySupport {

@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.olm
 
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
@@ -23,7 +24,6 @@ import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForUsersAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 
 internal class MXOlmEncryption(

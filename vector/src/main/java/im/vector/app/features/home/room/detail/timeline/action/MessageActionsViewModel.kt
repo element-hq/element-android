@@ -452,6 +452,10 @@ class MessageActionsViewModel @AssistedInject constructor(
                                  actionPermissions: ActionPermissions): Boolean {
         // We let reply in thread visible even if threads are not enabled, with an enhanced flow to attract users
 //        if (!vectorPreferences.areThreadMessagesEnabled()) return false
+        // Disable beta prompt if the homeserver do not support threads
+        if (!vectorPreferences.areThreadMessagesEnabled() &&
+                !session.getHomeServerCapabilities().canUseThreading) return false
+
         if (initialState.isFromThreadTimeline) return false
         if (event.root.isThread()) return false
         if (event.root.getClearType() != EventType.MESSAGE &&

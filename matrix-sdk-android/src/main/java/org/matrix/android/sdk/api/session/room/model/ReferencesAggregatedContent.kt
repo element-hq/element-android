@@ -17,7 +17,7 @@ package org.matrix.android.sdk.api.session.room.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.crypto.VerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 
 /**
  * Contains an aggregated summary info of the references.

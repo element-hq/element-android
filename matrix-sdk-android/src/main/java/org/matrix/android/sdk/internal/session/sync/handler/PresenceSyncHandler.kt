@@ -31,26 +31,24 @@ import javax.inject.Inject
 internal class PresenceSyncHandler @Inject constructor(private val matrixConfiguration: MatrixConfiguration) {
 
     fun handle(realm: Realm, presenceSyncResponse: PresenceSyncResponse?) {
-        if (matrixConfiguration.presenceSyncEnabled) {
-            presenceSyncResponse?.events
-                    ?.filter { event -> event.type == EventType.PRESENCE }
-                    ?.forEach { event ->
-                        val content = event.getPresenceContent() ?: return@forEach
-                        val userId = event.senderId ?: return@forEach
-                        val userPresenceEntity = UserPresenceEntity(
-                                userId = userId,
-                                lastActiveAgo = content.lastActiveAgo,
-                                statusMessage = content.statusMessage,
-                                isCurrentlyActive = content.isCurrentlyActive,
-                                avatarUrl = content.avatarUrl,
-                                displayName = content.displayName
-                        ).also {
-                            it.presence = content.presence
-                        }
-
-                        storePresenceToDB(realm, userPresenceEntity)
+        presenceSyncResponse?.events
+                ?.filter { event -> event.type == EventType.PRESENCE }
+                ?.forEach { event ->
+                    val content = event.getPresenceContent() ?: return@forEach
+                    val userId = event.senderId ?: return@forEach
+                    val userPresenceEntity = UserPresenceEntity(
+                            userId = userId,
+                            lastActiveAgo = content.lastActiveAgo,
+                            statusMessage = content.statusMessage,
+                            isCurrentlyActive = content.isCurrentlyActive,
+                            avatarUrl = content.avatarUrl,
+                            displayName = content.displayName
+                    ).also {
+                        it.presence = content.presence
                     }
-        }
+
+                    storePresenceToDB(realm, userPresenceEntity)
+                }
     }
 
     /**

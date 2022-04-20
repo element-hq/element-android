@@ -27,7 +27,7 @@ import androidx.core.content.getSystemService
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.PendingIntentCompat
 import im.vector.app.core.services.VectorSyncService
-import org.matrix.android.sdk.internal.session.sync.job.SyncService
+import org.matrix.android.sdk.api.session.sync.job.SyncService
 import timber.log.Timber
 
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {

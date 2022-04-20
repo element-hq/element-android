@@ -39,7 +39,7 @@ import im.vector.app.features.login.JavascriptResponse
 import im.vector.app.features.signout.soft.SoftLogoutAction
 import im.vector.app.features.signout.soft.SoftLogoutViewModel
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 import java.net.URLDecoder
 import javax.inject.Inject
@@ -204,7 +204,7 @@ class LoginWebFragment2 @Inject constructor(
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
-                        val adapter = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java)
+                        val adapter = MatrixJsonParser.getMoshi().adapter(JavascriptResponse::class.java)
                         javascriptResponse = adapter.fromJson(json)
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading() : fromJson failed")

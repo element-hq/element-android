@@ -17,6 +17,7 @@
 package im.vector.app.features.onboarding
 
 import im.vector.app.R
+import im.vector.app.core.extensions.andThen
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.onboarding.OnboardingAction.LoginOrRegister
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
@@ -24,7 +25,6 @@ import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.extensions.andThen
 import javax.inject.Inject
 
 class DirectLoginUseCase @Inject constructor(

@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class TypingEventContent(
+internal data class TypingEventContent(
         @Json(name = "user_ids")
         val typingUserIds: List<String> = emptyList()
 )

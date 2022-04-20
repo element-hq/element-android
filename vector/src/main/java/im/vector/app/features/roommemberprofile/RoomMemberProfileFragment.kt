@@ -47,6 +47,8 @@ import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.displayname.getBestName
@@ -57,7 +59,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorPr
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -131,11 +133,18 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.OnKickActionSuccess         -> Unit
                 is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess      -> Unit
                 is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
-                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> Unit
+                is RoomMemberProfileViewEvents.OnIgnoreActionSuccess       -> handleOnIgnoreActionSuccess(it)
                 is RoomMemberProfileViewEvents.OnInviteActionSuccess       -> Unit
             }
         }
         setupLongClicks()
+    }
+
+    private fun handleOnIgnoreActionSuccess(action: RoomMemberProfileViewEvents.OnIgnoreActionSuccess) {
+        if (action.shouldPerformInitialSync) {
+            // A user has been un-ignored, perform a initial sync
+            MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
+        }
     }
 
     private fun setupLongClicks() {

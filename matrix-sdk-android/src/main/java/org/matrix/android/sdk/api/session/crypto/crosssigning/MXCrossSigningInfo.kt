@@ -16,9 +16,6 @@
 
 package org.matrix.android.sdk.api.session.crypto.crosssigning
 
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
-import org.matrix.android.sdk.internal.crypto.model.KeyUsage
-
 data class MXCrossSigningInfo(
         val userId: String,
         val crossSigningKeys: List<CryptoCrossSigningKey>
