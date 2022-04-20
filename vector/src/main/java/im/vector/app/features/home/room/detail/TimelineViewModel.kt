@@ -821,7 +821,12 @@ class TimelineViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.joinRoom(room.roomId)
-                analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom(JoinedRoom.Trigger.Timeline))
+                val trigger = if (initialState.isInviteAlreadyAccepted) {
+                    JoinedRoom.Trigger.Invite
+                } else {
+                    JoinedRoom.Trigger.Timeline
+                }
+                analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom(trigger))
             } catch (throwable: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.Failure(throwable, showInDialog = true))
             }
