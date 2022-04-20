@@ -28,7 +28,9 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventCon
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
-import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
+import org.matrix.android.sdk.internal.crypto.MegolmSessionData
+import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
+import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -307,4 +309,44 @@ internal class MXMegolmDecryption(
         Timber.tag(loggerTag.value).v("ON NEW SESSION $sessionId - $senderKey")
         newSessionListener?.onNewSession(roomId, senderKey, sessionId)
     }
+    override fun shareKeysWithDevice(exportedKeys: MegolmSessionData?, deviceId: String, userId: String) {
+        exportedKeys ?: return
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            runCatching { deviceListManager.downloadKeys(listOf(userId), false) }
+                    .mapCatching {
+                        val deviceInfo = cryptoStore.getUserDevice(userId, deviceId)
+                        if (deviceInfo == null) {
+                            throw RuntimeException()
+                        } else {
+                            val devicesByUser = mapOf(userId to listOf(deviceInfo))
+                            val usersDeviceMap = ensureOlmSessionsForDevicesAction.handle(devicesByUser)
+                            val olmSessionResult = usersDeviceMap.getObject(userId, deviceId)
+                            if (olmSessionResult?.sessionId == null) {
+                                // no session with this device, probably because there
+                                // were no one-time keys.
+                                Timber.tag(loggerTag.value).e("no session with this device $deviceId, probably because there were no one-time keys.")
+                                return@mapCatching
+                            }
+                            Timber.tag(loggerTag.value).i("shareKeysWithDevice() : sharing session ${exportedKeys.sessionId} with device $userId:$deviceId")
+
+                            val payloadJson = mapOf(
+                                    "type" to EventType.FORWARDED_ROOM_KEY,
+                                    "content" to exportedKeys
+                            )
+
+                            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
+                            val sendToDeviceMap = MXUsersDevicesMap<Any>()
+                            sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
+                            Timber.tag(loggerTag.value).i("shareKeysWithDevice() : sending ${exportedKeys.sessionId} to $userId:$deviceId")
+                            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
+                            try {
+                                sendToDeviceTask.execute(sendToDeviceParams)
+                            } catch (failure: Throwable) {
+                                Timber.tag(loggerTag.value).e(failure, "shareKeysWithDevice() : Failed to send ${exportedKeys.sessionId} to $userId:$deviceId")
+                            }
+                        }
+                    }
+        }
+    }
+
 }

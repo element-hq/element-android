@@ -828,6 +828,18 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
+    override fun getInboundGroupSessions(roomId: String): List<OlmInboundGroupSessionWrapper2> {
+        return doWithRealm(realmConfiguration) {
+            it.where<OlmInboundGroupSessionEntity>()
+                    .findAll()
+                    .mapNotNull { inboundGroupSessionEntity ->
+                        inboundGroupSessionEntity.getInboundGroupSession()
+                    }.filter { inboundSession ->
+                        inboundSession.roomId == roomId
+                    }
+        }
+    }
+
     override fun removeInboundGroupSession(sessionId: String, senderKey: String) {
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
 

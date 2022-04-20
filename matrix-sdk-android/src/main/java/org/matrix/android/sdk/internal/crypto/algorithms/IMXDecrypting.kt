@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.algorithms
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 
 /**
@@ -43,4 +44,6 @@ internal interface IMXDecrypting {
      * @param defaultKeysBackupService the keys backup service
      */
     fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {}
+
+    fun shareKeysWithDevice(exportedKeys: MegolmSessionData?, deviceId: String, userId: String) {}
 }

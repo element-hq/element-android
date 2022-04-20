@@ -23,6 +23,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.realm.Realm
 import io.realm.RealmQuery
+import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
@@ -50,6 +51,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val inviteThreePidTask: InviteThreePidTask,
         private val membershipAdminTask: MembershipAdminTask,
         private val roomDataSource: RoomDataSource,
+        private val cryptoService: CryptoService,
         @UserId
         private val userId: String,
         private val queryStringValueProcessor: QueryStringValueProcessor
@@ -139,6 +141,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     override suspend fun invite(userId: String, reason: String?) {
+        cryptoService.sendSharedHistoryKeys(roomId, userId)
         val params = InviteTask.Params(roomId, userId, reason)
         inviteTask.execute(params)
     }

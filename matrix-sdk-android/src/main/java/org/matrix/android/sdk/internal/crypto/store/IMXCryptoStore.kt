@@ -67,6 +67,14 @@ internal interface IMXCryptoStore {
     fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2>
 
     /**
+     * Retrieve the known inbound group sessions for the specified room
+     *
+     * @param roomId The roomId that the sessions will be returned
+     * @return the list of all known group sessions, for the provided roomId
+     */
+    fun getInboundGroupSessions(roomId: String): List<OlmInboundGroupSessionWrapper2>
+
+    /**
      * @return true to unilaterally blacklist all unverified devices.
      */
     fun getGlobalBlacklistUnverifiedDevices(): Boolean
