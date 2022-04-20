@@ -125,7 +125,8 @@ internal class SecretShareManager @Inject constructor(
 
         if (userId != credentials.userId) {
             // secrets are only shared between our own devices
-            Timber.e("Ignoring secret share request from other users $userId")
+            Timber.tag(loggerTag.value)
+                    .e("Ignoring secret share request from other users $userId")
             return
         }
 
@@ -137,7 +138,8 @@ internal class SecretShareManager @Inject constructor(
 
         val device = cryptoStore.getUserDevice(credentials.userId, deviceId)
                 ?: return Unit.also {
-                    Timber.e("Received secret share request from unknown device $deviceId")
+                    Timber.tag(loggerTag.value)
+                            .e("Received secret share request from unknown device $deviceId")
                 }
 
         val isRequestingDeviceTrusted = device.isVerified
@@ -156,7 +158,8 @@ internal class SecretShareManager @Inject constructor(
                 else                       -> null
             }
             if (secretValue == null) {
-                Timber.i("The secret is unknown $secretName, passing to app layer")
+                Timber.tag(loggerTag.value)
+                        .i("The secret is unknown $secretName, passing to app layer")
                 val toList = synchronized(gossipingRequestListeners) { gossipingRequestListeners.toList() }
                 toList.onEach { listener ->
                     listener.onSecretShareRequest(request)
@@ -204,7 +207,8 @@ internal class SecretShareManager @Inject constructor(
                         .e(failure, "failed to send shared secret $secretName to ${device.shortDebugString()}")
             }
         } else {
-            Timber.d(" Received secret share request from un-authorised device ${device.deviceId}")
+            Timber.tag(loggerTag.value)
+                    .d(" Received secret share request from un-authorised device ${device.deviceId}")
         }
     }
 

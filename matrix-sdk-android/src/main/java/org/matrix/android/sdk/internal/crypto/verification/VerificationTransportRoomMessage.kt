@@ -152,7 +152,7 @@ internal class VerificationTransportRoomMessage(
                     val params = SendVerificationMessageTask.Params(event)
                     sendVerificationMessageTask.executeRetry(params, 5)
                 } catch (failure: Throwable) {
-                    Timber.w("")
+                    Timber.w(failure, "Failed to cancel verification transaction")
                 }
             }
         }
@@ -177,7 +177,8 @@ internal class VerificationTransportRoomMessage(
                     val params = SendVerificationMessageTask.Params(event)
                     sendVerificationMessageTask.executeRetry(params, 5)
                 } catch (failure: Throwable) {
-                    Timber.w("")
+                    Timber.w(failure, "Failed to complete (done) verification")
+                    // should we call onDone?
                 } finally {
                     onDone?.invoke()
                 }

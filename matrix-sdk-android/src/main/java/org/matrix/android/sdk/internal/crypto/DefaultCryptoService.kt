@@ -472,7 +472,7 @@ internal class DefaultCryptoService @Inject constructor(
                         outgoingKeyRequestManager.requireProcessAllPendingKeyRequests()
                     } else {
                         Timber.tag(loggerTag.value)
-                                .w("Don't process key requests yet as their might be more to_device to catchup")
+                                .w("Don't process key requests yet as there might be more to_device to catchup")
                     }
                 } catch (failure: Throwable) {
                     // just for safety but should not throw
@@ -1289,8 +1289,8 @@ internal class DefaultCryptoService @Inject constructor(
                 loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
             } catch (failure: Throwable) {
                 Timber.tag(loggerTag.value).e("prepareToEncrypt() : Failed to load room members")
-//                callback.onFailure(failure)
-//                return@launch
+                // we probably shouldn't block sending on that (but questionable)
+                // but some members won't be able to decrypt
             }
 
             val userIds = getRoomUserIds(roomId)

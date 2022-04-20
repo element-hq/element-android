@@ -328,14 +328,6 @@ internal class MXOlmDevice @Inject constructor(
                 Timber.tag(loggerTag.value).e(e, "## createInboundSession() : removeOneTimeKeys failed")
             }
 
-//            Timber.tag(loggerTag.value).v("## createInboundSession() : ciphertext: $ciphertext.")
-//            try {
-//                val sha256 = olmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))
-//                Timber.tag(loggerTag.value).v("## createInboundSession() :ciphertext: SHA256: $sha256")
-//            } catch (e: Exception) {
-//                Timber.tag(loggerTag.value).e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
-//            }
-
             val olmMessage = OlmMessage()
             olmMessage.mCipherText = ciphertext
             olmMessage.mType = messageType.toLong()

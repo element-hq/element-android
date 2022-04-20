@@ -113,7 +113,7 @@ internal class OutgoingKeyRequestManager @Inject constructor(
                 mapOf(
                         myUserId to listOf("*"),
 
-                        // TODO we might not have deviceId in the future due to https://github.com/matrix-org/matrix-spec-proposals/pull/3700
+                        // We might not have deviceId in the future due to https://github.com/matrix-org/matrix-spec-proposals/pull/3700
                         // so in this case query to all
                         sender to listOf(senderDevice ?: "*")
                 )
@@ -136,7 +136,6 @@ internal class OutgoingKeyRequestManager @Inject constructor(
             tryOrNull {
                 val megolmVersion = it.read()
                 if (megolmVersion != 3) return@tryOrNull null
-                /** Int tag */
                 /** Int tag */
                 if (it.read() != 8) return@tryOrNull null
                 it.read()
