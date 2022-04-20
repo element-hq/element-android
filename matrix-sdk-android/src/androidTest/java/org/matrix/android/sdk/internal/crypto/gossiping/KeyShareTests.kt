@@ -31,6 +31,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.crypto.OutgoingRoomKeyRequestState
+import org.matrix.android.sdk.api.session.crypto.RequestResult
 import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
@@ -43,7 +44,6 @@ import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.internal.crypto.RequestResult
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -172,8 +172,10 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Mark the device as trusted
-        aliceSession.cryptoService().setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
-                aliceSession2.sessionParams.deviceId ?: "")
+        aliceSession.cryptoService().setDeviceVerification(
+                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
+                aliceSession2.sessionParams.deviceId ?: ""
+        )
 
         // Re request
         aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
@@ -252,7 +254,8 @@ class KeyShareTests : InstrumentedTest {
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 val outgoing = aliceNewSession.cryptoService().getOutgoingRoomKeyRequests().firstOrNull { it.sessionId == sentEventMegolmSession }
-                val ownDeviceReply = outgoing?.results?.firstOrNull { it.userId == aliceSession.myUserId && it.fromDevice == aliceSession.sessionParams.deviceId }
+                val ownDeviceReply =
+                        outgoing?.results?.firstOrNull { it.userId == aliceSession.myUserId && it.fromDevice == aliceSession.sessionParams.deviceId }
                 ownDeviceReply != null && ownDeviceReply.result is RequestResult.Success
             }
         }
@@ -350,7 +353,8 @@ class KeyShareTests : InstrumentedTest {
                     Log.v("TEST", "=========================")
                 }
                 val outgoing = aliceNewSession.cryptoService().getOutgoingRoomKeyRequests().firstOrNull { it.sessionId == sentEventMegolmSession }
-                val ownDeviceReply = outgoing?.results?.firstOrNull { it.userId == aliceSession.myUserId && it.fromDevice == aliceSession.sessionParams.deviceId }
+                val ownDeviceReply =
+                        outgoing?.results?.firstOrNull { it.userId == aliceSession.myUserId && it.fromDevice == aliceSession.sessionParams.deviceId }
                 val result = ownDeviceReply?.result
                 result != null && result is RequestResult.Success && result.chainIndex == 0
             }
@@ -455,7 +459,8 @@ class KeyShareTests : InstrumentedTest {
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 val outgoing = aliceNewSession.cryptoService().getOutgoingRoomKeyRequests().firstOrNull { it.sessionId == sentEventMegolmSession }
-                val ownDeviceReply = outgoing?.results?.firstOrNull { it.userId == aliceSession.myUserId && it.fromDevice == aliceSession.sessionParams.deviceId }
+                val ownDeviceReply =
+                        outgoing?.results?.firstOrNull { it.userId == aliceSession.myUserId && it.fromDevice == aliceSession.sessionParams.deviceId }
                 val result = ownDeviceReply?.result
                 result != null && result is RequestResult.Success && result.chainIndex == 0
             }
