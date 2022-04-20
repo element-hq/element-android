@@ -63,7 +63,6 @@ class RoomPreviewViewModel @AssistedInject constructor(
         // Observe joined room (from the sync)
         observeRoomSummary()
         observeMembershipChanges()
-
         if (initialState.fromEmailInvite != null) {
             setState {
                 copy(peekingState = Loading())
