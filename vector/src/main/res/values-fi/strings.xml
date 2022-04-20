@@ -42,7 +42,7 @@
     <string name="initial_sync_start_importing_account">Alkusynkronointi:
 \nTuodaan tiliä…</string>
     <string name="initial_sync_start_importing_account_crypto">Alkusynkronointi:
-\nTuodaan kryptoa</string>
+\nTuodaan krypto</string>
     <string name="initial_sync_start_importing_account_rooms">Alkusynkronointi:
 \nTuodaan huoneita</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Alkusynkronointi:
@@ -267,7 +267,7 @@
     <string name="action_remove">Poista</string>
     <string name="action_join">Liity</string>
     <string name="action_reject">Hylkää</string>
-    <string name="room_jump_to_first_unread">Siirry ensimmäiseen lukemattomaan viestiin.</string>
+    <string name="room_jump_to_first_unread">Siirry lukemattomaan</string>
     <string name="room_participants_leave_prompt_title">Poistu huoneesta</string>
     <string name="room_participants_leave_prompt_msg">Haluatko varmasti poistua huoneesta?</string>
     <string name="room_participants_header_direct_chats">YKSITYISKESKUSTELUT</string>
@@ -516,7 +516,7 @@
     <string name="settings_call_ringtone_use_app_ringtone">Käytä ${app_name}in oletussoittoääntä saapuville puheluille</string>
     <string name="settings_call_ringtone_title">Saapuvien puheluiden soittoääni</string>
     <string name="video_call_in_progress">Videopuhelu menossa…</string>
-    <string name="list_members">Käyttäjälista</string>
+    <string name="list_members">Jäsenet</string>
     <plurals name="room_title_members">
         <item quantity="one">yksi jäsen</item>
         <item quantity="other">%d jäsentä</item>
@@ -1562,7 +1562,7 @@
     <string name="space_leave_prompt_msg_private">Et voi liittyä uudelleen, ellei sinua kutsuta uudelleen.</string>
     <string name="space_leave_prompt_msg_only_you">Olet ainoa henkilö täällä. Jos poistut, kukaan ei voi liittyä tänne tulevaisuudessa, et edes sinä.</string>
     <string name="space_leave_prompt_msg_with_name">Haluatko varmasti poistua avaruudesta %s\?</string>
-    <string name="leave_space">Poistu avaruudesta</string>
+    <string name="leave_space">Poistu</string>
     <string name="space_add_child_title">Lisää huoneita</string>
     <string name="space_explore_activity_title">Selaa huoneita</string>
     <plurals name="space_people_you_know">
@@ -2053,4 +2053,54 @@
         <item quantity="other">%1$s lisäsi tälle huoneelle vaihtoehtoiset osoitteet %2$s.</item>
     </plurals>
     <string name="room_error_access_unauthorized">Sinulla ei ole lupaa liittyä tähän huoneeseen</string>
+    <string name="room_message_autocomplete_users">Käyttäjät</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d lisää</item>
+        <item quantity="other">%1$d lisää</item>
+    </plurals>
+    <string name="tooltip_attachment_file">Lähetä tiedosto</string>
+    <string name="location_share_live_stop">Pysäytä</string>
+    <string name="a11y_location_share_option_pinned_icon">Jaa tämä sijainti</string>
+    <string name="location_share_option_pinned">Jaa tämä sijainti</string>
+    <string name="a11y_location_share_option_user_current_icon">Jaa nykyinen sijaintini</string>
+    <string name="location_share_option_user_current">Jaa nykyinen sijaintini</string>
+    <string name="restart_the_application_to_apply_changes">Käynnistä sovellus uudelleen, jotta muutos tulee voimaan.</string>
+    <string name="space_add_existing_rooms">Lisää olemassa olevia huoneita ja avaruuksia</string>
+    <string name="dont_leave_any">Älä poistu mistään huoneesta ja avaruudesta</string>
+    <string name="leave_all_rooms_and_spaces">Poistu kaikista huoneista ja avaruuksista</string>
+    <string name="use_latest_app">Käytä ${app_name}in uusinta versiota muilla laitteillasi:</string>
+    <string name="ftue_personalize_skip_this_step">Ohita tämä vaihe</string>
+    <string name="ftue_personalize_submit">Tallenna ja jatka</string>
+    <string name="ftue_personalize_complete_subtitle">Asetukset on tallennettu.</string>
+    <string name="ftue_personalize_complete_title">Kaikki valmista!</string>
+    <string name="ftue_personalize_lets_go">Menoksi</string>
+    <string name="ftue_profile_picture_subtitle">Voit vaihtaa tämän milloin tahansa.</string>
+    <string name="ftue_profile_picture_title">Lisää profiilikuva</string>
+    <string name="ftue_display_name_entry_footer">Voit vaihtaa tämän myöhemmin</string>
+    <string name="ftue_display_name_entry_title">Näyttönimi</string>
+    <string name="ftue_display_name_subtitle">Tämä näytetään, kun lähetät viestejä.</string>
+    <string name="ftue_display_name_title">Valitse näyttönimi</string>
+    <string name="ftue_account_created_subtitle">Tilisi %s on luotu.</string>
+    <string name="ftue_account_created_congratulations_title">Onnittelut!</string>
+    <string name="ftue_account_created_personalize">Personoi profiili</string>
+    <string name="ftue_auth_use_case_skip_partial">ohittaa tämän kysymyksen</string>
+    <string name="ftue_auth_use_case_skip">Ei varmuutta vielä\? Voit %s</string>
+    <string name="settings_discovery_no_policy_provided">Identiteettipalvelin ei tarjoa käytäntöä</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Piilota identiteettipalvelimen käytäntö</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Näytä identiteettipalvelimen käytäntö</string>
+    <string name="error_jitsi_join_conf">Valitettavasti konfrenssiin liityttäessä ilmeni virhe</string>
+    <string name="legals_no_policy_provided">Tämä palvelin ei tarjoa mitään käytäntöä.</string>
+    <string name="legals_identity_server_title">Identiteettipalvelimesi käytäntö</string>
+    <string name="legals_home_server_title">Kotipalvelimesi käytäntö</string>
+    <string name="legals_application_title">${app_name}-käytäntö</string>
+    <string name="action_thread_copy_link_to_thread">Kopioi linkki ketjuun</string>
+    <string name="action_disable">Poista käytöstä</string>
+    <string name="preference_system_settings">Järjestelmän asetukset</string>
+    <string name="preference_help_summary">Apua ${app_name}in käyttöön</string>
+    <string name="preference_root_legals">Lainopilliset asiat</string>
+    <string name="analytics_opt_in_content_link">tästä</string>
+    <string name="analytics_opt_in_content">Auta meitä tunnistamaan mahdollisia ongelmia ja parantamaan ${app_name}iä jakamalla anonyymia käyttödataa. Ymmärtääksemme miten ihmiset käyttävät useita laitteita, luomme satunnaisen tunnisteen, joka jaetaan kaikkien laitteidesi kesken.
+\n
+\nLue käyttöehdot %s.</string>
+    <string name="analytics_opt_in_title">Auta parantamaan ${app_name}iä</string>
 </resources>

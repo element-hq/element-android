@@ -1959,7 +1959,7 @@
 \nRiprova più tardi, o chiedi a un amministratore della stanza di controllare se hai l\'accesso.</string>
     <string name="join_anyway">Unisciti comunque</string>
     <string name="join_space">Unisciti a uno Spazio</string>
-    <string name="create_space">Crea Spazio</string>
+    <string name="create_space">Crea spazio</string>
     <string name="skip_for_now">Per il momento, salta</string>
     <string name="share_space_link_message">Unisciti al mio Spazio %1$s %2$s</string>
     <string name="invite_just_to_this_room_desc">Non faranno parte di %s</string>
@@ -1998,7 +1998,7 @@
     <string name="create_spaces_choose_type_label">Che tipo di Spazio vuoi creare\?</string>
     <string name="your_private_space">Il tuo Spazio privato</string>
     <string name="your_public_space">Il tuo Spazio pubblico</string>
-    <string name="add_space">Aggiungi Spazio</string>
+    <string name="add_space">Aggiungi spazio</string>
     <string name="command_description_leave_room">Esci dalla stanza con un ID (o dalla stanza attuale se vuota)</string>
     <string name="command_description_join_space">Unisciti allo Spazio con un ID</string>
     <string name="command_description_create_space">Crea uno Spazio</string>
@@ -2429,4 +2429,23 @@
 \n
 \nSarà una transizione una-tantum, dato che le conversazioni ora sono parte delle specifiche di Matrix.</string>
     <string name="threads_notice_migration_title">I messaggi in conversazioni entrano in beta 🎉</string>
+    <string name="ftue_account_created_take_me_home">Portami a casa</string>
+    <string name="live_location_sharing_notification_description">Stai condividendo la posizione</string>
+    <string name="live_location_sharing_notification_title">Posizione in tempo reale di ${app_name}</string>
+    <string name="error_forbidden_digits_only_username">L\'homeserver non accetta nomi utente con solo numeri.</string>
+    <string name="ftue_personalize_skip_this_step">Salta questo passo</string>
+    <string name="ftue_personalize_submit">Salva e continua</string>
+    <string name="ftue_personalize_complete_subtitle">Le tue preferenze sono state salvate.</string>
+    <string name="ftue_personalize_complete_title">Tutto pronto!</string>
+    <string name="ftue_personalize_lets_go">Andiamo</string>
+    <string name="ftue_profile_picture_subtitle">Puoi cambiarla in qualsiasi momento.</string>
+    <string name="ftue_profile_picture_title">Aggiungi un\'immagine del profilo</string>
+    <string name="ftue_display_name_entry_footer">Puoi cambiarlo in seguito</string>
+    <string name="ftue_display_name_entry_title">Nome da mostrare</string>
+    <string name="ftue_display_name_subtitle">Verrà mostrato quando invii messaggi.</string>
+    <string name="ftue_display_name_title">Scegli un nome da mostrare</string>
+    <string name="ftue_account_created_subtitle">Il tuo account %s è stato creato.</string>
+    <string name="ftue_account_created_congratulations_title">Congratulazioni!</string>
+    <string name="ftue_account_created_personalize">Personalizza profilo</string>
+    <string name="action_disable">Disattiva</string>
 </resources>

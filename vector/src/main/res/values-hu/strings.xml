@@ -2438,4 +2438,23 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="a11y_location_share_locate_button">Ugrás a jelenlegi pozícióra</string>
     <string name="a11y_location_share_pin_on_map">Kiválasztott hely rögzítése a térképen</string>
     <string name="threads_notice_migration_title">Üzenetszálak lassan béta állapotba kerülnek 🎉</string>
+    <string name="live_location_sharing_notification_description">Helymeghatározás folyamatban</string>
+    <string name="live_location_sharing_notification_title">${app_name} Folyamatos helymeghatározás</string>
+    <string name="error_forbidden_digits_only_username">A matrix szerver nem fogad el olyan felhasználói nevet ami csak számokból áll.</string>
+    <string name="ftue_personalize_skip_this_step">Lépés kihagyása</string>
+    <string name="ftue_personalize_submit">Mentés és tovább</string>
+    <string name="ftue_personalize_complete_subtitle">A beállítások elmentve.</string>
+    <string name="ftue_personalize_complete_title">Minden kész!</string>
+    <string name="ftue_personalize_lets_go">Gyerünk</string>
+    <string name="ftue_profile_picture_subtitle">Bármikor megváltoztatható.</string>
+    <string name="ftue_profile_picture_title">Profilkép hozzáadása</string>
+    <string name="ftue_display_name_entry_footer">Ezt később meg lehet változtatni</string>
+    <string name="ftue_display_name_entry_title">Megjelenítendő név</string>
+    <string name="ftue_display_name_subtitle">Ez fog megjelenni amikor üzenetet küldesz.</string>
+    <string name="ftue_display_name_title">Válassz egy megjelenítési nevet</string>
+    <string name="ftue_account_created_subtitle">A fiókod elkészült: %s.</string>
+    <string name="ftue_account_created_congratulations_title">Gratulálunk!</string>
+    <string name="ftue_account_created_take_me_home">Vigyél haza</string>
+    <string name="ftue_account_created_personalize">Profil személyre szabása</string>
+    <string name="action_disable">Tiltás</string>
 </resources>

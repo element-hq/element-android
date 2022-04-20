@@ -1247,7 +1247,7 @@
     <string name="search_no_results">نتیجه‌ای در پی نداشت</string>
     <string name="search_banned_user_hint">فیلترکردن کاربران مسدود شده</string>
     <plurals name="room_details_selected">
-        <item quantity="one">%d مورد</item>
+        <item quantity="one">۱ مورد</item>
         <item quantity="other">%d مورد</item>
     </plurals>
     <string name="ssl_only_accept">تنها اگر مدیر کارساز، اثرانگشتی منتشر کرده که با بالایی مطابق است، بپذیرید.</string>
@@ -2430,4 +2430,31 @@
     <string name="location_share_option_user_current">هم‌رسانی مکان کنونیم</string>
     <string name="a11y_location_share_locate_button">بزرگ‌نمایی به مکان کنونی</string>
     <string name="a11y_location_share_pin_on_map">سنجاق مکان گزیده روی نقشه</string>
+    <string name="threads_notice_migration_message">داریم به ارائه یک بتای عمومی برای رشته‌ها نزدیک‌تر می‌شویم.
+\n
+\nهمین‌طور که برایش آماده می‌شویم، نیاز به انجام چند تغییر است: رشته‌هایی که پیش از این ایجاد شده‌اند،به شکل پاسخ‌های عادی نشان داده خواهند شد.
+\n
+\nاین کار، یک تبدیل یک باره است؛ چرا که رشته‌ها اکنون بخشی از مشخّصات ماتریکسند.</string>
+    <string name="threads_notice_migration_title">رشته‌ها به بتا می رسند 🎉</string>
+    <string name="live_location_sharing_notification_description">هم‌رساین مکان در حال انجام است</string>
+    <string name="live_location_sharing_notification_title">مکان زندهٔ ${app_name}</string>
+    <string name="location_in_background_missing_permission_dialog_content">اگر می‌خواهید مکانتان را هم‌رسانی کنید، ${app_name} نیاز به دسترسی همیشگی مکان هنگام در پس‌زمینه بودن کاره دارد.
+\nفقط برای مدتی که برمی‌گزینید، به مکانتان دسترسی خواهیم داشت.</string>
+    <string name="error_forbidden_digits_only_username">کارساز خانگی، نام‌های کاربری فقط رقمی را نمی‌پذیرد.</string>
+    <string name="ftue_personalize_skip_this_step">پرش از این گام</string>
+    <string name="ftue_personalize_submit">ذخیره و ادامه</string>
+    <string name="ftue_personalize_complete_subtitle">ترجیحاتتان ذخیره شد.</string>
+    <string name="ftue_personalize_complete_title">همه‌چیز تنظیم شده!</string>
+    <string name="ftue_personalize_lets_go">بزن بریم</string>
+    <string name="ftue_profile_picture_subtitle">می‌توانید هرزمانی تغییرش دهید.</string>
+    <string name="ftue_display_name_title">گزینش نامی نمایشی</string>
+    <string name="ftue_profile_picture_title">افزودن یک تصویر نمایه</string>
+    <string name="ftue_display_name_entry_footer">می‌توانید بعدها تغییرش دهید</string>
+    <string name="ftue_display_name_entry_title">نام نمایشی</string>
+    <string name="ftue_display_name_subtitle">هنگامی که پیام می‌فرستید نشان داده خواهد شد.</string>
+    <string name="ftue_account_created_subtitle">حسابتان %s ایجاد شد.</string>
+    <string name="ftue_account_created_congratulations_title">تبریک!</string>
+    <string name="ftue_account_created_take_me_home">مرا به خانه ببر</string>
+    <string name="ftue_account_created_personalize">شخصی سازی نمایه</string>
+    <string name="action_disable">از کار انداختن</string>
 </resources>
