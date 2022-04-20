@@ -837,7 +837,9 @@
     <string name="room_participants_power_level_demote">Degradera</string>
     <string name="room_participants_action_ignore_title">Ignorera användare</string>
     <string name="room_participants_action_unignore_title">Avignorera användare</string>
-    <string name="room_participants_action_unignore_prompt_msg">Att avignorera den här användaren kommer att visa alla meddelanden från hen igen.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Att avignorera den här användaren kommer att visa alla meddelanden från dem igen.
+\n
+\nNotera att detta kräver en omstart av appen och kan ta en stund.</string>
     <string name="room_participants_action_cancel_invite_title">Avbryt inbjudan</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Är du säker på att du vill avbryta inbjudan för den här användaren\?</string>
     <string name="room_participants_remove_title">Kicka användaren</string>
@@ -2457,4 +2459,32 @@
     <string name="ftue_account_created_take_me_home">För mig hem</string>
     <string name="ftue_account_created_personalize">Anpassa profil</string>
     <string name="action_disable">Inaktivera</string>
+    <string name="location_share_live_started">Laddar realtidsposition…</string>
+    <string name="location_share_live_select_duration_option_3">8 timmar</string>
+    <string name="location_share_live_select_duration_option_2">1 timma</string>
+    <string name="location_share_live_select_duration_option_1">15 minuter</string>
+    <string name="location_share_live_select_duration_title">Dela din position i realtid under</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Kunde inte spela %1$s</string>
+    <string name="a11y_pause_audio_message">Pausa %1$s</string>
+    <string name="a11y_play_audio_message">Spela %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minuter och %2$d sekunder</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Delade sin position i realtid</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} är även perfekt för arbetet. Flera av världens mest säkra organisationer litar på den.</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_info">Trådar är ett work-in-progress med nya, spännande funktioner så som förbättrade notiser. Kom gärna med feedback!</string>
+    <string name="send_feedback_threads_title">Trådar Beta feedback</string>
+    <string name="give_feedback_threads">Ge feedback</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Med detta aktiverat så kommer du alltid se offline ut för andra, även om du är aktiv i appen.</string>
+    <string name="settings_presence_user_always_appears_offline">Offline-läge</string>
+    <string name="settings_presence">Närvaro</string>
+    <string name="threads_labs_enable_notice_message">Din hemserver stödjer för närvarande inte trådar, så denna funktionen kanske funkar dåligt. Vissa meddelanden i trådar kanske inte visas alltid. %sVill du ändå aktivera trådar\?</string>
+    <string name="threads_labs_enable_notice_title">Trådar beta</string>
+    <string name="threads_beta_enable_notice_message">Trådar hjälper till att hålla dina konversationer till ämnet och gör dem lättare att följa. %sFör att aktivera trådar måste appen ladda om. Detta kan ta lång tid för vissa konton.</string>
+    <string name="threads_beta_enable_notice_title">Trådar Beta</string>
+    <string name="action_learn_more">Läs mer</string>
+    <string name="action_try_it_out">Prova</string>
 </resources>
