@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-class MigrateAuthTo005(realm: DynamicRealm) : RealmMigrator(realm, 5) {
+internal class MigrateAuthTo005(realm: DynamicRealm) : RealmMigrator(realm, 5) {
 
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Update SessionParamsEntity to add LoginType")
