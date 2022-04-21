@@ -60,9 +60,10 @@ class SearchMessagesTest : InstrumentedTest {
     fun sendTextMessageAndSearchPartOfItUsingRoom() {
         doTest { cryptoTestData ->
             cryptoTestData.firstSession
-                    .getRoom(cryptoTestData.roomId)!!
+                    .searchService()
                     .search(
                             searchTerm = "lore",
+                            roomId = cryptoTestData.roomId,
                             limit = 10,
                             includeProfile = true,
                             afterLimit = 0,

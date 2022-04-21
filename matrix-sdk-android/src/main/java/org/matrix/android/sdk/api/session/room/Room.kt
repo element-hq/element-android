@@ -38,7 +38,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
 import org.matrix.android.sdk.api.session.room.version.RoomVersionService
-import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.util.Optional
 
@@ -83,26 +82,6 @@ interface Room :
      * A current snapshot of [RoomSummary] associated with the room
      */
     fun roomSummary(): RoomSummary?
-
-    /**
-     * Generic function to search a term in a room.
-     * Ref: https://matrix.org/docs/spec/client_server/latest#module-search
-     * @param searchTerm the term to search
-     * @param nextBatch the token that retrieved from the previous response. Should be provided to get the next batch of results
-     * @param orderByRecent if true, the most recent message events will return in the first places of the list
-     * @param limit the maximum number of events to return.
-     * @param beforeLimit how many events before the result are returned.
-     * @param afterLimit how many events after the result are returned.
-     * @param includeProfile requests that the server returns the historic profile information for the users that sent the events that were returned.
-     * @return The search result
-     */
-    suspend fun search(searchTerm: String,
-                       nextBatch: String?,
-                       orderByRecent: Boolean,
-                       limit: Int,
-                       beforeLimit: Int,
-                       afterLimit: Int,
-                       includeProfile: Boolean): SearchResult
 
     /**
      * Use this room as a Space, if the type is correct.

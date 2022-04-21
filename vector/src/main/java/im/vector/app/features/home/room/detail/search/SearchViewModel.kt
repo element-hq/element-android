@@ -35,7 +35,7 @@ import org.matrix.android.sdk.api.session.search.SearchResult
 
 class SearchViewModel @AssistedInject constructor(
         @Assisted private val initialState: SearchViewState,
-        session: Session
+        private val session: Session
 ) : VectorViewModel<SearchViewState, SearchAction, SearchViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
@@ -101,8 +101,9 @@ class SearchViewModel @AssistedInject constructor(
 
         currentTask = viewModelScope.launch {
             try {
-                val result = room.search(
+                val result = session.searchService().search(
                         searchTerm = state.searchTerm,
+                        roomId = initialState.roomId,
                         nextBatch = nextBatch,
                         orderByRecent = true,
                         beforeLimit = 0,

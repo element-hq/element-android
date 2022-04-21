@@ -41,7 +41,6 @@ import org.matrix.android.sdk.internal.session.room.timeline.DefaultTimelineServ
 import org.matrix.android.sdk.internal.session.room.typing.DefaultTypingService
 import org.matrix.android.sdk.internal.session.room.uploads.DefaultUploadsService
 import org.matrix.android.sdk.internal.session.room.version.DefaultRoomVersionService
-import org.matrix.android.sdk.internal.session.search.SearchTask
 import javax.inject.Inject
 
 internal interface RoomFactory {
@@ -71,7 +70,6 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                                                       private val roomAccountDataServiceFactory: DefaultRoomAccountDataService.Factory,
                                                       private val sendStateTask: SendStateTask,
                                                       private val viaParameterFinder: ViaParameterFinder,
-                                                      private val searchTask: SearchTask,
                                                       private val coroutineDispatchers: MatrixCoroutineDispatchers) :
         RoomFactory {
 
@@ -99,7 +97,6 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                 roomAccountDataService = roomAccountDataServiceFactory.create(roomId),
                 roomVersionService = roomVersionServiceFactory.create(roomId),
                 sendStateTask = sendStateTask,
-                searchTask = searchTask,
                 viaParameterFinder = viaParameterFinder,
                 coroutineDispatchers = coroutineDispatchers
         )
