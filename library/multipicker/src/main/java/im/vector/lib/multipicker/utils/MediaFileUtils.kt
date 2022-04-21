@@ -37,6 +37,6 @@ internal fun createTemporaryMediaFile(context: Context, mediaType: MediaType): F
     )
 }
 
-enum class MediaType {
+internal enum class MediaType {
     IMAGE, VIDEO
 }
