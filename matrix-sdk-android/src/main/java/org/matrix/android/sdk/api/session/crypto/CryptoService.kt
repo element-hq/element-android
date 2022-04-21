@@ -176,4 +176,9 @@ interface CryptoService {
      * send, in order to speed up sending of the message.
      */
     fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
+
+    /**
+     * Share existing inbound sessions with the provided userId devices
+     */
+    fun sendSharedHistoryKeys(roomId: String, userId: String)
 }

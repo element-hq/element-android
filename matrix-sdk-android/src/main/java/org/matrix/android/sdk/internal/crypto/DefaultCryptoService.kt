@@ -1334,7 +1334,23 @@ internal class DefaultCryptoService @Inject constructor(
             )
         }
     }
-
+    override fun sendSharedHistoryKeys(roomId: String, userId: String) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            val userDevices = cryptoStore.getUserDevices(userId)
+            userDevices?.forEach {
+                // Lets share our existing inbound sessions for every user device
+                val deviceId = it.key
+                val inboundSessions = cryptoStore.getInboundGroupSessions(roomId)
+                inboundSessions.forEach { inboundGroupSession ->
+                    // Share the session with the to userId with deviceId
+                    val exportedKeys = inboundGroupSession.exportKeys()
+                    val algorithm = exportedKeys?.algorithm
+                    val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, algorithm)
+                    decryptor?.shareKeysWithDevice(exportedKeys, deviceId, userId)
+                }
+            }
+        }
+    }
     /* ==========================================================================================
      * For test only
      * ========================================================================================== */
