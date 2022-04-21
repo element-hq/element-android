@@ -30,8 +30,12 @@ internal open class OlmInboundGroupSessionEntity(
         @PrimaryKey var primaryKey: String? = null,
         var sessionId: String? = null,
         var senderKey: String? = null,
+        var roomId: String? = null,
         // olmInboundGroupSessionData contains Json
         var olmInboundGroupSessionData: String? = null,
+        // Flag that indicates whether or not the current inboundSession will be shared to
+        // invited users to decrypt past messages
+        var sharedHistory: Boolean = false,
         // Indicate if the key has been backed up to the homeserver
         var backedUp: Boolean = false
 ) :

@@ -745,9 +745,13 @@ internal class RealmCryptoStore @Inject constructor(
                 if (sessionIdentifier != null) {
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, session.senderKey)
 
-                    val existing = realm.where<OlmInboundGroupSessionEntity>()
-                            .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
-                            .findFirst()
+                    val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
+                        primaryKey = key
+                        sessionId = sessionIdentifier
+                        senderKey = session.senderKey
+                        roomId = session.roomId
+                        putInboundGroupSession(session)
+                    }
 
                     if (existing != null) {
                         // we want to keep the existing backup status
@@ -831,11 +835,10 @@ internal class RealmCryptoStore @Inject constructor(
     override fun getInboundGroupSessions(roomId: String): List<OlmInboundGroupSessionWrapper2> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.ROOM_ID, roomId)
                     .findAll()
                     .mapNotNull { inboundGroupSessionEntity ->
                         inboundGroupSessionEntity.getInboundGroupSession()
-                    }.filter { inboundSession ->
-                        inboundSession.roomId == roomId
                     }
         }
     }
