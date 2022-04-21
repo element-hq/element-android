@@ -33,9 +33,9 @@ data class CreateSpaceState(
         val aliasManuallyModified: Boolean = false,
         val aliasVerificationTask: Async<Boolean> = Uninitialized,
         val nameInlineError: String? = null,
-        val defaultRooms: Map<Int, String?>? = null, /** Int: position in form */
-        val default3pidInvite: Map<Int, String?>? = null, /** Int: position in form */
-        val emailValidationResult: Map<Int, Boolean>? = null, /** Int: position in form */
+        val defaultRooms: Map<Int, String?>? = null, // Int: position in form
+        val default3pidInvite: Map<Int, String?>? = null, // Int: position in form
+        val emailValidationResult: Map<Int, Boolean>? = null, // Int: position in form
         val creationResult: Async<String> = Uninitialized,
         val canInviteByMail: Boolean = false
 ) : MavericksState {
