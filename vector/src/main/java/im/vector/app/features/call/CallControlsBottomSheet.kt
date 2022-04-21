@@ -68,7 +68,7 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
         }
 
         views.callControlsShareScreen.views.bottomSheetActionClickableZone.debouncedClicks {
-            callViewModel.handle(VectorCallViewActions.InitiateScreenSharing)
+            callViewModel.handle(VectorCallViewActions.ToggleScreenSharing)
             dismiss()
         }
     }
@@ -100,5 +100,6 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
             views.callControlsToggleHoldResume.leftIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_call_hold_action)
         }
         views.callControlsTransfer.isVisible = state.canOpponentBeTransferred
+        views.callControlsShareScreen.title = getString(if (state.isSharingScreen) R.string.call_stop_screen_sharing else R.string.call_start_screen_sharing)
     }
 }

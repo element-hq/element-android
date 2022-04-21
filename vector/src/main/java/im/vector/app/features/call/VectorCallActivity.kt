@@ -58,6 +58,7 @@ import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.webrtc.ScreenCaptureService
+import im.vector.app.features.call.webrtc.ScreenCaptureServiceConnection
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.displayname.getBestName
@@ -96,6 +97,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var screenCaptureServiceConnection: ScreenCaptureServiceConnection
 
     private val callViewModel: VectorCallViewModel by viewModel()
 
@@ -528,6 +530,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             }
             is VectorCallViewEvents.FailToTransfer                    -> showSnackbar(getString(R.string.call_transfer_failure))
             is VectorCallViewEvents.ShowScreenSharingPermissionDialog -> handleShowScreenSharingPermissionDialog()
+            is VectorCallViewEvents.StopScreenSharingService          -> handleStopScreenSharingService()
             else                                                      -> Unit
         }
     }
@@ -640,6 +643,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                         this,
                         Intent(this, ScreenCaptureService::class.java)
                 )
+                screenCaptureServiceConnection.bind()
             }
         }
     }
@@ -647,6 +651,12 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun handleShowScreenSharingPermissionDialog() {
         getSystemService<MediaProjectionManager>()?.let {
             navigator.openScreenSharingPermissionDialog(it.createScreenCaptureIntent(), screenSharingPermissionActivityResultLauncher)
+        }
+    }
+
+    private fun handleStopScreenSharingService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            screenCaptureServiceConnection.stopScreenCapturing()
         }
     }
 

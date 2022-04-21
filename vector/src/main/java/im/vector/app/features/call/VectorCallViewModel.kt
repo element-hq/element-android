@@ -256,7 +256,10 @@ class VectorCallViewModel @AssistedInject constructor(
 
     override fun handle(action: VectorCallViewActions) = withState { state ->
         when (action) {
-            VectorCallViewActions.EndCall                        -> call?.endCall()
+            VectorCallViewActions.EndCall                        -> {
+                call?.endCall()
+                _viewEvents.post(VectorCallViewEvents.StopScreenSharingService)
+            }
             VectorCallViewActions.AcceptCall                     -> {
                 setState {
                     copy(callState = Loading())
@@ -337,18 +340,35 @@ class VectorCallViewModel @AssistedInject constructor(
             VectorCallViewActions.TransferCall                   -> {
                 handleCallTransfer()
             }
-            is VectorCallViewActions.SwitchCall                  -> {
+            is VectorCallViewActions.SwitchCall          -> {
                 setState { VectorCallViewState(action.callArgs) }
                 setupCallWithCurrentState()
             }
-            is VectorCallViewActions.InitiateScreenSharing       -> {
-                _viewEvents.post(
-                        VectorCallViewEvents.ShowScreenSharingPermissionDialog
-                )
+            is VectorCallViewActions.ToggleScreenSharing -> {
+                handleToggleScreenSharing(state.isSharingScreen)
             }
-            is VectorCallViewActions.StartScreenSharing          -> {
-                call?.shareScreen()
+            is VectorCallViewActions.StartScreenSharing  -> {
+                call?.startSharingScreen()
+                setState {
+                    copy(isSharingScreen = true)
+                }
             }
+        }
+    }
+
+    private fun handleToggleScreenSharing(isSharingScreen: Boolean) {
+        if (isSharingScreen) {
+            call?.stopSharingScreen()
+            setState {
+                copy(isSharingScreen = false)
+            }
+            _viewEvents.post(
+                    VectorCallViewEvents.StopScreenSharingService
+            )
+        } else {
+            _viewEvents.post(
+                    VectorCallViewEvents.ShowScreenSharingPermissionDialog
+            )
         }
     }
 

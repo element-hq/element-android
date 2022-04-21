@@ -770,7 +770,11 @@ class WebRtcCall(
         return currentCaptureFormat
     }
 
-    fun shareScreen() {
+    fun startSharingScreen() {
+        // TODO. Will be handled within the next PR.
+    }
+
+    fun stopSharingScreen() {
         // TODO. Will be handled within the next PR.
     }
 
