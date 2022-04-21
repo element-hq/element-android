@@ -69,6 +69,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         observeThirdPartyInvites()
         observeRoomSummary()
         observePowerLevel()
+        observeIgnoredUsers()
     }
 
     private fun observeRoomMemberSummaries() {
@@ -145,6 +146,16 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         room.flow().liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE))
                 .execute { async ->
                     copy(threePidInvites = async)
+                }
+    }
+
+    private fun observeIgnoredUsers() {
+        session.flow()
+                .liveIgnoredUsers()
+                .execute { async ->
+                    copy(
+                            ignoredUserIds = async.invoke().orEmpty().map { it.userId }
+                    )
                 }
     }
 

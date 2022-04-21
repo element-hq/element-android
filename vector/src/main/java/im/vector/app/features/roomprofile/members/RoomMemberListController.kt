@@ -133,6 +133,7 @@ class RoomMemberListController @Inject constructor(
             }
             showPresence(true)
             userPresence(roomMember.userPresence)
+            ignoredUser(roomMember.userId in data.ignoredUserIds)
             powerLevelLabel(
                     span {
                         span(powerLabel) {
