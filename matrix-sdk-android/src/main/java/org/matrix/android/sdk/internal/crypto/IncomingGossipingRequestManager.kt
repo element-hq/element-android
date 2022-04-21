@@ -116,7 +116,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         Timber.i("## CRYPTO | GOSSIP onGossipingRequestEvent received type ${event.type} from user:${event.senderId}, content:$roomKeyShare")
         // val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
         when (roomKeyShare?.action) {
-            GossipingToDeviceObject.ACTION_SHARE_REQUEST -> {
+            GossipingToDeviceObject.ACTION_SHARE_REQUEST      -> {
                 if (event.getClearType() == EventType.REQUEST_SECRET) {
                     IncomingSecretShareRequest.fromEvent(event)?.let {
                         if (event.senderId == credentials.userId && it.deviceId == credentials.deviceId) {
@@ -346,7 +346,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         val isDeviceLocallyVerified = cryptoStore.getUserDevice(userId, deviceId)?.trustLevel?.isLocallyVerified()
 
         when (secretName) {
-            MASTER_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.master
+            MASTER_KEY_SSSS_NAME       -> cryptoStore.getCrossSigningPrivateKeys()?.master
             SELF_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.selfSigned
             USER_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.user
             KEYBACKUP_SECRET_SSSS_NAME -> cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey

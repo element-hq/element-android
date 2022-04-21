@@ -38,7 +38,7 @@ data class AccountDataViewState(
 
 class AccountDataViewModel @AssistedInject constructor(@Assisted initialState: AccountDataViewState,
                                                        private val session: Session) :
-    VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<AccountDataViewState, AccountDataAction, EmptyViewEvents>(initialState) {
 
     init {
         session.flow().liveUserAccountData(emptySet())

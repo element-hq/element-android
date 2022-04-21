@@ -40,7 +40,7 @@ data class GossipingEventsPaperTrailState(
 
 class GossipingEventsPaperTrailViewModel @AssistedInject constructor(@Assisted initialState: GossipingEventsPaperTrailState,
                                                                      private val session: Session) :
-    VectorViewModel<GossipingEventsPaperTrailState, EmptyAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<GossipingEventsPaperTrailState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
         refresh()

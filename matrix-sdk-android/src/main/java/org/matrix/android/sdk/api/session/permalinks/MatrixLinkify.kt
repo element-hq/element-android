@@ -55,7 +55,7 @@ object MatrixLinkify {
                             MatrixPatterns.isRoomId(url) ||
                             MatrixPatterns.isGroupId(url) ||
                             MatrixPatterns.isEventId(url)) {
-                        url = PermalinkService.MATRIX_TO_URL_BASE  + url
+                        url = PermalinkService.MATRIX_TO_URL_BASE + url
                     }
                     val span = MatrixPermalinkSpan(url, callback)
                     spannable.setSpan(span, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

@@ -39,7 +39,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,
         private val mxSession: Session,
         stringProvider: StringProvider) :
-    VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
+        VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {

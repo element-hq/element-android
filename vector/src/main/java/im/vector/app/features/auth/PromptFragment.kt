@@ -65,7 +65,7 @@ class PromptFragment : VectorBaseFragment<FragmentReauthConfirmBinding>() {
 
     override fun invalidate() = withState(viewModel) {
         when (it.flowType) {
-            LoginFlowTypes.SSO -> {
+            LoginFlowTypes.SSO      -> {
                 views.passwordFieldTil.isVisible = false
                 views.reAuthConfirmButton.text = getString(R.string.auth_login_sso)
             }

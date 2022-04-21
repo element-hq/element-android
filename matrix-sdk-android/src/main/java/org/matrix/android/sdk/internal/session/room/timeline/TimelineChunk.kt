@@ -49,22 +49,23 @@ import java.util.concurrent.atomic.AtomicBoolean
  * It does mainly listen to the db timeline events.
  * It also triggers pagination to the server when needed, or dispatch to the prev or next chunk if any.
  */
-internal class TimelineChunk(private val chunkEntity: ChunkEntity,
-                             private val timelineSettings: TimelineSettings,
-                             private val roomId: String,
-                             private val timelineId: String,
-                             private val fetchThreadTimelineTask: FetchThreadTimelineTask,
-                             private val eventDecryptor: TimelineEventDecryptor,
-                             private val paginationTask: PaginationTask,
-                             private val realmConfiguration: RealmConfiguration,
-                             private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-                             private val timelineEventMapper: TimelineEventMapper,
-                             private val uiEchoManager: UIEchoManager?,
-                             private val threadsAwarenessHandler: ThreadsAwarenessHandler,
-                             private val lightweightSettingsStorage: LightweightSettingsStorage,
-                             private val initialEventId: String?,
-                             private val onBuiltEvents: (Boolean) -> Unit,
-                             private val onEventsDeleted: () -> Unit,
+internal class TimelineChunk(
+        private val chunkEntity: ChunkEntity,
+        private val timelineSettings: TimelineSettings,
+        private val roomId: String,
+        private val timelineId: String,
+        private val fetchThreadTimelineTask: FetchThreadTimelineTask,
+        private val eventDecryptor: TimelineEventDecryptor,
+        private val paginationTask: PaginationTask,
+        private val realmConfiguration: RealmConfiguration,
+        private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+        private val timelineEventMapper: TimelineEventMapper,
+        private val uiEchoManager: UIEchoManager?,
+        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
+        private val initialEventId: String?,
+        private val onBuiltEvents: (Boolean) -> Unit,
+        private val onEventsDeleted: () -> Unit,
 ) {
 
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)

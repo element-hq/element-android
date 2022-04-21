@@ -28,7 +28,7 @@ import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
 import javax.inject.Inject
 
 class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor() :
-    VectorSettingsBaseFragment() {
+        VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.settings_notification_advanced
 

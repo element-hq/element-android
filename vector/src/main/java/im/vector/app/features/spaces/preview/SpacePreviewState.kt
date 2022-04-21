@@ -22,8 +22,8 @@ import com.airbnb.mvrx.Uninitialized
 
 data class SpacePreviewState(
         val idOrAlias: String,
-        val name: String?  = null,
-        val topic: String?  = null,
+        val name: String? = null,
+        val topic: String? = null,
         val avatarUrl: String? = null,
         val spaceInfo: Async<ChildInfo> = Uninitialized,
         val childInfoList: Async<List<ChildInfo>> = Uninitialized,

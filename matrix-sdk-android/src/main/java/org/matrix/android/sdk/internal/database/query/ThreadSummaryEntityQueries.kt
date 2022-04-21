@@ -39,9 +39,11 @@ internal fun ThreadSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: Str
         this.rootThreadEventId = rootThreadEventId
     }
 }
+
 internal fun ThreadSummaryEntity.Companion.getOrNull(realm: Realm, roomId: String, rootThreadEventId: String): ThreadSummaryEntity? {
     return where(realm, roomId, rootThreadEventId).findFirst()
 }
+
 internal fun RealmList<ThreadSummaryEntity>.find(rootThreadEventId: String): ThreadSummaryEntity? {
     return this.where()
             .equalTo(ThreadSummaryEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)

@@ -31,7 +31,7 @@ import javax.inject.Inject
  */
 class TestPlayServices @Inject constructor(private val context: FragmentActivity,
                                            private val stringProvider: StringProvider) :
-    TroubleshootTest(R.string.settings_troubleshoot_test_play_services_title) {
+        TroubleshootTest(R.string.settings_troubleshoot_test_play_services_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val apiAvailability = GoogleApiAvailability.getInstance()
