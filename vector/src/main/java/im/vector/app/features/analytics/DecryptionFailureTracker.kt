@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
