@@ -14,6 +14,15 @@ buildscript {
     }
 }
 
+dokkaHtml {
+    dokkaSourceSets {
+        configureEach {
+            // Emit warnings about not documented members.
+            reportUndocumented.set(true)
+        }
+    }
+}
+
 android {
     testOptions.unitTests.includeAndroidResources = true
 
