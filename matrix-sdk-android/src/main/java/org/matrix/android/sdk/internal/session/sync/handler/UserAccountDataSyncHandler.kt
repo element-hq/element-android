@@ -43,10 +43,10 @@ import org.matrix.android.sdk.internal.database.model.PushRulesEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntity
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.deleteOnCascade
+import org.matrix.android.sdk.internal.database.query.findAllFrom
 import org.matrix.android.sdk.internal.database.query.getDirectRooms
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
@@ -206,10 +206,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         // See https://spec.matrix.org/latest/client-server-api/#client-behaviour-22 :
         // "Once ignored, the client will no longer receive events sent by that user, with the exception of state events"
         // So just delete all non-state events from our local storage.
-        realm.where(TimelineEventEntity::class.java)
-                .`in`(TimelineEventEntityFields.ROOT.SENDER, userIds.toTypedArray())
-                .isNull(TimelineEventEntityFields.ROOT.STATE_KEY)
-                .findAll()
+        TimelineEventEntity.findAllFrom(realm, userIds)
                 .also { Timber.d("Deleting ${it.size} TimelineEventEntity from ignored users") }
                 .forEach {
                     it.deleteOnCascade(true)
