@@ -21,7 +21,6 @@ import im.vector.app.features.analytics.plan.ViewRoom
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
-import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 
 fun RoomSummary?.toAnalyticsViewRoom(trigger: ViewRoom.Trigger, groupingMethod: RoomGroupingMethod? = null, viaKeyboard: Boolean? = null): ViewRoom {
     val activeSpace = groupingMethod?.let {
@@ -34,22 +33,6 @@ fun RoomSummary?.toAnalyticsViewRoom(trigger: ViewRoom.Trigger, groupingMethod: 
     return ViewRoom(
             isDM = this?.isDirect.orFalse(),
             isSpace = this?.roomType == RoomType.SPACE,
-            trigger = trigger,
-            activeSpace = activeSpace,
-            viaKeyboard = viaKeyboard
-    )
-}
-
-fun PublicRoom.toAnalyticsViewRoom(trigger: ViewRoom.Trigger, groupingMethod: RoomGroupingMethod? = null, viaKeyboard: Boolean? = null): ViewRoom {
-    val activeSpace = groupingMethod?.let {
-        when (it) {
-            is RoomGroupingMethod.BySpace -> it.spaceSummary?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
-            else                          -> null
-        }
-    }
-    return ViewRoom(
-            isDM = false,
-            isSpace = false,
             trigger = trigger,
             activeSpace = activeSpace,
             viaKeyboard = viaKeyboard

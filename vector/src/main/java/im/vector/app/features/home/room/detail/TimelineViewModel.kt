@@ -821,16 +821,20 @@ class TimelineViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.joinRoom(room.roomId)
-                val trigger = if (initialState.isInviteAlreadyAccepted) {
-                    JoinedRoom.Trigger.Invite
-                } else {
-                    JoinedRoom.Trigger.Timeline
-                }
-                analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom(trigger))
+                trackRoomJoined()
             } catch (throwable: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.Failure(throwable, showInDialog = true))
             }
         }
+    }
+
+    private fun trackRoomJoined() {
+        val trigger = if (initialState.isInviteAlreadyAccepted) {
+            JoinedRoom.Trigger.Invite
+        } else {
+            JoinedRoom.Trigger.Timeline
+        }
+        analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom(trigger))
     }
 
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
