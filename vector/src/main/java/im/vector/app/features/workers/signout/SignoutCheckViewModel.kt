@@ -74,7 +74,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
         session.cryptoService().keysBackupService().addListener(this)
         session.cryptoService().keysBackupService().checkAndStartKeysBackup()
 
-        val quad4SIsSetup = session.sharedSecretStorageService.isRecoverySetup()
+        val quad4SIsSetup = session.sharedSecretStorageService().isRecoverySetup()
         val allKeysKnown = session.cryptoService().crossSigningService().allPrivateKeysKnown()
         val backupState = session.cryptoService().keysBackupService().state
         setState {
@@ -88,7 +88,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
 
         session.flow().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
                 .map {
-                    session.sharedSecretStorageService.isRecoverySetup()
+                    session.sharedSecretStorageService().isRecoverySetup()
                 }
                 .distinctUntilChanged()
                 .execute {

@@ -20,6 +20,7 @@ import im.vector.app.core.platform.ViewModelTask
 import im.vector.app.core.resources.StringProvider
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -27,6 +27,7 @@ import im.vector.app.features.autocomplete.RecyclerViewPresenter
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.pushrules.SenderNotificationPermissionCondition
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
@@ -147,7 +148,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                         AutocompleteMemberItem.Everyone(it)
                     }
 
-    private fun canNotifyEveryone() = session.resolveSenderNotificationPermissionCondition(
+    private fun canNotifyEveryone() = session.pushRuleService().resolveSenderNotificationPermissionCondition(
             Event(
                     senderId = session.myUserId,
                     roomId = roomId

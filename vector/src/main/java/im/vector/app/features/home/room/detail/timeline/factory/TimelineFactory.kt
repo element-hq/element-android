@@ -22,6 +22,7 @@ import im.vector.app.features.home.room.detail.timeline.merged.MergedTimelines
 import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import javax.inject.Inject

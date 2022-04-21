@@ -290,7 +290,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     }
 
     private fun retrieveBinding() {
-        retrieveBinding(session.getThreePids())
+        retrieveBinding(session.profileService().getThreePids())
     }
 
     private fun retrieveBinding(threePids: List<ThreePid>) = withState { state ->

@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomGuestAccessContent
@@ -67,7 +68,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         observeRoomAvatar()
         observeState()
 
-        val homeServerCapabilities = session.getHomeServerCapabilities()
+        val homeServerCapabilities = session.homeServerCapabilitiesService().getHomeServerCapabilities()
         val canUseRestricted = homeServerCapabilities
                 .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.getRoomVersion())
 

@@ -50,6 +50,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.group.groupSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
@@ -82,7 +83,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
 
     init {
 
-        session.getUserLive(session.myUserId)
+        session.userService().getUserLive(session.myUserId)
                 .asFlow()
                 .setOnEach {
                     copy(
@@ -100,14 +101,14 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                     )
                 }
 
-        session.getGroupSummariesLive(groupSummaryQueryParams {})
+        session.groupService().getGroupSummariesLive(groupSummaryQueryParams {})
                 .asFlow()
                 .setOnEach {
                     copy(legacyGroups = it)
                 }
 
         // XXX there should be a way to refactor this and share it
-        session.getPagedRoomSummariesLive(
+        session.roomService().getPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
                     this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {
@@ -120,11 +121,11 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                     val inviteCount = if (autoAcceptInvites.hideInvites) {
                         0
                     } else {
-                        session.getRoomSummaries(
+                        session.roomService().getRoomSummaries(
                                 roomSummaryQueryParams { this.memberships = listOf(Membership.INVITE) }
                         ).size
                     }
-                    val totalCount = session.getNotificationCountForRooms(
+                    val totalCount = session.roomService().getNotificationCountForRooms(
                             roomSummaryQueryParams {
                                 this.memberships = listOf(Membership.JOIN)
                                 this.activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(null).takeIf {

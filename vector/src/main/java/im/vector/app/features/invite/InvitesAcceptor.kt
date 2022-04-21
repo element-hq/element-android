@@ -34,6 +34,7 @@ import kotlinx.coroutines.sync.withPermit
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -111,11 +112,11 @@ class InvitesAcceptor @Inject constructor(
             rejectInviteSafely(roomId)
             return
         }
-        val roomMembershipChanged = getChangeMemberships(roomId)
+        val roomMembershipChanged = roomService().getChangeMemberships(roomId)
         if (roomMembershipChanged != ChangeMembershipState.Joined && !roomMembershipChanged.isInProgress()) {
             try {
                 Timber.v("Try auto join room: $roomId")
-                joinRoom(roomId)
+                roomService().joinRoom(roomId)
             } catch (failure: Throwable) {
                 Timber.v("Failed auto join room: $roomId")
                 // if we got 404 on invites, the inviting user have left or the hs is off.
@@ -134,7 +135,7 @@ class InvitesAcceptor @Inject constructor(
 
     private suspend fun Session.rejectInviteSafely(roomId: String) {
         try {
-            leaveRoom(roomId)
+            roomService().leaveRoom(roomId)
             shouldRejectRoomIds.remove(roomId)
         } catch (failure: Throwable) {
             Timber.v("Fail rejecting invite for room: $roomId")

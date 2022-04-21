@@ -436,7 +436,7 @@ class MessageItemFactory @Inject constructor(
 
         val otherUserId = if (informationData.sentByMe) messageContent.toUserId else informationData.senderId
         val otherUserName = if (informationData.sentByMe) {
-            session.getRoomMember(messageContent.toUserId, roomId)?.displayName
+            session.roomService().getRoomMember(messageContent.toUserId, roomId)?.displayName
         } else {
             informationData.memberName
         }

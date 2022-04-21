@@ -35,6 +35,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -409,7 +411,7 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                     if (isSpace) {
                         session.spaceService().joinSpace(childId, null, spaceChildInfo.viaServers)
                     } else {
-                        session.joinRoom(childId, null, spaceChildInfo.viaServers)
+                        session.roomService().joinRoom(childId, null, spaceChildInfo.viaServers)
                     }
                 } catch (failure: Throwable) {
                     Timber.e(failure, "## Space: Failed to join room or subspace")

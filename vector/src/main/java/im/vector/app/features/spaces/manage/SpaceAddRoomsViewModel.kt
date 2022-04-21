@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -63,8 +64,10 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<SpaceAddRoomsViewModel, SpaceAddRoomsState> by hiltMavericksViewModelFactory()
 
+    private val roomService = session.roomService()
+
     val spaceUpdatableLivePageResult: UpdatableLivePageResult by lazy {
-        session.getFilteredPagedRoomSummariesLive(
+        roomService.getFilteredPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
                     this.excludeType = null
@@ -84,12 +87,12 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     val spaceCountFlow: Flow<Int> by lazy {
         spaceUpdatableLivePageResult.livePagedList.asFlow()
-                .flatMapLatest { session.getRoomCountLive(spaceUpdatableLivePageResult.queryParams).asFlow() }
+                .flatMapLatest { roomService.getRoomCountLive(spaceUpdatableLivePageResult.queryParams).asFlow() }
                 .distinctUntilChanged()
     }
 
     val roomUpdatableLivePageResult: UpdatableLivePageResult by lazy {
-        session.getFilteredPagedRoomSummariesLive(
+        roomService.getFilteredPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
                     this.excludeType = listOf(RoomType.SPACE)
@@ -110,12 +113,12 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     val roomCountFlow: Flow<Int> by lazy {
         roomUpdatableLivePageResult.livePagedList.asFlow()
-                .flatMapLatest { session.getRoomCountLive(roomUpdatableLivePageResult.queryParams).asFlow() }
+                .flatMapLatest { roomService.getRoomCountLive(roomUpdatableLivePageResult.queryParams).asFlow() }
                 .distinctUntilChanged()
     }
 
     val dmUpdatableLivePageResult: UpdatableLivePageResult by lazy {
-        session.getFilteredPagedRoomSummariesLive(
+        roomService.getFilteredPagedRoomSummariesLive(
                 roomSummaryQueryParams {
                     this.memberships = listOf(Membership.JOIN)
                     this.excludeType = listOf(RoomType.SPACE)
@@ -136,7 +139,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     val dmCountFlow: Flow<Int> by lazy {
         dmUpdatableLivePageResult.livePagedList.asFlow()
-                .flatMapLatest { session.getRoomCountLive(dmUpdatableLivePageResult.queryParams).asFlow() }
+                .flatMapLatest { roomService.getRoomCountLive(dmUpdatableLivePageResult.queryParams).asFlow() }
                 .distinctUntilChanged()
     }
 

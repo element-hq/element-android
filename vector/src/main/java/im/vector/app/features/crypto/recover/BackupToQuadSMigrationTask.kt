@@ -61,7 +61,7 @@ class BackupToQuadSMigrationTask @Inject constructor(
             // We need to use the current secret for keybackup and use it as the new master key for SSSS
             // Then we need to put back the backup key in sss
             val keysBackupService = session.cryptoService().keysBackupService()
-            val quadS = session.sharedSecretStorageService
+            val quadS = session.sharedSecretStorageService()
 
             val version = keysBackupService.keysBackupVersion ?: return Result.NoKeyBackupVersion
 

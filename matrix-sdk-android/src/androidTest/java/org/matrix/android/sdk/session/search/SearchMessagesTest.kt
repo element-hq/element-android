@@ -24,6 +24,7 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestData

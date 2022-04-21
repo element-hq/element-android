@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 
 class InviteUsersToRoomViewModel @AssistedInject constructor(
         @Assisted initialState: InviteUsersToRoomViewState,
