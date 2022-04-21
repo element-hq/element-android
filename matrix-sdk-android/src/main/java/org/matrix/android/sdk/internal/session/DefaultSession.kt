@@ -128,8 +128,8 @@ internal class DefaultSession @Inject constructor(
         private val accountService: Lazy<AccountService>,
         private val eventService: Lazy<EventService>,
         private val contentScannerService: Lazy<ContentScannerService>,
-        private val identityService: IdentityService,
-        private val integrationManagerService: IntegrationManagerService,
+        private val identityService: Lazy<IdentityService>,
+        private val integrationManagerService: Lazy<IntegrationManagerService>,
         private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
         private val spaceService: Lazy<SpaceService>,
@@ -285,7 +285,7 @@ internal class DefaultSession @Inject constructor(
 
     override fun contentScannerService(): ContentScannerService = contentScannerService.get()
 
-    override fun identityService() = identityService
+    override fun identityService(): IdentityService = identityService.get()
 
     override fun fileService(): FileService = defaultFileService.get()
 
@@ -295,7 +295,7 @@ internal class DefaultSession @Inject constructor(
 
     override fun mediaService(): MediaService = mediaService.get()
 
-    override fun integrationManagerService() = integrationManagerService
+    override fun integrationManagerService(): IntegrationManagerService = integrationManagerService.get()
 
     override fun callSignalingService(): CallSignalingService = callSignalingService.get()
 
