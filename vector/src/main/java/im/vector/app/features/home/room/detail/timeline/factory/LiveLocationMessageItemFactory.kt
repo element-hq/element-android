@@ -46,7 +46,7 @@ class LiveLocationMessageItemFactory @Inject constructor(
     }
 
     private fun isLiveRunning(liveLocationContent: LiveLocationBeaconContent): Boolean {
-        return liveLocationContent.getBestBeaconInfo()?.isLive.orFalse() && liveLocationContent.hasTimedOut.not()
+        return liveLocationContent.isLive.orFalse() && liveLocationContent.hasTimedOut.not()
     }
 
     private fun buildStartLiveItem(
