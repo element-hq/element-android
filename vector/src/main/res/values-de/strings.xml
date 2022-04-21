@@ -2428,4 +2428,5 @@
     <string name="a11y_location_share_option_user_live_icon">Live-Standort teilen</string>
     <string name="location_share_option_user_live">Live-Standort teilen</string>
     <string name="threads_notice_migration_title">Threads nähern sich der Beta 🎉</string>
+    <string name="action_disable">Deaktivieren</string>
 </resources>

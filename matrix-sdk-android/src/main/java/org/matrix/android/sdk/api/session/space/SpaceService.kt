@@ -68,7 +68,7 @@ interface SpaceService {
                                    suggestedOnly: Boolean? = null,
                                    limit: Int? = null,
                                    from: String? = null,
-                                   // when paginating, pass back the m.space.child state events
+            // when paginating, pass back the m.space.child state events
                                    knownStateList: List<Event>? = null): SpaceHierarchyData
 
     /**

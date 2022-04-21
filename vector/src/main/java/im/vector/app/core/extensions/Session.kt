@@ -74,8 +74,8 @@ fun Session.cannotLogoutSafely(): Boolean {
     return hasUnsavedKeys() ||
             // has local cross signing keys
             (cryptoService().crossSigningService().allPrivateKeysKnown() &&
-            // That are not backed up
-            !sharedSecretStorageService.isRecoverySetup())
+                    // That are not backed up
+                    !sharedSecretStorageService.isRecoverySetup())
 }
 
 fun Session.vectorStore(context: Context) = VectorSessionStore(context, myUserId)

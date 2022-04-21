@@ -37,7 +37,7 @@ class TestTokenRegistration @Inject constructor(private val context: FragmentAct
                                                 private val stringProvider: StringProvider,
                                                 private val pushersManager: PushersManager,
                                                 private val activeSessionHolder: ActiveSessionHolder) :
-    TroubleshootTest(R.string.settings_troubleshoot_test_token_registration_title) {
+        TroubleshootTest(R.string.settings_troubleshoot_test_token_registration_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         // Check if we have a registered pusher for this token

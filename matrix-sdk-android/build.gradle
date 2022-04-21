@@ -32,7 +32,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.4.12\""
+        buildConfigField "String", "SDK_VERSION", "\"1.4.14\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -171,7 +171,7 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.46'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.47'
 
     testImplementation libs.tests.junit
     testImplementation 'org.robolectric:robolectric:4.7.3'

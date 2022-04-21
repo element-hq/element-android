@@ -275,9 +275,9 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                 knownSummaries = (
                         knownSummaries +
                                 (paginate.children.mapNotNull {
-                            session.getRoomSummary(it.childRoomId)
-                                    ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
-                        })
+                                    session.getRoomSummary(it.childRoomId)
+                                            ?.takeIf { it.membership == Membership.JOIN } // only take if joined because it will be up to date (synced)
+                                })
                         ).distinctBy { it.roomId }
 
                 query = query.copy(

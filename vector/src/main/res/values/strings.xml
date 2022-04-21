@@ -176,6 +176,9 @@
     <string name="initial_sync_start_importing_account_groups">Initial sync:\nImporting communities</string>
     <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
+    <string name="initial_sync_request_title">Initial sync request</string>
+    <string name="initial_sync_request_content">${app_name} needs to perform a clear cache to be up to date, for the following reason:\n%s\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="initial_sync_request_reason_unignored_users">- Some users have been unignored</string>
 
     <string name="event_status_sent_message">Message sent</string>
     <string name="event_status_sending_message">Sending message…</string>
@@ -636,7 +639,7 @@
     <string name="room_participants_action_ignore">Ignore</string>
 
     <string name="room_participants_action_unignore_title">Unignore user</string>
-    <string name="room_participants_action_unignore_prompt_msg">Unignoring this user will show all messages from them again.\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Unignoring this user will show all messages from them again.</string>
     <string name="room_participants_action_unignore">Unignore</string>
 
     <string name="room_participants_action_cancel_invite_title">Cancel invite</string>
@@ -741,6 +744,9 @@
     <string name="threads_beta_enable_notice_title">Threads Beta</string>
     <!-- %s will be replaced with action_learn_more string resource that will be clickable(url redirection)  -->
     <string name="threads_beta_enable_notice_message">Threads help keep your conversations on-topic and easy to track. %sEnabling threads will refresh the app. This may take longer for some accounts.</string>
+    <string name="threads_labs_enable_notice_title">Threads Beta</string>
+    <string name="threads_labs_enable_notice_message">Your homeserver does not currently support threads, so this feature may be unreliable. Some threaded messages may not be reliably available. %sDo you want to enable threads anyway?</string>
+
 
     <!-- Search -->
     <string name="search_hint">Search</string>
@@ -1034,7 +1040,7 @@
     <string name="settings_fail_to_update_password">Failed to update password</string>
     <string name="settings_fail_to_update_password_invalid_current_password">The password is not valid</string>
     <string name="settings_password_updated">Your password has been updated</string>
-    <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="settings_unignore_user">Show all messages from %s?</string>
 
     <string name="settings_emails_and_phone_numbers_title">Emails and phone numbers</string>
     <string name="settings_emails_and_phone_numbers_summary">Manage emails and phone numbers linked to your Matrix account</string>
@@ -1662,7 +1668,8 @@
     <string name="you_may_contact_me">You may contact me if you have any follow up questions</string>
     <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
     <string name="feedback_failed">The feedback failed to be sent (%s)</string>
-    <string name="give_feedback">Give Feedback</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="give_feedback" tools:ignore="UnusedResources">Give Feedback</string>
     <string name="give_feedback_threads">Give Feedback</string>
     <string name="send_feedback_threads_title">Threads Beta feedback</string>
     <string name="send_feedback_threads_info">Threads are a work in progress with new, exciting upcoming features, such as improved notifications. We’d love to hear your feedback!</string>

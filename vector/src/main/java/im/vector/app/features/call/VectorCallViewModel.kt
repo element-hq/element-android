@@ -340,14 +340,14 @@ class VectorCallViewModel @AssistedInject constructor(
             VectorCallViewActions.TransferCall                   -> {
                 handleCallTransfer()
             }
-            is VectorCallViewActions.SwitchCall          -> {
+            is VectorCallViewActions.SwitchCall                  -> {
                 setState { VectorCallViewState(action.callArgs) }
                 setupCallWithCurrentState()
             }
-            is VectorCallViewActions.ToggleScreenSharing -> {
+            is VectorCallViewActions.ToggleScreenSharing         -> {
                 handleToggleScreenSharing(state.isSharingScreen)
             }
-            is VectorCallViewActions.StartScreenSharing  -> {
+            is VectorCallViewActions.StartScreenSharing          -> {
                 call?.startSharingScreen()
                 setState {
                     copy(isSharingScreen = true)

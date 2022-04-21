@@ -1,1 +1,0 @@
-Live Location Sharing - Send location data

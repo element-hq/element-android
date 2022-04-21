@@ -34,7 +34,7 @@ import javax.inject.Inject
  * Possible next worker    : None
  */
 internal class RedactEventWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<RedactEventWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<RedactEventWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

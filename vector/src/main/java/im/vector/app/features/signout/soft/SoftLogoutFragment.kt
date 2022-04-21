@@ -65,14 +65,14 @@ class SoftLogoutFragment @Inject constructor(
                             mode.ssoIdentityProviders
                     ))
                 }
-                is LoginMode.Sso -> {
+                is LoginMode.Sso            -> {
                     loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
                             softLogoutViewState.homeServerUrl,
                             softLogoutViewState.deviceId,
                             mode.ssoIdentityProviders
                     ))
                 }
-                LoginMode.Unsupported -> {
+                LoginMode.Unsupported       -> {
                     // Prepare the loginViewModel for a SSO/login fallback recovery
                     loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
                             softLogoutViewState.homeServerUrl,
@@ -80,7 +80,7 @@ class SoftLogoutFragment @Inject constructor(
                             null
                     ))
                 }
-                else                  -> Unit
+                else                        -> Unit
             }
         }
     }

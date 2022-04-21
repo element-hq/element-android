@@ -34,7 +34,7 @@ data class E2EMessageDetected(
         val senderDeviceId: String,
         val senderKey: String,
         val sessionId: String
-        ) {
+) {
 
     companion object {
         fun fromEvent(event: Event, roomId: String): E2EMessageDetected {
@@ -109,9 +109,9 @@ class UISIDetector : LiveEventListener {
         timer.schedule(timeoutTask, timeoutMillis)
     }
 
-    override fun onLiveEvent(roomId: String, event: Event) { }
+    override fun onLiveEvent(roomId: String, event: Event) {}
 
-    override fun onPaginatedEvent(roomId: String, event: Event) { }
+    override fun onPaginatedEvent(roomId: String, event: Event) {}
 
     private fun trackerId(eventId: String, roomId: String): String = "$roomId-$eventId"
 

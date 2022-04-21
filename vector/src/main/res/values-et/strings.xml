@@ -245,7 +245,7 @@
     <string name="are_you_sure">Kas sa oled kindel\?</string>
     <string name="backup">Varunda</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Kui sa enne väljalogimist ei varunda oma võtmeid, siis sa kaotad ligipääsu oma krüptitud sõnumitele.</string>
-    <string name="loading">Laeme…</string>
+    <string name="loading">Laadime…</string>
     <string name="ok">Sobib</string>
     <string name="action_cancel">Tühista</string>
     <string name="action_save">Salvesta</string>
@@ -1958,7 +1958,7 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
     <string name="leave_space">Lahku kogukonnast</string>
-    <string name="space_add_child_title">Lisa jututuba</string>
+    <string name="space_add_child_title">Lisa jututube</string>
     <string name="space_explore_activity_title">Tutvu jututubadega</string>
     <plurals name="space_people_you_know">
         <item quantity="one">%d sinu tuttav on juba liitunud</item>
@@ -1968,7 +1968,7 @@
 \nProovi hiljem uuesti või küsi jututoa haldajalt, kas sul on olemas selleks vajalikud õigused.</string>
     <string name="join_anyway">Liitu ikkagi</string>
     <string name="join_space">Liitu kogukonnakeskusega</string>
-    <string name="create_space">Loo kogukonnakeskus</string>
+    <string name="create_space">Loo kogukond</string>
     <string name="skip_for_now">Hetkel jäta vahele</string>
     <string name="share_space_link_message">Palun liitu %1$s kogukonnakeskusega %2$s</string>
     <string name="invite_just_to_this_room_desc">Nad ei saa osalema %s jututoas</string>
@@ -2007,7 +2007,7 @@
     <string name="create_spaces_choose_type_label">Missugust kogukonnakeskust sooviksid sa luua\?</string>
     <string name="your_private_space">Sinu privaatne kogukonnakeskus</string>
     <string name="your_public_space">Sinu avalik kogukonnakeskus</string>
-    <string name="add_space">Lisa kogukonnakeskus</string>
+    <string name="add_space">Lisa kogukond</string>
     <string name="command_description_leave_room">Lahku antud tunnusega jututoast (tunnuse puudumisel jututoast, kus hetkel asud)</string>
     <string name="command_description_join_space">Liitu kogukonnakeskusega tema tunnuse alusel</string>
     <string name="command_description_create_space">Loo kogukonnakeskus</string>
@@ -2438,4 +2438,23 @@
 \n
 \nKuna jutulõngad on nüüd osa Matrix\'i spetsifikatsioonist, siis see on ühekordne muudatus.</string>
     <string name="threads_notice_migration_title">Jutulõngad on peaaegu valmis 🎉</string>
+    <string name="live_location_sharing_notification_description">Asukoha reaalajas jagamine on hetkel kasutusel</string>
+    <string name="live_location_sharing_notification_title">Asukoht reaalajas - ${app_name}</string>
+    <string name="error_forbidden_digits_only_username">Koduserver ei võimalda ainult numbritest koosneva kasutajanime loomist.</string>
+    <string name="ftue_personalize_skip_this_step">Jäta see samm vahele</string>
+    <string name="ftue_personalize_submit">Salvesta ja jätka</string>
+    <string name="ftue_personalize_complete_subtitle">Sinu eelistused on salvestatud.</string>
+    <string name="ftue_personalize_complete_title">Kõik on valmis!</string>
+    <string name="ftue_personalize_lets_go">Alustame nüüd</string>
+    <string name="ftue_profile_picture_subtitle">Sa võid seda hiljem alati muuta.</string>
+    <string name="ftue_profile_picture_title">Lisa profiilipilt</string>
+    <string name="ftue_display_name_entry_footer">Sa võid seda hiljem muuta</string>
+    <string name="ftue_display_name_entry_title">Kuvatav nimi</string>
+    <string name="ftue_display_name_subtitle">Seda näidatakse sõnumite saatmisel.</string>
+    <string name="ftue_display_name_title">Vali kuvatav nimi</string>
+    <string name="ftue_account_created_subtitle">Sinu kasutajakonto %s on nüüd olemas.</string>
+    <string name="ftue_account_created_congratulations_title">Õnnitlused!</string>
+    <string name="ftue_account_created_take_me_home">Mine avalehele</string>
+    <string name="ftue_account_created_personalize">Isikupärasta oma profiili</string>
+    <string name="action_disable">Lülita välja</string>
 </resources>
