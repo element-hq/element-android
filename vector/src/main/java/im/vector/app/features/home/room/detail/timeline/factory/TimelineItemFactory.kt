@@ -138,7 +138,6 @@ class TimelineItemFactory @Inject constructor(
                     }
                 }.also {
                     if (it != null && event.isEncrypted()) {
-//                        Timber.i("----> ${event.eventId} encryption error found")
                         decryptionFailureTracker.e2eEventDisplayedInTimeline(event)
                     }
                 }
