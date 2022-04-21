@@ -245,7 +245,7 @@
     <string name="action_remove">أزِل</string>
     <string name="action_join">انضم</string>
     <string name="action_reject">ارفض</string>
-    <string name="room_jump_to_first_unread">انتقل إلى أول رسالة غير مقروءة.</string>
+    <string name="room_jump_to_first_unread">انتقل إلى غير المقروءة.</string>
     <string name="room_participants_leave_prompt_title">ترك الغرفة</string>
     <string name="room_participants_leave_prompt_msg">أمتأكّد من ترك الغرفة؟</string>
     <string name="room_participants_action_ban">امنع</string>
@@ -253,7 +253,7 @@
     <string name="room_participants_action_ignore">أخفِ كل رسائل هذا المستخدم</string>
     <string name="room_participants_action_unignore">اعرض كل رسائل هذا المستخدم</string>
     <string name="room_one_user_is_typing">‏⁨%1$s⁩ يكتب…</string>
-    <string name="room_do_not_have_permission_to_post">لا تصريح لديك للنشر في هذه الغرفة</string>
+    <string name="room_do_not_have_permission_to_post">لا أذن لديك للنشر في هذه الغرفة.</string>
     <string name="ssl_logout_account">اخرج</string>
     <string name="ssl_fingerprint_hash">البصمة (⁨%s⁩):</string>
     <string name="ssl_could_not_verify">تعذّر التحقق من معرّف الخادوم البعيد.</string>
@@ -408,7 +408,7 @@
     <string name="room_participants_action_mention">أشِر إليه</string>
     <string name="room_participants_power_level_prompt">لن تستطيع العودة عن هذا التغيير إذ أنك تمنح المستخدم نفس مستوى السلطة الذي لك.
 أمتأكد؟</string>
-    <string name="room_participants_ban_prompt_msg">أمتأكد من منع هذا المستخدم من هذه الدردشة؟</string>
+    <string name="room_participants_ban_prompt_msg">حظر مستخدم عن هذه الغرفة سيمنعه من الانضمام إليها ثانية.</string>
     <string name="ssl_trust">ثِق</string>
     <string name="ssl_do_not_trust">لا تثق</string>
     <string name="ssl_remain_offline">تجاهل</string>
@@ -481,7 +481,7 @@
     <string name="encryption_information_not_verified">&lt;b&gt;غير&lt;b/&gt; مؤكّدة</string>
     <string name="encryption_information_verified">مؤكّدة</string>
     <string name="encryption_information_verify">أكّد</string>
-    <string name="list_members">اسرد الأعضاء</string>
+    <string name="list_members">أعضاء</string>
     <string name="room_participants_action_invite">ادعُ</string>
     <string name="ssl_cert_not_trust">قد يعني هذا بأن أحدهم يعترض الاتصال بعدوانية، أو أن هاتفك لا يثق بالشهادة التي قدّمها الخادوم البعيد.</string>
     <string name="ssl_cert_new_account_expl">إن قال مدير الخادوم بأن هذا متوقع، فتأكد من أن البصمة أدناه تطابق البصمة التي وفّرها.</string>
@@ -735,7 +735,7 @@
         <item quantity="many">%d مكالمةً فائة</item>
         <item quantity="other">%d مكالمة فائة</item>
     </plurals>
-    <string name="call_ringing">يتصل…</string>
+    <string name="call_ringing">يَرِن…</string>
     <string name="settings_call_ringtone_dialog_title">اختر نغمة للمكالمات:</string>
     <string name="settings_call_ringtone_title">نغمة المكالمات الواردة</string>
     <string name="settings_call_show_confirmation_dialog_summary">أكّد المكالمة قبل إجرائها</string>
@@ -1026,4 +1026,56 @@
     <string name="keys_backup_info_title_version">النسخة</string>
     <string name="keys_backup_settings_checking_backup_state">يتحقق من حالة النسخ الاحتياطي</string>
     <string name="keys_backup_settings_restore_backup_button">استعد من نسخ احتياطي</string>
+    <string name="room_permissions_title">الأذونات</string>
+    <string name="space_settings_permissions_title">أذونات الفضاء</string>
+    <string name="room_settings_permissions_title">أذونات الغرفة</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s و%2$s وآخرون</string>
+    <string name="room_notification_two_users_are_typing">%1$s و%2$s</string>
+    <string name="space_participants_unban_prompt_msg">فك الحظر عن مستخدم سيمح له الانضمام لهذا الفضاء.</string>
+    <string name="room_participants_unban_prompt_msg">فك الحظر عن مستخدم سيمح له الانضمام لهذه الغرفة.</string>
+    <string name="space_participants_ban_prompt_msg">حظر مستخدم عن هذه الفضاء سيمنعه من الانضمام إليه ثانية.</string>
+    <string name="room_participants_unban_title">فك حظر مستخدم</string>
+    <string name="room_participants_ban_reason">سبب الحظر</string>
+    <string name="room_participants_ban_title">احظر مستخدمًا</string>
+    <string name="space_participants_remove_prompt_msg">سيزال المستخدم من هذه الفضاء.
+\n
+\nلمنعه من الانضمام ثانية لهذه الفضاء احظره.</string>
+    <string name="room_participants_remove_prompt_msg">سيزال المستخدم من هذه الغرفة.
+\n
+\nلمنعه من الانضمام ثانية لهذه الغرفة احظره.</string>
+    <string name="room_participants_remove_reason">سبب الإزالة</string>
+    <string name="room_participants_remove_title">أزل مستخدمًا</string>
+    <string name="room_participants_action_cancel_invite_prompt_msg">أمتأكد من سحب دعوة هذا المستخدم؟</string>
+    <string name="room_participants_action_cancel_invite_title">اسحب الدعوة</string>
+    <string name="room_participants_action_unignore_title">ألغ تجاهل المستخدم</string>
+    <string name="room_participants_action_ignore_prompt_msg">بتجاهل هذا المستخدم ستزال الرسائل من الغرف المشتركة بينكما.
+\n
+\nيمكنم التراجع عن هذا الإجراء في أي وقت عبر الإعدادات العامة.</string>
+    <string name="room_participants_action_ignore_title">تجاهل مستخدم</string>
+    <string name="room_participants_power_level_demote">اخفض الرتبة</string>
+    <string name="room_participants_power_level_demote_warning_prompt">لن تتمكن من التراجع عن هذا التغيير لأنك ستخفض رتبتك ، إذا كنت آخر مستخدم ذي امتياز في الغرفة ، فسيكون من المستحيل استعادة الامتيازات.</string>
+    <string name="room_participants_power_level_demote_warning_title">أتريد خفض رتبتك؟</string>
+    <string name="room_participants_action_cancel_invite">اسحب الدعوة</string>
+    <string name="room_participants_leave_private_warning">هذه الغرفة ليست علنية، لا يمكنك إعادة الانضمام إليها بدون دعوة.</string>
+    <string name="permissions_denied_add_contact">امنح اذن النفاذ للمتراسلين.</string>
+    <string name="permissions_denied_qr_code">لمسح رمز الاستحابة السريعة اسمح بالنفاذ للكاميرا.</string>
+    <string name="video_call_in_progress">تجري مكالمة مرئية…</string>
+    <plurals name="missed_video_call">
+        <item quantity="zero">لا مكالمات مرئية فائتة</item>
+        <item quantity="one">مكالمة مرئية فائتة</item>
+        <item quantity="two">مكالمتان مرئيتان فائتتان</item>
+        <item quantity="few">%d مكالمات مرئية فائتة</item>
+        <item quantity="many">%d مكالمة مرئية فائتة</item>
+        <item quantity="other">%d مكالمة مرئية فائتة</item>
+    </plurals>
+    <string name="settings_call_ringtone_use_app_ringtone">استخدم نغمة ${app_name} الافتراضية للمكالمات الواردة</string>
+    <string name="settings_call_show_confirmation_dialog_title">امنع المكالمات العَرضية</string>
+    <string name="action_learn_more">استزد</string>
+    <string name="action_change">عدّل</string>
+    <string name="action_try_it_out">جربه</string>
+    <string name="action_not_now">ليس الآن</string>
+    <string name="action_disable">عطّل</string>
+    <string name="action_enable">فعّل</string>
+    <string name="cannot_call_yourself_with_invite">لا يمكنك إجراء مكالمة مع نفسك، انتظر قبول منتسبين لطلب</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">شغّلتّ التعمية بين الطرفيات (خورزمية مجهولة %1$s).</string>
 </resources>
