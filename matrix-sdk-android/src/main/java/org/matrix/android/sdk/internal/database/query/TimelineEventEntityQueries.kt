@@ -132,3 +132,14 @@ internal fun RealmQuery<TimelineEventEntity>.filterSendStates(sendStates: List<S
     val sendStatesStr = sendStates.map { it.name }.toTypedArray()
     return `in`(TimelineEventEntityFields.ROOT.SEND_STATE_STR, sendStatesStr)
 }
+
+/**
+ * Find all TimelineEventEntity items where sender is in senderIds collection, excluding state events
+ */
+internal fun TimelineEventEntity.Companion.findAllFrom(realm: Realm,
+                                                       senderIds: Collection<String>): RealmResults<TimelineEventEntity> {
+    return realm.where(TimelineEventEntity::class.java)
+            .`in`(TimelineEventEntityFields.ROOT.SENDER, senderIds.toTypedArray())
+            .isNull(TimelineEventEntityFields.ROOT.STATE_KEY)
+            .findAll()
+}
