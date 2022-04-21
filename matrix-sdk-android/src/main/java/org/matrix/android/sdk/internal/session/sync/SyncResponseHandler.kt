@@ -34,7 +34,7 @@ import org.matrix.android.sdk.internal.session.dispatchTo
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
-import org.matrix.android.sdk.internal.session.notification.ProcessEventForPushTask
+import org.matrix.android.sdk.internal.session.pushrules.ProcessEventForPushTask
 import org.matrix.android.sdk.internal.session.sync.handler.CryptoSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.GroupSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.PresenceSyncHandler

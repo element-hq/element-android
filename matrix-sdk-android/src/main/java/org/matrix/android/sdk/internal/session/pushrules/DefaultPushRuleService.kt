@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.internal.session.notification
+package org.matrix.android.sdk.internal.session.pushrules
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
