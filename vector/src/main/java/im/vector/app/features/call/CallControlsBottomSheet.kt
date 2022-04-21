@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallControlsBinding
-import im.vector.app.features.DefaultVectorFeatures
+import im.vector.app.features.VectorFeatures
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,7 +36,7 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
         return BottomSheetCallControlsBinding.inflate(inflater, container, false)
     }
 
-    @Inject lateinit var vectorFeatures: DefaultVectorFeatures
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     private val callViewModel: VectorCallViewModel by activityViewModel()
 
