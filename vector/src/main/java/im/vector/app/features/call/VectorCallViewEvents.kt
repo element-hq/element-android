@@ -32,7 +32,4 @@ sealed class VectorCallViewEvents : VectorViewEvents {
     object FailToTransfer : VectorCallViewEvents()
     object ShowScreenSharingPermissionDialog : VectorCallViewEvents()
     object StopScreenSharingService : VectorCallViewEvents()
-//    data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
-//    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()
-//    object CallAccepted : VectorCallViewEvents()
 }

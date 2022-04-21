@@ -31,12 +31,15 @@ class ScreenCaptureService : VectorService() {
     private val binder = LocalBinder()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Show a sticky notification
+        showStickyNotification()
+
+        return START_STICKY
+    }
+
+    private fun showStickyNotification() {
         val notificationId = System.currentTimeMillis().toInt()
         val notification = notificationUtils.buildScreenSharingNotification()
         startForeground(notificationId, notification)
-
-        return START_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder {
