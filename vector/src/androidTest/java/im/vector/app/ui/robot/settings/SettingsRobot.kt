@@ -44,10 +44,6 @@ class SettingsRobot {
         clickOnAndGoBack(R.string.preference_voice_and_video) { block() }
     }
 
-    fun ignoredUsers(block: () -> Unit = {}) {
-        clickOnAndGoBack(R.string.settings_ignored_users) { block() }
-    }
-
     fun securityAndPrivacy(block: SettingsSecurityRobot.() -> Unit) {
         clickOnAndGoBack(R.string.settings_security_and_privacy) { block(SettingsSecurityRobot()) }
     }
