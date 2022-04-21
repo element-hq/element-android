@@ -34,7 +34,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
         @Assisted initialState: MigrateRoomViewState,
         private val session: Session,
         private val upgradeRoomViewModelTask: UpgradeRoomViewModelTask) :
-    VectorViewModel<MigrateRoomViewState, MigrateRoomAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<MigrateRoomViewState, MigrateRoomAction, EmptyViewEvents>(initialState) {
 
     init {
         val room = session.getRoom(initialState.roomId)

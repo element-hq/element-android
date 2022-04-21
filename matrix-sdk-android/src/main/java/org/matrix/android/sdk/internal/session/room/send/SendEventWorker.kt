@@ -40,7 +40,7 @@ import javax.inject.Inject
  * Possible next worker    : None
  */
 internal class SendEventWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<SendEventWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<SendEventWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

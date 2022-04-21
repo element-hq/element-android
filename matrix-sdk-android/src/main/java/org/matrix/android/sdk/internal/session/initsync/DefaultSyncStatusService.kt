@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @SessionScope
 internal class DefaultSyncStatusService @Inject constructor() :
-    SyncStatusService,
+        SyncStatusService,
         ProgressReporter {
 
     private val status = MutableLiveData<SyncStatusService.Status>()

@@ -172,7 +172,7 @@ internal class DefaultSyncTask @Inject constructor(
             val nbToDevice = syncResponse.toDevice?.events.orEmpty().size
             val nextBatch = syncResponse.nextBatch
             Timber.tag(loggerTag.value).d(
-                "Incremental sync request parsing, $nbRooms room(s) $nbToDevice toDevice(s). Got nextBatch: $nextBatch"
+                    "Incremental sync request parsing, $nbRooms room(s) $nbToDevice toDevice(s). Got nextBatch: $nextBatch"
             )
             defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncParsing(
                     rooms = nbRooms,

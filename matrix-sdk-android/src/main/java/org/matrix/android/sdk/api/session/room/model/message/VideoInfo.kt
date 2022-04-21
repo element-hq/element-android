@@ -67,5 +67,5 @@ data class VideoInfo(
  * Get the url of the encrypted thumbnail or of the thumbnail
  */
 fun VideoInfo.getThumbnailUrl(): String? {
-        return thumbnailFile?.url ?: thumbnailUrl
+    return thumbnailFile?.url ?: thumbnailUrl
 }

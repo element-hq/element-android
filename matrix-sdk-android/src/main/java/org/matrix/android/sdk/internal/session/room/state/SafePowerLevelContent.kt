@@ -51,7 +51,7 @@ internal fun JsonDict.toSafePowerLevelsContentDict(): JsonDict {
                         usersDefault = content.usersDefault,
                         users = content.users,
                         stateDefault = content.stateDefault,
-                        notifications = content.notifications?.mapValues { content.notificationLevel(it.key)  }
+                        notifications = content.notifications?.mapValues { content.notificationLevel(it.key) }
                 )
             }
             ?.toContent()

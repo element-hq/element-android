@@ -34,7 +34,7 @@ import javax.inject.Inject
  */
 class TestAccountSettings @Inject constructor(private val stringProvider: StringProvider,
                                               private val activeSessionHolder: ActiveSessionHolder) :
-    TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
+        TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return

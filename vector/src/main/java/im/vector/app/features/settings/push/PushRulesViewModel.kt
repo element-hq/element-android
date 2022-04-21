@@ -30,7 +30,7 @@ data class PushRulesViewState(
 ) : MavericksState
 
 class PushRulesViewModel(initialState: PushRulesViewState) :
-    VectorViewModel<PushRulesViewState, EmptyAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<PushRulesViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     companion object : MavericksViewModelFactory<PushRulesViewModel, PushRulesViewState> {
 

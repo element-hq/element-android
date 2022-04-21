@@ -36,7 +36,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> {
-       override fun create(initialState: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel
+        override fun create(initialState: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel
     }
 
     companion object : MavericksViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> by hiltMavericksViewModelFactory()
@@ -73,7 +73,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     private fun handleSelectNotificationState(action: RoomNotificationSettingsAction.SelectNotificationState) {
         setState { copy(isLoading = true) }
         viewModelScope.launch {
-            runCatching {  room.setRoomNotificationState(action.notificationState) }
+            runCatching { room.setRoomNotificationState(action.notificationState) }
                     .fold(
                             {
                                 setState {

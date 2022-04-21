@@ -86,10 +86,10 @@ class ReAuthActivity : SimpleFragmentActivity() {
 
         sharedViewModel.observeViewEvents {
             when (it) {
-                is ReAuthEvents.OpenSsoURl -> {
+                is ReAuthEvents.OpenSsoURl            -> {
                     openInCustomTab(it.url)
                 }
-                ReAuthEvents.Dismiss -> {
+                ReAuthEvents.Dismiss                  -> {
                     setResult(RESULT_CANCELED)
                     finish()
                 }
@@ -205,7 +205,7 @@ class ReAuthActivity : SimpleFragmentActivity() {
                 LoginFlowTypes.PASSWORD -> {
                     LoginFlowTypes.PASSWORD
                 }
-                LoginFlowTypes.SSO -> {
+                LoginFlowTypes.SSO      -> {
                     LoginFlowTypes.SSO
                 }
                 else                    -> {

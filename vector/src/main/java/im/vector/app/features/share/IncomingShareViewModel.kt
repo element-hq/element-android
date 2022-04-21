@@ -42,7 +42,7 @@ class IncomingShareViewModel @AssistedInject constructor(
         @Assisted initialState: IncomingShareViewState,
         private val session: Session,
         private val breadcrumbsRoomComparator: BreadcrumbsRoomComparator) :
-    VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
+        VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {

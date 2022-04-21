@@ -176,7 +176,7 @@ class DefaultNavigator @Inject constructor(
             Navigator.PostSwitchSpaceAction.OpenAddExistingRooms -> {
                 startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
-            Navigator.PostSwitchSpaceAction.OpenRoomList -> {
+            Navigator.PostSwitchSpaceAction.OpenRoomList         -> {
                 startActivity(context, SpaceExploreActivity.newIntent(context, spaceId), buildTask = false)
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom   -> {
