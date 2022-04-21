@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright 2021 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.login.terms
+package org.matrix.android.sdk.internal.auth.registration
 
-data class UrlAndName(
-        val url: String,
-        val name: String
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.util.JsonDict
+
+/**
+ * Class to pass parameters to the custom registration types for /register.
+ */
+@JsonClass(generateAdapter = true)
+internal data class RegistrationCustomParams(
+        // authentication parameters
+        @Json(name = "auth")
+        val auth: JsonDict? = null,
 )
