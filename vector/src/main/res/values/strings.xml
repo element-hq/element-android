@@ -176,6 +176,9 @@
     <string name="initial_sync_start_importing_account_groups">Initial sync:\nImporting communities</string>
     <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
+    <string name="initial_sync_request_title">Initial sync request</string>
+    <string name="initial_sync_request_content">${app_name} needs to perform a clear cache to be up to date, for the following reason:\n%s\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="initial_sync_request_reason_unignored_users">- Some users have been unignored</string>
 
     <string name="event_status_sent_message">Message sent</string>
     <string name="event_status_sending_message">Sending message…</string>
@@ -634,7 +637,7 @@
     <string name="room_participants_action_ignore">Ignore</string>
 
     <string name="room_participants_action_unignore_title">Unignore user</string>
-    <string name="room_participants_action_unignore_prompt_msg">Unignoring this user will show all messages from them again.\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Unignoring this user will show all messages from them again.</string>
     <string name="room_participants_action_unignore">Unignore</string>
 
     <string name="room_participants_action_cancel_invite_title">Cancel invite</string>
@@ -1035,7 +1038,7 @@
     <string name="settings_fail_to_update_password">Failed to update password</string>
     <string name="settings_fail_to_update_password_invalid_current_password">The password is not valid</string>
     <string name="settings_password_updated">Your password has been updated</string>
-    <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="settings_unignore_user">Show all messages from %s?</string>
 
     <string name="settings_emails_and_phone_numbers_title">Emails and phone numbers</string>
     <string name="settings_emails_and_phone_numbers_summary">Manage emails and phone numbers linked to your Matrix account</string>

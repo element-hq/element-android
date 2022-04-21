@@ -59,11 +59,13 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                              private val realmConfiguration: RealmConfiguration,
                              private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
                              private val timelineEventMapper: TimelineEventMapper,
-                             private val uiEchoManager: UIEchoManager? = null,
+                             private val uiEchoManager: UIEchoManager?,
                              private val threadsAwarenessHandler: ThreadsAwarenessHandler,
                              private val lightweightSettingsStorage: LightweightSettingsStorage,
                              private val initialEventId: String?,
-                             private val onBuiltEvents: (Boolean) -> Unit) {
+                             private val onBuiltEvents: (Boolean) -> Unit,
+                             private val onEventsDeleted: () -> Unit,
+) {
 
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
     private val isLastBackward = AtomicBoolean(chunkEntity.isLastBackward)
@@ -505,6 +507,11 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         if (insertions.isNotEmpty() || modifications.isNotEmpty()) {
             onBuiltEvents(true)
         }
+
+        val deletions = changeSet.deletions
+        if (deletions.isNotEmpty()) {
+            onEventsDeleted()
+        }
     }
 
     private fun getNextDisplayIndex(direction: Timeline.Direction): Int? {
@@ -543,7 +550,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 threadsAwarenessHandler = threadsAwarenessHandler,
                 lightweightSettingsStorage = lightweightSettingsStorage,
                 initialEventId = null,
-                onBuiltEvents = this.onBuiltEvents
+                onBuiltEvents = this.onBuiltEvents,
+                onEventsDeleted = this.onEventsDeleted
         )
     }
 

@@ -95,6 +95,7 @@ internal class LoadTimelineStrategy(
             val threadsAwarenessHandler: ThreadsAwarenessHandler,
             val lightweightSettingsStorage: LightweightSettingsStorage,
             val onEventsUpdated: (Boolean) -> Unit,
+            val onEventsDeleted: () -> Unit,
             val onLimitedTimeline: () -> Unit,
             val onNewTimelineEvents: (List<String>) -> Unit
     )
@@ -302,7 +303,8 @@ internal class LoadTimelineStrategy(
                     threadsAwarenessHandler = dependencies.threadsAwarenessHandler,
                     lightweightSettingsStorage = dependencies.lightweightSettingsStorage,
                     initialEventId = mode.originEventId(),
-                    onBuiltEvents = dependencies.onEventsUpdated
+                    onBuiltEvents = dependencies.onEventsUpdated,
+                    onEventsDeleted = dependencies.onEventsDeleted,
             )
         }
     }

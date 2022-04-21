@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,12 @@
 
 package org.matrix.android.sdk.api.failure
 
-import org.matrix.android.sdk.api.network.ssl.Fingerprint
-
-// This class will be sent to the bus
-sealed class GlobalError {
-    data class InvalidToken(val softLogout: Boolean) : GlobalError()
-    data class ConsentNotGivenError(val consentUri: String) : GlobalError()
-    data class CertificateError(val fingerprint: Fingerprint) : GlobalError()
-
+/**
+ * This enum provide the reason why the SDK request an initial sync to the application
+ */
+enum class InitialSyncRequestReason {
     /**
-     * The SDK requires the app (which should request the user) to perform an initial sync.
+     * The list of ignored users has changed, and at least one user who was ignored is not ignored anymore
      */
-    data class InitialSyncRequest(val reason: InitialSyncRequestReason) : GlobalError()
-    object ExpiredAccount : GlobalError()
+    IGNORED_USERS_LIST_CHANGE,
 }
