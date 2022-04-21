@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.api.session.crypto.crosssigning
 
 import kotlinx.coroutines.flow.Flow
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.util.Optional
@@ -92,8 +91,7 @@ interface CrossSigningService {
     fun allPrivateKeysKnown(): Boolean
 
     /** Mark a user identity as trusted and sign and upload signatures of our user-signing key to the server */
-    suspend fun trustUser(otherUserId: String,
-                          callback: MatrixCallback<Unit>)
+    suspend fun trustUser(otherUserId: String)
 
     /** Mark our own master key as trusted */
     suspend fun markMyMasterKeyAsTrusted()

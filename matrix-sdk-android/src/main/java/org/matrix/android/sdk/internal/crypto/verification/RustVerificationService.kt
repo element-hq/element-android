@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransa
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
@@ -76,7 +77,7 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
         olmMachineProvider.olmMachine
     }
 
-    private val dispatcher = UpdateDispatcher(this.olmMachine.verificationListeners)
+    private val dispatcher = UpdateDispatcher(olmMachine.verificationListeners)
 
     /** The main entry point for the verification service
      *
@@ -89,18 +90,22 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
      * dispatches updates to our listeners.
      */
     internal suspend fun onEvent(event: Event) = when (event.getClearType()) {
-        // I'm not entirely sure why getClearType() returns a msgtype in one case
-        // and a event type in the other case, but this is how the old verification
-        // service did things and it does seem to work.
-        MessageType.MSGTYPE_VERIFICATION_REQUEST -> onRequest(event)
-        EventType.KEY_VERIFICATION_START         -> onStart(event)
+        EventType.KEY_VERIFICATION_REQUEST -> onRequest(event, fromRoomMessage = false)
+        EventType.KEY_VERIFICATION_START   -> onStart(event)
         EventType.KEY_VERIFICATION_READY,
         EventType.KEY_VERIFICATION_ACCEPT,
         EventType.KEY_VERIFICATION_KEY,
         EventType.KEY_VERIFICATION_MAC,
         EventType.KEY_VERIFICATION_CANCEL,
-        EventType.KEY_VERIFICATION_DONE          -> onUpdate(event)
-        else                                     -> {
+        EventType.KEY_VERIFICATION_DONE    -> onUpdate(event)
+        EventType.MESSAGE                  -> onRoomMessage(event)
+        else                               -> Unit
+    }
+
+    private fun onRoomMessage(event: Event) {
+        val messageContent = event.getClearContent()?.toModel<MessageContent>() ?: return
+        if (messageContent.msgType == MessageType.MSGTYPE_VERIFICATION_REQUEST) {
+            onRequest(event, fromRoomMessage = true)
         }
     }
 
@@ -109,9 +114,9 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
 
-        this.olmMachine.getVerificationRequest(sender, flowId)?.dispatchRequestUpdated()
-        val verification = this.getExistingTransaction(sender, flowId) ?: return
-        this.dispatcher.dispatchTxUpdated(verification)
+        olmMachine.getVerificationRequest(sender, flowId)?.dispatchRequestUpdated()
+        val verification = getExistingTransaction(sender, flowId) ?: return
+        dispatcher.dispatchTxUpdated(verification)
     }
 
     /** Check if the start event created new verification objects and dispatch updates */
@@ -119,8 +124,8 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
         val sender = event.senderId ?: return
         val flowId = getFlowId(event) ?: return
 
-        val verification = this.getExistingTransaction(sender, flowId) ?: return
-        val request = this.olmMachine.getVerificationRequest(sender, flowId)
+        val verification = getExistingTransaction(sender, flowId) ?: return
+        val request = olmMachine.getVerificationRequest(sender, flowId)
 
         if (request != null && request.isReady()) {
             // If this is a SAS verification originating from a `m.key.verification.request`
@@ -131,34 +136,37 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
                 Timber.d("## Verification: Auto accepting SAS verification with $sender")
                 verification.accept()
             } else {
-                this.dispatcher.dispatchTxUpdated(verification)
+                dispatcher.dispatchTxUpdated(verification)
             }
         } else {
             // This didn't originate from a request, so tell our listeners that
             // this is a new verification.
-            this.dispatcher.dispatchTxAdded(verification)
+            dispatcher.dispatchTxAdded(verification)
             // The IncomingVerificationRequestHandler seems to only listen to updates
             // so let's trigger an update after the addition as well.
-            this.dispatcher.dispatchTxUpdated(verification)
+            dispatcher.dispatchTxUpdated(verification)
         }
     }
 
     /** Check if the request event created a nev verification request object and dispatch that it dis so */
-    private fun onRequest(event: Event) {
-        val flowId = getFlowId(event) ?: return
+    private fun onRequest(event: Event, fromRoomMessage: Boolean) {
+        val flowId = if (fromRoomMessage) {
+            event.eventId
+        } else {
+            event.getClearContent().toModel<ToDeviceVerificationEvent>()?.transactionId
+        } ?: return
         val sender = event.senderId ?: return
+        val request = getExistingVerificationRequest(sender, flowId) ?: return
 
-        val request = this.getExistingVerificationRequest(sender, flowId) ?: return
-
-        this.dispatcher.dispatchRequestAdded(request)
+        dispatcher.dispatchRequestAdded(request)
     }
 
     override fun addListener(listener: VerificationService.Listener) {
-        this.dispatcher.addListener(listener)
+        dispatcher.addListener(listener)
     }
 
     override fun removeListener(listener: VerificationService.Listener) {
-        this.dispatcher.removeListener(listener)
+        dispatcher.removeListener(listener)
     }
 
     override suspend fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
@@ -175,13 +183,13 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
             otherUserId: String,
             tid: String,
     ): VerificationTransaction? {
-        return this.olmMachine.getVerification(otherUserId, tid)
+        return olmMachine.getVerification(otherUserId, tid)
     }
 
     override fun getExistingVerificationRequests(
             otherUserId: String
     ): List<PendingVerificationRequest> {
-        return this.olmMachine.getVerificationRequests(otherUserId).map {
+        return olmMachine.getVerificationRequests(otherUserId).map {
             it.toPendingVerificationRequest()
         }
     }
@@ -191,7 +199,7 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
             tid: String?
     ): PendingVerificationRequest? {
         return if (tid != null) {
-            this.olmMachine.getVerificationRequest(otherUserId, tid)?.toPendingVerificationRequest()
+            olmMachine.getVerificationRequest(otherUserId, tid)?.toPendingVerificationRequest()
         } else {
             null
         }
@@ -256,8 +264,7 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
             otherUserId: String,
             transactionId: String
     ): Boolean {
-        val request = this.olmMachine.getVerificationRequest(otherUserId, transactionId)
-
+        val request = olmMachine.getVerificationRequest(otherUserId, transactionId)
         return if (request != null) {
             request.acceptWithMethods(methods)
 
@@ -265,7 +272,7 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
                 val qrcode = request.startQrVerification()
 
                 if (qrcode != null) {
-                    this.dispatcher.dispatchTxAdded(qrcode)
+                    dispatcher.dispatchTxAdded(qrcode)
                 }
 
                 true
@@ -294,7 +301,7 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
     ): String? {
         return if (method == VerificationMethod.SAS) {
             if (transactionId != null) {
-                val request = this.olmMachine.getVerificationRequest(otherUserId, transactionId)
+                val request = olmMachine.getVerificationRequest(otherUserId, transactionId)
 
                 val sas = request?.startSasVerification()
 
@@ -310,7 +317,8 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
                 // be wise do do so as well
                 // DeviceListBottomSheetViewModel triggers this, interestingly the method that
                 // triggers this is called `manuallyVerify()`
-                val verification = olmMachine.getDevice(otherUserId, otherDeviceId)?.startVerification()
+                val otherDevice = olmMachine.getDevice(otherUserId, otherDeviceId)
+                val verification = otherDevice?.startVerification()
                 if (verification != null) {
                     dispatcher.dispatchTxAdded(verification)
                     verification.transactionId
@@ -338,7 +346,7 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
 
     override suspend fun cancelVerificationRequest(request: PendingVerificationRequest) {
         val verificationRequest = request.transactionId?.let {
-            this.olmMachine.getVerificationRequest(request.otherUserId, it)
+            olmMachine.getVerificationRequest(request.otherUserId, it)
         }
         verificationRequest?.cancel()
     }
@@ -348,7 +356,7 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
             transactionId: String,
             roomId: String
     ) {
-        val verificationRequest = this.olmMachine.getVerificationRequest(otherUserId, transactionId)
+        val verificationRequest = olmMachine.getVerificationRequest(otherUserId, transactionId)
         verificationRequest?.cancel()
     }
 }

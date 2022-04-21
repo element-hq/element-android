@@ -146,22 +146,20 @@ internal class RustCrossSigningService @Inject constructor(
     }
 
     /** Mark a user identity as trusted and sign and upload signatures of our user-signing key to the server */
-    override suspend fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {
+    override suspend fun trustUser(otherUserId: String) {
         // This is only used in a test
         val userIdentity = olmMachine.getIdentity(otherUserId)
-
         if (userIdentity != null) {
             userIdentity.verify()
-            callback.onSuccess(Unit)
         } else {
-            callback.onFailure(Throwable("## CrossSigning - CrossSigning is not setup for this account"))
+            throw Throwable("## CrossSigning - CrossSigning is not setup for this account")
         }
     }
 
     /** Mark our own master key as trusted */
     override suspend fun markMyMasterKeyAsTrusted() {
         // This doesn't seem to be used?
-        trustUser(olmMachine.userId(), NoOpMatrixCallback())
+        trustUser(olmMachine.userId())
     }
 
     /**

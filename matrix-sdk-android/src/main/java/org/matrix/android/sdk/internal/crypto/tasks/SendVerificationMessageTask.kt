@@ -67,7 +67,6 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
                 return encryptEventTask.execute(EncryptEventTask.Params(
                         params.event.roomId ?: "",
                         params.event,
-                        listOf("m.relates_to")
                 ))
             } catch (throwable: Throwable) {
                 // We said it's ok to send verification request in clear
