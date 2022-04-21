@@ -60,6 +60,9 @@ class DebugVectorFeatures(
     override fun isLiveLocationEnabled(): Boolean = read(DebugFeatureKeys.liveLocationSharing)
             ?: vectorFeatures.isLiveLocationEnabled()
 
+    override fun isScreenSharingEnabled(): Boolean = read(DebugFeatureKeys.screenSharing)
+            ?: vectorFeatures.isScreenSharingEnabled()
+
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {
             it.remove(key)
@@ -114,4 +117,5 @@ object DebugFeatureKeys {
     val onboardingPersonalize = booleanPreferencesKey("onboarding-personalize")
     val onboardingCombinedRegister = booleanPreferencesKey("onboarding-combined-register")
     val liveLocationSharing = booleanPreferencesKey("live-location-sharing")
+    val screenSharing = booleanPreferencesKey("screen-sharing")
 }

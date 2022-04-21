@@ -31,7 +31,6 @@ sealed class VectorCallViewEvents : VectorViewEvents {
     object ShowDialPad : VectorCallViewEvents()
     object ShowCallTransferScreen : VectorCallViewEvents()
     object FailToTransfer : VectorCallViewEvents()
-//    data class CallAnswered(val content: CallAnswerContent) : VectorCallViewEvents()
-//    data class CallHangup(val content: CallHangupContent) : VectorCallViewEvents()
-//    object CallAccepted : VectorCallViewEvents()
+    object ShowScreenSharingPermissionDialog : VectorCallViewEvents()
+    object StopScreenSharingService : VectorCallViewEvents()
 }

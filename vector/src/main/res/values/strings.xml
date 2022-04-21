@@ -483,6 +483,8 @@
     <string name="call_camera_back">Back</string>
     <string name="call_format_turn_hd_off">Turn HD off</string>
     <string name="call_format_turn_hd_on">Turn HD on</string>
+    <string name="call_start_screen_sharing">Share screen</string>
+    <string name="call_stop_screen_sharing">Stop screen sharing</string>
 
     <string name="option_send_files">Send files</string>
     <string name="option_send_sticker">Send sticker</string>
@@ -3030,4 +3032,8 @@
     <string name="room_message_notify_everyone">Notify the whole room</string>
     <string name="room_message_autocomplete_users">Users</string>
     <string name="room_message_autocomplete_notification">Room notification</string>
+
+    <!-- Screen sharing -->
+    <string name="screen_sharing_notification_title">${app_name} Screen Sharing</string>
+    <string name="screen_sharing_notification_description">Screen sharing is in progress</string>
 </resources>

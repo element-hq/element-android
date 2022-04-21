@@ -600,4 +600,9 @@ class DefaultNavigator @Inject constructor(
                         roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
                 )))
     }
+
+    override fun openScreenSharingPermissionDialog(screenCaptureIntent: Intent,
+                                                   activityResultLauncher: ActivityResultLauncher<Intent>) {
+        activityResultLauncher.launch(screenCaptureIntent)
+    }
 }
