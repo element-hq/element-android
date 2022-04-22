@@ -1,2 +1,2 @@
-Huvudsakliga ändringar i denna versionen: Diverse buggfixar och förbättrad stabilitet.
-Fullständig lista av ändringar: https://github.com/vector-im/element-android/releases
+Huvudsakliga ändringar i denna version: Diverse buggfixar och förbättrad stabilitet.
+Fullständig lista över ändringar: https://github.com/vector-im/element-android/releases
