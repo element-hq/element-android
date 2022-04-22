@@ -55,7 +55,7 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
             description(
                     span {
                         +host.vectorDateFormatter.format(event.ageLocalTs, DateFormatKind.DEFAULT_DATE_AND_TIME)
-                        span("\nfrom: ") {
+                        span("\n${host.senderFromTo(event.type)}: ") {
                             textStyle = "bold"
                         }
                         +"${event.info.userId}|${event.info.deviceId}"
@@ -99,6 +99,16 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                         }
                     }.toEpoxyCharSequence()
             )
+        }
+    }
+
+    private fun senderFromTo(type: TrailType): String {
+        return when (type) {
+            TrailType.OutgoingKeyWithheld,
+            TrailType.OutgoingKeyForward -> "to"
+            TrailType.IncomingKeyRequest,
+            TrailType.IncomingKeyForward -> "from"
+            TrailType.Unknown            -> ""
         }
     }
 }
