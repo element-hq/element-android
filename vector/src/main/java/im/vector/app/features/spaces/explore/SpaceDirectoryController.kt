@@ -140,11 +140,13 @@ class SpaceDirectoryController @Inject constructor(
                     val matrixItem = data?.knownRoomSummaries?.find { it.roomId == info.childRoomId }?.toMatrixItem()
                             ?: info.toMatrixItem()
 
+
                     spaceChildInfoItem {
                         id(info.childRoomId)
                         matrixItem(matrixItem)
                         avatarRenderer(host.avatarRenderer)
                         topic(info.topic)
+                        suggested(info.suggested ?: false)
                         errorLabel(
                                 error?.let {
                                     host.stringProvider.getString(R.string.error_failed_to_join_room, host.errorFormatter.toHumanReadable(it))
