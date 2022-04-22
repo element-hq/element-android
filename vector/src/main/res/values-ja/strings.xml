@@ -512,7 +512,7 @@
     <string name="settings_security_and_privacy">セキュリティーとプライバシー</string>
     <string name="preference_root_help_about">ヘルプと概要</string>
     <string name="bottom_action_people_x">ダイレクトメッセージ</string>
-    <string name="edited_suffix">（編集済）</string>
+    <string name="edited_suffix">（編集した）</string>
     <string name="room_filtering_filter_hint">会話を検索…</string>
     <string name="room_list_quick_actions_notifications_all_noisy">全てのメッセージ (音量大)</string>
     <string name="room_list_quick_actions_notifications_all">全てのメッセージ</string>
