@@ -716,8 +716,10 @@ internal class DefaultCryptoService @Inject constructor(
                 }.foldToCallback(callback)
             } else {
                 val algorithm = getEncryptionAlgorithm(roomId)
-                val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
-                        algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                val reason = String.format(
+                        MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
+                        algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON
+                )
                 Timber.tag(loggerTag.value).e("encryptEventContent() : failed $reason")
                 callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason)))
             }
@@ -797,7 +799,14 @@ internal class DefaultCryptoService @Inject constructor(
                 }
                 EventType.ROOM_KEY_REQUEST                       -> {
                     event.getClearContent().toModel<RoomKeyShareRequest>()?.let { req ->
-                        event.senderId?.let { incomingKeyRequestManager.addNewIncomingRequest(it, req) }
+                        // We'll always get these because we send room key requests to
+                        // '*' (ie. 'all devices') which includes the sending device,
+                        // so ignore requests from ourself because apart from it being
+                        // very silly, it won't work because an Olm session cannot send
+                        // messages to itself.
+                        if (req.requestingDeviceId != deviceId) { // ignore self requests
+                            event.senderId?.let { incomingKeyRequestManager.addNewIncomingRequest(it, req) }
+                        }
                     }
                 }
                 EventType.SEND_SECRET                            -> {
