@@ -84,6 +84,7 @@ import org.webrtc.RtpTransceiver
 import org.webrtc.SessionDescription
 import org.webrtc.SurfaceTextureHelper
 import org.webrtc.SurfaceViewRenderer
+import org.webrtc.VideoCapturer
 import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
 import timber.log.Timber
@@ -770,8 +771,27 @@ class WebRtcCall(
         return currentCaptureFormat
     }
 
-    fun startSharingScreen() {
-        // TODO. Will be handled within the next PR.
+    fun startSharingScreen(videoCapturer: VideoCapturer) {
+        val factory = peerConnectionFactoryProvider.get() ?: return
+        val videoSource = factory.createVideoSource(true)
+        val audioSource = factory.createAudioSource(DEFAULT_AUDIO_CONSTRAINTS)
+        val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
+        videoCapturer.initialize(surfaceTextureHelper, context, videoSource.capturerObserver)
+        videoCapturer.startCapture(currentCaptureFormat.width, currentCaptureFormat.height, currentCaptureFormat.fps)
+
+        val videoTrack = factory.createVideoTrack("ARDAMSv0", videoSource).apply { setEnabled(true) }
+        val audioTrack = factory.createAudioTrack("ARDAMSa0", audioSource).apply { setEnabled(true) }
+
+        val localMediaStream = factory.createLocalMediaStream("ARDAMS")
+        peerConnection?.addTrack(videoTrack)
+        peerConnection?.addTrack(audioTrack)
+        localMediaStream.addTrack(videoTrack)
+        localMediaStream.addTrack(audioTrack)
+
+        localAudioSource = audioSource
+        localVideoSource = videoSource
+        localAudioTrack = audioTrack
+        localVideoTrack = videoTrack
     }
 
     fun stopSharingScreen() {
