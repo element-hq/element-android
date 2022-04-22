@@ -207,7 +207,8 @@ class TimelineViewModel @AssistedInject constructor(
             appStateHandler.getCurrentRoomGroupingMethod()?.space().let { currentSpace ->
                 val currentRoomSummary = room.roomSummary() ?: return@let
                 // nothing we are good
-                if (currentSpace == null || !currentRoomSummary.flattenParentIds.contains(currentSpace.roomId)) {
+                if ((currentSpace == null && !vectorPreferences.prefSpacesShowAllRoomInHome())
+                        || (currentSpace != null && !currentRoomSummary.flattenParentIds.contains(currentSpace.roomId))) {
                     // take first one or switch to home
                     appStateHandler.setCurrentSpace(
                             currentRoomSummary
