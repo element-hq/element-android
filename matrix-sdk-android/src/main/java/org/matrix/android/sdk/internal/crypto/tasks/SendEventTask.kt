@@ -76,8 +76,7 @@ internal class DefaultSendEventTask @Inject constructor(
         if (params.encrypt && !params.event.isEncrypted()) {
             return encryptEventTask.execute(EncryptEventTask.Params(
                     params.event.roomId ?: "",
-                    params.event,
-                    listOf("m.relates_to")
+                    params.event
             ))
         }
         return params.event
