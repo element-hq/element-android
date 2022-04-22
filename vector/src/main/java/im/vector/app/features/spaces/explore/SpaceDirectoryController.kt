@@ -140,7 +140,6 @@ class SpaceDirectoryController @Inject constructor(
                     val matrixItem = data?.knownRoomSummaries?.find { it.roomId == info.childRoomId }?.toMatrixItem()
                             ?: info.toMatrixItem()
 
-
                     spaceChildInfoItem {
                         id(info.childRoomId)
                         matrixItem(matrixItem)
