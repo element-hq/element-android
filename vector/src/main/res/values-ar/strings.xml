@@ -1127,4 +1127,16 @@
     <string name="settings_emails_and_phone_numbers_title">البريد الإلكتروني وأرقام الهاتف</string>
     <string name="settings_fail_to_update_password_invalid_current_password">كلمة السر غير صالحة</string>
     <string name="settings_password">كلمة السر</string>
+    <string name="room_no_active_widgets">لا ودجات نشطة</string>
+    <string name="room_widget_webview_access_microphone">استخدم المايكروفون</string>
+    <string name="room_widget_webview_access_camera">استخدم الكاميرا</string>
+    <string name="room_widget_resource_decline_permission">احجب الكل</string>
+    <string name="room_widget_resource_grant_permission">اسمح</string>
+    <string name="room_widget_permission_room_id">معرف الغرفة</string>
+    <string name="room_widget_permission_widget_id">معرف الودجة</string>
+    <string name="room_widget_permission_theme">سمتك</string>
+    <string name="room_widget_permission_user_id">معرفك</string>
+    <string name="room_widget_permission_avatar_url">رابط صورتك الرمزية</string>
+    <string name="room_widget_permission_display_name">اسمك العلني</string>
+    <string name="room_widget_open_in_browser">افتح في المتصفح</string>
 </resources>
