@@ -296,7 +296,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
             communityGroups
         }
                 .execute { async ->
-                    val rootSpaces = session.spaceService().getRootSpaceSummaries()
+                    val rootSpaces = async.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
                     val orders = rootSpaces.map {
                         it.roomId to session.getRoom(it.roomId)
                                 ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
