@@ -423,7 +423,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     private fun tentativeRestoreBackup(res: Map<String, String>?) {
         // It's not a good idea to download the full backup, it might take very long
         // and use a lot of resources
-        // Just check that the ey is valid and store it, the backup will be used megolm session per
+        // Just check that the key is valid and store it, the backup will be used megolm session per
         // megolm session when an UISI is encountered
 
         viewModelScope.launch(Dispatchers.IO) {
