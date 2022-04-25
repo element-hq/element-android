@@ -15,14 +15,14 @@
  */
 package org.matrix.android.sdk.internal.session.pushers
 
-import org.matrix.android.sdk.api.pushrules.ConditionResolver
-import org.matrix.android.sdk.api.pushrules.ContainsDisplayNameCondition
-import org.matrix.android.sdk.api.pushrules.EventMatchCondition
-import org.matrix.android.sdk.api.pushrules.RoomMemberCountCondition
-import org.matrix.android.sdk.api.pushrules.SenderNotificationPermissionCondition
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.pushrules.ConditionResolver
+import org.matrix.android.sdk.api.session.pushrules.ContainsDisplayNameCondition
+import org.matrix.android.sdk.api.session.pushrules.EventMatchCondition
+import org.matrix.android.sdk.api.session.pushrules.RoomMemberCountCondition
+import org.matrix.android.sdk.api.session.pushrules.SenderNotificationPermissionCondition
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomGetter

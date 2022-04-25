@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.api.pushrules.rest
+package org.matrix.android.sdk.api.session.pushrules.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.pushrules.Condition
-import org.matrix.android.sdk.api.pushrules.ContainsDisplayNameCondition
-import org.matrix.android.sdk.api.pushrules.EventMatchCondition
-import org.matrix.android.sdk.api.pushrules.Kind
-import org.matrix.android.sdk.api.pushrules.RoomMemberCountCondition
-import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.SenderNotificationPermissionCondition
+import org.matrix.android.sdk.api.session.pushrules.Condition
+import org.matrix.android.sdk.api.session.pushrules.ContainsDisplayNameCondition
+import org.matrix.android.sdk.api.session.pushrules.EventMatchCondition
+import org.matrix.android.sdk.api.session.pushrules.Kind
+import org.matrix.android.sdk.api.session.pushrules.RoomMemberCountCondition
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.SenderNotificationPermissionCondition
 import timber.log.Timber
 
 /**

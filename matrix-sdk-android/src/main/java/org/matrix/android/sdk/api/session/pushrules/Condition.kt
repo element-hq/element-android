@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.api.pushrules
+package org.matrix.android.sdk.api.session.pushrules
 
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.session.events.model.Event
 
-data class PushEvents(
-        val matchedEvents: List<Pair<Event, PushRule>>,
-        val roomsJoined: Collection<String>,
-        val roomsLeft: Collection<String>,
-        val redactedEventIds: List<String>
-)
+interface Condition {
+    fun isSatisfied(event: Event, conditionResolver: ConditionResolver): Boolean
+
+    fun technicalDescription(): String
+}

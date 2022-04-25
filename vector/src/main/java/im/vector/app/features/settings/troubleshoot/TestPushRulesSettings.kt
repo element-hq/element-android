@@ -21,8 +21,8 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.notifications.toNotificationAction
-import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.getActions
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.getActions
 import javax.inject.Inject
 
 class TestPushRulesSettings @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,

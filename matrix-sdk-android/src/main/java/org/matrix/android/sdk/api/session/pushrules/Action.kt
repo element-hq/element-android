@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.matrix.android.sdk.api.pushrules
+package org.matrix.android.sdk.api.session.pushrules
 
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import timber.log.Timber
 
 sealed class Action {
