@@ -297,12 +297,12 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         }
                 .execute { async ->
                     val rootSpaces = async.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
-                    val orders = rootSpaces.map {
+                    val orders = rootSpaces.associate {
                         it.roomId to session.getRoom(it.roomId)
                                 ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
                                 ?.content.toModel<SpaceOrderContent>()
                                 ?.safeOrder()
-                    }.toMap()
+                    }
                     copy(
                             asyncSpaces = async,
                             rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
