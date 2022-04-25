@@ -40,7 +40,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
@@ -279,21 +278,13 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
             displayName = QueryStringValue.IsNotEmpty
         }
 
-        val flowSession = session.flow()
-
         combine(
-                flowSession
-                        .liveUser(session.myUserId)
-                        .map {
-                            it.getOrNull()
-                        },
-                flowSession
+                session.flow()
                         .liveSpaceSummaries(params),
-                session
-                        .accountDataService()
+                session.accountDataService()
                         .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
                         .asFlow()
-        ) { _, spaces, _ ->
+        ) { spaces, _ ->
             spaces
         }
                 .execute { async ->
