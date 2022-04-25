@@ -212,7 +212,8 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         }
         session.coroutineScope.launch {
             orderCommands.forEach {
-                session.getRoom(it.spaceId)?.updateAccountData(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER,
+                session.getRoom(it.spaceId)?.updateAccountData(
+                        RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER,
                         SpaceOrderContent(order = it.order).toContent()
                 )
             }
