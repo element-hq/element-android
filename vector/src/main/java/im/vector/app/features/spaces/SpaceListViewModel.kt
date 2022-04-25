@@ -292,8 +292,8 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                         .accountDataService()
                         .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
                         .asFlow()
-        ) { _, communityGroups, _ ->
-            communityGroups
+        ) { _, spaces, _ ->
+            spaces
         }
                 .execute { async ->
                     val rootSpaces = async.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
