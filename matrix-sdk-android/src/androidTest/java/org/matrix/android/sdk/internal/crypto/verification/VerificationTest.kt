@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.verification.qrcode
+package org.matrix.android.sdk.internal.crypto.verification
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.amshove.kluent.shouldBe
@@ -23,19 +23,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.auth.UIABaseAuth
-import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
-import org.matrix.android.sdk.common.TestConstants
+import timber.log.Timber
 import java.util.concurrent.CountDownLatch
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -147,50 +141,19 @@ class VerificationTest : InstrumentedTest {
             ExpectedResult(sasIsSupported = true, otherCanShowQrCode = true, otherCanScanQrCode = true)
     )
 
-    // TODO Add tests without SAS
-
     private fun doTest(aliceSupportedMethods: List<VerificationMethod>,
                        bobSupportedMethods: List<VerificationMethod>,
                        expectedResultForAlice: ExpectedResult,
                        expectedResultForBob: ExpectedResult) {
-         val testHelper = CommonTestHelper(context())
-         val cryptoTestHelper = CryptoTestHelper(testHelper)
+        val testHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(testHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession!!
 
-        testHelper.doSync<Unit> { callback ->
-            aliceSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = aliceSession.myUserId,
-                                                    password = TestConstants.PASSWORD,
-                                                    session = flowResponse.session
-                                            )
-                                    )
-                                }
-                            }, callback)
-        }
-
-        testHelper.doSync<Unit> { callback ->
-            bobSession.cryptoService().crossSigningService()
-                    .initializeCrossSigning(
-                            object : UserInteractiveAuthInterceptor {
-                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                                    promise.resume(
-                                            UserPasswordAuth(
-                                                    user = bobSession.myUserId,
-                                                    password = TestConstants.PASSWORD,
-                                                    session = flowResponse.session
-                                            )
-                                    )
-                                }
-                            }, callback)
-        }
+        cryptoTestHelper.initializeCrossSigning(aliceSession)
+        cryptoTestHelper.initializeCrossSigning(bobSession)
 
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
         val bobVerificationService = bobSession.cryptoService().verificationService()
@@ -202,6 +165,7 @@ class VerificationTest : InstrumentedTest {
         val aliceListener = object : VerificationService.Listener {
             override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
                 // Step 4: Alice receive the ready request
+                Timber.v("Alice is ready: ${pr.isReady}")
                 if (pr.isReady) {
                     aliceReadyPendingVerificationRequest = pr
                     latch.countDown()
@@ -213,16 +177,19 @@ class VerificationTest : InstrumentedTest {
         val bobListener = object : VerificationService.Listener {
             override fun verificationRequestCreated(pr: PendingVerificationRequest) {
                 // Step 2: Bob accepts the verification request
-                bobVerificationService.readyPendingVerificationInDMs(
-                        bobSupportedMethods,
-                        aliceSession.myUserId,
-                        cryptoTestData.roomId,
-                        pr.transactionId!!
-                )
+                Timber.v("Bob accepts the verification request")
+                testHelper.runBlockingTest {
+                    bobVerificationService.readyPendingVerification(
+                            bobSupportedMethods,
+                            aliceSession.myUserId,
+                            pr.transactionId!!
+                    )
+                }
             }
 
             override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
                 // Step 3: Bob is ready
+                Timber.v("Bob is ready: ${pr.isReady}")
                 if (pr.isReady) {
                     bobReadyPendingVerificationRequest = pr
                     latch.countDown()
@@ -233,7 +200,9 @@ class VerificationTest : InstrumentedTest {
 
         val bobUserId = bobSession.myUserId
         // Step 1: Alice starts a verification request
-        aliceVerificationService.requestKeyVerificationInDMs(aliceSupportedMethods, bobUserId, cryptoTestData.roomId)
+        testHelper.runBlockingTest {
+            aliceVerificationService.requestKeyVerificationInDMs(aliceSupportedMethods, bobUserId, cryptoTestData.roomId)
+        }
         testHelper.await(latch)
 
         aliceReadyPendingVerificationRequest!!.let { pr ->

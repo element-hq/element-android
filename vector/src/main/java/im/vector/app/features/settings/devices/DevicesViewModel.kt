@@ -250,7 +250,7 @@ class DevicesViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val txID = session.cryptoService()
                     .verificationService()
-                    .beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId, null)
+                    .beginDeviceVerification(session.myUserId, action.deviceId)
             _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
                     session.myUserId,
                     txID

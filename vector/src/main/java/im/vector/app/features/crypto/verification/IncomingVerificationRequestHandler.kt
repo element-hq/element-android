@@ -166,9 +166,8 @@ class IncomingVerificationRequestHandler @Inject constructor(
                             }
                         }
                         dismissedAction = LaunchCoroutineRunnable(coroutineScope) {
-                            session?.cryptoService()?.verificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
-                                    pr.transactionId ?: "",
-                                    pr.roomId ?: ""
+                            session?.cryptoService()?.verificationService()?.cancelVerificationRequest(pr.otherUserId,
+                                    pr.transactionId ?: ""
                             )
                         }
                         colorAttribute = R.attr.vctr_notice_secondary

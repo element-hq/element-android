@@ -229,17 +229,12 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
         return null
     }
 
-    override suspend fun requestKeyVerification(
-            methods: List<VerificationMethod>,
-            otherUserId: String,
-            otherDevices: List<String>?
-    ): PendingVerificationRequest {
-        val verification = when (val identity = olmMachine.getIdentity(otherUserId)) {
+    override suspend fun requestSelfKeyVerification(methods: List<VerificationMethod>): PendingVerificationRequest {
+        val verification = when (val identity = olmMachine.getIdentity(olmMachine.userId())) {
             is OwnUserIdentity -> identity.requestVerification(methods)
             is UserIdentity    -> throw IllegalArgumentException("This method doesn't support verification of other users devices")
             null               -> throw IllegalArgumentException("Cross signing has not been bootstrapped for our own user")
         }
-
         return verification.toPendingVerificationRequest()
     }
 
@@ -249,7 +244,7 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
             roomId: String,
             localId: String?
     ): PendingVerificationRequest {
-        Timber.i("## SAS Requesting verification to user: $otherUserId in room $roomId")
+        olmMachine.ensureUsersKeys(listOf(otherUserId))
         val verification = when (val identity = olmMachine.getIdentity(otherUserId)) {
             is UserIdentity    -> identity.requestVerification(methods, roomId, localId!!)
             is OwnUserIdentity -> throw IllegalArgumentException("This method doesn't support verification of our own user")
@@ -284,78 +279,49 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
         }
     }
 
-    override suspend fun readyPendingVerificationInDMs(
-            methods: List<VerificationMethod>,
-            otherUserId: String,
-            roomId: String,
-            transactionId: String
-    ): Boolean {
-        return readyPendingVerification(methods, otherUserId, transactionId)
-    }
-
     override suspend fun beginKeyVerification(
             method: VerificationMethod,
             otherUserId: String,
-            otherDeviceId: String,
-            transactionId: String?
+            transactionId: String
     ): String? {
         return if (method == VerificationMethod.SAS) {
-            if (transactionId != null) {
-                val request = olmMachine.getVerificationRequest(otherUserId, transactionId)
+            val request = olmMachine.getVerificationRequest(otherUserId, transactionId)
 
-                val sas = request?.startSasVerification()
+            val sas = request?.startSasVerification()
 
-                if (sas != null) {
-                    dispatcher.dispatchTxAdded(sas)
-                    sas.transactionId
-                } else {
-                    null
-                }
+            if (sas != null) {
+                dispatcher.dispatchTxAdded(sas)
+                sas.transactionId
             } else {
-                // This starts the short SAS flow, the one that doesn't start with
-                // a `m.key.verification.request`, Element web stopped doing this, might
-                // be wise do do so as well
-                // DeviceListBottomSheetViewModel triggers this, interestingly the method that
-                // triggers this is called `manuallyVerify()`
-                val otherDevice = olmMachine.getDevice(otherUserId, otherDeviceId)
-                val verification = otherDevice?.startVerification()
-                if (verification != null) {
-                    dispatcher.dispatchTxAdded(verification)
-                    verification.transactionId
-                } else {
-                    null
-                }
+                null
             }
         } else {
             throw IllegalArgumentException("Unknown verification method")
         }
     }
 
-    override suspend fun beginKeyVerificationInDMs(
-            method: VerificationMethod,
-            transactionId: String,
-            roomId: String,
-            otherUserId: String,
-            otherDeviceId: String
-    ): String {
-        beginKeyVerification(method, otherUserId, otherDeviceId, transactionId)
-        // TODO what's the point of returning the same ID we got as an argument?
-        // We do this because the old verification service did so
-        return transactionId
+    override suspend fun beginDeviceVerification(otherUserId: String, otherDeviceId: String): String? {
+        // This starts the short SAS flow, the one that doesn't start with
+        // a `m.key.verification.request`, Element web stopped doing this, might
+        // be wise do do so as well
+        // DeviceListBottomSheetViewModel triggers this, interestingly the method that
+        // triggers this is called `manuallyVerify()`
+        val otherDevice = olmMachine.getDevice(otherUserId, otherDeviceId)
+        val verification = otherDevice?.startVerification()
+        return if (verification != null) {
+            dispatcher.dispatchTxAdded(verification)
+            verification.transactionId
+        } else {
+            null
+        }
     }
 
     override suspend fun cancelVerificationRequest(request: PendingVerificationRequest) {
-        val verificationRequest = request.transactionId?.let {
-            olmMachine.getVerificationRequest(request.otherUserId, it)
-        }
-        verificationRequest?.cancel()
+        request.transactionId ?: return
+        cancelVerificationRequest(request.otherUserId, request.transactionId)
     }
 
-    override suspend fun declineVerificationRequestInDMs(
-            otherUserId: String,
-            transactionId: String,
-            roomId: String
-    ) {
+    override suspend fun cancelVerificationRequest(otherUserId: String, transactionId: String) {
         val verificationRequest = olmMachine.getVerificationRequest(otherUserId, transactionId)
         verificationRequest?.cancel()
     }

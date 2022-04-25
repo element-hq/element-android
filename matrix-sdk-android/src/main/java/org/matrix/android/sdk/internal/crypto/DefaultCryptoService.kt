@@ -775,7 +775,7 @@ internal class DefaultCryptoService @Inject constructor(
                 }
             }
         } catch (throwable: Throwable) {
-            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO doKeyDownloadForUsers(): error")
         }
     }
 

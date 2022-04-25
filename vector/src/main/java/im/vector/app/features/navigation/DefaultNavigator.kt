@@ -217,10 +217,8 @@ class DefaultNavigator @Inject constructor(
     override fun requestSessionVerification(context: Context, otherSessionId: String) {
         coroutineScope.launch {
             val session = sessionHolder.getSafeActiveSession() ?: return@launch
-            val pr = session.cryptoService().verificationService().requestKeyVerification(
-                    supportedVerificationMethodsProvider.provide(),
-                    session.myUserId,
-                    listOf(otherSessionId)
+            val pr = session.cryptoService().verificationService().requestSelfKeyVerification(
+                    supportedVerificationMethodsProvider.provide()
             )
             if (context is AppCompatActivity) {
                 VerificationBottomSheet.withArgs(
@@ -241,10 +239,8 @@ class DefaultNavigator @Inject constructor(
                     .map { it.deviceId }
             if (context is AppCompatActivity) {
                 if (otherSessions.isNotEmpty()) {
-                    val pr = session.cryptoService().verificationService().requestKeyVerification(
-                            supportedVerificationMethodsProvider.provide(),
-                            session.myUserId,
-                            otherSessions)
+                    val pr = session.cryptoService().verificationService().requestSelfKeyVerification(
+                            supportedVerificationMethodsProvider.provide())
                     VerificationBottomSheet.forSelfVerification(session, pr.transactionId ?: pr.localId)
                             .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
                 } else {

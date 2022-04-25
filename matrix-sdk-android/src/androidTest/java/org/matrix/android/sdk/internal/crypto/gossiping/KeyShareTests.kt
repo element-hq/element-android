@@ -24,7 +24,6 @@ import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.FixMethodOrder
 import org.junit.Ignore
@@ -37,7 +36,6 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
@@ -250,32 +248,31 @@ class KeyShareTests : InstrumentedTest {
 
         aliceVerificationService1.addListener(object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
+                if (tx !is SasVerificationTransaction) return
                 Log.d("#TEST", "AA: tx incoming?:${tx.isIncoming} state ${tx.state}")
-                if (tx is SasVerificationTransaction) {
-                    if (tx.state == VerificationTxState.OnStarted) {
-                        (tx as IncomingSasVerificationTransaction).performAccept()
+                when (tx.state) {
+                    VerificationTxState.OnStarted      -> commonTestHelper.runBlockingTest {
+                        tx.acceptVerification()
                     }
-                    if (tx.state == VerificationTxState.ShortCodeReady) {
+                    VerificationTxState.ShortCodeReady -> commonTestHelper.runBlockingTest {
                         session1ShortCode = tx.getDecimalCodeRepresentation()
-                        commonTestHelper.runBlockingTest {
-                            delay(500)
-                            tx.userHasVerifiedShortCode()
-                        }
+                        delay(500)
+                        tx.userHasVerifiedShortCode()
                     }
                 }
             }
-        })
+        }
+        )
 
         aliceVerificationService2.addListener(object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
+                if (tx !is SasVerificationTransaction) return
                 Log.d("#TEST", "BB: tx incoming?:${tx.isIncoming} state ${tx.state}")
-                if (tx is SasVerificationTransaction) {
-                    if (tx.state == VerificationTxState.ShortCodeReady) {
+                when (tx.state) {
+                    VerificationTxState.ShortCodeReady -> commonTestHelper.runBlockingTest {
                         session2ShortCode = tx.getDecimalCodeRepresentation()
-                        commonTestHelper.runBlockingTest {
-                            delay(500)
-                            tx.userHasVerifiedShortCode()
-                        }
+                        delay(500)
+                        tx.userHasVerifiedShortCode()
                     }
                 }
             }
@@ -301,7 +298,8 @@ class KeyShareTests : InstrumentedTest {
 
         // SSK and USK private keys should have been shared
 
-        commonTestHelper.waitWithLatch(60_000) { latch ->
+        commonTestHelper.waitWithLatch(60_000)
+        { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 Log.d("#TEST", "CAN XS :${aliceSession2.cryptoService().crossSigningService().getMyCrossSigningKeys()}")
                 aliceSession2.cryptoService().crossSigningService().canCrossSign()
@@ -309,7 +307,8 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Test that key backup key has been shared to
-        commonTestHelper.waitWithLatch(60_000) { latch ->
+        commonTestHelper.waitWithLatch(60_000)
+        { latch ->
             val keysBackupService = aliceSession2.cryptoService().keysBackupService()
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 Log.d("#TEST", "Recovery :${keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey}")

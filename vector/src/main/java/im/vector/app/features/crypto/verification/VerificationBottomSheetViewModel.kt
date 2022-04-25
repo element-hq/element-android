@@ -238,7 +238,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 handleRequestVerificationByDM(roomId, otherUserId)
             }
             is VerificationAction.StartSASVerification         -> {
-                handleStartSASVerification(roomId, otherUserId, action)
+                handleStartSASVerification(otherUserId, action)
             }
             is VerificationAction.RemoteQrCodeScanned          -> {
                 handleRemoteQrCodeScanned(action)
@@ -284,28 +284,16 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         }.exhaustive
     }
 
-    private fun handleStartSASVerification(roomId: String?, otherUserId: String, action: VerificationAction.StartSASVerification) {
+    private fun handleStartSASVerification(otherUserId: String, action: VerificationAction.StartSASVerification) {
         val request = session.cryptoService().verificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
                 ?: return
-        val otherDevice = if (request.isIncoming) request.requestInfo?.fromDevice else request.readyInfo?.fromDevice
         viewModelScope.launch {
-            if (roomId == null) {
                 session.cryptoService().verificationService().beginKeyVerification(
                         VerificationMethod.SAS,
                         otherUserId = request.otherUserId,
-                        otherDeviceId = otherDevice ?: "",
                         transactionId = action.pendingRequestTransactionId
                 )
-            } else {
-                session.cryptoService().verificationService().beginKeyVerificationInDMs(
-                        VerificationMethod.SAS,
-                        transactionId = action.pendingRequestTransactionId,
-                        roomId = roomId,
-                        otherUserId = request.otherUserId,
-                        otherDeviceId = otherDevice ?: ""
-                )
             }
-        }
     }
 
     private fun handleSASDoNotMatchAction(action: VerificationAction.SASDoNotMatchAction) {
