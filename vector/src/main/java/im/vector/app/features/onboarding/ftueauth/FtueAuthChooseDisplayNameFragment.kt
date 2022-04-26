@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import com.google.android.material.textfield.TextInputLayout
+import im.vector.app.core.extensions.hasContent
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.databinding.FragmentFtueDisplayNameBinding
 import im.vector.app.features.onboarding.OnboardingAction
@@ -69,7 +70,7 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
 
     override fun updateWithState(state: OnboardingViewState) {
         views.displayNameInput.editText?.setText(state.personalizationState.displayName)
-        views.displayNameSubmit.isEnabled = views.displayNameInput.hasContentEmpty()
+        views.displayNameSubmit.isEnabled = views.displayNameInput.hasContent()
     }
 
     override fun resetViewModel() {
@@ -81,5 +82,3 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
         return true
     }
 }
-
-private fun TextInputLayout.hasContentEmpty() = !editText?.text.isNullOrEmpty()
