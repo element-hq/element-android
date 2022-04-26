@@ -30,7 +30,7 @@ internal object AuditTrailMapper {
     fun map(entity: AuditTrailEntity): AuditTrail? {
         val contentJson = entity.contentJson ?: return null
         return when (entity.type) {
-            TrailType.OutgoingKeyForward.name  -> {
+            TrailType.OutgoingKeyForward.name -> {
                 val info = tryOrNull {
                     MoshiProvider.providesMoshi().adapter(ForwardInfo::class.java).fromJson(contentJson)
                 } ?: return null
@@ -60,7 +60,17 @@ internal object AuditTrailMapper {
                         info = info
                 )
             }
-            else                              ->  {
+            TrailType.IncomingKeyForward.name -> {
+                val info = tryOrNull {
+                    MoshiProvider.providesMoshi().adapter(ForwardInfo::class.java).fromJson(contentJson)
+                } ?: return null
+                AuditTrail(
+                        ageLocalTs = entity.ageLocalTs ?: 0,
+                        type = TrailType.IncomingKeyForward,
+                        info = info
+                )
+            }
+            else -> {
                 AuditTrail(
                         ageLocalTs = entity.ageLocalTs ?: 0,
                         type = TrailType.Unknown,
