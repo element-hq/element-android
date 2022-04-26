@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- TODO During next Weblate sync: There are 2 occurences of `$ {app_name}` in the translations. Remove the extra space. -->
+    <!-- TODO During next Weblate sync: Format all strings.xml files via AndroidStudio -> Reformat Code -> Mask -> *.xml -->
 
     <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
     <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
