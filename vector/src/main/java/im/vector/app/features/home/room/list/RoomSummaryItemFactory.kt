@@ -124,7 +124,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .avatarRenderer(avatarRenderer)
                 // We do not display shield in the room list anymore
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
-                .izPublic(roomSummary.isPublic)
+                .isPublic(roomSummary.isPublic)
                 .showPresence(roomSummary.isDirect)
                 .userPresence(roomSummary.directUserPresence)
                 .matrixItem(roomSummary.toMatrixItem())

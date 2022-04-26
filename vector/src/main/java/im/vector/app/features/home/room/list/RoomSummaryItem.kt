@@ -45,24 +45,56 @@ import org.matrix.android.sdk.api.util.MatrixItem
 @EpoxyModelClass(layout = R.layout.item_room)
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
-    @EpoxyAttribute lateinit var typingMessage: String
-    @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
-    @EpoxyAttribute lateinit var matrixItem: MatrixItem
+    @EpoxyAttribute
+    lateinit var typingMessage: String
 
-    @EpoxyAttribute lateinit var lastFormattedEvent: EpoxyCharSequence
-    @EpoxyAttribute lateinit var lastEventTime: String
-    @EpoxyAttribute var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
-    @EpoxyAttribute var userPresence: UserPresence? = null
-    @EpoxyAttribute var showPresence: Boolean = false
-    @EpoxyAttribute var izPublic: Boolean = false
-    @EpoxyAttribute var unreadNotificationCount: Int = 0
-    @EpoxyAttribute var hasUnreadMessage: Boolean = false
-    @EpoxyAttribute var hasDraft: Boolean = false
-    @EpoxyAttribute var showHighlighted: Boolean = false
-    @EpoxyAttribute var hasFailedSending: Boolean = false
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemLongClickListener: View.OnLongClickListener? = null
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var itemClickListener: ClickListener? = null
-    @EpoxyAttribute var showSelected: Boolean = false
+    @EpoxyAttribute
+    lateinit var avatarRenderer: AvatarRenderer
+
+    @EpoxyAttribute
+    lateinit var matrixItem: MatrixItem
+
+    @EpoxyAttribute
+    lateinit var lastFormattedEvent: EpoxyCharSequence
+
+    @EpoxyAttribute
+    lateinit var lastEventTime: String
+
+    @EpoxyAttribute
+    var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
+
+    @EpoxyAttribute
+    var userPresence: UserPresence? = null
+
+    @EpoxyAttribute
+    var showPresence: Boolean = false
+
+    @EpoxyAttribute @JvmField
+    var isPublic: Boolean = false
+
+    @EpoxyAttribute
+    var unreadNotificationCount: Int = 0
+
+    @EpoxyAttribute
+    var hasUnreadMessage: Boolean = false
+
+    @EpoxyAttribute
+    var hasDraft: Boolean = false
+
+    @EpoxyAttribute
+    var showHighlighted: Boolean = false
+
+    @EpoxyAttribute
+    var hasFailedSending: Boolean = false
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var itemLongClickListener: View.OnLongClickListener? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var itemClickListener: ClickListener? = null
+
+    @EpoxyAttribute
+    var showSelected: Boolean = false
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -79,7 +111,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.draftView.isVisible = hasDraft
         avatarRenderer.render(matrixItem, holder.avatarImageView)
         holder.roomAvatarDecorationImageView.render(encryptionTrustLevel)
-        holder.roomAvatarPublicDecorationImageView.isVisible = izPublic
+        holder.roomAvatarPublicDecorationImageView.isVisible = isPublic
         holder.roomAvatarFailSendingImageView.isVisible = hasFailedSending
         renderSelection(holder, showSelected)
         holder.typingView.setTextOrHide(typingMessage)
