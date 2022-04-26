@@ -657,9 +657,22 @@ internal class RealmCryptoStore @Inject constructor(
                 ?: false
     }
 
+    override fun shouldShareHistory(roomId: String): Boolean {
+        return doWithRealm(realmConfiguration) {
+            CryptoRoomEntity.getById(it, roomId)?.shouldShareHistory
+        }
+                ?: false
+    }
+
     override fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean) {
         doRealmTransaction(realmConfiguration) {
             CryptoRoomEntity.getOrCreate(it, roomId).shouldEncryptForInvitedMembers = shouldEncryptForInvitedMembers
+        }
+    }
+
+    override fun setShouldShareHistory(roomId: String, shouldShareHistory: Boolean) {
+        doRealmTransaction(realmConfiguration) {
+            CryptoRoomEntity.getOrCreate(it, roomId).shouldShareHistory = shouldShareHistory
         }
     }
 
@@ -743,6 +756,10 @@ internal class RealmCryptoStore @Inject constructor(
                 }
 
                 if (sessionIdentifier != null) {
+                    val shouldShareHistory = session.roomId?.let { roomId ->
+                        CryptoRoomEntity.getById(realm, roomId)?.shouldShareHistory
+                    } ?: false
+                    session.sharedHistory = shouldShareHistory
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, session.senderKey)
 
                     val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
@@ -750,22 +767,11 @@ internal class RealmCryptoStore @Inject constructor(
                         sessionId = sessionIdentifier
                         senderKey = session.senderKey
                         roomId = session.roomId
+                        sharedHistory = shouldShareHistory
                         putInboundGroupSession(session)
                     }
-
-                    if (existing != null) {
-                        // we want to keep the existing backup status
-                        existing.putInboundGroupSession(session)
-                    } else {
-                        val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
-                            primaryKey = key
-                            sessionId = sessionIdentifier
-                            senderKey = session.senderKey
-                            putInboundGroupSession(session)
-                        }
-
-                        realm.insertOrUpdate(realmOlmInboundGroupSession)
-                    }
+                    Timber.i("## CRYPTO | shouldShareHistory: $shouldShareHistory for $key")
+                    realm.insertOrUpdate(realmOlmInboundGroupSession)
                 }
             }
         }

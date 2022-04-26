@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
 import io.realm.DynamicRealm
+import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
@@ -28,5 +29,8 @@ internal class MigrateCryptoTo017(realm: DynamicRealm) : RealmMigrator(realm, 16
         realm.schema.get("OlmInboundGroupSessionEntity")
                 ?.addField(OlmInboundGroupSessionEntityFields.SHARED_HISTORY, Boolean::class.java)
                 ?.addField(OlmInboundGroupSessionEntityFields.ROOM_ID, String::class.java)
+
+        realm.schema.get("CryptoRoomEntity")
+                ?.addField(CryptoRoomEntityFields.SHOULD_SHARE_HISTORY, Boolean::class.java)
     }
 }

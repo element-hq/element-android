@@ -73,6 +73,9 @@ internal class RealmCryptoStoreMigration @Inject constructor(
         if (oldVersion < 14) MigrateCryptoTo014(realm).perform()
         if (oldVersion < 15) MigrateCryptoTo015(realm).perform()
         if (oldVersion < 16) MigrateCryptoTo016(realm).perform()
+<<<<<<< develop
         if (oldVersion < 17) MigrateCryptoTo017(realm).perform()
+=======
+>>>>>>> Implement history key sharing functionality with respect to room visibility settings
     }
 }

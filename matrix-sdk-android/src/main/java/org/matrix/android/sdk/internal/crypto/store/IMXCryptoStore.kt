@@ -258,6 +258,17 @@ internal interface IMXCryptoStore {
 
     fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean)
 
+    fun shouldShareHistory(roomId: String): Boolean
+
+    /**
+     * Sets a boolean flag that will determine whether or not room history (existing inbound sessions)
+     * will be shared to new user invites
+     *
+     * @param roomId the room id
+     * @param shouldShareHistory The boolean flag
+     */
+    fun setShouldShareHistory(roomId: String, shouldShareHistory: Boolean)
+
     /**
      * Store a session between the logged-in user and another device.
      *

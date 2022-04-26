@@ -43,6 +43,10 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
     // Devices which forwarded this session to us (normally empty).
     var forwardingCurve25519KeyChain: List<String>? = ArrayList()
 
+    // Flag that indicates whether or not the current inboundSession will be shared to
+    // invited users to decrypt past messages
+    var sharedHistory: Boolean = false
+
     /**
      * @return the first known message index
      */
