@@ -608,8 +608,8 @@
     <string name="video_meeting">Почати відеозустріч</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">У вас немає повноважень розпочати дзвінок</string>
     <string name="no_permissions_to_start_webrtc_call">У вас немає повноважень на дзвінок у цій кімнаті</string>
-    <string name="no_permissions_to_start_conf_call_in_direct_room">У вас немає повноважень розпочати конференц-дзвінок</string>
-    <string name="no_permissions_to_start_conf_call">У вас немає повноважень розпочати конференц-дзвінок у цій кімнаті</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">У вас немає повноважень розпочати груповий виклик</string>
+    <string name="no_permissions_to_start_conf_call">У вас немає повноважень розпочати груповий виклик у цій кімнаті</string>
     <string name="action_reset">Скинути</string>
     <string name="action_dismiss">Відхилити</string>
     <string name="action_play">Грати</string>
@@ -816,7 +816,7 @@
     <string name="room_widget_resource_decline_permission">Заблокувати все</string>
     <string name="room_widget_resource_grant_permission">Дозволити</string>
     <string name="room_widget_resource_permission_title">Цей віджет хоче використовувати такі ресурси:</string>
-    <string name="error_jitsi_not_supported_on_old_device">На жаль, конференц-дзвінки з Jitsi не підтримуються на старих пристроях (пристрої з ОС Android нижче 6.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">На жаль, групові виклики з Jitsi не підтримуються на старих пристроях (пристрої з ОС Android нижче 6.0)</string>
     <string name="room_widget_permission_room_id">ID кімнати</string>
     <string name="room_widget_permission_widget_id">ID віджету</string>
     <string name="room_widget_permission_theme">Ваша тема</string>
@@ -1144,7 +1144,7 @@
     <string name="room_list_quick_actions_leave">Вийти з кімнати</string>
     <string name="room_profile_section_more_leave">Вийти з кімнати</string>
     <string name="direct_room_profile_section_more_leave">Вийти</string>
-    <string name="jitsi_leave_conf_to_join_another_one_content">Вийти з поточної конференції та перейти до іншої\?</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Вийти з поточного групового виклику та перейти до іншого\?</string>
     <string name="room_participants_leave_private_warning">Це не загальнодоступна кімната. Ви не зможете знову приєднатися без запрошення.</string>
     <string name="room_settings_enable_encryption_no_permission">У вас немає дозволу на ввімкнення шифрування в цій кімнаті.</string>
     <string name="room_settings_permissions_title">Дозволи кімнати</string>
@@ -1463,7 +1463,7 @@
     <string name="keys_backup_restore_with_recovery_key">Використайте ключ відновлення, щоб розблокувати історію зашифрованих повідомлень</string>
     <string name="keys_backup_restore_use_recovery_key">використайте свій ключ відновлення</string>
     <string name="keys_backup_restore_is_getting_backup_version">Отримання резервної версії…</string>
-    <string name="error_jitsi_join_conf">Перепрошуємо, під час спроби приєднатися до конференції сталася помилка</string>
+    <string name="error_jitsi_join_conf">Перепрошуємо, під час спроби приєднатися до групового виклику сталася помилка</string>
     <string name="directory_add_a_new_server_error_already_added">Цей сервер уже є у списку</string>
     <string name="directory_add_a_new_server_error">Не вдалося знайти цей сервер або його список кімнат</string>
     <string name="directory_add_a_new_server_prompt">Введіть назву нового сервера, який потрібно дослідити.</string>
