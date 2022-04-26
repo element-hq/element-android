@@ -32,7 +32,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.room.model.livelocation.BeaconInfo
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import timber.log.Timber
 import java.util.Timer
@@ -98,10 +97,8 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
 
     private suspend fun sendLiveBeaconInfo(session: Session, roomArgs: RoomArgs) {
         val beaconContent = LiveLocationBeaconContent(
-                unstableBeaconInfo = BeaconInfo(
-                        timeout = roomArgs.durationMillis,
-                        isLive = true
-                ),
+                timeout = roomArgs.durationMillis,
+                isLive = true,
                 unstableTimestampAsMilliseconds = clock.epochMillis()
         ).toContent()
 

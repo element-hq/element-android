@@ -59,7 +59,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
         }
 
         // Check if live location is ended
-        if (!beaconInfoContent.getBestBeaconInfo()?.isLive.orFalse()) {
+        if (!beaconInfoContent.isLive.orFalse()) {
             Timber.v("## LIVE LOCATION. Beacon info is not live anymore")
             return
         }
@@ -79,7 +79,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
                                      liveLocationContent: MessageLiveLocationContent): Boolean {
         val beaconInfoStartTime = beaconInfoContent.getBestTimestampAsMilliseconds() ?: 0
         val liveLocationEventTime = liveLocationContent.getBestTimestampAsMilliseconds() ?: 0
-        val timeout = beaconInfoContent.getBestBeaconInfo()?.timeout ?: 0
+        val timeout = beaconInfoContent.timeout ?: 0
         return liveLocationEventTime - beaconInfoStartTime > timeout
     }
 }
