@@ -106,5 +106,8 @@ interface SpaceService {
 
     suspend fun removeSpaceParent(childRoomId: String, parentSpaceId: String)
 
-    fun getRootSpaceSummaries(): List<RoomSummary>
+    /**
+     * Get the root spaces, i.e. all the spaces which do not have a parent space.
+     */
+    suspend fun getRootSpaceSummaries(): List<RoomSummary>
 }

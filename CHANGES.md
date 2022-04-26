@@ -1,3 +1,11 @@
+Changes in Element 1.4.13 (2022-04-26)
+======================================
+
+Bugfixes 🐛
+----------
+ - Fix UI freeze observed after each incremental sync ([#5835](https://github.com/vector-im/element-android/issues/5835))
+
+
 Changes in Element v1.4.12 (2022-04-20)
 =======================================
 
