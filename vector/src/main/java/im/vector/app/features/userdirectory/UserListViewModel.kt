@@ -191,7 +191,7 @@ class UserListViewModel @AssistedInject constructor(
         knownUsersSearch
                 .sample(300)
                 .flatMapLatest { search ->
-                    session.getPagedUsersLive(search, state.excludedUserIds).asFlow()
+                    session.userService().getPagedUsersLive(search, state.excludedUserIds).asFlow()
                 }
                 .execute {
                     copy(knownUsers = it)
@@ -212,7 +212,7 @@ class UserListViewModel @AssistedInject constructor(
                 ThreePidUser(email = search, user = null)
             } else {
                 try {
-                    val user = tryOrNull { session.getProfileAsUser(foundThreePid.matrixId) } ?: User(foundThreePid.matrixId)
+                    val user = tryOrNull { session.profileService().getProfileAsUser(foundThreePid.matrixId) } ?: User(foundThreePid.matrixId)
                     ThreePidUser(
                             email = search,
                             user = user
@@ -232,10 +232,11 @@ class UserListViewModel @AssistedInject constructor(
                 emptyList()
             } else {
                 val searchResult = session
+                        .userService()
                         .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
                         .sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
                 val userProfile = if (MatrixPatterns.isUserId(search)) {
-                    val user = tryOrNull { session.getProfileAsUser(search) }
+                    val user = tryOrNull { session.profileService().getProfileAsUser(search) }
                     User(
                             userId = search,
                             displayName = user?.displayName,

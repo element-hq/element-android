@@ -42,6 +42,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxCall
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.call.supportCallTransfer
 import org.matrix.android.sdk.api.util.MatrixItem
 

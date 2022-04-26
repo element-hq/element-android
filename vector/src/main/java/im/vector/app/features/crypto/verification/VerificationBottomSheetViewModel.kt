@@ -53,6 +53,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.fromBase64
@@ -149,7 +150,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     pendingRequest = if (pr != null) Success(pr) else Uninitialized,
                     isMe = initialState.otherUserId == session.myUserId,
                     currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
-                    quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
+                    quadSContainsSecrets = session.sharedSecretStorageService().isRecoverySetup(),
                     hasAnyOtherSession = hasAnyOtherSession
             )
         }
@@ -231,7 +232,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     override fun handle(action: VerificationAction) = withState { state ->
         val otherUserId = state.otherUserMxItem?.id ?: return@withState
         val roomId = state.roomId
-                ?: session.getExistingDirectRoomWithUser(otherUserId)
+                ?: session.roomService().getExistingDirectRoomWithUser(otherUserId)
 
         when (action) {
             is VerificationAction.RequestVerificationByDM      -> {
@@ -244,7 +245,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                         )
                     }
                     viewModelScope.launch {
-                        val result = runCatching { session.createDirectRoom(otherUserId) }
+                        val result = runCatching { session.roomService().createDirectRoom(otherUserId) }
                         result.fold(
                                 { data ->
                                     setState {
@@ -372,7 +373,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 action.cypherData.fromBase64().inputStream().use { ins ->
-                    val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
+                    val res = session.secureStorageService().loadSecureSecret<Map<String, String>>(ins, action.alias)
                     val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
                             res?.get(MASTER_KEY_SSSS_NAME),
                             res?.get(USER_SIGNING_KEY_SSSS_NAME),

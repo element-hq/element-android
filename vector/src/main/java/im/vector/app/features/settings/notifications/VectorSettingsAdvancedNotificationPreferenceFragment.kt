@@ -38,7 +38,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is PushRulePreference) {
-                val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
+                val ruleAndKind: PushRuleAndKind? = session.pushRuleService().getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
 
                 if (ruleAndKind == null) {
                     // The rule is not defined, hide the preference
@@ -57,7 +57,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
 
                             lifecycleScope.launch {
                                 val result = runCatching {
-                                    session.updatePushRuleActions(ruleAndKind.kind,
+                                    session.pushRuleService().updatePushRuleActions(ruleAndKind.kind,
                                             ruleAndKind.pushRule.ruleId,
                                             enabled,
                                             newActions)

@@ -315,7 +315,7 @@ class CreateSpaceViewModel @AssistedInject constructor(
                 }
                 viewModelScope.launch {
                     try {
-                        when (val result = session.checkAliasAvailability(aliasLocalPart)) {
+                        when (val result = session.roomDirectoryService().checkAliasAvailability(aliasLocalPart)) {
                             AliasAvailabilityResult.Available       -> {
                                 setState {
                                     copy(

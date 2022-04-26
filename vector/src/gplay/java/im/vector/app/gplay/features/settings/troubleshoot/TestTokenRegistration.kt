@@ -49,7 +49,7 @@ class TestTokenRegistration @Inject constructor(private val context: FragmentAct
             status = TestStatus.FAILED
             return
         }
-        val pushers = session.getPushers().filter {
+        val pushers = session.pushersService().getPushers().filter {
             it.pushKey == fcmToken && it.state == PusherState.REGISTERED
         }
         if (pushers.isEmpty()) {

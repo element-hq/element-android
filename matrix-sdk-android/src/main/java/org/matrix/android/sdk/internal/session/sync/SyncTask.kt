@@ -107,7 +107,7 @@ internal class DefaultSyncTask @Inject constructor(
         val isInitialSync = token == null
         if (isInitialSync) {
             // We might want to get the user information in parallel too
-            val user = tryOrNull { session.getProfileAsUser(userId) }
+            val user = tryOrNull { session.profileService().getProfileAsUser(userId) }
             userStore.createOrUpdate(
                     userId = userId,
                     displayName = user?.displayName,

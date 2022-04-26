@@ -37,7 +37,7 @@ class TestPushRulesSettings @Inject constructor(private val activeSessionHolder:
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
-        val pushRules = session.getPushRules().getAllRules()
+        val pushRules = session.pushRuleService().getPushRules().getAllRules()
         var oneOrMoreRuleIsOff = false
         var oneOrMoreRuleAreSilent = false
         testedRules.forEach { ruleId ->

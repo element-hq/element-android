@@ -29,6 +29,8 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 
 class MigrateRoomViewModel @AssistedInject constructor(
         @Assisted initialState: MigrateRoomViewState,

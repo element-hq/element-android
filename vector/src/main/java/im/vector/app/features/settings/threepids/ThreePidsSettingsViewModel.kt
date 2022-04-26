@@ -133,7 +133,8 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
                 }
             }
             is ThreePidsSettingsAction.PasswordAuthDone -> {
-                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+                val decryptedPass = session.secureStorageService()
+                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
@@ -175,7 +176,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             // First submit the code
             try {
-                session.submitSmsCode(action.threePid, action.code)
+                session.profileService().submitSmsCode(action.threePid, action.code)
             } catch (failure: Throwable) {
                 isLoading(false)
                 setState {
@@ -190,7 +191,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
 
             // then finalize
             pendingThreePid = action.threePid
-            loadingSuspendable { session.finalizeAddingThreePid(action.threePid, uiaInterceptor) }
+            loadingSuspendable { session.profileService().finalizeAddingThreePid(action.threePid, uiaInterceptor) }
         }
     }
 
@@ -218,7 +219,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
             } else {
                 viewModelScope.launch {
                     loadingSuspendable {
-                        session.addThreePid(action.threePid)
+                        session.profileService().addThreePid(action.threePid)
                         // Also reset the state
                         setState {
                             copy(
@@ -235,14 +236,14 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         isLoading(true)
         pendingThreePid = action.threePid
         viewModelScope.launch {
-            loadingSuspendable { session.finalizeAddingThreePid(action.threePid, uiaInterceptor) }
+            loadingSuspendable { session.profileService().finalizeAddingThreePid(action.threePid, uiaInterceptor) }
         }
     }
 
     private fun handleCancelThreePid(action: ThreePidsSettingsAction.CancelThreePid) {
         isLoading(true)
         viewModelScope.launch {
-            loadingSuspendable { session.cancelAddingThreePid(action.threePid) }
+            loadingSuspendable { session.profileService().cancelAddingThreePid(action.threePid) }
         }
     }
 
@@ -258,7 +259,7 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
     private fun handleDeleteThreePid(action: ThreePidsSettingsAction.DeleteThreePid) {
         isLoading(true)
         viewModelScope.launch {
-            loadingSuspendable { session.deleteThreePid(action.threePid) }
+            loadingSuspendable { session.profileService().deleteThreePid(action.threePid) }
         }
     }
 }

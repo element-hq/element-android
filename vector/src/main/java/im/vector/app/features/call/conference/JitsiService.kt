@@ -31,6 +31,7 @@ import org.jitsi.meet.sdk.JitsiMeetUserInfo
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.MatrixJsonParser
@@ -99,7 +100,7 @@ class JitsiService @Inject constructor(
     }
 
     suspend fun joinConference(roomId: String, jitsiWidget: Widget, enableVideo: Boolean): JitsiCallViewEvents.JoinConference {
-        val me = session.getRoomMember(session.myUserId, roomId)?.toMatrixItem()
+        val me = session.roomService().getRoomMember(session.myUserId, roomId)?.toMatrixItem()
         val userDisplayName = me?.getBestName()
         val userAvatar = me?.avatarUrl?.let { session.contentUrlResolver().resolveFullSize(it) }
         val userInfo = JitsiMeetUserInfo().apply {

@@ -36,6 +36,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MatrixJsonParser

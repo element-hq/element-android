@@ -50,6 +50,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransa
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -73,7 +74,7 @@ class KeyShareTests : InstrumentedTest {
 
         // Create an encrypted room and add a message
         val roomId = commonTestHelper.runBlockingTest {
-            aliceSession.createRoom(
+            aliceSession.roomService().createRoom(
                     CreateRoomParams().apply {
                         visibility = RoomDirectoryVisibility.PRIVATE
                         enableEncryption()
@@ -340,7 +341,7 @@ class KeyShareTests : InstrumentedTest {
 
         // Create an encrypted room and send a couple of messages
         val roomId = commonTestHelper.runBlockingTest {
-            aliceSession.createRoom(
+            aliceSession.roomService().createRoom(
                     CreateRoomParams().apply {
                         visibility = RoomDirectoryVisibility.PRIVATE
                         enableEncryption()
@@ -378,7 +379,7 @@ class KeyShareTests : InstrumentedTest {
         }
 
         commonTestHelper.runBlockingTest {
-            bobSession.joinRoom(roomAlicePov.roomId, null, emptyList())
+            bobSession.roomService().joinRoom(roomAlicePov.roomId, null, emptyList())
         }
 
         // we want to discard alice outbound session

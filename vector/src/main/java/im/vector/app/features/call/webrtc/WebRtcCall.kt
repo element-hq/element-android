@@ -989,7 +989,7 @@ class WebRtcCall(
                 val nativeUserId = session.sipNativeLookup(newAssertedIdentity.id!!).firstOrNull()?.userId
                 if (nativeUserId != null) {
                     val resolvedUser = tryOrNull {
-                        session.resolveUser(nativeUserId)
+                        session.userService().resolveUser(nativeUserId)
                     }
                     if (resolvedUser != null) {
                         remoteAssertedIdentity = newAssertedIdentity.copy(
