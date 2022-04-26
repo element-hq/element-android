@@ -475,7 +475,9 @@ class SpaceHierarchyTest : InstrumentedTest {
         //   + C
         //     + c1, c2
 
-        val rootSpaces = session.spaceService().getRootSpaceSummaries()
+        val rootSpaces = commonTestHelper.runBlockingTest {
+            session.spaceService().getRootSpaceSummaries()
+        }
 
         assertEquals("Unexpected number of root spaces ${rootSpaces.map { it.name }}", 2, rootSpaces.size)
 
