@@ -2112,9 +2112,9 @@
         <item quantity="one">Chamada de áudio perdida</item>
         <item quantity="other">%d chamadas de áudio perdidas</item>
     </plurals>
-    <string name="upgrade_room_for_restricted_note">Por favor note que fazer upgrade vai fazer uma nova versão da sala. Todas as mensagens atuais vão permanecer nesta sala arquivada.</string>
-    <string name="upgrade_room_for_restricted_no_param">Qualquer pessoa em um espaço pai vai ser capaz de achar e se juntar a esta sala - não precisa convidar manualmente todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
-    <string name="upgrade_room_for_restricted">Qualquer pessoa em %s vai ser capaz de achar e se juntar a esta sala - não precisa convidar todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
+    <string name="upgrade_room_for_restricted_note">Por favor note que fazer upgrade vai fazer uma nova versão da sala. Todas as mensagens atuais vão ficar nesta sala arquivada.</string>
+    <string name="upgrade_room_for_restricted_no_param">Qualquer pessoa em um espaço pai vai ser capaz de achar e se juntar a esta sala - não precisa manualmente convidar todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
+    <string name="upgrade_room_for_restricted">Qualquer pessoa em %s vai ser capaz de achar e se juntar a esta sala - não precisa manualmente convidar todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
     <string name="voice_message_reply_content">Mensagem de Voz (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">Não dá para responder ou editar enquanto mensagem de voz está ativa</string>
     <string name="error_voice_message_unable_to_record">Não dá para gravar uma mensagem de voz</string>
