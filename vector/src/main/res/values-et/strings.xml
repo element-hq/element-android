@@ -2485,4 +2485,6 @@
     <string name="threads_beta_enable_notice_title">Jutulõngade beetaversioon</string>
     <string name="action_learn_more">Lisateave</string>
     <string name="action_try_it_out">Proovi nüüd</string>
+    <string name="send_feedback_threads_info">Jutulõngad on hetkel arendusjärgus funktsionaalsus ning samaga lisandub ka senisest parem versioon teavitustest. Me hea meelega tahaksime kuulda, mida sa nendest muutustest arvad!</string>
+    <string name="threads_beta_enable_notice_message">Jutulõngad aitavad hoida sinu vestlusi teemakohastena ning kergesti jälgitavatena.%sJutulõngade kasutusele võtmisel laadime rakenduse uuesti. Kui sul on väga mahukad kontod, siis võib natuke aega kuluda.</string>
 </resources>
