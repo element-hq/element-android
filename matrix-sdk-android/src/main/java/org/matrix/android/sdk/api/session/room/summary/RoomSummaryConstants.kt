@@ -32,6 +32,5 @@ object RoomSummaryConstants {
             EventType.CALL_ANSWER,
             EventType.ENCRYPTED,
             EventType.STICKER,
-            EventType.REACTION
     ) + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
 }
