@@ -13,7 +13,7 @@ jobs:
 
       - name: Update Gradle Wrapper
         uses: gradle-update/update-gradle-wrapper-action@v1
-        # Tchap: Disabled for no
+        # Skip in forks
         if: github.repository == 'vector-im/element-android'
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
