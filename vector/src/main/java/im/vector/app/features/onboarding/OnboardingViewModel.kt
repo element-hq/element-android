@@ -50,7 +50,6 @@ import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.FlowResult
-import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.session.Session
@@ -275,8 +274,10 @@ class OnboardingViewModel @AssistedInject constructor(
                                     // do nothing
                                 }
                                 else                   -> when (it) {
-                                    is RegistrationResult.Success      -> onSessionCreated(it.session, isAccountCreated = true)
-                                    is RegistrationResult.FlowResponse -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
+                                    is RegistrationResult.Complete         -> onSessionCreated(it.session, isAccountCreated = true)
+                                    is RegistrationResult.NextStep         -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
+                                    is RegistrationResult.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
+                                    is RegistrationResult.Error            -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
                                 }
                             }
                         },

@@ -18,16 +18,17 @@ package im.vector.app.features.onboarding
 
 import im.vector.app.test.fakes.FakeRegistrationWizard
 import im.vector.app.test.fakes.FakeSession
+import im.vector.app.test.fixtures.a401ServerError
 import io.mockk.coVerifyAll
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
-import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
+import org.matrix.android.sdk.api.auth.registration.RegistrationResult as SdkResult
 
 private val A_SESSION = FakeSession()
-private val AN_EXPECTED_RESULT = RegistrationResult.Success(A_SESSION)
+private val AN_EXPECTED_RESULT = RegistrationResult.Complete(A_SESSION)
 private const val A_USERNAME = "a username"
 private const val A_PASSWORD = "a password"
 private const val AN_INITIAL_DEVICE_NAME = "a device name"
@@ -57,6 +58,20 @@ class RegistrationActionHandlerTest {
         cases.forEach { testSuccessfulActionDelegation(it) }
     }
 
+    @Test
+    fun `given adding an email ThreePid fails with 401, when handling register action, then infer EmailSuccess`() = runTest {
+        val registrationActionHandler = RegistrationActionHandler()
+        val fakeRegistrationWizard = FakeRegistrationWizard()
+        fakeRegistrationWizard.givenAddEmailThreePidErrors(
+                cause = a401ServerError(),
+                email = A_PID_TO_REGISTER.email
+        )
+
+        val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, RegisterAction.AddThreePid(A_PID_TO_REGISTER))
+
+        result shouldBeEqualTo RegistrationResult.SendEmailSuccess(A_PID_TO_REGISTER.email)
+    }
+
     private suspend fun testSuccessfulActionDelegation(case: Case) {
         val registrationActionHandler = RegistrationActionHandler()
         val fakeRegistrationWizard = FakeRegistrationWizard()
@@ -69,6 +84,6 @@ class RegistrationActionHandlerTest {
     }
 }
 
-private fun case(action: RegisterAction, expect: suspend RegistrationWizard.() -> RegistrationResult) = Case(action, expect)
+private fun case(action: RegisterAction, expect: suspend RegistrationWizard.() -> SdkResult) = Case(action, expect)
 
-private class Case(val action: RegisterAction, val expect: suspend RegistrationWizard.() -> RegistrationResult)
+private class Case(val action: RegisterAction, val expect: suspend RegistrationWizard.() -> SdkResult)

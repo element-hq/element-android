@@ -101,6 +101,7 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthAccountCreatedFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseDisplayNameFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthChooseProfilePictureFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthEmailEntryFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLegacyStyleCaptchaFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLoginFragment
@@ -493,6 +494,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthAccountCreatedFragment::class)
     fun bindFtueAuthAccountCreatedFragment(fragment: FtueAuthAccountCreatedFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthEmailEntryFragment::class)
+    fun bindFtueAuthEmailEntryFragment(fragment: FtueAuthEmailEntryFragment): Fragment
 
     @Binds
     @IntoMap

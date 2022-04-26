@@ -31,4 +31,8 @@
     <string name="ftue_auth_terms_title">Privacy policy</string>
     <string name="ftue_auth_terms_subtitle">Please read through T&amp;C. You must accept in order to continue.</string>
 
+    <string name="ftue_auth_email_title">Enter your email address</string>
+    <string name="ftue_auth_email_subtitle">This will help verify your account and enables password recovery.</string>
+    <string name="ftue_auth_email_entry_title">Email Address</string>
+
 </resources>
