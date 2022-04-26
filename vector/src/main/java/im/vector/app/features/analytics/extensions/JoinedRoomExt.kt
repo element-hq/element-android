@@ -33,7 +33,7 @@ fun Int?.toAnalyticsRoomSize(): JoinedRoom.RoomSize {
     }
 }
 
-fun RoomSummary?.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger): JoinedRoom {
+fun RoomSummary?.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger?): JoinedRoom {
     return JoinedRoom(
             isDM = this?.isDirect.orFalse(),
             isSpace = this?.roomType == RoomType.SPACE,
@@ -42,7 +42,7 @@ fun RoomSummary?.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger): JoinedRoom 
     )
 }
 
-fun PublicRoom.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger): JoinedRoom {
+fun PublicRoom.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger?): JoinedRoom {
     return JoinedRoom(
             isDM = false,
             isSpace = false,

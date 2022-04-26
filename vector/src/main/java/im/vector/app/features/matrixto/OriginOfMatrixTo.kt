@@ -28,24 +28,24 @@ enum class OriginOfMatrixTo {
     USER_CODE
 }
 
-fun OriginOfMatrixTo.toJoinedRoomTrigger(): JoinedRoom.Trigger {
+fun OriginOfMatrixTo.toJoinedRoomTrigger(): JoinedRoom.Trigger? {
     return when (this) {
         OriginOfMatrixTo.LINK          -> JoinedRoom.Trigger.MobilePermalink
         OriginOfMatrixTo.NOTIFICATION  -> JoinedRoom.Trigger.Notification
         OriginOfMatrixTo.TIMELINE      -> JoinedRoom.Trigger.Timeline
         OriginOfMatrixTo.SPACE_EXPLORE -> JoinedRoom.Trigger.MobileExploreRooms
         OriginOfMatrixTo.ROOM_LIST     -> JoinedRoom.Trigger.RoomDirectory
-        OriginOfMatrixTo.USER_CODE     -> throw IllegalArgumentException("can't map source to join room trigger")
+        OriginOfMatrixTo.USER_CODE     -> null
     }
 }
 
-fun OriginOfMatrixTo.toViewRoomTrigger(): ViewRoom.Trigger {
+fun OriginOfMatrixTo.toViewRoomTrigger(): ViewRoom.Trigger? {
     return when (this) {
         OriginOfMatrixTo.LINK          -> ViewRoom.Trigger.MobilePermalink
         OriginOfMatrixTo.NOTIFICATION  -> ViewRoom.Trigger.Notification
         OriginOfMatrixTo.TIMELINE      -> ViewRoom.Trigger.Timeline
         OriginOfMatrixTo.SPACE_EXPLORE -> ViewRoom.Trigger.MobileExploreRooms
         OriginOfMatrixTo.ROOM_LIST     -> ViewRoom.Trigger.RoomDirectory
-        OriginOfMatrixTo.USER_CODE     -> throw IllegalArgumentException("can't map source to view room trigger")
+        OriginOfMatrixTo.USER_CODE     -> null
     }
 }

@@ -24,7 +24,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.replaceFragment
@@ -35,8 +34,6 @@ import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.spaces.share.ShareSpaceBottomSheet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.matrix.android.sdk.api.session.Session
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
@@ -44,9 +41,6 @@ class SpacePeopleActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
     override fun getBinding() = ActivitySimpleLoadingBinding.inflate(layoutInflater)
 
     private lateinit var sharedActionViewModel: SpacePeopleSharedActionViewModel
-
-    @Inject lateinit var session: Session
-    @Inject lateinit var appStateHandler: AppStateHandler
 
     override fun initUiAndData() {
         super.initUiAndData()

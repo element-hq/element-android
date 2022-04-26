@@ -30,7 +30,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ButtonStateView
@@ -46,7 +45,6 @@ import im.vector.app.features.roomdirectory.JoinState
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.span
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -55,9 +53,7 @@ import javax.inject.Inject
  * Note: this Fragment is also used for world readable room for the moment
  */
 class RoomPreviewNoPreviewFragment @Inject constructor(
-        private val avatarRenderer: AvatarRenderer,
-        private val session: Session,
-        private val appStateHandler: AppStateHandler
+        private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomPreviewNoPreviewBinding>() {
 
     private val roomPreviewViewModel: RoomPreviewViewModel by fragmentViewModel()

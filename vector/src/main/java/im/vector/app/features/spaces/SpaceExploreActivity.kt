@@ -25,7 +25,6 @@ import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
@@ -41,8 +40,6 @@ import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewAction
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewEvents
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
-import org.matrix.android.sdk.api.session.Session
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), MatrixToBottomSheet.InteractionListener {
@@ -52,9 +49,6 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
     override fun getTitleRes(): Int = R.string.space_explore_activity_title
 
     val sharedViewModel: SpaceDirectoryViewModel by viewModel()
-
-    @Inject lateinit var session: Session
-    @Inject lateinit var appStateHandler: AppStateHandler
 
     private val createRoomResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {

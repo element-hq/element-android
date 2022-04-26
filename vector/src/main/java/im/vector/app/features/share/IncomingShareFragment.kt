@@ -41,7 +41,6 @@ import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
@@ -52,8 +51,7 @@ import javax.inject.Inject
  */
 class IncomingShareFragment @Inject constructor(
         private val incomingShareController: IncomingShareController,
-        private val sessionHolder: ActiveSessionHolder,
-        private val session: Session
+        private val sessionHolder: ActiveSessionHolder
 ) :
         VectorBaseFragment<FragmentIncomingShareBinding>(),
         AttachmentsHelper.Callback,
