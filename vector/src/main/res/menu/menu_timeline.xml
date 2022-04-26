@@ -33,7 +33,7 @@
     <item
         android:id="@+id/voice_call"
         android:icon="@drawable/ic_phone"
-        android:title="@string/call"
+        android:title="@string/action_voice_call"
         android:visible="false"
         app:iconTint="?colorPrimary"
         app:showAsAction="always"
