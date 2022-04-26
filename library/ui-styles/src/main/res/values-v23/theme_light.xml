@@ -6,6 +6,6 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.Vector.Light" parent="Theme.Vector.Light.v23"/>
+    <style name="Theme.Vector.Light" parent="Theme.Vector.Light.v23" />
 
 </resources>

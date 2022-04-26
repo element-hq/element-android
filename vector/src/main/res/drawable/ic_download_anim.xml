@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<animated-vector
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt">
     <aapt:attr name="android:drawable">
         <vector
@@ -16,7 +15,7 @@
                 android:strokeColor="#2E2F32"
                 android:strokeWidth="2"
                 android:strokeLineCap="round"
-                android:strokeLineJoin="round"/>
+                android:strokeLineJoin="round" />
             <path
                 android:name="path_1"
                 android:pathData="M 8 12 L 12 16 L 16 12"
@@ -24,7 +23,7 @@
                 android:strokeColor="#2E2F32"
                 android:strokeWidth="2"
                 android:strokeLineCap="round"
-                android:strokeLineJoin="round"/>
+                android:strokeLineJoin="round" />
             <path
                 android:name="path_2"
                 android:pathData="M 12 2 L 12 16"
@@ -32,7 +31,7 @@
                 android:strokeColor="#2E2F32"
                 android:strokeWidth="2"
                 android:strokeLineCap="round"
-                android:strokeLineJoin="round"/>
+                android:strokeLineJoin="round" />
         </vector>
     </aapt:attr>
     <target android:name="path_2">
@@ -44,7 +43,7 @@
                     android:valueFrom="M 12 2 L 12 16"
                     android:valueTo="M 12 14 L 12 16"
                     android:valueType="pathType"
-                    android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+                    android:interpolator="@android:anim/accelerate_decelerate_interpolator" />
                 <objectAnimator
                     android:propertyName="pathData"
                     android:startOffset="682"
@@ -52,7 +51,7 @@
                     android:valueFrom="M 12 14 L 12 16"
                     android:valueTo="M 12 2 L 12 16"
                     android:valueType="pathType"
-                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
             </set>
         </aapt:attr>
     </target>
@@ -65,7 +64,7 @@
                     android:valueFrom="M 8 12 L 12 16 L 16 12"
                     android:valueTo="M 8 14 L 12 18 L 16 14"
                     android:valueType="pathType"
-                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
                 <objectAnimator
                     android:propertyName="pathData"
                     android:startOffset="682"
@@ -73,7 +72,7 @@
                     android:valueFrom="M 8 14 L 12 18 L 16 14"
                     android:valueTo="M 8 12 L 12 16 L 16 12"
                     android:valueType="pathType"
-                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
             </set>
         </aapt:attr>
     </target>
@@ -87,7 +86,7 @@
                     android:valueFrom="M 3 18 L 3 20 C 3 21.105 3.895 22 5 22 L 19 22 C 20.105 22 21 21.105 21 20 L 21 18"
                     android:valueTo="M 3 15 L 3 20 C 3 21.105 3.895 22 5 22 L 19 22 C 20.105 22 21 21.105 21 20 L 21 15"
                     android:valueType="pathType"
-                    android:interpolator="@android:interpolator/linear_out_slow_in"/>
+                    android:interpolator="@android:interpolator/linear_out_slow_in" />
                 <objectAnimator
                     android:propertyName="pathData"
                     android:startOffset="700"
@@ -95,7 +94,7 @@
                     android:valueFrom="M 3 15 L 3 20 C 3 21.105 3.895 22 5 22 L 19 22 C 20.105 22 21 21.105 21 20 L 21 15"
                     android:valueTo="M 3 18 L 3 20 C 3 21.105 3.895 22 5 22 L 19 22 C 20.105 22 21 21.105 21 20 L 21 18"
                     android:valueType="pathType"
-                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
             </set>
         </aapt:attr>
     </target>

@@ -7,7 +7,7 @@
         <attr name="circle_start_color" format="color|reference" />
         <attr name="circle_end_color" format="color|reference" />
         <attr name="toggled" format="boolean" />
-        <attr name="emoji" format="string"/>
-        <attr name="reaction_count" format="integer"/>
+        <attr name="emoji" format="string" />
+        <attr name="reaction_count" format="integer" />
     </declare-styleable>
 </resources>

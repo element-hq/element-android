@@ -26,7 +26,7 @@
             android:layout_height="?attr/actionBarSize"
             android:minHeight="0dp"
             app:title="@string/pick_tings_to_leave"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways"/>
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways" />
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/publicRoomsFilter"

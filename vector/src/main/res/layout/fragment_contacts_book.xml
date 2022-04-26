@@ -20,7 +20,7 @@
                 android:id="@+id/phoneBookToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:title="@string/contacts_book_title"/>
+                app:title="@string/contacts_book_title" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phoneBookFilterContainer"

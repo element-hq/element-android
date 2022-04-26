@@ -30,8 +30,7 @@
         android:title="@string/settings_notification_your_keywords">
         <im.vector.app.core.preference.KeywordPreference
             android:key="SETTINGS_KEYWORD_EDIT"
-            android:persistent="false"
-            />
+            android:persistent="false" />
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_KEYWORDS_FOOTER"

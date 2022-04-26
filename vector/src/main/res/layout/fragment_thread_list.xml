@@ -38,20 +38,20 @@
         tools:visibility="gone" />
 
 
-        <ProgressBar
-            android:id="@+id/threadListProgressBar"
-            style="@style/Widget.Vector.ProgressBar.Horizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:indeterminate="true"
-            android:visibility="gone"
-            tools:ignore="NegativeMargin"
-            android:layout_marginTop="-6dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/threadListAppBarLayout"
-            tools:visibility="visible" />
+    <ProgressBar
+        android:id="@+id/threadListProgressBar"
+        style="@style/Widget.Vector.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:indeterminate="true"
+        android:visibility="gone"
+        tools:ignore="NegativeMargin"
+        android:layout_marginTop="-6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/threadListAppBarLayout"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/threadListEmptyConstraintLayout"
@@ -136,8 +136,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/bg_shadow_divider"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/threadsFeedBackConstraintLayout"
-        />
+        app:layout_constraintBottom_toTopOf="@id/threadsFeedBackConstraintLayout" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/threadsFeedBackConstraintLayout"
         android:layout_width="0dp"
@@ -147,6 +147,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
         <TextView
             android:id="@+id/threadsBetaFeedbackIcon"
             style="@style/Widget.Vector.TextView.Caption"

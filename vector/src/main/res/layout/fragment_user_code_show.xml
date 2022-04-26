@@ -20,7 +20,7 @@
                 android:id="@+id/showUserCodeToolBar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:title="@string/add_by_qr_code"/>
+                app:title="@string/add_by_qr_code" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Widget.Vector.ActionButton" parent="Widget.AppCompat.ActionButton">
         <item name="android:paddingStart">5dp</item>
         <item name="android:paddingEnd">5dp</item>
