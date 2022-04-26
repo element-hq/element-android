@@ -1952,8 +1952,8 @@
     </plurals>
     <plurals name="missed_audio_call">
         <item quantity="one">שיחה שלא נענתה</item>
-        <item quantity="two">"%d שיחות  שלא נענו"</item>
-        <item quantity="many">"%d שיחות  שלא נענו"</item>
+        <item quantity="two">%d שיחות שלא נענו</item>
+        <item quantity="many">%d שיחות שלא נענו</item>
         <item quantity="other">שיחה שלא נענתה</item>
     </plurals>
     <string name="call_ringing">צלצול שיחה…</string>
@@ -2099,8 +2099,8 @@
     <plurals name="call_active_status">
         <item quantity="one">שיחה פעילה ·</item>
         <item quantity="two">%1$d שיחות פעילות ·</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="many">%1$d שיחות פעילות ·</item>
+        <item quantity="other">%1$d שיחות פעילות ·</item>
     </plurals>
     <string name="call_only_active">שיחה פעילה (%1$s)</string>
     <string name="call_dial_pad_lookup_error">אירעה שגיאה בחיפוש מספר הטלפון</string>
@@ -2132,9 +2132,9 @@
     <string name="room_notification_two_users_are_typing">%1$s ו %2$s</string>
     <plurals name="notice_room_server_acl_changes">
         <item quantity="one">%d שינוי ברשימות ACL בשרתים</item>
-        <item quantity="two"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="two">%d שינוים ברשימות ACL בשרתים</item>
+        <item quantity="many">%d שינוים ברשימות ACL בשרתים</item>
+        <item quantity="other">%d שינוים ברשימות ACL בשרתים</item>
     </plurals>
     <string name="space_settings_manage_rooms">נהל חדרים</string>
     <string name="decide_who_can_find_and_join">החלט מי יכול לראות ולהצטרף לחדר זה.</string>

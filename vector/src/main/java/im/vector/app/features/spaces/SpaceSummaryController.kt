@@ -109,9 +109,6 @@ class SpaceSummaryController @Inject constructor(
         val host = this
         spaceBetaHeaderItem {
             id("beta_header")
-            clickAction {
-                host.callback?.sendFeedBack()
-            }
         }
 
         // show invites on top

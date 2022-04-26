@@ -41,6 +41,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -140,14 +141,14 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
-            is OnboardingAction.HomeServerChange           -> withAction(action) { handleHomeserverChange(action.homeServerUrl) }
+            is OnboardingAction.HomeServerChange           -> withAction(action) { handleHomeserverChange(action) }
             is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
             is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword              -> handleResetPassword(action)
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
-            is OnboardingAction.PostRegisterAction         -> handleRegisterAction(action.registerAction)
+            is OnboardingAction.PostRegisterAction         -> handleRegisterAction(action.registerAction, ::emitFlowResultViewEvent)
             is OnboardingAction.ResetAction                -> handleResetAction(action)
             is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
@@ -175,7 +176,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
         return when (val config = loginConfig.toHomeserverConfig()) {
             null -> continueToPageAfterSplash(onboardingFlow)
-            else -> startAuthenticationFlow(config, ServerType.Other)
+            else -> startAuthenticationFlow(trigger = null, config, ServerType.Other)
         }
     }
 
@@ -209,9 +210,9 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.HomeServerChange.SelectHomeServer -> {
                 currentHomeServerConnectionConfig
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
-                        ?.let { startAuthenticationFlow(it) }
+                        ?.let { startAuthenticationFlow(finalLastAction, it) }
             }
-            is OnboardingAction.LoginOrRegister  ->
+            is OnboardingAction.LoginOrRegister                   ->
                 handleDirectLogin(
                         finalLastAction,
                         HomeServerConnectionConfig.Builder()
@@ -220,7 +221,7 @@ class OnboardingViewModel @AssistedInject constructor(
                                 .withAllowedFingerPrints(listOf(action.fingerprint))
                                 .build()
                 )
-            else                                 -> Unit
+            else                                                  -> Unit
         }
     }
 
@@ -255,41 +256,52 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRegisterAction(action: RegisterAction) {
+    private fun handleRegisterAction(action: RegisterAction, onNextRegistrationStepAction: (FlowResult) -> Unit) {
         currentJob = viewModelScope.launch {
             if (action.hasLoadingState()) {
                 setState { copy(isLoading = true) }
             }
-            runCatching { registrationActionHandler.handleRegisterAction(registrationWizard, action) }
-                    .fold(
-                            onSuccess = {
-                                when {
-                                    action.ignoresResult() -> {
-                                        // do nothing
-                                    }
-                                    else                   -> when (it) {
-                                        is RegistrationResult.Success      -> onSessionCreated(it.session, isAccountCreated = true)
-                                        is RegistrationResult.FlowResponse -> onFlowResponse(it.flowResult)
-                                    }
-                                }
-                            },
-                            onFailure = {
-                                if (it !is CancellationException) {
-                                    _viewEvents.post(OnboardingViewEvents.Failure(it))
-                                }
-                            }
-                    )
+            internalRegisterAction(action, onNextRegistrationStepAction)
             setState { copy(isLoading = false) }
         }
     }
 
+    private suspend fun internalRegisterAction(action: RegisterAction, onNextRegistrationStepAction: (FlowResult) -> Unit) {
+        runCatching { registrationActionHandler.handleRegisterAction(registrationWizard, action) }
+                .fold(
+                        onSuccess = {
+                            when {
+                                action.ignoresResult() -> {
+                                    // do nothing
+                                }
+                                else                   -> when (it) {
+                                    is RegistrationResult.Success      -> onSessionCreated(it.session, isAccountCreated = true)
+                                    is RegistrationResult.FlowResponse -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
+                                }
+                            }
+                        },
+                        onFailure = {
+                            if (it !is CancellationException) {
+                                _viewEvents.post(OnboardingViewEvents.Failure(it))
+                            }
+                        }
+                )
+    }
+
+    private fun emitFlowResultViewEvent(flowResult: FlowResult) {
+        _viewEvents.post(OnboardingViewEvents.RegistrationFlowResult(flowResult, isRegistrationStarted))
+    }
+
     private fun handleRegisterWith(action: OnboardingAction.Register) {
         reAuthHelper.data = action.password
-        handleRegisterAction(RegisterAction.CreateAccount(
-                action.username,
-                action.password,
-                action.initialDeviceName
-        ))
+        handleRegisterAction(
+                RegisterAction.CreateAccount(
+                        action.username,
+                        action.password,
+                        action.initialDeviceName
+                ),
+                ::emitFlowResultViewEvent
+        )
     }
 
     private fun handleResetAction(action: OnboardingAction.ResetAction) {
@@ -337,18 +349,17 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleUpdateSignMode(action: OnboardingAction.UpdateSignMode) {
-        setState {
-            copy(
-                    signMode = action.signMode
-            )
-        }
-
+        updateSignMode(action.signMode)
         when (action.signMode) {
-            SignMode.SignUp             -> handleRegisterAction(RegisterAction.StartRegistration)
+            SignMode.SignUp             -> handleRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
             SignMode.SignIn             -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown            -> Unit
         }
+    }
+
+    private fun updateSignMode(signMode: SignMode) {
+        setState { copy(signMode = signMode) }
     }
 
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
@@ -509,18 +520,17 @@ class OnboardingViewModel @AssistedInject constructor(
         _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
     }
 
-    private fun onFlowResponse(flowResult: FlowResult) {
+    private suspend fun onFlowResponse(flowResult: FlowResult, onNextRegistrationStepAction: (FlowResult) -> Unit) {
         // If dummy stage is mandatory, and password is already sent, do the dummy stage now
         if (isRegistrationStarted && flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
-            handleRegisterDummy()
+            handleRegisterDummy(onNextRegistrationStepAction)
         } else {
-            // Notify the user
-            _viewEvents.post(OnboardingViewEvents.RegistrationFlowResult(flowResult, isRegistrationStarted))
+            onNextRegistrationStepAction(flowResult)
         }
     }
 
-    private fun handleRegisterDummy() {
-        handleRegisterAction(RegisterAction.RegisterDummy)
+    private suspend fun handleRegisterDummy(onNextRegistrationStepAction: (FlowResult) -> Unit) {
+        internalRegisterAction(RegisterAction.RegisterDummy, onNextRegistrationStepAction)
     }
 
     private suspend fun onSessionCreated(session: Session, isAccountCreated: Boolean) {
@@ -581,42 +591,87 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleHomeserverChange(homeserverUrl: String) {
-        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(homeserverUrl)
+    private fun handleHomeserverChange(action: OnboardingAction.HomeServerChange) {
+        val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
         if (homeServerConnectionConfig == null) {
             // This is invalid
             _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
-            startAuthenticationFlow(homeServerConnectionConfig)
+            startAuthenticationFlow(action, homeServerConnectionConfig)
         }
     }
 
-    private fun startAuthenticationFlow(homeServerConnectionConfig: HomeServerConnectionConfig, serverTypeOverride: ServerType? = null) {
+    private fun startAuthenticationFlow(
+            trigger: OnboardingAction?,
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            serverTypeOverride: ServerType? = null
+    ) {
         currentHomeServerConnectionConfig = homeServerConnectionConfig
 
         currentJob = viewModelScope.launch {
             setState { copy(isLoading = true) }
-
             runCatching { startAuthenticationFlowUseCase.execute(homeServerConnectionConfig) }.fold(
-                    onSuccess = {
-                        rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
-                        if (it.isHomeserverOutdated) {
-                            _viewEvents.post(OnboardingViewEvents.OutdatedHomeserver)
-                        }
+                    onSuccess = { onAuthenticationStartedSuccess(trigger, homeServerConnectionConfig, it, serverTypeOverride) },
+                    onFailure = { _viewEvents.post(OnboardingViewEvents.Failure(it)) }
+            )
+            setState { copy(isLoading = false) }
+        }
+    }
 
-                        setState {
-                            copy(
-                                    serverType = alignServerTypeAfterSubmission(homeServerConnectionConfig, serverTypeOverride),
-                                    selectedHomeserver = it.selectedHomeserver,
-                                    isLoading = false,
-                            )
-                        }
-                        onAuthenticationStartedSuccess()
-                    },
-                    onFailure = {
-                        setState { copy(isLoading = false) }
-                        _viewEvents.post(OnboardingViewEvents.Failure(it))
+    private suspend fun onAuthenticationStartedSuccess(
+            trigger: OnboardingAction?,
+            config: HomeServerConnectionConfig,
+            authResult: StartAuthenticationResult,
+            serverTypeOverride: ServerType?
+    ) {
+        rememberHomeServer(config.homeServerUri.toString())
+        if (authResult.isHomeserverOutdated) {
+            _viewEvents.post(OnboardingViewEvents.OutdatedHomeserver)
+        }
+
+        when (trigger) {
+            is OnboardingAction.HomeServerChange.EditHomeServer   -> {
+                when (awaitState().onboardingFlow) {
+                    OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) { _ ->
+                        updateServerSelection(config, serverTypeOverride, authResult)
+                        _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
                     }
+                    else                  -> throw IllegalArgumentException("developer error")
+                }
+            }
+            is OnboardingAction.HomeServerChange.SelectHomeServer -> {
+                updateServerSelection(config, serverTypeOverride, authResult)
+                if (authResult.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
+                    when (awaitState().onboardingFlow) {
+                        OnboardingFlow.SignIn -> {
+                            updateSignMode(SignMode.SignIn)
+                            internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+                        }
+                        OnboardingFlow.SignUp -> {
+                            updateSignMode(SignMode.SignUp)
+                            internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+                        }
+                        OnboardingFlow.SignInSignUp,
+                        null                  -> {
+                            _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+                        }
+                    }
+                } else {
+                    _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+                }
+            }
+            else                                                  -> {
+                updateServerSelection(config, serverTypeOverride, authResult)
+                _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+            }
+        }
+    }
+
+    private fun updateServerSelection(config: HomeServerConnectionConfig, serverTypeOverride: ServerType?, authResult: StartAuthenticationResult) {
+        setState {
+            copy(
+                    serverType = alignServerTypeAfterSubmission(config, serverTypeOverride),
+                    selectedHomeserver = authResult.selectedHomeserver,
             )
         }
     }
@@ -630,29 +685,6 @@ class OnboardingViewModel @AssistedInject constructor(
             ServerType.MatrixOrg
         } else {
             serverTypeOverride ?: serverType
-        }
-    }
-
-    private fun onAuthenticationStartedSuccess() {
-        withState {
-            when (lastAction) {
-                is OnboardingAction.HomeServerChange.EditHomeServer   -> _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
-                is OnboardingAction.HomeServerChange.SelectHomeServer -> {
-                    if (it.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
-                        when (it.onboardingFlow) {
-                            OnboardingFlow.SignIn -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignIn))
-                            OnboardingFlow.SignUp -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignUp))
-                            OnboardingFlow.SignInSignUp,
-                            null                  -> {
-                                _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
-                            }
-                        }
-                    } else {
-                        _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
-                    }
-                }
-                else                                 -> _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
-            }
         }
     }
 

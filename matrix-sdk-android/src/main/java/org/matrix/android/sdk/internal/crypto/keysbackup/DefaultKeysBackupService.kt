@@ -409,19 +409,21 @@ internal class DefaultKeysBackupService @Inject constructor(
      */
     @WorkerThread
     private fun getKeysBackupTrustBg(keysBackupVersion: KeysVersionResult): KeysBackupVersionTrust {
-        val keysBackupVersionTrust = KeysBackupVersionTrust()
         val authData = keysBackupVersion.getAuthDataAsMegolmBackupAuthData()
 
         if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
-            return keysBackupVersionTrust
+            return KeysBackupVersionTrust(usable = false)
         }
 
         val mySigs = authData.signatures[userId]
         if (mySigs.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Ignoring key backup because it lacks any signatures from this user")
-            return keysBackupVersionTrust
+            return KeysBackupVersionTrust(usable = false)
         }
+
+        var keysBackupVersionTrustIsUsable = false
+        val keysBackupVersionTrustSignatures = mutableListOf<KeysBackupVersionTrustSignature>()
 
         for ((keyId, mySignature) in mySigs) {
             // XXX: is this how we're supposed to get the device id?
@@ -449,19 +451,23 @@ internal class DefaultKeysBackupService @Inject constructor(
                     }
 
                     if (isSignatureValid && device.isVerified) {
-                        keysBackupVersionTrust.usable = true
+                        keysBackupVersionTrustIsUsable = true
                     }
                 }
 
-                val signature = KeysBackupVersionTrustSignature()
-                signature.device = device
-                signature.valid = isSignatureValid
-                signature.deviceId = deviceId
-                keysBackupVersionTrust.signatures.add(signature)
+                val signature = KeysBackupVersionTrustSignature(
+                        deviceId = deviceId,
+                        device = device,
+                        valid = isSignatureValid,
+                )
+                keysBackupVersionTrustSignatures.add(signature)
             }
         }
 
-        return keysBackupVersionTrust
+        return KeysBackupVersionTrust(
+                usable = keysBackupVersionTrustIsUsable,
+                signatures = keysBackupVersionTrustSignatures
+        )
     }
 
     override fun trustKeysBackupVersion(keysBackupVersion: KeysVersionResult,
@@ -1103,7 +1109,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                                    privateKeySalt: String,
                                    privateKeyIterations: Int,
                                    progressListener: ProgressListener): ByteArray {
-         return deriveKey(passphrase, privateKeySalt, privateKeyIterations, progressListener)
+        return deriveKey(passphrase, privateKeySalt, privateKeyIterations, progressListener)
     }
 
     /**

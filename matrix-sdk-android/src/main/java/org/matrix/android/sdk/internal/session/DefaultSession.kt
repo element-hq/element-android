@@ -26,7 +26,6 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
-import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.EventStreamService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
@@ -53,6 +52,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.presence.PresenceService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
+import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.search.SearchService

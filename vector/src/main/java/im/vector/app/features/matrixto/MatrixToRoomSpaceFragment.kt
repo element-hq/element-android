@@ -60,10 +60,10 @@ class MatrixToRoomSpaceFragment @Inject constructor(
             Uninitialized -> {
                 views.matrixToCardContentVisibility.isVisible = false
             }
-            is Loading -> {
+            is Loading    -> {
                 views.matrixToCardContentVisibility.isVisible = false
             }
-            is Success -> {
+            is Success    -> {
                 views.matrixToCardContentVisibility.isVisible = true
                 when (val peek = item.invoke()) {
                     is RoomInfoResult.FullInfo     -> {
@@ -154,7 +154,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                     }
                 }
             }
-            is Fail -> {
+            is Fail       -> {
                 // TODO display some error copy?
                 sharedViewModel.handle(MatrixToAction.FailedToResolveUser)
             }
@@ -176,14 +176,14 @@ class MatrixToRoomSpaceFragment @Inject constructor(
             Uninitialized -> {
                 views.matrixToCardMainButton.render(ButtonStateView.State.Button)
             }
-            is Success -> {
+            is Success    -> {
                 views.matrixToCardMainButton.render(ButtonStateView.State.Button)
             }
-            is Fail -> {
+            is Fail       -> {
                 views.matrixToCardMainButton.render(ButtonStateView.State.Error)
                 // TODO display some error copy?
             }
-            is Loading -> {
+            is Loading    -> {
                 views.matrixToCardMainButton.render(ButtonStateView.State.Loading)
             }
         }
@@ -191,7 +191,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
 
     private fun mainButtonClicked() = withState(sharedViewModel) { state ->
         when (val info = state.roomPeekResult.invoke()) {
-            is RoomInfoResult.FullInfo -> {
+            is RoomInfoResult.FullInfo    -> {
                 when (info.membership) {
                     Membership.NONE,
                     Membership.INVITE,

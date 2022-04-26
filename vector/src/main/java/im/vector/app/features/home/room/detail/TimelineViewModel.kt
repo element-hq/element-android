@@ -444,6 +444,7 @@ class TimelineViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
             is RoomDetailAction.EndPoll                          -> handleEndPoll(action.eventId)
+            RoomDetailAction.StopLiveLocationSharing             -> handleStopLiveLocationSharing()
         }
     }
 
@@ -1091,6 +1092,10 @@ class TimelineViewModel @AssistedInject constructor(
                 .setOnEach {
                     copy(incrementalSyncStatus = it)
                 }
+    }
+
+    private fun handleStopLiveLocationSharing() {
+        locationSharingServiceConnection.stopLiveLocationSharing(room.roomId)
     }
 
     private fun observeRoomSummary() {

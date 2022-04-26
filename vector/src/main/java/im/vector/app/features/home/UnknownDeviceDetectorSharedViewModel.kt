@@ -58,7 +58,7 @@ data class DeviceDetectionInfo(
 class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted initialState: UnknownDevicesState,
                                                                        session: Session,
                                                                        private val vectorPreferences: VectorPreferences) :
-    VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
+        VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
 
     sealed class Action : VectorViewModelAction {
         data class IgnoreDevice(val deviceIds: List<String>) : Action()

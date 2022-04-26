@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
-import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.cache.CacheService
@@ -47,6 +46,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.presence.PresenceService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
+import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.search.SearchService
@@ -298,6 +298,7 @@ interface Session :
          * Possible cases:
          * - The access token is not valid anymore,
          * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver
+         * See [GlobalError] for all the possible cases
          */
         fun onGlobalError(session: Session, globalError: GlobalError) = Unit
     }

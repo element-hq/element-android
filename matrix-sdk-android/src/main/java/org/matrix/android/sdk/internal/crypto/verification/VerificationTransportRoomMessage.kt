@@ -296,13 +296,13 @@ internal class VerificationTransportRoomMessage(
                               messageAuthenticationCode: String,
                               shortAuthenticationStrings: List<String>): VerificationInfoAccept =
             MessageVerificationAcceptContent.create(
-            tid,
-            keyAgreementProtocol,
-            hash,
-            commitment,
-            messageAuthenticationCode,
-            shortAuthenticationStrings
-    )
+                    tid,
+                    keyAgreementProtocol,
+                    hash,
+                    commitment,
+                    messageAuthenticationCode,
+                    shortAuthenticationStrings
+            )
 
     override fun createKey(tid: String, pubKey: String): VerificationInfoKey = MessageVerificationKeyContent.create(tid, pubKey)
 

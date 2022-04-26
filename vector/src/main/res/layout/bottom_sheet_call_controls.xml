@@ -8,6 +8,15 @@
     android:orientation="vertical">
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
+        android:id="@+id/callControlsShareScreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionTitle="@string/call_start_screen_sharing"
+        app:leftIcon="@drawable/ic_share_screen"
+        app:tint="?vctr_content_primary"
+        app:titleTextColor="?vctr_content_primary" />
+
+    <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/callControlsSwitchCamera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

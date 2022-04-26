@@ -28,4 +28,7 @@
     <string name="ftue_auth_choose_server_ems_subtitle">Element Matrix Services (EMS) is a robust and reliable hosting service for fast, secure and real time communication. Find out how on <a href="${ftue_ems_url}">element.io/ems</a></string>
     <string name="ftue_auth_choose_server_ems_cta">Get in touch</string>
 
+    <string name="ftue_auth_terms_title">Privacy policy</string>
+    <string name="ftue_auth_terms_subtitle">Please read through T&amp;C. You must accept in order to continue.</string>
+
 </resources>

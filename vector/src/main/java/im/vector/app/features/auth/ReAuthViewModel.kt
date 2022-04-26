@@ -42,7 +42,7 @@ class ReAuthViewModel @AssistedInject constructor(
 
     override fun handle(action: ReAuthActions) = withState { state ->
         when (action) {
-            ReAuthActions.StartSSOFallback -> {
+            ReAuthActions.StartSSOFallback   -> {
                 if (state.flowType == LoginFlowTypes.SSO) {
                     setState { copy(ssoFallbackPageWasShown = true) }
                     val ssoURL = session.getUiaSsoFallbackUrl(initialState.session ?: "")
@@ -55,7 +55,7 @@ class ReAuthViewModel @AssistedInject constructor(
             ReAuthActions.FallBackPageClosed -> {
                 // Should we do something here?
             }
-            is ReAuthActions.ReAuthWithPass -> {
+            is ReAuthActions.ReAuthWithPass  -> {
                 val safeForIntentCypher = ByteArrayOutputStream().also {
                     it.use {
                         session.securelyStoreObject(action.password, initialState.resultKeyStoreAlias, it)

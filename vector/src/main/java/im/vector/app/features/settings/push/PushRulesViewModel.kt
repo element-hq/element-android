@@ -23,14 +23,14 @@ import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 
 data class PushRulesViewState(
         val rules: List<PushRule> = emptyList()
 ) : MavericksState
 
 class PushRulesViewModel(initialState: PushRulesViewState) :
-    VectorViewModel<PushRulesViewState, EmptyAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<PushRulesViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     companion object : MavericksViewModelFactory<PushRulesViewModel, PushRulesViewState> {
 

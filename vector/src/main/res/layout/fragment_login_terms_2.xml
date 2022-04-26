@@ -52,6 +52,8 @@
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             app:layout_constraintBottom_toTopOf="@id/loginTermsSubmit"
             app:layout_constraintTop_toBottomOf="@id/loginTermsNotice"
             tools:listitem="@layout/item_policy" />

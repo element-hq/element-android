@@ -148,8 +148,8 @@ internal class FileUploader @Inject constructor(
                 .post(requestBody)
                 .build()
 
-       return withContext(coroutineDispatchers.io) {
-             okHttpClient.newCall(request).awaitResponse().use { response ->
+        return withContext(coroutineDispatchers.io) {
+            okHttpClient.newCall(request).awaitResponse().use { response ->
                 if (!response.isSuccessful) {
                     throw response.toFailure(globalErrorReceiver)
                 } else {

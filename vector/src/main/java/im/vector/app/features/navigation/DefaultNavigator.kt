@@ -176,6 +176,9 @@ class DefaultNavigator @Inject constructor(
             Navigator.PostSwitchSpaceAction.OpenAddExistingRooms -> {
                 startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
+            Navigator.PostSwitchSpaceAction.OpenRoomList         -> {
+                startActivity(context, SpaceExploreActivity.newIntent(context, spaceId), buildTask = false)
+            }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom   -> {
                 val args = TimelineArgs(
                         postSwitchSpaceAction.roomId,
@@ -596,5 +599,10 @@ class DefaultNavigator @Inject constructor(
                         avatarUrl = threadTimelineArgs.avatarUrl,
                         roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
                 )))
+    }
+
+    override fun openScreenSharingPermissionDialog(screenCaptureIntent: Intent,
+                                                   activityResultLauncher: ActivityResultLauncher<Intent>) {
+        activityResultLauncher.launch(screenCaptureIntent)
     }
 }

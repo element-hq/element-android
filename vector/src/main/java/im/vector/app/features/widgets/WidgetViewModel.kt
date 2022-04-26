@@ -51,7 +51,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                                                   widgetPostAPIHandlerFactory: WidgetPostAPIHandler.Factory,
                                                   private val stringProvider: StringProvider,
                                                   private val session: Session) :
-    VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
+        VectorViewModel<WidgetViewState, WidgetAction, WidgetViewEvents>(initialState),
         WidgetPostAPIHandler.NavigationCallback,
         IntegrationManagerService.Listener {
 

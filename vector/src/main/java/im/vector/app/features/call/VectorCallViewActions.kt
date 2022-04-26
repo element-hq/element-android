@@ -40,4 +40,6 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object CallTransferSelectionCancelled : VectorCallViewActions()
     data class CallTransferSelectionResult(val callTransferResult: CallTransferResult) : VectorCallViewActions()
     object TransferCall : VectorCallViewActions()
+    object ToggleScreenSharing : VectorCallViewActions()
+    object StartScreenSharing : VectorCallViewActions()
 }

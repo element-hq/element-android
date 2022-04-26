@@ -43,6 +43,7 @@ interface SyncStatusService {
                 val rooms: Int,
                 val toDevice: Int
         ) : IncrementalSyncStatus()
+
         object IncrementalSyncError : IncrementalSyncStatus()
         object IncrementalSyncDone : IncrementalSyncStatus()
     }

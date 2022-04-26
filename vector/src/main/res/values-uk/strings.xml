@@ -1490,7 +1490,7 @@
     <string name="room_settings_room_access_entry_unknown">Невідоме налаштування доступу (%s)</string>
     <string name="room_settings_room_access_entry_knock">Будь-хто може попроситися до кімнати, учасники можуть прийняти або відхилити</string>
     <string name="join_anyway">Усе одно приєднатися</string>
-    <string name="create_space">Створити Простір</string>
+    <string name="create_space">Створити простір</string>
     <string name="join_space">Приєднатися до Простору</string>
     <string name="invite_by_link">Поділитися посиланням</string>
     <string name="invite_by_email">Запросити електронним листом</string>
@@ -2530,4 +2530,23 @@
 \n
 \nЦе буде одноразовий перехід, оскільки треди — тепер частина специфікації Matrix.</string>
     <string name="threads_notice_migration_title">Незабаром бета-версія тредів 🎉</string>
+    <string name="live_location_sharing_notification_description">Триває передавання місцеперебування</string>
+    <string name="live_location_sharing_notification_title">${app_name} Місцеперебування наживо</string>
+    <string name="error_forbidden_digits_only_username">Домашній сервер не приймає ім\'я користувача лише з цифр.</string>
+    <string name="ftue_personalize_skip_this_step">Пропустити цей крок</string>
+    <string name="ftue_personalize_submit">Зберегти й продовжити</string>
+    <string name="ftue_personalize_complete_subtitle">Ваші налаштування збережено.</string>
+    <string name="ftue_personalize_complete_title">Усе налаштовано!</string>
+    <string name="ftue_personalize_lets_go">Поїхали</string>
+    <string name="ftue_profile_picture_subtitle">Ви можете змінити його будь-коли.</string>
+    <string name="ftue_profile_picture_title">Додати зображення профілю</string>
+    <string name="ftue_display_name_entry_footer">Ви можете змінити його пізніше</string>
+    <string name="ftue_display_name_entry_title">Показуване ім\'я</string>
+    <string name="ftue_display_name_subtitle">Його буде показано у надісланих повідомленнях.</string>
+    <string name="ftue_display_name_title">Виберіть показуване ім\'я</string>
+    <string name="ftue_account_created_subtitle">Ваш обліковий запис %s створено.</string>
+    <string name="ftue_account_created_congratulations_title">Вітаємо!</string>
+    <string name="ftue_account_created_take_me_home">На головну</string>
+    <string name="ftue_account_created_personalize">Персоналізувати профіль</string>
+    <string name="action_disable">Вимкнути</string>
 </resources>

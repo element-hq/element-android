@@ -38,7 +38,7 @@ import org.matrix.android.sdk.flow.unwrap
 
 class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialState: RoomPermissionsViewState,
                                                            private val session: Session) :
-    VectorViewModel<RoomPermissionsViewState, RoomPermissionsAction, RoomPermissionsViewEvents>(initialState) {
+        VectorViewModel<RoomPermissionsViewState, RoomPermissionsAction, RoomPermissionsViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<RoomPermissionsViewModel, RoomPermissionsViewState> {

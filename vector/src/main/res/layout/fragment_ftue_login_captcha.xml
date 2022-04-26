@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/captchaRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/captchaGutterStart"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/captchaGutterEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
+
+    <Space
+        android:id="@+id/headerSpacing"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        app:layout_constraintBottom_toTopOf="@id/captchaHeaderIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <ImageView
+        android:id="@+id/captchaHeaderIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/circle"
+        android:backgroundTint="?colorSecondary"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_user_fg"
+        app:layout_constraintBottom_toTopOf="@id/captchaHeaderTitle"
+        app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
+        app:layout_constraintHeight_percent="0.10"
+        app:layout_constraintStart_toStartOf="@id/captchaGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/headerSpacing"
+        app:tint="@color/palette_white" />
+
+    <TextView
+        android:id="@+id/captchaHeaderTitle"
+        style="@style/Widget.Vector.TextView.Title.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/ftue_auth_create_account_title"
+        android:textColor="?vctr_content_primary"
+        app:layout_constraintBottom_toTopOf="@id/captchaHeaderSubtitle"
+        app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/captchaGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/captchaHeaderIcon" />
+
+    <TextView
+        android:id="@+id/captchaHeaderSubtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/auth_recaptcha_message"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
+        app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/captchaGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/captchaHeaderTitle" />
+
+    <Space
+        android:id="@+id/titleContentSpacing"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/loginCaptchaWevView"
+        app:layout_constraintHeight_percent="0.03"
+        app:layout_constraintTop_toBottomOf="@id/captchaHeaderSubtitle" />
+
+    <WebView
+        android:id="@+id/loginCaptchaWevView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/login_a11y_captcha_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/captchaGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/titleContentSpacing" />
+
+    <ProgressBar
+        android:id="@+id/loginCaptchaProgress"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/captchaGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/captchaGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/headerSpacing"
+        tools:ignore="UnknownId,NotSibling" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -76,7 +76,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         @Assisted private val initialState: SharedSecureStorageViewState,
         private val stringProvider: StringProvider,
         private val session: Session) :
-    VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
+        VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<SharedSecureStorageViewModel, SharedSecureStorageViewState> {
@@ -88,7 +88,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
             copy(userId = session.myUserId)
         }
         val integrityResult = session.sharedSecretStorageService.checkShouldBeAbleToAccessSecrets(initialState.requestedSecrets, initialState.keyId)
-        if (integrityResult  !is IntegrityResult.Success) {
+        if (integrityResult !is IntegrityResult.Success) {
             _viewEvents.post(
                     SharedSecureStorageViewEvent.Error(
                             stringProvider.getString(R.string.enter_secret_storage_invalid),
@@ -134,13 +134,13 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
     override fun handle(action: SharedSecureStorageAction) = withState {
         when (action) {
-            is SharedSecureStorageAction.Cancel                   -> handleCancel()
-            is SharedSecureStorageAction.SubmitPassphrase         -> handleSubmitPassphrase(action)
-            SharedSecureStorageAction.UseKey                      -> handleUseKey()
-            is SharedSecureStorageAction.SubmitKey                -> handleSubmitKey(action)
-            SharedSecureStorageAction.Back                        -> handleBack()
-            SharedSecureStorageAction.ForgotResetAll              -> handleResetAll()
-            SharedSecureStorageAction.DoResetAll                  -> handleDoResetAll()
+            is SharedSecureStorageAction.Cancel           -> handleCancel()
+            is SharedSecureStorageAction.SubmitPassphrase -> handleSubmitPassphrase(action)
+            SharedSecureStorageAction.UseKey              -> handleUseKey()
+            is SharedSecureStorageAction.SubmitKey        -> handleSubmitKey(action)
+            SharedSecureStorageAction.Back                -> handleBack()
+            SharedSecureStorageAction.ForgotResetAll      -> handleResetAll()
+            SharedSecureStorageAction.DoResetAll          -> handleDoResetAll()
         }
     }
 

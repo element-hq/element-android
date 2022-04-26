@@ -21,11 +21,11 @@ import androidx.preference.Preference
 import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.pushrules.RuleKind
-import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
+import org.matrix.android.sdk.api.session.pushrules.RuleKind
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 
 abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
-    VectorSettingsBaseFragment() {
+        VectorSettingsBaseFragment() {
 
     abstract val prefKeyToPushRuleId: Map<String, String>
 

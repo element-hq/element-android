@@ -39,10 +39,18 @@ data class LiveLocationBeaconContent(
         @Json(name = "m.new_content") override val newContent: Content? = null,
 
         /**
-         * Indicates user's intent to share ephemeral location.
+         * Optional description of the beacon.
          */
-        @Json(name = "org.matrix.msc3672.beacon_info") val unstableBeaconInfo: BeaconInfo? = null,
-        @Json(name = "m.beacon_info") val beaconInfo: BeaconInfo? = null,
+        @Json(name = "description") val description: String? = null,
+        /**
+         * Beacon should be considered as inactive after this timeout as milliseconds.
+         */
+        @Json(name = "timeout") val timeout: Long? = null,
+        /**
+         * Should be set true to start sharing beacon.
+         */
+        @Json(name = "live") val isLive: Boolean? = null,
+
         /**
          * Beacon creation timestamp.
          */
@@ -64,8 +72,6 @@ data class LiveLocationBeaconContent(
          */
         var hasTimedOut: Boolean = false
 ) : MessageContent {
-
-    fun getBestBeaconInfo() = beaconInfo ?: unstableBeaconInfo
 
     fun getBestTimestampAsMilliseconds() = timestampAsMilliseconds ?: unstableTimestampAsMilliseconds
 

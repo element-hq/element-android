@@ -75,13 +75,13 @@ data class RoomSettingsViewState(
 
     fun getJoinRuleWording(stringProvider: StringProvider): String {
         return when (val joinRule = newRoomJoinRules.newJoinRules ?: currentRoomJoinRules) {
-            RoomJoinRules.INVITE -> {
+            RoomJoinRules.INVITE     -> {
                 stringProvider.getString(R.string.room_settings_room_access_private_title)
             }
-            RoomJoinRules.PUBLIC -> {
+            RoomJoinRules.PUBLIC     -> {
                 stringProvider.getString(R.string.room_settings_room_access_public_title)
             }
-            RoomJoinRules.KNOCK -> {
+            RoomJoinRules.KNOCK      -> {
                 stringProvider.getString(R.string.room_settings_room_access_entry_knock)
             }
             RoomJoinRules.RESTRICTED -> {

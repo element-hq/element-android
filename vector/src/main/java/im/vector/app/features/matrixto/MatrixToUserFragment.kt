@@ -60,16 +60,16 @@ class MatrixToUserFragment @Inject constructor(
             Uninitialized -> {
                 views.matrixToCardUserContentVisibility.isVisible = false
             }
-            is Loading -> {
+            is Loading    -> {
                 views.matrixToCardUserContentVisibility.isVisible = false
             }
-            is Success -> {
+            is Success    -> {
                 views.matrixToCardUserContentVisibility.isVisible = true
                 views.matrixToCardNameText.setTextOrHide(item.invoke().displayName)
                 views.matrixToCardUserIdText.setTextOrHide(item.invoke().id)
                 avatarRenderer.render(item.invoke(), views.matrixToCardAvatar)
             }
-            is Fail -> {
+            is Fail       -> {
                 // TODO display some error copy?
                 sharedViewModel.handle(MatrixToAction.FailedToResolveUser)
             }
@@ -80,17 +80,17 @@ class MatrixToUserFragment @Inject constructor(
                 views.matrixToCardButtonLoading.isVisible = false
                 views.matrixToCardSendMessageButton.isVisible = false
             }
-            is Success -> {
+            is Success    -> {
                 views.matrixToCardButtonLoading.isVisible = false
                 views.matrixToCardSendMessageButton.isVisible = true
             }
-            is Fail -> {
+            is Fail       -> {
                 views.matrixToCardButtonLoading.isVisible = false
                 views.matrixToCardSendMessageButton.isVisible = true
                 // TODO display some error copy?
                 sharedViewModel.handle(MatrixToAction.FailedToStartChatting)
             }
-            is Loading -> {
+            is Loading    -> {
                 views.matrixToCardButtonLoading.isVisible = true
                 views.matrixToCardSendMessageButton.isInvisible = true
             }
