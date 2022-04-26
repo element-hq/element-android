@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AlwaysShowAction">
 
     <item
         android:id="@+id/timeline_setting"
@@ -47,8 +48,7 @@
         app:actionLayout="@layout/view_thread_notification_badge"
         app:iconTint="?colorPrimary"
         app:showAsAction="always"
-        tools:visible="true"
-        tools:ignore="AlwaysShowAction" />
+        tools:visible="true" />
 
     <item
         android:id="@+id/join_conference"
