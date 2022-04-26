@@ -223,12 +223,7 @@ class FtueAuthGenericTextInputFormFragment @Inject constructor() : AbstractFtueA
     override fun onError(throwable: Throwable) {
         when (params.mode) {
             TextInputFormFragmentMode.SetEmail      -> {
-                if (throwable.is401()) {
-                    // This is normal use case, we go to the mail waiting screen
-                    viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendEmailSuccess(viewModel.currentThreePid ?: "")))
-                } else {
-                    views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
-                }
+                views.loginGenericTextInputFormTil.error = errorFormatter.toHumanReadable(throwable)
             }
             TextInputFormFragmentMode.SetMsisdn     -> {
                 if (throwable.is401()) {
