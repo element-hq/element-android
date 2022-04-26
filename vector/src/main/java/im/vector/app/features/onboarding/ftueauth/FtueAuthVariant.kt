@@ -242,12 +242,7 @@ class FtueAuthVariant(
             registrationShouldFallback(viewEvents)               -> displayFallbackWebDialog()
             viewEvents.isRegistrationStarted                     -> handleRegistrationNavigation(viewEvents.flowResult.orderedStages())
             vectorFeatures.isOnboardingCombinedRegisterEnabled() -> openStartCombinedRegister()
-            else                                                 -> {
-                // First ask for login and password
-                // I add a tag to indicate that this fragment is a registration stage.
-                // This way it will be automatically popped in when starting the next registration stage
-                openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
-            }
+            else                                                 -> openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
         }
     }
 
