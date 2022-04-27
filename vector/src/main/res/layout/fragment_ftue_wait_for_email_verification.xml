@@ -20,16 +20,16 @@
         app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
 
     <Space
-        android:id="@+id/accountCreatedSpace1"
+        android:id="@+id/emailVerificationSpace1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/accountCreatedLogo"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationLogo"
         app:layout_constraintHeight_percent="0.10"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <ImageView
-        android:id="@+id/accountCreatedLogo"
+        android:id="@+id/emailVerificationLogo"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
@@ -37,79 +37,79 @@
         android:backgroundTint="?colorSecondary"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_email"
-        app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace2"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationSpace2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.12"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace1" />
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationSpace1" />
 
     <Space
-        android:id="@+id/accountCreatedSpace2"
+        android:id="@+id/emailVerificationSpace2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/accountCreatedTitle"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationTitle"
         app:layout_constraintHeight_percent="0.05"
-        app:layout_constraintTop_toBottomOf="@id/accountCreatedLogo" />
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationLogo" />
 
     <TextView
-        android:id="@+id/accountCreatedTitle"
+        android:id="@+id/emailVerificationTitle"
         style="@style/Widget.Vector.TextView.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/ftue_auth_email_verification_title"
         android:transitionName="loginTitleTransition"
-        app:layout_constraintBottom_toTopOf="@id/accountCreatedSubtitle"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationSubtitle"
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace2" />
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationSpace2" />
 
     <TextView
-        android:id="@+id/accountCreatedSubtitle"
+        android:id="@+id/emailVerificationSubtitle"
         style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace4"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationSpace4"
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/accountCreatedTitle"
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationTitle"
         tools:text="To confirm your email address, tap the button in the email we just sent to hello@world.org" />
 
     <Space
-        android:id="@+id/accountCreatedSpace4"
+        android:id="@+id/emailVerificationSpace4"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/accountCreatedPersonalize"
-        app:layout_constraintTop_toBottomOf="@id/accountCreatedSubtitle" />
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationResendEmail"
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationSubtitle" />
 
     <ProgressBar
-        android:id="@+id/accountCreatedWaiting"
+        android:id="@+id/emailVerificationWaiting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/accountCreatedSpace4"
+        app:layout_constraintBottom_toBottomOf="@id/emailVerificationSpace4"
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
-        app:layout_constraintTop_toTopOf="@id/accountCreatedSpace4"
+        app:layout_constraintTop_toTopOf="@id/emailVerificationSpace4"
         tools:visibility="visible" />
 
     <TextView
-        android:id="@+id/accountCreatedFooter"
+        android:id="@+id/emailVerificationFooter"
         style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/ftue_auth_email_verification_footer"
-        app:layout_constraintBottom_toTopOf="@id/accountCreatedPersonalize"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationResendEmail"
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace4" />
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationSpace4" />
 
     <Button
-        android:id="@+id/accountCreatedPersonalize"
+        android:id="@+id/emailVerificationResendEmail"
         style="@style/Widget.Vector.Button.Text.Login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -118,17 +118,17 @@
         android:textAllCaps="true"
         android:textColor="?colorSecondary"
         android:transitionName="loginSubmitTransition"
-        app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace5"
+        app:layout_constraintBottom_toTopOf="@id/emailVerificationSpace5"
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/accountCreatedFooter" />
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationFooter" />
 
     <Space
-        android:id="@+id/accountCreatedSpace5"
+        android:id="@+id/emailVerificationSpace5"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.05"
-        app:layout_constraintTop_toBottomOf="@id/accountCreatedPersonalize" />
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationResendEmail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
