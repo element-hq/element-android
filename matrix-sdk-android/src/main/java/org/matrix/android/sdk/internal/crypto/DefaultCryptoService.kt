@@ -1192,7 +1192,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     override fun removeRoomKeysRequestListener(listener: GossipingRequestListener) {
         incomingKeyRequestManager.removeRoomKeysRequestListener(listener)
-        secretShareManager.addListener(listener)
+        secretShareManager.removeListener(listener)
     }
 
     /**

@@ -229,7 +229,7 @@ internal class MXMegolmDecryption(
         }
 
         Timber.tag(loggerTag.value).i("onRoomKeyEvent addInboundGroupSession ${roomKeyContent.sessionId}")
-        val added = olmDevice.addInboundGroupSession(roomKeyContent.sessionId,
+        val addSessionResult = olmDevice.addInboundGroupSession(roomKeyContent.sessionId,
                 roomKeyContent.sessionKey,
                 roomKeyContent.roomId,
                 senderKey,
@@ -237,9 +237,9 @@ internal class MXMegolmDecryption(
                 keysClaimed,
                 exportFormat)
 
-        when (added) {
-            is MXOlmDevice.AddSessionResult.Imported               -> added.ratchetIndex
-            is MXOlmDevice.AddSessionResult.NotImportedHigherIndex -> added.newIndex
+        when (addSessionResult) {
+            is MXOlmDevice.AddSessionResult.Imported               -> addSessionResult.ratchetIndex
+            is MXOlmDevice.AddSessionResult.NotImportedHigherIndex -> addSessionResult.newIndex
             else                                                   -> null
         }?.let { index ->
             if (event.getClearType() == EventType.FORWARDED_ROOM_KEY) {
@@ -273,7 +273,7 @@ internal class MXMegolmDecryption(
             }
         }
 
-        if (added is MXOlmDevice.AddSessionResult.Imported) {
+        if (addSessionResult is MXOlmDevice.AddSessionResult.Imported) {
             Timber.tag(loggerTag.value)
                     .d("onRoomKeyEvent(${event.getClearType()}) : Added megolm session ${roomKeyContent.sessionId} in ${roomKeyContent.roomId}")
             defaultKeysBackupService.maybeBackupKeys()

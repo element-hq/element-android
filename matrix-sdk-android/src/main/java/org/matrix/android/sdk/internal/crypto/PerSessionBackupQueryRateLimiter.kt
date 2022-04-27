@@ -66,7 +66,7 @@ internal class PerSessionBackupQueryRateLimiter @Inject constructor(
     private var backupVersion: KeysVersionResult? = null
     private var savedKeyBackupKeyInfo: SavedKeyBackupKeyInfo? = null
     var backupWasCheckedFromServer: Boolean = false
-    var now = System.currentTimeMillis()
+    val now = System.currentTimeMillis()
 
     fun refreshBackupInfoIfNeeded(force: Boolean = false) {
         if (backupWasCheckedFromServer && !force) return

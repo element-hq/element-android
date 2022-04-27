@@ -85,7 +85,7 @@ internal class SecretShareManager @Inject constructor(
         }
     }
 
-    fun removeRoomKeysRequestListener(listener: GossipingRequestListener) {
+    fun removeListener(listener: GossipingRequestListener) {
         synchronized(gossipingRequestListeners) {
             gossipingRequestListeners.remove(listener)
         }
@@ -120,7 +120,7 @@ internal class SecretShareManager @Inject constructor(
 
         val userId = toDevice.senderId ?: return Unit.also {
             Timber.tag(loggerTag.value)
-                    .v("handleSecretRequest() : Missing secret name")
+                    .v("handleSecretRequest() : Missing senderId")
         }
 
         if (userId != credentials.userId) {

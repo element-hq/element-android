@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldCo
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
-import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
@@ -70,7 +69,7 @@ internal class OutgoingKeyRequestManager @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoConfig: MXCryptoConfig,
         private val inboundGroupSessionStore: InboundGroupSessionStore,
-        private val sendToDeviceTask: DefaultSendToDeviceTask,
+        private val sendToDeviceTask: SendToDeviceTask,
         private val deviceListManager: DeviceListManager,
         private val perSessionBackupQueryRateLimiter: PerSessionBackupQueryRateLimiter) {
 

@@ -892,7 +892,8 @@ internal class RealmCryptoStore @Inject constructor(
                     val sessionIdentifier = olmInboundGroupSessionWrapper.olmInboundGroupSession?.sessionIdentifier()
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(
                             sessionIdentifier,
-                            olmInboundGroupSessionWrapper.senderKey)
+                            olmInboundGroupSessionWrapper.senderKey
+                    )
 
                     val existing = realm.where<OlmInboundGroupSessionEntity>()
                             .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
@@ -1049,7 +1050,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .equalTo(OutgoingKeyRequestEntityFields.ROOM_ID, requestBody.roomId)
                     .equalTo(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID, requestBody.sessionId)
         }.map {
-            it.toOutgoingGossipingRequest()
+            it.toOutgoingKeyRequest()
         }.firstOrNull {
             it.requestBody?.algorithm == requestBody.algorithm &&
                     it.requestBody?.roomId == requestBody.roomId &&
@@ -1063,7 +1064,7 @@ internal class RealmCryptoStore @Inject constructor(
             realm.where<OutgoingKeyRequestEntity>()
                     .equalTo(OutgoingKeyRequestEntityFields.REQUEST_ID, requestId)
         }.map {
-            it.toOutgoingGossipingRequest()
+            it.toOutgoingKeyRequest()
         }.firstOrNull()
     }
 
@@ -1074,7 +1075,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .equalTo(OutgoingKeyRequestEntityFields.ROOM_ID, roomId)
                     .equalTo(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID, sessionId)
         }.map {
-            it.toOutgoingGossipingRequest()
+            it.toOutgoingKeyRequest()
         }.filter {
             it.requestBody?.algorithm == algorithm &&
                     it.requestBody?.senderKey == senderKey
@@ -1088,29 +1089,34 @@ internal class RealmCryptoStore @Inject constructor(
         val dataSourceFactory = realmDataSourceFactory.map {
             AuditTrailMapper.map(it)
             // mm we can't map not null...
-                    ?: AuditTrail(
-                            System.currentTimeMillis(),
-                            TrailType.Unknown,
-                            IncomingKeyRequestInfo(
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                            )
-                    )
+                    ?: createUnknownTrail()
         }
-        return monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
+        return monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
+                LivePagedListBuilder(
+                        dataSourceFactory,
                         PagedList.Config.Builder()
                                 .setPageSize(20)
                                 .setEnablePlaceholders(false)
                                 .setPrefetchDistance(1)
-                                .build())
+                                .build()
+                )
         )
     }
+
+    private fun createUnknownTrail() = AuditTrail(
+            System.currentTimeMillis(),
+            TrailType.Unknown,
+            IncomingKeyRequestInfo(
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+            )
+    )
 
     override fun <T> getGossipingEventsTrail(type: TrailType, mapper: ((AuditTrail) -> T)): LiveData<PagedList<T>> {
         val realmDataSourceFactory = monarchy.createDataSourceFactory { realm ->
@@ -1121,28 +1127,19 @@ internal class RealmCryptoStore @Inject constructor(
         val dataSourceFactory = realmDataSourceFactory.map { entity ->
             (AuditTrailMapper.map(entity)
             // mm we can't map not null...
-                    ?: AuditTrail(
-                            System.currentTimeMillis(),
-                            type,
-                            IncomingKeyRequestInfo(
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                            )
-                    )
+                    ?: createUnknownTrail()
                     ).let { mapper.invoke(it) }
         }
-        return monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
+        return monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
+                LivePagedListBuilder(
+                        dataSourceFactory,
                         PagedList.Config.Builder()
                                 .setPageSize(20)
                                 .setEnablePlaceholders(false)
                                 .setPrefetchDistance(1)
-                                .build())
+                                .build()
+                )
         )
     }
 
@@ -1166,7 +1163,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .equalTo(OutgoingKeyRequestEntityFields.ROOM_ID, requestBody.roomId)
                     .findAll()
                     .map {
-                        it.toOutgoingGossipingRequest()
+                        it.toOutgoingKeyRequest()
                     }.also {
                         if (it.size > 1) {
                             // there should be one or zero but not more, worth warning
@@ -1188,7 +1185,7 @@ internal class RealmCryptoStore @Inject constructor(
                     this.requestState = OutgoingRoomKeyRequestState.UNSENT
                     this.setRequestBody(requestBody)
                     this.creationTimeStamp = System.currentTimeMillis()
-                }.toOutgoingGossipingRequest()
+                }.toOutgoingKeyRequest()
             } else {
                 request = existing
             }
@@ -1231,7 +1228,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .equalTo(OutgoingKeyRequestEntityFields.ROOM_ID, roomId)
                     .equalTo(OutgoingKeyRequestEntityFields.MEGOLM_SESSION_ID, sessionId)
                     .findAll().firstOrNull { entity ->
-                        entity.toOutgoingGossipingRequest().let {
+                        entity.toOutgoingKeyRequest().let {
                             it.requestBody?.senderKey == senderKey &&
                                     it.requestBody?.algorithm == algorithm
                         }
@@ -1473,7 +1470,7 @@ internal class RealmCryptoStore @Inject constructor(
             realm
                     .where(OutgoingKeyRequestEntity::class.java)
         }, { entity ->
-            entity.toOutgoingGossipingRequest()
+            entity.toOutgoingKeyRequest()
         })
                 .filterNotNull()
     }
@@ -1484,7 +1481,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .where(OutgoingKeyRequestEntity::class.java)
                     .`in`(OutgoingKeyRequestEntityFields.REQUEST_STATE_STR, inStates.map { it.name }.toTypedArray())
         }, { entity ->
-            entity.toOutgoingGossipingRequest()
+            entity.toOutgoingKeyRequest()
         })
                 .filterNotNull()
     }
@@ -1495,15 +1492,18 @@ internal class RealmCryptoStore @Inject constructor(
                     .where(OutgoingKeyRequestEntity::class.java)
         }
         val dataSourceFactory = realmDataSourceFactory.map {
-            it.toOutgoingGossipingRequest()
+            it.toOutgoingKeyRequest()
         }
-        val trail = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
+        val trail = monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
+                LivePagedListBuilder(
+                        dataSourceFactory,
                         PagedList.Config.Builder()
                                 .setPageSize(20)
                                 .setEnablePlaceholders(false)
                                 .setPrefetchDistance(1)
-                                .build())
+                                .build()
+                )
         )
         return trail
     }

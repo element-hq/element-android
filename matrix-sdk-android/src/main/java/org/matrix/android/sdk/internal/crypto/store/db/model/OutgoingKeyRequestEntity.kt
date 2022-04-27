@@ -58,7 +58,7 @@ internal open class OutgoingKeyRequestEntity(
                         )
     }
 
-    fun getRequestedKeyInfo(): RoomKeyRequestBody? = RoomKeyRequestBody.fromJson(requestedInfoStr)
+    private fun getRequestedKeyInfo(): RoomKeyRequestBody? = RoomKeyRequestBody.fromJson(requestedInfoStr)
 
     fun setRequestBody(body: RoomKeyRequestBody) {
         requestedInfoStr = body.toJson()
@@ -92,7 +92,7 @@ internal open class OutgoingKeyRequestEntity(
         replies.add(newReply)
     }
 
-    fun toOutgoingGossipingRequest(): OutgoingKeyRequest {
+    fun toOutgoingKeyRequest(): OutgoingKeyRequest {
         return OutgoingKeyRequest(
                 requestBody = getRequestedKeyInfo(),
                 recipients = getRecipients().orEmpty(),

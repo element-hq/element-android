@@ -28,7 +28,6 @@ import javax.inject.Inject
 @SessionScope
 internal class RoomEncryptorsStore @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
-        // Repository
         private val megolmEncryptionFactory: MXMegolmEncryptionFactory,
         private val olmEncryptionFactory: MXOlmEncryptionFactory,
 ) {

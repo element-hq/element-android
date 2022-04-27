@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.room.membership.joining
 
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
@@ -71,13 +70,11 @@ internal class DefaultJoinRoomTask @Inject constructor(
         }
         val joinRoomResponse = try {
             executeRequest(globalErrorReceiver) {
-                withContext(coroutineDispatcher.io) {
-                    roomAPI.join(
-                            roomIdOrAlias = params.roomIdOrAlias,
-                            viaServers = params.viaServers.take(3),
-                            params = extraParams
-                    )
-                }
+                roomAPI.join(
+                        roomIdOrAlias = params.roomIdOrAlias,
+                        viaServers = params.viaServers.take(3),
+                        params = extraParams
+                )
             }
         } catch (failure: Throwable) {
             roomChangeMembershipStateDataSource.updateState(params.roomIdOrAlias, ChangeMembershipState.FailedJoining(failure))

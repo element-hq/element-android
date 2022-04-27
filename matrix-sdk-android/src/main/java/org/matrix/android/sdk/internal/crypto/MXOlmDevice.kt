@@ -577,11 +577,11 @@ internal class MXOlmDevice @Inject constructor(
 
     //  Inbound group session
 
-    sealed class AddSessionResult {
-        data class Imported(val ratchetIndex: Int) : AddSessionResult()
-        abstract class Failure : AddSessionResult()
+    sealed interface AddSessionResult {
+        data class Imported(val ratchetIndex: Int) : AddSessionResult
+        abstract class Failure : AddSessionResult
         object NotImported : Failure()
-        data class NotImportedHigherIndex(val newIndex: Int) : AddSessionResult()
+        data class NotImportedHigherIndex(val newIndex: Int) : Failure()
     }
 
     /**
