@@ -18,7 +18,10 @@ package org.matrix.android.sdk.internal.database.helper
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
@@ -31,6 +34,7 @@ import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFie
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.find
+import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
@@ -180,3 +184,14 @@ internal fun ChunkEntity.isMoreRecentThan(chunkToCheck: ChunkEntity): Boolean {
     // We don't know, so we assume it's false
     return false
 }
+
+internal fun ChunkEntity.Companion.findLatestSessionInfo(realm: Realm, roomId: String): Set<SessionInfoPair>? =
+        ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)?.timelineEvents?.mapNotNull { timelineEvent ->
+            timelineEvent?.root?.asDomain()?.content?.toModel<EncryptedEventContent>()?.let { content ->
+                content.sessionId ?:  return@mapNotNull null
+                content.senderKey ?:  return@mapNotNull null
+                Pair(content.sessionId, content.senderKey)
+            }
+        }?.toSet()
+
+internal typealias SessionInfoPair = Pair<String, String>

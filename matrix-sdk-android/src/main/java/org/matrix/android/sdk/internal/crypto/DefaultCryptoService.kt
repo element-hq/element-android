@@ -92,6 +92,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.verification.DefaultVerificationService
 import org.matrix.android.sdk.internal.crypto.verification.VerificationMessageProcessor
+import org.matrix.android.sdk.internal.database.helper.SessionInfoPair
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
@@ -1337,6 +1338,34 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
+    override fun sendSharedHistoryKeysToLastChunk(roomId: String, userId: String, sessionInfoSet: Set<SessionInfoPair>?) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+            runCatching {
+                deviceListManager.downloadKeys(listOf(userId), false)
+            }.mapCatching {
+                val userDevices = cryptoStore.getUserDevices(userId)
+                userDevices?.forEach {
+                    // Lets share the provided inbound sessions for every user device
+                    val deviceId = it.key
+                    sessionInfoSet?.mapNotNull { sessionInfoPair ->
+                        // Get inbound session from sessionId and sessionKey
+                        cryptoStore.getInboundGroupSession(sessionInfoPair.first, sessionInfoPair.second)
+                    }?.filter { inboundGroupSession ->
+                        // Filter only sessions with sharedHistory enabled
+                        inboundGroupSession.sharedHistory
+                    }?.forEach { inboundGroupSession ->
+                        // Share the session to userId with deviceId
+                        val exportedKeys = inboundGroupSession.exportKeys()
+                        val algorithm = exportedKeys?.algorithm
+                        val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, algorithm)
+                        decryptor?.shareKeysWithDevice(exportedKeys, deviceId, userId)
+                        Timber.i("## CRYPTO | Sharing inbound session")
+                    }
+                }
+            }
+        }
+    }
+
     override fun sendSharedHistoryKeys(roomId: String, userId: String) {
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             val userDevices = cryptoStore.getUserDevices(userId)
@@ -1347,7 +1376,7 @@ internal class DefaultCryptoService @Inject constructor(
                 inboundSessions.filter { inboundGroupSession ->
                     inboundGroupSession.sharedHistory
                 }.forEach { inboundGroupSession ->
-                    // Share the session with the to userId with deviceId
+                    // Share the session to userId with deviceId
                     val exportedKeys = inboundGroupSession.exportKeys()
                     val algorithm = exportedKeys?.algorithm
                     val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, algorithm)

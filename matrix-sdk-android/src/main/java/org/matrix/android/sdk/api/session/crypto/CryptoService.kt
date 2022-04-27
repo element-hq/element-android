@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+import org.matrix.android.sdk.internal.database.helper.SessionInfoPair
 
 interface CryptoService {
 
@@ -178,7 +179,12 @@ interface CryptoService {
     fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
 
     /**
-     * Share existing inbound sessions with the provided userId devices
+     * Share all existing inbound sessions to the provided userId devices
      */
     fun sendSharedHistoryKeys(roomId: String, userId: String)
+
+    /**
+     * Share all inbound sessions of the last chunk messages to the provided userId devices
+     */
+    fun sendSharedHistoryKeysToLastChunk(roomId: String, userId: String, sessionInfoSet: Set<SessionInfoPair>?)
 }

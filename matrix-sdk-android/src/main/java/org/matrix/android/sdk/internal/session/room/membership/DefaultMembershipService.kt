@@ -29,7 +29,9 @@ import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.internal.database.helper.findLatestSessionInfo
 import org.matrix.android.sdk.internal.database.mapper.asDomain
+import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
@@ -141,7 +143,10 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     override suspend fun invite(userId: String, reason: String?) {
-        cryptoService.sendSharedHistoryKeys(roomId, userId)
+        val sessionInfoSet = Realm.getInstance(monarchy.realmConfiguration).use {
+            ChunkEntity.findLatestSessionInfo(it, roomId)
+        }
+        cryptoService.sendSharedHistoryKeysToLastChunk(roomId, userId, sessionInfoSet)
         val params = InviteTask.Params(roomId, userId, reason)
         inviteTask.execute(params)
     }
