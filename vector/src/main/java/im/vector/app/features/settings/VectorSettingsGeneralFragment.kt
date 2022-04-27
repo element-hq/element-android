@@ -64,6 +64,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerConfig
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.flow.flow
@@ -177,7 +178,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         // Password
         // Hide the preference if password can not be updated
-        if (session.getHomeServerCapabilities().canChangePassword) {
+        if (session.homeServerCapabilitiesService().getHomeServerCapabilities().canChangePassword) {
             mPasswordPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 onPasswordUpdateClick()
                 false
@@ -332,7 +333,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         lifecycleScope.launch {
             val result = runCatching {
-                session.updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString())
+                session.profileService().updateAvatar(session.myUserId, uri, getFilenameFromUri(context, uri) ?: UUID.randomUUID().toString())
             }
             if (!isAdded) return@launch
 
@@ -444,7 +445,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     showPasswordLoadingView(true)
                     lifecycleScope.launch {
                         val result = runCatching {
-                            session.changePassword(oldPwd, newPwd)
+                            session.accountService().changePassword(oldPwd, newPwd)
                         }
                         if (!isAdded) {
                             return@launch
@@ -476,7 +477,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
             displayLoadingView()
 
             lifecycleScope.launch {
-                val result = runCatching { session.setDisplayName(session.myUserId, value) }
+                val result = runCatching { session.profileService().setDisplayName(session.myUserId, value) }
                 if (!isAdded) return@launch
                 result.fold(
                         onSuccess = {

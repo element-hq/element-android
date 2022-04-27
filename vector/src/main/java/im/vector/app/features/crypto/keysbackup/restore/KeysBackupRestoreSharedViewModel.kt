@@ -170,7 +170,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     fun handleGotSecretFromSSSS(cipherData: String, alias: String) {
         try {
             cipherData.fromBase64().inputStream().use { ins ->
-                val res = session.loadSecureSecret<Map<String, String>>(ins, alias)
+                val res = session.secureStorageService().loadSecureSecret<Map<String, String>>(ins, alias)
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME)
                 if (secret == null) {
                     _navigateEvent.postValue(
@@ -252,7 +252,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                 ?: return false
 
         // Some sanity ?
-        val defaultKeyResult = session.sharedSecretStorageService.getDefaultKey()
+        val defaultKeyResult = session.sharedSecretStorageService().getDefaultKey()
         val keyInfo = (defaultKeyResult as? KeyInfoResult.Success)?.keyInfo
                 ?: return false
 

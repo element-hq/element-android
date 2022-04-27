@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 suspend fun Session.fetchIdentityServerWithTerms(userLanguage: String): ServerAndPolicies? {
     return identityService().getCurrentIdentityServerUrl()
             ?.let { identityServerUrl ->
-                val termsResponse = getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
+                val termsResponse = termsService().getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
                         .serverResponse
                 buildServerAndPolicies(identityServerUrl, termsResponse, userLanguage)
             }
@@ -32,7 +32,7 @@ suspend fun Session.fetchIdentityServerWithTerms(userLanguage: String): ServerAn
 
 suspend fun Session.fetchHomeserverWithTerms(userLanguage: String): ServerAndPolicies {
     val homeserverUrl = sessionParams.homeServerUrl
-    val terms = getHomeserverTerms(homeserverUrl.ensureProtocol())
+    val terms = termsService().getHomeserverTerms(homeserverUrl.ensureProtocol())
     return buildServerAndPolicies(homeserverUrl, terms, userLanguage)
 }
 

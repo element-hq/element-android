@@ -14,6 +14,22 @@ buildscript {
     }
 }
 
+dokkaHtml {
+    dokkaSourceSets {
+        configureEach {
+            // Emit warnings about not documented members.
+            reportUndocumented.set(true)
+            // Suppress package legacy riot. Sadly this does not work
+            /*
+            perPackageOption {
+                prefix.set("org.matrix.android.sdk.internal.legacy.riot")
+                suppress.set(true)
+            }
+             */
+        }
+    }
+}
+
 android {
     testOptions.unitTests.includeAndroidResources = true
 

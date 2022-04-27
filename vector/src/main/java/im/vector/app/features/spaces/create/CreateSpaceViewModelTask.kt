@@ -113,7 +113,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                     try {
                         val roomId = try {
                             if (params.isPublic) {
-                                session.createRoom(
+                                session.roomService().createRoom(
                                         CreateRoomParams().apply {
                                             this.name = roomName
                                             this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
@@ -121,13 +121,14 @@ class CreateSpaceViewModelTask @Inject constructor(
                                 )
                             } else {
                                 val homeServerCapabilities = session
+                                        .homeServerCapabilitiesService()
                                         .getHomeServerCapabilities()
                                 val restrictedSupport = homeServerCapabilities
                                         .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
 
                                 val createRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
                                 if (createRestricted) {
-                                    session.createRoom(CreateRoomParams().apply {
+                                    session.roomService().createRoom(CreateRoomParams().apply {
                                         this.name = roomName
                                         this.featurePreset = RestrictedRoomPreset(
                                                 homeServerCapabilities,
@@ -140,7 +141,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                                         }
                                     })
                                 } else {
-                                    session.createRoom(CreateRoomParams().apply {
+                                    session.roomService().createRoom(CreateRoomParams().apply {
                                         this.name = roomName
                                         visibility = RoomDirectoryVisibility.PRIVATE
                                         this.preset = CreateRoomPreset.PRESET_PRIVATE_CHAT

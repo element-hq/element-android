@@ -69,7 +69,8 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
             }
             is DeactivateAccountAction.PasswordAuthDone  -> {
                 _viewEvents.post(DeactivateAccountViewEvents.Loading())
-                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+                val decryptedPass = session.secureStorageService()
+                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
@@ -92,7 +93,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
 
         viewModelScope.launch {
             val event = try {
-                session.deactivateAccount(
+                session.accountService().deactivateAccount(
                         action.eraseAllData,
                         object : UserInteractiveAuthInterceptor {
                             override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {

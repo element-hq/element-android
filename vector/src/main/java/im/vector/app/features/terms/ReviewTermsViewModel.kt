@@ -84,7 +84,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                session.agreeToTerms(
+                session.termsService().agreeToTerms(
                         termsArgs.type,
                         termsArgs.baseURL,
                         agreedUrls,
@@ -109,7 +109,7 @@ class ReviewTermsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                val data = session.getTerms(termsArgs.type, termsArgs.baseURL)
+                val data = session.termsService().getTerms(termsArgs.type, termsArgs.baseURL)
                 val terms = data.serverResponse.getLocalizedTerms(action.preferredLanguageCode).map {
                     Term(it.localizedUrl ?: "",
                             it.localizedName ?: "",

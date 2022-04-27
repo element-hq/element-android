@@ -36,7 +36,7 @@ class PushRulesViewModel(initialState: PushRulesViewState) :
 
         override fun initialState(viewModelContext: ViewModelContext): PushRulesViewState? {
             val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
-            val rules = session.getPushRules().getAllRules()
+            val rules = session.pushRuleService().getPushRules().getAllRules()
             return PushRulesViewState(rules)
         }
     }

@@ -36,6 +36,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
@@ -72,7 +73,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         }
         viewModelScope.launch {
             runCatching {
-                session.getRoomDirectoryVisibility(room.roomId)
+                session.roomDirectoryService().getRoomDirectoryVisibility(room.roomId)
             }.fold(
                     {
                         setState {
@@ -205,7 +206,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         postLoading(true)
         viewModelScope.launch {
             runCatching {
-                session.setRoomDirectoryVisibility(room.roomId, action.roomDirectoryVisibility)
+                session.roomDirectoryService().setRoomDirectoryVisibility(room.roomId, action.roomDirectoryVisibility)
             }.fold(
                     {
                         setState {
@@ -354,7 +355,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleRemoveLocalAlias(action: RoomAliasAction.RemoveLocalAlias) {
         postLoading(true)
         viewModelScope.launch {
-            runCatching { session.deleteRoomAlias(action.alias) }
+            runCatching { session.roomService().deleteRoomAlias(action.alias) }
                     .onFailure {
                         setState {
                             copy(isLoading = false)

@@ -107,7 +107,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
     private suspend fun checkTerms(baseUrl: String) {
         try {
-            val data = mxSession.getTerms(TermsService.ServiceType.IdentityService, baseUrl)
+            val data = mxSession.termsService().getTerms(TermsService.ServiceType.IdentityService, baseUrl)
 
             // has all been accepted?
             val resp = data.serverResponse

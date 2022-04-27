@@ -160,7 +160,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             args.clearCredentials     -> {
                 lifecycleScope.launch {
                     try {
-                        session.signOut(!args.isUserLoggedOut)
+                        session.signOutService().signOut(!args.isUserLoggedOut)
                     } catch (failure: Throwable) {
                         displayError(failure)
                         return@launch

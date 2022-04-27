@@ -47,6 +47,7 @@ import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.RoomTagQueryFilter
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -324,11 +325,11 @@ class RoomListSectionBuilderSpace(
                 },
                 { qpm ->
                     val name = stringProvider.getString(R.string.bottom_action_rooms)
-                    val updatableFilterLivePageResult = session.getFilteredPagedRoomSummariesLive(qpm)
+                    val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(qpm)
                     onUpdatable(updatableFilterLivePageResult)
 
                     val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
-                            .flatMapLatest { session.getRoomCountLive(updatableFilterLivePageResult.queryParams).asFlow() }
+                            .flatMapLatest { session.roomService().getRoomCountLive(updatableFilterLivePageResult.queryParams).asFlow() }
                             .distinctUntilChanged()
 
                     sections.add(
@@ -354,13 +355,13 @@ class RoomListSectionBuilderSpace(
             val liveQueryParams = MutableStateFlow(updatedQueryParams)
             val itemCountFlow = liveQueryParams
                     .flatMapLatest {
-                        session.getRoomCountLive(it).asFlow()
+                        session.roomService().getRoomCountLive(it).asFlow()
                     }
                     .flowOn(Dispatchers.Main)
                     .distinctUntilChanged()
 
             val name = stringProvider.getString(nameRes)
-            val filteredPagedRoomSummariesLive = session.getFilteredPagedRoomSummariesLive(
+            val filteredPagedRoomSummariesLive = session.roomService().getFilteredPagedRoomSummariesLive(
                     roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()),
                     pagedListConfig
             )
@@ -407,7 +408,7 @@ class RoomListSectionBuilderSpace(
                                         if (countRoomAsNotif) {
                                             RoomAggregateNotificationCount(it.size, it.size)
                                         } else {
-                                            session.getNotificationCountForRooms(
+                                            session.roomService().getNotificationCountForRooms(
                                                     roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
                                             )
                                         }

@@ -18,6 +18,8 @@ package org.matrix.android.sdk.internal.session.space
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -64,7 +66,8 @@ internal class DefaultSpaceService @Inject constructor(
         private val stateEventDataSource: StateEventDataSource,
         private val peekSpaceTask: PeekSpaceTask,
         private val resolveSpaceInfoTask: ResolveSpaceInfoTask,
-        private val leaveRoomTask: LeaveRoomTask
+        private val leaveRoomTask: LeaveRoomTask,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
 ) : SpaceService {
 
     override suspend fun createSpace(params: CreateSpaceParams): String {
@@ -105,8 +108,10 @@ internal class DefaultSpaceService @Inject constructor(
         return roomSummaryDataSource.getSpaceSummaries(spaceSummaryQueryParams, sortOrder)
     }
 
-    override fun getRootSpaceSummaries(): List<RoomSummary> {
-        return roomSummaryDataSource.getRootSpaceSummaries()
+    override suspend fun getRootSpaceSummaries(): List<RoomSummary> {
+        return withContext(coroutineDispatchers.io) {
+            roomSummaryDataSource.getRootSpaceSummaries()
+        }
     }
 
     override suspend fun peekSpace(spaceId: String): SpacePeekResult {

@@ -51,7 +51,7 @@ class AutocompleteRoomPresenter @Inject constructor(context: Context,
                 QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
             }
         }
-        val rooms = session.getRoomSummaries(queryParams)
+        val rooms = session.roomService().getRoomSummaries(queryParams)
                 .asSequence()
                 .sortedBy { it.displayName }
         controller.setData(rooms.toList())
