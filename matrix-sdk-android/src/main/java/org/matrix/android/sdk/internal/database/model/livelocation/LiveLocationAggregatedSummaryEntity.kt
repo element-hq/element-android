@@ -22,7 +22,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Aggregation info concerning a live location share.
  */
-class LiveLocationAggregatedSummaryEntity(
+internal open class LiveLocationAggregatedSummaryEntity(
         /**
          * Event id of the event that started the live.
          */
@@ -34,4 +34,6 @@ class LiveLocationAggregatedSummaryEntity(
         val endOfLiveTimestampAsMilliseconds: Long? = null,
 
         val lastLocation: String? = null
-) : RealmObject()
+) : RealmObject() {
+    companion object
+}
