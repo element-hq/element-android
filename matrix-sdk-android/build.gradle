@@ -19,13 +19,15 @@ dokkaHtml {
         configureEach {
             // Emit warnings about not documented members.
             reportUndocumented.set(true)
-            // Suppress package legacy riot. Sadly this does not work
-            /*
+            // Suppress legacy Riot's packages.
             perPackageOption {
-                prefix.set("org.matrix.android.sdk.internal.legacy.riot")
+                matchingRegex.set("org.matrix.android.sdk.internal.legacy.riot")
                 suppress.set(true)
             }
-             */
+            perPackageOption {
+                matchingRegex.set("org.matrix.androidsdk.crypto.data")
+                suppress.set(true)
+            }
         }
     }
 }
