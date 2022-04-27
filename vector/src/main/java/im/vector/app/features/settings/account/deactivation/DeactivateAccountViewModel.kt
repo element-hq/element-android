@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.failure.isInvalidUIAAuth
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import org.matrix.android.sdk.api.session.uia.exceptions.UiaCancelledException
 import org.matrix.android.sdk.api.util.fromBase64
 import timber.log.Timber
 import kotlin.coroutines.Continuation
@@ -59,6 +60,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
             is DeactivateAccountAction.DeactivateAccount -> handleDeactivateAccount(action)
             DeactivateAccountAction.SsoAuthDone          -> {
                 Timber.d("## UIA - FallBack success")
+                _viewEvents.post(DeactivateAccountViewEvents.Loading())
                 if (pendingAuth != null) {
                     uiaContinuation?.resume(pendingAuth!!)
                 } else {
@@ -66,6 +68,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
                 }
             }
             is DeactivateAccountAction.PasswordAuthDone  -> {
+                _viewEvents.post(DeactivateAccountViewEvents.Loading())
                 val decryptedPass = session.secureStorageService()
                         .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
@@ -78,7 +81,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
             }
             DeactivateAccountAction.ReAuthCancelled      -> {
                 Timber.d("## UIA - Reauth cancelled")
-                uiaContinuation?.resumeWithException(Exception())
+                uiaContinuation?.resumeWithException(UiaCancelledException())
                 uiaContinuation = null
                 pendingAuth = null
             }
@@ -101,7 +104,7 @@ class DeactivateAccountViewModel @AssistedInject constructor(@Assisted private v
                         }
                 )
                 DeactivateAccountViewEvents.Done
-            } catch (failure: Exception) {
+            } catch (failure: Throwable) {
                 if (failure.isInvalidUIAAuth()) {
                     DeactivateAccountViewEvents.InvalidAuth
                 } else {

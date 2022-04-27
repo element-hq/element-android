@@ -20,6 +20,7 @@ import dagger.Lazy
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KeyUsage
+import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
@@ -126,13 +127,13 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
                 uploadSigningKeysTask.execute(uploadSigningKeysParams)
             } catch (failure: Throwable) {
                 if (params.interactiveAuthInterceptor == null ||
-                        !handleUIA(
+                        handleUIA(
                                 failure = failure,
                                 interceptor = params.interactiveAuthInterceptor,
                                 retryBlock = { authUpdate ->
                                     uploadSigningKeysTask.execute(uploadSigningKeysParams.copy(userAuthParam = authUpdate))
                                 }
-                        )
+                        ) != UiaResult.SUCCESS
                 ) {
                     Timber.d("## UIA: propagate failure")
                     throw failure

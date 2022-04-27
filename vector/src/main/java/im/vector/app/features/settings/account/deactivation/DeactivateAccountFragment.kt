@@ -34,6 +34,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.settings.VectorSettingsActivity
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.session.uia.exceptions.UiaCancelledException
 import javax.inject.Inject
 
 class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<FragmentDeactivateAccountBinding>() {
@@ -114,7 +115,9 @@ class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<Fragm
                 is DeactivateAccountViewEvents.OtherFailure  -> {
                     settingsActivity?.ignoreInvalidTokenError = false
                     dismissLoadingDialog()
-                    displayErrorDialog(it.throwable)
+                    if (it.throwable !is UiaCancelledException) {
+                        displayErrorDialog(it.throwable)
+                    }
                 }
                 DeactivateAccountViewEvents.Done             -> {
                     MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true, isAccountDeactivated = true))
@@ -123,7 +126,8 @@ class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<Fragm
                     ReAuthActivity.newIntent(requireContext(),
                             it.registrationFlowResponse,
                             it.lastErrorCode,
-                            getString(R.string.deactivate_account_title)).let { intent ->
+                            getString(R.string.deactivate_account_title)
+                    ).let { intent ->
                         reAuthActivityResultLauncher.launch(intent)
                     }
                 }
