@@ -21,6 +21,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.databinding.FragmentFtueWaitForEmailVerificationBinding
@@ -41,6 +42,7 @@ data class FtueAuthWaitForEmailFragmentArgument(
 class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueWaitForEmailVerificationBinding>() {
 
     private val params: FtueAuthWaitForEmailFragmentArgument by args()
+    private var inferHasLeftAndReturnedToScreen = false
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueWaitForEmailVerificationBinding {
         return FragmentFtueWaitForEmailVerificationBinding.inflate(inflater, container, false)
@@ -51,18 +53,28 @@ class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragm
         setupUi()
     }
 
+    private fun setupUi() {
+        views.accountCreatedSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
+    }
+
     override fun onResume() {
         super.onResume()
+        showLoadingIfReturningToScreen()
         viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.CheckIfEmailHasBeenValidated(0)))
+    }
+
+    private fun showLoadingIfReturningToScreen() {
+        when (inferHasLeftAndReturnedToScreen){
+            true -> views.accountCreatedWaiting.isVisible = true
+            false -> {
+                inferHasLeftAndReturnedToScreen = true
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.handle(OnboardingAction.StopEmailValidationCheck)
-    }
-
-    private fun setupUi() {
-        views.accountCreatedSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
     }
 
     override fun resetViewModel() {
