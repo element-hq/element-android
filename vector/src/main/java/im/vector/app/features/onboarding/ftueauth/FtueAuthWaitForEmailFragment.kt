@@ -25,7 +25,6 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
 import im.vector.app.databinding.FragmentFtueWaitForEmailVerificationBinding
-import im.vector.app.databinding.FragmentLoginWaitForEmailBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.parcelize.Parcelize
@@ -54,7 +53,10 @@ class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragm
     }
 
     private fun setupUi() {
-        views.accountCreatedSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
+        views.emailVerificationSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
+        views.emailVerificationResendEmail.debouncedClicks {
+            viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid))
+        }
     }
 
     override fun onResume() {
@@ -64,8 +66,8 @@ class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragm
     }
 
     private fun showLoadingIfReturningToScreen() {
-        when (inferHasLeftAndReturnedToScreen){
-            true -> views.accountCreatedWaiting.isVisible = true
+        when (inferHasLeftAndReturnedToScreen) {
+            true  -> views.emailVerificationWaiting.isVisible = true
             false -> {
                 inferHasLeftAndReturnedToScreen = true
             }
