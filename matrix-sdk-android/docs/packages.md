@@ -1,3 +1,3 @@
 # Package org.matrix.android.sdk.api
 
-Doc for the package!
+This is the root package of the API exposed by this SDK.
