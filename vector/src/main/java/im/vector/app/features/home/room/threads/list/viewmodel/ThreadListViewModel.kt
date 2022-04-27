@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
 
@@ -68,7 +69,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
      * capabilities
      */
     private fun fetchAndObserveThreads() {
-        when (session.getHomeServerCapabilities().canUseThreading) {
+        when (session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) {
             true  -> {
                 fetchThreadList()
                 observeThreadSummaries()
@@ -113,11 +114,19 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
 
     private fun fetchThreadList() {
         viewModelScope.launch {
+            setLoading(true)
             room?.fetchThreadSummaries()
+            setLoading(false)
         }
     }
 
-    fun canHomeserverUseThreading() = session.getHomeServerCapabilities().canUseThreading
+    private fun setLoading(isLoading: Boolean) {
+        setState {
+            copy(isLoading = isLoading)
+        }
+    }
+
+    fun canHomeserverUseThreading() = session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading
 
     fun applyFiltering(shouldFilterThreads: Boolean) {
         analyticsTracker.capture(Interaction.Name.MobileThreadListFilterItem.toAnalyticsInteraction())

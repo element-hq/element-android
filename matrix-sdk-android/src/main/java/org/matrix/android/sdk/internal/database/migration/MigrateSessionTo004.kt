@@ -20,7 +20,7 @@ import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.database.model.PendingThreePidEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
+internal class MigrateSessionTo004(realm: DynamicRealm) : RealmMigrator(realm, 4) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.create("PendingThreePidEntity")

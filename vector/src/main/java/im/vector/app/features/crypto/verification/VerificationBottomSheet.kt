@@ -30,7 +30,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.VectorBaseActivity
@@ -49,12 +48,12 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.settings.VectorSettingsActivity
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import timber.log.Timber
@@ -118,7 +117,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                         activity.navigator.openSettings(activity, VectorSettingsActivity.EXTRA_DIRECT_ACCESS_SECURITY_PRIVACY)
                     }
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -252,6 +251,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                             VerificationConclusionFragment.Args(false, state.sasTransactionState.cancelCode.value, state.isMe)
                     )
                 }
+                else                             -> Unit
             }
 
             return@withState

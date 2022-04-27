@@ -16,13 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.room.notification
 
-import org.matrix.android.sdk.api.pushrules.Action
-import org.matrix.android.sdk.api.pushrules.Kind
-import org.matrix.android.sdk.api.pushrules.RuleSetKey
-import org.matrix.android.sdk.api.pushrules.getActions
-import org.matrix.android.sdk.api.pushrules.rest.PushCondition
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.pushrules.toJson
+import org.matrix.android.sdk.api.session.pushrules.Action
+import org.matrix.android.sdk.api.session.pushrules.Kind
+import org.matrix.android.sdk.api.session.pushrules.RuleSetKey
+import org.matrix.android.sdk.api.session.pushrules.getActions
+import org.matrix.android.sdk.api.session.pushrules.rest.PushCondition
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.toJson
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity

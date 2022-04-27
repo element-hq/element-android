@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.image
 
 import im.vector.app.features.media.ImageContentRenderer
+import org.matrix.android.sdk.api.session.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -25,7 +26,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 
 fun TimelineEvent.buildImageContentRendererData(maxHeight: Int): ImageContentRenderer.Data? {
     return when {

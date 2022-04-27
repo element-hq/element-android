@@ -20,21 +20,26 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
+import org.matrix.android.sdk.api.session.crypto.model.GossipingRequestState
+import org.matrix.android.sdk.api.session.crypto.model.GossipingToDeviceObject
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRequestCancellation
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
+import org.matrix.android.sdk.api.session.crypto.model.IncomingSecretShareRequest
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXGroupEncryption
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.internal.crypto.model.rest.GossipingDefaultContent
-import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
 import org.matrix.android.sdk.internal.di.SessionId
@@ -111,7 +116,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         Timber.i("## CRYPTO | GOSSIP onGossipingRequestEvent received type ${event.type} from user:${event.senderId}, content:$roomKeyShare")
         // val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
         when (roomKeyShare?.action) {
-            GossipingToDeviceObject.ACTION_SHARE_REQUEST -> {
+            GossipingToDeviceObject.ACTION_SHARE_REQUEST      -> {
                 if (event.getClearType() == EventType.REQUEST_SECRET) {
                     IncomingSecretShareRequest.fromEvent(event)?.let {
                         if (event.senderId == credentials.userId && it.deviceId == credentials.deviceId) {
@@ -341,7 +346,7 @@ internal class IncomingGossipingRequestManager @Inject constructor(
         val isDeviceLocallyVerified = cryptoStore.getUserDevice(userId, deviceId)?.trustLevel?.isLocallyVerified()
 
         when (secretName) {
-            MASTER_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.master
+            MASTER_KEY_SSSS_NAME       -> cryptoStore.getCrossSigningPrivateKeys()?.master
             SELF_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.selfSigned
             USER_SIGNING_KEY_SSSS_NAME -> cryptoStore.getCrossSigningPrivateKeys()?.user
             KEYBACKUP_SECRET_SSSS_NAME -> cryptoStore.getKeyBackupRecoveryKeyInfo()?.recoveryKey

@@ -28,7 +28,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +38,11 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
@@ -49,14 +53,11 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
@@ -149,7 +150,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     pendingRequest = if (pr != null) Success(pr) else Uninitialized,
                     isMe = initialState.otherUserId == session.myUserId,
                     currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
-                    quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
+                    quadSContainsSecrets = session.sharedSecretStorageService().isRecoverySetup(),
                     hasAnyOtherSession = hasAnyOtherSession
             )
         }
@@ -231,7 +232,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     override fun handle(action: VerificationAction) = withState { state ->
         val otherUserId = state.otherUserMxItem?.id ?: return@withState
         val roomId = state.roomId
-                ?: session.getExistingDirectRoomWithUser(otherUserId)
+                ?: session.roomService().getExistingDirectRoomWithUser(otherUserId)
 
         when (action) {
             is VerificationAction.RequestVerificationByDM      -> {
@@ -244,7 +245,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                         )
                     }
                     viewModelScope.launch {
-                        val result = runCatching { session.createDirectRoom(otherUserId) }
+                        val result = runCatching { session.roomService().createDirectRoom(otherUserId) }
                         result.fold(
                                 { data ->
                                     setState {
@@ -365,14 +366,14 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     copy(verifyingFrom4S = false)
                 }
             }
-        }.exhaustive
+        }
     }
 
     private fun handleSecretBackFromSSSS(action: VerificationAction.GotResultFromSsss) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 action.cypherData.fromBase64().inputStream().use { ins ->
-                    val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
+                    val res = session.secureStorageService().loadSecureSecret<Map<String, String>>(ins, action.alias)
                     val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
                             res?.get(MASTER_KEY_SSSS_NAME),
                             res?.get(USER_SIGNING_KEY_SSSS_NAME),
@@ -427,9 +428,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     Timber.v("## Keybackup secret not restored from SSSS")
                 }
 
-                val version = awaitCallback<KeysVersionResult?> {
+                val version = awaitCallback<KeysBackupLastVersionResult> {
                     session.cryptoService().keysBackupService().getCurrentVersion(it)
-                } ?: return@launch
+                }.toKeysVersionResult() ?: return@launch
 
                 awaitCallback<ImportRoomKeysResult> {
                     session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(

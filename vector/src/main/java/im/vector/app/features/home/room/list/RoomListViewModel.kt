@@ -29,7 +29,6 @@ import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
@@ -43,6 +42,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
@@ -163,7 +163,7 @@ class RoomListViewModel @AssistedInject constructor(
             is RoomListAction.ToggleSection               -> handleToggleSection(action.section)
             is RoomListAction.JoinSuggestedRoom           -> handleJoinSuggestedRoom(action)
             is RoomListAction.ShowRoomDetails             -> handleShowRoomDetails(action)
-        }.exhaustive
+        }
     }
 
     fun isPublicRoom(roomId: String): Boolean {
@@ -234,7 +234,7 @@ class RoomListViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                session.leaveRoom(roomId)
+                session.roomService().leaveRoom(roomId)
                 // We do not update the rejectingRoomsIds here, because, the room is not rejected yet regarding the sync data.
                 // Instead, we wait for the room to be rejected
                 // Known bug: if the user is invited again (after rejecting the first invitation), the loading will be displayed instead of the buttons.
@@ -266,7 +266,7 @@ class RoomListViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                session.joinRoom(action.roomId, null, action.viaServers ?: emptyList())
+                session.roomService().joinRoom(action.roomId, null, action.viaServers ?: emptyList())
 
                 suggestedRoomJoiningState.postValue(suggestedRoomJoiningState.value.orEmpty().toMutableMap().apply {
                     this[action.roomId] = Success(Unit)
@@ -320,7 +320,7 @@ class RoomListViewModel @AssistedInject constructor(
     private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {
         _viewEvents.post(RoomListViewEvents.Loading(null))
         viewModelScope.launch {
-            val value = runCatching { session.leaveRoom(action.roomId) }
+            val value = runCatching { session.roomService().leaveRoom(action.roomId) }
                     .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
             _viewEvents.post(value)
         }

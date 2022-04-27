@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.auth.registration
 
 import kotlinx.coroutines.delay
+import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
@@ -25,6 +26,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.toFlowResult
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.Failure.RegistrationFlowError
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.auth.PendingSessionStore
 import org.matrix.android.sdk.internal.auth.SessionCreator
@@ -45,6 +47,7 @@ internal class DefaultRegistrationWizard(
     private val registerAvailableTask: RegisterAvailableTask = DefaultRegisterAvailableTask(authAPI)
     private val registerAddThreePidTask: RegisterAddThreePidTask = DefaultRegisterAddThreePidTask(authAPI)
     private val validateCodeTask: ValidateCodeTask = DefaultValidateCodeTask(authAPI)
+    private val registerCustomTask: RegisterCustomTask = DefaultRegisterCustomTask(authAPI)
 
     override val currentThreePid: String?
         get() {
@@ -187,22 +190,51 @@ internal class DefaultRegistrationWizard(
         return performRegistrationRequest(params)
     }
 
-    private suspend fun performRegistrationRequest(registrationParams: RegistrationParams,
-                                                   delayMillis: Long = 0): RegistrationResult {
+    override suspend fun registrationCustom(
+            authParams: JsonDict
+    ): RegistrationResult {
+        val safeSession = pendingSessionData.currentSession
+                ?: throw IllegalStateException("developer error, call createAccount() method first")
+
+        val mutableParams = authParams.toMutableMap()
+        mutableParams["session"] = safeSession
+
+        val params = RegistrationCustomParams(auth = mutableParams)
+        return performRegistrationOtherRequest(params)
+    }
+
+    private suspend fun performRegistrationRequest(
+            registrationParams: RegistrationParams,
+            delayMillis: Long = 0
+    ): RegistrationResult {
         delay(delayMillis)
+        return register { registerTask.execute(RegisterTask.Params(registrationParams)) }
+    }
+
+    private suspend fun performRegistrationOtherRequest(
+            registrationCustomParams: RegistrationCustomParams
+    ): RegistrationResult {
+        return register { registerCustomTask.execute(RegisterCustomTask.Params(registrationCustomParams)) }
+    }
+
+    private suspend fun register(
+            execute: suspend () -> Credentials
+    ): RegistrationResult {
         val credentials = try {
-            registerTask.execute(RegisterTask.Params(registrationParams))
+            execute.invoke()
         } catch (exception: Throwable) {
             if (exception is RegistrationFlowError) {
-                pendingSessionData = pendingSessionData.copy(currentSession = exception.registrationFlowResponse.session)
-                        .also { pendingSessionStore.savePendingSessionData(it) }
+                pendingSessionData =
+                        pendingSessionData.copy(currentSession = exception.registrationFlowResponse.session)
+                                .also { pendingSessionStore.savePendingSessionData(it) }
                 return RegistrationResult.FlowResponse(exception.registrationFlowResponse.toFlowResult())
             } else {
                 throw exception
             }
         }
 
-        val session = sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
+        val session =
+                sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)
         return RegistrationResult.Success(session)
     }
 

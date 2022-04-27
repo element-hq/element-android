@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.olm
 
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
@@ -23,7 +24,6 @@ import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForUsersAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXEncrypting
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 
 internal class MXOlmEncryption(
@@ -33,7 +33,7 @@ internal class MXOlmEncryption(
         private val messageEncrypter: MessageEncrypter,
         private val deviceListManager: DeviceListManager,
         private val ensureOlmSessionsForUsersAction: EnsureOlmSessionsForUsersAction) :
-    IMXEncrypting {
+        IMXEncrypting {
 
     override suspend fun encryptEventContent(eventContent: Content, eventType: String, userIds: List<String>): Content {
         // pick the list of recipients based on the membership list.

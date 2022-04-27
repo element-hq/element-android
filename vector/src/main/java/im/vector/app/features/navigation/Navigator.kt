@@ -31,7 +31,7 @@ import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
-import im.vector.app.features.poll.create.PollMode
+import im.vector.app.features.poll.PollMode
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity
@@ -54,8 +54,9 @@ interface Navigator {
 
     sealed class PostSwitchSpaceAction {
         object None : PostSwitchSpaceAction()
-        data class OpenDefaultRoom(val roomId: String, val showShareSheet: Boolean) : PostSwitchSpaceAction()
         object OpenAddExistingRooms : PostSwitchSpaceAction()
+        object OpenRoomList : PostSwitchSpaceAction()
+        data class OpenDefaultRoom(val roomId: String, val showShareSheet: Boolean) : PostSwitchSpaceAction()
     }
 
     fun switchToSpace(context: Context, spaceId: String, postSwitchSpaceAction: PostSwitchSpaceAction)
@@ -167,4 +168,9 @@ interface Navigator {
     fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
 
     fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs)
+
+    fun openScreenSharingPermissionDialog(
+            screenCaptureIntent: Intent,
+            activityResultLauncher: ActivityResultLauncher<Intent>
+    )
 }

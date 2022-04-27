@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room
 
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.Room
@@ -41,16 +42,13 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
 import org.matrix.android.sdk.api.session.room.version.RoomVersionService
-import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.api.session.space.Space
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
-import org.matrix.android.sdk.internal.session.search.SearchTask
 import org.matrix.android.sdk.internal.session.space.DefaultSpace
-import org.matrix.android.sdk.internal.util.awaitCallback
 import java.security.InvalidParameterException
 
 internal class DefaultRoom(override val roomId: String,
@@ -76,7 +74,6 @@ internal class DefaultRoom(override val roomId: String,
                            private val roomVersionService: RoomVersionService,
                            private val sendStateTask: SendStateTask,
                            private val viaParameterFinder: ViaParameterFinder,
-                           private val searchTask: SearchTask,
                            override val coroutineDispatchers: MatrixCoroutineDispatchers
 ) :
         Room,
@@ -140,32 +137,12 @@ internal class DefaultRoom(override val roomId: String,
                         eventType = EventType.STATE_ROOM_ENCRYPTION,
                         body = mapOf(
                                 "algorithm" to algorithm
-                        ))
+                        )
+                )
 
                 sendStateTask.execute(params)
             }
         }
-    }
-
-    override suspend fun search(searchTerm: String,
-                                nextBatch: String?,
-                                orderByRecent: Boolean,
-                                limit: Int,
-                                beforeLimit: Int,
-                                afterLimit: Int,
-                                includeProfile: Boolean): SearchResult {
-        return searchTask.execute(
-                SearchTask.Params(
-                        searchTerm = searchTerm,
-                        roomId = roomId,
-                        nextBatch = nextBatch,
-                        orderByRecent = orderByRecent,
-                        limit = limit,
-                        beforeLimit = beforeLimit,
-                        afterLimit = afterLimit,
-                        includeProfile = includeProfile
-                )
-        )
     }
 
     override fun asSpace(): Space? {

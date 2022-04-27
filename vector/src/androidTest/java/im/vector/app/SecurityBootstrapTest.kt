@@ -166,7 +166,7 @@ class SecurityBootstrapTest : VerificationTestBase() {
         assert(uiSession.cryptoService().crossSigningService().allPrivateKeysKnown())
         assert(uiSession.cryptoService().keysBackupService().isEnabled)
         assert(uiSession.cryptoService().keysBackupService().currentBackupVersion != null)
-        assert(uiSession.sharedSecretStorageService.isRecoverySetup())
-        assert(uiSession.sharedSecretStorageService.isMegolmKeyInBackup())
+        assert(uiSession.sharedSecretStorageService().isRecoverySetup())
+        assert(uiSession.sharedSecretStorageService().isMegolmKeyInBackup())
     }
 }

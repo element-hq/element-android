@@ -24,8 +24,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
+import org.matrix.android.sdk.api.util.fromBase64
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import java.io.ByteArrayOutputStream
 import java.util.UUID
 

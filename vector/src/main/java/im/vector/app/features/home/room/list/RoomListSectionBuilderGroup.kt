@@ -70,22 +70,20 @@ class RoomListSectionBuilderGroup(
                         },
                         { qpm ->
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
-                            session.getFilteredPagedRoomSummariesLive(qpm)
-                                    .let { updatableFilterLivePageResult ->
-                                        onUpdatable(updatableFilterLivePageResult)
+                            val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(qpm)
+                            onUpdatable(updatableFilterLivePageResult)
 
-                                        val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
-                                                .flatMapLatest { session.getRoomCountFlow(updatableFilterLivePageResult.queryParams) }
-                                                .distinctUntilChanged()
+                            val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
+                                    .flatMapLatest { session.roomService().getRoomCountLive(updatableFilterLivePageResult.queryParams).asFlow() }
+                                    .distinctUntilChanged()
 
-                                        sections.add(
-                                                RoomsSection(
-                                                        sectionName = name,
-                                                        livePages = updatableFilterLivePageResult.livePagedList,
-                                                        itemCount = itemCountFlow
-                                                )
-                                        )
-                                    }
+                            sections.add(
+                                    RoomsSection(
+                                            sectionName = name,
+                                            livePages = updatableFilterLivePageResult.livePagedList,
+                                            itemCount = itemCountFlow
+                                    )
+                            )
                         }
                 )
             }
@@ -252,37 +250,33 @@ class RoomListSectionBuilderGroup(
                            @StringRes nameRes: Int,
                            notifyOfLocalEcho: Boolean = false,
                            query: (RoomSummaryQueryParams.Builder) -> Unit) {
-        withQueryParams(
-                { query.invoke(it) },
-                { roomQueryParams ->
-                    val name = stringProvider.getString(nameRes)
-                    session.getFilteredPagedRoomSummariesLive(roomQueryParams)
-                            .also {
-                                activeSpaceUpdaters.add(it)
-                            }.livePagedList
-                            .let { livePagedList ->
-                                // use it also as a source to update count
-                                livePagedList.asFlow()
-                                        .onEach {
-                                            sections.find { it.sectionName == name }
-                                                    ?.notificationCount
-                                                    ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
-                                        }
-                                        .flowOn(Dispatchers.Default)
-                                        .launchIn(coroutineScope)
+        withQueryParams(query) { roomQueryParams ->
+            val name = stringProvider.getString(nameRes)
+            session.roomService().getFilteredPagedRoomSummariesLive(roomQueryParams)
+                    .also {
+                        activeSpaceUpdaters.add(it)
+                    }.livePagedList
+                    .let { livePagedList ->
+                        // use it also as a source to update count
+                        livePagedList.asFlow()
+                                .onEach {
+                                    sections.find { it.sectionName == name }
+                                            ?.notificationCount
+                                            ?.postValue(session.roomService().getNotificationCountForRooms(roomQueryParams))
+                                }
+                                .flowOn(Dispatchers.Default)
+                                .launchIn(coroutineScope)
 
-                                sections.add(
-                                        RoomsSection(
-                                                sectionName = name,
-                                                livePages = livePagedList,
-                                                notifyOfLocalEcho = notifyOfLocalEcho,
-                                                itemCount = session.getRoomCountFlow(roomQueryParams)
-                                        )
+                        sections.add(
+                                RoomsSection(
+                                        sectionName = name,
+                                        livePages = livePagedList,
+                                        notifyOfLocalEcho = notifyOfLocalEcho,
+                                        itemCount = session.roomService().getRoomCountLive(roomQueryParams).asFlow()
                                 )
-                            }
-                }
-
-        )
+                        )
+                    }
+        }
     }
 
     private fun withQueryParams(builder: (RoomSummaryQueryParams.Builder) -> Unit, block: (RoomSummaryQueryParams) -> Unit) {

@@ -29,11 +29,9 @@ import java.util.List;
 
 import timber.log.Timber;
 
-/*
- * IMPORTANT: This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
- */
-
 /**
+ * <b>IMPORTANT:</b> This class is imported from Riot-Android to be able to perform a migration. Do not use it for any other purpose
+ *
  * Stores login credentials in SharedPreferences.
  */
 public class LoginStorage {

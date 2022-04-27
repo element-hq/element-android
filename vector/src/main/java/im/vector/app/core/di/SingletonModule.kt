@@ -46,6 +46,7 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.CoroutineScope
@@ -59,6 +60,7 @@ import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -113,11 +115,13 @@ object VectorStaticModule {
     }
 
     @Provides
-    fun providesMatrixConfiguration(vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider): MatrixConfiguration {
+    fun providesMatrixConfiguration(
+            vectorPreferences: VectorPreferences,
+            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
-                presenceSyncEnabled = BuildConfig.PRESENCE_SYNC_ENABLED
+                threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
         )
     }
 
@@ -146,6 +150,11 @@ object VectorStaticModule {
     @Provides
     fun providesRawService(matrix: Matrix): RawService {
         return matrix.rawService()
+    }
+
+    @Provides
+    fun providesLightweightSettingsStorage(matrix: Matrix): LightweightSettingsStorage {
+        return matrix.lightweightSettingsStorage()
     }
 
     @Provides

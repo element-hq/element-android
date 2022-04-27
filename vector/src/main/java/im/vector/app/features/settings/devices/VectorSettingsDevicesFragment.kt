@@ -32,7 +32,6 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.ManuallyVerifyDialog
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.DialogBaseEditTextBinding
@@ -40,7 +39,7 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import javax.inject.Inject
 
 /**
@@ -90,7 +89,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
                         viewModel.handle(DevicesAction.MarkAsManuallyVerified(it.cryptoDeviceInfo))
                     }
                 }
-            }.exhaustive
+            }
         }
     }
 

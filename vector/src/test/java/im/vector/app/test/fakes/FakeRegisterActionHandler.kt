@@ -33,4 +33,8 @@ class FakeRegisterActionHandler {
             result.first { it.first == actionArg }.second
         }
     }
+
+    fun givenThrowsFor(wizard: RegistrationWizard, action: RegisterAction, cause: Throwable) {
+        coEvery { instance.handleRegisterAction(wizard, action) } throws cause
+    }
 }

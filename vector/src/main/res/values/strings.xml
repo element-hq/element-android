@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- TODO During next Weblate sync: There are 2 occurences of `$ {app_name}` in the translations. Remove the extra space. -->
+
     <string name="notice_room_invite_no_invitee">%s\'s invitation</string>
     <string name="notice_room_invite_no_invitee_by_you">Your invitation</string>
     <string name="notice_room_created">%1$s created the room</string>
@@ -176,6 +178,9 @@
     <string name="initial_sync_start_importing_account_groups">Initial sync:\nImporting communities</string>
     <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
+    <string name="initial_sync_request_title">Initial sync request</string>
+    <string name="initial_sync_request_content">${app_name} needs to perform a clear cache to be up to date, for the following reason:\n%s\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="initial_sync_request_reason_unignored_users">- Some users have been unignored</string>
 
     <string name="event_status_sent_message">Message sent</string>
     <string name="event_status_sending_message">Sending message…</string>
@@ -358,7 +363,9 @@
     <string name="action_switch">Switch</string>
     <string name="action_unpublish">Unpublish</string>
     <string name="action_enable">Enable</string>
+    <string name="action_disable">Disable</string>
     <string name="action_not_now">Not now</string>
+    <string name="action_try_it_out">Try it out</string>
     <string name="action_agree">Agree</string>
     <string name="action_change">"Change"</string>
     <string name="action_remove">Remove</string>
@@ -383,6 +390,7 @@
     <string name="action_play">Play</string>
     <string name="action_dismiss">Dismiss</string>
     <string name="action_reset">Reset</string>
+    <string name="action_learn_more">Learn more</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
 
@@ -477,6 +485,8 @@
     <string name="call_camera_back">Back</string>
     <string name="call_format_turn_hd_off">Turn HD off</string>
     <string name="call_format_turn_hd_on">Turn HD on</string>
+    <string name="call_start_screen_sharing">Share screen</string>
+    <string name="call_stop_screen_sharing">Stop screen sharing</string>
 
     <string name="option_send_files">Send files</string>
     <string name="option_send_sticker">Send sticker</string>
@@ -731,6 +741,14 @@
     <!-- Parameter %s will be replaced by the value of string reply_in_thread -->
     <string name="thread_list_empty_notice">Tip: Long tap a message and use “%s”.</string>
     <string name="search_thread_from_a_thread">From a Thread</string>
+    <string name="threads_notice_migration_title">Threads Approaching Beta 🎉</string>
+    <string name="threads_notice_migration_message">We’re getting closer to releasing a public Beta for Threads.\n\nAs we prepare for it, we need to make some changes: threads created before this point will be displayed as regular replies.\n\nThis will be a one-off transition as Threads are now part of the Matrix specification.</string>
+    <string name="threads_beta_enable_notice_title">Threads Beta</string>
+    <!-- %s will be replaced with action_learn_more string resource that will be clickable(url redirection)  -->
+    <string name="threads_beta_enable_notice_message">Threads help keep your conversations on-topic and easy to track. %sEnabling threads will refresh the app. This may take longer for some accounts.</string>
+    <string name="threads_labs_enable_notice_title">Threads Beta</string>
+    <string name="threads_labs_enable_notice_message">Your homeserver does not currently support threads, so this feature may be unreliable. Some threaded messages may not be reliably available. %sDo you want to enable threads anyway?</string>
+
 
     <!-- Search -->
     <string name="search_hint">Search</string>
@@ -1024,7 +1042,7 @@
     <string name="settings_fail_to_update_password">Failed to update password</string>
     <string name="settings_fail_to_update_password_invalid_current_password">The password is not valid</string>
     <string name="settings_password_updated">Your password has been updated</string>
-    <string name="settings_unignore_user">Show all messages from %s?\n\nNote that this action will restart the app and it may take some time.</string>
+    <string name="settings_unignore_user">Show all messages from %s?</string>
 
     <string name="settings_emails_and_phone_numbers_title">Emails and phone numbers</string>
     <string name="settings_emails_and_phone_numbers_summary">Manage emails and phone numbers linked to your Matrix account</string>
@@ -1039,13 +1057,19 @@
     <string name="media_source_choose">Choose</string>
     <string name="settings_play_shutter_sound">Play shutter sound</string>
 
-    <string name="settings_flair">Flair</string>
+    <!-- TODO Remove -->
+    <string name="settings_flair" tools:ignore="MissingTranslation">Flair</string>
 
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>
     <string name="media_saving_period_1_week">1 week</string>
     <string name="media_saving_period_1_month">1 month</string>
     <string name="media_saving_period_forever">Forever</string>
+
+    <!-- Presence settings -->
+    <string name="settings_presence">Presence</string>
+    <string name="settings_presence_user_always_appears_offline">Offline mode</string>
+    <string name="settings_presence_user_always_appears_offline_summary">If enabled, you will always appear offline to other users, even when using the application.</string>
 
     <!-- Room Settings -->
 
@@ -1546,7 +1570,7 @@
 
     <string name="edit">Edit</string>
     <string name="reply">Reply</string>
-    <string name="reply_in_thread">Reply In Thread</string>
+    <string name="reply_in_thread">Reply in thread</string>
     <string name="view_in_room">View In Room</string>
 
     <string name="global_retry">Retry</string>
@@ -1639,13 +1663,19 @@
     <string name="send_suggestion_sent">Thanks, the suggestion has been successfully sent</string>
     <string name="send_suggestion_failed">The suggestion failed to be sent (%s)</string>
 
+    <string name="beta_title_bottom_sheet_action">BETA</string>
     <string name="send_feedback_space_title">Spaces feedback</string>
     <string name="feedback">Feedback</string>
     <string name="send_feedback_space_info">You’re using a beta version of spaces. Your feedback will help inform the next versions. Your platform and username will be noted to help us use your feedback as much as we can.</string>
     <string name="you_may_contact_me">You may contact me if you have any follow up questions</string>
     <string name="feedback_sent">Thanks, your feedback has been successfully sent</string>
     <string name="feedback_failed">The feedback failed to be sent (%s)</string>
-    <string name="give_feedback">Give Feedback</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="give_feedback" tools:ignore="UnusedResources">Give Feedback</string>
+    <string name="give_feedback_threads">Give Feedback</string>
+    <string name="send_feedback_threads_title">Threads Beta feedback</string>
+    <string name="send_feedback_threads_info">Threads are a work in progress with new, exciting upcoming features, such as improved notifications. We’d love to hear your feedback!</string>
+    <string name="beta">BETA</string>
 
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">"Show complete history in encrypted rooms"</string>
@@ -1848,7 +1878,7 @@
     <string name="ftue_auth_carousel_control_body">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
     <string name="ftue_auth_carousel_encrypted_body">End-to-end encrypted and no phone number required. No ads or datamining.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="ftue_auth_carousel_workplace_body" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 
     <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
     <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected.</string>
@@ -1860,6 +1890,25 @@
     <string name="ftue_auth_use_case_skip_partial">skip this question</string>
     <string name="ftue_auth_use_case_join_existing_server">Looking to join an existing server?</string>
     <string name="ftue_auth_use_case_connect_to_server">Connect to server</string>
+
+    <string name="ftue_account_created_personalize">Personalize profile</string>
+    <string name="ftue_account_created_take_me_home">Take me home</string>
+    <string name="ftue_account_created_congratulations_title">Congratulations!</string>
+    <string name="ftue_account_created_subtitle">Your account %s has been created.</string>
+
+    <string name="ftue_display_name_title">Choose a display name</string>
+    <string name="ftue_display_name_subtitle">This will be shown when you send messages.</string>
+    <string name="ftue_display_name_entry_title">Display Name</string>
+    <string name="ftue_display_name_entry_footer">You can change this later</string>
+
+    <string name="ftue_profile_picture_title">Add a profile picture</string>
+    <string name="ftue_profile_picture_subtitle">You can change this anytime.</string>
+    <string name="ftue_personalize_lets_go">Let\'s go</string>
+    <string name="ftue_personalize_complete_title">You\'re all set!</string>
+    <string name="ftue_personalize_complete_subtitle">Your preferences have been saved.</string>
+
+    <string name="ftue_personalize_submit">Save and continue</string>
+    <string name="ftue_personalize_skip_this_step">Skip this step</string>
 
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
@@ -2083,6 +2132,7 @@
     <string name="sent_a_reaction">Reacted with: %s</string>
     <string name="sent_verification_conclusion">Verification Conclusion</string>
     <string name="sent_location">Shared their location</string>
+    <string name="sent_live_location">Shared their live location</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
@@ -2448,6 +2498,7 @@
 
     <string name="error_empty_field_choose_user_name">Please choose a username.</string>
     <string name="error_empty_field_choose_password">Please choose a password.</string>
+    <string name="error_forbidden_digits_only_username">"The homeserver does not accept username with only digits."</string>
     <string name="external_link_confirmation_title">Double-check this link</string>
     <string name="external_link_confirmation_message">The link %1$s is taking you to another site: %2$s.\n\nAre you sure you want to continue?</string>
 
@@ -2715,7 +2766,7 @@
 
     <string name="public_space">Public space</string>
     <string name="private_space">Private space</string>
-    <string name="add_space">Add Space</string>
+    <string name="add_space">Add space</string>
     <string name="your_public_space">Your public space</string>
     <string name="your_private_space">Your private space</string>
     <string name="create_spaces_choose_type_label">What type of space do you want to create?</string>
@@ -2759,7 +2810,7 @@
     <!-- First one is the space name, and the second one is the matrix.to link -->
     <string name="share_space_link_message">Join my space %1$s %2$s</string>
     <string name="skip_for_now">Skip for now</string>
-    <string name="create_space">Create Space</string>
+    <string name="create_space">Create space</string>
     <string name="join_space">Join Space</string>
     <string name="join_anyway">Join Anyway</string>
     <string name="room_alias_preview_not_found">This alias is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
@@ -2858,6 +2909,14 @@
     <string name="error_voice_message_cannot_reply_or_edit">Cannot reply or edit while voice message is active</string>
     <string name="voice_message_reply_content">Voice Message (%1$s)</string>
 
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string> <!-- filename, duration, file size -->
+    <string name="a11y_audio_playback_duration">%1$d minutes %2$d seconds</string>
+    <string name="a11y_play_audio_message">Play %1$s</string>
+    <string name="a11y_pause_audio_message">Pause %1$s</string>
+    <string name="error_audio_message_unable_to_play">Unable to play %1$s</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+
     <string name="upgrade_room_for_restricted">Anyone in %s will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
     <string name="upgrade_room_for_restricted_no_param">Anyone in a parent space will be able to find and join this room - no need to manually invite everyone. You’ll be able to change this in room settings anytime.</string>
 
@@ -2937,6 +2996,10 @@
     <string name="a11y_location_share_option_user_live_icon">Share live location</string>
     <string name="location_share_option_pinned">Share this location</string>
     <string name="a11y_location_share_option_pinned_icon">Share this location</string>
+    <string name="location_share_live_select_duration_title">Share your live location for</string>
+    <string name="location_share_live_select_duration_option_1">15 minutes</string>
+    <string name="location_share_live_select_duration_option_2">1 hour</string>
+    <string name="location_share_live_select_duration_option_3">8 hours</string>
     <string name="location_in_background_missing_permission_dialog_title">Allow access</string>
     <string name="location_in_background_missing_permission_dialog_content">If you’d like to share your Live location, ${app_name} needs location access all the time when the app is in the background.\nWe will only access your location for the duration that you choose.</string>
     <string name="location_not_available_dialog_title">${app_name} could not access your location</string>
@@ -2947,7 +3010,10 @@
     <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
     <string name="location_timeline_failed_to_load_map">Failed to load map</string>
     <string name="location_share_live_enabled">Live location enabled</string>
+    <string name="location_share_live_started">Loading live location…</string>
     <string name="location_share_live_stop">Stop</string>
+    <string name="live_location_sharing_notification_title">${app_name} Live Location</string>
+    <string name="live_location_sharing_notification_description">Location sharing is in progress</string>
 
     <string name="message_bubbles">Show Message bubbles</string>
 
@@ -2968,4 +3034,8 @@
     <string name="room_message_notify_everyone">Notify the whole room</string>
     <string name="room_message_autocomplete_users">Users</string>
     <string name="room_message_autocomplete_notification">Room notification</string>
+
+    <!-- Screen sharing -->
+    <string name="screen_sharing_notification_title">${app_name} Screen Sharing</string>
+    <string name="screen_sharing_notification_description">Screen sharing is in progress</string>
 </resources>

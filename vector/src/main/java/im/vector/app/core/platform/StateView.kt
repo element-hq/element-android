@@ -27,7 +27,7 @@ import im.vector.app.core.extensions.updateConstraintSet
 import im.vector.app.databinding.ViewStateBinding
 
 class StateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-    FrameLayout(context, attrs, defStyle) {
+        FrameLayout(context, attrs, defStyle) {
 
     sealed class State {
         object Content : State()

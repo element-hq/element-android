@@ -27,9 +27,9 @@ import com.airbnb.mvrx.Mavericks
 class JSonViewerDialog : DialogFragment() {
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_dialog_jv, container, false)
     }
@@ -39,15 +39,15 @@ class JSonViewerDialog : DialogFragment() {
         val args: JSonViewerFragmentArgs = arguments?.getParcelable(Mavericks.KEY_ARG) ?: return
         if (savedInstanceState == null) {
             childFragmentManager.beginTransaction()
-                .replace(
-                    R.id.fragmentContainer, JSonViewerFragment.newInstance(
-                        args.jsonString,
-                        args.defaultOpenDepth,
-                        true,
-                        args.styleProvider
+                    .replace(
+                            R.id.fragmentContainer, JSonViewerFragment.newInstance(
+                            args.jsonString,
+                            args.defaultOpenDepth,
+                            true,
+                            args.styleProvider
                     )
-                )
-                .commitNow()
+                    )
+                    .commitNow()
         }
     }
 
@@ -63,13 +63,13 @@ class JSonViewerDialog : DialogFragment() {
 
     companion object {
         fun newInstance(
-            jsonString: String,
-            initialOpenDepth: Int = -1,
-            styleProvider: JSonViewerStyleProvider? = null
+                jsonString: String,
+                initialOpenDepth: Int = -1,
+                styleProvider: JSonViewerStyleProvider? = null
         ): JSonViewerDialog {
             val args = Bundle()
             val parcelableArgs =
-                JSonViewerFragmentArgs(jsonString, initialOpenDepth, false, styleProvider)
+                    JSonViewerFragmentArgs(jsonString, initialOpenDepth, false, styleProvider)
             args.putParcelable(Mavericks.KEY_ARG, parcelableArgs)
             return JSonViewerDialog().apply { arguments = args }
         }

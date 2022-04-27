@@ -39,7 +39,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.view.TimelineMessageLayoutRenderer
 import im.vector.app.features.reactions.widget.ReactionButton
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.send.SendState
 
 private const val MAX_REACTIONS_TO_SHOW = 8

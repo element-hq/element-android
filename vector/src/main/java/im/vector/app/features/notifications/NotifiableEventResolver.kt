@@ -27,12 +27,16 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isEdition
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.supportsNotification
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
@@ -41,7 +45,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getEditedEventId
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -100,7 +103,7 @@ class NotifiableEventResolver @Inject constructor(
         // Ignore message edition
         if (event.isEdition()) return null
 
-        val actions = session.getActions(event)
+        val actions = session.pushRuleService().getActions(event)
         val notificationAction = actions.toNotificationAction()
 
         return if (notificationAction.shouldNotify) {
@@ -155,7 +158,8 @@ class NotifiableEventResolver @Inject constructor(
             // only convert encrypted messages to NotifiableMessageEvents
             when (event.root.getClearType()) {
                 EventType.MESSAGE,
-                in EventType.POLL_START -> {
+                in EventType.POLL_START,
+                in EventType.STATE_ROOM_BEACON_INFO -> {
                     val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
                     val roomName = room.roomSummary()?.displayName ?: ""
                     val senderDisplayName = event.senderInfo.disambiguatedDisplayName
@@ -187,7 +191,7 @@ class NotifiableEventResolver @Inject constructor(
                             soundName = null
                     )
                 }
-                else                    -> null
+                else                                -> null
             }
         }
     }
@@ -232,7 +236,7 @@ class NotifiableEventResolver @Inject constructor(
     private fun resolveStateRoomEvent(event: Event, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent? {
         val content = event.content?.toModel<RoomMemberContent>() ?: return null
         val roomId = event.roomId ?: return null
-        val dName = event.senderId?.let { session.getRoomMember(it, roomId)?.displayName }
+        val dName = event.senderId?.let { session.roomService().getRoomMember(it, roomId)?.displayName }
         if (Membership.INVITE == content.membership) {
             val roomSummary = session.getRoomSummary(roomId)
             val body = noticeEventFormatter.format(event, dName, isDm = roomSummary?.isDirect.orFalse())

@@ -21,11 +21,14 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
+import org.matrix.android.sdk.internal.database.helper.countInThreadMessages
+import org.matrix.android.sdk.internal.database.helper.findRootThreadEvent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
+import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.database.query.findWithSenderMembershipEvent
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -83,12 +86,14 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
 //                    }
 
                     val modified = unsignedData.copy(redactedEvent = redactionEvent)
-                    // I Commented the line below, it should not be empty while we lose all the previous info about
-                    // the redacted event
-//                    eventToPrune.content = ContentMapper.map(emptyMap())
+                    // Deleting the content of a thread message will result to delete the thread relation, however threads are now dynamic
+                    // so there is not much of a problem
+                    eventToPrune.content = ContentMapper.map(emptyMap())
                     eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
                     eventToPrune.decryptionResultJson = null
                     eventToPrune.decryptionErrorCode = null
+
+                    handleTimelineThreadSummaryIfNeeded(realm, eventToPrune, isLocalEcho)
                 }
 //                EventType.REACTION -> {
 //                    eventRelationsAggregationUpdater.handleReactionRedact(eventToPrune, realm, userId)
@@ -100,6 +105,39 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
                 it.senderName = null
                 it.isUniqueDisplayName = false
                 it.senderAvatar = null
+            }
+        }
+    }
+
+    /**
+     * Invalidates the number of threads in the main timeline thread summary,
+     * with respect to redactions.
+     */
+    private fun handleTimelineThreadSummaryIfNeeded(
+            realm: Realm,
+            eventToPrune: EventEntity,
+            isLocalEcho: Boolean,
+    ) {
+        if (eventToPrune.isThread() && !isLocalEcho) {
+            val roomId = eventToPrune.roomId
+            val rootThreadEvent = eventToPrune.findRootThreadEvent() ?: return
+            val rootThreadEventId = eventToPrune.rootThreadEventId ?: return
+
+            val inThreadMessages = countInThreadMessages(
+                    realm = realm,
+                    roomId = roomId,
+                    rootThreadEventId = rootThreadEventId
+            )
+
+            rootThreadEvent.numberOfThreads = inThreadMessages
+            if (inThreadMessages == 0) {
+                // We should also clear the thread summary list
+                rootThreadEvent.isRootThread = false
+                rootThreadEvent.threadSummaryLatestMessage = null
+                ThreadSummaryEntity
+                        .where(realm, roomId = roomId, rootThreadEventId)
+                        .findFirst()
+                        ?.deleteFromRealm()
             }
         }
     }

@@ -42,7 +42,7 @@ private const val DEFAULT_DELAY_MILLIS = 30_000L
  * Possible next worker    : None
  */
 internal class SyncWorker(context: Context, workerParameters: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<SyncWorker.Params>(context, workerParameters, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<SyncWorker.Params>(context, workerParameters, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

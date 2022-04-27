@@ -134,7 +134,7 @@
         <item quantity="other">%d perubahan keanggotaan</item>
     </plurals>
     <string name="call">Panggilan</string>
-    <string name="list_members">Daftar Anggota</string>
+    <string name="list_members">Anggota</string>
     <string name="room_jump_to_first_unread">Arahkan ke pesan yang belum dibaca</string>
     <plurals name="room_title_members">
         <item quantity="other">%d anggota</item>
@@ -1727,7 +1727,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_leave_prompt_msg_private">Anda tidak akan dapat bergabung lagi kecuali jika Anda diundang lagi.</string>
     <string name="space_leave_prompt_msg_only_you">Anda orang satu-satunya di sini. Jika Anda tinggalkan, siapa saja tidak dapat bergabung di masa depan, termasuk Anda.</string>
     <string name="space_leave_prompt_msg_with_name">Apakah Anda yakin untuk meninggalkan %s\?</string>
-    <string name="leave_space">Tinggalkan Space</string>
+    <string name="leave_space">Tinggalkan</string>
     <string name="space_add_child_title">Tambahkan ruangan</string>
     <string name="space_explore_activity_title">Jelajah ruangan</string>
     <plurals name="space_people_you_know">
@@ -1742,7 +1742,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \nCoba lagi nanti, atau tanyakan ke admin ruangan untuk mengecek jika Anda punya akses.</string>
     <string name="join_anyway">Bergabung Saja</string>
     <string name="join_space">Bergabung ke Space</string>
-    <string name="create_space">Buat Space</string>
+    <string name="create_space">Buat space</string>
     <string name="skip_for_now">Lewat untuk sekarang</string>
     <string name="share_space_link_message">Bergabung ke space saya %1$s %2$s</string>
     <string name="invite_just_to_this_room_desc">Mereka tidak akan menjadi bagian dari %s</string>
@@ -1784,7 +1784,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="create_spaces_choose_type_label">Tipe space apa yang Anda ingin buat\?</string>
     <string name="your_private_space">Space privat Anda</string>
     <string name="your_public_space">Space publik Anda</string>
-    <string name="add_space">Tambahkan Space</string>
+    <string name="add_space">Tambahkan space</string>
     <string name="private_space">Space privat</string>
     <string name="public_space">Space publik</string>
     <string name="event_status_delete_all_failed_dialog_message">Apakah Anda yakin untuk menghapus semua pesan yang belum dikirim di ruangan ini\?</string>
@@ -2002,7 +2002,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \n${app_name} Desktop</string>
     <string name="change_password_summary">Atur kata sandi akun baru…</string>
     <string name="error_saving_media_file">Tidak dapat menyimpan file media</string>
-    <string name="settings_security_prevent_screenshots_summary">Mengaktifkan pengaturan ini menambahkan FLAG_SECURE ke semua Aktifitas. Mulai ulang aplikasi ini untuk berpengaruh pada perubahannya.</string>
+    <string name="settings_security_prevent_screenshots_summary">Mengaktifkan pengaturan ini menambahkan FLAG_SECURE ke semua Aktivitas. Mulai ulang aplikasi ini untuk berpengaruh pada perubahannya.</string>
     <string name="settings_security_prevent_screenshots_title">Mencegah tangkapan layar dari aplikasi</string>
     <string name="bootstrap_migration_backup_recovery_key">Kunci pemulihan kunci cadangan</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Tidak tahu Kunci Frasa Sandi Cadangan, Anda dapat %s.</string>
@@ -2374,4 +2374,42 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s dan lainnya</string>
     <string name="room_notification_two_users_are_typing">%1$s dan %2$s</string>
+    <string name="location_share_live_stop">Berhenti</string>
+    <string name="location_share_live_enabled">Lokasi langsung diaktifkan</string>
+    <string name="location_in_background_missing_permission_dialog_content">Jika Anda ingin membagikan lokasi langsung Anda, ${app_name} membutuhkan akses ke lokasi selama aplikasinya di latar belakang.
+\nKami hanya akan mengakses lokasi Anda untuk durasi yang Anda pilih.</string>
+    <string name="location_in_background_missing_permission_dialog_title">Perbolehkan akses</string>
+    <string name="a11y_location_share_option_pinned_icon">Bagikan lokasi ini</string>
+    <string name="location_share_option_pinned">Bagikan lokasi ini</string>
+    <string name="a11y_location_share_option_user_live_icon">Bagikan lokasi langsung</string>
+    <string name="location_share_option_user_live">Bagikan lokasi langsung</string>
+    <string name="a11y_location_share_option_user_current_icon">Bagikan lokasi saya saat ini</string>
+    <string name="location_share_option_user_current">Bagikan lokasi saya saat ini</string>
+    <string name="a11y_location_share_locate_button">Perbesar ke lokasi saat ini</string>
+    <string name="a11y_location_share_pin_on_map">Pin dari lokasi yang terpilih pada peta</string>
+    <string name="threads_notice_migration_message">Kami hampir dekat untuk meriliskan sebuah Beta publik untuk Utasan.
+\n
+\nSaat kami mempersiapkan, kami harus membuat beberapa perubahan: utasan dibuat sebelum titik ini akan <strong>ditampilkan sebagai balasan biasa</strong>.
+\n
+\nIni hanya transisi sekali, utasan sekarang sebagai bagian dari spesifikasi Matrix.</string>
+    <string name="threads_notice_migration_title">Utasan Mencapai Beta 🎉</string>
+    <string name="live_location_sharing_notification_description">Penbagian lokasi sedang dilakukan</string>
+    <string name="live_location_sharing_notification_title">${app_name} Lokasi langsung</string>
+    <string name="error_forbidden_digits_only_username">Homeserver tidak menerima nama pengguna dengan hanya angka.</string>
+    <string name="ftue_personalize_skip_this_step">Lewati</string>
+    <string name="ftue_personalize_submit">Simpan dan lanjutkan</string>
+    <string name="ftue_personalize_complete_subtitle">Preferensi Anda telah disimpan.</string>
+    <string name="ftue_personalize_complete_title">Anda siap!</string>
+    <string name="ftue_personalize_lets_go">Ayo</string>
+    <string name="ftue_profile_picture_subtitle">Anda dapat mengubahnya kapan saja.</string>
+    <string name="ftue_profile_picture_title">Tambahkan sebuah foto profil</string>
+    <string name="ftue_display_name_entry_footer">Anda dapat mengubahnya nanti</string>
+    <string name="ftue_display_name_entry_title">Nama Tampilan</string>
+    <string name="ftue_display_name_subtitle">Ini akan ditampilkan ketika Anda mengirim pesan.</string>
+    <string name="ftue_display_name_title">Pilih nama tampilan</string>
+    <string name="ftue_account_created_subtitle">Akun %s Anda telah dibuat.</string>
+    <string name="ftue_account_created_congratulations_title">Selamat!</string>
+    <string name="ftue_account_created_take_me_home">Kembalikan saya ke beranda</string>
+    <string name="ftue_account_created_personalize">Ubah profil</string>
+    <string name="action_disable">Nonaktifkan</string>
 </resources>

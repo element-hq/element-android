@@ -49,6 +49,10 @@ internal fun RoomSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: Strin
     return where(realm, roomId).findFirst() ?: realm.createObject(roomId)
 }
 
+internal fun RoomSummaryEntity.Companion.getOrNull(realm: Realm, roomId: String): RoomSummaryEntity? {
+    return where(realm, roomId).findFirst()
+}
+
 internal fun RoomSummaryEntity.Companion.getDirectRooms(realm: Realm,
                                                         excludeRoomIds: Set<String>? = null): RealmResults<RoomSummaryEntity> {
     return RoomSummaryEntity.where(realm)

@@ -94,7 +94,7 @@ internal fun isReadMarkerMoreRecent(realmConfiguration: RealmConfiguration,
             val eventToCheckIndex = eventToCheck?.displayIndex ?: Int.MAX_VALUE
             eventToCheckIndex <= readMarkerIndex
         } else {
-            eventToCheckChunk?.isLastForward == false
+            eventToCheckChunk != null && readMarkerChunk?.isMoreRecentThan(eventToCheckChunk) == true
         }
     }
 }

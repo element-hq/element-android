@@ -21,10 +21,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.pushrules.PushEvents
-import org.matrix.android.sdk.api.pushrules.PushRuleService
-import org.matrix.android.sdk.api.pushrules.getActions
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.pushrules.PushEvents
+import org.matrix.android.sdk.api.session.pushrules.PushRuleService
+import org.matrix.android.sdk.api.session.pushrules.getActions
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -71,12 +71,12 @@ class PushRuleTriggerListener @Inject constructor(
             stop()
         }
         this.session = session
-        session.addPushRuleListener(this)
+        session.pushRuleService().addPushRuleListener(this)
     }
 
     fun stop() {
         scope.coroutineContext.cancelChildren(CancellationException("PushRuleTriggerListener stopping"))
-        session?.removePushRuleListener(this)
+        session?.pushRuleService()?.removePushRuleListener(this)
         session = null
         notificationDrawerManager.clearAllEvents()
     }

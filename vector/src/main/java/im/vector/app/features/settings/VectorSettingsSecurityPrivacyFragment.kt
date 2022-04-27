@@ -73,9 +73,9 @@ import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
 import org.matrix.android.sdk.api.raw.RawService
-import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DevicesListResponse
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
@@ -186,6 +186,10 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private val secureBackupPreference by lazy {
         findPreference<VectorPreference>("SETTINGS_SECURE_BACKUP_RECOVERY_PREFERENCE_KEY")!!
     }
+
+    private val ignoredUsersPreference by lazy {
+        findPreference<VectorPreference>("SETTINGS_IGNORED_USERS_PREFERENCE_KEY")!!
+    }
 //    private val secureBackupResetPreference by lazy {
 //        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY)
 //    }
@@ -273,6 +277,11 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         secureBackupPreference.icon = activity?.let {
             ThemeUtils.tintDrawable(it,
                     ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_content_primary)
+        }
+
+        ignoredUsersPreference.icon = activity?.let {
+            ThemeUtils.tintDrawable(it,
+                    ContextCompat.getDrawable(it, R.drawable.ic_settings_root_ignored_users)!!, R.attr.vctr_content_primary)
         }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.let {

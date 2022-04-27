@@ -30,14 +30,15 @@ import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.MockOkHttpInterceptor
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -138,7 +139,7 @@ class WithHeldTests : InstrumentedTest {
 
     @Test
     @Ignore("This test will be ignored until it is fixed")
-    fun  test_WithHeldNoOlm() {
+    fun test_WithHeldNoOlm() {
         val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!

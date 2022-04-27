@@ -30,8 +30,16 @@ import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -43,12 +51,6 @@ import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -551,7 +553,7 @@ class E2eeSanityTests : InstrumentedTest {
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
                 otherAccounts.map {
-                    aliceSession.getRoomMember(it.myUserId, e2eRoomID)?.membership
+                    aliceSession.roomService().getRoomMember(it.myUserId, e2eRoomID)?.membership
                 }.all {
                     it == Membership.JOIN
                 }
@@ -574,7 +576,7 @@ class E2eeSanityTests : InstrumentedTest {
         testHelper.runBlockingTest(60_000) {
             Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $e2eRoomID")
             try {
-                otherSession.joinRoom(e2eRoomID)
+                otherSession.roomService().joinRoom(e2eRoomID)
             } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
                 // it's ok we will wait after
             }

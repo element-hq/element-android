@@ -38,10 +38,11 @@ import kotlinx.coroutines.flow.sample
 import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import timber.log.Timber
 
 data class UnknownDevicesState(
@@ -58,7 +59,7 @@ data class DeviceDetectionInfo(
 class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted initialState: UnknownDevicesState,
                                                                        session: Session,
                                                                        private val vectorPreferences: VectorPreferences) :
-    VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
+        VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
 
     sealed class Action : VectorViewModelAction {
         data class IgnoreDevice(val deviceIds: List<String>) : Action()

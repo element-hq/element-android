@@ -42,7 +42,6 @@ import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.widgets.helper.WidgetFactory
 import org.matrix.android.sdk.internal.session.widgets.helper.extractWidgetSequence
-import java.util.HashMap
 import javax.inject.Inject
 
 @SessionScope
@@ -53,7 +52,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
                                                  private val widgetFactory: WidgetFactory,
                                                  @UserId private val userId: String) :
 
-    IntegrationManagerService.Listener, SessionLifecycleObserver {
+        IntegrationManagerService.Listener, SessionLifecycleObserver {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)

@@ -18,6 +18,7 @@ body:
 
         - [ ] Weblate sync, fix lint issue if any (in a dedicated PR)
         - [ ] Check the update of the store descriptions (using Google Translate if necessary) to ensure that the changes are acceptable to be published to the stores.
+        - [ ] While Weblate is locked, and after the PR from Weblate has been merged, handle all the TODOs in the main `strings.xml` file
         - [ ] Run the script `./tools/release/pushPlayStoreMetaData.sh`. You can check in the GooglePlay console the Activity log to check the effect.
 
         ### Do the release

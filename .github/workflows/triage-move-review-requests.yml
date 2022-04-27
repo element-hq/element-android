@@ -7,6 +7,8 @@ jobs:
   add_design_pr_to_project:
     name: Move PRs asking for design review to the design board
     runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
     steps:
       - uses: octokit/graphql-action@v2.x
         id: find_team_members
@@ -74,6 +76,8 @@ jobs:
   add_product_pr_to_project:
     name: Move PRs asking for product review to the product board
     runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
     steps:
       - uses: octokit/graphql-action@v2.x
         id: find_team_members

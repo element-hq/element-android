@@ -1,0 +1,2 @@
+Principales cambios de esta versión: primera implementación de los hilos de mensajes. Burbujas de mensajes.
+Todos los cambios en: https://github.com/vector-im/element-android/releases/tag/v1.4.0

@@ -33,7 +33,7 @@ import kotlin.concurrent.getOrSet
  */
 @SessionScope
 internal class RealmSessionProvider @Inject constructor(@SessionDatabase private val monarchy: Monarchy) :
-    SessionLifecycleObserver {
+        SessionLifecycleObserver {
 
     private val realmThreadLocal = ThreadLocal<Realm>()
 

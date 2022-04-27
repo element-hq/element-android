@@ -29,7 +29,6 @@ import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
@@ -87,6 +86,7 @@ class WidgetFragment @Inject constructor() :
                 is WidgetViewEvents.OnURLFormatted            -> loadFormattedUrl(it)
                 is WidgetViewEvents.DisplayIntegrationManager -> displayIntegrationManager(it)
                 is WidgetViewEvents.Failure                   -> displayErrorDialog(it.throwable)
+                is WidgetViewEvents.Close                     -> Unit
             }
         }
         viewModel.handle(WidgetAction.LoadFormattedUrl)
@@ -192,13 +192,14 @@ class WidgetFragment @Inject constructor() :
     override fun invalidate() = withState(viewModel) { state ->
         Timber.v("Invalidate state: $state")
         when (state.formattedURL) {
-            is Incomplete -> {
+            Uninitialized,
+            is Loading -> {
                 setStateError(null)
                 views.widgetWebView.isInvisible = true
                 views.widgetProgressBar.isIndeterminate = true
                 views.widgetProgressBar.isVisible = true
             }
-            is Success    -> {
+            is Success -> {
                 setStateError(null)
                 when (state.webviewLoadedUrl) {
                     Uninitialized -> {
@@ -221,7 +222,7 @@ class WidgetFragment @Inject constructor() :
                     }
                 }
             }
-            is Fail       -> {
+            is Fail    -> {
                 // we need to show Error
                 views.widgetWebView.isInvisible = true
                 views.widgetProgressBar.isVisible = false

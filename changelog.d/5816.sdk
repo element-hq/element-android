@@ -1,0 +1,2 @@
+Some `Session` apis are now available by requesting the service first. For instance `Session.updateAvatar(...)` is now `Session.profileService().updateAvatar(...)`
+The shortcut `Room.search()` has been removed, you have to use `Session.searchService().search()`

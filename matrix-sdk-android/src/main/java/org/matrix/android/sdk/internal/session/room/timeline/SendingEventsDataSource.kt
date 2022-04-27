@@ -45,9 +45,11 @@ internal class RealmSendingEventsDataSource(
     private var frozenSendingTimelineEvents: RealmList<TimelineEventEntity>? = null
 
     private val sendingTimelineEventsListener = RealmChangeListener<RealmList<TimelineEventEntity>> { events ->
-        uiEchoManager.onSentEventsInDatabase(events.map { it.eventId })
-        updateFrozenResults(events)
-        onEventsUpdated(false)
+        if (events.isValid) {
+            uiEchoManager.onSentEventsInDatabase(events.map { it.eventId })
+            updateFrozenResults(events)
+            onEventsUpdated(false)
+        }
     }
 
     override fun start() {
@@ -55,6 +57,7 @@ internal class RealmSendingEventsDataSource(
         roomEntity = RoomEntity.where(safeRealm, roomId = roomId).findFirst()
         sendingTimelineEvents = roomEntity?.sendingTimelineEvents
         sendingTimelineEvents?.addChangeListener(sendingTimelineEventsListener)
+        updateFrozenResults(sendingTimelineEvents)
     }
 
     override fun stop() {

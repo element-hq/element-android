@@ -29,7 +29,7 @@ import im.vector.app.databinding.FragmentBootstrapSetupRecoveryBinding
 import javax.inject.Inject
 
 class BootstrapSetupRecoveryKeyFragment @Inject constructor() :
-    VectorBaseFragment<FragmentBootstrapSetupRecoveryBinding>() {
+        VectorBaseFragment<FragmentBootstrapSetupRecoveryBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapSetupRecoveryBinding {
         return FragmentBootstrapSetupRecoveryBinding.inflate(inflater, container, false)

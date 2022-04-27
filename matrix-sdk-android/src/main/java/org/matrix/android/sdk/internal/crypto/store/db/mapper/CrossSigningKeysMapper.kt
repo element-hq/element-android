@@ -19,8 +19,8 @@ package org.matrix.android.sdk.internal.crypto.store.db.mapper
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import io.realm.RealmList
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeyInfoEntity
 import timber.log.Timber
 import javax.inject.Inject

@@ -19,7 +19,7 @@ package im.vector.app.features.onboarding
 import im.vector.app.test.fakes.FakeRegistrationWizard
 import im.vector.app.test.fakes.FakeSession
 import io.mockk.coVerifyAll
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
@@ -39,7 +39,7 @@ private val A_PID_TO_REGISTER = RegisterThreePid.Email("an email")
 class RegistrationActionHandlerTest {
 
     @Test
-    fun `when handling register action then delegates to wizard`() = runBlockingTest {
+    fun `when handling register action then delegates to wizard`() = runTest {
         val cases = listOf(
                 case(RegisterAction.StartRegistration) { getRegistrationFlow() },
                 case(RegisterAction.CaptchaDone(A_CAPTCHA_RESPONSE)) { performReCaptcha(A_CAPTCHA_RESPONSE) },

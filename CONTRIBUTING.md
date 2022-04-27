@@ -2,7 +2,7 @@
 
 Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md
 
-Android support can be found in this [![Element Android Matrix room #element-android:matrix.org](https://img.shields.io/matrix/element-android:matrix.org.svg?label=%23element-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-android:matrix.org) room.
+Element Android support can be found in this room: [![Element Android Matrix room #element-android:matrix.org](https://img.shields.io/matrix/element-android:matrix.org.svg?label=%23element-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-android:matrix.org).
 
 # Specific rules for Matrix Android projects
 
@@ -43,6 +43,8 @@ If you want to fix an issue with an English string, please submit a PR.
 If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please use [Weblate](https://translate.element.io/projects/element-android/).
 
 ## I want to submit a PR to fix an issue
+
+Please have a look in the [dedicated documentation](./docs/pull_request.md) about pull request.
 
 Please check if a corresponding issue exists. If yes, please let us know in a comment that you're working on it.
 If an issue does not exist yet, it may be relevant to open a new issue and let us know that you're implementing it.
@@ -142,6 +144,8 @@ Instead, please comment the original string with:
 ```xml
 <!-- TODO TO BE REMOVED -->
 ```
+And add `tools:ignore="UnusedResources"` to the string, to let lint ignore that the string is not used.
+
 The string will be removed during the next sync with Weblate.
 
 ### Accessibility

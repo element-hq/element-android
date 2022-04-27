@@ -30,7 +30,7 @@ import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
 
-data class InboundGroupSessionHolder(
+internal data class InboundGroupSessionHolder(
         val wrapper: OlmInboundGroupSessionWrapper2,
         val mutex: Mutex = Mutex()
 )
@@ -75,15 +75,15 @@ internal class InboundGroupSessionStore @Inject constructor(
 
     @Synchronized
     fun getInboundGroupSession(sessionId: String, senderKey: String): InboundGroupSessionHolder? {
-            val known = sessionCache[CacheKey(sessionId, senderKey)]
-            Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession  $sessionId in cache ${known != null}")
-            return known
-                    ?: store.getInboundGroupSession(sessionId, senderKey)?.also {
-                Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession cache populate ${it.roomId}")
-                sessionCache.put(CacheKey(sessionId, senderKey), InboundGroupSessionHolder(it))
-            }?.let {
-                InboundGroupSessionHolder(it)
-            }
+        val known = sessionCache[CacheKey(sessionId, senderKey)]
+        Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession  $sessionId in cache ${known != null}")
+        return known
+                ?: store.getInboundGroupSession(sessionId, senderKey)?.also {
+                    Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession cache populate ${it.roomId}")
+                    sessionCache.put(CacheKey(sessionId, senderKey), InboundGroupSessionHolder(it))
+                }?.let {
+                    InboundGroupSessionHolder(it)
+                }
     }
 
     @Synchronized

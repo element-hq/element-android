@@ -26,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.setHorizontalPadding
 
 @EpoxyModelClass(layout = R.layout.item_policy)
 abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
@@ -38,6 +39,9 @@ abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
     @EpoxyAttribute
     var subtitle: String? = null
 
+    @EpoxyAttribute
+    var horizontalPadding: Int? = null
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var checkChangeListener: CompoundButton.OnCheckedChangeListener? = null
 
@@ -46,13 +50,12 @@ abstract class PolicyItem : EpoxyModelWithHolder<PolicyItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.let {
-            it.checkbox.isChecked = checked
-            it.checkbox.setOnCheckedChangeListener(checkChangeListener)
-            it.title.text = title
-            it.subtitle.text = subtitle
-            it.view.onClick(clickListener)
-        }
+        horizontalPadding?.let { holder.view.setHorizontalPadding(it) }
+        holder.checkbox.isChecked = checked
+        holder.checkbox.setOnCheckedChangeListener(checkChangeListener)
+        holder.title.text = title
+        holder.subtitle.text = subtitle
+        holder.view.onClick(clickListener)
     }
 
     // Ensure checkbox behaves as expected (remove the listener)

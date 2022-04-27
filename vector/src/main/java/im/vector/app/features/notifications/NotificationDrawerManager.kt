@@ -27,6 +27,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 import javax.inject.Inject

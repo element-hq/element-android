@@ -35,7 +35,7 @@ class ExplicitTermFilter @Inject constructor(
             .toRegex(RegexOption.IGNORE_CASE)
 
     fun canSearchFor(term: String): Boolean {
-        return term !in explicitTerms  && term != "18+"
+        return term !in explicitTerms && term != "18+"
     }
 
     fun isValid(str: String): Boolean {

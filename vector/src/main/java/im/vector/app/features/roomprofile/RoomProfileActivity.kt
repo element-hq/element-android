@@ -26,7 +26,6 @@ import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
@@ -85,24 +84,24 @@ class RoomProfileActivity :
                     addFragment(views.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
                     addFragmentToBackstack(views.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
                 }
-                EXTRA_DIRECT_ACCESS_ROOM_MEMBERS -> {
+                EXTRA_DIRECT_ACCESS_ROOM_MEMBERS  -> {
                     addFragment(views.simpleFragmentContainer, RoomMemberListFragment::class.java, roomProfileArgs)
                 }
-                else -> addFragment(views.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
+                else                              -> addFragment(views.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
             }
         }
         sharedActionViewModel
                 .stream()
                 .onEach { sharedAction ->
                     when (sharedAction) {
-                        RoomProfileSharedAction.OpenRoomMembers                 -> openRoomMembers()
-                        RoomProfileSharedAction.OpenRoomSettings                -> openRoomSettings()
-                        RoomProfileSharedAction.OpenRoomAliasesSettings         -> openRoomAlias()
-                        RoomProfileSharedAction.OpenRoomPermissionsSettings     -> openRoomPermissions()
-                        RoomProfileSharedAction.OpenRoomUploads                 -> openRoomUploads()
+                        RoomProfileSharedAction.OpenRoomMembers              -> openRoomMembers()
+                        RoomProfileSharedAction.OpenRoomSettings             -> openRoomSettings()
+                        RoomProfileSharedAction.OpenRoomAliasesSettings      -> openRoomAlias()
+                        RoomProfileSharedAction.OpenRoomPermissionsSettings  -> openRoomPermissions()
+                        RoomProfileSharedAction.OpenRoomUploads              -> openRoomUploads()
                         RoomProfileSharedAction.OpenBannedRoomMembers        -> openBannedRoomMembers()
                         RoomProfileSharedAction.OpenRoomNotificationSettings -> openRoomNotificationSettings()
-                    }.exhaustive
+                    }
                 }
                 .launchIn(lifecycleScope)
 

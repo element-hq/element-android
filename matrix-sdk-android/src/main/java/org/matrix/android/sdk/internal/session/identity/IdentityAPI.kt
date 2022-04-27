@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.identity
 
+import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.internal.auth.registration.SuccessResult
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.session.identity.model.IdentityAccountResponse
@@ -26,7 +27,6 @@ import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestOwn
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenForEmailBody
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenForMsisdnBody
 import org.matrix.android.sdk.internal.session.identity.model.IdentityRequestTokenResponse
-import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

@@ -116,12 +116,13 @@ class SharedSecureStorageActivity :
             is SharedSecureStorageViewEvent.FinishSuccess        -> {
                 val dataResult = Intent()
                 dataResult.putExtra(EXTRA_DATA_RESULT, it.cypherResult)
-                setResult(Activity.RESULT_OK, dataResult)
+                setResult(RESULT_OK, dataResult)
                 finish()
             }
             is SharedSecureStorageViewEvent.ShowResetBottomSheet -> {
                 navigator.open4SSetup(this, SetupMode.HARD_RESET)
             }
+            else                                                 -> Unit
         }
     }
 

@@ -22,9 +22,12 @@ import com.squareup.moshi.JsonClass
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isCrossSignedVerified
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
@@ -52,7 +55,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class UpdateTrustWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<UpdateTrustWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<UpdateTrustWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

@@ -21,16 +21,19 @@ import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
+import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
@@ -185,5 +188,36 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
             RoomJoinRulesAllowEntry.restrictedToRoom(spaceId)
         }
         updateJoinRule(RoomJoinRules.RESTRICTED, null, allowEntries)
+    }
+
+    override suspend fun stopLiveLocation(userId: String) {
+        getLiveLocationBeaconInfo(userId, true)?.let { beaconInfoStateEvent ->
+            beaconInfoStateEvent.getClearContent()?.toModel<LiveLocationBeaconContent>()?.let { content ->
+                val updatedContent = content.copy(isLive = false).toContent()
+
+                beaconInfoStateEvent.stateKey?.let {
+                    sendStateEvent(
+                            eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
+                            body = updatedContent,
+                            stateKey = it
+                    )
+                }
+            }
+        }
+    }
+
+    override suspend fun getLiveLocationBeaconInfo(userId: String, filterOnlyLive: Boolean): Event? {
+        return EventType.STATE_ROOM_BEACON_INFO
+                .mapNotNull {
+                    stateEventDataSource.getStateEvent(
+                            roomId = roomId,
+                            eventType = it,
+                            stateKey = QueryStringValue.Equals(userId)
+                    )
+                }
+                .firstOrNull { beaconInfoEvent ->
+                    !filterOnlyLive ||
+                            beaconInfoEvent.getClearContent()?.toModel<LiveLocationBeaconContent>()?.isLive.orFalse()
+                }
     }
 }

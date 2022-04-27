@@ -18,7 +18,6 @@ package im.vector.app.features.login2
 
 import android.content.Context
 import android.net.Uri
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -29,7 +28,6 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.tryAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -137,7 +135,7 @@ class LoginViewModel2 @AssistedInject constructor(
             LoginAction2.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is LoginAction2.PostViewEvent              -> _viewEvents.post(action.viewEvent)
             is LoginAction2.Finish                     -> handleFinish()
-        }.exhaustive
+        }
     }
 
     private fun handleFinish() {
@@ -172,6 +170,7 @@ class LoginViewModel2 @AssistedInject constructor(
                 handleSetUserPassword(finalLastAction)
             is LoginAction2.LoginWith        ->
                 handleLoginWith(finalLastAction)
+            else                             -> Unit
         }
     }
 
@@ -500,7 +499,7 @@ class LoginViewModel2 @AssistedInject constructor(
             SignMode2.Unknown -> error("Developer error, invalid sign mode")
             SignMode2.SignIn  -> handleSetUserNameForSignIn(action, null)
             SignMode2.SignUp  -> handleSetUserNameForSignUp(action)
-        }.exhaustive
+        }
     }
 
     private fun handleSetUserPassword(action: LoginAction2.SetUserPassword) = withState { state ->
@@ -508,7 +507,7 @@ class LoginViewModel2 @AssistedInject constructor(
             SignMode2.Unknown -> error("Developer error, invalid sign mode")
             SignMode2.SignIn  -> handleSignInWithPassword(action)
             SignMode2.SignUp  -> handleRegisterWithPassword(action)
-        }.exhaustive
+        }
     }
 
     private fun handleRegisterWithPassword(action: LoginAction2.SetUserPassword) = withState { state ->
@@ -588,7 +587,7 @@ class LoginViewModel2 @AssistedInject constructor(
                 else                          -> {
                     onWellKnownError()
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -772,7 +771,7 @@ class LoginViewModel2 @AssistedInject constructor(
                                             ),
                                             httpCode = 403
                                     )
-                                     */
+                                 */
 
                                 LoginViewEvents2.OpenSignUpChooseUsernameScreen
                             } catch (throwable: Throwable) {

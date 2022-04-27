@@ -29,7 +29,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.WaitingViewData
 import im.vector.app.core.resources.StringProvider
@@ -42,8 +41,8 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
@@ -77,7 +76,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         @Assisted private val initialState: SharedSecureStorageViewState,
         private val stringProvider: StringProvider,
         private val session: Session) :
-    VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
+        VectorViewModel<SharedSecureStorageViewState, SharedSecureStorageAction, SharedSecureStorageViewEvent>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<SharedSecureStorageViewModel, SharedSecureStorageViewState> {
@@ -88,8 +87,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         setState {
             copy(userId = session.myUserId)
         }
-        val integrityResult = session.sharedSecretStorageService.checkShouldBeAbleToAccessSecrets(initialState.requestedSecrets, initialState.keyId)
-        if (integrityResult  !is IntegrityResult.Success) {
+        val integrityResult = session.sharedSecretStorageService().checkShouldBeAbleToAccessSecrets(initialState.requestedSecrets, initialState.keyId)
+        if (integrityResult !is IntegrityResult.Success) {
             _viewEvents.post(
                     SharedSecureStorageViewEvent.Error(
                             stringProvider.getString(R.string.enter_secret_storage_invalid),
@@ -97,8 +96,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                     )
             )
         }
-        val keyResult = initialState.keyId?.let { session.sharedSecretStorageService.getKey(it) }
-                ?: session.sharedSecretStorageService.getDefaultKey()
+        val keyResult = initialState.keyId?.let { session.sharedSecretStorageService().getKey(it) }
+                ?: session.sharedSecretStorageService().getDefaultKey()
 
         if (!keyResult.isSuccess()) {
             _viewEvents.post(SharedSecureStorageViewEvent.Dismiss)
@@ -135,14 +134,14 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
 
     override fun handle(action: SharedSecureStorageAction) = withState {
         when (action) {
-            is SharedSecureStorageAction.Cancel                   -> handleCancel()
-            is SharedSecureStorageAction.SubmitPassphrase         -> handleSubmitPassphrase(action)
-            SharedSecureStorageAction.UseKey                      -> handleUseKey()
-            is SharedSecureStorageAction.SubmitKey                -> handleSubmitKey(action)
-            SharedSecureStorageAction.Back                        -> handleBack()
-            SharedSecureStorageAction.ForgotResetAll              -> handleResetAll()
-            SharedSecureStorageAction.DoResetAll                  -> handleDoResetAll()
-        }.exhaustive
+            is SharedSecureStorageAction.Cancel           -> handleCancel()
+            is SharedSecureStorageAction.SubmitPassphrase -> handleSubmitPassphrase(action)
+            SharedSecureStorageAction.UseKey              -> handleUseKey()
+            is SharedSecureStorageAction.SubmitKey        -> handleSubmitKey(action)
+            SharedSecureStorageAction.Back                -> handleBack()
+            SharedSecureStorageAction.ForgotResetAll      -> handleResetAll()
+            SharedSecureStorageAction.DoResetAll          -> handleDoResetAll()
+        }
     }
 
     private fun handleDoResetAll() {
@@ -206,7 +205,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 val recoveryKey = action.recoveryKey
-                val keyInfoResult = session.sharedSecretStorageService.getDefaultKey()
+                val keyInfoResult = session.sharedSecretStorageService().getDefaultKey()
                 if (!keyInfoResult.isSuccess()) {
                     _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
                     _viewEvents.post(SharedSecureStorageViewEvent.Error(stringProvider.getString(R.string.failed_to_access_secure_storage)))
@@ -229,7 +228,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 withContext(Dispatchers.IO) {
                     initialState.requestedSecrets.forEach {
                         if (session.accountDataService().getUserAccountDataEvent(it) != null) {
-                            val res = session.sharedSecretStorageService.getSecret(
+                            val res = session.sharedSecretStorageService().getSecret(
                                     name = it,
                                     keyId = keyInfo.id,
                                     secretKey = keySpec)
@@ -244,7 +243,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
                 val safeForIntentCypher = ByteArrayOutputStream().also {
                     it.use {
-                        session.securelyStoreObject(decryptedSecretMap as Map<String, String>, initialState.resultKeyStoreAlias, it)
+                        session.secureStorageService().securelyStoreObject(decryptedSecretMap as Map<String, String>, initialState.resultKeyStoreAlias, it)
                     }
                 }.toByteArray().toBase64NoPadding()
                 _viewEvents.post(SharedSecureStorageViewEvent.FinishSuccess(safeForIntentCypher))
@@ -263,7 +262,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 val passphrase = action.passphrase
-                val keyInfoResult = session.sharedSecretStorageService.getDefaultKey()
+                val keyInfoResult = session.sharedSecretStorageService().getDefaultKey()
                 if (!keyInfoResult.isSuccess()) {
                     _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
                     _viewEvents.post(SharedSecureStorageViewEvent.Error("Cannot find ssss key"))
@@ -298,7 +297,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 withContext(Dispatchers.IO) {
                     initialState.requestedSecrets.forEach {
                         if (session.accountDataService().getUserAccountDataEvent(it) != null) {
-                            val res = session.sharedSecretStorageService.getSecret(
+                            val res = session.sharedSecretStorageService().getSecret(
                                     name = it,
                                     keyId = keyInfo.id,
                                     secretKey = keySpec)
@@ -313,7 +312,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
                 val safeForIntentCypher = ByteArrayOutputStream().also {
                     it.use {
-                        session.securelyStoreObject(decryptedSecretMap as Map<String, String>, initialState.resultKeyStoreAlias, it)
+                        session.secureStorageService().securelyStoreObject(decryptedSecretMap as Map<String, String>, initialState.resultKeyStoreAlias, it)
                     }
                 }.toByteArray().toBase64NoPadding()
                 _viewEvents.post(SharedSecureStorageViewEvent.FinishSuccess(safeForIntentCypher))

@@ -28,7 +28,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
@@ -75,7 +74,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
         session.cryptoService().keysBackupService().addListener(this)
         session.cryptoService().keysBackupService().checkAndStartKeysBackup()
 
-        val quad4SIsSetup = session.sharedSecretStorageService.isRecoverySetup()
+        val quad4SIsSetup = session.sharedSecretStorageService().isRecoverySetup()
         val allKeysKnown = session.cryptoService().crossSigningService().allPrivateKeysKnown()
         val backupState = session.cryptoService().keysBackupService().state
         setState {
@@ -89,7 +88,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
 
         session.flow().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
                 .map {
-                    session.sharedSecretStorageService.isRecoverySetup()
+                    session.sharedSecretStorageService().isRecoverySetup()
                 }
                 .distinctUntilChanged()
                 .execute {
@@ -124,7 +123,7 @@ class SignoutCheckViewModel @AssistedInject constructor(
                     copy(hasBeenExportedToFile = Success(true))
                 }
             }
-        }.exhaustive
+        }
     }
 
     private fun handleExportKeys(action: Actions.ExportKeys) {

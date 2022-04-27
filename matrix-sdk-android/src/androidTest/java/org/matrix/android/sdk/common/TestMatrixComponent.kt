@@ -26,6 +26,7 @@ import org.matrix.android.sdk.internal.di.MatrixModule
 import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.di.NetworkModule
 import org.matrix.android.sdk.internal.raw.RawModule
+import org.matrix.android.sdk.internal.settings.SettingsModule
 import org.matrix.android.sdk.internal.util.system.SystemModule
 
 @Component(modules = [
@@ -34,6 +35,7 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
     NetworkModule::class,
     AuthModule::class,
     RawModule::class,
+    SettingsModule::class,
     SystemModule::class
 ])
 @MatrixScope

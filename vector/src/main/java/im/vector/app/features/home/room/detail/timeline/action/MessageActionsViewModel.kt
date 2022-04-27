@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
@@ -69,16 +70,16 @@ import org.matrix.android.sdk.flow.unwrap
 /**
  * Information related to an event and used to display preview in contextual bottom sheet.
  */
-class MessageActionsViewModel @AssistedInject constructor(@Assisted
-                                                          private val initialState: MessageActionState,
-                                                          private val eventHtmlRenderer: Lazy<EventHtmlRenderer>,
-                                                          private val htmlCompressor: VectorHtmlCompressor,
-                                                          private val session: Session,
-                                                          private val noticeEventFormatter: NoticeEventFormatter,
-                                                          private val errorFormatter: ErrorFormatter,
-                                                          private val stringProvider: StringProvider,
-                                                          private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-                                                          private val vectorPreferences: VectorPreferences
+class MessageActionsViewModel @AssistedInject constructor(
+        @Assisted private val initialState: MessageActionState,
+        private val eventHtmlRenderer: Lazy<EventHtmlRenderer>,
+        private val htmlCompressor: VectorHtmlCompressor,
+        private val session: Session,
+        private val noticeEventFormatter: NoticeEventFormatter,
+        private val errorFormatter: ErrorFormatter,
+        private val stringProvider: StringProvider,
+        private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
+        private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
 
     private val informationData = initialState.informationData
@@ -450,7 +451,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun canReplyInThread(event: TimelineEvent,
                                  messageContent: MessageContent?,
                                  actionPermissions: ActionPermissions): Boolean {
-        if (!vectorPreferences.areThreadMessagesEnabled()) return false
+        // We let reply in thread visible even if threads are not enabled, with an enhanced flow to attract users
+//        if (!vectorPreferences.areThreadMessagesEnabled()) return false
+        // Disable beta prompt if the homeserver do not support threads
+        if (!vectorPreferences.areThreadMessagesEnabled() &&
+                !session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) return false
+
         if (initialState.isFromThreadTimeline) return false
         if (event.root.isThread()) return false
         if (event.root.getClearType() != EventType.MESSAGE &&

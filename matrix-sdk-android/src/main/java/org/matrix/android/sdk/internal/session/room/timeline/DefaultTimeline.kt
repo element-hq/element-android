@@ -35,7 +35,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
@@ -100,6 +100,7 @@ internal class DefaultTimeline(private val roomId: String,
             threadsAwarenessHandler = threadsAwarenessHandler,
             lightweightSettingsStorage = lightweightSettingsStorage,
             onEventsUpdated = this::sendSignalToPostSnapshot,
+            onEventsDeleted = this::onEventsDeleted,
             onLimitedTimeline = this::onLimitedTimeline,
             onNewTimelineEvents = this::onNewTimelineEvents
     )
@@ -223,7 +224,15 @@ internal class DefaultTimeline(private val roomId: String,
         updateState(direction) {
             it.copy(loading = true)
         }
-        val loadMoreResult = strategy.loadMore(count, direction, fetchOnServerIfNeeded)
+        val loadMoreResult = try {
+            strategy.loadMore(count, direction, fetchOnServerIfNeeded)
+        } catch (throwable: Throwable) {
+            // Timeline could not be loaded with a (likely) permanent issue, such as the
+            // server now knowing the initialEventId, so we want to show an error message
+            // and possibly restart without initialEventId.
+            onTimelineFailure(throwable)
+            return false
+        }
         Timber.v("$baseLogMessage: result $loadMoreResult")
         val hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END
         updateState(direction) {
@@ -296,6 +305,12 @@ internal class DefaultTimeline(private val roomId: String,
         }
     }
 
+    private fun onEventsDeleted() {
+        // Some event have been deleted, for instance when a user has been ignored.
+        // Restart the timeline (live)
+        restartWithEventId(null)
+    }
+
     private suspend fun postSnapshot() {
         val snapshot = strategy.buildSnapshot()
         Timber.v("Post snapshot of ${snapshot.size} events")
@@ -338,6 +353,14 @@ internal class DefaultTimeline(private val roomId: String,
             Timber.v("Post $direction pagination state: $state ")
             listeners.forEach {
                 tryOrNull { it.onStateUpdated(direction, state) }
+            }
+        }
+    }
+
+    private fun onTimelineFailure(throwable: Throwable) {
+        timelineScope.launch(coroutineDispatchers.main) {
+            listeners.forEach {
+                tryOrNull { it.onTimelineFailure(throwable) }
             }
         }
     }

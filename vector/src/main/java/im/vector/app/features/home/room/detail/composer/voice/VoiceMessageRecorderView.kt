@@ -23,12 +23,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
-import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.lib.core.utils.timer.CountUpTimer
 import javax.inject.Inject
 import kotlin.math.floor
@@ -41,7 +40,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), VoiceMessagePlaybackTracker.Listener {
+) : ConstraintLayout(context, attrs, defStyleAttr), AudioMessagePlaybackTracker.Listener {
 
     interface Callback {
         fun onVoiceRecordingStarted()
@@ -53,6 +52,8 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
         fun onDeleteVoiceMessage()
         fun onRecordingLimitReached()
         fun onRecordingWaveformClicked()
+        fun onVoiceWaveformTouchedUp(percentage: Float, duration: Int)
+        fun onVoiceWaveformMoved(percentage: Float, duration: Int)
     }
 
     @Inject lateinit var clock: Clock
@@ -65,6 +66,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     private var recordingTicker: CountUpTimer? = null
     private var lastKnownState: RecordingUiState? = null
     private var dragState: DraggingState = DraggingState.Ignored
+    private var recordingDuration: Long = 0
 
     init {
         inflate(this.context, R.layout.view_voice_message_recorder, this)
@@ -95,15 +97,27 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             override fun onDeleteVoiceMessage() = callback.onDeleteVoiceMessage()
             override fun onWaveformClicked() {
                 when (lastKnownState) {
-                    RecordingUiState.Draft  -> callback.onVoicePlaybackButtonClicked()
                     is RecordingUiState.Recording,
                     is RecordingUiState.Locked -> callback.onRecordingWaveformClicked()
+                    else                       -> Unit
                 }
             }
 
             override fun onVoicePlaybackButtonClicked() = callback.onVoicePlaybackButtonClicked()
             override fun onMicButtonDrag(nextDragStateCreator: (DraggingState) -> DraggingState) {
                 onDrag(dragState, newDragState = nextDragStateCreator(dragState))
+            }
+
+            override fun onVoiceWaveformTouchedUp(percentage: Float) {
+                if (lastKnownState == RecordingUiState.Draft) {
+                    callback.onVoiceWaveformTouchedUp(percentage, recordingDuration.toInt())
+                }
+            }
+
+            override fun onVoiceWaveformMoved(percentage: Float) {
+                if (lastKnownState == RecordingUiState.Draft) {
+                    callback.onVoiceWaveformMoved(percentage, recordingDuration.toInt())
+                }
             }
         })
     }
@@ -119,7 +133,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     fun render(recordingState: RecordingUiState) {
         if (lastKnownState == recordingState) return
         when (recordingState) {
-            RecordingUiState.Idle      -> {
+            RecordingUiState.Idle         -> {
                 reset()
             }
             is RecordingUiState.Recording -> {
@@ -137,7 +151,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                     voiceMessageViews.showRecordingLockedViews(recordingState)
                 }, 500)
             }
-            RecordingUiState.Draft   -> {
+            RecordingUiState.Draft        -> {
                 stopRecordingTicker()
                 voiceMessageViews.showDraftViews()
             }
@@ -167,7 +181,7 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
             DraggingState.Ready         -> {
                 // do nothing
             }
-        }.exhaustive
+        }
         dragState = newDragState
     }
 
@@ -203,20 +217,21 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     private fun stopRecordingTicker() {
+        recordingDuration = recordingTicker?.elapsedTime() ?: 0
         recordingTicker?.stop()
         recordingTicker = null
     }
 
-    override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
+    override fun onUpdate(state: AudioMessagePlaybackTracker.Listener.State) {
         when (state) {
-            is VoiceMessagePlaybackTracker.Listener.State.Recording -> {
+            is AudioMessagePlaybackTracker.Listener.State.Recording -> {
                 voiceMessageViews.renderRecordingWaveform(state.amplitudeList.toTypedArray())
             }
-            is VoiceMessagePlaybackTracker.Listener.State.Playing   -> {
+            is AudioMessagePlaybackTracker.Listener.State.Playing   -> {
                 voiceMessageViews.renderPlaying(state)
             }
-            is VoiceMessagePlaybackTracker.Listener.State.Paused,
-            is VoiceMessagePlaybackTracker.Listener.State.Idle      -> {
+            is AudioMessagePlaybackTracker.Listener.State.Paused,
+            is AudioMessagePlaybackTracker.Listener.State.Idle      -> {
                 voiceMessageViews.renderIdle()
             }
         }

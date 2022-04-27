@@ -63,11 +63,11 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
         // Default screen is for bug report, so modify it for suggestion
         when (reportType) {
-            ReportType.BUG_REPORT          -> {
+            ReportType.BUG_REPORT            -> {
                 supportActionBar?.setTitle(R.string.title_activity_bug_report)
                 views.bugReportButtonContactMe.isVisible = true
             }
-            ReportType.SUGGESTION          -> {
+            ReportType.SUGGESTION            -> {
                 supportActionBar?.setTitle(R.string.send_suggestion)
 
                 views.bugReportFirstText.setText(R.string.send_suggestion_content)
@@ -76,7 +76,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
                 hideBugReportOptions()
             }
-            ReportType.SPACE_BETA_FEEDBACK -> {
+            ReportType.SPACE_BETA_FEEDBACK   -> {
                 supportActionBar?.setTitle(R.string.send_feedback_space_title)
 
                 views.bugReportFirstText.setText(R.string.send_feedback_space_info)
@@ -85,7 +85,16 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
                 hideBugReportOptions()
             }
-            else                           -> {
+            ReportType.THREADS_BETA_FEEDBACK -> {
+                supportActionBar?.setTitle(R.string.send_feedback_threads_title)
+
+                views.bugReportFirstText.setText(R.string.send_feedback_threads_info)
+                views.bugReportTextInputLayout.hint = getString(R.string.feedback)
+                views.bugReportButtonContactMe.isVisible = true
+
+                hideBugReportOptions()
+            }
+            else                             -> {
                 // other types not supported here
             }
         }

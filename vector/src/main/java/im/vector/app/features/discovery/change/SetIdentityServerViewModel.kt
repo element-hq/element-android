@@ -25,7 +25,6 @@ import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureProtocol
@@ -40,7 +39,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
         @Assisted initialState: SetIdentityServerState,
         private val mxSession: Session,
         stringProvider: StringProvider) :
-    VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
+        VectorViewModel<SetIdentityServerState, SetIdentityServerAction, SetIdentityServerViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<SetIdentityServerViewModel, SetIdentityServerState> {
@@ -67,7 +66,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
         when (action) {
             SetIdentityServerAction.UseDefaultIdentityServer   -> useDefault()
             is SetIdentityServerAction.UseCustomIdentityServer -> usedCustomIdentityServerUrl(action)
-        }.exhaustive
+        }
     }
 
     private fun useDefault() = withState { state ->
@@ -108,7 +107,7 @@ class SetIdentityServerViewModel @AssistedInject constructor(
 
     private suspend fun checkTerms(baseUrl: String) {
         try {
-            val data = mxSession.getTerms(TermsService.ServiceType.IdentityService, baseUrl)
+            val data = mxSession.termsService().getTerms(TermsService.ServiceType.IdentityService, baseUrl)
 
             // has all been accepted?
             val resp = data.serverResponse

@@ -23,6 +23,9 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.group.GroupSummaryQueryParams
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -39,23 +42,20 @@ import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 
 class FlowSession(private val session: Session) {
 
     fun liveRoomSummaries(queryParams: RoomSummaryQueryParams, sortOrder: RoomSortOrder = RoomSortOrder.NONE): Flow<List<RoomSummary>> {
-        return session.getRoomSummariesLive(queryParams, sortOrder).asFlow()
+        return session.roomService().getRoomSummariesLive(queryParams, sortOrder).asFlow()
                 .startWith(session.coroutineDispatchers.io) {
-                    session.getRoomSummaries(queryParams, sortOrder)
+                    session.roomService().getRoomSummaries(queryParams, sortOrder)
                 }
     }
 
     fun liveGroupSummaries(queryParams: GroupSummaryQueryParams): Flow<List<GroupSummary>> {
-        return session.getGroupSummariesLive(queryParams).asFlow()
+        return session.groupService().getGroupSummariesLive(queryParams).asFlow()
                 .startWith(session.coroutineDispatchers.io) {
-                    session.getGroupSummaries(queryParams)
+                    session.groupService().getGroupSummaries(queryParams)
                 }
     }
 
@@ -67,9 +67,9 @@ class FlowSession(private val session: Session) {
     }
 
     fun liveBreadcrumbs(queryParams: RoomSummaryQueryParams): Flow<List<RoomSummary>> {
-        return session.getBreadcrumbsLive(queryParams).asFlow()
+        return session.roomService().getBreadcrumbsLive(queryParams).asFlow()
                 .startWith(session.coroutineDispatchers.io) {
-                    session.getBreadcrumbs(queryParams)
+                    session.roomService().getBreadcrumbs(queryParams)
                 }
     }
 
@@ -85,43 +85,47 @@ class FlowSession(private val session: Session) {
     }
 
     fun livePushers(): Flow<List<Pusher>> {
-        return session.getPushersLive().asFlow()
+        return session.pushersService().getPushersLive().asFlow()
     }
 
     fun liveUser(userId: String): Flow<Optional<User>> {
-        return session.getUserLive(userId).asFlow()
+        return session.userService().getUserLive(userId).asFlow()
                 .startWith(session.coroutineDispatchers.io) {
-                    session.getUser(userId).toOptional()
+                    session.userService().getUser(userId).toOptional()
                 }
     }
 
     fun liveRoomMember(userId: String, roomId: String): Flow<Optional<RoomMemberSummary>> {
-        return session.getRoomMemberLive(userId, roomId).asFlow()
+        return session.roomService().getRoomMemberLive(userId, roomId).asFlow()
                 .startWith(session.coroutineDispatchers.io) {
-                    session.getRoomMember(userId, roomId).toOptional()
+                    session.roomService().getRoomMember(userId, roomId).toOptional()
                 }
     }
 
     fun liveUsers(): Flow<List<User>> {
-        return session.getUsersLive().asFlow()
+        return session.userService().getUsersLive().asFlow()
     }
 
     fun liveIgnoredUsers(): Flow<List<User>> {
-        return session.getIgnoredUsersLive().asFlow()
+        return session.userService().getIgnoredUsersLive().asFlow()
     }
 
     fun livePagedUsers(filter: String? = null, excludedUserIds: Set<String>? = null): Flow<PagedList<User>> {
-        return session.getPagedUsersLive(filter, excludedUserIds).asFlow()
+        return session.userService().getPagedUsersLive(filter, excludedUserIds).asFlow()
     }
 
     fun liveThreePIds(refreshData: Boolean): Flow<List<ThreePid>> {
-        return session.getThreePidsLive(refreshData).asFlow()
-                .startWith(session.coroutineDispatchers.io) { session.getThreePids() }
+        return session.profileService().getThreePidsLive(refreshData).asFlow()
+                .startWith(session.coroutineDispatchers.io) {
+                    session.profileService().getThreePids()
+                }
     }
 
     fun livePendingThreePIds(): Flow<List<ThreePid>> {
-        return session.getPendingThreePidsLive().asFlow()
-                .startWith(session.coroutineDispatchers.io) { session.getPendingThreePids() }
+        return session.profileService().getPendingThreePidsLive().asFlow()
+                .startWith(session.coroutineDispatchers.io) {
+                    session.profileService().getPendingThreePids()
+                }
     }
 
     fun liveUserCryptoDevices(userId: String): Flow<List<CryptoDeviceInfo>> {
@@ -179,7 +183,7 @@ class FlowSession(private val session: Session) {
     }
 
     fun liveRoomChangeMembershipState(): Flow<Map<String, ChangeMembershipState>> {
-        return session.getChangeMembershipsLive().asFlow()
+        return session.roomService().getChangeMembershipsLive().asFlow()
     }
 }
 

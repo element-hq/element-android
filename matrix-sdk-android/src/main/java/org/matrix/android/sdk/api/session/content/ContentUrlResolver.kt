@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.content
 
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 
 /**
  * This interface defines methods for accessing content from the current session.

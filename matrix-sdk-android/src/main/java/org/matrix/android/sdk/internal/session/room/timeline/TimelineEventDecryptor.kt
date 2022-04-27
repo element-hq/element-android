@@ -20,11 +20,10 @@ import io.realm.RealmConfiguration
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.internal.crypto.NewSessionListener
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.query.where
@@ -40,7 +39,6 @@ internal class TimelineEventDecryptor @Inject constructor(
         private val realmConfiguration: RealmConfiguration,
         private val cryptoService: CryptoService,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
-        private val lightweightSettingsStorage: LightweightSettingsStorage
 ) {
 
     private val newSessionListener = object : NewSessionListener {

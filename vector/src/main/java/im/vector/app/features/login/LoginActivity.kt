@@ -35,7 +35,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
@@ -43,10 +42,10 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
-import im.vector.app.features.login.terms.toLocalizedLoginTerms
 import im.vector.app.features.pin.UnlockedActivity
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
+import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
 
 /**
@@ -197,7 +196,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
             is LoginViewEvents.Loading                                    ->
                 // This is handled by the Fragments
                 Unit
-        }.exhaustive
+        }
     }
 
     private fun updateWithState(loginViewState: LoginViewState) {
@@ -260,13 +259,13 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                             tag = FRAGMENT_LOGIN_TAG,
                             option = commonOption)
                     LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
-                }.exhaustive
+                }
             }
             SignMode.SignInWithMatrixId -> addFragmentToBackstack(views.loginFragmentContainer,
                     LoginFragment::class.java,
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption)
-        }.exhaustive
+        }
     }
 
     /**

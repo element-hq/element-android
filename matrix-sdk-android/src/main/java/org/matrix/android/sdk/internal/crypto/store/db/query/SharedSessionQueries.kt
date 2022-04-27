@@ -20,7 +20,7 @@ import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntity
 import org.matrix.android.sdk.internal.crypto.store.db.model.SharedSessionEntityFields
 

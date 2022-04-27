@@ -75,11 +75,14 @@ interface UserService {
 
     /**
      * Ignore users
+     * Note: once done, for the change to take effect, you have to request an initial sync.
+     * This may be improved in the future
      */
     suspend fun ignoreUserIds(userIds: List<String>)
 
     /**
      * Un-ignore some users
+     * Note: once done, for the change to take effect, you have to request an initial sync.
      */
     suspend fun unIgnoreUserIds(userIds: List<String>)
 }

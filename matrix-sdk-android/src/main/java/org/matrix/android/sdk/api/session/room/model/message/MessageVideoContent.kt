@@ -18,16 +18,16 @@ package org.matrix.android.sdk.api.session.room.model.message
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
 data class MessageVideoContent(
         /**
          * Required. Must be 'm.video'.
          */
-        @Json(name = MessageContent.MSG_TYPE_JSON_KEY)override val msgType: String,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
 
         /**
          * Required. A description of the video e.g. 'Gangnam style', or some kind of content description for accessibility e.g. 'video attachment'.

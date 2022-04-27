@@ -23,7 +23,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +36,7 @@ import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -51,7 +51,7 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
         @Assisted initialState: RequireActiveMembershipViewState,
         private val stringProvider: StringProvider,
         private val session: Session) :
-    VectorViewModel<RequireActiveMembershipViewState, RequireActiveMembershipAction, RequireActiveMembershipViewEvents>(initialState) {
+        VectorViewModel<RequireActiveMembershipViewState, RequireActiveMembershipAction, RequireActiveMembershipViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<RequireActiveMembershipViewModel, RequireActiveMembershipViewState> {
@@ -127,6 +127,6 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
                 }
                 roomIdFlow.tryEmit(Optional.from(action.roomId))
             }
-        }.exhaustive
+        }
     }
 }

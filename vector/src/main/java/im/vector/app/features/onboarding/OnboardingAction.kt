@@ -22,14 +22,21 @@ import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.internal.network.ssl.Fingerprint
+import org.matrix.android.sdk.api.network.ssl.Fingerprint
 
 sealed interface OnboardingAction : VectorViewModelAction {
     data class OnGetStarted(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction
     data class OnIAlreadyHaveAnAccount(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction
 
     data class UpdateServerType(val serverType: ServerType) : OnboardingAction
-    data class UpdateHomeServer(val homeServerUrl: String) : OnboardingAction
+
+    sealed interface HomeServerChange : OnboardingAction {
+        val homeServerUrl: String
+
+        data class SelectHomeServer(override val homeServerUrl: String) : HomeServerChange
+        data class EditHomeServer(override val homeServerUrl: String) : HomeServerChange
+    }
+
     data class UpdateUseCase(val useCase: FtueUseCase) : OnboardingAction
     object ResetUseCase : OnboardingAction
     data class UpdateSignMode(val signMode: SignMode) : OnboardingAction
@@ -41,6 +48,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
 
     // Login or Register, depending on the signMode
     data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
+    data class Register(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
     object StopEmailValidationCheck : OnboardingAction
 
     data class PostRegisterAction(val registerAction: RegisterAction) : OnboardingAction
@@ -51,7 +59,7 @@ sealed interface OnboardingAction : VectorViewModelAction {
     object ResetHomeServerType : ResetAction
     object ResetHomeServerUrl : ResetAction
     object ResetSignMode : ResetAction
-    object ResetLogin : ResetAction
+    object ResetAuthenticationAttempt : ResetAction
     object ResetResetPassword : ResetAction
 
     // Homeserver history

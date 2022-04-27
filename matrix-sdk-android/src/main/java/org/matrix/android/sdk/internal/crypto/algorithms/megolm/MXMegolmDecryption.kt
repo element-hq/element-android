@@ -23,26 +23,26 @@ import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.NewSessionListener
+import org.matrix.android.sdk.api.session.crypto.model.ForwardedRoomKeyContent
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.RoomKeyRequestBody
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
+import org.matrix.android.sdk.api.session.events.model.content.RoomKeyContent
+import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.DeviceListManager
-import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
-import org.matrix.android.sdk.internal.crypto.NewSessionListener
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXWithHeldExtension
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
-import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
-import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
-import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
-import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.session.StreamEventsManager
@@ -318,19 +318,20 @@ internal class MXMegolmDecryption(private val userId: String,
 
             outgoingGossipingRequestManager.cancelRoomKeyRequest(content)
 
-            onNewSession(senderKey, roomKeyContent.sessionId)
+            onNewSession(roomKeyContent.roomId, senderKey, roomKeyContent.sessionId)
         }
     }
 
     /**
      * Check if the some messages can be decrypted with a new session
      *
+     * @param roomId the room id where the new Megolm session has been created for, may be null when importing from external sessions
      * @param senderKey the session sender key
      * @param sessionId the session id
      */
-    override fun onNewSession(senderKey: String, sessionId: String) {
+    fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
         Timber.tag(loggerTag.value).v("ON NEW SESSION $sessionId - $senderKey")
-        newSessionListener?.onNewSession(null, senderKey, sessionId)
+        newSessionListener?.onNewSession(roomId, senderKey, sessionId)
     }
 
     override fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean {

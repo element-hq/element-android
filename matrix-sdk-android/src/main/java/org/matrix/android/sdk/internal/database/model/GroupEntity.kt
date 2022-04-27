@@ -25,7 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
  * Then GetGroupDataTask is called regularly to fetch group information from the homeserver.
  */
 internal open class GroupEntity(@PrimaryKey var groupId: String = "") :
-    RealmObject() {
+        RealmObject() {
 
     private var membershipStr: String = Membership.NONE.name
     var membership: Membership

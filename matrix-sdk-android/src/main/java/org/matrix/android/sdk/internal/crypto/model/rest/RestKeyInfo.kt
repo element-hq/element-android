@@ -17,7 +17,7 @@ package org.matrix.android.sdk.internal.crypto.model.rest
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
+import org.matrix.android.sdk.api.session.crypto.crosssigning.CryptoCrossSigningKey
 import org.matrix.android.sdk.internal.crypto.model.CryptoInfoMapper
 
 @JsonClass(generateAdapter = true)

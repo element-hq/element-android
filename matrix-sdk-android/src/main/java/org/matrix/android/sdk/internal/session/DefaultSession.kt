@@ -26,7 +26,6 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
-import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.EventStreamService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
@@ -53,6 +52,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.presence.PresenceService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
+import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.search.SearchService
@@ -124,12 +124,12 @@ internal class DefaultSession @Inject constructor(
         private val syncStatusService: Lazy<SyncStatusService>,
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
         private val accountDataService: Lazy<SessionAccountDataService>,
-        private val _sharedSecretStorageService: Lazy<SharedSecretStorageService>,
+        private val sharedSecretStorageService: Lazy<SharedSecretStorageService>,
         private val accountService: Lazy<AccountService>,
         private val eventService: Lazy<EventService>,
         private val contentScannerService: Lazy<ContentScannerService>,
-        private val identityService: IdentityService,
-        private val integrationManagerService: IntegrationManagerService,
+        private val identityService: Lazy<IdentityService>,
+        private val integrationManagerService: Lazy<IntegrationManagerService>,
         private val thirdPartyService: Lazy<ThirdPartyService>,
         private val callSignalingService: Lazy<CallSignalingService>,
         private val spaceService: Lazy<SpaceService>,
@@ -140,28 +140,7 @@ internal class DefaultSession @Inject constructor(
         @UnauthenticatedWithCertificate
         private val unauthenticatedWithCertificateOkHttpClient: Lazy<OkHttpClient>
 ) : Session,
-        GlobalErrorHandler.Listener,
-        RoomService by roomService.get(),
-        RoomDirectoryService by roomDirectoryService.get(),
-        GroupService by groupService.get(),
-        UserService by userService.get(),
-        SignOutService by signOutService.get(),
-        FilterService by filterService.get(),
-        PushRuleService by pushRuleService.get(),
-        PushersService by pushersService.get(),
-        EventService by eventService.get(),
-        TermsService by termsService.get(),
-        SyncStatusService by syncStatusService.get(),
-        SecureStorageService by secureStorageService.get(),
-        HomeServerCapabilitiesService by homeServerCapabilitiesService.get(),
-        ProfileService by profileService.get(),
-        PresenceService by presenceService.get(),
-        AccountService by accountService.get(),
-        ToDeviceService by toDeviceService.get(),
-        EventStreamService by eventStreamService.get() {
-
-    override val sharedSecretStorageService: SharedSecretStorageService
-        get() = _sharedSecretStorageService.get()
+        GlobalErrorHandler.Listener {
 
     private var isOpen = false
 
@@ -274,42 +253,44 @@ internal class DefaultSession @Inject constructor(
     }
 
     override fun contentUrlResolver() = contentUrlResolver
-
     override fun contentUploadProgressTracker() = contentUploadProgressTracker
-
     override fun typingUsersTracker() = typingUsersTracker
-
     override fun contentDownloadProgressTracker(): ContentDownloadStateTracker = contentDownloadStateTracker
 
     override fun cryptoService(): CryptoService = cryptoService.get()
-
     override fun contentScannerService(): ContentScannerService = contentScannerService.get()
-
-    override fun identityService() = identityService
-
+    override fun identityService(): IdentityService = identityService.get()
+    override fun homeServerCapabilitiesService(): HomeServerCapabilitiesService = homeServerCapabilitiesService.get()
+    override fun roomService(): RoomService = roomService.get()
+    override fun roomDirectoryService(): RoomDirectoryService = roomDirectoryService.get()
+    override fun groupService(): GroupService = groupService.get()
+    override fun userService(): UserService = userService.get()
+    override fun signOutService(): SignOutService = signOutService.get()
+    override fun filterService(): FilterService = filterService.get()
+    override fun pushRuleService(): PushRuleService = pushRuleService.get()
+    override fun pushersService(): PushersService = pushersService.get()
+    override fun eventService(): EventService = eventService.get()
+    override fun termsService(): TermsService = termsService.get()
+    override fun syncStatusService(): SyncStatusService = syncStatusService.get()
+    override fun secureStorageService(): SecureStorageService = secureStorageService.get()
+    override fun profileService(): ProfileService = profileService.get()
+    override fun presenceService(): PresenceService = presenceService.get()
+    override fun accountService(): AccountService = accountService.get()
+    override fun toDeviceService(): ToDeviceService = toDeviceService.get()
+    override fun eventStreamService(): EventStreamService = eventStreamService.get()
     override fun fileService(): FileService = defaultFileService.get()
-
     override fun permalinkService(): PermalinkService = permalinkService.get()
-
     override fun widgetService(): WidgetService = widgetService.get()
-
     override fun mediaService(): MediaService = mediaService.get()
-
-    override fun integrationManagerService() = integrationManagerService
-
+    override fun integrationManagerService(): IntegrationManagerService = integrationManagerService.get()
     override fun callSignalingService(): CallSignalingService = callSignalingService.get()
-
     override fun searchService(): SearchService = searchService.get()
-
     override fun federationService(): FederationService = federationService.get()
-
     override fun thirdPartyService(): ThirdPartyService = thirdPartyService.get()
-
     override fun spaceService(): SpaceService = spaceService.get()
-
     override fun openIdService(): OpenIdService = openIdService.get()
-
     override fun accountDataService(): SessionAccountDataService = accountDataService.get()
+    override fun sharedSecretStorageService(): SharedSecretStorageService = sharedSecretStorageService.get()
 
     override fun getOkHttpClient(): OkHttpClient {
         return unauthenticatedWithCertificateOkHttpClient.get()

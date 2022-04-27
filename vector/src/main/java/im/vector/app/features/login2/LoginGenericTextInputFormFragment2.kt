@@ -75,8 +75,8 @@ class LoginGenericTextInputFormFragment2 @Inject constructor() : AbstractLoginFr
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             views.loginGenericTextInputFormTextInput.setAutofillHints(
                     when (params.mode) {
-                        TextInputFormFragmentMode.SetEmail  -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
-                        TextInputFormFragmentMode.SetMsisdn -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
+                        TextInputFormFragmentMode.SetEmail      -> HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
+                        TextInputFormFragmentMode.SetMsisdn     -> HintConstants.AUTOFILL_HINT_PHONE_NUMBER
                         TextInputFormFragmentMode.ConfirmMsisdn -> HintConstants.AUTOFILL_HINT_SMS_OTP
                     }
             )

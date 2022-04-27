@@ -18,7 +18,7 @@ package org.matrix.android.sdk.api.session.room.model.message
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
 data class VideoInfo(
@@ -67,5 +67,5 @@ data class VideoInfo(
  * Get the url of the encrypted thumbnail or of the thumbnail
  */
 fun VideoInfo.getThumbnailUrl(): String? {
-        return thumbnailFile?.url ?: thumbnailUrl
+    return thumbnailFile?.url ?: thumbnailUrl
 }

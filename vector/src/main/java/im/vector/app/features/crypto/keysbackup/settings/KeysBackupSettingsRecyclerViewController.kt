@@ -31,7 +31,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
 import java.util.UUID
 import javax.inject.Inject
 
@@ -140,6 +140,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
 
                 isBackupAlreadySetup = true
             }
+            null                                       -> Unit
         }
 
         if (isBackupAlreadySetup) {

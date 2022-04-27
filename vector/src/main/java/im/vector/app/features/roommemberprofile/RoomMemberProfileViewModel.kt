@@ -28,7 +28,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -49,7 +48,7 @@ import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.profile.ProfileService
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -57,7 +56,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
-import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
@@ -114,8 +113,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         session.flow().liveUserCryptoDevices(initialState.userId)
                 .map {
                     Pair(
-                            it.fold(true, { prev, dev -> prev && dev.isVerified }),
-                            it.fold(true, { prev, dev -> prev && (dev.trustLevel?.crossSigningVerified == true) })
+                            it.fold(true) { prev, dev -> prev && dev.isVerified },
+                            it.fold(true) { prev, dev -> prev && (dev.trustLevel?.crossSigningVerified == true) }
                     )
                 }
                 .execute { it ->
@@ -170,7 +169,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             RoomMemberProfileAction.InviteUser                -> handleInviteAction()
             is RoomMemberProfileAction.SetUserColorOverride   -> handleSetUserColorOverride(action)
             is RoomMemberProfileAction.OpenOrCreateDm         -> handleOpenOrCreateDm(action)
-        }.exhaustive
+        }
     }
 
     private fun handleOpenOrCreateDm(action: RoomMemberProfileAction.OpenOrCreateDm) {
@@ -329,14 +328,10 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
 
     private suspend fun fetchProfileInfo() {
         val result = runCatchingToAsync {
-            session.getProfile(initialState.userId)
-                    .let {
-                        MatrixItem.UserItem(
-                                id = initialState.userId,
-                                displayName = it[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                avatarUrl = it[ProfileService.AVATAR_URL_KEY] as? String
-                        )
-                    }
+            session.profileService()
+                    .getProfile(initialState.userId)
+                    .let { User.fromJson(initialState.userId, it) }
+                    .toMatrixItem()
         }
 
         setState {
@@ -393,9 +388,9 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val event = try {
                 if (isIgnored) {
-                    session.unIgnoreUserIds(listOf(state.userId))
+                    session.userService().unIgnoreUserIds(listOf(state.userId))
                 } else {
-                    session.ignoreUserIds(listOf(state.userId))
+                    session.userService().ignoreUserIds(listOf(state.userId))
                 }
                 RoomMemberProfileViewEvents.OnIgnoreActionSuccess
             } catch (failure: Throwable) {

@@ -29,11 +29,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.shareText
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.alias.detail.RoomAliasBottomSheet
@@ -62,6 +62,11 @@ class RoomAliasFragment @Inject constructor(
         return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomAddresses
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(RoomAliasBottomSheetSharedActionViewModel::class.java)
@@ -77,7 +82,7 @@ class RoomAliasFragment @Inject constructor(
             when (it) {
                 is RoomAliasViewEvents.Failure -> showFailure(it.throwable)
                 RoomAliasViewEvents.Success    -> showSuccess()
-            }.exhaustive
+            }
         }
 
         sharedActionViewModel

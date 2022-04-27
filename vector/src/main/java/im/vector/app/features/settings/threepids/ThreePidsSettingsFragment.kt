@@ -28,7 +28,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.getFormattedValue
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.isEmail
@@ -62,9 +61,9 @@ class ThreePidsSettingsFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                is ThreePidsSettingsViewEvents.Failure -> displayErrorDialog(it.throwable)
+                is ThreePidsSettingsViewEvents.Failure       -> displayErrorDialog(it.throwable)
                 is ThreePidsSettingsViewEvents.RequestReAuth -> askAuthentication(it)
-            }.exhaustive
+            }
         }
     }
 
@@ -76,10 +75,11 @@ class ThreePidsSettingsFragment @Inject constructor(
             reAuthActivityResultLauncher.launch(intent)
         }
     }
+
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
-                LoginFlowTypes.SSO -> {
+                LoginFlowTypes.SSO      -> {
                     viewModel.handle(ThreePidsSettingsAction.SsoAuthDone)
                 }
                 LoginFlowTypes.PASSWORD -> {

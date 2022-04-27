@@ -18,11 +18,14 @@ package org.matrix.android.sdk.internal.session.sync
 
 import android.os.SystemClock
 import okhttp3.ResponseBody
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.statistics.StatisticEvent
+import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.session.sync.model.LazyRoomSyncEphemeral
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
@@ -104,7 +107,11 @@ internal class DefaultSyncTask @Inject constructor(
         val isInitialSync = token == null
         if (isInitialSync) {
             // We might want to get the user information in parallel too
-            userStore.createOrUpdate(userId)
+            val user = tryOrNull { session.profileService().getProfileAsUser(userId) }
+            userStore.createOrUpdate(
+                    userId = userId,
+                    displayName = user?.displayName,
+                    avatarUrl = user?.avatarUrl)
             defaultSyncStatusService.startRoot(InitSyncStep.ImportingAccount, 100)
         }
         // Maybe refresh the homeserver capabilities data we know
@@ -165,7 +172,7 @@ internal class DefaultSyncTask @Inject constructor(
             val nbToDevice = syncResponse.toDevice?.events.orEmpty().size
             val nextBatch = syncResponse.nextBatch
             Timber.tag(loggerTag.value).d(
-                "Incremental sync request parsing, $nbRooms room(s) $nbToDevice toDevice(s). Got nextBatch: $nextBatch"
+                    "Incremental sync request parsing, $nbRooms room(s) $nbToDevice toDevice(s). Got nextBatch: $nextBatch"
             )
             defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncParsing(
                     rooms = nbRooms,

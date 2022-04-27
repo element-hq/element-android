@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.api.session.crypto
 
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.olm.OlmException
 
 /**

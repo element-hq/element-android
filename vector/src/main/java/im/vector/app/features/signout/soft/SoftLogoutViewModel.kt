@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getUser
 import timber.log.Timber
 
 /**
@@ -169,7 +170,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
                 }
                 viewModelScope.launch {
                     try {
-                        session.updateCredentials(action.credentials)
+                        session.signOutService().updateCredentials(action.credentials)
                         onSessionRestored()
                     } catch (failure: Throwable) {
                         _viewEvents.post(SoftLogoutViewEvents.Failure(failure))
@@ -192,7 +193,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             try {
-                session.signInAgain(action.password)
+                session.signOutService().signInAgain(action.password)
                 onSessionRestored()
             } catch (failure: Throwable) {
                 setState {

@@ -33,14 +33,13 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
-import java.util.ArrayList
-import java.util.HashMap
 
 class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roomId: String,
                                                        private val stringProvider: StringProvider,

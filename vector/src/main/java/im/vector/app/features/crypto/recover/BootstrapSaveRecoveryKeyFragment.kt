@@ -29,6 +29,7 @@ import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.extensions.safeOpenOutputStream
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.startSharePlainTextIntent
@@ -81,7 +82,7 @@ class BootstrapSaveRecoveryKeyFragment @Inject constructor(
             val uri = activityResult.data?.data ?: return@registerStartForActivityResult
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    sharedViewModel.handle(BootstrapActions.SaveKeyToUri(requireContext().contentResolver!!.openOutputStream(uri)!!))
+                    sharedViewModel.handle(BootstrapActions.SaveKeyToUri(requireContext().safeOpenOutputStream(uri)!!))
                 } catch (failure: Throwable) {
                     sharedViewModel.handle(BootstrapActions.SaveReqFailed)
                 }

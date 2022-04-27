@@ -8,12 +8,13 @@ Az Element egy biztonságos üzenetküldő, és egy csapatmunka app, amely távo
 - Videochat, VoIP, és képernyőmegosztási lehetőséggel 
 - Egyszerű integráció a kedvenc online kollaborációs eszközeiddel, projektkezelési eszközökkel, VoIP szolgáltatásokkal, és más csoportos üzenetküldő alkalmazásokkal
 
-Element is completely different from other messaging and collaboration apps. It operates on Matrix, an open network for secure messaging and decentralized communication. It allows self-hosting to give users maximum ownership and control of their data and messages.
+Az Element teljesen más, mint az összes többi üzenetküldő és kollaborációs alkalmazás. A biztonságos üzenetküldést és decentralizált kommunikációt biztosító Matrix platformot használja. Akár egyénileg üzemeltetett szervereket is lehet használni az adatok teljes kontrollálása érdekében.
 
-<b>Privacy and encrypted messaging</b>
-Element protects you from unwanted ads, data mining and walled gardens. It also secures all your data, one-to-one video and voice communication through end-to-end encryption and cross-signed device verification.
+<b>Magánszféra és titkosított csevegés</b>
+Az Element megvéd a nemkívánatos hirdetésektől, adatbányászattól, és a zárt platformoktól. Ezeken felül biztonságban tartja az összes adatod és 1:1 hívásod a végponti titkosításnak és az eszközök-közti hitelesítésnek köszönhetően.
 
-Element gives you control over your privacy while allowing you to communicate securely with anyone on the Matrix network, or other business collaboration tools by integrating with apps such as Slack.
+Az Element átadja neked az irányítást a magánszférád felett, miközben lehetővé teszi, hogy biztonságosan kommunikálj bárkivel a Matrix hálózatban, vagy a többi üzleti kommunikációs eszközt használókkal, az olyan appok integrálásának köszönhetően, mint például a Slack.
+
 
 <b>Element can be self-hosted</b>
 To allow more control of your sensitive data and conversations, Element can be self-hosted or you can choose any Matrix-based host - the standard for open source, decentralized communication. Element gives you privacy, security compliance and integration flexibility.

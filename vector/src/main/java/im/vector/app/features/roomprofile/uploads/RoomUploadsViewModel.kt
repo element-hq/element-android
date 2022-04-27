@@ -25,10 +25,10 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
@@ -110,7 +110,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
             is RoomUploadsAction.Share    -> handleShare(action)
             RoomUploadsAction.Retry       -> handleLoadMore()
             RoomUploadsAction.LoadMore    -> handleLoadMore()
-        }.exhaustive
+        }
     }
 
     private fun handleShare(action: RoomUploadsAction.Share) {

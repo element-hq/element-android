@@ -30,7 +30,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.resetBackstack
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
@@ -42,7 +41,6 @@ import im.vector.app.features.login.LoginWaitForEmailFragmentArgument
 import im.vector.app.features.login.TextInputFormFragmentMode
 import im.vector.app.features.login.isSupported
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
-import im.vector.app.features.login.terms.toLocalizedLoginTerms
 import im.vector.app.features.login2.LoginAction2
 import im.vector.app.features.login2.LoginCaptchaFragment2
 import im.vector.app.features.login2.LoginFragmentSigninPassword2
@@ -67,6 +65,7 @@ import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.terms.LoginTermsFragment2
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
+import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
 
 private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
@@ -257,7 +256,7 @@ class Login2Variant(
             is LoginViewEvents2.OnSessionCreated                           -> handleOnSessionCreated(event)
             is LoginViewEvents2.Finish                                     -> terminate(true)
             is LoginViewEvents2.CancelRegistration                         -> handleCancelRegistration()
-        }.exhaustive
+        }
     }
 
     private fun handleCancelRegistration() {

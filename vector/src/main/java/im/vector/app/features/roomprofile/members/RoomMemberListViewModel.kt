@@ -23,7 +23,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
@@ -34,12 +33,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -70,6 +70,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         observeThirdPartyInvites()
         observeRoomSummary()
         observePowerLevel()
+        observeIgnoredUsers()
     }
 
     private fun observeRoomMemberSummaries() {
@@ -149,6 +150,16 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                 }
     }
 
+    private fun observeIgnoredUsers() {
+        session.flow()
+                .liveIgnoredUsers()
+                .execute { async ->
+                    copy(
+                            ignoredUserIds = async.invoke().orEmpty().map { it.userId }
+                    )
+                }
+    }
+
     private fun buildRoomMemberSummaries(powerLevelsContent: PowerLevelsContent, roomMembers: List<RoomMemberSummary>): RoomMemberSummaries {
         val admins = ArrayList<RoomMemberSummary>()
         val moderators = ArrayList<RoomMemberSummary>()
@@ -181,7 +192,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         when (action) {
             is RoomMemberListAction.RevokeThreePidInvite -> handleRevokeThreePidInvite(action)
             is RoomMemberListAction.FilterMemberList     -> handleFilterMemberList(action)
-        }.exhaustive
+        }
     }
 
     private fun handleRevokeThreePidInvite(action: RoomMemberListAction.RevokeThreePidInvite) {

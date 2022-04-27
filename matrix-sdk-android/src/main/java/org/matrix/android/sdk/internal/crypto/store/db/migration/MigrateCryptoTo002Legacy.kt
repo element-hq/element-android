@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntit
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-class MigrateCryptoTo002Legacy(realm: DynamicRealm) : RealmMigrator(realm, 2) {
+internal class MigrateCryptoTo002Legacy(realm: DynamicRealm) : RealmMigrator(realm, 2) {
 
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Update IncomingRoomKeyRequestEntity format: requestBodyString field is exploded into several fields")
