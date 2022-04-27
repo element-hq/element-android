@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.tasks
 
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.session.uia.UiaResult
 import org.matrix.android.sdk.internal.auth.registration.handleUIA
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.crypto.model.rest.DeleteDeviceParams
@@ -47,13 +48,13 @@ internal class DefaultDeleteDeviceTask @Inject constructor(
             }
         } catch (throwable: Throwable) {
             if (params.userInteractiveAuthInterceptor == null ||
-                    !handleUIA(
+                    handleUIA(
                             failure = throwable,
                             interceptor = params.userInteractiveAuthInterceptor,
                             retryBlock = { authUpdate ->
                                 execute(params.copy(userAuthParam = authUpdate))
                             }
-                    )
+                    ) != UiaResult.SUCCESS
             ) {
                 Timber.d("## UIA: propagate failure")
                 throw throwable
