@@ -68,15 +68,6 @@ class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragm
         views.loginWaitForEmailNotice.text = getString(R.string.login_wait_for_email_notice, params.email)
     }
 
-    override fun onError(throwable: Throwable) {
-        if (throwable.is401()) {
-            // Try again, with a delay
-            viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.CheckIfEmailHasBeenValidated(10_000)))
-        } else {
-            super.onError(throwable)
-        }
-    }
-
     override fun resetViewModel() {
         viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
