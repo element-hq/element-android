@@ -192,12 +192,7 @@ class FtueAuthVariant(
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
             is OnboardingViewEvents.OnSendEmailSuccess                         -> {
-                // Pop the enter email Fragment
-                supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                addRegistrationStageFragmentToBackstack(
-                        FtueAuthWaitForEmailFragment::class.java,
-                        FtueAuthWaitForEmailFragmentArgument(viewEvents.email),
-                )
+                openWaitForEmailVerification(viewEvents.email)
             }
             is OnboardingViewEvents.OnSendMsisdnSuccess                        -> {
                 // Pop the enter Msisdn Fragment
@@ -411,6 +406,20 @@ class FtueAuthVariant(
             else                                                 -> addRegistrationStageFragmentToBackstack(
                     FtueAuthGenericTextInputFormFragment::class.java,
                     FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
+            )
+        }
+    }
+
+    private fun openWaitForEmailVerification(email: String) {
+        supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        when {
+            vectorFeatures.isOnboardingCombinedRegisterEnabled() -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthWaitForEmailFragment::class.java,
+                    FtueAuthWaitForEmailFragmentArgument(email),
+            )
+            else                                                 -> addRegistrationStageFragmentToBackstack(
+                    FtueAuthLegacyWaitForEmailFragment::class.java,
+                    FtueAuthWaitForEmailFragmentArgument(email),
             )
         }
     }
