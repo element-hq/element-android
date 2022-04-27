@@ -136,7 +136,7 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     private fun shareLocation(locationData: LocationData?, isUserLocation: Boolean) {
         locationData?.let { location ->
-            room.sendLocation(
+            room.sendService().sendLocation(
                     latitude = location.latitude,
                     longitude = location.longitude,
                     uncertainty = location.uncertainty,

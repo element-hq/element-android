@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -499,7 +500,7 @@ class SpaceHierarchyTest : InstrumentedTest {
         ))
 
         commonTestHelper.runBlockingTest {
-            aliceSession.getRoom(spaceAInfo.spaceId)!!.invite(bobSession.myUserId, null)
+            aliceSession.getRoom(spaceAInfo.spaceId)!!.membershipService().invite(bobSession.myUserId, null)
         }
 
         commonTestHelper.runBlockingTest {
@@ -509,7 +510,7 @@ class SpaceHierarchyTest : InstrumentedTest {
         var bobRoomId = ""
         commonTestHelper.waitWithLatch {
             bobRoomId = bobSession.roomService().createRoom(CreateRoomParams().apply { name = "A Bob Room" })
-            bobSession.getRoom(bobRoomId)!!.invite(aliceSession.myUserId)
+            bobSession.getRoom(bobRoomId)!!.membershipService().invite(aliceSession.myUserId)
             it.countDown()
         }
 
@@ -554,7 +555,7 @@ class SpaceHierarchyTest : InstrumentedTest {
                     ?.setUserPowerLevel(aliceSession.myUserId, Role.Admin.value)
                     ?.toContent()
 
-            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent!!)
+            room.stateService().sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent!!)
             it.countDown()
         }
 

@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -258,7 +259,7 @@ internal class DefaultSpaceService @Inject constructor(
         val room = roomGetter.getRoom(childRoomId)
                 ?: throw IllegalArgumentException("Unknown Room $childRoomId")
 
-        room.sendStateEvent(
+        room.stateService().sendStateEvent(
                 eventType = EventType.STATE_SPACE_PARENT,
                 stateKey = parentSpaceId,
                 body = SpaceParentContent(
@@ -276,7 +277,7 @@ internal class DefaultSpaceService @Inject constructor(
         if (existingEvent != null) {
             // Should i check if it was sent by me?
             // we don't check power level, it will throw if you cannot do that
-            room.sendStateEvent(
+            room.stateService().sendStateEvent(
                     eventType = EventType.STATE_SPACE_PARENT,
                     stateKey = parentSpaceId,
                     body = SpaceParentContent(

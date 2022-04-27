@@ -51,6 +51,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxStat
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -84,7 +85,7 @@ class KeyShareTests : InstrumentedTest {
         val room = aliceSession.getRoom(roomId)
         assertNotNull(room)
         Thread.sleep(4_000)
-        assertTrue(room?.isEncrypted() == true)
+        assertTrue(room?.roomCryptoService()?.isEncrypted() == true)
         val sentEventId = commonTestHelper.sendTextMessage(room!!, "My Message", 1).first().eventId
 
         // Open a new sessionx
@@ -351,7 +352,7 @@ class KeyShareTests : InstrumentedTest {
         val roomAlicePov = aliceSession.getRoom(roomId)
         assertNotNull(roomAlicePov)
         Thread.sleep(1_000)
-        assertTrue(roomAlicePov?.isEncrypted() == true)
+        assertTrue(roomAlicePov?.roomCryptoService()?.isEncrypted() == true)
         val secondEventId = commonTestHelper.sendTextMessage(roomAlicePov!!, "Message", 3)[1].eventId
 
         // Create bob session
@@ -375,7 +376,7 @@ class KeyShareTests : InstrumentedTest {
 
         // Let alice invite bob
         commonTestHelper.runBlockingTest {
-            roomAlicePov.invite(bobSession.myUserId, null)
+            roomAlicePov.membershipService().invite(bobSession.myUserId, null)
         }
 
         commonTestHelper.runBlockingTest {
