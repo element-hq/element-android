@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,33 +17,25 @@
 package im.vector.app.features.onboarding.ftueauth
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.args
 import im.vector.app.R
-import im.vector.app.databinding.FragmentFtueWaitForEmailVerificationBinding
 import im.vector.app.databinding.FragmentLoginWaitForEmailBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
-import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
-
-@Parcelize
-data class FtueAuthWaitForEmailFragmentArgument(
-        val email: String
-) : Parcelable
 
 /**
  * In this screen, the user is asked to check his emails
  */
-class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueWaitForEmailVerificationBinding>() {
+class FtueAuthLegacyWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginWaitForEmailBinding>() {
 
     private val params: FtueAuthWaitForEmailFragmentArgument by args()
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueWaitForEmailVerificationBinding {
-        return FragmentFtueWaitForEmailVerificationBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWaitForEmailBinding {
+        return FragmentLoginWaitForEmailBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,7 +54,7 @@ class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragm
     }
 
     private fun setupUi() {
-        views.accountCreatedSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
+        views.loginWaitForEmailNotice.text = getString(R.string.login_wait_for_email_notice, params.email)
     }
 
     override fun resetViewModel() {
