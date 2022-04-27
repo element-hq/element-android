@@ -145,12 +145,13 @@ class DecryptionFailureTracker @Inject constructor(
 
     private fun MXCryptoError.ErrorType.toAnalyticsErrorName(): DetailedErrorName {
         val detailed = "$name | mxc_crypto_error_type"
-        return when (this) {
+        val errorName = when (this) {
             MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID,
-            MXCryptoError.ErrorType.KEYS_WITHHELD         -> Pair(detailed, Error.Name.OlmKeysNotSentError)
-            MXCryptoError.ErrorType.OLM                   -> Pair(detailed, Error.Name.OlmUnspecifiedError)
-            MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX -> Pair(detailed, Error.Name.OlmIndexError)
-            else                                          -> Pair(detailed, Error.Name.UnknownError)
+            MXCryptoError.ErrorType.KEYS_WITHHELD         -> Error.Name.OlmKeysNotSentError
+            MXCryptoError.ErrorType.OLM                   -> Error.Name.OlmUnspecifiedError
+            MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX -> Error.Name.OlmIndexError
+            else                                          -> Error.Name.UnknownError
         }
+        return DetailedErrorName(detailed, errorName)
     }
 }
