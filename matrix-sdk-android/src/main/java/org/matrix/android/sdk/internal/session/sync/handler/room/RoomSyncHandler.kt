@@ -423,7 +423,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     roomId = roomId,
                     eventEntity = eventEntity,
                     direction = PaginationDirection.FORWARDS,
-                    roomMemberContentsByUser = roomMemberContentsByUser)
+                    roomMemberContentsByUser = roomMemberContentsByUser
+            )
             if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
                 eventEntity.rootThreadEventId?.let {
                     // This is a thread event
@@ -439,7 +440,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                 threadEventEntity = eventEntity,
                                 roomMemberContentsByUser = roomMemberContentsByUser,
                                 userId = userId,
-                                roomEntity = roomEntity)
+                                roomEntity = roomEntity
+                        )
                     }
                 } ?: run {
                     // This is a normal event or a root thread one
@@ -477,7 +479,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     roomId = roomId,
                     realm = realm,
                     chunkEntity = chunkEntity,
-                    currentUserId = userId)
+                    currentUserId = userId
+            )
         }
 
         // posting new events to timeline if any is registered
@@ -507,11 +510,11 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
     }
 
-    // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
-    private fun decryptIfNeeded(event: Event, roomId: String) = runBlocking {
+    private fun decryptIfNeeded(event: Event, roomId: String) {
         try {
             // Event from sync does not have roomId, so add it to the event first
-            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
+            // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
+            val result = runBlocking { cryptoService.decryptEvent(event.copy(roomId = roomId), "") }
             event.mxDecryptionResult = OlmDecryptionResult(
                     payload = result.clearEvent,
                     senderKey = result.senderCurve25519Key,

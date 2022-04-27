@@ -213,15 +213,15 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
     }
 }
 
-// note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
-private fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEntity, roomId: String) = runBlocking {
-    cryptoService ?: return@runBlocking
+private fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEntity, roomId: String) {
+    cryptoService ?: return
     val event = eventEntity.asDomain()
     if (event.isEncrypted() && event.mxDecryptionResult == null && event.eventId != null) {
         try {
             Timber.i("###THREADS ThreadSummaryHelper request decryption for eventId:${event.eventId}")
             // Event from sync does not have roomId, so add it to the event first
-            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
+            // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
+            val result = runBlocking { cryptoService.decryptEvent(event.copy(roomId = roomId), "") }
             event.mxDecryptionResult = OlmDecryptionResult(
                     payload = result.clearEvent,
                     senderKey = result.senderCurve25519Key,
