@@ -27,6 +27,8 @@ import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult as SdkResult
 
+private const val IGNORED_DELAY = 0L
+private val AN_ERROR = RuntimeException()
 private val A_SESSION = FakeSession()
 private val AN_EXPECTED_RESULT = RegistrationResult.Complete(A_SESSION)
 private const val A_USERNAME = "a username"
@@ -38,6 +40,9 @@ private const val EMAIL_VALIDATED_DELAY = 10000L
 private val A_PID_TO_REGISTER = RegisterThreePid.Email("an email")
 
 class RegistrationActionHandlerTest {
+
+    private val fakeRegistrationWizard = FakeRegistrationWizard()
+    private val registrationActionHandler = RegistrationActionHandler()
 
     @Test
     fun `when handling register action then delegates to wizard`() = runTest {
@@ -60,8 +65,6 @@ class RegistrationActionHandlerTest {
 
     @Test
     fun `given adding an email ThreePid fails with 401, when handling register action, then infer EmailSuccess`() = runTest {
-        val registrationActionHandler = RegistrationActionHandler()
-        val fakeRegistrationWizard = FakeRegistrationWizard()
         fakeRegistrationWizard.givenAddEmailThreePidErrors(
                 cause = a401ServerError(),
                 email = A_PID_TO_REGISTER.email
@@ -72,9 +75,40 @@ class RegistrationActionHandlerTest {
         result shouldBeEqualTo RegistrationResult.SendEmailSuccess(A_PID_TO_REGISTER.email)
     }
 
+    @Test
+    fun `given email verification errors with 401 then fatal error, when checking email validation, then continues to poll until non 401 error`() = runTest {
+        val errorsToThrow = listOf(
+                a401ServerError(),
+                a401ServerError(),
+                a401ServerError(),
+                AN_ERROR
+        )
+        fakeRegistrationWizard.givenCheckIfEmailHasBeenValidatedErrors(errorsToThrow)
+
+        val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, RegisterAction.CheckIfEmailHasBeenValidated(IGNORED_DELAY))
+
+        fakeRegistrationWizard.verifyCheckedEmailedVerification(times = errorsToThrow.size)
+        result shouldBeEqualTo RegistrationResult.Error(AN_ERROR)
+    }
+
+    @Test
+    fun `given email verification errors with 401 and succeeds, when checking email validation, then continues to poll until success`() = runTest {
+        val errorsToThrow = listOf(
+                a401ServerError(),
+                a401ServerError(),
+                a401ServerError()
+        )
+        fakeRegistrationWizard.givenCheckIfEmailHasBeenValidatedErrors(errorsToThrow, finally = SdkResult.Success(A_SESSION))
+
+        val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, RegisterAction.CheckIfEmailHasBeenValidated(IGNORED_DELAY))
+
+        fakeRegistrationWizard.verifyCheckedEmailedVerification(times = errorsToThrow.size + 1)
+        result shouldBeEqualTo RegistrationResult.Complete(A_SESSION)
+    }
+
     private suspend fun testSuccessfulActionDelegation(case: Case) {
-        val registrationActionHandler = RegistrationActionHandler()
         val fakeRegistrationWizard = FakeRegistrationWizard()
+        val registrationActionHandler = RegistrationActionHandler()
         fakeRegistrationWizard.givenSuccessFor(result = A_SESSION, case.expect)
 
         val result = registrationActionHandler.handleRegisterAction(fakeRegistrationWizard, case.action)
