@@ -37,7 +37,7 @@ class RegistrationActionHandler @Inject constructor() {
             is RegisterAction.AddThreePid                  -> handleAddThreePid(registrationWizard, action)
             is RegisterAction.SendAgainThreePid            -> resultOf { registrationWizard.sendAgainThreePid() }
             is RegisterAction.ValidateThreePid             -> resultOf { registrationWizard.handleValidateThreePid(action.code) }
-            is RegisterAction.CheckIfEmailHasBeenValidated -> resultOf { registrationWizard.checkIfEmailHasBeenValidated(action.delayMillis) }
+            is RegisterAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailIsValidated(registrationWizard, action.delayMillis)
             is RegisterAction.CreateAccount                -> resultOf {
                 registrationWizard.createAccount(
                         action.username,
@@ -50,12 +50,7 @@ class RegistrationActionHandler @Inject constructor() {
 
     private suspend fun handleAddThreePid(wizard: RegistrationWizard, action: RegisterAction.AddThreePid): RegistrationResult {
         return runCatching { wizard.addThreePid(action.threePid) }.fold(
-                onSuccess = {
-                    when (it) {
-                        is Success      -> RegistrationResult.Complete(it.session)
-                        is FlowResponse -> RegistrationResult.NextStep(it.flowResult)
-                    }
-                },
+                onSuccess = { it.toRegistrationResult() },
                 onFailure = {
                     when {
                         action.threePid is RegisterThreePid.Email && it.is401() -> RegistrationResult.SendEmailSuccess(action.threePid.email)
@@ -64,18 +59,30 @@ class RegistrationActionHandler @Inject constructor() {
                 }
         )
     }
+
+    private tailrec suspend fun handleCheckIfEmailIsValidated(registrationWizard: RegistrationWizard, delayMillis: Long): RegistrationResult {
+        return runCatching { registrationWizard.checkIfEmailHasBeenValidated(delayMillis) }.fold(
+                onSuccess = { it.toRegistrationResult() },
+                onFailure = {
+                    when {
+                        it.is401() -> null // recursively continue to check with a delay
+                        else       -> RegistrationResult.Error(it)
+                    }
+                }
+        ) ?: handleCheckIfEmailIsValidated(registrationWizard, 10_000)
+    }
 }
 
 private inline fun resultOf(block: () -> SdkRegistrationResult): RegistrationResult {
     return runCatching { block() }.fold(
-            onSuccess = {
-                when (it) {
-                    is FlowResponse -> RegistrationResult.NextStep(it.flowResult)
-                    is Success      -> RegistrationResult.Complete(it.session)
-                }
-            },
+            onSuccess = { it.toRegistrationResult() },
             onFailure = { RegistrationResult.Error(it) }
     )
+}
+
+private fun SdkRegistrationResult.toRegistrationResult() = when (this) {
+    is FlowResponse -> RegistrationResult.NextStep(flowResult)
+    is Success      -> RegistrationResult.Complete(session)
 }
 
 sealed interface RegistrationResult {
