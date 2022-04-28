@@ -74,6 +74,6 @@ class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
     }
 
     override fun resetViewModel() {
-        // Nothing to do
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
 }
