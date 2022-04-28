@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,21 @@ import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEnt
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntityFields
 
-internal fun LiveLocationAggregatedSummaryEntity.Companion.where(realm: Realm, roomId: String, eventId: String): RealmQuery<LiveLocationAggregatedSummaryEntity> {
+internal fun LiveLocationAggregatedSummaryEntity.Companion.where(
+        realm: Realm,
+        roomId: String,
+        eventId: String,
+): RealmQuery<LiveLocationAggregatedSummaryEntity> {
     return realm.where<LiveLocationAggregatedSummaryEntity>()
             .equalTo(LiveLocationAggregatedSummaryEntityFields.ROOM_ID, roomId)
             .equalTo(LiveLocationAggregatedSummaryEntityFields.EVENT_ID, eventId)
 }
 
-internal fun LiveLocationAggregatedSummaryEntity.Companion.create(realm: Realm, roomId: String, eventId: String): LiveLocationAggregatedSummaryEntity {
+internal fun LiveLocationAggregatedSummaryEntity.Companion.create(
+        realm: Realm,
+        roomId: String,
+        eventId: String,
+): LiveLocationAggregatedSummaryEntity {
     val obj = realm.createObject(LiveLocationAggregatedSummaryEntity::class.java).apply {
         this.eventId = eventId
         this.roomId = roomId
@@ -40,7 +48,11 @@ internal fun LiveLocationAggregatedSummaryEntity.Companion.create(realm: Realm, 
     return obj
 }
 
-internal fun LiveLocationAggregatedSummaryEntity.Companion.getOrCreate(realm: Realm, roomId: String, eventId: String): LiveLocationAggregatedSummaryEntity {
+internal fun LiveLocationAggregatedSummaryEntity.Companion.getOrCreate(
+        realm: Realm,
+        roomId: String,
+        eventId: String,
+): LiveLocationAggregatedSummaryEntity {
     return LiveLocationAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
             ?: LiveLocationAggregatedSummaryEntity.create(realm, roomId, eventId)
 }
