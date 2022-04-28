@@ -24,18 +24,15 @@ import androidx.lifecycle.lifecycleScope
 import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
-import im.vector.app.core.extensions.hasContent
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.setOnImeDone
 import im.vector.app.databinding.FragmentFtueEmailInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
-import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.RegisterAction
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
-import org.matrix.android.sdk.api.failure.is401
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
@@ -78,10 +75,5 @@ class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
 
     override fun resetViewModel() {
         // Nothing to do
-    }
-
-    override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome))
-        return true
     }
 }

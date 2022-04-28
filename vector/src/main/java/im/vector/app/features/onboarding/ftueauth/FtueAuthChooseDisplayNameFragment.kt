@@ -22,7 +22,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.core.extensions.hasContent
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.databinding.FragmentFtueDisplayNameBinding
