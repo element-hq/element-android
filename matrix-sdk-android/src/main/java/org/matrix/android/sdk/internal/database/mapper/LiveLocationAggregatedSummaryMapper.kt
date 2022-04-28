@@ -24,7 +24,6 @@ import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationA
 
 internal object LiveLocationAggregatedSummaryMapper {
 
-    // TODO add unit tests
     fun map(entity: LiveLocationAggregatedSummaryEntity): LiveLocationAggregatedSummary {
         return LiveLocationAggregatedSummary(
                 eventId = entity.eventId,

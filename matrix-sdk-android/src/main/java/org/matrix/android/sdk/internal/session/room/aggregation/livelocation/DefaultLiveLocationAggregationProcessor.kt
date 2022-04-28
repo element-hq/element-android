@@ -31,7 +31,6 @@ import javax.inject.Inject
 
 internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : LiveLocationAggregationProcessor {
 
-    // TODO add unit tests
     override fun handleBeaconInfo(realm: Realm, event: Event, content: LiveLocationBeaconContent, roomId: String, isLocalEcho: Boolean) {
         if (event.senderId.isNullOrEmpty() || isLocalEcho) {
             return
