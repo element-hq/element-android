@@ -57,12 +57,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/ftue_auth_email_verification_title"
         android:transitionName="loginTitleTransition"
         app:layout_constraintBottom_toTopOf="@id/emailVerificationSubtitle"
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/emailVerificationSpace2" />
+        app:layout_constraintTop_toBottomOf="@id/emailVerificationSpace2"
+        tools:text="@string/ftue_auth_email_verification_title" />
 
     <TextView
         android:id="@+id/emailVerificationSubtitle"
