@@ -293,7 +293,10 @@ class MessageComposerViewModel @AssistedInject constructor(
                                         msgType = MessageType.MSGTYPE_EMOTE,
                                         autoMarkdown = action.autoMarkdown)
                             } else {
-                                room.sendService().sendTextMessage(parsedCommand.message, msgType = MessageType.MSGTYPE_EMOTE, autoMarkdown = action.autoMarkdown)
+                                room.sendService().sendTextMessage(
+                                        text = parsedCommand.message,
+                                        msgType = MessageType.MSGTYPE_EMOTE,
+                                        autoMarkdown = action.autoMarkdown)
                             }
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                             popDraft()
