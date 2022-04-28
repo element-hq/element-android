@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.list
 
+import im.vector.app.features.home.RoomListDisplayMode
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class RoomSummaryListController(
@@ -26,7 +27,7 @@ class RoomSummaryListController(
 
     override fun buildModels(data: List<RoomSummary>?) {
         data?.forEach {
-            add(roomSummaryItemFactory.create(it, emptyMap(), emptySet(), listener))
+            add(roomSummaryItemFactory.create(it, emptyMap(), emptySet(), RoomListDisplayMode.ROOMS /* TODO: change */, listener))
         }
     }
 }

@@ -36,6 +36,7 @@ import im.vector.app.core.ui.views.PresenceStateImageView
 import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
@@ -53,6 +54,12 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     @EpoxyAttribute
     lateinit var matrixItem: MatrixItem
+
+    @EpoxyAttribute
+    var displayMode: RoomListDisplayMode = RoomListDisplayMode.PEOPLE
+
+    @EpoxyAttribute
+    var spaceName: String? = null
 
     @EpoxyAttribute
     lateinit var lastFormattedEvent: EpoxyCharSequence
@@ -105,7 +112,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         }
         holder.titleView.text = matrixItem.getBestName()
         holder.lastEventTimeView.text = lastEventTime
-        holder.lastEventView.text = lastFormattedEvent.charSequence
+        holder.lastEventView.text = getTextForLastEventView()
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
@@ -117,6 +124,14 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.typingView.setTextOrHide(typingMessage)
         holder.lastEventView.isInvisible = holder.typingView.isVisible
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
+    }
+
+    private fun getTextForLastEventView(): CharSequence {
+        return if (displayMode == RoomListDisplayMode.FILTERED) {
+            spaceName.orEmpty() // TODO: handle other cases
+        } else {
+            lastFormattedEvent.charSequence
+        }
     }
 
     override fun unbind(holder: Holder) {

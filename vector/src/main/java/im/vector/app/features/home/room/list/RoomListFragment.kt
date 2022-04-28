@@ -287,7 +287,7 @@ class RoomListFragment @Inject constructor(
             val contentAdapter =
                     when {
                         section.livePages != null     -> {
-                            pagedControllerFactory.createRoomSummaryPagedController()
+                            pagedControllerFactory.createRoomSummaryPagedController(roomListParams.displayMode)
                                     .also { controller ->
                                         section.livePages.observe(viewLifecycleOwner) { pl ->
                                             controller.submitList(pl)

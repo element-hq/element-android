@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -349,39 +350,34 @@ internal class RoomSummaryUpdater @Inject constructor(
             }
 
             val acyclicGraph = graph.withoutEdges(backEdges)
-//            Timber.v("## SPACES: acyclicGraph $acyclicGraph")
             val flattenSpaceParents = acyclicGraph.flattenDestination().map {
                 it.key.name to it.value.map { it.name }
             }.toMap()
-//            Timber.v("## SPACES: flattenSpaceParents ${flattenSpaceParents.map { it.key.name to it.value.map { it.name } }.joinToString("\n") {
-//                it.first + ": [" + it.second.joinToString(",") + "]"
-//            }}")
-
-//            Timber.v("## SPACES: lookup map ${lookupMap.map { it.key.name to it.value.map { it.name } }.toMap()}")
 
             lookupMap.entries
                     .filter { it.key.roomType == RoomType.SPACE && it.key.membership == Membership.JOIN }
                     .forEach { entry ->
                         val parent = RoomSummaryEntity.where(realm, entry.key.roomId).findFirst()
                         if (parent != null) {
-//                            Timber.v("## SPACES: check hierarchy of ${parent.name} id ${parent.roomId}")
-//                            Timber.v("## SPACES: flat known parents of ${parent.name} are ${flattenSpaceParents[parent.roomId]}")
                             val flattenParentsIds = (flattenSpaceParents[parent.roomId] ?: emptyList()) + listOf(parent.roomId)
-//                            Timber.v("## SPACES: flatten known parents of children of ${parent.name} are ${flattenParentsIds}")
                             entry.value.forEach { child ->
                                 RoomSummaryEntity.where(realm, child.roomId).findFirst()?.let { childSum ->
-
-//                                    Timber.w("## SPACES: ${childSum.name} is ${childSum.roomId} fc: ${childSum.flattenParentIds}")
-//                                    var allParents = childSum.flattenParentIds ?: ""
+                                    // TODO: Revisit
+                                    childSum.parents.add(SpaceParentSummaryEntity(
+                                            true,
+                                            parent.roomId,
+                                            parent,
+                                            RealmList()
+                                    ))
                                     if (childSum.flattenParentIds == null) childSum.flattenParentIds = ""
                                     flattenParentsIds.forEach {
                                         if (childSum.flattenParentIds?.contains(it) != true) {
-                                            childSum.flattenParentIds += "|$it"
+                                            if (childSum.flattenParentIds?.isEmpty() == false) {
+                                                childSum.flattenParentIds += "|"
+                                            }
+                                            childSum.flattenParentIds += it
                                         }
                                     }
-//                                    childSum.flattenParentIds = "$allParents|"
-
-//                                    Timber.v("## SPACES: flatten of ${childSum.name} is ${childSum.flattenParentIds}")
                                 }
                             }
                         }
@@ -411,7 +407,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                             // we keep real m.child/m.parent relations and add the one for common memberships
                             dmRoom.flattenParentIds += "|${flattenRelated.joinToString("|")}|"
                         }
-//                        Timber.v("## SPACES: flatten of ${dmRoom.otherMemberIds.joinToString(",")} is ${dmRoom.flattenParentIds}")
                     }
 
             // Maybe a good place to count the number of notifications for spaces?

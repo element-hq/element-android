@@ -213,7 +213,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/roomNameView"
         app:layout_constraintTop_toBottomOf="@id/roomNameView"
-        tools:text="Alice is typing…" />
+        tools:text="Alice is typing…"
+        tools:visibility="gone" />
 
     <!-- Margin bottom does not work, so I use space -->
     <Space

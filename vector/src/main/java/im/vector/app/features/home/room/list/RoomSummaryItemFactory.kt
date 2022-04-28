@@ -26,6 +26,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
@@ -46,13 +47,14 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     fun create(roomSummary: RoomSummary,
                roomChangeMembershipStates: Map<String, ChangeMembershipState>,
                selectedRoomIds: Set<String>,
+               displayMode: RoomListDisplayMode,
                listener: RoomListListener?): VectorEpoxyModel<*> {
         return when (roomSummary.membership) {
             Membership.INVITE -> {
                 val changeMembershipState = roomChangeMembershipStates[roomSummary.roomId] ?: ChangeMembershipState.Unknown
                 createInvitationItem(roomSummary, changeMembershipState, listener)
             }
-            else              -> createRoomItem(roomSummary, selectedRoomIds, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
+            else              -> createRoomItem(roomSummary, selectedRoomIds, displayMode, listener?.let { it::onRoomClicked }, listener?.let { it::onRoomLongClicked })
         }
     }
 
@@ -105,6 +107,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
     fun createRoomItem(
             roomSummary: RoomSummary,
             selectedRoomIds: Set<String>,
+            displayMode: RoomListDisplayMode,
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
     ): VectorEpoxyModel<*> {
@@ -124,6 +127,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .avatarRenderer(avatarRenderer)
                 // We do not display shield in the room list anymore
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+                .displayMode(displayMode)
+                .spaceName(roomSummary.spaceParents?.firstOrNull()?.roomSummary?.name.orEmpty())
                 .isPublic(roomSummary.isPublic)
                 .showPresence(roomSummary.isDirect)
                 .userPresence(roomSummary.directUserPresence)
