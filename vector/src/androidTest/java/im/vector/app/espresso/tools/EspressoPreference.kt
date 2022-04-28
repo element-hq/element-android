@@ -26,18 +26,26 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.PreferenceMatchers.withKey
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isFocusable
 import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import im.vector.app.R
+import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.instanceOf
-import org.hamcrest.Matchers.`is`
 
 fun clickOnPreference(@StringRes textResId: Int) {
     onView(withId(R.id.recycler_view))
-            .perform(actionOnItem<RecyclerView.ViewHolder>(
-                    hasDescendant(withText(textResId)), click()))
+            .perform(
+                    actionOnItem<RecyclerView.ViewHolder>(
+                            allOf(
+                                    hasDescendant(withText(textResId)),
+                                    // Avoid to click on the Preference Category
+                                    isFocusable()
+                            ), click()
+                    )
+            )
 }
 
 fun clickOnSwitchPreference(preferenceKey: String) {
