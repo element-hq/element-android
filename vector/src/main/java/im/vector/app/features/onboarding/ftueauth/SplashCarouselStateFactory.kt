@@ -18,7 +18,6 @@ package im.vector.app.features.onboarding.ftueauth
 
 import android.content.Context
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import im.vector.app.R
 import im.vector.app.core.resources.LocaleProvider
@@ -29,7 +28,6 @@ import im.vector.app.features.themes.ThemeProvider
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
-import me.gujun.android.span.span
 import javax.inject.Inject
 
 class SplashCarouselStateFactory @Inject constructor(
@@ -41,7 +39,7 @@ class SplashCarouselStateFactory @Inject constructor(
 
     fun create(): SplashCarouselState {
         val lightTheme = themeProvider.isLightTheme()
-        fun background(@DrawableRes lightDrawable: Int) = if (lightTheme) lightDrawable else R.drawable.bg_carousel_page_dark
+        fun background(@DrawableRes lightDrawable: Int) = if (lightTheme) lightDrawable else R.drawable.bg_color_background
         fun hero(@DrawableRes lightDrawable: Int, @DrawableRes darkDrawable: Int) = if (lightTheme) lightDrawable else darkDrawable
         return SplashCarouselState(
                 listOf(
