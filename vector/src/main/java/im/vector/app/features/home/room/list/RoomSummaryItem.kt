@@ -123,7 +123,6 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         renderSelection(holder, showSelected)
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
         showTypingViewIfNecessary(holder)
-
     }
 
     private fun showTypingViewIfNecessary(holder: Holder) {
