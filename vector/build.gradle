@@ -399,6 +399,7 @@ dependencies {
     implementation 'me.gujun.android:span:1.7'
     implementation libs.markwon.core
     implementation libs.markwon.extLatex
+    implementation libs.markwon.imageGlide
     implementation libs.markwon.inlineParser
     implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'

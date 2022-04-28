@@ -18,8 +18,13 @@ package im.vector.app.features.html
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.text.Spannable
 import androidx.core.text.toSpannable
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.request.target.Target
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
@@ -30,6 +35,8 @@ import io.noties.markwon.PrecomputedFutureTextSetterCompat
 import io.noties.markwon.ext.latex.JLatexMathPlugin
 import io.noties.markwon.ext.latex.JLatexMathTheme
 import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.image.AsyncDrawable
+import io.noties.markwon.image.glide.GlideImagesPlugin
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin
 import org.commonmark.node.Node
 import timber.log.Timber
@@ -40,7 +47,8 @@ import javax.inject.Singleton
 class EventHtmlRenderer @Inject constructor(
         htmlConfigure: MatrixHtmlPluginConfigure,
         context: Context,
-        vectorPreferences: VectorPreferences
+        vectorPreferences: VectorPreferences,
+        private val activeSessionHolder: ActiveSessionHolder
 ) {
 
     interface PostProcessor {
@@ -48,7 +56,25 @@ class EventHtmlRenderer @Inject constructor(
     }
 
     private val builder = Markwon.builder(context)
-            .usePlugin(HtmlPlugin.create(htmlConfigure))
+            .usePlugins(listOf(
+                    HtmlPlugin.create(htmlConfigure),
+                    GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
+                        override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {
+                            val url = drawable.destination
+                            if (url.startsWith("mxc://")) {
+                                val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
+                                val imageUrl = contentUrlResolver.resolveFullSize(url)
+                                return Glide.with(context).load(imageUrl)
+                            }
+                            // We don't want to support other url schemes here, so just return a request for null
+                            return Glide.with(context).load(null as String?)
+                        }
+
+                        override fun cancel(target: Target<*>) {
+                            Glide.with(context).clear(target)
+                        }
+                    })
+            ))
 
     private val markwon = if (vectorPreferences.latexMathsIsEnabled()) {
         builder
