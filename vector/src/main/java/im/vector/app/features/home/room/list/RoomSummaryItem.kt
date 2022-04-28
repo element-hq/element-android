@@ -121,9 +121,16 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.roomAvatarPublicDecorationImageView.isVisible = isPublic
         holder.roomAvatarFailSendingImageView.isVisible = hasFailedSending
         renderSelection(holder, showSelected)
-        holder.typingView.setTextOrHide(typingMessage)
-        holder.subtitleView.isInvisible = holder.typingView.isVisible
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
+        showTypingViewIfNecessary(holder)
+
+    }
+
+    private fun showTypingViewIfNecessary(holder: Holder) {
+        if (displayMode != RoomListDisplayMode.FILTERED) {
+            holder.typingView.setTextOrHide(typingMessage)
+            holder.subtitleView.isInvisible = holder.typingView.isVisible
+        }
     }
 
     private fun getTextForLastEventView(): CharSequence {
