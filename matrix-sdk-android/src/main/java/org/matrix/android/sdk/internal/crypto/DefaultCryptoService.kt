@@ -1349,13 +1349,14 @@ internal class DefaultCryptoService @Inject constructor(
                     val deviceId = it.key
                     sessionInfoSet?.mapNotNull { sessionInfoPair ->
                         // Get inbound session from sessionId and sessionKey
-                        cryptoStore.getInboundGroupSession(sessionInfoPair.first, sessionInfoPair.second)
-                    }?.filter { inboundGroupSession ->
-                        // Filter only sessions with sharedHistory enabled
-                        inboundGroupSession.sharedHistory
+                        cryptoStore.getInboundGroupSession(
+                                sessionId = sessionInfoPair.first,
+                                senderKey = sessionInfoPair.second,
+                                sharedHistory = true
+                        )
                     }?.forEach { inboundGroupSession ->
-                        // Share the session to userId with deviceId
-                        val exportedKeys = inboundGroupSession.exportKeys()
+                        // Share the sharable session to userId with deviceId
+                        val exportedKeys = inboundGroupSession.exportKeys(sharedHistory = true)
                         val algorithm = exportedKeys?.algorithm
                         val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, algorithm)
                         decryptor?.shareKeysWithDevice(exportedKeys, deviceId, userId)
@@ -1366,26 +1367,6 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    override fun sendSharedHistoryKeys(roomId: String, userId: String) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            val userDevices = cryptoStore.getUserDevices(userId)
-            userDevices?.forEach {
-                // Lets share our existing inbound sessions for every user device
-                val deviceId = it.key
-                val inboundSessions = cryptoStore.getInboundGroupSessions(roomId)
-                inboundSessions.filter { inboundGroupSession ->
-                    inboundGroupSession.sharedHistory
-                }.forEach { inboundGroupSession ->
-                    // Share the session to userId with deviceId
-                    val exportedKeys = inboundGroupSession.exportKeys()
-                    val algorithm = exportedKeys?.algorithm
-                    val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, algorithm)
-                    decryptor?.shareKeysWithDevice(exportedKeys, deviceId, userId)
-                    Timber.i("## CRYPTO | Sharing inbound session")
-                }
-            }
-        }
-    }
     /* ==========================================================================================
      * For test only
      * ========================================================================================== */

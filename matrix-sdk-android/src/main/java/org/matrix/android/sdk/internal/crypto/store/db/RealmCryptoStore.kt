@@ -759,7 +759,6 @@ internal class RealmCryptoStore @Inject constructor(
                     val shouldShareHistory = session.roomId?.let { roomId ->
                         CryptoRoomEntity.getById(realm, roomId)?.shouldShareHistory
                     } ?: false
-                    session.sharedHistory = shouldShareHistory
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, session.senderKey)
 
                     val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
@@ -782,6 +781,17 @@ internal class RealmCryptoStore @Inject constructor(
 
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
+                    .findFirst()
+                    ?.getInboundGroupSession()
+        }
+    }
+
+    override fun getInboundGroupSession(sessionId: String, senderKey: String, sharedHistory: Boolean): OlmInboundGroupSessionWrapper2? {
+        val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
+        return doWithRealm(realmConfiguration) {
+            it.where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.SHARED_HISTORY, sharedHistory)
                     .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
                     .findFirst()
                     ?.getInboundGroupSession()

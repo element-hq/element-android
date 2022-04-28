@@ -321,7 +321,17 @@ internal interface IMXCryptoStore {
     fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2?
 
     /**
-     * Get the current outbound group session for this encrypted room.
+     * Retrieve an inbound group session, filtering shared history.
+     *
+     * @param sessionId the session identifier.
+     * @param senderKey the base64-encoded curve25519 key of the sender.
+     * @param sharedHistory filter inbound session with respect to shared history field
+     * @return an inbound group session.
+     */
+    fun getInboundGroupSession(sessionId: String, senderKey: String, sharedHistory: Boolean): OlmInboundGroupSessionWrapper2?
+
+    /**
+     * Get the current outbound group session for this encrypted room
      */
     fun getCurrentOutboundGroupSessionForRoom(roomId: String): OutboundGroupSessionWrapper?
 
