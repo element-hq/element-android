@@ -59,7 +59,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
     var displayMode: RoomListDisplayMode = RoomListDisplayMode.PEOPLE
 
     @EpoxyAttribute
-    var spaceName: String? = null
+    lateinit var subtitle: String
 
     @EpoxyAttribute
     lateinit var lastFormattedEvent: EpoxyCharSequence
@@ -112,7 +112,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         }
         holder.titleView.text = matrixItem.getBestName()
         holder.lastEventTimeView.text = lastEventTime
-        holder.lastEventView.text = getTextForLastEventView()
+        holder.subtitleView.text = getTextForLastEventView()
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
@@ -122,13 +122,13 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.roomAvatarFailSendingImageView.isVisible = hasFailedSending
         renderSelection(holder, showSelected)
         holder.typingView.setTextOrHide(typingMessage)
-        holder.lastEventView.isInvisible = holder.typingView.isVisible
+        holder.subtitleView.isInvisible = holder.typingView.isVisible
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
     }
 
     private fun getTextForLastEventView(): CharSequence {
         return if (displayMode == RoomListDisplayMode.FILTERED) {
-            spaceName.orEmpty() // TODO: handle other cases
+            subtitle
         } else {
             lastFormattedEvent.charSequence
         }
@@ -157,7 +157,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         val titleView by bind<TextView>(R.id.roomNameView)
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomUnreadCounterBadgeView)
         val unreadIndentIndicator by bind<View>(R.id.roomUnreadIndicator)
-        val lastEventView by bind<TextView>(R.id.roomLastEventView)
+        val subtitleView by bind<TextView>(R.id.subtitleView)
         val typingView by bind<TextView>(R.id.roomTypingView)
         val draftView by bind<ImageView>(R.id.roomDraftBadge)
         val lastEventTimeView by bind<TextView>(R.id.roomLastEventTimeView)

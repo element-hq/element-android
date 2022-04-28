@@ -183,7 +183,7 @@
         tools:text="@tools:sample/date/hhmm" />
 
     <TextView
-        android:id="@+id/roomLastEventView"
+        android:id="@+id/subtitleView"
         style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
         android:layout_width="0dp"
         android:layout_height="7dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/roomLastEventView"
+        app:layout_constraintTop_toBottomOf="@id/subtitleView"
         tools:layout_marginStart="120dp" />
 
     <androidx.constraintlayout.widget.Barrier

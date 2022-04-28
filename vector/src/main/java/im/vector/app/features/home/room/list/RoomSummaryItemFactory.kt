@@ -111,6 +111,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
             onClick: ((RoomSummary) -> Unit)?,
             onLongClick: ((RoomSummary) -> Boolean)?
     ): VectorEpoxyModel<*> {
+        val subtitle = getSearchResultSubtitle(roomSummary)
         val unreadCount = roomSummary.notificationCount
         val showHighlighted = roomSummary.highlightCount > 0
         val showSelected = selectedRoomIds.contains(roomSummary.roomId)
@@ -121,6 +122,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
         }
+
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
@@ -128,7 +130,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 // We do not display shield in the room list anymore
                 // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .displayMode(displayMode)
-                .spaceName(roomSummary.spaceParents?.firstOrNull()?.roomSummary?.name.orEmpty())
+                .subtitle(subtitle)
                 .isPublic(roomSummary.isPublic)
                 .showPresence(roomSummary.isDirect)
                 .userPresence(roomSummary.directUserPresence)
@@ -146,5 +148,13 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                     onLongClick?.invoke(roomSummary) ?: false
                 }
                 .itemClickListener { onClick?.invoke(roomSummary) }
+    }
+
+    private fun getSearchResultSubtitle(roomSummary: RoomSummary): String {
+        val spaceName = roomSummary.spaceParents?.firstOrNull()?.roomSummary?.name
+        val userId = roomSummary.directUserId
+        val canonicalAlias = roomSummary.canonicalAlias
+
+        return (spaceName ?: userId ?: canonicalAlias).orEmpty()
     }
 }
