@@ -27,7 +27,7 @@ data class LiveLocationAggregatedSummary(
          */
         val eventId: String,
         val roomId: String,
-        val isLive: Boolean,
-        val endOfLiveTimestampAsMilliseconds: Long,
-        val lastLocationContent: MessageLiveLocationContent? = null,
+        val isLive: Boolean?,
+        val endOfLiveTimestampAsMilliseconds: Long?,
+        val lastLocationContent: MessageLiveLocationContent?,
 )

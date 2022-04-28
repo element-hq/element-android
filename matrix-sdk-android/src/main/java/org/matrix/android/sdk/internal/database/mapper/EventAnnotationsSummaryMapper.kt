@@ -58,8 +58,10 @@ internal object EventAnnotationsSummaryMapper {
                 },
                 pollResponseSummary = annotationsSummary.pollResponseSummary?.let {
                     PollResponseAggregatedSummaryEntityMapper.map(it)
+                },
+                liveLocationAggregatedSummary = annotationsSummary.liveLocationAggregatedSummary?.let {
+                    LiveLocationAggregatedSummaryMapper.map(it)
                 }
-
         )
     }
 }
