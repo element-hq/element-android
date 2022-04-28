@@ -29,6 +29,7 @@ import im.vector.app.core.utils.colorTerminatingFullStop
 import im.vector.app.databinding.FragmentFtueWaitForEmailVerificationBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.RegisterAction
+import im.vector.app.features.themes.ThemeProvider
 import im.vector.app.features.themes.ThemeUtils
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
@@ -41,7 +42,9 @@ data class FtueAuthWaitForEmailFragmentArgument(
 /**
  * In this screen, the user is asked to check their emails.
  */
-class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueWaitForEmailVerificationBinding>() {
+class FtueAuthWaitForEmailFragment @Inject constructor(
+        private val themeProvider: ThemeProvider
+) : AbstractFtueAuthFragment<FragmentFtueWaitForEmailVerificationBinding>() {
 
     private val params: FtueAuthWaitForEmailFragmentArgument by args()
     private var inferHasLeftAndReturnedToScreen = false
@@ -56,6 +59,12 @@ class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragm
     }
 
     private fun setupUi() {
+        views.emailVerificationGradientContainer.setBackgroundResource(
+                when (themeProvider.isLightTheme()) {
+                    true  -> R.drawable.bg_waiting_for_email_verification
+                    false -> R.drawable.bg_color_background
+                }
+        )
         views.emailVerificationTitle.text = R.string.ftue_auth_email_verification_title.colorTerminatingFullStop(R.attr.colorSecondary)
         views.emailVerificationSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
         views.emailVerificationResendEmail.debouncedClicks {
