@@ -19,6 +19,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
 
+    <View
+        android:id="@+id/emailVerificationGradientContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.60"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Space
         android:id="@+id/emailVerificationSpace1"
         android:layout_width="match_parent"
