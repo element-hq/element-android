@@ -364,7 +364,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                                 RoomSummaryEntity.where(realm, child.roomId).findFirst()?.let { childSum ->
                                     // TODO: Revisit
                                     childSum.parents.add(SpaceParentSummaryEntity(
-                                            true,
+                                            canonical = true,
                                             parent.roomId,
                                             parent,
                                             RealmList()
