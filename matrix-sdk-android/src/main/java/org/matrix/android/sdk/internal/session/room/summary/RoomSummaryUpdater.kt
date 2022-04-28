@@ -365,9 +365,9 @@ internal class RoomSummaryUpdater @Inject constructor(
                                     // TODO: Revisit
                                     childSum.parents.add(SpaceParentSummaryEntity(
                                             canonical = true,
-                                            parent.roomId,
-                                            parent,
-                                            RealmList()
+                                            parentRoomId = parent.roomId,
+                                            parentSummaryEntity = parent,
+                                            viaServers = RealmList()
                                     ))
                                     if (childSum.flattenParentIds == null) childSum.flattenParentIds = ""
                                     flattenParentsIds.forEach {
