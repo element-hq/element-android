@@ -46,7 +46,8 @@ class LiveLocationMessageItemFactory @Inject constructor(
     }
 
     private fun isLiveRunning(liveLocationContent: LiveLocationBeaconContent): Boolean {
-        return liveLocationContent.isLive.orFalse() && liveLocationContent.hasTimedOut.not()
+        // TODO when we will use aggregatedSummary, check if the live has timed out as well
+        return liveLocationContent.isLive.orFalse()
     }
 
     private fun buildStartLiveItem(

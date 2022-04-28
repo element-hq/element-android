@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.model.livelocation
 
-import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 
 /**
  * Aggregation info concerning a live location share.
@@ -26,7 +26,8 @@ data class LiveLocationAggregatedSummary(
          * Event id of the event that started the live.
          */
         val eventId: String,
+        val roomId: String,
         val isLive: Boolean,
         val endOfLiveTimestampAsMilliseconds: Long,
-        val lastLocation: LocationInfo? = null
+        val lastLocationContent: MessageLocationContent? = null,
 )

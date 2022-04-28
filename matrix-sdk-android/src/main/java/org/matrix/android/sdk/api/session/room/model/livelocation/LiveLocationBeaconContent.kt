@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
 import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
@@ -61,16 +60,6 @@ data class LiveLocationBeaconContent(
          */
         @Json(name = "org.matrix.msc3488.asset") val unstableLocationAsset: LocationAsset = LocationAsset(LocationAssetType.SELF),
         @Json(name = "m.asset") val locationAsset: LocationAsset? = null,
-
-        /**
-         * Client side tracking of the last location
-         */
-        var lastLocationContent: MessageLiveLocationContent? = null,
-
-        /**
-         * Client side tracking of whether the beacon has timed out.
-         */
-        var hasTimedOut: Boolean = false
 ) : MessageContent {
 
     fun getBestTimestampAsMilliseconds() = timestampAsMilliseconds ?: unstableTimestampAsMilliseconds
