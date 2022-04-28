@@ -61,10 +61,10 @@ internal class MigrateCryptoTo016(realm: DynamicRealm) : RealmMigrator(realm, 16
                 .addIndex(AuditTrailEntityFields.TYPE)
 
         realm.schema.get("CryptoMetadataEntity")
-                ?.addField(CryptoMetadataEntityFields.GLOBAL_ENABLE_KEY_REQUESTING_AND_SHARING, Boolean::class.java)
+                ?.addField(CryptoMetadataEntityFields.GLOBAL_ENABLE_KEY_GOSSIPING, Boolean::class.java)
                 ?.transform {
                     // set the default value to true
-                    it.setBoolean(CryptoMetadataEntityFields.GLOBAL_ENABLE_KEY_REQUESTING_AND_SHARING, true)
+                    it.setBoolean(CryptoMetadataEntityFields.GLOBAL_ENABLE_KEY_GOSSIPING, true)
                 }
     }
 }

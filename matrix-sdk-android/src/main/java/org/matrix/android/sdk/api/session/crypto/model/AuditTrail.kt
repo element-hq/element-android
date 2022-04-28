@@ -47,6 +47,15 @@ data class ForwardInfo(
         val chainIndex: Long?
 ) : AuditInfo
 
+object UnknownInfo : AuditInfo {
+    override val roomId: String = ""
+    override val sessionId: String = ""
+    override val senderKey: String = ""
+    override val alg: String = ""
+    override val userId: String = ""
+    override val deviceId: String = ""
+}
+
 @JsonClass(generateAdapter = true)
 data class WithheldInfo(
         override val roomId: String,

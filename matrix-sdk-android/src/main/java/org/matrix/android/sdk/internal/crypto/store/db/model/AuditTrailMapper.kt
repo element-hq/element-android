@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.crypto.model.AuditInfo
 import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
 import org.matrix.android.sdk.api.session.crypto.model.ForwardInfo
 import org.matrix.android.sdk.api.session.crypto.model.IncomingKeyRequestInfo
 import org.matrix.android.sdk.api.session.crypto.model.TrailType
+import org.matrix.android.sdk.api.session.crypto.model.UnknownInfo
 import org.matrix.android.sdk.api.session.crypto.model.WithheldInfo
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
@@ -30,7 +30,7 @@ internal object AuditTrailMapper {
     fun map(entity: AuditTrailEntity): AuditTrail? {
         val contentJson = entity.contentJson ?: return null
         return when (entity.type) {
-            TrailType.OutgoingKeyForward.name -> {
+            TrailType.OutgoingKeyForward.name  -> {
                 val info = tryOrNull {
                     MoshiProvider.providesMoshi().adapter(ForwardInfo::class.java).fromJson(contentJson)
                 } ?: return null
@@ -50,7 +50,7 @@ internal object AuditTrailMapper {
                         info = info
                 )
             }
-            TrailType.IncomingKeyRequest.name -> {
+            TrailType.IncomingKeyRequest.name  -> {
                 val info = tryOrNull {
                     MoshiProvider.providesMoshi().adapter(IncomingKeyRequestInfo::class.java).fromJson(contentJson)
                 } ?: return null
@@ -60,7 +60,7 @@ internal object AuditTrailMapper {
                         info = info
                 )
             }
-            TrailType.IncomingKeyForward.name -> {
+            TrailType.IncomingKeyForward.name  -> {
                 val info = tryOrNull {
                     MoshiProvider.providesMoshi().adapter(ForwardInfo::class.java).fromJson(contentJson)
                 } ?: return null
@@ -70,24 +70,11 @@ internal object AuditTrailMapper {
                         info = info
                 )
             }
-            else -> {
+            else                               -> {
                 AuditTrail(
                         ageLocalTs = entity.ageLocalTs ?: 0,
                         type = TrailType.Unknown,
-                        info = object : AuditInfo {
-                            override val roomId: String
-                                get() = ""
-                            override val sessionId: String
-                                get() = ""
-                            override val senderKey: String
-                                get() = ""
-                            override val alg: String
-                                get() = ""
-                            override val userId: String
-                                get() = ""
-                            override val deviceId: String
-                                get() = ""
-                        }
+                        info = UnknownInfo
                 )
             }
         }

@@ -96,9 +96,9 @@ internal class IncomingKeyRequestManager @Inject constructor(
         val requestId = this.requestId ?: return null
         if (body.algorithm != MXCRYPTO_ALGORITHM_MEGOLM) return null
         val action = when (this.action) {
-            "request"              -> MegolmRequestAction.Request
+            "request" -> MegolmRequestAction.Request
             "request_cancellation" -> MegolmRequestAction.Cancel
-            else                   -> null
+            else -> null
         } ?: return null
         return ValidMegolmRequestBody(
                 requestId = requestId,
@@ -112,6 +112,11 @@ internal class IncomingKeyRequestManager @Inject constructor(
     }
 
     fun addNewIncomingRequest(senderId: String, request: RoomKeyShareRequest) {
+        if (!cryptoStore.isKeyGossipingEnabled()) {
+            Timber.tag(loggerTag.value)
+                    .i("Ignore incoming key request as per crypto config in room ${request.body?.roomId}")
+            return
+        }
         outgoingRequestScope.launch {
             // It is important to handle requests in order
             sequencer.post {
@@ -422,7 +427,8 @@ internal class IncomingKeyRequestManager @Inject constructor(
                     MXCRYPTO_ALGORITHM_MEGOLM,
                     requestingDevice.userId,
                     requestingDevice.deviceId,
-                    chainIndex)
+                    chainIndex
+            )
             true
         } catch (failure: Throwable) {
             Timber.tag(loggerTag.value)

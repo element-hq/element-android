@@ -953,13 +953,13 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun enableKeyGossiping(enable: Boolean) {
         doRealmTransaction(realmConfiguration) {
-            it.where<CryptoMetadataEntity>().findFirst()?.globalEnableKeyRequestingAndSharing = enable
+            it.where<CryptoMetadataEntity>().findFirst()?.globalEnableKeyGossiping = enable
         }
     }
 
     override fun isKeyGossipingEnabled(): Boolean {
         return doWithRealm(realmConfiguration) {
-            it.where<CryptoMetadataEntity>().findFirst()?.globalEnableKeyRequestingAndSharing
+            it.where<CryptoMetadataEntity>().findFirst()?.globalEnableKeyGossiping
         } ?: true
     }
 
