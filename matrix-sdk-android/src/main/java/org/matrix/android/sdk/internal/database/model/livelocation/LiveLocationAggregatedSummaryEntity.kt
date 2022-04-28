@@ -26,14 +26,15 @@ internal open class LiveLocationAggregatedSummaryEntity(
         /**
          * Event id of the event that started the live.
          */
-        @PrimaryKey
         var eventId: String = "",
+
+        var roomId: String = "",
 
         var isLive: Boolean? = null,
 
-        val endOfLiveTimestampAsMilliseconds: Long? = null,
+        var endOfLiveTimestampAsMilliseconds: Long? = null,
 
-        val lastLocation: String? = null
+        var lastLocation: String? = null
 ) : RealmObject() {
     companion object
 }
