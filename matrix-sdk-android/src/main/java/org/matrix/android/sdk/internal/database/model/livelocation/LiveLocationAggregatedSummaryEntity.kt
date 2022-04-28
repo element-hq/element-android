@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.database.model.livelocation
 
 import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
 
 /**
  * Aggregation info concerning a live location share.
@@ -34,7 +33,11 @@ internal open class LiveLocationAggregatedSummaryEntity(
 
         var endOfLiveTimestampAsMilliseconds: Long? = null,
 
-        var lastLocation: String? = null
+        /**
+         * For now we persist this as a JSON for greater flexibility
+         * @see [org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent]
+         */
+        var lastLocationContent: String? = null,
 ) : RealmObject() {
     companion object
 }

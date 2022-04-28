@@ -17,35 +17,74 @@
 package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 
 import io.realm.Realm
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
+import org.matrix.android.sdk.internal.database.mapper.ContentMapper
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.query.getOrCreate
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : LiveLocationAggregationProcessor {
 
     override fun handleBeaconInfo(realm: Realm, event: Event, content: LiveLocationBeaconContent, roomId: String, isLocalEcho: Boolean) {
-        //val locationSenderId = event.senderId ?: return
-
-        // We shouldn't process local echos
-        if (isLocalEcho) {
+        if (event.senderId.isNullOrEmpty() || isLocalEcho) {
             return
         }
 
-        // TODO if live field is true, get eventId else get get replace eventId
-        // TODO getOrCreate existing aggregated summary
-        // TODO update the endOfLiveTimestamp and live fields
+        val targetEventId = if (content.isLive.orTrue()) {
+            event.eventId
+        } else {
+            // when live is set to false, we use the id of the event that should have been replaced
+            event.unsignedData?.replacesState
+        }
+
+        if (targetEventId.isNullOrEmpty()) {
+            Timber.w("no target event id found for the beacon content")
+            return
+        }
+
+        val aggregatedSummary = LiveLocationAggregatedSummaryEntity.getOrCreate(
+                realm = realm,
+                roomId = roomId,
+                eventId = targetEventId
+        )
+
+        aggregatedSummary.endOfLiveTimestampAsMilliseconds = content.getBestTimestampAsMilliseconds()?.let { it + (content.timeout ?: 0) }
+        aggregatedSummary.isLive = content.isLive
     }
 
     override fun handleLiveLocation(realm: Realm, event: Event, content: MessageLiveLocationContent, roomId: String, isLocalEcho: Boolean) {
-        //val locationSenderId = event.senderId ?: return
-
-        // We shouldn't process local echos
-        if (isLocalEcho) {
+        if (event.senderId.isNullOrEmpty() || isLocalEcho) {
             return
         }
 
-        // TODO getOrCreate existing aggregated summary
-        // TODO add location content only if more recent than the current one if any
+        val targetEventId = content.relatesTo?.eventId
+
+        if (targetEventId.isNullOrEmpty()) {
+            Timber.w("no target event id found for the live location content")
+            return
+        }
+
+        val aggregatedSummary = LiveLocationAggregatedSummaryEntity.getOrCreate(
+                realm = realm,
+                roomId = roomId,
+                eventId = targetEventId
+        )
+        val updatedLocationTimestamp = content.getBestTimestampAsMilliseconds() ?: 0
+        val currentLocationTimestamp = ContentMapper
+                .map(aggregatedSummary.lastLocationContent)
+                .toModel<MessageLiveLocationContent>()
+                ?.getBestTimestampAsMilliseconds()
+                ?: 0
+
+        if (updatedLocationTimestamp > currentLocationTimestamp) {
+            // only take location if it is more recent
+            aggregatedSummary.lastLocationContent = ContentMapper.map(content.toContent())
+        }
     }
 }
