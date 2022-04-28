@@ -179,11 +179,6 @@ interface CryptoService {
     fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>)
 
     /**
-     * Share all existing inbound sessions to the provided userId devices
-     */
-    fun sendSharedHistoryKeys(roomId: String, userId: String)
-
-    /**
      * Share all inbound sessions of the last chunk messages to the provided userId devices
      */
     fun sendSharedHistoryKeysToLastChunk(roomId: String, userId: String, sessionInfoSet: Set<SessionInfoPair>?)
