@@ -39,6 +39,21 @@ import org.matrix.android.sdk.internal.extensions.assertIsManaged
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import timber.log.Timber
 
+internal fun ChunkEntity.moveEventsFrom(chunkToMerge: ChunkEntity, direction: PaginationDirection) {
+    assertIsManaged()
+    val localRealm = this.realm
+    val eventsToMerge = if (direction == PaginationDirection.FORWARDS) {
+        chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
+    } else {
+        chunkToMerge.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+    }
+    eventsToMerge.forEach {
+        if (addTimelineEventFromMove(localRealm, it, direction)) {
+            chunkToMerge.timelineEvents.remove(it)
+        }
+    }
+}
+
 internal fun ChunkEntity.merge(roomId: String, chunkToMerge: ChunkEntity, direction: PaginationDirection) {
     assertIsManaged()
     val localRealm = this.realm
@@ -163,6 +178,17 @@ private fun ChunkEntity.addTimelineEventFromMerge(realm: Realm, timelineEventEnt
     }
     handleThreadSummary(realm, eventId, copied)
     timelineEvents.add(copied)
+}
+
+private fun ChunkEntity.addTimelineEventFromMove(realm: Realm, event: TimelineEventEntity, direction: PaginationDirection): Boolean {
+    val eventId = event.eventId
+    if (timelineEvents.find(eventId) != null) {
+        return false
+    }
+    event.displayIndex = nextDisplayIndex(direction)
+    handleThreadSummary(realm, eventId, event)
+    timelineEvents.add(event)
+    return true
 }
 
 /**

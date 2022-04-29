@@ -43,6 +43,7 @@ import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.helper.createOrUpdate
+import org.matrix.android.sdk.internal.database.helper.moveEventsFrom
 import org.matrix.android.sdk.internal.database.helper.updateThreadSummaryIfNeeded
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -364,6 +365,15 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      aggregator: SyncResponsePostTreatmentAggregator): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
         if (isLimited && lastChunk != null) {
+            Timber.i("Deleting last forward chunk (${lastChunk.identifier()})")
+            // Add events that oldPrev may have dropped since they were already in lastChunk
+            val oldPrev = lastChunk.prevChunk
+            if (oldPrev != null && oldPrev.nextToken != lastChunk.prevToken) {
+                // If the tokens mismatch, this means we have chained them due to duplicated events.
+                // In this case, we need to make sure to re-add possibly dropped events (which would have
+                // been duplicates otherwise)
+                oldPrev.moveEventsFrom(lastChunk, PaginationDirection.FORWARDS)
+            }
             lastChunk.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
         }
         val chunkEntity = if (!isLimited && lastChunk != null) {
