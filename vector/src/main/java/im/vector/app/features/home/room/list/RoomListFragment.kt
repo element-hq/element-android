@@ -337,7 +337,7 @@ class RoomListFragment @Inject constructor(
                                     }
                         }
                         else                          -> {
-                            pagedControllerFactory.createRoomSummaryListController()
+                            pagedControllerFactory.createRoomSummaryListController(roomListParams.displayMode)
                                     .also { controller ->
                                         section.liveList?.observe(viewLifecycleOwner) { list ->
                                             controller.setData(list)

@@ -27,8 +27,8 @@ class RoomSummaryPagedControllerFactory @Inject constructor(
         return RoomSummaryPagedController(roomSummaryItemFactory, displayMode)
     }
 
-    fun createRoomSummaryListController(): RoomSummaryListController {
-        return RoomSummaryListController(roomSummaryItemFactory)
+    fun createRoomSummaryListController(displayMode: RoomListDisplayMode): RoomSummaryListController {
+        return RoomSummaryListController(roomSummaryItemFactory, displayMode)
     }
 
     fun createSuggestedRoomListController(): SuggestedRoomListController {
