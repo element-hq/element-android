@@ -105,14 +105,14 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+
+        renderDisplayMode(holder)
         holder.rootView.onClick(itemClickListener)
         holder.rootView.setOnLongClickListener {
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             itemLongClickListener?.onLongClick(it) ?: false
         }
         holder.titleView.text = matrixItem.getBestName()
-        holder.lastEventTimeView.text = lastEventTime
-        holder.subtitleView.text = getTextForLastEventView()
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft
@@ -122,22 +122,24 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         holder.roomAvatarFailSendingImageView.isVisible = hasFailedSending
         renderSelection(holder, showSelected)
         holder.roomAvatarPresenceImageView.render(showPresence, userPresence)
-        showTypingViewIfNecessary(holder)
     }
 
-    private fun showTypingViewIfNecessary(holder: Holder) {
-        if (displayMode != RoomListDisplayMode.FILTERED) {
-            holder.typingView.setTextOrHide(typingMessage)
-            holder.subtitleView.isInvisible = holder.typingView.isVisible
-        }
+    private fun renderDisplayMode(holder: Holder) = when (displayMode) {
+        RoomListDisplayMode.ROOMS,
+        RoomListDisplayMode.PEOPLE,
+        RoomListDisplayMode.NOTIFICATIONS -> renderForDefaultDisplayMode(holder)
+        RoomListDisplayMode.FILTERED      -> renderForFilteredDisplayMode(holder)
     }
 
-    private fun getTextForLastEventView(): CharSequence {
-        return if (displayMode == RoomListDisplayMode.FILTERED) {
-            subtitle
-        } else {
-            lastFormattedEvent.charSequence
-        }
+    private fun renderForDefaultDisplayMode(holder: Holder) {
+        holder.subtitleView.text = lastFormattedEvent.charSequence
+        holder.lastEventTimeView.text = lastEventTime
+    }
+
+    private fun renderForFilteredDisplayMode(holder: Holder) {
+        holder.subtitleView.text = subtitle
+        holder.typingView.setTextOrHide(typingMessage)
+        holder.subtitleView.isInvisible = holder.typingView.isVisible
     }
 
     override fun unbind(holder: Holder) {
