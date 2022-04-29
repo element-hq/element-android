@@ -20,38 +20,38 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
-import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntity
-import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 
-internal fun LiveLocationAggregatedSummaryEntity.Companion.where(
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.where(
         realm: Realm,
         roomId: String,
         eventId: String,
-): RealmQuery<LiveLocationAggregatedSummaryEntity> {
-    return realm.where<LiveLocationAggregatedSummaryEntity>()
-            .equalTo(LiveLocationAggregatedSummaryEntityFields.ROOM_ID, roomId)
-            .equalTo(LiveLocationAggregatedSummaryEntityFields.EVENT_ID, eventId)
+): RealmQuery<LiveLocationShareAggregatedSummaryEntity> {
+    return realm.where<LiveLocationShareAggregatedSummaryEntity>()
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, roomId)
+            .equalTo(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, eventId)
 }
 
-internal fun LiveLocationAggregatedSummaryEntity.Companion.create(
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.create(
         realm: Realm,
         roomId: String,
         eventId: String,
-): LiveLocationAggregatedSummaryEntity {
-    val obj = realm.createObject(LiveLocationAggregatedSummaryEntity::class.java, eventId).apply {
+): LiveLocationShareAggregatedSummaryEntity {
+    val obj = realm.createObject(LiveLocationShareAggregatedSummaryEntity::class.java, eventId).apply {
         this.roomId = roomId
     }
     val annotationSummary = EventAnnotationsSummaryEntity.getOrCreate(realm, roomId = roomId, eventId = eventId)
-    annotationSummary.liveLocationAggregatedSummary = obj
+    annotationSummary.liveLocationShareAggregatedSummary = obj
 
     return obj
 }
 
-internal fun LiveLocationAggregatedSummaryEntity.Companion.getOrCreate(
+internal fun LiveLocationShareAggregatedSummaryEntity.Companion.getOrCreate(
         realm: Realm,
         roomId: String,
         eventId: String,
-): LiveLocationAggregatedSummaryEntity {
-    return LiveLocationAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
-            ?: LiveLocationAggregatedSummaryEntity.create(realm, roomId, eventId)
+): LiveLocationShareAggregatedSummaryEntity {
+    return LiveLocationShareAggregatedSummaryEntity.where(realm, roomId, eventId).findFirst()
+            ?: LiveLocationShareAggregatedSummaryEntity.create(realm, roomId, eventId)
 }

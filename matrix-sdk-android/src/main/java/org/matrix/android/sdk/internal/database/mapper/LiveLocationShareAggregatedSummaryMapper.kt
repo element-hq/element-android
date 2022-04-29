@@ -18,14 +18,14 @@ package org.matrix.android.sdk.internal.database.mapper
 
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationAggregatedSummary
+import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
-import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 
-internal object LiveLocationAggregatedSummaryMapper {
+internal object LiveLocationShareAggregatedSummaryMapper {
 
-    fun map(entity: LiveLocationAggregatedSummaryEntity): LiveLocationAggregatedSummary {
-        return LiveLocationAggregatedSummary(
+    fun map(entity: LiveLocationShareAggregatedSummaryEntity): LiveLocationShareAggregatedSummary {
+        return LiveLocationShareAggregatedSummary(
                 eventId = entity.eventId,
                 roomId = entity.roomId,
                 isActive = entity.isActive,
@@ -34,8 +34,8 @@ internal object LiveLocationAggregatedSummaryMapper {
         )
     }
 
-    fun map(model: LiveLocationAggregatedSummary): LiveLocationAggregatedSummaryEntity {
-        return LiveLocationAggregatedSummaryEntity(
+    fun map(model: LiveLocationShareAggregatedSummary): LiveLocationShareAggregatedSummaryEntity {
+        return LiveLocationShareAggregatedSummaryEntity(
                 eventId = model.eventId,
                 roomId = model.roomId,
                 isActive = model.isActive,

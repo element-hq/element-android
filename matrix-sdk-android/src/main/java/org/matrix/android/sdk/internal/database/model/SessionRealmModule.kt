@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.database.model
 
 import io.realm.annotations.RealmModule
-import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntity
 import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 
@@ -48,7 +48,7 @@ import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntit
             EditAggregatedSummaryEntity::class,
             EditionOfEvent::class,
             PollResponseAggregatedSummaryEntity::class,
-            LiveLocationAggregatedSummaryEntity::class,
+            LiveLocationShareAggregatedSummaryEntity::class,
             ReferencesAggregatedSummaryEntity::class,
             PushRulesEntity::class,
             PushRuleEntity::class,

@@ -15,7 +15,7 @@
  */
 package org.matrix.android.sdk.api.session.room.model
 
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationAggregatedSummary
+import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 
 data class EventAnnotationsSummary(
         val eventId: String,
@@ -23,5 +23,5 @@ data class EventAnnotationsSummary(
         val editSummary: EditAggregatedSummary? = null,
         val pollResponseSummary: PollResponseAggregatedSummary? = null,
         val referencesAggregatedSummary: ReferencesAggregatedSummary? = null,
-        val liveLocationAggregatedSummary: LiveLocationAggregatedSummary? = null,
+        val liveLocationShareAggregatedSummary: LiveLocationShareAggregatedSummary? = null,
 )

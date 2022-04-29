@@ -14,20 +14,32 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.livelocation
+package org.matrix.android.sdk.internal.database.model.livelocation
 
-import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
 /**
  * Aggregation info concerning a live location share.
  */
-data class LiveLocationAggregatedSummary(
+internal open class LiveLocationShareAggregatedSummaryEntity(
         /**
          * Event id of the event that started the live.
          */
-        val eventId: String,
-        val roomId: String,
-        val isActive: Boolean?,
-        val endOfLiveTimestampAsMilliseconds: Long?,
-        val lastLocationDataContent: MessageBeaconLocationDataContent?,
-)
+        @PrimaryKey
+        var eventId: String = "",
+
+        var roomId: String = "",
+
+        var isActive: Boolean? = null,
+
+        var endOfLiveTimestampAsMilliseconds: Long? = null,
+
+        /**
+         * For now we persist this as a JSON for greater flexibility
+         * @see [org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent]
+         */
+        var lastLocationContent: String? = null,
+) : RealmObject() {
+    companion object
+}

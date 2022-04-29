@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
-import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import timber.log.Timber
 import javax.inject.Inject
@@ -48,7 +48,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
             return
         }
 
-        val aggregatedSummary = LiveLocationAggregatedSummaryEntity.getOrCreate(
+        val aggregatedSummary = LiveLocationShareAggregatedSummaryEntity.getOrCreate(
                 realm = realm,
                 roomId = roomId,
                 eventId = targetEventId
@@ -70,7 +70,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
             return
         }
 
-        val aggregatedSummary = LiveLocationAggregatedSummaryEntity.getOrCreate(
+        val aggregatedSummary = LiveLocationShareAggregatedSummaryEntity.getOrCreate(
                 realm = realm,
                 roomId = roomId,
                 eventId = targetEventId

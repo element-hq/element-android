@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.database.migration
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntityFields
-import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationShareAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
 /**
@@ -29,18 +29,18 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 internal class MigrateSessionTo027(realm: DynamicRealm) : RealmMigrator(realm, 27) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        val liveLocationSummaryEntity = realm.schema.get("LiveLocationAggregatedSummaryEntity")
-                ?: realm.schema.create("LiveLocationAggregatedSummaryEntity")
-                        .addField(LiveLocationAggregatedSummaryEntityFields.EVENT_ID, String::class.java, FieldAttribute.REQUIRED)
-                        .addField(LiveLocationAggregatedSummaryEntityFields.ROOM_ID, String::class.java, FieldAttribute.REQUIRED)
-                        .addField(LiveLocationAggregatedSummaryEntityFields.IS_ACTIVE, Boolean::class.java)
-                        .setNullable(LiveLocationAggregatedSummaryEntityFields.IS_ACTIVE, true)
-                        .addField(LiveLocationAggregatedSummaryEntityFields.END_OF_LIVE_TIMESTAMP_AS_MILLISECONDS, Long::class.java)
-                        .setNullable(LiveLocationAggregatedSummaryEntityFields.END_OF_LIVE_TIMESTAMP_AS_MILLISECONDS, true)
-                        .addField(LiveLocationAggregatedSummaryEntityFields.LAST_LOCATION_CONTENT, String::class.java)
+        val liveLocationSummaryEntity = realm.schema.get("LiveLocationShareAggregatedSummaryEntity")
+                ?: realm.schema.create("LiveLocationShareAggregatedSummaryEntity")
+                        .addField(LiveLocationShareAggregatedSummaryEntityFields.EVENT_ID, String::class.java, FieldAttribute.REQUIRED)
+                        .addField(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, String::class.java, FieldAttribute.REQUIRED)
+                        .addField(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, Boolean::class.java)
+                        .setNullable(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
+                        .addField(LiveLocationShareAggregatedSummaryEntityFields.END_OF_LIVE_TIMESTAMP_AS_MILLISECONDS, Long::class.java)
+                        .setNullable(LiveLocationShareAggregatedSummaryEntityFields.END_OF_LIVE_TIMESTAMP_AS_MILLISECONDS, true)
+                        .addField(LiveLocationShareAggregatedSummaryEntityFields.LAST_LOCATION_CONTENT, String::class.java)
                 ?: return
 
         realm.schema.get("EventAnnotationsSummaryEntity")
-                ?.addRealmObjectField(EventAnnotationsSummaryEntityFields.LIVE_LOCATION_AGGREGATED_SUMMARY.`$`, liveLocationSummaryEntity)
+                ?.addRealmObjectField(EventAnnotationsSummaryEntityFields.LIVE_LOCATION_SHARE_AGGREGATED_SUMMARY.`$`, liveLocationSummaryEntity)
     }
 }
