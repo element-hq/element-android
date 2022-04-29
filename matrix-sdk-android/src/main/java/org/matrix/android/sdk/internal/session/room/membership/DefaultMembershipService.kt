@@ -45,7 +45,6 @@ import org.matrix.android.sdk.internal.session.room.membership.admin.MembershipA
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
 import org.matrix.android.sdk.internal.util.fetchCopied
-import timber.log.Timber
 
 internal class DefaultMembershipService @AssistedInject constructor(
         @Assisted private val roomId: String,

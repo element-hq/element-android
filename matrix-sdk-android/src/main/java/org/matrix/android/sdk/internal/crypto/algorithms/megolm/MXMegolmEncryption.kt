@@ -173,7 +173,11 @@ internal class MXMegolmEncryption(
                 // Need to make a brand new session?
                 session.needsRotation(sessionRotationPeriodMsgs, sessionRotationPeriodMs) ||
                 // Is there a room history visibility change since the last outboundSession
-                cryptoStore.needsRotationDueToVisibilityChange(roomId) ||
+                cryptoStore.needsRotationDueToVisibilityChange(roomId).also {
+                    if (it) {
+                        Timber.tag(loggerTag.value).d("roomId:$roomId Room history visibility change detected since the last outbound session")
+                    }
+                } ||
                 // Determine if we have shared with anyone we shouldn't have
                 session.sharedWithTooManyDevices(devicesInRoom)) {
             Timber.tag(loggerTag.value).d("roomId:$roomId Starting new megolm session because we need to rotate.")

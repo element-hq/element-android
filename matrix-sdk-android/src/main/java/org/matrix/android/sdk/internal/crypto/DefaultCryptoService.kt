@@ -1357,7 +1357,9 @@ internal class DefaultCryptoService @Inject constructor(
                         )
                     }?.filter { inboundGroupSession ->
                         // Prevent injecting a forged encrypted message and using session_id/sender_key of another room.
-                        inboundGroupSession.roomId == roomId
+                        (inboundGroupSession.roomId == roomId).also {
+                            Timber.tag(loggerTag.value).d("Forged encrypted message detected for roomId:$roomId")
+                        }
                     }?.forEach { inboundGroupSession ->
                         // Share the sharable session to userId with deviceId
                         val exportedKeys = inboundGroupSession.exportKeys(sharedHistory = true)
