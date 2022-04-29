@@ -16,7 +16,6 @@
 package org.matrix.android.sdk.internal.crypto.verification
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
@@ -52,11 +51,12 @@ internal class VerificationTransportRoomMessage(
         private val userDeviceId: String?,
         private val roomId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val tx: DefaultVerificationTransaction?
+        private val tx: DefaultVerificationTransaction?,
+        cryptoCoroutineScope: CoroutineScope,
 ) : VerificationTransport {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-    private val verificationSenderScope = CoroutineScope(SupervisorJob() + dispatcher)
+    private val verificationSenderScope = CoroutineScope(cryptoCoroutineScope.coroutineContext + dispatcher)
     private val sequencer = SemaphoreCoroutineSequencer()
 
     override fun <T> sendToOther(type: String,

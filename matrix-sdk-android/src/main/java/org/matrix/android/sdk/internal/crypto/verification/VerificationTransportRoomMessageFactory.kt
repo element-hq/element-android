@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.verification
 
+import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
@@ -28,7 +29,8 @@ internal class VerificationTransportRoomMessageFactory @Inject constructor(
         private val userId: String,
         @DeviceId
         private val deviceId: String?,
-        private val localEchoEventFactory: LocalEchoEventFactory
+        private val localEchoEventFactory: LocalEchoEventFactory,
+        private val cryptoCoroutineScope: CoroutineScope,
 ) {
 
     fun createTransport(roomId: String, tx: DefaultVerificationTransaction?): VerificationTransportRoomMessage {
@@ -38,6 +40,8 @@ internal class VerificationTransportRoomMessageFactory @Inject constructor(
                 userDeviceId = deviceId,
                 roomId = roomId,
                 localEchoEventFactory = localEchoEventFactory,
-                tx = tx)
+                tx = tx,
+                cryptoCoroutineScope
+        )
     }
 }
