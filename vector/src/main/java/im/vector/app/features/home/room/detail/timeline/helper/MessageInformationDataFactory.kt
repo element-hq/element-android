@@ -21,6 +21,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
+import im.vector.app.features.home.room.detail.timeline.item.LiveLocationShareSummaryData
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
 import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
@@ -44,8 +45,7 @@ import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
 import javax.inject.Inject
 
 /**
- * TODO Update this comment
- * This class compute if data of an event (such has avatar, display name, ...) should be displayed, depending on the previous event in the timeline
+ * This class is responsible of building extra information data associated to a given event.
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
                                                         private val dateFormatter: VectorDateFormatter,
@@ -119,7 +119,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 isFirstFromThisSender = isFirstFromThisSender,
                 isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
-                sendStateDecoration = sendStateDecoration
+                sendStateDecoration = sendStateDecoration,
+                liveLocationShareSummaryData = getLiveLocationShareSummaryData(event)
         )
     }
 
@@ -185,6 +186,16 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
             }
         } else {
             E2EDecoration.NONE
+        }
+    }
+
+    private fun getLiveLocationShareSummaryData(event: TimelineEvent): LiveLocationShareSummaryData? {
+        return event.annotations?.liveLocationShareAggregatedSummary?.let { summary ->
+            LiveLocationShareSummaryData(
+                    isActive = summary.isActive,
+                    endOfLiveTimestampAsMilliseconds = summary.endOfLiveTimestampAsMilliseconds,
+                    lastGeoUri = summary.lastLocationDataContent?.getBestLocationInfo()?.geoUri
+            )
         }
     }
 

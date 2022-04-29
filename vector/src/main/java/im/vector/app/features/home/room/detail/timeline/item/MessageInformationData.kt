@@ -20,6 +20,8 @@ import android.os.Parcelable
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
+import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -42,7 +44,8 @@ data class MessageInformationData(
         val e2eDecoration: E2EDecoration = E2EDecoration.NONE,
         val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE,
         val isFirstFromThisSender: Boolean = false,
-        val isLastFromThisSender: Boolean = false
+        val isLastFromThisSender: Boolean = false,
+        val liveLocationShareSummaryData: LiveLocationShareSummaryData? = null,
 ) : Parcelable {
 
     val matrixItem: MatrixItem
@@ -96,6 +99,13 @@ data class PollResponseData(
 data class PollVoteSummaryData(
         val total: Int = 0,
         val percentage: Double = 0.0
+) : Parcelable
+
+@Parcelize
+data class LiveLocationShareSummaryData(
+        val isActive: Boolean?,
+        val endOfLiveTimestampAsMilliseconds: Long?,
+        val lastGeoUri: String?,
 ) : Parcelable
 
 enum class E2EDecoration {
