@@ -59,12 +59,12 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 MessageType.MSGTYPE_VIDEO,
                 MessageType.MSGTYPE_STICKER_LOCAL,
                 MessageType.MSGTYPE_EMOTE,
-                MessageType.MSGTYPE_LIVE_LOCATION_STATE,
+                MessageType.MSGTYPE_BEACON_INFO,
         )
         private val MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE = setOf(
                 MessageType.MSGTYPE_IMAGE,
                 MessageType.MSGTYPE_VIDEO,
-                MessageType.MSGTYPE_LIVE_LOCATION_STATE,
+                MessageType.MSGTYPE_BEACON_INFO,
         )
     }
 
@@ -151,8 +151,8 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
 
     private fun MessageContent?.shouldAddMessageOverlay(): Boolean {
         return when {
-            this == null || msgType == MessageType.MSGTYPE_LIVE_LOCATION_STATE -> false
-            msgType == MessageType.MSGTYPE_LOCATION                            -> vectorPreferences.labsRenderLocationsInTimeline()
+            this == null || msgType == MessageType.MSGTYPE_BEACON_INFO -> false
+            msgType == MessageType.MSGTYPE_LOCATION                    -> vectorPreferences.labsRenderLocationsInTimeline()
             else                                                               -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
         }
     }

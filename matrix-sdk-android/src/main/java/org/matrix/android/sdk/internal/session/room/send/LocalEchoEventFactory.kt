@@ -43,7 +43,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollConte
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
@@ -249,7 +249,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                                 longitude: Double,
                                 uncertainty: Double?): Event {
         val geoUri = buildGeoUri(latitude, longitude, uncertainty)
-        val content = MessageLiveLocationContent(
+        val content = MessageBeaconLocationDataContent(
                 body = geoUri,
                 relatesTo = RelationDefaultContent(
                         type = RelationType.REFERENCE,

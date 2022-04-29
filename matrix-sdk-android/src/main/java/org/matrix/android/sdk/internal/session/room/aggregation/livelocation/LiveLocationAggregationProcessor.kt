@@ -18,22 +18,22 @@ package org.matrix.android.sdk.internal.session.room.aggregation.livelocation
 
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
+import org.matrix.android.sdk.api.session.room.model.livelocation.MessageBeaconInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 
 internal interface LiveLocationAggregationProcessor {
     fun handleBeaconInfo(
             realm: Realm,
             event: Event,
-            content: LiveLocationBeaconContent,
+            content: MessageBeaconInfoContent,
             roomId: String,
             isLocalEcho: Boolean,
     )
 
-    fun handleLiveLocation(
+    fun handleBeaconLocationData(
             realm: Realm,
             event: Event,
-            content: MessageLiveLocationContent,
+            content: MessageBeaconLocationDataContent,
             roomId: String,
             isLocalEcho: Boolean,
     )

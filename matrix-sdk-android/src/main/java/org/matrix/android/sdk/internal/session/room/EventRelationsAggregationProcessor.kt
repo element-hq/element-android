@@ -33,10 +33,10 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.VoteInfo
 import org.matrix.android.sdk.api.session.room.model.VoteSummary
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
+import org.matrix.android.sdk.api.session.room.model.livelocation.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
@@ -190,13 +190,13 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                                 }
                             }
                             in EventType.STATE_ROOM_BEACON_INFO -> {
-                                event.content.toModel<LiveLocationBeaconContent>(catchError = true)?.let {
+                                event.content.toModel<MessageBeaconInfoContent>(catchError = true)?.let {
                                     liveLocationAggregationProcessor.handleBeaconInfo(realm, event, it, roomId, isLocalEcho)
                                 }
                             }
                             in EventType.BEACON_LOCATION_DATA   -> {
-                                event.content.toModel<MessageLiveLocationContent>(catchError = true)?.let {
-                                    liveLocationAggregationProcessor.handleLiveLocation(realm, event, it, roomId, isLocalEcho)
+                                event.content.toModel<MessageBeaconLocationDataContent>(catchError = true)?.let {
+                                    liveLocationAggregationProcessor.handleBeaconLocationData(realm, event, it, roomId, isLocalEcho)
                                 }
                             }
                         }
@@ -258,13 +258,13 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                     }
                 }
                 in EventType.STATE_ROOM_BEACON_INFO -> {
-                    event.content.toModel<LiveLocationBeaconContent>(catchError = true)?.let {
+                    event.content.toModel<MessageBeaconInfoContent>(catchError = true)?.let {
                         liveLocationAggregationProcessor.handleBeaconInfo(realm, event, it, roomId, isLocalEcho)
                     }
                 }
                 in EventType.BEACON_LOCATION_DATA   -> {
-                    event.content.toModel<MessageLiveLocationContent>(catchError = true)?.let {
-                        liveLocationAggregationProcessor.handleLiveLocation(realm, event, it, roomId, isLocalEcho)
+                    event.content.toModel<MessageBeaconLocationDataContent>(catchError = true)?.let {
+                        liveLocationAggregationProcessor.handleBeaconLocationData(realm, event, it, roomId, isLocalEcho)
                     }
                 }
                 else                                -> Timber.v("UnHandled event ${event.eventId}")

@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.database.mapper
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationAggregatedSummary
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntity
 
 internal object LiveLocationAggregatedSummaryMapper {
@@ -30,7 +30,7 @@ internal object LiveLocationAggregatedSummaryMapper {
                 roomId = entity.roomId,
                 isActive = entity.isActive,
                 endOfLiveTimestampAsMilliseconds = entity.endOfLiveTimestampAsMilliseconds,
-                lastLocationContent = ContentMapper.map(entity.lastLocationContent).toModel<MessageLiveLocationContent>()
+                lastLocationDataContent = ContentMapper.map(entity.lastLocationContent).toModel<MessageBeaconLocationDataContent>()
         )
     }
 
@@ -40,7 +40,7 @@ internal object LiveLocationAggregatedSummaryMapper {
                 roomId = model.roomId,
                 isActive = model.isActive,
                 endOfLiveTimestampAsMilliseconds = model.endOfLiveTimestampAsMilliseconds,
-                lastLocationContent = ContentMapper.map(model.lastLocationContent.toContent())
+                lastLocationContent = ContentMapper.map(model.lastLocationDataContent.toContent())
         )
     }
 }

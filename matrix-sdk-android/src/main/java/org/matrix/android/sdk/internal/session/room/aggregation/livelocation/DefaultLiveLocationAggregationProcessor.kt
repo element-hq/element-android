@@ -21,8 +21,8 @@ import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
+import org.matrix.android.sdk.api.session.room.model.livelocation.MessageBeaconInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.model.livelocation.LiveLocationAggregatedSummaryEntity
 import org.matrix.android.sdk.internal.database.query.getOrCreate
@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : LiveLocationAggregationProcessor {
 
-    override fun handleBeaconInfo(realm: Realm, event: Event, content: LiveLocationBeaconContent, roomId: String, isLocalEcho: Boolean) {
+    override fun handleBeaconInfo(realm: Realm, event: Event, content: MessageBeaconInfoContent, roomId: String, isLocalEcho: Boolean) {
         if (event.senderId.isNullOrEmpty() || isLocalEcho) {
             return
         }
@@ -58,7 +58,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
         aggregatedSummary.isActive = content.isLive
     }
 
-    override fun handleLiveLocation(realm: Realm, event: Event, content: MessageLiveLocationContent, roomId: String, isLocalEcho: Boolean) {
+    override fun handleBeaconLocationData(realm: Realm, event: Event, content: MessageBeaconLocationDataContent, roomId: String, isLocalEcho: Boolean) {
         if (event.senderId.isNullOrEmpty() || isLocalEcho) {
             return
         }
@@ -78,7 +78,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
         val updatedLocationTimestamp = content.getBestTimestampAsMilliseconds() ?: 0
         val currentLocationTimestamp = ContentMapper
                 .map(aggregatedSummary.lastLocationContent)
-                .toModel<MessageLiveLocationContent>()
+                .toModel<MessageBeaconLocationDataContent>()
                 ?.getBestTimestampAsMilliseconds()
                 ?: 0
 

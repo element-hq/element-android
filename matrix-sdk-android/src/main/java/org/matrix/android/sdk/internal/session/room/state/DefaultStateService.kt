@@ -33,7 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
+import org.matrix.android.sdk.api.session.room.model.livelocation.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
@@ -192,7 +192,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
 
     override suspend fun stopLiveLocation(userId: String) {
         getLiveLocationBeaconInfo(userId, true)?.let { beaconInfoStateEvent ->
-            beaconInfoStateEvent.getClearContent()?.toModel<LiveLocationBeaconContent>()?.let { content ->
+            beaconInfoStateEvent.getClearContent()?.toModel<MessageBeaconInfoContent>()?.let { content ->
                 val updatedContent = content.copy(isLive = false).toContent()
 
                 beaconInfoStateEvent.stateKey?.let {
@@ -217,7 +217,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 }
                 .firstOrNull { beaconInfoEvent ->
                     !filterOnlyLive ||
-                            beaconInfoEvent.getClearContent()?.toModel<LiveLocationBeaconContent>()?.isLive.orFalse()
+                            beaconInfoEvent.getClearContent()?.toModel<MessageBeaconInfoContent>()?.isLive.orFalse()
                 }
     }
 }

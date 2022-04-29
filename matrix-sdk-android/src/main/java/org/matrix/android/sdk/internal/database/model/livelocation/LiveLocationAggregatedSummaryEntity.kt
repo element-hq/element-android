@@ -37,7 +37,7 @@ internal open class LiveLocationAggregatedSummaryEntity(
 
         /**
          * For now we persist this as a JSON for greater flexibility
-         * @see [org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent]
+         * @see [org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent]
          */
         var lastLocationContent: String? = null,
 ) : RealmObject() {

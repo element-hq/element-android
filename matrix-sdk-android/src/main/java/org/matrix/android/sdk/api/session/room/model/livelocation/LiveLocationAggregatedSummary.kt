@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.api.session.room.model.livelocation
 
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 
 /**
  * Aggregation info concerning a live location share.
@@ -29,5 +29,5 @@ data class LiveLocationAggregatedSummary(
         val roomId: String,
         val isActive: Boolean?,
         val endOfLiveTimestampAsMilliseconds: Long?,
-        val lastLocationContent: MessageLiveLocationContent?,
+        val lastLocationDataContent: MessageBeaconLocationDataContent?,
 )

@@ -22,12 +22,12 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
 @JsonClass(generateAdapter = true)
-data class MessageLiveLocationContent(
+data class MessageBeaconLocationDataContent(
         /**
          * Local message type, not from server
          */
         @Transient
-        override val msgType: String = MessageType.MSGTYPE_LIVE_LOCATION,
+        override val msgType: String = MessageType.MSGTYPE_BEACON_LOCATION_DATA,
 
         @Json(name = "body") override val body: String = "",
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
