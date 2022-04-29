@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.database.model.livelocation
 
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
 /**
  * Aggregation info concerning a live location share.
@@ -25,6 +26,7 @@ internal open class LiveLocationAggregatedSummaryEntity(
         /**
          * Event id of the event that started the live.
          */
+        @PrimaryKey
         var eventId: String = "",
 
         var roomId: String = "",

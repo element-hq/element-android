@@ -38,8 +38,7 @@ internal fun LiveLocationAggregatedSummaryEntity.Companion.create(
         roomId: String,
         eventId: String,
 ): LiveLocationAggregatedSummaryEntity {
-    val obj = realm.createObject(LiveLocationAggregatedSummaryEntity::class.java).apply {
-        this.eventId = eventId
+    val obj = realm.createObject(LiveLocationAggregatedSummaryEntity::class.java, eventId).apply {
         this.roomId = roomId
     }
     val annotationSummary = EventAnnotationsSummaryEntity.getOrCreate(realm, roomId = roomId, eventId = eventId)
