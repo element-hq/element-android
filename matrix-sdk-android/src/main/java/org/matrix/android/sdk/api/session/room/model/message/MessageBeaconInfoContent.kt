@@ -19,10 +19,6 @@ package org.matrix.android.sdk.api.session.room.model.message
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
-import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
 @JsonClass(generateAdapter = true)
