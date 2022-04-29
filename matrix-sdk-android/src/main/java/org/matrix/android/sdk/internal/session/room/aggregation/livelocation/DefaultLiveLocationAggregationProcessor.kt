@@ -82,9 +82,10 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
                 ?.getBestTimestampAsMilliseconds()
                 ?: 0
 
-        if (updatedLocationTimestamp > currentLocationTimestamp) {
-            // only take location if it is more recent
+        if (updatedLocationTimestamp.isMoreRecentThan(currentLocationTimestamp)) {
             aggregatedSummary.lastLocationContent = ContentMapper.map(content.toContent())
         }
     }
+
+    private fun Long.isMoreRecentThan(timestamp: Long) = this > timestamp
 }
