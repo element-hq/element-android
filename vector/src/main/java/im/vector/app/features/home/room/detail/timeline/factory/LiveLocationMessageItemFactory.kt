@@ -24,7 +24,7 @@ import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.room.model.livelocation.MessageBeaconInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import javax.inject.Inject
 
 class LiveLocationMessageItemFactory @Inject constructor(
