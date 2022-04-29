@@ -341,7 +341,14 @@ internal interface IMXCryptoStore {
     fun storeCurrentOutboundGroupSessionForRoom(roomId: String, outboundGroupSession: OlmOutboundGroupSession?)
 
     /**
-     * Remove an inbound group session.
+     * Returns true if there is a room history visibility change since the latest outbound
+     * session. Specifically when the room's history visibility setting changes to
+     * world_readable or shared from invited or joined, or changes to invited or joined from world_readable or shared
+     */
+    fun needsRotationDueToVisibilityChange(roomId: String): Boolean
+
+    /**
+     * Remove an inbound group session
      *
      * @param sessionId the session identifier.
      * @param senderKey the base64-encoded curve25519 key of the sender.

@@ -826,12 +826,22 @@ internal class RealmCryptoStore @Inject constructor(
                 if (outboundGroupSession != null) {
                     val info = realm.createObject(OutboundGroupSessionInfoEntity::class.java).apply {
                         creationTime = clock.epochMillis()
+                        // Store the room history visibility on the outbound session creation
+                        shouldShareHistory = entity.shouldShareHistory
                         putOutboundGroupSession(outboundGroupSession)
                     }
                     entity.outboundSessionInfo = info
                 }
             }
         }
+    }
+
+    override fun needsRotationDueToVisibilityChange(roomId: String): Boolean {
+        return doWithRealm(realmConfiguration) { realm ->
+            CryptoRoomEntity.getById(realm, roomId)?.let { entity ->
+                entity.shouldShareHistory != entity.outboundSessionInfo?.shouldShareHistory
+            }
+        } ?: false
     }
 
     /**
