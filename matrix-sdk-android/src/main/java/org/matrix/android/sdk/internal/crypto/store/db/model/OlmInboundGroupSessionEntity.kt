@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
 import timber.log.Timber
@@ -36,16 +36,16 @@ internal open class OlmInboundGroupSessionEntity(
         var backedUp: Boolean = false) :
         RealmObject() {
 
-    fun getInboundGroupSession(): OlmInboundGroupSessionWrapper2? {
+    fun getInboundGroupSession(): OlmInboundGroupSessionWrapper? {
         return try {
-            deserializeFromRealm<OlmInboundGroupSessionWrapper2?>(olmInboundGroupSessionData)
+            deserializeFromRealm<OlmInboundGroupSessionWrapper?>(olmInboundGroupSessionData)
         } catch (failure: Throwable) {
             Timber.e(failure, "## Deserialization failure")
             return null
         }
     }
 
-    fun putInboundGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper2?) {
+    fun putInboundGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper?) {
         olmInboundGroupSessionData = serializeForRealm(olmInboundGroupSessionWrapper)
     }
 

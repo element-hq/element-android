@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXOutboundSessionInfo
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.SharedWithHelper
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -605,7 +605,7 @@ internal class MXOlmDevice @Inject constructor(
                                forwardingCurve25519KeyChain: List<String>,
                                keysClaimed: Map<String, String>,
                                exportFormat: Boolean): Boolean {
-        val candidateSession = OlmInboundGroupSessionWrapper2(sessionKey, exportFormat)
+        val candidateSession = OlmInboundGroupSessionWrapper(sessionKey, exportFormat)
         val existingSessionHolder = tryOrNull { getInboundGroupSession(sessionId, senderKey, roomId) }
         val existingSession = existingSessionHolder?.wrapper
         // If we have an existing one we should check if the new one is not better
@@ -673,18 +673,18 @@ internal class MXOlmDevice @Inject constructor(
      * @param megolmSessionsData the megolm sessions data
      * @return the successfully imported sessions.
      */
-    fun importInboundGroupSessions(megolmSessionsData: List<MegolmSessionData>): List<OlmInboundGroupSessionWrapper2> {
-        val sessions = ArrayList<OlmInboundGroupSessionWrapper2>(megolmSessionsData.size)
+    fun importInboundGroupSessions(megolmSessionsData: List<MegolmSessionData>): List<OlmInboundGroupSessionWrapper> {
+        val sessions = ArrayList<OlmInboundGroupSessionWrapper>(megolmSessionsData.size)
 
         for (megolmSessionData in megolmSessionsData) {
             val sessionId = megolmSessionData.sessionId ?: continue
             val senderKey = megolmSessionData.senderKey ?: continue
             val roomId = megolmSessionData.roomId
 
-            var candidateSessionToImport: OlmInboundGroupSessionWrapper2? = null
+            var candidateSessionToImport: OlmInboundGroupSessionWrapper? = null
 
             try {
-                candidateSessionToImport = OlmInboundGroupSessionWrapper2(megolmSessionData)
+                candidateSessionToImport = OlmInboundGroupSessionWrapper(megolmSessionData)
             } catch (e: Exception) {
                 Timber.tag(loggerTag.value).e(e, "## importInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
             }

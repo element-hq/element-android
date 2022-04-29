@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.crypto.store.db.migration
 
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapperOld
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.mapper.CrossSigningKeysMapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeyInfoEntityFields
@@ -50,9 +50,9 @@ internal class MigrateCryptoTo007(realm: DynamicRealm) : RealmMigrator(realm, 7)
         inboundGroupSessions.forEach { dynamicObject ->
             dynamicObject.getString(OlmInboundGroupSessionEntityFields.OLM_INBOUND_GROUP_SESSION_DATA)?.let { serializedObject ->
                 try {
-                    deserializeFromRealm<OlmInboundGroupSessionWrapper?>(serializedObject)?.let { oldFormat ->
+                    deserializeFromRealm<OlmInboundGroupSessionWrapperOld?>(serializedObject)?.let { oldFormat ->
                         val newFormat = oldFormat.exportKeys()?.let {
-                            OlmInboundGroupSessionWrapper2(it)
+                            OlmInboundGroupSessionWrapper(it)
                         }
                         dynamicObject.setString(OlmInboundGroupSessionEntityFields.OLM_INBOUND_GROUP_SESSION_DATA, serializeForRealm(newFormat))
                     }

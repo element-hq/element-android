@@ -50,7 +50,7 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.GossipRequestType
 import org.matrix.android.sdk.internal.crypto.IncomingShareRequestCommon
 import org.matrix.android.sdk.internal.crypto.OutgoingSecretRequest
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -722,7 +722,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper2>) {
+    override fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper>) {
         if (sessions.isEmpty()) {
             return
         }
@@ -753,7 +753,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2? {
+    override fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper? {
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
 
         return doWithRealm(realmConfiguration) {
@@ -801,10 +801,10 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     /**
-     * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper2,
+     * Note: the result will be only use to export all the keys and not to use the OlmInboundGroupSessionWrapper,
      * so there is no need to use or update `inboundGroupSessionToRelease` for native memory management
      */
-    override fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2> {
+    override fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .findAll()
@@ -871,7 +871,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper2>) {
+    override fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper>) {
         if (olmInboundGroupSessionWrappers.isEmpty()) {
             return
         }
@@ -894,7 +894,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper2> {
+    override fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper> {
         return doWithRealm(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()
                     .equalTo(OlmInboundGroupSessionEntityFields.BACKED_UP, false)

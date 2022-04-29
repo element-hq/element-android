@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.store.db.migration
 
 import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
+import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapperOld
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.serializeForRealm
@@ -64,7 +64,7 @@ internal class MigrateCryptoTo003RiotX(realm: DynamicRealm) : RealmMigrator(real
                         val oldSerializedData = obj.getString("olmInboundGroupSessionData")
                         deserializeFromRealm<MXOlmInboundGroupSession2>(oldSerializedData)?.let { mxOlmInboundGroupSession2 ->
                             val sessionKey = mxOlmInboundGroupSession2.mSession.sessionIdentifier()
-                            val newOlmInboundGroupSessionWrapper = OlmInboundGroupSessionWrapper(sessionKey, false)
+                            val newOlmInboundGroupSessionWrapper = OlmInboundGroupSessionWrapperOld(sessionKey, false)
                                     .apply {
                                         olmInboundGroupSession = mxOlmInboundGroupSession2.mSession
                                         roomId = mxOlmInboundGroupSession2.mRoomId

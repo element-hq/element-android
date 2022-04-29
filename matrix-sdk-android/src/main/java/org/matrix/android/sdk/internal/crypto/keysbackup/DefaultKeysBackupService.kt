@@ -75,7 +75,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreRoomSessionD
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreRoomSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -1314,7 +1314,7 @@ internal class DefaultKeysBackupService @Inject constructor(
 
     @VisibleForTesting
     @WorkerThread
-    fun encryptGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper2): KeyBackupData? {
+    fun encryptGroupSession(olmInboundGroupSessionWrapper: OlmInboundGroupSessionWrapper): KeyBackupData? {
         // Gather information for each key
         val device = olmInboundGroupSessionWrapper.senderKey?.let { cryptoStore.deviceWithIdentityKey(it) }
 

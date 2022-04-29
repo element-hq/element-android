@@ -26,7 +26,7 @@ import java.io.Serializable
  * This class adds more context to a OlmInboundGroupSession object.
  * This allows additional checks. The class implements Serializable so that the context can be stored.
  */
-internal class OlmInboundGroupSessionWrapper2 : Serializable {
+internal class OlmInboundGroupSessionWrapperOld : Serializable {
 
     // The associated olm inbound group session.
     var olmInboundGroupSession: OlmInboundGroupSession? = null
@@ -48,12 +48,15 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
      */
     val firstKnownIndex: Long?
         get() {
-            return try {
-                olmInboundGroupSession?.firstKnownIndex
-            } catch (e: Exception) {
-                Timber.e(e, "## getFirstKnownIndex() : getFirstKnownIndex failed")
-                null
+            if (null != olmInboundGroupSession) {
+                try {
+                    return olmInboundGroupSession!!.firstKnownIndex
+                } catch (e: Exception) {
+                    Timber.e(e, "## getFirstKnownIndex() : getFirstKnownIndex failed")
+                }
             }
+
+            return null
         }
 
     /**
@@ -74,10 +77,6 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
         }
     }
 
-    constructor() {
-        // empty
-    }
-
     /**
      * Create a new instance from the provided keys map.
      *
@@ -87,13 +86,11 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
     @Throws(Exception::class)
     constructor(megolmSessionData: MegolmSessionData) {
         try {
-            val safeSessionKey = megolmSessionData.sessionKey ?: throw Exception("invalid data")
-            olmInboundGroupSession = OlmInboundGroupSession.importSession(safeSessionKey)
-                    .also {
-                        if (it.sessionIdentifier() != megolmSessionData.sessionId) {
-                            throw Exception("Mismatched group session Id")
-                        }
-                    }
+            olmInboundGroupSession = OlmInboundGroupSession.importSession(megolmSessionData.sessionKey!!)
+
+            if (olmInboundGroupSession!!.sessionIdentifier() != megolmSessionData.sessionId) {
+                throw Exception("Mismatched group session Id")
+            }
 
             senderKey = megolmSessionData.senderKey
             keysClaimed = megolmSessionData.senderClaimedKeys
@@ -105,11 +102,10 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
 
     /**
      * Export the inbound group session keys
-     * @param index the index to export. If null, the first known index will be used
      *
      * @return the inbound group session as MegolmSessionData if the operation succeeds
      */
-    fun exportKeys(index: Long? = null): MegolmSessionData? {
+    fun exportKeys(): MegolmSessionData? {
         return try {
             if (null == forwardingCurve25519KeyChain) {
                 forwardingCurve25519KeyChain = ArrayList()
@@ -119,18 +115,14 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
                 return null
             }
 
-            val safeOlmInboundGroupSession = olmInboundGroupSession ?: return null
-
-            val wantedIndex = index ?: safeOlmInboundGroupSession.firstKnownIndex
-
             MegolmSessionData(
                     senderClaimedEd25519Key = keysClaimed?.get("ed25519"),
-                    forwardingCurve25519KeyChain = forwardingCurve25519KeyChain?.toList().orEmpty(),
+                    forwardingCurve25519KeyChain = ArrayList(forwardingCurve25519KeyChain!!),
                     senderKey = senderKey,
                     senderClaimedKeys = keysClaimed,
                     roomId = roomId,
-                    sessionId = safeOlmInboundGroupSession.sessionIdentifier(),
-                    sessionKey = safeOlmInboundGroupSession.export(wantedIndex),
+                    sessionId = olmInboundGroupSession!!.sessionIdentifier(),
+                    sessionKey = olmInboundGroupSession!!.export(olmInboundGroupSession!!.firstKnownIndex),
                     algorithm = MXCRYPTO_ALGORITHM_MEGOLM
             )
         } catch (e: Exception) {
@@ -146,11 +138,14 @@ internal class OlmInboundGroupSessionWrapper2 : Serializable {
      * @return the exported data
      */
     fun exportSession(messageIndex: Long): String? {
-        return try {
-            return olmInboundGroupSession?.export(messageIndex)
-        } catch (e: Exception) {
-            Timber.e(e, "## exportSession() : export failed")
-            null
+        if (null != olmInboundGroupSession) {
+            try {
+                return olmInboundGroupSession!!.export(messageIndex)
+            } catch (e: Exception) {
+                Timber.e(e, "## exportSession() : export failed")
+            }
         }
+
+        return null
     }
 }

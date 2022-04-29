@@ -36,7 +36,7 @@ import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldCo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.crypto.IncomingShareRequestCommon
 import org.matrix.android.sdk.internal.crypto.OutgoingSecretRequest
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.model.OutboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.db.model.KeysBackupDataEntity
@@ -65,7 +65,7 @@ internal interface IMXCryptoStore {
      *
      * @return the list of all known group sessions, to export them.
      */
-    fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper2>
+    fun getInboundGroupSessions(): List<OlmInboundGroupSessionWrapper>
 
     /**
      * @return true to unilaterally blacklist all unverified devices.
@@ -294,7 +294,7 @@ internal interface IMXCryptoStore {
      *
      * @param sessions the inbound group sessions to store.
      */
-    fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper2>)
+    fun storeInboundGroupSessions(sessions: List<OlmInboundGroupSessionWrapper>)
 
     /**
      * Retrieve an inbound group session.
@@ -303,7 +303,7 @@ internal interface IMXCryptoStore {
      * @param senderKey the base64-encoded curve25519 key of the sender.
      * @return an inbound group session.
      */
-    fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2?
+    fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper?
 
     /**
      * Get the current outbound group session for this encrypted room
@@ -337,7 +337,7 @@ internal interface IMXCryptoStore {
      *
      * @param sessions the sessions
      */
-    fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper2>)
+    fun markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers: List<OlmInboundGroupSessionWrapper>)
 
     /**
      * Retrieve inbound group sessions that are not yet backed up.
@@ -345,7 +345,7 @@ internal interface IMXCryptoStore {
      * @param limit the maximum number of sessions to return.
      * @return an array of non backed up inbound group sessions.
      */
-    fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper2>
+    fun inboundGroupSessionsToBackup(limit: Int): List<OlmInboundGroupSessionWrapper>
 
     /**
      * Number of stored inbound group sessions.

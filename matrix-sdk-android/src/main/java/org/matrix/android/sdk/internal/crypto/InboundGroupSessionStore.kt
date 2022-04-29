@@ -23,7 +23,7 @@ import kotlinx.coroutines.sync.Mutex
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.logger.LoggerTag
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import java.util.Timer
@@ -31,7 +31,7 @@ import java.util.TimerTask
 import javax.inject.Inject
 
 internal data class InboundGroupSessionHolder(
-        val wrapper: OlmInboundGroupSessionWrapper2,
+        val wrapper: OlmInboundGroupSessionWrapper,
         val mutex: Mutex = Mutex()
 )
 
@@ -66,7 +66,7 @@ internal class InboundGroupSessionStore @Inject constructor(
     private val timer = Timer()
     private var timerTask: TimerTask? = null
 
-    private val dirtySession = mutableListOf<OlmInboundGroupSessionWrapper2>()
+    private val dirtySession = mutableListOf<OlmInboundGroupSessionWrapper>()
 
     @Synchronized
     fun clear() {
@@ -126,7 +126,7 @@ internal class InboundGroupSessionStore @Inject constructor(
 
     @Synchronized
     private fun batchSave() {
-        val toSave = mutableListOf<OlmInboundGroupSessionWrapper2>().apply { addAll(dirtySession) }
+        val toSave = mutableListOf<OlmInboundGroupSessionWrapper>().apply { addAll(dirtySession) }
         dirtySession.clear()
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession batching save of ${toSave.size}")
