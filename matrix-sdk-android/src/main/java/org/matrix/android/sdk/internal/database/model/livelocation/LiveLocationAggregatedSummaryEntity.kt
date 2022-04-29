@@ -31,7 +31,7 @@ internal open class LiveLocationAggregatedSummaryEntity(
 
         var roomId: String = "",
 
-        var isLive: Boolean? = null,
+        var isActive: Boolean? = null,
 
         var endOfLiveTimestampAsMilliseconds: Long? = null,
 

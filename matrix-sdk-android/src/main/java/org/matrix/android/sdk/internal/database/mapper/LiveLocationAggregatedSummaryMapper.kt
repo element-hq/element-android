@@ -28,7 +28,7 @@ internal object LiveLocationAggregatedSummaryMapper {
         return LiveLocationAggregatedSummary(
                 eventId = entity.eventId,
                 roomId = entity.roomId,
-                isLive = entity.isLive,
+                isActive = entity.isActive,
                 endOfLiveTimestampAsMilliseconds = entity.endOfLiveTimestampAsMilliseconds,
                 lastLocationContent = ContentMapper.map(entity.lastLocationContent).toModel<MessageLiveLocationContent>()
         )
@@ -38,7 +38,7 @@ internal object LiveLocationAggregatedSummaryMapper {
         return LiveLocationAggregatedSummaryEntity(
                 eventId = model.eventId,
                 roomId = model.roomId,
-                isLive = model.isLive,
+                isActive = model.isActive,
                 endOfLiveTimestampAsMilliseconds = model.endOfLiveTimestampAsMilliseconds,
                 lastLocationContent = ContentMapper.map(model.lastLocationContent.toContent())
         )

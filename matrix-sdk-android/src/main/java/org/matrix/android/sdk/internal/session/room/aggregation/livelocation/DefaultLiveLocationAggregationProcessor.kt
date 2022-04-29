@@ -55,7 +55,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
         )
 
         aggregatedSummary.endOfLiveTimestampAsMilliseconds = content.getBestTimestampAsMilliseconds()?.let { it + (content.timeout ?: 0) }
-        aggregatedSummary.isLive = content.isLive
+        aggregatedSummary.isActive = content.isLive
     }
 
     override fun handleLiveLocation(realm: Realm, event: Event, content: MessageLiveLocationContent, roomId: String, isLocalEcho: Boolean) {
