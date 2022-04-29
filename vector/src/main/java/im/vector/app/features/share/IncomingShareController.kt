@@ -57,7 +57,7 @@ class IncomingShareController @Inject constructor(private val roomSummaryItemFac
                         .createRoomItem(
                                 roomSummary,
                                 data.selectedRoomIds,
-                                RoomListDisplayMode.ROOMS /* TODO: Change */,
+                                RoomListDisplayMode.FILTERED,
                                 callback?.let { it::onRoomClicked },
                                 callback?.let { it::onRoomLongClicked }
                         )
