@@ -177,6 +177,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
             }
         }
         val optimizedThreadSummaryMap = hashMapOf<String, EventEntity>()
+        var hasNewEvents = false
         run processTimelineEvents@{
             eventList.forEach { event ->
                 if (event.eventId == null || event.senderId == null) {
@@ -191,6 +192,13 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 // If it exists, we want to stop here, just link the prevChunk
                 val existingChunk = existingTimelineEvent?.chunk?.firstOrNull()
                 if (existingChunk != null) {
+                    // If we haven't found a single new event yet, we don't want to link in the pagination direction, as that might cause a
+                    // timeline loop if the other chunk is in the other direction.
+                    if (!hasNewEvents) {
+                        Timber.i("Skip adding event $eventId, already exists")
+                        // Only skip this event, but still process other events
+                        return@forEach
+                    }
                     when (direction) {
                         PaginationDirection.BACKWARDS -> {
                             if (currentChunk.nextChunk == existingChunk) {
@@ -212,6 +220,10 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     // Stop processing here
                     return@processTimelineEvents
                 }
+
+                // existingChunk == null => this is a new event we haven't seen before
+                hasNewEvents = true
+
                 val ageLocalTs = event.unsignedData?.age?.let { now - it }
                 var eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
                 if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
