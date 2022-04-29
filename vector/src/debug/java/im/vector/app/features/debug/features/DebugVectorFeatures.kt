@@ -57,6 +57,9 @@ class DebugVectorFeatures(
     override fun isOnboardingCombinedRegisterEnabled(): Boolean = read(DebugFeatureKeys.onboardingCombinedRegister)
             ?: vectorFeatures.isOnboardingCombinedRegisterEnabled()
 
+    override fun isOnboardingCombinedLoginEnabled(): Boolean = read(DebugFeatureKeys.onboardingCombinedLogin)
+            ?: vectorFeatures.isOnboardingCombinedLoginEnabled()
+
     override fun isLiveLocationEnabled(): Boolean = read(DebugFeatureKeys.liveLocationSharing)
             ?: vectorFeatures.isLiveLocationEnabled()
 
@@ -116,6 +119,7 @@ object DebugFeatureKeys {
     val onboardingUseCase = booleanPreferencesKey("onboarding-splash-carousel")
     val onboardingPersonalize = booleanPreferencesKey("onboarding-personalize")
     val onboardingCombinedRegister = booleanPreferencesKey("onboarding-combined-register")
+    val onboardingCombinedLogin = booleanPreferencesKey("onboarding-combined-login")
     val liveLocationSharing = booleanPreferencesKey("live-location-sharing")
     val screenSharing = booleanPreferencesKey("screen-sharing")
 }

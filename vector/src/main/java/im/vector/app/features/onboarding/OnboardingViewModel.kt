@@ -196,7 +196,9 @@ class OnboardingViewModel @AssistedInject constructor(
             } else {
                 OnboardingViewEvents.OpenServerSelection
             }
-            OnboardingFlow.SignIn,
+            OnboardingFlow.SignIn       -> if (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
+                OnboardingViewEvents.OpenCombinedLogin
+            } else OnboardingViewEvents.OpenServerSelection
             OnboardingFlow.SignInSignUp -> OnboardingViewEvents.OpenServerSelection
         }
         _viewEvents.post(nextOnboardingStep)
