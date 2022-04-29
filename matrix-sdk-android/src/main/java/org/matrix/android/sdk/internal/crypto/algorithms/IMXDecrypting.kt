@@ -45,5 +45,5 @@ internal interface IMXDecrypting {
      */
     fun onRoomKeyEvent(event: Event, defaultKeysBackupService: DefaultKeysBackupService) {}
 
-    fun shareKeysWithDevice(exportedKeys: MegolmSessionData?, deviceId: String, userId: String) {}
+    fun shareForwardKeysWithDevice(exportedKeys: MegolmSessionData?, deviceId: String, userId: String) {}
 }

@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.membership
 
 import androidx.lifecycle.LiveData
+import com.otaliastudios.opengl.core.use
 import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -44,6 +45,7 @@ import org.matrix.android.sdk.internal.session.room.membership.admin.MembershipA
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
 import org.matrix.android.sdk.internal.util.fetchCopied
+import timber.log.Timber
 
 internal class DefaultMembershipService @AssistedInject constructor(
         @Assisted private val roomId: String,
@@ -143,10 +145,10 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     override suspend fun invite(userId: String, reason: String?) {
-        val sessionInfoSet = Realm.getInstance(monarchy.realmConfiguration).use {
+        val sessionInfo = Realm.getInstance(monarchy.realmConfiguration).use {
             ChunkEntity.findLatestSessionInfo(it, roomId)
         }
-        cryptoService.sendSharedHistoryKeysToLastChunk(roomId, userId, sessionInfoSet)
+        cryptoService.sendSharedHistoryKeys(roomId, userId, sessionInfo)
         val params = InviteTask.Params(roomId, userId, reason)
         inviteTask.execute(params)
     }
