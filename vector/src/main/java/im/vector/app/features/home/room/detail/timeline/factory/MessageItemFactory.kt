@@ -216,7 +216,7 @@ class MessageItemFactory @Inject constructor(
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
             }
-            is MessageBeaconInfoContent          -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
+            is MessageBeaconInfoContent          -> liveLocationMessageItemFactory.create(informationData.liveLocationShareSummaryData, highlight, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {

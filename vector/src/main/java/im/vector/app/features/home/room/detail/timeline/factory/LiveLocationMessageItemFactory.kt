@@ -21,9 +21,11 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
+import im.vector.app.features.home.room.detail.timeline.item.LiveLocationShareSummaryData
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import javax.inject.Inject
 
@@ -34,20 +36,22 @@ class LiveLocationMessageItemFactory @Inject constructor(
 ) {
 
     fun create(
-            beaconInfoContent: MessageBeaconInfoContent,
+            liveLocationShareSummaryData: LiveLocationShareSummaryData?,
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes,
     ): VectorEpoxyModel<*>? {
         // TODO handle location received and stopped states
+        // TODO create a dedicated ViewState
         return when {
-            isLiveRunning(beaconInfoContent) -> buildStartLiveItem(highlight, attributes)
-            else                             -> null
+            liveLocationShareSummaryData == null        -> null
+            isLiveRunning(liveLocationShareSummaryData) -> buildStartLiveItem(highlight, attributes)
+            else                                        -> null
         }
     }
 
-    private fun isLiveRunning(beaconInfoContent: MessageBeaconInfoContent): Boolean {
-        // TODO when we will use aggregatedSummary, check if the live has timed out as well
-        return beaconInfoContent.isLive.orFalse()
+    private fun isLiveRunning(liveLocationShareSummaryData: LiveLocationShareSummaryData): Boolean {
+        // TODO check if the live has timed out as well
+        return liveLocationShareSummaryData.isActive.orFalse()
     }
 
     private fun buildStartLiveItem(
