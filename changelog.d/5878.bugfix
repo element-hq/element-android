@@ -1,0 +1,1 @@
+Fix a case where paginating forwards would lose messages
