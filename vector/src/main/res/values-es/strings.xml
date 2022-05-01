@@ -2038,7 +2038,7 @@
     <string name="other_spaces_or_rooms_you_might_not_know">Otros espacios o habitaciones que puede que no conozcas</string>
     <string name="joining_replacement_room">Unirse a la sala de repuesto</string>
     <string name="a11y_unsent_draft">Tiene borradores sin enviar</string>
-    <string name="you_may_contact_me">Puedes contactarme si tienes dudas después</string>
+    <string name="you_may_contact_me">Puedes contactarme si tienes alguna duda</string>
     <string name="upgrade_room_no_power_to_manage">Necesitas permiso para actualizar una sala</string>
     <string name="upgrade_room_update_parent_space">Actualizar el espacio padre automáticamente</string>
     <string name="upgrade_room_auto_invite">Invitar usuarios automáticamente</string>
