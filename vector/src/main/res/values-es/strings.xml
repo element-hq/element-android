@@ -1484,7 +1484,7 @@
     <string name="room_settings_enable_encryption_dialog_content">Una vez habilitado, el cifrado de una sala no se puede deshabilitar. Los mensajes enviados en una sala cifrada no pueden ser vistos por el servidor, solo por los participantes de la sala. Habilitar el cifrado puede impedir que muchos bots y puentes funcionen correctamente.</string>
     <string name="verification_request_notice">Para estar seguro, verifique %s comprobando un código de un solo uso.</string>
     <string name="verification_request_start_notice">Para estar seguro, hágalo en persona o use otra forma de comunicarse.</string>
-    <string name="verification_emoji_notice">Compare los emoji únicos, asegurándose de que aparezcan en el mismo orden.</string>
+    <string name="verification_emoji_notice">Verifica si los mismos emojis aparecen en el mismo orden en ambos usuarios.</string>
     <string name="verification_code_notice">Compare el código con el que se muestra en la pantalla del otro usuario.</string>
     <string name="verification_conclusion_ok_notice">Los mensajes con este usuario están cifrados Extremo-a-Extremo y no pueden ser leídos por terceros.</string>
     <string name="verification_conclusion_ok_self_notice">Su nueva sesión ahora está verificada. Tiene acceso a sus mensajes cifrados y otros usuarios lo verán como de confianza.</string>
