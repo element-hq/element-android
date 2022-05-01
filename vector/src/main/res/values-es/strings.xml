@@ -317,7 +317,7 @@
     <string name="action_remove">Eliminar</string>
     <string name="action_join">Unirse</string>
     <string name="action_reject">Rechazar</string>
-    <string name="room_jump_to_first_unread">Mensajes no leídos.</string>
+    <string name="room_jump_to_first_unread">Ir a mensajes no leídos</string>
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Seguro que quieres salir de la sala?</string>
     <string name="room_participants_header_direct_chats">CONVERSACIONES DIRECTAS</string>
@@ -332,7 +332,7 @@
     <string name="room_one_user_is_typing">%s está escribiendo…</string>
     <string name="room_two_users_are_typing">%1$s y %2$s están escribiendo…</string>
     <string name="room_many_users_are_typing">%1$s y %2$s y otros están escribiendo…</string>
-    <string name="room_do_not_have_permission_to_post">No tienes permiso para publicar en esta sala</string>
+    <string name="room_do_not_have_permission_to_post">No tienes permiso para publicar en esta sala.</string>
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_do_not_trust">No confiar</string>
     <string name="ssl_logout_account">Cerrar Sesión</string>
@@ -582,7 +582,7 @@
     <string name="command_description_markdown">Activar/Desactivar markdown</string>
     <string name="command_description_clear_scalar_token">Para reparar la gestión de las Aplicaciones de Matrix</string>
     <string name="settings_preview_media_before_sending">Vista previa de medios antes de enviar</string>
-    <string name="room_tombstone_versioned_description">Esta sala ha sido reemplazada y ya no está activa</string>
+    <string name="room_tombstone_versioned_description">Esta sala ha sido reemplazada y ya no está activa.</string>
     <string name="room_tombstone_continuation_link">La conversación continúa aquí</string>
     <string name="room_tombstone_continuation_description">Esta sala es una continuación de otra conversación</string>
     <string name="room_tombstone_predecessor_link">Haz clic aquí para ver mensajes más antiguos</string>
@@ -972,7 +972,7 @@
     <string name="room_filtering_footer_create_new_direct_message">Enviar un nuevo mensaje directo</string>
     <string name="room_filtering_footer_open_room_directory">Ver el directorio de la sala</string>
     <string name="room_directory_search_hint">Nombre o ID (#ejemplo:servidor.org)</string>
-    <string name="labs_swipe_to_reply_in_timeline">Habilitar \"desplazar para contestar\" en la línea de tiempo</string>
+    <string name="labs_swipe_to_reply_in_timeline">Habilitar \"deslizar para contestar\" en la línea de tiempo</string>
     <string name="link_copied_to_clipboard">Enlace copiado al portapapeles</string>
     <string name="creating_direct_room">Creando sala…</string>
     <string name="message_view_edit_history">Ver historial de modificaciones</string>
@@ -1306,7 +1306,9 @@
 \n
 \n Puede revertir esta acción en cualquier momento en la configuración general.</string>
     <string name="room_participants_action_unignore_title">Dejar de ignorar al usuario</string>
-    <string name="room_participants_action_unignore_prompt_msg">Si ignora a este usuario, se mostrarán todos sus mensajes nuevamente.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Si deja de ignorar a este usuario, se mostrarán todos sus mensajes nuevamente.
+\n
+\nTome nota de que esta acción reiniciará la aplicación y podría tardar algún tiempo.</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">¿Estás seguro de que deseas cancelar la invitación de este usuario\?</string>
     <string name="room_participants_remove_title">Patear usuario</string>
     <string name="room_participants_remove_prompt_msg">patear al usuario los eliminará de esta sala.
@@ -1991,7 +1993,7 @@
     <string name="room_settings_room_access_private_description">Solo la gente invitada puede encontrar y unirse a l sala</string>
     <string name="room_settings_room_access_private_invite_only_title">Privada (solo mediante invitación)</string>
     <string name="room_settings_room_access_entry_knock">Cualquiera puede solicitar entrar en la sala, serán los miembros quienes decidan aceptar o rechazar la solicitud</string>
-    <string name="room_alias_local_address_subtitle">Configurar las direcciones para esta sala de forma que otros usuarios puedan encontrarla mediante tu homeserver (%1$s).</string>
+    <string name="room_alias_local_address_subtitle">Configurar las direcciones para esta sala de forma que otros usuarios puedan encontrarla mediante tu servidor doméstico (%1$s)</string>
     <string name="room_alias_address_empty_can_add">Ninguna dirección publicada aún, añade una debajo.</string>
     <string name="room_alias_published_alias_subtitle">Las direcciones publicadas pueden ser usadas por cualquiera en cualquier servidor para unirse a tu sala. Para publicar una dirección es necesario configurarla previamente como dirección local.</string>
     <string name="space_settings_alias_subtitle">Ver y gestionar direcciones de este espacio.</string>
@@ -2018,7 +2020,7 @@
         <item quantity="one">Llamada de audio perdida</item>
         <item quantity="other">%d llamadas de audio perdidas</item>
     </plurals>
-    <string name="hs_client_url">Homeserver API URL</string>
+    <string name="hs_client_url">URL de API del servidor doméstico</string>
     <string name="missing_permissions_title">Faltan permisos</string>
     <string name="denied_permission_voice_message">Para enviar mensajes de voz has de otorgar el permiso de Micrófono.</string>
     <string name="denied_permission_camera">Para llevar a cabo esta acción has de otorgar el permiso de Cámara en las preferencias del sistema.</string>
@@ -2036,7 +2038,7 @@
     <string name="other_spaces_or_rooms_you_might_not_know">Otros espacios o habitaciones que puede que no conozcas</string>
     <string name="joining_replacement_room">Unirse a la sala de repuesto</string>
     <string name="a11y_unsent_draft">Tiene borradores sin enviar</string>
-    <string name="you_may_contact_me">Puedes contactarme si tienes dudas de seguimiento</string>
+    <string name="you_may_contact_me">Puedes contactarme si tienes dudas después</string>
     <string name="upgrade_room_no_power_to_manage">Necesitas permiso para actualizar una sala</string>
     <string name="upgrade_room_update_parent_space">Actualizar el espacio padre automáticamente</string>
     <string name="upgrade_room_auto_invite">Invitar usuarios automáticamente</string>
@@ -2178,7 +2180,7 @@
     <string name="command_description_room_avatar">Cambiar el avatar de la sala actual</string>
     <string name="command_description_nick_for_room">Cambiar su apodo para mostrar solo en la sala actual</string>
     <string name="command_description_room_name">Establecer el nombre de la sala</string>
-    <string name="command_description_unignore_user">Deja de ignorar a un usuario, muestra sus mensajes en el futuro.</string>
+    <string name="command_description_unignore_user">Deja de ignorar a un usuario, muestra sus mensajes en el futuro</string>
     <string name="command_description_ignore_user">Ignorar a un usuario, ocultándole sus mensajes</string>
     <string name="space_you_know_that_contains_this_room">Espacio que sabes que contiene esta sala</string>
     <string name="room_settings_space_access_public_description">Cualquiera puede encontrar el espacio y unirse</string>
@@ -2304,4 +2306,65 @@
     <string name="thread_list_modal_title">Filtrar</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s y otros</string>
     <string name="action_thread_copy_link_to_thread">Copiar enlace al hilo</string>
+    <string name="tooltip_attachment_sticker">Enviar sticker</string>
+    <string name="location_timeline_failed_to_load_map">Ocurrió un error al cargar el mapa</string>
+    <string name="ftue_personalize_complete_title">¡Estás listo!</string>
+    <string name="search_thread_from_a_thread">Desde un hilo</string>
+    <string name="thread_list_empty_subtitle">Los hilos ayudan a mantener sus conversaciones en el tema fijado y son fáciles de organizar.</string>
+    <string name="analytics_opt_in_list_item_3">Puedes apagar esto en cualquier momento en configuración</string>
+    <string name="threads_labs_enable_notice_message">Tu servidor doméstico actualmente no soporta hilos, por lo tanto esta función podría ser poco fiable. Algunos mensajes en hilos puede que no estén disponibles de forma fiable. %s ¿Deseas activar la función de hilos de todas formas\?</string>
+    <string name="threads_beta_enable_notice_title">Beta de hilos</string>
+    <string name="threads_notice_migration_message">Nos estamos acercando a el lanzamiento de una beta pública para hilos.
+\n
+\nMientras nos preparamos, tenemos que hacer algunos cambios: los hilos creados a partir de ahora se mostrarán como respuestas normales.
+\n
+\nEsto será una transición debido a que los hilos son ahora parte de la especificación Matrix.</string>
+    <string name="threads_notice_migration_title">Hilos acercándose a versión beta 🎉</string>
+    <string name="login_splash_already_have_account">Ya tengo una cuenta</string>
+    <string name="login_splash_create_account">Crear cuenta</string>
+    <string name="ftue_personalize_skip_this_step">Saltar este paso</string>
+    <string name="ftue_personalize_submit">Guardar y continuar</string>
+    <string name="ftue_personalize_complete_subtitle">Tus preferencias han sido guardadas.</string>
+    <string name="ftue_personalize_lets_go">Vámonos</string>
+    <string name="ftue_profile_picture_title">Añadir una foto de perfil</string>
+    <string name="ftue_display_name_entry_footer">Puedes cambiar esto más tarde</string>
+    <string name="ftue_display_name_entry_title">Nombre público</string>
+    <string name="ftue_display_name_title">Escoger un nombre público</string>
+    <string name="ftue_account_created_subtitle">Tu cuenta %s ha sido creada.</string>
+    <string name="ftue_account_created_congratulations_title">¡Felicidades!</string>
+    <string name="give_feedback_threads">Dar opinión</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline">Modo fuera de línea</string>
+    <string name="settings_presence">Presencia</string>
+    <string name="analytics_opt_in_list_item_2">Nosotros <b> no </b> compartimos información con terceros</string>
+    <string name="analytics_opt_in_list_item_1">Nosotros <b> no </b> grabamos o perfilamos ningún dato de cuenta</string>
+    <string name="analytics_opt_in_title">Ayudar a mejorar ${app_name}</string>
+    <string name="location_share_live_select_duration_option_3">8 horas</string>
+    <string name="location_share_live_select_duration_option_2">1 hora</string>
+    <string name="location_share_live_select_duration_option_1">15 minutos</string>
+    <string name="location_in_background_missing_permission_dialog_title">Permitir acceso</string>
+    <string name="labs_render_locations_in_timeline">Mostrar ubicaciónes de usuarios en la línea de tiempo</string>
+    <string name="location_share_live_enabled">Ubicación en vivo activada</string>
+    <string name="location_share_live_started">Cargando ubicación en vivo…</string>
+    <string name="location_share_live_stop">Parar</string>
+    <string name="message_bubbles">Mostrar burbujas de mensajes</string>
+    <string name="tooltip_attachment_photo">Abrir cámara</string>
+    <string name="tooltip_attachment_gallery">Enviar imágenes y vídeos</string>
+    <string name="tooltip_attachment_file">Subir archivo</string>
+    <string name="tooltip_attachment_contact">Abrir contactos</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d más</item>
+        <item quantity="other">%1$d más</item>
+    </plurals>
+    <string name="message_reaction_show_less">Mostrar menos</string>
+    <string name="tooltip_attachment_location">Compartir ubicación</string>
+    <string name="tooltip_attachment_poll">Crear encuesta</string>
+    <string name="analytics_opt_in_content_link">aquí</string>
+    <string name="action_learn_more">Aprender más</string>
+    <string name="action_try_it_out">Pruébalo</string>
+    <string name="action_disable">Deshabilitar</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d cambio de ACL del servidor</item>
+        <item quantity="other">%d cambios de ALC de los servidores</item>
+    </plurals>
 </resources>
