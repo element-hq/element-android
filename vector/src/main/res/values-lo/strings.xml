@@ -654,4 +654,15 @@
     <string name="notice_room_leave">%1$s ອອກຈາກຫ້ອງ</string>
     <string name="notice_direct_room_join_by_you">ທ່ານໄດ້ເຂົ້າຮ່ວມ</string>
     <string name="notice_direct_room_join">%1$s ໄດ້ເຂົ້າຮ່ວມ</string>
+    <string name="notice_room_join_by_you">ທ່ານໄດ້ເຂົ້າຮ່ວມຫ້ອງ</string>
+    <string name="notice_room_join">%1$s ໄດ້ເຂົ້າຮ່ວມຫ້ອງ</string>
+    <string name="notice_room_invite_you">%1$s ໄດ້ເຊີນທ່ານ</string>
+    <string name="notice_room_invite_by_you">ທ່ານໄດ້ເຊີນ %1$s</string>
+    <string name="notice_room_invite">%1$s ໄດ້ເຊີນ %2$s</string>
+    <string name="notice_direct_room_created_by_you">ທ່ານໄດ້ຕັ້ງກະທູ້ສົນທະນາ</string>
+    <string name="notice_direct_room_created">%1$s ໄດ້ຕັ້ງກະທູ້ສົນທະນາ</string>
+    <string name="notice_room_created_by_you">ທ່ານໄດ້ສ້າງຫ້ອງ</string>
+    <string name="notice_room_created">%1$s ໄດ້ສ້າງຫ້ອງ</string>
+    <string name="notice_room_invite_no_invitee_by_you">ບັດເຊີນຂອງທ່ານ</string>
+    <string name="notice_room_invite_no_invitee">ການເຊີນຂອງ %s</string>
 </resources>
