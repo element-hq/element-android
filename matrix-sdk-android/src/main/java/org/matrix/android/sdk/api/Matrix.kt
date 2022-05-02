@@ -64,7 +64,7 @@ class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
         val appContext = context.applicationContext
         Monarchy.init(appContext)
         DaggerMatrixComponent.factory().create(appContext, matrixConfiguration).inject(this)
-        if (appContext.applicationContext !is Configuration.Provider) {
+        if (appContext !is Configuration.Provider) {
             val configuration = Configuration.Builder()
                     .setExecutor(Executors.newCachedThreadPool())
                     .setWorkerFactory(matrixWorkerFactory)
