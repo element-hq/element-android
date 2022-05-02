@@ -43,9 +43,10 @@ import javax.inject.Inject
 /**
  * This is the main entry point to the matrix sdk.
  * <br/>
- * See [Companion.createInstance] to create an instance. The app should create and manage the instance itself.
+ * @param context the application context
+ * @param matrixConfiguration global configuration that will be used for every [org.matrix.android.sdk.api.session.Session]
  */
-class Matrix private constructor(context: Context, matrixConfiguration: MatrixConfiguration) {
+class Matrix(context: Context, matrixConfiguration: MatrixConfiguration) {
 
     @Inject internal lateinit var legacySessionImporter: LegacySessionImporter
     @Inject internal lateinit var authenticationService: AuthenticationService
@@ -60,14 +61,15 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var lightweightSettingsStorage: LightweightSettingsStorage
 
     init {
-        Monarchy.init(context)
-        DaggerMatrixComponent.factory().create(context, matrixConfiguration).inject(this)
-        if (context.applicationContext !is Configuration.Provider) {
+        val appContext = context.applicationContext
+        Monarchy.init(appContext)
+        DaggerMatrixComponent.factory().create(appContext, matrixConfiguration).inject(this)
+        if (appContext.applicationContext !is Configuration.Provider) {
             val configuration = Configuration.Builder()
                     .setExecutor(Executors.newCachedThreadPool())
                     .setWorkerFactory(matrixWorkerFactory)
                     .build()
-            WorkManager.initialize(context, configuration)
+            WorkManager.initialize(appContext, configuration)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
     }
@@ -123,14 +125,6 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     }
 
     companion object {
-        /**
-         * Creates a new instance of Matrix, it's recommended to manage this instance as a singleton.
-         * To make use of the built in singleton use Matrix.initialize() and/or Matrix.getInstance(context) instead
-         **/
-        fun createInstance(context: Context, matrixConfiguration: MatrixConfiguration): Matrix {
-            return Matrix(context.applicationContext, matrixConfiguration)
-        }
-
         /**
          * @return a String with details about the Matrix SDK version
          */
