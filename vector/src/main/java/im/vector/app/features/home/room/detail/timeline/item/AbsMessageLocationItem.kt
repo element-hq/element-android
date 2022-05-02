@@ -41,7 +41,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
     var locationUrl: String? = null
 
     @EpoxyAttribute
-    var userId: String? = null
+    var locationUserId: String? = null
 
     @EpoxyAttribute
     var mapWidth: Int = 0
@@ -89,7 +89,7 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
                                                  target: Target<Drawable>?,
                                                  dataSource: DataSource?,
                                                  isFirstResource: Boolean): Boolean {
-                        locationPinProvider?.create(userId) { pinDrawable ->
+                        locationPinProvider?.create(locationUserId) { pinDrawable ->
                             // we are not using Glide since it does not display it correctly when there is no user photo
                             holder.staticMapPinImageView.setImageDrawable(pinDrawable)
                         }
