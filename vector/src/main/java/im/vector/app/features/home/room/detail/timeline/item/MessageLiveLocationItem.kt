@@ -24,6 +24,7 @@ import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.toTimestamp
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.location.live.LocationLiveMessageBannerView
 import im.vector.app.features.location.live.LocationLiveMessageBannerViewState
@@ -54,7 +55,7 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
         holder.locationLiveMessageBanner.isVisible = true
         holder.locationLiveMessageBanner.render(viewState)
         holder.locationLiveMessageBanner.stopButton.setOnClickListener {
-            // TODO call stop live location
+            attributes.callback?.onTimelineItemAction(RoomDetailAction.StopLiveLocationSharing)
         }
         // TODO adjust Copyright map placement if needed
     }
