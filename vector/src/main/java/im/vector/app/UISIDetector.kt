@@ -52,7 +52,7 @@ data class E2EMessageDetected(
     }
 }
 
-class UISIDetector : LiveEventListener {
+class UISIDetector(private val timeoutMillis: Long = 30_000L) : LiveEventListener {
 
     interface UISIDetectorCallback {
         val enabled: Boolean
@@ -66,7 +66,6 @@ class UISIDetector : LiveEventListener {
     private val trackedEvents = mutableMapOf<String, TimerTask>()
     private val executor = Executors.newSingleThreadExecutor()
     private val timer = Timer()
-    private val timeoutMillis = 30_000L
     private val enabled: Boolean get() = callback?.enabled.orFalse()
 
     override fun onEventDecrypted(event: Event, clearEvent: JsonDict) {

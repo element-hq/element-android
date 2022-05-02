@@ -38,7 +38,8 @@ class UISIDetectorTest {
 
     @Test
     fun `trigger detection after grace period`() {
-        val uisiDetector = UISIDetector()
+        val gracePeriod = 5_000L
+        val uisiDetector = UISIDetector(gracePeriod)
         var detectedEvent: E2EMessageDetected? = null
 
         uisiDetector.callback = object : UISIDetector.UISIDetectorCallback {
@@ -60,7 +61,7 @@ class UISIDetectorTest {
         uisiDetector.onEventDecryptionError(event, fakeCryptoError())
 
         runBlocking {
-            delay(40_000)
+            delay((gracePeriod * 1.2).toLong())
         }
         Assert.assertEquals(eventId, detectedEvent?.eventId)
     }
@@ -68,7 +69,8 @@ class UISIDetectorTest {
     @Test
     fun `If event decrypted during grace period should not trigger detection`() {
         val scope = CoroutineScope(SupervisorJob())
-        val uisiDetector = UISIDetector()
+        val gracePeriod = 5_000L
+        val uisiDetector = UISIDetector(gracePeriod)
 
         uisiDetector.callback = object : UISIDetector.UISIDetectorCallback {
             override val enabled = true
@@ -89,12 +91,12 @@ class UISIDetectorTest {
 
         // the grace period is 30s
         scope.launch(Dispatchers.Default) {
-            delay(10_000)
+            delay((gracePeriod * 0.5).toLong())
             uisiDetector.onEventDecrypted(event, emptyMap())
         }
 
         runBlocking {
-            delay(60_000)
+            delay((gracePeriod * 1.2).toLong())
         }
     }
 
