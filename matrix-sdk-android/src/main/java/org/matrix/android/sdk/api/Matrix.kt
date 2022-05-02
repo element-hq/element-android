@@ -43,6 +43,9 @@ import javax.inject.Inject
 /**
  * This is the main entry point to the matrix sdk.
  * <br/>
+ *
+ * The constructor creates a new instance of Matrix, it's recommended to manage this instance as a singleton.
+ *
  * @param context the application context
  * @param matrixConfiguration global configuration that will be used for every [org.matrix.android.sdk.api.session.Session]
  */
