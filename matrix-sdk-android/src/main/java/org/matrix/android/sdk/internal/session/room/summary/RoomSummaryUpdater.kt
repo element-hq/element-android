@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
-import io.realm.RealmList
 import io.realm.kotlin.createObject
 import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -362,13 +361,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                             val flattenParentsIds = (flattenSpaceParents[parent.roomId] ?: emptyList()) + listOf(parent.roomId)
                             entry.value.forEach { child ->
                                 RoomSummaryEntity.where(realm, child.roomId).findFirst()?.let { childSum ->
-                                    // TODO: Revisit
-                                    childSum.parents.add(SpaceParentSummaryEntity(
-                                            canonical = true,
-                                            parentRoomId = parent.roomId,
-                                            parentSummaryEntity = parent,
-                                            viaServers = RealmList()
-                                    ))
                                     if (childSum.flattenParentIds == null) childSum.flattenParentIds = ""
                                     flattenParentsIds.forEach {
                                         if (childSum.flattenParentIds?.contains(it) != true) {
