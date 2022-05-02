@@ -107,7 +107,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     /**
      * Get the worker factory. The returned value has to be provided to `WorkConfiguration.Builder()`
      */
-    fun workerFactory(): WorkerFactory = matrixWorkerFactory
+    fun getWorkerFactory(): WorkerFactory = matrixWorkerFactory
 
     /**
      * Register an API interceptor, to be able to be notified when the specified API got a response
