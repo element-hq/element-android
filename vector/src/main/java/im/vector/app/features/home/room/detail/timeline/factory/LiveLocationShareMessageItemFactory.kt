@@ -53,12 +53,15 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes,
     ): VectorEpoxyModel<*>? {
-        return when (val currentState = getViewState(liveLocationShareSummaryData)) {
+        val item = when (val currentState = getViewState(liveLocationShareSummaryData)) {
             LiveLocationShareViewState.Loading    -> buildLoadingItem(highlight, attributes)
             LiveLocationShareViewState.Inactive   -> buildInactiveItem()
             is LiveLocationShareViewState.Running -> buildRunningItem(highlight, attributes, currentState)
             LiveLocationShareViewState.Unkwown    -> null
         }
+        item?.layout(attributes.informationData.messageLayout.layoutRes)
+
+        return item
     }
 
     private fun buildLoadingItem(
