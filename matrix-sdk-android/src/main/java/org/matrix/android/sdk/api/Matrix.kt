@@ -73,24 +73,52 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
     }
 
+    /**
+     * Return the User Agent used for any request that the SDK is making to the homeserver.
+     * There is no way to change the user agent at the moment
+     */
     fun getUserAgent() = userAgentHolder.userAgent
 
+    /**
+     * Return the AuthenticationService
+     */
     fun authenticationService() = authenticationService
 
+    /**
+     * Return the RawService
+     */
     fun rawService() = rawService
 
+    /**
+     * Return the LightweightSettingsStorage
+     */
     fun lightweightSettingsStorage() = lightweightSettingsStorage
 
+    /**
+     * Return the HomeServerHistoryService
+     */
     fun homeServerHistoryService() = homeServerHistoryService
 
+    /**
+     * Return the legacy session importer, useful if you want to migrate an app, which was using the legacy Matrix Android Sdk
+     */
     fun legacySessionImporter() = legacySessionImporter
 
+    /**
+     * Get the worker factory. The returned value has to be provided to `WorkConfiguration.Builder()`
+     */
     fun workerFactory(): WorkerFactory = matrixWorkerFactory
 
+    /**
+     * Register an API interceptor, to be able to be notified when the specified API got a response
+     */
     fun registerApiInterceptorListener(path: ApiPath, listener: ApiInterceptorListener) {
         apiInterceptor.addListener(path, listener)
     }
 
+    /**
+     * Un-register an API interceptor
+     */
     fun unregisterApiInterceptorListener(path: ApiPath, listener: ApiInterceptorListener) {
         apiInterceptor.removeListener(path, listener)
     }
