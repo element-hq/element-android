@@ -16,24 +16,36 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
+import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.LiveLocationShareSummaryData
+import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
+import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
+import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.toLocationData
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.Session
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import javax.inject.Inject
 
 class LiveLocationShareMessageItemFactory @Inject constructor(
+        private val session: Session,
         private val dimensionConverter: DimensionConverter,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
         private val avatarSizeProvider: AvatarSizeProvider,
+        private val urlMapProvider: UrlMapProvider,
+        private val locationPinProvider: LocationPinProvider,
+        private val vectorDateFormatter: VectorDateFormatter,
 ) {
 
     fun create(
@@ -41,10 +53,10 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes,
     ): VectorEpoxyModel<*>? {
-        return when (getViewState(liveLocationShareSummaryData)) {
+        return when (val currentState = getViewState(liveLocationShareSummaryData)) {
             LiveLocationShareViewState.Loading    -> buildLoadingItem(highlight, attributes)
             LiveLocationShareViewState.Inactive   -> buildInactiveItem()
-            is LiveLocationShareViewState.Running -> buildRunningItem()
+            is LiveLocationShareViewState.Running -> buildRunningItem(highlight, attributes, currentState)
             LiveLocationShareViewState.Unkwown    -> null
         }
     }
@@ -64,7 +76,32 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
                 .leftGuideline(avatarSizeProvider.leftGuideline)
     }
 
-    private fun buildRunningItem() = null
+    private fun buildRunningItem(
+            highlight: Boolean,
+            attributes: AbsMessageItem.Attributes,
+            runningState: LiveLocationShareViewState.Running,
+    ): MessageLiveLocationItem {
+        // TODO only render location if enabled in preferences: to be handled in a next PR
+        val width = timelineMediaSizeProvider.getMaxSize().first
+        val height = dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
+
+        val locationUrl = runningState.lastGeoUri.toLocationData()?.let {
+            urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
+        }
+
+        return MessageLiveLocationItem_()
+                .attributes(attributes)
+                .locationUrl(locationUrl)
+                .mapWidth(width)
+                .mapHeight(height)
+                .locationUserId(attributes.informationData.senderId)
+                .locationPinProvider(locationPinProvider)
+                .highlighted(highlight)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .currentUserId(session.myUserId)
+                .endOfLiveDateTime(runningState.endOfLiveDateTime)
+                .vectorDateFormatter(vectorDateFormatter)
+    }
 
     private fun buildInactiveItem() = null
 

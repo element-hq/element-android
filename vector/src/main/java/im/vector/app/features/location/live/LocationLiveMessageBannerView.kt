@@ -98,17 +98,21 @@ class LocationLiveMessageBannerView @JvmOverloads constructor(
         title.text = context.getString(R.string.location_share_live_enabled)
 
         countDownTimer?.cancel()
-        countDownTimer = object : CountDownTimer(viewState.remainingTimeInMillis, REMAINING_TIME_COUNTER_INTERVAL_IN_MS) {
-            override fun onTick(millisUntilFinished: Long) {
-                val duration = Duration.ofMillis(millisUntilFinished.coerceAtLeast(0L))
-                subTitle.text = context.getString(R.string.location_share_live_remaining_time, TextUtils.formatDurationWithUnits(context, duration))
-            }
+        viewState.remainingTimeInMillis
+                .takeIf { it >= 0 }
+                ?.let {
+                    countDownTimer = object : CountDownTimer(it, REMAINING_TIME_COUNTER_INTERVAL_IN_MS) {
+                        override fun onTick(millisUntilFinished: Long) {
+                            val duration = Duration.ofMillis(millisUntilFinished.coerceAtLeast(0L))
+                            subTitle.text = context.getString(R.string.location_share_live_remaining_time, TextUtils.formatDurationWithUnits(context, duration))
+                        }
 
-            override fun onFinish() {
-                subTitle.text = context.getString(R.string.location_share_live_remaining_time, TextUtils.formatDurationWithUnits(context, Duration.ofMillis(0L)))
-            }
-        }
-        countDownTimer?.start()
+                        override fun onFinish() {
+                            subTitle.text = context.getString(R.string.location_share_live_remaining_time, TextUtils.formatDurationWithUnits(context, Duration.ofMillis(0L)))
+                        }
+                    }
+                    countDownTimer?.start()
+                }
 
         val rootLayout: ConstraintLayout? = (binding.root as? ConstraintLayout)
         rootLayout?.let { parentLayout ->
