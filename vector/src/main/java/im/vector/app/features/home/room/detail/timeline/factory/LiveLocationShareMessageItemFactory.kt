@@ -110,9 +110,9 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
 
     private fun getViewState(liveLocationShareSummaryData: LiveLocationShareSummaryData?): LiveLocationShareViewState {
         return when {
-            liveLocationShareSummaryData?.isActive == null                                                   -> LiveLocationShareViewState.Unkwown
-            liveLocationShareSummaryData.isActive && liveLocationShareSummaryData.lastGeoUri.isNullOrEmpty() -> LiveLocationShareViewState.Loading
+            liveLocationShareSummaryData?.isActive == null -> LiveLocationShareViewState.Unkwown
             liveLocationShareSummaryData.isActive.not() || isLiveTimedOut(liveLocationShareSummaryData)      -> LiveLocationShareViewState.Inactive
+            liveLocationShareSummaryData.isActive && liveLocationShareSummaryData.lastGeoUri.isNullOrEmpty() -> LiveLocationShareViewState.Loading
             else                                                                                             ->
                 LiveLocationShareViewState.Running(
                         liveLocationShareSummaryData.lastGeoUri.orEmpty(),
