@@ -25,8 +25,8 @@ import im.vector.app.features.home.room.detail.timeline.item.LiveLocationShareSu
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.extensions.orTrue
-import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class LiveLocationMessageItemFactory @Inject constructor(
@@ -67,5 +67,12 @@ class LiveLocationMessageItemFactory @Inject constructor(
                 .mapHeight(height)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
+    }
+
+    private sealed class LiveLocationShareViewState {
+        object Loading : LiveLocationShareViewState()
+        data class Running(val locationInfo: LocationInfo, val endOfLiveDateTime: LocalDateTime?) : LiveLocationShareViewState()
+        object Inactive : LiveLocationShareViewState()
+        object Unkwown : LiveLocationShareViewState()
     }
 }
