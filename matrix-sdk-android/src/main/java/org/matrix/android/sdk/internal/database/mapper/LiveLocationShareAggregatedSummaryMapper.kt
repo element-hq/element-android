@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
-import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationShareAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
@@ -26,21 +25,9 @@ internal object LiveLocationShareAggregatedSummaryMapper {
 
     fun map(entity: LiveLocationShareAggregatedSummaryEntity): LiveLocationShareAggregatedSummary {
         return LiveLocationShareAggregatedSummary(
-                eventId = entity.eventId,
-                roomId = entity.roomId,
                 isActive = entity.isActive,
                 endOfLiveTimestampMillis = entity.endOfLiveTimestampMillis,
                 lastLocationDataContent = ContentMapper.map(entity.lastLocationContent).toModel<MessageBeaconLocationDataContent>()
-        )
-    }
-
-    fun map(model: LiveLocationShareAggregatedSummary): LiveLocationShareAggregatedSummaryEntity {
-        return LiveLocationShareAggregatedSummaryEntity(
-                eventId = model.eventId,
-                roomId = model.roomId,
-                isActive = model.isActive,
-                endOfLiveTimestampMillis = model.endOfLiveTimestampMillis,
-                lastLocationContent = ContentMapper.map(model.lastLocationDataContent.toContent())
         )
     }
 }

@@ -22,11 +22,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocati
  * Aggregation info concerning a live location share.
  */
 data class LiveLocationShareAggregatedSummary(
-        /**
-         * Event id of the event that started the live.
-         */
-        val eventId: String,
-        val roomId: String,
         val isActive: Boolean?,
         val endOfLiveTimestampMillis: Long?,
         val lastLocationDataContent: MessageBeaconLocationDataContent?,
