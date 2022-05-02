@@ -173,29 +173,24 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             EventType.KEY_VERIFICATION_START,
                             EventType.KEY_VERIFICATION_MAC,
                             EventType.KEY_VERIFICATION_READY,
-                            EventType.KEY_VERIFICATION_KEY      -> {
+                            EventType.KEY_VERIFICATION_KEY    -> {
                                 Timber.v("## SAS REF in room $roomId for event ${event.eventId}")
                                 encryptedEventContent.relatesTo.eventId?.let {
                                     handleVerification(realm, event, roomId, isLocalEcho, it)
                                 }
                             }
-                            in EventType.POLL_RESPONSE          -> {
+                            in EventType.POLL_RESPONSE        -> {
                                 event.getClearContent().toModel<MessagePollResponseContent>(catchError = true)?.let {
                                     handleResponse(realm, event, it, roomId, isLocalEcho, event.getRelationContent()?.eventId)
                                 }
                             }
-                            in EventType.POLL_END               -> {
+                            in EventType.POLL_END             -> {
                                 event.content.toModel<MessageEndPollContent>(catchError = true)?.let {
                                     handleEndPoll(realm, event, it, roomId, isLocalEcho)
                                 }
                             }
-                            in EventType.STATE_ROOM_BEACON_INFO -> {
-                                event.content.toModel<MessageBeaconInfoContent>(catchError = true)?.let {
-                                    liveLocationAggregationProcessor.handleBeaconInfo(realm, event, it, roomId, isLocalEcho)
-                                }
-                            }
-                            in EventType.BEACON_LOCATION_DATA   -> {
-                                event.content.toModel<MessageBeaconLocationDataContent>(catchError = true)?.let {
+                            in EventType.BEACON_LOCATION_DATA -> {
+                                event.getClearContent().toModel<MessageBeaconLocationDataContent>(catchError = true)?.let {
                                     liveLocationAggregationProcessor.handleBeaconLocationData(realm, event, it, roomId, isLocalEcho)
                                 }
                             }
@@ -260,11 +255,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 in EventType.STATE_ROOM_BEACON_INFO -> {
                     event.content.toModel<MessageBeaconInfoContent>(catchError = true)?.let {
                         liveLocationAggregationProcessor.handleBeaconInfo(realm, event, it, roomId, isLocalEcho)
-                    }
-                }
-                in EventType.BEACON_LOCATION_DATA   -> {
-                    event.content.toModel<MessageBeaconLocationDataContent>(catchError = true)?.let {
-                        liveLocationAggregationProcessor.handleBeaconLocationData(realm, event, it, roomId, isLocalEcho)
                     }
                 }
                 else                                -> Timber.v("UnHandled event ${event.eventId}")
