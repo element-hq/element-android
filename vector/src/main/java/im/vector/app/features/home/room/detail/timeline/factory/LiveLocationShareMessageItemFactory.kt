@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class LiveLocationMessageItemFactory @Inject constructor(
+class LiveLocationShareMessageItemFactory @Inject constructor(
         private val dimensionConverter: DimensionConverter,
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
         private val avatarSizeProvider: AvatarSizeProvider,
