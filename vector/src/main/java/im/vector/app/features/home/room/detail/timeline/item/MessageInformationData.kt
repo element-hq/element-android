@@ -104,7 +104,7 @@ data class PollVoteSummaryData(
 @Parcelize
 data class LiveLocationShareSummaryData(
         val isActive: Boolean?,
-        val endOfLiveTimestampAsMilliseconds: Long?,
+        val endOfLiveTimestampMillis: Long?,
         val lastGeoUri: String?,
 ) : Parcelable
 

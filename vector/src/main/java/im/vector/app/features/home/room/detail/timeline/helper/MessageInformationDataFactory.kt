@@ -193,7 +193,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         return event.annotations?.liveLocationShareAggregatedSummary?.let { summary ->
             LiveLocationShareSummaryData(
                     isActive = summary.isActive,
-                    endOfLiveTimestampAsMilliseconds = summary.endOfLiveTimestampAsMilliseconds,
+                    endOfLiveTimestampMillis = summary.endOfLiveTimestampMillis,
                     lastGeoUri = summary.lastLocationDataContent?.getBestLocationInfo()?.geoUri
             )
         }

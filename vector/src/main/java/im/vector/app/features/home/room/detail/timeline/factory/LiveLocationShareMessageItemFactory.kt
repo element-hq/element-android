@@ -132,7 +132,7 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
     }
 
     private fun getEndOfLiveDateTime(liveLocationShareSummaryData: LiveLocationShareSummaryData): LocalDateTime? {
-        return liveLocationShareSummaryData.endOfLiveTimestampAsMilliseconds?.let { DateProvider.toLocalDateTime(timestamp = it) }
+        return liveLocationShareSummaryData.endOfLiveTimestampMillis?.let { DateProvider.toLocalDateTime(timestamp = it) }
     }
 
     private sealed class LiveLocationShareViewState {
