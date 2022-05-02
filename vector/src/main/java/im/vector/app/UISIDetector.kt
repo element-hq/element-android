@@ -90,22 +90,27 @@ class UISIDetector : LiveEventListener {
         val roomId = event.roomId
         if (!enabled || eventId == null || roomId == null) return
 
-        val trackerId: String = trackerId(eventId, roomId)
-        if (trackedEvents.containsKey(trackerId)) {
-            Timber.w("## UISIDetector: Event $eventId is already tracked")
+        val trackedId: String = trackedId(eventId, roomId)
+        if (trackedEvents.containsKey(trackedId)) {
+            Timber.v("## UISIDetector: Event $eventId is already tracked")
             return
         }
         // track it and start timer
         val timeoutTask = object : TimerTask() {
             override fun run() {
                 executor.execute {
+                    // we should check if it's still tracked (it might have been decrypted)
+                    if (!trackedEvents.containsKey(trackedId)) {
+                        Timber.v("## UISIDetector: E2E error for $eventId was resolved")
+                        return@execute
+                    }
                     unTrack(eventId, roomId)
                     Timber.v("## UISIDetector: Timeout on $eventId")
                     triggerUISI(E2EMessageDetected.fromEvent(event, roomId))
                 }
             }
         }
-        trackedEvents[trackerId] = timeoutTask
+        trackedEvents[trackedId] = timeoutTask
         timer.schedule(timeoutTask, timeoutMillis)
     }
 
@@ -113,7 +118,7 @@ class UISIDetector : LiveEventListener {
 
     override fun onPaginatedEvent(roomId: String, event: Event) {}
 
-    private fun trackerId(eventId: String, roomId: String): String = "$roomId-$eventId"
+    private fun trackedId(eventId: String, roomId: String): String = "$roomId-$eventId"
 
     private fun triggerUISI(source: E2EMessageDetected) {
         if (!enabled) return
@@ -122,6 +127,6 @@ class UISIDetector : LiveEventListener {
     }
 
     private fun unTrack(eventId: String, roomId: String) {
-        trackedEvents.remove(trackerId(eventId, roomId))?.cancel()
+        trackedEvents.remove(trackedId(eventId, roomId))?.cancel()
     }
 }
