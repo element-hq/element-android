@@ -301,7 +301,7 @@
     <string name="start_video_call">ລີ່ມການໂທວິດີໂອ</string>
     <string name="start_voice_call">ເລີ່ມການໂທດ້ວຍສຽງ</string>
     <string name="search">ຊອກຫາ</string>
-    <string name="hs_client_url">Homeserver API URL</string>
+    <string name="hs_client_url">API URL ຂອງສະຖານີ</string>
     <string name="hs_url">Homeserver URL</string>
     <string name="logout">ອອກຈາກລະບົບ</string>
     <string name="username">ຊື່ຜູ້ໃຊ້</string>
@@ -541,7 +541,7 @@
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="other">%1$s, %2$s, %3$s ແລະ %4$d ອື່ນໆ</item>
     </plurals>
-    <string name="room_displayname_4_members">%1$s, %2$s, %3$s ແລະ %4$</string>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s ແລະ %4$s</string>
     <string name="room_displayname_3_members">%1$s, %2$s ແລະ %3$s</string>
     <string name="room_displayname_two_members">%1$s ແລະ %2$s</string>
     <string name="room_displayname_room_invite">ເຊີນຫ້ອງ</string>
