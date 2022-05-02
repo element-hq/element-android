@@ -54,7 +54,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
                 eventId = targetEventId
         )
 
-        aggregatedSummary.endOfLiveTimestampAsMilliseconds = content.getBestTimestampAsMilliseconds()?.let { it + (content.timeout ?: 0) }
+        aggregatedSummary.endOfLiveTimestampAsMilliseconds = content.getBestTimestampMillis()?.let { it + (content.timeout ?: 0) }
         aggregatedSummary.isActive = content.isLive
     }
 

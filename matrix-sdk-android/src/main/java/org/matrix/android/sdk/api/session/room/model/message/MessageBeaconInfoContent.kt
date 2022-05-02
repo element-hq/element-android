@@ -49,8 +49,8 @@ data class MessageBeaconInfoContent(
         /**
          * Beacon creation timestamp.
          */
-        @Json(name = "org.matrix.msc3488.ts") val unstableTimestampAsMilliseconds: Long? = null,
-        @Json(name = "m.ts") val timestampAsMilliseconds: Long? = null,
+        @Json(name = "org.matrix.msc3488.ts") val unstableTimestampMillis: Long? = null,
+        @Json(name = "m.ts") val timestampMillis: Long? = null,
         /**
          * Live location asset type.
          */
@@ -58,7 +58,7 @@ data class MessageBeaconInfoContent(
         @Json(name = "m.asset") val locationAsset: LocationAsset? = null,
 ) : MessageContent {
 
-    fun getBestTimestampAsMilliseconds() = timestampAsMilliseconds ?: unstableTimestampAsMilliseconds
+    fun getBestTimestampMillis() = timestampMillis ?: unstableTimestampMillis
 
     fun getBestLocationAsset() = locationAsset ?: unstableLocationAsset
 }

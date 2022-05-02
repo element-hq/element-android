@@ -242,7 +242,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 body = geoUri,
                 unstableLocationInfo = LocationInfo(geoUri = geoUri, description = geoUri),
                 unstableLocationAsset = LocationAsset(type = assetType),
-                unstableTimestampAsMilliseconds = System.currentTimeMillis(),
+                unstableTimestampMillis = System.currentTimeMillis(),
                 unstableText = geoUri
         )
         return createMessageEvent(roomId, content)

@@ -99,7 +99,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         val beaconContent = MessageBeaconInfoContent(
                 timeout = roomArgs.durationMillis,
                 isLive = true,
-                unstableTimestampAsMilliseconds = clock.epochMillis()
+                unstableTimestampMillis = clock.epochMillis()
         ).toContent()
 
         val stateKey = session.myUserId
