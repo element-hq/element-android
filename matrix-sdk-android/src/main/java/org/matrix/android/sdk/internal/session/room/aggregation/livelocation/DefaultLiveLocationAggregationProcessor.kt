@@ -85,7 +85,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
                 ?: 0
 
         if (updatedLocationTimestamp.isMoreRecentThan(currentLocationTimestamp)) {
-            Timber.d("set last location of summary with id=$targetEventId to ${content.getBestLocationInfo()}")
+            Timber.d("updating last location of the summary of id=$targetEventId")
             aggregatedSummary.lastLocationContent = ContentMapper.map(content.toContent())
         }
     }
