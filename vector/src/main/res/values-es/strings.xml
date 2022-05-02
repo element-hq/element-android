@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="notice_room_invite_no_invitee">la invitación de %s</string>
     <string name="notice_room_invite">%1$s invitó a %2$s</string>
     <string name="notice_room_invite_you">%1$s te ha invitado</string>
@@ -574,7 +574,7 @@
     <string name="command_description_unban_user">Quita el veto al usuario con la ID dada</string>
     <string name="command_description_op_user">Define el nivel de autoridad de un usuario</string>
     <string name="command_description_invite_user">Invita al usuario con la ID dada a la sala actual</string>
-    <string name="command_description_join_room">Se une a la sala con el alias dado</string>
+    <string name="command_description_join_room">Se une a la sala con la dirección dada</string>
     <string name="command_description_part_room">Salir de la sala</string>
     <string name="command_description_topic">Establecer el tema de la sala</string>
     <string name="command_description_remove_user">Expulsa al usuario con la ID dada</string>
@@ -1507,7 +1507,7 @@
     <string name="verification_profile_device_verified_because">Esta sesión es de confianza para mensajería segura porque %1$s (%2$s) la ha verificado:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) iniciado sesión con una nueva sesión:</string>
     <string name="verification_profile_device_untrust_info">Hasta que este usuario confíe en esta sesión, los mensajes enviados hacia y desde ella se etiquetan con advertencias. Alternativamente, puede verificarlo manualmente.</string>
-    <string name="qr_code_scanned_by_other_notice">¡Casi ahí! ¿Es %s muestra el mismo escudo\?</string>
+    <string name="qr_code_scanned_by_other_notice">¡Casi estamos! ¿Muestra %s el mismo tick\?</string>
     <string name="verification_cannot_access_other_session">Use una contraseña o clave de recuperación</string>
     <string name="verification_use_passphrase">Si no puede acceder a una sesión existente</string>
     <string name="enter_secret_storage_invalid">No puedo encontrar secretos almacenados</string>
@@ -1562,7 +1562,7 @@
     <string name="encryption_not_enabled">Cifrado no habilitado</string>
     <string name="encryption_unknown_algorithm_tile_description">El cifrado usado por esta sala no es compatible</string>
     <string name="room_created_summary_item">%s creado y configurado la sala.</string>
-    <string name="qr_code_scanned_self_verif_notice">¡Casi ahí! ¿El otro dispositivo muestra el mismo escudo\?</string>
+    <string name="qr_code_scanned_self_verif_notice">¡Casi estamos! ¿El otro dispositivo muestra el mismo tick\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">¡Casi ahí! Esperando confirmación…</string>
     <string name="error_failed_to_import_keys">No se pudieron importar las claves</string>
     <string name="settings_messages_at_room">Mensajes que contienen @room</string>
@@ -1824,8 +1824,8 @@
     <string name="call_resume_action">Continuar</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Los espacios son una nueva manera para agrupar salas y personas.</string>
     <string name="join_space">Únete a un Espacio</string>
-    <string name="create_space">Crea un Espacio</string>
-    <string name="add_space">Añade un Espacio</string>
+    <string name="create_space">Crear espacio</string>
+    <string name="add_space">Añadir espacio</string>
     <string name="command_description_create_space">Crea un Espacio</string>
     <string name="activity_create_space_title">Crear un espacio</string>
     <string name="initial_sync_start_server_computing">Sincronización inicial:
@@ -2079,7 +2079,7 @@
     <string name="create_spaces_details_public_header">Añade algunos detalles para ayudarlo a destacar. Puedes cambiar esto en cualquier momento.</string>
     <string name="create_spaces_private_teammates">Un espacio privado para ti y tus compañeros de equipo</string>
     <string name="create_spaces_organise_rooms">Un espacio privado para organizar tus salas</string>
-    <string name="create_spaces_make_sure_access">Asegúrate de que son las personas correctas las que tienen acceso a %s. Puedes cambiar esto más tarde.</string>
+    <string name="create_spaces_make_sure_access">Asegúrate de que las personas correctas tienen acceso a %s.</string>
     <string name="create_spaces_who_are_you_working_with">¿Con quién estás trabajando\?</string>
     <string name="create_spaces_join_info_help">Para unirte a un espacio existente necesitas una invitación.</string>
     <string name="create_spaces_you_can_change_later">Puedes cambiar esto más tarde</string>
@@ -2367,4 +2367,120 @@
         <item quantity="one">%d cambio de ACL del servidor</item>
         <item quantity="other">%d cambios de ALC de los servidores</item>
     </plurals>
+    <string name="a11y_location_share_option_pinned_icon">Compartir esta ubicación</string>
+    <string name="a11y_location_share_option_user_live_icon">Compartir ubicación en tiempo real</string>
+    <string name="a11y_location_share_option_user_current_icon">Compartir mi ubicación actual</string>
+    <string name="location_share" tools:ignore="UnusedResources">Compartir ubicación</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} también es estupenda para el trabajo. Es confiada por las organizaciones más seguras del mundo.</string>
+    <string name="identity_server_consent_dialog_content_3">Para descubrir contactos ya existentes, tendrás que enviar información de contacto (emails y números de teléfono) a tu servidor de identidad. Aplicamos hashes en tus datos antes de enviarlos por privacidad.</string>
+    <string name="send_feedback_threads_info">Los hilos son un trabajo en progreso con nuevas y excitantes características nuevas, como notificaciones mejoradas. ¡Nos encantaría escuchar tus comentarios!</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Si se activa, siempre aparecerás como fuera de línea para otros usuarios, incluso cuando uses la aplicación.</string>
+    <string name="threads_beta_enable_notice_message">Los hilos ayudan a mantener tus conversaciones en el asunto y las hacen más fáciles de rastrear. %sHabilitar la función de hilos refrescará la aplicación. Esto podría tardar más en algunas cuentas.</string>
+    <string name="room_message_autocomplete_notification">Notificación de sala</string>
+    <string name="room_message_autocomplete_users">Usuarios</string>
+    <string name="room_message_notify_everyone">Notificar a toda la sala</string>
+    <string name="live_location_sharing_notification_description">La compartición de ubicación está en progreso</string>
+    <string name="live_location_sharing_notification_title">${app_name} Ubicación en directo</string>
+    <string name="settings_enable_location_sharing_summary">Cuando se active serás capaz de enviar tu ubicación a cualquier sala</string>
+    <string name="settings_enable_location_sharing">Activar compartir ubicación</string>
+    <string name="location_share_external">Abrir con</string>
+    <string name="location_not_available_dialog_content">${app_name} no ha podido acceder a tu ubicación. Por favor, inténtalo de nuevo más tarde.</string>
+    <string name="location_not_available_dialog_title">${app_name} no ha podido acceder a tu ubicación</string>
+    <string name="location_in_background_missing_permission_dialog_content">If te gustaría compartir tu ubicación en tiempo real, ${app_name} necesita permiso de ubicación siempre cuando la aplicación esté en segundo plano
+\nSolo acederemos a tu ubicación para la duración que escogas.</string>
+    <string name="location_share_live_select_duration_title">Compartir tu ubicación en directo para</string>
+    <string name="location_share_option_pinned">Compartir esta ubicación</string>
+    <string name="location_share_option_user_live">Compartir ubicación en directo</string>
+    <string name="location_share_option_user_current">Compartir mi ubicación actual</string>
+    <string name="a11y_location_share_locate_button">Hacer zoom a ubicación actual</string>
+    <string name="a11y_location_share_pin_on_map">Pin de ubicación selecionada en el mapa</string>
+    <string name="a11y_static_map_image">Mapa</string>
+    <string name="a11y_location_share_icon" tools:ignore="UnusedResources">Compartir ubicación</string>
+    <string name="location_activity_title_preview">Ubicación</string>
+    <string name="location_activity_title_static_sharing">Compartir ubicación</string>
+    <string name="closed_poll_option_description">Los resultados solo se revelan cuando finalices la encuesta</string>
+    <string name="closed_poll_option_title">Encuesta cerrada</string>
+    <string name="open_poll_option_description">Los votantes verán los resultados tan pronto como hayan votado</string>
+    <string name="open_poll_option_title">Abrir encuesta</string>
+    <string name="poll_type_title">Tipo de encuesta</string>
+    <string name="edit_poll_title">Editar encuesta</string>
+    <string name="delete_poll_dialog_content">¿Estás seguro de que quieres eliminar esta encuesta\? No podrás recuperarla cuando se elimine.</string>
+    <string name="delete_poll_dialog_title">Eliminar encuesta</string>
+    <string name="poll_end_room_list_preview">Encuesta finalizada</string>
+    <string name="poll_response_room_list_preview">Voto enviado</string>
+    <string name="end_poll_confirmation_approve_button">Finalizar encuesta</string>
+    <string name="end_poll_confirmation_description">Esto evitará que las personas puedan votar y mostrará los resultados finales de la encuesta.</string>
+    <string name="end_poll_confirmation_title">¿Finalizar encuesta\?</string>
+    <string name="a11y_poll_winner_option">opción ganadora</string>
+    <string name="poll_end_action">Finalizar encuesta</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Resultado final basado en %1$d voto</item>
+        <item quantity="other">Resultado final basado en %1$d votos</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">%1$d voto enviado. Vota para ver los resultados</item>
+        <item quantity="other">%1$d votos enviados. Vota para ver los resultados</item>
+    </plurals>
+    <string name="poll_no_votes_cast">No hay ningún voto</string>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Basado en %1$d voto</item>
+        <item quantity="other">Basado en %1$d votos</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d voto</item>
+        <item quantity="other">%1$d votos</item>
+    </plurals>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Al menos %1$s opción es requerida</item>
+        <item quantity="other">Al menos %1$s opciones son requeridas</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">La pregunta no puede estar vacía</string>
+    <string name="create_poll_button">CREAR ENCUESTA</string>
+    <string name="create_poll_add_option">AÑADIR OPCIÓN</string>
+    <string name="create_poll_options_hint">Opción %1$d</string>
+    <string name="create_poll_options_title">Crear opciones</string>
+    <string name="create_poll_question_hint">Pregunta o asunto</string>
+    <string name="create_poll_question_title">Pregunta o asunto de encuesta</string>
+    <string name="create_poll_title">Crear Encuesta</string>
+    <string name="restart_the_application_to_apply_changes">Reinicia la aplicación para que el cambio surta efecto.</string>
+    <string name="analytics_opt_in_content">Ayúdanos a identificar problemas y a mejorar ${app_name} compartiendo datos de uso anónimos. Para comprender como las personas usan múltiples dispositivos, generaremos un identificador aleatorio, compartido por tus dispositivos.
+\n
+\nPuedes leer todos nuestros términos en %s.</string>
+    <string name="labs_enable_latex_maths">Habilitar matemáticas con LaTeX</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Ocurrió un error al reproducir %1$s</string>
+    <string name="a11y_pause_audio_message">Pausar %1$s</string>
+    <string name="a11y_play_audio_message">Reproducir %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minutos %2$d segundos</string>
+    <string name="a11y_audio_message_item">%1$s,%2$s,%3$s</string>
+    <string name="labs_enable_thread_messages_desc">Nota: la applicación se reiniciará</string>
+    <string name="labs_enable_thread_messages">Activar mensajes en hilo</string>
+    <string name="labs_auto_report_uisi_desc">Tu sistema automáticamente enviará registros cuando ocurra un fallo al desencriptar</string>
+    <string name="labs_auto_report_uisi">Reportar errores de desencriptado automáticamente.</string>
+    <string name="a11y_presence_unavailable">No disponible</string>
+    <string name="a11y_presence_offline">Fuera de línea</string>
+    <string name="a11y_presence_online">En línea</string>
+    <string name="error_forbidden_digits_only_username">El servidor doméstico no acepta nombres de usuario con únicamente dígitos.</string>
+    <string name="encryption_misconfigured">La encriptación está configurada de manera incorrecta</string>
+    <string name="room_member_override_nick_color">Sobreescribir color del nick</string>
+    <string name="room_profile_section_restore_security">Restaurar Encriptación</string>
+    <string name="contact_admin_to_restore_encryption">Por favor, contacta con un administrador para restablecer la encriptación a un estado válido.</string>
+    <string name="encryption_has_been_misconfigured">La encriptación ha sido configurada de forma incorrecta.</string>
+    <string name="sent_live_location">Compartieron su localización en vivo</string>
+    <string name="sent_location">Compartieron su localización</string>
+    <string name="ftue_profile_picture_subtitle">Puedes cambiar esto en todo momento.</string>
+    <string name="ftue_display_name_subtitle">Esto se mostrará cuando mandes mensajes.</string>
+    <string name="ftue_account_created_take_me_home">Llévame a casa</string>
+    <string name="ftue_account_created_personalize">Personalizar perfil</string>
+    <string name="ftue_auth_use_case_connect_to_server">Conectar a servidor</string>
+    <string name="ftue_auth_use_case_join_existing_server">¿Querías unirte a un servidor ya existente\?</string>
+    <string name="ftue_auth_carousel_encrypted_body">Encriptado extremo-a-extremo, sin requerir un número de teléfono. Sin anuncios o minado de datos.</string>
+    <string name="ftue_auth_carousel_control_body">Elige dónde se almacenan tus conversaciones, dándote control e independencia. Conectado mediante Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">La comunicación segura e independiente que te da el mismo nivel de privacidad que una conversación cara a cara en tu propio hogar.</string>
+    <string name="identity_server_consent_dialog_title_2">Enviar emials y números de teléfono a %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Tus contactos son privados. Para descubrir usuarios desde tus contactos, necesitamos tu permiso para enviar información de contactos a tu servidor de identidad.</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_title">Comentarios de la beta de hilos</string>
+    <string name="threads_labs_enable_notice_title">Beta de hilos</string>
 </resources>
