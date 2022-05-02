@@ -21,6 +21,14 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
+/**
+ * Content of the state event of type
+ * [EventType.BEACON_LOCATION_DATA][org.matrix.android.sdk.api.session.events.model.EventType.BEACON_LOCATION_DATA]
+ *
+ * It contains location data related to a live location share.
+ * It is related to the state event that originally started the live.
+ * See [MessageBeaconInfoContent][org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent]
+ */
 @JsonClass(generateAdapter = true)
 data class MessageBeaconLocationDataContent(
         /**
