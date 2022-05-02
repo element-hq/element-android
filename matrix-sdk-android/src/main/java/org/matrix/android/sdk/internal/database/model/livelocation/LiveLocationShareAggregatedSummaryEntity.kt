@@ -33,7 +33,7 @@ internal open class LiveLocationShareAggregatedSummaryEntity(
 
         var isActive: Boolean? = null,
 
-        var endOfLiveTimestampAsMilliseconds: Long? = null,
+        var endOfLiveTimestampMillis: Long? = null,
 
         /**
          * For now we persist this as a JSON for greater flexibility

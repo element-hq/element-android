@@ -35,8 +35,8 @@ internal class MigrateSessionTo027(realm: DynamicRealm) : RealmMigrator(realm, 2
                         .addField(LiveLocationShareAggregatedSummaryEntityFields.ROOM_ID, String::class.java, FieldAttribute.REQUIRED)
                         .addField(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, Boolean::class.java)
                         .setNullable(LiveLocationShareAggregatedSummaryEntityFields.IS_ACTIVE, true)
-                        .addField(LiveLocationShareAggregatedSummaryEntityFields.END_OF_LIVE_TIMESTAMP_AS_MILLISECONDS, Long::class.java)
-                        .setNullable(LiveLocationShareAggregatedSummaryEntityFields.END_OF_LIVE_TIMESTAMP_AS_MILLISECONDS, true)
+                        .addField(LiveLocationShareAggregatedSummaryEntityFields.END_OF_LIVE_TIMESTAMP_MILLIS, Long::class.java)
+                        .setNullable(LiveLocationShareAggregatedSummaryEntityFields.END_OF_LIVE_TIMESTAMP_MILLIS, true)
                         .addField(LiveLocationShareAggregatedSummaryEntityFields.LAST_LOCATION_CONTENT, String::class.java)
                 ?: return
 

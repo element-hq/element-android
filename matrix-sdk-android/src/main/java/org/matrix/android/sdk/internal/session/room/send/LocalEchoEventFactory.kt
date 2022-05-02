@@ -261,7 +261,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         eventId = beaconInfoEventId
                 ),
                 unstableLocationInfo = LocationInfo(geoUri = geoUri, description = geoUri),
-                unstableTimestampAsMilliseconds = System.currentTimeMillis(),
+                unstableTimestampMillis = System.currentTimeMillis(),
         )
         val localId = LocalEcho.createLocalEchoId()
         return Event(

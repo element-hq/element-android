@@ -56,7 +56,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
 
         Timber.d("updating summary of id=$targetEventId with isLive=${content.isLive}")
 
-        aggregatedSummary.endOfLiveTimestampAsMilliseconds = content.getBestTimestampMillis()?.let { it + (content.timeout ?: 0) }
+        aggregatedSummary.endOfLiveTimestampMillis = content.getBestTimestampMillis()?.let { it + (content.timeout ?: 0) }
         aggregatedSummary.isActive = content.isLive
     }
 
@@ -77,11 +77,11 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
                 roomId = roomId,
                 eventId = targetEventId
         )
-        val updatedLocationTimestamp = content.getBestTimestampAsMilliseconds() ?: 0
+        val updatedLocationTimestamp = content.getBestTimestampMillis() ?: 0
         val currentLocationTimestamp = ContentMapper
                 .map(aggregatedSummary.lastLocationContent)
                 .toModel<MessageBeaconLocationDataContent>()
-                ?.getBestTimestampAsMilliseconds()
+                ?.getBestTimestampMillis()
                 ?: 0
 
         if (updatedLocationTimestamp.isMoreRecentThan(currentLocationTimestamp)) {

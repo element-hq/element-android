@@ -29,7 +29,7 @@ internal object LiveLocationShareAggregatedSummaryMapper {
                 eventId = entity.eventId,
                 roomId = entity.roomId,
                 isActive = entity.isActive,
-                endOfLiveTimestampAsMilliseconds = entity.endOfLiveTimestampAsMilliseconds,
+                endOfLiveTimestampMillis = entity.endOfLiveTimestampMillis,
                 lastLocationDataContent = ContentMapper.map(entity.lastLocationContent).toModel<MessageBeaconLocationDataContent>()
         )
     }
@@ -39,7 +39,7 @@ internal object LiveLocationShareAggregatedSummaryMapper {
                 eventId = model.eventId,
                 roomId = model.roomId,
                 isActive = model.isActive,
-                endOfLiveTimestampAsMilliseconds = model.endOfLiveTimestampAsMilliseconds,
+                endOfLiveTimestampMillis = model.endOfLiveTimestampMillis,
                 lastLocationContent = ContentMapper.map(model.lastLocationDataContent.toContent())
         )
     }

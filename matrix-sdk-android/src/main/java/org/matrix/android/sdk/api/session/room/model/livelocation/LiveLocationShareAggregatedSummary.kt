@@ -28,6 +28,6 @@ data class LiveLocationShareAggregatedSummary(
         val eventId: String,
         val roomId: String,
         val isActive: Boolean?,
-        val endOfLiveTimestampAsMilliseconds: Long?,
+        val endOfLiveTimestampMillis: Long?,
         val lastLocationDataContent: MessageBeaconLocationDataContent?,
 )
