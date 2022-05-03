@@ -1,0 +1,2 @@
+- Notify of the latest known location in LocationTracker to avoid multiple locations at start
+- Debounce location updates
