@@ -1,0 +1,1 @@
+Replace usage of `System.currentTimeMillis()` by a `Clock` interface
