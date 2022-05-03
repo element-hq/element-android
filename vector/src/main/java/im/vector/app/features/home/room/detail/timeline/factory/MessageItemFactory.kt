@@ -31,6 +31,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -142,6 +143,7 @@ class MessageItemFactory @Inject constructor(
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val spanUtils: SpanUtils,
         private val session: Session,
+        private val clock: Clock,
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
@@ -457,6 +459,7 @@ class MessageItemFactory @Inject constructor(
                                 reactionsSummaryEvents = attributes.reactionsSummaryEvents,
                         )
                 )
+                .clock(clock)
                 .callback(callback)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
