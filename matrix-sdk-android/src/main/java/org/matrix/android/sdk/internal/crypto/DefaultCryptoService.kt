@@ -103,6 +103,7 @@ import org.matrix.android.sdk.internal.task.TaskThread
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.task.launchToCallback
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
@@ -130,6 +131,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val userId: String,
         @DeviceId
         private val deviceId: String?,
+        private val clock: Clock,
         private val myDeviceInfoHolder: Lazy<MyDeviceInfoHolder>,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
@@ -701,11 +703,11 @@ internal class DefaultCryptoService @Inject constructor(
             }
             val safeAlgorithm = alg
             if (safeAlgorithm != null) {
-                val t0 = System.currentTimeMillis()
+                val t0 = clock.epochMillis()
                 Timber.tag(loggerTag.value).v("encryptEventContent() starts")
                 runCatching {
                     val content = safeAlgorithm.encryptEventContent(eventContent, eventType, userIds)
-                    Timber.tag(loggerTag.value).v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
+                    Timber.tag(loggerTag.value).v("## CRYPTO | encryptEventContent() : succeeds after ${clock.epochMillis() - t0} ms")
                     MXEncryptEventContentResult(content, EventType.ENCRYPTED)
                 }.foldToCallback(callback)
             } else {
@@ -1022,9 +1024,9 @@ internal class DefaultCryptoService @Inject constructor(
         return withContext(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).v("importRoomKeys starts")
 
-            val t0 = System.currentTimeMillis()
+            val t0 = clock.epochMillis()
             val roomKeys = MXMegolmExportEncryption.decryptMegolmKeyFile(roomKeysAsArray, password)
-            val t1 = System.currentTimeMillis()
+            val t1 = clock.epochMillis()
 
             Timber.tag(loggerTag.value).v("importRoomKeys : decryptMegolmKeyFile done in ${t1 - t0} ms")
 
@@ -1032,7 +1034,7 @@ internal class DefaultCryptoService @Inject constructor(
                     .adapter<List<MegolmSessionData>>(Types.newParameterizedType(List::class.java, MegolmSessionData::class.java))
                     .fromJson(roomKeys)
 
-            val t2 = System.currentTimeMillis()
+            val t2 = clock.epochMillis()
 
             Timber.tag(loggerTag.value).v("importRoomKeys : JSON parsing ${t2 - t1} ms")
 
@@ -1224,7 +1226,7 @@ internal class DefaultCryptoService @Inject constructor(
 //        val deviceKey = deviceInfo.identityKey()
 //
 //        val lastForcedDate = lastNewSessionForcedDates.getObject(senderId, deviceKey) ?: 0
-//        val now = System.currentTimeMillis()
+//        val now = clock.epochMillis()
 //        if (now - lastForcedDate < CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS) {
 //            Timber.d("## CRYPTO | markOlmSessionForUnwedging: New session already forced with device at $lastForcedDate. Not forcing another")
 //            return

@@ -33,10 +33,13 @@ import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo013
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo014
 import org.matrix.android.sdk.internal.crypto.store.db.migration.MigrateCryptoTo015
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class RealmCryptoStoreMigration @Inject constructor() : RealmMigration {
+internal class RealmCryptoStoreMigration @Inject constructor(
+        private val clock: Clock,
+) : RealmMigration {
     /**
      * Forces all RealmCryptoStoreMigration instances to be equal
      * Avoids Realm throwing when multiple instances of the migration are set
@@ -59,7 +62,7 @@ internal class RealmCryptoStoreMigration @Inject constructor() : RealmMigration 
         if (oldVersion < 5) MigrateCryptoTo005(realm).perform()
         if (oldVersion < 6) MigrateCryptoTo006(realm).perform()
         if (oldVersion < 7) MigrateCryptoTo007(realm).perform()
-        if (oldVersion < 8) MigrateCryptoTo008(realm).perform()
+        if (oldVersion < 8) MigrateCryptoTo008(realm, clock).perform()
         if (oldVersion < 9) MigrateCryptoTo009(realm).perform()
         if (oldVersion < 10) MigrateCryptoTo010(realm).perform()
         if (oldVersion < 11) MigrateCryptoTo011(realm).perform()

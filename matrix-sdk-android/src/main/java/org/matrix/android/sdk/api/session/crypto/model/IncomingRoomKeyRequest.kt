@@ -65,7 +65,7 @@ data class IncomingRoomKeyRequest(
          *
          * @param event the event
          */
-        fun fromEvent(event: Event): IncomingRoomKeyRequest? {
+        fun fromEvent(event: Event, now: Long): IncomingRoomKeyRequest? {
             return event.getClearContent()
                     .toModel<RoomKeyShareRequest>()
                     ?.let {
@@ -74,7 +74,7 @@ data class IncomingRoomKeyRequest(
                                 deviceId = it.requestingDeviceId,
                                 requestId = it.requestId,
                                 requestBody = it.body ?: RoomKeyRequestBody(),
-                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
+                                localCreationTimestamp = event.ageLocalTs ?: now
                         )
                     }
         }

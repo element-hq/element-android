@@ -65,7 +65,7 @@ data class IncomingSecretShareRequest(
          *
          * @param event the event
          */
-        fun fromEvent(event: Event): IncomingSecretShareRequest? {
+        fun fromEvent(event: Event, now: Long): IncomingSecretShareRequest? {
             return event.getClearContent()
                     .toModel<SecretShareRequest>()
                     ?.let {
@@ -74,7 +74,7 @@ data class IncomingSecretShareRequest(
                                 deviceId = it.requestingDeviceId,
                                 requestId = it.requestId,
                                 secretName = it.secretName,
-                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
+                                localCreationTimestamp = event.ageLocalTs ?: now
                         )
                     }
         }

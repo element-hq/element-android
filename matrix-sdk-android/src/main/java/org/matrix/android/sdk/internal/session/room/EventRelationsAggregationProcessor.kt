@@ -67,6 +67,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -75,7 +76,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         private val stateEventDataSource: StateEventDataSource,
         @SessionId private val sessionId: String,
         private val sessionManager: SessionManager,
-        private val liveLocationAggregationProcessor: LiveLocationAggregationProcessor
+        private val liveLocationAggregationProcessor: LiveLocationAggregationProcessor,
+        private val clock: Clock,
 ) : EventInsertLiveProcessor {
 
     private val allowedTypes = listOf(
@@ -325,7 +327,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                                         totalVotes = 0,
                                         winnerVoteCount = 0,
                                 )
-                                        .toContent())
+                                        .toContent()
+                        )
                     }
 
             val txId = event.unsignedData?.transactionId
@@ -335,7 +338,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 Timber.v("###REPLACE Receiving remote echo of edit (edit already done)")
                 existingSummary.editions.firstOrNull { it.eventId == txId }?.let {
                     it.eventId = event.eventId
-                    it.timestamp = event.originServerTs ?: System.currentTimeMillis()
+                    it.timestamp = event.originServerTs ?: clock.epochMillis()
                     it.isLocalEcho = false
                 }
             } else {
@@ -346,10 +349,10 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                                 eventId = event.eventId,
                                 content = ContentMapper.map(newContent),
                                 timestamp = if (isLocalEcho) {
-                                    System.currentTimeMillis()
+                                    clock.epochMillis()
                                 } else {
                                     // Do not take local echo originServerTs here, could mess up ordering (keep old ts)
-                                    event.originServerTs ?: System.currentTimeMillis()
+                                    event.originServerTs ?: clock.epochMillis()
                                 },
                                 isLocalEcho = isLocalEcho
                         )
@@ -729,11 +732,13 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_MAC    -> currentState.toState(VerificationState.WAITING)
-                EventType.KEY_VERIFICATION_CANCEL -> currentState.toState(if (event.senderId == userId) {
-                    VerificationState.CANCELED_BY_ME
-                } else {
-                    VerificationState.CANCELED_BY_OTHER
-                })
+                EventType.KEY_VERIFICATION_CANCEL -> currentState.toState(
+                        if (event.senderId == userId) {
+                            VerificationState.CANCELED_BY_ME
+                        } else {
+                            VerificationState.CANCELED_BY_OTHER
+                        }
+                )
                 EventType.KEY_VERIFICATION_DONE   -> currentState.toState(VerificationState.DONE)
                 else                              -> VerificationState.REQUEST
             }
