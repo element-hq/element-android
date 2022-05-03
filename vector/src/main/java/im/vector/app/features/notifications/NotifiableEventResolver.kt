@@ -20,6 +20,7 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.takeAs
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
@@ -58,7 +59,8 @@ import javax.inject.Inject
 class NotifiableEventResolver @Inject constructor(
         private val stringProvider: StringProvider,
         private val noticeEventFormatter: NoticeEventFormatter,
-        private val displayableEventFormatter: DisplayableEventFormatter
+        private val displayableEventFormatter: DisplayableEventFormatter,
+        private val clock: Clock,
 ) {
 
     // private val eventDisplay = RiotEventDisplay(context)
@@ -86,7 +88,7 @@ class NotifiableEventResolver @Inject constructor(
                         eventId = event.eventId!!,
                         editedEventId = timelineEvent.getEditedEventId(),
                         noisy = false, // will be updated
-                        timestamp = event.originServerTs ?: System.currentTimeMillis(),
+                        timestamp = event.originServerTs ?: clock.epochMillis(),
                         description = bodyPreview,
                         title = stringProvider.getString(R.string.notification_unknown_new_event),
                         soundName = null,
@@ -178,15 +180,19 @@ class NotifiableEventResolver @Inject constructor(
                             roomName = roomName,
                             roomIsDirect = room.roomSummary()?.isDirect ?: false,
                             roomAvatarPath = session.contentUrlResolver()
-                                    .resolveThumbnail(room.roomSummary()?.avatarUrl,
+                                    .resolveThumbnail(
+                                            room.roomSummary()?.avatarUrl,
                                             250,
                                             250,
-                                            ContentUrlResolver.ThumbnailMethod.SCALE),
+                                            ContentUrlResolver.ThumbnailMethod.SCALE
+                                    ),
                             senderAvatarPath = session.contentUrlResolver()
-                                    .resolveThumbnail(event.senderInfo.avatarUrl,
+                                    .resolveThumbnail(
+                                            event.senderInfo.avatarUrl,
                                             250,
                                             250,
-                                            ContentUrlResolver.ThumbnailMethod.SCALE),
+                                            ContentUrlResolver.ThumbnailMethod.SCALE
+                                    ),
                             matrixID = session.myUserId,
                             soundName = null
                     )

@@ -18,6 +18,7 @@ package im.vector.app.features.crypto.verification
 import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.time.Clock
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
@@ -42,7 +43,9 @@ import javax.inject.Singleton
 class IncomingVerificationRequestHandler @Inject constructor(
         private val context: Context,
         private var avatarRenderer: Provider<AvatarRenderer>,
-        private val popupAlertManager: PopupAlertManager) : VerificationService.Listener {
+        private val popupAlertManager: PopupAlertManager,
+        private val clock: Clock,
+) : VerificationService.Listener {
 
     private var session: Session? = null
 
@@ -104,7 +107,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                     }
                             )
                             // 10mn expiration
-                            expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
+                            expirationTimestamp = clock.epochMillis() + (10 * 60 * 1000L)
                         }
                 popupAlertManager.postVectorAlert(alert)
             }
@@ -168,7 +171,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         }
                         colorAttribute = R.attr.vctr_notice_secondary
                         // 5mn expiration
-                        expirationTimestamp = System.currentTimeMillis() + (5 * 60 * 1000L)
+                        expirationTimestamp = clock.epochMillis() + (5 * 60 * 1000L)
                     }
             popupAlertManager.postVectorAlert(alert)
         }

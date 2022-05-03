@@ -37,6 +37,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.databinding.FragmentCreateRoomBinding
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
@@ -62,7 +63,8 @@ data class CreateRoomArgs(
 class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController,
         private val createSpaceController: CreateSubSpaceController,
-        colorProvider: ColorProvider
+        colorProvider: ColorProvider,
+        clock: Clock,
 ) : VectorBaseFragment<FragmentCreateRoomBinding>(),
         CreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,
@@ -74,7 +76,7 @@ class CreateRoomFragment @Inject constructor(
 
     private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentCreateRoomBinding {
         return FragmentCreateRoomBinding.inflate(inflater, container, false)
@@ -166,7 +168,8 @@ class CreateRoomFragment @Inject constructor(
         } else {
             listOf(RoomJoinRules.INVITE, RoomJoinRules.PUBLIC)
         }
-        RoomJoinRuleBottomSheet.newInstance(state.roomJoinRules,
+        RoomJoinRuleBottomSheet.newInstance(
+                state.roomJoinRules,
                 allowed.map { it.toOption(false) },
                 state.isSubSpace,
                 state.parentSpaceSummary?.displayName

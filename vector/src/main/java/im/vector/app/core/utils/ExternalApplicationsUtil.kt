@@ -147,8 +147,11 @@ fun openFileSelection(activity: Activity,
  * Send an email to address with optional subject and message
  */
 fun sendMailTo(address: String, subject: String? = null, message: String? = null, activity: Activity) {
-    val intent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-            "mailto", address, null))
+    val intent = Intent(
+            Intent.ACTION_SENDTO, Uri.fromParts(
+            "mailto", address, null
+    )
+    )
     intent.putExtra(Intent.EXTRA_SUBJECT, subject)
     intent.putExtra(Intent.EXTRA_TEXT, message)
 
@@ -248,7 +251,12 @@ private fun appendTimeToFilename(name: String): String {
     return """${filename}_$dateExtension.$fileExtension"""
 }
 
-suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType: String?, notificationUtils: NotificationUtils) {
+suspend fun saveMedia(context: Context,
+                      file: File,
+                      title: String,
+                      mediaMimeType: String?,
+                      notificationUtils: NotificationUtils,
+                      now: Long) {
     withContext(Dispatchers.IO) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val filename = appendTimeToFilename(title)
@@ -257,8 +265,8 @@ suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType
                 put(MediaStore.Images.Media.TITLE, filename)
                 put(MediaStore.Images.Media.DISPLAY_NAME, filename)
                 put(MediaStore.Images.Media.MIME_TYPE, mediaMimeType)
-                put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
-                put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
+                put(MediaStore.Images.Media.DATE_ADDED, now)
+                put(MediaStore.Images.Media.DATE_TAKEN, now)
             }
             val externalContentUri = when {
                 mediaMimeType?.isMimeTypeImage() == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -289,7 +297,7 @@ suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType
                 }
             }
         } else {
-            saveMediaLegacy(context, mediaMimeType, title, file)
+            saveMediaLegacy(context, mediaMimeType, title, file, now)
         }
     }
 }
@@ -298,7 +306,8 @@ suspend fun saveMedia(context: Context, file: File, title: String, mediaMimeType
 private fun saveMediaLegacy(context: Context,
                             mediaMimeType: String?,
                             title: String,
-                            file: File) {
+                            file: File,
+                            now: Long) {
     val state = Environment.getExternalStorageState()
     if (Environment.MEDIA_MOUNTED != state) {
         context.toast(context.getString(R.string.error_saving_media_file))
@@ -319,7 +328,7 @@ private fun saveMediaLegacy(context: Context,
         } else {
             title
         }
-        val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename)
+        val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename, now)
         if (savedFile != null) {
             val downloadManager = context.getSystemService<DownloadManager>()
             downloadManager?.addCompletedDownload(
@@ -329,7 +338,8 @@ private fun saveMediaLegacy(context: Context,
                     mediaMimeType ?: MimeTypes.OctetStream,
                     savedFile.absolutePath,
                     savedFile.length(),
-                    true)
+                    true
+            )
             addToGallery(savedFile, mediaMimeType, context)
         }
     } catch (error: Throwable) {
@@ -411,7 +421,7 @@ fun selectTxtFileToWrite(
  * @return               the created file
  */
 @Suppress("DEPRECATION")
-fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?): File? {
+fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?, now: Long): File? {
     // defines another name for the external media
     var dstFileName: String
 
@@ -423,7 +433,7 @@ fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: Strin
         if (dotPos > 0) {
             fileExt = sourceFile.name.substring(dotPos)
         }
-        dstFileName = "vector_" + System.currentTimeMillis() + fileExt
+        dstFileName = "vector_$now$fileExt"
     } else {
         dstFileName = outputFilename
     }
