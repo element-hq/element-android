@@ -24,6 +24,7 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.res.Configuration
 import android.graphics.Color
+import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -56,6 +57,8 @@ import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.call.utils.EglUtils
+import im.vector.app.features.call.webrtc.ScreenCaptureService
+import im.vector.app.features.call.webrtc.ScreenCaptureServiceConnection
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.displayname.getBestName
@@ -94,6 +97,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var screenCaptureServiceConnection: ScreenCaptureServiceConnection
 
     private val callViewModel: VectorCallViewModel by viewModel()
 
@@ -512,20 +516,22 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun handleViewEvents(event: VectorCallViewEvents?) {
         Timber.tag(loggerTag.value).v("handleViewEvents $event")
         when (event) {
-            is VectorCallViewEvents.ConnectionTimeout      -> {
+            is VectorCallViewEvents.ConnectionTimeout                 -> {
                 onErrorTimoutConnect(event.turn)
             }
-            is VectorCallViewEvents.ShowDialPad            -> {
+            is VectorCallViewEvents.ShowDialPad                       -> {
                 CallDialPadBottomSheet.newInstance(false).apply {
                     callback = dialPadCallback
                 }.show(supportFragmentManager, FRAGMENT_DIAL_PAD_TAG)
             }
-            is VectorCallViewEvents.ShowCallTransferScreen -> {
+            is VectorCallViewEvents.ShowCallTransferScreen            -> {
                 val callId = withState(callViewModel) { it.callId }
                 navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
-            is VectorCallViewEvents.FailToTransfer         -> showSnackbar(getString(R.string.call_transfer_failure))
-            else                                           -> Unit
+            is VectorCallViewEvents.FailToTransfer                    -> showSnackbar(getString(R.string.call_transfer_failure))
+            is VectorCallViewEvents.ShowScreenSharingPermissionDialog -> handleShowScreenSharingPermissionDialog()
+            is VectorCallViewEvents.StopScreenSharingService          -> handleStopScreenSharingService()
+            else                                                      -> Unit
         }
     }
 
@@ -625,6 +631,32 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                             or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
             )
+        }
+    }
+
+    private val screenSharingPermissionActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            callViewModel.handle(VectorCallViewActions.StartScreenSharing)
+            // We need to start a foreground service with a sticky notification during screen sharing
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ContextCompat.startForegroundService(
+                        this,
+                        Intent(this, ScreenCaptureService::class.java)
+                )
+                screenCaptureServiceConnection.bind()
+            }
+        }
+    }
+
+    private fun handleShowScreenSharingPermissionDialog() {
+        getSystemService<MediaProjectionManager>()?.let {
+            navigator.openScreenSharingPermissionDialog(it.createScreenCaptureIntent(), screenSharingPermissionActivityResultLauncher)
+        }
+    }
+
+    private fun handleStopScreenSharingService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            screenCaptureServiceConnection.stopScreenCapturing()
         }
     }
 

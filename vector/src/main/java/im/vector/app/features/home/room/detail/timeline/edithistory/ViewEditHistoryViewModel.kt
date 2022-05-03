@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.isReply
+import org.matrix.android.sdk.api.session.getRoom
 import timber.log.Timber
 import java.util.UUID
 

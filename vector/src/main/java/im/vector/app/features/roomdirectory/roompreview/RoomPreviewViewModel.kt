@@ -71,6 +71,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
                 // we might want to check if the mail is bound to this account?
                 // if it is the invite
                 val threePids = session
+                        .profileService()
                         .getThreePids()
                         .filterIsInstance<ThreePid.Email>()
 
@@ -106,7 +107,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             val peekResult = tryOrNull {
-                session.peekRoom(initialState.roomAlias ?: initialState.roomId)
+                session.roomService().peekRoom(initialState.roomAlias ?: initialState.roomId)
             }
 
             when (peekResult) {
@@ -225,7 +226,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
                         state.fromEmailInvite?.privateKey ?: ""
                 )
 
-                session.joinRoom(state.roomId, reason = null, thirdPartySigned)
+                session.roomService().joinRoom(state.roomId, reason = null, thirdPartySigned)
             } catch (failure: Throwable) {
                 setState {
                     copy(
@@ -245,7 +246,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             try {
-                session.joinRoom(state.roomId, viaServers = state.homeServers)
+                session.roomService().joinRoom(state.roomId, viaServers = state.homeServers)
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
             } catch (failure: Throwable) {

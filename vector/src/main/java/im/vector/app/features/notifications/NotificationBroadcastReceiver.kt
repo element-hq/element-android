@@ -30,6 +30,7 @@ import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import timber.log.Timber
@@ -84,7 +85,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             if (room != null) {
                 session.coroutineScope.launch {
                     tryOrNull {
-                        session.joinRoom(room.roomId)
+                        session.roomService().joinRoom(room.roomId)
                         analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom(JoinedRoom.Trigger.Notification))
                     }
                 }
@@ -95,7 +96,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     private fun handleRejectRoom(roomId: String) {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             session.coroutineScope.launch {
-                tryOrNull { session.leaveRoom(roomId) }
+                tryOrNull { session.roomService().leaveRoom(roomId) }
             }
         }
     }
@@ -138,7 +139,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 editedEventId = null,
                 noisy = false,
                 timestamp = System.currentTimeMillis(),
-                senderName = session.getRoomMember(session.myUserId, room.roomId)?.displayName
+                senderName = session.roomService().getRoomMember(session.myUserId, room.roomId)?.displayName
                         ?: context?.getString(R.string.notification_sender_me),
                 senderId = session.myUserId,
                 body = message,

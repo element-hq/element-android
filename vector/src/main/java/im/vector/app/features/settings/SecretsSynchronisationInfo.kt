@@ -45,7 +45,7 @@ fun Session.liveSecretSynchronisationInfo(): Flow<SecretsSynchronisationInfo> {
             sessionFlow.liveCrossSigningPrivateKeys()
     ) { _, crossSigningInfo, pInfo ->
         // first check if 4S is already setup
-        val is4SSetup = sharedSecretStorageService.isRecoverySetup()
+        val is4SSetup = sharedSecretStorageService().isRecoverySetup()
         val isCrossSigningEnabled = crossSigningInfo.getOrNull() != null
         val isCrossSigningTrusted = crossSigningInfo.getOrNull()?.isTrusted() == true
         val allPrivateKeysKnown = pInfo.getOrNull()?.allKnown().orFalse()
@@ -63,7 +63,7 @@ fun Session.liveSecretSynchronisationInfo(): Flow<SecretsSynchronisationInfo> {
                 allPrivateKeysKnown = allPrivateKeysKnown,
                 megolmBackupAvailable = megolmBackupAvailable,
                 megolmSecretKnown = megolmKeyKnown,
-                isMegolmKeyIn4S = sharedSecretStorageService.isMegolmKeyInBackup()
+                isMegolmKeyIn4S = sharedSecretStorageService().isMegolmKeyInBackup()
         )
     }
             .distinctUntilChanged()

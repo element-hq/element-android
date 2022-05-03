@@ -34,11 +34,12 @@ internal enum class SyncPresence(val value: String) {
     companion object {
         fun from(presenceEnum: PresenceEnum): SyncPresence {
             return when (presenceEnum) {
-                PresenceEnum.ONLINE -> Online
-                PresenceEnum.OFFLINE -> Offline
+                PresenceEnum.ONLINE      -> Online
+                PresenceEnum.OFFLINE     -> Offline
                 PresenceEnum.UNAVAILABLE -> Unavailable
             }
         }
+
         fun from(s: String?): SyncPresence? = values().find { it.value == s }
     }
 }

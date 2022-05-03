@@ -15,8 +15,8 @@
  */
 package org.matrix.android.sdk.internal.session.pushers
 
-import org.matrix.android.sdk.api.pushrules.RuleKind
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.RuleKind
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task

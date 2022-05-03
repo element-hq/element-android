@@ -44,7 +44,7 @@ internal interface NetworkConnectivityChecker {
 internal class DefaultNetworkConnectivityChecker @Inject constructor(private val homeServerPinger: HomeServerPinger,
                                                                      private val backgroundDetectionObserver: BackgroundDetectionObserver,
                                                                      private val networkCallbackStrategy: NetworkCallbackStrategy) :
-    NetworkConnectivityChecker {
+        NetworkConnectivityChecker {
 
     private val hasInternetAccess = AtomicBoolean(true)
     private val listeners = Collections.synchronizedSet(LinkedHashSet<NetworkConnectivityChecker.Listener>())

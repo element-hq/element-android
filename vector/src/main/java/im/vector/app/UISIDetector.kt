@@ -34,7 +34,7 @@ data class E2EMessageDetected(
         val senderDeviceId: String,
         val senderKey: String,
         val sessionId: String
-        ) {
+) {
 
     companion object {
         fun fromEvent(event: Event, roomId: String): E2EMessageDetected {
@@ -52,7 +52,7 @@ data class E2EMessageDetected(
     }
 }
 
-class UISIDetector : LiveEventListener {
+class UISIDetector(private val timeoutMillis: Long = 30_000L) : LiveEventListener {
 
     interface UISIDetectorCallback {
         val enabled: Boolean
@@ -66,7 +66,6 @@ class UISIDetector : LiveEventListener {
     private val trackedEvents = mutableMapOf<String, TimerTask>()
     private val executor = Executors.newSingleThreadExecutor()
     private val timer = Timer()
-    private val timeoutMillis = 30_000L
     private val enabled: Boolean get() = callback?.enabled.orFalse()
 
     override fun onEventDecrypted(event: Event, clearEvent: JsonDict) {
@@ -90,30 +89,35 @@ class UISIDetector : LiveEventListener {
         val roomId = event.roomId
         if (!enabled || eventId == null || roomId == null) return
 
-        val trackerId: String = trackerId(eventId, roomId)
-        if (trackedEvents.containsKey(trackerId)) {
-            Timber.w("## UISIDetector: Event $eventId is already tracked")
+        val trackedId: String = trackedId(eventId, roomId)
+        if (trackedEvents.containsKey(trackedId)) {
+            Timber.v("## UISIDetector: Event $eventId is already tracked")
             return
         }
         // track it and start timer
         val timeoutTask = object : TimerTask() {
             override fun run() {
                 executor.execute {
+                    // we should check if it's still tracked (it might have been decrypted)
+                    if (!trackedEvents.containsKey(trackedId)) {
+                        Timber.v("## UISIDetector: E2E error for $eventId was resolved")
+                        return@execute
+                    }
                     unTrack(eventId, roomId)
                     Timber.v("## UISIDetector: Timeout on $eventId")
                     triggerUISI(E2EMessageDetected.fromEvent(event, roomId))
                 }
             }
         }
-        trackedEvents[trackerId] = timeoutTask
+        trackedEvents[trackedId] = timeoutTask
         timer.schedule(timeoutTask, timeoutMillis)
     }
 
-    override fun onLiveEvent(roomId: String, event: Event) { }
+    override fun onLiveEvent(roomId: String, event: Event) {}
 
-    override fun onPaginatedEvent(roomId: String, event: Event) { }
+    override fun onPaginatedEvent(roomId: String, event: Event) {}
 
-    private fun trackerId(eventId: String, roomId: String): String = "$roomId-$eventId"
+    private fun trackedId(eventId: String, roomId: String): String = "$roomId-$eventId"
 
     private fun triggerUISI(source: E2EMessageDetected) {
         if (!enabled) return
@@ -122,6 +126,6 @@ class UISIDetector : LiveEventListener {
     }
 
     private fun unTrack(eventId: String, roomId: String) {
-        trackedEvents.remove(trackerId(eventId, roomId))?.cancel()
+        trackedEvents.remove(trackedId(eventId, roomId))?.cancel()
     }
 }

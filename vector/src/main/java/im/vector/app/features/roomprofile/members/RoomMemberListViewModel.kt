@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -69,6 +70,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         observeThirdPartyInvites()
         observeRoomSummary()
         observePowerLevel()
+        observeIgnoredUsers()
     }
 
     private fun observeRoomMemberSummaries() {
@@ -145,6 +147,16 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         room.flow().liveStateEvents(setOf(EventType.STATE_ROOM_THIRD_PARTY_INVITE))
                 .execute { async ->
                     copy(threePidInvites = async)
+                }
+    }
+
+    private fun observeIgnoredUsers() {
+        session.flow()
+                .liveIgnoredUsers()
+                .execute { async ->
+                    copy(
+                            ignoredUserIds = async.invoke().orEmpty().map { it.userId }
+                    )
                 }
     }
 

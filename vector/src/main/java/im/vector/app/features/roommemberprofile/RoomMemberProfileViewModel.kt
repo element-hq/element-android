@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -327,7 +328,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
 
     private suspend fun fetchProfileInfo() {
         val result = runCatchingToAsync {
-            session.getProfile(initialState.userId)
+            session.profileService()
+                    .getProfile(initialState.userId)
                     .let { User.fromJson(initialState.userId, it) }
                     .toMatrixItem()
         }
@@ -386,11 +388,11 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val event = try {
                 if (isIgnored) {
-                    session.unIgnoreUserIds(listOf(state.userId))
+                    session.userService().unIgnoreUserIds(listOf(state.userId))
                 } else {
-                    session.ignoreUserIds(listOf(state.userId))
+                    session.userService().ignoreUserIds(listOf(state.userId))
                 }
-                RoomMemberProfileViewEvents.OnIgnoreActionSuccess(isIgnored)
+                RoomMemberProfileViewEvents.OnIgnoreActionSuccess
             } catch (failure: Throwable) {
                 RoomMemberProfileViewEvents.Failure(failure)
             }

@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
@@ -113,7 +114,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 // could this room be already known
                 val knownRoom = if (permalinkData.isRoomAlias) {
                     tryOrNull {
-                        session.getRoomIdByAlias(permalinkData.roomIdOrAlias, false)
+                        session.roomService().getRoomIdByAlias(permalinkData.roomIdOrAlias, false)
                     }
                             ?.getOrNull()
                             ?.roomId?.let {
@@ -198,7 +199,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     private fun checkForKnownMembers(someMembers: List<MatrixItem.UserItem>) {
         viewModelScope.launch(Dispatchers.Default) {
             val knownMembers = someMembers.filter {
-                session.getExistingDirectRoomWithUser(it.id) != null
+                session.roomService().getExistingDirectRoomWithUser(it.id) != null
             }
             // put one with avatar first, and take 5
             val finalRes = (knownMembers.filter { it.avatarUrl != null } + knownMembers.filter { it.avatarUrl == null })
@@ -237,7 +238,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     }
 
     private suspend fun resolveUser(userId: String): User {
-        return tryOrNull { session.resolveUser(userId) }
+        return tryOrNull { session.userService().resolveUser(userId) }
         // Create raw user in case the user is not searchable
                 ?: User(userId, null, null)
     }
@@ -247,7 +248,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
      * main thing is trying to see if it's a space or a room
      */
     private suspend fun resolveRoom(roomIdOrAlias: String): PeekResult {
-        return session.peekRoom(roomIdOrAlias)
+        return session.roomService().peekRoom(roomIdOrAlias)
     }
 
     override fun handle(action: MatrixToAction) {
@@ -305,7 +306,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             try {
-                session.joinRoom(
+                session.roomService().joinRoom(
                         roomIdOrAlias = action.roomIdOrAlias,
                         reason = null,
                         viaServers = action.viaServers?.take(3) ?: emptyList()
@@ -331,7 +332,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
 
     private suspend fun getRoomIdFromRoomIdOrAlias(roomIdOrAlias: String): String {
         return if (MatrixPatterns.isRoomAlias(roomIdOrAlias)) {
-            session.getRoomIdByAlias(roomIdOrAlias, true).get().roomId
+            session.roomService().getRoomIdByAlias(roomIdOrAlias, true).get().roomId
         } else roomIdOrAlias
     }
 

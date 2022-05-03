@@ -36,7 +36,7 @@ enum class ConclusionState {
 }
 
 class VerificationConclusionViewModel(initialState: VerificationConclusionViewState) :
-    VectorViewModel<VerificationConclusionViewState, EmptyAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<VerificationConclusionViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     companion object : MavericksViewModelFactory<VerificationConclusionViewModel, VerificationConclusionViewState> {
 

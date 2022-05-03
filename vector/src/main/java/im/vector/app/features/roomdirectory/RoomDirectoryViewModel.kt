@@ -166,7 +166,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
 
         currentJob = viewModelScope.launch {
             val data = try {
-                session.getPublicRooms(roomDirectoryData.homeServer,
+                session.roomDirectoryService().getPublicRooms(roomDirectoryData.homeServer,
                         PublicRoomsParams(
                                 limit = PUBLIC_ROOMS_LIMIT,
                                 filter = PublicRoomsFilter(searchTerm = filter),
@@ -226,7 +226,7 @@ class RoomDirectoryViewModel @AssistedInject constructor(
         val viaServers = listOfNotNull(state.roomDirectoryData.homeServer)
         viewModelScope.launch {
             try {
-                session.joinRoom(action.publicRoom.roomId, viaServers = viaServers)
+                session.roomService().joinRoom(action.publicRoom.roomId, viaServers = viaServers)
                 analyticsTracker.capture(action.publicRoom.toAnalyticsJoinedRoom(JoinedRoom.Trigger.RoomDirectory))
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined

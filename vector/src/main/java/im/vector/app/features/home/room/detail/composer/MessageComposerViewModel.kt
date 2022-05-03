@@ -51,6 +51,8 @@ import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
@@ -446,7 +448,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                         is ParsedCommand.LeaveRoom                         -> {
                             viewModelScope.launch(Dispatchers.IO) {
                                 try {
-                                    session.leaveRoom(parsedCommand.roomId)
+                                    session.roomService().leaveRoom(parsedCommand.roomId)
                                     popDraft()
                                     _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk(parsedCommand))
                                 } catch (failure: Throwable) {
@@ -610,7 +612,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     private fun handleJoinToAnotherRoomSlashCommand(command: ParsedCommand.JoinRoom) {
         viewModelScope.launch {
             try {
-                session.joinRoom(command.roomAlias, command.reason, emptyList())
+                session.roomService().joinRoom(command.roomAlias, command.reason, emptyList())
             } catch (failure: Throwable) {
                 _viewEvents.post(MessageComposerViewEvents.SlashCommandResultError(failure))
                 return@launch
@@ -677,7 +679,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleChangeDisplayNameSlashCommand(changeDisplayName: ParsedCommand.ChangeDisplayName) {
         launchSlashCommandFlowSuspendable(changeDisplayName) {
-            session.setDisplayName(session.myUserId, changeDisplayName.displayName)
+            session.profileService().setDisplayName(session.myUserId, changeDisplayName.displayName)
         }
     }
 
@@ -692,7 +694,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                         ?.let { session.getRoom(it) }
             }
                     ?.let {
-                        session.leaveRoom(it.roomId)
+                        session.roomService().leaveRoom(it.roomId)
                     }
         }
     }
@@ -757,7 +759,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleIgnoreSlashCommand(ignore: ParsedCommand.IgnoreUser) {
         launchSlashCommandFlowSuspendable(ignore) {
-            session.ignoreUserIds(listOf(ignore.userId))
+            session.userService().ignoreUserIds(listOf(ignore.userId))
         }
     }
 
@@ -774,7 +776,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleUnignoreSlashCommandConfirmed(unignore: ParsedCommand.UnignoreUser) {
         launchSlashCommandFlowSuspendable(unignore) {
-            session.unIgnoreUserIds(listOf(unignore.userId))
+            session.userService().unIgnoreUserIds(listOf(unignore.userId))
         }
     }
 

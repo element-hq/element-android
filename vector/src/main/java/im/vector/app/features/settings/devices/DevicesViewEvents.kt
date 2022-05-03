@@ -29,7 +29,7 @@ import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 sealed class DevicesViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : DevicesViewEvents()
 
-//    object HideLoading : DevicesViewEvents()
+    //    object HideLoading : DevicesViewEvents()
     data class Failure(val throwable: Throwable) : DevicesViewEvents()
 
 //    object RequestPassword : DevicesViewEvents()

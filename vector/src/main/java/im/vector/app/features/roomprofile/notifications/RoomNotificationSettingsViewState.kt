@@ -30,7 +30,7 @@ data class RoomNotificationSettingsViewState(
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val isLoading: Boolean = false,
         val notificationState: Async<RoomNotificationState> = Uninitialized
-)  : MavericksState {
+) : MavericksState {
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
     constructor(args: RoomListActionsArgs) : this(roomId = args.roomId)
 }

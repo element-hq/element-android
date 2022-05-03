@@ -33,6 +33,8 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
@@ -146,7 +148,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     private suspend fun PermalinkData.RoomLink.getRoomId(): String? {
         val session = activeSessionHolder.getSafeActiveSession()
         return if (isRoomAlias && session != null) {
-            val roomIdByAlias = session.getRoomIdByAlias(roomIdOrAlias, true)
+            val roomIdByAlias = session.roomService().getRoomIdByAlias(roomIdOrAlias, true)
             roomIdByAlias.getOrNull()?.roomId
         } else {
             roomIdOrAlias

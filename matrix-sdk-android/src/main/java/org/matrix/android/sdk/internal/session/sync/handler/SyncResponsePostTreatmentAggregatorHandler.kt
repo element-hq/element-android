@@ -28,6 +28,7 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.toMutable
 import org.matrix.android.sdk.internal.session.user.UserEntityFactory
 import org.matrix.android.sdk.internal.session.user.accountdata.DirectChatsHelper
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
+import org.matrix.android.sdk.internal.util.awaitTransaction
 import javax.inject.Inject
 
 internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
@@ -91,9 +92,9 @@ internal class SyncResponsePostTreatmentAggregatorHandler @Inject constructor(
         }
     }
 
-    private fun List<User>.saveLocally() {
+    private suspend fun List<User>.saveLocally() {
         val userEntities = map { user -> UserEntityFactory.create(user) }
-        monarchy.doWithRealm {
+        monarchy.awaitTransaction {
             it.insertOrUpdate(userEntities)
         }
     }

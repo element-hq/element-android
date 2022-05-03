@@ -52,7 +52,7 @@ internal class WidgetManager @Inject constructor(private val integrationManager:
                                                  private val widgetFactory: WidgetFactory,
                                                  @UserId private val userId: String) :
 
-    IntegrationManagerService.Listener, SessionLifecycleObserver {
+        IntegrationManagerService.Listener, SessionLifecycleObserver {
 
     private val lifecycleOwner: LifecycleOwner = LifecycleOwner { lifecycleRegistry }
     private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(lifecycleOwner)

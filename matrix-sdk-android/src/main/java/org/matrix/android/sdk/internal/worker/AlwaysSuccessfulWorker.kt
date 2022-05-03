@@ -20,7 +20,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 
 internal class AlwaysSuccessfulWorker(context: Context, params: WorkerParameters) :
-    Worker(context, params) {
+        Worker(context, params) {
 
     override fun doWork(): Result {
         return Result.success()

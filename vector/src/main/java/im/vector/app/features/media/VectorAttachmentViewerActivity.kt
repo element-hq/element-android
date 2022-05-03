@@ -53,6 +53,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.getRoom
 import timber.log.Timber
 import javax.inject.Inject
 

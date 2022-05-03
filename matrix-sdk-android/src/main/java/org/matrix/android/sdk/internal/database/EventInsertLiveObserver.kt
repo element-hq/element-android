@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 internal class EventInsertLiveObserver @Inject constructor(@SessionDatabase realmConfiguration: RealmConfiguration,
                                                            private val processors: Set<@JvmSuppressWildcards EventInsertLiveProcessor>) :
-    RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
+        RealmLiveEntityObserver<EventInsertEntity>(realmConfiguration) {
 
     override val query = Monarchy.Query {
         it.where(EventInsertEntity::class.java).equalTo(EventInsertEntityFields.CAN_BE_PROCESSED, true)

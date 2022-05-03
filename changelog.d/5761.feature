@@ -1,1 +1,0 @@
-Improve user experience when home servers do not yet support threads

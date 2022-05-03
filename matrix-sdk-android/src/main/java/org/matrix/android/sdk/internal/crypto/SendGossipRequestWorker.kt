@@ -41,7 +41,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class SendGossipRequestWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<SendGossipRequestWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<SendGossipRequestWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

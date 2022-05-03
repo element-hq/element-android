@@ -15,8 +15,7 @@
  */
 package org.matrix.android.sdk.internal.session.pushers
 
-import org.matrix.android.sdk.api.pushrules.rest.GetPushRulesResponse
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import retrofit2.http.Body
 import retrofit2.http.DELETE

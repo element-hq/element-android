@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Sort
-import io.realm.kotlin.where
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -29,6 +28,7 @@ import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import javax.inject.Inject
@@ -53,8 +53,7 @@ internal class TimelineEventDataSource @Inject constructor(private val realmSess
     fun getAttachmentMessages(roomId: String): List<TimelineEvent> {
         // TODO pretty bad query.. maybe we should denormalize clear type in base?
         return realmSessionProvider.withRealm { realm ->
-            realm.where<TimelineEventEntity>()
-                    .equalTo(TimelineEventEntityFields.ROOM_ID, roomId)
+            TimelineEventEntity.whereRoomId(realm, roomId)
                     .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.ASCENDING)
                     .findAll()
                     ?.mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }

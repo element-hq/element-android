@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 internal class DefaultWidgetPostAPIMediator @Inject constructor(private val moshi: Moshi,
                                                                 private val widgetPostMessageAPIProvider: WidgetPostMessageAPIProvider) :
-    WidgetPostAPIMediator {
+        WidgetPostAPIMediator {
 
     private val jsonAdapter = moshi.adapter<JsonDict>(JSON_DICT_PARAMETERIZED_TYPE)
 

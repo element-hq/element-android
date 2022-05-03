@@ -371,7 +371,7 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
-            else                                    -> {
+            else                                               -> {
                 // Idle or Incremental sync status
                 views.waitingView.root.isVisible = false
             }

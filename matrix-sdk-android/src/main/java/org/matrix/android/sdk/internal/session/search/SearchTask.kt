@@ -87,7 +87,7 @@ internal class DefaultSearchTask @Inject constructor(
                 results = searchCategories.roomEvents?.results?.map { searchResponseItem ->
 
                     val localThreadEventDetails = localTimelineEvents
-                            ?.firstOrNull { it.eventId ==  searchResponseItem.event.eventId }
+                            ?.firstOrNull { it.eventId == searchResponseItem.event.eventId }
                             ?.root
                             ?.asDomain()
                             ?.threadDetails

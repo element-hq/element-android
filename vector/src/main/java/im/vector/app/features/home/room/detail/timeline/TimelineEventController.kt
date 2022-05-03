@@ -132,6 +132,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                                   mediaData: ImageContentRenderer.Data,
                                   view: View,
                                   inMemory: List<AttachmentData>)
+
         fun onVideoMessageClicked(messageVideoContent: MessageVideoContent, mediaData: VideoContentRenderer.Data, view: View)
 
         //        fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent)

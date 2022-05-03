@@ -40,6 +40,8 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
@@ -97,7 +99,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
                 }
             }
 
-            val homeServerCapabilities = session.getHomeServerCapabilities()
+            val homeServerCapabilities = session.homeServerCapabilitiesService().getHomeServerCapabilities()
             var safeRule: RoomJoinRules = joinRulesContent?.joinRules ?: RoomJoinRules.INVITE
             // server is not really checking that, just to be sure let's check
             val restrictedSupportedByThisVersion = homeServerCapabilities
@@ -355,7 +357,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
         viewModelScope.launch {
             if (vectorPreferences.developerMode()) {
                 // in developer mode we let you choose any room or space to restrict to
-                val filteredCandidates = session.getRoomSummaries(
+                val filteredCandidates = session.roomService().getRoomSummaries(
                         roomSummaryQueryParams {
                             excludeType = null
                             displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)

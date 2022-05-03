@@ -24,10 +24,8 @@ import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
-import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.account.AccountService
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
-import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
@@ -47,6 +45,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.presence.PresenceService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
+import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.search.SearchService
@@ -68,26 +67,7 @@ import org.matrix.android.sdk.api.session.widgets.WidgetService
  * This interface defines interactions with a session.
  * An instance of a session will be provided by the SDK.
  */
-interface Session :
-        RoomService,
-        RoomDirectoryService,
-        GroupService,
-        UserService,
-        CacheService,
-        SignOutService,
-        FilterService,
-        TermsService,
-        EventService,
-        ProfileService,
-        PresenceService,
-        PushRuleService,
-        PushersService,
-        SyncStatusService,
-        HomeServerCapabilitiesService,
-        SecureStorageService,
-        AccountService,
-        ToDeviceService,
-        EventStreamService {
+interface Session {
 
     val coroutineDispatchers: MatrixCoroutineDispatchers
 
@@ -143,6 +123,11 @@ interface Session :
      * This method stop the sync thread.
      */
     fun stopSync()
+
+    /**
+     * Clear cache of the session
+     */
+    suspend fun clearCache()
 
     /**
      * This method allows to listen the sync state.
@@ -207,6 +192,96 @@ interface Session :
     fun identityService(): IdentityService
 
     /**
+     * Returns the HomeServerCapabilities service associated with the session
+     */
+    fun homeServerCapabilitiesService(): HomeServerCapabilitiesService
+
+    /**
+     * Returns the RoomService associated with the session
+     */
+    fun roomService(): RoomService
+
+    /**
+     * Returns the RoomDirectoryService associated with the session
+     */
+    fun roomDirectoryService(): RoomDirectoryService
+
+    /**
+     * Returns the GroupService associated with the session
+     */
+    fun groupService(): GroupService
+
+    /**
+     * Returns the UserService associated with the session
+     */
+    fun userService(): UserService
+
+    /**
+     * Returns the SignOutService associated with the session
+     */
+    fun signOutService(): SignOutService
+
+    /**
+     * Returns the FilterService associated with the session
+     */
+    fun filterService(): FilterService
+
+    /**
+     * Returns the PushRuleService associated with the session
+     */
+    fun pushRuleService(): PushRuleService
+
+    /**
+     * Returns the PushersService associated with the session
+     */
+    fun pushersService(): PushersService
+
+    /**
+     * Returns the EventService associated with the session
+     */
+    fun eventService(): EventService
+
+    /**
+     * Returns the TermsService associated with the session
+     */
+    fun termsService(): TermsService
+
+    /**
+     * Returns the SyncStatusService associated with the session
+     */
+    fun syncStatusService(): SyncStatusService
+
+    /**
+     * Returns the SecureStorageService associated with the session
+     */
+    fun secureStorageService(): SecureStorageService
+
+    /**
+     * Returns the ProfileService associated with the session
+     */
+    fun profileService(): ProfileService
+
+    /**
+     * Returns the PresenceService associated with the session
+     */
+    fun presenceService(): PresenceService
+
+    /**
+     * Returns the AccountService associated with the session
+     */
+    fun accountService(): AccountService
+
+    /**
+     * Returns the ToDeviceService associated with the session
+     */
+    fun toDeviceService(): ToDeviceService
+
+    /**
+     * Returns the EventStreamService associated with the session
+     */
+    fun eventStreamService(): EventStreamService
+
+    /**
      * Returns the widget service associated with the session
      */
     fun widgetService(): WidgetService
@@ -267,6 +342,11 @@ interface Session :
     fun accountDataService(): SessionAccountDataService
 
     /**
+     * Returns the SharedSecretStorageService associated with the session
+     */
+    fun sharedSecretStorageService(): SharedSecretStorageService
+
+    /**
      * Add a listener to the session.
      * @param listener the listener to add.
      */
@@ -298,11 +378,10 @@ interface Session :
          * Possible cases:
          * - The access token is not valid anymore,
          * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver
+         * See [GlobalError] for all the possible cases
          */
         fun onGlobalError(session: Session, globalError: GlobalError) = Unit
     }
-
-    val sharedSecretStorageService: SharedSecretStorageService
 
     fun getUiaSsoFallbackUrl(authenticationSessionId: String): String
 

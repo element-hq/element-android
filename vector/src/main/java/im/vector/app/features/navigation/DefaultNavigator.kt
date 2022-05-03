@@ -105,6 +105,8 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
 import im.vector.app.space
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -192,7 +194,7 @@ class DefaultNavigator @Inject constructor(
             Navigator.PostSwitchSpaceAction.OpenAddExistingRooms -> {
                 startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
-            Navigator.PostSwitchSpaceAction.OpenRoomList -> {
+            Navigator.PostSwitchSpaceAction.OpenRoomList         -> {
                 startActivity(context, SpaceExploreActivity.newIntent(context, spaceId), buildTask = false)
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom   -> {
@@ -615,5 +617,10 @@ class DefaultNavigator @Inject constructor(
                         avatarUrl = threadTimelineArgs.avatarUrl,
                         roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
                 )))
+    }
+
+    override fun openScreenSharingPermissionDialog(screenCaptureIntent: Intent,
+                                                   activityResultLauncher: ActivityResultLauncher<Intent>) {
+        activityResultLauncher.launch(screenCaptureIntent)
     }
 }

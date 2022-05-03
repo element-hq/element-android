@@ -30,8 +30,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.features.notifications.toNotificationAction
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.pushrules.getActions
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.getActions
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 
 @EpoxyModelClass(layout = R.layout.item_pushrule_raw)
 abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {

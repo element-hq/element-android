@@ -431,7 +431,7 @@ class CommonTestHelper(context: Context) {
 
     fun signOutAndClose(session: Session) {
         runBlockingTest(timeout = 60_000) {
-            session.signOut(true)
+            session.signOutService().signOut(true)
         }
         // no need signout will close
         // session.close()

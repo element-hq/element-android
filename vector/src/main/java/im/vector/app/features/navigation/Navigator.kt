@@ -175,4 +175,9 @@ interface Navigator {
     fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
 
     fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs)
+
+    fun openScreenSharingPermissionDialog(
+            screenCaptureIntent: Intent,
+            activityResultLauncher: ActivityResultLauncher<Intent>
+    )
 }

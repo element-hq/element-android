@@ -25,7 +25,7 @@ sealed class RoomAliasBottomSheetSharedAction(
         @StringRes val titleRes: Int,
         @DrawableRes val iconResId: Int = 0,
         val destructive: Boolean = false) :
-    VectorSharedAction {
+        VectorSharedAction {
 
     data class ShareAlias(val matrixTo: String) : RoomAliasBottomSheetSharedAction(
             R.string.action_share,
