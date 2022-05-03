@@ -147,6 +147,7 @@ class VectorCallViewModel @AssistedInject constructor(
                     setState { copy(otherKnownCallInfo = null) }
                 }
             }
+            _viewEvents.post(VectorCallViewEvents.StopScreenSharingService)
         }
 
         override fun onCurrentCallChange(call: WebRtcCall?) {

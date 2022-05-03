@@ -664,7 +664,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         )
         screenCaptureServiceConnection.bind(object : ScreenCaptureServiceConnection.Callback {
             override fun onServiceConnected() {
-                startScreenSharingService(activityResult)
+                startScreenSharing(activityResult)
             }
         })
     }

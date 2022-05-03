@@ -80,6 +80,7 @@ import org.webrtc.MediaConstraints
 import org.webrtc.MediaStream
 import org.webrtc.PeerConnection
 import org.webrtc.PeerConnectionFactory
+import org.webrtc.RtpSender
 import org.webrtc.RtpTransceiver
 import org.webrtc.SessionDescription
 import org.webrtc.SurfaceTextureHelper
@@ -154,12 +155,15 @@ class WebRtcCall(
     private var makingOffer: Boolean = false
     private var ignoreOffer: Boolean = false
 
-    private var videoCapturer: CameraVideoCapturer? = null
+    private var videoCapturer: VideoCapturer? = null
 
     private val availableCamera = ArrayList<CameraProxy>()
     private var cameraInUse: CameraProxy? = null
     private var currentCaptureFormat: CaptureFormat = CaptureFormat.HD
     private var cameraAvailabilityCallback: CameraManager.AvailabilityCallback? = null
+
+    private var videoSender: RtpSender? = null
+    private var screenSender: RtpSender? = null
 
     private val timer = CountUpTimer(1000L).apply {
         tickListener = object : CountUpTimer.TickListener {
@@ -618,7 +622,7 @@ class WebRtcCall(
             val videoTrack = peerConnectionFactory.createVideoTrack(VIDEO_TRACK_ID, videoSource)
             Timber.tag(loggerTag.value).v("Add video track $VIDEO_TRACK_ID to call ${mxCall.callId}")
             videoTrack.setEnabled(true)
-            peerConnection?.addTrack(videoTrack, listOf(STREAM_ID))
+            videoSender = peerConnection?.addTrack(videoTrack, listOf(STREAM_ID))
             localVideoSource = videoSource
             localVideoTrack = videoTrack
         }
@@ -723,7 +727,7 @@ class WebRtcCall(
             Timber.tag(loggerTag.value).v("switchCamera")
             if (mxCall.state is CallState.Connected && mxCall.isVideoCall) {
                 val oppositeCamera = getOppositeCameraIfAny() ?: return@launch
-                videoCapturer?.switchCamera(
+                (videoCapturer as? CameraVideoCapturer)?.switchCamera(
                         object : CameraVideoCapturer.CameraSwitchHandler {
                             // Invoked on success. |isFrontCamera| is true if the new camera is front facing.
                             override fun onCameraSwitchDone(isFrontCamera: Boolean) {
@@ -773,29 +777,35 @@ class WebRtcCall(
 
     fun startSharingScreen(videoCapturer: VideoCapturer) {
         val factory = peerConnectionFactoryProvider.get() ?: return
-        val videoSource = factory.createVideoSource(true)
-        val audioSource = factory.createAudioSource(DEFAULT_AUDIO_CONSTRAINTS)
+
+        this.videoCapturer = videoCapturer
+
+        val localMediaStream = factory.createLocalMediaStream(STREAM_ID)
+        val videoSource = factory.createVideoSource(videoCapturer.isScreencast)
+
+        // Start capturing screen
         val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
         videoCapturer.initialize(surfaceTextureHelper, context, videoSource.capturerObserver)
         videoCapturer.startCapture(currentCaptureFormat.width, currentCaptureFormat.height, currentCaptureFormat.fps)
 
-        val videoTrack = factory.createVideoTrack("ARDAMSv0", videoSource).apply { setEnabled(true) }
-        val audioTrack = factory.createAudioTrack("ARDAMSa0", audioSource).apply { setEnabled(true) }
+        // Remove local camera previews
+        localSurfaceRenderers.forEach { it.get()?.let { localVideoTrack?.removeSink(it) } }
 
-        val localMediaStream = factory.createLocalMediaStream("ARDAMS")
-        peerConnection?.addTrack(videoTrack)
-        peerConnection?.addTrack(audioTrack)
-        localMediaStream.addTrack(videoTrack)
-        localMediaStream.addTrack(audioTrack)
+        // Show screen preview locally
+        localVideoTrack = factory.createVideoTrack(VIDEO_TRACK_ID, videoSource).apply { setEnabled(true) }
+        localMediaStream?.addTrack(localVideoTrack)
+        localSurfaceRenderers.forEach { it.get()?.let { localVideoTrack?.addSink(it) } }
 
-        localAudioSource = audioSource
-        localVideoSource = videoSource
-        localAudioTrack = audioTrack
-        localVideoTrack = videoTrack
+        // Remove camera stream
+        peerConnection?.removeTrack(videoSender)
+
+        screenSender = peerConnection?.addTrack(localVideoTrack, listOf(STREAM_ID))
     }
 
     fun stopSharingScreen() {
-        // TODO. Will be handled within the next PR.
+        screenSender?.let { peerConnection?.removeTrack(it) }
+        peerConnectionFactoryProvider.get()?.let { configureVideoTrack(it) }
+        sessionScope?.launch(dispatcher) { attachViewRenderersInternal() }
     }
 
     private suspend fun release() {
