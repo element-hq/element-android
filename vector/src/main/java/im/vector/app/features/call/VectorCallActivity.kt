@@ -651,7 +651,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     private fun startScreenSharing(activityResult: ActivityResult) {
         val videoCapturer = ScreenCapturerAndroid(activityResult.data, object : MediaProjection.Callback() {
             override fun onStop() {
-                Timber.v("User revoked the screen capturing permission")
+                Timber.i("User revoked the screen capturing permission")
             }
         })
         callViewModel.handle(VectorCallViewActions.StartScreenSharing(videoCapturer))

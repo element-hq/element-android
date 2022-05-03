@@ -783,29 +783,41 @@ class WebRtcCall(
         val localMediaStream = factory.createLocalMediaStream(STREAM_ID)
         val videoSource = factory.createVideoSource(videoCapturer.isScreencast)
 
-        // Start capturing screen
-        val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
-        videoCapturer.initialize(surfaceTextureHelper, context, videoSource.capturerObserver)
-        videoCapturer.startCapture(currentCaptureFormat.width, currentCaptureFormat.height, currentCaptureFormat.fps)
+        startCapturingScreen(videoCapturer, videoSource)
 
-        // Remove local camera previews
-        localSurfaceRenderers.forEach { it.get()?.let { localVideoTrack?.removeSink(it) } }
+        removeLocalSurfaceRenderers()
 
-        // Show screen preview locally
-        localVideoTrack = factory.createVideoTrack(VIDEO_TRACK_ID, videoSource).apply { setEnabled(true) }
-        localMediaStream?.addTrack(localVideoTrack)
-        localSurfaceRenderers.forEach { it.get()?.let { localVideoTrack?.addSink(it) } }
+        showScreenLocally(factory, videoSource, localMediaStream)
 
-        // Remove camera stream
-        peerConnection?.removeTrack(videoSender)
+        videoSender?.let { removeStream(it) }
 
         screenSender = peerConnection?.addTrack(localVideoTrack, listOf(STREAM_ID))
     }
 
     fun stopSharingScreen() {
-        screenSender?.let { peerConnection?.removeTrack(it) }
+        screenSender?.let { removeStream(it) }
         peerConnectionFactoryProvider.get()?.let { configureVideoTrack(it) }
         sessionScope?.launch(dispatcher) { attachViewRenderersInternal() }
+    }
+
+    private fun removeStream(sender: RtpSender) {
+        peerConnection?.removeTrack(sender)
+    }
+
+    private fun showScreenLocally(factory: PeerConnectionFactory, videoSource: VideoSource?, localMediaStream: MediaStream?) {
+        localVideoTrack = factory.createVideoTrack(VIDEO_TRACK_ID, videoSource).apply { setEnabled(true) }
+        localMediaStream?.addTrack(localVideoTrack)
+        localSurfaceRenderers.forEach { it.get()?.let { localVideoTrack?.addSink(it) } }
+    }
+
+    private fun removeLocalSurfaceRenderers() {
+        localSurfaceRenderers.forEach { it.get()?.let { localVideoTrack?.removeSink(it) } }
+    }
+
+    private fun startCapturingScreen(videoCapturer: VideoCapturer, videoSource: VideoSource) {
+        val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
+        videoCapturer.initialize(surfaceTextureHelper, context, videoSource.capturerObserver)
+        videoCapturer.startCapture(currentCaptureFormat.width, currentCaptureFormat.height, currentCaptureFormat.fps)
     }
 
     private suspend fun release() {
