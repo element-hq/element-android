@@ -25,6 +25,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -85,7 +86,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 session.coroutineScope.launch {
                     tryOrNull {
                         session.roomService().joinRoom(room.roomId)
-                        analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom())
+                        analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom(JoinedRoom.Trigger.Notification))
                     }
                 }
             }

@@ -37,6 +37,7 @@ import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSearchBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -134,7 +135,16 @@ class SearchFragment @Inject constructor(
                     roomEncryptionTrustLevel = null,
                     rootThreadEventId = it)
             navigator.openThread(requireContext(), threadTimelineArgs, event.eventId)
-        } ?: navigator.openRoom(requireContext(), roomId, event.eventId)
+        } ?: openRoom(roomId, event.eventId)
+    }
+
+    private fun openRoom(roomId: String, eventId: String?) {
+        navigator.openRoom(
+                context = requireContext(),
+                roomId = roomId,
+                eventId = eventId,
+                trigger = ViewRoom.Trigger.MessageSearch
+        )
     }
 
     override fun loadMore() {

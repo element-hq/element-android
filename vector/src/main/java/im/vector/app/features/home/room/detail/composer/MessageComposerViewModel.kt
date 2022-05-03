@@ -28,6 +28,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsComposer
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
@@ -617,7 +618,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 return@launch
             }
             session.getRoomSummary(command.roomAlias)
-                    ?.also { analyticsTracker.capture(it.toAnalyticsJoinedRoom()) }
+                    ?.also { analyticsTracker.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.SlashCommand)) }
                     ?.roomId
                     ?.let {
                         _viewEvents.post(MessageComposerViewEvents.JoinRoomCommandSuccess(it))

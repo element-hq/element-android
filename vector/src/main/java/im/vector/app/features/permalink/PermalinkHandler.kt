@@ -25,6 +25,7 @@ import im.vector.app.core.extensions.isIgnored
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.utils.toast
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import kotlinx.coroutines.Dispatchers
@@ -192,12 +193,12 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                     navigationInterceptor.openJoinedRoomScreen(buildTask, roomId, eventId, rawLink, context, rootThreadEventId, roomSummary)
                 } else {
                     // maybe open space preview navigator.openSpacePreview(context, roomId)? if already joined?
-                    navigator.openMatrixToBottomSheet(context, rawLink.toString())
+                    navigator.openMatrixToBottomSheet(context, rawLink.toString(), OriginOfMatrixTo.LINK)
                 }
             }
             else                             -> {
                 // XXX this could trigger another server load
-                navigator.openMatrixToBottomSheet(context, rawLink.toString())
+                navigator.openMatrixToBottomSheet(context, rawLink.toString(), OriginOfMatrixTo.LINK)
             }
         }
     }
