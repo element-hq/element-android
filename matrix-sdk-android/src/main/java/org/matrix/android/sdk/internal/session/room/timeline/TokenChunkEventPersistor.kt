@@ -178,6 +178,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
         }
         val optimizedThreadSummaryMap = hashMapOf<String, EventEntity>()
         var hasNewEvents = false
+        var existingChunkToLink: ChunkEntity? = null
         run processTimelineEvents@{
             eventList.forEach { event ->
                 if (event.eventId == null || event.senderId == null) {
@@ -196,7 +197,12 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     // timeline loop if the other chunk is in the other direction.
                     if (!hasNewEvents) {
                         Timber.i("Skip adding event $eventId, already exists")
-                        // Only skip this event, but still process other events
+                        // Only skip this event, but still process other events.
+                        // Remember this chunk, since in case we don't find any new events, we still want to link this in pagination direction
+                        // e.g. in order to link a chunk to the /sync chunk
+                        if (existingChunkToLink == null) {
+                            existingChunkToLink = existingChunk
+                        }
                         return@forEach
                     }
                     when (direction) {
@@ -247,6 +253,27 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     } ?: run {
                         // This is a normal event or a root thread one
                         optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
+                    }
+                }
+            }
+        }
+        val existingChunk = existingChunkToLink
+        if (!hasNewEvents && existingChunk != null) {
+            when (direction) {
+                PaginationDirection.BACKWARDS -> {
+                    if (currentChunk.nextChunk == existingChunk) {
+                        Timber.w("Avoid double link, shouldn't happen in an ideal world")
+                    } else {
+                        currentChunk.prevChunk = existingChunk
+                        existingChunk.nextChunk = currentChunk
+                    }
+                }
+                PaginationDirection.FORWARDS  -> {
+                    if (currentChunk.prevChunk == existingChunk) {
+                        Timber.w("Avoid double link, shouldn't happen in an ideal world")
+                    } else {
+                        currentChunk.nextChunk = existingChunk
+                        existingChunk.prevChunk = currentChunk
                     }
                 }
             }
