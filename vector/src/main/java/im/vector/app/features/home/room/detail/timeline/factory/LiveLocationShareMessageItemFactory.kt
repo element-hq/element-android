@@ -25,6 +25,8 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.LiveLocationShareSummaryData
+import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationInactiveItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationInactiveItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem
@@ -54,14 +56,29 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
             attributes: AbsMessageItem.Attributes,
     ): VectorEpoxyModel<*>? {
         val item = when (val currentState = getViewState(liveLocationShareSummaryData)) {
+            LiveLocationShareViewState.Inactive   -> buildInactiveItem(highlight, attributes)
             LiveLocationShareViewState.Loading    -> buildLoadingItem(highlight, attributes)
-            LiveLocationShareViewState.Inactive   -> buildInactiveItem()
             is LiveLocationShareViewState.Running -> buildRunningItem(highlight, attributes, currentState)
             LiveLocationShareViewState.Unkwown    -> null
         }
         item?.layout(attributes.informationData.messageLayout.layoutRes)
 
         return item
+    }
+
+    private fun buildInactiveItem(
+            highlight: Boolean,
+            attributes: AbsMessageItem.Attributes,
+    ): MessageLiveLocationInactiveItem {
+        val width = timelineMediaSizeProvider.getMaxSize().first
+        val height = dimensionConverter.dpToPx(MessageItemFactory.MESSAGE_LOCATION_ITEM_HEIGHT_IN_DP)
+
+        return MessageLiveLocationInactiveItem_()
+                .attributes(attributes)
+                .mapWidth(width)
+                .mapHeight(height)
+                .highlighted(highlight)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
     }
 
     private fun buildLoadingItem(
@@ -106,11 +123,9 @@ class LiveLocationShareMessageItemFactory @Inject constructor(
                 .vectorDateFormatter(vectorDateFormatter)
     }
 
-    private fun buildInactiveItem() = null
-
     private fun getViewState(liveLocationShareSummaryData: LiveLocationShareSummaryData?): LiveLocationShareViewState {
         return when {
-            liveLocationShareSummaryData?.isActive == null -> LiveLocationShareViewState.Unkwown
+            liveLocationShareSummaryData?.isActive == null                                                   -> LiveLocationShareViewState.Unkwown
             liveLocationShareSummaryData.isActive.not() || isLiveTimedOut(liveLocationShareSummaryData)      -> LiveLocationShareViewState.Inactive
             liveLocationShareSummaryData.isActive && liveLocationShareSummaryData.lastGeoUri.isNullOrEmpty() -> LiveLocationShareViewState.Loading
             else                                                                                             ->
