@@ -127,8 +127,8 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
         }
     }
 
-    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
-        navigator.openRoom(this, roomId)
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {

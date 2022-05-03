@@ -28,16 +28,13 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetMatrixToCardBinding
-import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -53,8 +50,6 @@ class MatrixToBottomSheet :
     ) : Parcelable
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
-    @Inject lateinit var session: Session
-    @Inject lateinit var appStateHandler: AppStateHandler
 
     var interactionListener: InteractionListener? = null
 
@@ -65,7 +60,7 @@ class MatrixToBottomSheet :
     private val viewModel by fragmentViewModel(MatrixToBottomSheetViewModel::class)
 
     interface InteractionListener {
-        fun mxToBottomSheetNavigateToRoom(roomId: String)
+        fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?)
         fun mxToBottomSheetSwitchToSpace(spaceId: String)
     }
 
@@ -104,14 +99,8 @@ class MatrixToBottomSheet :
         viewModel.observeViewEvents {
             when (it) {
                 is MatrixToViewEvents.NavigateToRoom  -> {
-                    interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId)
                     withState(viewModel) { state ->
-                        analyticsTracker.capture(
-                                session.getRoomSummary(it.roomId).toAnalyticsViewRoom(
-                                    trigger = state.origin.toViewRoomTrigger(),
-                                    groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
-                                )
-                        )
+                        interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId, state.origin.toViewRoomTrigger())
                     }
                     dismiss()
                 }
