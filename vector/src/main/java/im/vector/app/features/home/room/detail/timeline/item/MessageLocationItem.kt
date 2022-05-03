@@ -21,5 +21,12 @@ import im.vector.app.R
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageLocationItem : AbsMessageLocationItem<MessageLocationItem.Holder>() {
-    class Holder : AbsMessageLocationItem.Holder()
+
+    override fun getViewStubId() = STUB_ID
+
+    class Holder : AbsMessageLocationItem.Holder(STUB_ID)
+
+    companion object {
+        private const val STUB_ID = R.id.messageContentLocationStub
+    }
 }

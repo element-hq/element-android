@@ -110,7 +110,13 @@ abstract class MessageLiveLocationItem : AbsMessageLocationItem<MessageLiveLocat
     private fun getRemainingTimeOfLiveInMillis() =
             (endOfLiveDateTime?.toTimestamp() ?: 0) - LocalDateTime.now().toTimestamp()
 
-    class Holder : AbsMessageLocationItem.Holder() {
+    override fun getViewStubId() = STUB_ID
+
+    class Holder : AbsMessageLocationItem.Holder(STUB_ID) {
         val locationLiveMessageBanner by bind<LocationLiveMessageBannerView>(R.id.locationLiveMessageBanner)
+    }
+
+    companion object {
+        private const val STUB_ID = R.id.messageContentLiveLocationStub
     }
 }

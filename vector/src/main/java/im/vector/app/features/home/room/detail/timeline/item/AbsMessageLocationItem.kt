@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.IdRes
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
@@ -101,15 +102,10 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
                 .into(holder.staticMapImageView)
     }
 
-    override fun getViewStubId() = STUB_ID
-
-    open class Holder : AbsMessageItem.Holder(STUB_ID) {
+    abstract class Holder(@IdRes stubId: Int) : AbsMessageItem.Holder(stubId) {
         val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
         val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
         val staticMapErrorTextView by bind<TextView>(R.id.staticMapErrorTextView)
     }
 
-    companion object {
-        private const val STUB_ID = R.id.messageContentLocationStub
-    }
 }
