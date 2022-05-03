@@ -57,34 +57,36 @@ class LocationTracker @Inject constructor(
             return
         }
 
-        locationManager.allProviders
-                .takeIf { it.isNotEmpty() }
-                // Take GPS first
-                ?.sortedByDescending { if (it == LocationManager.GPS_PROVIDER) 1 else 0 }
-                ?.forEach { provider ->
-                    Timber.d("## LocationTracker. track location using $provider")
+        val providers = locationManager.allProviders
 
-                    // Send last known location without waiting location updates
-                    locationManager.getLastKnownLocation(provider)?.let { lastKnownLocation ->
-                        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
-                            Timber.d("## LocationTracker. lastKnownLocation: $lastKnownLocation")
-                        } else {
-                            Timber.d("## LocationTracker. lastKnownLocation: ${lastKnownLocation.provider}")
-                        }
-                        notifyLocation(lastKnownLocation, isLive = false)
+        if (providers.isEmpty()) {
+            callbacks.forEach { it.onLocationProviderIsNotAvailable() }
+            Timber.v("## LocationTracker. There is no location provider available")
+        } else {
+            // Take GPS first
+            providers.sortedByDescending { if (it == LocationManager.GPS_PROVIDER) 1 else 0 }
+                    .mapNotNull { provider ->
+                        Timber.d("## LocationTracker. track location using $provider")
+
+                        locationManager.requestLocationUpdates(
+                                provider,
+                                MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
+                                MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
+                                this
+                        )
+
+                        locationManager.getLastKnownLocation(provider)
                     }
-
-                    locationManager.requestLocationUpdates(
-                            provider,
-                            MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
-                            MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
-                            this
-                    )
-                }
-                ?: run {
-                    callbacks.forEach { it.onLocationProviderIsNotAvailable() }
-                    Timber.v("## LocationTracker. There is no location provider available")
-                }
+                    .maxByOrNull { location -> location.time }
+                    ?.let { latestKnownLocation ->
+                        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+                            Timber.d("## LocationTracker. lastKnownLocation: $latestKnownLocation")
+                        } else {
+                            Timber.d("## LocationTracker. lastKnownLocation: ${latestKnownLocation.provider}")
+                        }
+                        notifyLocation(latestKnownLocation, isLive = false)
+                    }
+        }
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
@@ -125,6 +127,7 @@ class LocationTracker @Inject constructor(
     }
 
     private fun notifyLocation(location: Location, isLive: Boolean) {
+        Timber.d("## LocationTracker. notify location")
         when (location.provider) {
             LocationManager.GPS_PROVIDER -> {
                 hasGpsProviderLiveLocation = isLive
