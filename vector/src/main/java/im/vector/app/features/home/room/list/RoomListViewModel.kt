@@ -45,6 +45,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
@@ -269,6 +270,7 @@ class RoomListViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.roomService().joinRoom(action.roomId, null, action.viaServers ?: emptyList())
+
                 suggestedRoomJoiningState.postValue(suggestedRoomJoiningState.value.orEmpty().toMutableMap().apply {
                     this[action.roomId] = Success(Unit)
                 }.toMap())

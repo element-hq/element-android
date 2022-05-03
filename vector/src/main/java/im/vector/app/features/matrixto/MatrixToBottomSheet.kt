@@ -37,6 +37,7 @@ import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import javax.inject.Inject
 import kotlin.reflect.KClass

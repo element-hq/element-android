@@ -25,7 +25,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -54,8 +53,7 @@ import javax.inject.Inject
 class PublicRoomsFragment @Inject constructor(
         private val publicRoomsController: PublicRoomsController,
         private val permalinkHandler: PermalinkHandler,
-        private val session: Session,
-        private val appStateHandler: AppStateHandler
+        private val session: Session
 ) : VectorBaseFragment<FragmentPublicRoomsBinding>(),
         PublicRoomsController.Callback {
 

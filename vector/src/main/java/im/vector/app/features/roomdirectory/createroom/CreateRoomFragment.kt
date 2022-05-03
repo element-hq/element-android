@@ -30,7 +30,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
@@ -49,7 +48,6 @@ import im.vector.app.features.roomprofile.settings.joinrule.toOption
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
@@ -65,9 +63,7 @@ data class CreateRoomArgs(
 class CreateRoomFragment @Inject constructor(
         private val createRoomController: CreateRoomController,
         private val createSpaceController: CreateSubSpaceController,
-        colorProvider: ColorProvider,
-        private val session: Session,
-        private val appStateHandler: AppStateHandler
+        colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentCreateRoomBinding>(),
         CreateRoomController.Listener,
         GalleryOrCameraDialogHelper.Listener,

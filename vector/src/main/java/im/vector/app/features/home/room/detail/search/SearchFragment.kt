@@ -29,7 +29,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -41,7 +40,6 @@ import im.vector.app.databinding.FragmentSearchBinding
 import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import javax.inject.Inject
@@ -54,9 +52,7 @@ data class SearchArgs(
 ) : Parcelable
 
 class SearchFragment @Inject constructor(
-        private val controller: SearchResultController,
-        private val session: Session,
-        private val appStateHandler: AppStateHandler
+        private val controller: SearchResultController
 ) : VectorBaseFragment<FragmentSearchBinding>(),
         StateView.EventCallback,
         SearchResultController.Listener {

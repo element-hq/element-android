@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -63,6 +64,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
         // Observe joined room (from the sync)
         observeRoomSummary()
         observeMembershipChanges()
+
         if (initialState.fromEmailInvite != null) {
             setState {
                 copy(peekingState = Loading())

@@ -31,7 +31,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
@@ -57,7 +56,6 @@ import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import java.net.HttpURLConnection
 import javax.inject.Inject
@@ -70,8 +68,6 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
     @Inject lateinit var errorFormatter: ErrorFormatter
-    @Inject lateinit var session: Session
-    @Inject lateinit var appStateHandler: AppStateHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

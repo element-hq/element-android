@@ -43,8 +43,7 @@ import javax.inject.Singleton
 class IncomingVerificationRequestHandler @Inject constructor(
         private val context: Context,
         private var avatarRenderer: Provider<AvatarRenderer>,
-        private val popupAlertManager: PopupAlertManager
-) : VerificationService.Listener {
+        private val popupAlertManager: PopupAlertManager) : VerificationService.Listener {
 
     private var session: Session? = null
 

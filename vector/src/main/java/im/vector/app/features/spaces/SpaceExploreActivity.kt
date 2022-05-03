@@ -97,7 +97,7 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
                     navigator.openRoom(
                             context = this,
                             roomId = it.roomId,
-                            trigger = ViewRoom.Trigger.MobileExploreRooms
+                            trigger = ViewRoom.Trigger.SpaceHierarchy
                     )
                 }
                 is SpaceDirectoryViewEvents.NavigateToMxToBottomSheet -> {

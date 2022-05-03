@@ -478,7 +478,8 @@ class HomeActivity :
             notificationDrawerManager.clearAllEvents()
         }
         if (parcelableExtra?.inviteNotificationRoomId != null) {
-            activeSessionHolder.getSafeActiveSession()?.permalinkService()
+            activeSessionHolder.getSafeActiveSession()
+                    ?.permalinkService()
                     ?.createPermalink(parcelableExtra.inviteNotificationRoomId)?.let {
                         navigator.openMatrixToBottomSheet(this, it, OriginOfMatrixTo.NOTIFICATION)
                     }
