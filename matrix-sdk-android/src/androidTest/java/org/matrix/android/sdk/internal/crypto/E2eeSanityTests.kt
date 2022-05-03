@@ -166,7 +166,7 @@ class E2eeSanityTests : InstrumentedTest {
             delay(3_000)
         }
 
-        // check that messages are encrypted (uisi)
+        // Due to the new shared keys implementation, invited user should be able to decrypt messages
         newAccount.forEach { otherSession ->
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
@@ -174,8 +174,7 @@ class E2eeSanityTests : InstrumentedTest {
                         Log.v("#E2E TEST", "Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
                     }
                     timelineEvent != null &&
-                            timelineEvent.root.getClearType() == EventType.ENCRYPTED &&
-                            timelineEvent.root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID
+                            timelineEvent.root.getClearType() == EventType.MESSAGE
                 }
             }
         }
