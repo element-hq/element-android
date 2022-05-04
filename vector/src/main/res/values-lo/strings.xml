@@ -948,7 +948,7 @@
     <string name="room_settings_room_access_private_description">ສະເພາະຄົນທີ່ຖືກເຊີນສາມາດຊອກຫາ ແລະ ເຂົ້າຮ່ວມໄດ້</string>
     <string name="room_settings_room_access_private_invite_only_title">ສ່ວນຕົວ (ເຊີນເທົ່ານັ້ນ)</string>
     <string name="room_settings_room_access_private_title">ສ່ວນຕົວ</string>
-    <string name="room_settings_room_access_entry_unknown">ການຕັ້ງຄ່າການເຂົ້າເຖິງທີ່ບໍ່ຮູ້ຈັກ)</string>
+    <string name="room_settings_room_access_entry_unknown">ການຕັ້ງຄ່າການເຂົ້າເຖິງທີ່ບໍ່ຮູ້ຈັກ (%s)</string>
     <string name="room_settings_room_access_entry_knock">ທຸກຄົນສາມາດເຄາະຫ້ອງໃດກໍ່ໄດ້, ສະມາຊິກສາມາດຍອມຮັບ ຫຼື ປະຕິເສດກໍ່ໄດ້</string>
     <string name="room_settings_read_history_entry_members_only_joined">ສະມາຊິກເທົ່ານັ້ນ (ນັບຕັ້ງແຕ່ພວກເຂົາເຂົ້າຮ່ວມ)</string>
     <string name="room_settings_read_history_entry_members_only_invited">ສະມາຊິກເທົ່ານັ້ນ (ນັບຕັ້ງແຕ່ພວກເຂົາຖືກເຊີນ)</string>
