@@ -145,9 +145,9 @@ class ThreadListFragment @Inject constructor(
 
     override fun onThreadSummaryClicked(threadSummary: ThreadSummary) {
         val roomThreadDetailArgs = ThreadTimelineArgs(
-                roomId = threadSummary.roomId,
-                displayName = threadSummary.rootThreadSenderInfo.displayName,
-                avatarUrl = threadSummary.rootThreadSenderInfo.avatarUrl,
+                roomId = threadListArgs.roomId,
+                displayName = threadListArgs.displayName,
+                avatarUrl = threadListArgs.avatarUrl,
                 roomEncryptionTrustLevel = null,
                 rootThreadEventId = threadSummary.rootEventId)
         (activity as? ThreadsActivity)?.navigateToThreadTimeline(roomThreadDetailArgs)
@@ -155,9 +155,9 @@ class ThreadListFragment @Inject constructor(
 
     override fun onThreadListClicked(timelineEvent: TimelineEvent) {
         val threadTimelineArgs = ThreadTimelineArgs(
-                roomId = timelineEvent.roomId,
-                displayName = timelineEvent.senderInfo.displayName,
-                avatarUrl = timelineEvent.senderInfo.avatarUrl,
+                roomId = threadListArgs.roomId,
+                displayName = threadListArgs.displayName,
+                avatarUrl = threadListArgs.avatarUrl,
                 roomEncryptionTrustLevel = null,
                 rootThreadEventId = timelineEvent.eventId)
         (activity as? ThreadsActivity)?.navigateToThreadTimeline(threadTimelineArgs)
