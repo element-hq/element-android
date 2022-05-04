@@ -36,7 +36,7 @@ sealed interface SendMode {
             val text: String,
             val fromSharing: Boolean,
             // This is necessary for forcing refresh on selectSubscribe
-            private val ts: Int = Random.nextInt()
+            private val random: Int = Random.nextInt()
     ) : SendMode
 
     data class Quote(val timelineEvent: TimelineEvent, val text: String) : SendMode
