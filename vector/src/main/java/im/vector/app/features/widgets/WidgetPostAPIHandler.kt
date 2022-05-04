@@ -33,6 +33,8 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -116,7 +118,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         }
         val userId = eventData["user_id"] as String
         Timber.d("Received request to get options for bot $userId in room $roomId requested")
-        val stateEvents = room.getStateEvents(setOf(EventType.BOT_OPTIONS))
+        val stateEvents = room.stateService().getStateEvents(setOf(EventType.BOT_OPTIONS))
         var botOptionsEvent: Event? = null
         val stateKey = "_$userId"
         for (stateEvent in stateEvents) {
@@ -195,7 +197,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
             return
         }
         Timber.d("Received request join rules  in room $roomId")
-        val joinedEvents = room.getStateEvents(setOf(EventType.STATE_ROOM_JOIN_RULES))
+        val joinedEvents = room.stateService().getStateEvents(setOf(EventType.STATE_ROOM_JOIN_RULES))
         if (joinedEvents.isNotEmpty()) {
             widgetPostAPIMediator.sendObjectResponse(Event::class.java, joinedEvents.last(), eventData)
         } else {
@@ -315,7 +317,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         val params = HashMap<String, Any>()
         params["status"] = status
         launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
-            room.sendStateEvent(
+            room.stateService().sendStateEvent(
                     eventType = EventType.PLUMBING,
                     stateKey = "",
                     body = params
@@ -340,7 +342,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         val stateKey = "_$userId"
 
         launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
-            room.sendStateEvent(
+            room.stateService().sendStateEvent(
                     eventType = EventType.BOT_OPTIONS,
                     stateKey = stateKey,
                     body = content
@@ -382,12 +384,12 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         val userId = eventData["user_id"] as String
         val description = "Received request to invite $userId into room $roomId"
         Timber.d(description)
-        val member = room.getRoomMember(userId)
+        val member = room.membershipService().getRoomMember(userId)
         if (member != null && member.membership == Membership.JOIN) {
             widgetPostAPIMediator.sendSuccess(eventData)
         } else {
             launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
-                room.invite(userId = userId)
+                room.membershipService().invite(userId = userId)
             }
         }
     }
@@ -401,7 +403,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         if (checkRoomId(widgetPostAPIMediator, eventData)) {
             return
         }
-        val numberOfJoinedMembers = room.getNumberOfJoinedMembers()
+        val numberOfJoinedMembers = room.membershipService().getNumberOfJoinedMembers()
         widgetPostAPIMediator.sendIntegerResponse(numberOfJoinedMembers, eventData)
     }
 

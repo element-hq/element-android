@@ -25,8 +25,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.RuleKind
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import javax.inject.Inject
 
 /**
@@ -38,7 +38,7 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
-        val defaultRule = session.getPushRules().getAllRules()
+        val defaultRule = session.pushRuleService().getPushRules().getAllRules()
                 .find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
 
         if (defaultRule != null) {
@@ -54,7 +54,7 @@ class TestAccountSettings @Inject constructor(private val stringProvider: String
 
                         session.coroutineScope.launch {
                             tryOrNull {
-                                session.updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled)
+                                session.pushRuleService().updatePushRuleEnableStatus(RuleKind.OVERRIDE, defaultRule, !defaultRule.enabled)
                             }
                             withContext(Dispatchers.Main) {
                                 manager?.retry(activityResultLauncher)

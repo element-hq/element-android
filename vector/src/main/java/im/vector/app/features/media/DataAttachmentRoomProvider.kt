@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MimeTypes
 import java.io.File

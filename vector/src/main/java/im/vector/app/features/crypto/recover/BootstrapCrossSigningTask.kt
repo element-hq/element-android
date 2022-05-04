@@ -117,7 +117,7 @@ class BootstrapCrossSigningTask @Inject constructor(
 
         val keyInfo: SsssKeyCreationInfo
 
-        val ssssService = session.sharedSecretStorageService
+        val ssssService = session.sharedSecretStorageService()
 
         params.progressListener?.onProgress(
                 WaitingViewData(

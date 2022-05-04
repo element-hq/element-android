@@ -34,6 +34,10 @@ import org.matrix.android.sdk.api.session.events.model.isEdition
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.supportsNotification
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
+import org.matrix.android.sdk.api.session.getUser
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
@@ -100,7 +104,7 @@ class NotifiableEventResolver @Inject constructor(
         // Ignore message edition
         if (event.isEdition()) return null
 
-        val actions = session.getActions(event)
+        val actions = session.pushRuleService().getActions(event)
         val notificationAction = actions.toNotificationAction()
 
         return if (notificationAction.shouldNotify) {
@@ -233,7 +237,7 @@ class NotifiableEventResolver @Inject constructor(
     private fun resolveStateRoomEvent(event: Event, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent? {
         val content = event.content?.toModel<RoomMemberContent>() ?: return null
         val roomId = event.roomId ?: return null
-        val dName = event.senderId?.let { session.getRoomMember(it, roomId)?.displayName }
+        val dName = event.senderId?.let { session.roomService().getRoomMember(it, roomId)?.displayName }
         if (Membership.INVITE == content.membership) {
             val roomSummary = session.getRoomSummary(roomId)
             val body = noticeEventFormatter.format(event, dName, isDm = roomSummary?.isDirect.orFalse())

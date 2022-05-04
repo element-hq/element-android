@@ -164,6 +164,7 @@ ext.groups = [
                         'org.codehaus.woodstox',
                         'org.eclipse.ee4j',
                         'org.ec4j.core',
+                        'org.freemarker',
                         'org.glassfish.jaxb',
                         'org.hamcrest',
                         'org.jacoco',

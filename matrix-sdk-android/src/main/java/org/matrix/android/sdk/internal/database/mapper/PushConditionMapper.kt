@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
-import org.matrix.android.sdk.api.pushrules.rest.PushCondition
+import org.matrix.android.sdk.api.session.pushrules.rest.PushCondition
 import org.matrix.android.sdk.internal.database.model.PushConditionEntity
 
 internal object PushConditionMapper {

@@ -16,8 +16,8 @@
 
 package im.vector.app.features.settings.notifications
 
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
-import org.matrix.android.sdk.api.pushrules.toJson
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.toJson
 
 enum class NotificationIndex {
     OFF,

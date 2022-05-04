@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session.room.notification
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
-import org.matrix.android.sdk.api.pushrules.RuleScope
+import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.query.where

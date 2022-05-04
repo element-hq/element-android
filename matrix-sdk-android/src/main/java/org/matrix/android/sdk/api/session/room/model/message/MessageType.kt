@@ -41,6 +41,6 @@ object MessageType {
     const val MSGTYPE_SNOWFALL = "io.element.effect.snowfall"
 
     // Fake message types for live location events to be able to inherit them from MessageContent
-    const val MSGTYPE_LIVE_LOCATION_STATE = "org.matrix.android.sdk.livelocation.state"
-    const val MSGTYPE_LIVE_LOCATION = "org.matrix.android.sdk.livelocation"
+    const val MSGTYPE_BEACON_INFO = "org.matrix.android.sdk.beacon.info"
+    const val MSGTYPE_BEACON_LOCATION_DATA = "org.matrix.android.sdk.beacon.location.data"
 }

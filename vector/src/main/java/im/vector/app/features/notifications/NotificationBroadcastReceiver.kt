@@ -25,10 +25,12 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import timber.log.Timber
@@ -83,8 +85,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             if (room != null) {
                 session.coroutineScope.launch {
                     tryOrNull {
-                        session.joinRoom(room.roomId)
-                        analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom())
+                        session.roomService().joinRoom(room.roomId)
+                        analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom(JoinedRoom.Trigger.Notification))
                     }
                 }
             }
@@ -94,7 +96,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     private fun handleRejectRoom(roomId: String) {
         activeSessionHolder.getSafeActiveSession()?.let { session ->
             session.coroutineScope.launch {
-                tryOrNull { session.leaveRoom(roomId) }
+                tryOrNull { session.roomService().leaveRoom(roomId) }
             }
         }
     }
@@ -104,7 +106,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             val room = session.getRoom(roomId)
             if (room != null) {
                 session.coroutineScope.launch {
-                    tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+                    tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
                 }
             }
         }
@@ -127,7 +129,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun sendMatrixEvent(message: String, session: Session, room: Room, context: Context?) {
-        room.sendTextMessage(message)
+        room.sendService().sendTextMessage(message)
 
         // Create a new event to be displayed in the notification drawer, right now
 
@@ -137,7 +139,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 editedEventId = null,
                 noisy = false,
                 timestamp = System.currentTimeMillis(),
-                senderName = session.getRoomMember(session.myUserId, room.roomId)?.displayName
+                senderName = session.roomService().getRoomMember(session.myUserId, room.roomId)?.displayName
                         ?: context?.getString(R.string.notification_sender_me),
                 senderId = session.myUserId,
                 body = message,

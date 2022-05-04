@@ -58,7 +58,7 @@ class ReAuthViewModel @AssistedInject constructor(
             is ReAuthActions.ReAuthWithPass  -> {
                 val safeForIntentCypher = ByteArrayOutputStream().also {
                     it.use {
-                        session.securelyStoreObject(action.password, initialState.resultKeyStoreAlias, it)
+                        session.secureStorageService().securelyStoreObject(action.password, initialState.resultKeyStoreAlias, it)
                     }
                 }.toByteArray().toBase64NoPadding()
                 _viewEvents.post(ReAuthEvents.PasswordFinishSuccess(safeForIntentCypher))

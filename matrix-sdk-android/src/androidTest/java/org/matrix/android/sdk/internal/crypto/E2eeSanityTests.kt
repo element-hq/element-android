@@ -38,8 +38,11 @@ import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -86,7 +89,7 @@ class E2eeSanityTests : InstrumentedTest {
         otherAccounts.forEach {
             testHelper.runBlockingTest {
                 Log.v("#E2E TEST", "Alice invites ${it.myUserId}")
-                aliceRoomPOV.invite(it.myUserId)
+                aliceRoomPOV.membershipService().invite(it.myUserId)
             }
         }
 
@@ -128,7 +131,7 @@ class E2eeSanityTests : InstrumentedTest {
         newAccount.forEach {
             testHelper.runBlockingTest {
                 Log.v("#E2E TEST", "Alice invites ${it.myUserId}")
-                aliceRoomPOV.invite(it.myUserId)
+                aliceRoomPOV.membershipService().invite(it.myUserId)
             }
         }
 
@@ -523,10 +526,10 @@ class E2eeSanityTests : InstrumentedTest {
     }
 
     private fun sendMessageInRoom(aliceRoomPOV: Room, text: String): String? {
-        aliceRoomPOV.sendTextMessage(text)
+        aliceRoomPOV.sendService().sendTextMessage(text)
         var sentEventId: String? = null
         testHelper.waitWithLatch(4 * TestConstants.timeOutMillis) { latch ->
-            val timeline = aliceRoomPOV.createTimeline(null, TimelineSettings(60))
+            val timeline = aliceRoomPOV.timelineService().createTimeline(null, TimelineSettings(60))
             timeline.start()
 
             testHelper.retryPeriodicallyWithLatch(latch) {
@@ -551,7 +554,7 @@ class E2eeSanityTests : InstrumentedTest {
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
                 otherAccounts.map {
-                    aliceSession.getRoomMember(it.myUserId, e2eRoomID)?.membership
+                    aliceSession.roomService().getRoomMember(it.myUserId, e2eRoomID)?.membership
                 }.all {
                     it == Membership.JOIN
                 }
@@ -574,7 +577,7 @@ class E2eeSanityTests : InstrumentedTest {
         testHelper.runBlockingTest(60_000) {
             Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $e2eRoomID")
             try {
-                otherSession.joinRoom(e2eRoomID)
+                otherSession.roomService().joinRoom(e2eRoomID)
             } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
                 // it's ok we will wait after
             }

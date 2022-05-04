@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -91,7 +92,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
                     copy(roomMemberSummaries = async)
                 }
 
-        if (room.isEncrypted()) {
+        if (room.roomCryptoService().isEncrypted()) {
             room.flow().liveRoomMembers(roomMemberQueryParams)
                     .flatMapLatest { membersSummary ->
                         session.cryptoService().getLiveCryptoDeviceInfo(membersSummary.map { it.userId })
@@ -196,7 +197,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
 
     private fun handleRevokeThreePidInvite(action: RoomMemberListAction.RevokeThreePidInvite) {
         viewModelScope.launch {
-            room.sendStateEvent(
+            room.stateService().sendStateEvent(
                     eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE,
                     stateKey = action.stateKey,
                     body = emptyMap()

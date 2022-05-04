@@ -38,6 +38,7 @@ import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.core.utils.tappableMatchingText
 import im.vector.app.databinding.FragmentRoomPreviewNoPreviewBinding
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.JoinState
@@ -100,7 +101,13 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
             if (state.roomType == RoomType.SPACE) {
                 navigator.switchToSpace(requireActivity(), state.roomId, Navigator.PostSwitchSpaceAction.None)
             } else {
-                navigator.openRoom(requireActivity(), state.roomId, roomPreviewData.eventId, roomPreviewData.buildTask)
+                navigator.openRoom(
+                        context = requireActivity(),
+                        roomId = state.roomId,
+                        eventId = roomPreviewData.eventId,
+                        buildTask = roomPreviewData.buildTask,
+                        trigger = ViewRoom.Trigger.MobileRoomPreview
+                )
             }
         }
 

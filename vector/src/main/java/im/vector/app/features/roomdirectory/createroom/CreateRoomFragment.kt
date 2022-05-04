@@ -38,6 +38,7 @@ import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentCreateRoomBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
@@ -219,20 +220,25 @@ class CreateRoomFragment @Inject constructor(
         val async = state.asyncCreateRoomRequest
         views.waitingView.root.isVisible = async is Loading
         if (async is Success) {
+            val roomId = async()
             // Navigate to freshly created room
             if (state.openAfterCreate) {
                 if (state.isSubSpace) {
                     navigator.switchToSpace(
                             requireContext(),
-                            async(),
+                            roomId,
                             Navigator.PostSwitchSpaceAction.None
                     )
                 } else {
-                    navigator.openRoom(requireActivity(), async())
+                    navigator.openRoom(
+                            context = requireActivity(),
+                            roomId = roomId,
+                            trigger = ViewRoom.Trigger.Created
+                    )
                 }
             }
 
-            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoomSuccess(async()))
+            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoomSuccess(roomId))
             sharedActionViewModel.post(RoomDirectorySharedAction.Close)
         } else {
             // Populate list with Epoxy

@@ -98,9 +98,7 @@ internal class UIEchoManager(private val listener: Listener) {
         val relatedEventID = timelineEvent.eventId
         val contents = inMemoryReactions[relatedEventID] ?: return timelineEvent
 
-        var existingAnnotationSummary = timelineEvent.annotations ?: EventAnnotationsSummary(
-                relatedEventID
-        )
+        var existingAnnotationSummary = timelineEvent.annotations ?: EventAnnotationsSummary()
         val updateReactions = existingAnnotationSummary.reactionsSummary.toMutableList()
 
         contents.forEach { uiEchoReaction ->

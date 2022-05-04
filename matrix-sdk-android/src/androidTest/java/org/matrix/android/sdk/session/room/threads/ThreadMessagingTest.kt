@@ -31,6 +31,7 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.isThread
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
@@ -80,7 +81,7 @@ class ThreadMessagingTest : InstrumentedTest {
         replyInThread.root.getRootThreadEventId().shouldBeEqualTo(initMessage.root.eventId)
 
         // The init normal message should now be a root thread event
-        val timeline = aliceRoom.createTimeline(null, TimelineSettings(30))
+        val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
         aliceSession.startSync(true)
@@ -141,7 +142,7 @@ class ThreadMessagingTest : InstrumentedTest {
         replyInThread.root.getRootThreadEventId().shouldBeEqualTo(initMessage.root.eventId)
 
         // The init normal message should now be a root thread event
-        val timeline = aliceRoom.createTimeline(null, TimelineSettings(30))
+        val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
         aliceSession.startSync(true)
@@ -214,7 +215,7 @@ class ThreadMessagingTest : InstrumentedTest {
         }
 
         // The init normal message should now be a root thread event
-        val timeline = aliceRoom.createTimeline(null, TimelineSettings(30))
+        val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
         aliceSession.startSync(true)
@@ -309,7 +310,7 @@ class ThreadMessagingTest : InstrumentedTest {
         }
 
         // The init normal message should now be a root thread event
-        val timeline = aliceRoom.createTimeline(null, TimelineSettings(30))
+        val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
         aliceSession.startSync(true)

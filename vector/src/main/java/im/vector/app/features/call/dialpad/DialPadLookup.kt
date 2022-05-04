@@ -47,7 +47,7 @@ class DialPadLookup @Inject constructor(
             if (nativeUserId == session.myUserId) {
                 throw Failure.NumberIsYours
             }
-            session.getExistingDirectRoomWithUser(nativeUserId)
+            session.roomService().getExistingDirectRoomWithUser(nativeUserId)
             // if there is not, just create a DM with the sip user
                     ?: directRoomHelper.ensureDMExists(sipUserId)
         } else {

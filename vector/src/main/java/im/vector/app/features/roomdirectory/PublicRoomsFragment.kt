@@ -33,6 +33,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentPublicRoomsBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import kotlinx.coroutines.flow.debounce
@@ -143,7 +144,11 @@ class PublicRoomsFragment @Inject constructor(
         withState(viewModel) { state ->
             when (joinState) {
                 JoinState.JOINED -> {
-                    navigator.openRoom(requireActivity(), publicRoom.roomId)
+                    navigator.openRoom(
+                            context = requireActivity(),
+                            roomId = publicRoom.roomId,
+                            trigger = ViewRoom.Trigger.RoomDirectory
+                    )
                 }
                 else             -> {
                     // ROOM PREVIEW

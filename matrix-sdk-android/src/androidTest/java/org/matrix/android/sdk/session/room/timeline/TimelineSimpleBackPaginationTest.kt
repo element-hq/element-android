@@ -28,6 +28,7 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
@@ -65,7 +66,7 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
                 message,
                 numberOfMessagesToSent)
 
-        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(30))
+        val bobTimeline = roomFromBobPOV.timelineService().createTimeline(null, TimelineSettings(30))
         bobTimeline.start()
 
         commonTestHelper.waitWithLatch(timeout = TestConstants.timeOutMillis * 10) {

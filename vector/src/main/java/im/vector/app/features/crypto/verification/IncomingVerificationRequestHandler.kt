@@ -18,6 +18,7 @@ package im.vector.app.features.crypto.verification
 import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
@@ -63,7 +64,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
         when (tx.state) {
             is VerificationTxState.OnStarted       -> {
                 // Add a notification for every incoming request
-                val user = session?.getUser(tx.otherUserId)
+                val user = session?.userService()?.getUser(tx.otherUserId)
                 val name = user?.toMatrixItem()?.getBestName() ?: tx.otherUserId
                 val alert = VerificationVectorAlert(
                         uid,
@@ -127,7 +128,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                 // XXX this is a bit hard coded :/
                 popupAlertManager.cancelAlert("review_login")
             }
-            val user = session?.getUser(pr.otherUserId)?.toMatrixItem()
+            val user = session?.userService()?.getUser(pr.otherUserId)?.toMatrixItem()
             val name = user?.getBestName() ?: pr.otherUserId
             val description = if (name == pr.otherUserId) {
                 name
@@ -156,7 +157,12 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 if (roomId.isNullOrBlank()) {
                                     it.navigator.waitSessionVerification(it)
                                 } else {
-                                    it.navigator.openRoom(it, roomId, pr.transactionId)
+                                    it.navigator.openRoom(
+                                            context = it,
+                                            roomId = roomId,
+                                            eventId = pr.transactionId,
+                                            trigger = ViewRoom.Trigger.VerificationRequest
+                                    )
                                 }
                             }
                         }

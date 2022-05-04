@@ -23,7 +23,7 @@ import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import org.matrix.android.sdk.api.pushrules.rest.PushRule
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRule
 
 data class PushRulesViewState(
         val rules: List<PushRule> = emptyList()
@@ -36,7 +36,7 @@ class PushRulesViewModel(initialState: PushRulesViewState) :
 
         override fun initialState(viewModelContext: ViewModelContext): PushRulesViewState? {
             val session = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java).activeSessionHolder().getActiveSession()
-            val rules = session.getPushRules().getAllRules()
+            val rules = session.pushRuleService().getPushRules().getAllRules()
             return PushRulesViewState(rules)
         }
     }
