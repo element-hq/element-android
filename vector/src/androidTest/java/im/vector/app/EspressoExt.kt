@@ -172,9 +172,9 @@ fun activityIdlingResource(activityClass: Class<*>): IdlingResource {
     val res = object : IdlingResource, ActivityLifecycleCallback {
         private var callback: IdlingResource.ResourceCallback? = null
         private var resumedActivity: Activity? = null
-        private val uniqTS = Random.nextLong()
+        private val uniqueSuffix = Random.nextLong()
 
-        override fun getName() = "activityIdlingResource_${activityClass.name}_$uniqTS"
+        override fun getName() = "activityIdlingResource_${activityClass.name}_$uniqueSuffix"
 
         override fun isIdleNow(): Boolean {
             val activity = resumedActivity ?: ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).firstOrNull {
