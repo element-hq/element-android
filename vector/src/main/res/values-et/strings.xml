@@ -743,7 +743,9 @@
 \nÜldistest seadistustest saad seda alati muuta.</string>
     <string name="room_participants_action_ignore">Eira selle kasutaja sõnumeid</string>
     <string name="room_participants_action_unignore_title">Lõpeta selle kasutaja eiramine</string>
-    <string name="room_participants_action_unignore_prompt_msg">Selle kasutaja eiramise lõpetamine teeb tema sõnumid uuesti nähtavaks.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Selle kasutaja eiramise lõpetamine teeb tema sõnumid uuesti nähtavaks.
+\n
+\nPalun arvesta, et samaga käivitud rakendub uuesti ning andmete sünkroniseerimiseks kulub natuke aega.</string>
     <string name="room_participants_action_unignore">Lõpeta eiramine</string>
     <string name="room_participants_action_cancel_invite_title">Tühista kutse</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Kas oled kindel et sa soovid tühistada kutse sellele kasutajale\?</string>
@@ -2457,4 +2459,32 @@
     <string name="ftue_account_created_take_me_home">Mine avalehele</string>
     <string name="ftue_account_created_personalize">Isikupärasta oma profiili</string>
     <string name="action_disable">Lülita välja</string>
+    <string name="location_share_live_started">Reaalajas asukoha laadimine…</string>
+    <string name="location_share_live_select_duration_option_3">8 tunni kestel</string>
+    <string name="location_share_live_select_duration_option_2">1 tunni kestel</string>
+    <string name="location_share_live_select_duration_option_1">15 minuti jooksul</string>
+    <string name="location_share_live_select_duration_title">Jaga oma asukohta reaalajas</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">%1$s helisõnumi esitamine ei õnnestu</string>
+    <string name="a11y_pause_audio_message">Peata helisõnumi esitus: %1$s</string>
+    <string name="a11y_play_audio_message">Esita helisõnumit: %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minutit %2$d sekundit</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Jagas oma asukohta</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} sobib ideaalselt kasutamiseks töökeskkonnas. Ta on kasutusel ka mitmetes üliturvalistes organisatsioonides.</string>
+    <string name="beta">BEETA</string>
+    <string name="send_feedback_threads_title">Jutulõngade beetaversiooni tagasiside</string>
+    <string name="give_feedback_threads">Jaga tagasisidet</string>
+    <string name="beta_title_bottom_sheet_action">BEETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Kui see valik on kasutusel, siis sa alati oled teiste jaoks võrgust väljas. Seda ka siis, kui kasutad rakendust.</string>
+    <string name="settings_presence_user_always_appears_offline">Ei ole võrgus</string>
+    <string name="settings_presence">Olek võrgus</string>
+    <string name="threads_labs_enable_notice_message">Sinu koduserver hetkel ei toeta jutulõngasid ning seega antud funktsionaalsus ei pruugi toimida korralikult. Kõik sõnumid jutulõngas ilmselt ei ole loetavad. %sKas sa ikkagi soovid jutulõngad kasutusele võtta\?</string>
+    <string name="threads_labs_enable_notice_title">Jutulõngade beetaversioon</string>
+    <string name="threads_beta_enable_notice_title">Jutulõngade beetaversioon</string>
+    <string name="action_learn_more">Lisateave</string>
+    <string name="action_try_it_out">Proovi nüüd</string>
+    <string name="send_feedback_threads_info">Jutulõngad on hetkel arendusjärgus funktsionaalsus ning samaga lisandub ka senisest parem versioon teavitustest. Me hea meelega tahaksime kuulda, mida sa nendest muutustest arvad!</string>
+    <string name="threads_beta_enable_notice_message">Jutulõngad aitavad hoida sinu vestlusi teemakohastena ning kergesti jälgitavatena.%sJutulõngade kasutusele võtmisel laadime rakenduse uuesti. Kui sul on väga mahukad kontod, siis võib natuke aega kuluda.</string>
 </resources>
