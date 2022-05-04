@@ -58,5 +58,6 @@ class ScreenCaptureServiceConnection @Inject constructor(
     override fun onServiceDisconnected(className: ComponentName) {
         isBound = false
         screenCaptureService = null
+        callback = null
     }
 }

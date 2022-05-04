@@ -144,7 +144,7 @@ class VectorCallViewModel @AssistedInject constructor(
         override fun onCallEnded(callId: String) {
             withState { state ->
                 if (state.otherKnownCallInfo?.callId == callId) {
-                    setState { copy(otherKnownCallInfo = null) }
+                    setState { copy(otherKnownCallInfo = null, isSharingScreen = false) }
                 }
             }
             _viewEvents.post(VectorCallViewEvents.StopScreenSharingService)
