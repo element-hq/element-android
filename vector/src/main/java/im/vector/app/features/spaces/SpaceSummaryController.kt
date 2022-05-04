@@ -141,33 +141,33 @@ class SpaceSummaryController @Inject constructor(
         }
 
         rootSpaces
-                ?.forEach { groupSummary ->
-                    val isSelected = selected is RoomGroupingMethod.BySpace && groupSummary.roomId == selected.space()?.roomId
+                ?.forEach { roomSummary ->
+                    val isSelected = selected is RoomGroupingMethod.BySpace && roomSummary.roomId == selected.space()?.roomId
                     // does it have children?
-                    val subSpaces = groupSummary.spaceChildren?.filter { childInfo ->
+                    val subSpaces = roomSummary.spaceChildren?.filter { childInfo ->
                         summaries?.any { it.roomId == childInfo.childRoomId }.orFalse()
                     }?.sortedWith(subSpaceComparator)
                     val hasChildren = (subSpaces?.size ?: 0) > 0
-                    val expanded = expandedStates[groupSummary.roomId] == true
+                    val expanded = expandedStates[roomSummary.roomId] == true
 
                     spaceSummaryItem {
                         avatarRenderer(host.avatarRenderer)
-                        id(groupSummary.roomId)
+                        id(roomSummary.roomId)
                         hasChildren(hasChildren)
                         expanded(expanded)
                         // to debug order
                         // matrixItem(groupSummary.copy(displayName = "${groupSummary.displayName} / ${spaceOrderInfo?.get(groupSummary.roomId)}")
                         // .toMatrixItem())
-                        matrixItem(groupSummary.toMatrixItem())
+                        matrixItem(roomSummary.toMatrixItem())
                         selected(isSelected)
                         canDrag(true)
-                        onMore { host.callback?.onSpaceSettings(groupSummary) }
-                        listener { host.callback?.onSpaceSelected(groupSummary) }
-                        toggleExpand { host.callback?.onToggleExpand(groupSummary) }
+                        onMore { host.callback?.onSpaceSettings(roomSummary) }
+                        listener { host.callback?.onSpaceSelected(roomSummary) }
+                        toggleExpand { host.callback?.onToggleExpand(roomSummary) }
                         countState(
                                 UnreadCounterBadgeView.State(
-                                        groupSummary.notificationCount,
-                                        groupSummary.highlightCount > 0
+                                        roomSummary.notificationCount,
+                                        roomSummary.highlightCount > 0
                                 )
                         )
                     }
@@ -175,7 +175,7 @@ class SpaceSummaryController @Inject constructor(
                     if (hasChildren && expanded) {
                         // it's expanded
                         subSpaces?.forEach { child ->
-                            buildSubSpace(groupSummary.roomId, summaries, expandedStates, selected, child, 1, 3)
+                            buildSubSpace(roomSummary.roomId, summaries, expandedStates, selected, child, 1, 3)
                         }
                     }
                 }
