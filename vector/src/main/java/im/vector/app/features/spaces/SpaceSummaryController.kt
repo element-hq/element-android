@@ -123,7 +123,7 @@ class SpaceSummaryController @Inject constructor(
                 ?.forEach { roomSummary ->
                     spaceSummaryItem {
                         avatarRenderer(host.avatarRenderer)
-                        id(roomSummary.roomId)
+                        id("invite_${roomSummary.roomId}")
                         matrixItem(roomSummary.toMatrixItem())
                         countState(UnreadCounterBadgeView.State(1, true))
                         selected(false)
