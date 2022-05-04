@@ -194,7 +194,7 @@ class RoomMemberProfileController @Inject constructor(
         buildProfileAction(
                 id = "overrideColor",
                 editable = false,
-                title = stringProvider.getString(R.string.room_member_override_display_name_colour),
+                title = stringProvider.getString(R.string.room_member_override_nick_color),
                 subtitle = state.userColorOverride,
                 divider = !state.isMine,
                 action = { callback?.onOverrideColorClicked() }
