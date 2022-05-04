@@ -30,6 +30,7 @@
         <item name="vctr_toolbar_background">@color/element_background_light</item>
         <item name="vctr_message_bubble_inbound">@color/vctr_message_bubble_inbound_light</item>
         <item name="vctr_message_bubble_outbound">@color/vctr_message_bubble_outbound_light</item>
+        <item name="vctr_badge_color_border">@color/vctr_badge_color_border_light</item>
 
         <!-- room message colors -->
         <item name="vctr_notice_secondary">#61708B</item>
