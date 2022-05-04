@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.model.livelocation
+package org.matrix.android.sdk.api.session.room.model.message
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
-import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
+/**
+ * Content of the state event of type
+ * [EventType.STATE_ROOM_BEACON_INFO][org.matrix.android.sdk.api.session.events.model.EventType.STATE_ROOM_BEACON_INFO]
+ *
+ * It contains general info related to a live location share.
+ * Locations are sent in a different message related to the state event.
+ * See [MessageBeaconLocationDataContent][org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent]
+ */
 @JsonClass(generateAdapter = true)
-data class LiveLocationBeaconContent(
+data class MessageBeaconInfoContent(
         /**
          * Local message type, not from server
          */
         @Transient
-        override val msgType: String = MessageType.MSGTYPE_LIVE_LOCATION_STATE,
+        override val msgType: String = MessageType.MSGTYPE_BEACON_INFO,
 
         @Json(name = "body") override val body: String = "",
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
@@ -54,26 +57,16 @@ data class LiveLocationBeaconContent(
         /**
          * Beacon creation timestamp.
          */
-        @Json(name = "org.matrix.msc3488.ts") val unstableTimestampAsMilliseconds: Long? = null,
-        @Json(name = "m.ts") val timestampAsMilliseconds: Long? = null,
+        @Json(name = "org.matrix.msc3488.ts") val unstableTimestampMillis: Long? = null,
+        @Json(name = "m.ts") val timestampMillis: Long? = null,
         /**
          * Live location asset type.
          */
         @Json(name = "org.matrix.msc3488.asset") val unstableLocationAsset: LocationAsset = LocationAsset(LocationAssetType.SELF),
         @Json(name = "m.asset") val locationAsset: LocationAsset? = null,
-
-        /**
-         * Client side tracking of the last location
-         */
-        var lastLocationContent: MessageLiveLocationContent? = null,
-
-        /**
-         * Client side tracking of whether the beacon has timed out.
-         */
-        var hasTimedOut: Boolean = false
 ) : MessageContent {
 
-    fun getBestTimestampAsMilliseconds() = timestampAsMilliseconds ?: unstableTimestampAsMilliseconds
+    fun getBestTimestampMillis() = timestampMillis ?: unstableTimestampMillis
 
     fun getBestLocationAsset() = locationAsset ?: unstableLocationAsset
 }
