@@ -30,7 +30,7 @@ fun WebRtcCall.getOpponentAsMatrixItem(session: Session): MatrixItem? {
             roomSummary.toMatrixItem()
         } else {
             val userId = roomSummary.otherMemberIds.first()
-            return room.getRoomMember(userId)?.toMatrixItem()
+            return room.membershipService().getRoomMember(userId)?.toMatrixItem()
         }
     }
 }

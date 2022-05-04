@@ -60,8 +60,8 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(
             selections.asFlow()
                     .map { user ->
                         when (user) {
-                            is PendingSelection.UserPendingSelection     -> room.invite(user.user.userId, null)
-                            is PendingSelection.ThreePidPendingSelection -> room.invite3pid(user.threePid)
+                            is PendingSelection.UserPendingSelection     -> room.membershipService().invite(user.user.userId, null)
+                            is PendingSelection.ThreePidPendingSelection -> room.membershipService().invite3pid(user.threePid)
                         }
                     }
                     .catch { cause ->

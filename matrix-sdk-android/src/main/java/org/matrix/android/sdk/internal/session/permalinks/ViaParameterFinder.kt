@@ -72,6 +72,7 @@ internal class ViaParameterFinder @Inject constructor(
      */
     private fun getUserIdsOfJoinedMembers(roomId: String): Set<String> {
         return roomGetterProvider.get().getRoom(roomId)
+                ?.membershipService()
                 ?.getRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.JOIN) })
                 ?.map { it.userId }
                 .orEmpty()
@@ -84,6 +85,7 @@ internal class ViaParameterFinder @Inject constructor(
     // It may not be possible for a user to join a room if there's no overlap between these
     fun computeViaParamsForRestricted(roomId: String, max: Int): List<String> {
         val userThatCanInvite = roomGetterProvider.get().getRoom(roomId)
+                ?.membershipService()
                 ?.getRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.JOIN) })
                 ?.map { it.userId }
                 ?.filter { userCanInvite(userId, roomId) }

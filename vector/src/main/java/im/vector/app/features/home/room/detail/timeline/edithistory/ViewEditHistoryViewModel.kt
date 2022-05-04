@@ -62,7 +62,7 @@ class ViewEditHistoryViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             val data = try {
-                room.fetchEditHistory(eventId)
+                room.relationService().fetchEditHistory(eventId)
             } catch (failure: Throwable) {
                 setState {
                     copy(editList = Fail(failure))

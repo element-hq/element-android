@@ -73,7 +73,7 @@ class RoomUploadsViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             try {
-                val result = room.getUploads(20, token)
+                val result = room.uploadsService().getUploads(20, token)
 
                 token = result.nextToken
 

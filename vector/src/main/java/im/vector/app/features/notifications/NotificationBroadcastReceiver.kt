@@ -26,6 +26,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.time.Clock
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -87,7 +88,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 session.coroutineScope.launch {
                     tryOrNull {
                         session.roomService().joinRoom(room.roomId)
-                        analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom())
+                        analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom(JoinedRoom.Trigger.Notification))
                     }
                 }
             }
@@ -107,7 +108,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             val room = session.getRoom(roomId)
             if (room != null) {
                 session.coroutineScope.launch {
-                    tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+                    tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
                 }
             }
         }
@@ -130,7 +131,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun sendMatrixEvent(message: String, session: Session, room: Room, context: Context?) {
-        room.sendTextMessage(message)
+        room.sendService().sendTextMessage(message)
 
         // Create a new event to be displayed in the notification drawer, right now
 

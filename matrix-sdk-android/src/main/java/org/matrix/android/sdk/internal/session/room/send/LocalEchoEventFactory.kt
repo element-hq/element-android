@@ -37,13 +37,13 @@ import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
 import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
 import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageLiveLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
@@ -72,7 +72,6 @@ import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
 import org.matrix.android.sdk.internal.util.time.Clock
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -245,7 +244,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 body = geoUri,
                 unstableLocationInfo = LocationInfo(geoUri = geoUri, description = geoUri),
                 unstableLocationAsset = LocationAsset(type = assetType),
-                unstableTs = TimeUnit.MILLISECONDS.toSeconds(clock.epochMillis()),
+                unstableTimestampMillis = clock.epochMillis(),
                 unstableText = geoUri
         )
         return createMessageEvent(roomId, content)
@@ -257,14 +256,14 @@ internal class LocalEchoEventFactory @Inject constructor(
                                 longitude: Double,
                                 uncertainty: Double?): Event {
         val geoUri = buildGeoUri(latitude, longitude, uncertainty)
-        val content = MessageLiveLocationContent(
+        val content = MessageBeaconLocationDataContent(
                 body = geoUri,
                 relatesTo = RelationDefaultContent(
                         type = RelationType.REFERENCE,
                         eventId = beaconInfoEventId
                 ),
                 unstableLocationInfo = LocationInfo(geoUri = geoUri, description = geoUri),
-                unstableTimestampAsMilliseconds = TimeUnit.MILLISECONDS.toSeconds(clock.epochMillis()),
+                unstableTimestampMillis = clock.epochMillis(),
         )
         val localId = LocalEcho.createLocalEchoId()
         return Event(

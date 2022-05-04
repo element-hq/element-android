@@ -19,6 +19,7 @@ import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.time.Clock
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
@@ -159,7 +160,12 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 if (roomId.isNullOrBlank()) {
                                     it.navigator.waitSessionVerification(it)
                                 } else {
-                                    it.navigator.openRoom(it, roomId, pr.transactionId)
+                                    it.navigator.openRoom(
+                                            context = it,
+                                            roomId = roomId,
+                                            eventId = pr.transactionId,
+                                            trigger = ViewRoom.Trigger.VerificationRequest
+                                    )
                                 }
                             }
                         }
