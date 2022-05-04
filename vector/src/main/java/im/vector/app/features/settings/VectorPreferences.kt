@@ -26,6 +26,7 @@ import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.time.Clock
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
@@ -33,7 +34,10 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import javax.inject.Inject
 
-class VectorPreferences @Inject constructor(private val context: Context) {
+class VectorPreferences @Inject constructor(
+        private val context: Context,
+        private val clock: Clock,
+) {
 
     companion object {
         const val SETTINGS_HELP_PREFERENCE_KEY = "SETTINGS_HELP_PREFERENCE_KEY"
@@ -664,9 +668,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun getMinMediasLastAccessTime(): Long {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS  -> System.currentTimeMillis() / 1000 - 3 * 24 * 60 * 60
-            MEDIA_SAVING_1_WEEK  -> System.currentTimeMillis() / 1000 - 7 * 24 * 60 * 60
-            MEDIA_SAVING_1_MONTH -> System.currentTimeMillis() / 1000 - 30 * 24 * 60 * 60
+            MEDIA_SAVING_3_DAYS  -> clock.epochMillis() / 1000 - 3 * 24 * 60 * 60
+            MEDIA_SAVING_1_WEEK  -> clock.epochMillis() / 1000 - 7 * 24 * 60 * 60
+            MEDIA_SAVING_1_MONTH -> clock.epochMillis() / 1000 - 30 * 24 * 60 * 60
             MEDIA_SAVING_FOREVER -> 0
             else                 -> 0
         }
@@ -872,8 +876,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true if user should always appear offline
      */
     fun userAlwaysAppearsOffline(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE,
-                getDefault(R.bool.settings_presence_user_always_appears_offline_default))
+        return defaultPrefs.getBoolean(
+                SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE,
+                getDefault(R.bool.settings_presence_user_always_appears_offline_default)
+        )
     }
 
     /**
@@ -1005,9 +1011,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun prefSpacesShowAllRoomInHome(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME,
+        return defaultPrefs.getBoolean(
+                SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME,
                 // migration of old property
-                !labsSpacesOnlyOrphansInHome())
+                !labsSpacesOnlyOrphansInHome()
+        )
     }
 
     /*

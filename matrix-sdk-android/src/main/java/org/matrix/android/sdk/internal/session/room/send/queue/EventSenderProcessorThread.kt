@@ -136,7 +136,7 @@ internal class EventSenderProcessorThread @Inject constructor(
     private var retryNoNetworkTask: TimerTask? = null
 
     override fun run() {
-        Timber.v("## SendThread started ts:${System.currentTimeMillis()}")
+        Timber.v("## SendThread started")
         try {
             while (!isInterrupted) {
                 Timber.v("## SendThread wait for task to process")
@@ -151,7 +151,7 @@ internal class EventSenderProcessorThread @Inject constructor(
                 }
                 // we check for network connectivity
                 while (!canReachServer) {
-                    Timber.v("## SendThread cannot reach server, wait ts:${System.currentTimeMillis()}")
+                    Timber.v("## SendThread cannot reach server")
                     // schedule to retry
                     waitForNetwork()
                     // if thread as been killed meanwhile
@@ -175,7 +175,7 @@ internal class EventSenderProcessorThread @Inject constructor(
                                     canReachServer = false
                                     if (task.retryCount.getAndIncrement() >= 3) task.onTaskFailed()
                                     while (!canReachServer) {
-                                        Timber.v("## SendThread retryLoop cannot reach server, wait ts:${System.currentTimeMillis()}")
+                                        Timber.v("## SendThread retryLoop cannot reach server")
                                         // schedule to retry
                                         waitForNetwork()
                                     }
@@ -218,7 +218,7 @@ internal class EventSenderProcessorThread @Inject constructor(
 //        state = State.KILLED
         // is this needed?
         retryNoNetworkTask?.cancel()
-        Timber.w("## SendThread finished ${System.currentTimeMillis()}")
+        Timber.w("## SendThread finished")
     }
 
     private fun waitForNetwork() {

@@ -79,22 +79,26 @@ import org.matrix.android.sdk.internal.session.room.typing.TypingEventContent
 import org.matrix.android.sdk.internal.session.sync.SyncResponsePostTreatmentAggregator
 import org.matrix.android.sdk.internal.session.sync.parsing.RoomSyncAccountDataHandler
 import org.matrix.android.sdk.internal.util.computeBestChunkSize
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class RoomSyncHandler @Inject constructor(private val readReceiptHandler: ReadReceiptHandler,
-                                                   private val roomSummaryUpdater: RoomSummaryUpdater,
-                                                   private val roomAccountDataHandler: RoomSyncAccountDataHandler,
-                                                   private val cryptoService: DefaultCryptoService,
-                                                   private val roomMemberEventHandler: RoomMemberEventHandler,
-                                                   private val roomTypingUsersHandler: RoomTypingUsersHandler,
-                                                   private val threadsAwarenessHandler: ThreadsAwarenessHandler,
-                                                   private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
-                                                   @UserId private val userId: String,
-                                                   private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
-                                                   private val lightweightSettingsStorage: LightweightSettingsStorage,
-                                                   private val timelineInput: TimelineInput,
-                                                   private val liveEventService: Lazy<StreamEventsManager>) {
+internal class RoomSyncHandler @Inject constructor(
+        private val readReceiptHandler: ReadReceiptHandler,
+        private val roomSummaryUpdater: RoomSummaryUpdater,
+        private val roomAccountDataHandler: RoomSyncAccountDataHandler,
+        private val cryptoService: DefaultCryptoService,
+        private val roomMemberEventHandler: RoomMemberEventHandler,
+        private val roomTypingUsersHandler: RoomTypingUsersHandler,
+        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+        private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
+        @UserId private val userId: String,
+        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
+        private val timelineInput: TimelineInput,
+        private val liveEventService: Lazy<StreamEventsManager>,
+        private val clock: Clock,
+) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -130,7 +134,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         } else {
             EventInsertType.INCREMENTAL_SYNC
         }
-        val syncLocalTimeStampMillis = System.currentTimeMillis()
+        val syncLocalTimeStampMillis = clock.epochMillis()
         val rooms = when (handlingStrategy) {
             is HandlingStrategy.JOINED  -> {
                 if (isInitialSync && initialSyncStrategy is InitialSyncStrategy.Optimized) {
@@ -440,7 +444,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                 threadEventEntity = eventEntity,
                                 roomMemberContentsByUser = roomMemberContentsByUser,
                                 userId = userId,
-                                roomEntity = roomEntity
+                                roomEntity = roomEntity,
+                                currentTimeMillis = clock.epochMillis(),
                         )
                     }
                 } ?: run {

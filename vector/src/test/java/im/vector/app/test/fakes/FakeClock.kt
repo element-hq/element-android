@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.voice
+package im.vector.app.test.fakes
 
-import android.content.Context
-import android.os.Build
 import im.vector.app.core.time.Clock
-import javax.inject.Inject
+import io.mockk.every
+import io.mockk.mockk
 
-class VoiceRecorderProvider @Inject constructor(
-        private val context: Context,
-        private val clock: Clock,
-) {
-    fun provideVoiceRecorder(): VoiceRecorder {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            VoiceRecorderQ(context)
-        } else {
-            VoiceRecorderL(context, clock)
-        }
+class FakeClock : Clock by mockk() {
+    fun givenEpoch(epoch: Long) {
+        every { epochMillis() } returns epoch
     }
 }

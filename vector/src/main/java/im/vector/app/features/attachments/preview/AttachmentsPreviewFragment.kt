@@ -45,6 +45,7 @@ import im.vector.app.core.extensions.insertBeforeLast
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.OnSnapPositionChangeListener
 import im.vector.app.core.utils.SnapOnScrollListener
 import im.vector.app.core.utils.attachSnapHelperWithListener
@@ -64,7 +65,8 @@ data class AttachmentsPreviewArgs(
 class AttachmentsPreviewFragment @Inject constructor(
         private val attachmentMiniaturePreviewController: AttachmentMiniaturePreviewController,
         private val attachmentBigPreviewController: AttachmentBigPreviewController,
-        private val colorProvider: ColorProvider
+        private val colorProvider: ColorProvider,
+        private val clock: Clock,
 ) : VectorBaseFragment<FragmentAttachmentsPreviewBinding>(), AttachmentMiniaturePreviewController.Callback {
 
     private val fragmentArgs: AttachmentsPreviewArgs by args()
@@ -192,7 +194,7 @@ class AttachmentsPreviewFragment @Inject constructor(
 
     private fun handleEditAction() = withState(viewModel) {
         val currentAttachment = it.attachments.getOrNull(it.currentAttachmentIndex) ?: return@withState
-        val destinationFile = File(requireContext().cacheDir, currentAttachment.name.insertBeforeLast("_edited_image_${System.currentTimeMillis()}"))
+        val destinationFile = File(requireContext().cacheDir, currentAttachment.name.insertBeforeLast("_edited_image_${clock.epochMillis()}"))
         val uri = currentAttachment.queryUri
         createUCropWithDefaultSettings(colorProvider, uri, destinationFile.toUri(), currentAttachment.name)
                 .getIntent(requireContext())

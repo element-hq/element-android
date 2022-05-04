@@ -70,6 +70,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
+import org.matrix.android.sdk.internal.util.time.Clock
 import java.util.UUID
 import javax.inject.Inject
 
@@ -90,7 +91,8 @@ internal class LocalEchoEventFactory @Inject constructor(
         private val thumbnailExtractor: ThumbnailExtractor,
         private val waveformSanitizer: WaveFormSanitizer,
         private val localEchoRepository: LocalEchoRepository,
-        private val permalinkFactory: PermalinkFactory
+        private val permalinkFactory: PermalinkFactory,
+        private val clock: Clock,
 ) {
     fun createTextEvent(roomId: String, msgType: String, text: CharSequence, autoMarkdown: Boolean): Event {
         if (msgType == MessageType.MSGTYPE_TEXT || msgType == MessageType.MSGTYPE_EMOTE) {
@@ -242,7 +244,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 body = geoUri,
                 unstableLocationInfo = LocationInfo(geoUri = geoUri, description = geoUri),
                 unstableLocationAsset = LocationAsset(type = assetType),
-                unstableTimestampMillis = System.currentTimeMillis(),
+                unstableTimestampMillis = clock.epochMillis(),
                 unstableText = geoUri
         )
         return createMessageEvent(roomId, content)
@@ -261,7 +263,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         eventId = beaconInfoEventId
                 ),
                 unstableLocationInfo = LocationInfo(geoUri = geoUri, description = geoUri),
-                unstableTimestampMillis = System.currentTimeMillis(),
+                unstableTimestampMillis = clock.epochMillis(),
         )
         val localId = LocalEcho.createLocalEchoId()
         return Event(
@@ -547,7 +549,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     private fun dummyOriginServerTs(): Long {
-        return System.currentTimeMillis()
+        return clock.epochMillis()
     }
 
     /**

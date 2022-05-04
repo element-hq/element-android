@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.voice
+package org.matrix.android.sdk.internal.util.time
 
-import android.content.Context
-import android.os.Build
-import im.vector.app.core.time.Clock
 import javax.inject.Inject
 
-class VoiceRecorderProvider @Inject constructor(
-        private val context: Context,
-        private val clock: Clock,
-) {
-    fun provideVoiceRecorder(): VoiceRecorder {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            VoiceRecorderQ(context)
-        } else {
-            VoiceRecorderL(context, clock)
-        }
+internal interface Clock {
+    fun epochMillis(): Long
+}
+
+internal class DefaultClock @Inject constructor() : Clock {
+
+    /**
+     * Provides a UTC epoch in milliseconds
+     *
+     * This value is not guaranteed to be correct with reality
+     * as a User can override the system time and date to any values.
+     */
+    override fun epochMillis(): Long {
+        return System.currentTimeMillis()
     }
 }

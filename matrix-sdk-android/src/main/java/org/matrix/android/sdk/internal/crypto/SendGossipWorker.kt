@@ -34,6 +34,7 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
 import org.matrix.android.sdk.internal.session.SessionComponent
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import timber.log.Timber
@@ -63,6 +64,7 @@ internal class SendGossipWorker(
     @Inject lateinit var credentials: Credentials
     @Inject lateinit var messageEncrypter: MessageEncrypter
     @Inject lateinit var ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction
+    @Inject lateinit var clock: Clock
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
@@ -129,7 +131,7 @@ internal class SendGossipWorker(
                 content = toDeviceContent.toContent(),
                 senderId = credentials.userId
         ).also {
-            it.ageLocalTs = System.currentTimeMillis()
+            it.ageLocalTs = clock.epochMillis()
         })
 
         try {
