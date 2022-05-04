@@ -14,30 +14,47 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.securestorage
+package org.matrix.android.sdk.api.securestorage
 
 import android.os.Build
+import android.util.Base64
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.spyk
+import org.amshove.kluent.invoking
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeInstanceOf
+import org.amshove.kluent.shouldNotThrow
+import org.amshove.kluent.shouldThrow
+import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.util.fromBase64
-import org.matrix.android.sdk.api.util.toBase64NoPadding
+import org.matrix.android.sdk.TestBuildVersionSdkIntProvider
 import java.io.ByteArrayOutputStream
+import java.security.KeyStore
+import java.security.KeyStoreException
 import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-class SecretStoringUtilsTest : InstrumentedTest {
+class SecretStoringUtilsTest {
 
+    private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val buildVersionSdkIntProvider = TestBuildVersionSdkIntProvider()
-    private val secretStoringUtils = SecretStoringUtils(context(), buildVersionSdkIntProvider)
+    private val keyStore = spyk(KeyStore.getInstance("AndroidKeyStore")).also { it.load(null) }
+    private val secretStoringUtils = SecretStoringUtils(context, keyStore, buildVersionSdkIntProvider)
 
     companion object {
         const val TEST_STR = "This is something I want to store safely!"
+    }
+
+    @Before
+    fun setup() {
+        clearAllMocks()
     }
 
     @Test
@@ -45,9 +62,9 @@ class SecretStoringUtilsTest : InstrumentedTest {
         val alias = generateAlias()
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.LOLLIPOP
         // Encrypt
-        val encrypted = secretStoringUtils.securelyStoreString(TEST_STR, alias)
+        val encrypted = secretStoringUtils.securelyStoreBytes(TEST_STR.toByteArray(), alias)
         // Decrypt
-        val decrypted = secretStoringUtils.loadSecureSecret(encrypted, alias)
+        val decrypted = String(secretStoringUtils.loadSecureSecretBytes(encrypted, alias))
         decrypted shouldBeEqualTo TEST_STR
         secretStoringUtils.safeDeleteKey(alias)
     }
@@ -57,9 +74,9 @@ class SecretStoringUtilsTest : InstrumentedTest {
         val alias = generateAlias()
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.M
         // Encrypt
-        val encrypted = secretStoringUtils.securelyStoreString(TEST_STR, alias)
+        val encrypted = secretStoringUtils.securelyStoreBytes(TEST_STR.toByteArray(), alias)
         // Decrypt
-        val decrypted = secretStoringUtils.loadSecureSecret(encrypted, alias)
+        val decrypted = String(secretStoringUtils.loadSecureSecretBytes(encrypted, alias))
         decrypted shouldBeEqualTo TEST_STR
         secretStoringUtils.safeDeleteKey(alias)
     }
@@ -69,9 +86,9 @@ class SecretStoringUtilsTest : InstrumentedTest {
         val alias = generateAlias()
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.R
         // Encrypt
-        val encrypted = secretStoringUtils.securelyStoreString(TEST_STR, alias)
+        val encrypted = secretStoringUtils.securelyStoreBytes(TEST_STR.toByteArray(), alias)
         // Decrypt
-        val decrypted = secretStoringUtils.loadSecureSecret(encrypted, alias)
+        val decrypted = String(secretStoringUtils.loadSecureSecretBytes(encrypted, alias))
         decrypted shouldBeEqualTo TEST_STR
         secretStoringUtils.safeDeleteKey(alias)
     }
@@ -81,13 +98,13 @@ class SecretStoringUtilsTest : InstrumentedTest {
         val alias = generateAlias()
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.LOLLIPOP
         // Encrypt
-        val encrypted = secretStoringUtils.securelyStoreString(TEST_STR, alias)
+        val encrypted = secretStoringUtils.securelyStoreBytes(TEST_STR.toByteArray(), alias)
 
         // Simulate a system upgrade
         buildVersionSdkIntProvider.value = Build.VERSION_CODES.M
 
         // Decrypt
-        val decrypted = secretStoringUtils.loadSecureSecret(encrypted, alias)
+        val decrypted = String(secretStoringUtils.loadSecureSecretBytes(encrypted, alias))
         decrypted shouldBeEqualTo TEST_STR
         secretStoringUtils.safeDeleteKey(alias)
     }
@@ -180,5 +197,56 @@ class SecretStoringUtilsTest : InstrumentedTest {
         secretStoringUtils.safeDeleteKey(alias)
     }
 
+    @Test
+    fun testEnsureKeyReturnsSymmetricKeyOnAndroidM() {
+        buildVersionSdkIntProvider.value = Build.VERSION_CODES.M
+        val alias = generateAlias()
+
+        val key = secretStoringUtils.ensureKey(alias)
+        key shouldBeInstanceOf KeyStore.SecretKeyEntry::class
+
+        secretStoringUtils.safeDeleteKey(alias)
+    }
+
+    @Test
+    fun testEnsureKeyReturnsPrivateKeyOnAndroidL() {
+        buildVersionSdkIntProvider.value = Build.VERSION_CODES.LOLLIPOP
+        val alias = generateAlias()
+
+        val key = secretStoringUtils.ensureKey(alias)
+        key shouldBeInstanceOf KeyStore.PrivateKeyEntry::class
+
+        secretStoringUtils.safeDeleteKey(alias)
+    }
+
+    @Test
+    fun testSafeDeleteCanHandleKeyStoreExceptions() {
+        every { keyStore.deleteEntry(any()) } throws KeyStoreException()
+
+        invoking { secretStoringUtils.safeDeleteKey(generateAlias()) } shouldNotThrow KeyStoreException::class
+    }
+
+    @Test
+    fun testLoadSecureSecretBytesWillThrowOnInvalidStreamFormat() {
+        invoking {
+            secretStoringUtils.loadSecureSecretBytes(byteArrayOf(255.toByte()), generateAlias())
+        } shouldThrow IllegalArgumentException::class
+    }
+
+    @Test
+    fun testLoadSecureSecretWillThrowOnInvalidStreamFormat() {
+        invoking {
+            secretStoringUtils.loadSecureSecret(byteArrayOf(255.toByte()).inputStream(), generateAlias())
+        } shouldThrow IllegalArgumentException::class
+    }
+
     private fun generateAlias() = UUID.randomUUID().toString()
+}
+
+private fun ByteArray.toBase64NoPadding(): String {
+    return Base64.encodeToString(this, Base64.NO_PADDING or Base64.NO_WRAP)
+}
+
+private fun String.fromBase64(): ByteArray {
+    return Base64.decode(this, Base64.DEFAULT)
 }

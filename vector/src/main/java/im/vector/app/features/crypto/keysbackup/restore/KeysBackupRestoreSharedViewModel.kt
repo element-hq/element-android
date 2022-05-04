@@ -25,6 +25,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.LiveEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.listeners.StepProgressListener
 import org.matrix.android.sdk.api.session.Session
@@ -42,7 +43,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class KeysBackupRestoreSharedViewModel @Inject constructor(
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val matrix: Matrix,
 ) : ViewModel() {
 
     data class KeySource(
@@ -186,7 +188,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     fun handleGotSecretFromSSSS(cipherData: String, alias: String) {
         try {
             cipherData.fromBase64().inputStream().use { ins ->
-                val res = session.secureStorageService().loadSecureSecret<Map<String, String>>(ins, alias)
+                val res = matrix.secureStorageService().loadSecureSecret<Map<String, String>>(ins, alias)
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME)
                 if (secret == null) {
                     _navigateEvent.postValue(

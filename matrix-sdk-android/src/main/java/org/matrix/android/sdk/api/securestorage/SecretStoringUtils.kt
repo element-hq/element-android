@@ -16,7 +16,7 @@
 
 @file:Suppress("DEPRECATION")
 
-package org.matrix.android.sdk.internal.session.securestorage
+package org.matrix.android.sdk.api.securestorage
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -25,7 +25,7 @@ import android.security.KeyPairGeneratorSpec
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import androidx.annotation.RequiresApi
-import org.matrix.android.sdk.internal.util.system.BuildVersionSdkIntProvider
+import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -80,9 +80,11 @@ import javax.security.auth.x500.X500Principal
  * Important: Keys stored in the keystore can be wiped out (depends of the OS version, like for example if you
  * add a pin or change the schema); So you might and with a useless pile of bytes.
  */
-internal class SecretStoringUtils @Inject constructor(
+class SecretStoringUtils @Inject constructor(
         private val context: Context,
-        private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider
+        private val keyStore: KeyStore,
+        private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+        private val keyNeedsUserAuthentication: Boolean = false,
 ) {
 
     companion object {
@@ -94,14 +96,24 @@ internal class SecretStoringUtils @Inject constructor(
         private const val FORMAT_1: Byte = 1
     }
 
-    private val keyStore: KeyStore by lazy {
-        KeyStore.getInstance(ANDROID_KEY_STORE).apply {
-            load(null)
-        }
-    }
-
     private val secureRandom = SecureRandom()
 
+    /**
+     * Allows creation of the crypto keys associated witht he [alias] before encrypting some value with it.
+     * @return A [KeyStore.Entry] with the keys.
+     */
+    @SuppressLint("NewApi")
+    fun ensureKey(alias: String): KeyStore.Entry {
+        when {
+            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> getOrGenerateSymmetricKeyForAliasM(alias)
+            else -> getOrGenerateKeyPairForAlias(alias).privateKey
+        }
+        return keyStore.getEntry(alias, null)
+    }
+
+    /**
+     * Deletes the key associated with the [keyAlias] and logs any [KeyStoreException] that could happen.
+     */
     fun safeDeleteKey(keyAlias: String) {
         try {
             keyStore.deleteEntry(keyAlias)
@@ -121,24 +133,24 @@ internal class SecretStoringUtils @Inject constructor(
      */
     @SuppressLint("NewApi")
     @Throws(Exception::class)
-    fun securelyStoreString(secret: String, keyAlias: String): ByteArray {
+    fun securelyStoreBytes(secret: ByteArray, keyAlias: String): ByteArray {
         return when {
-            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> encryptStringM(secret, keyAlias)
-            else -> encryptString(secret, keyAlias)
+            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> encryptBytesM(secret, keyAlias)
+            else -> encryptBytes(secret, keyAlias)
         }
     }
 
     /**
-     * Decrypt a secret that was encrypted by #securelyStoreString().
+     * Decrypt a secret that was encrypted by [securelyStoreBytes].
      */
     @SuppressLint("NewApi")
     @Throws(Exception::class)
-    fun loadSecureSecret(encrypted: ByteArray, keyAlias: String): String {
+    fun loadSecureSecretBytes(encrypted: ByteArray, keyAlias: String): ByteArray {
         encrypted.inputStream().use { inputStream ->
             // First get the format
             return when (val format = inputStream.read().toByte()) {
-                FORMAT_API_M -> decryptStringM(inputStream, keyAlias)
-                FORMAT_1 -> decryptString(inputStream, keyAlias)
+                FORMAT_API_M -> decryptBytesM(inputStream, keyAlias)
+                FORMAT_1 -> decryptBytes(inputStream, keyAlias)
                 else -> throw IllegalArgumentException("Unknown format $format")
             }
         }
@@ -162,6 +174,22 @@ internal class SecretStoringUtils @Inject constructor(
         }
     }
 
+    fun getEncryptCipher(alias: String): Cipher {
+        val key = when (val keyEntry = ensureKey(alias)) {
+            is KeyStore.SecretKeyEntry -> keyEntry.secretKey
+            is KeyStore.PrivateKeyEntry -> keyEntry.certificate.publicKey
+            else -> throw IllegalStateException("Unknown KeyEntry type.")
+        }
+        val cipherMode = when {
+            buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.M -> AES_MODE
+            else -> RSA_MODE
+        }
+        val cipher = Cipher.getInstance(cipherMode)
+        cipher.init(Cipher.ENCRYPT_MODE, key)
+        return cipher
+    }
+
+    @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.M)
     private fun getOrGenerateSymmetricKeyForAliasM(alias: String): SecretKey {
         val secretKeyEntry = (keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry)
@@ -176,6 +204,13 @@ internal class SecretStoringUtils @Inject constructor(
                     .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                     .setKeySize(128)
+                    .apply {
+                        setUserAuthenticationRequired(keyNeedsUserAuthentication)
+                        if (buildVersionSdkIntProvider.get() >= Build.VERSION_CODES.N) {
+                            setInvalidatedByBiometricEnrollment(true)
+                        }
+                    }
+                    .setUserAuthenticationRequired(keyNeedsUserAuthentication)
                     .build()
             generator.init(keyGenSpec)
             return generator.generateKey()
@@ -216,19 +251,16 @@ internal class SecretStoringUtils @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun encryptStringM(text: String, keyAlias: String): ByteArray {
-        val secretKey = getOrGenerateSymmetricKeyForAliasM(keyAlias)
-
-        val cipher = Cipher.getInstance(AES_MODE)
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+    private fun encryptBytesM(byteArray: ByteArray, keyAlias: String): ByteArray {
+        val cipher = getEncryptCipher(keyAlias)
         val iv = cipher.iv
         // we happen the iv to the final result
-        val encryptedBytes: ByteArray = cipher.doFinal(text.toByteArray(Charsets.UTF_8))
+        val encryptedBytes: ByteArray = cipher.doFinal(byteArray)
         return formatMMake(iv, encryptedBytes)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun decryptStringM(inputStream: InputStream, keyAlias: String): String {
+    private fun decryptBytesM(inputStream: InputStream, keyAlias: String): ByteArray {
         val (iv, encryptedText) = formatMExtract(inputStream)
 
         val secretKey = getOrGenerateSymmetricKeyForAliasM(keyAlias)
@@ -237,10 +269,10 @@ internal class SecretStoringUtils @Inject constructor(
         val spec = GCMParameterSpec(128, iv)
         cipher.init(Cipher.DECRYPT_MODE, secretKey, spec)
 
-        return String(cipher.doFinal(encryptedText), Charsets.UTF_8)
+        return cipher.doFinal(encryptedText)
     }
 
-    private fun encryptString(text: String, keyAlias: String): ByteArray {
+    private fun encryptBytes(byteArray: ByteArray, keyAlias: String): ByteArray {
         // we generate a random symmetric key
         val key = ByteArray(16)
         secureRandom.nextBytes(key)
@@ -252,12 +284,12 @@ internal class SecretStoringUtils @Inject constructor(
         val cipher = Cipher.getInstance(AES_MODE)
         cipher.init(Cipher.ENCRYPT_MODE, sKey)
         val iv = cipher.iv
-        val encryptedBytes: ByteArray = cipher.doFinal(text.toByteArray(Charsets.UTF_8))
+        val encryptedBytes: ByteArray = cipher.doFinal(byteArray)
 
         return format1Make(encryptedKey, iv, encryptedBytes)
     }
 
-    private fun decryptString(inputStream: InputStream, keyAlias: String): String {
+    private fun decryptBytes(inputStream: InputStream, keyAlias: String): ByteArray {
         val (encryptedKey, iv, encrypted) = format1Extract(inputStream)
 
         // we need to decrypt the key
@@ -266,16 +298,13 @@ internal class SecretStoringUtils @Inject constructor(
         val spec = GCMParameterSpec(128, iv)
         cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(sKeyBytes, "AES"), spec)
 
-        return String(cipher.doFinal(encrypted), Charsets.UTF_8)
+        return cipher.doFinal(encrypted)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     @Throws(IOException::class)
     private fun saveSecureObjectM(keyAlias: String, output: OutputStream, writeObject: Any) {
-        val secretKey = getOrGenerateSymmetricKeyForAliasM(keyAlias)
-
-        val cipher = Cipher.getInstance(AES_MODE)
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey/*, spec*/)
+        val cipher = getEncryptCipher(keyAlias)
         val iv = cipher.iv
 
         val bos1 = ByteArrayOutputStream()
@@ -362,10 +391,8 @@ internal class SecretStoringUtils @Inject constructor(
 
     @Throws(Exception::class)
     private fun rsaEncrypt(alias: String, secret: ByteArray): ByteArray {
-        val privateKeyEntry = getOrGenerateKeyPairForAlias(alias)
         // Encrypt the text
-        val inputCipher = Cipher.getInstance(RSA_MODE)
-        inputCipher.init(Cipher.ENCRYPT_MODE, privateKeyEntry.certificate.publicKey)
+        val inputCipher = getEncryptCipher(alias)
 
         val outputStream = ByteArrayOutputStream()
         CipherOutputStream(outputStream, inputCipher).use {
