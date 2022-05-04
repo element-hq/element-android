@@ -2429,4 +2429,11 @@
     <string name="location_share_option_user_live">Live-Standort teilen</string>
     <string name="threads_notice_migration_title">Threads nähern sich der Beta 🎉</string>
     <string name="action_disable">Deaktivieren</string>
+    <string name="beta">BETA</string>
+    <string name="give_feedback_threads">Feedback geben</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="threads_labs_enable_notice_title">Threads Beta</string>
+    <string name="threads_beta_enable_notice_title">Threads Beta</string>
+    <string name="call_start_screen_sharing">Bildschirm teilen</string>
+    <string name="action_try_it_out">Ausprobieren</string>
 </resources>
