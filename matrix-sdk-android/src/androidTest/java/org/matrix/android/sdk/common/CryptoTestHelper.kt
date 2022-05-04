@@ -70,7 +70,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         if (encryptedRoom) {
             testHelper.waitWithLatch { latch ->
                 val room = aliceSession.getRoom(roomId)!!
-                room.enableEncryption()
+                room.roomCryptoService().enableEncryption()
                 val roomSummaryLive = room.getRoomSummaryLive()
                 val roomSummaryObserver = object : Observer<Optional<RoomSummary>> {
                     override fun onChanged(roomSummary: Optional<RoomSummary>) {
@@ -109,7 +109,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
                 }
             }
             bobRoomSummariesLive.observeForever(newRoomObserver)
-            aliceRoom.invite(bobSession.myUserId)
+            aliceRoom.membershipService().invite(bobSession.myUserId)
         }
 
         testHelper.waitWithLatch { latch ->
@@ -117,6 +117,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             val roomJoinedObserver = object : Observer<List<RoomSummary>> {
                 override fun onChanged(t: List<RoomSummary>?) {
                     if (bobSession.getRoom(aliceRoomId)
+                                    ?.membershipService()
                                     ?.getRoomMember(bobSession.myUserId)
                                     ?.membership == Membership.JOIN) {
                         bobRoomSummariesLive.removeObserver(this)
@@ -161,7 +162,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         val samSession = testHelper.createAccount(TestConstants.USER_SAM, defaultSessionParams)
 
         testHelper.runBlockingTest {
-            room.invite(samSession.myUserId, null)
+            room.membershipService().invite(samSession.myUserId, null)
         }
 
         testHelper.runBlockingTest {
@@ -261,6 +262,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             val newRoomObserver = object : Observer<List<RoomSummary>> {
                 override fun onChanged(t: List<RoomSummary>?) {
                     if (bob.getRoom(roomId)
+                                    ?.membershipService()
                                     ?.getRoomMember(bob.myUserId)
                                     ?.membership == Membership.JOIN) {
                         bobRoomSummariesLive.removeObserver(this)
@@ -373,13 +375,13 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         val room = aliceSession.getRoom(roomId)!!
 
         testHelper.runBlockingTest {
-            room.enableEncryption()
+            room.roomCryptoService().enableEncryption()
         }
 
         val sessions = mutableListOf(aliceSession)
         for (index in 1 until numberOfMembers) {
             val session = testHelper.createAccount("User_$index", defaultSessionParams)
-            testHelper.runBlockingTest(timeout = 600_000) { room.invite(session.myUserId, null) }
+            testHelper.runBlockingTest(timeout = 600_000) { room.membershipService().invite(session.myUserId, null) }
             println("TEST -> " + session.myUserId + " invited")
             testHelper.runBlockingTest { session.roomService().joinRoom(room.roomId, null, emptyList()) }
             println("TEST -> " + session.myUserId + " joined")

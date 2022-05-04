@@ -105,6 +105,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         val stateKey = session.myUserId
         session
                 .getRoom(roomArgs.roomId)
+                ?.stateService()
                 ?.sendStateEvent(
                         eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
                         stateKey = stateKey,
@@ -147,7 +148,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 .getSafeActiveSession()
                 ?.let { session ->
                     session.coroutineScope.launch(session.coroutineDispatchers.io) {
-                        session.getRoom(roomId)?.stopLiveLocation(session.myUserId)
+                        session.getRoom(roomId)?.stateService()?.stopLiveLocation(session.myUserId)
                     }
                 }
     }
@@ -174,10 +175,11 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         }
 
         room
+                .stateService()
                 .getLiveLocationBeaconInfo(userId, true)
                 ?.eventId
                 ?.let {
-                    room.sendLiveLocation(
+                    room.sendService().sendLiveLocation(
                             beaconInfoEventId = it,
                             latitude = locationData.latitude,
                             longitude = locationData.longitude,

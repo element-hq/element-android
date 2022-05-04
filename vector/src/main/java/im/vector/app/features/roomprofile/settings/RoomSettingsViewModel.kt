@@ -70,7 +70,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
 
         val homeServerCapabilities = session.homeServerCapabilitiesService().getHomeServerCapabilities()
         val canUseRestricted = homeServerCapabilities
-                .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.getRoomVersion())
+                .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.roomVersionService().getRoomVersion())
 
         val restrictedSupport = homeServerCapabilities.isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
         val couldUpgradeToRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
@@ -249,25 +249,25 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
         when (val avatarAction = state.avatarAction) {
             RoomSettingsViewState.AvatarAction.None            -> Unit
             RoomSettingsViewState.AvatarAction.DeleteAvatar    -> {
-                operationList.add { room.deleteAvatar() }
+                operationList.add { room.stateService().deleteAvatar() }
             }
             is RoomSettingsViewState.AvatarAction.UpdateAvatar -> {
-                operationList.add { room.updateAvatar(avatarAction.newAvatarUri, avatarAction.newAvatarFileName) }
+                operationList.add { room.stateService().updateAvatar(avatarAction.newAvatarUri, avatarAction.newAvatarFileName) }
             }
         }
         if (summary?.name != state.newName) {
-            operationList.add { room.updateName(state.newName ?: "") }
+            operationList.add { room.stateService().updateName(state.newName ?: "") }
         }
         if (summary?.topic != state.newTopic) {
-            operationList.add { room.updateTopic(state.newTopic ?: "") }
+            operationList.add { room.stateService().updateTopic(state.newTopic ?: "") }
         }
 
         if (state.newHistoryVisibility != null) {
-            operationList.add { room.updateHistoryReadability(state.newHistoryVisibility) }
+            operationList.add { room.stateService().updateHistoryReadability(state.newHistoryVisibility) }
         }
 
         if (state.newRoomJoinRules.hasChanged()) {
-            operationList.add { room.updateJoinRule(state.newRoomJoinRules.newJoinRules, state.newRoomJoinRules.newGuestAccess) }
+            operationList.add { room.stateService().updateJoinRule(state.newRoomJoinRules.newJoinRules, state.newRoomJoinRules.newGuestAccess) }
         }
         viewModelScope.launch {
             updateLoadingState(isLoading = true)

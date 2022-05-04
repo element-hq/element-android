@@ -127,7 +127,8 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
             )
 
     private fun createMemberItems(queryParams: RoomMemberQueryParams) =
-            room.getRoomMembers(queryParams)
+            room.membershipService()
+                    .getRoomMembers(queryParams)
                     .asSequence()
                     .sortedBy { it.displayName }
                     .disambiguate()

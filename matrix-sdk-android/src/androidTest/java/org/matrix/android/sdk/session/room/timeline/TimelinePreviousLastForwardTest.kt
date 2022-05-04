@@ -63,7 +63,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
 
-        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(30))
+        val bobTimeline = roomFromBobPOV.timelineService().createTimeline(null, TimelineSettings(30))
         bobTimeline.start()
 
         run {

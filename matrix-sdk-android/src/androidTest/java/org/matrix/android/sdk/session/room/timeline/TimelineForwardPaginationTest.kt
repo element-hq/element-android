@@ -75,7 +75,7 @@ class TimelineForwardPaginationTest : InstrumentedTest {
 
         // Alice clear the cache and restart the sync
         commonTestHelper.clearCacheAndSync(aliceSession)
-        val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(30))
+        val aliceTimeline = roomFromAlicePOV.timelineService().createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
         // Alice sees the 10 last message of the room, and can only navigate BACKWARD

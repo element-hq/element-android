@@ -170,7 +170,7 @@ class RoomListViewModel @AssistedInject constructor(
     }
 
     fun isPublicRoom(roomId: String): Boolean {
-        return session.getRoom(roomId)?.isPublic().orFalse()
+        return session.getRoom(roomId)?.stateService()?.isPublic().orFalse()
     }
 
     // PRIVATE METHODS *****************************************************************************
@@ -254,7 +254,7 @@ class RoomListViewModel @AssistedInject constructor(
         if (room != null) {
             viewModelScope.launch {
                 try {
-                    room.setRoomNotificationState(action.notificationState)
+                    room.roomPushRuleService().setRoomNotificationState(action.notificationState)
                 } catch (failure: Exception) {
                     _viewEvents.post(RoomListViewEvents.Failure(failure))
                 }
@@ -299,13 +299,13 @@ class RoomListViewModel @AssistedInject constructor(
                         action.tag.otherTag()
                                 ?.takeIf { room.roomSummary()?.hasTag(it).orFalse() }
                                 ?.let { tagToRemove ->
-                                    room.deleteTag(tagToRemove)
+                                    room.tagsService().deleteTag(tagToRemove)
                                 }
 
                         // Set the tag. We do not handle the order for the moment
-                        room.addTag(action.tag, 0.5)
+                        room.tagsService().addTag(action.tag, 0.5)
                     } else {
-                        room.deleteTag(action.tag)
+                        room.tagsService().deleteTag(action.tag)
                     }
                 } catch (failure: Throwable) {
                     _viewEvents.post(RoomListViewEvents.Failure(failure))
