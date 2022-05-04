@@ -645,7 +645,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     when (awaitState().onboardingFlow) {
                         OnboardingFlow.SignIn -> {
                             updateSignMode(SignMode.SignIn)
-                            internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+                            _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
                         }
                         OnboardingFlow.SignUp -> {
                             updateSignMode(SignMode.SignUp)
