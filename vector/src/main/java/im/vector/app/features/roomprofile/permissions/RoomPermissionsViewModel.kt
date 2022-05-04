@@ -124,7 +124,7 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
                                 }
                         )
                     }
-                    room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent.toContent())
+                    room.stateService().sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent.toContent())
                     setState {
                         copy(
                                 isLoading = false

@@ -43,7 +43,7 @@ class MigrateRoomViewModel @AssistedInject constructor(
         val summary = session.getRoomSummary(initialState.roomId)
         setState {
             copy(
-                    currentVersion = room?.getRoomVersion(),
+                    currentVersion = room?.roomVersionService()?.getRoomVersion(),
                     isPublic = summary?.isPublic ?: false,
                     otherMemberCount = summary?.otherMemberIds?.count() ?: 0,
                     knownParents = summary?.flattenParentIds ?: emptyList()

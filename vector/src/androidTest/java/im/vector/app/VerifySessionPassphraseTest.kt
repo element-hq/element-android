@@ -53,6 +53,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -68,7 +69,7 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
     fun createSessionWithCrossSigningAnd4S() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val matrix = getMatrixInstance()
-        val userName = "foobar_${System.currentTimeMillis()}"
+        val userName = "foobar_${Random.nextLong()}"
         existingSession = createAccountAndSync(matrix, userName, password, true)
         doSync<Unit> {
             existingSession!!.cryptoService().crossSigningService()

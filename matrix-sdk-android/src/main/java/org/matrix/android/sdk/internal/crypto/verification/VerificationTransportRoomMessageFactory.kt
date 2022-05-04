@@ -22,6 +22,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.task.TaskExecutor
+import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
 internal class VerificationTransportRoomMessageFactory @Inject constructor(
@@ -33,17 +34,21 @@ internal class VerificationTransportRoomMessageFactory @Inject constructor(
         @DeviceId
         private val deviceId: String?,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val taskExecutor: TaskExecutor
+        private val taskExecutor: TaskExecutor,
+        private val clock: Clock,
 ) {
 
     fun createTransport(roomId: String, tx: DefaultVerificationTransaction?): VerificationTransportRoomMessage {
-        return VerificationTransportRoomMessage(workManagerProvider,
+        return VerificationTransportRoomMessage(
+                workManagerProvider,
                 sessionId,
                 userId,
                 deviceId,
                 roomId,
                 localEchoEventFactory,
                 tx,
-                taskExecutor.executorScope)
+                taskExecutor.executorScope,
+                clock
+        )
     }
 }

@@ -26,6 +26,7 @@ import org.matrix.android.sdk.MatrixTest
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -148,12 +149,20 @@ class PushRulesConditionTest : MatrixTest {
         val room2JoinedId = "2joined"
         val room3JoinedId = "3joined"
 
-        val roomStub2Joined = mockk<Room> {
+        val roomMembershipService2 = mockk<MembershipService> {
             every { getNumberOfJoinedMembers() } returns 2
         }
 
-        val roomStub3Joined = mockk<Room> {
+        val roomMembershipService3 = mockk<MembershipService> {
             every { getNumberOfJoinedMembers() } returns 3
+        }
+
+        val roomStub2Joined = mockk<Room> {
+            every { membershipService() } returns roomMembershipService2
+        }
+
+        val roomStub3Joined = mockk<Room> {
+            every { membershipService() } returns roomMembershipService3
         }
 
         val roomGetterStub = mockk<RoomGetter> {

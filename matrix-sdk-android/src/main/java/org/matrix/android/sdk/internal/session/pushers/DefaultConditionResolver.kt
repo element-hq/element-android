@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.pushrules.ContainsDisplayNameCondition
 import org.matrix.android.sdk.api.session.pushrules.EventMatchCondition
 import org.matrix.android.sdk.api.session.pushrules.RoomMemberCountCondition
 import org.matrix.android.sdk.api.session.pushrules.SenderNotificationPermissionCondition
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomGetter
@@ -60,7 +61,7 @@ internal class DefaultConditionResolver @Inject constructor(
                                                      condition: ContainsDisplayNameCondition): Boolean {
         val roomId = event.roomId ?: return false
         val room = roomGetter.getRoom(roomId) ?: return false
-        val myDisplayName = room.getRoomMember(userId)?.displayName ?: return false
+        val myDisplayName = room.membershipService().getRoomMember(userId)?.displayName ?: return false
         return condition.isSatisfied(event, myDisplayName)
     }
 }

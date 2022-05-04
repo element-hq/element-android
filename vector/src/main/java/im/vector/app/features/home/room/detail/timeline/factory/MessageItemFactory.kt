@@ -31,6 +31,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -98,8 +99,8 @@ import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageEmoteContent
@@ -142,6 +143,7 @@ class MessageItemFactory @Inject constructor(
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val spanUtils: SpanUtils,
         private val session: Session,
+        private val clock: Clock,
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
@@ -207,15 +209,15 @@ class MessageItemFactory @Inject constructor(
             is MessageAudioContent               -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageLocationContent            -> {
+            is MessageLocationContent   -> {
                 if (vectorPreferences.labsRenderLocationsInTimeline()) {
                     buildLocationItem(messageContent, informationData, highlight, attributes)
                 } else {
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
             }
-            is LiveLocationBeaconContent         -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
-            else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageBeaconInfoContent -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
+            else                        -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
             layout(informationData.messageLayout.layoutRes)
@@ -457,6 +459,7 @@ class MessageItemFactory @Inject constructor(
                                 reactionsSummaryEvents = attributes.reactionsSummaryEvents,
                         )
                 )
+                .clock(clock)
                 .callback(callback)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)

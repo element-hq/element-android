@@ -135,7 +135,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             initialIndex = inMemoryData.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
             dataSourceFactory.createProvider(inMemoryData, room, lifecycleScope)
         } else {
-            val events = room?.getAttachmentMessages().orEmpty()
+            val events = room?.timelineService()?.getAttachmentMessages().orEmpty()
             initialIndex = events.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
             dataSourceFactory.createProvider(events, lifecycleScope)
         }

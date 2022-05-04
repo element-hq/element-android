@@ -21,13 +21,21 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
+/**
+ * Content of the state event of type
+ * [EventType.BEACON_LOCATION_DATA][org.matrix.android.sdk.api.session.events.model.EventType.BEACON_LOCATION_DATA]
+ *
+ * It contains location data related to a live location share.
+ * It is related to the state event that originally started the live.
+ * See [MessageBeaconInfoContent][org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent]
+ */
 @JsonClass(generateAdapter = true)
-data class MessageLiveLocationContent(
+data class MessageBeaconLocationDataContent(
         /**
          * Local message type, not from server
          */
         @Transient
-        override val msgType: String = MessageType.MSGTYPE_LIVE_LOCATION,
+        override val msgType: String = MessageType.MSGTYPE_BEACON_LOCATION_DATA,
 
         @Json(name = "body") override val body: String = "",
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
@@ -42,11 +50,11 @@ data class MessageLiveLocationContent(
         /**
          * Exact time that the data in the event refers to (milliseconds since the UNIX epoch)
          */
-        @Json(name = "org.matrix.msc3488.ts") val unstableTimestampAsMilliseconds: Long? = null,
-        @Json(name = "m.ts") val timestampAsMilliseconds: Long? = null
+        @Json(name = "org.matrix.msc3488.ts") val unstableTimestampMillis: Long? = null,
+        @Json(name = "m.ts") val timestampMillis: Long? = null
 ) : MessageContent {
 
     fun getBestLocationInfo() = locationInfo ?: unstableLocationInfo
 
-    fun getBestTimestampAsMilliseconds() = timestampAsMilliseconds ?: unstableTimestampAsMilliseconds
+    fun getBestTimestampMillis() = timestampMillis ?: unstableTimestampMillis
 }

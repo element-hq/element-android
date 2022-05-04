@@ -34,7 +34,7 @@ internal data class OlmSessionWrapper(
     /**
      * Notify that a message has been received on this olm session so that it updates `lastReceivedMessageTs`
      */
-    fun onMessageReceived() {
-        lastReceivedMessageTs = System.currentTimeMillis()
+    fun onMessageReceived(currentTimeMillis: Long) {
+        lastReceivedMessageTs = currentTimeMillis
     }
 }

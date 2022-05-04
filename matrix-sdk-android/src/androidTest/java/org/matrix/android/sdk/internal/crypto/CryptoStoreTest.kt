@@ -27,6 +27,7 @@ import org.junit.runner.RunWith
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.util.time.DefaultClock
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmManager
 import org.matrix.olm.OlmSession
@@ -37,6 +38,7 @@ private const val DUMMY_DEVICE_KEY = "DeviceKey"
 class CryptoStoreTest : InstrumentedTest {
 
     private val cryptoStoreHelper = CryptoStoreHelper()
+    private val clock = DefaultClock()
 
     @Before
     fun setup() {
@@ -106,7 +108,7 @@ class CryptoStoreTest : InstrumentedTest {
 
         // Note: we cannot be sure what will be the result of getLastUsedSessionId() here
 
-        olmSessionWrapper2.onMessageReceived()
+        olmSessionWrapper2.onMessageReceived(clock.epochMillis())
         cryptoStore.storeSession(olmSessionWrapper2, DUMMY_DEVICE_KEY)
 
         // sessionId2 is returned now
@@ -114,7 +116,7 @@ class CryptoStoreTest : InstrumentedTest {
 
         Thread.sleep(2)
 
-        olmSessionWrapper1.onMessageReceived()
+        olmSessionWrapper1.onMessageReceived(clock.epochMillis())
         cryptoStore.storeSession(olmSessionWrapper1, DUMMY_DEVICE_KEY)
 
         // sessionId1 is returned now
