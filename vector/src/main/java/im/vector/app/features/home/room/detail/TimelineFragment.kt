@@ -1517,7 +1517,7 @@ class TimelineFragment @Inject constructor(
 
         views.composerLayout.views.composerEmojiButton.isVisible = vectorPreferences.showEmojiKeyboard()
 
-        if (isThreadTimeLine() && timelineArgs.threadTimelineArgs?.startsThread == true) {
+        if (isThreadTimeLine() && timelineArgs.threadTimelineArgs?.showKeyboard == true) {
             // Show keyboard when the user started a thread
             views.composerLayout.views.composerEditText.showKeyboard(andRequestFocus = true)
         }
@@ -2422,7 +2422,7 @@ class TimelineFragment @Inject constructor(
 
     private fun onReplyInThreadClicked(action: EventSharedAction.ReplyInThread) {
         if (vectorPreferences.areThreadMessagesEnabled()) {
-            navigateToThreadTimeline(action.eventId, action.startsThread)
+            navigateToThreadTimeline(action.eventId, action.startsThread, true)
         } else {
             displayThreadsBetaOptInDialog()
         }
@@ -2433,7 +2433,7 @@ class TimelineFragment @Inject constructor(
      * using the ThreadsActivity
      */
 
-    private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false) {
+    private fun navigateToThreadTimeline(rootThreadEventId: String, startsThread: Boolean = false, showKeyboard: Boolean = false) {
         analyticsTracker.capture(Interaction.Name.MobileRoomThreadSummaryItem.toAnalyticsInteraction())
         context?.let {
             val roomThreadDetailArgs = ThreadTimelineArgs(
@@ -2442,7 +2442,9 @@ class TimelineFragment @Inject constructor(
                     displayName = timelineViewModel.getRoomSummary()?.displayName,
                     avatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl,
                     roomEncryptionTrustLevel = timelineViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
-                    rootThreadEventId = rootThreadEventId)
+                    rootThreadEventId = rootThreadEventId,
+                    showKeyboard = showKeyboard
+            )
             navigator.openThread(it, roomThreadDetailArgs)
         }
     }
