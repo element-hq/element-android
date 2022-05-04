@@ -88,7 +88,7 @@ class LocationLiveMessageBannerView @JvmOverloads constructor(
         }
 
         GlideApp.with(context)
-                .load(ColorDrawable(ThemeUtils.getColor(context, R.attr.colorSurface)))
+                .load(ColorDrawable(ThemeUtils.getColor(context, android.R.attr.colorBackground)))
                 .transform(GranularRoundedCorners(0f, 0f, viewState.bottomEndCornerRadiusInDp, viewState.bottomStartCornerRadiusInDp))
                 .into(background)
     }
@@ -108,7 +108,10 @@ class LocationLiveMessageBannerView @JvmOverloads constructor(
                         }
 
                         override fun onFinish() {
-                            subTitle.text = context.getString(R.string.location_share_live_remaining_time, TextUtils.formatDurationWithUnits(context, Duration.ofMillis(0L)))
+                            subTitle.text = context.getString(
+                                    R.string.location_share_live_remaining_time,
+                                    TextUtils.formatDurationWithUnits(context, Duration.ofMillis(0L))
+                            )
                         }
                     }
                     countDownTimer?.start()

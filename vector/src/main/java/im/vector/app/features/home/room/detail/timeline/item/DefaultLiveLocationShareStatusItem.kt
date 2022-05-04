@@ -68,7 +68,7 @@ class DefaultLiveLocationShareStatusItem : LiveLocationShareStatusItem {
             GranularRoundedCorners(0f, 0f, bottomCornerRadius, bottomCornerRadius)
         }
         GlideApp.with(bannerImageView)
-                .load(ColorDrawable(ThemeUtils.getColor(bannerImageView.context, R.attr.colorSurface)))
+                .load(ColorDrawable(ThemeUtils.getColor(bannerImageView.context, android.R.attr.colorBackground)))
                 .transform(imageCornerTransformation)
                 .into(bannerImageView)
     }
