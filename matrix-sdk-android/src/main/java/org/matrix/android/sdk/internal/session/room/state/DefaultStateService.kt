@@ -73,14 +73,14 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
             eventType: String,
             stateKey: String,
             body: JsonDict
-    ) {
+    ): String {
         val params = SendStateTask.Params(
                 roomId = roomId,
                 stateKey = stateKey,
                 eventType = eventType,
                 body = body.toSafeJson(eventType)
         )
-        sendStateTask.executeRetry(params, 3)
+        return sendStateTask.executeRetry(params, 3)
     }
 
     private fun JsonDict.toSafeJson(eventType: String): JsonDict {
