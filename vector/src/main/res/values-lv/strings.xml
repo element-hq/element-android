@@ -1526,7 +1526,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="call_resume_action">Turpināt</string>
     <string name="settings_call_ringtone_dialog_title">Izvēlieties zvana signālu:</string>
     <string name="settings_call_ringtone_title">Ienākoša zvana signāls</string>
-    <string name="settings_call_ringtone_use_app_ringtone">Izmantot noklusējuma $ {app_name} zvana signālu ienākošajiem zvaniem</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Izmantot noklusējuma ${app_name} zvana signālu ienākošajiem zvaniem</string>
     <string name="settings_call_show_confirmation_dialog_summary">Pirms zvana uzsākšanas lūgt apstiprinājumu</string>
     <string name="settings_call_show_confirmation_dialog_title">Novērst nejaušu zvanu</string>
     <string name="login_error_ssl_peer_unverified">SSL kļūda: Peer identitāte nav pārbaudīta.</string>
