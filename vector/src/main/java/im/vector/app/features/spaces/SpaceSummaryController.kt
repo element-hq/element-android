@@ -42,7 +42,8 @@ import javax.inject.Inject
 class SpaceSummaryController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
-        private val stringProvider: StringProvider) : EpoxyController() {
+        private val stringProvider: StringProvider,
+) : EpoxyController() {
 
     var callback: Callback? = null
     private var viewState: SpaceListViewState? = null
@@ -62,7 +63,8 @@ class SpaceSummaryController @Inject constructor(
                 nonNullViewState.selectedGroupingMethod,
                 nonNullViewState.rootSpacesOrdered,
                 nonNullViewState.expandedStates,
-                nonNullViewState.homeAggregateCount)
+                nonNullViewState.homeAggregateCount
+        )
 
         if (!nonNullViewState.legacyGroups.isNullOrEmpty()) {
             genericFooterItem {
@@ -82,8 +84,10 @@ class SpaceSummaryController @Inject constructor(
                     avatarRenderer(host.avatarRenderer)
                     id("all_communities")
                     matrixItem(mxItem.copy(displayName = host.stringProvider.getString(R.string.group_all_communities)))
-                    selected(nonNullViewState.selectedGroupingMethod is RoomGroupingMethod.ByLegacyGroup &&
-                            nonNullViewState.selectedGroupingMethod.group() == null)
+                    selected(
+                            nonNullViewState.selectedGroupingMethod is RoomGroupingMethod.ByLegacyGroup &&
+                                    nonNullViewState.selectedGroupingMethod.group() == null
+                    )
                     listener { host.callback?.onGroupSelected(null) }
                 }
             }
@@ -93,8 +97,10 @@ class SpaceSummaryController @Inject constructor(
                     avatarRenderer(host.avatarRenderer)
                     id(groupSummary.groupId)
                     matrixItem(groupSummary.toMatrixItem())
-                    selected(nonNullViewState.selectedGroupingMethod is RoomGroupingMethod.ByLegacyGroup &&
-                            nonNullViewState.selectedGroupingMethod.group()?.groupId == groupSummary.groupId)
+                    selected(
+                            nonNullViewState.selectedGroupingMethod is RoomGroupingMethod.ByLegacyGroup &&
+                                    nonNullViewState.selectedGroupingMethod.group()?.groupId == groupSummary.groupId
+                    )
                     listener { host.callback?.onGroupSelected(groupSummary) }
                 }
             }
@@ -112,8 +118,8 @@ class SpaceSummaryController @Inject constructor(
         }
 
         // show invites on top
-
-        summaries?.filter { it.membership == Membership.INVITE }
+        summaries
+                ?.filter { it.membership == Membership.INVITE }
                 ?.forEach { roomSummary ->
                     spaceSummaryItem {
                         avatarRenderer(host.avatarRenderer)
