@@ -46,6 +46,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
     @EpoxyAttribute var areThreadMessagesEnabled: Boolean = false
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var threadSummaryListener: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -66,6 +67,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
                     val displayName = it.threadSummarySenderInfo?.displayName
                     val avatarUrl = it.threadSummarySenderInfo?.avatarUrl
                     avatarRenderer.render(MatrixItem.UserItem(userId, displayName, avatarUrl), holder.threadSummaryAvatarImageView)
+                    holder.threadSummaryConstraintLayout.onClick(threadSummaryListener)
                 } else {
                     showFromThread(holder)
                 }
