@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.securestorage
+package im.vector.app.test
 
-import org.matrix.android.sdk.internal.util.system.BuildVersionSdkIntProvider
+import org.matrix.android.sdk.api.util.BuildVersionSdkIntProvider
 
 class TestBuildVersionSdkIntProvider : BuildVersionSdkIntProvider {
     var value: Int = 0

@@ -361,6 +361,7 @@ dependencies {
     implementation libs.androidx.core
     implementation "androidx.media:media:1.6.0"
     implementation "androidx.transition:transition:1.4.1"
+    implementation libs.androidx.biometric
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
@@ -421,7 +422,6 @@ dependencies {
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation libs.androidx.autoFill
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
-    implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
     implementation 'com.github.hyuwah:DraggableView:1.0.0'
 
     // Custom Tab
@@ -561,4 +561,5 @@ dependencies {
     }
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
+    debugImplementation libs.androidx.fragmentTesting
 }

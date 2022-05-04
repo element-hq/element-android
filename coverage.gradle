@@ -24,11 +24,13 @@ def excludes = [
 
 def initializeReport(report, projects, classExcludes) {
     projects.each { project -> project.apply plugin: 'jacoco' }
-    report.executionData { fileTree(rootProject.rootDir.absolutePath).include(
-        "**/build/outputs/unit_test_code_coverage/**/*.exec",
-        "**/build/outputs/code_coverage/**/coverage.ec"
-    ) }
 
+    report.executionData {
+        fileTree(rootProject.rootDir.absolutePath).include(
+            "**/build/outputs/unit_test_code_coverage/**/*.exec",
+            "**/build/outputs/code_coverage/**/coverage.ec",
+        )
+    }
     report.reports {
         xml.enabled true
         html.enabled true

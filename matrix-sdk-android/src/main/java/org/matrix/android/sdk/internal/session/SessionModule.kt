@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
-import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.util.md5
@@ -93,7 +92,6 @@ import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcesso
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessorCoroutine
 import org.matrix.android.sdk.internal.session.room.tombstone.RoomTombstoneEventProcessor
-import org.matrix.android.sdk.internal.session.securestorage.DefaultSecureStorageService
 import org.matrix.android.sdk.internal.session.typing.DefaultTypingUsersTracker
 import org.matrix.android.sdk.internal.session.user.accountdata.DefaultSessionAccountDataService
 import org.matrix.android.sdk.internal.session.widgets.DefaultWidgetURLFormatter
@@ -366,9 +364,6 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindEventSenderProcessorAsSessionLifecycleObserver(processor: EventSenderProcessorCoroutine): SessionLifecycleObserver
-
-    @Binds
-    abstract fun bindSecureStorageService(service: DefaultSecureStorageService): SecureStorageService
 
     @Binds
     abstract fun bindHomeServerCapabilitiesService(service: DefaultHomeServerCapabilitiesService): HomeServerCapabilitiesService

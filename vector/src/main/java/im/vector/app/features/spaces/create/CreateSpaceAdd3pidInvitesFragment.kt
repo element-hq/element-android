@@ -54,7 +54,7 @@ class CreateSpaceAdd3pidInvitesFragment @Inject constructor(
             invalidateState(it)
         }
 
-        views.nextButton.setText(R.string.next_pf)
+        views.nextButton.setText(R.string.action_next)
         views.nextButton.debouncedClicks {
             view.hideKeyboard()
             sharedViewModel.handle(CreateSpaceAction.NextFromAdd3pid)
@@ -67,7 +67,7 @@ class CreateSpaceAdd3pidInvitesFragment @Inject constructor(
         views.nextButton.text = if (noEmails) {
             getString(R.string.skip_for_now)
         } else {
-            getString(R.string.next_pf)
+            getString(R.string.action_next)
         }
     }
 

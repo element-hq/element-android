@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.securestorage
+package org.matrix.android.sdk.internal.securestorage
 
-import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
+import org.matrix.android.sdk.api.securestorage.SecretStoringUtils
+import org.matrix.android.sdk.api.securestorage.SecureStorageService
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject

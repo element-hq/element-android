@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.securestorage
+package im.vector.app.features.pin.lockscreen.configuration
 
-import java.io.InputStream
-import java.io.OutputStream
+import android.os.Parcelable
+import im.vector.app.features.pin.lockscreen.ui.LockScreenViewModel
+import kotlinx.parcelize.Parcelize
 
-interface SecureStorageService {
-
-    fun securelyStoreObject(any: Any, keyAlias: String, outputStream: OutputStream)
-
-    fun <T> loadSecureSecret(inputStream: InputStream, keyAlias: String): T?
+/**
+ * Mode used by [LockScreenViewModel] to configure the UI and interactions.
+ */
+@Parcelize
+enum class LockScreenMode : Parcelable {
+    CREATE,
+    VERIFY
 }

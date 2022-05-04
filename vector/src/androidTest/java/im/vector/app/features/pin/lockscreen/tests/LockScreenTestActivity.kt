@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.util.system
+package im.vector.app.features.pin.lockscreen.tests
 
-internal interface BuildVersionSdkIntProvider {
-    /**
-     * Return the current version of the Android SDK.
-     */
-    fun get(): Int
-}
+import androidx.fragment.app.FragmentActivity
+
+class LockScreenTestActivity : FragmentActivity()

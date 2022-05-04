@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -63,7 +64,9 @@ class ShortcutsHandler @Inject constructor(
             // No op
             return Job()
         }
-        hasPinCode.set(pinCodeStore.getEncodedPin() != null)
+        coroutineScope.launch {
+            hasPinCode.set(pinCodeStore.hasEncodedPin())
+        }
         val session = activeSessionHolder.getSafeActiveSession() ?: return Job()
         return session.flow().liveRoomSummaries(
                 roomSummaryQueryParams {

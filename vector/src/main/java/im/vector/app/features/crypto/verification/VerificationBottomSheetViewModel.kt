@@ -34,6 +34,7 @@ import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isSecureBackupRequired
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.raw.RawService
@@ -100,7 +101,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         private val rawService: RawService,
         private val session: Session,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val matrix: Matrix,
 ) :
         VectorViewModel<VerificationBottomSheetViewState, VerificationAction, VerificationBottomSheetViewEvents>(initialState),
         VerificationService.Listener {
@@ -402,7 +404,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 action.cypherData.fromBase64().inputStream().use { ins ->
-                    val res = session.secureStorageService().loadSecureSecret<Map<String, String>>(ins, action.alias)
+                    val res = matrix.secureStorageService().loadSecureSecret<Map<String, String>>(ins, action.alias)
                     val trustResult = session.cryptoService().crossSigningService().checkTrustFromPrivateKeys(
                             res?.get(MASTER_KEY_SSSS_NAME),
                             res?.get(USER_SIGNING_KEY_SSSS_NAME),

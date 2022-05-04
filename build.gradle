@@ -252,11 +252,7 @@ dependencyAnalysis {
                 exclude("org.json:json") // Used in unit tests, overwrites the one bundled into Android
             }
         }
-        project(":library:ui-styles") {
-            onUnusedDependencies {
-                exclude("com.github.vector-im:PFLockScreen-Android") // False positive
-            }
-        }
+        project(":library:ui-styles")
         project(":matrix-sdk-android") {
             onUnusedDependencies {
                 exclude("io.reactivex.rxjava2:rxkotlin") // Transitively required for mocking realm as monarchy doesn't expose Rx

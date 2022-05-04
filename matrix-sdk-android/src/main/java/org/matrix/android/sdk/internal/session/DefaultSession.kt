@@ -55,7 +55,6 @@ import org.matrix.android.sdk.api.session.pushrules.PushRuleService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
 import org.matrix.android.sdk.api.session.room.RoomService
 import org.matrix.android.sdk.api.session.search.SearchService
-import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
@@ -111,7 +110,6 @@ internal class DefaultSession @Inject constructor(
         private val cryptoService: Lazy<DefaultCryptoService>,
         private val defaultFileService: Lazy<FileService>,
         private val permalinkService: Lazy<PermalinkService>,
-        private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
         private val syncService: Lazy<SyncService>,
         private val mediaService: Lazy<MediaService>,
@@ -220,7 +218,6 @@ internal class DefaultSession @Inject constructor(
     override fun eventService(): EventService = eventService.get()
     override fun termsService(): TermsService = termsService.get()
     override fun syncService(): SyncService = syncService.get()
-    override fun secureStorageService(): SecureStorageService = secureStorageService.get()
     override fun profileService(): ProfileService = profileService.get()
     override fun presenceService(): PresenceService = presenceService.get()
     override fun accountService(): AccountService = accountService.get()
