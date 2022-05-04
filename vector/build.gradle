@@ -13,6 +13,18 @@ kapt {
     correctErrorTypes = true
 }
 
+knit {
+    files = fileTree(project.rootDir) {
+        include '**/*.md'
+        include '**/*.kt'
+        include '**/*.kts'
+        exclude '**/build/**'
+        exclude '**/.gradle/**'
+        exclude '**/towncrier/template.md'
+        exclude '**/CHANGES.md'
+    }
+}
+
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 4
