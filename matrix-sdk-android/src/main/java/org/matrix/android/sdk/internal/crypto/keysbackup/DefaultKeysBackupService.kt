@@ -54,6 +54,7 @@ import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.ObjectSigner
 import org.matrix.android.sdk.internal.crypto.actions.MegolmSessionDataImporter
+import org.matrix.android.sdk.internal.crypto.crosssigning.CrossSigningOlm
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.BackupKeysResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
@@ -102,6 +103,7 @@ internal class DefaultKeysBackupService @Inject constructor(
         private val cryptoStore: IMXCryptoStore,
         private val olmDevice: MXOlmDevice,
         private val objectSigner: ObjectSigner,
+        private val crossSigningOlm: CrossSigningOlm,
         // Actions
         private val megolmSessionDataImporter: MegolmSessionDataImporter,
         // Tasks
@@ -178,7 +180,6 @@ internal class DefaultKeysBackupService @Inject constructor(
                             }
                         }
                     }
-
                     val generatePrivateKeyResult = generatePrivateKeyWithPassword(password, backgroundProgressListener)
                     SignalableMegolmBackupAuthData(
                             publicKey = olmPkDecryption.setPrivateKey(generatePrivateKeyResult.privateKey),
@@ -187,7 +188,6 @@ internal class DefaultKeysBackupService @Inject constructor(
                     )
                 } else {
                     val publicKey = olmPkDecryption.generateKey()
-
                     SignalableMegolmBackupAuthData(
                             publicKey = publicKey
                     )
@@ -195,13 +195,28 @@ internal class DefaultKeysBackupService @Inject constructor(
 
                 val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableMegolmBackupAuthData.signalableJSONDictionary())
 
+                val signatures = mutableMapOf<String, MutableMap<String, String>>()
+
+                val deviceSignature = objectSigner.signObject(canonicalJson)
+                deviceSignature.forEach { (userID, content) ->
+                    signatures[userID] = content.toMutableMap()
+                }
+
+                // If we have cross signing add signature, will throw if cross signing not properly configured
+                try {
+                    val crossSign = crossSigningOlm.signObject(CrossSigningOlm.KeyType.MASTER, canonicalJson)
+                    signatures[credentials.userId]?.putAll(crossSign)
+                } catch (failure: Throwable) {
+                    // ignore and log
+                    Timber.w(failure, "prepareKeysBackupVersion: failed to sign with cross signing keys")
+                }
+
                 val signedMegolmBackupAuthData = MegolmBackupAuthData(
                         publicKey = signalableMegolmBackupAuthData.publicKey,
                         privateKeySalt = signalableMegolmBackupAuthData.privateKeySalt,
                         privateKeyIterations = signalableMegolmBackupAuthData.privateKeyIterations,
-                        signatures = objectSigner.signObject(canonicalJson)
+                        signatures = signatures
                 )
-
                 val creationInfo = MegolmBackupCreationInfo(
                         algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
                         authData = signedMegolmBackupAuthData,
@@ -420,18 +435,41 @@ internal class DefaultKeysBackupService @Inject constructor(
 
         for ((keyId, mySignature) in mySigs) {
             // XXX: is this how we're supposed to get the device id?
-            var deviceId: String? = null
+            var deviceOrCrossSigningKeyId: String? = null
             val components = keyId.split(":")
             if (components.size == 2) {
-                deviceId = components[1]
+                deviceOrCrossSigningKeyId = components[1]
             }
 
-            if (deviceId != null) {
-                val device = cryptoStore.getUserDevice(userId, deviceId)
+            // Let's check if it's my master key
+            val myMSKPKey = cryptoStore.getMyCrossSigningInfo()?.masterKey()?.unpaddedBase64PublicKey
+            if (deviceOrCrossSigningKeyId == myMSKPKey) {
+                // we have to check if we can trust
+
+                var isSignatureValid = false
+                try {
+                    crossSigningOlm.verifySignature(CrossSigningOlm.KeyType.MASTER, authData.signalableJSONDictionary(), authData.signatures)
+                    isSignatureValid = true
+                } catch (failure: Throwable) {
+                    Timber.w(failure, "getKeysBackupTrust: Bad signature from my user MSK")
+                }
+                val mskTrusted = cryptoStore.getMyCrossSigningInfo()?.masterKey()?.trustLevel?.isVerified() == true
+                if (isSignatureValid && mskTrusted) {
+                    keysBackupVersionTrustIsUsable = true
+                }
+                val signature = KeysBackupVersionTrustSignature.UserSignature(
+                        keyId = deviceOrCrossSigningKeyId,
+                        cryptoCrossSigningKey = cryptoStore.getMyCrossSigningInfo()?.masterKey(),
+                        valid = isSignatureValid
+                )
+
+                keysBackupVersionTrustSignatures.add(signature)
+            } else if (deviceOrCrossSigningKeyId != null) {
+                val device = cryptoStore.getUserDevice(userId, deviceOrCrossSigningKeyId)
                 var isSignatureValid = false
 
                 if (device == null) {
-                    Timber.v("getKeysBackupTrust: Signature from unknown device $deviceId")
+                    Timber.v("getKeysBackupTrust: Signature from unknown device $deviceOrCrossSigningKeyId")
                 } else {
                     val fingerprint = device.fingerprint()
                     if (fingerprint != null) {
@@ -448,8 +486,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                     }
                 }
 
-                val signature = KeysBackupVersionTrustSignature(
-                        deviceId = deviceId,
+                val signature = KeysBackupVersionTrustSignature.DeviceSignature(
+                        deviceId = deviceOrCrossSigningKeyId,
                         device = device,
                         valid = isSignatureValid,
                 )
