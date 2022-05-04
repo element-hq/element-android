@@ -39,6 +39,7 @@ import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.glide.GlideImagesPlugin
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin
 import org.commonmark.node.Node
+import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -61,7 +62,7 @@ class EventHtmlRenderer @Inject constructor(
                     GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
                         override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {
                             val url = drawable.destination
-                            if (url.startsWith("mxc://")) {
+                            if (url.isMxcUrl()) {
                                 val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
                                 val imageUrl = contentUrlResolver.resolveFullSize(url)
                                 return Glide.with(context).load(imageUrl)
