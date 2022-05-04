@@ -757,7 +757,9 @@
 \n
 \nVocê pode reverter esta ação a qualquer momento nas configurações gerais.</string>
     <string name="room_participants_action_unignore_title">Designorar usuária(o)</string>
-    <string name="room_participants_action_unignore_prompt_msg">Designorar esta(e) usuária(o) vai mostrar todas as mensagens dela(e) de novo.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Designorar esta(e) usuária(o) vai mostrar todas as mensagens dela(e) de novo.
+\n
+\nNote que esta ação vai recomeçar o app e pode levar algum tempo.</string>
     <string name="room_participants_action_cancel_invite_title">Cancelar convite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Você tem certeza que você quer cancelar o convite para esta(e) usuária(o)\?</string>
     <string name="room_participants_remove_title">Expulsar usuária(o)</string>
@@ -2110,9 +2112,9 @@
         <item quantity="one">Chamada de áudio perdida</item>
         <item quantity="other">%d chamadas de áudio perdidas</item>
     </plurals>
-    <string name="upgrade_room_for_restricted_note">Por favor note que fazer upgrade vai fazer uma nova versão da sala. Todas as mensagens atuais vão permanecer nesta sala arquivada.</string>
-    <string name="upgrade_room_for_restricted_no_param">Qualquer pessoa em um espaço pai vai ser capaz de achar e se juntar a esta sala - não precisa convidar manualmente todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
-    <string name="upgrade_room_for_restricted">Qualquer pessoa em %s vai ser capaz de achar e se juntar a esta sala - não precisa convidar todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
+    <string name="upgrade_room_for_restricted_note">Por favor note que fazer upgrade vai fazer uma nova versão da sala. Todas as mensagens atuais vão ficar nesta sala arquivada.</string>
+    <string name="upgrade_room_for_restricted_no_param">Qualquer pessoa em um espaço pai vai ser capaz de achar e se juntar a esta sala - não precisa manualmente convidar todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
+    <string name="upgrade_room_for_restricted">Qualquer pessoa em %s vai ser capaz de achar e se juntar a esta sala - não precisa manualmente convidar todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
     <string name="voice_message_reply_content">Mensagem de Voz (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">Não dá para responder ou editar enquanto mensagem de voz está ativa</string>
     <string name="error_voice_message_unable_to_record">Não dá para gravar uma mensagem de voz</string>
@@ -2388,7 +2390,7 @@
     <string name="ftue_auth_use_case_title">Com quem você vai fazer chat mais\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Você já está visualizando esta thread!</string>
     <string name="view_in_room">Visualizar Em Sala</string>
-    <string name="reply_in_thread">Responder Em Thread</string>
+    <string name="reply_in_thread">Responder em thread</string>
     <string name="command_not_supported_in_threads">O comando \"%s\" é reconhecido mas não suportado em threads.</string>
     <string name="search_thread_from_a_thread">De uma Thread</string>
     <string name="thread_list_empty_notice">Dica: Toque longo numa mensagem e use “%s”.</string>
@@ -2457,4 +2459,32 @@
     <string name="ftue_account_created_take_me_home">Me leve para casa</string>
     <string name="ftue_account_created_personalize">Personalizar perfil</string>
     <string name="action_disable">Desabilitar</string>
+    <string name="location_share_live_started">Carregando localização ao vivo…</string>
+    <string name="location_share_live_select_duration_option_3">8 horas</string>
+    <string name="location_share_live_select_duration_option_2">1 hora</string>
+    <string name="location_share_live_select_duration_option_1">15 minutos</string>
+    <string name="location_share_live_select_duration_title">Compartilhar sua localização ao vivo por</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Incapaz de tocar %1$s</string>
+    <string name="a11y_pause_audio_message">Pausar %1$s</string>
+    <string name="a11y_play_audio_message">Tocar %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minutos %2$d segundos</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Compartilhou a localização ao vivo dela(e)</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} também é ótimo para o lugar de trabalho. Ele é confiado pelas organizações mais seguras do mundo.</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_info">Threads são um trabalho em progresso com novas funcionalidades próximas emocionantes, tais como notificações melhoradas. Nós adoraríamos ouvir seu feedback!</string>
+    <string name="send_feedback_threads_title">Feedback de Threads Beta</string>
+    <string name="give_feedback_threads">Dar Feedback</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Se habilitado, você sempre vai aparecer offline para outras(os) usuárias(os), mesmo quando usando o aplicativo.</string>
+    <string name="settings_presence_user_always_appears_offline">Modo offline</string>
+    <string name="settings_presence">Presença</string>
+    <string name="threads_labs_enable_notice_message">Seu servidorcasa não atualmente suporta threads, então esta funcionalidade pode ser inconfiável. Algumas mensagens de thread podem não estar confiavelmente disponíveis. %sVocê quer habilitar threads mesmo assim\?</string>
+    <string name="threads_labs_enable_notice_title">Threads Beta</string>
+    <string name="threads_beta_enable_notice_message">Threads ajudam manThreads ajudam manter suas conversas em-tópico e fáceis de rastrear. %sHabilitar threads vai refrescar o app. Isto pode tomar mais tempo para algumas contas.</string>
+    <string name="threads_beta_enable_notice_title">Threads Beta</string>
+    <string name="action_learn_more">Saber mais</string>
+    <string name="action_try_it_out">Teste aí</string>
 </resources>
