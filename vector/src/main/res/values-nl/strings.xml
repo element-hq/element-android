@@ -1244,7 +1244,9 @@
 \nOm te voorkomen dat hij/zij opnieuw toetreedt, kun je hem/haar ook verbannen.</string>
     <string name="room_participants_remove_reason">Reden voor verwijdering</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Weet u zeker dat u uitnodiging voor deze persoon wilt annuleren\?</string>
-    <string name="room_participants_action_unignore_prompt_msg">Het niet meer negeren van deze persoon zal al zijn/haar berichten opnieuw doen weergeven.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Als u deze persoon niet negeert, worden alle berichten van deze persoon opnieuw weergegeven.
+\n
+\nHoud er rekening mee dat deze actie de app opnieuw zal starten en dat dit enige tijd kan duren.</string>
     <string name="room_participants_action_ignore_prompt_msg">Door deze persoon te negeren worden zijn/haar berichten verwijderd uit gesprekken die jullie delen.
 \n
 \nU kunt deze actie op elk moment ongedaan maken in de algemene instellingen.</string>
@@ -2457,4 +2459,32 @@
         <item quantity="one">%d server ACL\'s veranderen</item>
         <item quantity="other">%d server ACL\'s wijzigingen</item>
     </plurals>
+    <string name="location_share_live_started">Live locatie laden…</string>
+    <string name="location_share_live_select_duration_option_3">8 uur</string>
+    <string name="location_share_live_select_duration_option_2">1 uur</string>
+    <string name="location_share_live_select_duration_option_1">15 minuten</string>
+    <string name="location_share_live_select_duration_title">Deel uw live locatie voor</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">%1$s kan niet worden afgeluisterd</string>
+    <string name="a11y_pause_audio_message">Pauze %1$s</string>
+    <string name="a11y_play_audio_message">Luister %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minuten %2$d seconden</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Hun live locatie gedeeld</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} is ook geweldig voor op de werkplek. Het wordt vertrouwd door \'s werelds veiligste organisaties.</string>
+    <string name="beta">BÈTA</string>
+    <string name="send_feedback_threads_info">Discussies zijn werk in uitvoering met nieuwe, opwindende aankomende functies, zoals verbeterde meldingen. We horen graag uw feedback!</string>
+    <string name="send_feedback_threads_title">Discussies Beta-feedback</string>
+    <string name="give_feedback_threads">Geef feedback</string>
+    <string name="beta_title_bottom_sheet_action">BÈTA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Indien ingeschakeld, verschijnt u altijd offline voor andere personen, zelfs wanneer u de applicatie gebruikt.</string>
+    <string name="settings_presence_user_always_appears_offline">Offline modus</string>
+    <string name="settings_presence">Aanwezigheid</string>
+    <string name="threads_labs_enable_notice_message">Uw server ondersteunt momenteel geen discussies, dus deze functie kan onbetrouwbaar zijn. Sommige berichten in een discussie zijn mogelijk niet betrouwbaar beschikbaar. %sWilt u toch discussies inschakelen\?</string>
+    <string name="threads_labs_enable_notice_title">Discussies bèta</string>
+    <string name="threads_beta_enable_notice_message">Discussies helpen uw gesprekken on-topic te houden en gemakkelijk bij te houden. %s Als u discussies inschakelt, wordt de app vernieuwd. Bij sommige accounts kan dit langer duren.</string>
+    <string name="threads_beta_enable_notice_title">Discussies bèta</string>
+    <string name="action_learn_more">Leer meer</string>
+    <string name="action_try_it_out">Probeer het uit</string>
 </resources>
