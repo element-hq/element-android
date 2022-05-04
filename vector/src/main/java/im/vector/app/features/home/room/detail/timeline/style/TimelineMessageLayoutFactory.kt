@@ -95,6 +95,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
                 isNextMessageReceivedMoreThanOneHourAgo ||
                 isTileTypeMessage(nextDisplayableEvent) ||
+                nextDisplayableEvent.isRootThread() ||
                 event.isRootThread() ||
                 nextDisplayableEvent.isEdition()
 
