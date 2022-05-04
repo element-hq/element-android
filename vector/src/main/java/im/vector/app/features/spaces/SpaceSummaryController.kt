@@ -141,6 +141,7 @@ class SpaceSummaryController @Inject constructor(
         }
 
         rootSpaces
+                ?.filter { it.membership != Membership.INVITE }
                 ?.forEach { roomSummary ->
                     val isSelected = selected is RoomGroupingMethod.BySpace && roomSummary.roomId == selected.space()?.roomId
                     // does it have children?
