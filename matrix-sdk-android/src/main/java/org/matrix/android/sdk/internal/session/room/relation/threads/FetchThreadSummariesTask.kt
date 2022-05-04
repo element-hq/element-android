@@ -98,7 +98,7 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
                         roomEntity = roomEntity,
                         userId = userId,
                         cryptoService = cryptoService,
-                        now = clock.epochMillis(),
+                        currentTimeMillis = clock.epochMillis(),
                 )
             }
         }

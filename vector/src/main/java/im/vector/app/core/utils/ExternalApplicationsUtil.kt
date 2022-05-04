@@ -256,7 +256,7 @@ suspend fun saveMedia(context: Context,
                       title: String,
                       mediaMimeType: String?,
                       notificationUtils: NotificationUtils,
-                      now: Long) {
+                      currentTimeMillis: Long) {
     withContext(Dispatchers.IO) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val filename = appendTimeToFilename(title)
@@ -265,8 +265,8 @@ suspend fun saveMedia(context: Context,
                 put(MediaStore.Images.Media.TITLE, filename)
                 put(MediaStore.Images.Media.DISPLAY_NAME, filename)
                 put(MediaStore.Images.Media.MIME_TYPE, mediaMimeType)
-                put(MediaStore.Images.Media.DATE_ADDED, now)
-                put(MediaStore.Images.Media.DATE_TAKEN, now)
+                put(MediaStore.Images.Media.DATE_ADDED, currentTimeMillis)
+                put(MediaStore.Images.Media.DATE_TAKEN, currentTimeMillis)
             }
             val externalContentUri = when {
                 mediaMimeType?.isMimeTypeImage() == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -297,7 +297,7 @@ suspend fun saveMedia(context: Context,
                 }
             }
         } else {
-            saveMediaLegacy(context, mediaMimeType, title, file, now)
+            saveMediaLegacy(context, mediaMimeType, title, file, currentTimeMillis)
         }
     }
 }
@@ -307,7 +307,7 @@ private fun saveMediaLegacy(context: Context,
                             mediaMimeType: String?,
                             title: String,
                             file: File,
-                            now: Long) {
+                            currentTimeMillis: Long) {
     val state = Environment.getExternalStorageState()
     if (Environment.MEDIA_MOUNTED != state) {
         context.toast(context.getString(R.string.error_saving_media_file))
@@ -328,7 +328,7 @@ private fun saveMediaLegacy(context: Context,
         } else {
             title
         }
-        val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename, now)
+        val savedFile = saveFileIntoLegacy(file, downloadDir, outputFilename, currentTimeMillis)
         if (savedFile != null) {
             val downloadManager = context.getSystemService<DownloadManager>()
             downloadManager?.addCompletedDownload(
@@ -418,10 +418,11 @@ fun selectTxtFileToWrite(
  * @param sourceFile     the file source path
  * @param dstDirPath     the dst path
  * @param outputFilename optional the output filename
+ * @param currentTimeMillis the current time in milliseconds
  * @return               the created file
  */
 @Suppress("DEPRECATION")
-fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?, now: Long): File? {
+fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: String?, currentTimeMillis: Long): File? {
     // defines another name for the external media
     var dstFileName: String
 
@@ -433,7 +434,7 @@ fun saveFileIntoLegacy(sourceFile: File, dstDirPath: File, outputFilename: Strin
         if (dotPos > 0) {
             fileExt = sourceFile.name.substring(dotPos)
         }
-        dstFileName = "vector_$now$fileExt"
+        dstFileName = "vector_$currentTimeMillis$fileExt"
     } else {
         dstFileName = outputFilename
     }

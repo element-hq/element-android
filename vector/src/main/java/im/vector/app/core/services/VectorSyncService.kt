@@ -106,7 +106,7 @@ class VectorSyncService : SyncService() {
                 syncDelaySeconds = syncDelaySeconds,
                 isPeriodic = true,
                 isNetworkBack = false,
-                now = clock.epochMillis()
+                currentTimeMillis = clock.epochMillis()
         )
     }
 
@@ -162,7 +162,7 @@ class VectorSyncService : SyncService() {
                     syncDelaySeconds = syncDelaySeconds,
                     isPeriodic = isPeriodic,
                     isNetworkBack = true,
-                    now = clock.epochMillis()
+                    currentTimeMillis = clock.epochMillis()
             )
             // Indicate whether the work finished successfully with the Result
             return Result.success()
@@ -195,7 +195,7 @@ private fun Context.rescheduleSyncService(sessionId: String,
                                           syncDelaySeconds: Int,
                                           isPeriodic: Boolean,
                                           isNetworkBack: Boolean,
-                                          now: Long) {
+                                          currentTimeMillis: Long) {
     Timber.d("## Sync: rescheduleSyncService")
     val intent = if (isPeriodic) {
         VectorSyncService.newPeriodicIntent(
@@ -221,7 +221,7 @@ private fun Context.rescheduleSyncService(sessionId: String,
         } else {
             PendingIntent.getService(this, 0, intent, PendingIntentCompat.FLAG_IMMUTABLE)
         }
-        val firstMillis = now + syncDelaySeconds * 1000L
+        val firstMillis = currentTimeMillis + syncDelaySeconds * 1000L
         val alarmMgr = getSystemService<AlarmManager>()!!
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)

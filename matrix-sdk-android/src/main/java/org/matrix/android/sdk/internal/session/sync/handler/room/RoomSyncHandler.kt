@@ -445,7 +445,7 @@ internal class RoomSyncHandler @Inject constructor(
                                 roomMemberContentsByUser = roomMemberContentsByUser,
                                 userId = userId,
                                 roomEntity = roomEntity,
-                                now = clock.epochMillis(),
+                                currentTimeMillis = clock.epochMillis(),
                         )
                     }
                 } ?: run {

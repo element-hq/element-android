@@ -34,11 +34,11 @@ internal fun ContentScanResultEntity.Companion.get(realm: Realm, attachmentUrl: 
 internal fun ContentScanResultEntity.Companion.getOrCreate(realm: Realm,
                                                            attachmentUrl: String,
                                                            contentScannerUrl: String?,
-                                                           now: Long): ContentScanResultEntity {
+                                                           currentTimeMillis: Long): ContentScanResultEntity {
     return ContentScanResultEntity.get(realm, attachmentUrl, contentScannerUrl)
             ?: realm.createObject<ContentScanResultEntity>().also {
                 it.mediaUrl = attachmentUrl
-                it.scanDateTimestamp = now
+                it.scanDateTimestamp = currentTimeMillis
                 it.scannerUrl = contentScannerUrl
             }
 }

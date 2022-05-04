@@ -43,7 +43,7 @@ class DownloadMediaUseCase @Inject constructor(
                     title = input.name,
                     mediaMimeType = getMimeTypeFromUri(appContext, input.toUri()),
                     notificationUtils = notificationUtils,
-                    now = clock.epochMillis()
+                    currentTimeMillis = clock.epochMillis()
             )
         }
     }

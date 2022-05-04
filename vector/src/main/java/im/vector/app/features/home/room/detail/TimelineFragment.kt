@@ -2187,7 +2187,7 @@ class TimelineFragment @Inject constructor(
                         title = action.messageContent.body,
                         mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), it.toUri()),
                         notificationUtils = notificationUtils,
-                        now = clock.epochMillis()
+                        currentTimeMillis = clock.epochMillis()
                 )
             }
                     .onFailure {

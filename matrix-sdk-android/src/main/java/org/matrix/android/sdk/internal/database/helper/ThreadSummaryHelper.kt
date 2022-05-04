@@ -138,7 +138,7 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
         roomEntity: RoomEntity,
         userId: String,
         cryptoService: CryptoService? = null,
-        now: Long,
+        currentTimeMillis: Long,
 ) {
     when (threadSummaryType) {
         ThreadSummaryUpdateType.REPLACE -> {
@@ -154,14 +154,14 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
                 Timber.i("###THREADS ThreadSummaryHelper REPLACE eventId:${it.rootThreadEventId} ")
             }
 
-            val rootThreadEventEntity = createEventEntity(realm, roomId, rootThreadEvent, now).also {
+            val rootThreadEventEntity = createEventEntity(realm, roomId, rootThreadEvent, currentTimeMillis).also {
                 try {
                     decryptIfNeeded(cryptoService, it, roomId)
                 } catch (e: InterruptedException) {
                     Timber.i("Decryption got interrupted")
                 }
             }
-            val latestThreadEventEntity = createLatestEventEntity(realm, roomId, rootThreadEvent, roomMemberContentsByUser, now)?.also {
+            val latestThreadEventEntity = createLatestEventEntity(realm, roomId, rootThreadEvent, roomMemberContentsByUser, currentTimeMillis)?.also {
                 try {
                     decryptIfNeeded(cryptoService, it, roomId)
                 } catch (e: InterruptedException) {
@@ -269,8 +269,8 @@ private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roo
 /**
  * Create an EventEntity for the root thread event or get an existing one
  */
-private fun createEventEntity(realm: Realm, roomId: String, event: Event, now: Long): EventEntity {
-    val ageLocalTs = event.unsignedData?.age?.let { now - it }
+private fun createEventEntity(realm: Realm, roomId: String, event: Event, currentTimeMillis: Long): EventEntity {
+    val ageLocalTs = event.unsignedData?.age?.let { currentTimeMillis - it }
     return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
 }
 
@@ -283,13 +283,13 @@ private fun createLatestEventEntity(
         roomId: String,
         rootThreadEvent: Event,
         roomMemberContentsByUser: HashMap<String, RoomMemberContent?>,
-        now: Long,
+        currentTimeMillis: Long,
 ): EventEntity? {
     return getLatestEvent(rootThreadEvent)?.let {
         it.senderId?.let { senderId ->
             roomMemberContentsByUser.addSenderState(realm, roomId, senderId)
         }
-        createEventEntity(realm, roomId, it, now)
+        createEventEntity(realm, roomId, it, currentTimeMillis)
     }
 }
 

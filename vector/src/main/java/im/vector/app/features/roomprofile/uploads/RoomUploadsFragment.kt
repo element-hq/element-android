@@ -91,7 +91,7 @@ class RoomUploadsFragment @Inject constructor(
                                     title = it.title,
                                     mediaMimeType = getMimeTypeFromUri(requireContext(), it.file.toUri()),
                                     notificationUtils = notificationUtils,
-                                    now = clock.epochMillis()
+                                    currentTimeMillis = clock.epochMillis()
                             )
                         }.onFailure { failure ->
                             if (!isAdded) return@onFailure
