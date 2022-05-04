@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -42,7 +41,6 @@ import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
@@ -51,6 +49,7 @@ import org.matrix.android.sdk.internal.session.room.relation.RelationsResponse
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -85,10 +84,9 @@ internal interface FetchThreadTimelineTask : Task<FetchThreadTimelineTask.Params
 internal class DefaultFetchThreadTimelineTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         @SessionDatabase private val monarchy: Monarchy,
-        @UserId private val userId: String,
-        private val cryptoService: DefaultCryptoService
+        private val cryptoService: DefaultCryptoService,
+        private val clock: Clock,
 ) : FetchThreadTimelineTask {
 
     enum class Result {
@@ -156,7 +154,8 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                             eventEntity = eventEntity,
                             direction = PaginationDirection.FORWARDS,
                             ownedByThreadChunk = true,
-                            roomMemberContentsByUser = roomMemberContentsByUser)
+                            roomMemberContentsByUser = roomMemberContentsByUser
+                    )
                 }
             }
 
@@ -178,7 +177,8 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                             eventEntity = eventEntity,
                             direction = PaginationDirection.FORWARDS,
                             ownedByThreadChunk = true,
-                            roomMemberContentsByUser = roomMemberContentsByUser)
+                            roomMemberContentsByUser = roomMemberContentsByUser
+                    )
                 }
             }
         }
@@ -207,7 +207,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
      * Create an EventEntity to be added in the TimelineEventEntity
      */
     private fun createEventEntity(roomId: String, event: Event, realm: Realm): EventEntity {
-        val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
+        val ageLocalTs = event.unsignedData?.age?.let { clock.epochMillis() - it }
         return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
     }
 

@@ -1350,7 +1350,7 @@
     <string name="settings_messages_by_bot">Skilaboð frá vélmennum</string>
     <string name="settings_room_invitations">Boð á spjallrás</string>
     <string name="settings_messages_containing_keywords">Stikkorð</string>
-    <string name="settings_mentions_at_room">\@spjallrás</string>
+    <string name="settings_mentions_at_room">\@room</string>
     <string name="settings_group_messages">Hópskilaboð</string>
     <string name="settings_messages_direct_messages">Bein skilaboð</string>
     <string name="settings_messages_containing_username">Notandanafnið mitt</string>
@@ -1446,7 +1446,7 @@
     <string name="room_settings_room_notifications_notify_me">Láta mig vita fyrir</string>
     <string name="settings_discovery_category">Uppgötvun</string>
     <string name="settings_room_upgrades">Uppfærslur spjallrásar</string>
-    <string name="settings_messages_at_room">Skilaboð sem innihalda @spjallrás</string>
+    <string name="settings_messages_at_room">Skilaboð sem innihalda @room</string>
     <string name="settings_when_rooms_are_upgraded">Þegar spjallrásir eru uppfærðar</string>
     <string name="space_settings_permissions_title">Heimildir svæðis</string>
     <string name="room_participants_ban_reason">Ástæða fyrir banni</string>

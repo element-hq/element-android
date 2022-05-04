@@ -1523,7 +1523,9 @@
     <string name="room_participants_remove_title">Wykop użytkownika</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Czy na pewno anulować zaproszenie dla tego użytkownika\?</string>
     <string name="room_participants_action_cancel_invite_title">Anuluj zaproszenie</string>
-    <string name="room_participants_action_unignore_prompt_msg">Zaprzestanie ignorowania użytkownika spowoduje ponowne wyświetlanie wszystkich jego wiadomości.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Zaprzestanie ignorowania użytkownika spowoduje ponowne wyświetlanie wszystkich jego wiadomości.
+\n
+\nAplikacja uruchomi się ponownie aby zsynchronizować wiadomości, może to potrwać kilka chwil.</string>
     <string name="room_participants_action_unignore_title">Przestań ignorować użytkownika</string>
     <string name="room_participants_action_ignore_prompt_msg">Zignorowanie tego użytkownika usunie wszystkie jego wiadomości z pokojów, które współdzielicie.
 \n
@@ -2550,4 +2552,17 @@
     <string name="sent_location">Udostępnili swoją lokalizację</string>
     <string name="room_message_notify_everyone">Powiadom cały pokój</string>
     <string name="room_message_autocomplete_users">Użytkownicy</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_title">Opinia o wątkach</string>
+    <string name="give_feedback_threads">Przekaż opinię</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Jeśli włączone, inni zobaczą twój status jako offline, nawet gdy używasz aplikacji.</string>
+    <string name="settings_presence_user_always_appears_offline">Tryb offline</string>
+    <string name="settings_presence">Statusy</string>
+    <string name="threads_labs_enable_notice_message">Twój serwer nie obsługuje obecnie wątków, co może powodować niestabilność tej funkcji. Niektóre wiadomości w wątkach mogą nie być poprawnie widoczne. %sCzy chcesz je włączyć pomimo tego\?</string>
+    <string name="threads_labs_enable_notice_title">Wątki (Beta)</string>
+    <string name="threads_beta_enable_notice_message">Dzięki wątkom Twoje rozmowy są zorganizowane i łatwe do śledzenia. %sWłączenie wątków uruchomi ponownie aplikację. Może to zająć więcej czasu dla niektórych kont.</string>
+    <string name="threads_beta_enable_notice_title">Wątki (Beta)</string>
+    <string name="action_learn_more">Dowiedz się więcej</string>
+    <string name="action_try_it_out">Wypróbuj</string>
 </resources>

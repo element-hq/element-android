@@ -296,7 +296,7 @@ class TimelineFragment @Inject constructor(
         private const val ircPattern = " (IRC)"
     }
 
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
 
     private val timelineArgs: TimelineArgs by args()
     private val glideRequests by lazy {
@@ -1443,7 +1443,7 @@ class TimelineFragment @Inject constructor(
                     }
                 }
             }
-            val swipeCallback = RoomMessageTouchHelperCallback(requireContext(), R.drawable.ic_reply, quickReplyHandler)
+            val swipeCallback = RoomMessageTouchHelperCallback(requireContext(), R.drawable.ic_reply, quickReplyHandler, clock)
             val touchHelper = ItemTouchHelper(swipeCallback)
             touchHelper.attachToRecyclerView(views.timelineRecyclerView)
         }
@@ -2186,7 +2186,8 @@ class TimelineFragment @Inject constructor(
                         file = it,
                         title = action.messageContent.body,
                         mediaMimeType = action.messageContent.mimeType ?: getMimeTypeFromUri(requireContext(), it.toUri()),
-                        notificationUtils = notificationUtils
+                        notificationUtils = notificationUtils,
+                        currentTimeMillis = clock.epochMillis()
                 )
             }
                     .onFailure {

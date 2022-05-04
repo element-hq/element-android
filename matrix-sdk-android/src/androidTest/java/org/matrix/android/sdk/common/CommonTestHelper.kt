@@ -57,7 +57,8 @@ import java.util.concurrent.TimeUnit
 class CommonTestHelper(context: Context) {
 
     internal val matrix: TestMatrix
-    val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private var accountNumber = 0
 
     fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
 
@@ -167,7 +168,8 @@ class CommonTestHelper(context: Context) {
                         if (rootThreadEventId != null) {
                             room.relationService().replyInThread(
                                     rootThreadEventId = rootThreadEventId,
-                                    replyInThreadText = formattedMessage)
+                                    replyInThreadText = formattedMessage
+                            )
                         } else {
                             room.sendService().sendTextMessage(formattedMessage)
                         }
@@ -237,7 +239,7 @@ class CommonTestHelper(context: Context) {
                               password: String,
                               testParams: SessionTestParams): Session {
         val session = createAccountAndSync(
-                userNamePrefix + "_" + System.currentTimeMillis() + UUID.randomUUID(),
+                userNamePrefix + "_" + accountNumber++ + "_" + UUID.randomUUID(),
                 password,
                 testParams
         )

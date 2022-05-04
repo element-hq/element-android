@@ -1519,7 +1519,9 @@
 \n
 \nPuoi annullare questa azione in qualsiasi momento nelle impostazioni generali.</string>
     <string name="room_participants_action_unignore_title">Non ignorare più</string>
-    <string name="room_participants_action_unignore_prompt_msg">Se non ignori più l\'utente vedrai di nuovo tutti i suoi messaggi.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Se non ignori più l\'utente vedrai di nuovo tutti i suoi messaggi.
+\n
+\nNota che quest\'azione riavvierà l\'app e potrebbe richiedere del tempo.</string>
     <string name="room_participants_action_cancel_invite_title">Annulla invito</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Sei sicuro di voler annullare l\'invito per questo utente\?</string>
     <string name="room_participants_remove_title">Butta fuori l\'utente</string>
@@ -2448,4 +2450,32 @@
     <string name="ftue_account_created_congratulations_title">Congratulazioni!</string>
     <string name="ftue_account_created_personalize">Personalizza profilo</string>
     <string name="action_disable">Disattiva</string>
+    <string name="location_share_live_started">Caricamento posizione in tempo reale…</string>
+    <string name="location_share_live_select_duration_option_3">8 ore</string>
+    <string name="location_share_live_select_duration_option_2">1 ora</string>
+    <string name="location_share_live_select_duration_option_1">15 minuti</string>
+    <string name="location_share_live_select_duration_title">Condividi la tua posizione in tempo reale per</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Impossibile riprodurre %1$s</string>
+    <string name="a11y_pause_audio_message">Metti in pausa %1$s</string>
+    <string name="a11y_play_audio_message">Riproduci %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minuti %2$d secondi</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Ha condiviso la sua posizione</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} è ottimo anche per i luoghi di lavoro. È considerato affidabile dalle più sicure organizzazioni del mondo.</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_info">Le conversazioni sono ancora in sviluppo e ci saranno nuove funzionalità in arrivo, come le notifiche migliorate. Vorremmo sapere la tua opinione!</string>
+    <string name="send_feedback_threads_title">Feedback della beta conversazioni</string>
+    <string name="give_feedback_threads">Invia un feedback</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Se attiva, apparirai sempre offline agli altri utenti, anche quando usi l\'applicazione.</string>
+    <string name="settings_presence_user_always_appears_offline">Modalità offline</string>
+    <string name="settings_presence">Presenza</string>
+    <string name="threads_labs_enable_notice_message">Il tuo homeserver attualmente non supporta i messaggi in conversazioni, perciò questa funzione sarà inaffidabile. Alcuni messaggi in conversazioni potrebbero non essere disponibili. %sVuoi attivare comunque le conversazioni\?</string>
+    <string name="threads_labs_enable_notice_title">Beta conversazioni</string>
+    <string name="threads_beta_enable_notice_message">Le conversazioni ti aiutano a tenere le tue discussioni in tema e rintracciabili. %sL\'attivazione ricaricherà l\'app. Potrebbe richiedere più tempo per alcuni account.</string>
+    <string name="threads_beta_enable_notice_title">Beta conversazioni</string>
+    <string name="action_learn_more">Maggiori informazioni</string>
+    <string name="action_try_it_out">Provalo</string>
 </resources>

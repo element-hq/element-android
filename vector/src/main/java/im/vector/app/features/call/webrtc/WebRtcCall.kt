@@ -670,15 +670,11 @@ class WebRtcCall(
                 isRemoteOnHold = true
                 isLocalOnHold = true
                 direction = RtpTransceiver.RtpTransceiverDirection.SEND_ONLY
-                timer.pause()
             } else {
                 isRemoteOnHold = false
                 isLocalOnHold = wasLocalOnHold
                 onCallBecomeActive(this@WebRtcCall)
                 direction = RtpTransceiver.RtpTransceiverDirection.SEND_RECV
-                if (!isLocalOnHold) {
-                    timer.resume()
-                }
             }
             for (transceiver in peerConnection?.transceivers ?: emptyList()) {
                 transceiver.direction = direction
@@ -941,11 +937,6 @@ class WebRtcCall(
             wasLocalOnHold = nowOnHold
             if (prevOnHold != nowOnHold) {
                 isLocalOnHold = nowOnHold
-                if (nowOnHold) {
-                    timer.pause()
-                } else {
-                    timer.resume()
-                }
                 listeners.forEach {
                     tryOrNull { it.onHoldUnhold() }
                 }

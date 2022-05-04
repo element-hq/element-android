@@ -64,8 +64,9 @@ data class IncomingRoomKeyRequest(
          * Factory
          *
          * @param event the event
+         * @param currentTimeMillis the current time in milliseconds
          */
-        fun fromEvent(event: Event): IncomingRoomKeyRequest? {
+        fun fromEvent(event: Event, currentTimeMillis: Long): IncomingRoomKeyRequest? {
             return event.getClearContent()
                     .toModel<RoomKeyShareRequest>()
                     ?.let {
@@ -74,7 +75,7 @@ data class IncomingRoomKeyRequest(
                                 deviceId = it.requestingDeviceId,
                                 requestId = it.requestId,
                                 requestBody = it.body ?: RoomKeyRequestBody(),
-                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
+                                localCreationTimestamp = event.ageLocalTs ?: currentTimeMillis
                         )
                     }
         }

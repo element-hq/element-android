@@ -21,6 +21,7 @@ import android.os.Binder
 import android.os.IBinder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.services.VectorService
+import im.vector.app.core.time.Clock
 import im.vector.app.features.notifications.NotificationUtils
 import javax.inject.Inject
 
@@ -28,6 +29,7 @@ import javax.inject.Inject
 class ScreenCaptureService : VectorService() {
 
     @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var clock: Clock
     private val binder = LocalBinder()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -37,7 +39,7 @@ class ScreenCaptureService : VectorService() {
     }
 
     private fun showStickyNotification() {
-        val notificationId = System.currentTimeMillis().toInt()
+        val notificationId = clock.epochMillis().toInt()
         val notification = notificationUtils.buildScreenSharingNotification()
         startForeground(notificationId, notification)
     }

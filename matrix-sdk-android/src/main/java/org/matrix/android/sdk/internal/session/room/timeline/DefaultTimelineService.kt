@@ -34,6 +34,7 @@ import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTa
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
+import org.matrix.android.sdk.internal.util.time.Clock
 
 internal class DefaultTimelineService @AssistedInject constructor(
         @Assisted private val roomId: String,
@@ -50,8 +51,9 @@ internal class DefaultTimelineService @AssistedInject constructor(
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val readReceiptHandler: ReadReceiptHandler,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val timelineEventDataSource: TimelineEventDataSource
-) : TimelineService {
+        private val timelineEventDataSource: TimelineEventDataSource,
+        private val clock: Clock,
+        ) : TimelineService {
 
     @AssistedFactory
     interface Factory {
@@ -75,7 +77,8 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 readReceiptHandler = readReceiptHandler,
                 getEventTask = contextOfEventTask,
                 threadsAwarenessHandler = threadsAwarenessHandler,
-                lightweightSettingsStorage = lightweightSettingsStorage
+                lightweightSettingsStorage = lightweightSettingsStorage,
+                clock = clock
         )
     }
 
