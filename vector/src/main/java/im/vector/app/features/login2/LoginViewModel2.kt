@@ -92,7 +92,7 @@ class LoginViewModel2 @AssistedInject constructor(
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
 
     val currentThreePid: String?
-        get() = registrationWizard?.currentThreePid()
+        get() = registrationWizard?.getCurrentThreePid()
 
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean

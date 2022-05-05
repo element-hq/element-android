@@ -114,7 +114,7 @@ class OnboardingViewModel @AssistedInject constructor(
         get() = authenticationService.getRegistrationWizard()
 
     val currentThreePid: String?
-        get() = registrationWizard.currentThreePid()
+        get() = registrationWizard.getCurrentThreePid()
 
     // True when login and password has been sent with success to the homeserver
     val isRegistrationStarted: Boolean

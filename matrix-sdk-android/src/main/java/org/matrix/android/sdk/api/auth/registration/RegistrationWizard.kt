@@ -112,7 +112,7 @@ interface RegistrationWizard {
      * Returns the current ThreePid, waiting for validation. The SDK will store it in database, so it can be
      * restored even if the app has been killed during the registration
      */
-    fun currentThreePid(): String?
+    fun getCurrentThreePid(): String?
 
     /**
      * Return true when login and password have been sent with success to the homeserver, i.e. [createAccount] has been

@@ -49,7 +49,7 @@ internal class DefaultRegistrationWizard(
     private val validateCodeTask: ValidateCodeTask = DefaultValidateCodeTask(authAPI)
     private val registerCustomTask: RegisterCustomTask = DefaultRegisterCustomTask(authAPI)
 
-    override fun currentThreePid(): String? {
+    override fun getCurrentThreePid(): String? {
         return when (val threePid = pendingSessionData.currentThreePidData?.threePid) {
             is RegisterThreePid.Email  -> threePid.email
             is RegisterThreePid.Msisdn -> {
