@@ -21,7 +21,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
-import org.matrix.android.sdk.api.session.pushers.PushersService
+import org.matrix.android.sdk.api.session.pushers.HttpPusher
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.abs
@@ -55,7 +55,7 @@ class PushersManager @Inject constructor(
         currentSession.pushersService().addHttpPusher(createHttpPusher(pushKey))
     }
 
-    private fun createHttpPusher(pushKey: String) = PushersService.HttpPusher(
+    private fun createHttpPusher(pushKey: String) = HttpPusher(
             pushKey,
             stringProvider.getString(R.string.pusher_app_id),
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
