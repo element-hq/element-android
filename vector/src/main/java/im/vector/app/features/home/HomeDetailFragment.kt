@@ -144,15 +144,11 @@ class HomeDetailFragment @Inject constructor(
         }
 
         views.allChatsLayout.setOnClickListener {
-            if (views.spaceModalFragment.isVisible) {
-                views.spaceModalFragment.isVisible = false
-                views.dimView.isVisible = false
-                views.toolbarChevron.rotation = 0F
-            } else {
-                views.spaceModalFragment.isVisible = true
-                views.dimView.isVisible = true
-                views.toolbarChevron.rotation = 90F
-            }
+            toggleModalVisibility()
+        }
+
+        views.dimView.setOnClickListener {
+            toggleModalVisibility()
         }
 
         viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
@@ -200,6 +196,18 @@ class HomeDetailFragment @Inject constructor(
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 }
+    }
+
+    private fun toggleModalVisibility() {
+        if (views.spaceModalFragment.isVisible) {
+            views.spaceModalFragment.isVisible = false
+            views.dimView.isVisible = false
+            views.toolbarChevron.rotation = 0F
+        } else {
+            views.spaceModalFragment.isVisible = true
+            views.dimView.isVisible = true
+            views.toolbarChevron.rotation = 90F
+        }
     }
 
     private fun handleCallStarted() {
