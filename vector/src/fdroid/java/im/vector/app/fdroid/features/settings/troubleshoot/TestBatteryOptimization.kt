@@ -31,7 +31,7 @@ class TestBatteryOptimization @Inject constructor(
 ) : TroubleshootTest(R.string.settings_troubleshoot_test_battery_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
-        if (isIgnoringBatteryOptimizations(context)) {
+        if (context.isIgnoringBatteryOptimizations()) {
             description = stringProvider.getString(R.string.settings_troubleshoot_test_battery_success)
             status = TestStatus.SUCCESS
             quickFix = null

@@ -218,7 +218,7 @@ class PopupAlertManager @Inject constructor(
         if (!alert.isLight) {
             clearLightStatusBar()
         }
-        val noAnimation = !animate || isAnimationDisabled(activity)
+        val noAnimation = !animate || activity.isAnimationDisabled()
 
         alert.weakCurrentActivity = WeakReference(activity)
         val alerter = Alerter.create(activity, alert.layoutRes)

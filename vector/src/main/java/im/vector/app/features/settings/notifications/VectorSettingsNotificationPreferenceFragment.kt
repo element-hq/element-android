@@ -204,7 +204,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             // Important, Battery optim white listing is needed in this mode;
             // Even if using foreground service with foreground notif, it stops to work
             // in doze mode for certain devices :/
-            if (!isIgnoringBatteryOptimizations(requireContext())) {
+            if (!requireContext().isIgnoringBatteryOptimizations()) {
                 requestDisablingBatteryOptimization(requireActivity(), batteryStartForActivityResult)
             }
         }
