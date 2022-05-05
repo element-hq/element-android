@@ -153,7 +153,7 @@
     <string name="send_bug_report_app_crashed">Chương trình đã gặp sự cố lần trước. Bạn có muốn mở trang tường thuật sự cố không\?</string>
     <string name="send_bug_report_progress">Tiến độ (%s%%)</string>
     <string name="send_bug_report_include_crash_logs">Gửi nhật ký dừng đột ngột</string>
-    <string name="send_bug_report_include_logs">Gửi logs</string>
+    <string name="send_bug_report_include_logs">Gửi log</string>
     <string name="auth_submit">Gửi</string>
     <string name="settings_discovery_manage">Quản lý cài đặt khám phá của bạn.</string>
     <string name="settings_discovery_category">Khám phá</string>
