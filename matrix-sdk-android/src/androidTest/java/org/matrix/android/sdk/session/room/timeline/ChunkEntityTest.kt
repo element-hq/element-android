@@ -68,7 +68,8 @@ internal class ChunkEntityTest : InstrumentedTest {
                     roomId = ROOM_ID,
                     eventEntity = fakeEvent,
                     direction = PaginationDirection.FORWARDS,
-                    roomMemberContentsByUser = emptyMap())
+                    roomMemberContentsByUser = emptyMap()
+            )
             chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
@@ -84,12 +85,14 @@ internal class ChunkEntityTest : InstrumentedTest {
                     roomId = ROOM_ID,
                     eventEntity = fakeEvent,
                     direction = PaginationDirection.FORWARDS,
-                    roomMemberContentsByUser = emptyMap())
+                    roomMemberContentsByUser = emptyMap()
+            )
             chunk.addTimelineEvent(
                     roomId = ROOM_ID,
                     eventEntity = fakeEvent,
                     direction = PaginationDirection.FORWARDS,
-                    roomMemberContentsByUser = emptyMap())
+                    roomMemberContentsByUser = emptyMap()
+            )
             chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
@@ -162,7 +165,8 @@ internal class ChunkEntityTest : InstrumentedTest {
                     roomId = roomId,
                     eventEntity = fakeEvent,
                     direction = direction,
-                    roomMemberContentsByUser = emptyMap())
+                    roomMemberContentsByUser = emptyMap()
+            )
         }
     }
 

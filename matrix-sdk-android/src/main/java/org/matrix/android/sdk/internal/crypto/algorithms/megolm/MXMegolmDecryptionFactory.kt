@@ -56,6 +56,7 @@ internal class MXMegolmDecryptionFactory @Inject constructor(
                 sendToDeviceTask,
                 coroutineDispatchers,
                 cryptoCoroutineScope,
-                eventsManager)
+                eventsManager
+        )
     }
 }

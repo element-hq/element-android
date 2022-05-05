@@ -113,13 +113,17 @@ class UnrecognizedCertificateDialog @Inject constructor(
         views.sslFingerprintTitle.text = stringProvider.getString(R.string.ssl_fingerprint_hash, unrecognizedFingerprint.hashType.toString())
         views.sslFingerprint.text = unrecognizedFingerprint.displayableHexRepr
         if (userId != null) {
-            views.sslUserId.text = stringProvider.getString(R.string.generic_label_and_value,
+            views.sslUserId.text = stringProvider.getString(
+                    R.string.generic_label_and_value,
                     stringProvider.getString(R.string.username),
-                    userId)
+                    userId
+            )
         } else {
-            views.sslUserId.text = stringProvider.getString(R.string.generic_label_and_value,
+            views.sslUserId.text = stringProvider.getString(
+                    R.string.generic_label_and_value,
                     stringProvider.getString(R.string.hs_url),
-                    homeServerUrl)
+                    homeServerUrl
+            )
         }
         if (existing) {
             if (homeServerConnectionConfigHasFingerprints) {

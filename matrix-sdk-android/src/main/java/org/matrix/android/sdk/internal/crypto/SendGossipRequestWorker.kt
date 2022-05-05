@@ -73,7 +73,7 @@ internal class SendGossipRequestWorker(context: Context, params: WorkerParameter
         val eventType: String
         val requestId: String
         when {
-            params.keyShareRequest != null    -> {
+            params.keyShareRequest != null -> {
                 eventType = EventType.ROOM_KEY_REQUEST
                 requestId = params.keyShareRequest.requestId
                 val toDeviceContent = RoomKeyShareRequest(
@@ -120,7 +120,7 @@ internal class SendGossipRequestWorker(context: Context, params: WorkerParameter
                     }
                 }
             }
-            else                              -> {
+            else -> {
                 return buildErrorResult(params, "Unknown empty gossiping request").also {
                     Timber.e("Unknown empty gossiping request: $params")
                 }

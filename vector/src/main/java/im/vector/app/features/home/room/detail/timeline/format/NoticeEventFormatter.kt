@@ -276,11 +276,15 @@ class NoticeEventFormatter @Inject constructor(
 
         val historyVisibilitySuffix = roomHistoryVisibilityFormatter.getNoticeSuffix(historyVisibility)
         return if (event.isSentByCurrentUser()) {
-            sp.getString(if (isDm) R.string.notice_made_future_direct_room_visibility_by_you else R.string.notice_made_future_room_visibility_by_you,
-                    historyVisibilitySuffix)
+            sp.getString(
+                    if (isDm) R.string.notice_made_future_direct_room_visibility_by_you else R.string.notice_made_future_room_visibility_by_you,
+                    historyVisibilitySuffix
+            )
         } else {
-            sp.getString(if (isDm) R.string.notice_made_future_direct_room_visibility else R.string.notice_made_future_room_visibility,
-                    senderName, historyVisibilitySuffix)
+            sp.getString(
+                    if (isDm) R.string.notice_made_future_direct_room_visibility else R.string.notice_made_future_room_visibility,
+                    senderName, historyVisibilitySuffix
+            )
         }
     }
 
@@ -298,20 +302,27 @@ class NoticeEventFormatter @Inject constructor(
                             } else {
                                 R.string.notice_room_third_party_revoked_invite_by_you
                             },
-                            prevContent.displayName)
+                            prevContent.displayName
+                    )
                 } else {
-                    sp.getString(if (isDm) R.string.notice_direct_room_third_party_revoked_invite else R.string.notice_room_third_party_revoked_invite,
-                            senderName, prevContent.displayName)
+                    sp.getString(
+                            if (isDm) R.string.notice_direct_room_third_party_revoked_invite else R.string.notice_room_third_party_revoked_invite,
+                            senderName, prevContent.displayName
+                    )
                 }
             }
             content != null     -> {
                 // Invitation case
                 if (event.isSentByCurrentUser()) {
-                    sp.getString(if (isDm) R.string.notice_direct_room_third_party_invite_by_you else R.string.notice_room_third_party_invite_by_you,
-                            content.displayName)
+                    sp.getString(
+                            if (isDm) R.string.notice_direct_room_third_party_invite_by_you else R.string.notice_room_third_party_invite_by_you,
+                            content.displayName
+                    )
                 } else {
-                    sp.getString(if (isDm) R.string.notice_direct_room_third_party_invite else R.string.notice_room_third_party_invite,
-                            senderName, content.displayName)
+                    sp.getString(
+                            if (isDm) R.string.notice_direct_room_third_party_invite else R.string.notice_room_third_party_invite,
+                            senderName, content.displayName
+                    )
                 }
             }
             else                -> null
@@ -416,19 +427,21 @@ class NoticeEventFormatter @Inject constructor(
 
         return buildString {
             // Title
-            append(if (prevEventContent == null) {
-                if (event.isSentByCurrentUser()) {
-                    sp.getString(R.string.notice_room_server_acl_set_title_by_you)
-                } else {
-                    sp.getString(R.string.notice_room_server_acl_set_title, senderName)
-                }
-            } else {
-                if (event.isSentByCurrentUser()) {
-                    sp.getString(R.string.notice_room_server_acl_updated_title_by_you)
-                } else {
-                    sp.getString(R.string.notice_room_server_acl_updated_title, senderName)
-                }
-            })
+            append(
+                    if (prevEventContent == null) {
+                        if (event.isSentByCurrentUser()) {
+                            sp.getString(R.string.notice_room_server_acl_set_title_by_you)
+                        } else {
+                            sp.getString(R.string.notice_room_server_acl_set_title, senderName)
+                        }
+                    } else {
+                        if (event.isSentByCurrentUser()) {
+                            sp.getString(R.string.notice_room_server_acl_updated_title_by_you)
+                        } else {
+                            sp.getString(R.string.notice_room_server_acl_updated_title, senderName)
+                        }
+                    }
+            )
             if (eventContent.allowList.isEmpty()) {
                 // Special case for stuck room
                 appendNl(sp.getString(R.string.notice_room_server_acl_allow_is_empty))
@@ -562,8 +575,10 @@ class NoticeEventFormatter @Inject constructor(
                             if (isDm) R.string.notice_direct_room_guest_access_can_join_by_you else R.string.notice_room_guest_access_can_join_by_you
                     )
                 } else {
-                    sp.getString(if (isDm) R.string.notice_direct_room_guest_access_can_join else R.string.notice_room_guest_access_can_join,
-                            senderName)
+                    sp.getString(
+                            if (isDm) R.string.notice_direct_room_guest_access_can_join else R.string.notice_room_guest_access_can_join,
+                            senderName
+                    )
                 }
             GuestAccess.Forbidden ->
                 if (event.isSentByCurrentUser()) {
@@ -571,8 +586,10 @@ class NoticeEventFormatter @Inject constructor(
                             if (isDm) R.string.notice_direct_room_guest_access_forbidden_by_you else R.string.notice_room_guest_access_forbidden_by_you
                     )
                 } else {
-                    sp.getString(if (isDm) R.string.notice_direct_room_guest_access_forbidden else R.string.notice_room_guest_access_forbidden,
-                            senderName)
+                    sp.getString(
+                            if (isDm) R.string.notice_direct_room_guest_access_forbidden else R.string.notice_room_guest_access_forbidden,
+                            senderName
+                    )
                 }
             else                  -> null
         }
@@ -705,18 +722,24 @@ class NoticeEventFormatter @Inject constructor(
             Membership.JOIN   ->
                 eventContent.safeReason?.let { reason ->
                     if (event.isSentByCurrentUser()) {
-                        sp.getString(if (isDm) R.string.notice_direct_room_join_with_reason_by_you else R.string.notice_room_join_with_reason_by_you,
-                                reason)
+                        sp.getString(
+                                if (isDm) R.string.notice_direct_room_join_with_reason_by_you else R.string.notice_room_join_with_reason_by_you,
+                                reason
+                        )
                     } else {
-                        sp.getString(if (isDm) R.string.notice_direct_room_join_with_reason else R.string.notice_room_join_with_reason,
-                                senderDisplayName, reason)
+                        sp.getString(
+                                if (isDm) R.string.notice_direct_room_join_with_reason else R.string.notice_room_join_with_reason,
+                                senderDisplayName, reason
+                        )
                     }
                 } ?: run {
                     if (event.isSentByCurrentUser()) {
                         sp.getString(if (isDm) R.string.notice_direct_room_join_by_you else R.string.notice_room_join_by_you)
                     } else {
-                        sp.getString(if (isDm) R.string.notice_direct_room_join else R.string.notice_room_join,
-                                senderDisplayName)
+                        sp.getString(
+                                if (isDm) R.string.notice_direct_room_join else R.string.notice_room_join,
+                                senderDisplayName
+                        )
                     }
                 }
             Membership.LEAVE  ->
@@ -745,15 +768,19 @@ class NoticeEventFormatter @Inject constructor(
                                             reason
                                     )
                                 } else {
-                                    sp.getString(if (isDm) R.string.notice_direct_room_leave_with_reason else R.string.notice_room_leave_with_reason,
-                                            senderDisplayName, reason)
+                                    sp.getString(
+                                            if (isDm) R.string.notice_direct_room_leave_with_reason else R.string.notice_room_leave_with_reason,
+                                            senderDisplayName, reason
+                                    )
                                 }
                             } ?: run {
                                 if (event.isSentByCurrentUser()) {
                                     sp.getString(if (isDm) R.string.notice_direct_room_leave_by_you else R.string.notice_room_leave_by_you)
                                 } else {
-                                    sp.getString(if (isDm) R.string.notice_direct_room_leave else R.string.notice_room_leave,
-                                            senderDisplayName)
+                                    sp.getString(
+                                            if (isDm) R.string.notice_direct_room_leave else R.string.notice_room_leave,
+                                            senderDisplayName
+                                    )
                                 }
                             }
                     }
@@ -824,8 +851,10 @@ class NoticeEventFormatter @Inject constructor(
                 if (event.isSentByCurrentUser()) {
                     sp.getString(if (isDm) R.string.direct_room_join_rules_invite_by_you else R.string.room_join_rules_invite_by_you)
                 } else {
-                    sp.getString(if (isDm) R.string.direct_room_join_rules_invite else R.string.room_join_rules_invite,
-                            senderName)
+                    sp.getString(
+                            if (isDm) R.string.direct_room_join_rules_invite else R.string.room_join_rules_invite,
+                            senderName
+                    )
                 }
             RoomJoinRules.PUBLIC ->
                 if (event.isSentByCurrentUser()) {

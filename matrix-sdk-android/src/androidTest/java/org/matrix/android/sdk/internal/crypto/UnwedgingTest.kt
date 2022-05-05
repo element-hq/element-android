@@ -171,7 +171,10 @@ class UnwedgingTest : InstrumentedTest {
         // Let us wedge the session now. Set crypto state like after the first message
         Timber.i("## CRYPTO | testUnwedging: wedge the session now. Set crypto state like after the first message")
 
-        aliceCryptoStore.storeSession(OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!), bobSession.cryptoService().getMyDevice().identityKey()!!)
+        aliceCryptoStore.storeSession(
+                OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!),
+                bobSession.cryptoService().getMyDevice().identityKey()!!
+        )
         olmDevice.clearOlmSessionCache()
         Thread.sleep(6_000)
 
@@ -218,7 +221,8 @@ class UnwedgingTest : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
 
         // Wait until we received back the key

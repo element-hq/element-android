@@ -26,6 +26,7 @@ internal class MXOlmDecryptionFactory @Inject constructor(private val olmDevice:
     fun create(): MXOlmDecryption {
         return MXOlmDecryption(
                 olmDevice,
-                userId)
+                userId
+        )
     }
 }

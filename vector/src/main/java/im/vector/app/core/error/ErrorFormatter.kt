@@ -155,15 +155,17 @@ class DefaultErrorFormatter @Inject constructor(
     }
 
     private fun identityServerError(identityServiceError: IdentityServiceError): String {
-        return stringProvider.getString(when (identityServiceError) {
-            IdentityServiceError.OutdatedIdentityServer       -> R.string.identity_server_error_outdated_identity_server
-            IdentityServiceError.OutdatedHomeServer           -> R.string.identity_server_error_outdated_home_server
-            IdentityServiceError.NoIdentityServerConfigured   -> R.string.identity_server_error_no_identity_server_configured
-            IdentityServiceError.TermsNotSignedException      -> R.string.identity_server_error_terms_not_signed
-            IdentityServiceError.BulkLookupSha256NotSupported -> R.string.identity_server_error_bulk_sha256_not_supported
-            IdentityServiceError.BindingError                 -> R.string.identity_server_error_binding_error
-            IdentityServiceError.NoCurrentBindingError        -> R.string.identity_server_error_no_current_binding_error
-            IdentityServiceError.UserConsentNotProvided       -> R.string.identity_server_user_consent_not_provided
-        })
+        return stringProvider.getString(
+                when (identityServiceError) {
+                    IdentityServiceError.OutdatedIdentityServer       -> R.string.identity_server_error_outdated_identity_server
+                    IdentityServiceError.OutdatedHomeServer           -> R.string.identity_server_error_outdated_home_server
+                    IdentityServiceError.NoIdentityServerConfigured   -> R.string.identity_server_error_no_identity_server_configured
+                    IdentityServiceError.TermsNotSignedException      -> R.string.identity_server_error_terms_not_signed
+                    IdentityServiceError.BulkLookupSha256NotSupported -> R.string.identity_server_error_bulk_sha256_not_supported
+                    IdentityServiceError.BindingError                 -> R.string.identity_server_error_binding_error
+                    IdentityServiceError.NoCurrentBindingError        -> R.string.identity_server_error_no_current_binding_error
+                    IdentityServiceError.UserConsentNotProvided       -> R.string.identity_server_user_consent_not_provided
+                }
+        )
     }
 }

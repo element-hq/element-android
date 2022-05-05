@@ -156,9 +156,11 @@ private class ContentMediaProgressUpdater(private val progressLayout: ViewGroup,
         progressBar.isIndeterminate = false
         progressBar.progress = percent.toInt()
         progressTextView.isVisible = true
-        progressTextView.text = progressLayout.context.getString(resId,
+        progressTextView.text = progressLayout.context.getString(
+                resId,
                 TextUtils.formatFileSize(progressLayout.context, current, true),
-                TextUtils.formatFileSize(progressLayout.context, total, true))
+                TextUtils.formatFileSize(progressLayout.context, total, true)
+        )
         progressTextView.setTextColor(messageColorProvider.getMessageTextColor(SendState.SENDING))
     }
 

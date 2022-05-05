@@ -135,21 +135,25 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
     override suspend fun finalizeAddingThreePid(threePid: ThreePid,
                                                 userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
         finalizeAddingThreePidTask
-                .execute(FinalizeAddingThreePidTask.Params(
-                        threePid = threePid,
-                        userInteractiveAuthInterceptor = userInteractiveAuthInterceptor,
-                        userWantsToCancel = false
-                ))
+                .execute(
+                        FinalizeAddingThreePidTask.Params(
+                                threePid = threePid,
+                                userInteractiveAuthInterceptor = userInteractiveAuthInterceptor,
+                                userWantsToCancel = false
+                        )
+                )
         refreshThreePids()
     }
 
     override suspend fun cancelAddingThreePid(threePid: ThreePid) {
         finalizeAddingThreePidTask
-                .execute(FinalizeAddingThreePidTask.Params(
-                        threePid = threePid,
-                        userInteractiveAuthInterceptor = null,
-                        userWantsToCancel = true
-                ))
+                .execute(
+                        FinalizeAddingThreePidTask.Params(
+                                threePid = threePid,
+                                userInteractiveAuthInterceptor = null,
+                                userWantsToCancel = true
+                        )
+                )
         refreshThreePids()
     }
 
@@ -161,8 +165,8 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
 
 private fun UserThreePidEntity.asDomain(): ThreePid {
     return when (medium) {
-        ThirdPartyIdentifier.MEDIUM_EMAIL  -> ThreePid.Email(address)
+        ThirdPartyIdentifier.MEDIUM_EMAIL -> ThreePid.Email(address)
         ThirdPartyIdentifier.MEDIUM_MSISDN -> ThreePid.Msisdn(address)
-        else                               -> error("Invalid medium type")
+        else -> error("Invalid medium type")
     }
 }

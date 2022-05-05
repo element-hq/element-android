@@ -155,7 +155,8 @@ class NotificationDrawerManager @Inject constructor(
                         Timber.w(throwable, "refreshNotificationDrawerBg failure")
                     }
                 },
-                canHandle.waitMillis())
+                canHandle.waitMillis()
+        )
     }
 
     @WorkerThread

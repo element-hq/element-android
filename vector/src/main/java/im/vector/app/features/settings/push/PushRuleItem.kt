@@ -72,8 +72,10 @@ abstract class PushRuleItem : EpoxyModelWithHolder<PushRuleItem.Holder>() {
             val description = StringBuffer()
             pushRule.conditions?.forEachIndexed { i, condition ->
                 if (i > 0) description.append("\n")
-                description.append(condition.asExecutableCondition(pushRule)?.technicalDescription()
-                        ?: "UNSUPPORTED")
+                description.append(
+                        condition.asExecutableCondition(pushRule)?.technicalDescription()
+                                ?: "UNSUPPORTED"
+                )
             }
             if (description.isBlank()) {
                 holder.description.text = "No Conditions"

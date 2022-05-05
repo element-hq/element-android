@@ -101,7 +101,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceInviteBottomSheetAction) {
         when (action) {
-            SpaceInviteBottomSheetAction.DoJoin   -> {
+            SpaceInviteBottomSheetAction.DoJoin -> {
                 setState { copy(joinActionState = Loading()) }
                 session.coroutineScope.launch(Dispatchers.IO) {
                     try {

@@ -102,12 +102,14 @@ fun TermPolicies.toLocalizedLoginTerms(userLanguage: String,
                 }
             }
 
-            result.add(LocalizedFlowDataLoginTerms(
-                    policyName = localizedFlowDataLoginTermsPolicyName,
-                    version = localizedFlowDataLoginTermsVersion,
-                    localizedUrl = localizedFlowDataLoginTermsLocalizedUrl,
-                    localizedName = localizedFlowDataLoginTermsLocalizedName
-            ))
+            result.add(
+                    LocalizedFlowDataLoginTerms(
+                            policyName = localizedFlowDataLoginTermsPolicyName,
+                            version = localizedFlowDataLoginTermsVersion,
+                            localizedUrl = localizedFlowDataLoginTermsLocalizedUrl,
+                            localizedName = localizedFlowDataLoginTermsLocalizedName
+                    )
+            )
         }
     }
 

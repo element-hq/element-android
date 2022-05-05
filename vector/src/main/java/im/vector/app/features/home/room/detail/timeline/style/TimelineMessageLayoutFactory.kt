@@ -153,7 +153,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         return when {
             this == null || msgType == MessageType.MSGTYPE_BEACON_INFO -> false
             msgType == MessageType.MSGTYPE_LOCATION                    -> vectorPreferences.labsRenderLocationsInTimeline()
-            else                                                               -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+            else                                                       -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
         }
     }
 

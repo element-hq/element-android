@@ -209,15 +209,15 @@ class MessageItemFactory @Inject constructor(
             is MessageAudioContent               -> buildAudioContent(params, messageContent, informationData, highlight, attributes)
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageLocationContent   -> {
+            is MessageLocationContent            -> {
                 if (vectorPreferences.labsRenderLocationsInTimeline()) {
                     buildLocationItem(messageContent, informationData, highlight, attributes)
                 } else {
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
             }
-            is MessageBeaconInfoContent -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
-            else                        -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageBeaconInfoContent          -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
+            else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
             layout(informationData.messageLayout.layoutRes)
@@ -666,27 +666,31 @@ class MessageItemFactory @Inject constructor(
                 ForegroundColorSpan(color),
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
 
         // Note: text size is set to 14sp
         spannable.setSpan(
                 AbsoluteSizeSpan(dimensionConverter.spToPx(13)),
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
 
-        spannable.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                callback?.onEditedDecorationClicked(informationData)
-            }
+        spannable.setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        callback?.onEditedDecorationClicked(informationData)
+                    }
 
-            override fun updateDrawState(ds: TextPaint) {
-                // nop
-            }
-        },
+                    override fun updateDrawState(ds: TextPaint) {
+                        // nop
+                    }
+                },
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
         return spannable
     }
 

@@ -79,7 +79,7 @@ class RoomMemberListFragment @Inject constructor(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         when (newState) {
-                            RecyclerView.SCROLL_STATE_IDLE     -> {
+                            RecyclerView.SCROLL_STATE_IDLE -> {
                                 if (withState(viewModel) { it.actionsPermissions.canInvite }) {
                                     views.inviteUsersButton.show()
                                 }

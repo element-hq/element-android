@@ -24,7 +24,8 @@ import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntit
 /**
  * Realm module for Session
  */
-@RealmModule(library = true,
+@RealmModule(
+        library = true,
         classes = [
             ChunkEntity::class,
             EventEntity::class,
@@ -71,5 +72,6 @@ import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntit
             SpaceParentSummaryEntity::class,
             UserPresenceEntity::class,
             ThreadSummaryEntity::class
-        ])
+        ]
+)
 internal class SessionRealmModule
