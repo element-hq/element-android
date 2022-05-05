@@ -143,6 +143,18 @@ class HomeDetailFragment @Inject constructor(
             updateUIForTab(currentTab)
         }
 
+        views.allChatsLayout.setOnClickListener {
+            if (views.spaceModalFragment.isVisible) {
+                views.spaceModalFragment.isVisible = false
+                views.dimView.isVisible = false
+                views.toolbarChevron.rotation = 0F
+            } else {
+                views.spaceModalFragment.isVisible = true
+                views.dimView.isVisible = true
+                views.toolbarChevron.rotation = 90F
+            }
+        }
+
         viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
             updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
         }

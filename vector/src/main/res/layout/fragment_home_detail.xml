@@ -24,7 +24,8 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/groupToolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,31 +122,34 @@
 
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/groupToolbarTitleView"
-                    style="@style/Widget.Vector.TextView.Title.Medium"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/all_chats_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/all_chats"
-                    android:textSize="28sp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginStart="4dp"
-                    app:layout_constraintStart_toEndOf="@id/groupToolbarAvatarImageView"
-                    app:layout_constraintTop_toTopOf="@id/groupToolbarAvatarImageView"
-                    app:layout_constraintBottom_toBottomOf="@id/groupToolbarAvatarImageView"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
-                <ImageView
-                    android:id="@+id/toolbar_chevron"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:src="@drawable/ic_arrow_right"
-                    android:importantForAccessibility="no"
-                    app:layout_constraintStart_toEndOf="@id/groupToolbarTitleView"
-                    app:layout_constraintTop_toTopOf="@id/groupToolbarTitleView"
-                    app:layout_constraintBottom_toBottomOf="@id/groupToolbarTitleView"
-                    app:layout_constraintVertical_bias="0.6"
-                    android:layout_marginStart="10dp"
-                    app:tint="@color/palette_element_green" />
+                    <TextView
+                        android:id="@+id/groupToolbarTitleView"
+                        style="@style/Widget.Vector.TextView.Title.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all_chats"
+                        android:textSize="26sp"
+                        android:layout_marginStart="4dp" />
+
+                    <ImageView
+                        android:id="@+id/toolbar_chevron"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:importantForAccessibility="no"
+                        android:layout_marginTop="4dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        app:tint="@color/palette_element_green" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -177,23 +181,10 @@
         android:id="@+id/roomListContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="0dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintTop_toBottomOf="@id/homeKeysBackupBanner" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="#000"
-        android:alpha="0.5"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/space_modal_fragment"
-        android:name="im.vector.app.features.home.SpaceListModalFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -203,5 +194,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/home_bottom_navigation" />
+
+    <View
+        android:id="@+id/dim_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#000"
+        android:alpha="0.5"
+        android:elevation="10dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/space_modal_fragment"
+        android:name="im.vector.app.features.home.SpaceListModalFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="15dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
