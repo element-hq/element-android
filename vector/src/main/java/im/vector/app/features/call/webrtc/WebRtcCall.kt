@@ -97,6 +97,7 @@ import kotlin.coroutines.CoroutineContext
 private const val STREAM_ID = "userMedia"
 private const val AUDIO_TRACK_ID = "${STREAM_ID}a0"
 private const val VIDEO_TRACK_ID = "${STREAM_ID}v0"
+private const val SCREEN_TRACK_ID = "${STREAM_ID}s0"
 private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints()
 private const val INVITE_TIMEOUT_IN_MS = 60_000L
 
@@ -805,7 +806,7 @@ class WebRtcCall(
     }
 
     private fun showScreenLocally(factory: PeerConnectionFactory, videoSource: VideoSource?, localMediaStream: MediaStream?) {
-        localVideoTrack = factory.createVideoTrack(VIDEO_TRACK_ID, videoSource).apply { setEnabled(true) }
+        localVideoTrack = factory.createVideoTrack(SCREEN_TRACK_ID, videoSource).apply { setEnabled(true) }
         localMediaStream?.addTrack(localVideoTrack)
         localSurfaceRenderers.forEach { it.get()?.let { localVideoTrack?.addSink(it) } }
     }
@@ -818,6 +819,13 @@ class WebRtcCall(
         val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
         videoCapturer.initialize(surfaceTextureHelper, context, videoSource.capturerObserver)
         videoCapturer.startCapture(currentCaptureFormat.width, currentCaptureFormat.height, currentCaptureFormat.fps)
+    }
+
+    /**
+     * Returns true if the user is sharing the screen, false otherwise.
+     */
+    fun isSharingScreen(): Boolean {
+        return localVideoTrack?.id() == SCREEN_TRACK_ID
     }
 
     private suspend fun release() {

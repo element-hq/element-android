@@ -224,7 +224,8 @@ class VectorCallViewModel @AssistedInject constructor(
                         formattedDuration = webRtcCall.formattedDuration(),
                         isHD = webRtcCall.mxCall.isVideoCall && webRtcCall.currentCaptureFormat() is CaptureFormat.HD,
                         canOpponentBeTransferred = webRtcCall.mxCall.capabilities.supportCallTransfer(),
-                        transferee = computeTransfereeState(webRtcCall.mxCall)
+                        transferee = computeTransfereeState(webRtcCall.mxCall),
+                        isSharingScreen = webRtcCall.isSharingScreen()
                 )
             }
             updateOtherKnownCall(webRtcCall)
