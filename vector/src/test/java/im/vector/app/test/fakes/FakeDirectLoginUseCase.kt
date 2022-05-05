@@ -25,11 +25,11 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 class FakeDirectLoginUseCase {
     val instance = mockk<DirectLoginUseCase>()
 
-    fun givenSuccessResult(action: OnboardingAction.LoginOrRegister, config: HomeServerConnectionConfig?, result: FakeSession) {
+    fun givenSuccessResult(action: OnboardingAction.LoginDirect, config: HomeServerConnectionConfig?, result: FakeSession) {
         coEvery { instance.execute(action, config) } returns Result.success(result)
     }
 
-    fun givenFailureResult(action: OnboardingAction.LoginOrRegister, config: HomeServerConnectionConfig?, cause: Throwable) {
+    fun givenFailureResult(action: OnboardingAction.LoginDirect, config: HomeServerConnectionConfig?, cause: Throwable) {
         coEvery { instance.execute(action, config) } returns Result.failure(cause)
     }
 }

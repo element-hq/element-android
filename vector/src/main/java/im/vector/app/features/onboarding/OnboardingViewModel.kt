@@ -141,9 +141,9 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
             is OnboardingAction.HomeServerChange           -> withAction(action) { handleHomeserverChange(action) }
-            is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
             is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
             is OnboardingAction.Login                      -> handleLogin(action).also { lastAction = action }
+            is OnboardingAction.LoginDirect                -> handleDirectLogin(action, homeServerConnectionConfig = null).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword              -> handleResetPassword(action)
@@ -217,7 +217,7 @@ class OnboardingViewModel @AssistedInject constructor(
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
                         ?.let { startAuthenticationFlow(finalLastAction, it) }
             }
-            is OnboardingAction.LoginOrRegister                   ->
+            is OnboardingAction.LoginDirect                       ->
                 handleDirectLogin(
                         finalLastAction,
                         HomeServerConnectionConfig.Builder()
@@ -473,16 +473,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleLoginOrRegister(action: OnboardingAction.LoginOrRegister) = withState { state ->
-        when (state.signMode) {
-            SignMode.Unknown            -> error("Developer error, invalid sign mode")
-            SignMode.SignIn             -> handleLogin(OnboardingAction.Login(action.username, action.password, action.initialDeviceName))
-            SignMode.SignUp             -> handleRegisterWith(OnboardingAction.Register(action.username, action.password, action.initialDeviceName))
-            SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
-        }
-    }
-
-    private fun handleDirectLogin(action: OnboardingAction.LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?) {
+    private fun handleDirectLogin(action: OnboardingAction.LoginDirect, homeServerConnectionConfig: HomeServerConnectionConfig?) {
         setState { copy(isLoading = true) }
         currentJob = viewModelScope.launch {
             directLoginUseCase.execute(action, homeServerConnectionConfig).fold(
@@ -639,7 +630,11 @@ class OnboardingViewModel @AssistedInject constructor(
         when (trigger) {
             is OnboardingAction.HomeServerChange.EditHomeServer   -> {
                 when (awaitState().onboardingFlow) {
-                    OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) { _ ->
+                    OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) {
+                        updateServerSelection(config, serverTypeOverride, authResult)
+                        _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
+                    }
+                    OnboardingFlow.SignIn -> {
                         updateServerSelection(config, serverTypeOverride, authResult)
                         _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
                     }
@@ -652,7 +647,10 @@ class OnboardingViewModel @AssistedInject constructor(
                     when (awaitState().onboardingFlow) {
                         OnboardingFlow.SignIn -> {
                             updateSignMode(SignMode.SignIn)
-                            _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
+                            when (vectorFeatures.isOnboardingCombinedLoginEnabled()) {
+                                true  -> _viewEvents.post(OnboardingViewEvents.OpenCombinedLogin)
+                                false -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
+                            }
                         }
                         OnboardingFlow.SignUp -> {
                             updateSignMode(SignMode.SignUp)
