@@ -24,7 +24,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.failure.is401
 import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
-import org.matrix.android.sdk.api.auth.registration.RegistrationResult as SdkRegistrationResult
+import org.matrix.android.sdk.api.auth.registration.RegistrationResult as MatrixRegistrationResult
 
 class RegistrationActionHandler @Inject constructor() {
 
@@ -73,14 +73,14 @@ class RegistrationActionHandler @Inject constructor() {
     }
 }
 
-private inline fun resultOf(block: () -> SdkRegistrationResult): RegistrationResult {
+private inline fun resultOf(block: () -> MatrixRegistrationResult): RegistrationResult {
     return runCatching { block() }.fold(
             onSuccess = { it.toRegistrationResult() },
             onFailure = { RegistrationResult.Error(it) }
     )
 }
 
-private fun SdkRegistrationResult.toRegistrationResult() = when (this) {
+private fun MatrixRegistrationResult.toRegistrationResult() = when (this) {
     is FlowResponse -> RegistrationResult.NextStep(flowResult)
     is Success      -> RegistrationResult.Complete(session)
 }
