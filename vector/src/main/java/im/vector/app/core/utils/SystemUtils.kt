@@ -55,8 +55,8 @@ fun Context.isAirplaneModeOn(): Boolean {
     return Settings.Global.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
 }
 
-fun Context.isAnimationDisabled(): Boolean {
-    return Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+fun Context.isAnimationEnabled(): Boolean {
+    return Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) != 0f
 }
 
 /**
