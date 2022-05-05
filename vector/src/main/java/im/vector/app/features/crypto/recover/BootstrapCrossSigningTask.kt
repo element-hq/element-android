@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreation
 import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
-import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
+import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.session.securestorage.SsssKeySpec
 import org.matrix.android.sdk.api.util.awaitCallback
@@ -183,7 +183,7 @@ class BootstrapCrossSigningTask @Inject constructor(
             ssssService.storeSecret(
                     MASTER_KEY_SSSS_NAME,
                     mskPrivateKey,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
             params.progressListener?.onProgress(
                     WaitingViewData(
@@ -195,7 +195,7 @@ class BootstrapCrossSigningTask @Inject constructor(
             ssssService.storeSecret(
                     USER_SIGNING_KEY_SSSS_NAME,
                     uskPrivateKey,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
             params.progressListener?.onProgress(
                     WaitingViewData(
@@ -206,7 +206,7 @@ class BootstrapCrossSigningTask @Inject constructor(
             ssssService.storeSecret(
                     SELF_SIGNING_KEY_SSSS_NAME,
                     sskPrivateKey,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
         } catch (failure: Failure) {
             Timber.e("## BootstrapCrossSigningTask: Creating 4S - Failed to store keys <${failure.localizedMessage}>")
@@ -258,7 +258,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                     ssssService.storeSecret(
                             KEYBACKUP_SECRET_SSSS_NAME,
                             secret,
-                            listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                            listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
                     )
                 }
             } else {
@@ -275,7 +275,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                             ssssService.storeSecret(
                                     KEYBACKUP_SECRET_SSSS_NAME,
                                     secret,
-                                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
                             )
                         }
                     } else {

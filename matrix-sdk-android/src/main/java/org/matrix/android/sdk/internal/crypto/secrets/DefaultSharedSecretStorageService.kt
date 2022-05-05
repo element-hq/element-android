@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.securestorage.EncryptedSecretContent
 import org.matrix.android.sdk.api.session.securestorage.IntegrityResult
 import org.matrix.android.sdk.api.session.securestorage.KeyInfo
 import org.matrix.android.sdk.api.session.securestorage.KeyInfoResult
+import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.session.securestorage.KeySigner
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.api.session.securestorage.SecretStorageKeyContent
@@ -157,7 +158,7 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
         return getKey(keyId)
     }
 
-    override suspend fun storeSecret(name: String, secretBase64: String, keys: List<SharedSecretStorageService.KeyRef>) {
+    override suspend fun storeSecret(name: String, secretBase64: String, keys: List<KeyRef>) {
         withContext(cryptoCoroutineScope.coroutineContext + coroutineDispatchers.computation) {
             val encryptedContents = HashMap<String, EncryptedSecretContent>()
             keys.forEach {

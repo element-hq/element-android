@@ -31,11 +31,11 @@ import org.matrix.android.sdk.api.crypto.SSSS_ALGORITHM_AES_HMAC_SHA2
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.securestorage.EncryptedSecretContent
+import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.session.securestorage.KeySigner
 import org.matrix.android.sdk.api.session.securestorage.RawBytesKeySpec
 import org.matrix.android.sdk.api.session.securestorage.SecretStorageKeyContent
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageError
-import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toBase64NoPadding
@@ -123,7 +123,7 @@ class QuadSTests : InstrumentedTest {
             aliceSession.sharedSecretStorageService().storeSecret(
                     "secret.of.life",
                     clearSecret,
-                    listOf(SharedSecretStorageService.KeyRef(null, keySpec)) // default key
+                    listOf(KeyRef(null, keySpec)) // default key
             )
         }
 
@@ -191,8 +191,8 @@ class QuadSTests : InstrumentedTest {
                     "my.secret",
                     mySecretText.toByteArray().toBase64NoPadding(),
                     listOf(
-                            SharedSecretStorageService.KeyRef(keyId1, RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)),
-                            SharedSecretStorageService.KeyRef(keyId2, RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey))
+                            KeyRef(keyId1, RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)),
+                            KeyRef(keyId2, RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey))
                     )
             )
         }
@@ -241,7 +241,7 @@ class QuadSTests : InstrumentedTest {
             aliceSession.sharedSecretStorageService().storeSecret(
                     "my.secret",
                     mySecretText.toByteArray().toBase64NoPadding(),
-                    listOf(SharedSecretStorageService.KeyRef(keyId1, RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)))
+                    listOf(KeyRef(keyId1, RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)))
             )
         }
 
