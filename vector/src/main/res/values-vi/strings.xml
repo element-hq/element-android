@@ -371,7 +371,7 @@
         <item quantity="other">%d thành viên</item>
     </plurals>
     <string name="room_jump_to_first_unread">Nhảy đến tin nhắn chưa đọc.</string>
-    <string name="list_members">Liệt kê các thành viên</string>
+    <string name="list_members">Các thành viên</string>
     <string name="action_reject">Từ chối</string>
     <string name="action_join">Tham gia</string>
     <string name="action_remove">Xoá</string>
@@ -563,10 +563,10 @@
     <string name="settings_background_fdroid_sync_mode_battery">Được tối ưu cho pin</string>
     <string name="settings_mentions_and_keywords_encryption_notice">Bạn sẽ không nhận được thông báo khi được đề cập tới trong phòng chat mã hóa trên mobile.</string>
     <string name="settings_room_upgrades">Nâng cấp phòng</string>
-    <string name="settings_messages_by_bot">Tin nhắn gửi bởi bot</string>
-    <string name="settings_call_invitations">Lời mời cuộc gọi</string>
-    <string name="settings_room_invitations">Lời mời vào phòng</string>
-    <string name="settings_messages_containing_keywords">Từ khóa</string>
+    <string name="settings_messages_by_bot">Các tin nhắn gửi bởi bot</string>
+    <string name="settings_call_invitations">Các lời mời cuộc gọi</string>
+    <string name="settings_room_invitations">Các lời mời vào phòng</string>
+    <string name="settings_messages_containing_keywords">Các từ khóa</string>
     <string name="settings_mentions_at_room">\@room</string>
     <string name="settings_encrypted_group_messages">Tin nhắn trong chat nhóm được mã hóa</string>
     <string name="settings_group_messages">Tin nhắn trong chat nhóm</string>
@@ -841,7 +841,7 @@
     <string name="settings_vibrate_on_mention">Rung khi đề cập tên người dùng</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Bao gồm thay đổi tên hiển thị và hình đại diện.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Hiện các sự kiện của tài khoản</string>
-    <string name="settings_show_join_leave_messages_summary">Sự kiện mời, loại hoặc cấm thành viên không bị ảnh hưởng.</string>
+    <string name="settings_show_join_leave_messages_summary">Sự kiện mời, gỡ hoặc cấm thành viên không bị ảnh hưởng.</string>
     <string name="settings_show_join_leave_messages">Hiện sự kiện tham gia hoặc rời phòng</string>
     <string name="settings_chat_effects_description">Gõ lệnh /confetti hoặc gửi tin chứa ❄️ hoặc 🎉</string>
     <string name="settings_chat_effects_title">Hiện hiệu ứng chat</string>
@@ -1049,7 +1049,7 @@
     <string name="room_two_users_are_typing">%1$s &amp; %2$s đang gõ…</string>
     <string name="room_one_user_is_typing">%s đang gõ…</string>
     <string name="room_participants_unban_prompt_msg">Việc hủy cấm người dùng sẽ cho phép họ tham gia lại phòng.</string>
-    <string name="room_participants_ban_prompt_msg">Việc cấm người dùng sẽ đá họ ra khỏi phòng này và ngăn họ tham gia lại.</string>
+    <string name="room_participants_ban_prompt_msg">Việc cấm người dùng sẽ gỡ họ ra khỏi phòng này và ngăn họ tham gia lại.</string>
     <string name="room_participants_unban_title">Hủy cấm người dùng</string>
     <string name="room_participants_ban_reason">Lý do cấm</string>
     <string name="room_participants_ban_title">Cấm người dùng</string>
@@ -1061,7 +1061,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Bạn có chắc bạn muốn hủy lời mời đối với người dùng này không\?</string>
     <string name="room_participants_action_cancel_invite_title">Hủy lời mời</string>
     <string name="room_participants_action_unignore">Hủy làm ngơ</string>
-    <string name="room_participants_action_unignore_prompt_msg">Việc hủy làm ngơ người dùng này sẽ hiện lại tất cả tin nhắn từ họ.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Việc bỏ làm ngơ người dùng này sẽ hiện lại tất cả tin nhắn từ họ.</string>
     <string name="audio_call_with_participant">Cuộc gọi âm thanh với %s</string>
     <string name="video_call_with_participant">Cuộc gọi video với %s</string>
     <string name="call_ringing">Cuộc gọi đang reo…</string>
@@ -1142,7 +1142,7 @@
     <string name="ssl_unexpected_existing_expl">Chứng chỉ đã bị thay đổi từ một thiết bị được tin cậy của bạn. Điều này RẤT BẤT THƯỜNG. Chúng tôi khuyên bạn KHÔNG NÊN CHẤP NHẬN chứng chỉ mới này.</string>
     <string name="ssl_cert_new_account_expl">Nếu quản trị viên của máy chủ đã nói rằng điều này có thể xảy ra, hãy chắc chắn rằng dấu vân tay phía dưới trùng với dấu vân tay được họ cung cấp.</string>
     <string name="space_participants_unban_prompt_msg">Hủy cấm người dùng sẽ cho phép họ tham gia không gian này lần nữa.</string>
-    <string name="space_participants_ban_prompt_msg">Cấm người dùng này sẽ đá họ khỏi không gian này và ngăn chặn họ tiếp tục tham gia.</string>
+    <string name="space_participants_ban_prompt_msg">Cấm người dùng này sẽ gỡ họ khỏi không gian này và ngăn chặn họ tiếp tục tham gia.</string>
     <string name="space_participants_remove_prompt_msg">hành động của bạn sẽ xóa họ khỏi không gian này.
 \n
 \nTrong trường hợp không muốn họ quay lại, bạn nên cấm họ tham gia lần nữa.</string>
@@ -1279,7 +1279,7 @@
     <string name="space_leave_prompt_msg_private">Bạn sẽ không thể tham gia lại trừ khi bạn được mời lại.</string>
     <string name="space_leave_prompt_msg_only_you">Bạn là người duy nhất ở đây. Nếu bạn rời đi, sẽ không ai có thể tham gia trong tương lai, kể cả bạn</string>
     <string name="space_leave_prompt_msg_with_name">Bạn có chắc chắn muốn rời khỏi %s không\?</string>
-    <string name="leave_space">Rời khỏi Space</string>
+    <string name="leave_space">Rời khỏi</string>
     <string name="space_add_child_title">Thêm phòng</string>
     <string name="space_explore_activity_title">Khám phá phòng</string>
     <string name="discovery_section">Khám phá (%s)</string>
@@ -1288,7 +1288,7 @@
     <string name="finish_setting_up_discovery">Hoàn tất việc cài đặt khám phá.</string>
     <string name="create_space_identity_server_info_none">Hiện tại bạn không sử dụng máy chủ xác thực. Để mời đồng đội và có thể khám phá bởi họ, hãy cấu hình một bên dưới.</string>
     <string name="join_space">Tham gia Space</string>
-    <string name="create_space">Tạo Space</string>
+    <string name="create_space">Tạo space</string>
     <string name="skip_for_now">Bỏ qua ngay bây giờ</string>
     <string name="share_space_link_message">Gia nhập Space của tôi %1$s %2$s</string>
     <string name="invite_by_username_or_mail">Mời theo tên người dùng hoặc thư</string>
@@ -1319,14 +1319,14 @@
     <string name="create_spaces_me_and_teammates">Tôi và các đồng đội</string>
     <string name="create_spaces_organise_rooms">Một Space riêng tư để sắp xếp các phòng của bạn</string>
     <string name="create_spaces_just_me">Chỉ tôi</string>
-    <string name="create_spaces_make_sure_access">Đảm bảo đúng người có quyền truy nhập vào %s. Bạn có thể thay đổi điều này sau.</string>
+    <string name="create_spaces_make_sure_access">Đảm bảo đúng người có quyền truy nhập vào %s.</string>
     <string name="create_spaces_who_are_you_working_with">Bạn làm việc với ai\?</string>
     <string name="create_spaces_join_info_help">Để tham gia một Space hiện có, bạn cần một lời mời.</string>
     <string name="create_spaces_you_can_change_later">Bạn có thể thay đổi điều này sau</string>
     <string name="create_spaces_choose_type_label">Bạn muốn tạo ra loại Space nào\?</string>
     <string name="your_private_space">Space riêng tư của bạn</string>
     <string name="your_public_space">Space công cộng của bạn</string>
-    <string name="add_space">Thêm Space</string>
+    <string name="add_space">Thêm space</string>
     <string name="private_space">Space riêng tư</string>
     <string name="public_space">Space công cộng</string>
     <string name="event_status_failed_messages_warning">Tin nhắn gửi thất bại</string>
@@ -1544,7 +1544,7 @@
         <item quantity="other">Kết quả cuối cùng dựa trên %1$d phiếu bầu</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="other">Đã bỏ %1$d phiếu bầu. Bỏ phiếu để xem kết quả</item>
+        <item quantity="other">%1$d phiếu bầu. Bỏ phiếu để xem kết quả</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
         <item quantity="other">Dựa trên %1$d phiếu bầu</item>
