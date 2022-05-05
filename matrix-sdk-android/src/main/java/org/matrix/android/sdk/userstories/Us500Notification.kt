@@ -16,13 +16,13 @@
 
 @file:Suppress("unused")
 
-package org.matrix.android.sdk._userstories
+package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Verify a Session after a Sign in
+ * Get notified when new Events are received
  *
  * #### Required APIs:
  * - TODO
  */
-object Us150VerifySession
+object Us500Notification

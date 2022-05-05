@@ -16,13 +16,13 @@
 
 @file:Suppress("unused")
 
-package org.matrix.android.sdk._userstories
+package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Get notified when new Events are received
+ * Send content to a room, including monitoring the sending state
  *
  * #### Required APIs:
  * - TODO
  */
-object Us500Notification
+object Us400RoomSendContent

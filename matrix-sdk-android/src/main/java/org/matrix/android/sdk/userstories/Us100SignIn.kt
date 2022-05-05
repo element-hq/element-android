@@ -16,13 +16,16 @@
 
 @file:Suppress("unused")
 
-package org.matrix.android.sdk._userstories
+package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Send content to a room, including monitoring the sending state
+ * Sign in to an existing account
  *
  * #### Required APIs:
- * - TODO
+ * - [org.matrix.android.sdk.api.Matrix.authenticationService]
+ * - [org.matrix.android.sdk.api.auth.AuthenticationService.getLoginFlow]
+ * - [org.matrix.android.sdk.api.auth.AuthenticationService.getLoginWizard]
+ * - [org.matrix.android.sdk.api.auth.login.LoginWizard.login]
  */
-object Us400RoomSendContent
+object Us100SignIn

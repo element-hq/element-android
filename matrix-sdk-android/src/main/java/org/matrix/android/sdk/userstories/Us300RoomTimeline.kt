@@ -16,16 +16,13 @@
 
 @file:Suppress("unused")
 
-package org.matrix.android.sdk._userstories
+package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Sign in to an existing account
+ * Display a Room timeline, and navigate backward and forward
  *
  * #### Required APIs:
- * - [org.matrix.android.sdk.api.Matrix.authenticationService]
- * - [org.matrix.android.sdk.api.auth.AuthenticationService.getLoginFlow]
- * - [org.matrix.android.sdk.api.auth.AuthenticationService.getLoginWizard]
- * - [org.matrix.android.sdk.api.auth.login.LoginWizard.login]
+ * - TODO
  */
-object Us100SignIn
+object Us300RoomTimeline

@@ -16,13 +16,13 @@
 
 @file:Suppress("unused")
 
-package org.matrix.android.sdk._userstories
+package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Display a Room timeline at a specific point
+ * Verify a Session after a Sign in
  *
  * #### Required APIs:
  * - TODO
  */
-object Us350RoomTimelineFromPermalink
+object Us150VerifySession

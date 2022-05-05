@@ -16,13 +16,13 @@
 
 @file:Suppress("unused")
 
-package org.matrix.android.sdk._userstories
+package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Init a Matrix object
+ * Display a Room timeline at a specific point
  *
- * ### Required APIs:
- * - [org.matrix.android.sdk.api.Matrix] constructor
+ * #### Required APIs:
+ * - TODO
  */
-object Us000InitMatrix
+object Us350RoomTimelineFromPermalink

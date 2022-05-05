@@ -16,13 +16,13 @@
 
 @file:Suppress("unused")
 
-package org.matrix.android.sdk._userstories
+package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Display a Room timeline, and navigate backward and forward
+ * Manage the sync with the server
  *
  * #### Required APIs:
  * - TODO
  */
-object Us300RoomTimeline
+object Us600SyncWithTheServer

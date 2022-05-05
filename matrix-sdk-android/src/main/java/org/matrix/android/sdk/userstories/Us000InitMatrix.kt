@@ -16,13 +16,13 @@
 
 @file:Suppress("unused")
 
-package org.matrix.android.sdk._userstories
+package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Manage the sync with the server
+ * Init a Matrix object
  *
- * #### Required APIs:
- * - TODO
+ * ### Required APIs:
+ * - [org.matrix.android.sdk.api.Matrix] constructor
  */
-object Us600SyncWithTheServer
+object Us000InitMatrix

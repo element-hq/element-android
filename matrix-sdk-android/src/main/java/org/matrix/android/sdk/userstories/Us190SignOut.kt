@@ -16,13 +16,13 @@
 
 @file:Suppress("unused")
 
-package org.matrix.android.sdk._userstories
+package org.matrix.android.sdk.userstories
 
 /**
  * ### Title
- * Get the Room list
+ * Sign out
  *
  * #### Required APIs:
  * - TODO
  */
-object Us200RoomList
+object Us190SignOut
