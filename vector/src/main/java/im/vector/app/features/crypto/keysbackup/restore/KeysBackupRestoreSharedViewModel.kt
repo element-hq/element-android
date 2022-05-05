@@ -83,7 +83,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     val progressObserver = object : StepProgressListener {
         override fun onStepProgress(step: StepProgressListener.Step) {
             when (step) {
-                is StepProgressListener.Step.ComputingKey -> {
+                is StepProgressListener.Step.ComputingKey  -> {
                     loadingEvent.postValue(
                             WaitingViewData(
                                     stringProvider.getString(R.string.keys_backup_restoring_waiting_message) +
@@ -102,7 +102,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
                             )
                     )
                 }
-                is StepProgressListener.Step.ImportingKey -> {
+                is StepProgressListener.Step.ImportingKey  -> {
                     Timber.d("backupKeys.ImportingKey.progress: ${step.progress}")
                     // Progress 0 can take a while, display an indeterminate progress in this case
                     if (step.progress == 0) {

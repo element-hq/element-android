@@ -76,12 +76,12 @@ abstract class AbstractLoginFragment2<VB : ViewBinding> : VectorBaseFragment<VB>
         }
 
         when (throwable) {
-            is CancellationException ->
+            is CancellationException                  ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
             is Failure.UnrecognizedCertificateFailure ->
                 showUnrecognizedCertificateFailure(throwable)
-            else ->
+            else                                      ->
                 onError(throwable)
         }
     }

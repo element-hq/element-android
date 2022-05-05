@@ -104,7 +104,7 @@ class FtueAuthUseCaseFragment @Inject constructor(
     private fun createIcon(@ColorRes tint: Int, icon: Int, isLightMode: Boolean): Drawable {
         val context = requireContext()
         val alpha = when (isLightMode) {
-            true -> LIGHT_MODE_ICON_BACKGROUND_ALPHA
+            true  -> LIGHT_MODE_ICON_BACKGROUND_ALPHA
             false -> DARK_MODE_ICON_BACKGROUND_ALPHA
         }
         val iconBackground = context.getResTintedDrawable(R.drawable.bg_feature_icon, tint, alpha = alpha)

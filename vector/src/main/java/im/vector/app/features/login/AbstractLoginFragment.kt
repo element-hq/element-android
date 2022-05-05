@@ -78,10 +78,10 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
         }
 
         when (throwable) {
-            is CancellationException ->
+            is CancellationException                  ->
                 /* Ignore this error, user has cancelled the action */
                 Unit
-            is Failure.ServerError ->
+            is Failure.ServerError                    ->
                 if (throwable.error.code == MatrixError.M_FORBIDDEN &&
                         throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                     MaterialAlertDialogBuilder(requireActivity())
@@ -94,7 +94,7 @@ abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(
                 }
             is Failure.UnrecognizedCertificateFailure ->
                 showUnrecognizedCertificateFailure(throwable)
-            else ->
+            else                                      ->
                 onError(throwable)
         }
     }

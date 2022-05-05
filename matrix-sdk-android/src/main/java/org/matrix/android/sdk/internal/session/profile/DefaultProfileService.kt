@@ -165,8 +165,8 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
 
 private fun UserThreePidEntity.asDomain(): ThreePid {
     return when (medium) {
-        ThirdPartyIdentifier.MEDIUM_EMAIL -> ThreePid.Email(address)
+        ThirdPartyIdentifier.MEDIUM_EMAIL  -> ThreePid.Email(address)
         ThirdPartyIdentifier.MEDIUM_MSISDN -> ThreePid.Msisdn(address)
-        else -> error("Invalid medium type")
+        else                               -> error("Invalid medium type")
     }
 }

@@ -135,7 +135,7 @@ class RoomDirectoryPickerController @Inject constructor(
             }
             when (data.addServerAsync) {
                 Uninitialized,
-                is Fail -> settingsContinueCancelItem {
+                is Fail    -> settingsContinueCancelItem {
                     id("continueCancel")
                     continueText(host.stringProvider.getString(R.string.ok))
                     canContinue(data.enteredServer.isNotEmpty())

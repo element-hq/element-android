@@ -43,9 +43,9 @@ class DirectLoginUseCase @Inject constructor(
     }
 
     private suspend fun createSessionFor(data: WellknownResult, action: LoginOrRegister, config: HomeServerConnectionConfig?) = when (data) {
-        is WellknownResult.Prompt -> loginDirect(action, data, config)
+        is WellknownResult.Prompt     -> loginDirect(action, data, config)
         is WellknownResult.FailPrompt -> handleFailPrompt(data, action, config)
-        else -> onWellKnownError()
+        else                          -> onWellKnownError()
     }
 
     private suspend fun handleFailPrompt(data: WellknownResult.FailPrompt, action: LoginOrRegister, config: HomeServerConnectionConfig?): Result<Session> {
