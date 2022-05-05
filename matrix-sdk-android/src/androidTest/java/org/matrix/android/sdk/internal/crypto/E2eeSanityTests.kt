@@ -23,7 +23,9 @@ import org.amshove.kluent.fail
 import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert
 import org.junit.FixMethodOrder
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
@@ -57,6 +59,9 @@ import org.matrix.android.sdk.common.TestMatrixCallback
 @FixMethodOrder(MethodSorters.JVM)
 @LargeTest
 class E2eeSanityTests : InstrumentedTest {
+
+    @Rule @JvmField val timeout = Timeout.seconds(120)
+
 
     private val testHelper = CommonTestHelper(context())
     private val cryptoTestHelper = CryptoTestHelper(testHelper)

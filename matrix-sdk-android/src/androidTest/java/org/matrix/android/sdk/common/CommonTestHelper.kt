@@ -111,7 +111,7 @@ class CommonTestHelper(context: Context) {
             }
             syncLiveData.observeForever(syncObserver)
         }
-        await(lock, timeout)
+        await("Timeout waiting to sync session", lock, timeout)
     }
 
     /**
@@ -120,7 +120,7 @@ class CommonTestHelper(context: Context) {
      * @param session    the session to sync
      */
     fun clearCacheAndSync(session: Session, timeout: Long = TestConstants.timeOutMillis) {
-        waitWithLatch(timeout) { latch ->
+        waitWithLatch("Timeout waiting to clear cache and sync", timeout) { latch ->
             session.clearCache()
             val syncLiveData = session.getSyncStateLive()
             val syncObserver = object : Observer<SyncState> {
@@ -172,7 +172,7 @@ class CommonTestHelper(context: Context) {
                             room.sendService().sendTextMessage(formattedMessage)
                         }
                     }
-                    waitWithLatch(timeout) { latch ->
+                    waitWithLatch("Timeout waiting for batch of messages to send", timeout) { latch ->
                         val timelineListener = object : Timeline.Listener {
 
                             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
@@ -374,8 +374,8 @@ class CommonTestHelper(context: Context) {
      * @param latch
      * @throws InterruptedException
      */
-    fun await(latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis) {
-        assertTrue(latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
+    fun await(message: String, latch: CountDownLatch, timeout: Long? = TestConstants.timeOutMillis) {
+        assertTrue(message, latch.await(timeout ?: TestConstants.timeOutMillis, TimeUnit.MILLISECONDS))
     }
 
     suspend fun retryPeriodicallyWithLatch(latch: CountDownLatch, condition: (() -> Boolean)) {
@@ -388,12 +388,12 @@ class CommonTestHelper(context: Context) {
         }
     }
 
-    fun waitWithLatch(timeout: Long? = TestConstants.timeOutMillis, dispatcher: CoroutineDispatcher = Dispatchers.Main, block: suspend (CountDownLatch) -> Unit) {
+    fun waitWithLatch(message: String, timeout: Long? = TestConstants.timeOutMillis, dispatcher: CoroutineDispatcher = Dispatchers.Main, block: suspend (CountDownLatch) -> Unit) {
         val latch = CountDownLatch(1)
         coroutineScope.launch(dispatcher) {
             block(latch)
         }
-        await(latch, timeout)
+        await(message, latch, timeout)
     }
 
     fun <T> runBlockingTest(timeout: Long = TestConstants.timeOutMillis, block: suspend () -> T): T {
@@ -418,7 +418,7 @@ class CommonTestHelper(context: Context) {
 
         block.invoke(callback)
 
-        await(lock, timeout)
+        await("Timeout waiting for sync", lock, timeout)
 
         assertNotNull(result)
         return result!!

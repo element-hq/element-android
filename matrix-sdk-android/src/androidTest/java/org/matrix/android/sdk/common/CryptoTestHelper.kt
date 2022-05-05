@@ -68,7 +68,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             aliceSession.roomService().createRoom(CreateRoomParams().apply { name = "MyRoom" })
         }
         if (encryptedRoom) {
-            testHelper.waitWithLatch { latch ->
+            testHelper.waitWithLatch("Wait for encryption to be enabled in room") { latch ->
                 val room = aliceSession.getRoom(roomId)!!
                 room.roomCryptoService().enableEncryption()
                 val roomSummaryLive = room.getRoomSummaryLive()
@@ -98,7 +98,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
 
         val bobSession = testHelper.createAccount(TestConstants.USER_BOB, defaultSessionParams)
 
-        testHelper.waitWithLatch { latch ->
+        testHelper.waitWithLatch("Timeout waiting for bob to see invite to room") { latch ->
             val bobRoomSummariesLive = bobSession.roomService().getRoomSummariesLive(roomSummaryQueryParams { })
             val newRoomObserver = object : Observer<List<RoomSummary>> {
                 override fun onChanged(t: List<RoomSummary>?) {
@@ -112,7 +112,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             aliceRoom.membershipService().invite(bobSession.myUserId)
         }
 
-        testHelper.waitWithLatch { latch ->
+        testHelper.waitWithLatch("Timeout waiting for bob to join room") { latch ->
             val bobRoomSummariesLive = bobSession.roomService().getRoomSummariesLive(roomSummaryQueryParams { })
             val roomJoinedObserver = object : Observer<List<RoomSummary>> {
                 override fun onChanged(t: List<RoomSummary>?) {
@@ -243,7 +243,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
 
     fun createDM(alice: Session, bob: Session): String {
         var roomId: String = ""
-        testHelper.waitWithLatch { latch ->
+        testHelper.waitWithLatch("Timeout waiting for bob to see DM from alice") { latch ->
             roomId = alice.roomService().createDirectRoom(bob.myUserId)
             val bobRoomSummariesLive = bob.roomService().getRoomSummariesLive(roomSummaryQueryParams { })
             val newRoomObserver = object : Observer<List<RoomSummary>> {
@@ -257,7 +257,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             bobRoomSummariesLive.observeForever(newRoomObserver)
         }
 
-        testHelper.waitWithLatch { latch ->
+        testHelper.waitWithLatch("Timeout waiting for bob to join DM wih alice") { latch ->
             val bobRoomSummariesLive = bob.roomService().getRoomSummariesLive(roomSummaryQueryParams { })
             val newRoomObserver = object : Observer<List<RoomSummary>> {
                 override fun onChanged(t: List<RoomSummary>?) {
@@ -315,7 +315,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         var bobPovTx: IncomingSasVerificationTransaction? = null
 
         // wait for alice to get the ready
-        testHelper.waitWithLatch {
+        testHelper.waitWithLatch("Timeout waiting for bob to see verification started") {
             testHelper.retryPeriodicallyWithLatch(it) {
                 bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID) as? IncomingSasVerificationTransaction
                 Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
@@ -328,7 +328,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             }
         }
 
-        testHelper.waitWithLatch {
+        testHelper.waitWithLatch("Timeout waiting for alice to be ShortCodeReady") {
             testHelper.retryPeriodicallyWithLatch(it) {
                 alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID) as? OutgoingSasVerificationTransaction
                 Log.v("TEST", "== alicePovTx is ${alicePovTx?.uxState}")
@@ -336,7 +336,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             }
         }
         // wait for alice to get the ready
-        testHelper.waitWithLatch {
+        testHelper.waitWithLatch("Timeout waiting for bob to be ShortCodeReady") {
             testHelper.retryPeriodicallyWithLatch(it) {
                 bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID) as? IncomingSasVerificationTransaction
                 Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
@@ -352,13 +352,14 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         bobPovTx!!.userHasVerifiedShortCode()
         alicePovTx!!.userHasVerifiedShortCode()
 
-        testHelper.waitWithLatch {
+        testHelper.waitWithLatch("Timeout waiting for alice to view bob as trusted") {
             testHelper.retryPeriodicallyWithLatch(it) {
                 alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
             }
         }
 
-        testHelper.waitWithLatch {
+        // Should this not be bob to see alice as trusted?
+        testHelper.waitWithLatch("Timeout waiting for alice to view bob as trusted") {
             testHelper.retryPeriodicallyWithLatch(it) {
                 alice.cryptoService().crossSigningService().isUserTrusted(bob.myUserId)
             }
