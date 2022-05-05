@@ -24,6 +24,11 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
+    <style name="TextAppearance.Vector.Title.Bold">
+        <item name="fontFamily">sans-serif-black</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+    </style>
+
     <style name="TextAppearance.Vector.Headline.Medium" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="fontFamily">sans-serif-medium</item>
         <item name="android:fontFamily">sans-serif-medium</item>

@@ -621,8 +621,6 @@
     <string name="room_participants_leave_prompt_msg">Are you sure you want to leave the room?</string>
     <string name="room_participants_leave_private_warning">This room is not public. You will not be able to rejoin without an invite.</string>
 
-    <string name="room_participants_header_direct_chats">Direct Messages</string>
-
     <string name="room_participants_action_invite">Invite</string>
     <string name="room_participants_action_cancel_invite">Cancel invite</string>
     <string name="room_participants_action_ban">Ban</string>
@@ -898,7 +896,6 @@
 
     <string name="settings_messages_containing_display_name">My display name</string>
     <string name="settings_messages_containing_username">My username</string>
-    <string name="settings_messages_direct_messages">Direct messages</string>
     <string name="settings_encrypted_direct_messages">Encrypted direct messages</string>
     <string name="settings_group_messages">Group messages</string>
     <string name="settings_encrypted_group_messages">Encrypted group messages</string>
@@ -1607,7 +1604,6 @@
     <string name="room_preview_not_found">This room is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
     <string name="room_preview_no_preview_join">"This room can't be previewed. Do you want to join it?"</string>
     <string name="fab_menu_create_room">"Rooms"</string>
-    <string name="fab_menu_create_chat">"Direct Messages"</string>
 
     <!-- Create room screen -->
     <string name="create_room_action_create">"CREATE"</string>
@@ -1680,7 +1676,11 @@
     <string name="settings_labs_show_hidden_events_in_timeline">Show hidden events in timeline</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">"Show complete history in encrypted rooms"</string>
 
+    <string name="fab_menu_create_chat">"Direct Messages"</string>
+    <string name="room_participants_header_direct_chats">Direct Messages</string>
+
     <string name="bottom_action_people_x">Direct Messages</string>
+    <string name="settings_messages_direct_messages">Direct messages</string>
 
     <string name="send_file_step_idle">Waiting…</string>
     <string name="send_file_step_encrypting_thumbnail">Encrypting thumbnail…</string>
@@ -3038,4 +3038,5 @@
     <!-- Screen sharing -->
     <string name="screen_sharing_notification_title">${app_name} Screen Sharing</string>
     <string name="screen_sharing_notification_description">Screen sharing is in progress</string>
+    <string name="all_chats">All Chats</string>
 </resources>

@@ -17,6 +17,10 @@
         <item name="android:textAppearance">@style/TextAppearance.Vector.Title.Medium</item>
     </style>
 
+    <style name="Widget.Vector.TextView.Title.Bold">
+        <item name="android:textAppearance">@style/TextAppearance.Vector.Title.Bold</item>
+    </style>
+
     <style name="Widget.Vector.TextView.HeadlineMedium">
         <item name="android:textAppearance">@style/TextAppearance.Vector.Headline.Medium</item>
     </style>

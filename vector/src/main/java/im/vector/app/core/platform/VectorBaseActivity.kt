@@ -238,6 +238,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
         initUiAndData()
 
+        window.statusBarColor = ContextCompat.getColor(this, android.R.color.white)
+        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.white)
         val titleRes = getTitleRes()
         if (titleRes != -1) {
             supportActionBar?.let {

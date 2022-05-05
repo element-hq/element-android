@@ -283,6 +283,7 @@ class HomeDetailFragment @Inject constructor(
         } else {
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = groupSummary.displayName
+            views.groupToolbarTitleView.text = groupSummary.displayName
         }
     }
 
@@ -292,6 +293,7 @@ class HomeDetailFragment @Inject constructor(
         } else {
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
+            views.groupToolbarTitleView.text = spaceSummary.displayName
         }
     }
 
@@ -363,13 +365,9 @@ class HomeDetailFragment @Inject constructor(
 
     private fun updateUIForTab(tab: HomeTab) {
         views.bottomNavigationView.menu.findItem(tab.toMenuId()).isChecked = true
-        views.groupToolbarTitleView.setText(tab.titleRes)
+        views.groupToolbarTitleView.text = getString(R.string.all_chats)
         updateSelectedFragment(tab)
         invalidateOptionsMenu()
-
-        views.groupToolbarTitleView.setOnClickListener {
-            println("TODO: open modal from here")
-        }
     }
 
     private fun HomeTab.toFragmentTag() = "FRAGMENT_TAG_$this"
