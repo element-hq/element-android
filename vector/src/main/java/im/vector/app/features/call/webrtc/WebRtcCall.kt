@@ -801,6 +801,7 @@ class WebRtcCall(
         if (mxCall.isVideoCall) {
             peerConnectionFactoryProvider.get()?.let { configureVideoTrack(it) }
         }
+        updateMuteStatus()
         sessionScope?.launch(dispatcher) { attachViewRenderersInternal() }
     }
 
