@@ -18,7 +18,7 @@
             android:minHeight="48dp"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/homeKeysBackupBanner"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/groupToolbar"
@@ -70,7 +70,7 @@
                         android:visibility="gone"
                         tools:background="@drawable/bg_unread_highlight"
                         tools:text="4"
-                        tools:visibility="visible" />
+                        tools:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -107,7 +107,7 @@
                         android:textColor="?vctr_content_primary"
                         android:visibility="gone"
                         tools:text="@tools:sample/lorem/random"
-                        tools:visibility="visible" />
+                        tools:visibility="gone" />
 
                 </LinearLayout>
 
@@ -135,7 +135,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/syncStateView"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/roomListContainer"
@@ -143,6 +143,21 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintTop_toBottomOf="@id/homeKeysBackupBanner" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#000"
+        android:alpha="0.5"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/space_modal_fragment"
+        android:name="im.vector.app.features.home.SpaceListModalFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

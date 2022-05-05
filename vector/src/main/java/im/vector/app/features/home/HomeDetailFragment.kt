@@ -366,6 +366,10 @@ class HomeDetailFragment @Inject constructor(
         views.groupToolbarTitleView.setText(tab.titleRes)
         updateSelectedFragment(tab)
         invalidateOptionsMenu()
+
+        views.groupToolbarTitleView.setOnClickListener {
+            println("TODO: open modal from here")
+        }
     }
 
     private fun HomeTab.toFragmentTag() = "FRAGMENT_TAG_$this"
@@ -377,7 +381,9 @@ class HomeDetailFragment @Inject constructor(
             childFragmentManager.fragments
                     .filter { it != fragmentToShow }
                     .forEach {
-                        detach(it)
+                        if (it.id != R.id.space_modal_fragment) {
+                            detach(it)
+                        }
                     }
             if (fragmentToShow == null) {
                 when (tab) {

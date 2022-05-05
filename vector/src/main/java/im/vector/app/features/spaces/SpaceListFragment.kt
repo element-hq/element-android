@@ -76,19 +76,16 @@ class SpaceListFragment @Inject constructor(
                     }
 
                     override fun onDragReleased(model: SpaceSummaryItem?, itemView: View?) {
-//                        Timber.v("VAL: onModelMoved from $fromPositionM to $toPositionM ${model?.matrixItem?.getBestName()}")
                         if (toPositionM == null || fromPositionM == null) return
                         val movingSpace = model?.matrixItem?.id ?: return
                         viewModel.handle(SpaceListAction.MoveSpace(movingSpace, toPositionM!! - fromPositionM!!))
                     }
 
                     override fun clearView(model: SpaceSummaryItem?, itemView: View?) {
-//                        Timber.v("VAL: clearView ${model?.matrixItem?.getBestName()}")
                         itemView?.elevation = initialElevation ?: 0f
                     }
 
                     override fun onModelMoved(fromPosition: Int, toPosition: Int, modelBeingMoved: SpaceSummaryItem?, itemView: View?) {
-//                        Timber.v("VAL: onModelMoved incremental from $fromPosition to $toPosition ${modelBeingMoved?.matrixItem?.getBestName()}")
                         if (fromPositionM == null) {
                             fromPositionM = fromPosition
                         }
@@ -97,7 +94,6 @@ class SpaceListFragment @Inject constructor(
                     }
 
                     override fun isDragEnabledForModel(model: SpaceSummaryItem?): Boolean {
-//                        Timber.v("VAL: isDragEnabledForModel ${model?.matrixItem?.getBestName()}")
                         return model?.canDrag == true
                     }
                 })
