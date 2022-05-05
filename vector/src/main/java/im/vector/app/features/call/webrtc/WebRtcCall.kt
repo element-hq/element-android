@@ -796,8 +796,11 @@ class WebRtcCall(
     }
 
     fun stopSharingScreen() {
+        localVideoTrack?.setEnabled(false)
         screenSender?.let { removeStream(it) }
-        peerConnectionFactoryProvider.get()?.let { configureVideoTrack(it) }
+        if (mxCall.isVideoCall) {
+            peerConnectionFactoryProvider.get()?.let { configureVideoTrack(it) }
+        }
         sessionScope?.launch(dispatcher) { attachViewRenderersInternal() }
     }
 
@@ -825,7 +828,7 @@ class WebRtcCall(
      * Returns true if the user is sharing the screen, false otherwise.
      */
     fun isSharingScreen(): Boolean {
-        return localVideoTrack?.id() == SCREEN_TRACK_ID
+        return localVideoTrack?.enabled().orFalse() && localVideoTrack?.id() == SCREEN_TRACK_ID
     }
 
     private suspend fun release() {
