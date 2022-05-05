@@ -172,7 +172,7 @@ internal class DefaultCryptoService @Inject constructor(
             }
         } else {
             cryptoCoroutineScope.launch {
-                verificationService.onEvent(event)
+                verificationService.onEvent(roomId, event)
             }
         }
     }
@@ -696,7 +696,7 @@ internal class DefaultCryptoService @Inject constructor(
                         this.keysBackupService.onSecretKeyGossip(secretContent.secretValue)
                     }
                     else                         -> {
-                        this.verificationService.onEvent(event)
+                        this.verificationService.onEvent(null, event)
                     }
                 }
                 liveEventManager.get().dispatchOnLiveToDevice(event)
@@ -799,8 +799,8 @@ internal class DefaultCryptoService @Inject constructor(
 
     private suspend fun signatureUpload(request: Request.SignatureUpload) {
         try {
-            requestSender.sendSignatureUpload(request)
-            olmMachine.markRequestAsSent(request.requestId, RequestType.SIGNATURE_UPLOAD, "{}")
+            val response = requestSender.sendSignatureUpload(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.SIGNATURE_UPLOAD, response)
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).e(throwable, "## CRYPTO signatureUpload(): error")
         }
@@ -808,7 +808,9 @@ internal class DefaultCryptoService @Inject constructor(
 
     private suspend fun sendRoomMessage(request: Request.RoomMessage) {
         try {
-            requestSender.sendRoomMessage(request)
+            Timber.v("SendRoomMessage: $request")
+            val response = requestSender.sendRoomMessage(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.ROOM_MESSAGE, response)
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).e(throwable, "## CRYPTO sendRoomMessage(): error")
         }
@@ -817,6 +819,7 @@ internal class DefaultCryptoService @Inject constructor(
     private suspend fun sendOutgoingRequests() {
         outgoingRequestsLock.withLock {
             coroutineScope {
+                Timber.v("OutgoingRequests: ${olmMachine.outgoingRequests()}")
                 olmMachine.outgoingRequests().map {
                     when (it) {
                         is Request.KeysUpload      -> {
@@ -992,13 +995,13 @@ internal class DefaultCryptoService @Inject constructor(
                 is Request.ToDevice -> {
                     sendToDevice(cancellation)
                 }
-                else -> Unit
+                else                -> Unit
             }
             when (request) {
                 is Request.ToDevice -> {
                     sendToDevice(request)
                 }
-                else -> Unit
+                else                -> Unit
             }
         }
     }

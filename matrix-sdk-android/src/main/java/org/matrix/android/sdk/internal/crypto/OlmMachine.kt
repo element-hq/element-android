@@ -104,7 +104,7 @@ internal class OlmMachine(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val moshi: Moshi
 ) {
-    private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
+    private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString(), null)
     internal val verificationListeners = ArrayList<VerificationService.Listener>()
     private val flowCollectors = FlowCollectors()
 
@@ -249,6 +249,12 @@ internal class OlmMachine(
         updateLivePrivateKeys()
 
         return response
+    }
+
+    suspend fun receiveUnencryptedVerificationEvent(roomId: String, event: Event) = withContext(coroutineDispatchers.io) {
+        val adapter = moshi.adapter(Event::class.java)
+        val serializedEvent = adapter.toJson(event)
+        inner.receiveUnencryptedVerificationEvent(serializedEvent, roomId)
     }
 
     /**

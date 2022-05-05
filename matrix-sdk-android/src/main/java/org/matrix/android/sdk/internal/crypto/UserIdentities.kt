@@ -236,7 +236,7 @@ internal class UserIdentity(
         val stringMethods = prepareMethods(methods)
         val content = olmMachine.inner().verificationRequestContent(userId, stringMethods)!!
 
-        val eventID = requestSender.sendRoomMessage(EventType.MESSAGE, roomId, content, transactionId)
+        val eventID = requestSender.sendRoomMessage(EventType.MESSAGE, roomId, content, transactionId).eventId
 
         val innerRequest = olmMachine.inner().requestVerification(userId, roomId, eventID, stringMethods)!!
 

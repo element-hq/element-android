@@ -47,6 +47,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeysClaimResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysQueryResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
+import org.matrix.android.sdk.internal.crypto.model.rest.SignatureUploadResponse
 import org.matrix.android.sdk.internal.crypto.tasks.ClaimOneTimeKeysForUsersDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendVerificationMessageTask
 import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
@@ -57,6 +58,8 @@ import org.matrix.android.sdk.internal.crypto.tasks.UploadSignaturesTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSigningKeysTask
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
+import org.matrix.android.sdk.internal.session.room.send.SendResponse
+import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import timber.log.Timber
 import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Request
@@ -120,35 +123,39 @@ internal class RequestSender @Inject constructor(
         }
     }
 
-    suspend fun sendRoomMessage(request: OutgoingVerificationRequest.InRoom): String {
+    private suspend fun sendRoomMessage(request: OutgoingVerificationRequest.InRoom): SendResponse {
         return sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
     }
 
     suspend fun sendRoomMessage(request: Request.RoomMessage): String {
-        return sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
+        val sendResponse = sendRoomMessage(request.eventType, request.roomId, request.content, request.requestId)
+        val responseAdapter = moshi.adapter(SendResponse::class.java)
+        return responseAdapter.toJson(sendResponse)
     }
 
-    suspend fun sendRoomMessage(eventType: String, roomId: String, content: String, transactionId: String): String {
-        val adapter = moshi.adapter<Content>(Map::class.java)
-        val jsonContent = adapter.fromJson(content)
+    suspend fun sendRoomMessage(eventType: String, roomId: String, content: String, transactionId: String): SendResponse {
+        val paramsAdapter = moshi.adapter<Content>(Map::class.java)
+        val jsonContent = paramsAdapter.fromJson(content)
         val event = Event(eventType, transactionId, jsonContent, roomId = roomId)
         val params = SendVerificationMessageTask.Params(event)
-        return this.sendVerificationMessageTask.get().executeRetry(params, REQUEST_RETRY_COUNT)
+        return sendVerificationMessageTask.get().executeRetry(params, REQUEST_RETRY_COUNT)
     }
 
-    suspend fun sendSignatureUpload(request: Request.SignatureUpload) {
-        sendSignatureUpload(request.body)
+    suspend fun sendSignatureUpload(request: Request.SignatureUpload): String {
+        return sendSignatureUpload(request.body)
     }
 
-    suspend fun sendSignatureUpload(request: SignatureUploadRequest) {
-        sendSignatureUpload(request.body)
+    suspend fun sendSignatureUpload(request: SignatureUploadRequest): String {
+        return sendSignatureUpload(request.body)
     }
 
-    private suspend fun sendSignatureUpload(body: String) {
-        val adapter = moshi.adapter<Map<String, Map<String, Any>>>(Map::class.java)
-        val signatures = adapter.fromJson(body)!!
+    private suspend fun sendSignatureUpload(body: String): String {
+        val paramsAdapter = moshi.adapter<Map<String, Map<String, Any>>>(Map::class.java)
+        val signatures = paramsAdapter.fromJson(body)!!
         val params = UploadSignaturesTask.Params(signatures)
-        this.signaturesUploadTask.executeRetry(params, REQUEST_RETRY_COUNT)
+        val response = signaturesUploadTask.executeRetry(params, REQUEST_RETRY_COUNT)
+        val responseAdapter = moshi.adapter(SignatureUploadResponse::class.java)
+        return responseAdapter.toJson(response)!!
     }
 
     suspend fun uploadCrossSigningKeys(

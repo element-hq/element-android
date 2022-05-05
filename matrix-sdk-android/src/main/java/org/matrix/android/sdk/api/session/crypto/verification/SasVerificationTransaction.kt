@@ -20,8 +20,6 @@ interface SasVerificationTransaction : VerificationTransaction {
 
     fun supportsEmoji(): Boolean
 
-    fun supportsDecimal(): Boolean
-
     fun getEmojiCodeRepresentation(): List<EmojiRepresentation>
 
     fun getDecimalCodeRepresentation(): String

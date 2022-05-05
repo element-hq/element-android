@@ -79,27 +79,33 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
 
     private val dispatcher = UpdateDispatcher(olmMachine.verificationListeners)
 
-    /** The main entry point for the verification service
+    /**
      *
      * All verification related events should be forwarded through this method to
      * the verification service.
      *
-     * Since events are at this point already handled by the rust-sdk through the receival
-     * of the to-device events and the decryption of room events, this method mainly just
+     * If the verification event is not encrypted it should be provided to the olmMachine.
+     * Otherwise events are at this point already handled by the rust-sdk through the receival
+     * of the to-device events and the decryption of room events. In this case this method mainly just
      * fetches the appropriate rust object that will be created or updated by the event and
      * dispatches updates to our listeners.
      */
-    internal suspend fun onEvent(event: Event) = when (event.getClearType()) {
-        EventType.KEY_VERIFICATION_REQUEST -> onRequest(event, fromRoomMessage = false)
-        EventType.KEY_VERIFICATION_START   -> onStart(event)
-        EventType.KEY_VERIFICATION_READY,
-        EventType.KEY_VERIFICATION_ACCEPT,
-        EventType.KEY_VERIFICATION_KEY,
-        EventType.KEY_VERIFICATION_MAC,
-        EventType.KEY_VERIFICATION_CANCEL,
-        EventType.KEY_VERIFICATION_DONE    -> onUpdate(event)
-        EventType.MESSAGE                  -> onRoomMessage(event)
-        else                               -> Unit
+    internal suspend fun onEvent(roomId: String?, event: Event) {
+        if (roomId != null && !event.isEncrypted()) {
+            olmMachine.receiveUnencryptedVerificationEvent(roomId, event)
+        }
+        when (event.getClearType()) {
+            EventType.KEY_VERIFICATION_REQUEST -> onRequest(event, fromRoomMessage = false)
+            EventType.KEY_VERIFICATION_START   -> onStart(event)
+            EventType.KEY_VERIFICATION_READY,
+            EventType.KEY_VERIFICATION_ACCEPT,
+            EventType.KEY_VERIFICATION_KEY,
+            EventType.KEY_VERIFICATION_MAC,
+            EventType.KEY_VERIFICATION_CANCEL,
+            EventType.KEY_VERIFICATION_DONE    -> onUpdate(event)
+            EventType.MESSAGE                  -> onRoomMessage(event)
+            else                               -> Unit
+        }
     }
 
     private fun onRoomMessage(event: Event) {

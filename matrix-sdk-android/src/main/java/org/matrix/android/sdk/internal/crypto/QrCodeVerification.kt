@@ -69,7 +69,7 @@ internal class QrCodeVerification(
 
     /** Pass the data from a scanned QR code into the QR code verification object */
     override suspend fun userHasScannedOtherQrCode(otherQrCodeText: String) {
-            request.scanQrCode(otherQrCodeText)
+        request.scanQrCode(otherQrCodeText)
         dispatchTxUpdated()
     }
 
@@ -178,14 +178,14 @@ internal class QrCodeVerification(
         }
 
         if (result != null) {
-            sender.sendVerificationRequest(result.request)
-            dispatchTxUpdated()
-
+            for (verificationRequest in result.requests) {
+                sender.sendVerificationRequest(verificationRequest)
+            }
             val signatureRequest = result.signatureRequest
-
             if (signatureRequest != null) {
                 sender.sendSignatureUpload(signatureRequest)
             }
+            dispatchTxUpdated()
         }
     }
 

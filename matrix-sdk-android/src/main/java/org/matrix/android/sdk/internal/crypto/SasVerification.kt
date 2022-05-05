@@ -130,14 +130,6 @@ internal class SasVerification(
     /** Is this verification happening over to-device messages */
     override fun isToDeviceTransport(): Boolean = inner.roomId == null
 
-    /** Does the verification flow support showing decimals as the short auth string */
-    override fun supportsDecimal(): Boolean {
-        // This is ignored anyways, throw it away?
-        // The spec also mandates that devices support at least decimal and
-        // the rust-sdk cancels if devices don't support it
-        return true
-    }
-
     /** Does the verification flow support showing emojis as the short auth string */
     override fun supportsEmoji(): Boolean {
         refreshData()
@@ -207,17 +199,17 @@ internal class SasVerification(
         val result = withContext(coroutineDispatchers.io) {
             machine.confirmVerification(inner.otherUserId, inner.flowId)
         }
-
         if (result != null) {
-            sender.sendVerificationRequest(result.request)
-            dispatchTxUpdated()
-
+            for (verificationRequest in result.requests) {
+                sender.sendVerificationRequest(verificationRequest)
+            }
             val signatureRequest = result.signatureRequest
-
             if (signatureRequest != null) {
                 sender.sendSignatureUpload(signatureRequest)
             }
+            dispatchTxUpdated()
         }
+
     }
 
     private suspend fun cancelHelper(code: CancelCode) {
