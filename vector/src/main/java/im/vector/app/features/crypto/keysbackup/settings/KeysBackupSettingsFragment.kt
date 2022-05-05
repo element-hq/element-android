@@ -32,7 +32,7 @@ import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
 import javax.inject.Inject
 
 class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSettingsRecyclerViewController: KeysBackupSettingsRecyclerViewController) :
-    VectorBaseFragment<FragmentKeysBackupSettingsBinding>(),
+        VectorBaseFragment<FragmentKeysBackupSettingsBinding>(),
         KeysBackupSettingsRecyclerViewController.Listener {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentKeysBackupSettingsBinding {

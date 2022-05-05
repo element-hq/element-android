@@ -64,7 +64,7 @@ class VectorSettingsLabsFragment @Inject constructor(
      */
     private fun onThreadsPreferenceClickedInterceptor(vectorSwitchPreference: VectorSwitchPreference) {
         val userEnabledThreads = vectorPreferences.areThreadMessagesEnabled()
-        if (!session.getHomeServerCapabilities().canUseThreading && userEnabledThreads) {
+        if (!session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading && userEnabledThreads) {
             activity?.let {
                 MaterialAlertDialogBuilder(it)
                         .setTitle(R.string.threads_labs_enable_notice_title)

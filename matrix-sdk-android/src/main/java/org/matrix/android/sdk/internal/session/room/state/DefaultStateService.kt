@@ -33,8 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
-import org.matrix.android.sdk.api.session.room.model.livelocation.BeaconInfo
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
@@ -74,14 +73,14 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
             eventType: String,
             stateKey: String,
             body: JsonDict
-    ) {
+    ): String {
         val params = SendStateTask.Params(
                 roomId = roomId,
                 stateKey = stateKey,
                 eventType = eventType,
                 body = body.toSafeJson(eventType)
         )
-        sendStateTask.executeRetry(params, 3)
+        return sendStateTask.executeRetry(params, 3)
     }
 
     private fun JsonDict.toSafeJson(eventType: String): JsonDict {
@@ -193,20 +192,13 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
 
     override suspend fun stopLiveLocation(userId: String) {
         getLiveLocationBeaconInfo(userId, true)?.let { beaconInfoStateEvent ->
-            beaconInfoStateEvent.getClearContent()?.toModel<LiveLocationBeaconContent>()?.let { content ->
-                val beaconContent = LiveLocationBeaconContent(
-                        unstableBeaconInfo = BeaconInfo(
-                                description = content.getBestBeaconInfo()?.description,
-                                timeout = content.getBestBeaconInfo()?.timeout,
-                                isLive = false,
-                        ),
-                        unstableTimestampAsMilliseconds = System.currentTimeMillis()
-                ).toContent()
+            beaconInfoStateEvent.getClearContent()?.toModel<MessageBeaconInfoContent>()?.let { content ->
+                val updatedContent = content.copy(isLive = false).toContent()
 
                 beaconInfoStateEvent.stateKey?.let {
                     sendStateEvent(
                             eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
-                            body = beaconContent,
+                            body = updatedContent,
                             stateKey = it
                     )
                 }
@@ -225,7 +217,7 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                 }
                 .firstOrNull { beaconInfoEvent ->
                     !filterOnlyLive ||
-                            beaconInfoEvent.getClearContent()?.toModel<LiveLocationBeaconContent>()?.getBestBeaconInfo()?.isLive.orFalse()
+                            beaconInfoEvent.getClearContent()?.toModel<MessageBeaconInfoContent>()?.isLive.orFalse()
                 }
     }
 }

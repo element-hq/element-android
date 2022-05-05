@@ -608,8 +608,8 @@
     <string name="video_meeting">Почати відеозустріч</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">У вас немає повноважень розпочати дзвінок</string>
     <string name="no_permissions_to_start_webrtc_call">У вас немає повноважень на дзвінок у цій кімнаті</string>
-    <string name="no_permissions_to_start_conf_call_in_direct_room">У вас немає повноважень розпочати конференц-дзвінок</string>
-    <string name="no_permissions_to_start_conf_call">У вас немає повноважень розпочати конференц-дзвінок у цій кімнаті</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">У вас немає повноважень розпочати груповий виклик</string>
+    <string name="no_permissions_to_start_conf_call">У вас немає повноважень розпочати груповий виклик у цій кімнаті</string>
     <string name="action_reset">Скинути</string>
     <string name="action_dismiss">Відхилити</string>
     <string name="action_play">Грати</string>
@@ -816,7 +816,7 @@
     <string name="room_widget_resource_decline_permission">Заблокувати все</string>
     <string name="room_widget_resource_grant_permission">Дозволити</string>
     <string name="room_widget_resource_permission_title">Цей віджет хоче використовувати такі ресурси:</string>
-    <string name="error_jitsi_not_supported_on_old_device">На жаль, конференц-дзвінки з Jitsi не підтримуються на старих пристроях (пристрої з ОС Android нижче 6.0)</string>
+    <string name="error_jitsi_not_supported_on_old_device">На жаль, групові виклики з Jitsi не підтримуються на старих пристроях (пристрої з ОС Android нижче 6.0)</string>
     <string name="room_widget_permission_room_id">ID кімнати</string>
     <string name="room_widget_permission_widget_id">ID віджету</string>
     <string name="room_widget_permission_theme">Ваша тема</string>
@@ -1002,7 +1002,9 @@
     <string name="room_participants_remove_title">Вилучити користувача</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ви впевнені, що бажаєте скасувати запрошення для цього користувача\?</string>
     <string name="room_participants_action_cancel_invite_title">Скасувати запрошення</string>
-    <string name="room_participants_action_unignore_prompt_msg">Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.
+\n
+\nЗауважте, що ця дія перезапустить застосунок, а це може тривати деякий час.</string>
     <string name="room_participants_action_unignore_title">Рознехтувати користувача</string>
     <string name="room_participants_action_ignore_prompt_msg">Нехтування цього користувача призведе до вилучення його повідомлень з усіх спільних кімнат.
 \n
@@ -1142,7 +1144,7 @@
     <string name="room_list_quick_actions_leave">Вийти з кімнати</string>
     <string name="room_profile_section_more_leave">Вийти з кімнати</string>
     <string name="direct_room_profile_section_more_leave">Вийти</string>
-    <string name="jitsi_leave_conf_to_join_another_one_content">Вийти з поточної конференції та перейти до іншої\?</string>
+    <string name="jitsi_leave_conf_to_join_another_one_content">Вийти з поточного групового виклику та перейти до іншого\?</string>
     <string name="room_participants_leave_private_warning">Це не загальнодоступна кімната. Ви не зможете знову приєднатися без запрошення.</string>
     <string name="room_settings_enable_encryption_no_permission">У вас немає дозволу на ввімкнення шифрування в цій кімнаті.</string>
     <string name="room_settings_permissions_title">Дозволи кімнати</string>
@@ -1461,7 +1463,7 @@
     <string name="keys_backup_restore_with_recovery_key">Використайте ключ відновлення, щоб розблокувати історію зашифрованих повідомлень</string>
     <string name="keys_backup_restore_use_recovery_key">використайте свій ключ відновлення</string>
     <string name="keys_backup_restore_is_getting_backup_version">Отримання резервної версії…</string>
-    <string name="error_jitsi_join_conf">Перепрошуємо, під час спроби приєднатися до конференції сталася помилка</string>
+    <string name="error_jitsi_join_conf">Перепрошуємо, під час спроби приєднатися до групового виклику сталася помилка</string>
     <string name="directory_add_a_new_server_error_already_added">Цей сервер уже є у списку</string>
     <string name="directory_add_a_new_server_error">Не вдалося знайти цей сервер або його список кімнат</string>
     <string name="directory_add_a_new_server_prompt">Введіть назву нового сервера, який потрібно дослідити.</string>
@@ -2549,4 +2551,32 @@
     <string name="ftue_account_created_take_me_home">На головну</string>
     <string name="ftue_account_created_personalize">Персоналізувати профіль</string>
     <string name="action_disable">Вимкнути</string>
+    <string name="location_share_live_started">Завантаження місцеперебування наживо…</string>
+    <string name="location_share_live_select_duration_option_3">8 годин</string>
+    <string name="location_share_live_select_duration_option_2">1 годину</string>
+    <string name="location_share_live_select_duration_option_1">15 хвилин</string>
+    <string name="location_share_live_select_duration_title">Ділитися своїм місцеперебуванням наживо</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Неможливо відтворити %1$s</string>
+    <string name="a11y_pause_audio_message">Зупинити %1$s</string>
+    <string name="a11y_play_audio_message">Відтворити %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d хвилин %2$d секунд</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Ділиться своїм місцеперебуванням наживо</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} також чудово підходить для роботи. Йому довіряють найтаємніші організації світу.</string>
+    <string name="beta">БЕТА</string>
+    <string name="send_feedback_threads_info">Треди — це поточна розробка з новими, захопливими майбутніми функціями, такими як вдосконалені сповіщення. Ми хотіли б почути ваш відгук!</string>
+    <string name="send_feedback_threads_title">Відгук про Треди бета</string>
+    <string name="give_feedback_threads">Надіслати відгук</string>
+    <string name="beta_title_bottom_sheet_action">БЕТА</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Якщо ввімкнено, ви завжди будете видимі в режимі офлайн для інших користувачів, навіть коли користуєтеся застосунком.</string>
+    <string name="settings_presence_user_always_appears_offline">Офлайн режим</string>
+    <string name="settings_presence">Присутність</string>
+    <string name="threads_labs_enable_notice_message">Ваш домашній сервер не підтримує тредів, тому ця функція може бути ненадійною. Деякі треди повідомлень можуть бути недоступними. %sУсе одно хочете ввімкнути треди\?</string>
+    <string name="threads_labs_enable_notice_title">Треди бета</string>
+    <string name="threads_beta_enable_notice_message">Треди допомагають упорядкувати свої розмови за темами та легко стежити за ними. %sУвімкнення тредів перезавантажить застосунок. Це може тривати більше часу для деяких облікових записів.</string>
+    <string name="threads_beta_enable_notice_title">Треди бета</string>
+    <string name="action_learn_more">Докладніше</string>
+    <string name="action_try_it_out">Спробувати</string>
 </resources>

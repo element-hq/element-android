@@ -29,7 +29,7 @@ import javax.inject.Provider
 internal class DefaultWidgetService @Inject constructor(private val widgetManager: WidgetManager,
                                                         private val widgetURLFormatter: WidgetURLFormatter,
                                                         private val widgetPostAPIMediator: Provider<WidgetPostAPIMediator>) :
-    WidgetService {
+        WidgetService {
 
     override fun getWidgetURLFormatter(): WidgetURLFormatter {
         return widgetURLFormatter
@@ -52,7 +52,7 @@ internal class DefaultWidgetService @Inject constructor(private val widgetManage
         return widgetManager.getWidgetComputedUrl(widget, isLightTheme)
     }
 
-override fun getRoomWidgetsLive(
+    override fun getRoomWidgetsLive(
             roomId: String,
             widgetId: QueryStringValue,
             widgetTypes: Set<String>?,

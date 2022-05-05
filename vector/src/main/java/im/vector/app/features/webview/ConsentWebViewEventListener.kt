@@ -32,7 +32,7 @@ private const val RIOT_BOT_ID = "@riot-bot:matrix.org"
 class ConsentWebViewEventListener(activity: VectorBaseActivity<*>,
                                   private val session: Session,
                                   private val delegate: WebViewEventListener) :
-    WebViewEventListener by delegate {
+        WebViewEventListener by delegate {
 
     private val safeActivity: VectorBaseActivity<*>? by weak(activity)
 

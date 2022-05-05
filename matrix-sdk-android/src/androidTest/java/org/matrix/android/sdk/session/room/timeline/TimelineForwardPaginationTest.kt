@@ -30,6 +30,7 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
@@ -74,7 +75,7 @@ class TimelineForwardPaginationTest : InstrumentedTest {
 
         // Alice clear the cache and restart the sync
         commonTestHelper.clearCacheAndSync(aliceSession)
-        val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(30))
+        val aliceTimeline = roomFromAlicePOV.timelineService().createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
         // Alice sees the 10 last message of the room, and can only navigate BACKWARD

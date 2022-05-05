@@ -18,6 +18,8 @@ package im.vector.app.features.crypto.verification
 import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.time.Clock
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
@@ -42,7 +44,9 @@ import javax.inject.Singleton
 class IncomingVerificationRequestHandler @Inject constructor(
         private val context: Context,
         private var avatarRenderer: Provider<AvatarRenderer>,
-        private val popupAlertManager: PopupAlertManager) : VerificationService.Listener {
+        private val popupAlertManager: PopupAlertManager,
+        private val clock: Clock,
+) : VerificationService.Listener {
 
     private var session: Session? = null
 
@@ -61,9 +65,9 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // TODO maybe check also if
         val uid = "kvr_${tx.transactionId}"
         when (tx.state) {
-            is VerificationTxState.OnStarted -> {
+            is VerificationTxState.OnStarted       -> {
                 // Add a notification for every incoming request
-                val user = session?.getUser(tx.otherUserId)
+                val user = session?.userService()?.getUser(tx.otherUserId)
                 val name = user?.toMatrixItem()?.getBestName() ?: tx.otherUserId
                 val alert = VerificationVectorAlert(
                         uid,
@@ -104,7 +108,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                     }
                             )
                             // 10mn expiration
-                            expirationTimestamp = System.currentTimeMillis() + (10 * 60 * 1000L)
+                            expirationTimestamp = clock.epochMillis() + (10 * 60 * 1000L)
                         }
                 popupAlertManager.postVectorAlert(alert)
             }
@@ -127,7 +131,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                 // XXX this is a bit hard coded :/
                 popupAlertManager.cancelAlert("review_login")
             }
-            val user = session?.getUser(pr.otherUserId)?.toMatrixItem()
+            val user = session?.userService()?.getUser(pr.otherUserId)?.toMatrixItem()
             val name = user?.getBestName() ?: pr.otherUserId
             val description = if (name == pr.otherUserId) {
                 name
@@ -156,7 +160,12 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 if (roomId.isNullOrBlank()) {
                                     it.navigator.waitSessionVerification(it)
                                 } else {
-                                    it.navigator.openRoom(it, roomId, pr.transactionId)
+                                    it.navigator.openRoom(
+                                            context = it,
+                                            roomId = roomId,
+                                            eventId = pr.transactionId,
+                                            trigger = ViewRoom.Trigger.VerificationRequest
+                                    )
                                 }
                             }
                         }
@@ -168,7 +177,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                         }
                         colorAttribute = R.attr.vctr_notice_secondary
                         // 5mn expiration
-                        expirationTimestamp = System.currentTimeMillis() + (5 * 60 * 1000L)
+                        expirationTimestamp = clock.epochMillis() + (5 * 60 * 1000L)
                     }
             popupAlertManager.postVectorAlert(alert)
         }

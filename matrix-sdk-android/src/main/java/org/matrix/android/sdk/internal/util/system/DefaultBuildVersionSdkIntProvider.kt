@@ -20,6 +20,6 @@ import android.os.Build
 import javax.inject.Inject
 
 internal class DefaultBuildVersionSdkIntProvider @Inject constructor() :
-    BuildVersionSdkIntProvider {
+        BuildVersionSdkIntProvider {
     override fun get() = Build.VERSION.SDK_INT
 }

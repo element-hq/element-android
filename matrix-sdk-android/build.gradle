@@ -14,6 +14,27 @@ buildscript {
     }
 }
 
+dokkaHtml {
+    dokkaSourceSets {
+        configureEach {
+            // Emit warnings about not documented members.
+            reportUndocumented.set(true)
+            // Suppress legacy Riot's packages.
+            perPackageOption {
+                matchingRegex.set("org.matrix.android.sdk.internal.legacy.riot")
+                suppress.set(true)
+            }
+            perPackageOption {
+                matchingRegex.set("org.matrix.androidsdk.crypto.data")
+                suppress.set(true)
+            }
+            // List of files with module and package documentation
+            // https://kotlinlang.org/docs/reference/kotlin-doc.html#module-and-package-documentation
+            includes.from("./docs/modules.md", "./docs/packages.md")
+        }
+    }
+}
+
 android {
     testOptions.unitTests.includeAndroidResources = true
 
@@ -32,7 +53,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.4.13\""
+        buildConfigField "String", "SDK_VERSION", "\"1.4.14\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         buildConfigField "String", "GIT_SDK_REVISION_UNIX_DATE", "\"${gitRevisionUnixDate()}\""
@@ -171,7 +192,7 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.46'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.47'
 
     testImplementation libs.tests.junit
     testImplementation 'org.robolectric:robolectric:4.7.3'

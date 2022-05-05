@@ -36,7 +36,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class BootstrapEnterPassphraseFragment @Inject constructor() :
-    VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
+        VectorBaseFragment<FragmentBootstrapEnterPassphraseBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBootstrapEnterPassphraseBinding {
         return FragmentBootstrapEnterPassphraseBinding.inflate(inflater, container, false)

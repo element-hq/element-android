@@ -37,7 +37,7 @@ interface ImageLoaderTarget {
 }
 
 internal class DefaultImageLoaderTarget(val holder: AnimatedImageViewHolder, private val contextView: ImageView) :
-    ImageLoaderTarget {
+        ImageLoaderTarget {
     override fun contextView(): ImageView {
         return contextView
     }

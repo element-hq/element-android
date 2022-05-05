@@ -49,7 +49,7 @@ class ThreadListController @Inject constructor(
     }
 
     override fun buildModels() =
-            when (session.getHomeServerCapabilities().canUseThreading) {
+            when (session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) {
                 true  -> buildThreadSummaries()
                 false -> buildThreadList()
             }
@@ -71,13 +71,13 @@ class ThreadListController @Inject constructor(
                 }
                 ?.forEach { threadSummary ->
                     val date = dateFormatter.format(threadSummary.latestEvent?.originServerTs, DateFormatKind.ROOM_LIST)
-                    val lastMessageFormatted =  threadSummary.let {
+                    val lastMessageFormatted = threadSummary.let {
                         displayableEventFormatter.formatThreadSummary(
                                 event = it.latestEvent,
                                 latestEdition = it.threadEditions.latestThreadEdition
                         ).toString()
                     }
-                    val rootMessageFormatted =  threadSummary.let {
+                    val rootMessageFormatted = threadSummary.let {
                         displayableEventFormatter.formatThreadSummary(
                                 event = it.rootEvent,
                                 latestEdition = it.threadEditions.rootThreadEdition
@@ -123,12 +123,12 @@ class ThreadListController @Inject constructor(
                 ?.forEach { timelineEvent ->
                     val date = dateFormatter.format(timelineEvent.root.threadDetails?.lastMessageTimestamp, DateFormatKind.ROOM_LIST)
                     val lastRootThreadEdition = timelineEvent.root.threadDetails?.lastRootThreadEdition
-                    val lastMessageFormatted =  timelineEvent.root.threadDetails?.threadSummaryLatestEvent.let {
+                    val lastMessageFormatted = timelineEvent.root.threadDetails?.threadSummaryLatestEvent.let {
                         displayableEventFormatter.formatThreadSummary(
                                 event = it,
                         ).toString()
                     }
-                    val rootMessageFormatted =  timelineEvent.root.let {
+                    val rootMessageFormatted = timelineEvent.root.let {
                         displayableEventFormatter.formatThreadSummary(
                                 event = it,
                                 latestEdition = lastRootThreadEdition

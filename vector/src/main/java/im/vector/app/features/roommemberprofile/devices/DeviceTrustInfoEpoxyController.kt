@@ -36,7 +36,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                                                          private val colorProvider: ColorProvider,
                                                          private val dimensionConverter: DimensionConverter,
                                                          private val vectorPreferences: VectorPreferences) :
-    TypedEpoxyController<DeviceListViewState>() {
+        TypedEpoxyController<DeviceListViewState>() {
 
     interface InteractionListener {
         fun onVerifyManually(device: CryptoDeviceInfo)

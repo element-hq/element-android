@@ -24,6 +24,7 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
+import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
 internal interface GetEventTask : Task<GetEventTask.Params, Event> {
@@ -36,7 +37,8 @@ internal interface GetEventTask : Task<GetEventTask.Params, Event> {
 internal class DefaultGetEventTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        private val eventDecryptor: EventDecryptor
+        private val eventDecryptor: EventDecryptor,
+        private val clock: Clock,
 ) : GetEventTask {
 
     override suspend fun execute(params: GetEventTask.Params): Event {
@@ -59,7 +61,7 @@ internal class DefaultGetEventTask @Inject constructor(
                     }
         }
 
-        event.ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
+        event.ageLocalTs = event.unsignedData?.age?.let { clock.epochMillis() - it }
 
         return event
     }

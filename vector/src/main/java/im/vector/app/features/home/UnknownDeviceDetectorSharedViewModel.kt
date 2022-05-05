@@ -29,6 +29,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.time.Clock
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,6 +40,7 @@ import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
@@ -55,10 +57,12 @@ data class DeviceDetectionInfo(
         val currentSessionTrust: Boolean
 )
 
-class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted initialState: UnknownDevicesState,
-                                                                       session: Session,
-                                                                       private val vectorPreferences: VectorPreferences) :
-    VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
+class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(
+        @Assisted initialState: UnknownDevicesState,
+        session: Session,
+        private val vectorPreferences: VectorPreferences,
+        clock: Clock,
+) : VectorViewModel<UnknownDevicesState, UnknownDeviceDetectorSharedViewModel.Action, EmptyViewEvents>(initialState) {
 
     sealed class Action : VectorViewModelAction {
         data class IgnoreDevice(val deviceIds: List<String>) : Action()
@@ -74,11 +78,10 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
     private val ignoredDeviceList = ArrayList<String>()
 
     init {
-
         val currentSessionTs = session.cryptoService().getCryptoDeviceInfo(session.myUserId)
                 .firstOrNull { it.deviceId == session.sessionParams.deviceId }
                 ?.firstTimeSeenLocalTs
-                ?: System.currentTimeMillis()
+                ?: clock.epochMillis()
         Timber.v("## Detector - Current Session first time seen $currentSessionTs")
 
         ignoredDeviceList.addAll(

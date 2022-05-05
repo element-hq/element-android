@@ -46,8 +46,9 @@ data class IncomingRequestCancellation(
          * Factory
          *
          * @param event the event
+         * @param currentTimeMillis the current time in milliseconds
          */
-        fun fromEvent(event: Event): IncomingRequestCancellation? {
+        fun fromEvent(event: Event, currentTimeMillis: Long): IncomingRequestCancellation? {
             return event.getClearContent()
                     .toModel<ShareRequestCancellation>()
                     ?.let {
@@ -55,7 +56,7 @@ data class IncomingRequestCancellation(
                                 userId = event.senderId,
                                 deviceId = it.requestingDeviceId,
                                 requestId = it.requestId,
-                                localCreationTimestamp = event.ageLocalTs ?: System.currentTimeMillis()
+                                localCreationTimestamp = event.ageLocalTs ?: currentTimeMillis
                         )
                     }
         }

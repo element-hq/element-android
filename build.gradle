@@ -21,8 +21,8 @@ buildscript {
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
         classpath "com.likethesalad.android:stem-plugin:2.0.0"
-        classpath 'org.owasp:dependency-check-gradle:7.0.4.1'
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.20"
+        classpath 'org.owasp:dependency-check-gradle:7.1.0.1'
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.21"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -30,7 +30,7 @@ buildscript {
 
 // ktlint Plugin
 plugins {
-    id "org.jlleitschuh.gradle.ktlint" version "10.2.1"
+    id "org.jlleitschuh.gradle.ktlint" version "10.3.0"
 }
 
 // https://github.com/jeremylong/DependencyCheck

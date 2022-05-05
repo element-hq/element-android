@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTra
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 

@@ -1528,7 +1528,9 @@
 \n
 \nKëtë veprim mund ta zhbëni në çfarëdo kohe, te rregullimet e përgjithshme.</string>
     <string name="room_participants_action_unignore_title">Hiqe shpërfilljen e përdoruesit</string>
-    <string name="room_participants_action_unignore_prompt_msg">Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.
+\n
+\nKini parasysh se ky veprim do të sjellë rinisjen e aplikacionit dhe do të hajë ca kohë.</string>
     <string name="room_participants_action_cancel_invite_title">Anuloje ftesën</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Jeni i sigurt se doni të anulohet ftesa për këtë përdorues\?</string>
     <string name="room_participants_remove_title">Përzëre përdoruesin</string>
@@ -2376,7 +2378,7 @@
     <string name="ftue_auth_use_case_title">Me kë do të bisedoni më shumë\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Po e shihni tashmë këtë rrjedhë!</string>
     <string name="view_in_room">Shiheni në Dhomë</string>
-    <string name="reply_in_thread">Përgjigjuni Te Rrjedha</string>
+    <string name="reply_in_thread">Përgjigjuni te rrjedha</string>
     <string name="command_not_supported_in_threads">Urdhri “%s” njihet, por nuk mbulohet në rrjedha.</string>
     <string name="search_thread_from_a_thread">Nga një Rrjedhë</string>
     <string name="thread_list_empty_notice">Ndihmëz: Prekni pakëz gjatë një mesazh dhe përdorni “%s”.</string>
@@ -2445,4 +2447,30 @@
     <string name="ftue_account_created_take_me_home">Shpjemëni në shtëpi</string>
     <string name="ftue_account_created_personalize">Personalizoni profil</string>
     <string name="action_disable">Çaktivizoje</string>
+    <string name="send_feedback_threads_title">Përshtypje për Beta-n e Rrjedhave</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Në u aktivizoftë, përdoruesve të tjerë do t’u dukeni në linjë, madje edhe kur përdoret aplikacioni.</string>
+    <string name="threads_labs_enable_notice_message">Shërbyesi juaj Home aktualisht s’mbulon rrjedha, ndaj kjo veçori mund të jetë e paqëndrueshme. Disa mesazhe rrjedhash mund të mos jenë të përdorshëm. %sDoni të aktivizohen rrjedhat, sido qoftë\?</string>
+    <string name="threads_labs_enable_notice_title">Beta Rrjedhash</string>
+    <string name="threads_beta_enable_notice_message">Rrjedhat ju ndihmojnë t’i mbani bisedat tuaja brenda temës dhe ndjekjen e tyre të lehtë. %sAktivizimi i rrjedhave do të sjellë rifreskimin e aplikacionit. Për disa llogari, kjo mund të zgjasë më shumë.</string>
+    <string name="threads_beta_enable_notice_title">Beta Rrjedhash</string>
+    <string name="send_feedback_threads_info">Rrjedhat janë në përpunim të vazhdueshëm, me veçori të reja, ngazëlluese, të ardhshme, bie fjala, njoftime. Do të donim fort të dëgjonim mendimin tuaj!</string>
+    <string name="location_share_live_select_duration_option_3">8 orë</string>
+    <string name="location_share_live_select_duration_option_2">1 orë</string>
+    <string name="location_share_live_select_duration_option_1">15 minuta</string>
+    <string name="location_share_live_select_duration_title">Tregoni vendndodhjen tuaj drejtpërsëdrejti për</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">S’arrihet të luhet %1$s</string>
+    <string name="a11y_pause_audio_message">Ndale %1$s</string>
+    <string name="a11y_play_audio_message">Luaje %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minuta %2$d sekonda</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} është gjithashtu i goditur për në punë. Është i besuar nga entet më të sigurta të botës.</string>
+    <string name="beta">BETA</string>
+    <string name="give_feedback_threads">Jepni Përshtypje</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline">Mënyra <em>offline</em></string>
+    <string name="settings_presence">Prani</string>
+    <string name="action_learn_more">Mësoni më tepër</string>
+    <string name="action_try_it_out">Provojeni</string>
 </resources>

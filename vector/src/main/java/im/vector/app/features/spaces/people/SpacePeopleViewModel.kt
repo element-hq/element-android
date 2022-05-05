@@ -65,7 +65,7 @@ class SpacePeopleViewModel @AssistedInject constructor(
     private fun handleChatWith(action: SpacePeopleViewAction.ChatWith) {
         val otherUserId = action.member.userId
         if (otherUserId == session.myUserId) return
-        val existingRoomId = session.getExistingDirectRoomWithUser(otherUserId)
+        val existingRoomId = session.roomService().getExistingDirectRoomWithUser(otherUserId)
         if (existingRoomId != null) {
             // just open it
             _viewEvents.post(SpacePeopleViewEvents.OpenRoom(existingRoomId))
@@ -86,7 +86,7 @@ class SpacePeopleViewModel @AssistedInject constructor(
                     }
 
             try {
-                val roomId = session.createRoom(roomParams)
+                val roomId = session.roomService().createRoom(roomParams)
                 analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
                 _viewEvents.post(SpacePeopleViewEvents.OpenRoom(roomId))
                 setState { copy(createAndInviteState = Success(roomId)) }

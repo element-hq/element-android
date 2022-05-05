@@ -43,7 +43,7 @@ class AvatarPlaceholderModelLoaderFactory(private val context: Context) : ModelL
 }
 
 class AvatarPlaceholderModelLoader(private val context: Context) :
-    ModelLoader<AvatarPlaceholder, Drawable> {
+        ModelLoader<AvatarPlaceholder, Drawable> {
 
     override fun buildLoadData(model: AvatarPlaceholder, width: Int, height: Int, options: Options): ModelLoader.LoadData<Drawable>? {
         return ModelLoader.LoadData(ObjectKey(model), AvatarPlaceholderDataFetcher(context, model))
@@ -55,7 +55,7 @@ class AvatarPlaceholderModelLoader(private val context: Context) :
 }
 
 class AvatarPlaceholderDataFetcher(context: Context, private val data: AvatarPlaceholder) :
-    DataFetcher<Drawable> {
+        DataFetcher<Drawable> {
 
     private val avatarRenderer = context.singletonEntryPoint().avatarRenderer()
 

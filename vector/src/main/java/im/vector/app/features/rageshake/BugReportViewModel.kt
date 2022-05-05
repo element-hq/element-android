@@ -39,7 +39,7 @@ class BugReportViewModel @AssistedInject constructor(
         override fun create(initialState: BugReportState): BugReportViewModel
     }
 
-    companion object : MavericksViewModelFactory<BugReportViewModel, BugReportState>  by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<BugReportViewModel, BugReportState> by hiltMavericksViewModelFactory()
 
     init {
         fetchHomeserverVersion()

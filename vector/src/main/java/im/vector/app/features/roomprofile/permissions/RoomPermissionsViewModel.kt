@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
@@ -38,7 +39,7 @@ import org.matrix.android.sdk.flow.unwrap
 
 class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialState: RoomPermissionsViewState,
                                                            private val session: Session) :
-    VectorViewModel<RoomPermissionsViewState, RoomPermissionsAction, RoomPermissionsViewEvents>(initialState) {
+        VectorViewModel<RoomPermissionsViewState, RoomPermissionsAction, RoomPermissionsViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<RoomPermissionsViewModel, RoomPermissionsViewState> {
@@ -123,7 +124,7 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
                                 }
                         )
                     }
-                    room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent.toContent())
+                    room.stateService().sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent.toContent())
                     setState {
                         copy(
                                 isLoading = false

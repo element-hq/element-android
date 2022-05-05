@@ -32,6 +32,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetMatrixToCardBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.AvatarRenderer
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
@@ -44,7 +45,8 @@ class MatrixToBottomSheet :
 
     @Parcelize
     data class MatrixToArgs(
-            val matrixToLink: String
+            val matrixToLink: String,
+            val origin: OriginOfMatrixTo
     ) : Parcelable
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
@@ -58,7 +60,7 @@ class MatrixToBottomSheet :
     private val viewModel by fragmentViewModel(MatrixToBottomSheetViewModel::class)
 
     interface InteractionListener {
-        fun mxToBottomSheetNavigateToRoom(roomId: String)
+        fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?)
         fun mxToBottomSheetSwitchToSpace(spaceId: String)
     }
 
@@ -97,7 +99,9 @@ class MatrixToBottomSheet :
         viewModel.observeViewEvents {
             when (it) {
                 is MatrixToViewEvents.NavigateToRoom  -> {
-                    interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId)
+                    withState(viewModel) { state ->
+                        interactionListener?.mxToBottomSheetNavigateToRoom(it.roomId, state.origin.toViewRoomTrigger())
+                    }
                     dismiss()
                 }
                 MatrixToViewEvents.Dismiss            -> dismiss()
@@ -116,9 +120,9 @@ class MatrixToBottomSheet :
     }
 
     companion object {
-        fun withLink(matrixToLink: String): MatrixToBottomSheet {
+        fun withLink(matrixToLink: String, origin: OriginOfMatrixTo): MatrixToBottomSheet {
             return MatrixToBottomSheet().apply {
-                setArguments(MatrixToArgs(matrixToLink = matrixToLink))
+                setArguments(MatrixToArgs(matrixToLink = matrixToLink, origin = origin))
             }
         }
     }

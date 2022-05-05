@@ -670,15 +670,11 @@ class WebRtcCall(
                 isRemoteOnHold = true
                 isLocalOnHold = true
                 direction = RtpTransceiver.RtpTransceiverDirection.SEND_ONLY
-                timer.pause()
             } else {
                 isRemoteOnHold = false
                 isLocalOnHold = wasLocalOnHold
                 onCallBecomeActive(this@WebRtcCall)
                 direction = RtpTransceiver.RtpTransceiverDirection.SEND_RECV
-                if (!isLocalOnHold) {
-                    timer.resume()
-                }
             }
             for (transceiver in peerConnection?.transceivers ?: emptyList()) {
                 transceiver.direction = direction
@@ -768,6 +764,14 @@ class WebRtcCall(
 
     fun currentCaptureFormat(): CaptureFormat {
         return currentCaptureFormat
+    }
+
+    fun startSharingScreen() {
+        // TODO. Will be handled within the next PR.
+    }
+
+    fun stopSharingScreen() {
+        // TODO. Will be handled within the next PR.
     }
 
     private suspend fun release() {
@@ -933,11 +937,6 @@ class WebRtcCall(
             wasLocalOnHold = nowOnHold
             if (prevOnHold != nowOnHold) {
                 isLocalOnHold = nowOnHold
-                if (nowOnHold) {
-                    timer.pause()
-                } else {
-                    timer.resume()
-                }
                 listeners.forEach {
                     tryOrNull { it.onHoldUnhold() }
                 }
@@ -981,7 +980,7 @@ class WebRtcCall(
                 val nativeUserId = session.sipNativeLookup(newAssertedIdentity.id!!).firstOrNull()?.userId
                 if (nativeUserId != null) {
                     val resolvedUser = tryOrNull {
-                        session.resolveUser(nativeUserId)
+                        session.userService().resolveUser(nativeUserId)
                     }
                     if (resolvedUser != null) {
                         remoteAssertedIdentity = newAssertedIdentity.copy(

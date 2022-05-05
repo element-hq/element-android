@@ -47,7 +47,7 @@ class DeactivateAccountTest : InstrumentedTest {
 
         // Deactivate the account
         commonTestHelper.runBlockingTest {
-            session.deactivateAccount(
+            session.accountService().deactivateAccount(
                     eraseAllData = false,
                     userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
                         override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {

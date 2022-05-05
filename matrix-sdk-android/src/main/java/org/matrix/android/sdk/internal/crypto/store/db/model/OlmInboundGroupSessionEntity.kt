@@ -34,7 +34,7 @@ internal open class OlmInboundGroupSessionEntity(
         var olmInboundGroupSessionData: String? = null,
         // Indicate if the key has been backed up to the homeserver
         var backedUp: Boolean = false) :
-    RealmObject() {
+        RealmObject() {
 
     fun getInboundGroupSession(): OlmInboundGroupSessionWrapper2? {
         return try {

@@ -106,7 +106,7 @@ body:
 
         https://github.com/matrix-org/matrix-android-sdk2-sample
 
-        - [ ] Update the dependency to the new version of the SDK2. It can take some time for MavenCentral to make the librarie available. You can check status on https://repo1.maven.org/maven2/org/matrix/android/matrix-android-sdk2/
+        - [ ] Update the dependency to the new version of the SDK2. It can take a few minutes for MavenCentral to make the library available. You can check status on https://repo1.maven.org/maven2/org/matrix/android/matrix-android-sdk2/
         - [ ] Build and run the sample, you may have to fix some API break
         - [ ] Commit and push directly on `main`
     validations:

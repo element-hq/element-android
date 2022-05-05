@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notice_room_invite_no_invitee">%s এর আমন্ত্রণ</string>
+</resources>

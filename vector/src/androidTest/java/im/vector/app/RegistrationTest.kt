@@ -34,6 +34,7 @@ import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -44,7 +45,7 @@ class RegistrationTest {
 
     @Test
     fun simpleRegister() {
-        val userId: String = "UiAutoTest_${System.currentTimeMillis()}"
+        val userId: String = "UiAutoTest_${Random.nextLong()}"
         val password: String = "password"
         val homeServerUrl: String = "http://10.0.2.2:8080"
 

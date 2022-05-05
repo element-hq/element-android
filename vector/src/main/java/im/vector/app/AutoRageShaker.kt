@@ -169,7 +169,7 @@ class AutoRageShaker @Inject constructor(
 
                         coroutineScope.launch {
                             try {
-                                activeSessionHolder.getSafeActiveSession()?.sendToDevice(
+                                activeSessionHolder.getSafeActiveSession()?.toDeviceService()?.sendToDevice(
                                         eventType = AUTO_RS_REQUEST,
                                         userId = target.senderUserId,
                                         deviceId = target.senderDeviceId,
@@ -261,7 +261,7 @@ class AutoRageShaker @Inject constructor(
         this.currentActiveSessionId = sessionId
 
         hasSynced = session.hasAlreadySynced()
-        session.getSyncStatusLive()
+        session.syncStatusService().getSyncStatusLive()
                 .asFlow()
                 .onEach {
                     hasSynced = it !is SyncStatusService.Status.InitialSyncProgressing
@@ -269,11 +269,11 @@ class AutoRageShaker @Inject constructor(
                 .launchIn(session.coroutineScope)
         activeSessionIds.add(sessionId)
         session.addListener(this)
-        session.addEventStreamListener(detector)
+        session.eventStreamService().addEventStreamListener(detector)
     }
 
     override fun onSessionStopped(session: Session) {
-        session.removeEventStreamListener(detector)
+        session.eventStreamService().removeEventStreamListener(detector)
         activeSessionIds.remove(session.sessionId)
     }
 }

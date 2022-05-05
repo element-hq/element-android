@@ -37,7 +37,7 @@ import java.net.URL
 
 class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val initialState: RoomWidgetPermissionViewState,
                                                                 private val session: Session) :
-    VectorViewModel<RoomWidgetPermissionViewState, RoomWidgetPermissionActions, RoomWidgetPermissionViewEvents>(initialState) {
+        VectorViewModel<RoomWidgetPermissionViewState, RoomWidgetPermissionActions, RoomWidgetPermissionViewEvents>(initialState) {
 
     private val widgetService = session.widgetService()
     private val integrationManagerService = session.integrationManagerService()

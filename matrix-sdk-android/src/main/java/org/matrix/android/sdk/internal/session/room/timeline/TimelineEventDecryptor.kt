@@ -99,9 +99,7 @@ internal class TimelineEventDecryptor @Inject constructor(
         executor?.execute {
             Realm.getInstance(realmConfiguration).use { realm ->
                 try {
-                    runBlocking {
-                        processDecryptRequest(request, realm)
-                    }
+                    processDecryptRequest(request, realm)
                 } catch (e: InterruptedException) {
                     Timber.i("Decryption got interrupted")
                 }
@@ -121,7 +119,7 @@ internal class TimelineEventDecryptor @Inject constructor(
         }
     }
 
-    private suspend fun processDecryptRequest(request: DecryptionRequest, realm: Realm) {
+    private fun processDecryptRequest(request: DecryptionRequest, realm: Realm) {
         val event = request.event
         val timelineId = request.timelineId
 
@@ -132,7 +130,8 @@ internal class TimelineEventDecryptor @Inject constructor(
             return
         }
         try {
-            val result = cryptoService.decryptEvent(request.event, timelineId)
+            // note: runBlocking should be used here while we are in realm single thread executor, to avoid thread switching
+            val result = runBlocking { cryptoService.decryptEvent(request.event, timelineId) }
             Timber.v("Successfully decrypted event ${event.eventId}")
             realm.executeTransaction {
                 val eventId = event.eventId ?: return@executeTransaction

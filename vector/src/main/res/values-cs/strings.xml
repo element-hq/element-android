@@ -1566,7 +1566,9 @@
 \n
 \nMůžete tuto akci kdykoli zvrátit v obecných nastaveních.</string>
     <string name="room_participants_action_unignore_title">Odignorovat uživatele</string>
-    <string name="room_participants_action_unignore_prompt_msg">Odignorování tohoto uživatele opět ukáže všechny jejich zprávy.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Zrušení ignorování tohoto uživatele opět ukáže všechny jejich zprávy.
+\n
+\nTato akce povede k restartování aplikace a může trvat nějakou dobu.</string>
     <string name="room_participants_action_cancel_invite_title">Zrušit pozvánku</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Jste si jisti, že chcete zrušit pozvánku tomuto uživateli\?</string>
     <string name="room_participants_remove_title">Vykopnout uživatele</string>
@@ -2504,4 +2506,32 @@
     <string name="ftue_account_created_take_me_home">Vezmi mě domů</string>
     <string name="ftue_account_created_personalize">Přizpůsobit profil</string>
     <string name="action_disable">Zakázat</string>
+    <string name="location_share_live_started">Načítání polohy živě…</string>
+    <string name="location_share_live_select_duration_option_3">8 hodin</string>
+    <string name="location_share_live_select_duration_option_2">1 hodinu</string>
+    <string name="location_share_live_select_duration_option_1">15 minut</string>
+    <string name="location_share_live_select_duration_title">Sdílet svoji polohu živě na</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Nelze přehrát %1$s</string>
+    <string name="a11y_pause_audio_message">Pozastavit %1$s</string>
+    <string name="a11y_play_audio_message">Přehrát %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minut %2$d sekund</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Sdíleli svou polohu živě</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} se skvěle hodí i na pracoviště. Aplikaci důvěřují nejlépe zabezpečené organizace na světě.</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_info">Vlákna jsou ve fázi vývoje s novými zajímavými funkcemi, jako jsou například vylepšená oznámení. Rádi si vyslechneme vaši zpětnou vazbu!</string>
+    <string name="send_feedback_threads_title">Zpětná vazba k vláknům Beta</string>
+    <string name="give_feedback_threads">Poskytnout zpětnou vazbu</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Pokud je tato funkce povolena, budete se ostatním uživatelům vždy jevit jako offline, a to i při používání aplikace.</string>
+    <string name="settings_presence_user_always_appears_offline">Režim offline</string>
+    <string name="settings_presence">Přítomnost</string>
+    <string name="threads_labs_enable_notice_message">Váš domovský server v současné době vlákna nepodporuje, takže tato funkce může být nespolehlivá. Některé zprávy ve vláknech nemusí být spolehlivě dostupné. %sChcete přesto vlákna povolit\?</string>
+    <string name="threads_labs_enable_notice_title">Vlákna Beta</string>
+    <string name="threads_beta_enable_notice_message">Vlákna pomáhají udržovat konverzace k tématu a snadno je sledovat. %sPovolením vláken se aplikace restartuje. U některých účtů to může trvat déle.</string>
+    <string name="threads_beta_enable_notice_title">Vlákna Beta</string>
+    <string name="action_learn_more">Zjistit více</string>
+    <string name="action_try_it_out">Vyzkoušet to</string>
 </resources>

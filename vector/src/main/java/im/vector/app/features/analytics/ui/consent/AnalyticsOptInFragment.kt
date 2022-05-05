@@ -31,7 +31,7 @@ import im.vector.app.databinding.FragmentAnalyticsOptinBinding
 import javax.inject.Inject
 
 class AnalyticsOptInFragment @Inject constructor() :
-    VectorBaseFragment<FragmentAnalyticsOptinBinding>(),
+        VectorBaseFragment<FragmentAnalyticsOptinBinding>(),
         OnBackPressed {
 
     // Share the view model with the Activity so that the Activity

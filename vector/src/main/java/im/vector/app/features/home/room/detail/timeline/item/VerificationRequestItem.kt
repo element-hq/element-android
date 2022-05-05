@@ -31,6 +31,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.time.Clock
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
@@ -46,6 +47,9 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
 
     @EpoxyAttribute
     lateinit var attributes: Attributes
+
+    @EpoxyAttribute
+    lateinit var clock: Clock
 
     @EpoxyAttribute
     var callback: TimelineEventController.Callback? = null
@@ -107,7 +111,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
         }
 
         // Always hide buttons if request is too old
-        if (!VerificationService.isValidRequest(attributes.informationData.ageLocalTS)) {
+        if (!VerificationService.isValidRequest(attributes.informationData.ageLocalTS, clock.epochMillis())) {
             holder.buttonBar.isVisible = false
         }
 

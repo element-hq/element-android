@@ -26,6 +26,8 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import io.noties.markwon.core.spans.LinkSpan
+import org.matrix.android.sdk.api.session.getRoomSummary
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -100,7 +102,7 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
             if (roomId == null) {
                 sessionHolder.getSafeActiveSession()?.getUser(userId)?.toMatrixItem()
             } else {
-                sessionHolder.getSafeActiveSession()?.getRoomMember(userId, roomId)?.toMatrixItem()
+                sessionHolder.getSafeActiveSession()?.roomService()?.getRoomMember(userId, roomId)?.toMatrixItem()
             }
 
     private fun PermalinkData.RoomLink.toMatrixItem(): MatrixItem? =
@@ -116,7 +118,7 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
             }
 
     private fun PermalinkData.GroupLink.toMatrixItem(): MatrixItem? {
-        val group = sessionHolder.getSafeActiveSession()?.getGroupSummary(groupId)
+        val group = sessionHolder.getSafeActiveSession()?.groupService()?.getGroupSummary(groupId)
         return MatrixItem.GroupItem(groupId, group?.displayName, group?.avatarUrl)
     }
 }
