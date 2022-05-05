@@ -37,7 +37,9 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersio
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrustSignature
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
@@ -133,6 +135,7 @@ class KeysBackupTest : InstrumentedTest {
     @Test
     fun createKeysBackupVersionTest() {
         val bobSession = testHelper.createAccount(TestConstants.USER_BOB, KeysBackupTestConstants.defaultSessionParams)
+        cryptoTestHelper.initializeCrossSigning(bobSession)
 
         val keysBackup = bobSession.cryptoService().keysBackupService()
 
@@ -147,12 +150,45 @@ class KeysBackupTest : InstrumentedTest {
         assertFalse(keysBackup.isEnabled)
 
         // Create the version
-        testHelper.doSync<KeysVersion> {
+        val version = testHelper.doSync<KeysVersion> {
             keysBackup.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
 
         // Backup must be enable now
         assertTrue(keysBackup.isEnabled)
+
+        // Check that it's signed with MSK
+        val versionResult = testHelper.doSync<KeysVersionResult?> {
+            keysBackup.getVersion(version.version, it)
+        }
+        val trust = testHelper.doSync<KeysBackupVersionTrust> {
+            keysBackup.getKeysBackupTrust(versionResult!!, it)
+        }
+
+        assertEquals("Should have 2 signatures", 2,  trust.signatures.size)
+
+        trust.signatures
+                .firstOrNull { it is KeysBackupVersionTrustSignature.DeviceSignature }
+                .let {
+                    assertNotNull("Should be signed by a device", it)
+                    it as KeysBackupVersionTrustSignature.DeviceSignature
+                }.let {
+                    assertEquals("Should be signed by current device", bobSession.sessionParams.deviceId, it.deviceId)
+                    assertTrue("Signature should be valid", it.valid)
+                }
+
+        trust.signatures
+                .firstOrNull { it is KeysBackupVersionTrustSignature.UserSignature }
+                .let {
+                    assertNotNull("Should be signed by a user", it)
+                    it as KeysBackupVersionTrustSignature.UserSignature
+                }.let {
+                    val msk = bobSession.cryptoService().crossSigningService()
+                            .getMyCrossSigningKeys()?.masterKey()?.unpaddedBase64PublicKey
+                    assertEquals("Should be signed by my msk 1", msk, it.keyId)
+                    assertEquals("Should be signed by my msk 2", msk, it.cryptoCrossSigningKey?.unpaddedBase64PublicKey)
+                    assertTrue("Signature should be valid", it.valid)
+                }
 
         stateObserver.stopAndCheckStates(null)
         testHelper.signOutAndClose(bobSession)
@@ -855,7 +891,7 @@ class KeysBackupTest : InstrumentedTest {
         assertTrue(keysBackupVersionTrust.usable)
         assertEquals(1, keysBackupVersionTrust.signatures.size)
 
-        val signature = keysBackupVersionTrust.signatures[0]
+        val signature = keysBackupVersionTrust.signatures[0] as KeysBackupVersionTrustSignature.DeviceSignature
         assertTrue(signature.valid)
         assertNotNull(signature.device)
         assertEquals(cryptoTestData.firstSession.cryptoService().getMyDevice().deviceId, signature.deviceId)
