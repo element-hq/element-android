@@ -23,7 +23,8 @@ body:
 
         ### Do the release
 
-        - [ ] Create release with gitflow, branch name `release/1.2.3`
+        - [ ] Make sure `develop` and `main` are up to date (git pull)
+        - [ ] Checkout develop and create a release with gitflow, branch name `release/1.2.3`
         - [ ] Check the crashes from the PlayStore
         - [ ] Check the rageshake with the current dev version: https://github.com/matrix-org/element-android-rageshakes/labels/1.2.3-dev
         - [ ] Run the integration test, and especially `UiAllScreensSanityTest.allScreensTest()`
