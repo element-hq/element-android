@@ -39,7 +39,7 @@ data class NotifiableMessageEvent(
         val outGoingMessage: Boolean = false,
         val outGoingMessageFailed: Boolean = false,
         override val isRedacted: Boolean = false,
-        override var isUpdated: Boolean = false
+        override val isUpdated: Boolean = false
 ) : NotifiableEvent {
 
     val type: String = EventType.MESSAGE

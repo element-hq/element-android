@@ -27,5 +27,5 @@ sealed interface NotifiableEvent : Serializable {
     // Used to know if event should be replaced with the one coming from eventstream
     val canBeReplaced: Boolean
     val isRedacted: Boolean
-    var isUpdated: Boolean
+    val isUpdated: Boolean
 }
