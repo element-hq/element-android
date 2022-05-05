@@ -81,7 +81,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
 
     init {
         session.cryptoService().keysBackupService().addListener(this)
-        keysBackupState.value = session.cryptoService().keysBackupService().state
+        keysBackupState.value = session.cryptoService().keysBackupService().getState()
         val liveUserAccountData = session.flow().liveUserAccountData(setOf(MASTER_KEY_SSSS_NAME, USER_SIGNING_KEY_SSSS_NAME, SELF_SIGNING_KEY_SSSS_NAME))
         val liveCrossSigningInfo = session.flow().liveCrossSigningInfo(session.myUserId)
         val liveCrossSigningPrivateKeys = session.flow().liveCrossSigningPrivateKeys()
@@ -116,7 +116,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                 }
 
         viewModelScope.launch {
-            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().getState())
         }
     }
 
@@ -148,7 +148,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
 
     override fun onStateChange(newState: KeysBackupState) {
         viewModelScope.launch {
-            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().getState())
         }
         keysBackupState.value = newState
     }

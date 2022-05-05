@@ -204,10 +204,13 @@ interface KeysBackupService {
                                      callback: MatrixCallback<ImportRoomKeysResult>)
 
     val keysBackupVersion: KeysVersionResult?
+
     val currentBackupVersion: String?
-    val isEnabled: Boolean
-    val isStucked: Boolean
-    val state: KeysBackupState
+        get() = keysBackupVersion?.version
+
+    fun isEnabled(): Boolean
+    fun isStucked(): Boolean
+    fun getState(): KeysBackupState
 
     // For gossiping
     fun saveBackupRecoveryKey(recoveryKey: String?, version: String?)
