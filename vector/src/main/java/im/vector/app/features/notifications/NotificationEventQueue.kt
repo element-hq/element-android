@@ -112,7 +112,7 @@ data class NotificationEventQueue(
 
     private fun replace(replace: NotifiableEvent, with: NotifiableEvent) {
         queue.remove(replace)
-        queue.add(with)
+        queue.add(with.apply { isUpdated = true })
     }
 
     fun clearMemberShipNotificationForRoom(roomId: String) {

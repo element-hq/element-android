@@ -26,5 +26,6 @@ data class SimpleNotifiableEvent(
         val timestamp: Long,
         val soundName: String?,
         override var canBeReplaced: Boolean,
-        override val isRedacted: Boolean = false
+        override val isRedacted: Boolean = false,
+        override var isUpdated: Boolean = false
 ) : NotifiableEvent
