@@ -109,7 +109,7 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
 
     private fun ViewPager2.scheduleCarouselTransition(): Job {
         val itemCount = adapter?.itemCount ?: throw IllegalStateException("An adapter must be set")
-        return lifecycleScope.launch {
+        return viewLifecycleOwner.lifecycleScope.launch {
             delay(CAROUSEL_ROTATION_DELAY_MS)
             setCurrentItem(currentItem.incrementByOneAndWrap(max = itemCount - 1), duration = CAROUSEL_TRANSITION_TIME_MS)
         }
