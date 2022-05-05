@@ -72,6 +72,7 @@ class RoomGroupMessageCreator @Inject constructor(
                             it.hasSmartReplyError = smartReplyErrors.isNotEmpty()
                             it.shouldBing = meta.shouldBing
                             it.customSound = events.last().soundName
+                            it.isUpdated = events.last().isUpdated
                         },
                         largeIcon = largeBitmap,
                         lastMessageTimestamp,

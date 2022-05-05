@@ -145,7 +145,7 @@ class NotificationEventQueueTest {
     @Test
     fun `given replaceable event when adding event with same id then updates existing event`() {
         val replaceableEvent = aSimpleNotifiableEvent(canBeReplaced = true)
-        val updatedEvent = replaceableEvent.copy(title = "updated title")
+        val updatedEvent = replaceableEvent.copy(title = "updated title", isUpdated = true)
         val queue = givenQueue(listOf(replaceableEvent))
 
         queue.add(updatedEvent)
@@ -167,7 +167,7 @@ class NotificationEventQueueTest {
     @Test
     fun `given event when adding new event with edited event id matching the existing event id then updates existing event`() {
         val editedEvent = aSimpleNotifiableEvent(eventId = "id-to-edit")
-        val updatedEvent = editedEvent.copy(eventId = "1", editedEventId = "id-to-edit", title = "updated title")
+        val updatedEvent = editedEvent.copy(eventId = "1", editedEventId = "id-to-edit", title = "updated title", isUpdated = true)
         val queue = givenQueue(listOf(editedEvent))
 
         queue.add(updatedEvent)
@@ -178,7 +178,7 @@ class NotificationEventQueueTest {
     @Test
     fun `given event when adding new event with edited event id matching the existing event edited id then updates existing event`() {
         val editedEvent = aSimpleNotifiableEvent(eventId = "0", editedEventId = "id-to-edit")
-        val updatedEvent = editedEvent.copy(eventId = "1", editedEventId = "id-to-edit", title = "updated title")
+        val updatedEvent = editedEvent.copy(eventId = "1", editedEventId = "id-to-edit", title = "updated title", isUpdated = true)
         val queue = givenQueue(listOf(editedEvent))
 
         queue.add(updatedEvent)
