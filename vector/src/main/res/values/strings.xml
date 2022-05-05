@@ -3039,4 +3039,5 @@
     <string name="screen_sharing_notification_title">${app_name} Screen Sharing</string>
     <string name="screen_sharing_notification_description">Screen sharing is in progress</string>
     <string name="all_chats">All Chats</string>
+    <string name="choose_a_space">Choose a space</string>
 </resources>

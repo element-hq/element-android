@@ -8,22 +8,43 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp">
 
+    <TextView
+        android:id="@+id/header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:textColor="?attr/vctr_content_tertiary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:text="@string/choose_a_space"
+        android:textAllCaps="true" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/room_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/header_text"
         tools:itemCount="3"
         tools:listitem="@layout/item_modal_space" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/bottom_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/room_list" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/add_space_icon_background"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:background="#4D8D97A5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/room_list"
+        app:layout_constraintTop_toBottomOf="@id/bottom_divider"
         app:shapeAppearanceOverlay="@style/SpaceListModalImageShapeOverlay" />
 
     <ImageView
