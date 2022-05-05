@@ -57,7 +57,7 @@ class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
                     views.emailEntryInput.error = null
                     views.emailEntrySubmit.isEnabled = it.isEmail()
                 }
-                .launchIn(lifecycleScope)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun updateEmail() {
