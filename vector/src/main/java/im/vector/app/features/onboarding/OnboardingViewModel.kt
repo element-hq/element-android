@@ -143,6 +143,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.HomeServerChange           -> withAction(action) { handleHomeserverChange(action) }
             is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
             is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
+            is OnboardingAction.Login                      -> handleLogin(action).also { lastAction = action }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword              -> handleResetPassword(action)
@@ -190,18 +191,21 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
-        val nextOnboardingStep = when (onboardingFlow) {
-            OnboardingFlow.SignUp       -> if (vectorFeatures.isOnboardingUseCaseEnabled()) {
-                OnboardingViewEvents.OpenUseCaseSelection
-            } else {
-                OnboardingViewEvents.OpenServerSelection
+        when (onboardingFlow) {
+            OnboardingFlow.SignUp       -> {
+                _viewEvents.post(
+                        if (vectorFeatures.isOnboardingUseCaseEnabled()) {
+                            OnboardingViewEvents.OpenUseCaseSelection
+                        } else {
+                            OnboardingViewEvents.OpenServerSelection
+                        }
+                )
             }
-            OnboardingFlow.SignIn       -> if (vectorFeatures.isOnboardingCombinedRegisterEnabled()) {
-                OnboardingViewEvents.OpenCombinedLogin
-            } else OnboardingViewEvents.OpenServerSelection
-            OnboardingFlow.SignInSignUp -> OnboardingViewEvents.OpenServerSelection
+            OnboardingFlow.SignIn       -> if (vectorFeatures.isOnboardingCombinedLoginEnabled()) {
+                handle(OnboardingAction.HomeServerChange.SelectHomeServer(defaultHomeserverUrl))
+            } else _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+            OnboardingFlow.SignInSignUp -> _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
         }
-        _viewEvents.post(nextOnboardingStep)
     }
 
     private fun handleUserAcceptCertificate(action: OnboardingAction.UserAcceptCertificate) {
@@ -472,7 +476,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleLoginOrRegister(action: OnboardingAction.LoginOrRegister) = withState { state ->
         when (state.signMode) {
             SignMode.Unknown            -> error("Developer error, invalid sign mode")
-            SignMode.SignIn             -> handleLogin(action)
+            SignMode.SignIn             -> handleLogin(OnboardingAction.Login(action.username, action.password, action.initialDeviceName))
             SignMode.SignUp             -> handleRegisterWith(OnboardingAction.Register(action.username, action.password, action.initialDeviceName))
             SignMode.SignInWithMatrixId -> handleDirectLogin(action, null)
         }
@@ -491,7 +495,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleLogin(action: OnboardingAction.LoginOrRegister) {
+    private fun handleLogin(action: OnboardingAction.Login) {
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {

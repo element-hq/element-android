@@ -234,7 +234,7 @@ class FtueAuthVariant(
     }
 
     private fun onStartCombinedLogin() {
-        addRegistrationStageFragmentToBackstack(FtueAuthCombinedRegisterFragment::class.java)
+        addRegistrationStageFragmentToBackstack(FtueAuthCombinedLoginFragment::class.java)
     }
 
     private fun onRegistrationFlow(viewEvents: OnboardingViewEvents.RegistrationFlowResult) {
