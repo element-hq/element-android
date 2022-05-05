@@ -323,8 +323,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                 }
     }
 
-    override val isRegistrationStarted: Boolean
-        get() = currentRegistrationWizard?.isRegistrationStarted == true
+    override fun isRegistrationStarted() = currentRegistrationWizard?.isRegistrationStarted() == true
 
     override fun getLoginWizard(): LoginWizard {
         return currentLoginWizard

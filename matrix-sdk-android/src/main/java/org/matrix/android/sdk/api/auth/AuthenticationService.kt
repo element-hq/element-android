@@ -66,7 +66,7 @@ interface AuthenticationService {
     /**
      * True when login and password has been sent with success to the homeserver.
      */
-    val isRegistrationStarted: Boolean
+    fun isRegistrationStarted(): Boolean
 
     /**
      * Cancel pending login or pending registration.
