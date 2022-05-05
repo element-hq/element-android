@@ -46,24 +46,10 @@
             android:gravity="center"
             android:text="@string/ftue_auth_welcome_back_title"
             android:textColor="?vctr_content_primary"
-            app:layout_constraintBottom_toTopOf="@id/createAccountHeaderSubtitle"
-            app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
-            app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/headerSpacing" />
-
-        <TextView
-            android:id="@+id/createAccountHeaderSubtitle"
-            style="@style/Widget.Vector.TextView.Subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/ftue_auth_create_account_subtitle"
-            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
             app:layout_constraintEnd_toEndOf="@id/createAccountGutterEnd"
             app:layout_constraintStart_toStartOf="@id/createAccountGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/createAccountHeaderTitle" />
+            app:layout_constraintTop_toBottomOf="@id/headerSpacing" />
 
         <Space
             android:id="@+id/titleContentSpacing"
@@ -71,7 +57,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/chooseYourServerHeader"
             app:layout_constraintHeight_percent="0.03"
-            app:layout_constraintTop_toBottomOf="@id/createAccountHeaderSubtitle" />
+            app:layout_constraintTop_toBottomOf="@id/createAccountHeaderTitle" />
 
         <TextView
             android:id="@+id/chooseYourServerHeader"

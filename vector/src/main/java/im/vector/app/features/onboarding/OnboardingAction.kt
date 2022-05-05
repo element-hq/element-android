@@ -46,10 +46,9 @@ sealed interface OnboardingAction : VectorViewModelAction {
     data class ResetPassword(val email: String, val newPassword: String) : OnboardingAction
     object ResetPasswordMailConfirmed : OnboardingAction
 
-    // Login or Register, depending on the signMode
-    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
     data class Register(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
     data class Login(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
+    data class LoginDirect(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
     object StopEmailValidationCheck : OnboardingAction
 
     data class PostRegisterAction(val registerAction: RegisterAction) : OnboardingAction
