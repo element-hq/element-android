@@ -56,7 +56,7 @@
         app:layout_constraintEnd_toEndOf="@id/add_space_icon_background"
         app:layout_constraintStart_toStartOf="@id/add_space_icon_background"
         app:layout_constraintTop_toTopOf="@id/add_space_icon_background"
-        app:tint="#000" />
+        app:tint="?attr/vctr_spoiler_background_color" />
 
     <TextView
         style="@style/Widget.Vector.TextView.Body.Medium"

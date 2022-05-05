@@ -46,6 +46,7 @@ import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.MavericksView
 import com.bumptech.glide.util.Util
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.EntryPointAccessors
@@ -238,8 +239,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
         initUiAndData()
 
-        window.statusBarColor = ContextCompat.getColor(this, android.R.color.white)
-        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.white)
+        val toolbarBackgroundRes = R.color.modal_background_color
+        window.statusBarColor = ContextCompat.getColor(this, toolbarBackgroundRes)
+        window.navigationBarColor = ContextCompat.getColor(this, toolbarBackgroundRes)
         val titleRes = getTitleRes()
         if (titleRes != -1) {
             supportActionBar?.let {
