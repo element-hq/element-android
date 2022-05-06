@@ -168,7 +168,7 @@ internal class OlmMachine(
         deviceObserver: DeviceUpdateObserver,
         private val requestSender: RequestSender,
 ) {
-    private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString())
+    private val inner: InnerMachine = InnerMachine(user_id, device_id, path.toString(),null)
     private val deviceUpdateObserver = deviceObserver
     private val userIdentityUpdateObserver = UserIdentityUpdateObserver()
     private val privateKeysUpdateObserver = PrivateCrossSigningKeysUpdateObserver()

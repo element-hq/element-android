@@ -179,7 +179,9 @@ internal class QrCodeVerification(
         }
 
         if (result != null) {
-            this.sender.sendVerificationRequest(result.request)
+            for (request in result.requests) {
+                this.sender.sendVerificationRequest(request)
+            }
             dispatchTxUpdated()
 
             val signatureRequest = result.signatureRequest

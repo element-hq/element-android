@@ -29,21 +29,22 @@ import uniffi.olm.PickledAccount
 import uniffi.olm.PickledInboundGroupSession
 import uniffi.olm.PickledSession
 import java.nio.charset.Charset
+import javax.inject.Inject
 
 private val charset = Charset.forName("UTF-8")
 
-internal class ExtractMigrationDataUseCase() {
+internal class ExtractMigrationDataUseCase @Inject constructor() {
 
     operator fun invoke(realm: Realm): MigrationData? {
-        val pickleKey = OlmUtility.getRandomKey()
+        val metadataEntity = realm.where<CryptoMetadataEntity>().findFirst() ?: return null
 
+        val pickleKey = OlmUtility.getRandomKey()
         val olmSessionEntities = realm.where<OlmSessionEntity>().findAll()
         val pickledSessions = olmSessionEntities.map { it.toPickledSession(pickleKey) }
 
         val inboundGroupSessionEntities = realm.where<OlmInboundGroupSessionEntity>().findAll()
         val pickledInboundGroupSessions = inboundGroupSessionEntities.map { it.toPickledInboundGroupSession(pickleKey) }
 
-        val metadataEntity = realm.where<CryptoMetadataEntity>().findFirst() ?: return null
         val masterKey = metadataEntity.xSignMasterPrivateKey
         val userKey = metadataEntity.xSignUserPrivateKey
         val selfSignedKey = metadataEntity.xSignSelfSignedPrivateKey
