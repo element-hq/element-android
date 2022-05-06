@@ -19,6 +19,6 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 200
     reviewers:
-      - "bmarty"
+      - "vector-im/element-android-reviewers"
     ignore:
       - dependency-name: com.google.zxing:core
