@@ -98,7 +98,8 @@ class SearchFragment @Inject constructor(
                 is Success -> {
                     views.stateView.state = StateView.State.Empty(
                             title = getString(R.string.search_no_results),
-                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results))
+                            image = ContextCompat.getDrawable(requireContext(), R.drawable.ic_search_no_results)
+                    )
                 }
                 else       -> Unit
             }
@@ -133,7 +134,8 @@ class SearchFragment @Inject constructor(
                     displayName = fragmentArgs.roomDisplayName,
                     avatarUrl = fragmentArgs.roomAvatarUrl,
                     roomEncryptionTrustLevel = null,
-                    rootThreadEventId = it)
+                    rootThreadEventId = it
+            )
             navigator.openThread(requireContext(), threadTimelineArgs, event.eventId)
         } ?: openRoom(roomId, event.eventId)
     }

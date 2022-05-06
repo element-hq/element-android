@@ -444,7 +444,8 @@ class HomeDetailFragment @Inject constructor(
                 it.syncState,
                 it.incrementalSyncStatus,
                 it.pushCounter,
-                vectorPreferences.developerShowDebugInfo())
+                vectorPreferences.developerShowDebugInfo()
+        )
 
         hasUnreadRooms = it.hasUnreadMessages
     }

@@ -82,7 +82,8 @@ class VerifySessionInteractiveTest : VerificationTestBase() {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
     }
 

@@ -66,10 +66,12 @@ class SoftLogoutActivity : LoginActivity() {
                 supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
                 // And inform the user
-                showError(getString(
-                        R.string.soft_logout_sso_not_same_user_error,
-                        softLogoutViewEvents.currentUserId,
-                        softLogoutViewEvents.newUserId)
+                showError(
+                        getString(
+                                R.string.soft_logout_sso_not_same_user_error,
+                                softLogoutViewEvents.currentUserId,
+                                softLogoutViewEvents.newUserId
+                        )
                 )
             }
             is SoftLogoutViewEvents.ClearData        -> {

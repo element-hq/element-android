@@ -115,9 +115,11 @@ class AccountCreatedFragment @Inject constructor(
 
     override fun onImageReady(uri: Uri?) {
         uri ?: return
-        viewModel.handle(AccountCreatedAction.SetAvatar(
-                avatarUri = uri,
-                filename = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
+        viewModel.handle(
+                AccountCreatedAction.SetAvatar(
+                        avatarUri = uri,
+                        filename = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString()
+                )
         )
     }
 

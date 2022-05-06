@@ -170,7 +170,8 @@ class IncomingVerificationRequestHandler @Inject constructor(
                             }
                         }
                         dismissedAction = Runnable {
-                            session?.cryptoService()?.verificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
+                            session?.cryptoService()?.verificationService()?.declineVerificationRequestInDMs(
+                                    pr.otherUserId,
                                     pr.transactionId ?: "",
                                     pr.roomId ?: ""
                             )

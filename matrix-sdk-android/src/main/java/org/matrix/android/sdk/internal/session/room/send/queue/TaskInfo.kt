@@ -37,9 +37,10 @@ internal interface TaskInfo {
         const val TYPE_REDACT = "TYPE_REDACT"
 
         private val moshi = Moshi.Builder()
-                .add(RuntimeJsonAdapterFactory.of(TaskInfo::class.java, "type", FallbackTaskInfo::class.java)
-                        .registerSubtype(SendEventTaskInfo::class.java, TYPE_SEND)
-                        .registerSubtype(RedactEventTaskInfo::class.java, TYPE_REDACT)
+                .add(
+                        RuntimeJsonAdapterFactory.of(TaskInfo::class.java, "type", FallbackTaskInfo::class.java)
+                                .registerSubtype(SendEventTaskInfo::class.java, TYPE_SEND)
+                                .registerSubtype(RedactEventTaskInfo::class.java, TYPE_REDACT)
                 )
                 .add(SerializeNulls.JSON_ADAPTER_FACTORY)
                 .build()

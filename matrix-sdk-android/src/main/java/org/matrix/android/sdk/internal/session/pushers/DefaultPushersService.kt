@@ -85,17 +85,19 @@ internal class DefaultPushersService @Inject constructor(
                                         deviceDisplayName: String,
                                         append: Boolean) {
         addPusherTask.execute(
-                AddPusherTask.Params(JsonPusher(
-                        pushKey = email,
-                        kind = Pusher.KIND_EMAIL,
-                        appId = Pusher.APP_ID_EMAIL,
-                        profileTag = "",
-                        lang = lang,
-                        appDisplayName = appDisplayName,
-                        deviceDisplayName = deviceDisplayName,
-                        data = JsonPusherData(brand = emailBranding),
-                        append = append
-                ))
+                AddPusherTask.Params(
+                        JsonPusher(
+                                pushKey = email,
+                                kind = Pusher.KIND_EMAIL,
+                                appId = Pusher.APP_ID_EMAIL,
+                                profileTag = "",
+                                lang = lang,
+                                appDisplayName = appDisplayName,
+                                deviceDisplayName = deviceDisplayName,
+                                data = JsonPusherData(brand = emailBranding),
+                                append = append
+                        )
+                )
         )
     }
 

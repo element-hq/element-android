@@ -95,8 +95,10 @@ class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<Fragm
 
     private fun setupViewListeners() {
         views.deactivateAccountSubmit.debouncedClicks {
-            viewModel.handle(DeactivateAccountAction.DeactivateAccount(
-                    views.deactivateAccountEraseCheckbox.isChecked)
+            viewModel.handle(
+                    DeactivateAccountAction.DeactivateAccount(
+                            views.deactivateAccountEraseCheckbox.isChecked
+                    )
             )
         }
     }
@@ -123,7 +125,8 @@ class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<Fragm
                     MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCredentials = true, isAccountDeactivated = true))
                 }
                 is DeactivateAccountViewEvents.RequestReAuth -> {
-                    ReAuthActivity.newIntent(requireContext(),
+                    ReAuthActivity.newIntent(
+                            requireContext(),
                             it.registrationFlowResponse,
                             it.lastErrorCode,
                             getString(R.string.deactivate_account_title)

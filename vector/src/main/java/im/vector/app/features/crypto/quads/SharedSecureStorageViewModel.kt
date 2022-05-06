@@ -213,12 +213,14 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 }
                 val keyInfo = (keyInfoResult as KeyInfoResult.Success).keyInfo
 
-                _viewEvents.post(SharedSecureStorageViewEvent.UpdateLoadingState(
-                        WaitingViewData(
-                                message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
-                                isIndeterminate = true
+                _viewEvents.post(
+                        SharedSecureStorageViewEvent.UpdateLoadingState(
+                                WaitingViewData(
+                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                        isIndeterminate = true
+                                )
                         )
-                ))
+                )
                 val keySpec = RawBytesKeySpec.fromRecoveryKey(recoveryKey) ?: return@launch Unit.also {
                     _viewEvents.post(SharedSecureStorageViewEvent.KeyInlineError(stringProvider.getString(R.string.bootstrap_invalid_recovery_key)))
                     _viewEvents.post(SharedSecureStorageViewEvent.HideModalLoading)
@@ -231,7 +233,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                             val res = session.sharedSecretStorageService().getSecret(
                                     name = it,
                                     keyId = keyInfo.id,
-                                    secretKey = keySpec)
+                                    secretKey = keySpec
+                            )
                             decryptedSecretMap[it] = res
                         } else {
                             Timber.w("## Cannot find secret $it in SSSS, skip")
@@ -270,26 +273,30 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                 }
                 val keyInfo = (keyInfoResult as KeyInfoResult.Success).keyInfo
 
-                _viewEvents.post(SharedSecureStorageViewEvent.UpdateLoadingState(
-                        WaitingViewData(
-                                message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
-                                isIndeterminate = true
+                _viewEvents.post(
+                        SharedSecureStorageViewEvent.UpdateLoadingState(
+                                WaitingViewData(
+                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                        isIndeterminate = true
+                                )
                         )
-                ))
+                )
                 val keySpec = RawBytesKeySpec.fromPassphrase(
                         passphrase,
                         keyInfo.content.passphrase?.salt ?: "",
                         keyInfo.content.passphrase?.iterations ?: 0,
                         object : ProgressListener {
                             override fun onProgress(progress: Int, total: Int) {
-                                _viewEvents.post(SharedSecureStorageViewEvent.UpdateLoadingState(
-                                        WaitingViewData(
-                                                message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
-                                                isIndeterminate = false,
-                                                progress = progress,
-                                                progressTotal = total
+                                _viewEvents.post(
+                                        SharedSecureStorageViewEvent.UpdateLoadingState(
+                                                WaitingViewData(
+                                                        message = stringProvider.getString(R.string.keys_backup_restoring_computing_key_waiting_message),
+                                                        isIndeterminate = false,
+                                                        progress = progress,
+                                                        progressTotal = total
+                                                )
                                         )
-                                ))
+                                )
                             }
                         }
                 )
@@ -300,7 +307,8 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
                             val res = session.sharedSecretStorageService().getSecret(
                                     name = it,
                                     keyId = keyInfo.id,
-                                    secretKey = keySpec)
+                                    secretKey = keySpec
+                            )
                             decryptedSecretMap[it] = res
                         } else {
                             Timber.w("## Cannot find secret $it in SSSS, skip")

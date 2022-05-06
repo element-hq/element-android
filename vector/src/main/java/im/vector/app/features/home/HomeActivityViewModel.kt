@@ -226,8 +226,8 @@ class HomeActivityViewModel @AssistedInject constructor(
                     val knownRooms = activeSessionHolder.getSafeActiveSession()
                             ?.roomService()
                             ?.getRoomSummaries(roomSummaryQueryParams {
-                        memberships = Membership.activeMemberships()
-                    })?.size ?: 0
+                                memberships = Membership.activeMemberships()
+                            })?.size ?: 0
 
                     // Prompt once to the user
                     if (knownRooms > 1 && !vectorPreferences.didAskUserToEnableSessionPush()) {

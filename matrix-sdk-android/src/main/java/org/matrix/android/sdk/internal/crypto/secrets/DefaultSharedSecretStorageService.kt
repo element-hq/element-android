@@ -213,7 +213,8 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 secretKey.privateKey,
                 ByteArray(32) { 0.toByte() },
                 secretName.toByteArray(),
-                64)
+                64
+        )
 
         // The first 32 bytes are used as the AES key, and the next 32 bytes are used as the MAC key
         val aesKey = pseudoRandomKey.copyOfRange(0, 32)
@@ -255,7 +256,8 @@ internal class DefaultSharedSecretStorageService @Inject constructor(
                 secretKey.privateKey,
                 ByteArray(32) { 0.toByte() },
                 secretName.toByteArray(),
-                64)
+                64
+        )
 
         // The first 32 bytes are used as the AES key, and the next 32 bytes are used as the MAC key
         val aesKey = pseudoRandomKey.copyOfRange(0, 32)

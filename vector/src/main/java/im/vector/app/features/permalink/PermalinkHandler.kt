@@ -219,7 +219,8 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                         displayName = roomSummary.displayName,
                         avatarUrl = roomSummary.avatarUrl,
                         roomEncryptionTrustLevel = roomSummary.roomEncryptionTrustLevel,
-                        rootThreadEventId = rootThreadEventId)
+                        rootThreadEventId = rootThreadEventId
+                )
                 navigator.openThread(context, threadTimelineArgs, eventId)
             } else {
                 navigator.openRoom(context, roomId, eventId, buildTask)

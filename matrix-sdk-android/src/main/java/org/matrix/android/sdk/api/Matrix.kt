@@ -132,9 +132,11 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
                     val matrixConfiguration = (appContext as MatrixConfiguration.Provider).providesMatrixConfiguration()
                     instance = Matrix(appContext, matrixConfiguration)
                 } else {
-                    throw IllegalStateException("Matrix is not initialized properly." +
-                            " If you want to manage your own Matrix instance use Matrix.createInstance" +
-                            " otherwise you should call Matrix.initialize or let your application implement MatrixConfiguration.Provider.")
+                    throw IllegalStateException(
+                            "Matrix is not initialized properly." +
+                                    " If you want to manage your own Matrix instance use Matrix.createInstance" +
+                                    " otherwise you should call Matrix.initialize or let your application implement MatrixConfiguration.Provider."
+                    )
                 }
             }
             return instance

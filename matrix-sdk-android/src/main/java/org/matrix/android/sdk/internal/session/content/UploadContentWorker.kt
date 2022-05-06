@@ -289,12 +289,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
                 val uploadThumbnailResult = dealWithThumbnail(params)
 
-                handleSuccess(params,
+                handleSuccess(
+                        params,
                         contentUploadResponse.contentUri,
                         uploadedFileEncryptedFileInfo,
                         uploadThumbnailResult?.uploadedThumbnailUrl,
                         uploadThumbnailResult?.uploadedThumbnailEncryptedFileInfo,
-                        newAttachmentAttributes)
+                        newAttachmentAttributes
+                )
             } catch (t: Throwable) {
                 Timber.e(t, "## ERROR ${t.localizedMessage}")
                 handleFailure(params, t)

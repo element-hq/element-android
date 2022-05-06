@@ -66,9 +66,11 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView) {
-        render(GlideApp.with(imageView),
+        render(
+                GlideApp.with(imageView),
                 matrixItem,
-                DrawableImageViewTarget(imageView))
+                DrawableImageViewTarget(imageView)
+        )
     }
 
 //    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView) {
@@ -97,9 +99,11 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
-        render(glideRequests,
+        render(
+                glideRequests,
                 matrixItem,
-                DrawableImageViewTarget(imageView))
+                DrawableImageViewTarget(imageView)
+        )
     }
 
     @UiThread
@@ -200,12 +204,14 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 it.load(resolvedUrl)
             } else {
                 val avatarColor = matrixItemColorProvider.getColor(matrixItem)
-                it.load(TextDrawable.builder()
-                        .beginConfig()
-                        .bold()
-                        .endConfig()
-                        .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor)
-                        .toBitmap(width = iconSize, height = iconSize))
+                it.load(
+                        TextDrawable.builder()
+                                .beginConfig()
+                                .bold()
+                                .endConfig()
+                                .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor)
+                                .toBitmap(width = iconSize, height = iconSize)
+                )
             }
         }
     }

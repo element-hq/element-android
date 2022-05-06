@@ -71,7 +71,8 @@ class TimelineForwardPaginationTest : InstrumentedTest {
         val sentMessages = commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 message,
-                numberOfMessagesToSend)
+                numberOfMessagesToSend
+        )
 
         // Alice clear the cache and restart the sync
         commonTestHelper.clearCacheAndSync(aliceSession)

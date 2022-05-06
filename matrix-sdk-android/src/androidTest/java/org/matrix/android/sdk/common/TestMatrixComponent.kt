@@ -29,15 +29,17 @@ import org.matrix.android.sdk.internal.raw.RawModule
 import org.matrix.android.sdk.internal.settings.SettingsModule
 import org.matrix.android.sdk.internal.util.system.SystemModule
 
-@Component(modules = [
-    TestModule::class,
-    MatrixModule::class,
-    NetworkModule::class,
-    AuthModule::class,
-    RawModule::class,
-    SettingsModule::class,
-    SystemModule::class
-])
+@Component(
+        modules = [
+            TestModule::class,
+            MatrixModule::class,
+            NetworkModule::class,
+            AuthModule::class,
+            RawModule::class,
+            SettingsModule::class,
+            SystemModule::class
+        ]
+)
 @MatrixScope
 internal interface TestMatrixComponent : MatrixComponent {
 

@@ -50,12 +50,14 @@ class SharedPreferencesUiStateRepository @Inject constructor(
 
     override fun storeDisplayMode(displayMode: RoomListDisplayMode) {
         sharedPreferences.edit {
-            putInt(KEY_DISPLAY_MODE,
+            putInt(
+                    KEY_DISPLAY_MODE,
                     when (displayMode) {
                         RoomListDisplayMode.PEOPLE -> VALUE_DISPLAY_MODE_PEOPLE
                         RoomListDisplayMode.ROOMS  -> VALUE_DISPLAY_MODE_ROOMS
                         else                       -> VALUE_DISPLAY_MODE_CATCHUP
-                    })
+                    }
+            )
         }
     }
 

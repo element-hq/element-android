@@ -111,8 +111,12 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
                 .onEach {
                     val powerLevelsHelper = PowerLevelsHelper(it)
                     setState {
-                        copy(canAddRooms = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                EventType.STATE_SPACE_CHILD))
+                        copy(
+                                canAddRooms = powerLevelsHelper.isUserAllowedToSend(
+                                        session.myUserId, true,
+                                        EventType.STATE_SPACE_CHILD
+                                )
+                        )
                     }
                 }
                 .launchIn(viewModelScope)
