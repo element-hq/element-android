@@ -38,7 +38,9 @@ class ScreenCaptureServiceConnection @Inject constructor(
     fun bind(callback: Callback) {
         this.callback = callback
 
-        if (!isBound) {
+        if (isBound) {
+            callback.onServiceConnected()
+        } else {
             Intent(context, ScreenCaptureService::class.java).also { intent ->
                 context.bindService(intent, this, 0)
             }

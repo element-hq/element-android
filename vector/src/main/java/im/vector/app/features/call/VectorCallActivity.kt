@@ -164,6 +164,9 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 }
             }
         }
+
+        // Bind to service in case of user killed the app while there is an ongoing call
+        bindToScreenCaptureService()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -662,9 +665,13 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 this,
                 Intent(this, ScreenCaptureService::class.java)
         )
+        bindToScreenCaptureService(activityResult)
+    }
+
+    private fun bindToScreenCaptureService(activityResult: ActivityResult? = null) {
         screenCaptureServiceConnection.bind(object : ScreenCaptureServiceConnection.Callback {
             override fun onServiceConnected() {
-                startScreenSharing(activityResult)
+                activityResult?.let { startScreenSharing(it) }
             }
         })
     }
