@@ -5,7 +5,10 @@ buildscript {
     apply from: 'dependencies_groups.gradle'
 
     repositories {
-        google()
+        // Do not use `google()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://maven.google.com'
+        }
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -47,6 +50,7 @@ allprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
 
     repositories {
+        // Do not use `mavenCentral()`, it prevents Dependabot from working properly
         maven {
             url 'https://repo1.maven.org/maven2'
             content {
@@ -71,14 +75,18 @@ allprojects {
                 groups.jitsi.group.each { includeGroup it }
             }
         }
-        google {
+        // Do not use `google()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://maven.google.com'
             content {
                 groups.google.regex.each { includeGroupByRegex it }
                 groups.google.group.each { includeGroup it }
             }
         }
         //noinspection JcenterRepositoryObsolete
-        jcenter {
+        // Do not use `jcenter`, it prevents Dependabot from working properly
+        maven {
+            url 'https://jcenter.bintray.com'
             content {
                 groups.jcenter.regex.each { includeGroupByRegex it }
                 groups.jcenter.group.each { includeGroup it }
