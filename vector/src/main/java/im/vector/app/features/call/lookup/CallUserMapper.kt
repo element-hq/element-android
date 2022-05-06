@@ -30,7 +30,7 @@ class CallUserMapper(private val session: Session, private val protocolsChecker:
     fun nativeRoomForVirtualRoom(roomId: String): String? {
         if (!protocolsChecker.supportVirtualRooms) return null
         val virtualRoom = session.getRoom(roomId) ?: return null
-        val virtualRoomEvent = virtualRoom.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM)
+        val virtualRoomEvent = virtualRoom.roomAccountDataService().getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM)
         return virtualRoomEvent?.content?.toModel<RoomVirtualContent>()?.nativeRoomId
     }
 
@@ -79,7 +79,7 @@ class CallUserMapper(private val session: Session, private val protocolsChecker:
 
     private suspend fun Room.markVirtual(nativeRoomId: String) {
         val virtualRoomContent = RoomVirtualContent(nativeRoomId = nativeRoomId)
-        updateAccountData(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM, virtualRoomContent.toContent())
+        roomAccountDataService().updateAccountData(RoomAccountDataTypes.EVENT_TYPE_VIRTUAL_ROOM, virtualRoomContent.toContent())
     }
 
     private suspend fun ensureVirtualRoomExists(userId: String, nativeRoomId: String): String {

@@ -58,7 +58,8 @@ internal abstract class SASDefaultVerificationTransaction(
         transactionId,
         otherUserId,
         otherDeviceId,
-        isIncoming),
+        isIncoming
+),
         SasVerificationTransaction {
 
     companion object {
@@ -297,9 +298,11 @@ internal abstract class SASDefaultVerificationTransaction(
             return
         }
 
-        trust(otherMasterKeyIsVerified,
+        trust(
+                otherMasterKeyIsVerified,
                 verifiedDevices,
-                eventuallyMarkMyMasterKeyAsTrusted = otherMasterKey?.trustLevel?.isVerified() == false)
+                eventuallyMarkMyMasterKeyAsTrusted = otherMasterKey?.trustLevel?.isVerified() == false
+        )
     }
 
     override fun cancel() {

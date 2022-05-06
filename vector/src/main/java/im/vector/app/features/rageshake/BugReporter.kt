@@ -111,7 +111,8 @@ class BugReporter @Inject constructor(
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    private val LOGCAT_CMD_ERROR = arrayOf("logcat", // /< Run 'logcat' command
+    private val LOGCAT_CMD_ERROR = arrayOf(
+            "logcat", // /< Run 'logcat' command
             "-d", // /< Dump the log rather than continue outputting it
             "-v", // formatting
             "threadtime", // include timestamps
@@ -278,8 +279,10 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("verbose_log", vectorPreferences.labAllowedExtendedLogging().toOnOff())
                             .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
-                            .addFormDataPart("os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") " +
-                                    Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)
+                            .addFormDataPart(
+                                    "os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") " +
+                                    Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME
+                            )
                             .addFormDataPart("locale", Locale.getDefault().toString())
                             .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
                             .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
@@ -317,8 +320,10 @@ class BugReporter @Inject constructor(
                                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
                                 }
 
-                                builder.addFormDataPart("file",
-                                        logCatScreenshotFile.name, logCatScreenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull()))
+                                builder.addFormDataPart(
+                                        "file",
+                                        logCatScreenshotFile.name, logCatScreenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull())
+                                )
                             } catch (e: Exception) {
                                 Timber.e(e, "## sendBugReport() : fail to write screenshot$e")
                             }
@@ -494,11 +499,13 @@ class BugReporter @Inject constructor(
         // app: Identifier for the application (eg 'riot-web').
         // Should correspond to a mapping configured in the configuration file for github issue reporting to work.
         // (see R.string.bug_report_url for configured RS server)
-        return context.getString(when (reportType) {
-            ReportType.AUTO_UISI_SENDER,
-            ReportType.AUTO_UISI -> R.string.bug_report_auto_uisi_app_name
-            else                 -> R.string.bug_report_app_name
-        })
+        return context.getString(
+                when (reportType) {
+                    ReportType.AUTO_UISI_SENDER,
+                    ReportType.AUTO_UISI -> R.string.bug_report_auto_uisi_app_name
+                    else                 -> R.string.bug_report_app_name
+                }
+        )
     }
 // ==============================================================================================================
 // crash report management

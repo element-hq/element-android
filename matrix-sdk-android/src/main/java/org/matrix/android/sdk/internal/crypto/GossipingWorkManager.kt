@@ -26,6 +26,7 @@ import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.CancelableWork
 import org.matrix.android.sdk.internal.worker.startChain
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -44,8 +45,8 @@ internal class GossipingWorkManager @Inject constructor(
     }
 
     // Prevent sending queue to stay broken after app restart
-    // The unique queue id will stay the same as long as this object is instanciated
-    val queueSuffixApp = System.currentTimeMillis()
+    // The unique queue id will stay the same as long as this object is instantiated
+    private val queueSuffixApp = UUID.randomUUID()
 
     fun postWork(workRequest: OneTimeWorkRequest, policy: ExistingWorkPolicy = ExistingWorkPolicy.APPEND): Cancelable {
         workManagerProvider.workManager

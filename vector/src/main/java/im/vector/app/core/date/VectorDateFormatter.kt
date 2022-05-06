@@ -22,15 +22,19 @@ import android.text.format.DateUtils
 import im.vector.app.core.resources.DateProvider
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.toTimestamp
+import im.vector.app.core.time.Clock
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Period
 import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class VectorDateFormatter @Inject constructor(private val context: Context,
-                                              private val localeProvider: LocaleProvider,
-                                              private val dateFormatterProviders: DateFormatterProviders) {
+class VectorDateFormatter @Inject constructor(
+        private val context: Context,
+        private val localeProvider: LocaleProvider,
+        private val dateFormatterProviders: DateFormatterProviders,
+        private val clock: Clock,
+) {
 
     private val hourFormatter by lazy {
         if (DateFormat.is24HourFormat(context)) {
@@ -158,8 +162,9 @@ class VectorDateFormatter @Inject constructor(private val context: Context,
     private fun getRelativeDay(ts: Long): String {
         return DateUtils.getRelativeTimeSpanString(
                 ts,
-                System.currentTimeMillis(),
+                clock.epochMillis(),
                 DateUtils.DAY_IN_MILLIS,
-                DateUtils.FORMAT_SHOW_WEEKDAY).toString()
+                DateUtils.FORMAT_SHOW_WEEKDAY
+        ).toString()
     }
 }

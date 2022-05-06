@@ -72,7 +72,7 @@
     <string name="action_join">Gabung</string>
     <string name="action_reject">Tolak</string>
     <string name="later">Nanti</string>
-    <string name="send_bug_report_include_crash_logs">Kirim catat gangguan</string>
+    <string name="send_bug_report_include_crash_logs">Kirim catatan gangguan</string>
     <string name="huge">Raksasa</string>
     <string name="small">Kecil</string>
     <string name="normal">Normal</string>
@@ -87,7 +87,7 @@
     <string name="copied_to_clipboard">Gandakan ke clipboard</string>
     <string name="send_bug_report_include_screenshot">Kirim tampilan layar</string>
     <string name="send_bug_report_description">Mohon uraikan kutu tersebut. Apa yang Anda lakukan\? Apa yang Anda harapkan terjadi\? Apa yang sebenarnya terjadi\?</string>
-    <string name="send_bug_report_logs_description">Catat dari klien akan dikirim bersama laporan gangguan ini untuk mendalami kendala yang Anda temukan. Laporan gangguan ini, termasuk catat dan tangkapan layar, tidak akan terlihat secara umum. Jika Anda hanya ingin mengirimkan tulisan di atas, silakan hapus centang:</string>
+    <string name="send_bug_report_logs_description">Catatan dari klien akan dikirim bersama laporan gangguan ini untuk mendalami kendala yang Anda temukan. Laporan gangguan ini, termasuk catatan dan tangkapan layar, tidak akan terlihat secara umum. Jika Anda hanya ingin mengirimkan tulisan di atas, silakan hapus centang:</string>
     <string name="send_bug_report_alert_message">Sepertinya Anda mengguncang ponsel akibat frustrasi. Apakah Anda ingin membuka halaman laporan kutu\?</string>
     <string name="send_bug_report_failed">Pengiriman laporan kutu gagal (%s)</string>
     <string name="send_bug_report_progress">Kemajuan (%s%%)</string>
@@ -590,7 +590,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_participants_remove_title">Keluarkan pengguna</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Apakah Anda yakin ingin membatalkan undangan untuk pengguna ini\?</string>
     <string name="room_participants_action_cancel_invite_title">Batalkan undangan</string>
-    <string name="room_participants_action_unignore_prompt_msg">Membatalkan abaian pengguna ini akan menampilkan semua pesan dari mereka.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Membatalkan abaian pengguna ini akan menampilkan semua pesan dari mereka.
+\n
+\nDicatat bahwa tindakan ini akan memulai ulang aplikasi dan mungkin membutuhkan beberapa waktu.</string>
     <string name="room_participants_action_unignore_title">Batal pengabaian pengguna</string>
     <string name="room_participants_action_ignore_prompt_msg">Mengabaikan pengguna ini akan menghilangkan pesan mereka dari ruangan yang Anda bagikan.
 \n
@@ -1179,8 +1181,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="send_attachment">Kirim lampiran</string>
     <string name="error_network_timeout">Sepertinya server terlalu lama merespons, hal ini dapat disebabkan oleh konektivitas yang buruk atau kesalahan pada server. Silakan coba lagi dalam beberapa saat.</string>
     <string name="error_terms_not_accepted">Silakan coba lagi setelah Anda menerima syarat dan ketentuan homeserver Anda.</string>
-    <string name="labs_allow_extended_logging_summary">Log verbose akan membantu pengembang dengan menyediakan lebih banyak catat saat Anda mengirim RageShake. Bahkan ketika diaktifkan, aplikasi tidak mencatat isi pesan atau data pribadi lainnya.</string>
-    <string name="labs_allow_extended_logging">Aktifkan catat verbose.</string>
+    <string name="labs_allow_extended_logging_summary">Catatan verbose akan membantu pengembang dengan menyediakan lebih banyak catat saat Anda mengirim RageShake. Bahkan ketika diaktifkan, aplikasi tidak mencatat isi pesan atau data pribadi lainnya.</string>
+    <string name="labs_allow_extended_logging">Aktifkan catatan verbose.</string>
     <string name="settings_text_message_sent_wrong_code">Kode verifikasi salah.</string>
     <string name="settings_text_message_sent_hint">Kode</string>
     <string name="settings_text_message_sent">Sebuah pesan teks telah dikirim ke %s. Silakan masukkan kode verifikasi yang ada di dalamnya.</string>
@@ -2285,7 +2287,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="restart_the_application_to_apply_changes">Mulai ulang aplikasi ini untuk menerapkan perubahan.</string>
     <string name="labs_enable_latex_maths">Aktifkan matematika LaTeX</string>
     <string name="room_error_access_unauthorized">Anda tidak diperbolehkan untuk bergabung ke ruangan ini</string>
-    <string name="labs_auto_report_uisi_desc">Sistem Anda akan mengirimkan catat secara otomatis ketika sebuah kesalahan dekripsi terjadi</string>
+    <string name="labs_auto_report_uisi_desc">Sistem Anda akan mengirimkan catatan secara otomatis ketika sebuah kesalahan dekripsi terjadi</string>
     <string name="tooltip_attachment_poll">Buat poll</string>
     <string name="tooltip_attachment_contact">Buka kontak</string>
     <string name="tooltip_attachment_sticker">Kirim stiker</string>
@@ -2345,7 +2347,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="ftue_auth_use_case_title">Siapa saja yang sering Anda chat\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Anda sudah menampilkan utasan ini!</string>
     <string name="view_in_room">Tampilkan Di Ruangan</string>
-    <string name="reply_in_thread">Balas Di Utasan</string>
+    <string name="reply_in_thread">Balas di utasan</string>
     <string name="command_not_supported_in_threads">Perintah \"%s\" dikenal tetapi tidak didukung dalam utasan.</string>
     <string name="search_thread_from_a_thread">Dari sebuah Utasan</string>
     <string name="thread_list_empty_notice">Tip: Tekan lama pada sebuah pesan dan gunakan “%s”.</string>
@@ -2412,4 +2414,32 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="ftue_account_created_take_me_home">Kembalikan saya ke beranda</string>
     <string name="ftue_account_created_personalize">Ubah profil</string>
     <string name="action_disable">Nonaktifkan</string>
+    <string name="location_share_live_started">Memuat lokasi langsung…</string>
+    <string name="location_share_live_select_duration_option_3">8 jam</string>
+    <string name="location_share_live_select_duration_option_2">1 jam</string>
+    <string name="location_share_live_select_duration_option_1">15 menit</string>
+    <string name="location_share_live_select_duration_title">Bagikan lokasi langsung Anda untuk</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Tidak dapat memainkan %1$s</string>
+    <string name="a11y_pause_audio_message">Jeda %1$s</string>
+    <string name="a11y_play_audio_message">Mainkan %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d menit %2$d detik</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Membagikan lokasi langsungnya</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} juga baik untuk tempat kerja. Dipercayai oleh organisasi yang paling aman di dunia.</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_info">Utasan adalah fitur yang sedang dikerjakan dengan fitur baru dan asik. Kami ingin dengar masukan Anda!</string>
+    <string name="send_feedback_threads_title">Masukan Utasan Beta</string>
+    <string name="give_feedback_threads">Berikan masukan</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Jika diaktifkan, Anda akan selalu terlihat luring kepada pengguna lain, bahkan ketika menggunakan aplikasi.</string>
+    <string name="settings_presence_user_always_appears_offline">Mode luring</string>
+    <string name="settings_presence">Presensi</string>
+    <string name="threads_labs_enable_notice_message">Homeserver Anda saat ini tidak mendukung utasan, jadi fitur ini mungkin tidak andal. Beberapa pesan yang diutas mungkin tidak tersedia. %sApakah Anda ingin mengaktifkan utasan saja\?</string>
+    <string name="threads_labs_enable_notice_title">Utasan Beta</string>
+    <string name="threads_beta_enable_notice_message">Utasan membantu percakapan sesuai topik dan mudah untuk dilacak. %sMengaktifkan utasan akan memuat aplikasi ulang. Ini mungkin membutuhkan beberapa waktu untuk beberapa akun.</string>
+    <string name="threads_beta_enable_notice_title">Utasan Beta</string>
+    <string name="action_learn_more">Pelajari lebih lanjut</string>
+    <string name="action_try_it_out">Coba</string>
 </resources>

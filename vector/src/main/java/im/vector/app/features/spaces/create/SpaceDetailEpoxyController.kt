@@ -102,7 +102,8 @@ class SpaceDetailEpoxyController @Inject constructor(
                 }
                 errorMessage(
                         host.roomAliasErrorFormatter.format(
-                                (((data.aliasVerificationTask as? Fail)?.error) as? RoomAliasError))
+                                (((data.aliasVerificationTask as? Fail)?.error) as? RoomAliasError)
+                        )
                 )
                 onTextChange(host.aliasTextWatcher)
             }

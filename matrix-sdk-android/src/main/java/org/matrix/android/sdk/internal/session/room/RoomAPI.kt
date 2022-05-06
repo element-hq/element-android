@@ -194,7 +194,8 @@ internal interface RoomAPI {
     @PUT(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state/{state_event_type}")
     suspend fun sendStateEvent(@Path("roomId") roomId: String,
                                @Path("state_event_type") stateEventType: String,
-                               @Body params: JsonDict)
+                               @Body params: JsonDict
+    ): SendResponse
 
     /**
      * Send a generic state event
@@ -208,7 +209,8 @@ internal interface RoomAPI {
     suspend fun sendStateEvent(@Path("roomId") roomId: String,
                                @Path("state_event_type") stateEventType: String,
                                @Path("state_key") stateKey: String,
-                               @Body params: JsonDict)
+                               @Body params: JsonDict
+    ): SendResponse
 
     /**
      * Get state events of a room

@@ -176,16 +176,22 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
                             if (!reason.isNullOrEmpty()) {
                                 when (reportType) {
                                     ReportType.BUG_REPORT          -> {
-                                        Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG).show()
+                                        Toast.makeText(
+                                                this@BugReportActivity,
+                                                getString(R.string.send_bug_report_failed, reason), Toast.LENGTH_LONG
+                                        ).show()
                                     }
                                     ReportType.SUGGESTION          -> {
-                                        Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG).show()
+                                        Toast.makeText(
+                                                this@BugReportActivity,
+                                                getString(R.string.send_suggestion_failed, reason), Toast.LENGTH_LONG
+                                        ).show()
                                     }
                                     ReportType.SPACE_BETA_FEEDBACK -> {
-                                        Toast.makeText(this@BugReportActivity,
-                                                getString(R.string.feedback_failed, reason), Toast.LENGTH_LONG).show()
+                                        Toast.makeText(
+                                                this@BugReportActivity,
+                                                getString(R.string.feedback_failed, reason), Toast.LENGTH_LONG
+                                        ).show()
                                     }
                                     else                           -> {
                                         // nop

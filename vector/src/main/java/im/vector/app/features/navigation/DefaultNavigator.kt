@@ -39,6 +39,9 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.VectorFeatures.OnboardingVariant
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsViewRoom
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
@@ -68,6 +71,7 @@ import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
@@ -118,7 +122,8 @@ class DefaultNavigator @Inject constructor(
         private val widgetArgsBuilder: WidgetArgsBuilder,
         private val appStateHandler: AppStateHandler,
         private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
-        private val features: VectorFeatures
+        private val features: VectorFeatures,
+        private val analyticsTracker: AnalyticsTracker
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
@@ -150,12 +155,23 @@ class DefaultNavigator @Inject constructor(
             roomId: String,
             eventId: String?,
             buildTask: Boolean,
-            isInviteAlreadyAccepted: Boolean
+            isInviteAlreadyAccepted: Boolean,
+            trigger: ViewRoom.Trigger?
     ) {
         if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
             fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
             return
         }
+
+        trigger?.let {
+            analyticsTracker.capture(
+                    sessionHolder.getActiveSession().getRoomSummary(roomId).toAnalyticsViewRoom(
+                            trigger = trigger,
+                            groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()
+                    )
+            )
+        }
+
         val args = TimelineArgs(roomId = roomId, eventId = eventId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
         val intent = RoomDetailActivity.newIntent(context, args)
         startActivity(context, intent, buildTask)
@@ -238,7 +254,8 @@ class DefaultNavigator @Inject constructor(
                 val pr = session.cryptoService().verificationService().requestKeyVerification(
                         supportedVerificationMethodsProvider.provide(),
                         session.myUserId,
-                        otherSessions)
+                        otherSessions
+                )
                 VerificationBottomSheet.forSelfVerification(session, pr.transactionId ?: pr.localId)
                         .show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
             } else {
@@ -296,13 +313,13 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openMatrixToBottomSheet(context: Context, link: String) {
+    override fun openMatrixToBottomSheet(context: Context, link: String, origin: OriginOfMatrixTo) {
         if (context is AppCompatActivity) {
             if (context !is MatrixToBottomSheet.InteractionListener) {
                 fatalError("Caller context should implement MatrixToBottomSheet.InteractionListener", vectorPreferences.failFast())
             }
             // TODO check if there is already one??
-            MatrixToBottomSheet.withLink(link)
+            MatrixToBottomSheet.withLink(link, origin)
                     .show(context.supportFragmentManager, "HA#MatrixToBottomSheet")
         }
     }
@@ -509,12 +526,14 @@ class DefaultNavigator @Inject constructor(
                                  view: View,
                                  inMemory: List<AttachmentData>,
                                  options: ((MutableList<Pair<View, String>>) -> Unit)?) {
-        VectorAttachmentViewerActivity.newIntent(activity,
+        VectorAttachmentViewerActivity.newIntent(
+                activity,
                 mediaData,
                 roomId,
                 mediaData.eventId,
                 inMemory,
-                ViewCompat.getTransitionName(view)).let { intent ->
+                ViewCompat.getTransitionName(view)
+        ).let { intent ->
             val pairs = ArrayList<Pair<View, String>>()
             activity.window.decorView.findViewById<View>(android.R.id.statusBarBackground)?.let {
                 pairs.add(Pair(it, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME))
@@ -583,24 +602,29 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String?) {
-        context.startActivity(ThreadsActivity.newIntent(
-                context = context,
-                threadTimelineArgs = threadTimelineArgs,
-                threadListArgs = null,
-                eventIdToNavigate = eventIdToNavigate
-        ))
+        context.startActivity(
+                ThreadsActivity.newIntent(
+                        context = context,
+                        threadTimelineArgs = threadTimelineArgs,
+                        threadListArgs = null,
+                        eventIdToNavigate = eventIdToNavigate
+                )
+        )
     }
 
     override fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs) {
-        context.startActivity(ThreadsActivity.newIntent(
-                context = context,
-                threadTimelineArgs = null,
-                threadListArgs = ThreadListArgs(
-                        roomId = threadTimelineArgs.roomId,
-                        displayName = threadTimelineArgs.displayName,
-                        avatarUrl = threadTimelineArgs.avatarUrl,
-                        roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
-                )))
+        context.startActivity(
+                ThreadsActivity.newIntent(
+                        context = context,
+                        threadTimelineArgs = null,
+                        threadListArgs = ThreadListArgs(
+                                roomId = threadTimelineArgs.roomId,
+                                displayName = threadTimelineArgs.displayName,
+                                avatarUrl = threadTimelineArgs.avatarUrl,
+                                roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
+                        )
+                )
+        )
     }
 
     override fun openScreenSharingPermissionDialog(screenCaptureIntent: Intent,

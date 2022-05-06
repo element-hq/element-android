@@ -60,8 +60,8 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(
             selections.asFlow()
                     .map { user ->
                         when (user) {
-                            is PendingSelection.UserPendingSelection     -> room.invite(user.user.userId, null)
-                            is PendingSelection.ThreePidPendingSelection -> room.invite3pid(user.threePid)
+                            is PendingSelection.UserPendingSelection     -> room.membershipService().invite(user.user.userId, null)
+                            is PendingSelection.ThreePidPendingSelection -> room.membershipService().invite3pid(user.threePid)
                         }
                     }
                     .catch { cause ->
@@ -69,15 +69,21 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(
                     }
                     .collect {
                         val successMessage = when (selections.size) {
-                            1    -> stringProvider.getString(R.string.invitation_sent_to_one_user,
-                                    selections.first().getBestName())
-                            2    -> stringProvider.getString(R.string.invitations_sent_to_two_users,
+                            1    -> stringProvider.getString(
+                                    R.string.invitation_sent_to_one_user,
+                                    selections.first().getBestName()
+                            )
+                            2    -> stringProvider.getString(
+                                    R.string.invitations_sent_to_two_users,
                                     selections.first().getBestName(),
-                                    selections.last().getBestName())
-                            else -> stringProvider.getQuantityString(R.plurals.invitations_sent_to_one_and_more_users,
+                                    selections.last().getBestName()
+                            )
+                            else -> stringProvider.getQuantityString(
+                                    R.plurals.invitations_sent_to_one_and_more_users,
                                     selections.size - 1,
                                     selections.first().getBestName(),
-                                    selections.size - 1)
+                                    selections.size - 1
+                            )
                         }
                         _viewEvents.post(InviteUsersToRoomViewEvents.Success(successMessage))
                     }

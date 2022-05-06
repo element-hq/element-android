@@ -64,11 +64,13 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
     private suspend fun handleEncryption(params: SendVerificationMessageTask.Params): Event {
         if (cryptoSessionInfoProvider.isRoomEncrypted(params.event.roomId ?: "")) {
             try {
-                return encryptEventTask.execute(EncryptEventTask.Params(
-                        params.event.roomId ?: "",
-                        params.event,
-                        listOf("m.relates_to")
-                ))
+                return encryptEventTask.execute(
+                        EncryptEventTask.Params(
+                                params.event.roomId ?: "",
+                                params.event,
+                                listOf("m.relates_to")
+                        )
+                )
             } catch (throwable: Throwable) {
                 // We said it's ok to send verification request in clear
             }

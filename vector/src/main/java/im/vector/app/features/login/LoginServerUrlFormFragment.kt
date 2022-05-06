@@ -100,11 +100,13 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
             }
         }
         val completions = state.knownCustomHomeServersUrls + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
-        views.loginServerUrlFormHomeServerUrl.setAdapter(ArrayAdapter(
-                requireContext(),
-                R.layout.item_completion_homeserver,
-                completions
-        ))
+        views.loginServerUrlFormHomeServerUrl.setAdapter(
+                ArrayAdapter(
+                        requireContext(),
+                        R.layout.item_completion_homeserver,
+                        completions
+                )
+        )
         views.loginServerUrlFormHomeServerUrlTil.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
                 .takeIf { completions.isNotEmpty() }
                 ?: TextInputLayout.END_ICON_NONE

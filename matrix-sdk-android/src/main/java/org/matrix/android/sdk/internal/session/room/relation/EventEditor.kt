@@ -27,12 +27,16 @@ import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class EventEditor @Inject constructor(private val eventSenderProcessor: EventSenderProcessor,
-                                               private val eventFactory: LocalEchoEventFactory,
-                                               private val localEchoRepository: LocalEchoRepository) {
+internal class EventEditor @Inject constructor(
+        private val eventSenderProcessor: EventSenderProcessor,
+        private val eventFactory: LocalEchoEventFactory,
+        private val localEchoRepository: LocalEchoRepository,
+        private val clock: Clock,
+) {
 
     fun editTextMessage(targetEvent: TimelineEvent,
                         msgType: String,
@@ -126,7 +130,7 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
     }
 
     private fun updateFailedEchoWithEvent(roomId: String, failedEchoEventId: String, editedEvent: Event) {
-        val editedEventEntity = editedEvent.toEntity(roomId, SendState.UNSENT, System.currentTimeMillis())
+        val editedEventEntity = editedEvent.toEntity(roomId, SendState.UNSENT, clock.epochMillis())
         localEchoRepository.updateEchoAsync(failedEchoEventId) { _, entity ->
             entity.content = editedEventEntity.content
             entity.ageLocalTs = editedEventEntity.ageLocalTs

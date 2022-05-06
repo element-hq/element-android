@@ -42,6 +42,7 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -88,7 +89,7 @@ class E2eeSanityTests : InstrumentedTest {
         otherAccounts.forEach {
             testHelper.runBlockingTest {
                 Log.v("#E2E TEST", "Alice invites ${it.myUserId}")
-                aliceRoomPOV.invite(it.myUserId)
+                aliceRoomPOV.membershipService().invite(it.myUserId)
             }
         }
 
@@ -130,7 +131,7 @@ class E2eeSanityTests : InstrumentedTest {
         newAccount.forEach {
             testHelper.runBlockingTest {
                 Log.v("#E2E TEST", "Alice invites ${it.myUserId}")
-                aliceRoomPOV.invite(it.myUserId)
+                aliceRoomPOV.membershipService().invite(it.myUserId)
             }
         }
 
@@ -298,11 +299,13 @@ class E2eeSanityTests : InstrumentedTest {
             }
 
             val importedResult = testHelper.doSync<ImportRoomKeysResult> {
-                keysBackupService.restoreKeyBackupWithPassword(keyVersionResult!!,
+                keysBackupService.restoreKeyBackupWithPassword(
+                        keyVersionResult!!,
                         keyBackupPassword,
                         null,
                         null,
-                        null, it)
+                        null, it
+                )
             }
 
             assertEquals(3, importedResult.totalNumberOfKeys)
@@ -525,10 +528,10 @@ class E2eeSanityTests : InstrumentedTest {
     }
 
     private fun sendMessageInRoom(aliceRoomPOV: Room, text: String): String? {
-        aliceRoomPOV.sendTextMessage(text)
+        aliceRoomPOV.sendService().sendTextMessage(text)
         var sentEventId: String? = null
         testHelper.waitWithLatch(4 * TestConstants.timeOutMillis) { latch ->
-            val timeline = aliceRoomPOV.createTimeline(null, TimelineSettings(60))
+            val timeline = aliceRoomPOV.timelineService().createTimeline(null, TimelineSettings(60))
             timeline.start()
 
             testHelper.retryPeriodicallyWithLatch(latch) {

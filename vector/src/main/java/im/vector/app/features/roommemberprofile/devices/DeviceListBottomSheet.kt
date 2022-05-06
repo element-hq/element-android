@@ -96,7 +96,8 @@ class DeviceListBottomSheet :
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             childFragmentManager.commitTransaction {
-                replace(R.id.bottomSheetFragmentContainer,
+                replace(
+                        R.id.bottomSheetFragmentContainer,
                         fragmentClass.java,
                         bundle,
                         fragmentClass.simpleName

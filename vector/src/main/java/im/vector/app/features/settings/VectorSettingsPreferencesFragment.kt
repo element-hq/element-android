@@ -147,8 +147,10 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 context?.let { context: Context ->
                     MaterialAlertDialogBuilder(context)
-                            .setSingleChoiceItems(R.array.media_saving_choice,
-                                    vectorPreferences.getSelectedMediasSavingPeriod()) { d, n ->
+                            .setSingleChoiceItems(
+                                    R.array.media_saving_choice,
+                                    vectorPreferences.getSelectedMediasSavingPeriod()
+                            ) { d, n ->
                                 vectorPreferences.setSelectedMediasSavingPeriod(n)
                                 d.cancel()
 

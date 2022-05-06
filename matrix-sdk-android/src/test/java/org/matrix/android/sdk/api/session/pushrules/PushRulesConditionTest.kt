@@ -26,6 +26,7 @@ import org.matrix.android.sdk.MatrixTest
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.members.MembershipService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -42,7 +43,8 @@ class PushRulesConditionTest : MatrixTest {
                 type = "m.room.message",
                 eventId = "mx0",
                 content = MessageTextContent("m.text", text).toContent(),
-                originServerTs = 0)
+                originServerTs = 0
+        )
     }
 
     @Test
@@ -61,7 +63,8 @@ class PushRulesConditionTest : MatrixTest {
                 eventId = "mx0",
                 stateKey = "@foo:matrix.org",
                 content = rm.toContent(),
-                originServerTs = 0)
+                originServerTs = 0
+        )
 
         assert(condition.isSatisfied(simpleTextEvent))
         assert(!condition.isSatisfied(simpleRoomMemberEvent))
@@ -130,7 +133,8 @@ class PushRulesConditionTest : MatrixTest {
                 eventId = "mx0",
                 content = MessageTextContent("m.notice", "A").toContent(),
                 originServerTs = 0,
-                roomId = "2joined").also {
+                roomId = "2joined"
+        ).also {
             assertTrue("Notice", conditionEqual.isSatisfied(it))
         }
     }
@@ -148,12 +152,20 @@ class PushRulesConditionTest : MatrixTest {
         val room2JoinedId = "2joined"
         val room3JoinedId = "3joined"
 
-        val roomStub2Joined = mockk<Room> {
+        val roomMembershipService2 = mockk<MembershipService> {
             every { getNumberOfJoinedMembers() } returns 2
         }
 
-        val roomStub3Joined = mockk<Room> {
+        val roomMembershipService3 = mockk<MembershipService> {
             every { getNumberOfJoinedMembers() } returns 3
+        }
+
+        val roomStub2Joined = mockk<Room> {
+            every { membershipService() } returns roomMembershipService2
+        }
+
+        val roomStub3Joined = mockk<Room> {
+            every { membershipService() } returns roomMembershipService3
         }
 
         val roomGetterStub = mockk<RoomGetter> {
@@ -166,7 +178,8 @@ class PushRulesConditionTest : MatrixTest {
                 eventId = "mx0",
                 content = MessageTextContent("m.text", "A").toContent(),
                 originServerTs = 0,
-                roomId = room2JoinedId).also {
+                roomId = room2JoinedId
+        ).also {
             assertFalse("This room does not have 3 members", conditionEqual3.isSatisfied(it, roomGetterStub))
             assertFalse("This room does not have 3 members", conditionEqual3Bis.isSatisfied(it, roomGetterStub))
             assertTrue("This room has less than 3 members", conditionLessThan3.isSatisfied(it, roomGetterStub))
@@ -177,7 +190,8 @@ class PushRulesConditionTest : MatrixTest {
                 eventId = "mx0",
                 content = MessageTextContent("m.text", "A").toContent(),
                 originServerTs = 0,
-                roomId = room3JoinedId).also {
+                roomId = room3JoinedId
+        ).also {
             assertTrue("This room has 3 members", conditionEqual3.isSatisfied(it, roomGetterStub))
             assertTrue("This room has 3 members", conditionEqual3Bis.isSatisfied(it, roomGetterStub))
             assertFalse("This room has more than 3 members", conditionLessThan3.isSatisfied(it, roomGetterStub))
@@ -197,7 +211,8 @@ class PushRulesConditionTest : MatrixTest {
                 eventId = "mx0",
                 content = MessageTextContent("m.text", "How was the cake benoit?").toContent(),
                 originServerTs = 0,
-                roomId = "2joined")
+                roomId = "2joined"
+        )
 
         condition.isSatisfied(event, "how") shouldBe true
         condition.isSatisfied(event, "How") shouldBe true

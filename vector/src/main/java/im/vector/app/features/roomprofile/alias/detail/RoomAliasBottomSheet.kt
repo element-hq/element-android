@@ -92,13 +92,15 @@ class RoomAliasBottomSheet :
                         isLocal: Boolean,
                         canEditCanonicalAlias: Boolean): RoomAliasBottomSheet {
             return RoomAliasBottomSheet().apply {
-                setArguments(RoomAliasBottomSheetArgs(
-                        alias = alias,
-                        isPublished = isPublished,
-                        isMainAlias = isMainAlias,
-                        isLocal = isLocal,
-                        canEditCanonicalAlias = canEditCanonicalAlias
-                ))
+                setArguments(
+                        RoomAliasBottomSheetArgs(
+                                alias = alias,
+                                isPublished = isPublished,
+                                isMainAlias = isMainAlias,
+                                isLocal = isLocal,
+                                canEditCanonicalAlias = canEditCanonicalAlias
+                        )
+                )
             }
         }
     }

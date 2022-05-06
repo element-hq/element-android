@@ -373,9 +373,11 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     // Trick, we must enable this room to disable notifications
                     lifecycleScope.launch {
                         try {
-                            pushRuleService.updatePushRuleEnableStatus(RuleKind.OVERRIDE,
+                            pushRuleService.updatePushRuleEnableStatus(
+                                    RuleKind.OVERRIDE,
                                     it,
-                                    !switchPref.isChecked)
+                                    !switchPref.isChecked
+                            )
                             // Push rules will be updated from the sync
                         } catch (failure: Throwable) {
                             if (!isAdded) {
