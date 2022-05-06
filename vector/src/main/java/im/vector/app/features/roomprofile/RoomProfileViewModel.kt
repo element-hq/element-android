@@ -191,11 +191,13 @@ class RoomProfileViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 session.roomService().leaveRoom(room.roomId)
-                analyticsTracker.capture(Interaction(
-                        index = null,
-                        interactionType = null,
-                        name = Interaction.Name.MobileRoomLeave
-                ))
+                analyticsTracker.capture(
+                        Interaction(
+                                index = null,
+                                interactionType = null,
+                                name = Interaction.Name.MobileRoomLeave
+                        )
+                )
                 // Do nothing, we will be closing the room automatically when it will get back from sync
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))

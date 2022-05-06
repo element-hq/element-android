@@ -299,11 +299,13 @@ class E2eeSanityTests : InstrumentedTest {
             }
 
             val importedResult = testHelper.doSync<ImportRoomKeysResult> {
-                keysBackupService.restoreKeyBackupWithPassword(keyVersionResult!!,
+                keysBackupService.restoreKeyBackupWithPassword(
+                        keyVersionResult!!,
                         keyBackupPassword,
                         null,
                         null,
-                        null, it)
+                        null, it
+                )
             }
 
             assertEquals(3, importedResult.totalNumberOfKeys)

@@ -712,8 +712,10 @@ internal class DefaultCryptoService @Inject constructor(
                 }.foldToCallback(callback)
             } else {
                 val algorithm = getEncryptionAlgorithm(roomId)
-                val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
-                        algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON)
+                val reason = String.format(
+                        MXCryptoError.UNABLE_TO_ENCRYPT_REASON,
+                        algorithm ?: MXCryptoError.NO_MORE_ALGORITHM_REASON
+                )
                 Timber.tag(loggerTag.value).e("encryptEventContent() : failed $reason")
                 callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason)))
             }

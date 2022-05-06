@@ -104,11 +104,13 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
                     MatrixToBottomSheet.withLink(it.link, OriginOfMatrixTo.SPACE_EXPLORE).show(supportFragmentManager, "ShowChild")
                 }
                 is SpaceDirectoryViewEvents.NavigateToCreateNewRoom   -> {
-                    createRoomResultLauncher.launch(CreateRoomActivity.getIntent(
-                            this,
-                            openAfterCreate = false,
-                            currentSpaceId = it.currentSpaceId
-                    ))
+                    createRoomResultLauncher.launch(
+                            CreateRoomActivity.getIntent(
+                                    this,
+                                    openAfterCreate = false,
+                                    currentSpaceId = it.currentSpaceId
+                            )
+                    )
                 }
             }
         }

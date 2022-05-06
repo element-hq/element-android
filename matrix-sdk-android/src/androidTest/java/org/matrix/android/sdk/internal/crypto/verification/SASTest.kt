@@ -75,10 +75,12 @@ class SASTest : InstrumentedTest {
         }
         bobVerificationService.addListener(bobListener)
 
-        val txID = aliceVerificationService.beginKeyVerification(VerificationMethod.SAS,
+        val txID = aliceVerificationService.beginKeyVerification(
+                VerificationMethod.SAS,
                 bobSession.myUserId,
                 bobSession.cryptoService().getMyDevice().deviceId,
-                null)
+                null
+        )
         assertNotNull("Alice should have a started transaction", txID)
 
         val aliceKeyTx = aliceVerificationService.getExistingTransaction(bobSession.myUserId, txID!!)
@@ -467,8 +469,10 @@ class SASTest : InstrumentedTest {
         val aliceTx = aliceVerificationService.getExistingTransaction(bobUserId, verificationSAS!!) as SASDefaultVerificationTransaction
         val bobTx = bobVerificationService.getExistingTransaction(aliceSession.myUserId, verificationSAS) as SASDefaultVerificationTransaction
 
-        assertEquals("Should have same SAS", aliceTx.getShortCodeRepresentation(SasMode.DECIMAL),
-                bobTx.getShortCodeRepresentation(SasMode.DECIMAL))
+        assertEquals(
+                "Should have same SAS", aliceTx.getShortCodeRepresentation(SasMode.DECIMAL),
+                bobTx.getShortCodeRepresentation(SasMode.DECIMAL)
+        )
 
         cryptoTestData.cleanUp(testHelper)
     }
@@ -544,7 +548,8 @@ class SASTest : InstrumentedTest {
 
         // Assert that devices are verified
         val bobDeviceInfoFromAlicePOV: CryptoDeviceInfo? = aliceSession.cryptoService().getDeviceInfo(bobUserId, bobDeviceId)
-        val aliceDeviceInfoFromBobPOV: CryptoDeviceInfo? = bobSession.cryptoService().getDeviceInfo(aliceSession.myUserId, aliceSession.cryptoService().getMyDevice().deviceId)
+        val aliceDeviceInfoFromBobPOV: CryptoDeviceInfo? =
+                bobSession.cryptoService().getDeviceInfo(aliceSession.myUserId, aliceSession.cryptoService().getMyDevice().deviceId)
 
         assertTrue("alice device should be verified from bob point of view", aliceDeviceInfoFromBobPOV!!.isVerified)
         assertTrue("bob device should be verified from alice point of view", bobDeviceInfoFromAlicePOV!!.isVerified)
@@ -611,14 +616,16 @@ class SASTest : InstrumentedTest {
                 requestID!!,
                 cryptoTestData.roomId,
                 bobSession.myUserId,
-                bobSession.sessionParams.deviceId!!)
+                bobSession.sessionParams.deviceId!!
+        )
 
         bobVerificationService.beginKeyVerificationInDMs(
                 VerificationMethod.SAS,
                 requestID!!,
                 cryptoTestData.roomId,
                 aliceSession.myUserId,
-                aliceSession.sessionParams.deviceId!!)
+                aliceSession.sessionParams.deviceId!!
+        )
 
         // we should reach SHOW SAS on both
         var alicePovTx: SasVerificationTransaction?

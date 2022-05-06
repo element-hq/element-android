@@ -96,11 +96,13 @@ internal class MXMegolmDecryption(private val userId: String,
         }
 
         return runCatching {
-            olmDevice.decryptGroupMessage(encryptedEventContent.ciphertext,
+            olmDevice.decryptGroupMessage(
+                    encryptedEventContent.ciphertext,
                     event.roomId,
                     timeline,
                     encryptedEventContent.sessionId,
-                    encryptedEventContent.senderKey)
+                    encryptedEventContent.senderKey
+            )
         }
                 .fold(
                         { olmDecryptionResult ->
@@ -132,9 +134,11 @@ internal class MXMegolmDecryption(private val userId: String,
                                             requestKeysForEvent(event, true)
                                         }
                                         // Encapsulate as withHeld exception
-                                        throw MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD,
+                                        throw MXCryptoError.Base(
+                                                MXCryptoError.ErrorType.KEYS_WITHHELD,
                                                 withHeldInfo.code?.value ?: "",
-                                                withHeldInfo.reason)
+                                                withHeldInfo.reason
+                                        )
                                     }
 
                                     if (requestKeysOnFail) {
@@ -144,7 +148,8 @@ internal class MXMegolmDecryption(private val userId: String,
                                     throw MXCryptoError.Base(
                                             MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX,
                                             "UNKNOWN_MESSAGE_INDEX",
-                                            null)
+                                            null
+                                    )
                                 }
 
                                 val reason = String.format(MXCryptoError.OLM_REASON, throwable.olmException.message)
@@ -153,7 +158,8 @@ internal class MXMegolmDecryption(private val userId: String,
                                 throw MXCryptoError.Base(
                                         MXCryptoError.ErrorType.OLM,
                                         reason,
-                                        detailedReason)
+                                        detailedReason
+                                )
                             }
                             if (throwable is MXCryptoError.Base) {
                                 if (
@@ -166,9 +172,11 @@ internal class MXMegolmDecryption(private val userId: String,
                                             requestKeysForEvent(event, true)
                                         }
                                         // Encapsulate as withHeld exception
-                                        throw MXCryptoError.Base(MXCryptoError.ErrorType.KEYS_WITHHELD,
+                                        throw MXCryptoError.Base(
+                                                MXCryptoError.ErrorType.KEYS_WITHHELD,
                                                 withHeldInfo.code?.value ?: "",
-                                                withHeldInfo.reason)
+                                                withHeldInfo.reason
+                                        )
                                     } else {
                                         // This is un-used in Matrix Android SDK2, not sure if needed
                                         // addEventToPendingList(event, timeline)
@@ -298,13 +306,15 @@ internal class MXMegolmDecryption(private val userId: String,
         }
 
         Timber.tag(loggerTag.value).i("onRoomKeyEvent addInboundGroupSession ${roomKeyContent.sessionId}")
-        val added = olmDevice.addInboundGroupSession(roomKeyContent.sessionId,
+        val added = olmDevice.addInboundGroupSession(
+                roomKeyContent.sessionId,
                 roomKeyContent.sessionKey,
                 roomKeyContent.roomId,
                 senderKey,
                 forwardingCurve25519KeyChain,
                 keysClaimed,
-                exportFormat)
+                exportFormat
+        )
 
         if (added) {
             defaultKeysBackupService.maybeBackupKeys()

@@ -102,10 +102,12 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
                     promptSkip()
                 }
                 is BootstrapViewEvents.RequestReAuth -> {
-                    ReAuthActivity.newIntent(requireContext(),
+                    ReAuthActivity.newIntent(
+                            requireContext(),
                             event.flowResponse,
                             event.lastErrorCode,
-                            getString(R.string.initialize_cross_signing)).let { intent ->
+                            getString(R.string.initialize_cross_signing)
+                    ).let { intent ->
                         reAuthActivityResultLauncher.launch(intent)
                     }
                 }
@@ -201,9 +203,11 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
                 val isKey = state.step.useKey()
                 val drawableRes = if (isKey) R.drawable.ic_security_key_24dp else R.drawable.ic_security_phrase_24dp
                 views.bootstrapIcon.isVisible = true
-                views.bootstrapIcon.setImageDrawable(ContextCompat.getDrawable(
-                        requireContext(),
-                        drawableRes)
+                views.bootstrapIcon.setImageDrawable(
+                        ContextCompat.getDrawable(
+                                requireContext(),
+                                drawableRes
+                        )
                 )
                 views.bootstrapTitleText.text = getString(R.string.upgrade_security)
                 showFragment(BootstrapMigrateBackupFragment::class)
@@ -227,7 +231,8 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
     private fun showFragment(fragmentClass: KClass<out Fragment>, argsParcelable: Parcelable? = null) {
         if (childFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             childFragmentManager.commitTransaction {
-                replace(R.id.bottomSheetFragmentContainer,
+                replace(
+                        R.id.bottomSheetFragmentContainer,
                         fragmentClass.java,
                         argsParcelable?.toMvRxBundle(),
                         fragmentClass.simpleName

@@ -53,7 +53,7 @@ internal class DefaultTimelineService @AssistedInject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val timelineEventDataSource: TimelineEventDataSource,
         private val clock: Clock,
-        ) : TimelineService {
+) : TimelineService {
 
     @AssistedFactory
     interface Factory {

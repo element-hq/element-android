@@ -207,14 +207,16 @@ class QuadSTests : InstrumentedTest {
 
         // Assert that can decrypt with both keys
         testHelper.runBlockingTest {
-            aliceSession.sharedSecretStorageService().getSecret("my.secret",
+            aliceSession.sharedSecretStorageService().getSecret(
+                    "my.secret",
                     keyId1,
                     RawBytesKeySpec.fromRecoveryKey(key1Info.recoveryKey)!!
             )
         }
 
         testHelper.runBlockingTest {
-            aliceSession.sharedSecretStorageService().getSecret("my.secret",
+            aliceSession.sharedSecretStorageService().getSecret(
+                    "my.secret",
                     keyId2,
                     RawBytesKeySpec.fromRecoveryKey(key2Info.recoveryKey)!!
             )
@@ -245,13 +247,15 @@ class QuadSTests : InstrumentedTest {
 
         testHelper.runBlockingTest {
             try {
-                aliceSession.sharedSecretStorageService().getSecret("my.secret",
+                aliceSession.sharedSecretStorageService().getSecret(
+                        "my.secret",
                         keyId1,
                         RawBytesKeySpec.fromPassphrase(
                                 "A bad passphrase",
                                 key1Info.content?.passphrase?.salt ?: "",
                                 key1Info.content?.passphrase?.iterations ?: 0,
-                                null)
+                                null
+                        )
                 )
             } catch (throwable: Throwable) {
                 assert(throwable is SharedSecretStorageError.BadMac)
@@ -260,13 +264,15 @@ class QuadSTests : InstrumentedTest {
 
         // Now try with correct key
         testHelper.runBlockingTest {
-            aliceSession.sharedSecretStorageService().getSecret("my.secret",
+            aliceSession.sharedSecretStorageService().getSecret(
+                    "my.secret",
                     keyId1,
                     RawBytesKeySpec.fromPassphrase(
                             passphrase,
                             key1Info.content?.passphrase?.salt ?: "",
                             key1Info.content?.passphrase?.iterations ?: 0,
-                            null)
+                            null
+                    )
             )
         }
 
@@ -321,7 +327,8 @@ class QuadSTests : InstrumentedTest {
                     keyId,
                     passphrase,
                     emptyKeySigner,
-                    null)
+                    null
+            )
         }
 
         assertAccountData(session, "${DefaultSharedSecretStorageService.KEY_ID_BASE}.$keyId")

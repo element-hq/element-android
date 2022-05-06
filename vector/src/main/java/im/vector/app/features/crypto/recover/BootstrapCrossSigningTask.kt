@@ -122,7 +122,8 @@ class BootstrapCrossSigningTask @Inject constructor(
         params.progressListener?.onProgress(
                 WaitingViewData(
                         stringProvider.getString(R.string.bootstrap_crosssigning_progress_pbkdf2),
-                        isIndeterminate = true)
+                        isIndeterminate = true
+                )
         )
 
         Timber.d("## BootstrapCrossSigningTask: Creating 4S key with pass: ${params.passphrase != null}")
@@ -151,7 +152,8 @@ class BootstrapCrossSigningTask @Inject constructor(
         params.progressListener?.onProgress(
                 WaitingViewData(
                         stringProvider.getString(R.string.bootstrap_crosssigning_progress_default_key),
-                        isIndeterminate = true)
+                        isIndeterminate = true
+                )
         )
 
         Timber.d("## BootstrapCrossSigningTask: Creating 4S - Set default key")

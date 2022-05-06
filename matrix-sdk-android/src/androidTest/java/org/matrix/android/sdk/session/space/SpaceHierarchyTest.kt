@@ -177,21 +177,27 @@ class SpaceHierarchyTest : InstrumentedTest {
         val commonTestHelper = CommonTestHelper(context())
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
-        val spaceAInfo = createPublicSpace(session, "SpaceA", listOf(
+        val spaceAInfo = createPublicSpace(
+                session, "SpaceA", listOf(
                 Triple("A1", true /*auto-join*/, true/*canonical*/),
                 Triple("A2", true, true)
-        ))
+        )
+        )
 
-        /* val spaceBInfo = */ createPublicSpace(session, "SpaceB", listOf(
+        /* val spaceBInfo = */ createPublicSpace(
+                session, "SpaceB", listOf(
                 Triple("B1", true /*auto-join*/, true/*canonical*/),
                 Triple("B2", true, true),
                 Triple("B3", true, true)
-        ))
+        )
+        )
 
-        val spaceCInfo = createPublicSpace(session, "SpaceC", listOf(
+        val spaceCInfo = createPublicSpace(
+                session, "SpaceC", listOf(
                 Triple("C1", true /*auto-join*/, true/*canonical*/),
                 Triple("C2", true, true)
-        ))
+        )
+        )
 
         // add C as a subspace of A
         val spaceA = session.spaceService().getSpace(spaceAInfo.spaceId)
@@ -254,15 +260,19 @@ class SpaceHierarchyTest : InstrumentedTest {
         val commonTestHelper = CommonTestHelper(context())
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
-        val spaceAInfo = createPublicSpace(session, "SpaceA", listOf(
+        val spaceAInfo = createPublicSpace(
+                session, "SpaceA", listOf(
                 Triple("A1", true /*auto-join*/, true/*canonical*/),
                 Triple("A2", true, true)
-        ))
+        )
+        )
 
-        val spaceCInfo = createPublicSpace(session, "SpaceC", listOf(
+        val spaceCInfo = createPublicSpace(
+                session, "SpaceC", listOf(
                 Triple("C1", true /*auto-join*/, true/*canonical*/),
                 Triple("C2", true, true)
-        ))
+        )
+        )
 
         // add C as a subspace of A
         val spaceA = session.spaceService().getSpace(spaceAInfo.spaceId)
@@ -296,16 +306,20 @@ class SpaceHierarchyTest : InstrumentedTest {
         val commonTestHelper = CommonTestHelper(context())
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
-        val spaceAInfo = createPublicSpace(session, "SpaceA", listOf(
+        val spaceAInfo = createPublicSpace(
+                session, "SpaceA", listOf(
                 Triple("A1", true /*auto-join*/, true/*canonical*/),
                 Triple("A2", true, true)
-        ))
+        )
+        )
 
-        val spaceBInfo = createPublicSpace(session, "SpaceB", listOf(
+        val spaceBInfo = createPublicSpace(
+                session, "SpaceB", listOf(
                 Triple("B1", true /*auto-join*/, true/*canonical*/),
                 Triple("B2", true, true),
                 Triple("B3", true, true)
-        ))
+        )
+        )
 
         // add B as a subspace of A
         val spaceA = session.spaceService().getSpace(spaceAInfo.spaceId)
@@ -315,10 +329,12 @@ class SpaceHierarchyTest : InstrumentedTest {
             session.spaceService().setSpaceParent(spaceBInfo.spaceId, spaceAInfo.spaceId, true, viaServers)
         }
 
-        val spaceCInfo = createPublicSpace(session, "SpaceC", listOf(
+        val spaceCInfo = createPublicSpace(
+                session, "SpaceC", listOf(
                 Triple("C1", true /*auto-join*/, true/*canonical*/),
                 Triple("C2", true, true)
-        ))
+        )
+        )
 
         commonTestHelper.waitWithLatch { latch ->
 
@@ -446,21 +462,27 @@ class SpaceHierarchyTest : InstrumentedTest {
         val commonTestHelper = CommonTestHelper(context())
         val session = commonTestHelper.createAccount("John", SessionTestParams(true))
 
-        /* val spaceAInfo = */ createPublicSpace(session, "SpaceA", listOf(
+        /* val spaceAInfo = */ createPublicSpace(
+                session, "SpaceA", listOf(
                 Triple("A1", true /*auto-join*/, true/*canonical*/),
                 Triple("A2", true, true)
-        ))
+        )
+        )
 
-        val spaceBInfo = createPublicSpace(session, "SpaceB", listOf(
+        val spaceBInfo = createPublicSpace(
+                session, "SpaceB", listOf(
                 Triple("B1", true /*auto-join*/, true/*canonical*/),
                 Triple("B2", true, true),
                 Triple("B3", true, true)
-        ))
+        )
+        )
 
-        val spaceCInfo = createPublicSpace(session, "SpaceC", listOf(
+        val spaceCInfo = createPublicSpace(
+                session, "SpaceC", listOf(
                 Triple("C1", true /*auto-join*/, true/*canonical*/),
                 Triple("C2", true, true)
-        ))
+        )
+        )
 
         val viaServers = listOf(session.sessionParams.homeServerHost ?: "")
 
@@ -494,10 +516,12 @@ class SpaceHierarchyTest : InstrumentedTest {
         val aliceSession = commonTestHelper.createAccount("Alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("Bib", SessionTestParams(true))
 
-        val spaceAInfo = createPrivateSpace(aliceSession, "Private Space A", listOf(
+        val spaceAInfo = createPrivateSpace(
+                aliceSession, "Private Space A", listOf(
                 Triple("General", true /*suggested*/, true/*canonical*/),
                 Triple("Random", true, true)
-        ))
+        )
+        )
 
         commonTestHelper.runBlockingTest {
             aliceSession.getRoom(spaceAInfo.spaceId)!!.membershipService().invite(bobSession.myUserId, null)

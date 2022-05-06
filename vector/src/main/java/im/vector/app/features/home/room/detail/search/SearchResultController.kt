@@ -126,8 +126,9 @@ class SearchResultController @Inject constructor(
                     .avatarRenderer(avatarRenderer)
                     .formattedDate(dateFormatter.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE))
                     .spannable(spannable.toEpoxyCharSequence())
-                    .sender(eventAndSender.sender
-                            ?: eventAndSender.event.senderId?.let { session.roomService().getRoomMember(it, data.roomId) }?.toMatrixItem()
+                    .sender(
+                            eventAndSender.sender
+                                    ?: eventAndSender.event.senderId?.let { session.roomService().getRoomMember(it, data.roomId) }?.toMatrixItem()
                     )
                     .threadDetails(event.threadDetails)
                     .threadSummaryFormatted(displayableEventFormatter.formatThreadSummary(event.threadDetails?.threadSummaryLatestEvent).toString())

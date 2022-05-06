@@ -218,9 +218,11 @@ internal class DefaultIdentityService @Inject constructor(
             listeners.toList().forEach { tryOrNull { it.onIdentityServerChange() } }
         }
 
-        updateUserAccountDataTask.execute(UpdateUserAccountDataTask.IdentityParams(
-                identityContent = IdentityServerContent(baseUrl = url)
-        ))
+        updateUserAccountDataTask.execute(
+                UpdateUserAccountDataTask.IdentityParams(
+                        identityContent = IdentityServerContent(baseUrl = url)
+                )
+        )
     }
 
     override fun getUserConsent(): Boolean {
@@ -297,11 +299,13 @@ internal class DefaultIdentityService @Inject constructor(
     }
 
     override suspend fun sign3pidInvitation(identiyServer: String, token: String, secret: String): SignInvitationResult {
-        return sign3pidInvitationTask.execute(Sign3pidInvitationTask.Params(
-                url = identiyServer,
-                token = token,
-                privateKey = secret
-        ))
+        return sign3pidInvitationTask.execute(
+                Sign3pidInvitationTask.Params(
+                        url = identiyServer,
+                        token = token,
+                        privateKey = secret
+                )
+        )
     }
 
     override fun addListener(listener: IdentityServiceListener) {

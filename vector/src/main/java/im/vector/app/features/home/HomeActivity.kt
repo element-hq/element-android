@@ -142,9 +142,11 @@ class HomeActivity :
             }
             // Here we want to change current space to the newly created one, and then immediately open the default room
             if (spaceId != null) {
-                navigator.switchToSpace(context = this,
+                navigator.switchToSpace(
+                        context = this,
                         spaceId = spaceId,
-                        postSwitchOption)
+                        postSwitchOption
+                )
             }
         }
     }

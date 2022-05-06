@@ -207,8 +207,10 @@ internal fun List<TimelineEvent>.mapEventsWithEdition(realm: Realm, roomId: Stri
                     ?.eventId
                     ?.let { editedEventId ->
                         TimelineEventEntity.where(realm, roomId, eventId = editedEventId).findFirst()?.let { editedEvent ->
-                            it.root.threadDetails = it.root.threadDetails?.copy(lastRootThreadEdition = editedEvent.root?.asDomain()?.getDecryptedTextSummary()
-                                    ?: "(edited)")
+                            it.root.threadDetails = it.root.threadDetails?.copy(
+                                    lastRootThreadEdition = editedEvent.root?.asDomain()?.getDecryptedTextSummary()
+                                            ?: "(edited)"
+                            )
                             it
                         } ?: it
                     } ?: it
@@ -341,7 +343,8 @@ internal fun updateNotificationsNew(roomId: String, realm: Realm, currentUserId:
                     realm = realm,
                     roomId = roomId,
                     rootThreadEventId = eventId,
-                    senderId = currentUserId)
+                    senderId = currentUserId
+            )
             val rootThreadEventEntity = EventEntity.where(realm, eventId).findFirst()
 
             if (isUserParticipating) {

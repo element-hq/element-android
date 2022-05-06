@@ -174,9 +174,11 @@ class NotificationUtils @Inject constructor(
          * Default notification importance: shows everywhere, makes noise, but does not visually
          * intrude.
          */
-        notificationManager.createNotificationChannel(NotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID,
+        notificationManager.createNotificationChannel(NotificationChannel(
+                NOISY_NOTIFICATION_CHANNEL_ID,
                 stringProvider.getString(R.string.notification_noisy_notifications).ifEmpty { "Noisy notifications" },
-                NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationManager.IMPORTANCE_DEFAULT
+        )
                 .apply {
                     description = stringProvider.getString(R.string.notification_noisy_notifications)
                     enableVibration(true)
@@ -187,9 +189,11 @@ class NotificationUtils @Inject constructor(
         /**
          * Low notification importance: shows everywhere, but is not intrusive.
          */
-        notificationManager.createNotificationChannel(NotificationChannel(SILENT_NOTIFICATION_CHANNEL_ID,
+        notificationManager.createNotificationChannel(NotificationChannel(
+                SILENT_NOTIFICATION_CHANNEL_ID,
                 stringProvider.getString(R.string.notification_silent_notifications).ifEmpty { "Silent notifications" },
-                NotificationManager.IMPORTANCE_LOW)
+                NotificationManager.IMPORTANCE_LOW
+        )
                 .apply {
                     description = stringProvider.getString(R.string.notification_silent_notifications)
                     setSound(null, null)
@@ -197,18 +201,22 @@ class NotificationUtils @Inject constructor(
                     lightColor = accentColor
                 })
 
-        notificationManager.createNotificationChannel(NotificationChannel(LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
+        notificationManager.createNotificationChannel(NotificationChannel(
+                LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
                 stringProvider.getString(R.string.notification_listening_for_events).ifEmpty { "Listening for events" },
-                NotificationManager.IMPORTANCE_MIN)
+                NotificationManager.IMPORTANCE_MIN
+        )
                 .apply {
                     description = stringProvider.getString(R.string.notification_listening_for_events)
                     setSound(null, null)
                     setShowBadge(false)
                 })
 
-        notificationManager.createNotificationChannel(NotificationChannel(CALL_NOTIFICATION_CHANNEL_ID,
+        notificationManager.createNotificationChannel(NotificationChannel(
+                CALL_NOTIFICATION_CHANNEL_ID,
                 stringProvider.getString(R.string.call).ifEmpty { "Call" },
-                NotificationManager.IMPORTANCE_HIGH)
+                NotificationManager.IMPORTANCE_HIGH
+        )
                 .apply {
                     description = stringProvider.getString(R.string.call)
                     setSound(null, null)
@@ -266,11 +274,13 @@ class NotificationUtils @Inject constructor(
             // reflection at runtime, to avoid compiler error: "Cannot resolve method.."
             try {
                 val deprecatedMethod = notification.javaClass
-                        .getMethod("setLatestEventInfo",
+                        .getMethod(
+                                "setLatestEventInfo",
                                 Context::class.java,
                                 CharSequence::class.java,
                                 CharSequence::class.java,
-                                PendingIntent::class.java)
+                                PendingIntent::class.java
+                        )
                 deprecatedMethod.invoke(notification, context, stringProvider.getString(R.string.app_name), stringProvider.getString(subTitleResId), pi)
             } catch (ex: Exception) {
                 Timber.e(ex, "## buildNotification(): Exception - setLatestEventInfo() Msg=")
@@ -390,7 +400,8 @@ class NotificationUtils @Inject constructor(
         val contentIntent = VectorCallActivity.newIntent(
                 context = context,
                 call = call,
-                mode = null).apply {
+                mode = null
+        ).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             data = createIgnoredUri(call.callId)
         }
@@ -645,8 +656,10 @@ class NotificationUtils @Inject constructor(
                             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
                     )
 
-                    NotificationCompat.Action.Builder(R.drawable.ic_material_done_all_white,
-                            stringProvider.getString(R.string.action_mark_room_read), markRoomReadPendingIntent)
+                    NotificationCompat.Action.Builder(
+                            R.drawable.ic_material_done_all_white,
+                            stringProvider.getString(R.string.action_mark_room_read), markRoomReadPendingIntent
+                    )
                             .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ)
                             .setShowsUserInterface(false)
                             .build()
@@ -658,8 +671,10 @@ class NotificationUtils @Inject constructor(
                             val remoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY)
                                     .setLabel(stringProvider.getString(R.string.action_quick_reply))
                                     .build()
-                            NotificationCompat.Action.Builder(R.drawable.vector_notification_quick_reply,
-                                    stringProvider.getString(R.string.action_quick_reply), replyPendingIntent)
+                            NotificationCompat.Action.Builder(
+                                    R.drawable.vector_notification_quick_reply,
+                                    stringProvider.getString(R.string.action_quick_reply), replyPendingIntent
+                            )
                                     .addRemoteInput(remoteInput)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
                                     .setShowsUserInterface(false)

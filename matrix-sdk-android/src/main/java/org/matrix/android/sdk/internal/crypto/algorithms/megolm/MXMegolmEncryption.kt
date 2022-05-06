@@ -337,8 +337,9 @@ internal class MXMegolmEncryption(
                                           sessionId: String,
                                           senderKey: String?,
                                           code: WithHeldCode) {
-        Timber.tag(loggerTag.value).d("notifyKeyWithHeld() :sending withheld for session:$sessionId and code $code to" +
-                " ${targets.joinToString { "${it.userId}|${it.deviceId}" }}"
+        Timber.tag(loggerTag.value).d(
+                "notifyKeyWithHeld() :sending withheld for session:$sessionId and code $code to" +
+                        " ${targets.joinToString { "${it.userId}|${it.deviceId}" }}"
         )
         val withHeldContent = RoomKeyWithHeldContent(
                 roomId = roomId,

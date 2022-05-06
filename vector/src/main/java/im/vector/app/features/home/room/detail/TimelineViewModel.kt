@@ -218,7 +218,8 @@ class TimelineViewModel @AssistedInject constructor(
                                     .flattenParentIds.firstOrNull { it.isNotBlank() },
                             // force persist, because if not on resume the AppStateHandler will resume
                             // the current space from what was persisted on enter background
-                            persistNow = true)
+                            persistNow = true
+                    )
                 }
             }
         }
@@ -373,9 +374,12 @@ class TimelineViewModel @AssistedInject constructor(
                         threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
                     }?.let { true } ?: false
                     val numberOfLocalUnreadThreads = threadList?.size ?: 0
-                    copy(threadNotificationBadgeState = ThreadNotificationBadgeState(
-                            numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
-                            isUserMentioned = isUserMentioned))
+                    copy(
+                            threadNotificationBadgeState = ThreadNotificationBadgeState(
+                                    numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
+                                    isUserMentioned = isUserMentioned
+                            )
+                    )
                 }
     }
 
@@ -515,10 +519,13 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
         val content = initialState.rootThreadEventId?.let {
-            action.stickerContent.copy(relatesTo = RelationDefaultContent(
-                    type = RelationType.THREAD,
-                    isFallingBack = true,
-                    eventId = it))
+            action.stickerContent.copy(
+                    relatesTo = RelationDefaultContent(
+                            type = RelationType.THREAD,
+                            isFallingBack = true,
+                            eventId = it
+                    )
+            )
         } ?: action.stickerContent
 
         room.sendService().sendEvent(EventType.STICKER, content.toContent())
@@ -846,10 +853,12 @@ class TimelineViewModel @AssistedInject constructor(
                 mxcUrl.startsWith("content://")
         if (isLocalSendingFile) {
             tryOrNull { Uri.parse(mxcUrl) }?.let {
-                _viewEvents.post(RoomDetailViewEvents.OpenFile(
-                        it,
-                        action.messageFileContent.mimeType
-                ))
+                _viewEvents.post(
+                        RoomDetailViewEvents.OpenFile(
+                                it,
+                                action.messageFileContent.mimeType
+                        )
+                )
             }
         } else {
             viewModelScope.launch {
@@ -861,21 +870,25 @@ class TimelineViewModel @AssistedInject constructor(
                         session.fileService().downloadFile(messageContent = action.messageFileContent)
                     }
 
-                    _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                            action.messageFileContent.mimeType,
-                            result.getOrNull(),
-                            result.exceptionOrNull()
-                    ))
+                    _viewEvents.post(
+                            RoomDetailViewEvents.DownloadFileState(
+                                    action.messageFileContent.mimeType,
+                                    result.getOrNull(),
+                                    result.exceptionOrNull()
+                            )
+                    )
                     canOpen = result.isSuccess
                 }
 
                 if (canOpen) {
                     // We can now open the file
                     session.fileService().getTemporarySharableURI(action.messageFileContent)?.let { uri ->
-                        _viewEvents.post(RoomDetailViewEvents.OpenFile(
-                                uri,
-                                action.messageFileContent.mimeType
-                        ))
+                        _viewEvents.post(
+                                RoomDetailViewEvents.OpenFile(
+                                        uri,
+                                        action.messageFileContent.mimeType
+                                )
+                        )
                     }
                 }
             }
@@ -1024,7 +1037,8 @@ class TimelineViewModel @AssistedInject constructor(
                         supportedVerificationMethodsProvider.provide(),
                         action.otherUserId,
                         room.roomId,
-                        action.transactionId)) {
+                        action.transactionId
+                )) {
             _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
         } else {
             // TODO
@@ -1035,7 +1049,8 @@ class TimelineViewModel @AssistedInject constructor(
         session.cryptoService().verificationService().declineVerificationRequestInDMs(
                 action.otherUserId,
                 action.transactionId,
-                room.roomId)
+                room.roomId
+        )
     }
 
     private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {
@@ -1048,9 +1063,13 @@ class TimelineViewModel @AssistedInject constructor(
         session.cryptoService().verificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
             if (it.handledByOtherSession) return
             if (!it.isFinished) {
-                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action.copy(
-                        otherUserId = it.otherUserId
-                )))
+                _viewEvents.post(
+                        RoomDetailViewEvents.ActionSuccess(
+                                action.copy(
+                                        otherUserId = it.otherUserId
+                                )
+                        )
+                )
             }
         }
     }

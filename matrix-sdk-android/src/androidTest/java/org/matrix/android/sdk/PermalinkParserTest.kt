@@ -37,7 +37,10 @@ class PermalinkParserTest {
         Assert.assertTrue("Should be parsed as email invite but was ${parsedLink::class.java}", parsedLink is PermalinkData.RoomEmailInviteLink)
         parsedLink as PermalinkData.RoomEmailInviteLink
         Assert.assertEquals("!MRBNLPtFnMAazZVPMO:matrix.org", parsedLink.roomId)
-        Assert.assertEquals("XmOwRZnSFabCRhTywFbJWKXWVNPysOpXIbroMGaUymqkJSvHeVKRsjHajwjCYdBsvGSvHauxbKfJmOxtXldtyLnyBMLKpBQCMzyYggrdapbVIceWZBtmslOQrXLABRoe", parsedLink.token)
+        Assert.assertEquals(
+                "XmOwRZnSFabCRhTywFbJWKXWVNPysOpXIbroMGaUymqkJSvHeVKRsjHajwjCYdBsvGSvHauxbKfJmOxtXldtyLnyBMLKpBQCMzyYggrdapbVIceWZBtmslOQrXLABRoe",
+                parsedLink.token
+        )
         Assert.assertEquals("vector.im", parsedLink.identityServer)
         Assert.assertEquals("Team2", parsedLink.roomName)
         Assert.assertEquals("hiphop5", parsedLink.inviterName)
@@ -45,7 +48,8 @@ class PermalinkParserTest {
 
     @Test
     fun testParseLinkWIthEvent() {
-        val rawInvite = "https://matrix.to/#/!OGEhHVWSdvArJzumhm:matrix.org/\$xuvJUVDJnwEeVjPx029rAOZ50difpmU_5gZk_T0jGfc?via=matrix.org&via=libera.chat&via=matrix.example.io"
+        val rawInvite =
+                "https://matrix.to/#/!OGEhHVWSdvArJzumhm:matrix.org/\$xuvJUVDJnwEeVjPx029rAOZ50difpmU_5gZk_T0jGfc?via=matrix.org&via=libera.chat&via=matrix.example.io"
 
         val parsedLink = PermalinkParser.parse(rawInvite)
         Assert.assertTrue("Should be parsed as room link", parsedLink is PermalinkData.RoomLink)

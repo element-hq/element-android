@@ -83,14 +83,16 @@ class ContactsDataSource @Inject constructor(
 
             // Get the phone numbers
             if (withMsisdn) {
-                contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                contentResolver.query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                         arrayOf(
                                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
                                 ContactsContract.CommonDataKinds.Phone.NUMBER
                         ),
                         null,
                         null,
-                        null)
+                        null
+                )
                         ?.use { cursor ->
                             val idColumnIndex = cursor.getColumnIndexOrNull(ContactsContract.CommonDataKinds.Phone.CONTACT_ID) ?: return@use
                             val phoneNumberColumnIndex = cursor.getColumnIndexOrNull(ContactsContract.CommonDataKinds.Phone.NUMBER) ?: return@use
@@ -122,7 +124,8 @@ class ContactsDataSource @Inject constructor(
                         ),
                         null,
                         null,
-                        null)
+                        null
+                )
                         ?.use { cursor ->
                             val idColumnIndex = cursor.getColumnIndexOrNull(ContactsContract.CommonDataKinds.Email.CONTACT_ID) ?: return@use
                             val emailColumnIndex = cursor.getColumnIndexOrNull(ContactsContract.CommonDataKinds.Email.DATA) ?: return@use

@@ -145,7 +145,10 @@ class KeyShareTests : InstrumentedTest {
                     Log.v("TEST", "Incoming request Session 1 (looking for $outGoingRequestId)")
                     Log.v("TEST", "=========================")
                     it.forEach { keyRequest ->
-                        Log.v("TEST", "[ts${keyRequest.localCreationTimestamp}] requestId ${keyRequest.requestId}, for sessionId ${keyRequest.requestBody?.sessionId} is ${keyRequest.state}")
+                        Log.v(
+                                "TEST",
+                                "[ts${keyRequest.localCreationTimestamp}] requestId ${keyRequest.requestId}, for sessionId ${keyRequest.requestBody?.sessionId} is ${keyRequest.state}"
+                        )
                     }
                     Log.v("TEST", "=========================")
                 }
@@ -164,8 +167,10 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Mark the device as trusted
-        aliceSession.cryptoService().setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
-                aliceSession2.sessionParams.deviceId ?: "")
+        aliceSession.cryptoService().setDeviceVerification(
+                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
+                aliceSession2.sessionParams.deviceId ?: ""
+        )
 
         // Re request
         aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
@@ -223,7 +228,8 @@ class KeyShareTests : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
 
         // Also bootstrap keybackup on first session
@@ -282,8 +288,10 @@ class KeyShareTests : InstrumentedTest {
         })
 
         val txId = "m.testVerif12"
-        aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
-                ?: "", txId)
+        aliceVerificationService2.beginKeyVerification(
+                VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
+                ?: "", txId
+        )
 
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
@@ -337,7 +345,8 @@ class KeyShareTests : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
 
         // Create an encrypted room and send a couple of messages
@@ -371,7 +380,8 @@ class KeyShareTests : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
 
         // Let alice invite bob
