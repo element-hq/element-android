@@ -20,22 +20,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceListModalBinding
+import im.vector.app.features.spaces.SpaceListAction
 import im.vector.app.features.spaces.SpaceListViewModel
-import im.vector.app.features.spaces.SpaceSummaryController
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>() {
 
-    @Inject
-    lateinit var spaceModalController: SpaceSummaryController
+    private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     @Inject
     lateinit var avatarRenderer: AvatarRenderer
@@ -51,12 +49,18 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         setupRecyclerView()
     }
 
     private fun setupRecyclerView() {
         binding.roomList.layoutManager = LinearLayoutManager(context)
-        binding.roomList.adapter = SpaceListAdapter(mutableListOf(), avatarRenderer)
+        binding.roomList.adapter = SpaceListAdapter(mutableListOf(), avatarRenderer).apply {
+            setOnSpaceClickListener { spaceSummary ->
+                viewModel.handle(SpaceListAction.SelectSpace(spaceSummary))
+                sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(false))
+            }
+        }
     }
 
     override fun invalidate() {

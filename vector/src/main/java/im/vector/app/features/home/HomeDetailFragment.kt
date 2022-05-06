@@ -24,6 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -55,6 +56,7 @@ import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DI
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -196,6 +198,17 @@ class HomeDetailFragment @Inject constructor(
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
                 }
+
+        observeSharedActions()
+    }
+
+    private fun observeSharedActions() = lifecycleScope.launch {
+        sharedActionViewModel.stream().collect { action ->
+            when(action) {
+                is HomeActivitySharedAction.OpenGroup -> toggleModalVisibility()
+                else -> Unit
+            }
+        }
     }
 
     private fun toggleModalVisibility() {
@@ -468,7 +481,8 @@ class HomeDetailFragment @Inject constructor(
                 it.syncState,
                 it.incrementalSyncStatus,
                 it.pushCounter,
-                vectorPreferences.developerShowDebugInfo())
+                vectorPreferences.developerShowDebugInfo()
+        )
 
         hasUnreadRooms = it.hasUnreadMessages
     }

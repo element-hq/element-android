@@ -28,6 +28,8 @@ class SpaceListAdapter(
         private val avatarRenderer: AvatarRenderer,
 ) : RecyclerView.Adapter<SpaceListAdapter.ViewHolder>() {
 
+    private var onItemClickListener: ((RoomSummary) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = ItemModalSpaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(itemView)
@@ -45,11 +47,16 @@ class SpaceListAdapter(
         notifyDataSetChanged()
     }
 
+    fun setOnSpaceClickListener(onClick: (space: RoomSummary) -> Unit) {
+        this.onItemClickListener = onClick
+    }
+
     inner class ViewHolder(private val binding: ItemModalSpaceBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(space: RoomSummary) {
             avatarRenderer.render(space.toMatrixItem(), binding.avatar)
             binding.name.text = space.name
+            binding.root.setOnClickListener { onItemClickListener?.invoke(space) }
         }
     }
 }
