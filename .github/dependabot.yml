@@ -10,6 +10,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    reviewers:
+      - "vector-im/element-android-reviewers"
     ignore:
       - dependency-name: "*github-script*"
   # Updates for Gradle dependencies used in the app
