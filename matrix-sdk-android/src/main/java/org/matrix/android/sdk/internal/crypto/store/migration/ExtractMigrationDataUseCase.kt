@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.store
+package org.matrix.android.sdk.internal.crypto.store.migration
 
 import io.realm.Realm
 import io.realm.kotlin.where
