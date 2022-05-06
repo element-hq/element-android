@@ -51,6 +51,7 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         setupRecyclerView()
+        setupAddSpace()
     }
 
     private fun setupRecyclerView() {
@@ -60,6 +61,12 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
                 viewModel.handle(SpaceListAction.SelectSpace(spaceSummary))
                 sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(false))
             }
+        }
+    }
+
+    private fun setupAddSpace() {
+        binding.addSpaceClickbox.setOnClickListener {
+            println("Add space clicked")
         }
     }
 
