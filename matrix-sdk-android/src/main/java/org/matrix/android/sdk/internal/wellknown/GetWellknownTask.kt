@@ -43,7 +43,7 @@ internal interface GetWellknownTask : Task<GetWellknownTask.Params, WellknownRes
              * the URL will be https://{domain}/.well-known/matrix/client
              */
             val domain: String,
-            val homeServerConnectionConfig: HomeServerConnectionConfig?
+            val homeServerConnectionConfig: HomeServerConnectionConfig
     )
 }
 
@@ -61,15 +61,11 @@ internal class DefaultGetWellknownTask @Inject constructor(
         return findClientConfig(params.domain, client)
     }
 
-    private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig?): OkHttpClient {
-        return if (homeServerConnectionConfig != null) {
-            okHttpClient.get()
-                    .newBuilder()
-                    .addSocketFactory(homeServerConnectionConfig)
-                    .build()
-        } else {
-            okHttpClient.get()
-        }
+    private fun buildClient(homeServerConnectionConfig: HomeServerConnectionConfig): OkHttpClient {
+        return okHttpClient.get()
+                .newBuilder()
+                .addSocketFactory(homeServerConnectionConfig)
+                .build()
     }
 
     /**
