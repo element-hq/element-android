@@ -401,7 +401,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 ) {
                     add(EventSharedAction.UseKeyBackup)
                 }
-                if (session.cryptoService().getCryptoDeviceInfo(session.myUserId).size > 1 ||
+                if (session.cryptoService().getCryptoDeviceInfoList(session.myUserId).size > 1 ||
                         timelineEvent.senderInfo.userId != session.myUserId) {
                     add(EventSharedAction.ReRequestKey(timelineEvent.eventId))
                 }

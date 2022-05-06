@@ -47,6 +47,7 @@ import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.RestKeyInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import timber.log.Timber
@@ -549,13 +550,7 @@ internal class OlmMachine(
      */
     @Throws(CryptoStoreException::class)
     suspend fun getCryptoDeviceInfo(userId: String, deviceId: String): CryptoDeviceInfo? {
-        return if (userId == userId() && deviceId == deviceId()) {
-            // Our own device isn't part of our store on the Rust side, return it
-            // using our ownDevice method
-            ownDevice()
-        } else {
-            getDevice(userId, deviceId)?.toCryptoDeviceInfo()
-        }
+        return getDevice(userId, deviceId)?.toCryptoDeviceInfo()
     }
 
     @Throws(CryptoStoreException::class)
@@ -596,8 +591,8 @@ internal class OlmMachine(
      */
     @Throws(CryptoStoreException::class)
     suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        val devices = getUserDevices(userId).map { it.toCryptoDeviceInfo() }.toMutableList()
-
+        return getUserDevices(userId).map { it.toCryptoDeviceInfo() }
+/*
         // EA doesn't differentiate much between our own and other devices of
         // while the rust-sdk does, append our own device here.
         if (userId == userId()) {
@@ -605,6 +600,8 @@ internal class OlmMachine(
         }
 
         return devices
+
+ */
     }
 
     /**

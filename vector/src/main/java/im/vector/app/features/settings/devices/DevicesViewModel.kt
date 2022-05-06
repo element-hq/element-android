@@ -35,7 +35,6 @@ import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.lib.core.utils.flow.throttleFirst
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -43,8 +42,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -53,17 +50,14 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.util.awaitCallback
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 import kotlin.coroutines.Continuation
@@ -277,8 +271,7 @@ class DevicesViewModel @AssistedInject constructor(
                 }
             } else {
                 // legacy
-                session.cryptoService().setDeviceVerification(
-                        DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+                session.cryptoService().verificationService().markedLocallyAsManuallyVerified(
                         action.cryptoDeviceInfo.userId,
                         action.cryptoDeviceInfo.deviceId)
             }
@@ -297,27 +290,21 @@ class DevicesViewModel @AssistedInject constructor(
     }
 
     private fun handleRename(action: DevicesAction.Rename) {
-        session.cryptoService().setDeviceName(action.deviceId, action.newName, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
+        viewModelScope.launch {
+            try {
+                session.cryptoService().setDeviceName(action.deviceId, action.newName)
                 setState {
-                    copy(
-                            request = Success(data)
-                    )
+                    copy(request = Success(Unit))
                 }
                 // force settings update
                 queryRefreshDevicesList()
-            }
-
-            override fun onFailure(failure: Throwable) {
+            } catch (failure: Throwable) {
                 setState {
-                    copy(
-                            request = Fail(failure)
-                    )
+                    copy(request = Fail(failure))
                 }
-
                 _viewEvents.post(DevicesViewEvents.Failure(failure))
             }
-        })
+        }
     }
 
     /**
@@ -332,39 +319,32 @@ class DevicesViewModel @AssistedInject constructor(
             )
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
-                awaitCallback<Unit> {
-                    session.cryptoService().deleteDevice(deviceId, object : UserInteractiveAuthInterceptor {
-                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                            Timber.d("## UIA : deleteDevice UIA")
-                            if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD && reAuthHelper.data != null && errCode == null) {
-                                UserPasswordAuth(
-                                        session = null,
-                                        user = session.myUserId,
-                                        password = reAuthHelper.data
-                                ).let { promise.resume(it) }
-                            } else {
-                                Timber.d("## UIA : deleteDevice UIA > start reauth activity")
-                                _viewEvents.post(DevicesViewEvents.RequestReAuth(flowResponse, errCode))
-                                pendingAuth = DefaultBaseAuth(session = flowResponse.session)
-                                uiaContinuation = promise
-                            }
+                session.cryptoService().deleteDevice(deviceId, object : UserInteractiveAuthInterceptor {
+                    override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                        Timber.d("## UIA : deleteDevice UIA")
+                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD && reAuthHelper.data != null && errCode == null) {
+                            UserPasswordAuth(
+                                    session = null,
+                                    user = session.myUserId,
+                                    password = reAuthHelper.data
+                            ).let { promise.resume(it) }
+                        } else {
+                            Timber.d("## UIA : deleteDevice UIA > start reauth activity")
+                            _viewEvents.post(DevicesViewEvents.RequestReAuth(flowResponse, errCode))
+                            pendingAuth = DefaultBaseAuth(session = flowResponse.session)
+                            uiaContinuation = promise
                         }
-                    }, it)
-                }
+                    }
+                })
                 setState {
-                    copy(
-                            request = Success(Unit)
-                    )
+                    copy(request = Success(Unit))
                 }
-                // force settings update
                 queryRefreshDevicesList()
             } catch (failure: Throwable) {
                 setState {
-                    copy(
-                            request = Fail(failure)
-                    )
+                    copy(request = Fail(failure))
                 }
                 if (failure is Failure.OtherServerError && failure.httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                     _viewEvents.post(DevicesViewEvents.Failure(Exception(stringProvider.getString(R.string.authentication_error))))

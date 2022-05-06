@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto
 
 import com.squareup.moshi.Moshi
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId

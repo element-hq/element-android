@@ -203,7 +203,7 @@ class XSigningTest : InstrumentedTest {
         }
 
         val bobSecondDevicePOVFirstDevice = runBlocking {
-            bobSession.cryptoService().getDeviceInfo(bobUserId, bobSecondDeviceId)
+            bobSession.cryptoService().getCryptoDeviceInfo(bobUserId, bobSecondDeviceId)
         }
         assertNotNull("Bob Second device should be known and persisted from first", bobSecondDevicePOVFirstDevice)
 

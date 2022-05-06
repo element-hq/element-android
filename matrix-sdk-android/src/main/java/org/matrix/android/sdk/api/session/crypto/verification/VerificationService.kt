@@ -121,5 +121,4 @@ interface VerificationService {
         }
     }
 
-    fun onPotentiallyInterestingEventRoomFailToDecrypt(event: Event)
 }

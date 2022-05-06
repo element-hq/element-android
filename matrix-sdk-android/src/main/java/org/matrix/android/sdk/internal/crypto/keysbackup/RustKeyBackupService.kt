@@ -40,7 +40,7 @@ import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.MegolmSessionImportManager
 import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
-import org.matrix.android.sdk.internal.crypto.RequestSender
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
@@ -580,16 +580,12 @@ internal class RustKeyBackupService @Inject constructor(
     }
 
     override suspend fun getVersion(version: String): KeysVersionResult? {
-        return withContext(coroutineDispatchers.io) {
-            sender.getKeyBackupVersion(version)
-        }
+        return sender.getKeyBackupVersion(version)
     }
 
     @Throws
     override suspend fun getCurrentVersion(): KeysVersionResult? {
-        return withContext(coroutineDispatchers.io) {
-            sender.getKeyBackupVersion()
-        }
+        return sender.getKeyBackupVersion()
     }
 
     override suspend fun forceUsingLastVersion(): Boolean {
@@ -645,18 +641,16 @@ internal class RustKeyBackupService @Inject constructor(
                 Timber.w("checkAndStartKeysBackup: invalid state: $state")
                 return@withContext
             }
-
             keysBackupVersion = null
             keysBackupStateManager.state = KeysBackupState.CheckingBackUpOnHomeserver
-
-            withContext(coroutineDispatchers.io) {
-                try {
-                    val data = getCurrentVersion()
-                    withContext(coroutineDispatchers.crypto) {
-                        checkAndStartWithKeysBackupVersion(data)
-                    }
-                } catch (failure: Throwable) {
-                    Timber.e(failure, "checkAndStartKeysBackup: Failed to get current version")
+            try {
+                val data = getCurrentVersion()
+                withContext(coroutineDispatchers.crypto) {
+                    checkAndStartWithKeysBackupVersion(data)
+                }
+            } catch (failure: Throwable) {
+                Timber.e(failure, "checkAndStartKeysBackup: Failed to get current version")
+                withContext(coroutineDispatchers.crypto) {
                     keysBackupStateManager.state = KeysBackupState.Unknown
                 }
             }

@@ -234,7 +234,7 @@ class DefaultNavigator @Inject constructor(
         coroutineScope.launch {
             val session = sessionHolder.getSafeActiveSession() ?: return@launch
             val otherSessions = session.cryptoService()
-                    .getCryptoDeviceInfo(session.myUserId)
+                    .getCryptoDeviceInfoList(session.myUserId)
                     .filter { it.deviceId != session.sessionParams.deviceId }
                     .map { it.deviceId }
             if (context is AppCompatActivity) {

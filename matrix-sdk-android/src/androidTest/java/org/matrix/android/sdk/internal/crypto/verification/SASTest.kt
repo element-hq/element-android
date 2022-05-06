@@ -22,7 +22,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.FixMethodOrder
@@ -49,7 +48,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationCancel
 import org.matrix.android.sdk.internal.crypto.model.rest.KeyVerificationStart
 import org.matrix.android.sdk.internal.crypto.model.rest.toValue
 import timber.log.Timber
-import java.util.UUID
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
@@ -76,14 +74,12 @@ class SASTest : InstrumentedTest {
         }
         bobVerificationService.addListener(bobListener)
 
-        val myDevice = testHelper.runBlockingTest {
-            bobSession.cryptoService().getMyDevice()
+        val bobDevice = testHelper.runBlockingTest {
+            bobSession.cryptoService().getMyCryptoDevice()
         }
         val txID = testHelper.runBlockingTest {
-            aliceVerificationService.beginKeyVerification(VerificationMethod.SAS,
-                    bobSession.myUserId,
-                    myDevice.deviceId,
-                    null)
+            aliceSession.cryptoService().downloadKeys(listOf(bobSession.myUserId), forceDownload = true)
+            aliceVerificationService.beginDeviceVerification(bobSession.myUserId, bobDevice.deviceId)
         }
         assertNotNull("Alice should have a started transaction", txID)
 
@@ -102,7 +98,7 @@ class SASTest : InstrumentedTest {
         assertEquals("Alice and Bob have same transaction id", aliceKeyTx!!.transactionId, bobKeyTx!!.transactionId)
 
 
-        assertEquals("Alice state should be started", VerificationTxState.Started, aliceKeyTx.state)
+        assertEquals("Alice state should be started", VerificationTxState.OnStarted, aliceKeyTx.state)
         assertEquals("Bob state should be started by alice", VerificationTxState.OnStarted, bobKeyTx.state)
 
         // Let's cancel from alice side
@@ -136,9 +132,6 @@ class SASTest : InstrumentedTest {
 
         assertEquals("Should be User cancelled on alice side", CancelCode.User, aliceCancelState.cancelCode)
         assertEquals("Should be User cancelled on bob side", CancelCode.User, bobCancelState.cancelCode)
-
-        assertNull(bobVerificationService.getExistingTransaction(aliceSession.myUserId, txID))
-        assertNull(aliceVerificationService.getExistingTransaction(bobSession.myUserId, txID))
 
         cryptoTestData.cleanUp(testHelper)
     }
@@ -184,7 +177,7 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val aliceUserID = aliceSession.myUserId
         val aliceDevice = testHelper.runBlockingTest {
-            aliceSession.cryptoService().getMyDevice().deviceId
+            aliceSession.cryptoService().getMyCryptoDevice().deviceId
         }
 
         val aliceListener = object : VerificationService.Listener {
@@ -237,7 +230,7 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val aliceUserID = aliceSession.myUserId
         val aliceDevice = testHelper.runBlockingTest {
-            aliceSession.cryptoService().getMyDevice().deviceId
+            aliceSession.cryptoService().getMyCryptoDevice().deviceId
         }
 
         fakeBobStart(bobSession, aliceUserID, aliceDevice, tid, mac = mac)
@@ -280,7 +273,7 @@ class SASTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val aliceUserID = aliceSession.myUserId
         val aliceDevice = testHelper.runBlockingTest {
-            aliceSession.cryptoService().getMyDevice().deviceId
+            aliceSession.cryptoService().getMyCryptoDevice().deviceId
         }
 
         fakeBobStart(bobSession, aliceUserID, aliceDevice, tid, codes = codes)
@@ -302,7 +295,7 @@ class SASTest : InstrumentedTest {
                              mac: List<String> = emptyList(),
                              codes: List<String> = emptyList()) {
         val deviceId = runBlocking {
-            bobSession.cryptoService().getMyDevice().deviceId
+            bobSession.cryptoService().getMyCryptoDevice().deviceId
         }
         val startMessage = KeyVerificationStart(
                 fromDevice = deviceId,
@@ -340,7 +333,7 @@ class SASTest : InstrumentedTest {
         val aliceVerificationService = aliceSession.cryptoService().verificationService()
 
         val aliceCreatedLatch = CountDownLatch(2)
-        val aliceCancelledLatch = CountDownLatch(2)
+        val aliceCancelledLatch = CountDownLatch(1)
         val createdTx = mutableListOf<VerificationTransaction>()
         val aliceListener = object : VerificationService.Listener {
             override fun transactionCreated(tx: VerificationTransaction) {
@@ -358,11 +351,12 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession!!.myUserId
         val bobDeviceId = testHelper.runBlockingTest {
-            bobSession.cryptoService().getMyDevice().deviceId
+            bobSession.cryptoService().getMyCryptoDevice().deviceId
         }
         testHelper.runBlockingTest {
-            aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
-            aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
+            aliceSession.cryptoService().downloadKeys(listOf(bobUserId), forceDownload = true)
+            aliceVerificationService.beginDeviceVerification(bobUserId, bobDeviceId)
+            aliceVerificationService.beginDeviceVerification(bobUserId, bobDeviceId)
         }
         testHelper.await(aliceCreatedLatch)
         testHelper.await(aliceCancelledLatch)
@@ -410,10 +404,10 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = runBlocking {
-            bobSession.cryptoService().getMyDevice().deviceId
+            bobSession.cryptoService().getMyCryptoDevice().deviceId
         }
         testHelper.runBlockingTest {
-            aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
+            //aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
         }
         testHelper.await(aliceAcceptedLatch)
 
@@ -422,70 +416,39 @@ class SASTest : InstrumentedTest {
 
     @Test
     fun test_aliceAndBobSASCode() {
+        val supportedMethods = listOf(VerificationMethod.SAS)
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
-
+        val sasTestHelper = SasVerificationTestHelper(testHelper, cryptoTestHelper)
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession!!
+        val transactionId = sasTestHelper.requestVerificationAndWaitForReadyState(cryptoTestData, supportedMethods)
 
-        cryptoTestHelper.initializeCrossSigning(aliceSession)
-        cryptoTestHelper.initializeCrossSigning(bobSession)
-
-        val aliceVerificationService = aliceSession.cryptoService().verificationService()
-        val bobVerificationService = bobSession.cryptoService().verificationService()
-
-        val aliceSASLatch = CountDownLatch(1)
+        val latch = CountDownLatch(2)
         val aliceListener = object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
-                when (tx.state) {
-                    VerificationTxState.ShortCodeReady -> {
-                        aliceSASLatch.countDown()
-                    }
-                    else                               -> Unit
-                }
+                Timber.v("Alice transactionUpdated: ${tx.state}")
+                latch.countDown()
             }
-        }
-        aliceVerificationService.addListener(aliceListener)
 
-        val bobSASLatch = CountDownLatch(1)
+        }
+        aliceSession.cryptoService().verificationService().addListener(aliceListener)
         val bobListener = object : VerificationService.Listener {
-
-            override fun verificationRequestCreated(pr: PendingVerificationRequest) {
-
-            }
-
             override fun transactionUpdated(tx: VerificationTransaction) {
-                val sasVerification = tx as SasVerificationTransaction
-                when (tx.state) {
-                    VerificationTxState.OnStarted      -> testHelper.runBlockingTest {
-                        sasVerification.acceptVerification()
-                    }
-                    VerificationTxState.ShortCodeReady -> {
-                        bobSASLatch.countDown()
-                    }
-                    else                               -> Unit
-                }
+                Timber.v("Bob transactionUpdated: ${tx.state}")
+                latch.countDown()
             }
         }
-        bobVerificationService.addListener(bobListener)
-
-        val bobUserId = bobSession.myUserId
+        bobSession.cryptoService().verificationService().addListener(bobListener)
         testHelper.runBlockingTest {
-            aliceSession.cryptoService().downloadKeys(listOf(bobUserId), forceDownload = true)
-            aliceVerificationService.requestKeyVerificationInDMs(listOf(VerificationMethod.SAS),bobUserId, cryptoTestData.roomId)
+            aliceSession.cryptoService().verificationService().beginKeyVerification(VerificationMethod.SAS, bobSession.myUserId, transactionId)
         }
-        testHelper.await(aliceSASLatch)
-        testHelper.await(bobSASLatch)
-
-        /*
-        val aliceTx = aliceVerificationService.getExistingTransaction(bobUserId, verificationSAS!!) as SasVerificationTransaction
-        val bobTx = bobVerificationService.getExistingTransaction(aliceSession.myUserId, verificationSAS) as SasVerificationTransaction
-
+        testHelper.await(latch)
+        val aliceTx = aliceSession.cryptoService().verificationService().getExistingTransaction(bobSession.myUserId, transactionId) as SasVerificationTransaction
+        val bobTx = bobSession.cryptoService().verificationService().getExistingTransaction(aliceSession.myUserId, transactionId) as SasVerificationTransaction
 
         assertEquals("Should have same SAS", aliceTx.getDecimalCodeRepresentation(), bobTx.getDecimalCodeRepresentation())
-
-         */
 
         cryptoTestData.cleanUp(testHelper)
     }
@@ -495,7 +458,8 @@ class SASTest : InstrumentedTest {
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
-
+        val sasVerificationTestHelper = SasVerificationTestHelper(testHelper, cryptoTestHelper)
+        val transactionId = sasVerificationTestHelper.requestVerificationAndWaitForReadyState(cryptoTestData, listOf(VerificationMethod.SAS))
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
 
@@ -504,8 +468,14 @@ class SASTest : InstrumentedTest {
 
         val aliceSASLatch = CountDownLatch(1)
         val aliceListener = object : VerificationService.Listener {
+
+            override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
+                Timber.v("RequestUpdated pr=$pr")
+            }
+
             var matchOnce = true
             override fun transactionUpdated(tx: VerificationTransaction) {
+                Timber.v("Alice transactionUpdated: ${tx.state}")
                 if (tx !is SasVerificationTransaction) return
                 when (tx.state) {
                     VerificationTxState.ShortCodeReady -> testHelper.runBlockingTest {
@@ -527,7 +497,13 @@ class SASTest : InstrumentedTest {
         val bobListener = object : VerificationService.Listener {
             var acceptOnce = true
             var matchOnce = true
+
+            override fun verificationRequestUpdated(pr: PendingVerificationRequest) {
+                Timber.v("RequestUpdated: pr=$pr")
+            }
+
             override fun transactionUpdated(tx: VerificationTransaction) {
+                Timber.v("Bob transactionUpdated: ${tx.state}")
                 if (tx !is SasVerificationTransaction) return
                 when (tx.state) {
                     VerificationTxState.OnStarted      -> testHelper.runBlockingTest {
@@ -542,7 +518,7 @@ class SASTest : InstrumentedTest {
                             tx.userHasVerifiedShortCode()
                         }
                     }
-                    VerificationTxState.Verified       -> {
+                    VerificationTxState.ShortCodeAccepted       -> {
                         bobSASLatch.countDown()
                     }
                     else                               -> Unit
@@ -553,20 +529,20 @@ class SASTest : InstrumentedTest {
 
         val bobUserId = bobSession.myUserId
         val bobDeviceId = runBlocking {
-            bobSession.cryptoService().getMyDevice().deviceId
+            bobSession.cryptoService().getMyCryptoDevice().deviceId
         }
         testHelper.runBlockingTest {
-            aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
+            aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, transactionId)
         }
         testHelper.await(aliceSASLatch)
         testHelper.await(bobSASLatch)
 
         // Assert that devices are verified
         val bobDeviceInfoFromAlicePOV: CryptoDeviceInfo? = testHelper.runBlockingTest {
-            aliceSession.cryptoService().getDeviceInfo(bobUserId, bobDeviceId)
+            aliceSession.cryptoService().getCryptoDeviceInfo(bobUserId, bobDeviceId)
         }
         val aliceDeviceInfoFromBobPOV: CryptoDeviceInfo? = testHelper.runBlockingTest {
-            bobSession.cryptoService().getDeviceInfo(aliceSession.myUserId, aliceSession.cryptoService().getMyDevice().deviceId)
+            bobSession.cryptoService().getCryptoDeviceInfo(aliceSession.myUserId, aliceSession.cryptoService().getMyCryptoDevice().deviceId)
         }
         assertTrue("alice device should be verified from bob point of view", aliceDeviceInfoFromBobPOV!!.isVerified)
         assertTrue("bob device should be verified from alice point of view", bobDeviceInfoFromAlicePOV!!.isVerified)
@@ -633,19 +609,17 @@ class SASTest : InstrumentedTest {
 
         // Start concurrent!
         testHelper.runBlockingTest {
-            aliceVerificationService.beginKeyVerificationInDMs(
-                    VerificationMethod.SAS,
-                    requestID!!,
-                    cryptoTestData.roomId,
-                    bobSession.myUserId,
-                    bobSession.sessionParams.deviceId!!)
+            aliceVerificationService.requestKeyVerificationInDMs(
+                    methods = listOf(VerificationMethod.SAS),
+                    otherUserId = bobSession.myUserId,
+                    roomId = cryptoTestData.roomId
+            )
 
-            bobVerificationService.beginKeyVerificationInDMs(
-                    VerificationMethod.SAS,
-                    requestID!!,
-                    cryptoTestData.roomId,
-                    aliceSession.myUserId,
-                    aliceSession.sessionParams.deviceId!!)
+            bobVerificationService.requestKeyVerificationInDMs(
+                    methods = listOf(VerificationMethod.SAS),
+                    otherUserId = aliceSession.myUserId,
+                    roomId = cryptoTestData.roomId
+            )
 
         }
 

@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.crypto
 
 import android.os.Handler
 import android.os.Looper
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
@@ -30,6 +29,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import timber.log.Timber
 import uniffi.olm.OlmMachine

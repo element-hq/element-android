@@ -132,7 +132,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         viewModelScope.launch {
 
             val hasAnyOtherSession = session.cryptoService()
-                    .getCryptoDeviceInfo(session.myUserId)
+                    .getCryptoDeviceInfoList(session.myUserId)
                     .any {
                         it.deviceId != session.sessionParams.deviceId
                     }

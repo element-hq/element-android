@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
 import uniffi.olm.CryptoStoreException
 import uniffi.olm.OlmMachine

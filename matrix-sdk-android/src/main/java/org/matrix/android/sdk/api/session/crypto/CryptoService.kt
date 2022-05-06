@@ -50,9 +50,9 @@ interface CryptoService {
 
     fun keysBackupService(): KeysBackupService
 
-    fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>)
+    suspend fun setDeviceName(deviceId: String, deviceName: String)
 
-    fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>)
+    suspend fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor)
 
     fun getCryptoVersion(context: Context, longFormat: Boolean): String
 
@@ -62,19 +62,15 @@ interface CryptoService {
 
     fun setWarnOnUnknownDevices(warn: Boolean)
 
-    fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String)
-
     suspend fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo>
 
-    suspend fun getMyDevice(): CryptoDeviceInfo
+    suspend fun getMyCryptoDevice(): CryptoDeviceInfo
 
     fun getGlobalBlacklistUnverifiedDevices(): Boolean
 
     fun setGlobalBlacklistUnverifiedDevices(block: Boolean)
 
     fun setRoomUnBlacklistUnverifiedDevices(roomId: String)
-
-    fun getDeviceTrackingStatus(userId: String): Int
 
     suspend fun importRoomKeys(roomKeysAsArray: ByteArray,
                                password: String,
@@ -84,7 +80,7 @@ interface CryptoService {
 
     fun setRoomBlacklistUnverifiedDevices(roomId: String)
 
-    suspend fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
+    suspend fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 
     fun reRequestRoomKeyForEvent(event: Event)
 
@@ -98,7 +94,7 @@ interface CryptoService {
 
     fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>>
 
-    fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>)
+    suspend fun fetchDeviceInfo(deviceId: String): DeviceInfo
 
     suspend fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int
 
@@ -113,19 +109,17 @@ interface CryptoService {
     @Throws(MXCryptoError::class)
     suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult
 
-    fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>)
-
     fun getEncryptionAlgorithm(roomId: String): String?
 
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
     suspend fun downloadKeys(userIds: List<String>, forceDownload: Boolean = false): MXUsersDevicesMap<CryptoDeviceInfo>
 
-    suspend fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo>
+    suspend fun getCryptoDeviceInfoList(userId: String): List<CryptoDeviceInfo>
 
-    fun getLiveCryptoDeviceInfo(userId: String): Flow<List<CryptoDeviceInfo>>
+    fun getLiveCryptoDeviceInfoList(userId: String): Flow<List<CryptoDeviceInfo>>
 
-    fun getLiveCryptoDeviceInfo(userIds: List<String>): Flow<List<CryptoDeviceInfo>>
+    fun getLiveCryptoDeviceInfoList(userIds: List<String>): Flow<List<CryptoDeviceInfo>>
 
     fun addNewSessionListener(newSessionListener: NewSessionListener)
 

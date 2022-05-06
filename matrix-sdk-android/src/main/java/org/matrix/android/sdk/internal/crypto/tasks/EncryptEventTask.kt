@@ -60,7 +60,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
                     ).toContent(),
                     forwardingCurve25519KeyChain = emptyList(),
                     senderCurve25519Key = result.eventContent["sender_key"] as? String,
-                    claimedEd25519Key = cryptoService.getMyDevice().fingerprint()
+                    claimedEd25519Key = cryptoService.getMyCryptoDevice().fingerprint()
             )
         } else {
             null

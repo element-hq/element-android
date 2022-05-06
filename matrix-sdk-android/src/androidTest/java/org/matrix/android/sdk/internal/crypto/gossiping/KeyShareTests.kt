@@ -50,7 +50,6 @@ import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.GossipingRequestState
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -158,8 +157,9 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Mark the device as trusted
-        aliceSession.cryptoService().setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
-                aliceSession2.sessionParams.deviceId ?: "")
+        commonTestHelper.runBlockingTest {
+            aliceSession.cryptoService().verificationService().markedLocallyAsManuallyVerified(aliceSession.myUserId, aliceSession2.sessionParams.deviceId ?: "")
+        }
 
         // Re request
         aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
@@ -280,13 +280,12 @@ class KeyShareTests : InstrumentedTest {
 
         val txId = "m.testVerif12"
         commonTestHelper.runBlockingTest {
-            aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
-                    ?: "", txId)
+            aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, txId)
         }
 
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
-                aliceSession1.cryptoService().getDeviceInfo(aliceSession1.myUserId, aliceSession2.sessionParams.deviceId ?: "")?.isVerified == true
+                aliceSession1.cryptoService().getCryptoDeviceInfo(aliceSession1.myUserId, aliceSession2.sessionParams.deviceId ?: "")?.isVerified == true
             }
         }
 

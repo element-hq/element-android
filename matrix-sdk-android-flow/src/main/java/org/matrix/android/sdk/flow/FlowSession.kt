@@ -125,9 +125,9 @@ class FlowSession(private val session: Session) {
     }
 
     fun liveUserCryptoDevices(userId: String): Flow<List<CryptoDeviceInfo>> {
-        return session.cryptoService().getLiveCryptoDeviceInfo(userId)
+        return session.cryptoService().getLiveCryptoDeviceInfoList(userId)
                 .startWith(session.coroutineDispatchers.io) {
-                    session.cryptoService().getCryptoDeviceInfo(userId)
+                    session.cryptoService().getCryptoDeviceInfoList(userId)
                 }
     }
 

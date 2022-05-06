@@ -155,7 +155,7 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun Session.firstTimeDeviceSeen() = flow {
-        val value = cryptoService().getCryptoDeviceInfo(myUserId)
+        val value = cryptoService().getCryptoDeviceInfoList(myUserId)
                 .firstOrNull { it.deviceId == sessionParams.deviceId }
                 ?.firstTimeSeenLocalTs
                 ?: System.currentTimeMillis()

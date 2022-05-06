@@ -176,13 +176,7 @@ internal class RustVerificationService @Inject constructor(private val olmMachin
     }
 
     override suspend fun markedLocallyAsManuallyVerified(userId: String, deviceID: String) {
-        // TODO this doesn't seem to be used anymore?
-        val device = olmMachine.getDevice(userId, deviceID)
-        device?.markAsTrusted()
-    }
-
-    override fun onPotentiallyInterestingEventRoomFailToDecrypt(event: Event) {
-        // TODO This should be handled inside the rust-sdk decryption method
+        olmMachine.getDevice(userId, deviceID)?.markAsTrusted()
     }
 
     override fun getExistingTransaction(

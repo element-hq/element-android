@@ -145,7 +145,7 @@ class UnwedgingTest : InstrumentedTest {
         // Let us pickle our session with bob here so we can later unpickle it
         // and wedge our session.
         var myDevice = testHelper.runBlockingTest {
-            bobSession.cryptoService().getMyDevice()
+            bobSession.cryptoService().getMyCryptoDevice()
         }
         val sessionIdsForBob = aliceCryptoStore.getDeviceSessionIds(myDevice.identityKey()!!)
         sessionIdsForBob!!.size shouldBe 1
@@ -178,7 +178,7 @@ class UnwedgingTest : InstrumentedTest {
         Timber.i("## CRYPTO | testUnwedging: wedge the session now. Set crypto state like after the first message")
 
         myDevice = testHelper.runBlockingTest {
-            bobSession.cryptoService().getMyDevice()
+            bobSession.cryptoService().getMyCryptoDevice()
         }
         aliceCryptoStore.storeSession(OlmSessionWrapper(deserializeFromRealm<OlmSession>(oldSession)!!), myDevice.identityKey()!!)
         Thread.sleep(6_000)

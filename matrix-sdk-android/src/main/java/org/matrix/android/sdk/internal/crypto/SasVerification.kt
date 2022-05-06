@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTra
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
 import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
 import uniffi.olm.CryptoStoreException

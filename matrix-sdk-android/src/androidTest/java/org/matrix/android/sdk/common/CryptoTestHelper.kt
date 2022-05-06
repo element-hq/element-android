@@ -301,12 +301,10 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         val bobVerificationService = bob.cryptoService().verificationService()
 
         runBlocking {
-            aliceVerificationService.beginKeyVerificationInDMs(
+            aliceVerificationService.beginKeyVerification(
                     VerificationMethod.SAS,
-                    requestID,
                     roomId,
-                    bob.myUserId,
-                    bob.sessionParams.credentials.deviceId!!)
+                    bob.myUserId, )
         }
 
         // we should reach SHOW SAS on both

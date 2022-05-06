@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto
+package org.matrix.android.sdk.internal.crypto.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -59,7 +59,6 @@ import org.matrix.android.sdk.internal.crypto.tasks.UploadSigningKeysTask
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.network.parsing.CheckNumberType
 import org.matrix.android.sdk.internal.session.room.send.SendResponse
-import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import timber.log.Timber
 import uniffi.olm.OutgoingVerificationRequest
 import uniffi.olm.Request

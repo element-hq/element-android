@@ -39,7 +39,6 @@ import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import java.util.concurrent.CountDownLatch
 
@@ -840,7 +839,7 @@ class KeysBackupTest : InstrumentedTest {
 
         val signature = keysBackupVersionTrust.signatures[0]
         val device = runBlocking {
-            cryptoTestData.firstSession.cryptoService().getMyDevice()
+            cryptoTestData.firstSession.cryptoService().getMyCryptoDevice()
         }
         assertTrue(signature.valid)
         assertNotNull(signature.device)
@@ -1065,7 +1064,9 @@ class KeysBackupTest : InstrumentedTest {
         assertFalse(keysBackup2.isEnabled)
 
         // - Validate the old device from the new one
-        aliceSession2.cryptoService().setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession2.myUserId, oldDeviceId)
+        testHelper.runBlockingTest {
+            aliceSession2.cryptoService().verificationService().markedLocallyAsManuallyVerified(aliceSession2.myUserId, oldDeviceId)
+        }
 
         // -> Backup should automatically enable on the new device
         val latch4 = CountDownLatch(1)

@@ -128,7 +128,7 @@ class KeyRequestHandler @Inject constructor(
                 }
 
                 if (deviceInfo.isUnknown) {
-                    session?.cryptoService()?.setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false), userId, deviceId)
+                    session?.cryptoService()?.verificationService()?.markedLocallyAsManuallyVerified(userId, deviceId)
 
                     deviceInfo.trustLevel = DeviceTrustLevel(crossSigningVerified = false, locallyVerified = false)
 

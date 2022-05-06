@@ -131,7 +131,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
 
     private fun observeCrossSigning() {
         combine(
-                session.flow().liveMyDevicesInfo(),
+                session.flow().liveUserCryptoDevices(session.myUserId),
                 session.flow().liveCrossSigningInfo(session.myUserId)
         ) { myDevicesInfo, mxCrossSigningInfo ->
             myDevicesInfo to mxCrossSigningInfo
