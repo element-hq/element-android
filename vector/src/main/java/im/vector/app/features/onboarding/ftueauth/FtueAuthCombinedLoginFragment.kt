@@ -36,6 +36,7 @@ import im.vector.app.databinding.FragmentFtueCombinedLoginBinding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
+import im.vector.app.features.login.render
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
@@ -118,9 +119,7 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
 
     private fun renderSsoProviders(deviceId: String?, ssoProviders: List<SsoIdentityProvider>?) {
         views.ssoGroup.isVisible = ssoProviders?.isNotEmpty() == true
-        views.ssoButtons.mode = SocialLoginButtonsView.Mode.MODE_CONTINUE
-        views.ssoButtons.ssoIdentityProviders = ssoProviders?.sorted()
-        views.ssoButtons.listener = SocialLoginButtonsView.InteractionListener { id ->
+        views.ssoButtons.render(ssoProviders, SocialLoginButtonsView.Mode.MODE_CONTINUE) { id ->
             viewModel.getSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = deviceId,
