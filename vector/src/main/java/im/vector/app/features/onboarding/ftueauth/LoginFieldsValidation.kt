@@ -16,43 +16,48 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
-import androidx.core.text.isDigitsOnly
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import javax.inject.Inject
-
-typealias LoginValidationResult = Pair<String?, String?>
 
 class LoginFieldsValidation @Inject constructor(
         private val stringProvider: StringProvider
 ) {
 
-    fun validate(usernameOrId: String, password: String, isMatrixOrg: Boolean): Pair<String?, String?> {
-        return validateUsernameOrId(usernameOrId, isMatrixOrg) to validatePassword(password)
+    fun validate(usernameOrId: String, password: String): LoginValidationResult {
+        return LoginValidationResult(usernameOrId, password, validateUsernameOrId(usernameOrId), validatePassword(password))
     }
 
-    private fun validateUsernameOrId(usernameOrId: String, isMatrixOrg: Boolean): String? {
+    private fun validateUsernameOrId(usernameOrId: String): String? {
         val accountError = when {
-            usernameOrId.isEmpty()                                                   -> stringProvider.getString(R.string.error_empty_field_choose_user_name)
-            isNumericOnlyUserIdForbidden(isMatrixOrg) && usernameOrId.isDigitsOnly() -> stringProvider.getString(R.string.error_forbidden_digits_only_username)
-            else                                                                     -> null
+            usernameOrId.isEmpty() -> stringProvider.getString(R.string.error_empty_field_enter_user_name)
+            else                   -> null
         }
         return accountError
     }
 
-    private fun isNumericOnlyUserIdForbidden(isMatrixOrg: Boolean) = isMatrixOrg
-
     private fun validatePassword(password: String): String? {
         val passwordError = when {
-            password.isEmpty() -> stringProvider.getString(R.string.error_empty_field_choose_password)
+            password.isEmpty() -> stringProvider.getString(R.string.error_empty_field_your_password)
             else               -> null
         }
         return passwordError
     }
 }
 
-fun LoginValidationResult.onValid(action: () -> Unit) {
+fun LoginValidationResult.onValid(action: (String, String) -> Unit): LoginValidationResult {
     when {
-        first != null && second != null -> action()
+        usernameOrIdError != null && passwordError != null -> action(usernameOrId, password)
     }
+    return this
+}
+
+fun LoginValidationResult.onUsernameOrIdError(action: (String) -> Unit): LoginValidationResult {
+    usernameOrIdError?.let(action)
+    return this
+}
+
+fun LoginValidationResult.onPasswordError(action: (String) -> Unit): LoginValidationResult {
+    passwordError?.let(action)
+    return this
 }
