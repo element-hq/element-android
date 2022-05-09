@@ -25,14 +25,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.core.extensions.observeNotNull
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceListModalBinding
 import im.vector.app.features.spaces.SpaceListAction
 import im.vector.app.features.spaces.SpaceListViewModel
-import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.api.util.toMatrixItem
+import im.vector.app.features.spaces.manage.ManageType
+import im.vector.app.features.spaces.manage.SpaceManageActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -72,7 +70,12 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
 
     private fun setupAddSpace() {
         binding.addSpaceClickbox.setOnClickListener {
-            println("Add space clicked")
+            val currentSpace = sharedActionViewModel.space.value
+            if (currentSpace != null) {
+                startActivity(SpaceManageActivity.newIntent(requireActivity(), currentSpace.roomId, ManageType.AddRoomsOnlySpaces))
+            } else {
+                sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
+            }
         }
     }
 
