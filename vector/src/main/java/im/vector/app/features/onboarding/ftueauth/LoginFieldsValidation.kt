@@ -47,7 +47,7 @@ class LoginFieldsValidation @Inject constructor(
 
 fun LoginValidationResult.onValid(action: (String, String) -> Unit): LoginValidationResult {
     when {
-        usernameOrIdError != null && passwordError != null -> action(usernameOrId, password)
+        usernameOrIdError == null && passwordError == null -> action(usernameOrId, password)
     }
     return this
 }
