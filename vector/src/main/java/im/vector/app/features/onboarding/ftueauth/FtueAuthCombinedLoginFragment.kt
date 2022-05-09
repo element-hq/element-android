@@ -21,17 +21,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import im.vector.app.R
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
-import im.vector.app.core.extensions.hasContentFlow
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
+import im.vector.app.core.extensions.setOnImeDone
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueCombinedLoginBinding
 import im.vector.app.features.login.LoginMode
@@ -40,9 +39,7 @@ import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import javax.inject.Inject
 
@@ -59,35 +56,15 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         setupSubmitButton()
         views.loginRoot.realignPercentagesToParent()
-        views.editServerButton.debouncedClicks {
-            viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection))
-        }
-
-        views.loginPasswordInput.editText().setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                submit()
-                return@setOnEditorActionListener true
-            }
-            return@setOnEditorActionListener false
-        }
+        views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
+        views.loginPasswordInput.setOnImeDone { submit() }
     }
 
     private fun setupSubmitButton() {
         views.loginSubmit.setOnClickListener { submit() }
-        observeInputFields()
-                .onEach {
-                    views.loginPasswordInput.error = null
-                    views.loginInput.error = null
-                    views.loginSubmit.isEnabled = it
-                }
+        observeContentChangesAndResetErrors(views.loginInput, views.loginPasswordInput, views.loginSubmit)
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
-
-    private fun observeInputFields() = combine(
-            views.loginInput.hasContentFlow { it.trim() },
-            views.loginPasswordInput.hasContentFlow(),
-            transform = { isLoginNotEmpty, isPasswordNotEmpty -> isLoginNotEmpty && isPasswordNotEmpty }
-    )
 
     private fun submit() {
         cleanupUi()
