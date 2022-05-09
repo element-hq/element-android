@@ -89,6 +89,7 @@ class CallControlsView @JvmOverloads constructor(
             views.videoToggleIcon.setImageResource(R.drawable.ic_video_off)
             views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_start_camera)
         }
+        views.videoToggleIcon.isEnabled = !state.isSharingScreen
 
         when (callState) {
             is CallState.LocalRinging -> {
