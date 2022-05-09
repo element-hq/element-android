@@ -4,7 +4,7 @@ name: Integration Tests
 # Further filtering occurs in 'should-i-run'
 
 on:
-  pull-request:
+  pull_request:
     types: [closed]
     branches: [develop]
 
