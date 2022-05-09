@@ -347,7 +347,7 @@ dependencies {
     implementation "androidx.transition:transition:1.4.1"
 
     implementation "org.threeten:threetenbp:1.4.0:no-tzdb"
-    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.9.0"
+    implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.10.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
