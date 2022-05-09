@@ -7,7 +7,10 @@ apply plugin: "org.jetbrains.dokka"
 
 buildscript {
     repositories {
-        maven { url 'https://repo1.maven.org/maven2' }
+        // Do not use `mavenCentral()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://repo1.maven.org/maven2'
+        }
     }
     dependencies {
         classpath "io.realm:realm-gradle-plugin:10.9.0"
