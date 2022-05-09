@@ -75,7 +75,7 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         }
     }
 
-    private fun observeSpaceChange() = sharedActionViewModel.space.observeNotNull(viewLifecycleOwner) {
+    private fun observeSpaceChange() = sharedActionViewModel.space.observe(viewLifecycleOwner) {
         viewModel.setSpace(it)
     }
 

@@ -29,6 +29,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.VectorOverrides
+import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -36,7 +37,10 @@ import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
 import im.vector.app.features.settings.VectorDataStore
+import im.vector.app.features.spaces.SpaceListAction
+import im.vector.app.features.spaces.SpaceListViewEvents
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.app.space
 import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -52,6 +56,7 @@ import org.matrix.android.sdk.api.session.crypto.NewSessionListener
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
@@ -213,6 +218,10 @@ class HomeDetailViewModel @AssistedInject constructor(
                             roomGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
                     )
                 }
+    }
+
+    fun handleSelectSpace(space: RoomSummary?) {
+        appStateHandler.setCurrentSpace(space?.roomId)
     }
 
     private fun observeRoomSummaries() {

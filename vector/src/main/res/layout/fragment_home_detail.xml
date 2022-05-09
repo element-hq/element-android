@@ -121,29 +121,38 @@
 
                 </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/back_button_chevron"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_arrow_right"
-                    android:rotation="180"
-                    app:layout_constraintTop_toTopOf="@id/back_button_text"
-                    app:layout_constraintBottom_toBottomOf="@id/back_button_text"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:tint="@color/palette_element_green" />
-
-                <TextView
-                    android:id="@+id/back_button_text"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/back_button_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/chats"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="16dp"
-                    android:textSize="17sp"
-                    android:textColor="@color/palette_element_green"
-                    app:layout_constraintStart_toEndOf="@id/back_button_chevron"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/back_button_chevron"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_arrow_right"
+                        android:rotation="180"
+                        app:layout_constraintTop_toTopOf="@id/back_button_text"
+                        app:layout_constraintBottom_toBottomOf="@id/back_button_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:tint="@color/palette_element_green" />
+
+                    <TextView
+                        android:id="@+id/back_button_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chats"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="16dp"
+                        android:textSize="17sp"
+                        android:textColor="@color/palette_element_green"
+                        app:layout_constraintStart_toEndOf="@id/back_button_chevron"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/all_chats_layout"
@@ -151,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:paddingBottom="8dp"
-                    app:layout_constraintTop_toBottomOf="@id/back_button_chevron"
+                    app:layout_constraintTop_toBottomOf="@id/back_button_layout"
                     app:layout_constraintStart_toStartOf="parent">
 
                     <TextView

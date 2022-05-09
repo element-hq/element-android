@@ -150,6 +150,15 @@ class HomeDetailFragment @Inject constructor(
             toggleModalVisibility()
         }
 
+        views.backButtonLayout.setOnClickListener {
+            val currentSpace = sharedActionViewModel.space.value
+            val directParent = currentSpace?.spaceParents?.firstOrNull()
+            viewModel.handleSelectSpace(directParent?.roomSummary)
+            sharedActionViewModel.space.value = directParent?.roomSummary
+            sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(false))
+            onSpaceChange(directParent?.roomSummary)
+        }
+
         views.dimView.setOnClickListener {
             toggleModalVisibility()
         }
@@ -205,23 +214,31 @@ class HomeDetailFragment @Inject constructor(
 
     private fun observeSharedActions() = lifecycleScope.launch {
         sharedActionViewModel.stream().collect { action ->
-            when(action) {
-                is HomeActivitySharedAction.OpenGroup -> toggleModalVisibility()
-                else -> Unit
+            when (action) {
+                is HomeActivitySharedAction.OpenGroup -> hideModal()
+                else                                  -> Unit
             }
         }
     }
 
     private fun toggleModalVisibility() {
         if (views.spaceModalFragment.isVisible) {
-            views.spaceModalFragment.isVisible = false
-            views.dimView.isVisible = false
-            views.toolbarChevron.rotation = 0F
+            hideModal()
         } else {
-            views.spaceModalFragment.isVisible = true
-            views.dimView.isVisible = true
-            views.toolbarChevron.rotation = 90F
+            showModal()
         }
+    }
+
+    private fun showModal() {
+        views.spaceModalFragment.isVisible = true
+        views.dimView.isVisible = true
+        views.toolbarChevron.rotation = 90F
+    }
+
+    private fun hideModal() {
+        views.spaceModalFragment.isVisible = false
+        views.dimView.isVisible = false
+        views.toolbarChevron.rotation = 0F
     }
 
     private fun handleCallStarted() {
@@ -312,8 +329,11 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onGroupChange(groupSummary: GroupSummary?) {
+        hideModal()
         if (groupSummary == null) {
             views.groupToolbarSpaceTitleView.isVisible = false
+            views.groupToolbarSpaceTitleView.text = getString(R.string.all_chats)
+            views.groupToolbarTitleView.text = getString(R.string.all_chats)
         } else {
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = groupSummary.displayName
@@ -322,8 +342,11 @@ class HomeDetailFragment @Inject constructor(
     }
 
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
+        hideModal()
         if (spaceSummary == null) {
             views.groupToolbarSpaceTitleView.isVisible = false
+            views.groupToolbarSpaceTitleView.text = getString(R.string.all_chats)
+            views.groupToolbarTitleView.text = getString(R.string.all_chats)
         } else {
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = spaceSummary.displayName

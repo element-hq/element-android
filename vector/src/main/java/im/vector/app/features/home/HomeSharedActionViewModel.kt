@@ -24,5 +24,5 @@ import javax.inject.Inject
 
 class HomeSharedActionViewModel @Inject constructor(val session: Session) : VectorSharedActionViewModel<HomeActivitySharedAction>() {
 
-    val space = MutableLiveData<RoomSummary>()
+    val space = MutableLiveData<RoomSummary?>()
 }

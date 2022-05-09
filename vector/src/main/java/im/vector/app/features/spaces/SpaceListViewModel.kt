@@ -343,7 +343,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         }
     }
 
-    fun setSpace(space: RoomSummary) {
+    fun setSpace(space: RoomSummary?) {
         this.currentSpace = space
         emitSpaceViewState()
     }
