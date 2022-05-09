@@ -104,7 +104,10 @@ class LocationLiveMessageBannerView @JvmOverloads constructor(
                     countDownTimer = object : CountDownTimer(it, REMAINING_TIME_COUNTER_INTERVAL_IN_MS) {
                         override fun onTick(millisUntilFinished: Long) {
                             val duration = Duration.ofMillis(millisUntilFinished.coerceAtLeast(0L))
-                            subTitle.text = context.getString(R.string.location_share_live_remaining_time, TextUtils.formatDurationWithUnits(context, duration))
+                            subTitle.text = context.getString(
+                                    R.string.location_share_live_remaining_time,
+                                    TextUtils.formatDurationWithUnits(context, duration)
+                            )
                         }
 
                         override fun onFinish() {

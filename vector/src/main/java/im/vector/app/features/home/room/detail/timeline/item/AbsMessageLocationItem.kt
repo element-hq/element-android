@@ -107,5 +107,4 @@ abstract class AbsMessageLocationItem<H : AbsMessageLocationItem.Holder> : AbsMe
         val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
         val staticMapErrorTextView by bind<TextView>(R.id.staticMapErrorTextView)
     }
-
 }
