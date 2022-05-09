@@ -71,7 +71,7 @@ jobs:
     needs:
       - sonarqube
       - codecov-units
-    if: always() && needs.sonarqube.result != "success" and needs.codecov-units.result != "success"
+    if: always() && (needs.sonarqube.result != "success" || needs.codecov-units.result != "success") 
     steps:
       - uses: michaelkaye/matrix-hookshot-action@v1.0.0
         with:
