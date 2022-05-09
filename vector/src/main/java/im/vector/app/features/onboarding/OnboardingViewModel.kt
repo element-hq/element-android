@@ -41,6 +41,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.StartAuthenticationFlowUseCase.StartAuthenticationResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.firstOrNull
@@ -141,9 +142,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
             is OnboardingAction.HomeServerChange           -> withAction(action) { handleHomeserverChange(action) }
-            is OnboardingAction.Register                   -> handleRegisterWith(action).also { lastAction = action }
-            is OnboardingAction.Login                      -> handleLogin(action).also { lastAction = action }
-            is OnboardingAction.LoginDirect                -> handleDirectLogin(action, homeServerConnectionConfig = null).also { lastAction = action }
+            is AuthenticateAction                          -> withAction(action) { handleAuthenticateAction(action) }
             is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
             is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
             is OnboardingAction.ResetPassword              -> handleResetPassword(action)
@@ -166,6 +165,14 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun withAction(action: OnboardingAction, block: (OnboardingAction) -> Unit) {
         lastAction = action
         block(action)
+    }
+
+    private fun handleAuthenticateAction(action: AuthenticateAction) {
+        when (action) {
+            is AuthenticateAction.Register    -> handleRegisterWith(action)
+            is AuthenticateAction.Login       -> handleLogin(action)
+            is AuthenticateAction.LoginDirect -> handleDirectLogin(action, homeServerConnectionConfig = null)
+        }
     }
 
     private fun handleSplashAction(resetConfig: Boolean, onboardingFlow: OnboardingFlow) {
@@ -217,7 +224,7 @@ class OnboardingViewModel @AssistedInject constructor(
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
                         ?.let { startAuthenticationFlow(finalLastAction, it) }
             }
-            is OnboardingAction.LoginDirect                       ->
+            is AuthenticateAction.LoginDirect                     ->
                 handleDirectLogin(
                         finalLastAction,
                         HomeServerConnectionConfig.Builder()
@@ -299,7 +306,7 @@ class OnboardingViewModel @AssistedInject constructor(
         _viewEvents.post(OnboardingViewEvents.RegistrationFlowResult(flowResult, isRegistrationStarted))
     }
 
-    private fun handleRegisterWith(action: OnboardingAction.Register) {
+    private fun handleRegisterWith(action: AuthenticateAction.Register) {
         reAuthHelper.data = action.password
         handleRegisterAction(
                 RegisterAction.CreateAccount(
@@ -473,7 +480,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleDirectLogin(action: OnboardingAction.LoginDirect, homeServerConnectionConfig: HomeServerConnectionConfig?) {
+    private fun handleDirectLogin(action: AuthenticateAction.LoginDirect, homeServerConnectionConfig: HomeServerConnectionConfig?) {
         setState { copy(isLoading = true) }
         currentJob = viewModelScope.launch {
             directLoginUseCase.execute(action, homeServerConnectionConfig).fold(
@@ -486,7 +493,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleLogin(action: OnboardingAction.Login) {
+    private fun handleLogin(action: AuthenticateAction.Login) {
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {

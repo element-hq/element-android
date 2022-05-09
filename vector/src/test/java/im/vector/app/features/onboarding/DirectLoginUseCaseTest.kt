@@ -32,7 +32,7 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.WellKnown
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 
-private val A_LOGIN_OR_REGISTER_ACTION = OnboardingAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
+private val A_LOGIN_OR_REGISTER_ACTION = OnboardingAction.AuthenticateAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
 private val A_WELLKNOWN_SUCCESS_RESULT = WellknownResult.Prompt("https://homeserverurl.com", identityServerUrl = null, WellKnown())
 private val A_WELLKNOWN_FAILED_WITH_CONTENT_RESULT = WellknownResult.FailPrompt("https://homeserverurl.com", WellKnown())
 private val A_WELLKNOWN_FAILED_WITHOUT_CONTENT_RESULT = WellknownResult.FailPrompt(null, null)

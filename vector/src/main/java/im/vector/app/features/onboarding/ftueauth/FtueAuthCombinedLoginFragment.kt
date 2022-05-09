@@ -100,7 +100,7 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
             val password = views.loginPasswordInput.content()
             val isMatrixOrg = state.selectedHomeserver.userFacingUrl == getString(R.string.matrix_org_server_url)
             loginFieldsValidation.validate(login, password, isMatrixOrg).onValid {
-                viewModel.handle(OnboardingAction.Login(login, password, getString(R.string.login_default_session_public_name)))
+                viewModel.handle(OnboardingAction.AuthenticateAction.Login(login, password, getString(R.string.login_default_session_public_name)))
             }
         }
     }
@@ -119,16 +119,16 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
         // Trick to display the error without text.
         views.loginInput.error = " "
         when {
-            throwable.isInvalidUsername()                                                            -> {
+            throwable.isInvalidUsername()                                                    -> {
                 views.loginInput.error = errorFormatter.toHumanReadable(throwable)
             }
-            throwable.isLoginEmailUnknown()                                                          -> {
+            throwable.isLoginEmailUnknown()                                                  -> {
                 views.loginInput.error = getString(R.string.login_login_with_email_error)
             }
             throwable.isInvalidPassword() && views.loginPasswordInput.hasSurroundingSpaces() -> {
                 views.loginPasswordInput.error = getString(R.string.auth_invalid_login_param_space_in_password)
             }
-            else                                                                                     -> {
+            else                                                                             -> {
                 super.onError(throwable)
             }
         }
