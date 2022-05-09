@@ -19,11 +19,13 @@ package im.vector.app.features.home.room.list
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.app.core.utils.createUIHandler
+import im.vector.app.features.home.RoomListDisplayMode
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 class RoomSummaryPagedController(
-        private val roomSummaryItemFactory: RoomSummaryItemFactory
+        private val roomSummaryItemFactory: RoomSummaryItemFactory,
+        private val displayMode: RoomListDisplayMode
 ) : PagedListEpoxyController<RoomSummary>(
         // Important it must match the PageList builder notify Looper
         modelBuildingHandler = createUIHandler()
@@ -57,6 +59,6 @@ class RoomSummaryPagedController(
     override fun buildItemModel(currentPosition: Int, item: RoomSummary?): EpoxyModel<*> {
         // for place holder if enabled
         item ?: return RoomSummaryItemPlaceHolder_().apply { id(currentPosition) }
-        return roomSummaryItemFactory.create(item, roomChangeMembershipStates.orEmpty(), emptySet(), listener)
+        return roomSummaryItemFactory.create(item, roomChangeMembershipStates.orEmpty(), emptySet(), displayMode, listener)
     }
 }

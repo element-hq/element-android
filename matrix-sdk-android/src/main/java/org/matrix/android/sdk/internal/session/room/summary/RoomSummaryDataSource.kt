@@ -36,6 +36,7 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.room.model.SpaceParentInfo
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
@@ -193,6 +194,18 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
+        }.map { roomSummary ->
+            val parents = roomSummary.flattenParentIds.mapNotNull { parentId ->
+                getRoomSummary(parentId)?.let { parentSummary ->
+                    SpaceParentInfo(
+                            parentId = parentSummary.flattenParentIds.firstOrNull(),
+                            roomSummary = parentSummary,
+                            canonical = true,
+                            viaServers = emptyList()
+                    )
+                }
+            }
+            roomSummary.copy(spaceParents = parents)
         }
 
         val boundaries = MutableLiveData(ResultBoundaries())

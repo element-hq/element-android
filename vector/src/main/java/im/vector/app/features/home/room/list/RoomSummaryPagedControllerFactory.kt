@@ -16,18 +16,19 @@
 
 package im.vector.app.features.home.room.list
 
+import im.vector.app.features.home.RoomListDisplayMode
 import javax.inject.Inject
 
 class RoomSummaryPagedControllerFactory @Inject constructor(
         private val roomSummaryItemFactory: RoomSummaryItemFactory
 ) {
 
-    fun createRoomSummaryPagedController(): RoomSummaryPagedController {
-        return RoomSummaryPagedController(roomSummaryItemFactory)
+    fun createRoomSummaryPagedController(displayMode: RoomListDisplayMode): RoomSummaryPagedController {
+        return RoomSummaryPagedController(roomSummaryItemFactory, displayMode)
     }
 
-    fun createRoomSummaryListController(): RoomSummaryListController {
-        return RoomSummaryListController(roomSummaryItemFactory)
+    fun createRoomSummaryListController(displayMode: RoomListDisplayMode): RoomSummaryListController {
+        return RoomSummaryListController(roomSummaryItemFactory, displayMode)
     }
 
     fun createSuggestedRoomListController(): SuggestedRoomListController {

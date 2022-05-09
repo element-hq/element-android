@@ -183,7 +183,7 @@
         tools:text="@tools:sample/date/hhmm" />
 
     <TextView
-        android:id="@+id/roomLastEventView"
+        android:id="@+id/subtitleView"
         style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -213,7 +213,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/roomNameView"
         app:layout_constraintTop_toBottomOf="@id/roomNameView"
-        tools:text="Alice is typing…" />
+        tools:text="Alice is typing…"
+        tools:visibility="gone" />
 
     <!-- Margin bottom does not work, so I use space -->
     <Space
@@ -221,7 +222,7 @@
         android:layout_width="0dp"
         android:layout_height="7dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/roomLastEventView"
+        app:layout_constraintTop_toBottomOf="@id/subtitleView"
         tools:layout_marginStart="120dp" />
 
     <androidx.constraintlayout.widget.Barrier
