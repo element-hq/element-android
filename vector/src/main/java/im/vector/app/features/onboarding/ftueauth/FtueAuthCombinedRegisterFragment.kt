@@ -42,6 +42,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import kotlinx.coroutines.flow.combine
@@ -119,7 +120,7 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
             }
 
             if (error == 0) {
-                viewModel.handle(OnboardingAction.Register(login, password, getString(R.string.login_default_session_public_name)))
+                viewModel.handle(AuthenticateAction.Register(login, password, getString(R.string.login_default_session_public_name)))
             }
         }
     }

@@ -59,7 +59,7 @@ private val A_RESULT_IGNORED_REGISTER_ACTION = RegisterAction.SendAgainThreePid
 private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
 private val AN_IGNORED_FLOW_RESULT = FlowResult(missingStages = emptyList(), completedStages = emptyList())
 private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationResult.NextStep(AN_IGNORED_FLOW_RESULT)
-private val A_DIRECT_LOGIN = OnboardingAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
+private val A_DIRECT_LOGIN = OnboardingAction.AuthenticateAction.LoginDirect("@a-user:id.org", "a-password", "a-device-name")
 private const val A_HOMESERVER_URL = "https://edited-homeserver.org"
 private val A_HOMESERVER_CONFIG = HomeServerConnectionConfig(FakeUri().instance)
 private val SELECTED_HOMESERVER_STATE = SelectedHomeserverState(preferredLoginMode = LoginMode.Password)
