@@ -157,9 +157,9 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
                 val initialDeviceName = getString(R.string.login_default_session_public_name)
                 val action = when (state.signMode) {
                     SignMode.Unknown            -> error("developer error")
-                    SignMode.SignUp             -> OnboardingAction.Register(login, password, initialDeviceName)
-                    SignMode.SignIn             -> OnboardingAction.Login(login, password, initialDeviceName)
-                    SignMode.SignInWithMatrixId -> OnboardingAction.LoginDirect(login, password, initialDeviceName)
+                    SignMode.SignUp             -> OnboardingAction.Register(username = login, password, initialDeviceName)
+                    SignMode.SignIn             -> OnboardingAction.Login(username = login, password, initialDeviceName)
+                    SignMode.SignInWithMatrixId -> OnboardingAction.LoginDirect(matrixId = login, password, initialDeviceName)
                 }
                 viewModel.handle(action)
             }

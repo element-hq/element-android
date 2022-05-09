@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
-import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
@@ -52,7 +51,9 @@ import org.matrix.android.sdk.api.failure.isInvalidUsername
 import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
 import javax.inject.Inject
 
-class FtueAuthCombinedLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<FragmentFtueCombinedLoginBinding>() {
+class FtueAuthCombinedLoginFragment @Inject constructor(
+        private val loginFieldsValidation: LoginFieldsValidation
+) : AbstractSSOFtueAuthFragment<FragmentFtueCombinedLoginBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedLoginBinding {
         return FragmentFtueCombinedLoginBinding.inflate(inflater, container, false)
@@ -61,12 +62,12 @@ class FtueAuthCombinedLoginFragment @Inject constructor() : AbstractSSOFtueAuthF
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupSubmitButton()
-        views.createAccountRoot.realignPercentagesToParent()
+        views.loginRoot.realignPercentagesToParent()
         views.editServerButton.debouncedClicks {
             viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection))
         }
 
-        views.createAccountPasswordInput.editText().setOnEditorActionListener { _, actionId, _ ->
+        views.loginPasswordInput.editText().setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 submit()
                 return@setOnEditorActionListener true
@@ -76,54 +77,38 @@ class FtueAuthCombinedLoginFragment @Inject constructor() : AbstractSSOFtueAuthF
     }
 
     private fun setupSubmitButton() {
-        views.createAccountSubmit.setOnClickListener { submit() }
+        views.loginSubmit.setOnClickListener { submit() }
         observeInputFields()
                 .onEach {
-                    views.createAccountPasswordInput.error = null
-                    views.createAccountInput.error = null
-                    views.createAccountSubmit.isEnabled = it
+                    views.loginPasswordInput.error = null
+                    views.loginInput.error = null
+                    views.loginSubmit.isEnabled = it
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun observeInputFields() = combine(
-            views.createAccountInput.hasContentFlow { it.trim() },
-            views.createAccountPasswordInput.hasContentFlow(),
+            views.loginInput.hasContentFlow { it.trim() },
+            views.loginPasswordInput.hasContentFlow(),
             transform = { isLoginNotEmpty, isPasswordNotEmpty -> isLoginNotEmpty && isPasswordNotEmpty }
     )
 
     private fun submit() {
         withState(viewModel) { state ->
             cleanupUi()
-
-            val login = views.createAccountInput.content()
-            val password = views.createAccountPasswordInput.content()
-
-            // This can be called by the IME action, so deal with empty cases
-            var error = 0
-            if (login.isEmpty()) {
-                views.createAccountInput.error = getString(R.string.error_empty_field_choose_user_name)
-                error++
-            }
-            if (state.isNumericOnlyUserIdForbidden() && login.isDigitsOnly()) {
-                views.createAccountInput.error = getString(R.string.error_forbidden_digits_only_username)
-                error++
-            }
-            if (password.isEmpty()) {
-                views.createAccountPasswordInput.error = getString(R.string.error_empty_field_choose_password)
-                error++
-            }
-
-            if (error == 0) {
+            val login = views.loginInput.content()
+            val password = views.loginPasswordInput.content()
+            val isMatrixOrg = state.selectedHomeserver.userFacingUrl == getString(R.string.matrix_org_server_url)
+            loginFieldsValidation.validate(login, password, isMatrixOrg).onValid {
                 viewModel.handle(OnboardingAction.Login(login, password, getString(R.string.login_default_session_public_name)))
             }
         }
     }
 
     private fun cleanupUi() {
-        views.createAccountSubmit.hideKeyboard()
-        views.createAccountInput.error = null
-        views.createAccountPasswordInput.error = null
+        views.loginSubmit.hideKeyboard()
+        views.loginInput.error = null
+        views.loginPasswordInput.error = null
     }
 
     override fun resetViewModel() {
@@ -132,16 +117,16 @@ class FtueAuthCombinedLoginFragment @Inject constructor() : AbstractSSOFtueAuthF
 
     override fun onError(throwable: Throwable) {
         // Trick to display the error without text.
-        views.createAccountInput.error = " "
+        views.loginInput.error = " "
         when {
             throwable.isInvalidUsername()                                                            -> {
-                views.createAccountInput.error = errorFormatter.toHumanReadable(throwable)
+                views.loginInput.error = errorFormatter.toHumanReadable(throwable)
             }
             throwable.isLoginEmailUnknown()                                                          -> {
-                views.createAccountInput.error = getString(R.string.login_login_with_email_error)
+                views.loginInput.error = getString(R.string.login_login_with_email_error)
             }
-            throwable.isInvalidPassword() && views.createAccountPasswordInput.hasSurroundingSpaces() -> {
-                views.createAccountPasswordInput.error = getString(R.string.auth_invalid_login_param_space_in_password)
+            throwable.isInvalidPassword() && views.loginPasswordInput.hasSurroundingSpaces() -> {
+                views.loginPasswordInput.error = getString(R.string.auth_invalid_login_param_space_in_password)
             }
             else                                                                                     -> {
                 super.onError(throwable)
@@ -158,7 +143,7 @@ class FtueAuthCombinedLoginFragment @Inject constructor() : AbstractSSOFtueAuthF
 
         if (state.isLoading) {
             // Ensure password is hidden
-            views.createAccountPasswordInput.editText().hidePassword()
+            views.loginPasswordInput.editText().hidePassword()
         }
     }
 
@@ -189,10 +174,8 @@ class FtueAuthCombinedLoginFragment @Inject constructor() : AbstractSSOFtueAuthF
 
     private fun setupAutoFill() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            views.createAccountInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
-            views.createAccountPasswordInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
+            views.loginInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_USERNAME)
+            views.loginPasswordInput.setAutofillHints(HintConstants.AUTOFILL_HINT_NEW_PASSWORD)
         }
     }
-
-    private fun OnboardingViewState.isNumericOnlyUserIdForbidden() = selectedHomeserver.userFacingUrl == getString(R.string.matrix_org_server_url)
 }
