@@ -22,7 +22,7 @@ def epoxy = "4.6.2"
 def mavericks = "2.5.0"
 def glide = "4.12.0"
 def bigImageViewer = "1.8.1"
-def jjwt = "0.11.2"
+def jjwt = "0.11.5"
 def vanniktechEmoji = "0.8.0"
 
 // Testing
