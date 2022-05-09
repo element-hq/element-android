@@ -38,7 +38,7 @@ private val A_WELLKNOWN_FAILED_WITH_CONTENT_RESULT = WellknownResult.FailPrompt(
 private val A_WELLKNOWN_FAILED_WITHOUT_CONTENT_RESULT = WellknownResult.FailPrompt(null, null)
 private val NO_HOMESERVER_CONFIG: HomeServerConnectionConfig? = null
 private val A_FALLBACK_CONFIG: HomeServerConnectionConfig = HomeServerConnectionConfig(
-        homeServerUri = FakeUri("https://${A_LOGIN_OR_REGISTER_ACTION.username.getServerName()}").instance,
+        homeServerUri = FakeUri("https://${A_LOGIN_OR_REGISTER_ACTION.matrixId.getServerName()}").instance,
         homeServerUriBase = FakeUri(A_WELLKNOWN_SUCCESS_RESULT.homeServerUrl).instance,
         identityServerUri = null
 )
@@ -54,7 +54,7 @@ class DirectLoginUseCaseTest {
 
     @Test
     fun `when logging in directly, then returns success with direct session result`() = runTest {
-        fakeAuthenticationService.givenWellKnown(A_LOGIN_OR_REGISTER_ACTION.username, config = NO_HOMESERVER_CONFIG, result = A_WELLKNOWN_SUCCESS_RESULT)
+        fakeAuthenticationService.givenWellKnown(A_LOGIN_OR_REGISTER_ACTION.matrixId, config = NO_HOMESERVER_CONFIG, result = A_WELLKNOWN_SUCCESS_RESULT)
         val (username, password, initialDeviceName) = A_LOGIN_OR_REGISTER_ACTION
         fakeAuthenticationService.givenDirectAuthentication(A_FALLBACK_CONFIG, username, password, initialDeviceName, result = fakeSession)
 
@@ -66,7 +66,7 @@ class DirectLoginUseCaseTest {
     @Test
     fun `given wellknown fails with content, when logging in directly, then returns success with direct session result`() = runTest {
         fakeAuthenticationService.givenWellKnown(
-                A_LOGIN_OR_REGISTER_ACTION.username,
+                A_LOGIN_OR_REGISTER_ACTION.matrixId,
                 config = NO_HOMESERVER_CONFIG,
                 result = A_WELLKNOWN_FAILED_WITH_CONTENT_RESULT
         )
@@ -81,7 +81,7 @@ class DirectLoginUseCaseTest {
     @Test
     fun `given wellknown fails without content, when logging in directly, then returns well known error`() = runTest {
         fakeAuthenticationService.givenWellKnown(
-                A_LOGIN_OR_REGISTER_ACTION.username,
+                A_LOGIN_OR_REGISTER_ACTION.matrixId,
                 config = NO_HOMESERVER_CONFIG,
                 result = A_WELLKNOWN_FAILED_WITHOUT_CONTENT_RESULT
         )
@@ -97,7 +97,7 @@ class DirectLoginUseCaseTest {
 
     @Test
     fun `given wellknown throws, when logging in directly, then returns failure result with original cause`() = runTest {
-        fakeAuthenticationService.givenWellKnownThrows(A_LOGIN_OR_REGISTER_ACTION.username, config = NO_HOMESERVER_CONFIG, cause = AN_ERROR)
+        fakeAuthenticationService.givenWellKnownThrows(A_LOGIN_OR_REGISTER_ACTION.matrixId, config = NO_HOMESERVER_CONFIG, cause = AN_ERROR)
 
         val result = useCase.execute(A_LOGIN_OR_REGISTER_ACTION, homeServerConnectionConfig = NO_HOMESERVER_CONFIG)
 
@@ -106,7 +106,7 @@ class DirectLoginUseCaseTest {
 
     @Test
     fun `given direct authentication throws, when logging in directly, then returns failure result with original cause`() = runTest {
-        fakeAuthenticationService.givenWellKnown(A_LOGIN_OR_REGISTER_ACTION.username, config = NO_HOMESERVER_CONFIG, result = A_WELLKNOWN_SUCCESS_RESULT)
+        fakeAuthenticationService.givenWellKnown(A_LOGIN_OR_REGISTER_ACTION.matrixId, config = NO_HOMESERVER_CONFIG, result = A_WELLKNOWN_SUCCESS_RESULT)
         val (username, password, initialDeviceName) = A_LOGIN_OR_REGISTER_ACTION
         fakeAuthenticationService.givenDirectAuthenticationThrows(A_FALLBACK_CONFIG, username, password, initialDeviceName, cause = AN_ERROR)
 

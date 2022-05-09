@@ -33,7 +33,7 @@ class DirectLoginUseCase @Inject constructor(
 ) {
 
     suspend fun execute(action: OnboardingAction.LoginDirect, homeServerConnectionConfig: HomeServerConnectionConfig?): Result<Session> {
-        return fetchWellKnown(action.username, homeServerConnectionConfig)
+        return fetchWellKnown(action.matrixId, homeServerConnectionConfig)
                 .andThen { wellKnown -> createSessionFor(wellKnown, action, homeServerConnectionConfig) }
     }
 
@@ -61,7 +61,7 @@ class DirectLoginUseCase @Inject constructor(
         return runCatching {
             authenticationService.directAuthentication(
                     alteredHomeServerConnectionConfig,
-                    action.username,
+                    action.matrixId,
                     action.password,
                     action.initialDeviceName
             )
