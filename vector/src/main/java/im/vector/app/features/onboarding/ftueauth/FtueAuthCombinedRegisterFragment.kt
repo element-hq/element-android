@@ -21,7 +21,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
@@ -31,11 +30,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
-import im.vector.app.core.extensions.hasContentFlow
 import im.vector.app.core.extensions.hasSurroundingSpaces
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
+import im.vector.app.core.extensions.setOnImeDone
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentFtueCombinedRegisterBinding
 import im.vector.app.features.login.LoginMode
@@ -45,9 +44,7 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingAction.AuthenticateAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.failure.isInvalidPassword
 import org.matrix.android.sdk.api.failure.isInvalidUsername
@@ -67,35 +64,15 @@ class FtueAuthCombinedRegisterFragment @Inject constructor() : AbstractSSOFtueAu
         super.onViewCreated(view, savedInstanceState)
         setupSubmitButton()
         views.createAccountRoot.realignPercentagesToParent()
-        views.editServerButton.debouncedClicks {
-            viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection))
-        }
-
-        views.createAccountPasswordInput.editText().setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                submit()
-                return@setOnEditorActionListener true
-            }
-            return@setOnEditorActionListener false
-        }
+        views.editServerButton.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.EditServerSelection)) }
+        views.createAccountPasswordInput.setOnImeDone { submit() }
     }
 
     private fun setupSubmitButton() {
         views.createAccountSubmit.setOnClickListener { submit() }
-        observeInputFields()
-                .onEach {
-                    views.createAccountPasswordInput.error = null
-                    views.createAccountInput.error = null
-                    views.createAccountSubmit.isEnabled = it
-                }
+        observeContentChangesAndResetErrors(views.createAccountInput, views.createAccountPasswordInput, views.createAccountSubmit)
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
-
-    private fun observeInputFields() = combine(
-            views.createAccountInput.hasContentFlow { it.trim() },
-            views.createAccountPasswordInput.hasContentFlow(),
-            transform = { isLoginNotEmpty, isPasswordNotEmpty -> isLoginNotEmpty && isPasswordNotEmpty }
-    )
 
     private fun submit() {
         withState(viewModel) { state ->
