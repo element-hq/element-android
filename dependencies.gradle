@@ -61,7 +61,7 @@ ext.libs = [
                 'lifecycleRuntimeKtx'     : "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle",
                 'datastore'               : "androidx.datastore:datastore:1.0.0",
                 'datastorepreferences'    : "androidx.datastore:datastore-preferences:1.0.0",
-                'pagingRuntimeKtx'        : "androidx.paging:paging-runtime-ktx:2.1.2",
+                'pagingRuntimeKtx'        : "androidx.paging:paging-runtime-ktx:3.1.1",
                 'coreTesting'             : "androidx.arch.core:core-testing:2.1.0",
                 'testCore'                : "androidx.test:core:$androidxTest",
                 'orchestrator'            : "androidx.test:orchestrator:$androidxOrchestrator",
