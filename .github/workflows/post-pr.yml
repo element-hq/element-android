@@ -25,7 +25,7 @@ jobs:
   should-i-run:
     name: Check if PR is suitable for analysis
     runs-on: ubuntu-latest
-    if: github.event.merged # Additionally require PR to have been completely merged.
+    if: github.event.pull_request.merged # Additionally require PR to have been completely merged.
     steps:
       - run: echo "Run those tests!" # no-op success
         
