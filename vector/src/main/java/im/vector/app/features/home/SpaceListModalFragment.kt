@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -77,6 +78,9 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
 
     private fun observeSpaceChange() = sharedActionViewModel.space.observe(viewLifecycleOwner) {
         viewModel.setSpace(it)
+        binding.headerText.isVisible = it == null
+
+        binding.bottomDivider.isVisible = !it?.spaceChildren.isNullOrEmpty()
     }
 
     override fun invalidate() {

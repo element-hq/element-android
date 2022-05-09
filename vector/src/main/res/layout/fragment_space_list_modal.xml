@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_space_modal"
-    android:paddingTop="16dp">
+    android:background="@drawable/bg_space_modal">
 
     <TextView
         android:id="@+id/header_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="16dp"
         android:textSize="13sp"
         android:textColor="?attr/vctr_content_tertiary"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,6 +35,14 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/room_list" />
 
+    <View
+        android:id="@+id/add_space_clickbox"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/ripple_grey"
+        app:layout_constraintTop_toBottomOf="@id/bottom_divider"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/add_space_icon_background"
         android:layout_width="42dp"
@@ -45,14 +53,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bottom_divider"
         app:shapeAppearanceOverlay="@style/SpaceListModalImageShapeOverlay" />
-
-    <View
-        android:id="@+id/add_space_clickbox"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/ripple_grey"
-        app:layout_constraintTop_toBottomOf="@id/bottom_divider"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:layout_width="24dp"

@@ -60,6 +60,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class HomeDetailFragment @Inject constructor(
@@ -160,7 +161,11 @@ class HomeDetailFragment @Inject constructor(
         }
 
         views.dimView.setOnClickListener {
-            toggleModalVisibility()
+            hideModal()
+        }
+
+        views.dimViewBottom.setOnClickListener {
+            hideModal()
         }
 
         viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
@@ -232,12 +237,14 @@ class HomeDetailFragment @Inject constructor(
     private fun showModal() {
         views.spaceModalFragment.isVisible = true
         views.dimView.isVisible = true
+        views.dimViewBottom.isVisible = true
         views.toolbarChevron.rotation = 90F
     }
 
     private fun hideModal() {
         views.spaceModalFragment.isVisible = false
         views.dimView.isVisible = false
+        views.dimViewBottom.isVisible = false
         views.toolbarChevron.rotation = 0F
     }
 
@@ -331,10 +338,12 @@ class HomeDetailFragment @Inject constructor(
     private fun onGroupChange(groupSummary: GroupSummary?) {
         hideModal()
         if (groupSummary == null) {
+            views.backButtonLayout.isVisible = false
             views.groupToolbarSpaceTitleView.isVisible = false
             views.groupToolbarSpaceTitleView.text = getString(R.string.all_chats)
             views.groupToolbarTitleView.text = getString(R.string.all_chats)
         } else {
+            views.backButtonLayout.isVisible = true
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = groupSummary.displayName
             views.groupToolbarTitleView.text = groupSummary.displayName
@@ -344,13 +353,18 @@ class HomeDetailFragment @Inject constructor(
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
         hideModal()
         if (spaceSummary == null) {
+            views.backButtonLayout.isVisible = false
             views.groupToolbarSpaceTitleView.isVisible = false
             views.groupToolbarSpaceTitleView.text = getString(R.string.all_chats)
             views.groupToolbarTitleView.text = getString(R.string.all_chats)
+            views.spaceAvatar.isVisible = false
         } else {
+            views.backButtonLayout.isVisible = true
             views.groupToolbarSpaceTitleView.isVisible = true
             views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
             views.groupToolbarTitleView.text = spaceSummary.displayName
+            views.spaceAvatar.isVisible = true
+            avatarRenderer.render(spaceSummary.toMatrixItem(), views.spaceAvatar)
         }
     }
 
