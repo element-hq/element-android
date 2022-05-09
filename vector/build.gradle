@@ -413,7 +413,7 @@ dependencies {
     implementation 'androidx.browser:browser:1.4.0'
 
     // Passphrase strength helper
-    implementation 'com.nulab-inc:zxcvbn:1.5.2'
+    implementation 'com.nulab-inc:zxcvbn:1.7.0'
 
     // To convert voice message on old platforms
     implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
