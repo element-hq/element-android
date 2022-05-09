@@ -28,7 +28,12 @@ import org.matrix.android.sdk.internal.crypto.model.rest.KeysUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.SendToDeviceBody
 import org.matrix.android.sdk.internal.crypto.model.rest.SignatureUploadResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.UpdateDeviceInfoBody
+import org.matrix.android.sdk.internal.crypto.model.rest.dehydration.UploadDehydratedDeviceBody
+import org.matrix.android.sdk.internal.crypto.model.rest.dehydration.UploadDehydratedDeviceResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.UploadSigningKeysBody
+import org.matrix.android.sdk.internal.crypto.model.rest.dehydration.ClaimDehydratedDeviceBody
+import org.matrix.android.sdk.internal.crypto.model.rest.dehydration.ClaimDehydratedDeviceResponse
+import org.matrix.android.sdk.internal.crypto.model.rest.dehydration.GetDehydratedDeviceResponse
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -153,4 +158,35 @@ internal interface CryptoApi {
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/changes")
     suspend fun getKeyChanges(@Query("from") oldToken: String,
                               @Query("to") newToken: String): KeyChangesResponse
+
+    /**
+     * Uploads the given dehydrated device. Each user has at most one dehydrated device.
+     * Uploading a new dehydrated device will remove any previously-set dehydrated device.
+     * set given device as dehydrated for the account.
+     *
+     * @param dehydratedDeviceBody data of the dehydrated device.
+     *
+     * Ref: https://github.com/uhoreg/matrix-doc/blob/dehydration/proposals/2697-device-dehydration.md#dehydrating-a-device
+     */
+    @PUT(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2697.v2/dehydrated_device")
+    suspend fun uploadDehydratedDevice(@Body dehydratedDeviceBody: UploadDehydratedDeviceBody): UploadDehydratedDeviceResponse
+
+    /**
+     * Get current dehydrated device of the account, If no dehydrated device is available, the server responds with a 404.
+     *
+     * Ref: https://github.com/uhoreg/matrix-doc/blob/dehydration/proposals/2697-device-dehydration.md#rehydrating-a-device
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2697.v2/dehydrated_device")
+    suspend fun getDehydratedDevice(): GetDehydratedDeviceResponse
+
+    /**
+     * claim the current dehydrated device.
+     * Note: Clients should not call any other endpoints before rehydrating a device.
+     * In particular, if a client calls /sync while rehydrating, the client should not expect the /sync to return sensible information.
+     * For example, it could contain a mix of to-device messages sent to the old device ID and the new device ID.
+     *
+     * Ref: https://github.com/uhoreg/matrix-doc/blob/dehydration/proposals/2697-device-dehydration.md#rehydrating-a-device
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2697.v2/dehydrated_device/claim")
+    suspend fun claimDehydratedDevice(@Body claimDehydratedDeviceParams: ClaimDehydratedDeviceBody): ClaimDehydratedDeviceResponse
 }
