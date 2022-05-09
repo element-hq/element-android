@@ -39,6 +39,7 @@
         app:layout_constraintStart_toStartOf="@id/locationLiveStartBanner"
         app:layout_constraintTop_toTopOf="@id/locationLiveStartBanner"
         app:srcCompat="@drawable/ic_attachment_location_live_white"
+        app:tint="?android:colorBackground"
         tools:ignore="ContentDescription" />
 
     <TextView
