@@ -69,6 +69,24 @@ internal interface CryptoApi {
     suspend fun uploadKeys(@Body body: KeysUploadBody): KeysUploadResponse
 
     /**
+     * Upload device and/or one-time keys, for a specific deviceId
+     *
+     * Overloading the existing uploadKeys() to enhance our request with the deviceId
+     *
+     * Note: Synapse already supports POST /keys/upload/{device_id} as this was used in some old clients.
+     * However, synapse requires that the given device ID matches the device ID of the client that made the call.
+     * So this will be changed to allow uploading keys for the dehydrated device.
+     * @param body the keys to be sent.
+     * @param deviceId the deviceId that keys will be uploaded
+     */
+
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "keys/upload/{deviceId}")
+    suspend fun uploadKeys(
+            @Body body: KeysUploadBody,
+            @Path("deviceId") deviceId: String
+    ): KeysUploadResponse
+
+    /**
      * Download device keys.
      * Doc: https://matrix.org/docs/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-query
      *
