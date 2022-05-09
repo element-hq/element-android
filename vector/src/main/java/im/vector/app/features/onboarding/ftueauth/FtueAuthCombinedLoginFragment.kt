@@ -29,7 +29,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.hasContentFlow
-import im.vector.app.core.extensions.hasSurroundingSpaces
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.realignPercentagesToParent
@@ -45,13 +44,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
-import org.matrix.android.sdk.api.failure.isInvalidPassword
-import org.matrix.android.sdk.api.failure.isInvalidUsername
-import org.matrix.android.sdk.api.failure.isLoginEmailUnknown
 import javax.inject.Inject
 
 class FtueAuthCombinedLoginFragment @Inject constructor(
-        private val loginFieldsValidation: LoginFieldsValidation
+        private val loginFieldsValidation: LoginFieldsValidation,
+        private val loginErrorParser: LoginErrorParser
 ) : AbstractSSOFtueAuthFragment<FragmentFtueCombinedLoginBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueCombinedLoginBinding {
@@ -116,20 +113,10 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
     override fun onError(throwable: Throwable) {
         // Trick to display the error without text.
         views.loginInput.error = " "
-        when {
-            throwable.isInvalidUsername()                                                    -> {
-                views.loginInput.error = errorFormatter.toHumanReadable(throwable)
-            }
-            throwable.isLoginEmailUnknown()                                                  -> {
-                views.loginInput.error = getString(R.string.login_login_with_email_error)
-            }
-            throwable.isInvalidPassword() && views.loginPasswordInput.hasSurroundingSpaces() -> {
-                views.loginPasswordInput.error = getString(R.string.auth_invalid_login_param_space_in_password)
-            }
-            else                                                                             -> {
-                super.onError(throwable)
-            }
-        }
+        loginErrorParser.parse(throwable, views.loginPasswordInput.content())
+                .onUnknown { super.onError(it) }
+                .onUsernameOrIdError { views.loginInput.error = it }
+                .onPasswordError { views.loginPasswordInput.error = it }
     }
 
     override fun updateWithState(state: OnboardingViewState) {
