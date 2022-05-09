@@ -454,7 +454,7 @@ dependencies {
     implementation 'com.posthog.android:posthog:1.1.2'
 
     // gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:23.0.0') {
+    gplayImplementation('com.google.firebase:firebase-messaging:23.0.4') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
