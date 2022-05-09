@@ -35,6 +35,7 @@ internal interface LiveLocationAggregationProcessor {
             event: Event,
             content: MessageBeaconLocationDataContent,
             roomId: String,
+            relatedEventId: String?,
             isLocalEcho: Boolean,
     )
 }

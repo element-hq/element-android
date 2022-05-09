@@ -60,22 +60,27 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
         aggregatedSummary.isActive = content.isLive
     }
 
-    override fun handleBeaconLocationData(realm: Realm, event: Event, content: MessageBeaconLocationDataContent, roomId: String, isLocalEcho: Boolean) {
+    override fun handleBeaconLocationData(
+            realm: Realm,
+            event: Event,
+            content: MessageBeaconLocationDataContent,
+            roomId: String,
+            relatedEventId: String?,
+            isLocalEcho: Boolean
+    ) {
         if (event.senderId.isNullOrEmpty() || isLocalEcho) {
             return
         }
 
-        val targetEventId = content.relatesTo?.eventId
-
-        if (targetEventId.isNullOrEmpty()) {
-            Timber.w("no target event id found for the live location content")
+        if (relatedEventId.isNullOrEmpty()) {
+            Timber.w("no related event id found for the live location content")
             return
         }
 
         val aggregatedSummary = LiveLocationShareAggregatedSummaryEntity.getOrCreate(
                 realm = realm,
                 roomId = roomId,
-                eventId = targetEventId
+                eventId = relatedEventId
         )
         val updatedLocationTimestamp = content.getBestTimestampMillis() ?: 0
         val currentLocationTimestamp = ContentMapper
@@ -85,7 +90,7 @@ internal class DefaultLiveLocationAggregationProcessor @Inject constructor() : L
                 ?: 0
 
         if (updatedLocationTimestamp.isMoreRecentThan(currentLocationTimestamp)) {
-            Timber.d("updating last location of the summary of id=$targetEventId")
+            Timber.d("updating last location of the summary of id=$relatedEventId")
             aggregatedSummary.lastLocationContent = ContentMapper.map(content.toContent())
         }
     }

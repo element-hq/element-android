@@ -194,7 +194,14 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             }
                             in EventType.BEACON_LOCATION_DATA -> {
                                 event.getClearContent().toModel<MessageBeaconLocationDataContent>(catchError = true)?.let {
-                                    liveLocationAggregationProcessor.handleBeaconLocationData(realm, event, it, roomId, isLocalEcho)
+                                    liveLocationAggregationProcessor.handleBeaconLocationData(
+                                            realm,
+                                            event,
+                                            it,
+                                            roomId,
+                                            event.getRelationContent()?.eventId,
+                                            isLocalEcho
+                                    )
                                 }
                             }
                         }
