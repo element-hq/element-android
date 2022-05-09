@@ -415,7 +415,7 @@ dependencies {
     // Passphrase strength helper
     implementation 'com.nulab-inc:zxcvbn:1.5.2'
 
-    // To convert voice message on old platforms
+    // To convert voice message on old platforms. Always keep the LTS suffix!
     implementation 'com.arthenica:ffmpeg-kit-audio:4.5.1-1'
 
     // Alerter
