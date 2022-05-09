@@ -17,6 +17,7 @@
 package im.vector.app.features.spaces
 
 import androidx.lifecycle.asFlow
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
@@ -54,6 +55,7 @@ import org.matrix.android.sdk.api.session.group.groupSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.spaceSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
@@ -70,6 +72,8 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                                                      private val autoAcceptInvites: AutoAcceptInvites,
                                                      private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<SpaceListViewState, SpaceListAction, SpaceListViewEvents>(initialState) {
+
+    private var currentSpace: RoomSummary? = null
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<SpaceListViewModel, SpaceListViewState> {
@@ -273,6 +277,8 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         _viewEvents.post(SpaceListViewEvents.AddSpace)
     }
 
+    var asyncSpaceList: Async<List<RoomSummary>>? = null
+
     private fun observeSpaceSummaries() {
         val params = spaceSummaryQueryParams {
             memberships = listOf(Membership.JOIN, Membership.INVITE)
@@ -287,22 +293,24 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                         .asFlow()
         ) { spaces, _ ->
             spaces
+        }.execute { async ->
+            asyncSpaceList = async
+            val currentSpaceChildren = currentSpace?.let { space -> async.invoke()?.filter { it.flattenParentIds.contains(space.roomId) } }
+            val rootSpaces = async.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
+            val displaySpaces = currentSpaceChildren ?: rootSpaces
+            val orders = displaySpaces.associate {
+                it.roomId to session.getRoom(it.roomId)
+                        ?.roomAccountDataService()
+                        ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
+                        ?.content.toModel<SpaceOrderContent>()
+                        ?.safeOrder()
+            }
+            copy(
+                    asyncSpaces = async,
+                    rootSpacesOrdered = displaySpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                    spaceOrderInfo = orders
+            )
         }
-                .execute { async ->
-                    val rootSpaces = async.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
-                    val orders = rootSpaces.associate {
-                        it.roomId to session.getRoom(it.roomId)
-                                ?.roomAccountDataService()
-                                ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
-                                ?.content.toModel<SpaceOrderContent>()
-                                ?.safeOrder()
-                    }
-                    copy(
-                            asyncSpaces = async,
-                            rootSpacesOrdered = rootSpaces.sortedWith(TopLevelSpaceComparator(orders)),
-                            spaceOrderInfo = orders
-                    )
-                }
 
         // clear local echos on update
         session.accountDataService()
@@ -313,5 +321,30 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                             spaceOrderLocalEchos = emptyMap()
                     )
                 }
+    }
+
+    private fun emitSpaceViewState() = asyncSpaceList?.let { async ->
+        val currentSpaceChildren = currentSpace?.let { space -> asyncSpaceList?.invoke()?.filter { it.flattenParentIds.contains(space.roomId) } }
+        val rootSpaces = asyncSpaceList?.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
+        val displaySpaces = currentSpaceChildren ?: rootSpaces
+        val orders = displaySpaces.associate {
+            it.roomId to session.getRoom(it.roomId)
+                    ?.roomAccountDataService()
+                    ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
+                    ?.content.toModel<SpaceOrderContent>()
+                    ?.safeOrder()
+        }
+        setState {
+            copy(
+                    asyncSpaces = async,
+                    rootSpacesOrdered = displaySpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                    spaceOrderInfo = orders
+            )
+        }
+    }
+
+    fun setSpace(space: RoomSummary) {
+        this.currentSpace = space
+        emitSpaceViewState()
     }
 }

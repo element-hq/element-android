@@ -24,10 +24,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.extensions.observeNotNull
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceListModalBinding
 import im.vector.app.features.spaces.SpaceListAction
 import im.vector.app.features.spaces.SpaceListViewModel
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -52,6 +56,7 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         setupRecyclerView()
         setupAddSpace()
+        observeSpaceChange()
     }
 
     private fun setupRecyclerView() {
@@ -68,6 +73,10 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         binding.addSpaceClickbox.setOnClickListener {
             println("Add space clicked")
         }
+    }
+
+    private fun observeSpaceChange() = sharedActionViewModel.space.observeNotNull(viewLifecycleOwner) {
+        viewModel.setSpace(it)
     }
 
     override fun invalidate() {

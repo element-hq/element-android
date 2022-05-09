@@ -137,6 +137,7 @@ class HomeDetailFragment @Inject constructor(
                 }
                 is RoomGroupingMethod.BySpace       -> {
                     onSpaceChange(roomGroupingMethod.spaceSummary)
+                    sharedActionViewModel.space.value = roomGroupingMethod.spaceSummary
                 }
             }
         }

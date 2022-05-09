@@ -50,7 +50,7 @@
         android:id="@+id/add_space_clickbox"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/ripple_selector_key_pf"
+        android:background="@drawable/ripple_grey"
         app:layout_constraintTop_toBottomOf="@id/bottom_divider"
         app:layout_constraintBottom_toBottomOf="parent" />
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/vctr_content_secondary">
+
+    <!--this creates the mask with the ripple effect-->
+    <item
+        android:id="@+id/mask"
+        android:drawable="@android:color/white" />
+
+</ripple>

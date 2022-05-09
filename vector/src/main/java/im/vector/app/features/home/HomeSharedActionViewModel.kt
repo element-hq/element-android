@@ -16,8 +16,13 @@
 
 package im.vector.app.features.home
 
+import androidx.lifecycle.MutableLiveData
 import im.vector.app.core.platform.VectorSharedActionViewModel
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
-class HomeSharedActionViewModel @Inject constructor(val session: Session) : VectorSharedActionViewModel<HomeActivitySharedAction>()
+class HomeSharedActionViewModel @Inject constructor(val session: Session) : VectorSharedActionViewModel<HomeActivitySharedAction>() {
+
+    val space = MutableLiveData<RoomSummary>()
+}
