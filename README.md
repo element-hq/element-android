@@ -53,3 +53,4 @@ Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/
 Issues are triaged by community members and the Android App Team, following the [triage process](https://github.com/vector-im/element-meta/wiki/Triage-process).
 
 We use [issue labels](https://github.com/vector-im/element-meta/wiki/Issue-labelling) to sort all incoming issues.
+
