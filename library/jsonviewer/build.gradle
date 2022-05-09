@@ -7,7 +7,7 @@ apply plugin: 'com.jakewharton.butterknife'
 buildscript {
     repositories {
         google()
-        mavenCentral()
+        maven { url 'https://repo1.maven.org/maven2' }
     }
     dependencies {
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
