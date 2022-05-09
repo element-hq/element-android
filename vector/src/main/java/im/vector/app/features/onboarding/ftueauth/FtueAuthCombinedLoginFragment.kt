@@ -25,7 +25,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
@@ -94,15 +93,14 @@ class FtueAuthCombinedLoginFragment @Inject constructor(
     )
 
     private fun submit() {
-        withState(viewModel) { state ->
-            cleanupUi()
-            val login = views.loginInput.content()
-            val password = views.loginPasswordInput.content()
-            val isMatrixOrg = state.selectedHomeserver.userFacingUrl == getString(R.string.matrix_org_server_url)
-            loginFieldsValidation.validate(login, password, isMatrixOrg).onValid {
-                viewModel.handle(OnboardingAction.AuthenticateAction.Login(login, password, getString(R.string.login_default_session_public_name)))
-            }
-        }
+        cleanupUi()
+        loginFieldsValidation.validate(views.loginInput.content(), views.loginPasswordInput.content())
+                .onUsernameOrIdError { views.loginInput.error = it }
+                .onPasswordError { views.loginPasswordInput.error = it }
+                .onValid { usernameOrId, password ->
+                    val initialDeviceName = getString(R.string.login_default_session_public_name)
+                    viewModel.handle(OnboardingAction.AuthenticateAction.Login(usernameOrId, password, initialDeviceName))
+                }
     }
 
     private fun cleanupUi() {
