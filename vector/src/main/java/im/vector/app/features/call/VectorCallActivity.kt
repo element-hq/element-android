@@ -24,6 +24,7 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.res.Configuration
 import android.graphics.Color
+import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.Bundle
@@ -32,6 +33,7 @@ import android.util.Rational
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.result.ActivityResult
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -76,6 +78,7 @@ import org.matrix.android.sdk.api.session.call.TurnServerResponse
 import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
+import org.webrtc.ScreenCapturerAndroid
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -161,6 +164,9 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 }
             }
         }
+
+        // Bind to service in case of user killed the app while there is an ongoing call
+        bindToScreenCaptureService()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -636,16 +642,38 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private val screenSharingPermissionActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            callViewModel.handle(VectorCallViewActions.StartScreenSharing)
-            // We need to start a foreground service with a sticky notification during screen sharing
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                ContextCompat.startForegroundService(
-                        this,
-                        Intent(this, ScreenCaptureService::class.java)
-                )
-                screenCaptureServiceConnection.bind()
+                // We need to start a foreground service with a sticky notification during screen sharing
+                startScreenSharingService(activityResult)
+            } else {
+                startScreenSharing(activityResult)
             }
         }
+    }
+
+    private fun startScreenSharing(activityResult: ActivityResult) {
+        val videoCapturer = ScreenCapturerAndroid(activityResult.data, object : MediaProjection.Callback() {
+            override fun onStop() {
+                Timber.i("User revoked the screen capturing permission")
+            }
+        })
+        callViewModel.handle(VectorCallViewActions.StartScreenSharing(videoCapturer))
+    }
+
+    private fun startScreenSharingService(activityResult: ActivityResult) {
+        ContextCompat.startForegroundService(
+                this,
+                Intent(this, ScreenCaptureService::class.java)
+        )
+        bindToScreenCaptureService(activityResult)
+    }
+
+    private fun bindToScreenCaptureService(activityResult: ActivityResult? = null) {
+        screenCaptureServiceConnection.bind(object : ScreenCaptureServiceConnection.Callback {
+            override fun onServiceConnected() {
+                activityResult?.let { startScreenSharing(it) }
+            }
+        })
     }
 
     private fun handleShowScreenSharingPermissionDialog() {
