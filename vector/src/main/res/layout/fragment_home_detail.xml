@@ -133,12 +133,11 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:importantForAccessibility="no"
-                        android:rotation="180"
-                        android:src="@drawable/ic_arrow_right"
-                        app:layout_constraintBottom_toBottomOf="@id/back_button_text"
+                        android:src="@drawable/ic_back_24dp"
+                        android:layout_marginTop="16dp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/back_button_text"
-                        app:tint="@color/palette_element_green" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="?attr/vctr_message_text_color" />
 
                     <TextView
                         android:id="@+id/back_button_text"
@@ -147,6 +146,7 @@
                         android:layout_marginStart="6dp"
                         android:layout_marginTop="16dp"
                         android:text="@string/chats"
+                        android:visibility="gone"
                         android:textColor="@color/palette_element_green"
                         android:textSize="17sp"
                         app:layout_constraintStart_toEndOf="@id/back_button_chevron"
@@ -193,7 +193,7 @@
                         android:layout_marginTop="4dp"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ic_arrow_right"
-                        app:tint="@color/palette_element_green" />
+                        app:tint="@color/palette_element_green"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 

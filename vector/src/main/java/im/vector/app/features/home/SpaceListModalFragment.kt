@@ -84,13 +84,6 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         viewModel.setSpace(it)
         binding.headerText.isVisible = it == null
         binding.headerTextLayout.isVisible = it == null
-        if (it == null) {
-            binding.noSpacesYetText.text = getString(R.string.no_spaces_yet)
-            binding.noSpacesYetMessage.text = getString(R.string.no_spaces_yet_message)
-        } else {
-            binding.noSpacesYetText.text = getString(R.string.no_subspaces_yet)
-            binding.noSpacesYetMessage.text = getString(R.string.no_subspaces_yet_message)
-        }
     }
 
     override fun invalidate() {
