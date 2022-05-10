@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLocationSharingBinding
@@ -42,8 +43,7 @@ class LocationLiveMapViewActivity : VectorBaseActivity<ActivityLocationSharingBi
             return
         }
         setupToolbar(views.toolbar)
-                // TODO check what should be the title and create String resource
-                .setTitle("Live")
+                .setTitle(getString(R.string.location_activity_title_preview))
                 .allowBack()
 
         if (isFirstCreation()) {
