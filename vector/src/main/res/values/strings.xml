@@ -3040,4 +3040,8 @@
     <string name="all_chats">All Chats</string>
     <string name="choose_a_space">Spaces</string>
     <string name="chats">Chats</string>
+    <string name="no_spaces_yet">No spaces yet</string>
+    <string name="no_spaces_yet_message">Add spaces to group your chats</string>
+    <string name="no_subspaces_yet">No subspaces yet</string>
+    <string name="no_subspaces_yet_message">Add subspaces to group your chats</string>
 </resources>

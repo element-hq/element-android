@@ -38,7 +38,41 @@
         app:layout_constraintTop_toBottomOf="@id/header_text_layout"
         app:layout_constraintBottom_toTopOf="@id/add_space_layout"
         tools:itemCount="3"
+        tools:visibility="visible"
         tools:listitem="@layout/item_modal_space" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/no_spaces_yet_group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="no_spaces_yet_text, no_spaces_yet_message" />
+
+    <TextView
+        android:id="@+id/no_spaces_yet_text"
+        style="@style/Widget.Vector.TextView.Title.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_spaces_yet"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/header_text_layout"
+        app:layout_constraintBottom_toTopOf="@id/no_spaces_yet_message"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/no_spaces_yet_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_marginTop="12dp"
+        android:text="@string/no_spaces_yet_message"
+        android:textColor="?attr/vctr_content_tertiary"
+        app:layout_constraintTop_toBottomOf="@id/no_spaces_yet_text"
+        app:layout_constraintBottom_toTopOf="@id/add_space_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
         android:layout_width="match_parent"

@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceListModalBinding
 import im.vector.app.features.spaces.SpaceListAction
@@ -83,12 +84,20 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         viewModel.setSpace(it)
         binding.headerText.isVisible = it == null
         binding.headerTextLayout.isVisible = it == null
+        if (it == null) {
+            binding.noSpacesYetText.text = getString(R.string.no_spaces_yet)
+            binding.noSpacesYetMessage.text = getString(R.string.no_spaces_yet_message)
+        } else {
+            binding.noSpacesYetText.text = getString(R.string.no_subspaces_yet)
+            binding.noSpacesYetMessage.text = getString(R.string.no_subspaces_yet_message)
+        }
     }
 
     override fun invalidate() {
         withState(viewModel) { state ->
             state.rootSpacesOrdered?.let {
-                (binding.roomList.adapter as SpaceListAdapter).replaceList(it + it)
+                (binding.roomList.adapter as SpaceListAdapter).replaceList(it)
+                binding.noSpacesYetGroup.isVisible = it.isEmpty()
             }
         }
     }
