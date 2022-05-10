@@ -98,6 +98,9 @@ android {
         freeCompilerArgs += [
                 // Disabled for now, there are too many errors. Could be handled in another dedicated PR
                 // '-Xexplicit-api=strict', // or warning
+                "-Xopt-in=kotlin.RequiresOptIn",
+                // Opt in for kotlinx.coroutines.FlowPreview
+                "-Xopt-in=kotlinx.coroutines.FlowPreview",
         ]
     }
 
