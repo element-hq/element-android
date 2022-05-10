@@ -359,19 +359,19 @@ class HomeDetailFragment @Inject constructor(
 
     private fun onGroupChange(groupSummary: GroupSummary?) {
         hideModal()
-//        if (groupSummary == null) {
-//            views.backButtonLayout.isVisible = false
-//            views.groupToolbarSpaceTitleView.isVisible = false
-//            views.groupToolbarSpaceTitleView.text = getString(R.string.all_chats)
-//            ImageViewCompat.setImageTintList(views.toolbarChevron, ColorStateList.valueOf(resources.getColor(R.color.palette_element_green)))
-//            views.groupToolbarTitleView.text = getString(R.string.all_chats)
-//        } else {
-//            views.backButtonLayout.isVisible = true
-//            views.groupToolbarSpaceTitleView.isVisible = true
-//            views.groupToolbarSpaceTitleView.text = groupSummary.displayName
-//            views.groupToolbarTitleView.text = groupSummary.displayName
-//            ImageViewCompat.setImageTintList(views.toolbarChevron, ColorStateList.valueOf(MaterialColors.getColor(views.toolbarChevron, R.attr.vctr_message_text_color)))
-//        }
+        if (groupSummary == null) {
+            views.backButtonLayout.isVisible = false
+            views.groupToolbarSpaceTitleView.isVisible = false
+            views.groupToolbarSpaceTitleView.text = getString(R.string.all_chats)
+            ImageViewCompat.setImageTintList(views.toolbarChevron, ColorStateList.valueOf(resources.getColor(R.color.palette_element_green)))
+            views.groupToolbarTitleView.text = getString(R.string.all_chats)
+        } else {
+            views.backButtonLayout.isVisible = true
+            views.groupToolbarSpaceTitleView.isVisible = true
+            views.groupToolbarSpaceTitleView.text = groupSummary.displayName
+            views.groupToolbarTitleView.text = groupSummary.displayName
+            ImageViewCompat.setImageTintList(views.toolbarChevron, ColorStateList.valueOf(MaterialColors.getColor(views.toolbarChevron, R.attr.vctr_message_text_color)))
+        }
     }
 
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
@@ -468,7 +468,6 @@ class HomeDetailFragment @Inject constructor(
 
     private fun updateUIForTab(tab: HomeTab) {
         views.bottomNavigationView.menu.findItem(tab.toMenuId()).isChecked = true
-        views.groupToolbarTitleView.text = getString(R.string.all_chats)
         updateSelectedFragment(tab)
         invalidateOptionsMenu()
     }
