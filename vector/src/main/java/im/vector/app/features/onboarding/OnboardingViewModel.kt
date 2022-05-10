@@ -255,7 +255,7 @@ class OnboardingViewModel @AssistedInject constructor(
             currentJob = viewModelScope.launch {
                 try {
                     val result = safeLoginWizard.loginWithToken(action.loginToken)
-                    onSessionCreated(result, isAccountCreated = false)
+                    onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
                 } catch (failure: Throwable) {
                     setState { copy(isLoading = false) }
                     _viewEvents.post(OnboardingViewEvents.Failure(failure))
@@ -289,7 +289,12 @@ class OnboardingViewModel @AssistedInject constructor(
                                     // do nothing
                                 }
                                 else                   -> when (it) {
-                                    is RegistrationResult.Complete         -> onSessionCreated(it.session, isAccountCreated = true)
+                                    is RegistrationResult.Complete         -> onSessionCreated(
+                                            it.session,
+                                            authenticationDescription = AuthenticationDescription.AccountCreated(
+                                                    AuthenticationDescription.AuthenticationType.Password
+                                            )
+                                    )
                                     is RegistrationResult.NextStep         -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
                                     is RegistrationResult.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
                                     is RegistrationResult.Error            -> _viewEvents.post(OnboardingViewEvents.Failure(it.cause))
@@ -499,7 +504,7 @@ class OnboardingViewModel @AssistedInject constructor(
         setState { copy(isLoading = true) }
         currentJob = viewModelScope.launch {
             directLoginUseCase.execute(action, homeServerConnectionConfig).fold(
-                    onSuccess = { onSessionCreated(it, isAccountCreated = false) },
+                    onSuccess = { onSessionCreated(it, authenticationDescription = AuthenticationDescription.Login) },
                     onFailure = {
                         setState { copy(isLoading = false) }
                         _viewEvents.post(OnboardingViewEvents.Failure(it))
@@ -524,7 +529,7 @@ class OnboardingViewModel @AssistedInject constructor(
                             action.initialDeviceName
                     )
                     reAuthHelper.data = action.password
-                    onSessionCreated(result, isAccountCreated = false)
+                    onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
                 } catch (failure: Throwable) {
                     setState { copy(isLoading = false) }
                     _viewEvents.post(OnboardingViewEvents.Failure(failure))
@@ -553,7 +558,7 @@ class OnboardingViewModel @AssistedInject constructor(
         internalRegisterAction(RegisterAction.RegisterDummy, onNextRegistrationStepAction)
     }
 
-    private suspend fun onSessionCreated(session: Session, isAccountCreated: Boolean) {
+    private suspend fun onSessionCreated(session: Session, authenticationDescription: AuthenticationDescription) {
         val state = awaitState()
         state.useCase?.let { useCase ->
             session.vectorStore(applicationContext).setUseCase(useCase)
@@ -564,15 +569,15 @@ class OnboardingViewModel @AssistedInject constructor(
         authenticationService.reset()
         session.configureAndStart(applicationContext)
 
-        when (isAccountCreated) {
-            true  -> {
+        when (authenticationDescription) {
+            is AuthenticationDescription.AccountCreated -> {
                 val personalizationState = createPersonalizationState(session, state)
                 setState {
                     copy(isLoading = false, personalizationState = personalizationState)
                 }
                 _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
             }
-            false -> {
+            AuthenticationDescription.Login             -> {
                 setState { copy(isLoading = false) }
                 _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
             }
@@ -603,7 +608,7 @@ class OnboardingViewModel @AssistedInject constructor(
             currentJob = viewModelScope.launch {
                 try {
                     val result = authenticationService.createSessionFromSso(homeServerConnectionConfigFinal, action.credentials)
-                    onSessionCreated(result, isAccountCreated = false)
+                    onSessionCreated(result, authenticationDescription = AuthenticationDescription.Login)
                 } catch (failure: Throwable) {
                     setState { copy(isLoading = false) }
                 }
