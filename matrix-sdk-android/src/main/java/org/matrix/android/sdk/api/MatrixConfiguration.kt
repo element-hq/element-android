@@ -65,6 +65,10 @@ data class MatrixConfiguration(
          * Thread messages default enable/disabled value
          */
         val threadMessagesEnabledDefault: Boolean = false,
+        /**
+         * Indicates whether or not dehydration functionality is enabled
+         */
+        val isDehydrationEnabled: Boolean = false
 ) {
 
     /**
