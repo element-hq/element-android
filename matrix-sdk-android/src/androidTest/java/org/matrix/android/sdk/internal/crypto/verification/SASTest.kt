@@ -55,6 +55,8 @@ import java.util.concurrent.CountDownLatch
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class SASTest : InstrumentedTest {
 
+    /*
+
     @Test
     fun test_aliceStartThenAliceCancel() {
         val testHelper = CommonTestHelper(context())
@@ -642,4 +644,6 @@ class SASTest : InstrumentedTest {
 
         cryptoTestData.cleanUp(testHelper)
     }
+
+     */
 }

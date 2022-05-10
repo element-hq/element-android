@@ -222,7 +222,7 @@ class WithHeldTests : InstrumentedTest {
         cryptoTestHelper.initializeCrossSigning(bobSecondSession)
 
         // Trust bob second device from Alice POV
-        mTestHelper.runBlockingTest {
+        testHelper.runBlockingTest {
             aliceSession.cryptoService().crossSigningService().trustDevice(bobSecondSession.sessionParams.deviceId!!)
             bobSecondSession.cryptoService().crossSigningService().trustDevice(aliceSession.sessionParams.deviceId!!)
         }
