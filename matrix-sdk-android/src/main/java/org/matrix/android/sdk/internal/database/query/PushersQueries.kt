@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.database.query
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.pushrules.RuleKind
+import org.matrix.android.sdk.api.session.pushrules.RuleKind
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.model.PushRuleEntityFields
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity

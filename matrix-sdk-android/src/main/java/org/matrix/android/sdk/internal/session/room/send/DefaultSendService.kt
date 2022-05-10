@@ -275,7 +275,8 @@ internal class DefaultSendService @AssistedInject constructor(
                     attachment = it,
                     compressBeforeSending = compressBeforeSending,
                     roomIds = roomIds,
-                    rootThreadEventId = rootThreadEventId)
+                    rootThreadEventId = rootThreadEventId
+            )
         }
     }
 
@@ -297,7 +298,8 @@ internal class DefaultSendService @AssistedInject constructor(
             localEchoEventFactory.createMediaEvent(
                     roomId = it,
                     attachment = attachment,
-                    rootThreadEventId = rootThreadId).also { event ->
+                    rootThreadEventId = rootThreadId
+            ).also { event ->
                 createLocalEcho(event)
             }
         }

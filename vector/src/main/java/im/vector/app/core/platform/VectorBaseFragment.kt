@@ -83,8 +83,8 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * [ToolbarConfig] instance from host activity
      * */
     protected var toolbar: ToolbarConfig? = null
-            get() = (activity as? VectorBaseActivity<*>)?.toolbar
-            private set
+        get() = (activity as? VectorBaseActivity<*>)?.toolbar
+        private set
     /* ==========================================================================================
      * View model
      * ========================================================================================== */

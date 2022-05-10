@@ -108,9 +108,11 @@ internal class DefaultTermsService @Inject constructor(
 
         val newList = listOfAcceptedTerms.toMutableSet().apply { addAll(agreedUrls) }.toList()
 
-        updateUserAccountDataTask.execute(UpdateUserAccountDataTask.AcceptedTermsParams(
-                acceptedTermsContent = AcceptedTermsContent(newList)
-        ))
+        updateUserAccountDataTask.execute(
+                UpdateUserAccountDataTask.AcceptedTermsParams(
+                        acceptedTermsContent = AcceptedTermsContent(newList)
+                )
+        )
     }
 
     private suspend fun getToken(url: String): String {

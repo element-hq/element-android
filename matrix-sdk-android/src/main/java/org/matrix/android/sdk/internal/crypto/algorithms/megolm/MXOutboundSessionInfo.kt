@@ -18,21 +18,24 @@ package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 
 internal class MXOutboundSessionInfo(
         // The id of the session
         val sessionId: String,
         val sharedWithHelper: SharedWithHelper,
+        private val clock: Clock,
         // When the session was created
-        private val creationTime: Long = System.currentTimeMillis()) {
+        private val creationTime: Long = clock.epochMillis(),
+) {
 
     // Number of times this session has been used
     var useCount: Int = 0
 
     fun needsRotation(rotationPeriodMsgs: Int, rotationPeriodMs: Int): Boolean {
         var needsRotation = false
-        val sessionLifetime = System.currentTimeMillis() - creationTime
+        val sessionLifetime = clock.epochMillis() - creationTime
 
         if (useCount >= rotationPeriodMsgs || sessionLifetime >= rotationPeriodMs) {
             Timber.v("## needsRotation() : Rotating megolm session after $useCount, ${sessionLifetime}ms")

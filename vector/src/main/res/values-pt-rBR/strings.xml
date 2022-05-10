@@ -757,7 +757,9 @@
 \n
 \nVocê pode reverter esta ação a qualquer momento nas configurações gerais.</string>
     <string name="room_participants_action_unignore_title">Designorar usuária(o)</string>
-    <string name="room_participants_action_unignore_prompt_msg">Designorar esta(e) usuária(o) vai mostrar todas as mensagens dela(e) de novo.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Designorar esta(e) usuária(o) vai mostrar todas as mensagens dela(e) de novo.
+\n
+\nNote que esta ação vai recomeçar o app e pode levar algum tempo.</string>
     <string name="room_participants_action_cancel_invite_title">Cancelar convite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Você tem certeza que você quer cancelar o convite para esta(e) usuária(o)\?</string>
     <string name="room_participants_remove_title">Expulsar usuária(o)</string>
@@ -1953,11 +1955,11 @@
         <item quantity="other">%d entradas</item>
     </plurals>
     <string name="settings_server_upload_size_title">Limite de upload de arquivo do servidor</string>
-    <string name="room_settings_room_access_restricted_description">Qualquer pessoa num espaço com esta sala pode encontrá-la e juntar-se a ela. Somente admins desta sala podem adicioná-la a um espaço.</string>
+    <string name="room_settings_room_access_restricted_description">Qualquer pessoa num espaço com esta sala pode achá-la e se juntar a ela. Somente admins desta sala podem adicioná-la a um espaço.</string>
     <string name="room_settings_room_access_restricted_title">Membros de espaço somente</string>
-    <string name="room_settings_room_access_public_description">Qualquer pessoa pode encontrar a sala e juntar-se</string>
+    <string name="room_settings_room_access_public_description">Qualquer pessoa pode achar a sala e se juntar</string>
     <string name="room_settings_room_access_public_title">Pública</string>
-    <string name="room_settings_room_access_private_description">Somente pessoas convidadas podem encontrar e juntar-se</string>
+    <string name="room_settings_room_access_private_description">Somente pessoas convidadas podem achar e se juntar</string>
     <string name="room_settings_room_access_private_title">Privada</string>
     <string name="room_settings_room_access_entry_unknown">Configuração de acesso desconhecida (%s)</string>
     <string name="room_settings_room_access_entry_knock">Qualquer pessoa pode tocar na sala, membros podem então aceitar ou rejeitar</string>
@@ -2024,7 +2026,7 @@
         <item quantity="other">%d pessoas que você conhece já têm se juntado</item>
     </plurals>
     <string name="join_space">Juntar-Se a Espaço</string>
-    <string name="create_space">Criar Espaço</string>
+    <string name="create_space">Criar espaço</string>
     <string name="share_space_link_message">Junte-se a meu espaço %1$s %2$s</string>
     <string name="invite_to_space_with_name_desc">Elas vão ser capazes de explorar %s</string>
     <string name="invite_to_space_with_name">Convidar para %s</string>
@@ -2058,7 +2060,7 @@
     <string name="create_spaces_choose_type_label">Que tipo de espaço você quer criar\?</string>
     <string name="your_private_space">Seu espaço privado</string>
     <string name="your_public_space">Seu espaço público</string>
-    <string name="add_space">Adicionar Espaço</string>
+    <string name="add_space">Adicionar espaço</string>
     <string name="private_space">Espaço privado</string>
     <string name="public_space">Espaço público</string>
     <string name="command_description_create_space">Criar um Espaço</string>
@@ -2110,9 +2112,9 @@
         <item quantity="one">Chamada de áudio perdida</item>
         <item quantity="other">%d chamadas de áudio perdidas</item>
     </plurals>
-    <string name="upgrade_room_for_restricted_note">Por favor note que fazer upgrade vai fazer uma nova versão da sala. Todas as mensagens atuais vão permanecer nesta sala arquivada.</string>
-    <string name="upgrade_room_for_restricted_no_param">Qualquer pessoa em um espaço pai vai ser capaz de encontrar e juntar-se a esta sala - não precisa convidar manualmente todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
-    <string name="upgrade_room_for_restricted">Qualquer pessoa em %s vai ser capaz de encontrar e juntar-se a esta sala - não precisa convidar todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
+    <string name="upgrade_room_for_restricted_note">Por favor note que fazer upgrade vai fazer uma nova versão da sala. Todas as mensagens atuais vão ficar nesta sala arquivada.</string>
+    <string name="upgrade_room_for_restricted_no_param">Qualquer pessoa em um espaço pai vai ser capaz de achar e se juntar a esta sala - não precisa manualmente convidar todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
+    <string name="upgrade_room_for_restricted">Qualquer pessoa em %s vai ser capaz de achar e se juntar a esta sala - não precisa manualmente convidar todo mundo. Você vai ser capaz de mudar isto em configurações de sala a qualquer hora.</string>
     <string name="voice_message_reply_content">Mensagem de Voz (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">Não dá para responder ou editar enquanto mensagem de voz está ativa</string>
     <string name="error_voice_message_unable_to_record">Não dá para gravar uma mensagem de voz</string>
@@ -2130,13 +2132,13 @@
     <string name="sent_a_voice_message">Voz</string>
     <string name="other_spaces_or_rooms_you_might_not_know">Outros espaços ou salas que você poderia não saber</string>
     <string name="space_you_know_that_contains_this_room">Espaço que você sabe que contém esta sala</string>
-    <string name="decide_who_can_find_and_join">Decida quem pode encontrar e juntar-se a esta sala.</string>
+    <string name="decide_who_can_find_and_join">Decida quem pode achar e se juntar a esta sala.</string>
     <string name="tap_to_edit_spaces">Toque para editar espaços</string>
     <string name="select_spaces">Selecionar espaços</string>
-    <string name="decide_which_spaces_can_access">Decida que espaços podem acessar esta sala. Se um espaço é selecionado seus membros vão ser capazes de encontrar e juntar-se a Nome de sala.</string>
+    <string name="decide_which_spaces_can_access">Decida que espaços podem acessar esta sala. Se um espaço é selecionado seus membros vão ser capazes de achar e se juntar a Nome de sala.</string>
     <string name="spaces_which_can_access">Espaços que podem acessar</string>
     <string name="allow_space_member_to_find_and_access">Permitir membros de espaço a encontrar e acessar.</string>
-    <string name="room_create_member_of_space_name_can_join">Membros de Escpaço %s podem encontrar, previsualizar e juntar-se.</string>
+    <string name="room_create_member_of_space_name_can_join">Membros de Espaço %s podem achar, previsualizar e se juntar.</string>
     <string name="room_settings_room_access_private_invite_only_title">Privada (Convite Somente)</string>
     <string name="denied_permission_voice_message">Para enviar mensagens de voz, por favor conceda a permissão Microfone.</string>
     <string name="settings_notification_notify_me_for">Notifique-me para</string>
@@ -2222,7 +2224,7 @@
     <string name="open_discovery_settings">Abrir Configurações de Descoberta</string>
     <string name="user_directory_search_hint_2">Pesquisar por nome, ID ou mail</string>
     <string name="create_new_space">Criar Novo Espaço</string>
-    <string name="room_settings_space_access_public_description">Qualquer pessoa pode encontrar o espaço e se juntar</string>
+    <string name="room_settings_space_access_public_description">Qualquer pessoa pode achar o espaço e se juntar</string>
     <string name="room_settings_space_access_title">Acesso a espaço</string>
     <string name="room_settings_access_rules_pref_dialog_title">Quem pode acessar\?</string>
     <string name="settings_notification_emails_enable_for_email">Habilitar notificações de email para %s</string>
@@ -2388,11 +2390,11 @@
     <string name="ftue_auth_use_case_title">Com quem você vai fazer chat mais\?</string>
     <string name="navigate_to_thread_when_already_in_the_thread">Você já está visualizando esta thread!</string>
     <string name="view_in_room">Visualizar Em Sala</string>
-    <string name="reply_in_thread">Responder Em Thread</string>
+    <string name="reply_in_thread">Responder em thread</string>
     <string name="command_not_supported_in_threads">O comando \"%s\" é reconhecido mas não suportado em threads.</string>
     <string name="search_thread_from_a_thread">De uma Thread</string>
     <string name="thread_list_empty_notice">Dica: Toque longo numa mensagem e use “%s”.</string>
-    <string name="thread_list_empty_subtitle">Threads ajudam a manter suas conversas em-tópico e fáceis de rastrear.</string>
+    <string name="thread_list_empty_subtitle">Threads ajudam manter suas conversas em-tópico e fáceis de rastrear.</string>
     <string name="thread_list_empty_title">Mantenha discussões organizadas com threads</string>
     <string name="thread_list_modal_my_threads_subtitle">Mostra todas as threads nas quais você tem participado</string>
     <string name="thread_list_modal_my_threads_title">Minhas Threads</string>
@@ -2438,4 +2440,51 @@
 \n
 \nIsto vai ser uma transição única visto que Threads são agora parte da especificação Matrix.</string>
     <string name="threads_notice_migration_title">Threads Aproximando-Se a Beta 🎉</string>
+    <string name="live_location_sharing_notification_title">${app_name} Localização ao Vivo</string>
+    <string name="live_location_sharing_notification_description">Compartilhamento de localização está em progresso</string>
+    <string name="error_forbidden_digits_only_username">O servidorcasa não aceita nome de usuária(o) com somente dígitos.</string>
+    <string name="ftue_personalize_skip_this_step">Pular este passo</string>
+    <string name="ftue_personalize_submit">Salvar e continuar</string>
+    <string name="ftue_personalize_complete_subtitle">Suas preferências têm sido salvas.</string>
+    <string name="ftue_personalize_complete_title">Você está pronta(o)!</string>
+    <string name="ftue_personalize_lets_go">Vamo lá</string>
+    <string name="ftue_profile_picture_subtitle">Você pode mudar isto a qualquer hora.</string>
+    <string name="ftue_profile_picture_title">Adicione uma imagem de perfil</string>
+    <string name="ftue_display_name_entry_footer">Você pode mudar isto mais tarde</string>
+    <string name="ftue_display_name_entry_title">Nome de Exibição</string>
+    <string name="ftue_display_name_subtitle">Isto vai ser mostrado quando você enviar mensagens.</string>
+    <string name="ftue_display_name_title">Escolha um nome de exibição</string>
+    <string name="ftue_account_created_subtitle">Sua conta %s tem sido criada.</string>
+    <string name="ftue_account_created_congratulations_title">Parabéns!</string>
+    <string name="ftue_account_created_take_me_home">Me leve para casa</string>
+    <string name="ftue_account_created_personalize">Personalizar perfil</string>
+    <string name="action_disable">Desabilitar</string>
+    <string name="location_share_live_started">Carregando localização ao vivo…</string>
+    <string name="location_share_live_select_duration_option_3">8 horas</string>
+    <string name="location_share_live_select_duration_option_2">1 hora</string>
+    <string name="location_share_live_select_duration_option_1">15 minutos</string>
+    <string name="location_share_live_select_duration_title">Compartilhar sua localização ao vivo por</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Incapaz de tocar %1$s</string>
+    <string name="a11y_pause_audio_message">Pausar %1$s</string>
+    <string name="a11y_play_audio_message">Tocar %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minutos %2$d segundos</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Compartilhou a localização ao vivo dela(e)</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} também é ótimo para o lugar de trabalho. Ele é confiado pelas organizações mais seguras do mundo.</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_info">Threads são um trabalho em progresso com novas funcionalidades próximas emocionantes, tais como notificações melhoradas. Nós adoraríamos ouvir seu feedback!</string>
+    <string name="send_feedback_threads_title">Feedback de Threads Beta</string>
+    <string name="give_feedback_threads">Dar Feedback</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Se habilitado, você sempre vai aparecer offline para outras(os) usuárias(os), mesmo quando usando o aplicativo.</string>
+    <string name="settings_presence_user_always_appears_offline">Modo offline</string>
+    <string name="settings_presence">Presença</string>
+    <string name="threads_labs_enable_notice_message">Seu servidorcasa não atualmente suporta threads, então esta funcionalidade pode ser inconfiável. Algumas mensagens de thread podem não estar confiavelmente disponíveis. %sVocê quer habilitar threads mesmo assim\?</string>
+    <string name="threads_labs_enable_notice_title">Threads Beta</string>
+    <string name="threads_beta_enable_notice_message">Threads ajudam manThreads ajudam manter suas conversas em-tópico e fáceis de rastrear. %sHabilitar threads vai refrescar o app. Isto pode tomar mais tempo para algumas contas.</string>
+    <string name="threads_beta_enable_notice_title">Threads Beta</string>
+    <string name="action_learn_more">Saber mais</string>
+    <string name="action_try_it_out">Teste aí</string>
 </resources>

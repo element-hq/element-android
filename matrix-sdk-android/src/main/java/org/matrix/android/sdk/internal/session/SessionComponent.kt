@@ -68,7 +68,8 @@ import org.matrix.android.sdk.internal.session.widgets.WidgetModule
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.util.system.SystemModule
 
-@Component(dependencies = [MatrixComponent::class],
+@Component(
+        dependencies = [MatrixComponent::class],
         modules = [
             SessionModule::class,
             RoomModule::class,

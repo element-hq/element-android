@@ -50,6 +50,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransa
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -73,7 +75,7 @@ class KeyShareTests : InstrumentedTest {
 
         // Create an encrypted room and add a message
         val roomId = commonTestHelper.runBlockingTest {
-            aliceSession.createRoom(
+            aliceSession.roomService().createRoom(
                     CreateRoomParams().apply {
                         visibility = RoomDirectoryVisibility.PRIVATE
                         enableEncryption()
@@ -83,7 +85,7 @@ class KeyShareTests : InstrumentedTest {
         val room = aliceSession.getRoom(roomId)
         assertNotNull(room)
         Thread.sleep(4_000)
-        assertTrue(room?.isEncrypted() == true)
+        assertTrue(room?.roomCryptoService()?.isEncrypted() == true)
         val sentEventId = commonTestHelper.sendTextMessage(room!!, "My Message", 1).first().eventId
 
         // Open a new sessionx
@@ -143,7 +145,10 @@ class KeyShareTests : InstrumentedTest {
                     Log.v("TEST", "Incoming request Session 1 (looking for $outGoingRequestId)")
                     Log.v("TEST", "=========================")
                     it.forEach { keyRequest ->
-                        Log.v("TEST", "[ts${keyRequest.localCreationTimestamp}] requestId ${keyRequest.requestId}, for sessionId ${keyRequest.requestBody?.sessionId} is ${keyRequest.state}")
+                        Log.v(
+                                "TEST",
+                                "[ts${keyRequest.localCreationTimestamp}] requestId ${keyRequest.requestId}, for sessionId ${keyRequest.requestBody?.sessionId} is ${keyRequest.state}"
+                        )
                     }
                     Log.v("TEST", "=========================")
                 }
@@ -162,8 +167,10 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Mark the device as trusted
-        aliceSession.cryptoService().setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
-                aliceSession2.sessionParams.deviceId ?: "")
+        aliceSession.cryptoService().setDeviceVerification(
+                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
+                aliceSession2.sessionParams.deviceId ?: ""
+        )
 
         // Re request
         aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
@@ -221,7 +228,8 @@ class KeyShareTests : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
 
         // Also bootstrap keybackup on first session
@@ -280,8 +288,10 @@ class KeyShareTests : InstrumentedTest {
         })
 
         val txId = "m.testVerif12"
-        aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
-                ?: "", txId)
+        aliceVerificationService2.beginKeyVerification(
+                VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
+                ?: "", txId
+        )
 
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
@@ -335,12 +345,13 @@ class KeyShareTests : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
 
         // Create an encrypted room and send a couple of messages
         val roomId = commonTestHelper.runBlockingTest {
-            aliceSession.createRoom(
+            aliceSession.roomService().createRoom(
                     CreateRoomParams().apply {
                         visibility = RoomDirectoryVisibility.PRIVATE
                         enableEncryption()
@@ -350,7 +361,7 @@ class KeyShareTests : InstrumentedTest {
         val roomAlicePov = aliceSession.getRoom(roomId)
         assertNotNull(roomAlicePov)
         Thread.sleep(1_000)
-        assertTrue(roomAlicePov?.isEncrypted() == true)
+        assertTrue(roomAlicePov?.roomCryptoService()?.isEncrypted() == true)
         val secondEventId = commonTestHelper.sendTextMessage(roomAlicePov!!, "Message", 3)[1].eventId
 
         // Create bob session
@@ -369,16 +380,17 @@ class KeyShareTests : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
 
         // Let alice invite bob
         commonTestHelper.runBlockingTest {
-            roomAlicePov.invite(bobSession.myUserId, null)
+            roomAlicePov.membershipService().invite(bobSession.myUserId, null)
         }
 
         commonTestHelper.runBlockingTest {
-            bobSession.joinRoom(roomAlicePov.roomId, null, emptyList())
+            bobSession.roomService().joinRoom(roomAlicePov.roomId, null, emptyList())
         }
 
         // we want to discard alice outbound session

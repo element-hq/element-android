@@ -28,7 +28,7 @@ import im.vector.app.R
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 
 class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-    LinearLayout(context, attrs, defStyle) {
+        LinearLayout(context, attrs, defStyle) {
 
     fun interface InteractionListener {
         fun onProviderSelected(id: String?)
@@ -99,10 +99,10 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
                         SsoIdentityProvider.BRAND_TWITTER  -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_twitter_style)
                         }
-                        SsoIdentityProvider.BRAND_GITLAB  -> {
+                        SsoIdentityProvider.BRAND_GITLAB   -> {
                             MaterialButton(context, null, R.attr.vctr_social_login_button_gitlab_style)
                         }
-                        else                            -> {
+                        else                               -> {
                             // TODO Use iconUrl
                             MaterialButton(context, null, R.attr.materialButtonOutlinedStyle).apply {
                                 transformationMethod = null

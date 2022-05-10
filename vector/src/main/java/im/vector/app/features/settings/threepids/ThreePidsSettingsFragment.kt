@@ -61,24 +61,27 @@ class ThreePidsSettingsFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                is ThreePidsSettingsViewEvents.Failure -> displayErrorDialog(it.throwable)
+                is ThreePidsSettingsViewEvents.Failure       -> displayErrorDialog(it.throwable)
                 is ThreePidsSettingsViewEvents.RequestReAuth -> askAuthentication(it)
             }
         }
     }
 
     private fun askAuthentication(event: ThreePidsSettingsViewEvents.RequestReAuth) {
-        ReAuthActivity.newIntent(requireContext(),
+        ReAuthActivity.newIntent(
+                requireContext(),
                 event.registrationFlowResponse,
                 event.lastErrorCode,
-                getString(R.string.settings_add_email_address)).let { intent ->
+                getString(R.string.settings_add_email_address)
+        ).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }
     }
+
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
-                LoginFlowTypes.SSO -> {
+                LoginFlowTypes.SSO      -> {
                     viewModel.handle(ThreePidsSettingsAction.SsoAuthDone)
                 }
                 LoginFlowTypes.PASSWORD -> {

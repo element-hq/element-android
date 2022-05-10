@@ -156,7 +156,8 @@ class WidgetFragment @Inject constructor() :
                         integrationManagerActivityResultLauncher,
                         state.roomId,
                         state.widgetId,
-                        state.widgetKind.screenId)
+                        state.widgetKind.screenId
+                )
                 return@withState true
             }
             R.id.action_delete          -> {

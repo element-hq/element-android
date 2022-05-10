@@ -23,12 +23,12 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.toast
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.pushrules.RuleIds
-import org.matrix.android.sdk.api.pushrules.rest.PushRuleAndKind
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.pushrules.rest.PushRuleAndKind
 import javax.inject.Inject
 
 class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor() :
-    VectorSettingsBaseFragment() {
+        VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.settings_notification_advanced
 
@@ -38,7 +38,7 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorPreference>(preferenceKey)
             if (preference is PushRulePreference) {
-                val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
+                val ruleAndKind: PushRuleAndKind? = session.pushRuleService().getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
 
                 if (ruleAndKind == null) {
                     // The rule is not defined, hide the preference
@@ -57,10 +57,12 @@ class VectorSettingsAdvancedNotificationPreferenceFragment @Inject constructor()
 
                             lifecycleScope.launch {
                                 val result = runCatching {
-                                    session.updatePushRuleActions(ruleAndKind.kind,
+                                    session.pushRuleService().updatePushRuleActions(
+                                            ruleAndKind.kind,
                                             ruleAndKind.pushRule.ruleId,
                                             enabled,
-                                            newActions)
+                                            newActions
+                                    )
                                 }
                                 if (!isAdded) {
                                     return@launch

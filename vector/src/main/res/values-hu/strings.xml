@@ -1486,7 +1486,9 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 \n
 \nEzt a műveletet bármikor visszavonhatja az általános beállításokban.</string>
     <string name="room_participants_action_unignore_title">Felhasználó figyelembe vétele</string>
-    <string name="room_participants_action_unignore_prompt_msg">A felhasználó figyelembe vétele után újra meg fog jelenni az összes üzenete.</string>
+    <string name="room_participants_action_unignore_prompt_msg">A felhasználó figyelembe vétele után újra meg fog jelenni az összes üzenete.
+\n
+\nEz a művelet újraindítja az alkalmazást ami sokáig tarthat.</string>
     <string name="room_participants_action_cancel_invite_title">Meghívás visszavonása</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Biztos, hogy visszavonja a felhasználó meghívását\?</string>
     <string name="room_participants_remove_prompt_msg">a felhasználó kirúgása eltávolítja a szobából.
@@ -2438,4 +2440,51 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="a11y_location_share_locate_button">Ugrás a jelenlegi pozícióra</string>
     <string name="a11y_location_share_pin_on_map">Kiválasztott hely rögzítése a térképen</string>
     <string name="threads_notice_migration_title">Üzenetszálak lassan béta állapotba kerülnek 🎉</string>
+    <string name="live_location_sharing_notification_description">Helymeghatározás folyamatban</string>
+    <string name="live_location_sharing_notification_title">${app_name} Folyamatos helymeghatározás</string>
+    <string name="error_forbidden_digits_only_username">A matrix szerver nem fogad el olyan felhasználói nevet ami csak számokból áll.</string>
+    <string name="ftue_personalize_skip_this_step">Lépés kihagyása</string>
+    <string name="ftue_personalize_submit">Mentés és tovább</string>
+    <string name="ftue_personalize_complete_subtitle">A beállítások elmentve.</string>
+    <string name="ftue_personalize_complete_title">Minden kész!</string>
+    <string name="ftue_personalize_lets_go">Gyerünk</string>
+    <string name="ftue_profile_picture_subtitle">Bármikor megváltoztatható.</string>
+    <string name="ftue_profile_picture_title">Profilkép hozzáadása</string>
+    <string name="ftue_display_name_entry_footer">Ezt később meg lehet változtatni</string>
+    <string name="ftue_display_name_entry_title">Megjelenítendő név</string>
+    <string name="ftue_display_name_subtitle">Ez fog megjelenni amikor üzenetet küldesz.</string>
+    <string name="ftue_display_name_title">Válassz egy megjelenítési nevet</string>
+    <string name="ftue_account_created_subtitle">A fiókod elkészült: %s.</string>
+    <string name="ftue_account_created_congratulations_title">Gratulálunk!</string>
+    <string name="ftue_account_created_take_me_home">Vigyél haza</string>
+    <string name="ftue_account_created_personalize">Profil személyre szabása</string>
+    <string name="action_disable">Tiltás</string>
+    <string name="location_share_live_started">Élő földrajzi helyzet meghatározás betöltése…</string>
+    <string name="location_share_live_select_duration_option_3">8 óra</string>
+    <string name="location_share_live_select_duration_option_2">1 óra</string>
+    <string name="location_share_live_select_duration_option_1">15 perc</string>
+    <string name="location_share_live_select_duration_title">Folyamatos helyzet megosztása ezért:</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Nem lehet lejátszani ezt: %1$s</string>
+    <string name="a11y_pause_audio_message">Megállít: %1$s</string>
+    <string name="a11y_play_audio_message">Lejátszás: %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d perc %2$d másodperc</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">A földrajzi helyzetüket folyamatosan megosztják</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} megállja a helyét a munkahelyen is. A világ legbiztonságosabb szervezetei bíznak meg benne.</string>
+    <string name="beta">Béta</string>
+    <string name="send_feedback_threads_info">Üzenetszálak fejlesztése folyamatban van, új és izgalmas funkciókkal, mint a fejlesztett értesítések. Szeretnénk hallani a véleményed!</string>
+    <string name="send_feedback_threads_title">Béta Üzenetszálak visszajelzés</string>
+    <string name="give_feedback_threads">Visszajelzés adása</string>
+    <string name="beta_title_bottom_sheet_action">Béta</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Ha engedélyezed úgy látszol majd mások számára, mintha nem kapcsolódnál a hálózathoz még akkor is amikor az alkalmazást használod.</string>
+    <string name="settings_presence_user_always_appears_offline">Hálózati kapcsolat nélkül</string>
+    <string name="settings_presence">Állapot</string>
+    <string name="threads_labs_enable_notice_message">A Matrix szervered jelenleg nem támogatja az üzenetszálakat így ez a funkció nem lesz megbízható. Bizonyos üzenetszálas üzenetek nem jelennek meg megbízhatóan. %sBiztos, hogy így is engedélyezed az üzenetszálakat\?</string>
+    <string name="threads_labs_enable_notice_title">Béta Üzenetszálak</string>
+    <string name="threads_beta_enable_notice_message">Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében. %sÜzenetszálak engedélyezése újraindítja az alkalmazást. Ez néhány fióknál sokáig tarthat.</string>
+    <string name="threads_beta_enable_notice_title">Béta Üzenetszálak</string>
+    <string name="action_learn_more">Tudj meg többet</string>
+    <string name="action_try_it_out">Próbáld ki</string>
 </resources>

@@ -93,12 +93,14 @@ internal class MatrixWorkerFactory @Inject constructor(private val sessionManage
     class CheckFactoryWorker(context: Context,
                              workerParameters: WorkerParameters,
                              private val isCreatedByMatrixWorkerFactory: Boolean) :
-        CoroutineWorker(context, workerParameters) {
+            CoroutineWorker(context, workerParameters) {
 
         // Called by WorkManager if there is no MatrixWorkerFactory
-        constructor(context: Context, workerParameters: WorkerParameters) : this(context,
+        constructor(context: Context, workerParameters: WorkerParameters) : this(
+                context,
                 workerParameters,
-                isCreatedByMatrixWorkerFactory = false)
+                isCreatedByMatrixWorkerFactory = false
+        )
 
         override suspend fun doWork(): Result {
             return if (!isCreatedByMatrixWorkerFactory) {

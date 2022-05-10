@@ -32,7 +32,7 @@ import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class RoomDevToolEditFragment @Inject constructor() :
-    VectorBaseFragment<FragmentDevtoolsEditorBinding>() {
+        VectorBaseFragment<FragmentDevtoolsEditorBinding>() {
 
     private val sharedViewModel: RoomDevToolViewModel by activityViewModel()
 

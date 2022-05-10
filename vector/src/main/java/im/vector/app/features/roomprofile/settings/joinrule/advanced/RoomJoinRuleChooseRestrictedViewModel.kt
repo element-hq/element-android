@@ -40,7 +40,10 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
@@ -97,11 +100,11 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
                 }
             }
 
-            val homeServerCapabilities = session.getHomeServerCapabilities()
+            val homeServerCapabilities = session.homeServerCapabilitiesService().getHomeServerCapabilities()
             var safeRule: RoomJoinRules = joinRulesContent?.joinRules ?: RoomJoinRules.INVITE
             // server is not really checking that, just to be sure let's check
             val restrictedSupportedByThisVersion = homeServerCapabilities
-                    .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.getRoomVersion())
+                    .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.roomVersionService().getRoomVersion())
             if (safeRule == RoomJoinRules.RESTRICTED &&
                     !restrictedSupportedByThisVersion) {
                 safeRule = RoomJoinRules.INVITE
@@ -189,9 +192,9 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 when (state.currentRoomJoinRules) {
-                    RoomJoinRules.PUBLIC     -> room.setJoinRulePublic()
-                    RoomJoinRules.INVITE     -> room.setJoinRuleInviteOnly()
-                    RoomJoinRules.RESTRICTED -> room.setJoinRuleRestricted(state.updatedAllowList.map { it.id })
+                    RoomJoinRules.PUBLIC     -> room.stateService().setJoinRulePublic()
+                    RoomJoinRules.INVITE     -> room.stateService().setJoinRuleInviteOnly()
+                    RoomJoinRules.RESTRICTED -> room.stateService().setJoinRuleRestricted(state.updatedAllowList.map { it.id })
                     RoomJoinRules.KNOCK,
                     RoomJoinRules.PRIVATE,
                     null                     -> {
@@ -292,7 +295,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
             setState { copy(updatingStatus = Loading()) }
             viewModelScope.launch {
                 try {
-                    room.setJoinRuleRestricted(candidates.map { it.id })
+                    room.stateService().setJoinRuleRestricted(candidates.map { it.id })
                     setState { copy(updatingStatus = Success(Unit)) }
                 } catch (failure: Throwable) {
                     setState { copy(updatingStatus = Fail(failure)) }
@@ -355,7 +358,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
         viewModelScope.launch {
             if (vectorPreferences.developerMode()) {
                 // in developer mode we let you choose any room or space to restrict to
-                val filteredCandidates = session.getRoomSummaries(
+                val filteredCandidates = session.roomService().getRoomSummaries(
                         roomSummaryQueryParams {
                             excludeType = null
                             displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)

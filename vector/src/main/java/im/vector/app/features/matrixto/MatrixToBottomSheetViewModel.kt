@@ -30,11 +30,16 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.createdirect.DirectRoomHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
@@ -48,7 +53,8 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val directRoomHelper: DirectRoomHelper,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
 
     @AssistedFactory
@@ -109,7 +115,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 // could this room be already known
                 val knownRoom = if (permalinkData.isRoomAlias) {
                     tryOrNull {
-                        session.getRoomIdByAlias(permalinkData.roomIdOrAlias, false)
+                        session.roomService().getRoomIdByAlias(permalinkData.roomIdOrAlias, false)
                     }
                             ?.getOrNull()
                             ?.roomId?.let {
@@ -194,7 +200,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     private fun checkForKnownMembers(someMembers: List<MatrixItem.UserItem>) {
         viewModelScope.launch(Dispatchers.Default) {
             val knownMembers = someMembers.filter {
-                session.getExistingDirectRoomWithUser(it.id) != null
+                session.roomService().getExistingDirectRoomWithUser(it.id) != null
             }
             // put one with avatar first, and take 5
             val finalRes = (knownMembers.filter { it.avatarUrl != null } + knownMembers.filter { it.avatarUrl == null })
@@ -233,7 +239,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
     }
 
     private suspend fun resolveUser(userId: String): User {
-        return tryOrNull { session.resolveUser(userId) }
+        return tryOrNull { session.userService().resolveUser(userId) }
         // Create raw user in case the user is not searchable
                 ?: User(userId, null, null)
     }
@@ -243,7 +249,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
      * main thing is trying to see if it's a space or a room
      */
     private suspend fun resolveRoom(roomIdOrAlias: String): PeekResult {
-        return session.peekRoom(roomIdOrAlias)
+        return session.roomService().peekRoom(roomIdOrAlias)
     }
 
     override fun handle(action: MatrixToAction) {
@@ -273,6 +279,11 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 val joinResult = session.spaceService().joinSpace(joinSpace.spaceID, null, joinSpace.viaServers?.take(3) ?: emptyList())
+                withState { state ->
+                    session.getRoomSummary(joinSpace.spaceID)?.let { summary ->
+                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.origin.toJoinedRoomTrigger()))
+                    }
+                }
                 if (joinResult.isSuccess()) {
                     _viewEvents.post(MatrixToViewEvents.NavigateToSpace(joinSpace.spaceID))
                 } else {
@@ -296,8 +307,19 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             try {
-                session.joinRoom(action.roomId, null, action.viaServers?.take(3) ?: emptyList())
-                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(action.roomId))
+                session.roomService().joinRoom(
+                        roomIdOrAlias = action.roomIdOrAlias,
+                        reason = null,
+                        viaServers = action.viaServers?.take(3) ?: emptyList()
+                )
+
+                val roomId = getRoomIdFromRoomIdOrAlias(action.roomIdOrAlias)
+                withState { state ->
+                    session.getRoomSummary(roomId)?.let { summary ->
+                        analyticsTracker.capture(summary.toAnalyticsJoinedRoom(state.origin.toJoinedRoomTrigger()))
+                    }
+                }
+                _viewEvents.post(MatrixToViewEvents.NavigateToRoom(roomId))
             } catch (failure: Throwable) {
                 _viewEvents.post(MatrixToViewEvents.ShowModalError(errorFormatter.toHumanReadable(failure)))
             } finally {
@@ -307,6 +329,12 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun getRoomIdFromRoomIdOrAlias(roomIdOrAlias: String): String {
+        return if (MatrixPatterns.isRoomAlias(roomIdOrAlias)) {
+            session.roomService().getRoomIdByAlias(roomIdOrAlias, true).get().roomId
+        } else roomIdOrAlias
     }
 
     private fun handleStartChatting(action: MatrixToAction.StartChattingWithUser) {

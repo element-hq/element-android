@@ -25,7 +25,7 @@ sealed class RoomMemberProfileViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : RoomMemberProfileViewEvents()
     data class Failure(val throwable: Throwable) : RoomMemberProfileViewEvents()
 
-    data class OnIgnoreActionSuccess(val shouldPerformInitialSync: Boolean) : RoomMemberProfileViewEvents()
+    object OnIgnoreActionSuccess : RoomMemberProfileViewEvents()
     object OnSetPowerLevelSuccess : RoomMemberProfileViewEvents()
     object OnInviteActionSuccess : RoomMemberProfileViewEvents()
     object OnKickActionSuccess : RoomMemberProfileViewEvents()

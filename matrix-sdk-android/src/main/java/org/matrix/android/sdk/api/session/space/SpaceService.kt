@@ -68,7 +68,7 @@ interface SpaceService {
                                    suggestedOnly: Boolean? = null,
                                    limit: Int? = null,
                                    from: String? = null,
-                                   // when paginating, pass back the m.space.child state events
+            // when paginating, pass back the m.space.child state events
                                    knownStateList: List<Event>? = null): SpaceHierarchyData
 
     /**
@@ -106,5 +106,8 @@ interface SpaceService {
 
     suspend fun removeSpaceParent(childRoomId: String, parentSpaceId: String)
 
-    fun getRootSpaceSummaries(): List<RoomSummary>
+    /**
+     * Get the root spaces, i.e. all the spaces which do not have a parent space.
+     */
+    suspend fun getRootSpaceSummaries(): List<RoomSummary>
 }

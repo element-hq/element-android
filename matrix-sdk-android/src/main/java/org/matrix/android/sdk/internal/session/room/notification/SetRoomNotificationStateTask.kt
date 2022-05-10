@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.session.room.notification
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
-import org.matrix.android.sdk.api.pushrules.RuleScope
+import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.query.where
@@ -38,7 +38,7 @@ internal interface SetRoomNotificationStateTask : Task<SetRoomNotificationStateT
 internal class DefaultSetRoomNotificationStateTask @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
                                                                        private val removePushRuleTask: RemovePushRuleTask,
                                                                        private val addPushRuleTask: AddPushRuleTask) :
-    SetRoomNotificationStateTask {
+        SetRoomNotificationStateTask {
 
     override suspend fun execute(params: SetRoomNotificationStateTask.Params) {
         val currentRoomPushRule = Realm.getInstance(monarchy.realmConfiguration).use {

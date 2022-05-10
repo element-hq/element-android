@@ -21,9 +21,10 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
+import timber.log.Timber
 import javax.inject.Inject
 
-internal interface SendStateTask : Task<SendStateTask.Params, Unit> {
+internal interface SendStateTask : Task<SendStateTask.Params, String> {
     data class Params(
             val roomId: String,
             val stateKey: String,
@@ -37,9 +38,9 @@ internal class DefaultSendStateTask @Inject constructor(
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : SendStateTask {
 
-    override suspend fun execute(params: SendStateTask.Params) {
+    override suspend fun execute(params: SendStateTask.Params): String {
         return executeRequest(globalErrorReceiver) {
-            if (params.stateKey.isEmpty()) {
+            val response = if (params.stateKey.isEmpty()) {
                 roomAPI.sendStateEvent(
                         roomId = params.roomId,
                         stateEventType = params.eventType,
@@ -52,6 +53,9 @@ internal class DefaultSendStateTask @Inject constructor(
                         stateKey = params.stateKey,
                         params = params.body
                 )
+            }
+            response.eventId.also {
+                Timber.d("State event: $it just sent in room ${params.roomId}")
             }
         }
     }

@@ -97,6 +97,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmOutboundGroupSession
@@ -110,7 +111,8 @@ internal class RealmCryptoStore @Inject constructor(
         @CryptoDatabase private val realmConfiguration: RealmConfiguration,
         private val crossSigningKeysMapper: CrossSigningKeysMapper,
         @UserId private val userId: String,
-        @DeviceId private val deviceId: String?
+        @DeviceId private val deviceId: String?,
+        private val clock: Clock,
 ) : IMXCryptoStore {
 
     /* ==========================================================================================
@@ -307,7 +309,7 @@ internal class RealmCryptoStore @Inject constructor(
                         // Add the device
                         Timber.d("Add device ${cryptoDeviceInfo.deviceId} of user $userId")
                         val newEntity = CryptoMapper.mapToEntity(cryptoDeviceInfo)
-                        newEntity.firstTimeSeenLocalTs = System.currentTimeMillis()
+                        newEntity.firstTimeSeenLocalTs = clock.epochMillis()
                         userEntity.devices.add(newEntity)
                     } else {
                         // Update the device
@@ -715,6 +717,7 @@ internal class RealmCryptoStore @Inject constructor(
         return doWithRealm(realmConfiguration) {
             it.where<OlmSessionEntity>()
                     .equalTo(OlmSessionEntityFields.DEVICE_KEY, deviceKey)
+                    .sort(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, Sort.DESCENDING)
                     .findAll()
                     .mapNotNull { sessionEntity ->
                         sessionEntity.sessionId
@@ -791,7 +794,7 @@ internal class RealmCryptoStore @Inject constructor(
 
                 if (outboundGroupSession != null) {
                     val info = realm.createObject(OutboundGroupSessionInfoEntity::class.java).apply {
-                        creationTime = System.currentTimeMillis()
+                        creationTime = clock.epochMillis()
                         putOutboundGroupSession(outboundGroupSession)
                     }
                     entity.outboundSessionInfo = info
@@ -881,7 +884,8 @@ internal class RealmCryptoStore @Inject constructor(
                 try {
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(
                             olmInboundGroupSessionWrapper.olmInboundGroupSession?.sessionIdentifier(),
-                            olmInboundGroupSessionWrapper.senderKey)
+                            olmInboundGroupSessionWrapper.senderKey
+                    )
 
                     it.where<OlmInboundGroupSessionEntity>()
                             .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
@@ -1056,13 +1060,16 @@ internal class RealmCryptoStore @Inject constructor(
                             localCreationTimestamp = 0
                     )
         }
-        return monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
+        return monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
+                LivePagedListBuilder(
+                        dataSourceFactory,
                         PagedList.Config.Builder()
                                 .setPageSize(20)
                                 .setEnablePlaceholders(false)
                                 .setPrefetchDistance(1)
-                                .build())
+                                .build()
+                )
         )
     }
 
@@ -1071,13 +1078,16 @@ internal class RealmCryptoStore @Inject constructor(
             realm.where<GossipingEventEntity>().sort(GossipingEventEntityFields.AGE_LOCAL_TS, Sort.DESCENDING)
         }
         val dataSourceFactory = realmDataSourceFactory.map { it.toModel() }
-        val trail = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
+        val trail = monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
+                LivePagedListBuilder(
+                        dataSourceFactory,
                         PagedList.Config.Builder()
                                 .setPageSize(20)
                                 .setEnablePlaceholders(false)
                                 .setPrefetchDistance(1)
-                                .build())
+                                .build()
+                )
         )
         return trail
     }
@@ -1152,7 +1162,7 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun saveGossipingEvents(events: List<Event>) {
         monarchy.writeAsync { realm ->
-            val now = System.currentTimeMillis()
+            val now = clock.epochMillis()
             events.forEach { event ->
                 val ageLocalTs = event.unsignedData?.age?.let { now - it } ?: now
                 val entity = GossipingEventEntity(
@@ -1325,7 +1335,7 @@ internal class RealmCryptoStore @Inject constructor(
                     .findAll()
                     .mapNotNull { entity ->
                         when (entity.type) {
-                            GossipRequestType.KEY    -> {
+                            GossipRequestType.KEY -> {
                                 IncomingRoomKeyRequest(
                                         userId = entity.otherUserId,
                                         deviceId = entity.otherDeviceId,
@@ -1358,7 +1368,7 @@ internal class RealmCryptoStore @Inject constructor(
                 it.otherUserId = request.userId
                 it.requestId = request.requestId ?: ""
                 it.requestState = GossipingRequestState.PENDING
-                it.localCreationTimestamp = ageLocalTS ?: System.currentTimeMillis()
+                it.localCreationTimestamp = ageLocalTS ?: clock.epochMillis()
                 if (request is IncomingSecretShareRequest) {
                     it.type = GossipRequestType.SECRET
                     it.requestedInfoStr = request.secretName
@@ -1379,7 +1389,7 @@ internal class RealmCryptoStore @Inject constructor(
                     it.otherUserId = request.userId
                     it.requestId = request.requestId ?: ""
                     it.requestState = GossipingRequestState.PENDING
-                    it.localCreationTimestamp = request.localCreationTimestamp ?: System.currentTimeMillis()
+                    it.localCreationTimestamp = request.localCreationTimestamp ?: clock.epochMillis()
                     if (request is IncomingSecretShareRequest) {
                         it.type = GossipRequestType.SECRET
                         it.requestedInfoStr = request.secretName
@@ -1535,13 +1545,16 @@ internal class RealmCryptoStore @Inject constructor(
             it.toOutgoingGossipingRequest() as? OutgoingRoomKeyRequest
                     ?: OutgoingRoomKeyRequest(requestBody = null, requestId = "?", recipients = emptyMap(), state = OutgoingGossipingRequestState.CANCELLED)
         }
-        val trail = monarchy.findAllPagedWithChanges(realmDataSourceFactory,
-                LivePagedListBuilder(dataSourceFactory,
+        val trail = monarchy.findAllPagedWithChanges(
+                realmDataSourceFactory,
+                LivePagedListBuilder(
+                        dataSourceFactory,
                         PagedList.Config.Builder()
                                 .setPageSize(20)
                                 .setEnablePlaceholders(false)
                                 .setPrefetchDistance(1)
-                                .build())
+                                .build()
+                )
         )
         return trail
     }
@@ -1706,7 +1719,7 @@ internal class RealmCryptoStore @Inject constructor(
      * So we need to tidy up a bit
      */
     override fun tidyUpDataBase() {
-        val prevWeekTs = System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1_000
+        val prevWeekTs = clock.epochMillis() - 7 * 24 * 60 * 60 * 1_000
         doRealmTransaction(realmConfiguration) { realm ->
 
             // Only keep one week history

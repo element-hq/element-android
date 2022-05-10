@@ -1,3 +1,128 @@
+Changes in Element v1.4.14 (2022-05-05)
+=======================================
+
+Features ✨
+----------
+ - Improve management of ignored users ([#5772](https://github.com/vector-im/element-android/issues/5772))
+ - VoIP Screen Sharing Permission ([#5811](https://github.com/vector-im/element-android/issues/5811))
+ - Live location sharing: updating beacon state event content structure ([#5814](https://github.com/vector-im/element-android/issues/5814))
+
+Bugfixes 🐛
+----------
+ - Fixes crash when accepting or receiving VOIP calls ([#5421](https://github.com/vector-im/element-android/issues/5421))
+ - Improve/fix crashes on messages decryption ([#5592](https://github.com/vector-im/element-android/issues/5592))
+ - Tentative fix of images crashing when being sent or shared from gallery ([#5652](https://github.com/vector-im/element-android/issues/5652))
+ - Improving deactivation experience along with a crash fix ([#5721](https://github.com/vector-im/element-android/issues/5721))
+ - Adds missing suggested tag for rooms in Explore Space ([#5826](https://github.com/vector-im/element-android/issues/5826))
+ - Fixes missing call icons when threads are enabled ([#5847](https://github.com/vector-im/element-android/issues/5847))
+ - Fix UX freezing when creating secure backup ([#5871](https://github.com/vector-im/element-android/issues/5871))
+ - Fixes sign in via other requiring homeserver registration to be enabled ([#5874](https://github.com/vector-im/element-android/issues/5874))
+ - Don't pause timer when call is held. ([#5885](https://github.com/vector-im/element-android/issues/5885))
+ - Fix UISIDetector grace period bug ([#5886](https://github.com/vector-im/element-android/issues/5886))
+ - Fix a crash with space invitations in the space list, and do not display space invitation twice. ([#5924](https://github.com/vector-im/element-android/issues/5924))
+ - Fixes crash on android api 21/22 devices when opening messages due to Konfetti library ([#5925](https://github.com/vector-im/element-android/issues/5925))
+
+In development 🚧
+----------------
+ - Reorders the registration steps to prioritise email, then terms for the FTUE onboarding ([#5783](https://github.com/vector-im/element-android/issues/5783))
+ - [Live location sharing] Improve aggregation process of events ([#5862](https://github.com/vector-im/element-android/issues/5862))
+
+Improved Documentation 📚
+------------------------
+ - Update the PR process doc with 2 reviewers and a new reviewer team. ([#5836](https://github.com/vector-im/element-android/issues/5836))
+ - Improve documentation of the project and of the SDK ([#5854](https://github.com/vector-im/element-android/issues/5854))
+
+SDK API changes ⚠️
+------------------
+ - Added registrationCustom into RegistrationWizard to send custom auth params for sign up
+ - Moved terms converter into api package to make it accessible in sdk ([#5575](https://github.com/vector-im/element-android/issues/5575))
+ - Move package `org.matrix.android.sdk.api.pushrules` to `org.matrix.android.sdk.api.session.pushrules` ([#5812](https://github.com/vector-im/element-android/issues/5812))
+ - Some `Session` apis are now available by requesting the service first. For instance `Session.updateAvatar(...)` is now `Session.profileService().updateAvatar(...)`
+ - The shortcut `Room.search()` has been removed, you have to use `Session.searchService().search()` ([#5816](https://github.com/vector-im/element-android/issues/5816))
+ - Add return type to RoomApi.sendStateEvent() to retrieve the created event id ([#5855](https://github.com/vector-im/element-android/issues/5855))
+ - `Room` apis are now available by requesting the service first. For instance `Room.updateAvatar(...)` is now `Room.stateService().updateAvatar(...)` ([#5858](https://github.com/vector-im/element-android/issues/5858))
+ - Remove unecessary field `eventId` from `EventAnnotationsSummary` and `ReferencesAggregatedSummary` ([#5890](https://github.com/vector-im/element-android/issues/5890))
+ - Replace usage of `System.currentTimeMillis()` by a `Clock` interface ([#5907](https://github.com/vector-im/element-android/issues/5907))
+
+Other changes
+-------------
+ - Move "Ignored users" setting section into "Security & Privacy" ([#5773](https://github.com/vector-im/element-android/issues/5773))
+ - Add a picto for ignored users in the room member list screen ([#5774](https://github.com/vector-im/element-android/issues/5774))
+ - Autoformats entire project ([#5805](https://github.com/vector-im/element-android/issues/5805))
+ - Add a GH workflow to push ElementX issues to the global board. ([#5832](https://github.com/vector-im/element-android/issues/5832))
+ - Faster Olm decrypt when there is a lot of existing sessions ([#5872](https://github.com/vector-im/element-android/issues/5872))
+
+
+Changes in Element 1.4.13 (2022-04-26)
+======================================
+
+Bugfixes 🐛
+----------
+ - Fix UI freeze observed after each incremental sync ([#5835](https://github.com/vector-im/element-android/issues/5835))
+
+
+Changes in Element v1.4.12 (2022-04-20)
+=======================================
+
+Features ✨
+----------
+ - Add a setting to be able to always appear offline ([#5582](https://github.com/vector-im/element-android/issues/5582))
+ - Adds the ability for audio attachments to be played in the timeline ([#5586](https://github.com/vector-im/element-android/issues/5586))
+ - Do not cancel the current incremental sync request and treatment when the app goes to background ([#5719](https://github.com/vector-im/element-android/issues/5719))
+ - Improve user experience when home servers do not yet support threads ([#5761](https://github.com/vector-im/element-android/issues/5761))
+
+Bugfixes 🐛
+----------
+ - Added text next to spinner when loading information after user is clicked on space members screen ([#4305](https://github.com/vector-im/element-android/issues/4305))
+ - The string `ftue_auth_carousel_workplace_body` was declared not translatable by mistake ([#5262](https://github.com/vector-im/element-android/issues/5262))
+ - Fix some cases where the read marker line would not show up ([#5475](https://github.com/vector-im/element-android/issues/5475))
+ - Fix sometimes read marker not properly updating ([#5481](https://github.com/vector-im/element-android/issues/5481))
+ - Fix sometimes endless loading timeline ([#5554](https://github.com/vector-im/element-android/issues/5554))
+ - Use member name instead of room name in DM creation item ([#5570](https://github.com/vector-im/element-android/issues/5570))
+ - Align auto-reporting of decryption errors implementation with web client. ([#5596](https://github.com/vector-im/element-android/issues/5596))
+ - Choosing "leave all rooms and spaces" while leaving Space won't cause leaving DMs in this Space anymore ([#5609](https://github.com/vector-im/element-android/issues/5609))
+ - Fixes display name being changed when using /myroomnick ([#5618](https://github.com/vector-im/element-android/issues/5618))
+ - Fix endless loading if the event from a permalink is not found ([#5659](https://github.com/vector-im/element-android/issues/5659))
+ - Redacted events are no longer visible. ([#5707](https://github.com/vector-im/element-android/issues/5707))
+ - Don't wrongly show non-space invites in the space panel. ([#5731](https://github.com/vector-im/element-android/issues/5731))
+ - Fixes the onboarding confetti rendering behind the content instead of in-front ([#5735](https://github.com/vector-im/element-android/issues/5735))
+ - Fixes crash when navigating the app whilst processing new room keys ([#5746](https://github.com/vector-im/element-android/issues/5746))
+ - Fix sorting of uploads in encrypted rooms ([#5757](https://github.com/vector-im/element-android/issues/5757))
+ - Fixing setting transfer title in call transfer. ([#5765](https://github.com/vector-im/element-android/issues/5765))
+ - Changes destination after joining a space to Explore Space Rooms screen ([#5766](https://github.com/vector-im/element-android/issues/5766))
+ - Unignoring a user will perform an initial sync ([#5767](https://github.com/vector-im/element-android/issues/5767))
+ - Open a room by link: use the actual roomId instead of the alias ([#5786](https://github.com/vector-im/element-android/issues/5786))
+
+In development 🚧
+----------------
+ - FTUE - Adds a new homeserver selection screen when creating an account ([#2396](https://github.com/vector-im/element-android/issues/2396))
+ - FTUE - Updates the Captcha and T&Cs registration screens UI style ([#5279](https://github.com/vector-im/element-android/issues/5279))
+ - FTUE - Adds error handling within the server selection screen ([#5749](https://github.com/vector-im/element-android/issues/5749))
+ - Live Location Sharing - Send location data ([#5697](https://github.com/vector-im/element-android/issues/5697))
+ - Live Location Sharing - Show message on start of a live ([#5710](https://github.com/vector-im/element-android/issues/5710))
+ - Live Location Sharing - Attach location data to beacon info state event ([#5711](https://github.com/vector-im/element-android/issues/5711))
+ - Live Location Sharing - Update beacon info state event when sharing is ended ([#5758](https://github.com/vector-im/element-android/issues/5758))
+
+
+SDK API changes ⚠️
+------------------
+ - Include original event in live decryption listeners and update sync status naming to InitialSyncProgressing for clarity. ([#5639](https://github.com/vector-im/element-android/issues/5639))
+ - KeysBackupService.getCurrentVersion takes a new type `KeysBackupLastVersionResult` in the callback. ([#5703](https://github.com/vector-im/element-android/issues/5703))
+ - A lot of classes which were exposed to the clients and were located in the package `org.matrix.android.sdk.internal` have been moved to the package `org.matrix.android.sdk.api`.
+  All the classes which are in the package `org.matrix.android.sdk.internal` should now be declared `internal`.
+  Some unused code and classes have been removed. ([#5744](https://github.com/vector-im/element-android/issues/5744))
+ - Some data classes are now immutable, using `val` instead of `var` ([#5762](https://github.com/vector-im/element-android/issues/5762))
+
+Other changes
+-------------
+ - Upgrade konfetti lib from 1.3.2 to 2.0.2 ([#5079](https://github.com/vector-im/element-android/issues/5079))
+ - Spaces feedback section is removed from left panel ([#5486](https://github.com/vector-im/element-android/issues/5486))
+ - Reduce error logs ([#5703](https://github.com/vector-im/element-android/issues/5703))
+ - Adds a complete editor config file for our current code style ([#5727](https://github.com/vector-im/element-android/issues/5727))
+ - Updates the posthog dev environment url and api key ([#5732](https://github.com/vector-im/element-android/issues/5732))
+ - Setup Dokka to be able to generate documentation of the SDK module. Run `./gradlew matrix-sdk-android:dokkaHtml` to do it. ([#5744](https://github.com/vector-im/element-android/issues/5744))
+
+
 Changes in Element v1.4.11 (2022-04-07)
 =======================================
 

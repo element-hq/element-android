@@ -129,8 +129,8 @@
     <string name="power_level_default">Predvolený</string>
     <string name="power_level_custom">Vlastná úroveň (%1$d)</string>
     <string name="power_level_custom_no_value">Vlastná úroveň</string>
-    <string name="notice_power_level_changed_by_you">Zmenili ste úroveň moci používateľa %1$s.</string>
-    <string name="notice_power_level_changed">%1$s zmenil úroveň moci používateľa %2$s.</string>
+    <string name="notice_power_level_changed_by_you">Zmenili ste úroveň oprávnenia používateľa %1$s.</string>
+    <string name="notice_power_level_changed">%1$s zmenil úroveň oprávnenia používateľa %2$s.</string>
     <string name="notice_power_level_diff">%1$s z %2$s na %3$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Pozvanie od vás. Dôvod: %1$s</string>
     <string name="notice_room_invite_with_reason_by_you">Pozvali ste %1$s. Dôvod: %2$s</string>
@@ -284,7 +284,7 @@
     <string name="room_participants_action_ignore">Skryť všetky správy od tohoto používateľa</string>
     <string name="room_participants_action_unignore">Zobraziť všetky správy od tohoto používateľa</string>
     <string name="room_participants_action_mention">Zmieniť sa</string>
-    <string name="room_participants_power_level_prompt">Túto zmenu nebudete môcť vrátiť späť, pretože tomuto používateľovi udeľujete rovnakú úroveň moci, akú máte vy.
+    <string name="room_participants_power_level_prompt">Túto zmenu nebudete môcť vrátiť späť, pretože tomuto používateľovi udeľujete rovnakú úroveň oprávnenia, akú máte vy.
 \nSte si istí\?</string>
     <string name="room_one_user_is_typing">%s píše…</string>
     <string name="room_two_users_are_typing">%1$s a %2$s píšu…</string>
@@ -427,7 +427,7 @@
     <string name="widget_delete_message_confirmation">Ste si istí, že chcete odstrániť widget z tejto miestnosti?</string>
     <string name="widget_integration_unable_to_create">Nie je možné vytvoriť widget.</string>
     <string name="widget_integration_failed_to_send_request">Nepodarilo sa odoslať požiadavku.</string>
-    <string name="widget_integration_positive_power_level">Úroveň moci musí byť kladné celé číslo.</string>
+    <string name="widget_integration_positive_power_level">Úroveň oprávnenia musí byť kladné celé číslo.</string>
     <string name="widget_integration_must_be_in_room">Nenachádzate sa v tejto miestnosti.</string>
     <string name="widget_integration_no_permission_in_room">V tejto miestnosti nemáte oprávnenie na vykonanie takejto akcie.</string>
     <string name="widget_integration_missing_room_id">V požiadavke chýba room_id.</string>
@@ -536,8 +536,8 @@
     <string name="command_description_emote">Zobrazí akciu</string>
     <string name="command_description_ban_user">Zakáže vstup zadanému používateľovi</string>
     <string name="command_description_unban_user">Povolí vstup zadanému používateľovi</string>
-    <string name="command_description_op_user">Určuje úroveň moci pre zadaného používateľa</string>
-    <string name="command_description_deop_user">Znižuje úroveň moci pre zadaného používateľa</string>
+    <string name="command_description_op_user">Určuje úroveň oprávnenia pre zadaného používateľa</string>
+    <string name="command_description_deop_user">Odstráni používateľa s daným ID</string>
     <string name="command_description_invite_user">Pozve zadaného používateľa do aktuálnej miestnosti</string>
     <string name="command_description_join_room">Pripojí sa do miestnosti s danou adresou</string>
     <string name="command_description_part_room">Opustí aktuálnu miestnosť</string>
@@ -667,7 +667,7 @@
     <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nNa zariadení máte množstvo aplikácií zaregistrovaných na doručovanie okamžitých oznámení cez služby Google play. Konfigurácia ${app_name} nemá vplyv na výskyt tejto chyby. Podľa Google sa môže vyskytovať len pri veľmi vysokom počte nainštalovaných aplikácií. Bežní používatelia by týmto nemali byť postihnutí.</string>
     <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
-\nKonfigurácia ${app_name} nemá vplyv na zobrazenie tejto chyby. Táto chyba sa môže zobraziť z niekoľkých dôvodov. Uistite sa že máte správne nastavený systémový čas a že ste v nastaveniach systému aplikácii služby Google play neobmedzili používanie prístupu na internet. Chyba sa tiež môže zobrazovať na vlastných zostaveniach (ROM), alebo sa chyba môže samovoľne prestať zobrazovať neskôr.</string>
+\nTáto chyba sa vymkla spod kontroly aplikácie ${app_name}. Môže sa vyskytnúť z niekoľkých dôvodov. Možno to bude fungovať, ak to neskôr skúsite znova, môžete tiež skontrolovať, či služba Google Play nemá v systémových nastaveniach obmedzené používanie dát, alebo či sú hodiny vášho zariadenia správne, prípadne sa to môže stať na vlastnej ROM.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia ${app_name} nemá vplyv na zobrazenie tejto chyby.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Pridať účet</string>
@@ -743,15 +743,17 @@
     <string name="settings_call_show_confirmation_dialog_title">Zabrániť neúmyselnému telefonovaniu</string>
     <string name="settings_call_show_confirmation_dialog_summary">Žiadať potvrdenie pred uskutočnením hovoru</string>
     <string name="room_participants_action_cancel_invite">Zrušiť pozvanie</string>
-    <string name="room_participants_power_level_demote_warning_title">Znížiť vlastnú úroveň moci\?</string>
-    <string name="room_participants_power_level_demote_warning_prompt">Túto zmenu nebudete môcť vrátiť späť, pretože znižujete vašu vlastnú úroveň moci. Ak ste jediný poverený používateľ v miestnosti, nebudete môcť znovu získať úroveň, akú máte teraz.</string>
+    <string name="room_participants_power_level_demote_warning_title">Znížiť vlastnú úroveň oprávnenia\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Túto zmenu nebudete môcť vrátiť späť, pretože znižujete vašu vlastnú úroveň oprávnenia. Ak ste jediný poverený používateľ v miestnosti, nebudete môcť znovu získať úroveň, akú máte teraz.</string>
     <string name="room_participants_power_level_demote">Znížiť</string>
     <string name="room_participants_action_ignore_title">Ignorovať používateľa</string>
     <string name="room_participants_action_ignore_prompt_msg">Ignorovaním tohoto používateľa odstránite všetky jeho správy vo vašich spoločných miestnostiach.
 \n
 \nTúto akciu môžete kedykoľvek zmeniť späť vo všeobecných nastaveniach.</string>
     <string name="room_participants_action_unignore_title">Neignorovať používateľa</string>
-    <string name="room_participants_action_unignore_prompt_msg">Zrušením ignorovania si opäť zobrazíte všetky správy od tohoto používateľa.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Zrušením ignorovania tohto používateľa sa opäť zobrazia všetky správy od neho.
+\n
+\nUpozorňujeme, že táto akcia spôsobí reštart aplikácie a môže chvíľu trvať.</string>
     <string name="room_participants_action_cancel_invite_title">Zrušiť pozvanie</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ste si istí, že chcete zrušiť pozvanie tohoto používateľa\?</string>
     <string name="room_participants_remove_title">Vykázať používateľa</string>
@@ -900,7 +902,7 @@
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="one">Záloha s %d kľúčom obnovená.</item>
         <item quantity="few">Záloha s %d kľúčmi obnovená.</item>
-        <item quantity="other">Záloha s %d kľúčami obnovená.</item>
+        <item quantity="other">Záloha s %d kľúčmi obnovená.</item>
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d nový kľúč bol pridaný do tejto relácie.</item>
@@ -1005,7 +1007,7 @@
     <string name="push_gateway_item_url">Url:</string>
     <string name="push_gateway_item_format">Formát:</string>
     <string name="preference_voice_and_video">Zvuk a video</string>
-    <string name="preference_root_help_about">Pomoc a O aplikácii</string>
+    <string name="preference_root_help_about">Pomoc a o aplikácii</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Zaregistrovať token</string>
     <string name="send_suggestion">Poslať návrh</string>
     <string name="send_suggestion_content">Nižšie napíšte obsah návrhu.</string>
@@ -1652,8 +1654,8 @@
     <string name="verification_no_scan_emoji_title">Overiť porovnaním emotikonov</string>
     <string name="verification_scan_self_emoji_subtitle">Namiesto toho overte porovnaním emotikonov</string>
     <string name="verification_scan_emoji_subtitle">Ak nie ste osobne, porovnajte namiesto toho emotikony</string>
-    <string name="verification_scan_with_this_device">Skenovať pomocou tohto zariadenia</string>
-    <string name="verification_scan_self_notice">Naskenujte kód pomocou iného zariadenia alebo prepnite a skenujte pomocou tohto zariadenia</string>
+    <string name="verification_scan_with_this_device">Naskenovať pomocou tohto zariadenia</string>
+    <string name="verification_scan_self_notice">Naskenujte kód pomocou iného zariadenia alebo prepnite a naskenujte pomocou tohto zariadenia</string>
     <string name="verification_scan_notice">Naskenujte kód pomocou zariadenia druhého používateľa, aby ste sa navzájom bezpečne overili</string>
     <string name="sent_verification_conclusion">Záver overovania</string>
     <string name="verification_conclusion_compromised">Môže byť narušená jedna z nasledujúcich vecí:
@@ -2485,4 +2487,51 @@
 \n
 \nPôjde o jednorazový prechod, keďže vlákna sú teraz súčasťou špecifikácie Matrix.</string>
     <string name="threads_notice_migration_title">Vlákna sa blížia k beta verzii 🎉</string>
+    <string name="ftue_account_created_subtitle">Váš účet %s bol vytvorený.</string>
+    <string name="live_location_sharing_notification_description">Prebieha zdieľanie polohy</string>
+    <string name="live_location_sharing_notification_title">${app_name} Poloha v reálnom čase</string>
+    <string name="error_forbidden_digits_only_username">Domovský server neakceptuje používateľské meno obsahujúce iba číslice.</string>
+    <string name="ftue_personalize_skip_this_step">Vynechať tento krok</string>
+    <string name="ftue_personalize_submit">Uložiť a pokračovať</string>
+    <string name="ftue_personalize_complete_subtitle">Vaše nastavenia boli uložené.</string>
+    <string name="ftue_personalize_complete_title">Všetko je pripravené!</string>
+    <string name="ftue_personalize_lets_go">Poďme na to</string>
+    <string name="ftue_profile_picture_subtitle">Toto môžete kedykoľvek zmeniť.</string>
+    <string name="ftue_profile_picture_title">Pridať profilový obrázok</string>
+    <string name="ftue_display_name_entry_footer">Neskôr to môžete zmeniť</string>
+    <string name="ftue_display_name_entry_title">Zobrazované meno</string>
+    <string name="ftue_display_name_subtitle">Toto sa zobrazí pri odosielaní správ.</string>
+    <string name="ftue_display_name_title">Vyberte si zobrazované meno</string>
+    <string name="ftue_account_created_congratulations_title">Gratulujeme!</string>
+    <string name="ftue_account_created_take_me_home">Zober ma domov</string>
+    <string name="ftue_account_created_personalize">Prispôsobiť profil</string>
+    <string name="action_disable">Zakázať</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="settings_presence">Prítomnosť</string>
+    <string name="location_share_live_started">Načítavanie polohy v reálnom čase…</string>
+    <string name="location_share_live_select_duration_title">Zdieľajte svoju polohu v reálnom čase na</string>
+    <string name="location_share_live_select_duration_option_3">8 hodín</string>
+    <string name="location_share_live_select_duration_option_2">1 hodinu</string>
+    <string name="location_share_live_select_duration_option_1">15 minút</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Nie je možné prehrať %1$s</string>
+    <string name="a11y_pause_audio_message">Pozastaviť %1$s</string>
+    <string name="a11y_play_audio_message">Prehrať %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minút %2$d sekúnd</string>
+    <string name="sent_live_location">Zdieľali svoju polohu v reálnom čase</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} je skvelý aj na pracovisku. Dôverujú mu najbezpečnejšie organizácie na svete.</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_info">Na vláknach sa neustále pracuje a pripravujú sa nové, zaujímavé funkcie, ako napríklad vylepšené oznámenia. Radi si vypočujeme vašu spätnú väzbu!</string>
+    <string name="send_feedback_threads_title">Spätná väzba na Beta vlákna</string>
+    <string name="give_feedback_threads">Poskytnite spätnú väzbu</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Ak je táto funkcia zapnutá, budete sa ostatným používateľom vždy javiť ako offline, a to aj pri používaní aplikácie.</string>
+    <string name="settings_presence_user_always_appears_offline">Režim offline</string>
+    <string name="threads_labs_enable_notice_message">Váš domovský server v súčasnosti nepodporuje vlákna, takže táto funkcia môže byť nespoľahlivá. Niektoré správy vo vláknach nemusia byť spoľahlivo dostupné. %sChcete aj tak povoliť vlákna\?</string>
+    <string name="threads_labs_enable_notice_title">Vlákna Beta</string>
+    <string name="threads_beta_enable_notice_message">Vlákna pomáhajú udržiavať vaše konverzácie v téme a ľahké sledovanie. %sZapnutím vlákien sa aplikácia obnoví. V prípade niektorých účtov to môže trvať dlhšie.</string>
+    <string name="threads_beta_enable_notice_title">Vlákna Beta</string>
+    <string name="action_learn_more">Zistiť viac</string>
+    <string name="action_try_it_out">Vyskúšajte si to</string>
 </resources>

@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.core.net.toUri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import im.vector.app.core.intent.getMimeTypeFromUri
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.features.notifications.NotificationUtils
 import kotlinx.coroutines.withContext
@@ -30,7 +31,8 @@ import javax.inject.Inject
 class DownloadMediaUseCase @Inject constructor(
         @ApplicationContext private val appContext: Context,
         private val session: Session,
-        private val notificationUtils: NotificationUtils
+        private val notificationUtils: NotificationUtils,
+        private val clock: Clock,
 ) {
 
     suspend fun execute(input: File): Result<Unit> = withContext(session.coroutineDispatchers.io) {
@@ -40,7 +42,8 @@ class DownloadMediaUseCase @Inject constructor(
                     file = input,
                     title = input.name,
                     mediaMimeType = getMimeTypeFromUri(appContext, input.toUri()),
-                    notificationUtils = notificationUtils
+                    notificationUtils = notificationUtils,
+                    currentTimeMillis = clock.epochMillis()
             )
         }
     }

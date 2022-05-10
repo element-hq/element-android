@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
@@ -376,19 +377,23 @@ class MessageActionsViewModel @AssistedInject constructor(
 
             if (canRedact(timelineEvent, actionPermissions)) {
                 if (timelineEvent.root.getClearType() in EventType.POLL_START) {
-                    add(EventSharedAction.Redact(
-                            eventId,
-                            askForReason = informationData.senderId != session.myUserId,
-                            dialogTitleRes = R.string.delete_poll_dialog_title,
-                            dialogDescriptionRes = R.string.delete_poll_dialog_content
-                    ))
+                    add(
+                            EventSharedAction.Redact(
+                                    eventId,
+                                    askForReason = informationData.senderId != session.myUserId,
+                                    dialogTitleRes = R.string.delete_poll_dialog_title,
+                                    dialogDescriptionRes = R.string.delete_poll_dialog_content
+                            )
+                    )
                 } else {
-                    add(EventSharedAction.Redact(
-                            eventId,
-                            askForReason = informationData.senderId != session.myUserId,
-                            dialogTitleRes = R.string.delete_event_dialog_title,
-                            dialogDescriptionRes = R.string.delete_event_dialog_content
-                    ))
+                    add(
+                            EventSharedAction.Redact(
+                                    eventId,
+                                    askForReason = informationData.senderId != session.myUserId,
+                                    dialogTitleRes = R.string.delete_event_dialog_title,
+                                    dialogDescriptionRes = R.string.delete_event_dialog_content
+                            )
+                    )
                 }
             }
         }
@@ -452,6 +457,10 @@ class MessageActionsViewModel @AssistedInject constructor(
                                  actionPermissions: ActionPermissions): Boolean {
         // We let reply in thread visible even if threads are not enabled, with an enhanced flow to attract users
 //        if (!vectorPreferences.areThreadMessagesEnabled()) return false
+        // Disable beta prompt if the homeserver do not support threads
+        if (!vectorPreferences.areThreadMessagesEnabled() &&
+                !session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) return false
+
         if (initialState.isFromThreadTimeline) return false
         if (event.root.isThread()) return false
         if (event.root.getClearType() != EventType.MESSAGE &&

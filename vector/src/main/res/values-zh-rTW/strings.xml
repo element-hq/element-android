@@ -1501,7 +1501,9 @@
 \n
 \n您隨時都可以在一般設定中撤銷此動作。</string>
     <string name="room_participants_action_unignore_title">取消忽略使用者</string>
-    <string name="room_participants_action_unignore_prompt_msg">取消忽略此使用者將再次顯示從他們而來的所有訊息。</string>
+    <string name="room_participants_action_unignore_prompt_msg">取消忽略此使用者將再次顯示從他們而來的所有訊息。
+\n
+\n注意，此動作將會重新啟動應用程式，且可能需要一些時間。</string>
     <string name="room_participants_action_cancel_invite_title">取消邀請</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">您確定您想要取消對此使用者的邀請嗎？</string>
     <string name="room_participants_remove_title">踢除使用者</string>
@@ -2391,4 +2393,51 @@
 \n
 \n這會是一次性的過渡，因為討論串現在是 Matrix 規範的一部分了。</string>
     <string name="threads_notice_migration_title">討論串接近測試版了 🎉</string>
+    <string name="live_location_sharing_notification_description">正在進行位置分享</string>
+    <string name="live_location_sharing_notification_title">${app_name} 即時位置</string>
+    <string name="error_forbidden_digits_only_username">家伺服器不接受僅有數字的使用者名稱。</string>
+    <string name="ftue_personalize_skip_this_step">略過此步驟</string>
+    <string name="ftue_personalize_submit">儲存並繼續</string>
+    <string name="ftue_personalize_complete_subtitle">您的偏好設定已儲存。</string>
+    <string name="ftue_personalize_complete_title">準備好了！</string>
+    <string name="ftue_personalize_lets_go">走吧</string>
+    <string name="ftue_profile_picture_subtitle">您可以在任何時候變更這個。</string>
+    <string name="ftue_profile_picture_title">新增個人資訊照片</string>
+    <string name="ftue_display_name_entry_footer">您可以在稍後變更這個</string>
+    <string name="ftue_display_name_entry_title">顯示名稱</string>
+    <string name="ftue_display_name_subtitle">這將會在您傳送訊息時顯示。</string>
+    <string name="ftue_display_name_title">選擇顯示名稱</string>
+    <string name="ftue_account_created_subtitle">您的帳號 %s 已建立。</string>
+    <string name="ftue_account_created_congratulations_title">恭喜！</string>
+    <string name="ftue_account_created_take_me_home">帶我回家</string>
+    <string name="ftue_account_created_personalize">個人化檔案</string>
+    <string name="action_disable">停用</string>
+    <string name="location_share_live_started">正在載入即時位置……</string>
+    <string name="location_share_live_select_duration_option_3">8小時</string>
+    <string name="location_share_live_select_duration_option_2">1小時</string>
+    <string name="location_share_live_select_duration_option_1">15分鐘</string>
+    <string name="location_share_live_select_duration_title">分享您的即時位置</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">無法播放 %1$s</string>
+    <string name="a11y_pause_audio_message">暫停 %1$s</string>
+    <string name="a11y_play_audio_message">播放 %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d分鐘%2$d秒</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">分享了他們的即時位置</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} 也非常適合工作場所。其受到世界上最安全的組織信任。</string>
+    <string name="beta">測試版</string>
+    <string name="send_feedback_threads_info">討論串是一項正在進行中的工作，包含了新的、令人興奮的即將推出的功能，例如改進的通知。我們想要聽到您的回饋！</string>
+    <string name="send_feedback_threads_title">討論串測試版回饋</string>
+    <string name="give_feedback_threads">給予回饋</string>
+    <string name="beta_title_bottom_sheet_action">測試版</string>
+    <string name="settings_presence_user_always_appears_offline_summary">若啟用，即使在使用應用程式時，您也會對其他使用者顯示為離線狀態。</string>
+    <string name="settings_presence_user_always_appears_offline">離線模式</string>
+    <string name="settings_presence">在場</string>
+    <string name="threads_labs_enable_notice_message">您的家伺服器目前不支援討論串，所以此功能可能不可靠。部份已進入討論串的訊息可能無法可靠地使用。%s您仍想啟用討論串嗎？</string>
+    <string name="threads_labs_enable_notice_title">討論串測試版</string>
+    <string name="threads_beta_enable_notice_message">討論串有助於讓您的對話不離題且易於追蹤。%s啟用討論串將會重新整理應用程式。對於特定帳號，可能需要更長的時間。</string>
+    <string name="threads_beta_enable_notice_title">討論串測試版</string>
+    <string name="action_learn_more">取得更多資訊</string>
+    <string name="action_try_it_out">試試看</string>
 </resources>

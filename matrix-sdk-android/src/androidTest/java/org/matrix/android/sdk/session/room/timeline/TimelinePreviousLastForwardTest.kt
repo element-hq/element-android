@@ -28,6 +28,7 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
@@ -62,7 +63,7 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
         val roomFromBobPOV = bobSession.getRoom(aliceRoomId)!!
 
-        val bobTimeline = roomFromBobPOV.createTimeline(null, TimelineSettings(30))
+        val bobTimeline = roomFromBobPOV.timelineService().createTimeline(null, TimelineSettings(30))
         bobTimeline.start()
 
         run {
@@ -93,7 +94,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         val firstMessageFromAliceId = commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 firstMessage,
-                30)
+                30
+        )
                 .last()
                 .eventId
 
@@ -129,7 +131,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
         commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 secondMessage,
-                30)
+                30
+        )
 
         // Bob start to sync
         bobSession.startSync(true)

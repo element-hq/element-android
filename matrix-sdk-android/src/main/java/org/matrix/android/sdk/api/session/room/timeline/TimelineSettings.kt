@@ -31,7 +31,8 @@ data class TimelineSettings(
         /**
          * The root thread eventId if this is a thread timeline, or null if this is NOT a thread timeline
          */
-        val rootThreadEventId: String? = null) {
+        val rootThreadEventId: String? = null,
+) {
 
     /**
      * Returns true if this is a thread timeline or false otherwise

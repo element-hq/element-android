@@ -375,6 +375,12 @@
             android:exported="false"
             android:foregroundServiceType="location" />
 
+        <service
+            android:name=".features.call.webrtc.ScreenCaptureService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection"
+            tools:targetApi="Q" />
+
         <!-- Receivers -->
 
         <receiver

@@ -139,7 +139,7 @@ class KeywordPreference : VectorPreference {
                 keyword.contains("/")   -> {
                     context.getString(R.string.settings_notification_keyword_contains_invalid_character, "/")
                 }
-                else -> null
+                else                    -> null
             }
 
             chipTextInputLayout.isErrorEnabled = errorMessage != null

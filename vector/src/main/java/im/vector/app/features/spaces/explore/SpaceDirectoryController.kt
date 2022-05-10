@@ -36,6 +36,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.spaceChildInfoItem
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError.Companion.M_UNRECOGNIZED
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -145,6 +146,7 @@ class SpaceDirectoryController @Inject constructor(
                         matrixItem(matrixItem)
                         avatarRenderer(host.avatarRenderer)
                         topic(info.topic)
+                        suggested(info.suggested.orFalse())
                         errorLabel(
                                 error?.let {
                                     host.stringProvider.getString(R.string.error_failed_to_join_room, host.errorFormatter.toHumanReadable(it))

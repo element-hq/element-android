@@ -34,7 +34,9 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.qrcode.QrCodeScannerEvents
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.qrcode.QrCodeScannerViewModel
@@ -92,7 +94,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
                 }
                 is UserCodeState.Mode.RESULT -> {
                     showFragment(ShowUserCodeFragment::class)
-                    MatrixToBottomSheet.withLink(mode.rawLink).show(supportFragmentManager, "MatrixToBottomSheet")
+                    MatrixToBottomSheet.withLink(mode.rawLink, OriginOfMatrixTo.USER_CODE).show(supportFragmentManager, "MatrixToBottomSheet")
                 }
             }
         }
@@ -141,8 +143,8 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         }
     }
 
-    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
-        navigator.openRoom(this, roomId)
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {}

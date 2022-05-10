@@ -32,12 +32,13 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
 import org.matrix.android.sdk.internal.session.SessionComponent
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import javax.inject.Inject
 
 internal class CancelGossipRequestWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<CancelGossipRequestWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<CancelGossipRequestWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -65,6 +66,7 @@ internal class CancelGossipRequestWorker(context: Context, params: WorkerParamet
     @Inject lateinit var sendToDeviceTask: SendToDeviceTask
     @Inject lateinit var cryptoStore: IMXCryptoStore
     @Inject lateinit var credentials: Credentials
+    @Inject lateinit var clock: Clock
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
@@ -85,7 +87,7 @@ internal class CancelGossipRequestWorker(context: Context, params: WorkerParamet
                 content = toDeviceContent.toContent(),
                 senderId = credentials.userId
         ).also {
-            it.ageLocalTs = System.currentTimeMillis()
+            it.ageLocalTs = clock.epochMillis()
         })
 
         params.recipients.forEach { userToDeviceMap ->

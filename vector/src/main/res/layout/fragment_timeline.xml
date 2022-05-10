@@ -188,7 +188,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@android:color/black" />
 
-    <nl.dionsegijn.konfetti.xml.KonfettiView
+    <im.vector.app.core.ui.views.CompatKonfetti
         android:id="@+id/viewKonfetti"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

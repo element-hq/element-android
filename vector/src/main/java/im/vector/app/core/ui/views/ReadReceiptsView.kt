@@ -107,11 +107,13 @@ class ReadReceiptsView @JvmOverloads constructor(
                 else ->
                     if (displayNames.size >= 2) {
                         val qty = readReceipts.size - 2
-                        context.resources.getQuantityString(R.plurals.two_and_some_others_read,
+                        context.resources.getQuantityString(
+                                R.plurals.two_and_some_others_read,
                                 qty,
                                 displayNames[0],
                                 displayNames[1],
-                                qty)
+                                qty
+                        )
                     } else {
                         context.resources.getQuantityString(R.plurals.fallback_users_read, readReceipts.size)
                     }

@@ -146,7 +146,8 @@ class CreateRoomController @Inject constructor(
                 hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                 errorMessage(
                         host.roomAliasErrorFormatter.format(
-                                (((viewState.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError)
+                                (((viewState.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError
+                        )
                 )
                 onTextChange { value ->
                     host.listener?.setAliasLocalPart(value)

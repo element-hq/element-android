@@ -68,16 +68,16 @@ internal class ImageCompressor @Inject constructor(
                     val orientation = exifInfo.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
                     val matrix = Matrix()
                     when (orientation) {
-                        ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
-                        ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
-                        ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+                        ExifInterface.ORIENTATION_ROTATE_270      -> matrix.postRotate(270f)
+                        ExifInterface.ORIENTATION_ROTATE_180      -> matrix.postRotate(180f)
+                        ExifInterface.ORIENTATION_ROTATE_90       -> matrix.postRotate(90f)
                         ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.preScale(-1f, 1f)
-                        ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.preScale(1f, -1f)
-                        ExifInterface.ORIENTATION_TRANSPOSE -> {
+                        ExifInterface.ORIENTATION_FLIP_VERTICAL   -> matrix.preScale(1f, -1f)
+                        ExifInterface.ORIENTATION_TRANSPOSE       -> {
                             matrix.preRotate(-90f)
                             matrix.preScale(-1f, 1f)
                         }
-                        ExifInterface.ORIENTATION_TRANSVERSE -> {
+                        ExifInterface.ORIENTATION_TRANSVERSE      -> {
                             matrix.preRotate(90f)
                             matrix.preScale(-1f, 1f)
                         }

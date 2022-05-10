@@ -53,6 +53,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -68,7 +69,7 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
     fun createSessionWithCrossSigningAnd4S() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val matrix = getMatrixInstance()
-        val userName = "foobar_${System.currentTimeMillis()}"
+        val userName = "foobar_${Random.nextLong()}"
         existingSession = createAccountAndSync(matrix, userName, password, true)
         doSync<Unit> {
             existingSession!!.cryptoService().crossSigningService()
@@ -83,27 +84,30 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
                                             )
                                     )
                                 }
-                            }, it)
+                            }, it
+                    )
         }
 
         val task = BootstrapCrossSigningTask(existingSession!!, StringProvider(context.resources))
 
         runBlocking {
-            task.execute(Params(
-                    userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
-                        override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
-                            promise.resume(
-                                    UserPasswordAuth(
-                                            user = existingSession!!.myUserId,
-                                            password = password,
-                                            session = flowResponse.session
+            task.execute(
+                    Params(
+                            userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
+                                override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
+                                    promise.resume(
+                                            UserPasswordAuth(
+                                                    user = existingSession!!.myUserId,
+                                                    password = password,
+                                                    session = flowResponse.session
+                                            )
                                     )
-                            )
-                        }
-                    },
-                    passphrase = passphrase,
-                    setupMode = SetupMode.NORMAL
-            ))
+                                }
+                            },
+                            passphrase = passphrase,
+                            setupMode = SetupMode.NORMAL
+                    )
+            )
         }
     }
 

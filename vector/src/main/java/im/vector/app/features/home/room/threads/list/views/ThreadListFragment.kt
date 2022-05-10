@@ -112,7 +112,8 @@ class ThreadListFragment @Inject constructor(
     private fun initTextConstants() {
         views.threadListEmptyNoticeTextView.text = String.format(
                 resources.getString(R.string.thread_list_empty_notice),
-                resources.getString(R.string.reply_in_thread))
+                resources.getString(R.string.reply_in_thread)
+        )
     }
 
     private fun initBetaFeedback() {
@@ -122,6 +123,7 @@ class ThreadListFragment @Inject constructor(
             bugReporter.openBugReportScreen(requireActivity(), reportType = ReportType.THREADS_BETA_FEEDBACK)
         }
     }
+
     override fun invalidate() = withState(threadListViewModel) { state ->
         invalidateOptionsMenu()
         renderEmptyStateIfNeeded(state)
@@ -148,7 +150,8 @@ class ThreadListFragment @Inject constructor(
                 displayName = threadSummary.rootThreadSenderInfo.displayName,
                 avatarUrl = threadSummary.rootThreadSenderInfo.avatarUrl,
                 roomEncryptionTrustLevel = null,
-                rootThreadEventId = threadSummary.rootEventId)
+                rootThreadEventId = threadSummary.rootEventId
+        )
         (activity as? ThreadsActivity)?.navigateToThreadTimeline(roomThreadDetailArgs)
     }
 
@@ -158,7 +161,8 @@ class ThreadListFragment @Inject constructor(
                 displayName = timelineEvent.senderInfo.displayName,
                 avatarUrl = timelineEvent.senderInfo.avatarUrl,
                 roomEncryptionTrustLevel = null,
-                rootThreadEventId = timelineEvent.eventId)
+                rootThreadEventId = timelineEvent.eventId
+        )
         (activity as? ThreadsActivity)?.navigateToThreadTimeline(threadTimelineArgs)
     }
 

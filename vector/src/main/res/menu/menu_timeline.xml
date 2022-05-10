@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AlwaysShowAction">
 
     <item
         android:id="@+id/timeline_setting"
@@ -19,24 +20,27 @@
         android:title="@string/action_invite"
         app:showAsAction="never" />
 
+    <!-- We always want to show this item as an icon -->
     <item
         android:id="@+id/video_call"
         android:icon="@drawable/ic_video"
         android:title="@string/action_video_call"
         android:visible="false"
         app:iconTint="?colorPrimary"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         tools:visible="true" />
 
+    <!-- We always want to show this item as an icon -->
     <item
         android:id="@+id/voice_call"
         android:icon="@drawable/ic_phone"
-        android:title="@string/call"
+        android:title="@string/action_voice_call"
         android:visible="false"
         app:iconTint="?colorPrimary"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         tools:visible="true" />
 
+    <!-- We always want to show this item as an icon -->
     <item
         android:id="@+id/menu_timeline_thread_list"
         android:title="@string/action_view_threads"

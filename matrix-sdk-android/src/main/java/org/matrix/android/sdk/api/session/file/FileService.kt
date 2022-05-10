@@ -45,9 +45,9 @@ interface FileService {
      * Result will be a decrypted file, stored in the cache folder. url parameter will be used to create unique filename to avoid name collision.
      */
     suspend fun downloadFile(fileName: String,
-                     mimeType: String?,
-                     url: String?,
-                     elementToDecrypt: ElementToDecrypt?): File
+                             mimeType: String?,
+                             url: String?,
+                             elementToDecrypt: ElementToDecrypt?): File
 
     suspend fun downloadFile(messageContent: MessageWithAttachmentContent): File =
             downloadFile(
@@ -68,7 +68,8 @@ interface FileService {
                     mxcUrl = messageContent.getFileUrl(),
                     fileName = messageContent.getFileName(),
                     mimeType = messageContent.mimeType,
-                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt())
+                    elementToDecrypt = messageContent.encryptedFileInfo?.toElementToDecrypt()
+            )
 
     /**
      * Use this URI and pass it to intent using flag Intent.FLAG_GRANT_READ_URI_PERMISSION

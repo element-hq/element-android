@@ -45,7 +45,8 @@ internal class DefaultUnbindThreePidsTask @Inject constructor(private val profil
                             identityServerUrlWithoutProtocol,
                             params.threePid.toMedium(),
                             params.threePid.value
-                    ))
+                    )
+            )
         }.isSuccess()
     }
 }

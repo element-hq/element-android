@@ -355,7 +355,7 @@
     <plurals name="membership_changes">
         <item quantity="other">%d個のメンバーシップの変更</item>
     </plurals>
-    <string name="list_members">メンバーを表示</string>
+    <string name="list_members">メンバー</string>
     <plurals name="room_title_members">
         <item quantity="other">%d名のメンバー</item>
     </plurals>
@@ -512,7 +512,7 @@
     <string name="settings_security_and_privacy">セキュリティーとプライバシー</string>
     <string name="preference_root_help_about">ヘルプと概要</string>
     <string name="bottom_action_people_x">ダイレクトメッセージ</string>
-    <string name="edited_suffix">（編集済）</string>
+    <string name="edited_suffix">（編集した）</string>
     <string name="room_filtering_filter_hint">会話を検索…</string>
     <string name="room_list_quick_actions_notifications_all_noisy">全てのメッセージ (音量大)</string>
     <string name="room_list_quick_actions_notifications_all">全てのメッセージ</string>
@@ -962,7 +962,7 @@
     <string name="settings_integrations">インテグレーション（統合）</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">アプリがバックグラウンドにある場合、着信メッセージは通知されません。</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name}は正確な時間に定期的にバックグラウンドで同期します（構成可能）。
-\nこれは無線とバッテリーの使用量に影響し、$ {app_name}がイベントを待機していることを示す永続的な通知が表示されます。</string>
+\nこれは無線とバッテリーの使用量に影響し、${app_name}がイベントを待機していることを示す永続的な通知が表示されます。</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name}は、端末の限られたリソース（バッテリーの残量）を維持する方法でバックグラウンド同期をします。
 \n端末の状態によっては、OSによって同期が延期される場合があります。</string>
     <string name="settings_system_preferences_summary">LEDの色、振動、音を選択してください…</string>
@@ -1520,7 +1520,7 @@
     <string name="delete_poll_dialog_title">アンケートを削除</string>
     <string name="create_space">スペースを作成</string>
     <string name="join_space">スペースに参加</string>
-    <string name="leave_space">スペースを退出</string>
+    <string name="leave_space">退出</string>
     <string name="space_settings_manage_rooms">ルームを管理</string>
     <string name="this_space_has_no_rooms">このスペースにはルームがありません</string>
     <string name="error_voice_message_unable_to_play">音声メッセージを再生できません</string>
@@ -2342,4 +2342,34 @@
     <string name="set_a_security_phrase_notice">あなたしか知らないセキュリティーフレーズを入力してください。サーバーで機密情報を保護するために使用します。</string>
     <string name="message_reaction_show_less">詳細を非表示</string>
     <string name="invite_people_to_your_space_desc">他の参加者はいません。%sに招待しましょう。</string>
+    <string name="location_share_live_enabled">位置情報（ライブ）が有効です</string>
+    <string name="location_in_background_missing_permission_dialog_title">アクセスを許可</string>
+    <string name="a11y_location_share_option_user_current_icon">現在の位置情報を共有</string>
+    <string name="location_share_option_user_current">現在の位置情報を共有</string>
+    <string name="create_spaces_room_public_header_desc">ルームを作成します。後から追加できます。</string>
+    <plurals name="entries">
+        <item quantity="other">%d個のエントリー</item>
+    </plurals>
+    <string name="ftue_personalize_submit">保存して続行</string>
+    <string name="ftue_personalize_complete_subtitle">設定を保存しました。</string>
+    <string name="ftue_profile_picture_subtitle">これは後から変更できます。</string>
+    <string name="ftue_profile_picture_title">プロフィール画像を追加</string>
+    <string name="ftue_display_name_entry_footer">これは後から変更できます</string>
+    <string name="ftue_display_name_entry_title">表示名</string>
+    <string name="ftue_display_name_subtitle">メッセージを送信する際に表示されます。</string>
+    <string name="a11y_location_share_option_pinned_icon">この位置情報を共有</string>
+    <string name="location_share_option_pinned">この位置情報を共有</string>
+    <string name="a11y_location_share_option_user_live_icon">位置情報（ライブ）を共有</string>
+    <string name="location_share_option_user_live">位置情報（ライブ）を共有</string>
+    <string name="location_share_live_stop">中止</string>
+    <string name="ftue_display_name_title">表示名を選択</string>
+    <string name="ftue_account_created_subtitle">あなたのアカウント %s が作成されました。</string>
+    <string name="ftue_account_created_congratulations_title">おめでとうございます！</string>
+    <string name="threads_notice_migration_message">近日中にスレッドはベータ版となります。
+\n
+\nその準備として、この時点以前に作成されたスレッドは、通常の返信として表示するように変更します。
+\n
+\nスレッドはMatrixの仕様の一部になったため、これは一度限りの変更です。</string>
+    <string name="threads_notice_migration_title">スレッドはベータ版になります 🎉</string>
+    <string name="action_disable">無効にする</string>
 </resources>

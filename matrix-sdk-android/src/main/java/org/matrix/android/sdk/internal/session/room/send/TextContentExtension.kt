@@ -54,7 +54,8 @@ internal fun TextContent.toThreadTextContent(
                     isFallingBack = true,
                     inReplyTo = ReplyToContent(
                             eventId = latestThreadEventId
-                    )),
+                    )
+            ),
             formattedBody = formattedText
     )
 }

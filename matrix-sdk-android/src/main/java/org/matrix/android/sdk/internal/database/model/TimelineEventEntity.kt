@@ -32,8 +32,8 @@ internal open class TimelineEventEntity(var localId: Long = 0,
                                         var isUniqueDisplayName: Boolean = false,
                                         var senderAvatar: String? = null,
                                         var senderMembershipEventId: String? = null,
-                                        // ownedByThreadChunk indicates that the current TimelineEventEntity belongs
-                                        // to a thread chunk and is a temporarily event.
+        // ownedByThreadChunk indicates that the current TimelineEventEntity belongs
+        // to a thread chunk and is a temporarily event.
                                         var ownedByThreadChunk: Boolean = false,
                                         var readReceipts: ReadReceiptsSummaryEntity? = null
 ) : RealmObject() {

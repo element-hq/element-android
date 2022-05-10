@@ -32,6 +32,7 @@ data class RoomMemberListViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
         val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized,
+        val ignoredUserIds: List<String> = emptyList(),
         val filter: String = "",
         val threePidInvites: Async<List<Event>> = Uninitialized,
         val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized,

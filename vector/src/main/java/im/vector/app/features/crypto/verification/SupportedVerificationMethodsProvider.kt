@@ -33,7 +33,8 @@ class SupportedVerificationMethodsProvider @Inject constructor(
                 // Element supports SAS verification
                 VerificationMethod.SAS,
                 // Element is able to show QR codes
-                VerificationMethod.QR_CODE_SHOW)
+                VerificationMethod.QR_CODE_SHOW
+        )
                 .apply {
                     if (hardwareInfo.hasBackCamera()) {
                         // Element is able to scan QR codes, and a Camera is available

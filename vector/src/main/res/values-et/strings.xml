@@ -245,7 +245,7 @@
     <string name="are_you_sure">Kas sa oled kindel\?</string>
     <string name="backup">Varunda</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Kui sa enne väljalogimist ei varunda oma võtmeid, siis sa kaotad ligipääsu oma krüptitud sõnumitele.</string>
-    <string name="loading">Laeme…</string>
+    <string name="loading">Laadime…</string>
     <string name="ok">Sobib</string>
     <string name="action_cancel">Tühista</string>
     <string name="action_save">Salvesta</string>
@@ -743,7 +743,9 @@
 \nÜldistest seadistustest saad seda alati muuta.</string>
     <string name="room_participants_action_ignore">Eira selle kasutaja sõnumeid</string>
     <string name="room_participants_action_unignore_title">Lõpeta selle kasutaja eiramine</string>
-    <string name="room_participants_action_unignore_prompt_msg">Selle kasutaja eiramise lõpetamine teeb tema sõnumid uuesti nähtavaks.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Selle kasutaja eiramise lõpetamine teeb tema sõnumid uuesti nähtavaks.
+\n
+\nPalun arvesta, et samaga käivitud rakendub uuesti ning andmete sünkroniseerimiseks kulub natuke aega.</string>
     <string name="room_participants_action_unignore">Lõpeta eiramine</string>
     <string name="room_participants_action_cancel_invite_title">Tühista kutse</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Kas oled kindel et sa soovid tühistada kutse sellele kasutajale\?</string>
@@ -1958,7 +1960,7 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
     <string name="leave_space">Lahku kogukonnast</string>
-    <string name="space_add_child_title">Lisa jututuba</string>
+    <string name="space_add_child_title">Lisa jututube</string>
     <string name="space_explore_activity_title">Tutvu jututubadega</string>
     <plurals name="space_people_you_know">
         <item quantity="one">%d sinu tuttav on juba liitunud</item>
@@ -1968,7 +1970,7 @@
 \nProovi hiljem uuesti või küsi jututoa haldajalt, kas sul on olemas selleks vajalikud õigused.</string>
     <string name="join_anyway">Liitu ikkagi</string>
     <string name="join_space">Liitu kogukonnakeskusega</string>
-    <string name="create_space">Loo kogukonnakeskus</string>
+    <string name="create_space">Loo kogukond</string>
     <string name="skip_for_now">Hetkel jäta vahele</string>
     <string name="share_space_link_message">Palun liitu %1$s kogukonnakeskusega %2$s</string>
     <string name="invite_just_to_this_room_desc">Nad ei saa osalema %s jututoas</string>
@@ -2007,7 +2009,7 @@
     <string name="create_spaces_choose_type_label">Missugust kogukonnakeskust sooviksid sa luua\?</string>
     <string name="your_private_space">Sinu privaatne kogukonnakeskus</string>
     <string name="your_public_space">Sinu avalik kogukonnakeskus</string>
-    <string name="add_space">Lisa kogukonnakeskus</string>
+    <string name="add_space">Lisa kogukond</string>
     <string name="command_description_leave_room">Lahku antud tunnusega jututoast (tunnuse puudumisel jututoast, kus hetkel asud)</string>
     <string name="command_description_join_space">Liitu kogukonnakeskusega tema tunnuse alusel</string>
     <string name="command_description_create_space">Loo kogukonnakeskus</string>
@@ -2438,4 +2440,51 @@
 \n
 \nKuna jutulõngad on nüüd osa Matrix\'i spetsifikatsioonist, siis see on ühekordne muudatus.</string>
     <string name="threads_notice_migration_title">Jutulõngad on peaaegu valmis 🎉</string>
+    <string name="live_location_sharing_notification_description">Asukoha reaalajas jagamine on hetkel kasutusel</string>
+    <string name="live_location_sharing_notification_title">Asukoht reaalajas - ${app_name}</string>
+    <string name="error_forbidden_digits_only_username">Koduserver ei võimalda ainult numbritest koosneva kasutajanime loomist.</string>
+    <string name="ftue_personalize_skip_this_step">Jäta see samm vahele</string>
+    <string name="ftue_personalize_submit">Salvesta ja jätka</string>
+    <string name="ftue_personalize_complete_subtitle">Sinu eelistused on salvestatud.</string>
+    <string name="ftue_personalize_complete_title">Kõik on valmis!</string>
+    <string name="ftue_personalize_lets_go">Alustame nüüd</string>
+    <string name="ftue_profile_picture_subtitle">Sa võid seda hiljem alati muuta.</string>
+    <string name="ftue_profile_picture_title">Lisa profiilipilt</string>
+    <string name="ftue_display_name_entry_footer">Sa võid seda hiljem muuta</string>
+    <string name="ftue_display_name_entry_title">Kuvatav nimi</string>
+    <string name="ftue_display_name_subtitle">Seda näidatakse sõnumite saatmisel.</string>
+    <string name="ftue_display_name_title">Vali kuvatav nimi</string>
+    <string name="ftue_account_created_subtitle">Sinu kasutajakonto %s on nüüd olemas.</string>
+    <string name="ftue_account_created_congratulations_title">Õnnitlused!</string>
+    <string name="ftue_account_created_take_me_home">Mine avalehele</string>
+    <string name="ftue_account_created_personalize">Isikupärasta oma profiili</string>
+    <string name="action_disable">Lülita välja</string>
+    <string name="location_share_live_started">Reaalajas asukoha laadimine…</string>
+    <string name="location_share_live_select_duration_option_3">8 tunni kestel</string>
+    <string name="location_share_live_select_duration_option_2">1 tunni kestel</string>
+    <string name="location_share_live_select_duration_option_1">15 minuti jooksul</string>
+    <string name="location_share_live_select_duration_title">Jaga oma asukohta reaalajas</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">%1$s helisõnumi esitamine ei õnnestu</string>
+    <string name="a11y_pause_audio_message">Peata helisõnumi esitus: %1$s</string>
+    <string name="a11y_play_audio_message">Esita helisõnumit: %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minutit %2$d sekundit</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="sent_live_location">Jagas oma asukohta</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} sobib ideaalselt kasutamiseks töökeskkonnas. Ta on kasutusel ka mitmetes üliturvalistes organisatsioonides.</string>
+    <string name="beta">BEETA</string>
+    <string name="send_feedback_threads_title">Jutulõngade beetaversiooni tagasiside</string>
+    <string name="give_feedback_threads">Jaga tagasisidet</string>
+    <string name="beta_title_bottom_sheet_action">BEETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Kui see valik on kasutusel, siis sa alati oled teiste jaoks võrgust väljas. Seda ka siis, kui kasutad rakendust.</string>
+    <string name="settings_presence_user_always_appears_offline">Ei ole võrgus</string>
+    <string name="settings_presence">Olek võrgus</string>
+    <string name="threads_labs_enable_notice_message">Sinu koduserver hetkel ei toeta jutulõngasid ning seega antud funktsionaalsus ei pruugi toimida korralikult. Kõik sõnumid jutulõngas ilmselt ei ole loetavad. %sKas sa ikkagi soovid jutulõngad kasutusele võtta\?</string>
+    <string name="threads_labs_enable_notice_title">Jutulõngade beetaversioon</string>
+    <string name="threads_beta_enable_notice_title">Jutulõngade beetaversioon</string>
+    <string name="action_learn_more">Lisateave</string>
+    <string name="action_try_it_out">Proovi nüüd</string>
+    <string name="send_feedback_threads_info">Jutulõngad on hetkel arendusjärgus funktsionaalsus ning samaga lisandub ka senisest parem versioon teavitustest. Me hea meelega tahaksime kuulda, mida sa nendest muutustest arvad!</string>
+    <string name="threads_beta_enable_notice_message">Jutulõngad aitavad hoida sinu vestlusi teemakohastena ning kergesti jälgitavatena.%sJutulõngade kasutusele võtmisel laadime rakenduse uuesti. Kui sul on väga mahukad kontod, siis võib natuke aega kuluda.</string>
 </resources>

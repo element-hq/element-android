@@ -20,17 +20,19 @@ import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where
-import org.matrix.android.sdk.api.pushrules.RuleScope
-import org.matrix.android.sdk.api.pushrules.RuleSetKey
-import org.matrix.android.sdk.api.pushrules.rest.GetPushRulesResponse
+import org.matrix.android.sdk.api.failure.GlobalError
+import org.matrix.android.sdk.api.failure.InitialSyncRequestReason
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataEvent
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.pushrules.RuleScope
+import org.matrix.android.sdk.api.session.pushrules.RuleSetKey
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.sync.model.InvitedRoomSync
 import org.matrix.android.sdk.api.session.sync.model.UserAccountDataSync
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -39,14 +41,20 @@ import org.matrix.android.sdk.internal.database.model.IgnoredUserEntity
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntity
 import org.matrix.android.sdk.internal.database.model.UserAccountDataEntityFields
 import org.matrix.android.sdk.internal.database.model.deleteOnCascade
+import org.matrix.android.sdk.internal.database.query.findAllFrom
 import org.matrix.android.sdk.internal.database.query.getDirectRooms
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.session.SessionListeners
+import org.matrix.android.sdk.internal.session.dispatchTo
+import org.matrix.android.sdk.internal.session.pushers.GetPushRulesResponse
 import org.matrix.android.sdk.internal.session.room.RoomAvatarResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomDisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
@@ -65,7 +73,10 @@ internal class UserAccountDataSyncHandler @Inject constructor(
         private val directChatsHelper: DirectChatsHelper,
         private val updateUserAccountDataTask: UpdateUserAccountDataTask,
         private val roomAvatarResolver: RoomAvatarResolver,
-        private val roomDisplayNameResolver: RoomDisplayNameResolver
+        private val roomDisplayNameResolver: RoomDisplayNameResolver,
+        @SessionId private val sessionId: String,
+        private val sessionManager: SessionManager,
+        private val sessionListeners: SessionListeners
 ) {
 
     fun handle(realm: Realm, accountData: UserAccountDataSync?) {
@@ -184,12 +195,36 @@ internal class UserAccountDataSyncHandler @Inject constructor(
 
     private fun handleIgnoredUsers(realm: Realm, event: UserAccountDataEvent) {
         val userIds = event.content.toModel<IgnoredUsersContent>()?.ignoredUsers?.keys ?: return
-        realm.where(IgnoredUserEntity::class.java)
-                .findAll()
-                .deleteAllFromRealm()
+        val currentIgnoredUsers = realm.where(IgnoredUserEntity::class.java).findAll()
+        val currentIgnoredUserIds = currentIgnoredUsers.map { it.userId }
+        // Delete the previous list
+        currentIgnoredUsers.deleteAllFromRealm()
         // And save the new received list
         userIds.forEach { realm.createObject(IgnoredUserEntity::class.java).apply { userId = it } }
-        // TODO If not initial sync, we should execute a init sync
+
+        // Delete all the TimelineEvents for all the ignored users
+        // See https://spec.matrix.org/latest/client-server-api/#client-behaviour-22 :
+        // "Once ignored, the client will no longer receive events sent by that user, with the exception of state events"
+        // So just delete all non-state events from our local storage.
+        TimelineEventEntity.findAllFrom(realm, userIds)
+                .also { Timber.d("Deleting ${it.size} TimelineEventEntity from ignored users") }
+                .forEach {
+                    it.deleteOnCascade(true)
+                }
+
+        // Handle the case when some users are unignored from another session
+        val mustRefreshCache = currentIgnoredUserIds.any { currentIgnoredUserId -> currentIgnoredUserId !in userIds }
+        if (mustRefreshCache) {
+            Timber.d("A user has been unignored from another session, an initial sync should be performed")
+            dispatchMustRefresh()
+        }
+    }
+
+    private fun dispatchMustRefresh() {
+        val session = sessionManager.getSessionComponent(sessionId)?.session()
+        session.dispatchTo(sessionListeners) { safeSession, listener ->
+            listener.onGlobalError(safeSession, GlobalError.InitialSyncRequest(InitialSyncRequestReason.IGNORED_USERS_LIST_CHANGE))
+        }
     }
 
     private fun handleBreadcrumbs(realm: Realm, event: UserAccountDataEvent) {
