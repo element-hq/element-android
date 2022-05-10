@@ -12,6 +12,10 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        // Do not use `mavenCentral()`, it prevents Dependabot from working properly
+        maven {
+            url 'https://repo1.maven.org/maven2'
+        }
     }
 
     dependencies {
