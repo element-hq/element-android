@@ -382,10 +382,15 @@ internal class DefaultAuthenticationService @Inject constructor(
         return getWellknownTask.execute(
                 GetWellknownTask.Params(
                         domain = matrixId.getDomain(),
-                        homeServerConnectionConfig = homeServerConnectionConfig
+                        homeServerConnectionConfig = homeServerConnectionConfig.orWellKnownDefaults()
                 )
         )
     }
+
+    private fun HomeServerConnectionConfig?.orWellKnownDefaults() = this ?: HomeServerConnectionConfig.Builder()
+            // server uri is ignored when doing a wellknown lookup as we use the matrix id domain instead
+            .withHomeServerUri("https://dummy.org")
+            .build()
 
     override suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
                                               matrixId: String,
