@@ -55,77 +55,6 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         private val appStateHandler: AppStateHandler
 ) : VectorViewModel<SpaceLeaveAdvanceViewState, SpaceLeaveAdvanceViewAction, EmptyViewEvents>(initialState) {
 
-    override fun handle(action: SpaceLeaveAdvanceViewAction) = withState { state ->
-        when (action) {
-            is SpaceLeaveAdvanceViewAction.ToggleSelection -> {
-                val existing = state.selectedRooms.toMutableList()
-                if (existing.contains(action.roomId)) {
-                    existing.remove(action.roomId)
-                } else {
-                    existing.add(action.roomId)
-                }
-                setState {
-                    copy(
-                            selectedRooms = existing.toImmutableList(),
-                    )
-                }
-            }
-            is SpaceLeaveAdvanceViewAction.UpdateFilter -> {
-                setState { copy(currentFilter = action.filter) }
-            }
-            SpaceLeaveAdvanceViewAction.DoLeave -> {
-                setState { copy(leaveState = Loading()) }
-                viewModelScope.launch {
-                    try {
-                        state.selectedRooms.forEach {
-                            try {
-                                session.roomService().leaveRoom(it)
-                            } catch (failure: Throwable) {
-                                // silently ignore?
-                                Timber.e(failure, "Fail to leave sub rooms/spaces")
-                            }
-                        }
-
-                        session.spaceService().leaveSpace(initialState.spaceId)
-                        // We observe the membership and to dismiss when we have remote echo of leaving
-                    } catch (failure: Throwable) {
-                        setState { copy(leaveState = Fail(failure)) }
-                    }
-                }
-            }
-            SpaceLeaveAdvanceViewAction.ClearError -> {
-                setState { copy(leaveState = Uninitialized) }
-            }
-            SpaceLeaveAdvanceViewAction.SelectAll -> {
-                val filteredRooms = (state.allChildren as? Success)?.invoke()?.filter {
-                    it.name.contains(state.currentFilter, true)
-                }
-
-                filteredRooms?.let {
-                    setState {
-                        copy(
-                                selectedRooms = it.map { it.roomId },
-                        )
-                    }
-                }
-            }
-            SpaceLeaveAdvanceViewAction.SelectNone -> {
-                setState {
-                    copy(
-                            selectedRooms = emptyList(),
-                    )
-                }
-            }
-            is SpaceLeaveAdvanceViewAction.SetFilteringEnabled -> {
-                setState {
-                    copy(
-                            isFilteringEnabled = action.isEnabled
-                    )
-                }
-            }
-        }
-    }
-
     init {
         val space = session.getRoom(initialState.spaceId)
         val spaceSummary = space?.roomSummary()
@@ -172,6 +101,62 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
             setState {
                 copy(allChildren = Success(children))
             }
+        }
+    }
+
+    override fun handle(action: SpaceLeaveAdvanceViewAction) {
+        when (action) {
+            is SpaceLeaveAdvanceViewAction.UpdateFilter -> setState { copy(currentFilter = action.filter) }
+            SpaceLeaveAdvanceViewAction.ClearError -> setState { copy(leaveState = Uninitialized) }
+            SpaceLeaveAdvanceViewAction.SelectNone -> setState { copy(selectedRooms = emptyList()) }
+            is SpaceLeaveAdvanceViewAction.SetFilteringEnabled -> setState { copy(isFilteringEnabled = action.isEnabled) }
+            is SpaceLeaveAdvanceViewAction.ToggleSelection -> handleSelectionToggle(action)
+            SpaceLeaveAdvanceViewAction.DoLeave -> handleLeave()
+            SpaceLeaveAdvanceViewAction.SelectAll -> handleSelectAll()
+        }
+    }
+
+    private fun handleSelectAll() = withState { state ->
+        val filteredRooms = (state.allChildren as? Success)?.invoke()?.filter {
+            it.name.contains(state.currentFilter, true)
+        }
+        filteredRooms?.let {
+            setState { copy(selectedRooms = it.map { it.roomId }) }
+        }
+    }
+
+    private fun handleLeave() = withState { state ->
+        setState { copy(leaveState = Loading()) }
+        viewModelScope.launch {
+            try {
+                state.selectedRooms.forEach {
+                    try {
+                        session.roomService().leaveRoom(it)
+                    } catch (failure: Throwable) {
+                        // silently ignore?
+                        Timber.e(failure, "Fail to leave sub rooms/spaces")
+                    }
+                }
+
+                session.spaceService().leaveSpace(initialState.spaceId)
+                // We observe the membership and to dismiss when we have remote echo of leaving
+            } catch (failure: Throwable) {
+                setState { copy(leaveState = Fail(failure)) }
+            }
+        }
+    }
+
+    private fun handleSelectionToggle(action: SpaceLeaveAdvanceViewAction.ToggleSelection) = withState { state ->
+        val existing = state.selectedRooms.toMutableList()
+        if (existing.contains(action.roomId)) {
+            existing.remove(action.roomId)
+        } else {
+            existing.add(action.roomId)
+        }
+        setState {
+            copy(
+                    selectedRooms = existing.toImmutableList(),
+            )
         }
     }
 

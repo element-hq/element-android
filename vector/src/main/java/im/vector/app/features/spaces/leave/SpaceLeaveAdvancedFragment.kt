@@ -59,17 +59,12 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
                     .setSubtitle(state.spaceSummary?.name)
                     .allowBack()
 
-            views.spaceLeaveRadioButtonsTitle.text = getString(R.string.space_leave_radio_buttons_title, state.spaceSummary?.name)
-
             state.spaceSummary?.let { summary ->
-                val warningMessage: CharSequence? = if (summary.otherMemberIds.isEmpty()) {
-                    getString(R.string.space_leave_prompt_msg_only_you)
-                } else if (state.isLastAdmin) {
-                    getString(R.string.space_leave_prompt_msg_as_admin)
-                } else if (!summary.isPublic) {
-                    getString(R.string.space_leave_prompt_msg_private)
-                } else {
-                    null
+                val warningMessage: CharSequence? = when {
+                    summary.otherMemberIds.isEmpty() -> getString(R.string.space_leave_prompt_msg_only_you)
+                    state.isLastAdmin                -> getString(R.string.space_leave_prompt_msg_as_admin)
+                    !summary.isPublic                -> getString(R.string.space_leave_prompt_msg_private)
+                    else                             -> null
                 }
 
                 views.spaceLeavePromptDescription.isVisible = warningMessage != null
@@ -87,47 +82,21 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
         }
 
         views.spaceLeaveSelectGroup.setOnCheckedChangeListener { _, optionId ->
-            run {
-                when (optionId) {
-                    R.id.spaceLeaveSelectAll  -> {
-                        viewModel.handle(SpaceLeaveAdvanceViewAction.SelectAll)
-                    }
-                    R.id.spaceLeaveSelectNone -> {
-                        viewModel.handle(SpaceLeaveAdvanceViewAction.SelectNone)
-                    }
-                }
+            when (optionId) {
+                R.id.spaceLeaveSelectAll  -> viewModel.handle(SpaceLeaveAdvanceViewAction.SelectAll)
+                R.id.spaceLeaveSelectNone -> viewModel.handle(SpaceLeaveAdvanceViewAction.SelectNone)
             }
         }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         menu.findItem(R.id.menu_space_leave_search)?.let { searchItem ->
-
-            searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-                override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                    viewModel.handle(SpaceLeaveAdvanceViewAction.SetFilteringEnabled(isEnabled = true))
-                    return true
-                }
-
-                override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                    viewModel.handle(SpaceLeaveAdvanceViewAction.SetFilteringEnabled(isEnabled = false))
-                    return true
-                }
-            })
-
-            val searchView = searchItem.actionView as SearchView
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    viewModel.handle(SpaceLeaveAdvanceViewAction.UpdateFilter(newText ?: ""))
-                    return true
-                }
-            })
+            searchItem.bind(
+                    onExpanded = { viewModel.handle(SpaceLeaveAdvanceViewAction.SetFilteringEnabled(isEnabled = true)) },
+                    onCollapsed = { viewModel.handle(SpaceLeaveAdvanceViewAction.SetFilteringEnabled(isEnabled = false)) },
+                    onTextChanged = { viewModel.handle(SpaceLeaveAdvanceViewAction.UpdateFilter(it)) }
+            )
         }
-
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -144,12 +113,8 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
             views.appBarLayout.setExpanded(false)
         }
 
-        val behavior = (views.appBarLayout.layoutParams as? CoordinatorLayout.LayoutParams)?.behavior as? ToggleableAppBarLayoutBehavior
-        behavior?.let {
-            it.isEnabled = !state.isFilteringEnabled
-        }
-
-        updateRadioButtons()
+        updateAppBarBehaviorState(state)
+        updateRadioButtonsState(state)
 
         controller.setData(state)
     }
@@ -158,19 +123,48 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
         viewModel.handle(SpaceLeaveAdvanceViewAction.ToggleSelection(roomSummary.roomId))
     }
 
-    private fun updateRadioButtons() = withState(viewModel) { state ->
+    private fun updateAppBarBehaviorState(state: SpaceLeaveAdvanceViewState) {
+        val behavior = (views.appBarLayout.layoutParams as CoordinatorLayout.LayoutParams).behavior as ToggleableAppBarLayoutBehavior
+        behavior.isEnabled = !state.isFilteringEnabled
+    }
+
+    private fun updateRadioButtonsState(state: SpaceLeaveAdvanceViewState) {
         (state.allChildren as? Success)?.invoke()?.size?.let { allChildrenCount ->
             when (state.selectedRooms.size) {
-                0                -> {
-                    views.spaceLeaveSelectNone.isChecked = true
-                }
-                allChildrenCount -> {
-                    views.spaceLeaveSelectAll.isChecked = true
-                }
-                else             -> {
-                    views.spaceLeaveSelectSemi.isChecked = true
-                }
+                0                -> views.spaceLeaveSelectNone.isChecked = true
+                allChildrenCount -> views.spaceLeaveSelectAll.isChecked = true
+                else             -> views.spaceLeaveSelectSemi.isChecked = true
             }
         }
+    }
+
+    private fun MenuItem.bind(
+            onExpanded: () -> Unit,
+            onCollapsed: () -> Unit,
+            onTextChanged: (String) -> Unit) {
+        setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                onExpanded()
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                onCollapsed()
+                return true
+            }
+        })
+
+        val searchView = actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                onTextChanged(newText ?: "")
+                return true
+            }
+        })
     }
 }
