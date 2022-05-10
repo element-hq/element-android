@@ -157,7 +157,7 @@ dependencies {
     implementation libs.arrow.instances
 
     // olm lib is now hosted in MavenCentral
-    implementation 'org.matrix.android:olm-sdk:3.2.10'
+    implementation 'org.matrix.android:olm-sdk:3.2.11'
 
     // DI
     implementation libs.dagger.dagger
