@@ -69,7 +69,7 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
     }
 
     private fun setupAddSpace() {
-        binding.addSpaceClickbox.setOnClickListener {
+        binding.addSpaceLayout.setOnClickListener {
             val currentSpace = sharedActionViewModel.space.value
             if (currentSpace != null) {
                 startActivity(SpaceManageActivity.newIntent(requireActivity(), currentSpace.roomId, ManageType.AddRoomsOnlySpaces))
@@ -82,14 +82,13 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
     private fun observeSpaceChange() = sharedActionViewModel.space.observe(viewLifecycleOwner) {
         viewModel.setSpace(it)
         binding.headerText.isVisible = it == null
-
-        binding.bottomDivider.isVisible = !it?.spaceChildren.isNullOrEmpty()
+        binding.headerTextLayout.isVisible = it == null
     }
 
     override fun invalidate() {
         withState(viewModel) { state ->
             state.rootSpacesOrdered?.let {
-                (binding.roomList.adapter as SpaceListAdapter).replaceList(it)
+                (binding.roomList.adapter as SpaceListAdapter).replaceList(it + it)
             }
         }
     }

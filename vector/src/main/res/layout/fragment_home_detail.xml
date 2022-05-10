@@ -267,9 +267,17 @@
         android:id="@+id/space_modal_fragment"
         android:name="im.vector.app.features.home.SpaceListModalFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
         android:elevation="0dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
