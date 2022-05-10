@@ -34,6 +34,7 @@ import im.vector.app.features.login.SocialLoginButtonsView
 import im.vector.app.features.login.ssoIdentityProviders
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import javax.inject.Inject
 
 /**
@@ -81,11 +82,11 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
                 views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.selectedHomeserver.preferredLoginMode.ssoIdentityProviders()?.sorted()
                 views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
-                    override fun onProviderSelected(id: String?) {
+                    override fun onProviderSelected(provider: SsoIdentityProvider?) {
                         viewModel.getSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
-                                providerId = id
+                                providerId = provider?.id
                         )
                                 ?.let { openInCustomTab(it) }
                     }

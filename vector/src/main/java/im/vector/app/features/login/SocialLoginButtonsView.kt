@@ -31,7 +31,7 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
         LinearLayout(context, attrs, defStyle) {
 
     fun interface InteractionListener {
-        fun onProviderSelected(id: String?)
+        fun onProviderSelected(provider: SsoIdentityProvider?)
     }
 
     enum class Mode {
@@ -113,7 +113,7 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
             button.text = getButtonTitle(identityProvider.name)
             button.setTag(R.id.loginSignupSigninSocialLoginButtons, identityProvider.id)
             button.setOnClickListener {
-                listener?.onProviderSelected(identityProvider.id)
+                listener?.onProviderSelected(identityProvider)
             }
             addView(button)
         }
@@ -160,7 +160,7 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
     }
 }
 
-fun SocialLoginButtonsView.render(ssoProviders: List<SsoIdentityProvider>?, mode: SocialLoginButtonsView.Mode, listener: (String?) -> Unit) {
+fun SocialLoginButtonsView.render(ssoProviders: List<SsoIdentityProvider>?, mode: SocialLoginButtonsView.Mode, listener: (SsoIdentityProvider?) -> Unit) {
     this.mode = mode
     this.ssoIdentityProviders = ssoProviders?.sorted()
     this.listener = SocialLoginButtonsView.InteractionListener { listener(it) }
