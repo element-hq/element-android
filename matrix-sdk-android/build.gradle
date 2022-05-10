@@ -83,6 +83,11 @@ android {
         test {
             java.srcDirs += "src/sharedTest/java"
         }
+        main {
+            assets {
+                srcDirs 'src/main/assets', 'src/androidTest/assets'
+            }
+        }
     }
 }
 

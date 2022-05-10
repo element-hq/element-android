@@ -21,7 +21,6 @@ import io.realm.RealmConfiguration
 import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
-import timber.log.Timber
 import uniffi.olm.ProgressListener
 import java.io.File
 import javax.inject.Inject
@@ -38,10 +37,6 @@ internal class RustCryptoStoreMigrateUseCase @Inject constructor(
     private suspend fun migrate(progressListener: ProgressListener) {
         awaitTransaction(realmConfiguration) { realm: Realm ->
             val migrationData = extractMigrationData(realm)
-            if (migrationData == null) {
-                Timber.v("No migration to do, return")
-                return@awaitTransaction
-            }
             uniffi.olm.migrate(migrationData, dataDir.path, null, progressListener)
         }
     }

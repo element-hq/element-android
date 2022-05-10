@@ -35,7 +35,15 @@ private val charset = Charset.forName("UTF-8")
 
 internal class ExtractMigrationDataUseCase @Inject constructor() {
 
-    operator fun invoke(realm: Realm): MigrationData? {
+    operator fun invoke(realm: Realm): MigrationData {
+        return try {
+            extract(realm) ?: throw ExtractMigrationDataFailure
+        } catch (failure: Throwable) {
+            throw ExtractMigrationDataFailure
+        }
+    }
+
+    private fun extract(realm: Realm): MigrationData? {
         val metadataEntity = realm.where<CryptoMetadataEntity>().findFirst() ?: return null
 
         val pickleKey = OlmUtility.getRandomKey()
@@ -61,7 +69,7 @@ internal class ExtractMigrationDataUseCase @Inject constructor() {
         val isOlmAccountShared = metadataEntity.deviceKeysSentToServer
 
         val olmAccount = metadataEntity.getOlmAccount()!!
-        val pickledOlmAccount = olmAccount.pickle(pickleKey)
+        val pickledOlmAccount = olmAccount.pickle(pickleKey, StringBuffer()).asString()
         val pickledAccount = PickledAccount(
                 userId = userId,
                 deviceId = deviceId,
@@ -88,7 +96,7 @@ internal class ExtractMigrationDataUseCase @Inject constructor() {
     private fun OlmInboundGroupSessionEntity.toPickledInboundGroupSession(pickleKey: ByteArray): PickledInboundGroupSession {
         val senderKey = this.senderKey ?: ""
         val olmInboundGroupSession = getInboundGroupSession()!!
-        val pickledInboundGroupSession = olmInboundGroupSession.olmInboundGroupSession!!.pickle(pickleKey)
+        val pickledInboundGroupSession = olmInboundGroupSession.olmInboundGroupSession!!.pickle(pickleKey, StringBuffer()).asString()
         return PickledInboundGroupSession(
                 pickle = pickledInboundGroupSession,
                 senderKey = senderKey,
@@ -104,7 +112,7 @@ internal class ExtractMigrationDataUseCase @Inject constructor() {
         val deviceKey = this.deviceKey ?: ""
         val lastReceivedMessageTs = this.lastReceivedMessageTs
         val olmSession = getOlmSession()!!
-        val pickledOlmSession = olmSession.pickle(pickleKey)
+        val pickledOlmSession = olmSession.pickle(pickleKey, StringBuffer()).asString()
         return PickledSession(
                 pickle = pickledOlmSession,
                 senderKey = deviceKey,
@@ -114,14 +122,5 @@ internal class ExtractMigrationDataUseCase @Inject constructor() {
         )
     }
 
-    private fun Any.pickle(pickleKey: ByteArray): String {
-        return try {
-            val pickleMethod = this.javaClass.getDeclaredMethod("serialize", ByteArray::class.java, StringBuffer::class.java)
-            pickleMethod.isAccessible = true
-            val pickled = pickleMethod.invoke(this, pickleKey, StringBuffer())!!
-            String(pickled as ByteArray, charset)
-        } catch (throwable: Throwable) {
-            ""
-        }
-    }
+    private fun ByteArray.asString() = String(this, charset)
 }
