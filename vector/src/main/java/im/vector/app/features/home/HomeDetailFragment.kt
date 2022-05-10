@@ -391,7 +391,7 @@ class HomeDetailFragment @Inject constructor(
             views.groupToolbarSpaceTitleView.text = spaceSummary.displayName
             views.groupToolbarTitleView.text = spaceSummary.displayName
             views.spaceAvatar.isVisible = true
-            avatarRenderer.render(spaceSummary.toMatrixItem(), views.spaceAvatar)
+            avatarRenderer.render(spaceSummary.toMatrixItem(), requireContext(), views.spaceAvatar)
             ImageViewCompat.setImageTintList(views.toolbarChevron, ColorStateList.valueOf(MaterialColors.getColor(views.toolbarChevron, R.attr.vctr_message_text_color)))
 
             spaceSummary.spaceParents?.firstOrNull()?.let { directParent ->

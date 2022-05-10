@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -68,6 +69,15 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     fun render(matrixItem: MatrixItem, imageView: ImageView) {
         render(
                 GlideApp.with(imageView),
+                matrixItem,
+                DrawableImageViewTarget(imageView)
+        )
+    }
+
+    @UiThread
+    fun render(matrixItem: MatrixItem, context: Context, imageView: ImageView) {
+        render(
+                GlideApp.with(context),
                 matrixItem,
                 DrawableImageViewTarget(imageView)
         )
