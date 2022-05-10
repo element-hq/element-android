@@ -510,7 +510,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                     UpdateKeysBackupVersionBody(
                             algorithm = keysBackupVersion.algorithm,
                             authData = newMegolmBackupAuthDataWithNewSignature.toJsonDict(),
-                            version = keysBackupVersion.version)
+                            version = keysBackupVersion.version
+                    )
                 }
 
                 // And send it to the homeserver
@@ -713,14 +714,18 @@ internal class DefaultKeysBackupService @Inject constructor(
                             }
                         }
                     }
-                    Timber.v("restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out" +
-                            " of $sessionsFromHsCount from the backup store on the homeserver")
+                    Timber.v(
+                            "restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out" +
+                                    " of $sessionsFromHsCount from the backup store on the homeserver"
+                    )
 
                     // Do not trigger a backup for them if they come from the backup version we are using
                     val backUp = keysVersionResult.version != keysBackupVersion?.version
                     if (backUp) {
-                        Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up" +
-                                " to backup version: ${keysBackupVersion?.version}")
+                        Timber.v(
+                                "restoreKeysWithRecoveryKey: Those keys will be backed up" +
+                                        " to backup version: ${keysBackupVersion?.version}"
+                        )
                     }
 
                     // Import them into the crypto store
@@ -819,11 +824,15 @@ internal class DefaultKeysBackupService @Inject constructor(
             // Get key for the room and for the session
             val data = getRoomSessionDataTask.execute(GetRoomSessionDataTask.Params(roomId, sessionId, version))
             // Convert to KeysBackupData
-            KeysBackupData(mutableMapOf(
-                    roomId to RoomKeysBackupData(mutableMapOf(
-                            sessionId to data
-                    ))
-            ))
+            KeysBackupData(
+                    mutableMapOf(
+                            roomId to RoomKeysBackupData(
+                                    mutableMapOf(
+                                            sessionId to data
+                                    )
+                            )
+                    )
+            )
         } else if (roomId != null) {
             // Get all keys for the room
             val data = withContext(coroutineDispatchers.io) {
@@ -1348,7 +1357,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                 "sender_key" to sessionData.senderKey,
                 "sender_claimed_keys" to sessionData.senderClaimedKeys,
                 "forwarding_curve25519_key_chain" to (sessionData.forwardingCurve25519KeyChain.orEmpty()),
-                "session_key" to sessionData.sessionKey)
+                "session_key" to sessionData.sessionKey
+        )
 
         val json = MoshiProvider.providesMoshi()
                 .adapter(Map::class.java)
@@ -1376,7 +1386,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                 sessionData = mapOf(
                         "ciphertext" to encryptedSessionBackupData.mCipherText,
                         "mac" to encryptedSessionBackupData.mMac,
-                        "ephemeral" to encryptedSessionBackupData.mEphemeralKey)
+                        "ephemeral" to encryptedSessionBackupData.mEphemeralKey
+                )
         )
     }
 

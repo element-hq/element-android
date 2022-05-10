@@ -38,7 +38,8 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEnti
 /**
  * Realm module for Crypto store classes
  */
-@RealmModule(library = true,
+@RealmModule(
+        library = true,
         classes = [
             CryptoMetadataEntity::class,
             CryptoRoomEntity::class,
@@ -57,5 +58,6 @@ import org.matrix.android.sdk.internal.crypto.store.db.model.WithHeldSessionEnti
             WithHeldSessionEntity::class,
             SharedSessionEntity::class,
             OutboundGroupSessionInfoEntity::class
-        ])
+        ]
+)
 internal class RealmCryptoStoreModule

@@ -568,8 +568,10 @@ internal class DefaultCrossSigningService @Inject constructor(
             }
 
             // Sign the other MasterKey with our UserSigning key
-            val newSignature = JsonCanonicalizer.getCanonicalJson(Map::class.java,
-                    otherMasterKeys.signalableJSONDictionary()).let { userPkSigning?.sign(it) }
+            val newSignature = JsonCanonicalizer.getCanonicalJson(
+                    Map::class.java,
+                    otherMasterKeys.signalableJSONDictionary()
+            ).let { userPkSigning?.sign(it) }
 
             if (newSignature == null) {
                 // race??
@@ -686,7 +688,8 @@ internal class DefaultCrossSigningService @Inject constructor(
         val otherSSKSignature = otherDevice.signatures?.get(otherUserId)?.get("ed25519:${otherKeys.selfSigningKey()?.unpaddedBase64PublicKey}")
                 ?: return legacyFallbackTrust(
                         locallyTrusted,
-                        DeviceTrustResult.MissingDeviceSignature(otherDeviceId, otherKeys.selfSigningKey()
+                        DeviceTrustResult.MissingDeviceSignature(
+                                otherDeviceId, otherKeys.selfSigningKey()
                                 ?.unpaddedBase64PublicKey
                                 ?: ""
                         )
@@ -735,7 +738,8 @@ internal class DefaultCrossSigningService @Inject constructor(
         val otherSSKSignature = otherDevice.signatures?.get(otherKeys.userId)?.get("ed25519:${otherKeys.selfSigningKey()?.unpaddedBase64PublicKey}")
                 ?: return legacyFallbackTrust(
                         locallyTrusted,
-                        DeviceTrustResult.MissingDeviceSignature(otherDevice.deviceId, otherKeys.selfSigningKey()
+                        DeviceTrustResult.MissingDeviceSignature(
+                                otherDevice.deviceId, otherKeys.selfSigningKey()
                                 ?.unpaddedBase64PublicKey
                                 ?: ""
                         )

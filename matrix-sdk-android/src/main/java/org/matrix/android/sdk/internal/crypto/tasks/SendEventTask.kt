@@ -76,11 +76,13 @@ internal class DefaultSendEventTask @Inject constructor(
     @Throws
     private suspend fun handleEncryption(params: SendEventTask.Params): Event {
         if (params.encrypt && !params.event.isEncrypted()) {
-            return encryptEventTask.execute(EncryptEventTask.Params(
-                    params.event.roomId ?: "",
-                    params.event,
-                    listOf("m.relates_to")
-            ))
+            return encryptEventTask.execute(
+                    EncryptEventTask.Params(
+                            params.event.roomId ?: "",
+                            params.event,
+                            listOf("m.relates_to")
+                    )
+            )
         }
         return params.event
     }

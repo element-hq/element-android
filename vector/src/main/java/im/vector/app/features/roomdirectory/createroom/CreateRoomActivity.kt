@@ -87,12 +87,14 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                       openAfterCreate: Boolean = true,
                       currentSpaceId: String? = null): Intent {
             return Intent(context, CreateRoomActivity::class.java).apply {
-                putExtra(Mavericks.KEY_ARG, CreateRoomArgs(
+                putExtra(
+                        Mavericks.KEY_ARG, CreateRoomArgs(
                         initialName = initialName,
                         isSpace = isSpace,
                         openAfterCreate = openAfterCreate,
                         parentSpaceId = currentSpaceId
-                ))
+                )
+                )
             }
         }
 

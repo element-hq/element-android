@@ -105,7 +105,14 @@ class OnboardingViewModelTest {
 
     @Test
     fun `given supports changing display name, when handling PersonalizeProfile, then emits contents choose display name`() = runTest {
-        viewModelWith(initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = true, supportsChangingProfilePicture = false)))
+        viewModelWith(
+                initialState.copy(
+                        personalizationState = PersonalizationState(
+                                supportsChangingDisplayName = true,
+                                supportsChangingProfilePicture = false
+                        )
+                )
+        )
         val test = viewModel.test()
 
         viewModel.handle(OnboardingAction.PersonalizeProfile)
@@ -117,7 +124,14 @@ class OnboardingViewModelTest {
 
     @Test
     fun `given only supports changing profile picture, when handling PersonalizeProfile, then emits contents choose profile picture`() = runTest {
-        viewModelWith(initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = false, supportsChangingProfilePicture = true)))
+        viewModelWith(
+                initialState.copy(
+                        personalizationState = PersonalizationState(
+                                supportsChangingDisplayName = false,
+                                supportsChangingProfilePicture = true
+                        )
+                )
+        )
         val test = viewModel.test()
 
         viewModel.handle(OnboardingAction.PersonalizeProfile)
@@ -473,10 +487,12 @@ class OnboardingViewModelTest {
 
     private fun givenSuccessfulRegistrationForStartAndDummySteps(missingStages: List<Stage>) {
         val flowResult = FlowResult(missingStages = missingStages, completedStages = emptyList())
-        givenRegistrationResultsFor(listOf(
-                A_LOADABLE_REGISTER_ACTION to RegistrationResult.FlowResponse(flowResult),
-                RegisterAction.RegisterDummy to RegistrationResult.Success(fakeSession)
-        ))
+        givenRegistrationResultsFor(
+                listOf(
+                        A_LOADABLE_REGISTER_ACTION to RegistrationResult.FlowResponse(flowResult),
+                        RegisterAction.RegisterDummy to RegistrationResult.Success(fakeSession)
+                )
+        )
         givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
     }
 

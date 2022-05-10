@@ -751,7 +751,9 @@
 \n
 \nTúto akciu môžete kedykoľvek zmeniť späť vo všeobecných nastaveniach.</string>
     <string name="room_participants_action_unignore_title">Neignorovať používateľa</string>
-    <string name="room_participants_action_unignore_prompt_msg">Zrušením ignorovania si opäť zobrazíte všetky správy od tohoto používateľa.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Zrušením ignorovania tohto používateľa sa opäť zobrazia všetky správy od neho.
+\n
+\nUpozorňujeme, že táto akcia spôsobí reštart aplikácie a môže chvíľu trvať.</string>
     <string name="room_participants_action_cancel_invite_title">Zrušiť pozvanie</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ste si istí, že chcete zrušiť pozvanie tohoto používateľa\?</string>
     <string name="room_participants_remove_title">Vykázať používateľa</string>
@@ -2504,4 +2506,32 @@
     <string name="ftue_account_created_take_me_home">Zober ma domov</string>
     <string name="ftue_account_created_personalize">Prispôsobiť profil</string>
     <string name="action_disable">Zakázať</string>
+    <string name="a11y_audio_message_item">%1$s, %2$s, %3$s</string>
+    <string name="settings_presence">Prítomnosť</string>
+    <string name="location_share_live_started">Načítavanie polohy v reálnom čase…</string>
+    <string name="location_share_live_select_duration_title">Zdieľajte svoju polohu v reálnom čase na</string>
+    <string name="location_share_live_select_duration_option_3">8 hodín</string>
+    <string name="location_share_live_select_duration_option_2">1 hodinu</string>
+    <string name="location_share_live_select_duration_option_1">15 minút</string>
+    <string name="audio_message_file_size">(%1$s)</string>
+    <string name="audio_message_reply_content">%1$s (%2$s)</string>
+    <string name="error_audio_message_unable_to_play">Nie je možné prehrať %1$s</string>
+    <string name="a11y_pause_audio_message">Pozastaviť %1$s</string>
+    <string name="a11y_play_audio_message">Prehrať %1$s</string>
+    <string name="a11y_audio_playback_duration">%1$d minút %2$d sekúnd</string>
+    <string name="sent_live_location">Zdieľali svoju polohu v reálnom čase</string>
+    <string name="ftue_auth_carousel_workplace_body">${app_name} je skvelý aj na pracovisku. Dôverujú mu najbezpečnejšie organizácie na svete.</string>
+    <string name="beta">BETA</string>
+    <string name="send_feedback_threads_info">Na vláknach sa neustále pracuje a pripravujú sa nové, zaujímavé funkcie, ako napríklad vylepšené oznámenia. Radi si vypočujeme vašu spätnú väzbu!</string>
+    <string name="send_feedback_threads_title">Spätná väzba na Beta vlákna</string>
+    <string name="give_feedback_threads">Poskytnite spätnú väzbu</string>
+    <string name="beta_title_bottom_sheet_action">BETA</string>
+    <string name="settings_presence_user_always_appears_offline_summary">Ak je táto funkcia zapnutá, budete sa ostatným používateľom vždy javiť ako offline, a to aj pri používaní aplikácie.</string>
+    <string name="settings_presence_user_always_appears_offline">Režim offline</string>
+    <string name="threads_labs_enable_notice_message">Váš domovský server v súčasnosti nepodporuje vlákna, takže táto funkcia môže byť nespoľahlivá. Niektoré správy vo vláknach nemusia byť spoľahlivo dostupné. %sChcete aj tak povoliť vlákna\?</string>
+    <string name="threads_labs_enable_notice_title">Vlákna Beta</string>
+    <string name="threads_beta_enable_notice_message">Vlákna pomáhajú udržiavať vaše konverzácie v téme a ľahké sledovanie. %sZapnutím vlákien sa aplikácia obnoví. V prípade niektorých účtov to môže trvať dlhšie.</string>
+    <string name="threads_beta_enable_notice_title">Vlákna Beta</string>
+    <string name="action_learn_more">Zistiť viac</string>
+    <string name="action_try_it_out">Vyskúšajte si to</string>
 </resources>

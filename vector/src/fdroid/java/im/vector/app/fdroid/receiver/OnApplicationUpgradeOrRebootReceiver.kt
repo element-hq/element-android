@@ -32,7 +32,8 @@ class OnApplicationUpgradeOrRebootReceiver : BroadcastReceiver() {
         BackgroundSyncStarter.start(
                 context,
                 singletonEntryPoint.vectorPreferences(),
-                singletonEntryPoint.activeSessionHolder()
+                singletonEntryPoint.activeSessionHolder(),
+                singletonEntryPoint.clock()
         )
     }
 }

@@ -36,11 +36,12 @@ class RoomGroupMessageCreator @Inject constructor(
         val firstKnownRoomEvent = events[0]
         val roomName = firstKnownRoomEvent.roomName ?: firstKnownRoomEvent.senderName ?: ""
         val roomIsGroup = !firstKnownRoomEvent.roomIsDirect
-        val style = NotificationCompat.MessagingStyle(Person.Builder()
-                .setName(userDisplayName)
-                .setIcon(bitmapLoader.getUserIcon(userAvatarUrl))
-                .setKey(firstKnownRoomEvent.matrixID)
-                .build()
+        val style = NotificationCompat.MessagingStyle(
+                Person.Builder()
+                        .setName(userDisplayName)
+                        .setIcon(bitmapLoader.getUserIcon(userAvatarUrl))
+                        .setKey(firstKnownRoomEvent.matrixID)
+                        .build()
         ).also {
             it.conversationTitle = roomName.takeIf { roomIsGroup }
             it.isGroupConversation = roomIsGroup
@@ -72,6 +73,7 @@ class RoomGroupMessageCreator @Inject constructor(
                             it.hasSmartReplyError = smartReplyErrors.isNotEmpty()
                             it.shouldBing = meta.shouldBing
                             it.customSound = events.last().soundName
+                            it.isUpdated = events.last().isUpdated
                         },
                         largeIcon = largeBitmap,
                         lastMessageTimestamp,

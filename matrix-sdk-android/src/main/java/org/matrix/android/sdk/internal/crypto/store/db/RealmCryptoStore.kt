@@ -95,6 +95,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmException
 import org.matrix.olm.OlmOutboundGroupSession
@@ -110,7 +111,8 @@ internal class RealmCryptoStore @Inject constructor(
         @CryptoDatabase private val realmConfiguration: RealmConfiguration,
         private val crossSigningKeysMapper: CrossSigningKeysMapper,
         @UserId private val userId: String,
-        @DeviceId private val deviceId: String?
+        @DeviceId private val deviceId: String?,
+        private val clock: Clock,
 ) : IMXCryptoStore {
 
     /* ==========================================================================================
@@ -308,7 +310,7 @@ internal class RealmCryptoStore @Inject constructor(
                         // Add the device
                         Timber.d("Add device ${cryptoDeviceInfo.deviceId} of user $userId")
                         val newEntity = CryptoMapper.mapToEntity(cryptoDeviceInfo)
-                        newEntity.firstTimeSeenLocalTs = System.currentTimeMillis()
+                        newEntity.firstTimeSeenLocalTs = clock.epochMillis()
                         userEntity.devices.add(newEntity)
                     } else {
                         // Update the device
@@ -716,6 +718,7 @@ internal class RealmCryptoStore @Inject constructor(
         return doWithRealm(realmConfiguration) {
             it.where<OlmSessionEntity>()
                     .equalTo(OlmSessionEntityFields.DEVICE_KEY, deviceKey)
+                    .sort(OlmSessionEntityFields.LAST_RECEIVED_MESSAGE_TS, Sort.DESCENDING)
                     .findAll()
                     .mapNotNull { sessionEntity ->
                         sessionEntity.sessionId
@@ -801,7 +804,7 @@ internal class RealmCryptoStore @Inject constructor(
 
                 if (outboundGroupSession != null) {
                     val info = realm.createObject(OutboundGroupSessionInfoEntity::class.java).apply {
-                        creationTime = System.currentTimeMillis()
+                        creationTime = clock.epochMillis()
                         putOutboundGroupSession(outboundGroupSession)
                     }
                     entity.outboundSessionInfo = info
@@ -1668,7 +1671,7 @@ internal class RealmCryptoStore @Inject constructor(
      * So we need to tidy up a bit
      */
     override fun tidyUpDataBase() {
-        val prevWeekTs = System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1_000
+        val prevWeekTs = clock.epochMillis() - 7 * 24 * 60 * 60 * 1_000
         doRealmTransaction(realmConfiguration) { realm ->
 
             // Clean the old ones?

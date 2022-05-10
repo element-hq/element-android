@@ -21,6 +21,7 @@ import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
+import org.matrix.android.sdk.internal.util.time.Clock
 import javax.inject.Inject
 
 internal class VerificationTransportRoomMessageFactory @Inject constructor(
@@ -31,6 +32,7 @@ internal class VerificationTransportRoomMessageFactory @Inject constructor(
         private val deviceId: String?,
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val cryptoCoroutineScope: CoroutineScope,
+        private val clock: Clock,
 ) {
 
     fun createTransport(roomId: String, tx: DefaultVerificationTransaction?): VerificationTransportRoomMessage {
@@ -41,7 +43,8 @@ internal class VerificationTransportRoomMessageFactory @Inject constructor(
                 roomId = roomId,
                 localEchoEventFactory = localEchoEventFactory,
                 tx = tx,
-                cryptoCoroutineScope
+                cryptoCoroutineScope = cryptoCoroutineScope,
+                clock = clock,
         )
     }
 }

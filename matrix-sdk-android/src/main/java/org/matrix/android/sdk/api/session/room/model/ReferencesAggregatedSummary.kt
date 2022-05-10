@@ -22,7 +22,6 @@ import org.matrix.android.sdk.api.session.events.model.Content
  * of all events that are referencing the 'eventId' event via the RelationType.REFERENCE
  */
 data class ReferencesAggregatedSummary(
-        val eventId: String,
         val content: Content?,
         val sourceEvents: List<String>,
         val localEchos: List<String>

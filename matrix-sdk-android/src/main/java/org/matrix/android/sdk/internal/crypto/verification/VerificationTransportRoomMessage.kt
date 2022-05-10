@@ -42,6 +42,7 @@ import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_SAS
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.concurrent.Executors
 
@@ -53,6 +54,7 @@ internal class VerificationTransportRoomMessage(
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val tx: DefaultVerificationTransaction?,
         cryptoCoroutineScope: CoroutineScope,
+        private val clock: Clock,
 ) : VerificationTransport {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
@@ -104,7 +106,7 @@ internal class VerificationTransportRoomMessage(
                 transactionId = "",
                 fromDevice = userDeviceId ?: "",
                 methods = supportedMethods,
-                timestamp = System.currentTimeMillis()
+                timestamp = clock.epochMillis()
         )
 
         val info = MessageVerificationRequestContent(
@@ -184,44 +186,7 @@ internal class VerificationTransportRoomMessage(
                 }
             }
         }
-//        val workerParams = WorkerParamsFactory.toData(SendVerificationMessageWorker.Params(
-//                sessionId = sessionId,
-//                eventId = event.eventId ?: ""
-//        ))
-//        val enqueueInfo = enqueueSendWork(workerParams)
-//
-//        val workLiveData = workManagerProvider.workManager
-//                .getWorkInfosForUniqueWorkLiveData(uniqueQueueName())
-//        val observer = object : Observer<List<WorkInfo>> {
-//            override fun onChanged(workInfoList: List<WorkInfo>?) {
-//                workInfoList
-//                        ?.filter { it.state == WorkInfo.State.SUCCEEDED }
-//                        ?.firstOrNull { it.id == enqueueInfo.second }
-//                        ?.let { _ ->
-//                            onDone?.invoke()
-//                            workLiveData.removeObserver(this)
-//                        }
-//            }
-//        }
-//
-//        // TODO listen to DB to get synced info
-//        coroutineScope.launch(Dispatchers.Main) {
-//            workLiveData.observeForever(observer)
-//        }
     }
-
-//    private fun enqueueSendWork(workerParams: Data): Pair<Operation, UUID> {
-//        val workRequest = workManagerProvider.matrixOneTimeWorkRequestBuilder<SendVerificationMessageWorker>()
-//                .setConstraints(WorkManagerProvider.workConstraints)
-//                .setInputData(workerParams)
-//                .setBackoffCriteria(BackoffPolicy.LINEAR, WorkManagerProvider.BACKOFF_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-//                .build()
-//        return workManagerProvider.workManager
-//                .beginUniqueWork(uniqueQueueName(), ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
-//                .enqueue() to workRequest.id
-//    }
-
-//    private fun uniqueQueueName() = "${roomId}_VerificationWork"
 
     override fun createAccept(tid: String,
                               keyAgreementProtocol: String,
@@ -295,7 +260,7 @@ internal class VerificationTransportRoomMessage(
     private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
         return Event(
                 roomId = roomId,
-                originServerTs = System.currentTimeMillis(),
+                originServerTs = clock.epochMillis(),
                 senderId = userId,
                 eventId = localId,
                 type = type,

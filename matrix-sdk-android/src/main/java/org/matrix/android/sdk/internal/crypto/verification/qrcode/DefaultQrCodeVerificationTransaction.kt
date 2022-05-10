@@ -54,7 +54,8 @@ internal class DefaultQrCodeVerificationTransaction(
         transactionId,
         otherUserId,
         otherDeviceId,
-        isIncoming),
+        isIncoming
+),
         QrCodeVerificationTransaction {
 
     override val qrCodeText: String?

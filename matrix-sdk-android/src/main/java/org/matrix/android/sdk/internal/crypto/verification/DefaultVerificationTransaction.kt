@@ -105,8 +105,10 @@ internal abstract class DefaultVerificationTransaction(
 
     private fun setDeviceVerified(userId: String, deviceId: String) {
         // TODO should not override cross sign status
-        setDeviceVerificationAction.handle(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+        setDeviceVerificationAction.handle(
+                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
                 userId,
-                deviceId)
+                deviceId
+        )
     }
 }

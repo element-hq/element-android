@@ -42,6 +42,7 @@ import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThre
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicReference
 
@@ -53,11 +54,13 @@ import java.util.concurrent.atomic.AtomicReference
  * Once we got a ChunkEntity we wrap it with TimelineChunk class so we dispatch any methods for loading data.
  */
 
-internal class LoadTimelineStrategy(
+internal class LoadTimelineStrategy constructor(
         private val roomId: String,
         private val timelineId: String,
         private val mode: Mode,
-        private val dependencies: Dependencies) {
+        private val dependencies: Dependencies,
+        clock: Clock,
+) {
 
     sealed interface Mode {
         object Live : Mode
@@ -153,7 +156,7 @@ internal class LoadTimelineStrategy(
         }
     }
 
-    private val uiEchoManager = UIEchoManager(uiEchoManagerListener)
+    private val uiEchoManager = UIEchoManager(uiEchoManagerListener, clock)
     private val sendingEventsDataSource: SendingEventsDataSource = RealmSendingEventsDataSource(
             roomId = roomId,
             realm = dependencies.realm,

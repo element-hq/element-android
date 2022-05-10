@@ -72,7 +72,7 @@ class TimelineWithManyMembersTest : InstrumentedTest {
         for (index in 1 until cryptoTestData.sessions.size) {
             val session = cryptoTestData.sessions[index]
             val roomForCurrentMember = session.getRoom(cryptoTestData.roomId)!!
-            val timelineForCurrentMember = roomForCurrentMember.createTimeline(null, TimelineSettings(30))
+            val timelineForCurrentMember = roomForCurrentMember.timelineService().createTimeline(null, TimelineSettings(30))
             timelineForCurrentMember.start()
 
             session.startSync(true)

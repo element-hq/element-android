@@ -27,6 +27,7 @@ import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
 import org.matrix.android.sdk.internal.crypto.RoomDecryptorProvider
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmDecryption
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,7 +36,9 @@ private val loggerTag = LoggerTag("MegolmSessionDataImporter", LoggerTag.CRYPTO)
 internal class MegolmSessionDataImporter @Inject constructor(private val olmDevice: MXOlmDevice,
                                                              private val roomDecryptorProvider: RoomDecryptorProvider,
                                                              private val outgoingKeyRequestManager: OutgoingKeyRequestManager,
-                                                             private val cryptoStore: IMXCryptoStore) {
+                                                             private val cryptoStore: IMXCryptoStore,
+                                                             private val clock: Clock,
+) {
 
     /**
      * Import a list of megolm session keys.
@@ -50,7 +53,7 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
     fun handle(megolmSessionsData: List<MegolmSessionData>,
                fromBackup: Boolean,
                progressListener: ProgressListener?): ImportRoomKeysResult {
-        val t0 = System.currentTimeMillis()
+        val t0 = clock.epochMillis()
 
         val totalNumbersOfKeys = megolmSessionsData.size
         var lastProgress = 0
@@ -110,7 +113,7 @@ internal class MegolmSessionDataImporter @Inject constructor(private val olmDevi
             cryptoStore.markBackupDoneForInboundGroupSessions(olmInboundGroupSessionWrappers)
         }
 
-        val t1 = System.currentTimeMillis()
+        val t1 = clock.epochMillis()
 
         Timber.tag(loggerTag.value).v("## importMegolmSessionsData : sessions import " + (t1 - t0) + " ms (" + megolmSessionsData.size + " sessions)")
 

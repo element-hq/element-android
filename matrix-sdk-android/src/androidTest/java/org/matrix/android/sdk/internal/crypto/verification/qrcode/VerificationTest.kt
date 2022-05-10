@@ -173,7 +173,8 @@ class VerificationTest : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, callback)
+                            }, callback
+                    )
         }
 
         testHelper.doSync<Unit> { callback ->
@@ -189,7 +190,8 @@ class VerificationTest : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, callback)
+                            }, callback
+                    )
         }
 
         val aliceVerificationService = aliceSession.cryptoService().verificationService()

@@ -212,7 +212,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         }
         session.coroutineScope.launch {
             orderCommands.forEach {
-                session.getRoom(it.spaceId)?.updateAccountData(
+                session.getRoom(it.spaceId)?.roomAccountDataService()?.updateAccountData(
                         RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER,
                         SpaceOrderContent(order = it.order).toContent()
                 )
@@ -292,6 +292,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                     val rootSpaces = async.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
                     val orders = rootSpaces.associate {
                         it.roomId to session.getRoom(it.roomId)
+                                ?.roomAccountDataService()
                                 ?.getAccountDataEvent(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER)
                                 ?.content.toModel<SpaceOrderContent>()
                                 ?.safeOrder()

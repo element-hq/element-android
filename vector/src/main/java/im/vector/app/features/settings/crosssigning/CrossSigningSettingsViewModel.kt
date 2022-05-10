@@ -110,7 +110,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                                                 uiaContinuation = promise
                                             }
                                         }
-                                    }, it)
+                                    }, it
+                            )
                         }
                     } catch (failure: Throwable) {
                         handleInitializeXSigningError(failure)

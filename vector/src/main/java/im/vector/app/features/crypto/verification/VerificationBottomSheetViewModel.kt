@@ -274,10 +274,11 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                 } else {
                     setState {
                         copy(
-                                pendingRequest = Success(session
-                                        .cryptoService()
-                                        .verificationService()
-                                        .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
+                                pendingRequest = Success(
+                                        session
+                                                .cryptoService()
+                                                .verificationService()
+                                                .requestKeyVerificationInDMs(supportedVerificationMethodsProvider.provide(), otherUserId, roomId)
                                 )
                         )
                     }
@@ -415,7 +416,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     )
                 }
                 _viewEvents.post(
-                        VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
+                        VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error))
+                )
             }
         }
     }

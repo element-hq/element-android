@@ -50,6 +50,7 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -57,6 +58,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.SessionTestParams
+import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.common.TestMatrixCallback
 import java.util.concurrent.CountDownLatch
 
@@ -101,7 +103,7 @@ class E2eeSanityTests : InstrumentedTest {
         otherAccounts.forEach {
             testHelper.runBlockingTest {
                 Log.v("#E2E TEST", "Alice invites ${it.myUserId}")
-                aliceRoomPOV.invite(it.myUserId)
+                aliceRoomPOV.membershipService().invite(it.myUserId)
             }
         }
 
@@ -143,7 +145,7 @@ class E2eeSanityTests : InstrumentedTest {
         newAccount.forEach {
             testHelper.runBlockingTest {
                 Log.v("#E2E TEST", "Alice invites ${it.myUserId}")
-                aliceRoomPOV.invite(it.myUserId)
+                aliceRoomPOV.membershipService().invite(it.myUserId)
             }
         }
 
@@ -327,7 +329,8 @@ class E2eeSanityTests : InstrumentedTest {
                         keyBackupPassword,
                         null,
                         null,
-                        null, it
+                        null,
+                        it
                 )
             }
 
@@ -577,12 +580,11 @@ class E2eeSanityTests : InstrumentedTest {
     }
 
     private fun sendMessageInRoom(testHelper: CommonTestHelper, aliceRoomPOV: Room, text: String): String? {
-        aliceRoomPOV.sendTextMessage(text)
+        aliceRoomPOV.sendService().sendTextMessage(text)
         var sentEventId: String? = null
-        testHelper.waitWithLatch(4 * 60_000L) { latch ->
-            val timeline = aliceRoomPOV.createTimeline(null, TimelineSettings(60))
+        testHelper.waitWithLatch(4 * TestConstants.timeOutMillis) { latch ->
+            val timeline = aliceRoomPOV.timelineService().createTimeline(null, TimelineSettings(60))
             timeline.start()
-
             testHelper.retryPeriodicallyWithLatch(latch) {
                 val decryptedMsg = timeline.getSnapshot()
                         .filter { it.root.getClearType() == EventType.MESSAGE }

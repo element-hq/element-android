@@ -1,1 +1,0 @@
-VoIP Screen Sharing Permission

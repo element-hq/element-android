@@ -87,8 +87,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         setState {
             copy(
                     isMine = session.myUserId == this.userId,
-                    userMatrixItem = room?.getRoomMember(initialState.userId)?.toMatrixItem()?.let { Success(it) } ?: Uninitialized,
-                    hasReadReceipt = room?.getUserReadReceipt(initialState.userId) != null,
+                    userMatrixItem = room?.membershipService()?.getRoomMember(initialState.userId)?.toMatrixItem()?.let { Success(it) } ?: Uninitialized,
+                    hasReadReceipt = room?.readService()?.getUserReadReceipt(initialState.userId) != null,
                     isSpace = room?.roomSummary()?.roomType == RoomType.SPACE
             )
         }
@@ -97,7 +97,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.Main) {
             // Do we have a room member for this id.
             val roomMember = withContext(Dispatchers.Default) {
-                room?.getRoomMember(initialState.userId)
+                room?.membershipService()?.getRoomMember(initialState.userId)
             }
             // If not, we look for profile info on the server
             if (room == null || roomMember == null) {
@@ -228,7 +228,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             viewModelScope.launch {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
                 try {
-                    room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent)
+                    room.stateService().sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent)
                     _viewEvents.post(RoomMemberProfileViewEvents.OnSetPowerLevelSuccess)
                 } catch (failure: Throwable) {
                     _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
@@ -242,10 +242,12 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         if (state.isRoomEncrypted) {
             if (!state.isMine && state.userMXCrossSigningInfo?.isTrusted() == false) {
                 // ok, let's find or create the DM room
-                _viewEvents.post(RoomMemberProfileViewEvents.StartVerification(
-                        userId = state.userId,
-                        canCrossSign = session.cryptoService().crossSigningService().canCrossSign()
-                ))
+                _viewEvents.post(
+                        RoomMemberProfileViewEvents.StartVerification(
+                                userId = state.userId,
+                                canCrossSign = session.cryptoService().crossSigningService().canCrossSign()
+                        )
+                )
             }
         }
     }
@@ -257,7 +259,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-                room.invite(initialState.userId)
+                room.membershipService().invite(initialState.userId)
                 _viewEvents.post(RoomMemberProfileViewEvents.OnInviteActionSuccess)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
@@ -272,7 +274,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-                room.remove(initialState.userId, action.reason)
+                room.membershipService().remove(initialState.userId, action.reason)
                 _viewEvents.post(RoomMemberProfileViewEvents.OnKickActionSuccess)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
@@ -289,9 +291,9 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             try {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
                 if (membership == Membership.BAN) {
-                    room.unban(initialState.userId, action.reason)
+                    room.membershipService().unban(initialState.userId, action.reason)
                 } else {
-                    room.ban(initialState.userId, action.reason)
+                    room.membershipService().ban(initialState.userId, action.reason)
                 }
                 _viewEvents.post(RoomMemberProfileViewEvents.OnBanActionSuccess)
             } catch (failure: Throwable) {

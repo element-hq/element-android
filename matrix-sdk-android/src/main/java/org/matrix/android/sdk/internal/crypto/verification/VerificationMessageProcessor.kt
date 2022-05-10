@@ -27,13 +27,15 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationStartContent
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class VerificationMessageProcessor @Inject constructor(
         private val verificationService: DefaultVerificationService,
         @UserId private val userId: String,
-        @DeviceId private val deviceId: String?
+        @DeviceId private val deviceId: String?,
+        private val clock: Clock,
 ) {
 
     private val transactionsHandledByOtherDevice = ArrayList<String>()
@@ -60,7 +62,7 @@ internal class VerificationMessageProcessor @Inject constructor(
         // If the request is in the future by more than 5 minutes or more than 10 minutes in the past,
         // the message should be ignored by the receiver.
 
-        if (event.ageLocalTs != null && !VerificationService.isValidRequest(event.ageLocalTs)) return Unit.also {
+        if (event.ageLocalTs != null && !VerificationService.isValidRequest(event.ageLocalTs, clock.epochMillis())) return Unit.also {
             Timber.d("## SAS Verification live observer: msgId: ${event.eventId} is outdated age:$event.ageLocalTs ms")
         }
 

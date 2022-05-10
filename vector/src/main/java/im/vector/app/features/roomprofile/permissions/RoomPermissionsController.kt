@@ -132,12 +132,15 @@ class RoomPermissionsController @Inject constructor(
 
         settingsInfoItem {
             id("notice")
-            helperText(host.stringProvider.getString(
-                    if (editable) {
-                        if (isSpace) R.string.space_permissions_notice else R.string.room_permissions_notice
-                    } else {
-                        if (isSpace) R.string.space_permissions_notice_read_only else R.string.room_permissions_notice_read_only
-                    }))
+            helperText(
+                    host.stringProvider.getString(
+                            if (editable) {
+                                if (isSpace) R.string.space_permissions_notice else R.string.room_permissions_notice
+                            } else {
+                                if (isSpace) R.string.space_permissions_notice_read_only else R.string.room_permissions_notice_read_only
+                            }
+                    )
+            )
         }
 
         // Useful permissions

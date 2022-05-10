@@ -53,7 +53,8 @@ internal class DefaultIncomingSASDefaultVerificationTransaction(
         transactionId,
         otherUserID,
         null,
-        isIncoming = true),
+        isIncoming = true
+),
         IncomingSasVerificationTransaction {
 
     override val uxState: IncomingSasVerificationTransaction.UxState

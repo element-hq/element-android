@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventCon
 import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -70,7 +71,7 @@ class KeyShareTests : InstrumentedTest {
         val room = aliceSession.getRoom(roomId)
         assertNotNull(room)
         Thread.sleep(4_000)
-        assertTrue(room?.isEncrypted() == true)
+        assertTrue(room?.roomCryptoService()?.isEncrypted() == true)
 
         val sentEvent = commonTestHelper.sendTextMessage(room!!, "My Message", 1).first()
         val sentEventId = sentEvent.eventId
