@@ -172,6 +172,8 @@ interface Navigator {
                             initialLocationData: LocationData?,
                             locationOwnerId: String?)
 
+    fun openLocationLiveMap(context: Context, roomId: String)
+
     fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
 
     fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs)

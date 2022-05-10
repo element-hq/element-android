@@ -221,6 +221,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
@@ -645,6 +646,13 @@ class TimelineFragment @Inject constructor(
                         initialLocationData = locationContent.toLocationData(),
                         locationOwnerId = if (isSelfLocation) senderId else null
                 )
+    }
+
+    private fun navigateToLocationLiveMap() {
+        navigator.openLocationLiveMap(
+                context = requireContext(),
+                roomId = timelineArgs.roomId
+        )
     }
 
     private fun handleChangeLocationIndicator(event: RoomDetailViewEvents.ChangeLocationIndicator) {
@@ -2014,6 +2022,10 @@ class TimelineFragment @Inject constructor(
             }
             is MessageLocationContent            -> {
                 handleShowLocationPreview(messageContent, informationData.senderId)
+            }
+            is MessageBeaconInfoContent          -> {
+                // TODO navigate only from running live location message: possible after merge of associated PR
+                navigateToLocationLiveMap()
             }
             else                                 -> {
                 val handled = onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
