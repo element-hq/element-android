@@ -352,6 +352,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
         hideModal()
+        views.backButtonText.text = getString(R.string.all_chats)
         if (spaceSummary == null) {
             views.backButtonLayout.isVisible = false
             views.groupToolbarSpaceTitleView.isVisible = false
@@ -365,6 +366,10 @@ class HomeDetailFragment @Inject constructor(
             views.groupToolbarTitleView.text = spaceSummary.displayName
             views.spaceAvatar.isVisible = true
             avatarRenderer.render(spaceSummary.toMatrixItem(), views.spaceAvatar)
+
+            spaceSummary.spaceParents?.firstOrNull()?.let { directParent ->
+                views.backButtonText.text = directParent.roomSummary?.name ?: getString(R.string.all_chats)
+            }
         }
     }
 
