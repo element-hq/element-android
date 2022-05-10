@@ -22,6 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -162,10 +163,20 @@ class HomeDetailFragment @Inject constructor(
 
         views.dimView.setOnClickListener {
             hideModal()
+            views.toolbarChevron.animate()
+                    .rotation(0F)
+                    .setDuration(500)
+                    .setInterpolator(DecelerateInterpolator())
+                    .start()
         }
 
         views.dimViewBottom.setOnClickListener {
             hideModal()
+            views.toolbarChevron.animate()
+                    .rotation(0F)
+                    .setDuration(500)
+                    .setInterpolator(DecelerateInterpolator())
+                    .start()
         }
 
         viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
@@ -229,6 +240,11 @@ class HomeDetailFragment @Inject constructor(
     private fun toggleModalVisibility() {
         if (views.spaceModalFragment.isVisible) {
             hideModal()
+            views.toolbarChevron.animate()
+                    .rotation(0F)
+                    .setDuration(500)
+                    .setInterpolator(DecelerateInterpolator())
+                    .start()
         } else {
             showModal()
         }
@@ -238,14 +254,17 @@ class HomeDetailFragment @Inject constructor(
         views.spaceModalFragment.isVisible = true
         views.dimView.isVisible = true
         views.dimViewBottom.isVisible = true
-        views.toolbarChevron.rotation = 90F
+        views.toolbarChevron.animate()
+                .rotation(-270F)
+                .setDuration(500)
+                .setInterpolator(DecelerateInterpolator())
+                .start()
     }
 
     private fun hideModal() {
         views.spaceModalFragment.isVisible = false
         views.dimView.isVisible = false
         views.dimViewBottom.isVisible = false
-        views.toolbarChevron.rotation = 0F
     }
 
     private fun handleCallStarted() {
@@ -353,6 +372,7 @@ class HomeDetailFragment @Inject constructor(
     private fun onSpaceChange(spaceSummary: RoomSummary?) {
         hideModal()
         views.backButtonText.text = getString(R.string.all_chats)
+        views.toolbarChevron.rotation = 0F
         if (spaceSummary == null) {
             views.backButtonLayout.isVisible = false
             views.groupToolbarSpaceTitleView.isVisible = false
