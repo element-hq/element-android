@@ -2833,8 +2833,6 @@
     <string name="space_add_child_title">Add rooms</string>
     <string name="leave_space">Leave</string>
 
-    <string name="space_leave_">Leave space</string>
-
     <string name="space_leave_radio_buttons_title">Things in this space</string>
     <string name="space_leave_radio_button_all">Leave all</string>
     <string name="space_leave_radio_button_none">Leave none</string>
