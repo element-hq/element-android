@@ -49,7 +49,7 @@ class ThreadListController @Inject constructor(
     }
 
     override fun buildModels() =
-            when (session.getHomeServerCapabilities().canUseThreading) {
+            when (session.homeServerCapabilitiesService().getHomeServerCapabilities().canUseThreading) {
                 true  -> buildThreadSummaries()
                 false -> buildThreadList()
             }

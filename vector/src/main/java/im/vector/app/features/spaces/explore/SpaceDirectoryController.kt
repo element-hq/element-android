@@ -158,6 +158,7 @@ class SpaceDirectoryController @Inject constructor(
                             matrixItem(matrixItem)
                             avatarRenderer(host.avatarRenderer)
                             topic(info.topic)
+                            suggested(info.suggested.orFalse())
                             errorLabel(
                                     error?.let {
                                         host.stringProvider.getString(R.string.error_failed_to_join_room, host.errorFormatter.toHumanReadable(it))

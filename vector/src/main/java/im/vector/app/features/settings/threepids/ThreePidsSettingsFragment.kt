@@ -68,10 +68,12 @@ class ThreePidsSettingsFragment @Inject constructor(
     }
 
     private fun askAuthentication(event: ThreePidsSettingsViewEvents.RequestReAuth) {
-        ReAuthActivity.newIntent(requireContext(),
+        ReAuthActivity.newIntent(
+                requireContext(),
                 event.registrationFlowResponse,
                 event.lastErrorCode,
-                getString(R.string.settings_add_email_address)).let { intent ->
+                getString(R.string.settings_add_email_address)
+        ).let { intent ->
             reAuthActivityResultLauncher.launch(intent)
         }
     }

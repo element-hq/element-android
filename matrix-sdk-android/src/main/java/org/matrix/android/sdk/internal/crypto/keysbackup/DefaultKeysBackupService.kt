@@ -63,16 +63,11 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.RoomKeysBack
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteBackupTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteRoomSessionDataTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteRoomSessionsDataTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DeleteSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupLastVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetRoomSessionDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetRoomSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.GetSessionsDataTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreRoomSessionDataTask
-import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreRoomSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.StoreSessionsDataTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.UpdateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
@@ -112,16 +107,11 @@ internal class DefaultKeysBackupService @Inject constructor(
         // Tasks
         private val createKeysBackupVersionTask: CreateKeysBackupVersionTask,
         private val deleteBackupTask: DeleteBackupTask,
-        private val deleteRoomSessionDataTask: DeleteRoomSessionDataTask,
-        private val deleteRoomSessionsDataTask: DeleteRoomSessionsDataTask,
-        private val deleteSessionDataTask: DeleteSessionsDataTask,
         private val getKeysBackupLastVersionTask: GetKeysBackupLastVersionTask,
         private val getKeysBackupVersionTask: GetKeysBackupVersionTask,
         private val getRoomSessionDataTask: GetRoomSessionDataTask,
         private val getRoomSessionsDataTask: GetRoomSessionsDataTask,
         private val getSessionsDataTask: GetSessionsDataTask,
-        private val storeRoomSessionDataTask: StoreRoomSessionDataTask,
-        private val storeSessionsDataTask: StoreRoomSessionsDataTask,
         private val storeSessionDataTask: StoreSessionsDataTask,
         private val updateKeysBackupVersionTask: UpdateKeysBackupVersionTask,
         // Task executor
@@ -168,58 +158,63 @@ internal class DefaultKeysBackupService @Inject constructor(
     override fun prepareKeysBackupVersion(password: String?,
                                           progressListener: ProgressListener?,
                                           callback: MatrixCallback<MegolmBackupCreationInfo>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            runCatching {
-                withContext(coroutineDispatchers.crypto) {
-                    val olmPkDecryption = OlmPkDecryption()
-                    val signalableMegolmBackupAuthData = if (password != null) {
-                        // Generate a private key from the password
-                        val backgroundProgressListener = if (progressListener == null) {
-                            null
-                        } else {
-                            object : ProgressListener {
-                                override fun onProgress(progress: Int, total: Int) {
-                                    uiHandler.post {
-                                        try {
-                                            progressListener.onProgress(progress, total)
-                                        } catch (e: Exception) {
-                                            Timber.e(e, "prepareKeysBackupVersion: onProgress failure")
-                                        }
+        cryptoCoroutineScope.launch(coroutineDispatchers.io) {
+            try {
+                val olmPkDecryption = OlmPkDecryption()
+                val signalableMegolmBackupAuthData = if (password != null) {
+                    // Generate a private key from the password
+                    val backgroundProgressListener = if (progressListener == null) {
+                        null
+                    } else {
+                        object : ProgressListener {
+                            override fun onProgress(progress: Int, total: Int) {
+                                uiHandler.post {
+                                    try {
+                                        progressListener.onProgress(progress, total)
+                                    } catch (e: Exception) {
+                                        Timber.e(e, "prepareKeysBackupVersion: onProgress failure")
                                     }
                                 }
                             }
                         }
-
-                        val generatePrivateKeyResult = generatePrivateKeyWithPassword(password, backgroundProgressListener)
-                        SignalableMegolmBackupAuthData(
-                                publicKey = olmPkDecryption.setPrivateKey(generatePrivateKeyResult.privateKey),
-                                privateKeySalt = generatePrivateKeyResult.salt,
-                                privateKeyIterations = generatePrivateKeyResult.iterations
-                        )
-                    } else {
-                        val publicKey = olmPkDecryption.generateKey()
-
-                        SignalableMegolmBackupAuthData(
-                                publicKey = publicKey
-                        )
                     }
 
-                    val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableMegolmBackupAuthData.signalableJSONDictionary())
-
-                    val signedMegolmBackupAuthData = MegolmBackupAuthData(
-                            publicKey = signalableMegolmBackupAuthData.publicKey,
-                            privateKeySalt = signalableMegolmBackupAuthData.privateKeySalt,
-                            privateKeyIterations = signalableMegolmBackupAuthData.privateKeyIterations,
-                            signatures = objectSigner.signObject(canonicalJson)
+                    val generatePrivateKeyResult = generatePrivateKeyWithPassword(password, backgroundProgressListener)
+                    SignalableMegolmBackupAuthData(
+                            publicKey = olmPkDecryption.setPrivateKey(generatePrivateKeyResult.privateKey),
+                            privateKeySalt = generatePrivateKeyResult.salt,
+                            privateKeyIterations = generatePrivateKeyResult.iterations
                     )
+                } else {
+                    val publicKey = olmPkDecryption.generateKey()
 
-                    MegolmBackupCreationInfo(
-                            algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
-                            authData = signedMegolmBackupAuthData,
-                            recoveryKey = computeRecoveryKey(olmPkDecryption.privateKey())
+                    SignalableMegolmBackupAuthData(
+                            publicKey = publicKey
                     )
                 }
-            }.foldToCallback(callback)
+
+                val canonicalJson = JsonCanonicalizer.getCanonicalJson(Map::class.java, signalableMegolmBackupAuthData.signalableJSONDictionary())
+
+                val signedMegolmBackupAuthData = MegolmBackupAuthData(
+                        publicKey = signalableMegolmBackupAuthData.publicKey,
+                        privateKeySalt = signalableMegolmBackupAuthData.privateKeySalt,
+                        privateKeyIterations = signalableMegolmBackupAuthData.privateKeyIterations,
+                        signatures = objectSigner.signObject(canonicalJson)
+                )
+
+                val creationInfo = MegolmBackupCreationInfo(
+                        algorithm = MXCRYPTO_ALGORITHM_MEGOLM_BACKUP,
+                        authData = signedMegolmBackupAuthData,
+                        recoveryKey = computeRecoveryKey(olmPkDecryption.privateKey())
+                )
+                uiHandler.post {
+                    callback.onSuccess(creationInfo)
+                }
+            } catch (failure: Throwable) {
+                uiHandler.post {
+                    callback.onFailure(failure)
+                }
+            }
         }
     }
 
@@ -267,41 +262,39 @@ internal class DefaultKeysBackupService @Inject constructor(
     }
 
     override fun deleteBackup(version: String, callback: MatrixCallback<Unit>?) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            withContext(coroutineDispatchers.crypto) {
-                // If we're currently backing up to this backup... stop.
-                // (We start using it automatically in createKeysBackupVersion so this is symmetrical).
-                if (keysBackupVersion != null && version == keysBackupVersion?.version) {
-                    resetKeysBackupData()
-                    keysBackupVersion = null
-                    keysBackupStateManager.state = KeysBackupState.Unknown
-                }
+        cryptoCoroutineScope.launch(coroutineDispatchers.io) {
+            // If we're currently backing up to this backup... stop.
+            // (We start using it automatically in createKeysBackupVersion so this is symmetrical).
+            if (keysBackupVersion != null && version == keysBackupVersion?.version) {
+                resetKeysBackupData()
+                keysBackupVersion = null
+                keysBackupStateManager.state = KeysBackupState.Unknown
+            }
 
-                deleteBackupTask
-                        .configureWith(DeleteBackupTask.Params(version)) {
-                            this.callback = object : MatrixCallback<Unit> {
-                                private fun eventuallyRestartBackup() {
-                                    // Do not stay in KeysBackupState.Unknown but check what is available on the homeserver
-                                    if (state == KeysBackupState.Unknown) {
-                                        checkAndStartKeysBackup()
-                                    }
-                                }
-
-                                override fun onSuccess(data: Unit) {
-                                    eventuallyRestartBackup()
-
-                                    uiHandler.post { callback?.onSuccess(Unit) }
-                                }
-
-                                override fun onFailure(failure: Throwable) {
-                                    eventuallyRestartBackup()
-
-                                    uiHandler.post { callback?.onFailure(failure) }
+            deleteBackupTask
+                    .configureWith(DeleteBackupTask.Params(version)) {
+                        this.callback = object : MatrixCallback<Unit> {
+                            private fun eventuallyRestartBackup() {
+                                // Do not stay in KeysBackupState.Unknown but check what is available on the homeserver
+                                if (state == KeysBackupState.Unknown) {
+                                    checkAndStartKeysBackup()
                                 }
                             }
+
+                            override fun onSuccess(data: Unit) {
+                                eventuallyRestartBackup()
+
+                                uiHandler.post { callback?.onSuccess(Unit) }
+                            }
+
+                            override fun onFailure(failure: Throwable) {
+                                eventuallyRestartBackup()
+
+                                uiHandler.post { callback?.onFailure(failure) }
+                            }
                         }
-                        .executeBy(taskExecutor)
-            }
+                    }
+                    .executeBy(taskExecutor)
         }
     }
 
@@ -480,10 +473,11 @@ internal class DefaultKeysBackupService @Inject constructor(
 
         if (authData == null) {
             Timber.w("trustKeyBackupVersion:trust: Key backup is missing required data")
-
-            callback.onFailure(IllegalArgumentException("Missing element"))
+            uiHandler.post {
+                callback.onFailure(IllegalArgumentException("Missing element"))
+            }
         } else {
-            cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+            cryptoCoroutineScope.launch(coroutineDispatchers.io) {
                 val updateKeysBackupVersionBody = withContext(coroutineDispatchers.crypto) {
                     // Get current signatures, or create an empty set
                     val myUserSignatures = authData.signatures?.get(userId).orEmpty().toMutableMap()
@@ -516,7 +510,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                     UpdateKeysBackupVersionBody(
                             algorithm = keysBackupVersion.algorithm,
                             authData = newMegolmBackupAuthDataWithNewSignature.toJsonDict(),
-                            version = keysBackupVersion.version)
+                            version = keysBackupVersion.version
+                    )
                 }
 
                 // And send it to the homeserver
@@ -535,11 +530,15 @@ internal class DefaultKeysBackupService @Inject constructor(
 
                                     checkAndStartWithKeysBackupVersion(newKeysBackupVersion)
 
-                                    callback.onSuccess(data)
+                                    uiHandler.post {
+                                        callback.onSuccess(data)
+                                    }
                                 }
 
                                 override fun onFailure(failure: Throwable) {
-                                    callback.onFailure(failure)
+                                    uiHandler.post {
+                                        callback.onFailure(failure)
+                                    }
                                 }
                             }
                         }
@@ -553,15 +552,14 @@ internal class DefaultKeysBackupService @Inject constructor(
                                                        callback: MatrixCallback<Unit>) {
         Timber.v("trustKeysBackupVersionWithRecoveryKey: version ${keysBackupVersion.version}")
 
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            val isValid = withContext(coroutineDispatchers.crypto) {
-                isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)
-            }
+        cryptoCoroutineScope.launch(coroutineDispatchers.io) {
+            val isValid = isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)
 
             if (!isValid) {
                 Timber.w("trustKeyBackupVersionWithRecoveryKey: Invalid recovery key.")
-
-                callback.onFailure(IllegalArgumentException("Invalid recovery key or password"))
+                uiHandler.post {
+                    callback.onFailure(IllegalArgumentException("Invalid recovery key or password"))
+                }
             } else {
                 trustKeysBackupVersion(keysBackupVersion, true, callback)
             }
@@ -573,15 +571,14 @@ internal class DefaultKeysBackupService @Inject constructor(
                                                       callback: MatrixCallback<Unit>) {
         Timber.v("trustKeysBackupVersionWithPassphrase: version ${keysBackupVersion.version}")
 
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
-            val recoveryKey = withContext(coroutineDispatchers.crypto) {
-                recoveryKeyFromPassword(password, keysBackupVersion, null)
-            }
+        cryptoCoroutineScope.launch(coroutineDispatchers.io) {
+            val recoveryKey = recoveryKeyFromPassword(password, keysBackupVersion, null)
 
             if (recoveryKey == null) {
                 Timber.w("trustKeysBackupVersionWithPassphrase: Key backup is missing required data")
-
-                callback.onFailure(IllegalArgumentException("Missing element"))
+                uiHandler.post {
+                    callback.onFailure(IllegalArgumentException("Missing element"))
+                }
             } else {
                 // Check trust using the recovery key
                 trustKeysBackupVersionWithRecoveryKey(keysBackupVersion, recoveryKey, callback)
@@ -592,30 +589,28 @@ internal class DefaultKeysBackupService @Inject constructor(
     override fun onSecretKeyGossip(secret: String) {
         Timber.i("## CrossSigning - onSecretKeyGossip")
 
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.io) {
             try {
-                when (val keysBackupLastVersionResult = getKeysBackupLastVersionTask.execute(Unit)) {
-                    KeysBackupLastVersionResult.NoKeysBackup  -> {
-                        Timber.d("No keys backup found")
-                    }
-                    is KeysBackupLastVersionResult.KeysBackup -> {
-                        val keysBackupVersion = keysBackupLastVersionResult.keysVersionResult
-                        val recoveryKey = computeRecoveryKey(secret.fromBase64())
-                        if (isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)) {
-                            awaitCallback<Unit> {
-                                trustKeysBackupVersion(keysBackupVersion, true, it)
-                            }
-                            val importResult = awaitCallback<ImportRoomKeysResult> {
-                                restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, null, null, null, it)
-                            }
-                            withContext(coroutineDispatchers.crypto) {
-                                cryptoStore.saveBackupRecoveryKey(recoveryKey, keysBackupVersion.version)
-                            }
-                            Timber.i("onSecretKeyGossip: Recovered keys $importResult")
-                        } else {
-                            Timber.e("onSecretKeyGossip: Recovery key is not valid ${keysBackupVersion.version}")
+                val keysBackupVersion = getKeysBackupLastVersionTask.execute(Unit).toKeysVersionResult()
+                        ?: return@launch Unit.also {
+                            Timber.d("Failed to get backup last version")
                         }
+                val recoveryKey = computeRecoveryKey(secret.fromBase64())
+                if (isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysBackupVersion)) {
+                    awaitCallback<Unit> {
+                        trustKeysBackupVersion(keysBackupVersion, true, it)
                     }
+                    // we don't want to start immediately downloading all as it can take very long
+
+//                    val importResult = awaitCallback<ImportRoomKeysResult> {
+//                        restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, null, null, null, it)
+//                    }
+                    withContext(coroutineDispatchers.crypto) {
+                        cryptoStore.saveBackupRecoveryKey(recoveryKey, keysBackupVersion.version)
+                    }
+                    Timber.i("onSecretKeyGossip: saved valid backup key")
+                } else {
+                    Timber.e("onSecretKeyGossip: Recovery key is not valid ${keysBackupVersion.version}")
                 }
             } catch (failure: Throwable) {
                 Timber.e("onSecretKeyGossip: failed to trust key backup version ${keysBackupVersion?.version}")
@@ -678,9 +673,9 @@ internal class DefaultKeysBackupService @Inject constructor(
                                             callback: MatrixCallback<ImportRoomKeysResult>) {
         Timber.v("restoreKeysWithRecoveryKey: From backup version: ${keysVersionResult.version}")
 
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.io) {
             runCatching {
-                val decryption = withContext(coroutineDispatchers.crypto) {
+                val decryption = withContext(coroutineDispatchers.computation) {
                     // Check if the recovery is valid before going any further
                     if (!isValidRecoveryKeyForKeysBackupVersion(recoveryKey, keysVersionResult)) {
                         Timber.e("restoreKeysWithRecoveryKey: Invalid recovery key for this keys version")
@@ -719,14 +714,18 @@ internal class DefaultKeysBackupService @Inject constructor(
                             }
                         }
                     }
-                    Timber.v("restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out" +
-                            " of $sessionsFromHsCount from the backup store on the homeserver")
+                    Timber.v(
+                            "restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out" +
+                                    " of $sessionsFromHsCount from the backup store on the homeserver"
+                    )
 
                     // Do not trigger a backup for them if they come from the backup version we are using
                     val backUp = keysVersionResult.version != keysBackupVersion?.version
                     if (backUp) {
-                        Timber.v("restoreKeysWithRecoveryKey: Those keys will be backed up" +
-                                " to backup version: ${keysBackupVersion?.version}")
+                        Timber.v(
+                                "restoreKeysWithRecoveryKey: Those keys will be backed up" +
+                                        " to backup version: ${keysBackupVersion?.version}"
+                        )
                     }
 
                     // Import them into the crypto store
@@ -749,7 +748,19 @@ internal class DefaultKeysBackupService @Inject constructor(
                     }
                     result
                 }
-            }.foldToCallback(callback)
+            }.foldToCallback(object : MatrixCallback<ImportRoomKeysResult> {
+                override fun onSuccess(data: ImportRoomKeysResult) {
+                    uiHandler.post {
+                        callback.onSuccess(data)
+                    }
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    uiHandler.post {
+                        callback.onFailure(failure)
+                    }
+                }
+            })
         }
     }
 
@@ -761,7 +772,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                                               callback: MatrixCallback<ImportRoomKeysResult>) {
         Timber.v("[MXKeyBackup] restoreKeyBackup with password: From backup version: ${keysBackupVersion.version}")
 
-        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
+        cryptoCoroutineScope.launch(coroutineDispatchers.io) {
             runCatching {
                 val progressListener = if (stepProgressListener != null) {
                     object : ProgressListener {
@@ -786,7 +797,19 @@ internal class DefaultKeysBackupService @Inject constructor(
                         restoreKeysWithRecoveryKey(keysBackupVersion, recoveryKey, roomId, sessionId, stepProgressListener, it)
                     }
                 }
-            }.foldToCallback(callback)
+            }.foldToCallback(object : MatrixCallback<ImportRoomKeysResult> {
+                override fun onSuccess(data: ImportRoomKeysResult) {
+                    uiHandler.post {
+                        callback.onSuccess(data)
+                    }
+                }
+
+                override fun onFailure(failure: Throwable) {
+                    uiHandler.post {
+                        callback.onFailure(failure)
+                    }
+                }
+            })
         }
     }
 
@@ -801,19 +824,27 @@ internal class DefaultKeysBackupService @Inject constructor(
             // Get key for the room and for the session
             val data = getRoomSessionDataTask.execute(GetRoomSessionDataTask.Params(roomId, sessionId, version))
             // Convert to KeysBackupData
-            KeysBackupData(mutableMapOf(
-                    roomId to RoomKeysBackupData(mutableMapOf(
-                            sessionId to data
-                    ))
-            ))
+            KeysBackupData(
+                    mutableMapOf(
+                            roomId to RoomKeysBackupData(
+                                    mutableMapOf(
+                                            sessionId to data
+                                    )
+                            )
+                    )
+            )
         } else if (roomId != null) {
             // Get all keys for the room
-            val data = getRoomSessionsDataTask.execute(GetRoomSessionsDataTask.Params(roomId, version))
+            val data = withContext(coroutineDispatchers.io) {
+                getRoomSessionsDataTask.execute(GetRoomSessionsDataTask.Params(roomId, version))
+            }
             // Convert to KeysBackupData
             KeysBackupData(mutableMapOf(roomId to data))
         } else {
             // Get all keys
-            getSessionsDataTask.execute(GetSessionsDataTask.Params(version))
+            withContext(coroutineDispatchers.io) {
+                getSessionsDataTask.execute(GetSessionsDataTask.Params(version))
+            }
         }
     }
 
@@ -1326,7 +1357,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                 "sender_key" to sessionData.senderKey,
                 "sender_claimed_keys" to sessionData.senderClaimedKeys,
                 "forwarding_curve25519_key_chain" to (sessionData.forwardingCurve25519KeyChain.orEmpty()),
-                "session_key" to sessionData.sessionKey)
+                "session_key" to sessionData.sessionKey
+        )
 
         val json = MoshiProvider.providesMoshi()
                 .adapter(Map::class.java)
@@ -1354,7 +1386,8 @@ internal class DefaultKeysBackupService @Inject constructor(
                 sessionData = mapOf(
                         "ciphertext" to encryptedSessionBackupData.mCipherText,
                         "mac" to encryptedSessionBackupData.mMac,
-                        "ephemeral" to encryptedSessionBackupData.mEphemeralKey)
+                        "ephemeral" to encryptedSessionBackupData.mEphemeralKey
+                )
         )
     }
 

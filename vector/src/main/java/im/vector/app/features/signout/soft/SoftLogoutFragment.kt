@@ -59,26 +59,32 @@ class SoftLogoutFragment @Inject constructor(
             softLogoutController.update(softLogoutViewState)
             when (val mode = softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
                 is LoginMode.SsoAndPassword -> {
-                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
-                            softLogoutViewState.homeServerUrl,
-                            softLogoutViewState.deviceId,
-                            mode.ssoIdentityProviders
-                    ))
+                    loginViewModel.handle(
+                            LoginAction.SetupSsoForSessionRecovery(
+                                    softLogoutViewState.homeServerUrl,
+                                    softLogoutViewState.deviceId,
+                                    mode.ssoIdentityProviders
+                            )
+                    )
                 }
                 is LoginMode.Sso            -> {
-                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
-                            softLogoutViewState.homeServerUrl,
-                            softLogoutViewState.deviceId,
-                            mode.ssoIdentityProviders
-                    ))
+                    loginViewModel.handle(
+                            LoginAction.SetupSsoForSessionRecovery(
+                                    softLogoutViewState.homeServerUrl,
+                                    softLogoutViewState.deviceId,
+                                    mode.ssoIdentityProviders
+                            )
+                    )
                 }
                 LoginMode.Unsupported       -> {
                     // Prepare the loginViewModel for a SSO/login fallback recovery
-                    loginViewModel.handle(LoginAction.SetupSsoForSessionRecovery(
-                            softLogoutViewState.homeServerUrl,
-                            softLogoutViewState.deviceId,
-                            null
-                    ))
+                    loginViewModel.handle(
+                            LoginAction.SetupSsoForSessionRecovery(
+                                    softLogoutViewState.homeServerUrl,
+                                    softLogoutViewState.deviceId,
+                                    null
+                            )
+                    )
                 }
                 else                        -> Unit
             }

@@ -31,6 +31,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -98,8 +99,8 @@ import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventContent
 import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageEmoteContent
@@ -142,6 +143,7 @@ class MessageItemFactory @Inject constructor(
         private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val spanUtils: SpanUtils,
         private val session: Session,
+        private val clock: Clock,
         private val audioMessagePlaybackTracker: AudioMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
@@ -214,7 +216,7 @@ class MessageItemFactory @Inject constructor(
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
             }
-            is LiveLocationBeaconContent         -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
+            is MessageBeaconInfoContent          -> liveLocationMessageItemFactory.create(messageContent, highlight, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
         return messageItem?.apply {
@@ -436,7 +438,7 @@ class MessageItemFactory @Inject constructor(
 
         val otherUserId = if (informationData.sentByMe) messageContent.toUserId else informationData.senderId
         val otherUserName = if (informationData.sentByMe) {
-            session.getRoomMember(messageContent.toUserId, roomId)?.displayName
+            session.roomService().getRoomMember(messageContent.toUserId, roomId)?.displayName
         } else {
             informationData.memberName
         }
@@ -457,6 +459,7 @@ class MessageItemFactory @Inject constructor(
                                 reactionsSummaryEvents = attributes.reactionsSummaryEvents,
                         )
                 )
+                .clock(clock)
                 .callback(callback)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
@@ -663,27 +666,31 @@ class MessageItemFactory @Inject constructor(
                 ForegroundColorSpan(color),
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
 
         // Note: text size is set to 14sp
         spannable.setSpan(
                 AbsoluteSizeSpan(dimensionConverter.spToPx(13)),
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
 
-        spannable.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                callback?.onEditedDecorationClicked(informationData)
-            }
+        spannable.setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        callback?.onEditedDecorationClicked(informationData)
+                    }
 
-            override fun updateDrawState(ds: TextPaint) {
-                // nop
-            }
-        },
+                    override fun updateDrawState(ds: TextPaint) {
+                        // nop
+                    }
+                },
                 editStart,
                 editEnd,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
         return spannable
     }
 

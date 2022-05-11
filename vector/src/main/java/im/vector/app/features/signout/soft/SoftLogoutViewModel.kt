@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getUser
 import timber.log.Timber
 
 /**
@@ -158,9 +159,12 @@ class SoftLogoutViewModel @AssistedInject constructor(
         withState { softLogoutViewState ->
             if (softLogoutViewState.userId != action.credentials.userId) {
                 Timber.w("User login again with SSO, but using another account")
-                _viewEvents.post(SoftLogoutViewEvents.ErrorNotSameUser(
-                        softLogoutViewState.userId,
-                        action.credentials.userId))
+                _viewEvents.post(
+                        SoftLogoutViewEvents.ErrorNotSameUser(
+                                softLogoutViewState.userId,
+                                action.credentials.userId
+                        )
+                )
             } else {
                 setState {
                     copy(
@@ -169,7 +173,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
                 }
                 viewModelScope.launch {
                     try {
-                        session.updateCredentials(action.credentials)
+                        session.signOutService().updateCredentials(action.credentials)
                         onSessionRestored()
                     } catch (failure: Throwable) {
                         _viewEvents.post(SoftLogoutViewEvents.Failure(failure))
@@ -192,7 +196,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             try {
-                session.signInAgain(action.password)
+                session.signOutService().signInAgain(action.password)
                 onSessionRestored()
             } catch (failure: Throwable) {
                 setState {

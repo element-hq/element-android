@@ -70,11 +70,11 @@ class RoomListSectionBuilderGroup(
                         },
                         { qpm ->
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
-                            val updatableFilterLivePageResult = session.getFilteredPagedRoomSummariesLive(qpm)
+                            val updatableFilterLivePageResult = session.roomService().getFilteredPagedRoomSummariesLive(qpm)
                             onUpdatable(updatableFilterLivePageResult)
 
                             val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
-                                    .flatMapLatest { session.getRoomCountLive(updatableFilterLivePageResult.queryParams).asFlow() }
+                                    .flatMapLatest { session.roomService().getRoomCountLive(updatableFilterLivePageResult.queryParams).asFlow() }
                                     .distinctUntilChanged()
 
                             sections.add(
@@ -197,7 +197,8 @@ class RoomListSectionBuilderGroup(
             actualGroupId: String?
     ) {
         if (autoAcceptInvites.showInvites()) {
-            addSection(sections,
+            addSection(
+                    sections,
                     activeSpaceAwareQueries,
                     R.string.invitations_header,
                     true
@@ -252,7 +253,7 @@ class RoomListSectionBuilderGroup(
                            query: (RoomSummaryQueryParams.Builder) -> Unit) {
         withQueryParams(query) { roomQueryParams ->
             val name = stringProvider.getString(nameRes)
-            session.getFilteredPagedRoomSummariesLive(roomQueryParams)
+            session.roomService().getFilteredPagedRoomSummariesLive(roomQueryParams)
                     .also {
                         activeSpaceUpdaters.add(it)
                     }.livePagedList
@@ -262,7 +263,7 @@ class RoomListSectionBuilderGroup(
                                 .onEach {
                                     sections.find { it.sectionName == name }
                                             ?.notificationCount
-                                            ?.postValue(session.getNotificationCountForRooms(roomQueryParams))
+                                            ?.postValue(session.roomService().getNotificationCountForRooms(roomQueryParams))
                                 }
                                 .flowOn(Dispatchers.Default)
                                 .launchIn(coroutineScope)
@@ -272,7 +273,7 @@ class RoomListSectionBuilderGroup(
                                         sectionName = name,
                                         livePages = livePagedList,
                                         notifyOfLocalEcho = notifyOfLocalEcho,
-                                        itemCount = session.getRoomCountLive(roomQueryParams).asFlow()
+                                        itemCount = session.roomService().getRoomCountLive(roomQueryParams).asFlow()
                                 )
                         )
                     }

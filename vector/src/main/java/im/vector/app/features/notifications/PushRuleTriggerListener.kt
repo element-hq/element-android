@@ -71,12 +71,12 @@ class PushRuleTriggerListener @Inject constructor(
             stop()
         }
         this.session = session
-        session.addPushRuleListener(this)
+        session.pushRuleService().addPushRuleListener(this)
     }
 
     fun stop() {
         scope.coroutineContext.cancelChildren(CancellationException("PushRuleTriggerListener stopping"))
-        session?.removePushRuleListener(this)
+        session?.pushRuleService()?.removePushRuleListener(this)
         session = null
         notificationDrawerManager.clearAllEvents()
     }

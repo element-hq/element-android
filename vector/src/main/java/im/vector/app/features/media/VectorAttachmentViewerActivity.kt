@@ -53,6 +53,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.getRoom
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -134,7 +135,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             initialIndex = inMemoryData.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
             dataSourceFactory.createProvider(inMemoryData, room, lifecycleScope)
         } else {
-            val events = room?.getAttachmentMessages().orEmpty()
+            val events = room?.timelineService()?.getAttachmentMessages().orEmpty()
             initialIndex = events.indexOfFirst { it.eventId == args.eventId }.coerceAtLeast(0)
             dataSourceFactory.createProvider(events, lifecycleScope)
         }

@@ -24,7 +24,7 @@ import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageLiveLocationStartItem_
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import javax.inject.Inject
 
 class LiveLocationMessageItemFactory @Inject constructor(
@@ -34,19 +34,20 @@ class LiveLocationMessageItemFactory @Inject constructor(
 ) {
 
     fun create(
-            liveLocationContent: LiveLocationBeaconContent,
+            beaconInfoContent: MessageBeaconInfoContent,
             highlight: Boolean,
             attributes: AbsMessageItem.Attributes,
     ): VectorEpoxyModel<*>? {
         // TODO handle location received and stopped states
         return when {
-            isLiveRunning(liveLocationContent) -> buildStartLiveItem(highlight, attributes)
-            else                               -> null
+            isLiveRunning(beaconInfoContent) -> buildStartLiveItem(highlight, attributes)
+            else                             -> null
         }
     }
 
-    private fun isLiveRunning(liveLocationContent: LiveLocationBeaconContent): Boolean {
-        return liveLocationContent.getBestBeaconInfo()?.isLive.orFalse() && liveLocationContent.hasTimedOut.not()
+    private fun isLiveRunning(beaconInfoContent: MessageBeaconInfoContent): Boolean {
+        // TODO when we will use aggregatedSummary, check if the live has timed out as well
+        return beaconInfoContent.isLive.orFalse()
     }
 
     private fun buildStartLiveItem(

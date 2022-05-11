@@ -46,7 +46,7 @@ class ChangePasswordTest : InstrumentedTest {
 
         // Change password
         commonTestHelper.runBlockingTest {
-            session.changePassword(TestConstants.PASSWORD, NEW_PASSWORD)
+            session.accountService().changePassword(TestConstants.PASSWORD, NEW_PASSWORD)
         }
 
         // Try to login with the previous password, it will fail

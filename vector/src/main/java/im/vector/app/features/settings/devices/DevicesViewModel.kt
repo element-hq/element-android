@@ -219,7 +219,8 @@ class DevicesViewModel @AssistedInject constructor(
                 Unit
             }
             is DevicesAction.PasswordAuthDone       -> {
-                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+                val decryptedPass = session.secureStorageService()
+                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
@@ -243,10 +244,12 @@ class DevicesViewModel @AssistedInject constructor(
         val txID = session.cryptoService()
                 .verificationService()
                 .beginKeyVerification(VerificationMethod.SAS, session.myUserId, action.deviceId, null)
-        _viewEvents.post(DevicesViewEvents.ShowVerifyDevice(
-                session.myUserId,
-                txID
-        ))
+        _viewEvents.post(
+                DevicesViewEvents.ShowVerifyDevice(
+                        session.myUserId,
+                        txID
+                )
+        )
     }
 
     private fun handleShowDeviceCryptoInfo(action: DevicesAction.VerifyMyDeviceManually) = withState { state ->
@@ -273,7 +276,8 @@ class DevicesViewModel @AssistedInject constructor(
                 session.cryptoService().setDeviceVerification(
                         DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
                         action.cryptoDeviceInfo.userId,
-                        action.cryptoDeviceInfo.deviceId)
+                        action.cryptoDeviceInfo.deviceId
+                )
             }
         }
     }

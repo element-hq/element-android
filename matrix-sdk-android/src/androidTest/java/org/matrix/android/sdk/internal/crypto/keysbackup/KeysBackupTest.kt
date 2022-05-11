@@ -41,6 +41,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
 import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
 import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.TestConstants
@@ -271,10 +272,12 @@ class KeysBackupTest : InstrumentedTest {
         assertNotNull(decryption)
         // - Check decryptKeyBackupData() returns stg
         val sessionData = keysBackup
-                .decryptKeyBackupData(keyBackupData,
+                .decryptKeyBackupData(
+                        keyBackupData,
                         session.olmInboundGroupSession!!.sessionIdentifier(),
                         cryptoTestData.roomId,
-                        decryption!!)
+                        decryption!!
+                )
         assertNotNull(sessionData)
         // - Compare the decrypted megolm key with the original one
         keysBackupTestHelper.assertKeysEquals(session.exportKeys(), sessionData)
@@ -296,7 +299,8 @@ class KeysBackupTest : InstrumentedTest {
 
         // - Restore the e2e backup from the homeserver
         val importRoomKeysResult = testHelper.doSync<ImportRoomKeysResult> {
-            testData.aliceSession2.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
+            testData.aliceSession2.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
+                    testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
                     testData.prepareKeysBackupDataResult.megolmBackupCreationInfo.recoveryKey,
                     null,
                     null,
@@ -679,7 +683,8 @@ class KeysBackupTest : InstrumentedTest {
         val steps = ArrayList<StepProgressListener.Step>()
 
         val importRoomKeysResult = testHelper.doSync<ImportRoomKeysResult> {
-            testData.aliceSession2.cryptoService().keysBackupService().restoreKeyBackupWithPassword(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
+            testData.aliceSession2.cryptoService().keysBackupService().restoreKeyBackupWithPassword(
+                    testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
                     password,
                     null,
                     null,
@@ -770,7 +775,8 @@ class KeysBackupTest : InstrumentedTest {
 
         // - Restore the e2e backup with the recovery key.
         val importRoomKeysResult = testHelper.doSync<ImportRoomKeysResult> {
-            testData.aliceSession2.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
+            testData.aliceSession2.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
+                    testData.aliceSession2.cryptoService().keysBackupService().keysBackupVersion!!,
                     testData.prepareKeysBackupDataResult.megolmBackupCreationInfo.recoveryKey,
                     null,
                     null,
@@ -1054,7 +1060,11 @@ class KeysBackupTest : InstrumentedTest {
         assertFalse(keysBackup2.isEnabled)
 
         // - Validate the old device from the new one
-        aliceSession2.cryptoService().setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession2.myUserId, oldDeviceId)
+        aliceSession2.cryptoService().setDeviceVerification(
+                DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true),
+                aliceSession2.myUserId,
+                oldDeviceId
+        )
 
         // -> Backup should automatically enable on the new device
         val latch4 = CountDownLatch(1)

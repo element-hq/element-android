@@ -36,6 +36,7 @@ internal class SharedWithHelper(
                 userId = deviceInfo.userId,
                 deviceId = deviceInfo.deviceId,
                 deviceIdentityKey = deviceInfo.identityKey() ?: "",
-                chainIndex = chainIndex)
+                chainIndex = chainIndex
+        )
     }
 }

@@ -71,10 +71,12 @@ class MarkdownParserTest : InstrumentedTest {
         testIdentity("")
         testIdentity("a")
         testIdentity("1")
-        testIdentity("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et " +
-                "dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
-                "modo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pari" +
-                "atur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+        testIdentity(
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et " +
+                        "dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
+                        "modo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pari" +
+                        "atur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        )
     }
 
     @Test
@@ -294,16 +296,20 @@ class MarkdownParserTest : InstrumentedTest {
         "$markdownPattern$name$markdownPattern"
                 .let {
                     markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag>")
+                            .expect(
+                                    expectedText = it,
+                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag>"
+                            )
                 }
 
         // Test twice the same tag
         "$markdownPattern$name$markdownPattern and $markdownPattern$name bis$markdownPattern"
                 .let {
                     markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag> and <$htmlExpectedTag>$name bis</$htmlExpectedTag>")
+                            .expect(
+                                    expectedText = it,
+                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag> and <$htmlExpectedTag>$name bis</$htmlExpectedTag>"
+                            )
                 }
 
         val textBefore = "a"
@@ -313,48 +319,60 @@ class MarkdownParserTest : InstrumentedTest {
         "$textBefore$markdownPattern$name$markdownPattern"
                 .let {
                     markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "$textBefore<$htmlExpectedTag>$name</$htmlExpectedTag>")
+                            .expect(
+                                    expectedText = it,
+                                    expectedFormattedText = "$textBefore<$htmlExpectedTag>$name</$htmlExpectedTag>"
+                            )
                 }
 
         // With text before and space
         "$textBefore $markdownPattern$name$markdownPattern"
                 .let {
                     markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "$textBefore <$htmlExpectedTag>$name</$htmlExpectedTag>")
+                            .expect(
+                                    expectedText = it,
+                                    expectedFormattedText = "$textBefore <$htmlExpectedTag>$name</$htmlExpectedTag>"
+                            )
                 }
 
         // With sticked text after
         "$markdownPattern$name$markdownPattern$textAfter"
                 .let {
                     markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag>$textAfter")
+                            .expect(
+                                    expectedText = it,
+                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag>$textAfter"
+                            )
                 }
 
         // With space and text after
         "$markdownPattern$name$markdownPattern $textAfter"
                 .let {
                     markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag> $textAfter")
+                            .expect(
+                                    expectedText = it,
+                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag> $textAfter"
+                            )
                 }
 
         // With sticked text before and text after
         "$textBefore$markdownPattern$name$markdownPattern$textAfter"
                 .let {
                     markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "a<$htmlExpectedTag>$name</$htmlExpectedTag>$textAfter")
+                            .expect(
+                                    expectedText = it,
+                                    expectedFormattedText = "a<$htmlExpectedTag>$name</$htmlExpectedTag>$textAfter"
+                            )
                 }
 
         // With text before and after, with spaces
         "$textBefore $markdownPattern$name$markdownPattern $textAfter"
                 .let {
                     markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "$textBefore <$htmlExpectedTag>$name</$htmlExpectedTag> $textAfter")
+                            .expect(
+                                    expectedText = it,
+                                    expectedFormattedText = "$textBefore <$htmlExpectedTag>$name</$htmlExpectedTag> $textAfter"
+                            )
                 }
     }
 
@@ -366,16 +384,20 @@ class MarkdownParserTest : InstrumentedTest {
         "$markdownPattern$name\n$name$markdownPattern"
                 .let {
                     markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name$softBreak$name</$htmlExpectedTag>")
+                            .expect(
+                                    expectedText = it,
+                                    expectedFormattedText = "<$htmlExpectedTag>$name$softBreak$name</$htmlExpectedTag>"
+                            )
                 }
 
         // With new line between two blocks
         "$markdownPattern$name$markdownPattern\n$markdownPattern$name$markdownPattern"
                 .let {
                     markdownParser.parse(it)
-                            .expect(expectedText = it,
-                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag><br /><$htmlExpectedTag>$name</$htmlExpectedTag>")
+                            .expect(
+                                    expectedText = it,
+                                    expectedFormattedText = "<$htmlExpectedTag>$name</$htmlExpectedTag><br /><$htmlExpectedTag>$name</$htmlExpectedTag>"
+                            )
                 }
     }
 

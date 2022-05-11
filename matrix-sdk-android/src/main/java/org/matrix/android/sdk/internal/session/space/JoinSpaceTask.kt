@@ -49,11 +49,13 @@ internal class DefaultJoinSpaceTask @Inject constructor(
     override suspend fun execute(params: JoinSpaceTask.Params): JoinSpaceResult {
         Timber.v("## Space: > Joining root space ${params.roomIdOrAlias} ...")
         try {
-            joinRoomTask.execute(JoinRoomTask.Params(
-                    params.roomIdOrAlias,
-                    params.reason,
-                    params.viaServers
-            ))
+            joinRoomTask.execute(
+                    JoinRoomTask.Params(
+                            params.roomIdOrAlias,
+                            params.reason,
+                            params.viaServers
+                    )
+            )
         } catch (failure: Throwable) {
             return JoinSpaceResult.Fail(failure)
         }

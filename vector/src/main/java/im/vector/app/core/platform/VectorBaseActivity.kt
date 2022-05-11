@@ -260,27 +260,29 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     private fun handleGlobalError(globalError: GlobalError) {
         when (globalError) {
-            is GlobalError.InvalidToken         ->
-                handleInvalidToken(globalError)
-            is GlobalError.ConsentNotGivenError ->
-                consentNotGivenHelper.displayDialog(globalError.consentUri,
-                        activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: "")
-            is GlobalError.CertificateError     ->
-                handleCertificateError(globalError)
+            is GlobalError.InvalidToken         -> handleInvalidToken(globalError)
+            is GlobalError.ConsentNotGivenError -> displayConsentNotGivenDialog(globalError)
+            is GlobalError.CertificateError     -> handleCertificateError(globalError)
             GlobalError.ExpiredAccount          -> Unit // TODO Handle account expiration
             is GlobalError.InitialSyncRequest   -> handleInitialSyncRequest(globalError)
         }
+    }
+
+    private fun displayConsentNotGivenDialog(globalError: GlobalError.ConsentNotGivenError) {
+        consentNotGivenHelper.displayDialog(globalError.consentUri, activeSessionHolder.getActiveSession().sessionParams.homeServerHost ?: "")
     }
 
     private fun handleInitialSyncRequest(initialSyncRequest: GlobalError.InitialSyncRequest) {
         MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.initial_sync_request_title)
                 .setMessage(
-                        getString(R.string.initial_sync_request_content, getString(
+                        getString(
+                                R.string.initial_sync_request_content, getString(
                                 when (initialSyncRequest.reason) {
                                     InitialSyncRequestReason.IGNORED_USERS_LIST_CHANGE -> R.string.initial_sync_request_reason_unignored_users
                                 }
-                        ))
+                        )
+                        )
                 )
                 .setPositiveButton(R.string.ok) { _, _ ->
                     MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
@@ -318,7 +320,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
         mainActivityStarted = true
 
-        MainActivity.restartApp(this,
+        MainActivity.restartApp(
+                this,
                 MainActivityArgs(
                         clearCredentials = !globalError.softLogout,
                         isUserLoggedOut = true,

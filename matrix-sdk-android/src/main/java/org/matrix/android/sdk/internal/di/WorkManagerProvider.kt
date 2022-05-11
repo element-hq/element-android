@@ -84,9 +84,11 @@ internal class WorkManagerProvider @Inject constructor(
                     if (workInfo?.state?.isFinished == true) {
                         checkWorkerLiveState.removeObserver(this)
                         if (workInfo.state == WorkInfo.State.FAILED) {
-                            throw RuntimeException("MatrixWorkerFactory is not being set on your worker configuration.\n" +
-                                    "Makes sure to add it to a DelegatingWorkerFactory if you have your own factory or use it directly.\n" +
-                                    "You can grab the instance through the Matrix class.")
+                            throw RuntimeException(
+                                    "MatrixWorkerFactory is not being set on your worker configuration.\n" +
+                                            "Makes sure to add it to a DelegatingWorkerFactory if you have your own factory or use it directly.\n" +
+                                            "You can grab the instance through the Matrix class."
+                            )
                         }
                     }
                 }
