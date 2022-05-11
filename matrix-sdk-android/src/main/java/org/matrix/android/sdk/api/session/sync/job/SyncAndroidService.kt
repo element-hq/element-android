@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * in order to be able to perform a sync even if the app is not running.
  * The <receiver> and <service> must be declared in the Manifest or the app using the SDK
  */
-abstract class SyncService : Service() {
+abstract class SyncAndroidService : Service() {
 
     private var sessionId: String? = null
     private var mIsSelfDestroyed: Boolean = false
