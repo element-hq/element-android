@@ -39,7 +39,7 @@ internal class TurnServerDataSource @Inject constructor(private val turnServerTa
     }
 
     suspend fun getTurnServer(): TurnServerResponse {
-        return cachedTurnServerResponse.data ?: turnServerTask.execute(GetTurnServerTask.Params).also {
+        return cachedTurnServerResponse.data ?: turnServerTask.execute(Unit).also {
             cachedTurnServerResponse.data = it
         }
     }
