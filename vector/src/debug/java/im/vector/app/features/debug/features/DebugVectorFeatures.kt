@@ -66,6 +66,9 @@ class DebugVectorFeatures(
     override fun isScreenSharingEnabled(): Boolean = read(DebugFeatureKeys.screenSharing)
             ?: vectorFeatures.isScreenSharingEnabled()
 
+    override fun shouldStartDmOnFirstMessage(): Boolean = read(DebugFeatureKeys.startDmOnFirstMsg)
+            ?: vectorFeatures.shouldStartDmOnFirstMessage()
+
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {
             it.remove(key)
@@ -123,4 +126,5 @@ object DebugFeatureKeys {
     val allowExternalUnifiedPushDistributors = booleanPreferencesKey("allow-external-unified-push-distributors")
     val liveLocationSharing = booleanPreferencesKey("live-location-sharing")
     val screenSharing = booleanPreferencesKey("screen-sharing")
+    val startDmOnFirstMsg = booleanPreferencesKey("start-dm-on-first-msg")
 }

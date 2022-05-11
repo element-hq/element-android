@@ -26,6 +26,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.CreatedRoom
 import im.vector.app.features.raw.wellknown.getElementWellknown
@@ -46,7 +47,8 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
         @Assisted initialState: CreateDirectRoomViewState,
         private val rawService: RawService,
         val session: Session,
-        val analyticsTracker: AnalyticsTracker
+        val analyticsTracker: AnalyticsTracker,
+        val vectorFeatures: VectorFeatures
 ) :
         VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
@@ -124,7 +126,12 @@ class CreateDirectRoomViewModel @AssistedInject constructor(
                     }
 
             val result = runCatchingToAsync {
-                session.roomService().createRoom(roomParams)
+                if (vectorFeatures.shouldStartDmOnFirstMessage()) {
+                    // Todo: Prepare direct room creation
+                    throw Throwable("Start DM on first message is not implemented yet.")
+                } else {
+                    session.roomService().createRoom(roomParams)
+                }
             }
             analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
 

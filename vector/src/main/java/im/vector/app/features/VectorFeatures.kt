@@ -30,6 +30,7 @@ interface VectorFeatures {
     fun isOnboardingCombinedLoginEnabled(): Boolean
     fun allowExternalUnifiedPushDistributors(): Boolean
     fun isScreenSharingEnabled(): Boolean
+    fun shouldStartDmOnFirstMessage(): Boolean
 
     enum class OnboardingVariant {
         LEGACY,
@@ -48,4 +49,5 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isOnboardingCombinedLoginEnabled() = false
     override fun allowExternalUnifiedPushDistributors(): Boolean = Config.ALLOW_EXTERNAL_UNIFIED_PUSH_DISTRIBUTORS
     override fun isScreenSharingEnabled(): Boolean = true
+    override fun shouldStartDmOnFirstMessage(): Boolean = false
 }

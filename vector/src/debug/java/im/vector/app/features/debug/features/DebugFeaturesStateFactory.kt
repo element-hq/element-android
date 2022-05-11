@@ -70,6 +70,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 key = DebugFeatureKeys.allowExternalUnifiedPushDistributors,
                                 factory = VectorFeatures::allowExternalUnifiedPushDistributors
                         ),
+                        createBooleanFeature(
+                                label = "Start DM on first message",
+                                key = DebugFeatureKeys.startDmOnFirstMsg,
+                                factory = VectorFeatures::shouldStartDmOnFirstMessage
+                        ),
                 )
         )
     }
