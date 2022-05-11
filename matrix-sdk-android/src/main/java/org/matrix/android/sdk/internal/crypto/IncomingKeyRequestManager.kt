@@ -405,7 +405,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
         }
 
         val export = sessionHolder.mutex.withLock {
-            sessionHolder.wrapper.exportKeys(chainIndex)
+            sessionHolder.wrapper.exportKeys(/**TODO*/ false ,chainIndex)
         } ?: return false.also {
             Timber.tag(loggerTag.value)
                     .e("shareKeysWithDevice: failed to export group session ${validRequest.sessionId}")
