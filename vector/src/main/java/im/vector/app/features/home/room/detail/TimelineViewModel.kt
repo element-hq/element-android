@@ -90,7 +90,6 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
@@ -105,6 +104,7 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationBadgeState
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
@@ -1130,11 +1130,11 @@ class TimelineViewModel @AssistedInject constructor(
                     copy(syncState = syncState)
                 }
 
-        session.syncStatusService().getSyncStatusLive()
+        session.syncService().getSyncRequestStateLive()
                 .asFlow()
-                .filterIsInstance<SyncStatusService.Status.IncrementalSyncStatus>()
+                .filterIsInstance<SyncRequestState.IncrementalSyncRequestState>()
                 .setOnEach {
-                    copy(incrementalSyncStatus = it)
+                    copy(incrementalSyncRequestState = it)
                 }
     }
 

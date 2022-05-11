@@ -44,7 +44,6 @@ import org.matrix.android.sdk.api.session.file.FileService
 import org.matrix.android.sdk.api.session.group.GroupService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.identity.IdentityService
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
 import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
@@ -61,6 +60,7 @@ import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageServi
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.sync.FilterService
+import org.matrix.android.sdk.api.session.sync.SyncService
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
@@ -76,13 +76,8 @@ import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.network.GlobalErrorHandler
-import org.matrix.android.sdk.internal.session.sync.SyncTokenStore
-import org.matrix.android.sdk.internal.session.sync.job.SyncThread
-import org.matrix.android.sdk.internal.session.sync.job.SyncWorker
 import org.matrix.android.sdk.internal.util.createUIHandler
-import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Provider
 
 @SessionScope
 internal class DefaultSession @Inject constructor(
@@ -112,16 +107,14 @@ internal class DefaultSession @Inject constructor(
         private val permalinkService: Lazy<PermalinkService>,
         private val secureStorageService: Lazy<SecureStorageService>,
         private val profileService: Lazy<ProfileService>,
+        private val syncService: Lazy<SyncService>,
         private val mediaService: Lazy<MediaService>,
         private val widgetService: Lazy<WidgetService>,
-        private val syncThreadProvider: Provider<SyncThread>,
         private val contentUrlResolver: ContentUrlResolver,
-        private val syncTokenStore: SyncTokenStore,
         private val sessionParamsStore: SessionParamsStore,
         private val contentUploadProgressTracker: ContentUploadStateTracker,
         private val typingUsersTracker: TypingUsersTracker,
         private val contentDownloadStateTracker: ContentDownloadStateTracker,
-        private val syncStatusService: Lazy<SyncStatusService>,
         private val homeServerCapabilitiesService: Lazy<HomeServerCapabilitiesService>,
         private val accountDataService: Lazy<SessionAccountDataService>,
         private val sharedSecretStorageService: Lazy<SharedSecretStorageService>,
@@ -144,8 +137,6 @@ internal class DefaultSession @Inject constructor(
 
     private var isOpen = false
 
-    private var syncThread: SyncThread? = null
-
     private val uiHandler = createUIHandler()
 
     override val isOpenable: Boolean
@@ -167,40 +158,9 @@ internal class DefaultSession @Inject constructor(
         }
     }
 
-    override fun requireBackgroundSync() {
-        SyncWorker.requireBackgroundSync(workManagerProvider, sessionId)
-    }
-
-    override fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long) {
-        SyncWorker.automaticallyBackgroundSync(workManagerProvider, sessionId, timeOutInSeconds, repeatDelayInSeconds)
-    }
-
-    override fun stopAnyBackgroundSync() {
-        SyncWorker.stopAnyBackgroundSync(workManagerProvider)
-    }
-
-    override fun startSync(fromForeground: Boolean) {
-        Timber.i("Starting sync thread")
-        assert(isOpen)
-        val localSyncThread = getSyncThread()
-        localSyncThread.setInitialForeground(fromForeground)
-        if (!localSyncThread.isAlive) {
-            localSyncThread.start()
-        } else {
-            localSyncThread.restart()
-            Timber.w("Attempt to start an already started thread")
-        }
-    }
-
-    override fun stopSync() {
-        assert(isOpen)
-        syncThread?.kill()
-        syncThread = null
-    }
-
     override fun close() {
         assert(isOpen)
-        stopSync()
+        syncService.get().stopSync()
         // timelineEventDecryptor.destroy()
         uiHandler.post {
             lifecycleObservers.forEach { it.onSessionStopped(this) }
@@ -213,25 +173,9 @@ internal class DefaultSession @Inject constructor(
         isOpen = false
     }
 
-    override fun getSyncStateLive() = getSyncThread().liveState()
-
-    override fun syncFlow() = getSyncThread().syncFlow()
-
-    override fun getSyncState() = getSyncThread().currentState()
-
-    override fun hasAlreadySynced(): Boolean {
-        return syncTokenStore.getLastToken() != null
-    }
-
-    private fun getSyncThread(): SyncThread {
-        return syncThread ?: syncThreadProvider.get().also {
-            syncThread = it
-        }
-    }
-
     override suspend fun clearCache() {
-        stopSync()
-        stopAnyBackgroundSync()
+        syncService.get().stopSync()
+        syncService.get().stopAnyBackgroundSync()
         uiHandler.post {
             lifecycleObservers.forEach {
                 it.onClearCache(this)
@@ -271,7 +215,7 @@ internal class DefaultSession @Inject constructor(
     override fun pushersService(): PushersService = pushersService.get()
     override fun eventService(): EventService = eventService.get()
     override fun termsService(): TermsService = termsService.get()
-    override fun syncStatusService(): SyncStatusService = syncStatusService.get()
+    override fun syncService(): SyncService = syncService.get()
     override fun secureStorageService(): SecureStorageService = secureStorageService.get()
     override fun profileService(): ProfileService = profileService.get()
     override fun presenceService(): PresenceService = presenceService.get()

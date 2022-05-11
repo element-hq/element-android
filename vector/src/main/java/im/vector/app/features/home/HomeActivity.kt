@@ -81,9 +81,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.api.session.sync.SyncRequestState
 import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
@@ -373,9 +373,9 @@ class HomeActivity :
     }
 
     private fun renderState(state: HomeActivityViewState) {
-        when (val status = state.syncStatusServiceStatus) {
-            is SyncStatusService.Status.InitialSyncProgressing -> {
-                val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
+        when (val status = state.syncRequestState) {
+            is SyncRequestState.InitialSyncProgressing -> {
+                val initSyncStepStr = initSyncStepFormatter.format(status.initialSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
                     // block interactions
@@ -392,7 +392,7 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
-            else                                               -> {
+            else                                 -> {
                 // Idle or Incremental sync status
                 views.waitingView.root.isVisible = false
             }

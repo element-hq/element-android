@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.initsync
+package org.matrix.android.sdk.api.session.sync
 
-enum class InitSyncStep {
+enum class InitialSyncStep {
     ServerComputing,
     Downloading,
     ImportingAccount,

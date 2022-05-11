@@ -40,7 +40,7 @@ fun Session.configureAndStart(context: Context, startSyncing: Boolean = true) {
 
 fun Session.startSyncing(context: Context) {
     val applicationContext = context.applicationContext
-    if (!hasAlreadySynced()) {
+    if (!syncService().hasAlreadySynced()) {
         // initial sync is done as a service so it can continue below app lifecycle
         VectorSyncService.newOneShotIntent(
                 context = applicationContext,
@@ -57,7 +57,7 @@ fun Session.startSyncing(context: Context) {
     } else {
         val isAtLeastStarted = ProcessLifecycleOwner.get().lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
         Timber.v("--> is at least started? $isAtLeastStarted")
-        startSync(isAtLeastStarted)
+        syncService().startSync(isAtLeastStarted)
     }
 }
 

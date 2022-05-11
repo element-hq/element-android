@@ -158,9 +158,9 @@ abstract class SyncService : Service() {
             // never do that in foreground, let the syncThread work
             syncTask.execute(params)
             // Start sync if we were doing an initial sync and the syncThread is not launched yet
-            if (isInitialSync && session.getSyncState() == SyncState.Idle) {
+            if (isInitialSync && session.syncService().getSyncState() == SyncState.Idle) {
                 val isForeground = !backgroundDetectionObserver.isInBackground
-                session.startSync(isForeground)
+                session.syncService().startSync(isForeground)
             }
             stopMe()
         } catch (throwable: Throwable) {
@@ -210,7 +210,7 @@ abstract class SyncService : Service() {
             session = sessionComponent.session()
             sessionId = safeSessionId
             syncTask = sessionComponent.syncTask()
-            isInitialSync = !session.hasAlreadySynced()
+            isInitialSync = !session.syncService().hasAlreadySynced()
             networkConnectivityChecker = sessionComponent.networkConnectivityChecker()
             taskExecutor = sessionComponent.taskExecutor()
             coroutineDispatchers = sessionComponent.coroutineDispatchers()

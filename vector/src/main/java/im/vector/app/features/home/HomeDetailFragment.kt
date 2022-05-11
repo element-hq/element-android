@@ -444,7 +444,7 @@ class HomeDetailFragment @Inject constructor(
         views.bottomNavigationView.getOrCreateBadge(R.id.bottom_action_notification).render(it.notificationCountCatchup, it.notificationHighlightCatchup)
         views.syncStateView.render(
                 it.syncState,
-                it.incrementalSyncStatus,
+                it.incrementalSyncRequestState,
                 it.pushCounter,
                 vectorPreferences.developerShowDebugInfo()
         )
