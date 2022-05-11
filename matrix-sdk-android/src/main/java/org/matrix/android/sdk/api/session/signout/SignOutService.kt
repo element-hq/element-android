@@ -38,5 +38,5 @@ interface SignOutService {
      * Sign out, and release the session, clear all the session data, including crypto data
      * @param signOutFromHomeserver true if the sign out request has to be done
      */
-    suspend fun signOut(signOutFromHomeserver: Boolean)
+    suspend fun signOut(signOutFromHomeserver: Boolean, numberOfActiveDevices: Int? = null)
 }

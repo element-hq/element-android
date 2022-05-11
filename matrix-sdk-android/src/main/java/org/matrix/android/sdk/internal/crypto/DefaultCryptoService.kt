@@ -80,6 +80,7 @@ import org.matrix.android.sdk.internal.crypto.algorithms.IMXWithHeldExtension
 import org.matrix.android.sdk.internal.crypto.algorithms.megolm.MXMegolmEncryptionFactory
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.MXOlmEncryptionFactory
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationManager
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.model.MXKey.Companion.KEY_SIGNED_CURVE_25519_TYPE
 import org.matrix.android.sdk.internal.crypto.model.toRest
@@ -178,6 +179,7 @@ internal class DefaultCryptoService @Inject constructor(
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,
         private val eventDecryptor: EventDecryptor,
+        private val dehydrationManager: DehydrationManager,
         private val liveEventManager: Lazy<StreamEventsManager>
 ) : CryptoService {
 
@@ -742,6 +744,11 @@ internal class DefaultCryptoService @Inject constructor(
      */
     @Throws(MXCryptoError::class)
     override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+        Timber.i("-------> Dehydrate device will be called here")
+        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+                dehydrationManager.dehydrateDevice("asd2343eae21eadsada".toByteArray())
+        }
+
         return internalDecryptEvent(event, timeline)
     }
 

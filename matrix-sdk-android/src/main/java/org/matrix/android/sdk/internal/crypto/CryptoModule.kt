@@ -89,6 +89,12 @@ import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSignaturesTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadSigningKeysTask
+import org.matrix.android.sdk.internal.crypto.tasks.dehydration.ClaimDehydratedDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.dehydration.DefaultClaimDehydratedDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.dehydration.DefaultGetDehydratedDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.dehydration.DefaultUploadDehydratedDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.dehydration.GetDehydratedDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.dehydration.UploadDehydratedDeviceTask
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.CryptoDatabase
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
@@ -251,4 +257,14 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindSendEventTask(task: DefaultSendEventTask): SendEventTask
+
+    @Binds
+    abstract fun bindClaimDehydratedDeviceTask(task: DefaultClaimDehydratedDeviceTask): ClaimDehydratedDeviceTask
+
+    @Binds
+    abstract fun bindGetDehydratedDeviceTask(task: DefaultGetDehydratedDeviceTask): GetDehydratedDeviceTask
+
+    @Binds
+    abstract fun bindUploadDehydratedDeviceTask(task: DefaultUploadDehydratedDeviceTask): UploadDehydratedDeviceTask
+
 }

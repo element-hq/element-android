@@ -33,7 +33,8 @@ internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadRespon
             val deviceKeys: DeviceKeys?,
             // the one-time keys to send.
             val oneTimeKeys: JsonDict?,
-            val fallbackKeys: JsonDict?
+            val fallbackKeys: JsonDict?,
+            val deviceId: String? = null
     )
 }
 
@@ -52,7 +53,11 @@ internal class DefaultUploadKeysTask @Inject constructor(
         Timber.i("## Uploading device keys -> $body")
 
         return executeRequest(globalErrorReceiver) {
-            cryptoApi.uploadKeys(body)
+            if (params.deviceId == null) {
+                cryptoApi.uploadKeys(body)
+            } else {
+                cryptoApi.uploadKeys(body, deviceId = params.deviceId)
+            }
         }
     }
 }

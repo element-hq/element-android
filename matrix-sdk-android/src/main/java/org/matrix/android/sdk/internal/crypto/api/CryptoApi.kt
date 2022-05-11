@@ -206,5 +206,5 @@ internal interface CryptoApi {
      * Ref: https://github.com/uhoreg/matrix-doc/blob/dehydration/proposals/2697-device-dehydration.md#rehydrating-a-device
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2697.v2/dehydrated_device/claim")
-    suspend fun claimDehydratedDevice(@Body claimDehydratedDeviceParams: ClaimDehydratedDeviceBody): ClaimDehydratedDeviceResponse
+    suspend fun claimDehydratedDevice(@Body claimDehydratedDeviceBody: ClaimDehydratedDeviceBody): ClaimDehydratedDeviceResponse
 }

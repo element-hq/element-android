@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.crypto.dehydration
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
@@ -28,13 +27,14 @@ import org.matrix.android.sdk.internal.crypto.ObjectSigner
 import org.matrix.android.sdk.internal.crypto.crosssigning.canonicalSignable
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceKeys
 import org.matrix.android.sdk.internal.crypto.model.rest.dehydration.DehydratedDeviceData
-import org.matrix.android.sdk.internal.crypto.tasks.UploadDehydratedDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.dehydration.UploadDehydratedDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.UploadKeysTask
+import org.matrix.android.sdk.internal.crypto.tasks.dehydration.ClaimDehydratedDeviceTask
+import org.matrix.android.sdk.internal.crypto.tasks.dehydration.GetDehydratedDeviceTask
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.olm.OlmAccount
 import timber.log.Timber
-import java.lang.Exception
 import javax.inject.Inject
 
 /**
@@ -47,6 +47,8 @@ private val loggerTag = LoggerTag("DehydrationManager", LoggerTag.CRYPTO)
 internal class DehydrationManager @Inject constructor(
         matrixConfiguration: MatrixConfiguration,
         private val uploadDehydratedDeviceTask: UploadDehydratedDeviceTask,
+        private val getDehydratedDeviceTask: GetDehydratedDeviceTask,
+        private val claimDehydratedDeviceTask: ClaimDehydratedDeviceTask,
         private val cryptoCoroutineScope: CoroutineScope,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val objectSigner: ObjectSigner,
@@ -55,33 +57,35 @@ internal class DehydrationManager @Inject constructor(
 ) {
     private companion object {
         private const val dehydratedDeviceAlgorithm = "org.matrix.msc2697.v1.olm.libolm_pickle"
-        private const val deviceDisplayName: String = "Backup device"
+        private const val deviceDisplayName: String = "Dehydrated device"
     }
 
     private val isDehydrationEnabled = matrixConfiguration.isDehydrationEnabled
-    private val inProgress = false
+    private var inProgress = false
 
     /**
      * Upload and replace any existing dehydrated device
+     * @param dehydrationKey must be the SSSS cross signing
      */
-    fun dehydrateDevice(dehydrationKey: ByteArray) = cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+    suspend fun dehydrateDevice(dehydrationKey: ByteArray): Boolean {
         if (!isDehydrationEnabled) {
             Timber.tag(loggerTag.value).d("Dehydration is disabled")
-            return@launch
+            return false
         }
         if (inProgress) {
             Timber.tag(loggerTag.value).d("Dehydration already in progress")
-            return@launch
+            return false
         }
+        Timber.tag(loggerTag.value).d("Device dehydration started!")
 
-        runCatching {
+        val result = runCatching {
             val account = createOlmAccount()
             val errorMessage = StringBuffer()
             val pickledAccount = account.pickle(dehydrationKey, errorMessage)
 
             if (errorMessage.isNotBlank()) {
                 Timber.tag(loggerTag.value).d("Failed to create pickled account")
-                return@launch
+                return@runCatching false
             }
 
             val dehydratedDevice = UploadDehydratedDeviceTask.Params(
@@ -98,17 +102,19 @@ internal class DehydrationManager @Inject constructor(
                 val deviceKeys = generateDeviceKeys(dehydratedDeviceId, account)
                 val oneTimeJson = generateOneTimeKeys(account)
                 val fallbackJson = generateFallbackKeys(account)
-                val uploadDeviceKeysParams = UploadKeysTask.Params(deviceKeys, oneTimeJson, fallbackJson)
+                val uploadDeviceKeysParams = UploadKeysTask.Params(deviceKeys, oneTimeJson, fallbackJson, dehydratedDeviceId)
                 uploadKeysTask.execute(uploadDeviceKeysParams)
-                Timber.tag(loggerTag.value).d("Device dehydrated successfully!")
-            } catch (ex: Exception) {
+                Timber.tag(loggerTag.value).d("Device dehydrated successfully with dehydratedDeviceId: $dehydratedDeviceId")
+                return@runCatching true
+            } catch (ex: Throwable) {
                 Timber.tag(loggerTag.value).e(ex, "Generating & uploading device keys failed")
-                return@launch
+                return@runCatching false
             }
         }.onFailure {
             Timber.tag(loggerTag.value).e(it, "Failed to upload dehydration device")
-        }
+        }.getOrNull()
 
+        return result ?: false
     }
 
     /**
@@ -197,8 +203,71 @@ internal class DehydrationManager @Inject constructor(
     }
 
     /**
-     * Rehydrate and claim an existing dehydrated device
+     * Rehydrate an existing dehydrated device
+     * @param dehydrationKey must be the SSSS cross signing
      */
-    fun rehydrateDevice() {
+    suspend fun rehydrateDevice(dehydrationKey: ByteArray): Boolean {
+
+        if (!isDehydrationEnabled) {
+            Timber.tag(loggerTag.value).d("Dehydration is disabled")
+            return false
+        }
+
+        // Get the dehydration device if found
+        val (dehydratedDeviceId, deviceData) = try {
+            getDehydratedDeviceTask.execute(Unit)
+        } catch (ex: Throwable) {
+            Timber.tag(loggerTag.value).e(ex, "Failed to get a dehydration device")
+            return false
+        }
+
+        if (dehydratedDeviceId.isNullOrBlank()) {
+            Timber.tag(loggerTag.value).d("No dehydrated device found.")
+            return false
+        }
+
+        if (deviceData.algorithm != dehydratedDeviceAlgorithm) {
+            Timber.e("Invalid dehydrated device algorithm.")
+            return false
+        }
+
+        Timber.tag(loggerTag.value).d("Dehydrated device found with dehydratedDeviceId: $dehydratedDeviceId")
+
+        /*val olmAccount = */createOlmAccountFromDehydrationKey(dehydrationKey, deviceData.account) ?: return false
+
+        // Lets claim the dehydrated device
+        val (success) = try {
+            claimDehydratedDeviceTask.execute(ClaimDehydratedDeviceTask.Params(dehydratedDeviceId))
+        } catch (ex: Throwable) {
+            Timber.tag(loggerTag.value).e(ex, "Device already claimed.")
+            return false
+        }
+
+        if (!success) {
+            Timber.tag(loggerTag.value).d("Failed to claim dehydrated deviceId:$dehydratedDeviceId")
+            return false
+        }
+
+//        // Exporting dehydrated device
+//        val tmpCredentials = credentials.copy(deviceId = dehydratedDeviceId)
+//        val dehydratedAccount = deviceData.account
+        Timber.tag(loggerTag.value).d("Dehydrated device with dehydratedDeviceId: $dehydratedDeviceId claimed!")
+
+        return true
+    }
+
+    /**
+     * Unpickles an account
+     */
+    private fun createOlmAccountFromDehydrationKey(dehydrationKey: ByteArray, account: String): OlmAccount? {
+        return runCatching {
+            val olmAccount = OlmAccount()
+//            val key = Base64.decode(dehydrationKey, Base64.DEFAULT)
+            olmAccount.unpickle(account.toByteArray(), dehydrationKey)
+            Timber.tag(loggerTag.value).d("Account unpickled identityKeys:  ${olmAccount.identityKeys()}")
+            olmAccount
+        }.onFailure {
+            Timber.tag(loggerTag.value).e(it, "Failed to unpickle account")
+        }.getOrNull()
     }
 }
