@@ -17,6 +17,9 @@
 package im.vector.app.features.onboarding.ftueauth
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,8 +44,7 @@ import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.failure.Failure
-import java.net.UnknownHostException
+import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import javax.inject.Inject
 
 private const val CAROUSEL_ROTATION_DELAY_MS = 5000L
@@ -128,11 +130,11 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
 
     private fun splashSubmit(isAlreadyHaveAccountEnabled: Boolean) {
         val getStartedFlow = if (isAlreadyHaveAccountEnabled) OnboardingFlow.SignUp else OnboardingFlow.SignInSignUp
-        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = false, onboardingFlow = getStartedFlow))
+        viewModel.handle(OnboardingAction.OnGetStarted(onboardingFlow = getStartedFlow))
     }
 
     private fun alreadyHaveAnAccount() {
-        viewModel.handle(OnboardingAction.OnIAlreadyHaveAnAccount(resetLoginConfig = false, onboardingFlow = OnboardingFlow.SignIn))
+        viewModel.handle(OnboardingAction.OnIAlreadyHaveAnAccount(onboardingFlow = OnboardingFlow.SignIn))
     }
 
     override fun resetViewModel() {
@@ -140,21 +142,56 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
     }
 
     override fun onError(throwable: Throwable) {
-        if (throwable is Failure.NetworkConnection &&
-                throwable.ioException is UnknownHostException) {
-            // Invalid homeserver from URL config
-            val url = viewModel.getInitialHomeServerUrl().orEmpty()
-            MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.dialog_title_error)
-                    .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
-                    .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
-                        val flow = withState(viewModel) { it.onboardingFlow } ?: OnboardingFlow.SignInSignUp
-                        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = true, flow))
-                    }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .show()
-        } else {
-            super.onError(throwable)
+        when {
+            requireContext().inferNoConnectivity() -> super.onError(throwable)
+            throwable.isHomeserverUnavailable()    -> {
+                val url = viewModel.getInitialHomeServerUrl().orEmpty()
+                homeserverUnavailableDialog(url) { onContinueFlowWithLoginConfigReset() }
+            }
+            else                                   -> super.onError(throwable)
         }
     }
+
+    private fun onContinueFlowWithLoginConfigReset() {
+        viewModel.handle(OnboardingAction.ResetDeeplinkConfig)
+        when (val flow = withState(viewModel) { it.onboardingFlow } ?: OnboardingFlow.SignInSignUp) {
+            OnboardingFlow.SignIn -> if (vectorFeatures.isOnboardingCombinedLoginEnabled()) {
+                viewModel.handle(OnboardingAction.OnIAlreadyHaveAnAccount(flow))
+            } else {
+                viewModel.handle(OnboardingAction.OnGetStarted(flow))
+            }
+            else                  -> viewModel.handle(OnboardingAction.OnGetStarted(flow))
+        }
+    }
+
+    private fun homeserverUnavailableDialog(url: String, action: () -> Unit) {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.dialog_title_error)
+                .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
+                .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ -> action() }
+                .setNegativeButton(R.string.action_cancel, null)
+                .show()
+    }
+}
+
+fun Context.inferNoConnectivity(): Boolean {
+    var networkAvailable = false
+
+    val connectivityManager: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = connectivityManager.activeNetwork
+    val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+
+    when {
+        networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> {
+            networkAvailable = true
+        }
+        networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true     -> {
+            networkAvailable = true
+        }
+        networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_VPN) == true      -> {
+            networkAvailable = true
+        }
+    }
+
+    return !networkAvailable
 }
