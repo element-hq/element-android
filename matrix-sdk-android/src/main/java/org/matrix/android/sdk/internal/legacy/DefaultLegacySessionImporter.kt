@@ -43,7 +43,6 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         private val context: Context,
         private val sessionParamsStore: SessionParamsStore,
         private val realmKeysUtils: RealmKeysUtils,
-        private val realmCryptoStoreMigration: RealmCryptoStoreMigration
 ) : LegacySessionImporter {
 
     private val loginStorage = LoginStorage(context)
@@ -164,6 +163,8 @@ internal class DefaultLegacySessionImporter @Inject constructor(
         // Ensure newLocation does not exist (can happen in case of partial migration)
         newLocation.deleteRecursively()
         newLocation.mkdirs()
+
+        val realmCryptoStoreMigration = RealmCryptoStoreMigration(newLocation)
 
         Timber.d("Migration: create legacy realm configuration")
 

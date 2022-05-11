@@ -18,13 +18,15 @@ package org.matrix.android.sdk.internal.crypto.store.migration.fixtures
 
 import io.realm.RealmConfiguration
 import org.matrix.android.sdk.common.TemporaryRealmConfigurationFactory
+import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 
-fun TemporaryRealmConfigurationFactory.rustCryptoStoreMigrationConfiguration(populateCryptoStore: Boolean): RealmConfiguration {
+fun TemporaryRealmConfigurationFactory.configurationForMigrationFrom15To16(populateCryptoStore: Boolean): RealmConfiguration {
     return create(
-            realmFilename = "crypto_store_rust_migration.realm",
-            assetFilename = "crypto_store_rust_migration.realm".takeIf { populateCryptoStore },
-            schemaVersion = 15L,
-            module = RealmCryptoStoreModule()
+            realmFilename = "crypto_store.realm",
+            assetFilename = "crypto_store_migration_15_to_16.realm".takeIf { populateCryptoStore },
+            schemaVersion = 16L,
+            module = RealmCryptoStoreModule(),
+            migration = RealmCryptoStoreMigration(root)
     )
 }

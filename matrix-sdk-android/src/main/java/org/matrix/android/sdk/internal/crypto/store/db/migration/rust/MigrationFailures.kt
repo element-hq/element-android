@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.store.migration
+package org.matrix.android.sdk.internal.crypto.store.db.migration.rust
 
-class CleanUpCryptoStoreUseCase {
-}
+object ExtractMigrationDataFailure : java.lang.RuntimeException("Can't proceed with migration, crypto store is empty or some necessary data is missing.")

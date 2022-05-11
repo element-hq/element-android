@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.store.migration
+package org.matrix.android.sdk.internal.crypto.store.db.migration.rust
 
-import io.realm.Realm
-import io.realm.kotlin.where
-import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoMetadataEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.OlmSessionEntity
-import org.matrix.android.sdk.internal.crypto.store.db.model.UserEntity
+import io.realm.DynamicRealm
+import io.realm.DynamicRealmObject
+import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
+import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
+import org.matrix.olm.OlmAccount
+import org.matrix.olm.OlmSession
 import org.matrix.olm.OlmUtility
 import uniffi.olm.CrossSigningKeyExport
 import uniffi.olm.MigrationData
@@ -29,13 +29,12 @@ import uniffi.olm.PickledAccount
 import uniffi.olm.PickledInboundGroupSession
 import uniffi.olm.PickledSession
 import java.nio.charset.Charset
-import javax.inject.Inject
 
 private val charset = Charset.forName("UTF-8")
 
-internal class ExtractMigrationDataUseCase @Inject constructor() {
+internal class ExtractMigrationDataUseCase {
 
-    operator fun invoke(realm: Realm): MigrationData {
+    operator fun invoke(realm: DynamicRealm): MigrationData {
         return try {
             extract(realm) ?: throw ExtractMigrationDataFailure
         } catch (failure: Throwable) {
@@ -43,32 +42,33 @@ internal class ExtractMigrationDataUseCase @Inject constructor() {
         }
     }
 
-    private fun extract(realm: Realm): MigrationData? {
-        val metadataEntity = realm.where<CryptoMetadataEntity>().findFirst() ?: return null
+    private fun extract(realm: DynamicRealm): MigrationData? {
+        val metadataEntity = realm.where("CryptoMetadataEntity").findFirst() ?: return null
 
         val pickleKey = OlmUtility.getRandomKey()
-        val olmSessionEntities = realm.where<OlmSessionEntity>().findAll()
+        val olmSessionEntities = realm.where("OlmSessionEntity").findAll()
         val pickledSessions = olmSessionEntities.map { it.toPickledSession(pickleKey) }
 
-        val inboundGroupSessionEntities = realm.where<OlmInboundGroupSessionEntity>().findAll()
+        val inboundGroupSessionEntities = realm.where("OlmInboundGroupSessionEntity").findAll()
         val pickledInboundGroupSessions = inboundGroupSessionEntities.map { it.toPickledInboundGroupSession(pickleKey) }
 
-        val masterKey = metadataEntity.xSignMasterPrivateKey
-        val userKey = metadataEntity.xSignUserPrivateKey
-        val selfSignedKey = metadataEntity.xSignSelfSignedPrivateKey
+        val masterKey = metadataEntity.getString("xSignMasterPrivateKey")
+        val userKey = metadataEntity.getString("xSignUserPrivateKey")
+        val selfSignedKey = metadataEntity.getString("xSignSelfSignedPrivateKey")
 
-        val userId = metadataEntity.userId!!
-        val deviceId = metadataEntity.deviceId!!
-        val backupVersion = metadataEntity.backupVersion
-        val backupRecoveryKey = metadataEntity.keyBackupRecoveryKey
+        val userId = metadataEntity.getString("userId")!!
+        val deviceId = metadataEntity.getString("deviceId")!!
+        val backupVersion = metadataEntity.getString("backupVersion")
+        val backupRecoveryKey = metadataEntity.getString("keyBackupRecoveryKey")
 
-        val trackedUserEntities = realm.where<UserEntity>().findAll()
+        val trackedUserEntities = realm.where("UserEntity").findAll()
         val trackedUserIds = trackedUserEntities.mapNotNull {
-            it.userId
+            it.getString("userId")
         }
-        val isOlmAccountShared = metadataEntity.deviceKeysSentToServer
+        val isOlmAccountShared = metadataEntity.getBoolean("deviceKeysSentToServer")
 
-        val olmAccount = metadataEntity.getOlmAccount()!!
+        val olmAccountStr = metadataEntity.getString("olmAccountData")
+        val olmAccount = deserializeFromRealm<OlmAccount>(olmAccountStr)!!
         val pickledOlmAccount = olmAccount.pickle(pickleKey, StringBuffer()).asString()
         val pickledAccount = PickledAccount(
                 userId = userId,
@@ -93,9 +93,11 @@ internal class ExtractMigrationDataUseCase @Inject constructor() {
         )
     }
 
-    private fun OlmInboundGroupSessionEntity.toPickledInboundGroupSession(pickleKey: ByteArray): PickledInboundGroupSession {
-        val senderKey = this.senderKey ?: ""
-        val olmInboundGroupSession = getInboundGroupSession()!!
+    private fun DynamicRealmObject.toPickledInboundGroupSession(pickleKey: ByteArray): PickledInboundGroupSession {
+        val senderKey = this.getString("senderKey") ?: ""
+        val backedUp = this.getBoolean("backedUp")
+        val olmInboundGroupSessionStr = this.getString("olmInboundGroupSessionData")
+        val olmInboundGroupSession = deserializeFromRealm<OlmInboundGroupSessionWrapper2>(olmInboundGroupSessionStr)!!
         val pickledInboundGroupSession = olmInboundGroupSession.olmInboundGroupSession!!.pickle(pickleKey, StringBuffer()).asString()
         return PickledInboundGroupSession(
                 pickle = pickledInboundGroupSession,
@@ -108,10 +110,11 @@ internal class ExtractMigrationDataUseCase @Inject constructor() {
         )
     }
 
-    private fun OlmSessionEntity.toPickledSession(pickleKey: ByteArray): PickledSession {
-        val deviceKey = this.deviceKey ?: ""
-        val lastReceivedMessageTs = this.lastReceivedMessageTs
-        val olmSession = getOlmSession()!!
+    private fun DynamicRealmObject.toPickledSession(pickleKey: ByteArray): PickledSession {
+        val deviceKey = this.getString("deviceKey") ?: ""
+        val lastReceivedMessageTs = this.getLong("lastReceivedMessageTs")
+        val olmSessionStr = this.getString("olmSessionData")
+        val olmSession = deserializeFromRealm<OlmSession>(olmSessionStr)!!
         val pickledOlmSession = olmSession.pickle(pickleKey, StringBuffer()).asString()
         return PickledSession(
                 pickle = pickledOlmSession,

@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.RealmMigration
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -82,14 +83,17 @@ class TemporaryRealmConfigurationFactory : TemporaryFolder() {
         this.tempFolder = tempFolder
     }
 
-    fun create(realmFilename: String, assetFilename: String? = null, schemaVersion: Long, module: Any?): RealmConfiguration {
+    fun create(realmFilename: String, assetFilename: String? = null, schemaVersion: Long, module: Any?, migration: RealmMigration? = null): RealmConfiguration {
         val configurationBuilder = RealmConfiguration.Builder()
                 .directory(root)
                 .name(realmFilename)
                 .schemaVersion(schemaVersion)
                 .allowWritesOnUiThread(true)
 
-        if(module != null){
+        if (migration != null) {
+            configurationBuilder.migration(migration)
+        }
+        if (module != null) {
             configurationBuilder.modules(module)
         }
         val configuration = configurationBuilder.build()
