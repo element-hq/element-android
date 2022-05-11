@@ -239,9 +239,14 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
         initUiAndData()
 
-        val toolbarBackgroundRes = R.color.modal_background_color
-        window.statusBarColor = ContextCompat.getColor(this, toolbarBackgroundRes)
-        window.navigationBarColor = ContextCompat.getColor(this, toolbarBackgroundRes)
+        try {
+            val toolbarBackground = MaterialColors.getColor(views.root, R.attr.vctr_toolbar_background)
+            window.statusBarColor = toolbarBackground
+            window.navigationBarColor = toolbarBackground
+        } catch (e: Exception) {
+            
+        }
+
         val titleRes = getTitleRes()
         if (titleRes != -1) {
             supportActionBar?.let {

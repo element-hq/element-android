@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/modal_background_color"
+        android:background="?attr/vctr_toolbar_background"
         android:paddingBottom="8dp">
 
         <TextView
@@ -71,7 +71,6 @@
         android:id="@+id/room_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/modal_background_color"
         app:layout_constraintTop_toBottomOf="@id/header_text_layout"
         app:layout_constraintBottom_toTopOf="@id/add_space_layout"
         tools:itemCount="3"
@@ -166,13 +165,14 @@
             app:layout_constraintTop_toTopOf="@id/add_space_icon_background"
             app:tint="?attr/vctr_spoiler_background_color" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             style="@style/Widget.Vector.TextView.Body.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/add_space"
             android:textSize="17sp"
+            android:textColor="?attr/vctr_message_text_color"
             app:layout_constraintBottom_toBottomOf="@id/add_space_icon_background"
             app:layout_constraintStart_toEndOf="@id/add_space_icon_background"
             app:layout_constraintTop_toTopOf="@id/add_space_icon_background" />

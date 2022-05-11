@@ -7,6 +7,6 @@
     <!--this creates the mask with the ripple effect-->
     <item
         android:id="@+id/mask"
-        android:drawable="@android:color/white" />
+        android:drawable="?attr/vctr_toolbar_background" />
 
 </ripple>
