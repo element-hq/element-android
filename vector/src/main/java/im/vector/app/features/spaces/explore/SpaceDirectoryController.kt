@@ -80,7 +80,7 @@ class SpaceDirectoryController @Inject constructor(
             val failure = results.error
             if (failure is Failure.ServerError && failure.error.code == M_UNRECOGNIZED) {
                 genericPillItem {
-                    id("HS no Support")
+                    id("hs_no_support")
                     imageRes(R.drawable.error)
                     tintIcon(false)
                     text(
@@ -141,7 +141,7 @@ class SpaceDirectoryController @Inject constructor(
 
                 if (filteredChildInfo.isEmpty()) {
                     spaceDirectoryFilterNoResults {
-                        id("no results")
+                        id("no_results")
                     }
                 } else {
                     filteredChildInfo.forEach { info ->
