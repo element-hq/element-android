@@ -73,7 +73,7 @@ data class IncomingRoomKeyRequest(
                     }
         }
 
-        fun fromRestRequest(senderId: String, request: RoomKeyShareRequest, clock: Clock): IncomingRoomKeyRequest? {
+        internal fun fromRestRequest(senderId: String, request: RoomKeyShareRequest, clock: Clock): IncomingRoomKeyRequest? {
             return IncomingRoomKeyRequest(
                     userId = senderId,
                     deviceId = request.requestingDeviceId,
