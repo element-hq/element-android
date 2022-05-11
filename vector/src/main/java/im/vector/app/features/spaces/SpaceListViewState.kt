@@ -36,5 +36,6 @@ data class SpaceListViewState(
         val legacyGroups: List<GroupSummary>? = null,
         val expandedStates: Map<String, Boolean> = emptyMap(),
         val inviteCount: Int = 0,
+        val inviteUserTask: ((String) -> String?)? = null,
         val homeAggregateCount: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0)
 ) : MavericksState

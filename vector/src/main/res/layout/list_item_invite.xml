@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/avatar"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@sample/space_avatars"
+        android:layout_marginStart="16dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="@id/avatar"
+        app:layout_constraintBottom_toTopOf="@id/invited_by"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        tools:text="Element Corp."/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/Widget.Vector.TextView.Body"
+        android:id="@+id/invited_by"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="?attr/vctr_content_secondary"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        app:layout_constraintStart_toStartOf="@id/name"
+        tools:text="Invited by John from Cornwall"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

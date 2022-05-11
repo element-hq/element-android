@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.allViews
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.fragmentViewModel
@@ -58,6 +59,7 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         setupRecyclerView()
         setupAddSpace()
+        setupInvites()
         observeSpaceChange()
     }
 
@@ -78,6 +80,17 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
                 startActivity(SpaceManageActivity.newIntent(requireActivity(), currentSpace.roomId, ManageType.AddRoomsOnlySpaces))
             } else {
                 sharedActionViewModel.post(HomeActivitySharedAction.AddSpace)
+            }
+        }
+    }
+
+    private fun setupInvites() {
+        binding.invitesGroup.referencedIds.map { binding.root.findViewById<View>(it) }.forEach {
+            it.setOnClickListener {
+                withState(viewModel) { state ->
+                    val invitesBottomSheet = InvitesBottomSheet(state.inviteSpaces.orEmpty(), avatarRenderer, state.inviteUserTask)
+                    invitesBottomSheet.show(requireActivity().supportFragmentManager, InvitesBottomSheet.TAG)
+                }
             }
         }
     }
