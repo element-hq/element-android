@@ -87,7 +87,7 @@ jobs:
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
 
-# Lint for main module
+# Lint for all modules
   android-lint:
     name: Android Linter
     runs-on: ubuntu-latest
@@ -106,14 +106,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Lint analysis
-        run: ./gradlew clean :vector:lint --stacktrace
+        run: ./gradlew clean lint --stacktrace
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: lint-report
           path: |
-            vector/build/reports/*.*
+            **/build/reports/*.*
 
 # Lint for Gplay and Fdroid release APK
   apk-lint:
