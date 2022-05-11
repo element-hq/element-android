@@ -113,17 +113,18 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
     private fun observeSpaceChange() = sharedActionViewModel.space.observe(viewLifecycleOwner) {
         viewModel.setSpace(it)
         binding.headerText.isVisible = it == null
-        binding.headerTextLayout.isVisible = it == null
+        binding.headerTextLayout.isVisible = binding.headerText.isVisible || binding.invitesGroup.isVisible
     }
 
     override fun invalidate() {
         withState(viewModel) { state ->
             state.rootSpacesOrdered?.let {
-                (binding.roomList.adapter as SpaceListAdapter).replaceList(it + it + it)
+                (binding.roomList.adapter as SpaceListAdapter).replaceList(it)
                 binding.noSpacesYetGroup.isVisible = it.isEmpty()
             }
 
             binding.invitesGroup.isVisible = state.inviteCount > 0
+            binding.headerTextLayout.isVisible = binding.headerText.isVisible || binding.invitesGroup.isVisible
             binding.counterBadge.render(UnreadCounterBadgeView.State(state.inviteCount, true))
             setupTopBar()
         }
