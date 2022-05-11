@@ -165,8 +165,8 @@
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/space_avatar"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="4dp"
                         android:visibility="gone"
@@ -182,15 +182,15 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="4dp"
                         android:text="@string/all_chats"
-                        android:textSize="26sp" />
+                        android:textSize="22sp" />
 
                     <ImageView
                         android:id="@+id/toolbar_chevron"
-                        android:layout_width="13dp"
-                        android:layout_height="13dp"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ic_arrow_right"
                         app:tint="@color/palette_element_green"/>
