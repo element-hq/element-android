@@ -75,11 +75,11 @@ class FtueAuthSplashFragment @Inject constructor(
 
     private fun splashSubmit(isAlreadyHaveAccountEnabled: Boolean) {
         val getStartedFlow = if (isAlreadyHaveAccountEnabled) OnboardingFlow.SignUp else OnboardingFlow.SignInSignUp
-        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = false, onboardingFlow = getStartedFlow))
+        viewModel.handle(OnboardingAction.OnGetStarted(onboardingFlow = getStartedFlow))
     }
 
     private fun alreadyHaveAnAccount() {
-        viewModel.handle(OnboardingAction.OnIAlreadyHaveAnAccount(resetLoginConfig = false, onboardingFlow = OnboardingFlow.SignIn))
+        viewModel.handle(OnboardingAction.OnIAlreadyHaveAnAccount(onboardingFlow = OnboardingFlow.SignIn))
     }
 
     override fun resetViewModel() {
@@ -96,7 +96,8 @@ class FtueAuthSplashFragment @Inject constructor(
                     .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
                     .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
                         val flow = withState(viewModel) { it.onboardingFlow } ?: OnboardingFlow.SignInSignUp
-                        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = true, flow))
+                        viewModel.handle(OnboardingAction.ResetDeeplinkConfig)
+                        viewModel.handle(OnboardingAction.OnGetStarted(flow))
                     }
                     .setNegativeButton(R.string.action_cancel, null)
                     .show()

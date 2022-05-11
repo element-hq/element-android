@@ -29,6 +29,7 @@ import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.VectorOverrides
@@ -108,7 +109,8 @@ class OnboardingViewModel @AssistedInject constructor(
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
-    private val defaultHomeserverUrl = matrixOrgUrl
+    private val defaultHomeserverUrl: String
+        get() = loginConfig?.homeServerUrl?.ensureProtocol() ?: matrixOrgUrl
 
     private val registrationWizard: RegistrationWizard
         get() = authenticationService.getRegistrationWizard()
@@ -134,8 +136,8 @@ class OnboardingViewModel @AssistedInject constructor(
 
     override fun handle(action: OnboardingAction) {
         when (action) {
-            is OnboardingAction.OnGetStarted               -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
-            is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
+            is OnboardingAction.OnGetStarted               -> handleSplashAction(action.onboardingFlow)
+            is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.onboardingFlow)
             is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase(action)
             OnboardingAction.ResetUseCase                  -> resetUseCase()
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
@@ -159,6 +161,7 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
             is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
             OnboardingAction.StopEmailValidationCheck      -> cancelWaitForEmailValidation()
+            OnboardingAction.ResetDeeplinkConfig           -> loginConfig = null
         }
     }
 
@@ -175,10 +178,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleSplashAction(resetConfig: Boolean, onboardingFlow: OnboardingFlow) {
-        if (resetConfig) {
-            loginConfig = null
-        }
+    private fun handleSplashAction(onboardingFlow: OnboardingFlow) {
         setState { copy(onboardingFlow = onboardingFlow) }
 
         return when (val config = loginConfig.toHomeserverConfig()) {
@@ -407,7 +407,6 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleInitWith(action: OnboardingAction.InitWith) {
         loginConfig = action.loginConfig
-
         // If there is a pending email validation continue on this step
         try {
             if (registrationWizard.isRegistrationStarted) {
