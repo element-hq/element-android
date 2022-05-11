@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,7 +41,8 @@ private val loggerTag = LoggerTag("OutgoingGossipingRequestManager", LoggerTag.C
 internal class PerSessionBackupQueryRateLimiter @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val keysBackupService: Lazy<DefaultKeysBackupService>,
-        private val cryptoStore: IMXCryptoStore
+        private val cryptoStore: IMXCryptoStore,
+        private val clock: Clock,
 ) {
 
     companion object {
@@ -54,7 +56,7 @@ internal class PerSessionBackupQueryRateLimiter @Inject constructor(
 
     data class LastTry(
             val backupVersion: String,
-            val timestamp: Long = System.currentTimeMillis()
+            val timestamp: Long
     )
 
     /**
@@ -66,7 +68,7 @@ internal class PerSessionBackupQueryRateLimiter @Inject constructor(
     private var backupVersion: KeysVersionResult? = null
     private var savedKeyBackupKeyInfo: SavedKeyBackupKeyInfo? = null
     var backupWasCheckedFromServer: Boolean = false
-    val now = System.currentTimeMillis()
+    val now = clock.epochMillis()
 
     fun refreshBackupInfoIfNeeded(force: Boolean = false) {
         if (backupWasCheckedFromServer && !force) return
@@ -124,7 +126,7 @@ internal class PerSessionBackupQueryRateLimiter @Inject constructor(
             return true
         } else {
             Timber.tag(loggerTag.value).v("Failed to find key in backup session:$sessionId in $roomId")
-            lastFailureMap[cacheKey] = LastTry(currentVersion.version)
+            lastFailureMap[cacheKey] = LastTry(currentVersion.version, clock.epochMillis())
             return false
         }
     }

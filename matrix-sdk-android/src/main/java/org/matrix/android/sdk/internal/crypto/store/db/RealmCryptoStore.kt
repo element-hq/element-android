@@ -1108,7 +1108,7 @@ internal class RealmCryptoStore @Inject constructor(
     }
 
     private fun createUnknownTrail() = AuditTrail(
-            System.currentTimeMillis(),
+            clock.epochMillis(),
             TrailType.Unknown,
             IncomingKeyRequestInfo(
                     "",
@@ -1187,7 +1187,7 @@ internal class RealmCryptoStore @Inject constructor(
                     this.requestedIndex = fromIndex
                     this.requestState = OutgoingRoomKeyRequestState.UNSENT
                     this.setRequestBody(requestBody)
-                    this.creationTimeStamp = System.currentTimeMillis()
+                    this.creationTimeStamp = clock.epochMillis()
                 }.toOutgoingKeyRequest()
             } else {
                 request = existing
@@ -1268,7 +1268,7 @@ internal class RealmCryptoStore @Inject constructor(
             fromUser: String,
             fromDevice: String) {
         monarchy.writeAsync { realm ->
-            val now = System.currentTimeMillis()
+            val now = clock.epochMillis()
             realm.createObject<AuditTrailEntity>().apply {
                 this.ageLocalTs = now
                 this.type = TrailType.IncomingKeyRequest.name
@@ -1296,7 +1296,7 @@ internal class RealmCryptoStore @Inject constructor(
                                         userId: String,
                                         deviceId: String) {
         monarchy.writeAsync { realm ->
-            val now = System.currentTimeMillis()
+            val now = clock.epochMillis()
             realm.createObject<AuditTrailEntity>().apply {
                 this.ageLocalTs = now
                 this.type = TrailType.OutgoingKeyWithheld.name
@@ -1346,7 +1346,7 @@ internal class RealmCryptoStore @Inject constructor(
                                     incoming: Boolean
     ) {
         monarchy.writeAsync { realm ->
-            val now = System.currentTimeMillis()
+            val now = clock.epochMillis()
             realm.createObject<AuditTrailEntity>().apply {
                 this.ageLocalTs = now
                 this.type = if (incoming) TrailType.IncomingKeyForward.name else TrailType.OutgoingKeyForward.name
@@ -1683,7 +1683,7 @@ internal class RealmCryptoStore @Inject constructor(
 
             // Only keep one month history
 
-            val prevMonthTs = System.currentTimeMillis() - 4 * 7 * 24 * 60 * 60 * 1_000L
+            val prevMonthTs = clock.epochMillis() - 4 * 7 * 24 * 60 * 60 * 1_000L
             realm.where<AuditTrailEntity>()
                     .lessThan(AuditTrailEntityFields.AGE_LOCAL_TS, prevMonthTs)
                     .findAll()

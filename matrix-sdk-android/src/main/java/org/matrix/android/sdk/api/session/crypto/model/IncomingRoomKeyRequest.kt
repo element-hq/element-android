@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.crypto.model
 
+import org.matrix.android.sdk.internal.util.time.Clock
+
 /**
  * IncomingRoomKeyRequest class defines the incoming room keys request.
  */
@@ -71,13 +73,13 @@ data class IncomingRoomKeyRequest(
                     }
         }
 
-        fun fromRestRequest(senderId: String, request: RoomKeyShareRequest): IncomingRoomKeyRequest? {
+        fun fromRestRequest(senderId: String, request: RoomKeyShareRequest, clock: Clock): IncomingRoomKeyRequest? {
             return IncomingRoomKeyRequest(
                     userId = senderId,
                     deviceId = request.requestingDeviceId,
                     requestId = request.requestId,
                     requestBody = request.body,
-                    localCreationTimestamp = System.currentTimeMillis()
+                    localCreationTimestamp = clock.epochMillis()
             )
         }
     }

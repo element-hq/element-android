@@ -44,6 +44,7 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -60,7 +61,9 @@ internal class IncomingKeyRequestManager @Inject constructor(
         private val cryptoConfig: MXCryptoConfig,
         private val messageEncrypter: MessageEncrypter,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val sendToDeviceTask: SendToDeviceTask) {
+        private val sendToDeviceTask: SendToDeviceTask,
+        private val clock: Clock,
+) {
 
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val outgoingRequestScope = CoroutineScope(SupervisorJob() + dispatcher)
@@ -135,7 +138,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
                         MegolmRequestAction.Cancel  -> {
                             // ignore, we can't cancel as it's not known (probably already processed)
                             // still notify app layer if it was passed up previously
-                            IncomingRoomKeyRequest.fromRestRequest(senderId, request)?.let { iReq ->
+                            IncomingRoomKeyRequest.fromRestRequest(senderId, request, clock)?.let { iReq ->
                                 outgoingRequestScope.launch(coroutineDispatchers.computation) {
                                     val listenersCopy = synchronized(gossipingRequestListeners) {
                                         gossipingRequestListeners.toList()
@@ -164,7 +167,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
                                     gossipingRequestListeners.toList()
                                 }
                                 listenersCopy.onEach {
-                                    IncomingRoomKeyRequest.fromRestRequest(senderId, request)?.let { iReq ->
+                                    IncomingRoomKeyRequest.fromRestRequest(senderId, request, clock)?.let { iReq ->
                                         withContext(coroutineDispatchers.main) {
                                             tryOrNull { it.onRequestCancelled(iReq) }
                                         }
@@ -287,7 +290,7 @@ internal class IncomingKeyRequestManager @Inject constructor(
                                     sessionId = request.sessionId,
                                     roomId = request.roomId
                             ),
-                            localCreationTimestamp = System.currentTimeMillis()
+                            localCreationTimestamp = clock.epochMillis()
                     )
                     listenersCopy.onEach {
                         withContext(coroutineDispatchers.main) {

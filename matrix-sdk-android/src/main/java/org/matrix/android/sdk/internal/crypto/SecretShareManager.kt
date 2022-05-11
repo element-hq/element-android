@@ -43,6 +43,7 @@ import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -56,7 +57,8 @@ internal class SecretShareManager @Inject constructor(
         private val messageEncrypter: MessageEncrypter,
         private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
         private val sendToDeviceTask: SendToDeviceTask,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val clock: Clock,
 ) {
 
     companion object {
@@ -100,7 +102,7 @@ internal class SecretShareManager @Inject constructor(
         // For now we just keep an in memory cache
         cryptoCoroutineScope.launch {
             verifMutex.withLock {
-                recentlyVerifiedDevices[deviceId] = System.currentTimeMillis()
+                recentlyVerifiedDevices[deviceId] = clock.epochMillis()
             }
         }
     }
@@ -217,7 +219,7 @@ internal class SecretShareManager @Inject constructor(
             recentlyVerifiedDevices[deviceId]
         } ?: return false
 
-        val age = System.currentTimeMillis() - verifTimestamp
+        val age = clock.epochMillis() - verifTimestamp
 
         return age < SECRET_SHARE_WINDOW_DURATION
     }
