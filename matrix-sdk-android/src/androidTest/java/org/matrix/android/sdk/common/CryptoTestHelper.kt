@@ -58,7 +58,7 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
-import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
+import org.matrix.android.sdk.api.session.securestorage.KeyRef
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toBase64NoPadding
@@ -361,19 +361,19 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             ssssService.storeSecret(
                     MASTER_KEY_SSSS_NAME,
                     session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.master!!,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
 
             ssssService.storeSecret(
                     SELF_SIGNING_KEY_SSSS_NAME,
                     session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.selfSigned!!,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
 
             ssssService.storeSecret(
                     USER_SIGNING_KEY_SSSS_NAME,
                     session.cryptoService().crossSigningService().getCrossSigningPrivateKeys()!!.user!!,
-                    listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                    listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
             )
 
             // set up megolm backup
@@ -390,7 +390,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
                 ssssService.storeSecret(
                         KEYBACKUP_SECRET_SSSS_NAME,
                         secret,
-                        listOf(SharedSecretStorageService.KeyRef(keyInfo.keyId, keyInfo.keySpec))
+                        listOf(KeyRef(keyInfo.keyId, keyInfo.keySpec))
                 )
             }
         }
