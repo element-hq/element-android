@@ -156,7 +156,7 @@ internal class DefaultSyncTask @Inject constructor(
             syncRequestStateTracker.endAll()
         } else {
             Timber.tag(loggerTag.value).d("Start incremental sync request with since token $token")
-            syncRequestStateTracker.setStatus(SyncRequestState.IncrementalSyncIdle)
+            syncRequestStateTracker.setSyncRequestState(SyncRequestState.IncrementalSyncIdle)
             val syncResponse = try {
                 executeRequest(globalErrorReceiver) {
                     syncAPI.sync(
@@ -166,7 +166,7 @@ internal class DefaultSyncTask @Inject constructor(
                 }
             } catch (throwable: Throwable) {
                 Timber.tag(loggerTag.value).e(throwable, "Incremental sync request error")
-                syncRequestStateTracker.setStatus(SyncRequestState.IncrementalSyncError)
+                syncRequestStateTracker.setSyncRequestState(SyncRequestState.IncrementalSyncError)
                 throw throwable
             }
             val nbRooms = syncResponse.rooms?.invite.orEmpty().size + syncResponse.rooms?.join.orEmpty().size + syncResponse.rooms?.leave.orEmpty().size
@@ -175,7 +175,7 @@ internal class DefaultSyncTask @Inject constructor(
             Timber.tag(loggerTag.value).d(
                     "Incremental sync request parsing, $nbRooms room(s) $nbToDevice toDevice(s). Got nextBatch: $nextBatch"
             )
-            syncRequestStateTracker.setStatus(
+            syncRequestStateTracker.setSyncRequestState(
                     SyncRequestState.IncrementalSyncParsing(
                             rooms = nbRooms,
                             toDevice = nbToDevice
@@ -184,7 +184,7 @@ internal class DefaultSyncTask @Inject constructor(
             syncResponseHandler.handleResponse(syncResponse, token, null)
             syncResponseToReturn = syncResponse
             Timber.tag(loggerTag.value).d("Incremental sync done")
-            syncRequestStateTracker.setStatus(SyncRequestState.IncrementalSyncDone)
+            syncRequestStateTracker.setSyncRequestState(SyncRequestState.IncrementalSyncDone)
         }
         syncStatisticsData.treatmentSyncTime = SystemClock.elapsedRealtime()
         syncStatisticsData.nbOfRooms = syncResponseToReturn?.rooms?.join?.size ?: 0

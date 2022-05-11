@@ -31,7 +31,7 @@ internal class SyncRequestStateTracker @Inject constructor() :
     private var rootTask: TaskInfo? = null
 
     // Only to be used for incremental sync
-    fun setStatus(newSyncRequestState: SyncRequestState.IncrementalSyncRequestState) {
+    fun setSyncRequestState(newSyncRequestState: SyncRequestState.IncrementalSyncRequestState) {
         syncRequestState.postValue(newSyncRequestState)
     }
 
