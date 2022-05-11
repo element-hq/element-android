@@ -19,7 +19,7 @@
         android:id="@+id/locationLiveStartBanner"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:alpha="0.85"
+        android:alpha="0.75"
         android:src="?android:colorBackground"
         app:layout_constraintBottom_toBottomOf="@id/locationLiveStartMap"
         app:layout_constraintEnd_toEndOf="@id/locationLiveStartMap"
