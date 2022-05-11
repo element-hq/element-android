@@ -88,7 +88,9 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         binding.invitesGroup.referencedIds.map { binding.root.findViewById<View>(it) }.forEach {
             it.setOnClickListener {
                 withState(viewModel) { state ->
-                    val invitesBottomSheet = InvitesBottomSheet(state.inviteSpaces.orEmpty(), avatarRenderer, state.inviteUserTask)
+                    val invitesBottomSheet = InvitesBottomSheet(state.inviteSpaces.orEmpty(), avatarRenderer, state.inviteUserTask) { invite ->
+                        sharedActionViewModel.post(HomeActivitySharedAction.OpenSpaceInvite(invite.roomId))
+                    }
                     invitesBottomSheet.show(requireActivity().supportFragmentManager, InvitesBottomSheet.TAG)
                 }
             }

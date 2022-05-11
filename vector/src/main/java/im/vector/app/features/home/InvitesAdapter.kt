@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 class InvitesAdapter(
         private val avatarRenderer: AvatarRenderer,
         private val inviteUserTask: ((String) -> String?)?,
+        private val onInviteClicked: ((RoomSummary) -> Unit)?,
 ) : RecyclerView.Adapter<InvitesAdapter.ViewHolder>() {
 
     private val invites = mutableListOf<RoomSummary>()
@@ -55,6 +56,8 @@ class InvitesAdapter(
         fun bind(invite: RoomSummary) {
             avatarRenderer.render(invite.toMatrixItem(), binding.avatar)
             binding.name.text = invite.name
+            binding.root.setOnClickListener { onInviteClicked?.invoke(invite) }
+
             invite.inviterId?.let {
                 val inviterName =  inviteUserTask?.invoke(it)
                 if (inviterName != null) {

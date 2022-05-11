@@ -332,6 +332,9 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
         val rootSpaces = asyncSpaceList?.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
         val displaySpaces = (currentSpaceChildren ?: rootSpaces).filter { it.inviterId == null }
         val inviteSpaces = (currentSpaceChildren ?: rootSpaces).filter { it.inviterId != null }
+        val inviteUserTask: (String) -> String? = {
+            session.getUser(it)?.displayName
+        }
         val orders = displaySpaces.associate {
             it.roomId to session.getRoom(it.roomId)
                     ?.roomAccountDataService()
@@ -345,6 +348,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                     rootSpacesOrdered = displaySpaces.sortedWith(TopLevelSpaceComparator(orders)),
                     inviteSpaces = inviteSpaces.sortedWith(TopLevelSpaceComparator(orders)),
                     inviteCount = inviteSpaces.size,
+                    inviteUserTask = inviteUserTask,
                     spaceOrderInfo = orders
             )
         }

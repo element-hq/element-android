@@ -28,7 +28,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 class InvitesBottomSheet(
         private val invites: List<RoomSummary>,
         private val avatarRenderer: AvatarRenderer,
-        private val inviteUserTask: ((String) -> String?)?
+        private val inviteUserTask: ((String) -> String?)?,
+        private val onInviteClicked: ((RoomSummary) -> Unit)?
 ) : BottomSheetDialogFragment() {
 
     private lateinit var binding: BottomSheetInvitesBinding
@@ -48,7 +49,10 @@ class InvitesBottomSheet(
     }
 
     private fun setupInvitesList() {
-        val adapter = InvitesAdapter(avatarRenderer, inviteUserTask)
+        val adapter = InvitesAdapter(avatarRenderer, inviteUserTask) {
+            dismiss()
+            onInviteClicked?.invoke(it)
+        }
         val layoutManager = LinearLayoutManager(context)
         binding.invitesList.adapter = adapter
         binding.invitesList.layoutManager = layoutManager
