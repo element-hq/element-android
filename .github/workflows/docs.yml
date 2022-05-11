@@ -1,6 +1,7 @@
 name: Documentation
 
 on:
+  pull_request: { }
   push:
     branches: [ develop ]
 
