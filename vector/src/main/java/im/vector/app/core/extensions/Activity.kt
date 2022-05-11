@@ -39,8 +39,10 @@ fun ComponentActivity.registerStartForActivityResult(onResult: (ActivityResult) 
 fun AppCompatActivity.addFragment(
         container: ViewGroup,
         fragment: Fragment,
-        allowStateLoss: Boolean = false) {
-    supportFragmentManager.commitTransaction(allowStateLoss) { add(container.id, fragment) }
+        allowStateLoss: Boolean = false,
+        tag: String? = null
+) {
+    supportFragmentManager.commitTransaction(allowStateLoss) { add(container.id, fragment, tag) }
 }
 
 fun <T : Fragment> AppCompatActivity.addFragment(
