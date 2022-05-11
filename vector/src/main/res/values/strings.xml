@@ -3039,6 +3039,7 @@
     <string name="screen_sharing_notification_description">Screen sharing is in progress</string>
     <string name="all_chats">All Chats</string>
     <string name="choose_a_space">Spaces</string>
+    <string name="invites">Invites</string>
     <string name="chats">Chats</string>
     <string name="no_spaces_yet">No spaces yet</string>
     <string name="no_spaces_yet_message">Add spaces to group your chats</string>

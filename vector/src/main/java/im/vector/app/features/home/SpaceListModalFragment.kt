@@ -28,10 +28,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpaceListModalBinding
+import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.features.spaces.SpaceListAction
 import im.vector.app.features.spaces.SpaceListViewModel
 import im.vector.app.features.spaces.manage.ManageType
 import im.vector.app.features.spaces.manage.SpaceManageActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -92,6 +94,9 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
                 (binding.roomList.adapter as SpaceListAdapter).replaceList(it)
                 binding.noSpacesYetGroup.isVisible = it.isEmpty()
             }
+
+            binding.invitesGroup.isVisible = state.inviteCount > 0
+            binding.counterBadge.render(UnreadCounterBadgeView.State(state.inviteCount, true))
         }
     }
 }

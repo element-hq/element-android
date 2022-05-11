@@ -30,9 +30,11 @@ data class SpaceListViewState(
         val asyncSpaces: Async<List<RoomSummary>> = Uninitialized,
         val selectedGroupingMethod: RoomGroupingMethod = RoomGroupingMethod.BySpace(null),
         val rootSpacesOrdered: List<RoomSummary>? = null,
+        val inviteSpaces: List<RoomSummary>? = null,
         val spaceOrderInfo: Map<String, String?>? = null,
         val spaceOrderLocalEchos: Map<String, String?>? = null,
         val legacyGroups: List<GroupSummary>? = null,
         val expandedStates: Map<String, Boolean> = emptyMap(),
+        val inviteCount: Int = 0,
         val homeAggregateCount: RoomAggregateNotificationCount = RoomAggregateNotificationCount(0, 0)
 ) : MavericksState

@@ -142,7 +142,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
                     )
                     setState {
                         copy(
-                                homeAggregateCount = counts
+                                homeAggregateCount = counts,
                         )
                     }
                 }
@@ -285,19 +285,16 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
             displayName = QueryStringValue.IsNotEmpty
         }
 
-        combine(
-                session.flow()
-                        .liveSpaceSummaries(params),
+        combine(session.flow().liveSpaceSummaries(params),
                 session.accountDataService()
                         .getLiveRoomAccountDataEvents(setOf(RoomAccountDataTypes.EVENT_TYPE_SPACE_ORDER))
                         .asFlow()
-        ) { spaces, _ ->
-            spaces
-        }.execute { async ->
+        ) { spaces, _ -> spaces }.execute { async ->
             asyncSpaceList = async
             val currentSpaceChildren = currentSpace?.let { space -> async.invoke()?.filter { it.flattenParentIds.contains(space.roomId) } }
             val rootSpaces = async.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
-            val displaySpaces = currentSpaceChildren ?: rootSpaces
+            val displaySpaces = (currentSpaceChildren ?: rootSpaces).filter { it.inviterId == null }
+            val inviteSpaces = (currentSpaceChildren ?: rootSpaces).filter { it.inviterId != null }
             val orders = displaySpaces.associate {
                 it.roomId to session.getRoom(it.roomId)
                         ?.roomAccountDataService()
@@ -308,6 +305,8 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
             copy(
                     asyncSpaces = async,
                     rootSpacesOrdered = displaySpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                    inviteSpaces = inviteSpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                    inviteCount = inviteSpaces.size,
                     spaceOrderInfo = orders
             )
         }
@@ -326,7 +325,8 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
     private fun emitSpaceViewState() = asyncSpaceList?.let { async ->
         val currentSpaceChildren = currentSpace?.let { space -> asyncSpaceList?.invoke()?.filter { it.flattenParentIds.contains(space.roomId) } }
         val rootSpaces = asyncSpaceList?.invoke().orEmpty().filter { it.flattenParentIds.isEmpty() }
-        val displaySpaces = currentSpaceChildren ?: rootSpaces
+        val displaySpaces = (currentSpaceChildren ?: rootSpaces).filter { it.inviterId == null }
+        val inviteSpaces = (currentSpaceChildren ?: rootSpaces).filter { it.inviterId != null }
         val orders = displaySpaces.associate {
             it.roomId to session.getRoom(it.roomId)
                     ?.roomAccountDataService()
@@ -338,6 +338,8 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
             copy(
                     asyncSpaces = async,
                     rootSpacesOrdered = displaySpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                    inviteSpaces = inviteSpaces.sortedWith(TopLevelSpaceComparator(orders)),
+                    inviteCount = inviteSpaces.size,
                     spaceOrderInfo = orders
             )
         }
