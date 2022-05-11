@@ -23,15 +23,14 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
-import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.getRoom
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
+// TODO add unit tests
 class LocationLiveMapViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationLiveMapViewState,
+        getCurrentUserLiveLocationUseCase: GetCurrentUserLiveLocationUseCase
 ) : VectorViewModel<LocationLiveMapViewState, LocationLiveMapAction, LocationLiveMapViewEvents>(initialState) {
-
-    // TODO create useCase to get Flow of user live location in room => Mock data for now
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<LocationLiveMapViewModel, LocationLiveMapViewState> {
@@ -41,7 +40,9 @@ class LocationLiveMapViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<LocationLiveMapViewModel, LocationLiveMapViewState> by hiltMavericksViewModelFactory()
 
     init {
-        // TODO call use case to collect flow of user live location
+        getCurrentUserLiveLocationUseCase.execute()
+                .onEach { setState { copy(userLocations = it) } }
+                .launchIn(viewModelScope)
     }
 
     override fun handle(action: LocationLiveMapAction) {
