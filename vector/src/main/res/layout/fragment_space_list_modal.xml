@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/modal_background_color"
-        android:elevation="4dp"
         android:paddingBottom="8dp">
 
         <TextView
@@ -76,8 +75,18 @@
         app:layout_constraintTop_toBottomOf="@id/header_text_layout"
         app:layout_constraintBottom_toTopOf="@id/add_space_layout"
         tools:itemCount="3"
-        tools:visibility="visible"
-        tools:listitem="@layout/item_modal_space" />
+        tools:layout_editor_absoluteX="-99dp"
+        tools:listitem="@layout/item_modal_space"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/header_bottom_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/top_shadow"
+        android:visibility="gone"
+        android:rotation="180"
+        app:layout_constraintTop_toBottomOf="@id/header_text_layout" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/no_spaces_yet_group"
@@ -113,9 +122,18 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <View
+        android:id="@+id/add_space_top_shadow"
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:background="@drawable/top_shadow"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/add_space_layout" />
+
+    <View
+        android:id="@+id/add_space_top_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/vctr_content_quinary"
         app:layout_constraintBottom_toTopOf="@id/add_space_layout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -58,6 +58,7 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(HomeSharedActionViewModel::class.java)
         setupRecyclerView()
+        setupTopBar()
         setupAddSpace()
         setupInvites()
         observeSpaceChange()
@@ -70,6 +71,18 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
                 viewModel.handle(SpaceListAction.SelectSpace(spaceSummary))
                 sharedActionViewModel.post(HomeActivitySharedAction.OpenGroup(false))
             }
+        }
+    }
+
+    private fun setupTopBar() {
+        if (!binding.roomList.canScrollVertically(-1)) {
+            binding.headerBottomShadow.isVisible = false
+            binding.addSpaceTopShadow.isVisible = false
+            binding.addSpaceTopDivider.isVisible = true
+        } else {
+            binding.headerBottomShadow.isVisible = true
+            binding.addSpaceTopShadow.isVisible = true
+            binding.addSpaceTopDivider.isVisible = false
         }
     }
 
@@ -106,12 +119,13 @@ class SpaceListModalFragment : VectorBaseFragment<FragmentSpaceListModalBinding>
     override fun invalidate() {
         withState(viewModel) { state ->
             state.rootSpacesOrdered?.let {
-                (binding.roomList.adapter as SpaceListAdapter).replaceList(it)
+                (binding.roomList.adapter as SpaceListAdapter).replaceList(it + it + it)
                 binding.noSpacesYetGroup.isVisible = it.isEmpty()
             }
 
             binding.invitesGroup.isVisible = state.inviteCount > 0
             binding.counterBadge.render(UnreadCounterBadgeView.State(state.inviteCount, true))
+            setupTopBar()
         }
     }
 }
