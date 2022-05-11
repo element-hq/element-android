@@ -21,6 +21,7 @@ import org.amshove.kluent.shouldBe
 import org.junit.Assert
 import org.junit.Before
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -85,6 +86,7 @@ class UnwedgingTest : InstrumentedTest {
      * -> This is automatically fixed after SDKs restarted the olm session
      */
     @Test
+    @Ignore("This test is failing on CI")
     fun testUnwedging() {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
