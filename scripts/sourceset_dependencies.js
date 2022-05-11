@@ -1,0 +1,1 @@
+sourceset_dependencies='{":matrix-sdk-android:dokkaHtml/androidTestRelease":[],":matrix-sdk-android:dokkaHtml/debug":[],":matrix-sdk-android:dokkaHtml/main":[],":matrix-sdk-android:dokkaHtml/release":[],":matrix-sdk-android:dokkaHtml/testFixtures":[],":matrix-sdk-android:dokkaHtml/testFixturesDebug":[],":matrix-sdk-android:dokkaHtml/testFixturesRelease":[]}'

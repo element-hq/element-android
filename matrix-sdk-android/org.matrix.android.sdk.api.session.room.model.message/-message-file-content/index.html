@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>MessageFileContent</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>matrix-sdk-android</span>
+            </a>
+    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.api.session.room.model.message/MessageFileContent///PointingToDeclaration//468305090">
+  <div class="breadcrumbs"><a href="../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../index.html">org.matrix.android.sdk.api.session.room.model.message</a><span class="delimiter">/</span><a href="index.html">MessageFileContent</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Message</span><wbr></wbr><span>File</span><wbr></wbr><span><span>Content</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/JsonClass///PointingToDeclaration/"><span class="token annotation">JsonClass</span></span><span class="token punctuation">(</span><span>generateAdapter<span class="token operator"> = </span><span class="breakable-word"><span class="token boolean">true</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">MessageFileContent</a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;msgtype&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span><span class="token keyword">val </span>msgType<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;body&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span><span class="token keyword">val </span>body<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;filename&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span><span class="token keyword">val </span>filename<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;info&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span><span class="token keyword">val </span>info<span class="token operator">: </span><a href="../-file-info/index.html">FileInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;url&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span><span class="token keyword">val </span>url<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;m.relates_to&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span><span class="token keyword">val </span>relatesTo<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model.relation/-relation-default-content/index.html">RelationDefaultContent</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;m.new_content&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span><span class="token keyword">val </span>newContent<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/index.html#-705089327%2FClasslikes%2F468305090">Content</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;file&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span><span class="token keyword">val </span>encryptedFileInfo<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.crypto.model/-encrypted-file-info/index.html">EncryptedFileInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span> : <a href="../-message-with-attachment-content/index.html">MessageWithAttachmentContent</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+    <div class="tabs-section-body">
+      <h2 class="tabbedcontent">Constructors</h2>
+      <div class="table" data-togglable="Constructors"><a data-name="-506185679%2FConstructors%2F468305090" anchor-label="MessageFileContent" id="-506185679%2FConstructors%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue TabbedContent">
+            <div class=""><span class="inline-flex">
+                <div><a href="-message-file-content.html"><span>Message</span><wbr></wbr><span>File</span><wbr></wbr><span><span>Content</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-506185679%2FConstructors%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-message-file-content.html"><span class="token function">MessageFileContent</span></a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;msgtype&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span>msgType<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;body&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span>body<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;filename&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span>filename<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;info&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span>info<span class="token operator">: </span><a href="../-file-info/index.html">FileInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;url&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span>url<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;m.relates_to&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span>relatesTo<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model.relation/-relation-default-content/index.html">RelationDefaultContent</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;m.new_content&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span>newContent<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/index.html#-705089327%2FClasslikes%2F468305090">Content</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span><span class="token annotation">@</span><span data-unresolved-link="com.squareup.moshi/Json///PointingToDeclaration/"><span class="token annotation">Json</span></span><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;file&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span> </span>encryptedFileInfo<span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.crypto.model/-encrypted-file-info/index.html">EncryptedFileInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="561027355%2FFunctions%2F468305090" anchor-label="getFileName" id="561027355%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="get-file-name.html"><span>get</span><wbr></wbr><span>File</span><wbr></wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="561027355%2FFunctions%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-file-name.html"><span class="token function">getFileName</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="601499232%2FProperties%2F468305090" anchor-label="body" id="601499232%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="body.html">body</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="601499232%2FProperties%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="601499232%2FProperties%2F468305090" anchor-label="body" id="601499232%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="body.html">body</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="601499232%2FProperties%2F468305090" anchor-label="body" id="601499232%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Required. A human-readable description of the file. This is recommended to be the filename of the original upload.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1855867030%2FProperties%2F468305090" anchor-label="encryptedFileInfo" id="-1855867030%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="encrypted-file-info.html">encryptedFileInfo</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1855867030%2FProperties%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-1855867030%2FProperties%2F468305090" anchor-label="encryptedFileInfo" id="-1855867030%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="encrypted-file-info.html">encryptedFileInfo</a><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.crypto.model/-encrypted-file-info/index.html">EncryptedFileInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1855867030%2FProperties%2F468305090" anchor-label="encryptedFileInfo" id="-1855867030%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Required if the file is encrypted. Information on the encrypted file, as specified in End-to-end encryption.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="93474587%2FProperties%2F468305090" anchor-label="filename" id="93474587%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="filename.html">filename</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="93474587%2FProperties%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="93474587%2FProperties%2F468305090" anchor-label="filename" id="93474587%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="filename.html">filename</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="93474587%2FProperties%2F468305090" anchor-label="filename" id="93474587%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">The original filename of the uploaded file.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1268956972%2FProperties%2F468305090" anchor-label="info" id="-1268956972%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="info.html">info</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1268956972%2FProperties%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-1268956972%2FProperties%2F468305090" anchor-label="info" id="-1268956972%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="info.html">info</a><span class="token operator">: </span><a href="../-file-info/index.html">FileInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1268956972%2FProperties%2F468305090" anchor-label="info" id="-1268956972%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Information about the file referred to in url.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1731204748%2FProperties%2F468305090" anchor-label="mimeType" id="-1731204748%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="mime-type.html">mimeType</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1731204748%2FProperties%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="-1731204748%2FProperties%2F468305090" anchor-label="mimeType" id="-1731204748%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="mime-type.html">mimeType</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1546219933%2FProperties%2F468305090" anchor-label="msgType" id="1546219933%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="msg-type.html">msgType</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1546219933%2FProperties%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1546219933%2FProperties%2F468305090" anchor-label="msgType" id="1546219933%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="msg-type.html">msgType</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1546219933%2FProperties%2F468305090" anchor-label="msgType" id="1546219933%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Required. Must be 'm.file'.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1273237865%2FProperties%2F468305090" anchor-label="newContent" id="1273237865%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="new-content.html">newContent</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1273237865%2FProperties%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="1273237865%2FProperties%2F468305090" anchor-label="newContent" id="1273237865%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="new-content.html">newContent</a><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.events.model/index.html#-705089327%2FClasslikes%2F468305090">Content</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="351811107%2FProperties%2F468305090" anchor-label="relatesTo" id="351811107%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="relates-to.html">relatesTo</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="351811107%2FProperties%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="351811107%2FProperties%2F468305090" anchor-label="relatesTo" id="351811107%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="relates-to.html">relatesTo</a><span class="token operator">: </span><a href="../../org.matrix.android.sdk.api.session.room.model.relation/-relation-default-content/index.html">RelationDefaultContent</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="56996489%2FProperties%2F468305090" anchor-label="url" id="56996489%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="url.html">url</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="56996489%2FProperties%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><a data-name="56996489%2FProperties%2F468305090" anchor-label="url" id="56996489%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="url.html">url</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="56996489%2FProperties%2F468305090" anchor-label="url" id="56996489%2FProperties%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a><p class="paragraph">Required if the file is unencrypted. The URL (typically MXC URI) to the file.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

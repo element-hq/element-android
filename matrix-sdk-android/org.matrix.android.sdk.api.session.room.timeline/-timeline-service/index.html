@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>TimelineService</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>matrix-sdk-android</span>
+            </a>
+    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageIds="matrix-sdk-android::org.matrix.android.sdk.api.session.room.timeline/TimelineService///PointingToDeclaration//468305090">
+  <div class="breadcrumbs"><a href="../../../index.html">matrix-sdk-android</a><span class="delimiter">/</span><a href="../index.html">org.matrix.android.sdk.api.session.room.timeline</a><span class="delimiter">/</span><a href="index.html">TimelineService</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Timeline</span><wbr></wbr><span><span>Service</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">TimelineService</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">This interface defines methods to interact with the timeline. It's implemented at the room level.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button></div>
+    <div class="tabs-section-body">
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="-985352630%2FFunctions%2F468305090" anchor-label="createTimeline" id="-985352630%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="create-timeline.html"><span>create</span><wbr></wbr><span><span>Timeline</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-985352630%2FFunctions%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="create-timeline.html"><span class="token function">createTimeline</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">eventId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">settings<span class="token operator">: </span><a href="../-timeline-settings/index.html">TimelineSettings</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-timeline/index.html">Timeline</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Instantiate a <a href="../-timeline/index.html">Timeline</a> with an optional initial eventId, to be used with permalink. You can also configure some settings with the <a href="create-timeline.html">settings</a> param.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-985771088%2FFunctions%2F468305090" anchor-label="getAttachmentMessages" id="-985771088%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="get-attachment-messages.html"><span>get</span><wbr></wbr><span>Attachment</span><wbr></wbr><span><span>Messages</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-985771088%2FFunctions%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-attachment-messages.html"><span class="token function">getAttachmentMessages</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-timeline-event/index.html">TimelineEvent</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns a snapshot list of TimelineEvent with EventType.MESSAGE and MessageType.MSGTYPE_IMAGE or MessageType.MSGTYPE_VIDEO.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1404405982%2FFunctions%2F468305090" anchor-label="getTimelineEvent" id="-1404405982%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="get-timeline-event.html"><span>get</span><wbr></wbr><span>Timeline</span><wbr></wbr><span><span>Event</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1404405982%2FFunctions%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-timeline-event.html"><span class="token function">getTimelineEvent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">eventId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-timeline-event/index.html">TimelineEvent</a><span class="token operator">?</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns a snapshot of TimelineEvent event with eventId. At the opposite of getTimelineEventLive which will be updated when local echo event is synced, it will return null in this case.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="992648622%2FFunctions%2F468305090" anchor-label="getTimelineEventLive" id="992648622%2FFunctions%2F468305090" data-filterable-set=":matrix-sdk-android:dokkaHtml/release"></a>
+        <div class="table-row" data-filterable-current=":matrix-sdk-android:dokkaHtml/release" data-filterable-set=":matrix-sdk-android:dokkaHtml/release">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="get-timeline-event-live.html"><span>get</span><wbr></wbr><span>Timeline</span><wbr></wbr><span>Event</span><wbr></wbr><span><span>Live</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="992648622%2FFunctions%2F468305090"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":matrix-sdk-android:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-timeline-event-live.html"><span class="token function">getTimelineEventLive</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">eventId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/lifecycle/LiveData.html">LiveData</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../org.matrix.android.sdk.api.util/-optional/index.html">Optional</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-timeline-event/index.html">TimelineEvent</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Creates a LiveData of Optional TimelineEvent event with eventId. If the eventId is a local echo eventId, it will make the LiveData be updated with the synced TimelineEvent when coming through the sync. In this case, makes sure to use the new synced eventId from the TimelineEvent class if you want to interact, as the local echo is removed from the SDK.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+        </div>
+    </div>
+</div>
+</body>
+</html>
