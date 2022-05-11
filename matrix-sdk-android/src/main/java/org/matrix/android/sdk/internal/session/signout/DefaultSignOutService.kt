@@ -17,12 +17,16 @@
 package org.matrix.android.sdk.internal.session.signout
 
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
+import org.matrix.android.sdk.internal.crypto.dehydration.DehydrationManager
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class DefaultSignOutService @Inject constructor(private val signOutTask: SignOutTask,
                                                          private val signInAgainTask: SignInAgainTask,
+                                                         private val dehydrationManager: DehydrationManager,
                                                          private val sessionParamsStore: SessionParamsStore
 ) : SignOutService {
 
@@ -34,7 +38,10 @@ internal class DefaultSignOutService @Inject constructor(private val signOutTask
         sessionParamsStore.updateCredentials(credentials)
     }
 
-    override suspend fun signOut(signOutFromHomeserver: Boolean) {
+    override suspend fun signOut(signOutFromHomeserver: Boolean, numberOfActiveDevices: Int?) {
+        if (numberOfActiveDevices == 1) {
+            dehydrationManager.dehydrateDevice("dehydrationKey".toByteArray())
+        }
         return signOutTask.execute(SignOutTask.Params(signOutFromHomeserver))
     }
 }

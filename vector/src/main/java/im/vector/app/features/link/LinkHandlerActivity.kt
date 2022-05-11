@@ -133,7 +133,8 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
         } else {
             lifecycleScope.launch {
                 try {
-                    session.signOutService().signOut(true)
+                    val numberOfActiveDevices = session.cryptoService().getMyDevicesInfo().size
+                    session.signOutService().signOut(true, numberOfActiveDevices)
                     Timber.d("## displayAlreadyLoginPopup(): logout succeeded")
                     sessionHolder.clearActiveSession()
                     startLoginActivity(uri)

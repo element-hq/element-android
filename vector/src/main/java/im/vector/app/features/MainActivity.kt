@@ -160,7 +160,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             args.clearCredentials     -> {
                 lifecycleScope.launch {
                     try {
-                        session.signOutService().signOut(!args.isUserLoggedOut)
+                        val numberOfActiveDevices = session.cryptoService().getMyDevicesInfo().size
+                        session.signOutService().signOut(!args.isUserLoggedOut,numberOfActiveDevices)
                     } catch (failure: Throwable) {
                         displayError(failure)
                         return@launch
