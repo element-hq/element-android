@@ -1412,7 +1412,7 @@ internal class DefaultKeysBackupService @Inject constructor(
         olmInboundGroupSessionWrapper.safeSessionId ?: return null
         olmInboundGroupSessionWrapper.senderKey ?: return null
         // Gather information for each key
-        val device = olmInboundGroupSessionWrapper.senderKey?.let { cryptoStore.deviceWithIdentityKey(it) }
+        val device = cryptoStore.deviceWithIdentityKey(olmInboundGroupSessionWrapper.senderKey)
 
         // Build the m.megolm_backup.v1.curve25519-aes-sha2 data as defined at
         // https://github.com/uhoreg/matrix-doc/blob/e2e_backup/proposals/1219-storing-megolm-keys-serverside.md#mmegolm_backupv1curve25519-aes-sha2-key-format

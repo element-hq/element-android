@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.crypto.store.db.migration
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.internal.crypto.model.InboundGroupSessionData
-import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.store.db.deserializeFromRealm
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.crypto.store.db.model.OlmInboundGroupSessionEntityFields
@@ -31,7 +30,7 @@ import timber.log.Timber
 /**
  * Version 17L enhance OlmInboundGroupSessionEntity to support shared history for MSC3061
  * Also migrates how megolm session are stored to avoid additional serialized frozen class
-*/
+ */
 internal class MigrateCryptoTo017(realm: DynamicRealm) : RealmMigrator(realm, 17) {
 
     override fun doMigrate(realm: DynamicRealm) {
@@ -52,7 +51,7 @@ internal class MigrateCryptoTo017(realm: DynamicRealm) : RealmMigrator(realm, 17
                         dynamicObject.getString(OlmInboundGroupSessionEntityFields.OLM_INBOUND_GROUP_SESSION_DATA)?.let { oldData ->
                             val oldWrapper = tryOrNull("Failed to convert megolm inbound group data") {
                                 @Suppress("DEPRECATION")
-                                deserializeFromRealm<OlmInboundGroupSessionWrapper2?>(oldData)
+                                deserializeFromRealm<org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2?>(oldData)
                             }
                             val groupSession = oldWrapper?.olmInboundGroupSession
                                     ?: return@transform Unit.also {
