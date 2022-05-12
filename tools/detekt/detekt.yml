@@ -1,0 +1,15 @@
+# Default rules: https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml
+
+style:
+  MaxLineLength:
+    # Default is 120
+    maxLineLength: 160
+  MagicNumber:
+    # Default is true
+    active: false
+  ReturnCount:
+    # Default is true
+    active: false
+  UnnecessaryAbstractClass:
+    # Default is true. False positive for Epoxy
+    active: false
