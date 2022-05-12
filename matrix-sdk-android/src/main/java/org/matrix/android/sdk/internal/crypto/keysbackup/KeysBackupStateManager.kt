@@ -49,7 +49,7 @@ internal class KeysBackupStateManager(private val uiHandler: Handler) {
                 state == KeysBackupState.BackingUp
 
     // True if unknown or bad state
-    val isStucked: Boolean
+    val isStuck: Boolean
         get() = state == KeysBackupState.Unknown ||
                 state == KeysBackupState.Disabled ||
                 state == KeysBackupState.WrongBackUpVersion ||

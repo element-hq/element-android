@@ -207,7 +207,7 @@ interface KeysBackupService {
         get() = keysBackupVersion?.version
 
     fun isEnabled(): Boolean
-    fun isStucked(): Boolean
+    fun isStuck(): Boolean
     fun getState(): KeysBackupState
 
     // For gossiping

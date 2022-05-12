@@ -139,7 +139,7 @@ internal class DefaultKeysBackupService @Inject constructor(
 
     override fun isEnabled(): Boolean = keysBackupStateManager.isEnabled
 
-    override fun isStucked(): Boolean = keysBackupStateManager.isStucked
+    override fun isStuck(): Boolean = keysBackupStateManager.isStuck
 
     override fun getState(): KeysBackupState = keysBackupStateManager.state
 
@@ -909,7 +909,7 @@ internal class DefaultKeysBackupService @Inject constructor(
      */
     fun maybeBackupKeys() {
         when {
-            isStucked()                                 -> {
+            isStuck()                                   -> {
                 // If not already done, or in error case, check for a valid backup version on the homeserver.
                 // If there is one, maybeBackupKeys will be called again.
                 checkAndStartKeysBackup()
@@ -1012,7 +1012,7 @@ internal class DefaultKeysBackupService @Inject constructor(
     }
 
     override fun checkAndStartKeysBackup() {
-        if (!isStucked()) {
+        if (!isStuck()) {
             // Try to start or restart the backup only if it is in unknown or bad state
             Timber.w("checkAndStartKeysBackup: invalid state: ${getState()}")
 
