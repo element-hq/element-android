@@ -37,10 +37,10 @@ fun TextInputLayout.hasContentFlow(mapper: (CharSequence) -> CharSequence = { it
 
 fun TextInputLayout.content() = editText().text.toString()
 
-fun TextInputLayout.hasContent() = !editText?.text.isNullOrEmpty()
+fun TextInputLayout.hasContent() = !editText().text.isNullOrEmpty()
 
 fun TextInputLayout.associateContentStateWith(button: View) {
-    editText?.addTextChangedListener(object : SimpleTextWatcher() {
+    editText().addTextChangedListener(object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             val newContent = s.toString()
             button.isEnabled = newContent.isNotEmpty()
@@ -49,7 +49,7 @@ fun TextInputLayout.associateContentStateWith(button: View) {
 }
 
 fun TextInputLayout.setOnImeDoneListener(action: () -> Unit) {
-    editText?.setOnEditorActionListener { _, actionId, _ ->
+    editText().setOnEditorActionListener { _, actionId, _ ->
         when (actionId) {
             EditorInfo.IME_ACTION_DONE -> {
                 action()
