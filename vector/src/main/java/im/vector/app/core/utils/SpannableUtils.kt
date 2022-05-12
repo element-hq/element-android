@@ -60,7 +60,7 @@ fun Span.bullet(text: CharSequence = "",
 
 fun String.colorTerminatingFullStop(@ColorInt color: Int): CharSequence {
     val fullStop = "."
-    return if (this.endsWith(fullStop)) {
+    return if (endsWith(fullStop)) {
         span {
             +this@colorTerminatingFullStop.removeSuffix(fullStop)
             span(fullStop) {
