@@ -19,6 +19,10 @@ style:
     active: false
   LoopWithTooManyJumpStatements:
     active: false
+  SerialVersionUIDInSerializableClass:
+    active: false
+  ProtectedMemberInFinalClass:
+    active: false
 
 empty-blocks:
   EmptyFunctionBlock:
@@ -68,4 +72,8 @@ naming:
     active: false
   TopLevelPropertyNaming:
     # TODO Enable it
+    active: false
+
+performance:
+  SpreadOperator:
     active: false
