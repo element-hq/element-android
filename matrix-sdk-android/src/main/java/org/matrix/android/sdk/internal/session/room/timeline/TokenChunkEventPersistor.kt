@@ -44,6 +44,7 @@ import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -54,7 +55,9 @@ internal class TokenChunkEventPersistor @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         @UserId private val userId: String,
         private val lightweightSettingsStorage: LightweightSettingsStorage,
-        private val liveEventManager: Lazy<StreamEventsManager>) {
+        private val liveEventManager: Lazy<StreamEventsManager>,
+        private val clock: Clock,
+) {
 
     enum class Result {
         SHOULD_FETCH_MORE,
@@ -166,7 +169,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
         val eventList = receivedChunk.events
         val stateEvents = receivedChunk.stateEvents
 
-        val now = System.currentTimeMillis()
+        val now = clock.epochMillis()
 
         stateEvents?.forEach { stateEvent ->
             val ageLocalTs = stateEvent.unsignedData?.age?.let { now - it }
@@ -227,7 +230,8 @@ internal class TokenChunkEventPersistor @Inject constructor(
                         roomId = roomId,
                         eventEntity = eventEntity,
                         direction = direction,
-                        roomMemberContentsByUser = roomMemberContentsByUser)
+                        roomMemberContentsByUser = roomMemberContentsByUser
+                )
                 if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
                     eventEntity.rootThreadEventId?.let {
                         // This is a thread event

@@ -90,12 +90,13 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 RoomSettingsViewState::newTopic,
                 RoomSettingsViewState::newHistoryVisibility,
                 RoomSettingsViewState::newRoomJoinRules,
-                RoomSettingsViewState::roomSummary) { avatarAction,
-                                                      newName,
-                                                      newTopic,
-                                                      newHistoryVisibility,
-                                                      newJoinRule,
-                                                      asyncSummary ->
+                RoomSettingsViewState::roomSummary
+        ) { avatarAction,
+            newName,
+            newTopic,
+            newHistoryVisibility,
+            newJoinRule,
+            asyncSummary ->
             val summary = asyncSummary()
             setState {
                 copy(
@@ -130,14 +131,22 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                             canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR),
                             canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME),
                             canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC),
-                            canChangeHistoryVisibility = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_HISTORY_VISIBILITY),
-                            canChangeJoinRule = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_ROOM_JOIN_RULES) &&
-                                    powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                            EventType.STATE_ROOM_GUEST_ACCESS),
-                            canAddChildren = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true,
-                                    EventType.STATE_SPACE_CHILD)
+                            canChangeHistoryVisibility = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_ROOM_HISTORY_VISIBILITY
+                            ),
+                            canChangeJoinRule = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_ROOM_JOIN_RULES
+                            ) &&
+                                    powerLevelsHelper.isUserAllowedToSend(
+                                            session.myUserId, true,
+                                            EventType.STATE_ROOM_GUEST_ACCESS
+                                    ),
+                            canAddChildren = powerLevelsHelper.isUserAllowedToSend(
+                                    session.myUserId, true,
+                                    EventType.STATE_SPACE_CHILD
+                            )
                     )
                     setState {
                         copy(actionPermissions = permissions)

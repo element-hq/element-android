@@ -32,15 +32,17 @@ internal class DefaultSearchService @Inject constructor(
                                 beforeLimit: Int,
                                 afterLimit: Int,
                                 includeProfile: Boolean): SearchResult {
-        return searchTask.execute(SearchTask.Params(
-                searchTerm = searchTerm,
-                roomId = roomId,
-                nextBatch = nextBatch,
-                orderByRecent = orderByRecent,
-                limit = limit,
-                beforeLimit = beforeLimit,
-                afterLimit = afterLimit,
-                includeProfile = includeProfile
-        ))
+        return searchTask.execute(
+                SearchTask.Params(
+                        searchTerm = searchTerm,
+                        roomId = roomId,
+                        nextBatch = nextBatch,
+                        orderByRecent = orderByRecent,
+                        limit = limit,
+                        beforeLimit = beforeLimit,
+                        afterLimit = afterLimit,
+                        includeProfile = includeProfile
+                )
+        )
     }
 }

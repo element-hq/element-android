@@ -77,7 +77,7 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
             val roomId = localEchoIds.roomId
             val eventId = localEchoIds.eventId
             localEchoRepository.updateSendState(eventId, roomId, SendState.SENDING)
-            Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule send event $eventId")
+            Timber.v("## SendEvent: Schedule send event $eventId")
             val sendWork = createSendEventWork(params.sessionId, eventId, true)
             timelineSendEventWorkCommon.postWork(roomId, sendWork)
         }

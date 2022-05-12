@@ -75,11 +75,13 @@ class UserCodeSharedViewModel @AssistedInject constructor(
     private fun handleShareByText() {
         session.permalinkService().createPermalink(session.myUserId)?.let { permalink ->
             val text = stringProvider.getString(R.string.invite_friends_text, permalink)
-            _viewEvents.post(UserCodeShareViewEvents.SharePlainText(
-                    text,
-                    stringProvider.getString(R.string.invite_friends),
-                    stringProvider.getString(R.string.invite_friends_rich_title)
-            ))
+            _viewEvents.post(
+                    UserCodeShareViewEvents.SharePlainText(
+                            text,
+                            stringProvider.getString(R.string.invite_friends),
+                            stringProvider.getString(R.string.invite_friends_rich_title)
+                    )
+            )
         }
     }
 

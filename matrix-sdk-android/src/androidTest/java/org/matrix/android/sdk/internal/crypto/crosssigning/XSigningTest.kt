@@ -126,8 +126,16 @@ class XSigningTest : InstrumentedTest {
         assertNull("Alice should not see bob User key", bobKeysFromAlicePOV.userKey())
         assertNotNull("Alice can see bob SelfSigned key", bobKeysFromAlicePOV.selfSigningKey())
 
-        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV.masterKey()?.unpaddedBase64PublicKey, bobSession.cryptoService().crossSigningService().getMyCrossSigningKeys()?.masterKey()?.unpaddedBase64PublicKey)
-        assertEquals("Bob keys from alice pov should match", bobKeysFromAlicePOV.selfSigningKey()?.unpaddedBase64PublicKey, bobSession.cryptoService().crossSigningService().getMyCrossSigningKeys()?.selfSigningKey()?.unpaddedBase64PublicKey)
+        assertEquals(
+                "Bob keys from alice pov should match",
+                bobKeysFromAlicePOV.masterKey()?.unpaddedBase64PublicKey,
+                bobSession.cryptoService().crossSigningService().getMyCrossSigningKeys()?.masterKey()?.unpaddedBase64PublicKey
+        )
+        assertEquals(
+                "Bob keys from alice pov should match",
+                bobKeysFromAlicePOV.selfSigningKey()?.unpaddedBase64PublicKey,
+                bobSession.cryptoService().crossSigningService().getMyCrossSigningKeys()?.selfSigningKey()?.unpaddedBase64PublicKey
+        )
 
         assertFalse("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV.isTrusted())
 

@@ -66,7 +66,7 @@ class FakeSharedSecretStorageService : SharedSecretStorageService {
 
     override fun checkShouldBeAbleToAccessSecrets(secretNames: List<String>, keyId: String?) = integrityResult
 
-    override fun requestSecret(name: String, myOtherDeviceId: String) {
+    override suspend fun requestSecret(name: String, myOtherDeviceId: String) {
         TODO("Not yet implemented")
     }
 }

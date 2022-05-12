@@ -113,9 +113,11 @@ class RoomProfileFragment @Inject constructor(
         setupRecyclerView()
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
                 headerView,
-                listOf(views.matrixProfileToolbarAvatarImageView,
+                listOf(
+                        views.matrixProfileToolbarAvatarImageView,
                         views.matrixProfileToolbarTitleView,
-                        views.matrixProfileDecorationToolbarAvatarImageView)
+                        views.matrixProfileDecorationToolbarAvatarImageView
+                )
         )
         views.matrixProfileAppBarLayout.addOnOffsetChangedListener(appBarStateChangeListener)
         roomProfileViewModel.observeViewEvents {
@@ -269,11 +271,13 @@ class RoomProfileFragment @Inject constructor(
     override fun createShortcut() {
         // Ask the view model to prepare it...
         roomProfileViewModel.handle(RoomProfileAction.CreateShortcut)
-        analyticsTracker.capture(Interaction(
-                index = null,
-                interactionType = null,
-                name = Interaction.Name.MobileRoomAddHome
-        ))
+        analyticsTracker.capture(
+                Interaction(
+                        index = null,
+                        interactionType = null,
+                        name = Interaction.Name.MobileRoomAddHome
+                )
+        )
     }
 
     private fun addShortcut(onShortcutReady: RoomProfileViewEvents.OnShortcutReady) {

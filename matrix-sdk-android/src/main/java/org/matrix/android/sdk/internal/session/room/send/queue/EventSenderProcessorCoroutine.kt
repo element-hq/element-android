@@ -191,7 +191,7 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
 
     private suspend fun QueuedTask.waitForNetwork() = waitForNetworkSequencer.post {
         while (!canReachServer.get()) {
-            Timber.v("## $this cannot reach server wait ts:${System.currentTimeMillis()}")
+            Timber.v("## $this cannot reach server wait for $$RETRY_WAIT_TIME_MS ms")
             delay(RETRY_WAIT_TIME_MS)
             withContext(Dispatchers.IO) {
                 val hostAvailable = HomeServerAvailabilityChecker(sessionParams).check()

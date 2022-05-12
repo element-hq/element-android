@@ -1,1 +1,0 @@
-Fixes crash on android api 21/22 devices when opening messages due to Konfetti library

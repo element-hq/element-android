@@ -38,6 +38,7 @@ import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProgress
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
 import org.matrix.android.sdk.internal.util.file.AtomicFileCreator
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.android.sdk.internal.util.writeToFile
 import timber.log.Timber
 import java.io.File
@@ -51,7 +52,8 @@ internal class DefaultFileService @Inject constructor(
         private val contentUrlResolver: ContentUrlResolver,
         @UnauthenticatedWithCertificateWithProgress
         private val okHttpClient: OkHttpClient,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val clock: Clock,
 ) : FileService {
 
     // Legacy folder, will be deleted
@@ -182,7 +184,8 @@ internal class DefaultFileService @Inject constructor(
                             MXEncryptedAttachments.decryptAttachment(
                                     inputStream,
                                     elementToDecrypt,
-                                    outputStream
+                                    outputStream,
+                                    clock
                             )
                         }
                     }

@@ -186,7 +186,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                     eventBody = eventBody,
                     eventToInject = eventToInject,
                     eventToInjectBody = eventToInjectBody,
-                    threadRelation = threadRelation) ?: return null
+                    threadRelation = threadRelation
+            ) ?: return null
 
             // update the event
             contentForNonEncrypted = updateEventEntity(event, eventEntity, eventPayload, messageTextContent)
@@ -253,7 +254,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                     eventBody = newEventBody,
                     eventToInject = event,
                     eventToInjectBody = eventBody,
-                    threadRelation = threadRelation) ?: return null
+                    threadRelation = threadRelation
+            ) ?: return null
 
             return updateEventEntity(newEventFound, eventEntityFound, newEventPayload, messageTextContent)
         }
@@ -309,7 +311,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                 userLink,
                 eventIdToInjectSenderId,
                 eventToInjectBody,
-                eventBody)
+                eventBody
+        )
 
         return MessageTextContent(
                 relatesTo = threadRelation,
@@ -330,7 +333,8 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                                         threadRelation: RelationDefaultContent?): String? {
         val replyFormatted = LocalEchoEventFactory.QUOTE_PATTERN.format(
                 "In reply to a thread",
-                eventBody)
+                eventBody
+        )
 
         val messageTextContent = MessageTextContent(
                 relatesTo = threadRelation,

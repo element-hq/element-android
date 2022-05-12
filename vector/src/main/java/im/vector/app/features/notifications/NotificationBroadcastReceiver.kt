@@ -23,6 +23,7 @@ import androidx.core.app.RemoteInput
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.time.Clock
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.analytics.plan.JoinedRoom
@@ -46,6 +47,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var analyticsTracker: AnalyticsTracker
+    @Inject lateinit var clock: Clock
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
@@ -138,7 +140,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 eventId = UUID.randomUUID().toString(),
                 editedEventId = null,
                 noisy = false,
-                timestamp = System.currentTimeMillis(),
+                timestamp = clock.epochMillis(),
                 senderName = session.roomService().getRoomMember(session.myUserId, room.roomId)?.displayName
                         ?: context?.getString(R.string.notification_sender_me),
                 senderId = session.myUserId,
@@ -189,7 +191,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 val notifiableMessageEvent = NotifiableMessageEvent(
                         event.eventId,
                         false,
-                        System.currentTimeMillis(),
+                        clock.epochMillis(),
                         session.myUser?.displayname
                                 ?: context?.getString(R.string.notification_sender_me),
                         session.myUserId,

@@ -210,12 +210,18 @@ class ThreePidsSettingsViewModel @AssistedInject constructor(
         withState { state ->
             val allThreePids = state.threePids.invoke().orEmpty() + state.pendingThreePids.invoke().orEmpty()
             if (allThreePids.any { it.value == action.threePid.value }) {
-                _viewEvents.post(ThreePidsSettingsViewEvents.Failure(IllegalArgumentException(stringProvider.getString(
-                        when (action.threePid) {
-                            is ThreePid.Email  -> R.string.auth_email_already_defined
-                            is ThreePid.Msisdn -> R.string.auth_msisdn_already_defined
-                        }
-                ))))
+                _viewEvents.post(
+                        ThreePidsSettingsViewEvents.Failure(
+                                IllegalArgumentException(
+                                        stringProvider.getString(
+                                                when (action.threePid) {
+                                                    is ThreePid.Email  -> R.string.auth_email_already_defined
+                                                    is ThreePid.Msisdn -> R.string.auth_msisdn_already_defined
+                                                }
+                                        )
+                                )
+                        )
+                )
             } else {
                 viewModelScope.launch {
                     loadingSuspendable {

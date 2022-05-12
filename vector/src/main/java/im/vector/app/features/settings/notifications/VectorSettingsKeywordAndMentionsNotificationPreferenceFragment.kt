@@ -119,10 +119,12 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
             val results = keywords.map {
                 runCatching {
                     withContext(Dispatchers.Default) {
-                        session.pushRuleService().updatePushRuleActions(RuleKind.CONTENT,
+                        session.pushRuleService().updatePushRuleActions(
+                                RuleKind.CONTENT,
                                 it,
                                 enabled,
-                                newActions)
+                                newActions
+                        )
                     }
                 }
             }
