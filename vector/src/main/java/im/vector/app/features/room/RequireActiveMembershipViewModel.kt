@@ -36,7 +36,9 @@ import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.Optional
@@ -92,7 +94,7 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
         }
         val senderId = room.getStateEvent(EventType.STATE_ROOM_MEMBER, QueryStringValue.Equals(session.myUserId))?.senderId
         val senderDisplayName = senderId?.takeIf { it != session.myUserId }?.let {
-            room.getRoomMember(it)?.displayName ?: it
+            room.membershipService().getRoomMember(it)?.displayName ?: it
         }
         val viewEvent = when (roomSummary.membership) {
             Membership.LEAVE -> {

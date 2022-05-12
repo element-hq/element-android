@@ -31,7 +31,8 @@ import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.room.model.livelocation.LiveLocationBeaconContent
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
@@ -95,15 +96,16 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
     }
 
     private suspend fun sendLiveBeaconInfo(session: Session, roomArgs: RoomArgs) {
-        val beaconContent = LiveLocationBeaconContent(
+        val beaconContent = MessageBeaconInfoContent(
                 timeout = roomArgs.durationMillis,
                 isLive = true,
-                unstableTimestampAsMilliseconds = clock.epochMillis()
+                unstableTimestampMillis = clock.epochMillis()
         ).toContent()
 
         val stateKey = session.myUserId
         session
                 .getRoom(roomArgs.roomId)
+                ?.stateService()
                 ?.sendStateEvent(
                         eventType = EventType.STATE_ROOM_BEACON_INFO.first(),
                         stateKey = stateKey,
@@ -146,7 +148,7 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
                 .getSafeActiveSession()
                 ?.let { session ->
                     session.coroutineScope.launch(session.coroutineDispatchers.io) {
-                        session.getRoom(roomId)?.stopLiveLocation(session.myUserId)
+                        session.getRoom(roomId)?.stateService()?.stopLiveLocation(session.myUserId)
                     }
                 }
     }
@@ -173,10 +175,11 @@ class LocationSharingService : VectorService(), LocationTracker.Callback {
         }
 
         room
+                .stateService()
                 .getLiveLocationBeaconInfo(userId, true)
                 ?.eventId
                 ?.let {
-                    room.sendLiveLocation(
+                    room.sendService().sendLiveLocation(
                             beaconInfoEventId = it,
                             latitude = locationData.latitude,
                             longitude = locationData.longitude,

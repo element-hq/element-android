@@ -86,7 +86,8 @@ class CreateSubSpaceController @Inject constructor(
                 maxLength(MatrixConstants.maxAliasLocalPartLength(data.homeServerName))
                 errorMessage(
                         host.roomAliasErrorFormatter.format(
-                                (((data.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError)
+                                (((data.asyncCreateRoomRequest as? Fail)?.error) as? CreateRoomFailure.AliasError)?.aliasError
+                        )
                 )
                 onTextChange { value ->
                     host.listener?.setAliasLocalPart(value)

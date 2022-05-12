@@ -32,6 +32,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationCancelContent
 import javax.inject.Inject

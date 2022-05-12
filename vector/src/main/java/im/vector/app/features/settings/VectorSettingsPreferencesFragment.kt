@@ -86,7 +86,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             pref.setOnPreferenceChangeListener { _, newValue ->
                 val presenceOfflineModeEnabled = newValue as? Boolean ?: false
                 lifecycleScope.launch {
-                    session.setMyPresence(if (presenceOfflineModeEnabled) PresenceEnum.OFFLINE else PresenceEnum.ONLINE)
+                    session.presenceService().setMyPresence(if (presenceOfflineModeEnabled) PresenceEnum.OFFLINE else PresenceEnum.ONLINE)
                 }
                 true
             }
@@ -147,8 +147,10 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 context?.let { context: Context ->
                     MaterialAlertDialogBuilder(context)
-                            .setSingleChoiceItems(R.array.media_saving_choice,
-                                    vectorPreferences.getSelectedMediasSavingPeriod()) { d, n ->
+                            .setSingleChoiceItems(
+                                    R.array.media_saving_choice,
+                                    vectorPreferences.getSelectedMediasSavingPeriod()
+                            ) { d, n ->
                                 vectorPreferences.setSelectedMediasSavingPeriod(n)
                                 d.cancel()
 

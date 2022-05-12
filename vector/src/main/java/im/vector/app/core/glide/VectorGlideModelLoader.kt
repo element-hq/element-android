@@ -121,7 +121,8 @@ class VectorGlideDataFetcher(context: Context,
                         fileName = data.filename,
                         mimeType = data.mimeType,
                         url = data.url,
-                        elementToDecrypt = data.elementToDecrypt)
+                        elementToDecrypt = data.elementToDecrypt
+                )
             }
             withContext(Dispatchers.Main) {
                 result.fold(

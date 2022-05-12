@@ -74,9 +74,13 @@ internal class RedactEventWorker(context: Context, params: WorkerParameters, ses
                         else                         -> {
                             // TODO mark as failed to send?
                             // always return success, or the chain will be stuck for ever!
-                            Result.success(WorkerParamsFactory.toData(params.copy(
-                                    lastFailureMessage = it.localizedMessage
-                            )))
+                            Result.success(
+                                    WorkerParamsFactory.toData(
+                                            params.copy(
+                                                    lastFailureMessage = it.localizedMessage
+                                            )
+                                    )
+                            )
                         }
                     }
                 }

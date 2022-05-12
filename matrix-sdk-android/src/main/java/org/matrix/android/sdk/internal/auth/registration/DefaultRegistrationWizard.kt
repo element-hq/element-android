@@ -120,21 +120,25 @@ internal class DefaultRegistrationWizard(
                 RegisterAddThreePidTask.Params(
                         threePid,
                         pendingSessionData.clientSecret,
-                        pendingSessionData.sendAttempt))
+                        pendingSessionData.sendAttempt
+                )
+        )
 
         pendingSessionData = pendingSessionData.copy(sendAttempt = pendingSessionData.sendAttempt + 1)
                 .also { pendingSessionStore.savePendingSessionData(it) }
 
         val params = RegistrationParams(
                 auth = if (threePid is RegisterThreePid.Email) {
-                    AuthParams.createForEmailIdentity(safeSession,
+                    AuthParams.createForEmailIdentity(
+                            safeSession,
                             ThreePidCredentials(
                                     clientSecret = pendingSessionData.clientSecret,
                                     sid = response.sid
                             )
                     )
                 } else {
-                    AuthParams.createForMsisdnIdentity(safeSession,
+                    AuthParams.createForMsisdnIdentity(
+                            safeSession,
                             ThreePidCredentials(
                                     clientSecret = pendingSessionData.clientSecret,
                                     sid = response.sid

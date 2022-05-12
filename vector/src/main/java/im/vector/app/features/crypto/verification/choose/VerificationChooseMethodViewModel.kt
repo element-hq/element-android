@@ -102,7 +102,8 @@ class VerificationChooseMethodViewModel @AssistedInject constructor(
             // Get the QR code now, because transaction is already created, so transactionCreated() will not be called
             val qrCodeVerificationTransaction = verificationService.getExistingTransaction(args.otherUserId, args.verificationId ?: "")
 
-            return VerificationChooseMethodViewState(otherUserId = args.otherUserId,
+            return VerificationChooseMethodViewState(
+                    otherUserId = args.otherUserId,
                     isMe = session.myUserId == pvr?.otherUserId,
                     canCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
                     transactionId = args.verificationId ?: "",

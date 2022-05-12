@@ -50,11 +50,6 @@ data class JoinedRoom(
         Invite,
 
         /**
-         * Room joined via space explore
-         */
-        MobileExploreRooms,
-
-        /**
          * Room joined via link
          */
         MobilePermalink,

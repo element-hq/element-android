@@ -148,7 +148,8 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
             EventType.STATE_ROOM_MEMBER          -> listOf("membership")
             EventType.STATE_ROOM_CREATE          -> listOf("creator")
             EventType.STATE_ROOM_JOIN_RULES      -> listOf("join_rule")
-            EventType.STATE_ROOM_POWER_LEVELS    -> listOf("users",
+            EventType.STATE_ROOM_POWER_LEVELS    -> listOf(
+                    "users",
                     "users_default",
                     "events",
                     "events_default",
@@ -156,7 +157,8 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
                     "ban",
                     "kick",
                     "redact",
-                    "invite")
+                    "invite"
+            )
             EventType.STATE_ROOM_ALIASES         -> listOf("aliases")
             EventType.STATE_ROOM_CANONICAL_ALIAS -> listOf("alias")
             EventType.FEEDBACK                   -> listOf("type", "target_event_id")

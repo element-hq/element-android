@@ -40,10 +40,14 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
 
         if (compareValues(sharedViewModel.importKeyResult?.totalNumberOfKeys, 0) > 0) {
             sharedViewModel.importKeyResult?.let {
-                val part1 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part1,
-                        it.totalNumberOfKeys, it.totalNumberOfKeys)
-                val part2 = resources.getQuantityString(R.plurals.keys_backup_restore_success_description_part2,
-                        it.successfullyNumberOfImportedKeys, it.successfullyNumberOfImportedKeys)
+                val part1 = resources.getQuantityString(
+                        R.plurals.keys_backup_restore_success_description_part1,
+                        it.totalNumberOfKeys, it.totalNumberOfKeys
+                )
+                val part2 = resources.getQuantityString(
+                        R.plurals.keys_backup_restore_success_description_part2,
+                        it.successfullyNumberOfImportedKeys, it.successfullyNumberOfImportedKeys
+                )
                 views.successDetailsText.text = String.format("%s\n%s", part1, part2)
             }
             // We don't put emoji in string xml as it will crash on old devices

@@ -15,6 +15,7 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
@@ -46,7 +47,9 @@ internal class DefaultSendEventTask @Inject constructor(
             params.event.roomId
                     ?.takeIf { params.encrypt }
                     ?.let { roomId ->
-                        loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                        tryOrNull {
+                            loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
+                        }
                     }
 
             val event = handleEncryption(params)
@@ -73,11 +76,13 @@ internal class DefaultSendEventTask @Inject constructor(
     @Throws
     private suspend fun handleEncryption(params: SendEventTask.Params): Event {
         if (params.encrypt && !params.event.isEncrypted()) {
-            return encryptEventTask.execute(EncryptEventTask.Params(
-                    params.event.roomId ?: "",
-                    params.event,
-                    listOf("m.relates_to")
-            ))
+            return encryptEventTask.execute(
+                    EncryptEventTask.Params(
+                            params.event.roomId ?: "",
+                            params.event,
+                            listOf("m.relates_to")
+                    )
+            )
         }
         return params.event
     }

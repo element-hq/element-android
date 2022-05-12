@@ -55,7 +55,7 @@ class AutocompleteGroupPresenter @Inject constructor(context: Context,
                 QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
             }
         }
-        val groups = session.getGroupSummaries(queryParams)
+        val groups = session.groupService().getGroupSummaries(queryParams)
                 .asSequence()
                 .sortedBy { it.displayName }
         controller.setData(groups.toList())

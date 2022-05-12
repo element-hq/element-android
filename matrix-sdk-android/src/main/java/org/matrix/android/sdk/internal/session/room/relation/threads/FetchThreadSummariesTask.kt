@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationResponse
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -55,12 +56,14 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val cryptoService: DefaultCryptoService,
         @UserId private val userId: String,
+        private val clock: Clock,
 ) : FetchThreadSummariesTask {
 
     override suspend fun execute(params: FetchThreadSummariesTask.Params): Result {
         val filter = FilterFactory.createThreadsFilter(
                 numberOfEvents = params.limit,
-                userId = if (params.isUserParticipating) userId else null).toJSONString()
+                userId = if (params.isUserParticipating) userId else null
+        ).toJSONString()
 
         val response = executeRequest(
                 globalErrorReceiver,
@@ -94,7 +97,9 @@ internal class DefaultFetchThreadSummariesTask @Inject constructor(
                         roomMemberContentsByUser = roomMemberContentsByUser,
                         roomEntity = roomEntity,
                         userId = userId,
-                        cryptoService = cryptoService)
+                        cryptoService = cryptoService,
+                        currentTimeMillis = clock.epochMillis(),
+                )
             }
         }
         return Result.SUCCESS

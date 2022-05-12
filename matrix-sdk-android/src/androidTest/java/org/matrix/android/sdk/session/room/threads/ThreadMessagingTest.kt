@@ -31,6 +31,7 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.isThread
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
@@ -58,7 +59,8 @@ class ThreadMessagingTest : InstrumentedTest {
         val sentMessages = commonTestHelper.sendTextMessage(
                 room = aliceRoom,
                 message = textMessage,
-                nbOfMessages = 1)
+                nbOfMessages = 1
+        )
 
         val initMessage = sentMessages.first()
 
@@ -72,7 +74,8 @@ class ThreadMessagingTest : InstrumentedTest {
                 room = aliceRoom,
                 message = "Reply In the above thread",
                 numberOfMessages = 1,
-                rootThreadEventId = initMessage.root.eventId.orEmpty())
+                rootThreadEventId = initMessage.root.eventId.orEmpty()
+        )
 
         val replyInThread = repliesInThread.first()
         replyInThread.root.isThread().shouldBeTrue()
@@ -80,7 +83,7 @@ class ThreadMessagingTest : InstrumentedTest {
         replyInThread.root.getRootThreadEventId().shouldBeEqualTo(initMessage.root.eventId)
 
         // The init normal message should now be a root thread event
-        val timeline = aliceRoom.createTimeline(null, TimelineSettings(30))
+        val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
         aliceSession.startSync(true)
@@ -115,7 +118,8 @@ class ThreadMessagingTest : InstrumentedTest {
         val sentMessages = commonTestHelper.sendTextMessage(
                 room = aliceRoom,
                 message = textMessage,
-                nbOfMessages = 1)
+                nbOfMessages = 1
+        )
 
         val initMessage = sentMessages.first()
 
@@ -133,7 +137,8 @@ class ThreadMessagingTest : InstrumentedTest {
                 room = bobRoom,
                 message = "Reply In the above thread",
                 numberOfMessages = 1,
-                rootThreadEventId = initMessage.root.eventId.orEmpty())
+                rootThreadEventId = initMessage.root.eventId.orEmpty()
+        )
 
         val replyInThread = repliesInThread.first()
         replyInThread.root.isThread().shouldBeTrue()
@@ -141,7 +146,7 @@ class ThreadMessagingTest : InstrumentedTest {
         replyInThread.root.getRootThreadEventId().shouldBeEqualTo(initMessage.root.eventId)
 
         // The init normal message should now be a root thread event
-        val timeline = aliceRoom.createTimeline(null, TimelineSettings(30))
+        val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
         aliceSession.startSync(true)
@@ -189,7 +194,8 @@ class ThreadMessagingTest : InstrumentedTest {
         val sentMessages = commonTestHelper.sendTextMessage(
                 room = aliceRoom,
                 message = textMessage,
-                nbOfMessages = 5)
+                nbOfMessages = 5
+        )
 
         sentMessages.forEach {
             it.root.isThread().shouldBeFalse()
@@ -205,7 +211,8 @@ class ThreadMessagingTest : InstrumentedTest {
                 room = aliceRoom,
                 message = "Reply In the above thread",
                 numberOfMessages = 40,
-                rootThreadEventId = selectedInitMessage.root.eventId.orEmpty())
+                rootThreadEventId = selectedInitMessage.root.eventId.orEmpty()
+        )
 
         repliesInThread.forEach {
             it.root.isThread().shouldBeTrue()
@@ -214,7 +221,7 @@ class ThreadMessagingTest : InstrumentedTest {
         }
 
         // The init normal message should now be a root thread event
-        val timeline = aliceRoom.createTimeline(null, TimelineSettings(30))
+        val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
         aliceSession.startSync(true)
@@ -252,7 +259,8 @@ class ThreadMessagingTest : InstrumentedTest {
         val sentMessages = commonTestHelper.sendTextMessage(
                 room = aliceRoom,
                 message = textMessage,
-                nbOfMessages = 5)
+                nbOfMessages = 5
+        )
 
         sentMessages.forEach {
             it.root.isThread().shouldBeFalse()
@@ -269,7 +277,8 @@ class ThreadMessagingTest : InstrumentedTest {
                 room = aliceRoom,
                 message = "Alice reply In the above second thread message",
                 numberOfMessages = 35,
-                rootThreadEventId = secondMessage.root.eventId.orEmpty())
+                rootThreadEventId = secondMessage.root.eventId.orEmpty()
+        )
 
         // Let's reply in timeline to that message from another user
         val bobSession = cryptoTestData.secondSession!!
@@ -281,14 +290,16 @@ class ThreadMessagingTest : InstrumentedTest {
                 room = bobRoom,
                 message = "Bob reply In the above first thread message",
                 numberOfMessages = 42,
-                rootThreadEventId = firstMessage.root.eventId.orEmpty())
+                rootThreadEventId = firstMessage.root.eventId.orEmpty()
+        )
 
         // Bob will also reply in second thread 5 times
         val bobThreadRepliesInSecondMessage = commonTestHelper.replyInThreadMessage(
                 room = bobRoom,
                 message = "Another Bob reply In the above second thread message",
                 numberOfMessages = 20,
-                rootThreadEventId = secondMessage.root.eventId.orEmpty())
+                rootThreadEventId = secondMessage.root.eventId.orEmpty()
+        )
 
         aliceThreadRepliesInSecondMessage.forEach {
             it.root.isThread().shouldBeTrue()
@@ -309,7 +320,7 @@ class ThreadMessagingTest : InstrumentedTest {
         }
 
         // The init normal message should now be a root thread event
-        val timeline = aliceRoom.createTimeline(null, TimelineSettings(30))
+        val timeline = aliceRoom.timelineService().createTimeline(null, TimelineSettings(30))
         timeline.start()
 
         aliceSession.startSync(true)

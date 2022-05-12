@@ -57,7 +57,8 @@ import java.util.concurrent.TimeUnit
 class CommonTestHelper(context: Context) {
 
     internal val matrix: TestMatrix
-    val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private var accountNumber = 0
 
     fun getTestInterceptor(session: Session): MockOkHttpInterceptor? = TestModule.interceptorForSession(session.sessionId) as? MockOkHttpInterceptor
 
@@ -145,7 +146,7 @@ class CommonTestHelper(context: Context) {
      * @param nbOfMessages the number of time the message will be sent
      */
     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
-        val timeline = room.createTimeline(null, TimelineSettings(10))
+        val timeline = room.timelineService().createTimeline(null, TimelineSettings(10))
         timeline.start()
         val sentEvents = sendTextMessagesBatched(timeline, room, message, nbOfMessages, timeout)
         timeline.dispose()
@@ -165,11 +166,12 @@ class CommonTestHelper(context: Context) {
                 .forEach { batchedMessages ->
                     batchedMessages.forEach { formattedMessage ->
                         if (rootThreadEventId != null) {
-                            room.replyInThread(
+                            room.relationService().replyInThread(
                                     rootThreadEventId = rootThreadEventId,
-                                    replyInThreadText = formattedMessage)
+                                    replyInThreadText = formattedMessage
+                            )
                         } else {
-                            room.sendTextMessage(formattedMessage)
+                            room.sendService().sendTextMessage(formattedMessage)
                         }
                     }
                     waitWithLatch(timeout) { latch ->
@@ -214,7 +216,7 @@ class CommonTestHelper(context: Context) {
             numberOfMessages: Int,
             rootThreadEventId: String,
             timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
-        val timeline = room.createTimeline(null, TimelineSettings(10))
+        val timeline = room.timelineService().createTimeline(null, TimelineSettings(10))
         timeline.start()
         val sentEvents = sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout, rootThreadEventId)
         timeline.dispose()
@@ -237,7 +239,7 @@ class CommonTestHelper(context: Context) {
                               password: String,
                               testParams: SessionTestParams): Session {
         val session = createAccountAndSync(
-                userNamePrefix + "_" + System.currentTimeMillis() + UUID.randomUUID(),
+                userNamePrefix + "_" + accountNumber++ + "_" + UUID.randomUUID(),
                 password,
                 testParams
         )
@@ -431,7 +433,7 @@ class CommonTestHelper(context: Context) {
 
     fun signOutAndClose(session: Session) {
         runBlockingTest(timeout = 60_000) {
-            session.signOut(true)
+            session.signOutService().signOut(true)
         }
         // no need signout will close
         // session.close()

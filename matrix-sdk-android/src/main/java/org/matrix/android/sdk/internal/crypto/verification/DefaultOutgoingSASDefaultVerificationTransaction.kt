@@ -20,8 +20,8 @@ import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.internal.crypto.IncomingGossipingRequestManager
-import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestManager
+import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
+import org.matrix.android.sdk.internal.crypto.SecretShareManager
 import org.matrix.android.sdk.internal.crypto.actions.SetDeviceVerificationAction
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
@@ -32,8 +32,8 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         deviceId: String?,
         cryptoStore: IMXCryptoStore,
         crossSigningService: CrossSigningService,
-        outgoingGossipingRequestManager: OutgoingGossipingRequestManager,
-        incomingGossipingRequestManager: IncomingGossipingRequestManager,
+        outgoingKeyRequestManager: OutgoingKeyRequestManager,
+        secretShareManager: SecretShareManager,
         deviceFingerprint: String,
         transactionId: String,
         otherUserId: String,
@@ -44,13 +44,14 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
         deviceId,
         cryptoStore,
         crossSigningService,
-        outgoingGossipingRequestManager,
-        incomingGossipingRequestManager,
+        outgoingKeyRequestManager,
+        secretShareManager,
         deviceFingerprint,
         transactionId,
         otherUserId,
         otherDeviceId,
-        isIncoming = false),
+        isIncoming = false
+),
         OutgoingSasVerificationTransaction {
 
     override val uxState: OutgoingSasVerificationTransaction.UxState
@@ -123,7 +124,7 @@ internal class DefaultOutgoingSASDefaultVerificationTransaction(
 //        val requestMessage = KeyVerificationRequest(
 //                fromDevice = session.sessionParams.deviceId ?: "",
 //                methods = listOf(KeyVerificationStart.VERIF_METHOD_SAS),
-//                timestamp = System.currentTimeMillis().toInt(),
+//                timestamp = clock.epochMillis().toInt(),
 //                transactionId = transactionId
 //        )
 //

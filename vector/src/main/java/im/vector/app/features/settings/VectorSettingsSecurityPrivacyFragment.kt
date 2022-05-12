@@ -151,7 +151,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         findPreference<VectorSwitchPreference>("SETTINGS_USER_ANALYTICS_CONSENT_KEY")!!
     }
 
-    override fun onCreateRecyclerView(inflater: LayoutInflater?, parent: ViewGroup?, savedInstanceState: Bundle?): RecyclerView {
+    override fun onCreateRecyclerView(inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?): RecyclerView {
         return super.onCreateRecyclerView(inflater, parent, savedInstanceState).also {
             // Insert animation are really annoying the first time the list is shown
             // due to the way preference fragment is done, it's not trivial to disable it for first appearance only..
@@ -275,13 +275,17 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         refreshXSigningStatus()
 
         secureBackupPreference.icon = activity?.let {
-            ThemeUtils.tintDrawable(it,
-                    ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_content_primary)
+            ThemeUtils.tintDrawable(
+                    it,
+                    ContextCompat.getDrawable(it, R.drawable.ic_secure_backup)!!, R.attr.vctr_content_primary
+            )
         }
 
         ignoredUsersPreference.icon = activity?.let {
-            ThemeUtils.tintDrawable(it,
-                    ContextCompat.getDrawable(it, R.drawable.ic_settings_root_ignored_users)!!, R.attr.vctr_content_primary)
+            ThemeUtils.tintDrawable(
+                    it,
+                    ContextCompat.getDrawable(it, R.drawable.ic_settings_root_ignored_users)!!, R.attr.vctr_content_primary
+            )
         }
 
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.let {
@@ -398,7 +402,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 navigator.openPinCode(
                         requireContext(),
                         pinActivityResultLauncher,
-                        PinMode.AUTH)
+                        PinMode.AUTH
+                )
             } else {
                 doOpenPinCodePreferenceScreen()
             }
@@ -512,10 +517,14 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
                     if (data != null) {
                         MaterialAlertDialogBuilder(thisActivity)
-                                .setMessage(resources.getQuantityString(R.plurals.encryption_import_room_keys_success,
-                                        data.successfullyNumberOfImportedKeys,
-                                        data.successfullyNumberOfImportedKeys,
-                                        data.totalNumberOfKeys))
+                                .setMessage(
+                                        resources.getQuantityString(
+                                                R.plurals.encryption_import_room_keys_success,
+                                                data.successfullyNumberOfImportedKeys,
+                                                data.successfullyNumberOfImportedKeys,
+                                                data.totalNumberOfKeys
+                                        )
+                                )
                                 .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
                                 .show()
                     }

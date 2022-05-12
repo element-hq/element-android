@@ -512,7 +512,7 @@
     <string name="settings_security_and_privacy">セキュリティーとプライバシー</string>
     <string name="preference_root_help_about">ヘルプと概要</string>
     <string name="bottom_action_people_x">ダイレクトメッセージ</string>
-    <string name="edited_suffix">（編集済）</string>
+    <string name="edited_suffix">（編集した）</string>
     <string name="room_filtering_filter_hint">会話を検索…</string>
     <string name="room_list_quick_actions_notifications_all_noisy">全てのメッセージ (音量大)</string>
     <string name="room_list_quick_actions_notifications_all">全てのメッセージ</string>
@@ -962,7 +962,7 @@
     <string name="settings_integrations">インテグレーション（統合）</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">アプリがバックグラウンドにある場合、着信メッセージは通知されません。</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name}は正確な時間に定期的にバックグラウンドで同期します（構成可能）。
-\nこれは無線とバッテリーの使用量に影響し、$ {app_name}がイベントを待機していることを示す永続的な通知が表示されます。</string>
+\nこれは無線とバッテリーの使用量に影響し、${app_name}がイベントを待機していることを示す永続的な通知が表示されます。</string>
     <string name="settings_background_fdroid_sync_mode_battery_description">${app_name}は、端末の限られたリソース（バッテリーの残量）を維持する方法でバックグラウンド同期をします。
 \n端末の状態によっては、OSによって同期が延期される場合があります。</string>
     <string name="settings_system_preferences_summary">LEDの色、振動、音を選択してください…</string>

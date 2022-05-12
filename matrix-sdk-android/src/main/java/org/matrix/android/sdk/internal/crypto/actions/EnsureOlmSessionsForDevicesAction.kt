@@ -137,10 +137,14 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
                 olmDevice.verifySignature(fingerprint, oneTimeKey.signalableJSONDictionary(), signature)
                 isVerified = true
             } catch (e: Exception) {
-                Timber.tag(loggerTag.value).d(e, "verifyKeyAndStartSession() : Verify error for otk: ${oneTimeKey.signalableJSONDictionary()}," +
-                        " signature:$signature fingerprint:$fingerprint")
-                Timber.tag(loggerTag.value).e("verifyKeyAndStartSession() : Verify error for ${deviceInfo.userId}|${deviceInfo.deviceId} " +
-                        " - signable json ${oneTimeKey.signalableJSONDictionary()}")
+                Timber.tag(loggerTag.value).d(
+                        e, "verifyKeyAndStartSession() : Verify error for otk: ${oneTimeKey.signalableJSONDictionary()}," +
+                        " signature:$signature fingerprint:$fingerprint"
+                )
+                Timber.tag(loggerTag.value).e(
+                        "verifyKeyAndStartSession() : Verify error for ${deviceInfo.userId}|${deviceInfo.deviceId} " +
+                                " - signable json ${oneTimeKey.signalableJSONDictionary()}"
+                )
                 errorMessage = e.message
             }
 

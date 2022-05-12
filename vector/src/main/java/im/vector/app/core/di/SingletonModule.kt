@@ -50,6 +50,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
@@ -173,7 +174,7 @@ object VectorStaticModule {
         return CoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.Default)
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(DelicateCoroutinesApi::class)
     @Provides
     @NamedGlobalScope
     fun providesGlobalScope(): CoroutineScope {

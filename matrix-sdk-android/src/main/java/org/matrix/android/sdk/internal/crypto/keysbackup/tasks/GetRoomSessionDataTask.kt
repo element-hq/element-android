@@ -41,7 +41,8 @@ internal class DefaultGetRoomSessionDataTask @Inject constructor(
             roomKeysApi.getRoomSessionData(
                     params.roomId,
                     params.sessionId,
-                    params.version)
+                    params.version
+            )
         }
     }
 }

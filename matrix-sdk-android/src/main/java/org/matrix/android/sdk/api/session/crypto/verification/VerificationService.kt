@@ -129,11 +129,10 @@ interface VerificationService {
         private const val TEN_MINUTES_IN_MILLIS = 10 * 60 * 1000
         private const val FIVE_MINUTES_IN_MILLIS = 5 * 60 * 1000
 
-        fun isValidRequest(age: Long?): Boolean {
+        fun isValidRequest(age: Long?, currentTimeMillis: Long): Boolean {
             if (age == null) return false
-            val now = System.currentTimeMillis()
-            val tooInThePast = now - TEN_MINUTES_IN_MILLIS
-            val tooInTheFuture = now + FIVE_MINUTES_IN_MILLIS
+            val tooInThePast = currentTimeMillis - TEN_MINUTES_IN_MILLIS
+            val tooInTheFuture = currentTimeMillis + FIVE_MINUTES_IN_MILLIS
             return age in tooInThePast..tooInTheFuture
         }
     }

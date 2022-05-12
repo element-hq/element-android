@@ -34,7 +34,7 @@ class DirectRoomHelper @Inject constructor(
 ) {
 
     suspend fun ensureDMExists(userId: String): String {
-        val existingRoomId = tryOrNull { session.getExistingDirectRoomWithUser(userId) }
+        val existingRoomId = tryOrNull { session.roomService().getExistingDirectRoomWithUser(userId) }
         val roomId: String
         if (existingRoomId != null) {
             roomId = existingRoomId
@@ -48,7 +48,7 @@ class DirectRoomHelper @Inject constructor(
                 setDirectMessage()
                 enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
             }
-            roomId = session.createRoom(roomParams)
+            roomId = session.roomService().createRoom(roomParams)
             analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
         }
         return roomId

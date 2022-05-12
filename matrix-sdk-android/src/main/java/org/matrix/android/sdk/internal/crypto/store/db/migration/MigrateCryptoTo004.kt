@@ -72,16 +72,20 @@ internal class MigrateCryptoTo004(realm: DynamicRealm) : RealmMigrator(realm, 4)
                 ?.addField(CryptoMetadataEntityFields.X_SIGN_SELF_SIGNED_PRIVATE_KEY, String::class.java)
 
         val moshi = Moshi.Builder().add(SerializeNulls.JSON_ADAPTER_FACTORY).build()
-        val listMigrationAdapter = moshi.adapter<List<String>>(Types.newParameterizedType(
-                List::class.java,
-                String::class.java,
-                Any::class.java
-        ))
-        val mapMigrationAdapter = moshi.adapter<JsonDict>(Types.newParameterizedType(
-                Map::class.java,
-                String::class.java,
-                Any::class.java
-        ))
+        val listMigrationAdapter = moshi.adapter<List<String>>(
+                Types.newParameterizedType(
+                        List::class.java,
+                        String::class.java,
+                        Any::class.java
+                )
+        )
+        val mapMigrationAdapter = moshi.adapter<JsonDict>(
+                Types.newParameterizedType(
+                        Map::class.java,
+                        String::class.java,
+                        Any::class.java
+                )
+        )
 
         realm.schema.get("DeviceInfoEntity")
                 ?.addField(DeviceInfoEntityFields.USER_ID, String::class.java)

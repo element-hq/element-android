@@ -46,6 +46,7 @@ import org.matrix.android.sdk.internal.session.call.DefaultCallSignalingService
 import org.matrix.android.sdk.internal.session.profile.GetProfileInfoTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
+import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
 import java.math.BigDecimal
 
@@ -61,7 +62,8 @@ internal class MxCallImpl(
         private val localEchoEventFactory: LocalEchoEventFactory,
         private val eventSenderProcessor: EventSenderProcessor,
         private val matrixConfiguration: MatrixConfiguration,
-        private val getProfileInfoTask: GetProfileInfoTask
+        private val getProfileInfoTask: GetProfileInfoTask,
+        private val clock: Clock,
 ) : MxCall {
 
     override var opponentPartyId: Optional<String>? = null
@@ -250,7 +252,7 @@ internal class MxCallImpl(
     private fun createEventAndLocalEcho(localId: String = LocalEcho.createLocalEchoId(), type: String, roomId: String, content: Content): Event {
         return Event(
                 roomId = roomId,
-                originServerTs = System.currentTimeMillis(),
+                originServerTs = clock.epochMillis(),
                 senderId = userId,
                 eventId = localId,
                 type = type,

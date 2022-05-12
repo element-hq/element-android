@@ -33,7 +33,7 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
         for (preferenceKey in prefKeyToPushRuleId.keys) {
             val preference = findPreference<VectorCheckboxPreference>(preferenceKey)!!
             preference.isIconSpaceReserved = false
-            val ruleAndKind: PushRuleAndKind? = session.getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
+            val ruleAndKind: PushRuleAndKind? = session.pushRuleService().getPushRules().findDefaultRule(prefKeyToPushRuleId[preferenceKey])
             if (ruleAndKind == null) {
                 // The rule is not defined, hide the preference
                 preference.isVisible = false
@@ -58,10 +58,12 @@ abstract class VectorSettingsPushRuleNotificationPreferenceFragment :
 
         lifecycleScope.launch {
             val result = runCatching {
-                session.updatePushRuleActions(kind,
+                session.pushRuleService().updatePushRuleActions(
+                        kind,
                         ruleId,
                         enabled,
-                        newActions)
+                        newActions
+                )
             }
             hideLoadingView()
             if (!isAdded) {
