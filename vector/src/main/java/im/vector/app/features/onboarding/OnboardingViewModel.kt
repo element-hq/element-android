@@ -634,47 +634,55 @@ class OnboardingViewModel @AssistedInject constructor(
         }
 
         when (trigger) {
-            is OnboardingAction.HomeServerChange.EditHomeServer   -> {
-                when (awaitState().onboardingFlow) {
-                    OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) {
-                        updateServerSelection(config, serverTypeOverride, authResult)
-                        _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
-                    }
-                    OnboardingFlow.SignIn -> {
-                        updateServerSelection(config, serverTypeOverride, authResult)
-                        _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
-                    }
-                    else                  -> throw IllegalArgumentException("developer error")
-                }
-            }
             is OnboardingAction.HomeServerChange.SelectHomeServer -> {
-                updateServerSelection(config, serverTypeOverride, authResult)
-                if (authResult.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
-                    when (awaitState().onboardingFlow) {
-                        OnboardingFlow.SignIn -> {
-                            updateSignMode(SignMode.SignIn)
-                            when (vectorFeatures.isOnboardingCombinedLoginEnabled()) {
-                                true  -> _viewEvents.post(OnboardingViewEvents.OpenCombinedLogin)
-                                false -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
-                            }
-                        }
-                        OnboardingFlow.SignUp -> {
-                            updateSignMode(SignMode.SignUp)
-                            internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
-                        }
-                        OnboardingFlow.SignInSignUp,
-                        null                  -> {
-                            _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
-                        }
-                    }
-                } else {
-                    _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
-                }
+                onHomeServerSelected(config, serverTypeOverride, authResult)
+            }
+            is OnboardingAction.HomeServerChange.EditHomeServer   -> {
+                onHomeServerEdited(config, serverTypeOverride, authResult)
             }
             else                                                  -> {
                 updateServerSelection(config, serverTypeOverride, authResult)
                 _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
             }
+        }
+    }
+
+    private suspend fun onHomeServerSelected(config: HomeServerConnectionConfig, serverTypeOverride: ServerType?, authResult: StartAuthenticationResult) {
+        updateServerSelection(config, serverTypeOverride, authResult)
+        if (authResult.selectedHomeserver.preferredLoginMode.supportsSignModeScreen()) {
+            when (awaitState().onboardingFlow) {
+                OnboardingFlow.SignIn -> {
+                    updateSignMode(SignMode.SignIn)
+                    when (vectorFeatures.isOnboardingCombinedLoginEnabled()) {
+                        true  -> _viewEvents.post(OnboardingViewEvents.OpenCombinedLogin)
+                        false -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
+                    }
+                }
+                OnboardingFlow.SignUp -> {
+                    updateSignMode(SignMode.SignUp)
+                    internalRegisterAction(RegisterAction.StartRegistration, ::emitFlowResultViewEvent)
+                }
+                OnboardingFlow.SignInSignUp,
+                null                  -> {
+                    _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+                }
+            }
+        } else {
+            _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+        }
+    }
+
+    private suspend fun onHomeServerEdited(config: HomeServerConnectionConfig, serverTypeOverride: ServerType?, authResult: StartAuthenticationResult) {
+        when (awaitState().onboardingFlow) {
+            OnboardingFlow.SignUp -> internalRegisterAction(RegisterAction.StartRegistration) {
+                updateServerSelection(config, serverTypeOverride, authResult)
+                _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
+            }
+            OnboardingFlow.SignIn -> {
+                updateServerSelection(config, serverTypeOverride, authResult)
+                _viewEvents.post(OnboardingViewEvents.OnHomeserverEdited)
+            }
+            else                  -> throw IllegalArgumentException("developer error")
         }
     }
 
