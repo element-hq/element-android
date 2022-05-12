@@ -21,7 +21,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.AttrRes
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
 import im.vector.app.R
@@ -65,15 +64,12 @@ class FtueAuthWaitForEmailFragment @Inject constructor(
                     false -> R.drawable.bg_color_background
                 }
         )
-        views.emailVerificationTitle.text = R.string.ftue_auth_email_verification_title.colorTerminatingFullStop(R.attr.colorSecondary)
+        views.emailVerificationTitle.text = getString(R.string.ftue_auth_email_verification_title)
+                .colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), R.attr.colorSecondary))
         views.emailVerificationSubtitle.text = getString(R.string.ftue_auth_email_verification_subtitle, params.email)
         views.emailVerificationResendEmail.debouncedClicks {
             viewModel.handle(OnboardingAction.PostRegisterAction(RegisterAction.SendAgainThreePid))
         }
-    }
-
-    private fun Int.colorTerminatingFullStop(@AttrRes color: Int): CharSequence {
-        return getString(this).colorTerminatingFullStop(ThemeUtils.getColor(requireContext(), color))
     }
 
     override fun onResume() {
