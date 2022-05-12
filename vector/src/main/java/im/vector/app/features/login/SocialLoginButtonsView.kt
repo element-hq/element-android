@@ -159,3 +159,9 @@ class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: 
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics).toInt()
     }
 }
+
+fun SocialLoginButtonsView.render(ssoProviders: List<SsoIdentityProvider>?, mode: SocialLoginButtonsView.Mode, listener: (String?) -> Unit) {
+    this.mode = mode
+    this.ssoIdentityProviders = ssoProviders?.sorted()
+    this.listener = SocialLoginButtonsView.InteractionListener { listener(it) }
+}

@@ -61,6 +61,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                                 factory = VectorFeatures::isOnboardingCombinedRegisterEnabled
                         ),
                         createBooleanFeature(
+                                label = "FTUE Combined login",
+                                key = DebugFeatureKeys.onboardingCombinedLogin,
+                                factory = VectorFeatures::isOnboardingCombinedLoginEnabled
+                        ),
+                        createBooleanFeature(
                                 label = "Live location sharing",
                                 key = DebugFeatureKeys.liveLocationSharing,
                                 factory = VectorFeatures::isLiveLocationEnabled

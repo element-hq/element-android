@@ -19,6 +19,8 @@
     <string name="ftue_auth_create_account_matrix_dot_org_server_description">Join millions for free on the largest public server</string>
     <string name="ftue_auth_create_account_edit_server_selection">Edit</string>
 
+    <string name="ftue_auth_welcome_back_title">Welcome back!</string>
+
     <string name="ftue_auth_choose_server_title">Choose your server</string>
     <string name="ftue_auth_choose_server_subtitle">What is the address of your server? Server is like a home for all your data.</string>
     <string name="ftue_auth_choose_server_entry_hint">Server URL</string>
