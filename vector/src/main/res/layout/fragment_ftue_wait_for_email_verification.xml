@@ -83,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
         app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
         app:layout_constraintTop_toBottomOf="@id/emailVerificationTitle"
-        tools:text="To confirm your email address, tap the button in the email we just sent to hello@world.org" />
+        tools:text="@string/ftue_auth_email_verification_subtitle" />
 
     <Space
         android:id="@+id/emailVerificationSpace4"
