@@ -13,3 +13,8 @@ style:
   UnnecessaryAbstractClass:
     # Default is true. False positive for Epoxy
     active: false
+
+exceptions:
+  TooGenericExceptionCaught:
+    # Default is true
+    active: false
