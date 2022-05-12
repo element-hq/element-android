@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <gradient
+                android:angle="@integer/rtl_mirror_flip"
+                android:endColor="#55DFD1FF"
+                android:startColor="#55A5F2E0" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <gradient
+                android:angle="90"
+                android:endColor="@android:color/transparent"
+                android:startColor="?android:colorBackground" />
+        </shape>
+    </item>
+</layer-list>

@@ -17,7 +17,9 @@
 package im.vector.app.test.fakes
 
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
+import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.session.Session
@@ -26,5 +28,22 @@ class FakeRegistrationWizard : RegistrationWizard by mockk(relaxed = false) {
 
     fun givenSuccessFor(result: Session, expect: suspend RegistrationWizard.() -> RegistrationResult) {
         coEvery { expect(this@FakeRegistrationWizard) } returns RegistrationResult.Success(result)
+    }
+
+    fun givenAddEmailThreePidErrors(cause: Throwable, email: String) {
+        coEvery { addThreePid(RegisterThreePid.Email(email)) } throws cause
+    }
+
+    fun givenCheckIfEmailHasBeenValidatedErrors(errors: List<Throwable>, finally: RegistrationResult? = null) {
+        var index = 0
+        coEvery { checkIfEmailHasBeenValidated(any()) } answers {
+            val current = index
+            index++
+            errors.getOrNull(current)?.let { throw it } ?: finally ?: throw RuntimeException("Developer error")
+        }
+    }
+
+    fun verifyCheckedEmailedVerification(times: Int) {
+        coVerify(exactly = times) { checkIfEmailHasBeenValidated(any()) }
     }
 }
