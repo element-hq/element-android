@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
@@ -292,7 +293,7 @@ class OnboardingViewModel @AssistedInject constructor(
                                     is RegistrationResult.Complete         -> onSessionCreated(
                                             it.session,
                                             authenticationDescription = AuthenticationDescription.AccountCreated(
-                                                    AuthenticationDescription.AuthenticationType.Password
+                                                    awaitState().selectedAuthenticationState.type ?: AuthenticationDescription.AuthenticationType.Other
                                             )
                                     )
                                     is RegistrationResult.NextStep         -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
@@ -324,6 +325,7 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun OnboardingViewState.hasSelectedMatrixOrg() = selectedHomeserver.userFacingUrl == matrixOrgUrl
 
     private fun handleRegisterWith(action: AuthenticateAction.Register) {
+        setState { copy(selectedAuthenticationState = SelectedAuthenticationState(AuthenticationDescription.AuthenticationType.Password)) }
         reAuthHelper.data = action.password
         handleRegisterAction(
                 RegisterAction.CreateAccount(
@@ -750,8 +752,9 @@ class OnboardingViewModel @AssistedInject constructor(
         return loginConfig?.homeServerUrl
     }
 
-    fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?): String? {
-        return authenticationService.getSsoUrl(redirectUrl, deviceId, providerId)
+    fun getSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?): String? {
+        setState { copy(selectedAuthenticationState = SelectedAuthenticationState(provider.toAuthenticationType())) }
+        return authenticationService.getSsoUrl(redirectUrl, deviceId, provider?.id)
     }
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {

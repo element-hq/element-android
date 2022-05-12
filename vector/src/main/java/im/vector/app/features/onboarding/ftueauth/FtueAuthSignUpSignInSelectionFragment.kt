@@ -86,7 +86,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
                         viewModel.getSsoUrl(
                                 redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
-                                providerId = provider?.id
+                                provider = provider
                         )
                                 ?.let { openInCustomTab(it) }
                     }
@@ -127,7 +127,7 @@ class FtueAuthSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOF
             viewModel.getSsoUrl(
                     redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,
-                    providerId = null
+                    provider = null
             )
                     ?.let { openInCustomTab(it) }
         } else {

@@ -93,7 +93,7 @@ abstract class AbstractSSOFtueAuthFragment<VB : ViewBinding> : AbstractFtueAuthF
                 viewModel.getSsoUrl(
                         redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
-                        providerId = null
+                        provider = null
                 )
                         ?.let { prefetchUrl(it) }
             }
