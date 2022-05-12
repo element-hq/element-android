@@ -90,6 +90,8 @@ import org.matrix.android.sdk.internal.session.permalinks.DefaultPermalinkServic
 import org.matrix.android.sdk.internal.session.room.EventRelationsAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.DefaultLiveLocationAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.poll.DefaultPollAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.create.RoomCreateEventProcessor
 import org.matrix.android.sdk.internal.session.room.prune.RedactionEventProcessor
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
@@ -395,4 +397,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindLiveLocationAggregationProcessor(processor: DefaultLiveLocationAggregationProcessor): LiveLocationAggregationProcessor
+
+    @Binds
+    abstract fun bindPollAggregationProcessor(processor: DefaultPollAggregationProcessor): PollAggregationProcessor
 }

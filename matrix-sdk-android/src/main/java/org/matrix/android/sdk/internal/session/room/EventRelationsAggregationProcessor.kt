@@ -68,6 +68,7 @@ import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -79,6 +80,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         @SessionId private val sessionId: String,
         private val sessionManager: SessionManager,
         private val liveLocationAggregationProcessor: LiveLocationAggregationProcessor,
+        private val pollAggregationProcessor: PollAggregationProcessor,
         private val clock: Clock,
 ) : EventInsertLiveProcessor {
 
@@ -317,22 +319,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 return
             }
 
-            ContentMapper
-                    .map(eventAnnotationsSummaryEntity.pollResponseSummary?.aggregatedContent)
-                    ?.toModel<PollSummaryContent>()
-                    ?.let { existingPollSummaryContent ->
-                        eventAnnotationsSummaryEntity.pollResponseSummary?.aggregatedContent = ContentMapper.map(
-                                PollSummaryContent(
-                                        myVote = existingPollSummaryContent.myVote,
-                                        votes = emptyList(),
-                                        votesSummary = emptyMap(),
-                                        totalVotes = 0,
-                                        winnerVoteCount = 0,
-                                )
-                                        .toContent()
-                        )
-                    }
-
             val txId = event.unsignedData?.transactionId
             // is it a remote echo?
             if (!isLocalEcho && existingSummary.editions.any { it.eventId == txId }) {
@@ -360,6 +346,10 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         )
                 )
             }
+        }
+
+        if (event.getClearType() in EventType.POLL_START) {
+            pollAggregationProcessor.handlePollStartEvent(realm, event)
         }
 
         if (!isLocalEcho) {
