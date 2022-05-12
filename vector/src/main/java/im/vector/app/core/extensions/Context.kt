@@ -16,6 +16,7 @@
 
 package im.vector.app.core.extensions
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -30,11 +31,13 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import dagger.hilt.EntryPoints
 import im.vector.app.core.datastore.dataStoreProvider
 import im.vector.app.core.di.SingletonEntryPoint
+import im.vector.app.core.resources.BuildMeta
 import java.io.OutputStream
 import kotlin.math.roundToInt
 
@@ -88,9 +91,10 @@ fun Context.safeOpenOutputStream(uri: Uri): OutputStream? {
  * @return true if no active connection is found
  */
 @Suppress("deprecation")
-fun Context.inferNoConnectivity(): Boolean {
-    val connectivityManager: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+@SuppressLint("NewApi") // false positive
+fun Context.inferNoConnectivity(buildMeta: BuildMeta): Boolean {
+    val connectivityManager = getSystemService<ConnectivityManager>()!!
+    return if (buildMeta.sdkInt > Build.VERSION_CODES.M) {
         val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         when {
             networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> false

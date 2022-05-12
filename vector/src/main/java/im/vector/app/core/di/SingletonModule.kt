@@ -187,7 +187,6 @@ object VectorStaticModule {
         return analyticsConfig
     }
 
-
     @Provides
     @Singleton
     fun providesBuildMeta() = BuildMeta()
