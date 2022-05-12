@@ -38,5 +38,13 @@ data class RoomKeyContent(
 
         // should be a Long but it is sometimes a double
         @Json(name = "chain_index")
-        val chainIndex: Any? = null
+        val chainIndex: Any? = null,
+
+        /**
+         * MSC3061
+         * Identifies keys that were sent when the room's visibility setting was set to world_readable or shared
+         */
+        @Json(name = "org.matrix.msc3061.shared_history")
+        val sharedHistory: Boolean? = false
+
 )

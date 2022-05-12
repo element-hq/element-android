@@ -110,6 +110,7 @@ import org.matrix.olm.OlmManager
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 import kotlin.math.max
 
 /**
@@ -965,10 +966,13 @@ internal class DefaultCryptoService @Inject constructor(
     private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
         if (!event.isStateEvent()) return
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
-        eventContent?.historyVisibility?.let {
-            cryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
-            cryptoStore.setShouldShareHistory(roomId, it.shouldShareHistory())
-        } ?: cryptoStore.setShouldShareHistory(roomId, false)
+        val historyVisibility = eventContent?.historyVisibility
+        if (historyVisibility == null) {
+            cryptoStore.setShouldShareHistory(roomId, false)
+        } else {
+            cryptoStore.setShouldEncryptForInvitedMembers(roomId, historyVisibility != RoomHistoryVisibility.JOINED)
+            cryptoStore.setShouldShareHistory(roomId, historyVisibility.shouldShareHistory())
+        }
     }
 
     /**
@@ -1338,36 +1342,26 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-    override fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            runCatching {
-                deviceListManager.downloadKeys(listOf(userId), false)
-            }.mapCatching {
-                val userDevices = cryptoStore.getUserDevices(userId)
-                userDevices?.forEach {
-                    // Lets share the provided inbound sessions for every user device
-                    val deviceId = it.key
-                    sessionInfoSet?.mapNotNull { sessionInfo ->
-                        // Get inbound session from sessionId and sessionKey
-                        cryptoStore.getInboundGroupSession(
-                                sessionId = sessionInfo.sessionId,
-                                senderKey = sessionInfo.senderKey,
-                                sharedHistory = true
-                        )
-                    }?.filter { inboundGroupSession ->
-                        // Prevent injecting a forged encrypted message and using session_id/sender_key of another room.
-                        (inboundGroupSession.roomId == roomId).also {
-                            Timber.tag(loggerTag.value).d("Forged encrypted message detected for roomId:$roomId")
-                        }
-                    }?.forEach { inboundGroupSession ->
-                        // Share the sharable session to userId with deviceId
-                        val exportedKeys = inboundGroupSession.exportKeys(sharedHistory = true)
-                        val algorithm = exportedKeys?.algorithm
-                        val decryptor = roomDecryptorProvider.getRoomDecryptor(roomId, algorithm)
-                        decryptor?.shareForwardKeysWithDevice(exportedKeys, deviceId, userId)
-                        Timber.i("## CRYPTO | Sharing inbound session")
-                    }
-                }
+    override suspend fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?) {
+        deviceListManager.downloadKeys(listOf(userId), false)
+        val userDevices = cryptoStore.getUserDeviceList(userId)
+        val sessionToShare = sessionInfoSet.orEmpty().mapNotNull { sessionInfo ->
+            // Get inbound session from sessionId and sessionKey
+            withContext(coroutineDispatchers.crypto) {
+                olmDevice.getInboundGroupSession(
+                        sessionId = sessionInfo.sessionId,
+                        senderKey = sessionInfo.senderKey,
+                        roomId = roomId
+                ).takeIf { it.wrapper.sessionData.sharedHistory }
+            }
+        }
+
+        userDevices?.forEach { deviceInfo ->
+            // Lets share the provided inbound sessions for every user device
+            sessionToShare.forEach { inboundGroupSession ->
+                val encryptor = roomEncryptorsStore.get(roomId)
+                encryptor?.shareHistoryKeysWithDevice(inboundGroupSession, deviceInfo)
+                Timber.i("## CRYPTO | Sharing inbound session")
             }
         }
     }

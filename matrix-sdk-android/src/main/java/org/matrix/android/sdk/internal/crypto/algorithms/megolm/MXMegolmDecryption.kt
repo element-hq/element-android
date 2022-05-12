@@ -28,7 +28,6 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventCon
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
-import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.OutgoingKeyRequestManager
 import org.matrix.android.sdk.internal.crypto.algorithms.IMXDecrypting
 import org.matrix.android.sdk.internal.crypto.keysbackup.DefaultKeysBackupService
@@ -241,13 +240,14 @@ internal class MXMegolmDecryption(
 
         Timber.tag(loggerTag.value).i("onRoomKeyEvent addInboundGroupSession ${roomKeyContent.sessionId}")
         val addSessionResult = olmDevice.addInboundGroupSession(
-                roomKeyContent.sessionId,
-                roomKeyContent.sessionKey,
-                roomKeyContent.roomId,
-                senderKey,
-                forwardingCurve25519KeyChain,
-                keysClaimed,
-                exportFormat
+                sessionId = roomKeyContent.sessionId,
+                sessionKey = roomKeyContent.sessionKey,
+                roomId = roomKeyContent.roomId,
+                senderKey = senderKey,
+                forwardingCurve25519KeyChain = forwardingCurve25519KeyChain,
+                keysClaimed = keysClaimed,
+                exportFormat = exportFormat,
+                sharedHistory = roomKeyContent.sharedHistory ?: false
         )
 
         when (addSessionResult) {
@@ -309,43 +309,4 @@ internal class MXMegolmDecryption(
         newSessionListener?.onNewSession(roomId, senderKey, sessionId)
     }
 
-    override fun shareForwardKeysWithDevice(exportedKeys: MegolmSessionData?, deviceId: String, userId: String) {
-//        exportedKeys ?: return
-//        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-//            runCatching { deviceListManager.downloadKeys(listOf(userId), false) }
-//                    .mapCatching {
-//                        val deviceInfo = cryptoStore.getUserDevice(userId, deviceId)
-//                        if (deviceInfo == null) {
-//                            throw RuntimeException()
-//                        } else {
-//                            val devicesByUser = mapOf(userId to listOf(deviceInfo))
-//                            val usersDeviceMap = ensureOlmSessionsForDevicesAction.handle(devicesByUser)
-//                            val olmSessionResult = usersDeviceMap.getObject(userId, deviceId)
-//                            if (olmSessionResult?.sessionId == null) {
-//                                // no session with this device, probably because there
-//                                // were no one-time keys.
-//                                Timber.tag(loggerTag.value).e("no session with this device $deviceId, probably because there were no one-time keys.")
-//                                return@mapCatching
-//                            }
-//                            Timber.tag(loggerTag.value).i("shareKeysWithDevice() : sharing session ${exportedKeys.sessionId} with device $userId:$deviceId")
-//
-//                            val payloadJson = mapOf(
-//                                    "type" to EventType.FORWARDED_ROOM_KEY,
-//                                    "content" to exportedKeys
-//                            )
-//
-//                            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
-//                            val sendToDeviceMap = MXUsersDevicesMap<Any>()
-//                            sendToDeviceMap.setObject(userId, deviceId, encodedPayload)
-//                            Timber.tag(loggerTag.value).i("shareKeysWithDevice() : sending ${exportedKeys.sessionId} to $userId:$deviceId")
-//                            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-//                            try {
-//                                sendToDeviceTask.execute(sendToDeviceParams)
-//                            } catch (failure: Throwable) {
-//                                Timber.tag(loggerTag.value).e(failure, "shareKeysWithDevice() : Failed to send ${exportedKeys.sessionId} to $userId:$deviceId")
-//                            }
-//                        }
-//                    }
-//        }
-    }
 }

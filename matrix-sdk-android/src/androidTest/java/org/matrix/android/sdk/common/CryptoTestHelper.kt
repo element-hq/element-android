@@ -81,7 +81,7 @@ class CryptoTestHelper(val testHelper: CommonTestHelper) {
         val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, defaultSessionParams)
 
         val roomId = testHelper.runBlockingTest {
-            aliceSession.createRoom(CreateRoomParams().apply {
+            aliceSession.roomService().createRoom(CreateRoomParams().apply {
                 historyVisibility = roomHistoryVisibility
                 name = "MyRoom"
             })

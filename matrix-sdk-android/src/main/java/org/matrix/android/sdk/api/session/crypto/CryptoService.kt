@@ -181,5 +181,5 @@ interface CryptoService {
     /**
      * Share all inbound sessions of the last chunk messages to the provided userId devices
      */
-    fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?)
+    suspend fun sendSharedHistoryKeys(roomId: String, userId: String, sessionInfoSet: Set<SessionInfo>?)
 }

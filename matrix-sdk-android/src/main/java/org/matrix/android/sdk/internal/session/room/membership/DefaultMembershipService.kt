@@ -144,6 +144,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     override suspend fun invite(userId: String, reason: String?) {
+        // TODO not sure it's the right way to get the latest messages in a room
         val sessionInfo = Realm.getInstance(monarchy.realmConfiguration).use {
             ChunkEntity.findLatestSessionInfo(it, roomId)
         }
