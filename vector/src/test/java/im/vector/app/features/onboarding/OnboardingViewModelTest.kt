@@ -262,7 +262,6 @@ class OnboardingViewModelTest {
                         initialState,
                         { copy(isLoading = true) },
                         { copy(isLoading = false) }
-
                 )
                 .assertEvents(OnboardingViewEvents.DeeplinkAuthenticationFailure(expectedRetryAction))
                 .finish()
