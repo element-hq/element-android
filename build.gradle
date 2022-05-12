@@ -151,8 +151,6 @@ allprojects {
         allRules = false
         // point to your custom config defining rules to run, overwriting default behavior
         config = files("$rootDir/tools/detekt/detekt.yml")
-        // a way of suppressing issues before introducing detekt
-        baseline = file("$rootDir/tools/detekt/baseline.xml")
     }
 }
 
