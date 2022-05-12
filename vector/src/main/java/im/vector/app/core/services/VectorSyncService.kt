@@ -33,10 +33,12 @@ import androidx.work.WorkerParameters
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.PendingIntentCompat
+import im.vector.app.core.time.Clock
+import im.vector.app.core.time.DefaultClock
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.internal.session.sync.job.SyncService
+import org.matrix.android.sdk.api.session.sync.job.SyncService
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -77,6 +79,7 @@ class VectorSyncService : SyncService() {
 
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var matrix: Matrix
+    @Inject lateinit var clock: Clock
 
     override fun provideMatrix() = matrix
 
@@ -102,7 +105,8 @@ class VectorSyncService : SyncService() {
                 syncTimeoutSeconds = syncTimeoutSeconds,
                 syncDelaySeconds = syncDelaySeconds,
                 isPeriodic = true,
-                isNetworkBack = false
+                isNetworkBack = false,
+                currentTimeMillis = clock.epochMillis()
         )
     }
 
@@ -114,9 +118,10 @@ class VectorSyncService : SyncService() {
         val rescheduleSyncWorkRequest: WorkRequest =
                 OneTimeWorkRequestBuilder<RestartWhenNetworkOn>()
                         .setInputData(RestartWhenNetworkOn.createInputData(sessionId, syncTimeoutSeconds, syncDelaySeconds, isPeriodic))
-                        .setConstraints(Constraints.Builder()
-                                .setRequiredNetworkType(NetworkType.CONNECTED)
-                                .build()
+                        .setConstraints(
+                                Constraints.Builder()
+                                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                                        .build()
                         )
                         .build()
 
@@ -137,20 +142,27 @@ class VectorSyncService : SyncService() {
     }
 
     // I do not move or rename this class, since I'm not sure about the side effect regarding the WorkManager
-    class RestartWhenNetworkOn(appContext: Context, workerParams: WorkerParameters) :
-            Worker(appContext, workerParams) {
+    class RestartWhenNetworkOn(
+            appContext: Context,
+            workerParams: WorkerParameters
+    ) : Worker(appContext, workerParams) {
+
         override fun doWork(): Result {
             Timber.d("## Sync: RestartWhenNetworkOn.doWork()")
             val sessionId = inputData.getString(KEY_SESSION_ID) ?: return Result.failure()
             val syncTimeoutSeconds = inputData.getInt(KEY_SYNC_TIMEOUT_SECONDS, BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS)
             val syncDelaySeconds = inputData.getInt(KEY_SYNC_DELAY_SECONDS, BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS)
             val isPeriodic = inputData.getBoolean(KEY_IS_PERIODIC, false)
+
+            // Not sure how to inject a Clock here
+            val clock = DefaultClock()
             applicationContext.rescheduleSyncService(
                     sessionId = sessionId,
                     syncTimeoutSeconds = syncTimeoutSeconds,
                     syncDelaySeconds = syncDelaySeconds,
                     isPeriodic = isPeriodic,
-                    isNetworkBack = true
+                    isNetworkBack = true,
+                    currentTimeMillis = clock.epochMillis()
             )
             // Indicate whether the work finished successfully with the Result
             return Result.success()
@@ -182,7 +194,8 @@ private fun Context.rescheduleSyncService(sessionId: String,
                                           syncTimeoutSeconds: Int,
                                           syncDelaySeconds: Int,
                                           isPeriodic: Boolean,
-                                          isNetworkBack: Boolean) {
+                                          isNetworkBack: Boolean,
+                                          currentTimeMillis: Long) {
     Timber.d("## Sync: rescheduleSyncService")
     val intent = if (isPeriodic) {
         VectorSyncService.newPeriodicIntent(
@@ -208,7 +221,7 @@ private fun Context.rescheduleSyncService(sessionId: String,
         } else {
             PendingIntent.getService(this, 0, intent, PendingIntentCompat.FLAG_IMMUTABLE)
         }
-        val firstMillis = System.currentTimeMillis() + syncDelaySeconds * 1000L
+        val firstMillis = currentTimeMillis + syncDelaySeconds * 1000L
         val alarmMgr = getSystemService<AlarmManager>()!!
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pendingIntent)

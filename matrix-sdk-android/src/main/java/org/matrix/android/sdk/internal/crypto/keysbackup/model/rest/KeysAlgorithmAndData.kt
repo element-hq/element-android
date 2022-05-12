@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup.model.rest
 
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import org.matrix.android.sdk.internal.di.MoshiProvider
 
 /**

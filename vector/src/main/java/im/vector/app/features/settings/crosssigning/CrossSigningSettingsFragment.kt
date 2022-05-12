@@ -28,7 +28,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
@@ -86,10 +85,12 @@ class CrossSigningSettingsFragment @Inject constructor(
                     Unit
                 }
                 is CrossSigningSettingsViewEvents.RequestReAuth        -> {
-                    ReAuthActivity.newIntent(requireContext(),
+                    ReAuthActivity.newIntent(
+                            requireContext(),
                             event.registrationFlowResponse,
                             event.lastErrorCode,
-                            getString(R.string.initialize_cross_signing)).let { intent ->
+                            getString(R.string.initialize_cross_signing)
+                    ).let { intent ->
                         reAuthActivityResultLauncher.launch(intent)
                     }
                 }
@@ -100,7 +101,7 @@ class CrossSigningSettingsFragment @Inject constructor(
                 CrossSigningSettingsViewEvents.HideModalWaitingView    -> {
                     views.waitingView.waitingView.isVisible = false
                 }
-            }.exhaustive
+            }
         }
     }
 

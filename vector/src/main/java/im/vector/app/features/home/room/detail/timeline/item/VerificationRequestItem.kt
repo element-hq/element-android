@@ -31,13 +31,13 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
-import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.time.Clock
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_state)
 abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestItem.Holder>() {
@@ -47,6 +47,9 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
 
     @EpoxyAttribute
     lateinit var attributes: Attributes
+
+    @EpoxyAttribute
+    lateinit var clock: Clock
 
     @EpoxyAttribute
     var callback: TimelineEventController.Callback? = null
@@ -105,10 +108,10 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
                 }
                 holder.statusTextView.isVisible = true
             }
-        }.exhaustive
+        }
 
         // Always hide buttons if request is too old
-        if (!VerificationService.isValidRequest(attributes.informationData.ageLocalTS)) {
+        if (!VerificationService.isValidRequest(attributes.informationData.ageLocalTS, clock.epochMillis())) {
             holder.buttonBar.isVisible = false
         }
 
@@ -154,6 +157,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
 //            val avatarCallback: TimelineEventController.AvatarCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val emojiTypeFace: Typeface? = null
+            override val reactionsSummaryEvents: ReactionsSummaryEvents? = null,
+            val emojiTypeFace: Typeface? = null,
     ) : AbsBaseMessageItem.Attributes
 }

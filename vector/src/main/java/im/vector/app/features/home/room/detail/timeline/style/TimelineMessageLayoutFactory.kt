@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVerification
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.isEdition
+import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import javax.inject.Inject
 
 class TimelineMessageLayoutFactory @Inject constructor(private val session: Session,
@@ -43,10 +44,9 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         // Can be rendered in bubbles, other types will fallback to default
         private val EVENT_TYPES_WITH_BUBBLE_LAYOUT = setOf(
                 EventType.MESSAGE,
-                EventType.POLL_START,
                 EventType.ENCRYPTED,
                 EventType.STICKER
-        )
+        ) + EventType.POLL_START + EventType.STATE_ROOM_BEACON_INFO
 
         // Can't be rendered in bubbles, so get back to default layout
         private val MSG_TYPES_WITHOUT_BUBBLE_LAYOUT = setOf(
@@ -58,10 +58,13 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 MessageType.MSGTYPE_IMAGE,
                 MessageType.MSGTYPE_VIDEO,
                 MessageType.MSGTYPE_STICKER_LOCAL,
-                MessageType.MSGTYPE_EMOTE
+                MessageType.MSGTYPE_EMOTE,
+                MessageType.MSGTYPE_BEACON_INFO,
         )
-        private val MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY = setOf(
-                MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_VIDEO
+        private val MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE = setOf(
+                MessageType.MSGTYPE_IMAGE,
+                MessageType.MSGTYPE_VIDEO,
+                MessageType.MSGTYPE_BEACON_INFO,
         )
     }
 
@@ -70,7 +73,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
     }
 
     private val isRTL: Boolean by lazy {
-       localeProvider.isRTL()
+        localeProvider.isRTL()
     }
 
     fun create(params: TimelineItemFactoryParams): TimelineMessageLayout {
@@ -92,6 +95,8 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
                 isNextMessageReceivedMoreThanOneHourAgo ||
                 isTileTypeMessage(nextDisplayableEvent) ||
+                nextDisplayableEvent.isRootThread() ||
+                event.isRootThread() ||
                 nextDisplayableEvent.isEdition()
 
         val messageLayout = when (layoutSettingsProvider.getLayoutSettings()) {
@@ -118,10 +123,12 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                     TimelineMessageLayout.Bubble(
                             showAvatar = showInformation && !isSentByMe,
                             showDisplayName = showInformation && !isSentByMe,
+                            addTopMargin = isFirstFromThisSender && isSentByMe,
                             isIncoming = !isSentByMe,
                             cornersRadius = cornersRadius,
                             isPseudoBubble = messageContent.isPseudoBubble(),
-                            timestampAsOverlay = messageContent.timestampAsOverlay()
+                            timestampInsideMessage = messageContent.timestampInsideMessage(),
+                            addMessageOverlay = messageContent.shouldAddMessageOverlay(),
                     )
                 } else {
                     buildModernLayout(showInformation)
@@ -137,10 +144,18 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         return this.msgType in MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT
     }
 
-    private fun MessageContent?.timestampAsOverlay(): Boolean {
+    private fun MessageContent?.timestampInsideMessage(): Boolean {
         if (this == null) return false
         if (msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
-        return this.msgType in MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY
+        return this.msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+    }
+
+    private fun MessageContent?.shouldAddMessageOverlay(): Boolean {
+        return when {
+            this == null || msgType == MessageType.MSGTYPE_BEACON_INFO -> false
+            msgType == MessageType.MSGTYPE_LOCATION                    -> vectorPreferences.labsRenderLocationsInTimeline()
+            else                                                       -> msgType in MSG_TYPES_WITH_TIMESTAMP_INSIDE_MESSAGE
+        }
     }
 
     private fun TimelineEvent.shouldBuildBubbleLayout(): Boolean {

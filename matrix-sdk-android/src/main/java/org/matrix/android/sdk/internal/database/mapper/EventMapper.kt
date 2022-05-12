@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.database.mapper
 
 import com.squareup.moshi.JsonDataException
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
@@ -26,17 +27,17 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
-import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
+import kotlin.random.Random
 
 internal object EventMapper {
 
     fun map(event: Event, roomId: String): EventEntity {
         val eventEntity = EventEntity()
         // TODO change this as we shouldn't use event everywhere
-        eventEntity.eventId = event.eventId ?: "$$roomId-${System.currentTimeMillis()}-${event.hashCode()}"
+        eventEntity.eventId = event.eventId ?: "$$roomId-${Random.nextLong()}-${event.hashCode()}"
         eventEntity.roomId = event.roomId ?: roomId
         eventEntity.content = ContentMapper.map(event.content)
         eventEntity.prevContent = ContentMapper.map(event.resolvedPrevContent())
@@ -114,7 +115,7 @@ internal object EventMapper {
                         )
                     },
                     threadNotificationState = eventEntity.threadNotificationState,
-                    threadSummaryLatestTextMessage = eventEntity.threadSummaryLatestMessage?.root?.asDomain()?.getDecryptedTextSummary(),
+                    threadSummaryLatestEvent = eventEntity.threadSummaryLatestMessage?.root?.asDomain(),
                     lastMessageTimestamp = eventEntity.threadSummaryLatestMessage?.root?.originServerTs
 
             )
@@ -126,7 +127,10 @@ internal fun EventEntity.asDomain(castJsonNumbers: Boolean = false): Event {
     return EventMapper.map(this, castJsonNumbers)
 }
 
-internal fun Event.toEntity(roomId: String, sendState: SendState, ageLocalTs: Long?, contentToInject: String? = null): EventEntity {
+internal fun Event.toEntity(roomId: String,
+                            sendState: SendState,
+                            ageLocalTs: Long?,
+                            contentToInject: String? = null): EventEntity {
     return EventMapper.map(this, roomId).apply {
         this.sendState = sendState
         this.ageLocalTs = ageLocalTs

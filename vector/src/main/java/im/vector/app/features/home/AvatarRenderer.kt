@@ -18,6 +18,7 @@ package im.vector.app.features.home
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.AnyThread
 import androidx.annotation.ColorInt
@@ -48,6 +49,7 @@ import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.util.MatrixItem
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -64,9 +66,11 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView) {
-        render(GlideApp.with(imageView),
+        render(
+                GlideApp.with(imageView),
                 matrixItem,
-                DrawableImageViewTarget(imageView))
+                DrawableImageViewTarget(imageView)
+        )
     }
 
 //    fun renderSpace(matrixItem: MatrixItem, imageView: ImageView) {
@@ -95,9 +99,21 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @UiThread
     fun render(matrixItem: MatrixItem, imageView: ImageView, glideRequests: GlideRequests) {
-        render(glideRequests,
+        render(
+                glideRequests,
                 matrixItem,
-                DrawableImageViewTarget(imageView))
+                DrawableImageViewTarget(imageView)
+        )
+    }
+
+    @UiThread
+    fun render(matrixItem: MatrixItem, localUri: Uri?, imageView: ImageView) {
+        val placeholder = getPlaceholderDrawable(matrixItem)
+        GlideApp.with(imageView)
+                .load(localUri?.let { File(localUri.path!!) })
+                .apply(RequestOptions.circleCropTransform())
+                .placeholder(placeholder)
+                .into(imageView)
     }
 
     @UiThread
@@ -188,12 +204,14 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 it.load(resolvedUrl)
             } else {
                 val avatarColor = matrixItemColorProvider.getColor(matrixItem)
-                it.load(TextDrawable.builder()
-                        .beginConfig()
-                        .bold()
-                        .endConfig()
-                        .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor)
-                        .toBitmap(width = iconSize, height = iconSize))
+                it.load(
+                        TextDrawable.builder()
+                                .beginConfig()
+                                .bold()
+                                .endConfig()
+                                .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor)
+                                .toBitmap(width = iconSize, height = iconSize)
+                )
             }
         }
     }

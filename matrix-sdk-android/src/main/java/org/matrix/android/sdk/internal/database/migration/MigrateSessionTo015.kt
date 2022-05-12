@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo015(realm: DynamicRealm) : RealmMigrator(realm, 15) {
+internal class MigrateSessionTo015(realm: DynamicRealm) : RealmMigrator(realm, 15) {
 
     override fun doMigrate(realm: DynamicRealm) {
         // fix issue with flattenParentIds on DM that kept growing with duplicate

@@ -18,9 +18,12 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.accountdata.RoomAccountDataTypes
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -37,8 +40,9 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
+import org.matrix.android.sdk.internal.crypto.EventDecryptor
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
+import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.GroupSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
@@ -69,7 +73,17 @@ internal class RoomSummaryUpdater @Inject constructor(
         private val roomDisplayNameResolver: RoomDisplayNameResolver,
         private val roomAvatarResolver: RoomAvatarResolver,
         private val crossSigningService: CrossSigningService,
-        private val roomAccountDataDataSource: RoomAccountDataDataSource) {
+        private val eventDecryptor: EventDecryptor,
+        private val roomAccountDataDataSource: RoomAccountDataDataSource
+) {
+
+    fun refreshLatestPreviewContent(realm: Realm, roomId: String) {
+        val roomSummaryEntity = RoomSummaryEntity.getOrNull(realm, roomId)
+        if (roomSummaryEntity != null) {
+            val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
+            latestPreviewableEvent?.attemptToDecrypt()
+        }
+    }
 
     fun update(realm: Realm,
                roomId: String,
@@ -121,6 +135,7 @@ internal class RoomSummaryUpdater @Inject constructor(
         val lastActivityFromEvent = latestPreviewableEvent?.root?.originServerTs
         if (lastActivityFromEvent != null) {
             roomSummaryEntity.lastActivityTime = lastActivityFromEvent
+            latestPreviewableEvent.attemptToDecrypt()
         }
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0 ||
@@ -154,8 +169,6 @@ internal class RoomSummaryUpdater @Inject constructor(
         }
         roomSummaryEntity.updateHasFailedSending()
 
-        // We do not decrypt Event anymore here, let's see if this is OK
-
         if (updateMembers) {
             val otherRoomMembers = RoomMemberHelper(realm, roomId)
                     .queryActiveRoomMembersEvent()
@@ -168,6 +181,22 @@ internal class RoomSummaryUpdater @Inject constructor(
             if (roomSummaryEntity.isEncrypted && otherRoomMembers.isNotEmpty()) {
                 // TODO do we really need to force a shield refresh here?
                 // crossSigningService.ensureRoomShieldForRoom(roomId)
+            }
+        }
+    }
+
+    private fun TimelineEventEntity.attemptToDecrypt() {
+        when (val root = this.root) {
+            null -> {
+                Timber.v("Decryption skipped due to missing root event $eventId")
+            }
+            else -> {
+                if (root.type == EventType.ENCRYPTED && root.decryptionResultJson == null) {
+                    Timber.v("Should decrypt $eventId")
+                    tryOrNull {
+                        runBlocking { eventDecryptor.decryptEvent(root.asDomain(), "") }
+                    }?.let { root.setDecryptionResult(it) }
+                }
             }
         }
     }
@@ -397,8 +426,6 @@ internal class RoomSummaryUpdater @Inject constructor(
                         realm.where(RoomSummaryEntity::class.java)
                                 .process(RoomSummaryEntityFields.MEMBERSHIP_STR, listOf(Membership.JOIN))
                                 .notEqualTo(RoomSummaryEntityFields.ROOM_TYPE, RoomType.SPACE)
-                                // also we do not count DM in here, because home space will already show them
-                                .equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
                                 .contains(RoomSummaryEntityFields.FLATTEN_PARENT_IDS, space.roomId)
                                 .findAll().forEach {
                                     highlightCount += it.highlightCount

@@ -16,7 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.model
 
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.olm.OlmInboundGroupSession
 import timber.log.Timber
@@ -26,7 +26,7 @@ import java.io.Serializable
  * This class adds more context to a OlmInboundGroupSession object.
  * This allows additional checks. The class implements Serializable so that the context can be stored.
  */
-class OlmInboundGroupSessionWrapper : Serializable {
+internal class OlmInboundGroupSessionWrapper : Serializable {
 
     // The associated olm inbound group session.
     var olmInboundGroupSession: OlmInboundGroupSession? = null

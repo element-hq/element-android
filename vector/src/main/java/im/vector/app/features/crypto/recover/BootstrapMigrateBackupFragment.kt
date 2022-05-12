@@ -42,7 +42,7 @@ import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.isValidRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.isValidRecoveryKey
 import reactivecircus.flowbinding.android.widget.editorActionEvents
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject

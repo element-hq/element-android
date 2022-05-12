@@ -20,6 +20,7 @@ import android.app.Activity
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
 import im.vector.app.R
@@ -29,6 +30,7 @@ import im.vector.app.core.utils.getCallRingtoneName
 import im.vector.app.core.utils.getCallRingtoneUri
 import im.vector.app.core.utils.setCallRingtoneUri
 import im.vector.app.core.utils.setUseRiotDefaultRingtone
+import im.vector.app.features.analytics.plan.MobileScreen
 
 class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
 
@@ -40,6 +42,11 @@ class VectorSettingsVoiceVideoFragment : VectorSettingsBaseFragment() {
     }
     private val mCallRingtonePreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CALL_RINGTONE_URI_PREFERENCE_KEY)!!
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.SettingsVoiceVideo
     }
 
     override fun bindPref() {

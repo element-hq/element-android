@@ -26,7 +26,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.flow.launchIn
@@ -37,6 +36,7 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.RoomCanonicalAliasContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
@@ -73,7 +73,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         }
         viewModelScope.launch {
             runCatching {
-                session.getRoomDirectoryVisibility(room.roomId)
+                session.roomDirectoryService().getRoomDirectoryVisibility(room.roomId)
             }.fold(
                     {
                         setState {
@@ -109,7 +109,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         }
 
         viewModelScope.launch {
-            runCatching { room.getRoomAliases() }
+            runCatching { room.aliasService().getRoomAliases() }
                     .fold(
                             {
                                 setState { copy(localAliases = Success(it.sorted())) }
@@ -190,7 +190,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
             is RoomAliasAction.RemoveLocalAlias           -> handleRemoveLocalAlias(action)
             is RoomAliasAction.PublishAlias               -> handlePublishAlias(action)
             RoomAliasAction.Retry                         -> handleRetry()
-        }.exhaustive
+        }
     }
 
     private fun handleRetry() = withState { state ->
@@ -206,7 +206,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         postLoading(true)
         viewModelScope.launch {
             runCatching {
-                session.setRoomDirectoryVisibility(room.roomId, action.roomDirectoryVisibility)
+                session.roomDirectoryService().setRoomDirectoryVisibility(room.roomId, action.roomDirectoryVisibility)
             }.fold(
                     {
                         setState {
@@ -304,7 +304,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
         postLoading(true)
         viewModelScope.launch {
             try {
-                room.updateCanonicalAlias(canonicalAlias, alternativeAliases)
+                room.stateService().updateCanonicalAlias(canonicalAlias, alternativeAliases)
                 setState {
                     copy(
                             isLoading = false,
@@ -328,7 +328,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
             )
         }
         viewModelScope.launch {
-            runCatching { room.addAlias(previousState.value) }
+            runCatching { room.aliasService().addAlias(previousState.value) }
                     .onFailure {
                         setState {
                             copy(
@@ -355,7 +355,7 @@ class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: Roo
     private fun handleRemoveLocalAlias(action: RoomAliasAction.RemoveLocalAlias) {
         postLoading(true)
         viewModelScope.launch {
-            runCatching { session.deleteRoomAlias(action.alias) }
+            runCatching { session.roomService().deleteRoomAlias(action.alias) }
                     .onFailure {
                         setState {
                             copy(isLoading = false)

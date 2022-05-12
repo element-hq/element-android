@@ -55,9 +55,9 @@ import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DI
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
 class HomeDetailFragment @Inject constructor(
@@ -444,7 +444,8 @@ class HomeDetailFragment @Inject constructor(
                 it.syncState,
                 it.incrementalSyncStatus,
                 it.pushCounter,
-                vectorPreferences.developerShowDebugInfo())
+                vectorPreferences.developerShowDebugInfo()
+        )
 
         hasUnreadRooms = it.hasUnreadMessages
     }
@@ -457,7 +458,7 @@ class HomeDetailFragment @Inject constructor(
         backgroundColor = if (highlight) {
             ThemeUtils.getColor(requireContext(), R.attr.colorError)
         } else {
-            ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary)
+            ThemeUtils.getColor(requireContext(), R.attr.vctr_unread_background)
         }
     }
 

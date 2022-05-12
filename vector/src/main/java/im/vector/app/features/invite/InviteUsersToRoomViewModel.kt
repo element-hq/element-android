@@ -28,16 +28,16 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.userdirectory.PendingSelection
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
 
-class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
-                                                             initialState: InviteUsersToRoomViewState,
-                                                             session: Session,
-                                                             val stringProvider: StringProvider) :
-    VectorViewModel<InviteUsersToRoomViewState, InviteUsersToRoomAction, InviteUsersToRoomViewEvents>(initialState) {
+class InviteUsersToRoomViewModel @AssistedInject constructor(
+        @Assisted initialState: InviteUsersToRoomViewState,
+        session: Session,
+        val stringProvider: StringProvider
+) : VectorViewModel<InviteUsersToRoomViewState, InviteUsersToRoomAction, InviteUsersToRoomViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
 
@@ -60,8 +60,8 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
             selections.asFlow()
                     .map { user ->
                         when (user) {
-                            is PendingSelection.UserPendingSelection     -> room.invite(user.user.userId, null)
-                            is PendingSelection.ThreePidPendingSelection -> room.invite3pid(user.threePid)
+                            is PendingSelection.UserPendingSelection     -> room.membershipService().invite(user.user.userId, null)
+                            is PendingSelection.ThreePidPendingSelection -> room.membershipService().invite3pid(user.threePid)
                         }
                     }
                     .catch { cause ->
@@ -69,15 +69,21 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
                     }
                     .collect {
                         val successMessage = when (selections.size) {
-                            1    -> stringProvider.getString(R.string.invitation_sent_to_one_user,
-                                    selections.first().getBestName())
-                            2    -> stringProvider.getString(R.string.invitations_sent_to_two_users,
+                            1    -> stringProvider.getString(
+                                    R.string.invitation_sent_to_one_user,
+                                    selections.first().getBestName()
+                            )
+                            2    -> stringProvider.getString(
+                                    R.string.invitations_sent_to_two_users,
                                     selections.first().getBestName(),
-                                    selections.last().getBestName())
-                            else -> stringProvider.getQuantityString(R.plurals.invitations_sent_to_one_and_more_users,
+                                    selections.last().getBestName()
+                            )
+                            else -> stringProvider.getQuantityString(
+                                    R.plurals.invitations_sent_to_one_and_more_users,
                                     selections.size - 1,
                                     selections.first().getBestName(),
-                                    selections.size - 1)
+                                    selections.size - 1
+                            )
                         }
                         _viewEvents.post(InviteUsersToRoomViewEvents.Success(successMessage))
                     }

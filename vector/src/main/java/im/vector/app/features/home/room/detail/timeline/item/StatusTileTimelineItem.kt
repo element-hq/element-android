@@ -57,7 +57,7 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
             ShieldUIState.GREEN -> R.drawable.ic_shield_trusted
             ShieldUIState.BLACK -> R.drawable.ic_shield_black
             ShieldUIState.RED   -> R.drawable.ic_shield_warning
-            ShieldUIState.ERROR   -> R.drawable.ic_warning_badge
+            ShieldUIState.ERROR -> R.drawable.ic_warning_badge
         }
 
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(
@@ -93,7 +93,8 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
             override val itemClickListener: ClickListener? = null,
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val emojiTypeFace: Typeface? = null
+            val emojiTypeFace: Typeface? = null,
+            override val reactionsSummaryEvents: ReactionsSummaryEvents? = null
     ) : AbsBaseMessageItem.Attributes
 
     enum class ShieldUIState {

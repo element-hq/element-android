@@ -38,7 +38,7 @@ import im.vector.app.databinding.FragmentLoginWebBinding
 import im.vector.app.features.signout.soft.SoftLogoutAction
 import im.vector.app.features.signout.soft.SoftLogoutViewModel
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 import java.net.URLDecoder
 import javax.inject.Inject
@@ -141,6 +141,7 @@ class LoginWebFragment @Inject constructor(
                         .show()
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
 
@@ -193,6 +194,7 @@ class LoginWebFragment @Inject constructor(
              * @param url
              * @return
              */
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
                 if (url == null) return super.shouldOverrideUrlLoading(view, url as String?)
 
@@ -203,7 +205,7 @@ class LoginWebFragment @Inject constructor(
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
-                        val adapter = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java)
+                        val adapter = MatrixJsonParser.getMoshi().adapter(JavascriptResponse::class.java)
                         javascriptResponse = adapter.fromJson(json)
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading() : fromJson failed")

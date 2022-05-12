@@ -35,8 +35,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
+import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
@@ -135,11 +138,12 @@ class SpaceMenuViewModel @AssistedInject constructor(
                 } else if (state.leaveMode == SpaceMenuState.LeaveMode.LEAVE_ALL) {
                     // need to find all child rooms that i have joined
 
-                    session.getRoomSummaries(
+                    session.roomService().getRoomSummaries(
                             roomSummaryQueryParams {
                                 excludeType = null
                                 activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(initialState.spaceId)
                                 memberships = listOf(Membership.JOIN)
+                                roomCategoryFilter = RoomCategoryFilter.ONLY_ROOMS
                             }
                     ).forEach {
                         try {

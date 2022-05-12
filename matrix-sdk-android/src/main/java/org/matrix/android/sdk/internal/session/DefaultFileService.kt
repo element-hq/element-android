@@ -30,14 +30,15 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import org.matrix.android.sdk.api.session.file.FileService
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.util.md5
 import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProgress
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
 import org.matrix.android.sdk.internal.util.file.AtomicFileCreator
-import org.matrix.android.sdk.internal.util.md5
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.android.sdk.internal.util.writeToFile
 import timber.log.Timber
 import java.io.File
@@ -51,7 +52,8 @@ internal class DefaultFileService @Inject constructor(
         private val contentUrlResolver: ContentUrlResolver,
         @UnauthenticatedWithCertificateWithProgress
         private val okHttpClient: OkHttpClient,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val clock: Clock,
 ) : FileService {
 
     // Legacy folder, will be deleted
@@ -123,7 +125,7 @@ internal class DefaultFileService @Inject constructor(
                     val resolvedUrl = contentUrlResolver.resolveForDownload(url, elementToDecrypt) ?: throw IllegalArgumentException("url is null")
 
                     val request = when (resolvedUrl) {
-                        is ContentUrlResolver.ResolvedMethod.GET -> {
+                        is ContentUrlResolver.ResolvedMethod.GET  -> {
                             Request.Builder()
                                     .url(resolvedUrl.url)
                                     .header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER, url)
@@ -182,7 +184,8 @@ internal class DefaultFileService @Inject constructor(
                             MXEncryptedAttachments.decryptAttachment(
                                     inputStream,
                                     elementToDecrypt,
-                                    outputStream
+                                    outputStream,
+                                    clock
                             )
                         }
                     }

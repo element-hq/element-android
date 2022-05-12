@@ -20,9 +20,9 @@ import android.net.Uri
 import android.view.View
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.features.call.webrtc.WebRtcCall
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import java.io.File
 
 /**
@@ -82,4 +82,6 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class StartChatEffect(val type: ChatEffect) : RoomDetailViewEvents()
     object StopChatEffects : RoomDetailViewEvents()
     object RoomReplacementStarted : RoomDetailViewEvents()
+
+    data class ChangeLocationIndicator(val isVisible: Boolean) : RoomDetailViewEvents()
 }

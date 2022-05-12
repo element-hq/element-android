@@ -26,7 +26,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.internal.assertFailsWith
 import org.junit.Before
 import org.junit.Test
@@ -53,9 +53,9 @@ class KeysExporterTest {
     @Test
     fun `when exporting then writes exported keys to context output stream`() {
         givenFileDescriptorWithSize(size = A_ROOM_KEYS_EXPORT.size.toLong())
-        val outputStream = context.givenOutputStreamFor(A_URI)
+        val outputStream = context.givenSafeOutputStreamFor(A_URI)
 
-        runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+        runTest { keysExporter.export(A_PASSWORD, A_URI) }
 
         verify { outputStream.write(A_ROOM_KEYS_EXPORT) }
     }
@@ -63,29 +63,29 @@ class KeysExporterTest {
     @Test
     fun `given different file size returned for export when exporting then throws UnexpectedExportKeysFileSizeException`() {
         givenFileDescriptorWithSize(size = 110)
-        context.givenOutputStreamFor(A_URI)
+        context.givenSafeOutputStreamFor(A_URI)
 
         assertFailsWith<UnexpectedExportKeysFileSizeException> {
-            runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+            runTest { keysExporter.export(A_PASSWORD, A_URI) }
         }
     }
 
     @Test
     fun `given output stream is unavailable for exporting to when exporting then throws IllegalStateException`() {
-        context.givenMissingOutputStreamFor(A_URI)
+        context.givenMissingSafeOutputStreamFor(A_URI)
 
         assertFailsWith<IllegalStateException>(message = "Unable to open file for writing") {
-            runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+            runTest { keysExporter.export(A_PASSWORD, A_URI) }
         }
     }
 
     @Test
     fun `given exported file is missing after export when exporting then throws IllegalStateException`() {
         context.givenFileDescriptor(A_URI, mode = "r") { null }
-        context.givenOutputStreamFor(A_URI)
+        context.givenSafeOutputStreamFor(A_URI)
 
         assertFailsWith<IllegalStateException>(message = "Exported file not found") {
-            runBlocking { keysExporter.export(A_PASSWORD, A_URI) }
+            runTest { keysExporter.export(A_PASSWORD, A_URI) }
         }
     }
 

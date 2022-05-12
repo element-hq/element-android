@@ -1,0 +1,1 @@
+Use key backup before requesting keys + refactor & improvement of key request/forward

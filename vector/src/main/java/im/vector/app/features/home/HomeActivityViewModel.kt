@@ -25,7 +25,6 @@ import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.login.ReAuthHelper
@@ -43,10 +42,15 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.pushrules.RuleIds
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
+import org.matrix.android.sdk.api.util.awaitCallback
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
@@ -59,6 +63,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         private val activeSessionHolder: ActiveSessionHolder,
         private val reAuthHelper: ReAuthHelper,
         private val analyticsStore: AnalyticsStore,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
@@ -81,6 +86,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         checkSessionPushIsOn()
         observeCrossSigningReset()
         observeAnalytics()
+        initThreadsMigration()
     }
 
     private fun observeAnalytics() {
@@ -127,24 +133,64 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
     }
 
+    /**
+     * Handle threads migration. The migration includes:
+     * - Notify users that had io.element.thread enabled from labs
+     * - Re-Enable m.thread to those users (that they had enabled labs threads)
+     * - Handle migration when threads are enabled by default
+     */
+    private fun initThreadsMigration() {
+        // When we would like to enable threads for all users
+//        if(vectorPreferences.shouldMigrateThreads()) {
+//            vectorPreferences.setThreadMessagesEnabled()
+//            lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
+//        }
+
+        when {
+            // Notify users
+            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.areThreadMessagesEnabled() -> {
+                Timber.i("----> Notify users about threads")
+                // Notify the user if needed that we migrated to support m.thread
+                // instead of io.element.thread so old thread messages will be displayed as normal timeline messages
+                _viewEvents.post(HomeActivityViewEvents.NotifyUserForThreadsMigration)
+                vectorPreferences.userNotifiedAboutThreads()
+            }
+            // Migrate users with enabled lab settings
+            vectorPreferences.shouldNotifyUserAboutThreads() && vectorPreferences.shouldMigrateThreads()     -> {
+                Timber.i("----> Migrate threads with enabled labs")
+                // If user had io.element.thread enabled then enable the new thread support,
+                // clear cache to sync messages appropriately
+                vectorPreferences.setThreadMessagesEnabled()
+                lightweightSettingsStorage.setThreadMessagesEnabled(vectorPreferences.areThreadMessagesEnabled())
+                // Clear Cache
+                _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = false))
+            }
+            // Enable all users
+            vectorPreferences.shouldMigrateThreads() && vectorPreferences.areThreadMessagesEnabled()         -> {
+                Timber.i("----> Try to migrate threads")
+                _viewEvents.post(HomeActivityViewEvents.MigrateThreads(checkSession = true))
+            }
+        }
+    }
+
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
-        session.getSyncStatusLive()
+        session.syncStatusService().getSyncStatusLive()
                 .asFlow()
                 .onEach { status ->
                     when (status) {
-                        is SyncStatusService.Status.Progressing -> {
+                        is SyncStatusService.Status.InitialSyncProgressing -> {
                             // Schedule a check of the bootstrap when the init sync will be finished
                             checkBootstrap = true
                         }
-                        is SyncStatusService.Status.Idle        -> {
+                        is SyncStatusService.Status.Idle                   -> {
                             if (checkBootstrap) {
                                 checkBootstrap = false
                                 maybeBootstrapCrossSigningAfterInitialSync()
                             }
                         }
-                        else                                    -> Unit
+                        else                                               -> Unit
                     }
 
                     setState {
@@ -170,15 +216,18 @@ class HomeActivityViewModel @AssistedInject constructor(
             if (!vectorPreferences.areNotificationEnabledForDevice()) {
                 // Check if set at account level
                 val mRuleMaster = activeSessionHolder.getSafeActiveSession()
+                        ?.pushRuleService()
                         ?.getPushRules()
                         ?.getAllRules()
                         ?.find { it.ruleId == RuleIds.RULE_ID_DISABLE_ALL }
                 if (mRuleMaster?.enabled == false) {
                     // So push are enabled at account level but not for this session
                     // Let's check that there are some rooms?
-                    val knownRooms = activeSessionHolder.getSafeActiveSession()?.getRoomSummaries(roomSummaryQueryParams {
-                        memberships = Membership.activeMemberships()
-                    })?.size ?: 0
+                    val knownRooms = activeSessionHolder.getSafeActiveSession()
+                            ?.roomService()
+                            ?.getRoomSummaries(roomSummaryQueryParams {
+                                memberships = Membership.activeMemberships()
+                            })?.size ?: 0
 
                     // Prompt once to the user
                     if (knownRooms > 1 && !vectorPreferences.didAskUserToEnableSessionPush()) {
@@ -255,6 +304,6 @@ class HomeActivityViewModel @AssistedInject constructor(
             HomeActivityViewActions.ViewStarted               -> {
                 initialize()
             }
-        }.exhaustive
+        }
     }
 }

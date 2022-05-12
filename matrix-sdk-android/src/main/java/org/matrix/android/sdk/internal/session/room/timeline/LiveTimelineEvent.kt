@@ -41,7 +41,7 @@ internal class LiveTimelineEvent(private val monarchy: Monarchy,
                                  private val timelineEventMapper: TimelineEventMapper,
                                  private val roomId: String,
                                  private val eventId: String) :
-    MediatorLiveData<Optional<TimelineEvent>>() {
+        MediatorLiveData<Optional<TimelineEvent>>() {
 
     init {
         buildAndObserveQuery()

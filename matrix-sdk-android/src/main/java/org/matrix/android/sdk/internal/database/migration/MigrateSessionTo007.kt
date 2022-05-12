@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomMembersLoadStatusType
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo007(realm: DynamicRealm) : RealmMigrator(realm, 7) {
+internal class MigrateSessionTo007(realm: DynamicRealm) : RealmMigrator(realm, 7) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("RoomEntity")

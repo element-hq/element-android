@@ -198,6 +198,18 @@
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
+    <im.vector.app.core.preference.VectorPreferenceCategory
+        android:title="@string/settings_presence"
+        app:isPreferenceVisible="@bool/settings_presence_visible">
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:title="@string/settings_presence_user_always_appears_offline"
+            android:summary="@string/settings_presence_user_always_appears_offline_summary"
+            android:key="SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE"
+            android:defaultValue="@bool/settings_presence_user_always_appears_offline_default" />
+
+    </im.vector.app.core.preference.VectorPreferenceCategory>
+
     <im.vector.app.core.preference.VectorPreferenceCategory android:title="@string/settings_category_room_directory">
 
         <im.vector.app.core.preference.VectorSwitchPreference

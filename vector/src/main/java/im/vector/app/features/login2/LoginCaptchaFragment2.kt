@@ -37,7 +37,7 @@ import im.vector.app.core.utils.AssetReader
 import im.vector.app.databinding.FragmentLoginCaptchaBinding
 import im.vector.app.features.login.JavascriptResponse
 import im.vector.app.features.login.LoginCaptchaFragmentArgument
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 import java.net.URLDecoder
 import java.util.Formatter
@@ -152,12 +152,14 @@ class LoginCaptchaFragment2 @Inject constructor(
                 }
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 @Suppress("DEPRECATION")
                 super.onReceivedError(view, errorCode, description, failingUrl)
                 onError(description)
             }
 
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 if (url?.startsWith("js:") == true) {
                     var json = url.substring(3)
@@ -166,7 +168,7 @@ class LoginCaptchaFragment2 @Inject constructor(
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
-                        javascriptResponse = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java).fromJson(json)
+                        javascriptResponse = MatrixJsonParser.getMoshi().adapter(JavascriptResponse::class.java).fromJson(json)
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading(): failed")
                     }

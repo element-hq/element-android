@@ -37,6 +37,8 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.styleMatchingText
 import im.vector.app.core.utils.tappableMatchingText
 import im.vector.app.databinding.FragmentRoomPreviewNoPreviewBinding
+import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.JoinState
@@ -69,6 +71,11 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
         views.roomPreviewNoPreviewJoin.commonClicked = { roomPreviewViewModel.handle(RoomPreviewAction.Join) }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomPreview
+    }
+
     override fun invalidate() = withState(roomPreviewViewModel) { state ->
 
         views.roomPreviewNoPreviewJoin.render(
@@ -94,7 +101,13 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
             if (state.roomType == RoomType.SPACE) {
                 navigator.switchToSpace(requireActivity(), state.roomId, Navigator.PostSwitchSpaceAction.None)
             } else {
-                navigator.openRoom(requireActivity(), state.roomId, roomPreviewData.eventId, roomPreviewData.buildTask)
+                navigator.openRoom(
+                        context = requireActivity(),
+                        roomId = state.roomId,
+                        eventId = roomPreviewData.eventId,
+                        buildTask = roomPreviewData.buildTask,
+                        trigger = ViewRoom.Trigger.MobileRoomPreview
+                )
             }
         }
 
@@ -110,8 +123,7 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
                     PeekingState.FOUND     -> {
                         // show join buttons
                         views.roomPreviewNoPreviewJoin.isVisible = true
-                        renderState(bestName, state.matrixItem(), state.roomTopic
-                                /**, state.roomType*/)
+                        renderState(bestName, state.matrixItem(), state.roomTopic)
                         if (state.fromEmailInvite != null && !state.isEmailBoundToAccount) {
                             views.roomPreviewNoPreviewLabel.text =
                                     span {
@@ -152,15 +164,13 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
                         views.roomPreviewNoPreviewJoin.isVisible = true
                         views.roomPreviewNoPreviewLabel.isVisible = true
                         views.roomPreviewNoPreviewLabel.setText(R.string.room_preview_no_preview_join)
-                        renderState(bestName, state.matrixItem().takeIf { state.roomAlias != null }, state.roomTopic
-                                /**, state.roomType*/)
+                        renderState(bestName, state.matrixItem().takeIf { state.roomAlias != null }, state.roomTopic)
                     }
                     else                   -> {
                         views.roomPreviewNoPreviewJoin.isVisible = false
                         views.roomPreviewNoPreviewLabel.isVisible = true
                         views.roomPreviewNoPreviewLabel.setText(R.string.room_preview_not_found)
-                        renderState(bestName, null, state.roomTopic
-                                /**, state.roomType*/)
+                        renderState(bestName, null, state.roomTopic)
                     }
                 }
             }
@@ -168,16 +178,13 @@ class RoomPreviewNoPreviewFragment @Inject constructor(
                 // Render with initial state, no peeking
                 views.roomPreviewPeekingProgress.isVisible = false
                 views.roomPreviewNoPreviewJoin.isVisible = true
-                renderState(bestName, state.matrixItem(), state.roomTopic
-                        /**, state.roomType*/)
+                renderState(bestName, state.matrixItem(), state.roomTopic)
                 views.roomPreviewNoPreviewLabel.isVisible = false
             }
         }
     }
 
-    private fun renderState(roomName: String, matrixItem: MatrixItem?, topic: String?
-            /**, roomType: String?*/
-    ) {
+    private fun renderState(roomName: String, matrixItem: MatrixItem?, topic: String?) {
         // Toolbar
         if (matrixItem != null) {
             views.roomPreviewNoPreviewToolbarAvatar.isVisible = true

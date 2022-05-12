@@ -46,9 +46,11 @@ import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
@@ -59,6 +61,7 @@ import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.settings.LightweightSettingsStorage
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -113,10 +116,13 @@ object VectorStaticModule {
     }
 
     @Provides
-    fun providesMatrixConfiguration(vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider): MatrixConfiguration {
+    fun providesMatrixConfiguration(
+            vectorPreferences: VectorPreferences,
+            vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
-                roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider
+                roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider,
+                threadMessagesEnabledDefault = vectorPreferences.areThreadMessagesEnabled(),
         )
     }
 
@@ -148,6 +154,11 @@ object VectorStaticModule {
     }
 
     @Provides
+    fun providesLightweightSettingsStorage(matrix: Matrix): LightweightSettingsStorage {
+        return matrix.lightweightSettingsStorage()
+    }
+
+    @Provides
     fun providesHomeServerHistoryService(matrix: Matrix): HomeServerHistoryService {
         return matrix.homeServerHistoryService()
     }
@@ -163,7 +174,7 @@ object VectorStaticModule {
         return CoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.Default)
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
+    @OptIn(DelicateCoroutinesApi::class)
     @Provides
     @NamedGlobalScope
     fun providesGlobalScope(): CoroutineScope {

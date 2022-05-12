@@ -19,7 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.os.Parcelable
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.api.crypto.VerificationState
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -58,11 +58,14 @@ data class ReferencesInfoData(
 data class ReactionsSummaryData(
         /*List of reactions (emoji,count,isSelected)*/
         val reactions: List<ReactionInfoData>? = null,
-        val showAll: Boolean = false,
+        val showAll: Boolean = false
+) : Parcelable
+
+data class ReactionsSummaryEvents(
         val onShowMoreClicked: () -> Unit,
         val onShowLessClicked: () -> Unit,
         val onAddMoreClicked: () -> Unit
-) : Parcelable
+)
 
 @Parcelize
 data class ReactionInfoData(

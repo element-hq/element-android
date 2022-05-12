@@ -31,7 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
-import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
+import org.matrix.android.sdk.api.session.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject
@@ -87,7 +87,8 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                         fileName = data.filename,
                                         mimeType = data.mimeType,
                                         url = data.url,
-                                        elementToDecrypt = data.elementToDecrypt)
+                                        elementToDecrypt = data.elementToDecrypt
+                                )
                     }
                     withContext(Dispatchers.Main) {
                         result.fold(
@@ -130,7 +131,8 @@ class VideoContentRenderer @Inject constructor(private val localFilesHelper: Loc
                                         fileName = data.filename,
                                         mimeType = data.mimeType,
                                         url = data.url,
-                                        elementToDecrypt = null)
+                                        elementToDecrypt = null
+                                )
                     }
                     withContext(Dispatchers.Main) {
                         result.fold(

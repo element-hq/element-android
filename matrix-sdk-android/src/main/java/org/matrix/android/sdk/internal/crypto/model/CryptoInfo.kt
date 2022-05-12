@@ -20,7 +20,7 @@ package org.matrix.android.sdk.internal.crypto.model
  * Generic crypto info.
  * Can be a device (CryptoDeviceInfo), as well as a CryptoCrossSigningInfo (can be seen as a kind of virtual device)
  */
-interface CryptoInfo {
+internal interface CryptoInfo {
 
     val userId: String
 

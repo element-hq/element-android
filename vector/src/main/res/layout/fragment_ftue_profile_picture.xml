@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LoginFormScrollView"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:fillViewport="true"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/profilePictureGutterStart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/profilePictureGutterEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/profilePictureToolbar"
+            style="@style/Widget.Vector.Toolbar.Settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/profilePictureView"
+            app:layout_constraintTop_toBottomOf="@id/profilePictureToolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:navigationIcon="@drawable/ic_back_24dp" />
+
+        <ImageView
+            android:id="@+id/profilePictureView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/bg_rounded_button"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_user_fg"
+            app:layout_constraintBottom_toTopOf="@id/avatarTitleSpacing"
+            app:layout_constraintEnd_toEndOf="@id/profilePictureGutterEnd"
+            app:layout_constraintHeight_percent="@dimen/ftue_auth_profile_picture_height"
+            app:layout_constraintStart_toStartOf="@id/profilePictureGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/profilePictureToolbar" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/changeProfilePictureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_rounded_button"
+            android:backgroundTint="?vctr_system"
+            app:layout_constraintBottom_toBottomOf="@id/profilePictureView"
+            app:layout_constraintEnd_toEndOf="@id/profilePictureView"
+            app:layout_constraintHeight_percent="@dimen/ftue_auth_profile_picture_icon_height"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="@id/profilePictureView"
+            app:layout_constraintTop_toTopOf="@id/profilePictureView"
+            app:layout_constraintVertical_bias="1">
+
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/pos"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/changeProfilePictureIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/ftue_profile_picture_title"
+                android:src="@drawable/ic_camera_plain"
+                app:layout_constraintBottom_toBottomOf="@id/pos"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.55"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/pos"
+                app:tint="?vctr_content_secondary" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Space
+            android:id="@+id/avatarTitleSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/profilePictureHeaderTitle"
+            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintTop_toBottomOf="@id/profilePictureView" />
+
+        <TextView
+            android:id="@+id/profilePictureHeaderTitle"
+            style="@style/Widget.Vector.TextView.Title.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/ftue_profile_picture_title"
+            android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@id/profilePictureHeaderSubtitle"
+            app:layout_constraintEnd_toEndOf="@id/profilePictureGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/profilePictureGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/avatarTitleSpacing" />
+
+        <TextView
+            android:id="@+id/profilePictureHeaderSubtitle"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/ftue_profile_picture_subtitle"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/entrySpacing"
+            app:layout_constraintEnd_toEndOf="@id/profilePictureGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/profilePictureGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/profilePictureHeaderTitle" />
+
+        <Space
+            android:id="@+id/entrySpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/profilePictureSubmit"
+            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintTop_toBottomOf="@id/profilePictureHeaderSubtitle" />
+
+        <Button
+            android:id="@+id/profilePictureSubmit"
+            style="@style/Widget.Vector.Button.Login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ftue_personalize_submit"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toTopOf="@id/profilePictureSkip"
+            app:layout_constraintEnd_toEndOf="@id/profilePictureGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/profilePictureGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/entrySpacing" />
+
+        <Button
+            android:id="@+id/profilePictureSkip"
+            style="@style/Widget.Vector.Button.Text.Login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ftue_personalize_skip_this_step"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/profilePictureGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/profilePictureGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/profilePictureSubmit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+

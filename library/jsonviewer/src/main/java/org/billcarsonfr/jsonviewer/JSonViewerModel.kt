@@ -30,8 +30,8 @@ internal interface Composed {
 }
 
 internal class JSonViewerObject(key: String?, index: Int?, jObject: JSONObject) :
-    JSonViewerModel(key, index, jObject),
-    Composed {
+        JSonViewerModel(key, index, jObject),
+        Composed {
 
     var keys = LinkedHashMap<String, JSonViewerModel>()
 
@@ -41,7 +41,7 @@ internal class JSonViewerObject(key: String?, index: Int?, jObject: JSONObject) 
 }
 
 internal class JSonViewerArray(key: String?, index: Int?, jObject: JSONArray) :
-    JSonViewerModel(key, index, jObject), Composed {
+        JSonViewerModel(key, index, jObject), Composed {
     var items = ArrayList<JSonViewerModel>()
 
     override fun addChild(model: JSonViewerModel) {
@@ -50,7 +50,7 @@ internal class JSonViewerArray(key: String?, index: Int?, jObject: JSONArray) :
 }
 
 internal class JSonViewerLeaf(key: String?, index: Int?, val stringRes: String, val type: JSONType) :
-    JSonViewerModel(key, index, stringRes)
+        JSonViewerModel(key, index, stringRes)
 
 internal enum class JSONType {
     STRING,
@@ -75,41 +75,41 @@ internal object ModelParser {
         when (obj) {
             is JSONObject -> {
                 val objectComposed = JSonViewerObject(key, index, obj)
-                    .apply { isExpanded = initialOpenDepth == -1 || depth <= initialOpenDepth }
+                        .apply { isExpanded = initialOpenDepth == -1 || depth <= initialOpenDepth }
                 objectComposed.depth = depth
                 obj.keys().forEach {
                     eval(objectComposed, it, null, obj.get(it), depth + 1, initialOpenDepth)
                 }
                 parent.addChild(objectComposed)
             }
-            is JSONArray -> {
+            is JSONArray  -> {
                 val objectComposed = JSonViewerArray(key, index, obj)
-                    .apply { isExpanded = initialOpenDepth == -1 || depth <= initialOpenDepth }
+                        .apply { isExpanded = initialOpenDepth == -1 || depth <= initialOpenDepth }
                 objectComposed.depth = depth
                 for (i in 0 until obj.length()) {
                     eval(objectComposed, null, i, obj[i], depth + 1, initialOpenDepth)
                 }
                 parent.addChild(objectComposed)
             }
-            is String -> {
-                JSonViewerLeaf(key, index,  obj, JSONType.STRING).let {
+            is String     -> {
+                JSonViewerLeaf(key, index, obj, JSONType.STRING).let {
                     it.depth = depth
                     parent.addChild(it)
                 }
             }
-            is Number -> {
+            is Number     -> {
                 JSonViewerLeaf(key, index, obj.toString(), JSONType.NUMBER).let {
                     it.depth = depth
                     parent.addChild(it)
                 }
             }
-            is Boolean -> {
+            is Boolean    -> {
                 JSonViewerLeaf(key, index, obj.toString(), JSONType.BOOLEAN).let {
                     it.depth = depth
                     parent.addChild(it)
                 }
             }
-            else -> {
+            else          -> {
                 if (obj == JSONObject.NULL) {
                     JSonViewerLeaf(key, index, "null", JSONType.NULL).let {
                         it.depth = depth

@@ -87,7 +87,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
         val liveCrossSigningPrivateKeys = session.flow().liveCrossSigningPrivateKeys()
         combine(liveUserAccountData, liveCrossSigningInfo, keyBackupFlow, liveCrossSigningPrivateKeys) { _, crossSigningInfo, keyBackupState, pInfo ->
             // first check if 4S is already setup
-            if (session.sharedSecretStorageService.isRecoverySetup()) {
+            if (session.sharedSecretStorageService().isRecoverySetup()) {
                 // 4S is already setup sp we should not display anything
                 return@combine when (keyBackupState) {
                     KeysBackupState.BackingUp -> BannerState.BackingUp

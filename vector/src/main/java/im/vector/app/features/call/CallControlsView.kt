@@ -89,6 +89,8 @@ class CallControlsView @JvmOverloads constructor(
             views.videoToggleIcon.setImageResource(R.drawable.ic_video_off)
             views.videoToggleIcon.contentDescription = resources.getString(R.string.a11y_start_camera)
         }
+        views.videoToggleIcon.isEnabled = !state.isSharingScreen
+        views.videoToggleIcon.alpha = if (state.isSharingScreen) 0.5f else 1f
 
         when (callState) {
             is CallState.LocalRinging -> {
@@ -111,6 +113,7 @@ class CallControlsView @JvmOverloads constructor(
                 views.ringingControls.isVisible = false
                 views.connectedControls.isVisible = false
             }
+            null                      -> Unit
         }
     }
 

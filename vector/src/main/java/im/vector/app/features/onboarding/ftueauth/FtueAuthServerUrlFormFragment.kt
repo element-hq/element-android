@@ -104,11 +104,13 @@ class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFrag
             }
         }
         val completions = state.knownCustomHomeServersUrls + if (BuildConfig.DEBUG) listOf("http://10.0.2.2:8080") else emptyList()
-        views.loginServerUrlFormHomeServerUrl.setAdapter(ArrayAdapter(
-                requireContext(),
-                R.layout.item_completion_homeserver,
-                completions
-        ))
+        views.loginServerUrlFormHomeServerUrl.setAdapter(
+                ArrayAdapter(
+                        requireContext(),
+                        R.layout.item_completion_homeserver,
+                        completions
+                )
+        )
         views.loginServerUrlFormHomeServerUrlTil.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
                 .takeIf { completions.isNotEmpty() }
                 ?: TextInputLayout.END_ICON_NONE
@@ -139,7 +141,7 @@ class FtueAuthServerUrlFormFragment @Inject constructor() : AbstractFtueAuthFrag
             }
             else                -> {
                 views.loginServerUrlFormHomeServerUrl.setText(serverUrl, false /* to avoid completion dialog flicker*/)
-                viewModel.handle(OnboardingAction.UpdateHomeServer(serverUrl))
+                viewModel.handle(OnboardingAction.HomeServerChange.SelectHomeServer(serverUrl))
             }
         }
     }

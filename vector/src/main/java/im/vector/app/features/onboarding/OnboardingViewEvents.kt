@@ -36,8 +36,11 @@ sealed class OnboardingViewEvents : VectorViewEvents {
 
     object OpenUseCaseSelection : OnboardingViewEvents()
     object OpenServerSelection : OnboardingViewEvents()
+    object OpenCombinedRegister : OnboardingViewEvents()
+    object EditServerSelection : OnboardingViewEvents()
     data class OnServerSelectionDone(val serverType: ServerType) : OnboardingViewEvents()
     object OnLoginFlowRetrieved : OnboardingViewEvents()
+    object OnHomeserverEdited : OnboardingViewEvents()
     data class OnSignModeSelected(val signMode: SignMode) : OnboardingViewEvents()
     object OnForgetPasswordClicked : OnboardingViewEvents()
     object OnResetPasswordSendThreePidDone : OnboardingViewEvents()
@@ -51,7 +54,8 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     object OnAccountCreated : OnboardingViewEvents()
     object OnAccountSignedIn : OnboardingViewEvents()
     object OnTakeMeHome : OnboardingViewEvents()
-    object OnPersonalizeProfile : OnboardingViewEvents()
-    object OnDisplayNameUpdated : OnboardingViewEvents()
-    object OnDisplayNameSkipped : OnboardingViewEvents()
+    object OnChooseDisplayName : OnboardingViewEvents()
+    object OnChooseProfilePicture : OnboardingViewEvents()
+    object OnPersonalizationComplete : OnboardingViewEvents()
+    object OnBack : OnboardingViewEvents()
 }

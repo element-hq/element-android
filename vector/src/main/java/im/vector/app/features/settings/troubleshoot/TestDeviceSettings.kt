@@ -27,7 +27,7 @@ import javax.inject.Inject
  */
 class TestDeviceSettings @Inject constructor(private val vectorPreferences: VectorPreferences,
                                              private val stringProvider: StringProvider) :
-    TroubleshootTest(R.string.settings_troubleshoot_test_device_settings_title) {
+        TroubleshootTest(R.string.settings_troubleshoot_test_device_settings_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         if (vectorPreferences.areNotificationEnabledForDevice()) {

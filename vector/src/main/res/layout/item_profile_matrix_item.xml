@@ -64,7 +64,7 @@
         android:textColor="?vctr_content_primary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@id/matrixItemSubtitle"
-        app:layout_constraintEnd_toStartOf="@id/matrixItemPowerLevelLabel"
+        app:layout_constraintEnd_toStartOf="@id/matrixItemIgnored"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatarDecoration"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginEnd="80dp"
@@ -83,11 +83,25 @@
         android:textColor="?vctr_content_secondary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/matrixItemPowerLevelLabel"
+        app:layout_constraintEnd_toStartOf="@id/matrixItemIgnored"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toBottomOf="@id/matrixItemTitle"
         app:layout_goneMarginEnd="8dp"
         tools:text="@sample/users.json/data/id" />
+
+    <ImageView
+        android:id="@+id/matrixItemIgnored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_settings_root_ignored_users"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/matrixItemPowerLevelLabel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorError"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/matrixItemPowerLevelLabel"

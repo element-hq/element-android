@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo014(realm: DynamicRealm) : RealmMigrator(realm, 14) {
+internal class MigrateSessionTo014(realm: DynamicRealm) : RealmMigrator(realm, 14) {
 
     override fun doMigrate(realm: DynamicRealm) {
         val roomAccountDataSchema = realm.schema.create("RoomAccountDataEntity")

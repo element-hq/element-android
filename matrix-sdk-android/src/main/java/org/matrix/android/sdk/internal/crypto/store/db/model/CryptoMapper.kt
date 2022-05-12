@@ -17,31 +17,37 @@ package org.matrix.android.sdk.internal.crypto.store.db.model
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.UnsignedDeviceInfo
 import org.matrix.android.sdk.api.util.JsonDict
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
 import org.matrix.android.sdk.internal.di.SerializeNulls
 import timber.log.Timber
 
-object CryptoMapper {
+internal object CryptoMapper {
 
     private val moshi = Moshi.Builder().add(SerializeNulls.JSON_ADAPTER_FACTORY).build()
-    private val listMigrationAdapter = moshi.adapter<List<String>>(Types.newParameterizedType(
-            List::class.java,
-            String::class.java,
-            Any::class.java
-    ))
-    private val mapMigrationAdapter = moshi.adapter<JsonDict>(Types.newParameterizedType(
-            Map::class.java,
-            String::class.java,
-            Any::class.java
-    ))
-    private val mapOfStringMigrationAdapter = moshi.adapter<Map<String, Map<String, String>>>(Types.newParameterizedType(
-            Map::class.java,
-            String::class.java,
-            Any::class.java
-    ))
+    private val listMigrationAdapter = moshi.adapter<List<String>>(
+            Types.newParameterizedType(
+                    List::class.java,
+                    String::class.java,
+                    Any::class.java
+            )
+    )
+    private val mapMigrationAdapter = moshi.adapter<JsonDict>(
+            Types.newParameterizedType(
+                    Map::class.java,
+                    String::class.java,
+                    Any::class.java
+            )
+    )
+    private val mapOfStringMigrationAdapter = moshi.adapter<Map<String, Map<String, String>>>(
+            Types.newParameterizedType(
+                    Map::class.java,
+                    String::class.java,
+                    Any::class.java
+            )
+    )
 
     internal fun mapToEntity(deviceInfo: CryptoDeviceInfo): DeviceInfoEntity {
         return DeviceInfoEntity(primaryKey = DeviceInfoEntity.createPrimaryKey(deviceInfo.userId, deviceInfo.deviceId))
@@ -91,11 +97,13 @@ object CryptoMapper {
                 },
                 keys = deviceInfoEntity.keysMapJson?.let {
                     try {
-                        moshi.adapter<Map<String, String>>(Types.newParameterizedType(
-                                Map::class.java,
-                                String::class.java,
-                                Any::class.java
-                        )).fromJson(it)
+                        moshi.adapter<Map<String, String>>(
+                                Types.newParameterizedType(
+                                        Map::class.java,
+                                        String::class.java,
+                                        Any::class.java
+                                )
+                        ).fromJson(it)
                     } catch (failure: Throwable) {
                         Timber.e(failure)
                         null

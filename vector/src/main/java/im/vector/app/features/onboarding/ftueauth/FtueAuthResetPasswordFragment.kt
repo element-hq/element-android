@@ -21,9 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
@@ -54,12 +51,15 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupSubmitButton()
     }
 
+    override fun onError(throwable: Throwable) {
+        views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(throwable)
+    }
+
     private fun setupUi(state: OnboardingViewState) {
-        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.homeServerUrlFromUser.toReducedUrl())
+        views.resetPasswordTitle.text = getString(R.string.login_reset_password_on, state.selectedHomeserver.userFacingUrl.toReducedUrl())
     }
 
     private fun setupSubmitButton() {
@@ -116,16 +116,9 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
 
     override fun updateWithState(state: OnboardingViewState) {
         setupUi(state)
-
-        when (state.asyncResetPassword) {
-            is Loading -> {
-                // Ensure new password is hidden
-                views.passwordField.hidePassword()
-            }
-            is Fail    -> {
-                views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(state.asyncResetPassword.error)
-            }
-            is Success -> Unit
+        if (state.isLoading) {
+            // Ensure new password is hidden
+            views.passwordField.hidePassword()
         }
     }
 }

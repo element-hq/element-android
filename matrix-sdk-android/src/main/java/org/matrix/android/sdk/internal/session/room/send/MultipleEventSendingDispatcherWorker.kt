@@ -29,7 +29,6 @@ import org.matrix.android.sdk.internal.session.room.timeline.TimelineSendEventWo
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
-import org.matrix.android.sdk.internal.worker.startChain
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,7 +39,7 @@ import javax.inject.Inject
  * Possible next worker    : None, but it will post new work to send events, encrypted or not
  */
 internal class MultipleEventSendingDispatcherWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<MultipleEventSendingDispatcherWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -77,10 +76,10 @@ internal class MultipleEventSendingDispatcherWorker(context: Context, params: Wo
         params.localEchoIds.forEach { localEchoIds ->
             val roomId = localEchoIds.roomId
             val eventId = localEchoIds.eventId
-                localEchoRepository.updateSendState(eventId, roomId, SendState.SENDING)
-                Timber.v("## SendEvent: [${System.currentTimeMillis()}] Schedule send event $eventId")
-                val sendWork = createSendEventWork(params.sessionId, eventId, true)
-                timelineSendEventWorkCommon.postWork(roomId, sendWork)
+            localEchoRepository.updateSendState(eventId, roomId, SendState.SENDING)
+            Timber.v("## SendEvent: Schedule send event $eventId")
+            val sendWork = createSendEventWork(params.sessionId, eventId, true)
+            timelineSendEventWorkCommon.postWork(roomId, sendWork)
         }
 
         return Result.success()

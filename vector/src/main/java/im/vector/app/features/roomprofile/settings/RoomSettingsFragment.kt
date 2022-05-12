@@ -33,13 +33,14 @@ import im.vector.app.R
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.FragmentRoomSettingGenericBinding
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileSharedActionViewModel
@@ -57,7 +58,8 @@ import javax.inject.Inject
 class RoomSettingsFragment @Inject constructor(
         private val controller: RoomSettingsController,
         colorProvider: ColorProvider,
-        private val avatarRenderer: AvatarRenderer
+        private val avatarRenderer: AvatarRenderer,
+        clock: Clock,
 ) :
         VectorBaseFragment<FragmentRoomSettingGenericBinding>(),
         RoomSettingsController.Callback,
@@ -70,13 +72,18 @@ class RoomSettingsFragment @Inject constructor(
     private lateinit var roomJoinRuleSharedActionViewModel: RoomJoinRuleSharedActionViewModel
 
     private val roomProfileArgs: RoomProfileArgs by args()
-    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider)
+    private val galleryOrCameraDialogHelper = GalleryOrCameraDialogHelper(this, colorProvider, clock)
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomSettingGenericBinding {
         return FragmentRoomSettingGenericBinding.inflate(inflater, container, false)
     }
 
     override fun getMenuRes() = R.menu.vector_room_settings
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = MobileScreen.ScreenName.RoomSettings
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -98,7 +105,7 @@ class RoomSettingsFragment @Inject constructor(
                     ignoreChanges = true
                     vectorBaseActivity.onBackPressed()
                 }
-            }.exhaustive
+            }
         }
     }
 
@@ -193,7 +200,8 @@ class RoomSettingsFragment @Inject constructor(
                 RoomSettingsAction.SetAvatarAction(
                         RoomSettingsViewState.AvatarAction.UpdateAvatar(
                                 newAvatarUri = uri,
-                                newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString())
+                                newAvatarFileName = getFilenameFromUri(requireContext(), uri) ?: UUID.randomUUID().toString()
+                        )
                 )
         )
     }

@@ -9,20 +9,11 @@
     <dimen name="layout_vertical_margin_big">32dp</dimen>
 
     <dimen name="profile_avatar_size">50dp</dimen>
-    <dimen name="floating_action_button_margin">16dp</dimen>
-    <dimen name="navigation_view_height">196dp</dimen>
-    <dimen name="navigation_avatar_top_margin">44dp</dimen>
-    <dimen name="item_decoration_left_margin">72dp</dimen>
     <dimen name="item_event_message_state_size">16dp</dimen>
 
     <dimen name="item_event_message_media_button_size">32dp</dimen>
 
-    <dimen name="chat_avatar_size">40dp</dimen>
-    <dimen name="member_list_avatar_size">60dp</dimen>
-
-    <dimen name="quote_width">4dp</dimen>
     <dimen name="quote_gap">8dp</dimen>
-    <dimen name="drawable_padding_small">8dp</dimen>
 
     <item name="dialog_width_ratio" format="float" type="dimen">0.75</item>
 
@@ -49,6 +40,7 @@
     <dimen name="menu_item_icon_size">24dp</dimen>
     <dimen name="menu_item_size">48dp</dimen>
     <dimen name="menu_item_ripple_size">48dp</dimen>
+    <dimen name="menu_item_width_small">38dp</dimen>
 
     <!-- Composer -->
     <dimen name="composer_min_height">56dp</dimen>
@@ -67,4 +59,15 @@
 
     <item name="ftue_auth_carousel_item_spacing" format="float" type="dimen">0.01</item>
     <item name="ftue_auth_carousel_item_image_height" format="float" type="dimen">0.35</item>
+
+    <item name="ftue_auth_profile_picture_height" format="float" type="dimen">0.15</item>
+    <item name="ftue_auth_profile_picture_icon_height" format="float" type="dimen">0.05</item>
+
+    <!--  Location sharing   -->
+    <dimen name="location_sharing_option_default_padding">10dp</dimen>
+    <dimen name="location_sharing_locate_button_margin_vertical">16dp</dimen>
+    <dimen name="location_sharing_locate_button_margin_horizontal">12dp</dimen>
+    <dimen name="location_sharing_compass_button_margin_horizontal">8dp</dimen>
+    <dimen name="location_sharing_live_duration_choice_margin_horizontal">12dp</dimen>
+    <dimen name="location_sharing_live_duration_choice_margin_vertical">22dp</dimen>
 </resources>

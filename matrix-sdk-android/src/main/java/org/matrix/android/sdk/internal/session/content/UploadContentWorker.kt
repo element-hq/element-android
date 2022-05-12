@@ -25,6 +25,7 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.crypto.model.EncryptedFileInfo
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
@@ -35,7 +36,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
@@ -46,6 +46,7 @@ import org.matrix.android.sdk.internal.session.room.send.LocalEchoIdentifiers
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.session.room.send.MultipleEventSendingDispatcherWorker
 import org.matrix.android.sdk.internal.util.TemporaryFileCreator
+import org.matrix.android.sdk.internal.util.time.Clock
 import org.matrix.android.sdk.internal.util.toMatrixErrorStr
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
@@ -87,6 +88,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
     @Inject lateinit var thumbnailExtractor: ThumbnailExtractor
     @Inject lateinit var localEchoRepository: LocalEchoRepository
     @Inject lateinit var temporaryFileCreator: TemporaryFileCreator
+    @Inject lateinit var clock: Clock
 
     override fun injectWith(injector: SessionComponent) {
         injector.inject(this)
@@ -243,7 +245,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                             .also { filesToDelete.add(it) }
 
                     uploadedFileEncryptedFileInfo =
-                            MXEncryptedAttachments.encrypt(fileToUpload.inputStream(), encryptedFile) { read, total ->
+                            MXEncryptedAttachments.encrypt(fileToUpload.inputStream(), encryptedFile, clock) { read, total ->
                                 notifyTracker(params) {
                                     contentUploadStateTracker.setEncrypting(it, read.toLong(), total.toLong())
                                 }
@@ -287,12 +289,14 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
 
                 val uploadThumbnailResult = dealWithThumbnail(params)
 
-                handleSuccess(params,
+                handleSuccess(
+                        params,
                         contentUploadResponse.contentUri,
                         uploadedFileEncryptedFileInfo,
                         uploadThumbnailResult?.uploadedThumbnailUrl,
                         uploadThumbnailResult?.uploadedThumbnailEncryptedFileInfo,
-                        newAttachmentAttributes)
+                        newAttachmentAttributes
+                )
             } catch (t: Throwable) {
                 Timber.e(t, "## ERROR ${t.localizedMessage}")
                 handleFailure(params, t)
@@ -329,7 +333,7 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                         if (params.isEncrypted) {
                             Timber.v("Encrypt thumbnail")
                             notifyTracker(params) { contentUploadStateTracker.setEncryptingThumbnail(it) }
-                            val encryptionResult = MXEncryptedAttachments.encryptAttachment(thumbnailData.bytes.inputStream())
+                            val encryptionResult = MXEncryptedAttachments.encryptAttachment(thumbnailData.bytes.inputStream(), clock)
                             val contentUploadResponse = fileUploader.uploadByteArray(
                                     byteArray = encryptionResult.encryptedByteArray,
                                     filename = null,

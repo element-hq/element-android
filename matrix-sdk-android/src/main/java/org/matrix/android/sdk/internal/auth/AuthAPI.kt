@@ -26,6 +26,7 @@ import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.login.ResetPasswordMailConfirmed
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationParams
 import org.matrix.android.sdk.internal.auth.registration.AddThreePidRegistrationResponse
+import org.matrix.android.sdk.internal.auth.registration.RegistrationCustomParams
 import org.matrix.android.sdk.internal.auth.registration.RegistrationParams
 import org.matrix.android.sdk.internal.auth.registration.SuccessResult
 import org.matrix.android.sdk.internal.auth.registration.ValidationCodeBody
@@ -67,6 +68,14 @@ internal interface AuthAPI {
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")
     suspend fun register(@Body registrationParams: RegistrationParams): Credentials
+
+    /**
+     * Register to the homeserver, or get error 401 with a RegistrationFlowResponse object if registration is incomplete
+     * method to perform other custom stages
+     * Ref: https://matrix.org/docs/spec/client_server/latest#account-registration-and-management
+     */
+    @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")
+    suspend fun registerCustom(@Body registrationCustomParams: RegistrationCustomParams): Credentials
 
     /**
      * Checks to see if a username is available, and valid, for the server.

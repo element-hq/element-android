@@ -39,13 +39,15 @@
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
-            android:src="@drawable/ic_user_round"
+            android:background="@drawable/circle"
+            android:backgroundTint="?colorSecondary"
+            android:src="@drawable/ic_user_fg"
             app:layout_constraintBottom_toTopOf="@id/displayNameHeaderTitle"
             app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
-            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintHeight_percent="0.12"
             app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?colorSecondary" />
+            app:tint="@color/palette_white" />
 
         <TextView
             android:id="@+id/displayNameHeaderTitle"
@@ -112,7 +114,7 @@
             app:layout_constraintTop_toBottomOf="@id/displayNameInput" />
 
         <Space
-            android:id="@+id/actionsSpacing"
+            android:id="@+id/entrySpacing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/displayNameSubmit"
@@ -131,7 +133,7 @@
             app:layout_constraintBottom_toTopOf="@id/displayNameSkip"
             app:layout_constraintEnd_toEndOf="@id/displayNameGutterEnd"
             app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/actionsSpacing" />
+            app:layout_constraintTop_toBottomOf="@id/entrySpacing" />
 
         <Button
             android:id="@+id/displayNameSkip"

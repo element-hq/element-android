@@ -23,7 +23,10 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.poll.PollMode
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -71,9 +74,10 @@ class CreatePollViewModel @AssistedInject constructor(
         val event = room.getTimelineEvent(eventId) ?: return
         val content = event.getLastMessageContent() as? MessagePollContent ?: return
 
-        val pollType = content.pollCreationInfo?.kind ?: PollType.DISCLOSED
-        val question = content.pollCreationInfo?.question?.question ?: ""
-        val options = content.pollCreationInfo?.answers?.mapNotNull { it.answer } ?: List(MIN_OPTIONS_COUNT) { "" }
+        val pollCreationInfo = content.getBestPollCreationInfo()
+        val pollType = pollCreationInfo?.kind ?: PollType.DISCLOSED_UNSTABLE
+        val question = pollCreationInfo?.question?.getBestQuestion() ?: ""
+        val options = pollCreationInfo?.answers?.mapNotNull { it.getBestAnswer() } ?: List(MIN_OPTIONS_COUNT) { "" }
 
         setState {
             copy(
@@ -106,7 +110,7 @@ class CreatePollViewModel @AssistedInject constructor(
             }
             else                                     -> {
                 when (state.mode) {
-                    PollMode.CREATE -> room.sendPoll(state.pollType, state.question, nonEmptyOptions)
+                    PollMode.CREATE -> room.sendService().sendPoll(state.pollType, state.question, nonEmptyOptions)
                     PollMode.EDIT   -> sendEditedPoll(state.editedEventId!!, state.pollType, state.question, nonEmptyOptions)
                 }
                 _viewEvents.post(CreatePollViewEvents.Success)
@@ -116,7 +120,7 @@ class CreatePollViewModel @AssistedInject constructor(
 
     private fun sendEditedPoll(editedEventId: String, pollType: PollType, question: String, options: List<String>) {
         val editedEvent = room.getTimelineEvent(editedEventId) ?: return
-        room.editPoll(editedEvent, pollType, question, options)
+        room.relationService().editPoll(editedEvent, pollType, question, options)
     }
 
     private fun handleOnAddOption() {

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="?colorSurface"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/threadListModalTitle"
@@ -23,7 +23,7 @@
         android:id="@+id/threadListModalAllThreads"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         app:actionDescription="@string/thread_list_modal_all_threads_subtitle"
         app:actionTitle="@string/thread_list_modal_all_threads_title"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
         android:id="@+id/threadListModalMyThreads"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="4dp"
         app:actionDescription="@string/thread_list_modal_my_threads_subtitle"
         app:actionTitle="@string/thread_list_modal_my_threads_title"
         app:layout_constraintStart_toStartOf="parent"

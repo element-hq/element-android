@@ -28,12 +28,13 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.securestorage.EmptyKeySigner
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.securestorage.SsssKeyCreationInfo
 import org.matrix.android.sdk.api.session.securestorage.SsssKeySpec
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.extractCurveKeyFromRecoveryKey
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
@@ -107,12 +108,13 @@ class BootstrapCrossSigningTask @Inject constructor(
 
         val keyInfo: SsssKeyCreationInfo
 
-        val ssssService = session.sharedSecretStorageService
+        val ssssService = session.sharedSecretStorageService()
 
         params.progressListener?.onProgress(
                 WaitingViewData(
                         stringProvider.getString(R.string.bootstrap_crosssigning_progress_pbkdf2),
-                        isIndeterminate = true)
+                        isIndeterminate = true
+                )
         )
 
         Timber.d("## BootstrapCrossSigningTask: Creating 4S key with pass: ${params.passphrase != null}")
@@ -141,7 +143,8 @@ class BootstrapCrossSigningTask @Inject constructor(
         params.progressListener?.onProgress(
                 WaitingViewData(
                         stringProvider.getString(R.string.bootstrap_crosssigning_progress_default_key),
-                        isIndeterminate = true)
+                        isIndeterminate = true
+                )
         )
 
         Timber.d("## BootstrapCrossSigningTask: Creating 4S - Set default key")
@@ -212,8 +215,7 @@ class BootstrapCrossSigningTask @Inject constructor(
             Timber.d("## BootstrapCrossSigningTask: Creating 4S - Checking megolm backup")
 
             // First ensure that in sync
-            var serverVersion = session.cryptoService().keysBackupService().getCurrentVersion()
-
+            var serverVersion = session.cryptoService().keysBackupService().getCurrentVersion()?.toKeysVersionResult()
             val knownMegolmSecret = session.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()
             val isMegolmBackupSecretKnown = knownMegolmSecret != null && knownMegolmSecret.version == serverVersion?.version
             val shouldCreateKeyBackup = serverVersion == null ||
@@ -223,7 +225,7 @@ class BootstrapCrossSigningTask @Inject constructor(
                 // clear all existing backups
                 while (serverVersion != null) {
                     session.cryptoService().keysBackupService().deleteBackup(serverVersion.version)
-                    serverVersion = session.cryptoService().keysBackupService().getCurrentVersion()
+                    serverVersion = session.cryptoService().keysBackupService().getCurrentVersion()?.toKeysVersionResult()
                 }
 
                 Timber.d("## BootstrapCrossSigningTask: Creating 4S - Create megolm backup")

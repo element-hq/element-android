@@ -56,7 +56,7 @@ import javax.inject.Inject
 internal class RoomSummaryDataSource @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val roomSummaryMapper: RoomSummaryMapper,
-        private val queryStringValueProcessor: QueryStringValueProcessor
+        private val queryStringValueProcessor: QueryStringValueProcessor,
 ) {
 
     fun getRoomSummary(roomIdOrAlias: String): RoomSummary? {
@@ -219,14 +219,25 @@ internal class RoomSummaryDataSource @Inject constructor(
         return object : UpdatableLivePageResult {
             override val livePagedList: LiveData<PagedList<RoomSummary>> = mapped
 
-            override fun updateQuery(builder: (RoomSummaryQueryParams) -> RoomSummaryQueryParams) {
-                realmDataSourceFactory.updateQuery {
-                    roomSummariesQuery(it, builder.invoke(queryParams)).process(sortOrder)
-                }
-            }
-
             override val liveBoundaries: LiveData<ResultBoundaries>
                 get() = boundaries
+
+            override var queryParams: RoomSummaryQueryParams = queryParams
+                set(value) {
+                    field = value
+                    realmDataSourceFactory.updateQuery {
+                        roomSummariesQuery(it, value).process(sortOrder)
+                    }
+                }
+        }
+    }
+
+    fun getCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {
+        val liveRooms = monarchy.findAllManagedWithChanges {
+            roomSummariesQuery(it, queryParams)
+        }
+        return Transformations.map(liveRooms) {
+            it.realmResults.where().count().toInt()
         }
     }
 
@@ -293,6 +304,7 @@ internal class RoomSummaryDataSource @Inject constructor(
             RoomCategoryFilter.ONLY_ROOMS              -> query.equalTo(RoomSummaryEntityFields.IS_DIRECT, false)
             RoomCategoryFilter.ONLY_WITH_NOTIFICATIONS -> query.greaterThan(RoomSummaryEntityFields.NOTIFICATION_COUNT, 0)
             RoomCategoryFilter.ALL                     -> Unit // nop
+            null                                       -> Unit
         }
 
         // Timber.w("VAL: activeSpaceId : ${queryParams.activeSpaceId}")

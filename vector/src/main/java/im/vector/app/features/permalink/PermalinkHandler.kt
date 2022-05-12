@@ -25,6 +25,7 @@ import im.vector.app.core.extensions.isIgnored
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.utils.toast
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import kotlinx.coroutines.Dispatchers
@@ -32,12 +33,16 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
+import org.matrix.android.sdk.api.session.room.timeline.isRootThread
 import javax.inject.Inject
 
 class PermalinkHandler @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
@@ -89,7 +94,13 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
 
                 val rootThreadEventId = permalinkData.eventId?.let { eventId ->
                     val room = roomId?.let { session?.getRoom(it) }
-                    room?.getTimelineEvent(eventId)?.root?.getRootThreadEventId()
+
+                    val rootThreadEventId = room?.getTimelineEvent(eventId)?.root?.getRootThreadEventId()
+                    rootThreadEventId ?: if (room?.getTimelineEvent(eventId)?.isRootThread() == true) {
+                        eventId
+                    } else {
+                        null
+                    }
                 }
                 openRoom(
                         navigationInterceptor,
@@ -138,7 +149,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
     private suspend fun PermalinkData.RoomLink.getRoomId(): String? {
         val session = activeSessionHolder.getSafeActiveSession()
         return if (isRoomAlias && session != null) {
-            val roomIdByAlias = session.getRoomIdByAlias(roomIdOrAlias, true)
+            val roomIdByAlias = session.roomService().getRoomIdByAlias(roomIdOrAlias, true)
             roomIdByAlias.getOrNull()?.roomId
         } else {
             roomIdOrAlias
@@ -183,12 +194,12 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                     navigationInterceptor.openJoinedRoomScreen(buildTask, roomId, eventId, rawLink, context, rootThreadEventId, roomSummary)
                 } else {
                     // maybe open space preview navigator.openSpacePreview(context, roomId)? if already joined?
-                    navigator.openMatrixToBottomSheet(context, rawLink.toString())
+                    navigator.openMatrixToBottomSheet(context, rawLink.toString(), OriginOfMatrixTo.LINK)
                 }
             }
             else                             -> {
                 // XXX this could trigger another server load
-                navigator.openMatrixToBottomSheet(context, rawLink.toString())
+                navigator.openMatrixToBottomSheet(context, rawLink.toString(), OriginOfMatrixTo.LINK)
             }
         }
     }
@@ -208,7 +219,8 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                         displayName = roomSummary.displayName,
                         avatarUrl = roomSummary.avatarUrl,
                         roomEncryptionTrustLevel = roomSummary.roomEncryptionTrustLevel,
-                        rootThreadEventId = rootThreadEventId)
+                        rootThreadEventId = rootThreadEventId
+                )
                 navigator.openThread(context, threadTimelineArgs, eventId)
             } else {
                 navigator.openRoom(context, roomId, eventId, buildTask)

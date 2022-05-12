@@ -26,4 +26,4 @@ interface VectorSharedAction
  * Parent class to handle navigation events, action events, or other any events
  */
 open class VectorSharedActionViewModel<T : VectorSharedAction>(private val store: MutableDataSource<T> = PublishDataSource()) :
-    ViewModel(), MutableDataSource<T> by store
+        ViewModel(), MutableDataSource<T> by store

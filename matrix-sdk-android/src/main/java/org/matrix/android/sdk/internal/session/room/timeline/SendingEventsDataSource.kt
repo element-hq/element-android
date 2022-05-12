@@ -46,9 +46,11 @@ internal class RealmSendingEventsDataSource(
     private val builtEvents =  ArrayList<TimelineEvent>()
 
     private val sendingTimelineEventsListener = RealmChangeListener<RealmList<TimelineEventEntity>> { events ->
-        uiEchoManager.onSentEventsInDatabase(events.map { it.eventId })
-        updateFrozenResults(events)
-        onEventsUpdated(false)
+        if (events.isValid) {
+            uiEchoManager.onSentEventsInDatabase(events.map { it.eventId })
+            updateFrozenResults(events)
+            onEventsUpdated(false)
+        }
     }
 
     override fun start() {
@@ -56,6 +58,7 @@ internal class RealmSendingEventsDataSource(
         roomEntity = RoomEntity.where(safeRealm, roomId = roomId).findFirst()
         sendingTimelineEvents = roomEntity?.sendingTimelineEvents
         sendingTimelineEvents?.addChangeListener(sendingTimelineEventsListener)
+        updateFrozenResults(sendingTimelineEvents)
     }
 
     override fun stop() {
@@ -67,7 +70,9 @@ internal class RealmSendingEventsDataSource(
 
     private fun updateFrozenResults(sendingEvents: RealmList<TimelineEventEntity>?) {
         // Makes sure to close the previous frozen realm
-        frozenSendingTimelineEvents?.realm?.close()
+        if (frozenSendingTimelineEvents?.isValid == true) {
+            frozenSendingTimelineEvents?.realm?.close()
+        }
         frozenSendingTimelineEvents = sendingEvents?.freeze()
     }
 
@@ -75,13 +80,15 @@ internal class RealmSendingEventsDataSource(
         val builtSendingEvents = mutableListOf<TimelineEvent>()
         uiEchoManager.getInMemorySendingEvents()
                 .addWithUiEcho(builtSendingEvents)
-        frozenSendingTimelineEvents
-                ?.filter { timelineEvent ->
-                    builtSendingEvents.none { it.eventId == timelineEvent.eventId }
-                }
-                ?.map {
-                    timelineEventMapper.map(it)
-                }?.addWithUiEcho(builtSendingEvents)
+        if (frozenSendingTimelineEvents?.isValid == true) {
+            frozenSendingTimelineEvents
+                    ?.filter { timelineEvent ->
+                        builtSendingEvents.none { it.eventId == timelineEvent.eventId }
+                    }
+                    ?.map {
+                        timelineEventMapper.map(it)
+                    }?.addWithUiEcho(builtSendingEvents)
+        }
 
         return builtSendingEvents
     }

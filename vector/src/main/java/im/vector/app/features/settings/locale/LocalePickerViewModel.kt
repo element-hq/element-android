@@ -23,7 +23,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.settings.VectorLocale
@@ -56,7 +55,7 @@ class LocalePickerViewModel @AssistedInject constructor(
     override fun handle(action: LocalePickerAction) {
         when (action) {
             is LocalePickerAction.SelectLocale -> handleSelectLocale(action)
-        }.exhaustive
+        }
     }
 
     private fun handleSelectLocale(action: LocalePickerAction.SelectLocale) {

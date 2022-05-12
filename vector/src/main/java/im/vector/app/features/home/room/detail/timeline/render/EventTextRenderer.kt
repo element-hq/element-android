@@ -62,7 +62,7 @@ class EventTextRenderer @AssistedInject constructor(@Assisted private val roomId
      * ========================================================================================== */
 
     private fun addNotifyEveryoneSpans(text: Spannable, roomId: String) {
-        val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)
+        val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.roomService()?.getRoomSummary(roomId)
         val matrixItem = MatrixItem.EveryoneInRoomItem(
                 id = roomId,
                 avatarUrl = room?.avatarUrl,

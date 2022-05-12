@@ -40,7 +40,7 @@ import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.internal.di.MoshiProvider
+import org.matrix.android.sdk.api.util.MatrixJsonParser
 import timber.log.Timber
 import java.net.URLDecoder
 import javax.inject.Inject
@@ -138,6 +138,7 @@ class FtueAuthWebFragment @Inject constructor(
                         .show()
             }
 
+            @Deprecated("Deprecated in Java")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
 
@@ -190,6 +191,7 @@ class FtueAuthWebFragment @Inject constructor(
              * @param url
              * @return
              */
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
                 if (url == null) return super.shouldOverrideUrlLoading(view, url as String?)
 
@@ -200,7 +202,7 @@ class FtueAuthWebFragment @Inject constructor(
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
-                        val adapter = MoshiProvider.providesMoshi().adapter(JavascriptResponse::class.java)
+                        val adapter = MatrixJsonParser.getMoshi().adapter(JavascriptResponse::class.java)
                         javascriptResponse = adapter.fromJson(json)
                     } catch (e: Exception) {
                         Timber.e(e, "## shouldOverrideUrlLoading() : fromJson failed")
@@ -235,7 +237,7 @@ class FtueAuthWebFragment @Inject constructor(
     }
 
     override fun resetViewModel() {
-        viewModel.handle(OnboardingAction.ResetLogin)
+        viewModel.handle(OnboardingAction.ResetAuthenticationAttempt)
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {

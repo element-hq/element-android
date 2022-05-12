@@ -21,7 +21,10 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.HTML
+import org.matrix.android.sdk.api.session.permalinks.PermalinkService.SpanTemplateType.MARKDOWN
 import org.matrix.android.sdk.internal.di.UserId
 import javax.inject.Inject
 
@@ -105,6 +108,23 @@ internal class PermalinkFactory @Inject constructor(
                 ?.substringBeforeLast("?")
     }
 
+    fun createMentionSpanTemplate(type: PermalinkService.SpanTemplateType, forceMatrixTo: Boolean): String {
+        return buildString {
+            when (type) {
+                HTML     -> append(MENTION_SPAN_TO_HTML_TEMPLATE_BEGIN)
+                MARKDOWN -> append(MENTION_SPAN_TO_MD_TEMPLATE_BEGIN)
+            }
+            append(baseUrl(forceMatrixTo))
+            if (useClientFormat(forceMatrixTo)) {
+                append(USER_PATH)
+            }
+            when (type) {
+                HTML     -> append(MENTION_SPAN_TO_HTML_TEMPLATE_END)
+                MARKDOWN -> append(MENTION_SPAN_TO_MD_TEMPLATE_END)
+            }
+        }
+    }
+
     /**
      * Escape '/' in id, because it is used as a separator
      *
@@ -147,5 +167,9 @@ internal class PermalinkFactory @Inject constructor(
         private const val ROOM_PATH = "room/"
         private const val USER_PATH = "user/"
         private const val GROUP_PATH = "group/"
+        private const val MENTION_SPAN_TO_HTML_TEMPLATE_BEGIN = "<a href=\""
+        private const val MENTION_SPAN_TO_HTML_TEMPLATE_END = "%1\$s\">%2\$s</a>"
+        private const val MENTION_SPAN_TO_MD_TEMPLATE_BEGIN = "[%2\$s]("
+        private const val MENTION_SPAN_TO_MD_TEMPLATE_END = "%1\$s)"
     }
 }

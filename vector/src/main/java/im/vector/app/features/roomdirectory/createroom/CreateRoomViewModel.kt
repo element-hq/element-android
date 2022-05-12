@@ -28,7 +28,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.CreatedRoom
@@ -41,6 +40,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
@@ -75,7 +75,8 @@ class CreateRoomViewModel @AssistedInject constructor(
 
         val parentSpaceId = initialState.parentSpaceId ?: appStateHandler.safeActiveSpaceId()
 
-        val restrictedSupport = session.getHomeServerCapabilities().isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
+        val restrictedSupport = session.homeServerCapabilitiesService().getHomeServerCapabilities()
+                .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
         val createRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
 
         val defaultJoinRules = if (parentSpaceId != null && createRestricted) {
@@ -138,7 +139,7 @@ class CreateRoomViewModel @AssistedInject constructor(
             CreateRoomAction.Reset                    -> doReset()
             CreateRoomAction.ToggleShowAdvanced       -> toggleShowAdvanced()
             is CreateRoomAction.DisableFederation     -> disableFederation(action)
-        }.exhaustive
+        }
     }
 
     private fun disableFederation(action: CreateRoomAction.DisableFederation) {
@@ -266,7 +267,7 @@ class CreateRoomViewModel @AssistedInject constructor(
                         RoomJoinRules.RESTRICTED -> {
                             state.parentSpaceId?.let {
                                 featurePreset = RestrictedRoomPreset(
-                                        session.getHomeServerCapabilities(),
+                                        session.homeServerCapabilitiesService().getHomeServerCapabilities(),
                                         listOf(RoomJoinRulesAllowEntry.restrictedToRoom(state.parentSpaceId))
                                 )
                             }
@@ -281,7 +282,7 @@ class CreateRoomViewModel @AssistedInject constructor(
                             // Preset
                             preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
                         }
-                    }.exhaustive
+                    }
                     // Disabling federation
                     disableFederation = state.disableFederation
 
@@ -298,7 +299,7 @@ class CreateRoomViewModel @AssistedInject constructor(
 
         // TODO: Should this be non-cancellable?
         viewModelScope.launch {
-            runCatching { session.createRoom(createRoomParams) }.fold(
+            runCatching { session.roomService().createRoom(createRoomParams) }.fold(
                     { roomId ->
                         analyticsTracker.capture(CreatedRoom(isDM = createRoomParams.isDirect.orFalse()))
                         if (state.parentSpaceId != null) {

@@ -31,7 +31,7 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
 import java.util.UUID
 import javax.inject.Inject
 
@@ -129,14 +129,17 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                     if (data.keysBackupVersionTrust()?.usable == false) {
                         description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     } else {
-                        description(host.stringProvider
-                                .getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup)
-                                .toEpoxyCharSequence())
+                        description(
+                                host.stringProvider
+                                        .getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup)
+                                        .toEpoxyCharSequence()
+                        )
                     }
                 }
 
                 isBackupAlreadySetup = true
             }
+            null                                       -> Unit
         }
 
         if (isBackupAlreadySetup) {
@@ -196,27 +199,35 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                         val deviceId: String = it.deviceId ?: ""
 
                         if (!isDeviceKnown) {
-                            description(host.stringProvider
-                                    .getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
-                                    .toEpoxyCharSequence())
+                            description(
+                                    host.stringProvider
+                                            .getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
+                                            .toEpoxyCharSequence()
+                            )
                             endIconResourceId(R.drawable.e2e_warning)
                         } else {
                             if (isSignatureValid) {
                                 if (host.session.sessionParams.deviceId == it.deviceId) {
-                                    description(host.stringProvider
-                                            .getString(R.string.keys_backup_settings_valid_signature_from_this_device)
-                                            .toEpoxyCharSequence())
+                                    description(
+                                            host.stringProvider
+                                                    .getString(R.string.keys_backup_settings_valid_signature_from_this_device)
+                                                    .toEpoxyCharSequence()
+                                    )
                                     endIconResourceId(R.drawable.e2e_verified)
                                 } else {
                                     if (isDeviceVerified) {
-                                        description(host.stringProvider
-                                                .getString(R.string.keys_backup_settings_valid_signature_from_verified_device, deviceId)
-                                                .toEpoxyCharSequence())
+                                        description(
+                                                host.stringProvider
+                                                        .getString(R.string.keys_backup_settings_valid_signature_from_verified_device, deviceId)
+                                                        .toEpoxyCharSequence()
+                                        )
                                         endIconResourceId(R.drawable.e2e_verified)
                                     } else {
-                                        description(host.stringProvider
-                                                .getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId)
-                                                .toEpoxyCharSequence())
+                                        description(
+                                                host.stringProvider
+                                                        .getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId)
+                                                        .toEpoxyCharSequence()
+                                        )
                                         endIconResourceId(R.drawable.e2e_warning)
                                     }
                                 }
@@ -224,13 +235,17 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                                 // Invalid signature
                                 endIconResourceId(R.drawable.e2e_warning)
                                 if (isDeviceVerified) {
-                                    description(host.stringProvider
-                                            .getString(R.string.keys_backup_settings_invalid_signature_from_verified_device, deviceId)
-                                            .toEpoxyCharSequence())
+                                    description(
+                                            host.stringProvider
+                                                    .getString(R.string.keys_backup_settings_invalid_signature_from_verified_device, deviceId)
+                                                    .toEpoxyCharSequence()
+                                    )
                                 } else {
-                                    description(host.stringProvider
-                                            .getString(R.string.keys_backup_settings_invalid_signature_from_unverified_device, deviceId)
-                                            .toEpoxyCharSequence())
+                                    description(
+                                            host.stringProvider
+                                                    .getString(R.string.keys_backup_settings_invalid_signature_from_unverified_device, deviceId)
+                                                    .toEpoxyCharSequence()
+                                    )
                                 }
                             }
                         }

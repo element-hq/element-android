@@ -20,7 +20,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import timber.log.Timber
 
-interface BackgroundDetectionObserver : DefaultLifecycleObserver {
+internal interface BackgroundDetectionObserver : DefaultLifecycleObserver {
     val isInBackground: Boolean
 
     fun register(listener: Listener)

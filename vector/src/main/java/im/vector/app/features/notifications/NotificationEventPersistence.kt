@@ -34,7 +34,7 @@ class NotificationEventPersistence @Inject constructor(private val context: Cont
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (file.exists()) {
                 file.inputStream().use {
-                    val events: ArrayList<NotifiableEvent>? = currentSession?.loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
+                    val events: ArrayList<NotifiableEvent>? = currentSession?.secureStorageService()?.loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
                     if (events != null) {
                         return factory(events)
                     }
@@ -55,7 +55,7 @@ class NotificationEventPersistence @Inject constructor(private val context: Cont
             val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
             if (!file.exists()) file.createNewFile()
             FileOutputStream(file).use {
-                currentSession.securelyStoreObject(queuedEvents.rawEvents(), KEY_ALIAS_SECRET_STORAGE, it)
+                currentSession.secureStorageService().securelyStoreObject(queuedEvents.rawEvents(), KEY_ALIAS_SECRET_STORAGE, it)
             }
         } catch (e: Throwable) {
             Timber.e(e, "## Failed to save cached notification info")

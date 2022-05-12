@@ -24,4 +24,10 @@ interface RelationContent {
     val eventId: String?
     val inReplyTo: ReplyToContent?
     val option: Int?
+
+    /**
+     * This flag indicates that the message should be rendered as a reply
+     * fallback, when isFallingBack = false
+     */
+    val isFallingBack: Boolean?
 }

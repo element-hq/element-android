@@ -35,6 +35,7 @@ import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.SessionRealmModule
 import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
+import org.matrix.android.sdk.internal.util.time.DefaultClock
 import org.matrix.android.sdk.session.room.timeline.RoomDataHelper.createFakeListOfEvents
 import org.matrix.android.sdk.session.room.timeline.RoomDataHelper.createFakeMessageEvent
 
@@ -42,6 +43,7 @@ import org.matrix.android.sdk.session.room.timeline.RoomDataHelper.createFakeMes
 internal class ChunkEntityTest : InstrumentedTest {
 
     private lateinit var monarchy: Monarchy
+    private val clock = DefaultClock()
 
     @Before
     fun setup() {
@@ -59,10 +61,15 @@ internal class ChunkEntityTest : InstrumentedTest {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
 
-            val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, System.currentTimeMillis()).let {
+            val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, clock.epochMillis()).let {
                 realm.copyToRealm(it)
             }
-            chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
+            chunk.addTimelineEvent(
+                    roomId = ROOM_ID,
+                    eventEntity = fakeEvent,
+                    direction = PaginationDirection.FORWARDS,
+                    roomMemberContentsByUser = emptyMap()
+            )
             chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
@@ -71,11 +78,21 @@ internal class ChunkEntityTest : InstrumentedTest {
     fun add_shouldNotAdd_whenAlreadyIncluded() {
         monarchy.runTransactionSync { realm ->
             val chunk: ChunkEntity = realm.createObject()
-            val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, System.currentTimeMillis()).let {
+            val fakeEvent = createFakeMessageEvent().toEntity(ROOM_ID, SendState.SYNCED, clock.epochMillis()).let {
                 realm.copyToRealm(it)
             }
-            chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
-            chunk.addTimelineEvent(ROOM_ID, fakeEvent, PaginationDirection.FORWARDS, emptyMap())
+            chunk.addTimelineEvent(
+                    roomId = ROOM_ID,
+                    eventEntity = fakeEvent,
+                    direction = PaginationDirection.FORWARDS,
+                    roomMemberContentsByUser = emptyMap()
+            )
+            chunk.addTimelineEvent(
+                    roomId = ROOM_ID,
+                    eventEntity = fakeEvent,
+                    direction = PaginationDirection.FORWARDS,
+                    roomMemberContentsByUser = emptyMap()
+            )
             chunk.timelineEvents.size shouldBeEqualTo 1
         }
     }
@@ -141,10 +158,15 @@ internal class ChunkEntityTest : InstrumentedTest {
                                    events: List<Event>,
                                    direction: PaginationDirection) {
         events.forEach { event ->
-            val fakeEvent = event.toEntity(roomId, SendState.SYNCED, System.currentTimeMillis()).let {
+            val fakeEvent = event.toEntity(roomId, SendState.SYNCED, clock.epochMillis()).let {
                 realm.copyToRealm(it)
             }
-            addTimelineEvent(roomId, fakeEvent, direction, emptyMap())
+            addTimelineEvent(
+                    roomId = roomId,
+                    eventEntity = fakeEvent,
+                    direction = direction,
+                    roomMemberContentsByUser = emptyMap()
+            )
         }
     }
 

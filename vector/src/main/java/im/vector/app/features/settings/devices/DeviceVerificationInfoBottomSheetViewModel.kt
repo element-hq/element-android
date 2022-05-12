@@ -27,8 +27,8 @@ import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 
 class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
                                                                              val session: Session
@@ -84,7 +84,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
         viewModelScope.launch {
             val hasAccountCrossSigning = session.cryptoService().crossSigningService().isCrossSigningInitialized()
             val accountCrossSigningIsTrusted = session.cryptoService().crossSigningService().isCrossSigningVerified()
-            val isRecoverySetup = session.sharedSecretStorageService.isRecoverySetup()
+            val isRecoverySetup = session.sharedSecretStorageService().isRecoverySetup()
             setState {
                 copy(
                         hasAccountCrossSigning = hasAccountCrossSigning,

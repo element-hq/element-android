@@ -37,7 +37,7 @@ sealed class BootstrapActions : VectorViewModelAction {
     data class UpdateCandidatePassphrase(val pass: String) : BootstrapActions()
     data class UpdateConfirmCandidatePassphrase(val pass: String) : BootstrapActions()
 
-//    data class ReAuth(val pass: String) : BootstrapActions()
+    //    data class ReAuth(val pass: String) : BootstrapActions()
     object RecoveryKeySaved : BootstrapActions()
     object Completed : BootstrapActions()
     object SaveReqQueryStarted : BootstrapActions()

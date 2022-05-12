@@ -26,18 +26,18 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
+import org.matrix.android.sdk.api.session.crypto.keysbackup.computeRecoveryKey
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.QrCodeVerificationTransaction
@@ -47,11 +47,10 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.keysbackup.util.computeRecoveryKey
 import timber.log.Timber
 
 data class VerificationBottomSheetViewState(
@@ -146,7 +145,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                         pendingRequest = if (pr != null) Success(pr) else Uninitialized,
                         isMe = initialState.otherUserId == session.myUserId,
                         currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
-                        quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
+                        quadSContainsSecrets = session.sharedSecretStorageService().isRecoverySetup(),
                         hasAnyOtherSession = hasAnyOtherSession
                 )
             }
@@ -231,7 +230,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     override fun handle(action: VerificationAction) = withState { state ->
         val otherUserId = state.otherUserMxItem?.id ?: return@withState
         val roomId = state.roomId
-                ?: session.getExistingDirectRoomWithUser(otherUserId)
+                ?: session.roomService().getExistingDirectRoomWithUser(otherUserId)
 
         when (action) {
             is VerificationAction.RequestVerificationByDM      -> {
@@ -281,19 +280,19 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     copy(verifyingFrom4S = false)
                 }
             }
-        }.exhaustive
+        }
     }
 
     private fun handleStartSASVerification(otherUserId: String, action: VerificationAction.StartSASVerification) {
         val request = session.cryptoService().verificationService().getExistingVerificationRequest(otherUserId, action.pendingRequestTransactionId)
                 ?: return
         viewModelScope.launch {
-                session.cryptoService().verificationService().beginKeyVerification(
-                        VerificationMethod.SAS,
-                        otherUserId = request.otherUserId,
-                        transactionId = action.pendingRequestTransactionId
-                )
-            }
+            session.cryptoService().verificationService().beginKeyVerification(
+                    VerificationMethod.SAS,
+                    otherUserId = request.otherUserId,
+                    transactionId = action.pendingRequestTransactionId
+            )
+        }
     }
 
     private fun handleSASDoNotMatchAction(action: VerificationAction.SASDoNotMatchAction) {
@@ -345,7 +344,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     private fun handleRequestVerificationByDM(roomId: String?, otherUserId: String) {
         viewModelScope.launch {
             val localId = LocalEcho.createLocalEchoId()
-            val dmRoomId = roomId ?: session.createDirectRoom(otherUserId)
+            val dmRoomId = roomId ?: session.roomService().createDirectRoom(otherUserId)
             setState { copy(pendingLocalId = localId, roomId = dmRoomId) }
             suspend {
                 session
@@ -367,7 +366,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 action.cypherData.fromBase64().inputStream().use { ins ->
-                    val res = session.loadSecureSecret<Map<String, String>>(ins, action.alias)
+                    val res = session.secureStorageService().loadSecureSecret<Map<String, String>>(ins, action.alias)
                     val crossSigningService = session.cryptoService().crossSigningService()
                     val trustResult = crossSigningService.checkTrustFromPrivateKeys(
                             res?.get(MASTER_KEY_SSSS_NAME),
@@ -410,7 +409,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     )
                 }
                 _viewEvents.post(
-                        VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error)))
+                        VerificationBottomSheetViewEvents.ModalError(failure.localizedMessage ?: stringProvider.getString(R.string.unexpected_error))
+                )
             }
         }
     }
@@ -418,24 +418,22 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
     private fun tentativeRestoreBackup(res: Map<String, String>?) {
         // on session scope because will happen after viewmodel is cleared
         session.coroutineScope.launch {
+            // It's not a good idea to download the full backup, it might take very long
+            // and use a lot of resources
+            // Just check that the key is valid and store it, the backup will be used megolm session per
+            // megolm session when an UISI is encountered
             try {
                 val secret = res?.get(KEYBACKUP_SECRET_SSSS_NAME) ?: return@launch Unit.also {
                     Timber.v("## Keybackup secret not restored from SSSS")
                 }
 
-                val version = tryOrNull { session.cryptoService().keysBackupService().getCurrentVersion() }
-                        ?: return@launch
+                val version = session.cryptoService().keysBackupService().getCurrentVersion()?.toKeysVersionResult() ?: return@launch
 
-                // TODO maybe mark as trusted earlier by checking recovery key early, then download?
-
-                session.cryptoService().keysBackupService().restoreKeysWithRecoveryKey(
-                        version,
-                        computeRecoveryKey(secret.fromBase64()),
-                        null,
-                        null,
-                        null
-                )
-
+                val recoveryKey = computeRecoveryKey(secret.fromBase64())
+                val isValid = session.cryptoService().keysBackupService().isValidRecoveryKeyForCurrentVersion(recoveryKey)
+                if (isValid) {
+                    session.cryptoService().keysBackupService().saveBackupRecoveryKey(recoveryKey, version.version)
+                }
                 session.cryptoService().keysBackupService().trustKeysBackupVersion(version, true)
             } catch (failure: Throwable) {
                 // Just ignore for now

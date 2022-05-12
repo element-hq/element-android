@@ -80,10 +80,12 @@ import org.webrtc.MediaConstraints
 import org.webrtc.MediaStream
 import org.webrtc.PeerConnection
 import org.webrtc.PeerConnectionFactory
+import org.webrtc.RtpSender
 import org.webrtc.RtpTransceiver
 import org.webrtc.SessionDescription
 import org.webrtc.SurfaceTextureHelper
 import org.webrtc.SurfaceViewRenderer
+import org.webrtc.VideoCapturer
 import org.webrtc.VideoSource
 import org.webrtc.VideoTrack
 import timber.log.Timber
@@ -95,6 +97,7 @@ import kotlin.coroutines.CoroutineContext
 private const val STREAM_ID = "userMedia"
 private const val AUDIO_TRACK_ID = "${STREAM_ID}a0"
 private const val VIDEO_TRACK_ID = "${STREAM_ID}v0"
+private const val SCREEN_TRACK_ID = "${STREAM_ID}s0"
 private val DEFAULT_AUDIO_CONSTRAINTS = MediaConstraints()
 private const val INVITE_TIMEOUT_IN_MS = 60_000L
 
@@ -153,12 +156,15 @@ class WebRtcCall(
     private var makingOffer: Boolean = false
     private var ignoreOffer: Boolean = false
 
-    private var videoCapturer: CameraVideoCapturer? = null
+    private var videoCapturer: VideoCapturer? = null
 
     private val availableCamera = ArrayList<CameraProxy>()
     private var cameraInUse: CameraProxy? = null
     private var currentCaptureFormat: CaptureFormat = CaptureFormat.HD
     private var cameraAvailabilityCallback: CameraManager.AvailabilityCallback? = null
+
+    private var videoSender: RtpSender? = null
+    private var screenSender: RtpSender? = null
 
     private val timer = CountUpTimer(1000L).apply {
         tickListener = object : CountUpTimer.TickListener {
@@ -617,7 +623,7 @@ class WebRtcCall(
             val videoTrack = peerConnectionFactory.createVideoTrack(VIDEO_TRACK_ID, videoSource)
             Timber.tag(loggerTag.value).v("Add video track $VIDEO_TRACK_ID to call ${mxCall.callId}")
             videoTrack.setEnabled(true)
-            peerConnection?.addTrack(videoTrack, listOf(STREAM_ID))
+            videoSender = peerConnection?.addTrack(videoTrack, listOf(STREAM_ID))
             localVideoSource = videoSource
             localVideoTrack = videoTrack
         }
@@ -670,15 +676,11 @@ class WebRtcCall(
                 isRemoteOnHold = true
                 isLocalOnHold = true
                 direction = RtpTransceiver.RtpTransceiverDirection.SEND_ONLY
-                timer.pause()
             } else {
                 isRemoteOnHold = false
                 isLocalOnHold = wasLocalOnHold
                 onCallBecomeActive(this@WebRtcCall)
                 direction = RtpTransceiver.RtpTransceiverDirection.SEND_RECV
-                if (!isLocalOnHold) {
-                    timer.resume()
-                }
             }
             for (transceiver in peerConnection?.transceivers ?: emptyList()) {
                 transceiver.direction = direction
@@ -722,7 +724,7 @@ class WebRtcCall(
             Timber.tag(loggerTag.value).v("switchCamera")
             if (mxCall.state is CallState.Connected && mxCall.isVideoCall) {
                 val oppositeCamera = getOppositeCameraIfAny() ?: return@launch
-                videoCapturer?.switchCamera(
+                (videoCapturer as? CameraVideoCapturer)?.switchCamera(
                         object : CameraVideoCapturer.CameraSwitchHandler {
                             // Invoked on success. |isFrontCamera| is true if the new camera is front facing.
                             override fun onCameraSwitchDone(isFrontCamera: Boolean) {
@@ -768,6 +770,62 @@ class WebRtcCall(
 
     fun currentCaptureFormat(): CaptureFormat {
         return currentCaptureFormat
+    }
+
+    fun startSharingScreen(videoCapturer: VideoCapturer) {
+        val factory = peerConnectionFactoryProvider.get() ?: return
+
+        this.videoCapturer = videoCapturer
+
+        val localMediaStream = factory.createLocalMediaStream(STREAM_ID)
+        val videoSource = factory.createVideoSource(videoCapturer.isScreencast)
+
+        startCapturingScreen(videoCapturer, videoSource)
+
+        removeLocalSurfaceRenderers()
+
+        showScreenLocally(factory, videoSource, localMediaStream)
+
+        videoSender?.let { removeStream(it) }
+
+        screenSender = peerConnection?.addTrack(localVideoTrack, listOf(STREAM_ID))
+    }
+
+    fun stopSharingScreen() {
+        localVideoTrack?.setEnabled(false)
+        screenSender?.let { removeStream(it) }
+        if (mxCall.isVideoCall) {
+            peerConnectionFactoryProvider.get()?.let { configureVideoTrack(it) }
+        }
+        updateMuteStatus()
+        sessionScope?.launch(dispatcher) { attachViewRenderersInternal() }
+    }
+
+    private fun removeStream(sender: RtpSender) {
+        peerConnection?.removeTrack(sender)
+    }
+
+    private fun showScreenLocally(factory: PeerConnectionFactory, videoSource: VideoSource?, localMediaStream: MediaStream?) {
+        localVideoTrack = factory.createVideoTrack(SCREEN_TRACK_ID, videoSource).apply { setEnabled(true) }
+        localMediaStream?.addTrack(localVideoTrack)
+        localSurfaceRenderers.forEach { it.get()?.let { localVideoTrack?.addSink(it) } }
+    }
+
+    private fun removeLocalSurfaceRenderers() {
+        localSurfaceRenderers.forEach { it.get()?.let { localVideoTrack?.removeSink(it) } }
+    }
+
+    private fun startCapturingScreen(videoCapturer: VideoCapturer, videoSource: VideoSource) {
+        val surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", rootEglBase!!.eglBaseContext)
+        videoCapturer.initialize(surfaceTextureHelper, context, videoSource.capturerObserver)
+        videoCapturer.startCapture(currentCaptureFormat.width, currentCaptureFormat.height, currentCaptureFormat.fps)
+    }
+
+    /**
+     * Returns true if the user is sharing the screen, false otherwise.
+     */
+    fun isSharingScreen(): Boolean {
+        return localVideoTrack?.enabled().orFalse() && localVideoTrack?.id() == SCREEN_TRACK_ID
     }
 
     private suspend fun release() {
@@ -933,11 +991,6 @@ class WebRtcCall(
             wasLocalOnHold = nowOnHold
             if (prevOnHold != nowOnHold) {
                 isLocalOnHold = nowOnHold
-                if (nowOnHold) {
-                    timer.pause()
-                } else {
-                    timer.resume()
-                }
                 listeners.forEach {
                     tryOrNull { it.onHoldUnhold() }
                 }
@@ -981,7 +1034,7 @@ class WebRtcCall(
                 val nativeUserId = session.sipNativeLookup(newAssertedIdentity.id!!).firstOrNull()?.userId
                 if (nativeUserId != null) {
                     val resolvedUser = tryOrNull {
-                        session.resolveUser(nativeUserId)
+                        session.userService().resolveUser(nativeUserId)
                     }
                     if (resolvedUser != null) {
                         remoteAssertedIdentity = newAssertedIdentity.copy(

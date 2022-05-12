@@ -18,15 +18,14 @@ package org.matrix.android.sdk.internal.session.sync
 
 import androidx.work.ExistingPeriodicWorkPolicy
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.api.pushrules.PushRuleService
-import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
+import org.matrix.android.sdk.api.session.pushrules.PushRuleService
+import org.matrix.android.sdk.api.session.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
-import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
@@ -35,13 +34,12 @@ import org.matrix.android.sdk.internal.session.dispatchTo
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
-import org.matrix.android.sdk.internal.session.notification.ProcessEventForPushTask
+import org.matrix.android.sdk.internal.session.pushrules.ProcessEventForPushTask
 import org.matrix.android.sdk.internal.session.sync.handler.GroupSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.PresenceSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.SyncResponsePostTreatmentAggregatorHandler
 import org.matrix.android.sdk.internal.session.sync.handler.UserAccountDataSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomSyncHandler
-import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
@@ -63,10 +61,8 @@ internal class SyncResponseHandler @Inject constructor(
         private val aggregatorHandler: SyncResponsePostTreatmentAggregatorHandler,
         private val cryptoService: DefaultCryptoService,
         private val tokenStore: SyncTokenStore,
-        private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
-        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
         private val presenceSyncHandler: PresenceSyncHandler
 ) {
 
@@ -110,6 +106,7 @@ internal class SyncResponseHandler @Inject constructor(
 
         // Start one big transaction
         monarchy.awaitTransaction { realm ->
+            // IMPORTANT nothing should be suspend here as we are accessing the realm instance (thread local)
             measureTimeMillis {
                 Timber.v("Handle rooms")
                 reportSubtask(reporter, InitSyncStep.ImportingAccountRoom, 1, 0.7f) {

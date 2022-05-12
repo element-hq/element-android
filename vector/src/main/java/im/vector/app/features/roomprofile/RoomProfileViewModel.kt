@@ -24,9 +24,10 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
@@ -38,6 +39,8 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
@@ -53,7 +56,8 @@ class RoomProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomProfileViewState,
         private val stringProvider: StringProvider,
         private val shortcutCreator: ShortcutCreator,
-        private val session: Session
+        private val session: Session,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<RoomProfileViewState, RoomProfileAction, RoomProfileViewEvents>(initialState) {
 
     @AssistedFactory
@@ -94,9 +98,9 @@ class RoomProfileViewModel @AssistedInject constructor(
                     copy(
                             roomCreateContent = async,
                             // This is a shortcut, we should do the next lines elsewhere, but keep it like that for the moment.
-                            recommendedRoomVersion = room.getRecommendedVersion(),
-                            isUsingUnstableRoomVersion = room.isUsingUnstableRoomVersion(),
-                            canUpgradeRoom = room.userMayUpgradeRoom(session.myUserId),
+                            recommendedRoomVersion = room.roomVersionService().getRecommendedVersion(),
+                            isUsingUnstableRoomVersion = room.roomVersionService().isUsingUnstableRoomVersion(),
+                            canUpgradeRoom = room.roomVersionService().userMayUpgradeRoom(session.myUserId),
                             isTombstoned = room.getStateEvent(EventType.STATE_ROOM_TOMBSTONE) != null
                     )
                 }
@@ -137,18 +141,18 @@ class RoomProfileViewModel @AssistedInject constructor(
             is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
             RoomProfileAction.CreateShortcut                 -> handleCreateShortcut()
             RoomProfileAction.RestoreEncryptionState         -> restoreEncryptionState()
-        }.exhaustive
+        }
     }
 
     fun isPublicRoom(): Boolean {
-        return room.isPublic()
+        return room.stateService().isPublic()
     }
 
     private fun handleEnableEncryption() {
         postLoading(true)
 
         viewModelScope.launch {
-            val result = runCatching { room.enableEncryption() }
+            val result = runCatching { room.roomCryptoService().enableEncryption() }
             postLoading(false)
             result.onFailure { failure ->
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))
@@ -175,7 +179,7 @@ class RoomProfileViewModel @AssistedInject constructor(
     private fun handleChangeNotificationMode(action: RoomProfileAction.ChangeRoomNotificationState) {
         viewModelScope.launch {
             try {
-                room.setRoomNotificationState(action.notificationState)
+                room.roomPushRuleService().setRoomNotificationState(action.notificationState)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))
             }
@@ -186,7 +190,14 @@ class RoomProfileViewModel @AssistedInject constructor(
         _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(R.string.room_profile_leaving_room)))
         viewModelScope.launch {
             try {
-                session.leaveRoom(room.roomId)
+                session.roomService().leaveRoom(room.roomId)
+                analyticsTracker.capture(
+                        Interaction(
+                                index = null,
+                                interactionType = null,
+                                name = Interaction.Name.MobileRoomLeave
+                        )
+                )
                 // Do nothing, we will be closing the room automatically when it will get back from sync
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))
@@ -205,7 +216,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         _viewEvents.post(RoomProfileViewEvents.Loading())
         session.coroutineScope.launch {
             try {
-                room.enableEncryption(force = true)
+                room.roomCryptoService().enableEncryption(force = true)
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to restore encryption state in room ${room.roomId}")
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))

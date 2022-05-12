@@ -23,7 +23,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -63,7 +62,7 @@ class ReviewTermsActivity : SimpleFragmentActivity() {
                     setResult(Activity.RESULT_OK)
                     finish()
                 }
-            }.exhaustive
+            }
         }
     }
 

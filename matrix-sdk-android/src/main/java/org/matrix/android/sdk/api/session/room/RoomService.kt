@@ -19,6 +19,8 @@ package org.matrix.android.sdk.api.session.room
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
+import org.matrix.android.sdk.api.session.room.alias.RoomAliasDescription
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
@@ -27,8 +29,6 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotificationCount
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
-import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
 
 /**
  * This interface defines methods to get rooms. It's implemented at the session level.
@@ -217,6 +217,12 @@ interface RoomService {
                                           sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): UpdatableLivePageResult
 
     /**
+     * Return a LiveData on the number of rooms
+     * @param queryParams parameters to query the room summaries. It can be use to keep only joined rooms, for instance.
+     */
+    fun getRoomCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int>
+
+    /**
      * TODO Doc
      */
     fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount
@@ -236,4 +242,12 @@ interface RoomService {
      */
     fun getFlattenRoomSummaryChildrenOfLive(spaceId: String?,
                                             memberships: List<Membership> = Membership.activeMemberships()): LiveData<List<RoomSummary>>
+
+    /**
+     * Refreshes the RoomSummary LatestPreviewContent for the given @param roomId
+     * If the roomId is null, all rooms are updated
+     *
+     * This is useful for refreshing summary content with encrypted messages after receiving new room keys
+     */
+    fun refreshJoinedRoomSummaryPreviews(roomId: String?)
 }

@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 
 internal class SharedWithHelper(
@@ -36,6 +36,7 @@ internal class SharedWithHelper(
                 userId = deviceInfo.userId,
                 deviceId = deviceInfo.deviceId,
                 deviceIdentityKey = deviceInfo.identityKey() ?: "",
-                chainIndex = chainIndex)
+                chainIndex = chainIndex
+        )
     }
 }

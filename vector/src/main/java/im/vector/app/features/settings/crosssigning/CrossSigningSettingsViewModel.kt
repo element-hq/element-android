@@ -22,7 +22,6 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.auth.ReAuthActivity
@@ -38,10 +37,9 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.auth.registration.nextUncompletedStage
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.uia.DefaultBaseAuth
+import org.matrix.android.sdk.api.util.fromBase64
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.crosssigning.fromBase64
-import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.model.rest.DefaultBaseAuth
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -110,7 +108,8 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 }
             }
             is CrossSigningSettingsAction.PasswordAuthDone    -> {
-                val decryptedPass = session.loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
+                val decryptedPass = session.secureStorageService()
+                        .loadSecureSecret<String>(action.password.fromBase64().inputStream(), ReAuthActivity.DEFAULT_RESULT_KEYSTORE_ALIAS)
                 uiaContinuation?.resume(
                         UserPasswordAuth(
                                 session = pendingAuth?.session,
@@ -126,7 +125,7 @@ class CrossSigningSettingsViewModel @AssistedInject constructor(
                 uiaContinuation = null
                 pendingAuth = null
             }
-        }.exhaustive
+        }
     }
 
     private fun observeCrossSigning() {

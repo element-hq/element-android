@@ -33,7 +33,6 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -41,6 +40,7 @@ import im.vector.app.core.utils.BehaviorDataSource
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
+import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandle
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
+import im.vector.app.features.location.LocationSharingServiceConnection
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
@@ -80,12 +81,16 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.content.WithHeldCode
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.file.FileService
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.room.getStateEvent
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -104,7 +109,6 @@ import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
-import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -125,10 +129,11 @@ class TimelineViewModel @AssistedInject constructor(
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
         private val decryptionFailureTracker: DecryptionFailureTracker,
         private val notificationDrawerManager: NotificationDrawerManager,
+        private val locationSharingServiceConnection: LocationSharingServiceConnection,
         timelineFactory: TimelineFactory,
         appStateHandler: AppStateHandler
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
-        Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
+        Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener, LocationSharingServiceConnection.Callback {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
@@ -158,6 +163,9 @@ class TimelineViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<TimelineViewModel, RoomDetailViewState> by hiltMavericksViewModelFactory() {
         const val PAGINATION_COUNT = 50
+
+        // The larger the number the faster the results, COUNT=200 for 500 thread messages its x4 faster than COUNT=50
+        const val PAGINATION_COUNT_THREADS_PERMALINK = 200
     }
 
     init {
@@ -177,18 +185,18 @@ class TimelineViewModel @AssistedInject constructor(
         setupPreviewUrlObservers()
         room.getRoomSummaryLive()
         viewModelScope.launch(Dispatchers.IO) {
-            tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
+            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
         }
         // Inform the SDK that the room is displayed
         viewModelScope.launch(Dispatchers.IO) {
-            tryOrNull { session.onRoomDisplayed(initialState.roomId) }
+            tryOrNull { session.roomService().onRoomDisplayed(initialState.roomId) }
         }
         callManager.addProtocolsCheckerListener(this)
         callManager.checkForProtocolsSupportIfNeeded()
         chatEffectManager.delegate = this
 
         // Ensure to share the outbound session keys with all members
-        if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
+        if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.roomCryptoService().isEncrypted()) {
             prepareForEncryption()
         }
 
@@ -210,13 +218,17 @@ class TimelineViewModel @AssistedInject constructor(
                                     .flattenParentIds.firstOrNull { it.isNotBlank() },
                             // force persist, because if not on resume the AppStateHandler will resume
                             // the current space from what was persisted on enter background
-                            persistNow = true)
+                            persistNow = true
+                    )
                 }
             }
         }
 
         // Threads
         initThreads()
+
+        // Observe location service lifecycle to be able to warn the user
+        locationSharingServiceConnection.bind(this)
     }
 
     /**
@@ -241,7 +253,7 @@ class TimelineViewModel @AssistedInject constructor(
             prepareToEncrypt = Loading()
             viewModelScope.launch {
                 runCatching {
-                    room.prepareToEncrypt()
+                    room.roomCryptoService().prepareToEncrypt()
                 }.fold({
                     prepareToEncrypt = Success(Unit)
                 }, {
@@ -345,7 +357,7 @@ class TimelineViewModel @AssistedInject constructor(
     private fun markThreadTimelineAsReadLocal() {
         initialState.rootThreadEventId?.let {
             session.coroutineScope.launch {
-                room.markThreadAsRead(it)
+                room.threadsLocalService().markThreadAsRead(it)
             }
         }
     }
@@ -362,9 +374,12 @@ class TimelineViewModel @AssistedInject constructor(
                         threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
                     }?.let { true } ?: false
                     val numberOfLocalUnreadThreads = threadList?.size ?: 0
-                    copy(threadNotificationBadgeState = ThreadNotificationBadgeState(
-                            numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
-                            isUserMentioned = isUserMentioned))
+                    copy(
+                            threadNotificationBadgeState = ThreadNotificationBadgeState(
+                                    numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
+                                    isUserMentioned = isUserMentioned
+                            )
+                    )
                 }
     }
 
@@ -437,7 +452,8 @@ class TimelineViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
             is RoomDetailAction.EndPoll                          -> handleEndPoll(action.eventId)
-        }.exhaustive
+            RoomDetailAction.StopLiveLocationSharing             -> handleStopLiveLocationSharing()
+        }
     }
 
     private fun handleJitsiCallJoinStatus(action: RoomDetailAction.UpdateJoinJitsiCallStatus) = withState { state ->
@@ -480,7 +496,7 @@ class TimelineViewModel @AssistedInject constructor(
     private fun handleSetNewAvatar(action: RoomDetailAction.SetAvatarAction) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                room.updateAvatar(action.newAvatarUri, action.newAvatarFileName)
+                room.stateService().updateAvatar(action.newAvatarUri, action.newAvatarFileName)
                 _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
@@ -497,16 +513,22 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleJumpToReadReceipt(action: RoomDetailAction.JumpToReadReceipt) {
-        room.getUserReadReceipt(action.userId)
+        room.readService().getUserReadReceipt(action.userId)
                 ?.let { handleNavigateToEvent(RoomDetailAction.NavigateToEvent(it, true)) }
     }
 
     private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
         val content = initialState.rootThreadEventId?.let {
-            action.stickerContent.copy(relatesTo = RelationDefaultContent(RelationType.IO_THREAD, it))
+            action.stickerContent.copy(
+                    relatesTo = RelationDefaultContent(
+                            type = RelationType.THREAD,
+                            isFallingBack = true,
+                            eventId = it
+                    )
+            )
         } ?: action.stickerContent
 
-        room.sendEvent(EventType.STICKER, content.toContent())
+        room.sendService().sendEvent(EventType.STICKER, content.toContent())
     }
 
     private fun handleStartCall(action: RoomDetailAction.StartCall) {
@@ -626,7 +648,7 @@ class TimelineViewModel @AssistedInject constructor(
         if (trackUnreadMessages.getAndSet(false)) {
             mostRecentDisplayedEvent?.root?.eventId?.also {
                 session.coroutineScope.launch {
-                    tryOrNull { room.setReadMarker(it) }
+                    tryOrNull { room.readService().setReadMarker(it) }
                 }
             }
             mostRecentDisplayedEvent = null
@@ -639,12 +661,12 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     fun getMember(userId: String): RoomMemberSummary? {
-        return room.getRoomMember(userId)
+        return room.membershipService().getRoomMember(userId)
     }
 
     private fun handleComposerFocusChange(action: RoomDetailAction.ComposerFocusChange) {
         // Ensure outbound session keys
-        if (OutboundSessionKeySharingStrategy.WhenTyping == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
+        if (OutboundSessionKeySharingStrategy.WhenTyping == BuildConfig.outboundSessionKeySharingStrategy && room.roomCryptoService().isEncrypted()) {
             if (action.focused) {
                 // Should we add some rate limit here, or do it only once per model lifecycle?
                 prepareForEncryption()
@@ -671,7 +693,7 @@ class TimelineViewModel @AssistedInject constructor(
             }
             viewModelScope.launch {
                 val result = runCatchingToAsync {
-                    session.joinRoom(roomId, viaServers = viaServers)
+                    session.roomService().joinRoom(roomId, viaServers = viaServers)
                     roomId
                 }
                 setState {
@@ -700,18 +722,20 @@ class TimelineViewModel @AssistedInject constructor(
 
         if (initialState.isThreadTimeline()) {
             when (itemId) {
-                R.id.menu_thread_timeline_more -> true
-                else                           -> false
+                R.id.menu_thread_timeline_view_in_room,
+                R.id.menu_thread_timeline_copy_link,
+                R.id.menu_thread_timeline_share -> true
+                else                            -> false
             }
         } else {
             when (itemId) {
                 R.id.timeline_setting          -> true
                 R.id.invite                    -> state.canInvite
                 R.id.open_matrix_apps          -> true
-                R.id.voice_call                -> state.isWebRTCCallOptionAvailable()
-                R.id.video_call                -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+                R.id.voice_call                -> state.isCallOptionAvailable()
+                R.id.video_call                -> state.isCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
                 // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-                R.id.join_conference           -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
+                R.id.join_conference           -> !state.isCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
                 R.id.search                    -> state.isSearchAvailable()
                 R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()
                 R.id.dev_tools                 -> vectorPreferences.developerMode()
@@ -723,36 +747,36 @@ class TimelineViewModel @AssistedInject constructor(
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSendReaction(action: RoomDetailAction.SendReaction) {
-        room.sendReaction(action.targetEventId, action.reaction)
+        room.relationService().sendReaction(action.targetEventId, action.reaction)
     }
 
     private fun handleRedactEvent(action: RoomDetailAction.RedactAction) {
         val event = room.getTimelineEvent(action.targetEventId) ?: return
-        room.redactEvent(event.root, action.reason)
+        room.sendService().redactEvent(event.root, action.reason)
     }
 
     private fun handleUndoReact(action: RoomDetailAction.UndoReaction) {
         viewModelScope.launch {
             tryOrNull {
-                room.undoReaction(action.targetEventId, action.reaction)
+                room.relationService().undoReaction(action.targetEventId, action.reaction)
             }
         }
     }
 
     private fun handleUpdateQuickReaction(action: RoomDetailAction.UpdateQuickReactAction) {
         if (action.add) {
-            room.sendReaction(action.targetEventId, action.selectedReaction)
+            room.relationService().sendReaction(action.targetEventId, action.selectedReaction)
         } else {
             viewModelScope.launch {
                 tryOrNull {
-                    room.undoReaction(action.targetEventId, action.selectedReaction)
+                    room.relationService().undoReaction(action.targetEventId, action.selectedReaction)
                 }
             }
         }
     }
 
     private fun handleSendMedia(action: RoomDetailAction.SendMedia) {
-        room.sendMedias(
+        room.sendService().sendMedias(
                 action.attachments,
                 action.compressBeforeSending,
                 emptySet(),
@@ -795,7 +819,7 @@ class TimelineViewModel @AssistedInject constructor(
         notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(initialState.roomId) }
         viewModelScope.launch {
             try {
-                session.leaveRoom(room.roomId)
+                session.roomService().leaveRoom(room.roomId)
             } catch (throwable: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.Failure(throwable, showInDialog = true))
             }
@@ -806,12 +830,21 @@ class TimelineViewModel @AssistedInject constructor(
         notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(initialState.roomId) }
         viewModelScope.launch {
             try {
-                session.joinRoom(room.roomId)
-                analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom())
+                session.roomService().joinRoom(room.roomId)
+                trackRoomJoined()
             } catch (throwable: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.Failure(throwable, showInDialog = true))
             }
         }
+    }
+
+    private fun trackRoomJoined() {
+        val trigger = if (initialState.isInviteAlreadyAccepted) {
+            JoinedRoom.Trigger.Invite
+        } else {
+            JoinedRoom.Trigger.Timeline
+        }
+        analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom(trigger))
     }
 
     private fun handleOpenOrDownloadFile(action: RoomDetailAction.DownloadOrOpen) {
@@ -820,10 +853,12 @@ class TimelineViewModel @AssistedInject constructor(
                 mxcUrl.startsWith("content://")
         if (isLocalSendingFile) {
             tryOrNull { Uri.parse(mxcUrl) }?.let {
-                _viewEvents.post(RoomDetailViewEvents.OpenFile(
-                        it,
-                        action.messageFileContent.mimeType
-                ))
+                _viewEvents.post(
+                        RoomDetailViewEvents.OpenFile(
+                                it,
+                                action.messageFileContent.mimeType
+                        )
+                )
             }
         } else {
             viewModelScope.launch {
@@ -835,21 +870,25 @@ class TimelineViewModel @AssistedInject constructor(
                         session.fileService().downloadFile(messageContent = action.messageFileContent)
                     }
 
-                    _viewEvents.post(RoomDetailViewEvents.DownloadFileState(
-                            action.messageFileContent.mimeType,
-                            result.getOrNull(),
-                            result.exceptionOrNull()
-                    ))
+                    _viewEvents.post(
+                            RoomDetailViewEvents.DownloadFileState(
+                                    action.messageFileContent.mimeType,
+                                    result.getOrNull(),
+                                    result.exceptionOrNull()
+                            )
+                    )
                     canOpen = result.isSuccess
                 }
 
                 if (canOpen) {
                     // We can now open the file
                     session.fileService().getTemporarySharableURI(action.messageFileContent)?.let { uri ->
-                        _viewEvents.post(RoomDetailViewEvents.OpenFile(
-                                uri,
-                                action.messageFileContent.mimeType
-                        ))
+                        _viewEvents.post(
+                                RoomDetailViewEvents.OpenFile(
+                                        uri,
+                                        action.messageFileContent.mimeType
+                                )
+                        )
                     }
                 }
             }
@@ -878,8 +917,8 @@ class TimelineViewModel @AssistedInject constructor(
                 return
             }
             when {
-                it.root.isTextMessage()       -> room.resendTextMessage(it)
-                it.root.isAttachmentMessage() -> room.resendMediaMessage(it)
+                it.root.isTextMessage()       -> room.sendService().resendTextMessage(it)
+                it.root.isAttachmentMessage() -> room.sendService().resendMediaMessage(it)
                 else                          -> {
                     // TODO
                 }
@@ -895,13 +934,13 @@ class TimelineViewModel @AssistedInject constructor(
                 Timber.e("Cannot resend message, it is not failed, Cancel first")
                 return
             }
-            room.deleteFailedEcho(it)
+            room.sendService().deleteFailedEcho(it)
         }
     }
 
     private fun handleCancel(action: RoomDetailAction.CancelSend) {
         if (action.force) {
-            room.cancelSend(action.eventId)
+            room.sendService().cancelSend(action.eventId)
             return
         }
         val targetEventId = action.eventId
@@ -911,16 +950,16 @@ class TimelineViewModel @AssistedInject constructor(
                 Timber.e("Cannot cancel message, it is not sending")
                 return
             }
-            room.cancelSend(targetEventId)
+            room.sendService().cancelSend(targetEventId)
         }
     }
 
     private fun handleResendAll() {
-        room.resendAllFailedMessages()
+        room.sendService().resendAllFailedMessages()
     }
 
     private fun handleRemoveAllFailedMessages() {
-        room.cancelAllFailedMessages()
+        room.sendService().cancelAllFailedMessages()
     }
 
     private fun observeEventDisplayedActions() {
@@ -943,7 +982,7 @@ class TimelineViewModel @AssistedInject constructor(
                     }
                     bufferedMostRecentDisplayedEvent.root.eventId?.let { eventId ->
                         session.coroutineScope.launch {
-                            tryOrNull { room.setReadReceipt(eventId) }
+                            tryOrNull { room.readService().setReadReceipt(eventId) }
                         }
                     }
                 }
@@ -960,14 +999,14 @@ class TimelineViewModel @AssistedInject constructor(
     private fun handleMarkAllAsRead() {
         setState { copy(unreadState = UnreadState.HasNoUnread) }
         viewModelScope.launch {
-            tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.BOTH) }
+            tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.BOTH) }
         }
     }
 
     private fun handleReportContent(action: RoomDetailAction.ReportContent) {
         viewModelScope.launch {
             val event = try {
-                room.reportContent(action.eventId, -100, action.reason)
+                room.reportingService().reportContent(action.eventId, -100, action.reason)
                 RoomDetailViewEvents.ActionSuccess(action)
             } catch (failure: Exception) {
                 RoomDetailViewEvents.ActionFailure(action, failure)
@@ -983,7 +1022,7 @@ class TimelineViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             val event = try {
-                session.ignoreUserIds(listOf(action.userId))
+                session.userService().ignoreUserIds(listOf(action.userId))
                 RoomDetailViewEvents.ActionSuccess(action)
             } catch (failure: Throwable) {
                 RoomDetailViewEvents.ActionFailure(action, failure)
@@ -1024,9 +1063,13 @@ class TimelineViewModel @AssistedInject constructor(
         session.cryptoService().verificationService().getExistingVerificationRequestInRoom(room.roomId, action.transactionId)?.let {
             if (it.handledByOtherSession) return
             if (!it.isFinished) {
-                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action.copy(
-                        otherUserId = it.otherUserId
-                )))
+                _viewEvents.post(
+                        RoomDetailViewEvents.ActionSuccess(
+                                action.copy(
+                                        otherUserId = it.otherUserId
+                                )
+                        )
+                )
             }
         }
     }
@@ -1059,13 +1102,13 @@ class TimelineViewModel @AssistedInject constructor(
         room.getTimelineEvent(action.eventId)?.let { pollTimelineEvent ->
             val currentVote = pollTimelineEvent.annotations?.pollResponseSummary?.aggregatedContent?.myVote
             if (currentVote != action.optionKey) {
-                room.voteToPoll(action.eventId, action.optionKey)
+                room.sendService().voteToPoll(action.eventId, action.optionKey)
             }
         }
     }
 
     private fun handleEndPoll(eventId: String) {
-        room.endPoll(eventId)
+        room.sendService().endPoll(eventId)
     }
 
     private fun observeSyncState() {
@@ -1075,12 +1118,16 @@ class TimelineViewModel @AssistedInject constructor(
                     copy(syncState = syncState)
                 }
 
-        session.getSyncStatusLive()
+        session.syncStatusService().getSyncStatusLive()
                 .asFlow()
                 .filterIsInstance<SyncStatusService.Status.IncrementalSyncStatus>()
                 .setOnEach {
                     copy(incrementalSyncStatus = it)
                 }
+    }
+
+    private fun handleStopLiveLocationSharing() {
+        locationSharingServiceConnection.stopLiveLocationSharing(room.roomId)
     }
 
     private fun observeRoomSummary() {
@@ -1101,9 +1148,13 @@ class TimelineViewModel @AssistedInject constructor(
             computeUnreadState(timelineEvents, roomSummary)
         }
                 // We don't want live update of unread so we skip when we already had a HasUnread or HasNoUnread
+                // However, we want to update an existing HasUnread, if the readMarkerId hasn't changed,
+                // as we might be loading new events to fill gaps in the timeline.
                 .distinctUntilChanged { previous, current ->
                     when {
                         previous is UnreadState.Unknown || previous is UnreadState.ReadMarkerNotLoaded -> false
+                        previous is UnreadState.HasUnread && current is UnreadState.HasUnread &&
+                                previous.readMarkerId == current.readMarkerId                          -> false
                         current is UnreadState.HasUnread || current is UnreadState.HasNoUnread         -> true
                         else                                                                           -> false
                     }
@@ -1122,12 +1173,17 @@ class TimelineViewModel @AssistedInject constructor(
                 } else {
                     UnreadState.Unknown
                 }
+        // If the read marker is at the bottom-most event, this doesn't mean we read all, in case we just haven't loaded more events.
+        // Avoid incorrectly returning HasNoUnread in this case.
+        if (firstDisplayableEventIndex == 0 && timeline.hasMoreToLoad(Timeline.Direction.FORWARDS)) {
+            return UnreadState.Unknown
+        }
         for (i in (firstDisplayableEventIndex - 1) downTo 0) {
             val timelineEvent = events.getOrNull(i) ?: return UnreadState.Unknown
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown
             val isFromMe = timelineEvent.root.senderId == session.myUserId
             if (!isFromMe) {
-                return UnreadState.HasUnread(eventId)
+                return UnreadState.HasUnread(eventId, readMarkerIdSnapshot)
             }
         }
         return UnreadState.HasNoUnread
@@ -1166,7 +1222,7 @@ class TimelineViewModel @AssistedInject constructor(
             }
             if (summary.membership == Membership.INVITE) {
                 summary.inviterId?.let { inviterId ->
-                    session.getRoomMember(inviterId, summary.roomId)
+                    session.roomService().getRoomMember(inviterId, summary.roomId)
                 }?.also {
                     setState { copy(asyncInviter = Success(it)) }
                 }
@@ -1177,10 +1233,30 @@ class TimelineViewModel @AssistedInject constructor(
         }
     }
 
+    /**
+     * Navigates to the appropriate event (by paginating the thread timeline until the event is found
+     * in the snapshot. The main reason for this function is to support the /relations api
+     */
+    private var threadPermalinkHandled = false
+    private fun navigateToThreadEventIfNeeded(snapshot: List<TimelineEvent>) {
+        if (eventId != null && initialState.rootThreadEventId != null) {
+            // When we have a permalink and we are in a thread timeline
+            if (snapshot.firstOrNull { it.eventId == eventId } != null && !threadPermalinkHandled) {
+                // Permalink event found lets navigate there
+                handleNavigateToEvent(RoomDetailAction.NavigateToEvent(eventId, true))
+                threadPermalinkHandled = true
+            } else {
+                // Permalink event not found yet continue paginating
+                timeline.paginate(Timeline.Direction.BACKWARDS, PAGINATION_COUNT_THREADS_PERMALINK)
+            }
+        }
+    }
+
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
         viewModelScope.launch {
             // tryEmit doesn't work with SharedFlow without cache
             timelineEvents.emit(snapshot)
+            navigateToThreadEventIfNeeded(snapshot)
         }
     }
 
@@ -1195,12 +1271,22 @@ class TimelineViewModel @AssistedInject constructor(
         _viewEvents.post(RoomDetailViewEvents.OnNewTimelineEvents(eventIds))
     }
 
+    override fun onLocationServiceRunning() {
+        _viewEvents.post(RoomDetailViewEvents.ChangeLocationIndicator(isVisible = true))
+    }
+
+    override fun onLocationServiceStopped() {
+        _viewEvents.post(RoomDetailViewEvents.ChangeLocationIndicator(isVisible = false))
+        // Bind again in case user decides to share live location without leaving the room
+        locationSharingServiceConnection.bind(this)
+    }
+
     override fun onCleared() {
         timeline.dispose()
         timeline.removeAllListeners()
         decryptionFailureTracker.onTimeLineDisposed(room.roomId)
         if (vectorPreferences.sendTypingNotifs()) {
-            room.userStopsTyping()
+            room.typingService().userStopsTyping()
         }
         chatEffectManager.delegate = null
         chatEffectManager.dispose()
@@ -1208,6 +1294,7 @@ class TimelineViewModel @AssistedInject constructor(
         // we should also mark it as read here, for the scenario that the user
         // is already in the thread timeline
         markThreadTimelineAsReadLocal()
+        locationSharingServiceConnection.unbind()
         super.onCleared()
     }
 }

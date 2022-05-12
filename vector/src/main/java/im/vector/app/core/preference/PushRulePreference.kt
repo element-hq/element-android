@@ -56,11 +56,13 @@ class PushRulePreference : VectorPreference {
      * Refresh the summary
      */
     private fun refreshSummary() {
-        summary = context.getString(when (index) {
-            NotificationIndex.OFF         -> R.string.notification_off
-            NotificationIndex.SILENT      -> R.string.notification_silent
-            NotificationIndex.NOISY, null -> R.string.notification_noisy
-        })
+        summary = context.getString(
+                when (index) {
+                    NotificationIndex.OFF         -> R.string.notification_off
+                    NotificationIndex.SILENT      -> R.string.notification_silent
+                    NotificationIndex.NOISY, null -> R.string.notification_noisy
+                }
+        )
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
@@ -83,6 +85,7 @@ class PushRulePreference : VectorPreference {
             NotificationIndex.NOISY  -> {
                 radioGroup?.check(R.id.bingPreferenceRadioBingRuleNoisy)
             }
+            null                     -> Unit
         }
 
         radioGroup?.setOnCheckedChangeListener { _, checkedId ->

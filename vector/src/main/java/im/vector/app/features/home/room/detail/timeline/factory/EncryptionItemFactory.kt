@@ -24,11 +24,12 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageInformatio
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem_
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.content.EncryptionEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
+import org.matrix.android.sdk.api.session.getRoomSummary
 import javax.inject.Inject
 
 class EncryptionItemFactory @Inject constructor(
@@ -46,7 +47,7 @@ class EncryptionItemFactory @Inject constructor(
         }
         val algorithm = event.root.content.toModel<EncryptionEventContent>()?.algorithm
         val informationData = informationDataFactory.create(params)
-        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback, params.reactionsSummaryEvents)
 
         val isSafeAlgorithm = algorithm == MXCRYPTO_ALGORITHM_MEGOLM
         val title: String
@@ -80,7 +81,8 @@ class EncryptionItemFactory @Inject constructor(
                                 itemClickListener = attributes.itemClickListener,
                                 itemLongClickListener = attributes.itemLongClickListener,
                                 reactionPillCallback = attributes.reactionPillCallback,
-                                readReceiptsCallback = attributes.readReceiptsCallback
+                                readReceiptsCallback = attributes.readReceiptsCallback,
+                                reactionsSummaryEvents = attributes.reactionsSummaryEvents
                         )
                 )
                 .highlighted(params.isHighlighted)

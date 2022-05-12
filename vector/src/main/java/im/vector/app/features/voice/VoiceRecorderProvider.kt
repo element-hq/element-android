@@ -18,16 +18,18 @@ package im.vector.app.features.voice
 
 import android.content.Context
 import android.os.Build
+import im.vector.app.core.time.Clock
 import javax.inject.Inject
 
 class VoiceRecorderProvider @Inject constructor(
-        private val context: Context
+        private val context: Context,
+        private val clock: Clock,
 ) {
     fun provideVoiceRecorder(): VoiceRecorder {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             VoiceRecorderQ(context)
         } else {
-            VoiceRecorderL(context)
+            VoiceRecorderL(context, clock)
         }
     }
 }

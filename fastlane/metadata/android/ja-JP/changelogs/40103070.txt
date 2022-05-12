@@ -1,0 +1,2 @@
+このバージョンの主な変更点：主に通知に関する不具合の修正。
+更新履歴：https://github.com/vector-im/element-android/releases/tag/v1.3.7-RC2

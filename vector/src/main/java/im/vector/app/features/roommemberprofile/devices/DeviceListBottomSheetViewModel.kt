@@ -28,15 +28,15 @@ import dagger.hilt.EntryPoints
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.getUser
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 
 data class DeviceListViewState(
         val userId: String,
@@ -94,7 +94,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(@Assisted priva
             is DeviceListAction.SelectDevice   -> selectDevice(action)
             is DeviceListAction.DeselectDevice -> deselectDevice()
             is DeviceListAction.ManuallyVerify -> manuallyVerify(action)
-        }.exhaustive
+        }
     }
 
     private fun refreshSelectedId() = withState { state ->

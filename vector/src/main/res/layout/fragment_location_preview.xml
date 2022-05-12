@@ -8,6 +8,7 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:mapbox_renderTextureMode="true" />
+        app:mapbox_renderTextureMode="true"
+        app:showLocateButton="false" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

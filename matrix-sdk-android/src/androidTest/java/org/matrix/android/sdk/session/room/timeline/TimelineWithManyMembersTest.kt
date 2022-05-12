@@ -27,6 +27,7 @@ import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
@@ -71,7 +72,7 @@ class TimelineWithManyMembersTest : InstrumentedTest {
         for (index in 1 until cryptoTestData.sessions.size) {
             val session = cryptoTestData.sessions[index]
             val roomForCurrentMember = session.getRoom(cryptoTestData.roomId)!!
-            val timelineForCurrentMember = roomForCurrentMember.createTimeline(null, TimelineSettings(30))
+            val timelineForCurrentMember = roomForCurrentMember.timelineService().createTimeline(null, TimelineSettings(30))
             timelineForCurrentMember.start()
 
             session.startSync(true)

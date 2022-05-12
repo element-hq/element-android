@@ -26,6 +26,7 @@ import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.core.time.Clock
 import im.vector.app.features.disclaimer.SHARED_PREF_KEY
 import im.vector.app.features.homeserver.ServerUrlsRepository
 import im.vector.app.features.themes.ThemeUtils
@@ -33,7 +34,10 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import timber.log.Timber
 import javax.inject.Inject
 
-class VectorPreferences @Inject constructor(private val context: Context) {
+class VectorPreferences @Inject constructor(
+        private val context: Context,
+        private val clock: Clock,
+) {
 
     companion object {
         const val SETTINGS_HELP_PREFERENCE_KEY = "SETTINGS_HELP_PREFERENCE_KEY"
@@ -100,6 +104,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_ENABLE_CHAT_EFFECTS = "SETTINGS_ENABLE_CHAT_EFFECTS"
         private const val SETTINGS_SHOW_EMOJI_KEYBOARD = "SETTINGS_SHOW_EMOJI_KEYBOARD"
         private const val SETTINGS_LABS_ENABLE_LATEX_MATHS = "SETTINGS_LABS_ENABLE_LATEX_MATHS"
+        const val SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE = "SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE"
 
         // Room directory
         private const val SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS = "SETTINGS_ROOM_DIRECTORY_SHOW_ALL_PUBLIC_ROOMS"
@@ -110,9 +115,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         // home
         private const val SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY = "SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY"
         private const val SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY = "SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
-
-        // flair
-        const val SETTINGS_GROUPS_FLAIR_KEY = "SETTINGS_GROUPS_FLAIR_KEY"
 
         // notifications
         const val SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY = "SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
@@ -201,7 +203,13 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
         private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
-        const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
+
+        // This key will be used to identify clients with the old thread support enabled io.element.thread
+        const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
+
+        // This key will be used to identify clients with the new thread support enabled m.thread
+        const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES_FINAL"
+        const val SETTINGS_THREAD_MESSAGES_SYNCED = "SETTINGS_THREAD_MESSAGES_SYNCED"
 
         // Possible values for TAKE_PHOTO_VIDEO_MODE
         const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
@@ -660,9 +668,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun getMinMediasLastAccessTime(): Long {
         return when (getSelectedMediasSavingPeriod()) {
-            MEDIA_SAVING_3_DAYS  -> System.currentTimeMillis() / 1000 - 3 * 24 * 60 * 60
-            MEDIA_SAVING_1_WEEK  -> System.currentTimeMillis() / 1000 - 7 * 24 * 60 * 60
-            MEDIA_SAVING_1_MONTH -> System.currentTimeMillis() / 1000 - 30 * 24 * 60 * 60
+            MEDIA_SAVING_3_DAYS  -> clock.epochMillis() / 1000 - 3 * 24 * 60 * 60
+            MEDIA_SAVING_1_WEEK  -> clock.epochMillis() / 1000 - 7 * 24 * 60 * 60
+            MEDIA_SAVING_1_MONTH -> clock.epochMillis() / 1000 - 30 * 24 * 60 * 60
             MEDIA_SAVING_FOREVER -> 0
             else                 -> 0
         }
@@ -863,6 +871,29 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
+     * Tells if user should always appear offline or not.
+     *
+     * @return true if user should always appear offline
+     */
+    fun userAlwaysAppearsOffline(): Boolean {
+        return defaultPrefs.getBoolean(
+                SETTINGS_PRESENCE_USER_ALWAYS_APPEARS_OFFLINE,
+                getDefault(R.bool.settings_presence_user_always_appears_offline_default)
+        )
+    }
+
+    /**
+     * Update the rage shake enabled status.
+     *
+     * @param isEnabled true to enable rage shake.
+     */
+    fun setRageshakeEnabled(isEnabled: Boolean) {
+        defaultPrefs.edit {
+            putBoolean(SETTINGS_USE_RAGE_SHAKE_KEY, isEnabled)
+        }
+    }
+
+    /**
      * Tells if the rage shake is used.
      *
      * @return true if the rage shake is used
@@ -980,9 +1011,11 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun prefSpacesShowAllRoomInHome(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME,
+        return defaultPrefs.getBoolean(
+                SETTINGS_PREF_SPACE_SHOW_ALL_ROOM_IN_HOME,
                 // migration of old property
-                !labsSpacesOnlyOrphansInHome())
+                !labsSpacesOnlyOrphansInHome()
+        )
     }
 
     /*
@@ -1006,7 +1039,56 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
     }
 
+    /**
+     * Indicates whether or not thread messages are enabled
+     */
     fun areThreadMessagesEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, false)
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, getDefault(R.bool.settings_labs_thread_messages_default))
+    }
+
+    /**
+     * Manually sets thread messages enabled, useful for migrating users from io.element.thread
+     */
+    fun setThreadMessagesEnabled() {
+        defaultPrefs
+                .edit()
+                .putBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, true)
+                .apply()
+    }
+
+    /**
+     * Indicates whether or not the user will be notified about the new thread support
+     * We should notify the user only if he had old thread support enabled
+     */
+    fun shouldNotifyUserAboutThreads(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS, false)
+    }
+
+    /**
+     * Indicates that the user have been notified about threads migration
+     */
+    fun userNotifiedAboutThreads() {
+        defaultPrefs
+                .edit()
+                .putBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS, false)
+                .apply()
+    }
+
+    /**
+     * Indicates whether or not we should clear cache for threads migration.
+     * Default value is true, for fresh installs and updates
+     */
+    fun shouldMigrateThreads(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_THREAD_MESSAGES_SYNCED, true)
+    }
+
+    /**
+     * Indicates that there no longer threads migration needed
+     */
+    fun setShouldMigrateThreads(shouldMigrate: Boolean) {
+        defaultPrefs
+                .edit()
+                .putBoolean(SETTINGS_THREAD_MESSAGES_SYNCED, shouldMigrate)
+                .apply()
     }
 }

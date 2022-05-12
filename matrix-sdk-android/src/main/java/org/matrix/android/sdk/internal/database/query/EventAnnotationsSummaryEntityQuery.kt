@@ -34,7 +34,7 @@ internal fun EventAnnotationsSummaryEntity.Companion.create(realm: Realm, roomId
         this.roomId = roomId
     }
     // Denormalization
-    TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId).findFirst()?.let {
+    TimelineEventEntity.where(realm, roomId = roomId, eventId = eventId).findAll()?.forEach {
         it.annotations = obj
     }
     return obj

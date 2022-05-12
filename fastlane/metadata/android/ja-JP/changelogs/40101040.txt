@@ -1,0 +1,2 @@
+このバージョンの主な変更点：パフォーマンスの向上と不具合の修正
+更新履歴：https://github.com/vector-im/element-android/releases/tag/v1.1.4

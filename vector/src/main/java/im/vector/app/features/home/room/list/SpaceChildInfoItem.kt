@@ -40,7 +40,7 @@ import me.gujun.android.span.image
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.util.MatrixItem
 
-@EpoxyModelClass(layout = R.layout.item_suggested_room)
+@EpoxyModelClass(layout = R.layout.item_explore_space_child)
 abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>() {
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
@@ -51,6 +51,7 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
 
     @EpoxyAttribute var memberCount: Int = 0
     @EpoxyAttribute var loading: Boolean = false
+    @EpoxyAttribute var suggested: Boolean = false
 
     @EpoxyAttribute var buttonLabel: String? = null
     @EpoxyAttribute var errorLabel: String? = null
@@ -89,6 +90,7 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
             }
         }
 
+        holder.suggestedTag.visibility = if (suggested) View.VISIBLE else View.GONE
         holder.joinButton.text = buttonLabel
 
         if (loading) {
@@ -121,7 +123,8 @@ abstract class SpaceChildInfoItem : VectorEpoxyModel<SpaceChildInfoItem.Holder>(
         val titleView by bind<TextView>(R.id.roomNameView)
         val joinButton by bind<Button>(R.id.joinSuggestedRoomButton)
         val joinButtonLoading by bind<ProgressBar>(R.id.joinSuggestedLoading)
-        val descriptionText by bind<TextView>(R.id.suggestedRoomDescription)
+        val descriptionText by bind<TextView>(R.id.roomDescription)
+        val suggestedTag by bind<TextView>(R.id.suggestedTag)
         val avatarImageView by bind<ImageView>(R.id.roomAvatarImageView)
         val rootView by bind<ViewGroup>(R.id.itemRoomLayout)
         val errorTextView by bind<TextView>(R.id.inlineErrorText)

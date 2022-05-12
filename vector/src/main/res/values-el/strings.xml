@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="medium_email">Ηλεκτρονική διεύθυνση</string>
-
     <string name="notice_room_invite_you">Ο/Η %1$s σας προσκάλεσε</string>
     <string name="notice_room_leave">Ο/Η %1$s αποχώρησε</string>
     <string name="notice_room_reject">Ο/Η %1$s απέρριψε την πρόσκληση</string>
@@ -9,7 +8,6 @@
     <string name="notice_room_invite">Ο/Η %1$s προσκάλεσε τον/την %2$s</string>
     <string name="notice_room_invite_no_invitee">Η πρόσκληση του/της %s</string>
     <string name="medium_phone_number">Αριθμός τηλεφώνου</string>
-
     <string name="notice_room_ban">Ο/Η %1$s απέκλεισε τον/την %2$s</string>
     <string name="notice_room_withdraw">Ο/Η %1$s απέσυρε την πρόσκληση του/της %2$s</string>
     <string name="notice_avatar_url_changed">Ο/Η %1$s άλλαξε εικονίδιο χρήστη</string>
@@ -20,7 +18,6 @@
     <string name="notice_room_name_changed">Ο/Η %1$s άλλαξε το όνομα του δωματίου σε: %2$s</string>
     <string name="notice_answered_call">Ο/Η %s απάντησε στην κλήση.</string>
     <string name="notice_ended_call">Ο/Η %s τερμάτισε την κλήση.</string>
-
     <string name="notice_placed_video_call">Ο/Η %s πραγματοποίησε μια κλήση βίντεο.</string>
     <string name="notice_placed_voice_call">Ο/Η %s πραγματοποίησε μια κλήση ήχου.</string>
     <string name="notice_made_future_room_visibility">Ο/Η %1$s κατέστησε το μελλοντικό ιστορικό του δωματίου ορατό στον/στην %2$s</string>
@@ -31,28 +28,15 @@
     <string name="notice_room_name_removed">Ο/Η %1$s αφαίρεσε το όνομα του δωματίου</string>
     <string name="notice_room_topic_removed">Ο/Η %1$s αφαίρεσε το θέμα του δωματίου</string>
     <string name="notice_room_third_party_registered_invite">Ο/Η %1$s δέχτηκε την πρόσκληση για το %2$s</string>
-
     <string name="notice_crypto_unable_to_decrypt">** Αδυναμία αποκρυπτογράφησης: %s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">Η συσκευή του/της αποστολέα δεν μας έχει στείλει τα κλειδιά για αυτό το μήνυμα.</string>
-
     <string name="unable_to_send_message">Αποτυχία αποστολής μηνύματος</string>
-
-
     <string name="matrix_error">Σφάλμα του Matrix</string>
-
-
     <string name="notice_room_join">Ο/Η %1$s εισήλθε στο δωμάτιο</string>
-
     <string name="room_displayname_room_invite">Πρόσκληση στο δωμάτιο</string>
-
     <string name="room_displayname_two_members">%1$s και %2$s</string>
-
-
-
     <string name="room_displayname_empty_room">Άδειο δωμάτιο</string>
-
     <string name="notice_room_visibility_joined">όλα τα μέλη του δωματίου από την στιγμή που εισήλθαν.</string>
-
     <string name="notice_room_third_party_invite">Ο/Η %1$s έστειλε μία πρόσκληση στον/στην %2$s για να εισέλθει στο δωμάτιο</string>
     <string name="action_cancel">Ακύρωση</string>
     <string name="action_close">Κλείσιμο</string>
@@ -108,7 +92,6 @@
     <string name="matrix_only_filter">Μόνο οι επαφές Matrix</string>
     <string name="no_result_placeholder">Δεν βρέθηκαν αποτελέσματα</string>
     <string name="rooms_header">Δωμάτια</string>
-
     <string name="groups_header">Κοινότητες</string>
     <string name="send_bug_report_include_crash_logs">Αποστολή καταγραφών σφαλμάτων</string>
     <string name="send_bug_report">Αναφορά σφάλματος</string>
@@ -214,8 +197,6 @@
     <string name="command_error">Σφάλμα εντολής</string>
     <string name="create">Δημιουργία</string>
     <string name="rooms">Δωμάτια</string>
-
-
     <string name="reason_colon">Λόγος: %1$s</string>
     <string name="deactivate_account_title">Απενεργοποίηση λογαριασμού</string>
     <string name="deactivate_account_submit">Απενεργοποίηση λογαριασμού</string>
@@ -295,7 +276,6 @@
         <item quantity="one">%d πρόσκληση</item>
         <item quantity="other">%d προσκλήσεις</item>
     </plurals>
-
     <string name="auth_login">Σύνδεση</string>
     <string name="room_participants_ban_reason">Λόγος οριστικής αποβολής</string>
     <string name="room_participants_ban_title">Αποκλεισμός χρήστη</string>
@@ -353,7 +333,6 @@
     <string name="call_failed_no_connection_description">Αποτυχία σύνδεσης σε πραγματικό χρόνο.
 \nΖητήστε από τον διαχειριστή του οικιακού σας διακομιστή να διαμορφώσει έναν διακομιστή TURN ώστε οι κλήσεις να λειτουργούν αξιόπιστα.</string>
     <string name="call_failed_no_connection">Η Κλήση ${app_name} Aπέτυχε</string>
-
     <string name="start_video_call_prompt_msg">Είσαστε σίγουροι ότι θέλετε να κάνετε κλήση βίντεο;</string>
     <string name="start_voice_call_prompt_msg">Είσαστε σίγουροι ότι θέλετε να κάνετε κλήση ήχου;</string>
     <string name="option_send_voice">Αποστολή φωνής</string>
@@ -369,7 +348,6 @@
     <string name="action_unpublish">Κατάργηση δημοσίευσης</string>
     <string name="action_copy">Αντιγραφή</string>
     <string name="call_notification_hangup">Τέλος κλήσης</string>
-
     <string name="bottom_action_notification">Ειδοποιήσεις</string>
     <string name="copied_to_clipboard">Αντιγράφηκε στο πρόχειρο</string>
     <string name="action_add">Πρόσθεση</string>
@@ -392,7 +370,6 @@
     <string name="room_one_user_is_typing">%s γράφει…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s γράφουν…</string>
     <string name="ssl_could_not_verify">Δεν εξακριβώθηκε η ταυτότητα του εξωτερικού διακομιστή.</string>
-
     <string name="search_no_results">Κανένα αποτέλεσμα</string>
     <string name="search_banned_user_hint">Φιλτράρισμα αποβεβλημένων χρηστών</string>
     <string name="search_members_hint">Φιλτράρισμα μελών δωματίου</string>
@@ -402,4 +379,9 @@
     <string name="ssl_unexpected_existing_expl">Το πιστοποιητικό έχει αλλάξει από αυτό που εμπιστεύθηκε προηγουμένως η συσκευή σας. Αυτό είναι ΑΚΡΩΣ ΑΣΥΝΗΘΙΣΤΟ. Προτείνεται να ΜΗΝ ΑΠΟΔΕΚΤΕΙΤΕ το νεο πιστοποιητικό.</string>
     <string name="system_theme">Προεπιλογή Συστήματος</string>
     <string name="auth_invalid_login_param">Λανθασμένο όνομα χρήστη και/ή κωδικού</string>
+    <string name="poll_end_action">Τερματισμός δημοσκόπησης</string>
+    <string name="edit_poll_title">Επεξεργασία δημοσκόπησης</string>
+    <string name="location_share_external">Άνοιγμα με</string>
+    <string name="tooltip_attachment_sticker">Αποστολή αυτοκόλλητου</string>
+    <string name="notice_room_created">%1$s δημιούργησε το δωμάτιο</string>
 </resources>

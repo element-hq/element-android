@@ -15,13 +15,14 @@
  */
 package org.matrix.android.sdk.internal.crypto.tasks
 
+import dagger.Lazy
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.session.crypto.CryptoService
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.send.SendState
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
-import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.task.Task
@@ -35,7 +36,7 @@ internal interface EncryptEventTask : Task<EncryptEventTask.Params, Event> {
 
 internal class DefaultEncryptEventTask @Inject constructor(
         private val localEchoRepository: LocalEchoRepository,
-        private val cryptoService: CryptoService
+        private val cryptoService: Lazy<CryptoService>
 ) : EncryptEventTask {
     override suspend fun execute(params: EncryptEventTask.Params): Event {
         // don't want to wait for any query
@@ -48,7 +49,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
         localEchoRepository.updateSendState(localEvent.eventId, localEvent.roomId, SendState.ENCRYPTING)
 
         // let it throws
-        val result = cryptoService.encryptEventContent(localEvent.content ?: emptyMap(), localEvent.type, params.roomId)
+        val result = cryptoService.get().encryptEventContent(localEvent.content ?: emptyMap(), localEvent.type, params.roomId)
         // Better handling of local echo, to avoid decrypting transition on remote echo
         // Should I only do it for text messages?
         val decryptionLocalEcho = if (result.eventContent["algorithm"] == MXCRYPTO_ALGORITHM_MEGOLM) {
@@ -60,7 +61,7 @@ internal class DefaultEncryptEventTask @Inject constructor(
                     ).toContent(),
                     forwardingCurve25519KeyChain = emptyList(),
                     senderCurve25519Key = result.eventContent["sender_key"] as? String,
-                    claimedEd25519Key = cryptoService.getMyCryptoDevice().fingerprint()
+                    claimedEd25519Key = cryptoService.get().getMyCryptoDevice().fingerprint()
             )
         } else {
             null

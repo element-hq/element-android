@@ -67,12 +67,26 @@ interface StateService {
     suspend fun deleteAvatar()
 
     /**
+     * Stops sharing live location in the room
+     * @param userId user id
+     */
+    suspend fun stopLiveLocation(userId: String)
+
+    /**
+     * Returns beacon info state event of a user
+     * @param userId user id who is sharing location
+     * @param filterOnlyLive filters only ongoing live location sharing beacons if true else ended event is included
+     */
+    suspend fun getLiveLocationBeaconInfo(userId: String, filterOnlyLive: Boolean): Event?
+
+    /**
      * Send a state event to the room
      * @param eventType The type of event to send.
      * @param stateKey The state_key for the state to send. Can be an empty string.
      * @param body The content object of the event; the fields in this object will vary depending on the type of event
+     * @return the id of the created state event
      */
-    suspend fun sendStateEvent(eventType: String, stateKey: String, body: JsonDict)
+    suspend fun sendStateEvent(eventType: String, stateKey: String, body: JsonDict): String
 
     /**
      * Get a state event of the room

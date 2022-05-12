@@ -23,7 +23,7 @@ import org.matrix.android.sdk.internal.database.model.RoomEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-class MigrateSessionTo022(realm: DynamicRealm) : RealmMigrator(realm, 22) {
+internal class MigrateSessionTo022(realm: DynamicRealm) : RealmMigrator(realm, 22) {
 
     override fun doMigrate(realm: DynamicRealm) {
         val listJoinedRoomIds = realm.where("RoomEntity")

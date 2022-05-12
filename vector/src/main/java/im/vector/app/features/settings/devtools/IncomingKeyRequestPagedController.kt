@@ -24,7 +24,7 @@ import im.vector.app.core.ui.list.GenericItem_
 import im.vector.app.core.utils.createUIHandler
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
-import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
 import javax.inject.Inject
 
 class IncomingKeyRequestPagedController @Inject constructor(
@@ -53,6 +53,7 @@ class IncomingKeyRequestPagedController @Inject constructor(
                             textStyle = "bold"
                         }
                         span("${roomKeyRequest.userId}")
+                        +"\n"
                         +host.vectorDateFormatter.format(roomKeyRequest.localCreationTimestamp, DateFormatKind.DEFAULT_DATE_AND_TIME)
                         span("\nsessionId:") {
                             textStyle = "bold"
@@ -62,10 +63,6 @@ class IncomingKeyRequestPagedController @Inject constructor(
                             textStyle = "bold"
                         }
                         +"${roomKeyRequest.deviceId}"
-                        span("\nstate: ") {
-                            textStyle = "bold"
-                        }
-                        +roomKeyRequest.state.name
                     }.toEpoxyCharSequence()
             )
         }

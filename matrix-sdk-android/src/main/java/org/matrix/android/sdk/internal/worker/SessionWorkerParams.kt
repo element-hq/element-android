@@ -20,7 +20,7 @@ package org.matrix.android.sdk.internal.worker
  * Note about the Worker usage:
  * The workers we chain, or when using the append strategy, should never return Result.Failure(), else the chain will be broken forever
  */
-interface SessionWorkerParams {
+internal interface SessionWorkerParams {
     val sessionId: String
 
     /**

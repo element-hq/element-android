@@ -27,6 +27,7 @@ import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.databinding.FragmentFtueDisplayNameBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewEvents
+import im.vector.app.features.onboarding.OnboardingViewState
 import javax.inject.Inject
 
 class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueDisplayNameBinding>() {
@@ -41,7 +42,6 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
     }
 
     private fun setupViews() {
-        views.displayNameSubmit.isEnabled = views.displayNameInput.hasContentEmpty()
         views.displayNameInput.editText?.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
                 val newContent = s.toString()
@@ -58,16 +58,18 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
             }
         }
 
-        views.displayNameSubmit.debouncedClicks {
-            updateDisplayName()
-        }
-
+        views.displayNameSubmit.debouncedClicks { updateDisplayName() }
         views.displayNameSkip.debouncedClicks { viewModel.handle(OnboardingAction.UpdateDisplayNameSkipped) }
     }
 
     private fun updateDisplayName() {
         val newDisplayName = views.displayNameInput.editText?.text.toString()
         viewModel.handle(OnboardingAction.UpdateDisplayName(newDisplayName))
+    }
+
+    override fun updateWithState(state: OnboardingViewState) {
+        views.displayNameInput.editText?.setText(state.personalizationState.displayName)
+        views.displayNameSubmit.isEnabled = views.displayNameInput.hasContentEmpty()
     }
 
     override fun resetViewModel() {

@@ -38,7 +38,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
@@ -50,8 +49,10 @@ import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.plan.MobileScreen
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
+import im.vector.app.features.matrixto.OriginOfMatrixTo
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.permalink.NavigationInterceptor
@@ -80,9 +81,9 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
+import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
+import org.matrix.android.sdk.api.session.sync.initialSyncStrategy
 import org.matrix.android.sdk.api.util.MatrixItem
-import org.matrix.android.sdk.internal.session.sync.InitialSyncStrategy
-import org.matrix.android.sdk.internal.session.sync.initialSyncStrategy
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -90,6 +91,7 @@ import javax.inject.Inject
 data class HomeActivityArgs(
         val clearNotification: Boolean,
         val accountCreation: Boolean,
+        val hasExistingSession: Boolean = false,
         val inviteNotificationRoomId: String? = null
 ) : Parcelable
 
@@ -106,6 +108,7 @@ class HomeActivity :
 
     @Suppress("UNUSED")
     private val analyticsAccountDataViewModel: AnalyticsAccountDataViewModel by viewModel()
+
     @Suppress("UNUSED")
     private val userColorAccountDataViewModel: UserColorAccountDataViewModel by viewModel()
 
@@ -139,9 +142,11 @@ class HomeActivity :
             }
             // Here we want to change current space to the newly created one, and then immediately open the default room
             if (spaceId != null) {
-                navigator.switchToSpace(context = this,
+                navigator.switchToSpace(
+                        context = this,
                         spaceId = spaceId,
-                        postSwitchOption)
+                        postSwitchOption
+                )
             }
         }
     }
@@ -231,7 +236,7 @@ class HomeActivity :
                         HomeActivitySharedAction.SendSpaceFeedBack    -> {
                             bugReporter.openBugReportScreen(this, ReportType.SPACE_BETA_FEEDBACK)
                         }
-                    }.exhaustive
+                    }
                 }
                 .launchIn(lifecycleScope)
 
@@ -242,7 +247,7 @@ class HomeActivity :
         }
         if (args?.inviteNotificationRoomId != null) {
             activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(args.inviteNotificationRoomId)?.let {
-                navigator.openMatrixToBottomSheet(this, it)
+                navigator.openMatrixToBottomSheet(this, it, OriginOfMatrixTo.NOTIFICATION)
             }
         }
 
@@ -253,7 +258,9 @@ class HomeActivity :
                 HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
                 is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn               -> handleShowAnalyticsOptIn()
-            }.exhaustive
+                HomeActivityViewEvents.NotifyUserForThreadsMigration    -> handleNotifyUserForThreadsMigration()
+                is HomeActivityViewEvents.MigrateThreads                -> migrateThreadsIfNeeded(it.checkSession)
+            }
         }
         homeActivityViewModel.onEach { renderState(it) }
 
@@ -267,6 +274,48 @@ class HomeActivity :
 
     private fun handleShowAnalyticsOptIn() {
         navigator.openAnalyticsOptIn(this)
+    }
+
+    /**
+     * Migrating from old threads io.element.thread to new m.thread needs an initial sync to
+     * sync and display existing messages appropriately
+     */
+    private fun migrateThreadsIfNeeded(checkSession: Boolean) {
+        if (checkSession) {
+            // We should check session to ensure we will only clear cache if needed
+            val args = intent.getParcelableExtra<HomeActivityArgs>(Mavericks.KEY_ARG)
+            if (args?.hasExistingSession == true) {
+                // existingSession --> Will be true only if we came from an existing active session
+                Timber.i("----> Migrating threads from an existing session..")
+                handleThreadsMigration()
+            } else {
+                // We came from a new session and not an existing one,
+                // so there is no need to migrate threads while an initial synced performed
+                Timber.i("----> No thread migration needed, we are ok")
+                vectorPreferences.setShouldMigrateThreads(shouldMigrate = false)
+            }
+        } else {
+            // Proceed with migration
+            handleThreadsMigration()
+        }
+    }
+
+    /**
+     * Clear cache and restart to invoke an initial sync for threads migration
+     */
+    private fun handleThreadsMigration() {
+        Timber.i("----> Threads Migration detected, clearing cache and sync...")
+        vectorPreferences.setShouldMigrateThreads(shouldMigrate = false)
+        MainActivity.restartApp(this, MainActivityArgs(clearCache = true))
+    }
+
+    private fun handleNotifyUserForThreadsMigration() {
+        MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.threads_notice_migration_title)
+                .setMessage(R.string.threads_notice_migration_message)
+                .setCancelable(true)
+                .setPositiveButton(R.string.sas_got_it) { _, _ -> }
+                .show()
     }
 
     private fun handleIntent(intent: Intent?) {
@@ -307,7 +356,7 @@ class HomeActivity :
 
     private fun renderState(state: HomeActivityViewState) {
         when (val status = state.syncStatusServiceStatus) {
-            is SyncStatusService.Status.Progressing -> {
+            is SyncStatusService.Status.InitialSyncProgressing -> {
                 val initSyncStepStr = initSyncStepFormatter.format(status.initSyncStep)
                 Timber.v("$initSyncStepStr ${status.percentProgress}")
                 views.waitingView.root.setOnClickListener {
@@ -325,11 +374,11 @@ class HomeActivity :
                 }
                 views.waitingView.root.isVisible = true
             }
-            else                                    -> {
+            else                                               -> {
                 // Idle or Incremental sync status
                 views.waitingView.root.isVisible = false
             }
-        }.exhaustive
+        }
     }
 
     private fun handleAskPasswordToInitCrossSigning(events: HomeActivityViewEvents.AskPasswordToInitCrossSigning) {
@@ -435,7 +484,7 @@ class HomeActivity :
             activeSessionHolder.getSafeActiveSession()
                     ?.permalinkService()
                     ?.createPermalink(parcelableExtra.inviteNotificationRoomId)?.let {
-                        navigator.openMatrixToBottomSheet(this, it)
+                        navigator.openMatrixToBottomSheet(this, it, OriginOfMatrixTo.NOTIFICATION)
                     }
         }
         handleIntent(intent)
@@ -522,20 +571,20 @@ class HomeActivity :
 
     override fun navToMemberProfile(userId: String, deepLink: Uri): Boolean {
         // TODO check if there is already one??
-        MatrixToBottomSheet.withLink(deepLink.toString())
+        MatrixToBottomSheet.withLink(deepLink.toString(), OriginOfMatrixTo.LINK)
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }
 
     override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
         if (roomId == null) return false
-        MatrixToBottomSheet.withLink(deepLink.toString())
+        MatrixToBottomSheet.withLink(deepLink.toString(), OriginOfMatrixTo.LINK)
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")
         return true
     }
 
     override fun spaceInviteBottomSheetOnAccept(spaceId: String) {
-        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.OpenRoomList)
     }
 
     override fun spaceInviteBottomSheetOnDecline(spaceId: String) {
@@ -546,11 +595,13 @@ class HomeActivity :
         fun newIntent(context: Context,
                       clearNotification: Boolean = false,
                       accountCreation: Boolean = false,
+                      existingSession: Boolean = false,
                       inviteNotificationRoomId: String? = null
         ): Intent {
             val args = HomeActivityArgs(
                     clearNotification = clearNotification,
                     accountCreation = accountCreation,
+                    hasExistingSession = existingSession,
                     inviteNotificationRoomId = inviteNotificationRoomId
             )
 
@@ -561,11 +612,11 @@ class HomeActivity :
         }
     }
 
-    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
-        navigator.openRoom(this, roomId)
+    override fun mxToBottomSheetNavigateToRoom(roomId: String, trigger: ViewRoom.Trigger?) {
+        navigator.openRoom(this, roomId, trigger = trigger)
     }
 
     override fun mxToBottomSheetSwitchToSpace(spaceId: String) {
-        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.None)
+        navigator.switchToSpace(this, spaceId, Navigator.PostSwitchSpaceAction.OpenRoomList)
     }
 }

@@ -34,6 +34,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
@@ -41,11 +42,26 @@ import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.crypto.NewSessionListener
+import org.matrix.android.sdk.api.session.crypto.OutgoingKeyRequest
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
+import org.matrix.android.sdk.api.session.crypto.model.AuditTrail
+import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.DeviceInfo
+import org.matrix.android.sdk.api.session.crypto.model.ForwardedRoomKeyContent
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.api.session.crypto.model.IncomingRoomKeyRequest
+import org.matrix.android.sdk.api.session.crypto.model.MXEncryptEventContentResult
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
+import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
+import org.matrix.android.sdk.api.session.crypto.model.TrailType
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.content.RoomKeyContent
+import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
+import org.matrix.android.sdk.api.session.events.model.content.SecretSendEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
@@ -55,15 +71,6 @@ import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
-import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
-import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
-import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
-import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
-import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
-import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
-import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
 import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
@@ -175,8 +182,6 @@ internal class DefaultCryptoService @Inject constructor(
             }
         }
     }
-
-    private val gossipingBuffer = mutableListOf<Event>()
 
     override suspend fun setDeviceName(deviceId: String, deviceName: String) {
         val params = SetDeviceNameTask.Params(deviceId, deviceName)
@@ -331,15 +336,6 @@ internal class DefaultCryptoService @Inject constructor(
             outgoingRequestsProcessor.process(olmMachine)
 
             keysBackupService.maybeBackupKeys()
-        }
-
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            tryOrNull {
-                gossipingBuffer.toList().let {
-                    cryptoStore.saveGossipingEvents(it)
-                }
-                gossipingBuffer.clear()
-            }
         }
     }
 
@@ -790,6 +786,14 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.setGlobalBlacklistUnverifiedDevices(block)
     }
 
+    override fun enableKeyGossiping(enable: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override fun isKeyGossipingEnabled(): Boolean {
+        TODO("Not yet implemented")
+    }
+
     /**
      * Tells whether the client should ever send encrypted messages to unverified devices.
      * The default value is false.
@@ -919,27 +923,34 @@ internal class DefaultCryptoService @Inject constructor(
         return "DefaultCryptoService of $userId ($deviceId)"
     }
 
-    override fun getOutgoingRoomKeyRequests(): List<OutgoingRoomKeyRequest> {
+    override fun getOutgoingRoomKeyRequests(): List<OutgoingKeyRequest> {
         return cryptoStore.getOutgoingRoomKeyRequests()
     }
 
-    override fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingRoomKeyRequest>> {
+    override fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingKeyRequest>> {
         return cryptoStore.getOutgoingRoomKeyRequestsPaged()
     }
 
     override fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>> {
-        return cryptoStore.getIncomingRoomKeyRequestsPaged()
+        return cryptoStore.getGossipingEventsTrail(TrailType.IncomingKeyRequest) {
+            IncomingRoomKeyRequest.fromEvent(it)
+                    ?: IncomingRoomKeyRequest(localCreationTimestamp = 0L)
+        }
+    }
+
+    override suspend fun manuallyAcceptRoomKeyRequest(request: IncomingRoomKeyRequest) {
+        //TODO rust?
     }
 
     override fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest> {
-        return cryptoStore.getIncomingRoomKeyRequests()
+        return getIncomingRoomKeyRequests()
     }
 
-    override fun getGossipingEventsTrail(): LiveData<PagedList<Event>> {
+    override fun getGossipingEventsTrail(): LiveData<PagedList<AuditTrail>> {
         return cryptoStore.getGossipingEventsTrail()
     }
 
-    override fun getGossipingEvents(): List<Event> {
+    override fun getGossipingEvents(): List<AuditTrail> {
         return cryptoStore.getGossipingEvents()
     }
 

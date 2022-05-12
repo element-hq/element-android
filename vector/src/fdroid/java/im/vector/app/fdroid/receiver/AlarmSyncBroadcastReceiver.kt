@@ -27,17 +27,21 @@ import androidx.core.content.getSystemService
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.PendingIntentCompat
 import im.vector.app.core.services.VectorSyncService
-import org.matrix.android.sdk.internal.session.sync.job.SyncService
+import im.vector.app.core.time.Clock
+import org.matrix.android.sdk.api.session.sync.job.SyncService
 import timber.log.Timber
 
 class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Timber.d("## Sync: AlarmSyncBroadcastReceiver received intent")
-        val vectorPreferences = context.singletonEntryPoint()
-                .takeIf { it.activeSessionHolder().getSafeActiveSession() != null }
-                ?.vectorPreferences()
-                ?: return Unit.also { Timber.v("No active session, so don't launch sync service.") }
+        val singletonEntryPoint = context.singletonEntryPoint()
+        if (singletonEntryPoint.activeSessionHolder().getSafeActiveSession() == null) {
+            Timber.v("No active session, so don't launch sync service.")
+            return
+        }
+        val vectorPreferences = singletonEntryPoint.vectorPreferences()
+        val clock = singletonEntryPoint.clock()
 
         val sessionId = intent.getStringExtra(SyncService.EXTRA_SESSION_ID) ?: return
         VectorSyncService.newPeriodicIntent(
@@ -52,7 +56,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
                         ContextCompat.startForegroundService(context, it)
                     } catch (ex: Throwable) {
                         Timber.i("## Sync: Failed to start service, Alarm scheduled to restart service")
-                        scheduleAlarm(context, sessionId, vectorPreferences.backgroundSyncDelay())
+                        scheduleAlarm(context, sessionId, vectorPreferences.backgroundSyncDelay(), clock)
                         Timber.e(ex)
                     }
                 }
@@ -61,7 +65,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
     companion object {
         private const val REQUEST_CODE = 0
 
-        fun scheduleAlarm(context: Context, sessionId: String, delayInSeconds: Int) {
+        fun scheduleAlarm(context: Context, sessionId: String, delayInSeconds: Int, clock: Clock) {
             // Reschedule
             Timber.v("## Sync: Scheduling alarm for background sync in $delayInSeconds seconds")
             val intent = Intent(context, AlarmSyncBroadcastReceiver::class.java).apply {
@@ -74,7 +78,7 @@ class AlarmSyncBroadcastReceiver : BroadcastReceiver() {
                     intent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
             )
-            val firstMillis = System.currentTimeMillis() + delayInSeconds * 1000L
+            val firstMillis = clock.epochMillis() + delayInSeconds * 1000L
             val alarmMgr = context.getSystemService<AlarmManager>()!!
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, firstMillis, pIntent)

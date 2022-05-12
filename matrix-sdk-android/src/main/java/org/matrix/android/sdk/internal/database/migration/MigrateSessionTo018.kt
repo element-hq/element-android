@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.presence.UserPresenceEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo018(realm: DynamicRealm) : RealmMigrator(realm, 18) {
+internal class MigrateSessionTo018(realm: DynamicRealm) : RealmMigrator(realm, 18) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.create("UserPresenceEntity")

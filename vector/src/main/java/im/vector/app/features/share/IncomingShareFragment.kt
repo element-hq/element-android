@@ -34,14 +34,15 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentIncomingShareBinding
+import im.vector.app.features.analytics.plan.ViewRoom
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.preview.AttachmentsPreviewActivity
 import im.vector.app.features.attachments.preview.AttachmentsPreviewArgs
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -81,7 +82,7 @@ class IncomingShareFragment @Inject constructor(
                 is IncomingShareViewEvents.ShareToRoom            -> handleShareToRoom(it)
                 is IncomingShareViewEvents.EditMediaBeforeSending -> handleEditMediaBeforeSending(it)
                 is IncomingShareViewEvents.MultipleRoomsShareDone -> handleMultipleRoomsShareDone(it)
-            }.exhaustive
+            }
         }
 
         val intent = vectorBaseActivity.intent
@@ -125,7 +126,11 @@ class IncomingShareFragment @Inject constructor(
 
     private fun handleMultipleRoomsShareDone(viewEvent: IncomingShareViewEvents.MultipleRoomsShareDone) {
         requireActivity().let {
-            navigator.openRoom(it, viewEvent.roomId)
+            navigator.openRoom(
+                    context = it,
+                    roomId = viewEvent.roomId,
+                    trigger = ViewRoom.Trigger.MobileLinkShare
+            )
             it.finish()
         }
     }

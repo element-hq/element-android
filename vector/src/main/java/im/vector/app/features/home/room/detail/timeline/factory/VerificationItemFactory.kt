@@ -25,13 +25,15 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageInformatio
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem
 import im.vector.app.features.home.room.detail.timeline.item.StatusTileTimelineItem_
-import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getTimelineEvent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationCancelContent
 import javax.inject.Inject
@@ -71,10 +73,10 @@ class VerificationItemFactory @Inject constructor(
         // If it's not a request ignore this event
         // if (refEvent.root.getClearContent().toModel<MessageVerificationRequestContent>() == null) return ignoredConclusion(event, highlight, callback)
 
-        val referenceInformationData = messageInformationDataFactory.create(TimelineItemFactoryParams(refEvent))
+        val referenceInformationData = messageInformationDataFactory.create(TimelineItemFactoryParams(event = refEvent))
 
         val informationData = messageInformationDataFactory.create(params)
-        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback, params.reactionsSummaryEvents)
 
         when (event.root.getClearType()) {
             EventType.KEY_VERIFICATION_CANCEL -> {
@@ -100,7 +102,8 @@ class VerificationItemFactory @Inject constructor(
                                                 itemClickListener = attributes.itemClickListener,
                                                 itemLongClickListener = attributes.itemLongClickListener,
                                                 reactionPillCallback = attributes.reactionPillCallback,
-                                                readReceiptsCallback = attributes.readReceiptsCallback
+                                                readReceiptsCallback = attributes.readReceiptsCallback,
+                                                reactionsSummaryEvents = attributes.reactionsSummaryEvents
                                         )
                                 )
                                 .highlighted(params.isHighlighted)
@@ -133,7 +136,8 @@ class VerificationItemFactory @Inject constructor(
                                         itemClickListener = attributes.itemClickListener,
                                         itemLongClickListener = attributes.itemLongClickListener,
                                         reactionPillCallback = attributes.reactionPillCallback,
-                                        readReceiptsCallback = attributes.readReceiptsCallback
+                                        readReceiptsCallback = attributes.readReceiptsCallback,
+                                        reactionsSummaryEvents = attributes.reactionsSummaryEvents
                                 )
                         )
                         .highlighted(params.isHighlighted)
