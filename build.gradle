@@ -35,9 +35,11 @@ buildscript {
     }
 }
 
-// ktlint Plugin
 plugins {
+    // ktlint Plugin
     id "org.jlleitschuh.gradle.ktlint" version "10.3.0"
+    // Detekt
+    id "io.gitlab.arturbosch.detekt" version "1.20.0"
 }
 
 // https://github.com/jeremylong/DependencyCheck
@@ -52,6 +54,7 @@ dependencyCheck {
 
 allprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
+    apply plugin: "io.gitlab.arturbosch.detekt"
 
     repositories {
         // Do not use `mavenCentral()`, it prevents Dependabot from working properly
@@ -139,6 +142,17 @@ allprojects {
                 // - A KDoc comment after any other element on the same line must be separated by a new line
                 "experimental:kdoc-wrapping",
         ]
+    }
+
+    detekt {
+        // preconfigure defaults
+        buildUponDefaultConfig = true
+        // activate all available (even unstable) rules.
+        allRules = false
+        // point to your custom config defining rules to run, overwriting default behavior
+        config = files("$rootDir/tools/detekt/detekt.yml")
+        // a way of suppressing issues before introducing detekt
+        baseline = file("$rootDir/tools/detekt/baseline.xml")
     }
 }
 
