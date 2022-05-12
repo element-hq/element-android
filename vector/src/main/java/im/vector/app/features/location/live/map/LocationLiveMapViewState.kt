@@ -16,6 +16,7 @@
 
 package im.vector.app.features.location.live.map
 
+import android.graphics.drawable.Drawable
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.features.location.LocationData
 
@@ -30,5 +31,6 @@ data class LocationLiveMapViewState(
 
 data class UserLiveLocationViewState(
         val userId: String,
+        val pinDrawable: Drawable,
         val locationData: LocationData
 )

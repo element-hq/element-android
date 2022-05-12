@@ -16,20 +16,34 @@
 
 package im.vector.app.features.location.live.map
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.constants.MapboxConstants
+import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.geometry.LatLngBounds
+import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions
+import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
 import dagger.hilt.android.AndroidEntryPoint
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
+import com.mapbox.mapboxsdk.style.layers.Property
 import im.vector.app.R
 import im.vector.app.core.extensions.addChildFragment
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSimpleContainerBinding
 import im.vector.app.features.location.UrlMapProvider
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 /**
@@ -43,6 +57,14 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
 
     private val args: LocationLiveMapViewArgs by args()
 
+    private val viewModel: LocationLiveMapViewModel by fragmentViewModel()
+
+    private var mapboxMap: WeakReference<MapboxMap>? = null
+    private var symbolManager: SymbolManager? = null
+    private var mapStyle: Style? = null
+    private val pendingLiveLocations = mutableListOf<UserLiveLocationViewState>()
+    private var isMapFirstUpdate = true
+
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSimpleContainerBinding {
         return FragmentSimpleContainerBinding.inflate(layoutInflater, container, false)
     }
@@ -55,9 +77,70 @@ class LocationLiveMapViewFragment : VectorBaseFragment<FragmentSimpleContainerBi
     private fun setupMap() {
         val mapFragment = getOrCreateSupportMapFragment()
 
-        mapFragment.getMapAsync { mapBoxMap ->
+        mapFragment.getMapAsync { mapboxMap ->
             lifecycleScope.launchWhenCreated {
-                mapBoxMap.setStyle(urlMapProvider.getMapUrl())
+                mapboxMap.setStyle(urlMapProvider.getMapUrl()) { style ->
+                    mapStyle = style
+                    this@LocationLiveMapViewFragment.mapboxMap = WeakReference(mapboxMap)
+                    symbolManager = SymbolManager(mapFragment.view as MapView, mapboxMap, style)
+                    pendingLiveLocations
+                            .takeUnless { it.isEmpty() }
+                            ?.let { updateMap(it) }
+                }
+            }
+        }
+    }
+
+    override fun invalidate() = withState(viewModel) { viewState ->
+        updateMap(viewState.userLocations)
+    }
+
+    private fun updateMap(userLiveLocations: List<UserLiveLocationViewState>) {
+        symbolManager?.let {
+            it.deleteAll()
+
+            val latLngBoundsBuilder = LatLngBounds.Builder()
+            userLiveLocations.forEach { userLocation ->
+                addUserPinToMapStyle(userLocation.userId, userLocation.pinDrawable)
+                val symbolOptions = buildSymbolOptions(userLocation)
+                it.create(symbolOptions)
+
+                if (isMapFirstUpdate) {
+                    latLngBoundsBuilder.include(LatLng(userLocation.locationData.latitude, userLocation.locationData.longitude))
+                }
+            }
+
+            if (isMapFirstUpdate) {
+                isMapFirstUpdate = false
+                zoomToViewAllUsers(latLngBoundsBuilder.build())
+            }
+        } ?: run {
+            pendingLiveLocations.clear()
+            pendingLiveLocations.addAll(userLiveLocations)
+        }
+    }
+
+    private fun addUserPinToMapStyle(userId: String, userPinDrawable: Drawable) {
+        mapStyle?.let { style ->
+            if (style.getImage(userId) == null) {
+                style.addImage(userId, userPinDrawable)
+            }
+        }
+    }
+
+    private fun buildSymbolOptions(userLiveLocation: UserLiveLocationViewState) =
+            SymbolOptions()
+                    .withLatLng(LatLng(userLiveLocation.locationData.latitude, userLiveLocation.locationData.longitude))
+                    .withIconImage(userLiveLocation.userId)
+                    .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
+
+    private fun zoomToViewAllUsers(latLngBounds: LatLngBounds) {
+        mapboxMap?.get()?.let { mapboxMap ->
+            mapboxMap.getCameraForLatLngBounds(latLngBounds)?.let { cameraPosition ->
+                // update the zoom a little to avoid having pins exactly at the edges of the map
+                mapboxMap.cameraPosition = CameraPosition.Builder(cameraPosition)
+                        .zoom((cameraPosition.zoom - 1).coerceAtLeast(MapboxConstants.MINIMUM_ZOOM.toDouble()))
+                        .build()
             }
         }
     }

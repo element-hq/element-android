@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.onEach
 // TODO add unit tests
 class LocationLiveMapViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationLiveMapViewState,
-        getCurrentUserLiveLocationUseCase: GetCurrentUserLiveLocationUseCase
+        getListOfUserLiveLocationUseCase: GetListOfUserLiveLocationUseCase
 ) : VectorViewModel<LocationLiveMapViewState, LocationLiveMapAction, LocationLiveMapViewEvents>(initialState) {
 
     @AssistedFactory
@@ -40,7 +40,7 @@ class LocationLiveMapViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<LocationLiveMapViewModel, LocationLiveMapViewState> by hiltMavericksViewModelFactory()
 
     init {
-        getCurrentUserLiveLocationUseCase.execute()
+        getListOfUserLiveLocationUseCase.execute()
                 .onEach { setState { copy(userLocations = it) } }
                 .launchIn(viewModelScope)
     }
