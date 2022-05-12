@@ -205,6 +205,8 @@ class VectorPreferences @Inject constructor(
         private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
         private const val SETTINGS_LABS_ENABLE_LIVE_LOCATION = "SETTINGS_LABS_ENABLE_LIVE_LOCATION"
 
+        private const val DID_SHOW_USER_SPACE_LEAVE_COACH_MARK = "DID_SHOW_USER_SPACE_LEAVE_COACH_MARK"
+
         // This key will be used to identify clients with the old thread support enabled io.element.thread
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES_OLD_CLIENTS = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
 
@@ -1101,5 +1103,15 @@ class VectorPreferences @Inject constructor(
 
     fun showLiveSenderInfo(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO, getDefault(R.bool.settings_timeline_show_live_sender_info_default))
+    }
+
+    fun didShowUserSpaceLeaveCoachMark(): Boolean {
+        return defaultPrefs.getBoolean(DID_SHOW_USER_SPACE_LEAVE_COACH_MARK, false)
+    }
+
+    fun setDidShowUserSpaceLeaveCoachMark() {
+        defaultPrefs.edit {
+            putBoolean(DID_SHOW_USER_SPACE_LEAVE_COACH_MARK, true)
+        }
     }
 }

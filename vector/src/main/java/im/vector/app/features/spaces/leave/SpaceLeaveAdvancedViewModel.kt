@@ -29,6 +29,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -52,7 +53,8 @@ import timber.log.Timber
 class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         @Assisted val initialState: SpaceLeaveAdvanceViewState,
         private val session: Session,
-        private val appStateHandler: AppStateHandler
+        private val appStateHandler: AppStateHandler,
+        private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<SpaceLeaveAdvanceViewState, SpaceLeaveAdvanceViewAction, EmptyViewEvents>(initialState) {
 
     init {
@@ -99,7 +101,7 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
             )
 
             setState {
-                copy(allChildren = Success(children))
+                copy(allChildren = Success(children), showCoachMark = !vectorPreferences.didShowUserSpaceLeaveCoachMark())
             }
         }
     }
@@ -113,7 +115,13 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
             is SpaceLeaveAdvanceViewAction.ToggleSelection -> handleSelectionToggle(action)
             SpaceLeaveAdvanceViewAction.DoLeave -> handleLeave()
             SpaceLeaveAdvanceViewAction.SelectAll -> handleSelectAll()
+            SpaceLeaveAdvanceViewAction.CoachMarkDismissed -> handleCoachMarkDismissed()
         }
+    }
+
+    private fun handleCoachMarkDismissed() = withState {
+        vectorPreferences.setDidShowUserSpaceLeaveCoachMark()
+        setState { copy(showCoachMark = false) }
     }
 
     private fun handleSelectAll() = withState { state ->

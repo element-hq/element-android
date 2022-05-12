@@ -26,4 +26,5 @@ sealed class SpaceLeaveAdvanceViewAction : VectorViewModelAction {
     object ClearError : SpaceLeaveAdvanceViewAction()
     object SelectAll : SpaceLeaveAdvanceViewAction()
     object SelectNone : SpaceLeaveAdvanceViewAction()
+    object CoachMarkDismissed : SpaceLeaveAdvanceViewAction()
 }

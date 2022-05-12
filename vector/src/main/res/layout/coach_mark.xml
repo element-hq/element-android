@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/coach_mark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|top"
+        android:paddingHorizontal="20dp"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <ImageView
+            android:id="@+id/coach_mark_arrow_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_coach_arrow"
+            app:tint="?colorPrimary"
+            tools:ignore="ContentDescription"/>
+
+        <TextView
+            android:id="@+id/coach_mark_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_coach_mark"
+            android:backgroundTint="?colorPrimary"
+            android:gravity="center"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:textAppearance="@style/TextAppearance.Vector.Body"
+            android:textSize="16sp"
+            android:textColor="@color/palette_white"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua" />
+
+        <ImageView
+            android:id="@+id/coach_mark_arrow_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="-1dp"
+            android:rotation="180"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_coach_arrow"
+            android:visibility="gone"
+            app:tint="?colorPrimary"
+            tools:ignore="ContentDescription"/>
+    </LinearLayout>
+
+</FrameLayout>

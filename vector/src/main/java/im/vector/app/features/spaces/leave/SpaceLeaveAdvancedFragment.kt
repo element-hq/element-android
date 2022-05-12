@@ -17,6 +17,7 @@
 package im.vector.app.features.spaces.leave
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -32,6 +33,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.ui.views.CoachMarkView
 import im.vector.app.core.utils.ToggleableAppBarLayoutBehavior
 import im.vector.app.databinding.FragmentSpaceLeaveAdvancedBinding
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -111,6 +113,12 @@ class SpaceLeaveAdvancedFragment @Inject constructor(
 
         if (state.isFilteringEnabled) {
             views.appBarLayout.setExpanded(false)
+        }
+
+        if (state.showCoachMark) {
+            CoachMarkView(requireContext(), views.root).show(R.string.space_leave_coach_mark_text, views.coachMarkGuide, Gravity.BOTTOM) {
+                viewModel.handle(SpaceLeaveAdvanceViewAction.CoachMarkDismissed)
+            }
         }
 
         updateAppBarBehaviorState(state)
