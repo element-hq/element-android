@@ -1057,7 +1057,7 @@
     <string name="settings_play_shutter_sound">Play shutter sound</string>
 
     <!-- TODO Remove -->
-    <string name="settings_flair" tools:ignore="MissingTranslation">Flair</string>
+    <string name="settings_flair" tools:ignore="UnusedResources">Flair</string>
 
     <!-- medias saving settings -->
     <string name="media_saving_period_3_days">3 days</string>
