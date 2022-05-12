@@ -28,8 +28,6 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import com.airbnb.mvrx.withState
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.getResTintedDrawable
 import im.vector.app.core.extensions.getTintedDrawable
@@ -40,7 +38,6 @@ import im.vector.app.features.login.ServerType
 import im.vector.app.features.onboarding.FtueUseCase
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.themes.ThemeProvider
-import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import javax.inject.Inject
 
 private const val DARK_MODE_ICON_BACKGROUND_ALPHA = 0.30f
@@ -107,38 +104,11 @@ class FtueAuthUseCaseFragment @Inject constructor(
     private fun createIcon(@ColorRes tint: Int, icon: Int, isLightMode: Boolean): Drawable {
         val context = requireContext()
         val alpha = when (isLightMode) {
-            true  -> LIGHT_MODE_ICON_BACKGROUND_ALPHA
+            true -> LIGHT_MODE_ICON_BACKGROUND_ALPHA
             false -> DARK_MODE_ICON_BACKGROUND_ALPHA
         }
         val iconBackground = context.getResTintedDrawable(R.drawable.bg_feature_icon, tint, alpha = alpha)
         val whiteLayer = context.getTintedDrawable(R.drawable.bg_feature_icon, Color.WHITE)
         return LayerDrawable(arrayOf(whiteLayer, iconBackground, ContextCompat.getDrawable(context, icon)))
-    }
-
-    override fun onError(throwable: Throwable) {
-        when {
-            requireContext().inferNoConnectivity() -> super.onError(throwable)
-            throwable.isHomeserverUnavailable()    -> {
-                val url = viewModel.getInitialHomeServerUrl().orEmpty()
-                homeserverUnavailableDialog(url) { onContinueFlowWithLoginConfigReset() }
-            }
-            else                                   -> super.onError(throwable)
-        }
-    }
-
-    private fun onContinueFlowWithLoginConfigReset() {
-        viewModel.handle(OnboardingAction.ResetDeeplinkConfig)
-        withState(viewModel) { it.useCase }?.let {
-            viewModel.handle(OnboardingAction.UpdateUseCase(it))
-        }
-    }
-
-    private fun homeserverUnavailableDialog(url: String, action: () -> Unit) {
-        MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.dialog_title_error)
-                .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
-                .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ -> action() }
-                .setNegativeButton(R.string.action_cancel, null)
-                .show()
     }
 }
