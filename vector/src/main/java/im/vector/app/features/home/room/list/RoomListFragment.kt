@@ -146,6 +146,10 @@ class RoomListFragment @Inject constructor(
                         (it.contentEpoxyController as? RoomSummaryPagedController)?.roomChangeMembershipStates = ms
                     }
         }
+        roomListViewModel.onEach(RoomListViewState::localRoomIds) {
+            // Local rooms should not exist anymore when the room list is shown
+            roomListViewModel.deleteLocalRooms(it)
+        }
     }
 
     private fun refreshCollapseStates() {

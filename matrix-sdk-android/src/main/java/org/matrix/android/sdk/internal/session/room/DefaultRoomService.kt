@@ -45,6 +45,7 @@ import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.create.CreateLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
+import org.matrix.android.sdk.internal.session.room.delete.DeleteLocalRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.RoomChangeMembershipStateDataSource
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
@@ -62,6 +63,7 @@ internal class DefaultRoomService @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val createRoomTask: CreateRoomTask,
         private val createLocalRoomTask: CreateLocalRoomTask,
+        private val deleteLocalRoomTask: DeleteLocalRoomTask,
         private val joinRoomTask: JoinRoomTask,
         private val markAllRoomsReadTask: MarkAllRoomsReadTask,
         private val updateBreadcrumbsTask: UpdateBreadcrumbsTask,
@@ -82,6 +84,10 @@ internal class DefaultRoomService @Inject constructor(
 
     override suspend fun createLocalRoom(createRoomParams: CreateRoomParams): String {
         return createLocalRoomTask.execute(createRoomParams)
+    }
+
+    override suspend fun deleteLocalRoom(roomId: String) {
+        deleteLocalRoomTask.execute(DeleteLocalRoomTask.Params(roomId))
     }
 
     override fun getRoom(roomId: String): Room? {

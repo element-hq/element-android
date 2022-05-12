@@ -48,6 +48,11 @@ interface RoomService {
     suspend fun createLocalRoom(createRoomParams: CreateRoomParams): String
 
     /**
+     * Delete a local room with all its related events.
+     */
+    suspend fun deleteLocalRoom(roomId: String)
+
+    /**
      * Create a direct room asynchronously. This is a facility method to create a direct room with the necessary parameters.
      */
     suspend fun createDirectRoom(otherUserId: String): String {
