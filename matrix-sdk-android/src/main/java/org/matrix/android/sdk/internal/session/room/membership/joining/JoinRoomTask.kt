@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.membership.joining
 
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
@@ -53,6 +54,7 @@ internal class DefaultJoinRoomTask @Inject constructor(
         private val readMarkersTask: SetReadMarkersTask,
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
+        private val coroutineDispatcher: MatrixCoroutineDispatchers,
         private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
         private val globalErrorReceiver: GlobalErrorReceiver,
         private val clock: Clock,

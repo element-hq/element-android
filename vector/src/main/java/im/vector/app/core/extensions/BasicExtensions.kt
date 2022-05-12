@@ -31,6 +31,11 @@ inline fun <T> T.ooi(block: (T) -> Unit): T = also(block)
 fun CharSequence.isEmail() = Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
 /**
+ * Return empty CharSequence if the CharSequence is null
+ */
+fun CharSequence?.orEmpty() = this ?: ""
+
+/**
  * Check if a CharSequence is a phone number
  */
 fun CharSequence.isMsisdn(): Boolean {

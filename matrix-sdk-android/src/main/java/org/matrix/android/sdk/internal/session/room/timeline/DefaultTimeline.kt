@@ -291,7 +291,6 @@ internal class DefaultTimeline(
         }
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     private fun listenToPostSnapshotSignals() {
         postSnapshotSignalFlow
                 .sample(150)
