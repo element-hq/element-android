@@ -30,6 +30,6 @@ internal data class GroupSummaryUsersSection(
 
         @Json(name = "users") val users: List<String> = emptyList()
 
-        // @TODO: Check the meaning and the usage of these roles. This dictionary is empty FTM.
+        // TODO Check the meaning and the usage of these roles. This dictionary is empty FTM.
         // public Map<Object, Object> roles;
 )
