@@ -25,4 +25,4 @@ package org.matrix.android.sdk.userstories
  * #### Required APIs:
  * - TODO
  */
-object Us400RoomSendContent
+class Us400RoomSendContent private constructor()

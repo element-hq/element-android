@@ -25,4 +25,4 @@ package org.matrix.android.sdk.userstories
  * #### Required APIs:
  * - TODO
  */
-object Us600SyncWithTheServer
+class Us600SyncWithTheServer private constructor()

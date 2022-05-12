@@ -25,4 +25,4 @@ package org.matrix.android.sdk.userstories
  * #### Required APIs:
  * - TODO
  */
-object Us150VerifySession
+class Us150VerifySession private constructor()

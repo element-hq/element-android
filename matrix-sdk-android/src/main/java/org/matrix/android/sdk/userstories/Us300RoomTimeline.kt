@@ -25,4 +25,4 @@ package org.matrix.android.sdk.userstories
  * #### Required APIs:
  * - TODO
  */
-object Us300RoomTimeline
+class Us300RoomTimeline private constructor()

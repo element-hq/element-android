@@ -25,4 +25,4 @@ package org.matrix.android.sdk.userstories
  * #### Required APIs:
  * - TODO
  */
-object Us200RoomList
+class Us200RoomList private constructor()

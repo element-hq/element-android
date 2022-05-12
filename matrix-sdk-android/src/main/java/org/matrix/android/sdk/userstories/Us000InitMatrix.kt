@@ -25,4 +25,4 @@ package org.matrix.android.sdk.userstories
  * ### Required APIs:
  * - [org.matrix.android.sdk.api.Matrix] constructor
  */
-object Us000InitMatrix
+class Us000InitMatrix private constructor()

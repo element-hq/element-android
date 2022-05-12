@@ -28,4 +28,4 @@ package org.matrix.android.sdk.userstories
  * - [org.matrix.android.sdk.api.auth.AuthenticationService.getLoginWizard]
  * - [org.matrix.android.sdk.api.auth.login.LoginWizard.login]
  */
-object Us100SignIn
+class Us100SignIn private constructor()
