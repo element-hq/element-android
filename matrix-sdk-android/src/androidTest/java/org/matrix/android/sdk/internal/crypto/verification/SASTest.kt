@@ -97,7 +97,6 @@ class SASTest : InstrumentedTest {
         assertTrue(aliceKeyTx is SasVerificationTransaction)
         assertEquals("Alice and Bob have same transaction id", aliceKeyTx!!.transactionId, bobKeyTx!!.transactionId)
 
-
         assertEquals("Alice state should be started", VerificationTxState.OnStarted, aliceKeyTx.state)
         assertEquals("Bob state should be started by alice", VerificationTxState.OnStarted, bobKeyTx.state)
 
@@ -407,7 +406,7 @@ class SASTest : InstrumentedTest {
             bobSession.cryptoService().getMyCryptoDevice().deviceId
         }
         testHelper.runBlockingTest {
-            //aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
+            // aliceVerificationService.beginKeyVerification(VerificationMethod.SAS, bobUserId, bobDeviceId, null)
         }
         testHelper.await(aliceAcceptedLatch)
 
@@ -431,7 +430,6 @@ class SASTest : InstrumentedTest {
                 Timber.v("Alice transactionUpdated: ${tx.state}")
                 latch.countDown()
             }
-
         }
         aliceSession.cryptoService().verificationService().addListener(aliceListener)
         val bobListener = object : VerificationService.Listener {
@@ -620,7 +618,6 @@ class SASTest : InstrumentedTest {
                     otherUserId = aliceSession.myUserId,
                     roomId = cryptoTestData.roomId
             )
-
         }
 
         // we should reach SHOW SAS on both

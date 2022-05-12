@@ -161,5 +161,4 @@ class UnknownDeviceDetectorSharedViewModel @AssistedInject constructor(@Assisted
                 ?: System.currentTimeMillis()
         emit(value)
     }
-
 }

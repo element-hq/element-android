@@ -29,5 +29,3 @@ data class KeysBackupSettingViewState(val keysBackupVersionTrust: Async<KeysBack
                                       val remainingKeysToBackup: Int = 0,
                                       val deleteBackupRequest: Async<Unit> = Uninitialized) :
         MavericksState
-
-

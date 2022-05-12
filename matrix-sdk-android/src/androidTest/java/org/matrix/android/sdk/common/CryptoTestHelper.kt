@@ -304,7 +304,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             aliceVerificationService.beginKeyVerification(
                     VerificationMethod.SAS,
                     roomId,
-                    bob.myUserId, )
+                    bob.myUserId,)
         }
 
         // we should reach SHOW SAS on both

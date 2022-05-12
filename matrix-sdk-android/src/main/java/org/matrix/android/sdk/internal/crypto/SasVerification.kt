@@ -210,7 +210,6 @@ internal class SasVerification(
             }
             dispatchTxUpdated()
         }
-
     }
 
     private suspend fun cancelHelper(code: CancelCode) {

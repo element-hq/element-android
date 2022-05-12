@@ -121,6 +121,5 @@ class HomeDrawerFragment @Inject constructor(
     }
 
     private fun signout() {
-
     }
 }

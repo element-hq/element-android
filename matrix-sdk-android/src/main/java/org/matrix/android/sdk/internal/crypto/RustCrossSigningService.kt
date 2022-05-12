@@ -17,8 +17,6 @@
 package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.flow.Flow
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -44,7 +42,7 @@ internal class RustCrossSigningService @Inject constructor(
      * Is our own device signed by our own cross signing identity
      */
     override suspend fun isCrossSigningVerified(): Boolean {
-        return when (val identity = olmMachine.getIdentity(olmMachine.userId()) ) {
+        return when (val identity = olmMachine.getIdentity(olmMachine.userId())) {
             is OwnUserIdentity -> identity.trustsOurOwnDevice()
             else               -> false
         }

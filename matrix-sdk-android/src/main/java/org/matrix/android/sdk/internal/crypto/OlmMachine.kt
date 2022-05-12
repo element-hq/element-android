@@ -83,8 +83,10 @@ private class CryptoProgressListener(private val listener: ProgressListener?) : 
     }
 }
 
-private data class UserIdentityCollector(val userId: String, val collector: SendChannel<Optional<MXCrossSigningInfo>>) : SendChannel<Optional<MXCrossSigningInfo>> by collector
-private data class DevicesCollector(val userIds: List<String>, val collector: SendChannel<List<CryptoDeviceInfo>>) : SendChannel<List<CryptoDeviceInfo>> by collector
+private data class UserIdentityCollector(val userId: String, val collector: SendChannel<Optional<MXCrossSigningInfo>>)
+    : SendChannel<Optional<MXCrossSigningInfo>> by collector
+private data class DevicesCollector(val userIds: List<String>, val collector: SendChannel<List<CryptoDeviceInfo>>)
+    : SendChannel<List<CryptoDeviceInfo>> by collector
 private typealias PrivateKeysCollector = SendChannel<Optional<PrivateKeysInfo>>
 
 private class FlowCollectors {

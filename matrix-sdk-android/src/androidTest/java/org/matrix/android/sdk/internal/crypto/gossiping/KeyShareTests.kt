@@ -297,8 +297,7 @@ class KeyShareTests : InstrumentedTest {
 
         // SSK and USK private keys should have been shared
 
-        commonTestHelper.waitWithLatch(60_000)
-        { latch ->
+        commonTestHelper.waitWithLatch(60_000) { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 Log.d("#TEST", "CAN XS :${aliceSession2.cryptoService().crossSigningService().getMyCrossSigningKeys()}")
                 aliceSession2.cryptoService().crossSigningService().canCrossSign()
@@ -306,8 +305,7 @@ class KeyShareTests : InstrumentedTest {
         }
 
         // Test that key backup key has been shared to
-        commonTestHelper.waitWithLatch(60_000)
-        { latch ->
+        commonTestHelper.waitWithLatch(60_000) { latch ->
             val keysBackupService = aliceSession2.cryptoService().keysBackupService()
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 Log.d("#TEST", "Recovery :${keysBackupService.getKeyBackupRecoveryKeyInfo()?.recoveryKey}")

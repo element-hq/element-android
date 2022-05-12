@@ -149,7 +149,7 @@ class UnwedgingTest : InstrumentedTest {
         }
         val sessionIdsForBob = aliceCryptoStore.getDeviceSessionIds(myDevice.identityKey()!!)
         sessionIdsForBob!!.size shouldBe 1
-        val olmSession = aliceCryptoStore.getDeviceSession(sessionIdsForBob.first(),myDevice.identityKey()!!)!!
+        val olmSession = aliceCryptoStore.getDeviceSession(sessionIdsForBob.first(), myDevice.identityKey()!!)!!
 
         val oldSession = serializeForRealm(olmSession.olmSession)
 

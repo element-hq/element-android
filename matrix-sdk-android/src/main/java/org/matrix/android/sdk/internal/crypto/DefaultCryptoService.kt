@@ -146,7 +146,12 @@ internal class DefaultCryptoService @Inject constructor(
 
     // Locks for some of our operations
     private val keyClaimLock: Mutex = Mutex()
-    private val outgoingRequestsProcessor = OutgoingRequestsProcessor(requestSender, cryptoCoroutineScope, cryptoSessionInfoProvider, crossSigningService::shieldForGroup)
+    private val outgoingRequestsProcessor = OutgoingRequestsProcessor(
+            requestSender = requestSender,
+            coroutineScope = cryptoCoroutineScope,
+            cryptoSessionInfoProvider = cryptoSessionInfoProvider,
+            shieldComputer = crossSigningService::shieldForGroup
+    )
     private val roomKeyShareLocks: ConcurrentHashMap<String, Mutex> = ConcurrentHashMap()
 
     fun onStateEvent(roomId: String, event: Event) {

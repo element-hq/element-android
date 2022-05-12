@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.matrix.android.sdk.common.CryptoTestHelper
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
-class SasVerificationTestHelper (private val testHelper: CommonTestHelper, private val cryptoTestHelper: CryptoTestHelper){
+class SasVerificationTestHelper(private val testHelper: CommonTestHelper, private val cryptoTestHelper: CryptoTestHelper) {
     fun requestVerificationAndWaitForReadyState(cryptoTestData: CryptoTestData, supportedMethods: List<VerificationMethod>): String {
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession!!
@@ -84,5 +84,3 @@ class SasVerificationTestHelper (private val testHelper: CommonTestHelper, priva
         return bobReadyPendingVerificationRequest?.transactionId!!
     }
 }
-
-

@@ -139,11 +139,13 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         }
     }
 
-    private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration  = runBlocking{
-        if (event.root.sendState != SendState.SYNCED)
+    private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration  = runBlocking {
+        if (event.root.sendState != SendState.SYNCED) {
             return@runBlocking E2EDecoration.NONE
-        if (!roomSummary?.isEncrypted.orFalse())
+        }
+        if (!roomSummary?.isEncrypted.orFalse()) {
             return@runBlocking E2EDecoration.NONE
+        }
         val isUserVerified = session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted().orFalse()
         if (!isUserVerified) {
             return@runBlocking E2EDecoration.NONE
