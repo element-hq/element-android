@@ -18,7 +18,10 @@ package im.vector.app.core.extensions
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ImageSpan
@@ -76,4 +79,31 @@ val Context.dataStoreProvider: (String) -> DataStore<Preferences> by dataStorePr
  */
 fun Context.safeOpenOutputStream(uri: Uri): OutputStream? {
     return contentResolver.openOutputStream(uri, "wt")
+}
+
+/**
+ * Checks for an active connection to infer if the device is offline.
+ * This is useful for breaking down UnknownHost exceptions and should not be used to determine if a valid connection is present
+ *
+ * @return true if no active connection is found
+ */
+@Suppress("deprecation")
+fun Context.inferNoConnectivity(): Boolean {
+    val connectivityManager: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        when {
+            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> false
+            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true     -> false
+            networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_VPN) == true      -> false
+            else                                                                              -> true
+        }
+    } else {
+        when (connectivityManager.activeNetworkInfo?.type) {
+            ConnectivityManager.TYPE_WIFI   -> false
+            ConnectivityManager.TYPE_MOBILE -> false
+            ConnectivityManager.TYPE_VPN    -> false
+            else                            -> true
+        }
+    }
 }
