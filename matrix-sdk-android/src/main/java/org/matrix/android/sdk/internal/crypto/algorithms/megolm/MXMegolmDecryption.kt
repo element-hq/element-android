@@ -308,5 +308,4 @@ internal class MXMegolmDecryption(
         Timber.tag(loggerTag.value).v("ON NEW SESSION $sessionId - $senderKey")
         newSessionListener?.onNewSession(roomId, senderKey, sessionId)
     }
-
 }
