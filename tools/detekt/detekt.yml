@@ -64,9 +64,6 @@ naming:
   VariableNaming:
     # TODO Enable it
     active: false
-  ConstructorParameterNaming:
-    # TODO Enable it
-    active: false
   TopLevelPropertyNaming:
     # TODO Enable it
     active: false
