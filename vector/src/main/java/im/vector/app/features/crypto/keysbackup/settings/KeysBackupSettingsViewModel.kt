@@ -156,14 +156,20 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
 
     suspend fun completeBackupCreation() {
         val info = pendingBackupCreationInfo ?: return
-        val version = awaitCallback<KeysVersion> {
-            session.cryptoService().keysBackupService().createKeysBackupVersion(info, it)
-        }
-        // Save it for gossiping
-        Timber.d("## BootstrapCrossSigningTask: Creating 4S - Save megolm backup key for gossiping")
-        session.cryptoService().keysBackupService().saveBackupRecoveryKey(info.recoveryKey, version = version.version)
+        try {
+            val version = awaitCallback<KeysVersion> {
+                session.cryptoService().keysBackupService().createKeysBackupVersion(info, it)
+            }
+            // Save it for gossiping
+            Timber.d("## BootstrapCrossSigningTask: Creating 4S - Save megolm backup key for gossiping")
+            session.cryptoService().keysBackupService().saveBackupRecoveryKey(info.recoveryKey, version = version.version)
+        } catch (failure: Throwable) {
+            // XXX mm... failed we should remove what we put in 4S, as it was not created?
 
-        // TODO catch, delete 4S account data
+            // for now just stay on the screen, user can retry, there is no api to delete account data
+        } finally {
+            pendingBackupCreationInfo = null
+        }
     }
 
     private fun deleteCurrentBackup() {

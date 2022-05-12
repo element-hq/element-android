@@ -231,7 +231,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         return cryptoTestData
     }
 
-    private fun ensureEventReceived(roomId: String, eventId: String, session: Session, andCanDecrypt : Boolean) {
+    private fun ensureEventReceived(roomId: String, eventId: String, session: Session, andCanDecrypt: Boolean) {
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
                 val timeLineEvent = session.getRoom(roomId)?.timelineService()?.getTimelineEvent(eventId)

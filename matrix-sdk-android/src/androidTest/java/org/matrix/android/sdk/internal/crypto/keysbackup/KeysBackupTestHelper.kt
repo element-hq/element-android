@@ -113,7 +113,7 @@ internal class KeysBackupTestHelper(
             keysBackup.createKeysBackupVersion(megolmBackupCreationInfo, it)
         }
 
-        Assert.assertNotNull("Key backup version should not be null",keysVersion.version)
+        Assert.assertNotNull("Key backup version should not be null", keysVersion.version)
 
         // Backup must be enable now
         Assert.assertTrue(keysBackup.isEnabled)

@@ -24,7 +24,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.FixMethodOrder
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -63,7 +62,6 @@ class KeysBackupTest : InstrumentedTest {
      */
     @Test
     fun roomKeysTest_testBackupStore_ok() {
-
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
 
@@ -105,7 +103,6 @@ class KeysBackupTest : InstrumentedTest {
      */
     @Test
     fun prepareKeysBackupVersionTest() {
-
         val testHelper = CommonTestHelper(context())
         val cryptoTestHelper = CryptoTestHelper(testHelper)
 

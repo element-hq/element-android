@@ -98,9 +98,8 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
                 is KeysBackupViewEvents.RequestStore4SSecret -> {
                     secretStartForActivityResult.launch(
                             SharedSecureStorageActivity.newWriteIntent(
-                                    this,
-                                    null, // default key
-                                    listOf(KEYBACKUP_SECRET_SSSS_NAME to it.recoveryKey)
+                                    context = this,
+                                    writeSecrets = listOf(KEYBACKUP_SECRET_SSSS_NAME to it.recoveryKey)
                             )
                     )
                 }
