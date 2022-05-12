@@ -211,6 +211,9 @@ class VectorPreferences @Inject constructor(
         const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES_FINAL"
         const val SETTINGS_THREAD_MESSAGES_SYNCED = "SETTINGS_THREAD_MESSAGES_SYNCED"
 
+        // This key will be used to enable user for displaying live user info or not.
+        const val SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO = "SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO"
+
         // Possible values for TAKE_PHOTO_VIDEO_MODE
         const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
         const val TAKE_PHOTO_VIDEO_MODE_PHOTO = 1
@@ -1039,9 +1042,6 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
     }
 
-    /**
-     * Indicates whether or not thread messages are enabled
-     */
     fun areThreadMessagesEnabled(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, getDefault(R.bool.settings_labs_thread_messages_default))
     }
@@ -1090,5 +1090,9 @@ class VectorPreferences @Inject constructor(
                 .edit()
                 .putBoolean(SETTINGS_THREAD_MESSAGES_SYNCED, shouldMigrate)
                 .apply()
+    }
+
+    fun showLiveSenderInfo(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_TIMELINE_SHOW_LIVE_SENDER_INFO, getDefault(R.bool.settings_timeline_show_live_sender_info_default))
     }
 }

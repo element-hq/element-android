@@ -136,6 +136,7 @@ internal class TimelineChunk(
             val prevEvents = prevChunk?.builtItems(includesNext = false, includesPrev = true).orEmpty()
             deepBuiltItems.addAll(prevEvents)
         }
+
         return deepBuiltItems
     }
 
