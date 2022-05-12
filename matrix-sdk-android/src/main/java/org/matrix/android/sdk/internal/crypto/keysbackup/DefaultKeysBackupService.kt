@@ -347,6 +347,11 @@ internal class DefaultKeysBackupService @Inject constructor(
 
     override fun backupAllGroupSessions(progressListener: ProgressListener?,
                                         callback: MatrixCallback<Unit>?) {
+
+        if (!isEnabled || backupOlmPkEncryption == null || keysBackupVersion == null) {
+            callback?.onFailure(Throwable("Backup not enabled"))
+            return
+        }
         // Get a status right now
         getBackupProgress(object : ProgressListener {
             override fun onProgress(progress: Int, total: Int) {
@@ -1258,7 +1263,6 @@ internal class DefaultKeysBackupService @Inject constructor(
             Timber.v("backupKeys: Invalid configuration")
             backupAllGroupSessionsCallback?.onFailure(IllegalStateException("Invalid configuration"))
             resetBackupAllGroupSessionsListeners()
-
             return
         }
 

@@ -203,15 +203,47 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
 
         // Alice sends a message
-        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[0], 1)
+        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[0], 1).first().eventId.let { sentEventId ->
+            // ensure bob got it
+            ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
+        }
 
         // Bob send 3 messages
-        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[0], 1)
-        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[1], 1)
-        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[2], 1)
+        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[0], 1).first().eventId.let { sentEventId ->
+            // ensure alice got it
+            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
+        }
+
+        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[1], 1).first().eventId.let { sentEventId ->
+            // ensure alice got it
+            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
+        }
+        testHelper.sendTextMessage(roomFromBobPOV, messagesFromBob[2], 1).first().eventId.let { sentEventId ->
+            // ensure alice got it
+            ensureEventReceived(aliceRoomId, sentEventId, aliceSession, true)
+        }
+
         // Alice sends a message
-        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[1], 1)
+        testHelper.sendTextMessage(roomFromAlicePOV, messagesFromAlice[1], 1).first().eventId.let { sentEventId ->
+            // ensure bob got it
+            ensureEventReceived(aliceRoomId, sentEventId, bobSession, true)
+        }
         return cryptoTestData
+    }
+
+    private fun ensureEventReceived(roomId: String, eventId: String, session: Session, andCanDecrypt : Boolean) {
+        testHelper.waitWithLatch { latch ->
+            testHelper.retryPeriodicallyWithLatch(latch) {
+                val timeLineEvent = session.getRoom(roomId)?.timelineService()?.getTimelineEvent(eventId)
+                if (andCanDecrypt) {
+                    timeLineEvent != null &&
+                            timeLineEvent.isEncrypted() &&
+                            timeLineEvent.root.getClearType() == EventType.MESSAGE
+                } else {
+                    timeLineEvent != null
+                }
+            }
+        }
     }
 
     fun checkEncryptedEvent(event: Event, roomId: String, clearMessage: String, senderSession: Session) {
@@ -381,9 +413,9 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
 
         testHelper.waitWithLatch {
             testHelper.retryPeriodicallyWithLatch(it) {
-                    bobVerificationService.getExistingVerificationRequests(alice.myUserId).firstOrNull {
-                        it.requestInfo?.fromDevice == alice.sessionParams.deviceId
-                    } != null
+                bobVerificationService.getExistingVerificationRequests(alice.myUserId).firstOrNull {
+                    it.requestInfo?.fromDevice == alice.sessionParams.deviceId
+                } != null
             }
         }
         val incomingRequest = bobVerificationService.getExistingVerificationRequests(alice.myUserId).first {
@@ -411,7 +443,8 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
                 requestID!!,
                 roomId,
                 bob.myUserId,
-                bob.sessionParams.credentials.deviceId!!)
+                bob.sessionParams.credentials.deviceId!!
+        )
 
         // we should reach SHOW SAS on both
         var alicePovTx: OutgoingSasVerificationTransaction? = null
