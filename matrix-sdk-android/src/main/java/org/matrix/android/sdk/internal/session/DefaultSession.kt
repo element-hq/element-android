@@ -177,7 +177,6 @@ internal class DefaultSession @Inject constructor(
         assert(!isOpen)
         isOpen = true
         globalErrorHandler.listener = this
-        cryptoService.get().ensureDevice()
         uiHandler.post {
             lifecycleObservers.forEach {
                 it.onSessionStarted(this)

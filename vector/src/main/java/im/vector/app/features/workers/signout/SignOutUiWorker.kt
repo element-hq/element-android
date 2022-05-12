@@ -17,17 +17,25 @@
 package im.vector.app.features.workers.signout
 
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.cannotLogoutSafely
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
 
 class SignOutUiWorker(private val activity: FragmentActivity) {
 
     fun perform() {
         val session = activity.singletonEntryPoint().activeSessionHolder().getSafeActiveSession() ?: return
+        activity.lifecycleScope.perform(session)
+    }
+
+    private fun CoroutineScope.perform(session: Session) = launch {
         if (session.cannotLogoutSafely()) {
             // The backup check on logout flow has to be displayed if there are keys in the store, and the keys backup state is not Ready
             val signOutDialog = SignOutBottomSheetDialogFragment.newInstance()

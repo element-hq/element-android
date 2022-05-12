@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.gossiping
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.FixMethodOrder
 import org.junit.Ignore
@@ -92,7 +93,9 @@ class WithHeldTests : InstrumentedTest {
         // Bob should not be able to decrypt because the keys is withheld
         try {
             // .. might need to wait a bit for stability?
-            bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
+                runBlocking {
+                    bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
+                }
             Assert.fail("This session should not be able to decrypt")
         } catch (failure: Throwable) {
             val type = (failure as MXCryptoError.Base).errorType
@@ -117,7 +120,9 @@ class WithHeldTests : InstrumentedTest {
         // Previous message should still be undecryptable (partially withheld session)
         try {
             // .. might need to wait a bit for stability?
-            bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
+                runBlocking {
+                    bobUnverifiedSession.cryptoService().decryptEvent(eventBobPOV.root, "")
+                }
             Assert.fail("This session should not be able to decrypt")
         } catch (failure: Throwable) {
             val type = (failure as MXCryptoError.Base).errorType
@@ -164,7 +169,9 @@ class WithHeldTests : InstrumentedTest {
         val eventBobPOV = bobSession.getRoom(testData.roomId)?.getTimelineEvent(eventId)
         try {
             // .. might need to wait a bit for stability?
-            bobSession.cryptoService().decryptEvent(eventBobPOV!!.root, "")
+                runBlocking {
+                    bobSession.cryptoService().decryptEvent(eventBobPOV!!.root, "")
+                }
             Assert.fail("This session should not be able to decrypt")
         } catch (failure: Throwable) {
             val type = (failure as MXCryptoError.Base).errorType
@@ -222,7 +229,7 @@ class WithHeldTests : InstrumentedTest {
         cryptoTestHelper.initializeCrossSigning(bobSecondSession)
 
         // Trust bob second device from Alice POV
-        mTestHelper.runBlockingTest {
+        testHelper.runBlockingTest {
             aliceSession.cryptoService().crossSigningService().trustDevice(bobSecondSession.sessionParams.deviceId!!)
             bobSecondSession.cryptoService().crossSigningService().trustDevice(aliceSession.sessionParams.deviceId!!)
         }

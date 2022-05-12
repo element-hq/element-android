@@ -18,7 +18,6 @@ package im.vector.app.features.crypto.keysbackup.settings
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -32,7 +31,6 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import timber.log.Timber
 
 class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialState: KeysBackupSettingViewState,
                                                               session: Session
@@ -46,6 +44,7 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
 
     companion object : MavericksViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> by hiltMavericksViewModelFactory()
 
+    private val cryptoService = session.cryptoService()
     private val keysBackupService: KeysBackupService = session.cryptoService().keysBackupService()
 
     init {
@@ -75,34 +74,12 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
 
     private fun getKeysBackupTrust() = withState { state ->
         val versionResult = keysBackupService.keysBackupVersion
-        Timber.d("BACKUP: HEEEEEEE $versionResult ${state.keysBackupVersionTrust}")
-
         if (state.keysBackupVersionTrust is Uninitialized && versionResult != null) {
-            setState {
-                copy(
-                        keysBackupVersionTrust = Loading(),
-                        deleteBackupRequest = Uninitialized
-                )
-            }
-            Timber.d("BACKUP: HEEEEEEE TWO")
-
-            viewModelScope.launch {
-                try {
-                    val data = keysBackupService.getKeysBackupTrust(versionResult)
-                    Timber.d("BACKUP: HEEEE suceeeded $data")
-                    setState {
-                        copy(
-                                keysBackupVersionTrust = Success(data)
-                        )
-                    }
-                } catch (failure: Throwable) {
-                    Timber.d("BACKUP: HEEEE FAILED $failure")
-                    setState {
-                        copy(
-                                keysBackupVersionTrust = Fail(failure)
-                        )
-                    }
-                }
+            setState { copy(deleteBackupRequest = Uninitialized) }
+            suspend {
+                keysBackupService.getKeysBackupTrust(versionResult)
+            }.execute {
+                copy(keysBackupVersionTrust = it)
             }
         }
     }
@@ -119,8 +96,22 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
                     keysBackupVersion = keysBackupService.keysBackupVersion
             )
         }
-
+        when (newState) {
+            KeysBackupState.BackingUp, KeysBackupState.WillBackUp -> updateKeysCount()
+            else                                                  -> Unit
+        }
         getKeysBackupTrust()
+    }
+
+    private fun updateKeysCount() {
+        viewModelScope.launch {
+            val totalKeys = cryptoService.inboundGroupSessionsCount(false)
+            val backedUpKeys = cryptoService.inboundGroupSessionsCount(true)
+            val remainingKeysToBackup = totalKeys - backedUpKeys
+            setState {
+                copy(remainingKeysToBackup = remainingKeysToBackup)
+            }
+        }
     }
 
     private fun deleteCurrentBackup() {

@@ -16,10 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import androidx.lifecycle.LiveData
-import kotlinx.coroutines.runBlocking
-import org.matrix.android.sdk.api.MatrixCallback
-import org.matrix.android.sdk.api.NoOpMatrixCallback
+import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -31,7 +28,6 @@ import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.extensions.foldToCallback
 import javax.inject.Inject
 
 internal class RustCrossSigningService @Inject constructor(
@@ -45,30 +41,30 @@ internal class RustCrossSigningService @Inject constructor(
     /**
      * Is our own device signed by our own cross signing identity
      */
-    override fun isCrossSigningVerified(): Boolean {
-        return when (val identity = runBlocking { olmMachine.getIdentity(olmMachine.userId()) }) {
+    override suspend fun isCrossSigningVerified(): Boolean {
+        return when (val identity = olmMachine.getIdentity(olmMachine.userId())) {
             is OwnUserIdentity -> identity.trustsOurOwnDevice()
             else               -> false
         }
     }
 
-    override fun isUserTrusted(otherUserId: String): Boolean {
+    override suspend fun isUserTrusted(otherUserId: String): Boolean {
         // This seems to be used only in tests.
-        return this.checkUserTrust(otherUserId).isVerified()
+        return checkUserTrust(otherUserId).isVerified()
     }
 
     /**
      * Will not force a download of the key, but will verify signatures trust chain.
      * Checks that my trusted user key has signed the other user UserKey
      */
-    override fun checkUserTrust(otherUserId: String): UserTrustResult {
-        val identity = runBlocking { olmMachine.getIdentity(olmMachine.userId()) }
+    override suspend fun checkUserTrust(otherUserId: String): UserTrustResult {
+        val identity = olmMachine.getIdentity(olmMachine.userId())
 
         // While UserTrustResult has many different states, they are by the callers
         // converted to a boolean value immediately, thus we don't need to support
         // all the values.
         return if (identity != null) {
-            val verified = runBlocking { identity.verified() }
+            val verified = identity.verified()
 
             if (verified) {
                 UserTrustResult.Success
@@ -84,8 +80,8 @@ internal class RustCrossSigningService @Inject constructor(
      * Initialize cross signing for this user.
      * Users needs to enter credentials
      */
-    override fun initializeCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?, callback: MatrixCallback<Unit>) {
-        runBlocking { runCatching { olmMachine.bootstrapCrossSigning(uiaInterceptor) }.foldToCallback(callback) }
+    override suspend fun initializeCrossSigning(uiaInterceptor: UserInteractiveAuthInterceptor?) {
+        olmMachine.bootstrapCrossSigning(uiaInterceptor)
     }
 
     /**
@@ -108,26 +104,26 @@ internal class RustCrossSigningService @Inject constructor(
      *
      * @param otherUserId The ID of the user for which we would like to fetch the cross signing keys.
      */
-    override fun getUserCrossSigningKeys(otherUserId: String): MXCrossSigningInfo? {
-        return runBlocking { olmMachine.getIdentity(otherUserId)?.toMxCrossSigningInfo() }
+    override suspend fun getUserCrossSigningKeys(otherUserId: String): MXCrossSigningInfo? {
+        return olmMachine.getIdentity(otherUserId)?.toMxCrossSigningInfo()
     }
 
-    override fun getLiveCrossSigningKeys(userId: String): LiveData<Optional<MXCrossSigningInfo>> {
-        return runBlocking { olmMachine.getLiveUserIdentity(userId) }
+    override fun getLiveCrossSigningKeys(userId: String): Flow<Optional<MXCrossSigningInfo>> {
+        return olmMachine.getLiveUserIdentity(userId)
     }
 
     /** Get our own public cross signing keys */
-    override fun getMyCrossSigningKeys(): MXCrossSigningInfo? {
+    override suspend fun getMyCrossSigningKeys(): MXCrossSigningInfo? {
         return getUserCrossSigningKeys(olmMachine.userId())
     }
 
     /** Get our own private cross signing keys */
-    override fun getCrossSigningPrivateKeys(): PrivateKeysInfo? {
-        return runBlocking { olmMachine.exportCrossSigningKeys() }
+    override suspend fun getCrossSigningPrivateKeys(): PrivateKeysInfo? {
+        return olmMachine.exportCrossSigningKeys()
     }
 
-    override fun getLiveCrossSigningPrivateKeys(): LiveData<Optional<PrivateKeysInfo>> {
-        return runBlocking { olmMachine.getLivePrivateCrossSigningKeys() }
+    override fun getLiveCrossSigningPrivateKeys(): Flow<Optional<PrivateKeysInfo>> {
+        return olmMachine.getLivePrivateCrossSigningKeys()
     }
 
     /**
@@ -136,34 +132,32 @@ internal class RustCrossSigningService @Inject constructor(
      * Returning true means that we have the private self-signing and user-signing keys at hand.
      */
     override fun canCrossSign(): Boolean {
-        val status = this.olmMachine.crossSigningStatus()
+        val status = olmMachine.crossSigningStatus()
 
         return status.hasSelfSigning && status.hasUserSigning
     }
 
     override fun allPrivateKeysKnown(): Boolean {
-        val status = this.olmMachine.crossSigningStatus()
+        val status = olmMachine.crossSigningStatus()
 
         return status.hasMaster && status.hasSelfSigning && status.hasUserSigning
     }
 
     /** Mark a user identity as trusted and sign and upload signatures of our user-signing key to the server */
-    override fun trustUser(otherUserId: String, callback: MatrixCallback<Unit>) {
+    override suspend fun trustUser(otherUserId: String) {
         // This is only used in a test
-        val userIdentity = runBlocking { olmMachine.getIdentity(otherUserId) }
-
+        val userIdentity = olmMachine.getIdentity(otherUserId)
         if (userIdentity != null) {
-            runBlocking { userIdentity.verify() }
-            callback.onSuccess(Unit)
+            userIdentity.verify()
         } else {
-            callback.onFailure(Throwable("## CrossSigning - CrossSigning is not setup for this account"))
+            throw Throwable("## CrossSigning - CrossSigning is not setup for this account")
         }
     }
 
     /** Mark our own master key as trusted */
-    override fun markMyMasterKeyAsTrusted() {
+    override suspend fun markMyMasterKeyAsTrusted() {
         // This doesn't seem to be used?
-        this.trustUser(this.olmMachine.userId(), NoOpMatrixCallback())
+        trustUser(olmMachine.userId())
     }
 
     /**
@@ -171,10 +165,8 @@ internal class RustCrossSigningService @Inject constructor(
      */
     override suspend fun trustDevice(deviceId: String) {
         val device = olmMachine.getDevice(olmMachine.userId(), deviceId)
-
-        return if (device != null) {
+        if (device != null) {
             val verified = device.verify()
-
             if (verified) {
                 return
             } else {
@@ -192,15 +184,15 @@ internal class RustCrossSigningService @Inject constructor(
      * using the self-signing key for our own devices or using the user-signing key and the master
      * key of another user.
      */
-    override fun checkDeviceTrust(otherUserId: String, otherDeviceId: String, locallyTrusted: Boolean?): DeviceTrustResult {
-        val device = runBlocking { olmMachine.getDevice(otherUserId, otherDeviceId) }
+    override suspend fun checkDeviceTrust(otherUserId: String, otherDeviceId: String, locallyTrusted: Boolean?): DeviceTrustResult {
+        val device = olmMachine.getDevice(otherUserId, otherDeviceId)
 
         return if (device != null) {
             // TODO i don't quite understand the semantics here and there are no docs for
             // DeviceTrustResult, what do the different result types mean exactly,
             // do you return success only if the Device is cross signing verified?
             // what about the local trust if it isn't? why is the local trust passed as an argument here?
-            DeviceTrustResult.Success(runBlocking { device.trustLevel() })
+            DeviceTrustResult.Success(device.trustLevel())
         } else {
             DeviceTrustResult.UnknownDevice(otherDeviceId)
         }
@@ -215,7 +207,7 @@ internal class RustCrossSigningService @Inject constructor(
     }
 
     override fun onSecretUSKGossip(uskPrivateKey: String) {
-        // And this.
+        // And 
     }
 
     override suspend fun shieldForGroup(userIds: List<String>): RoomEncryptionTrustLevel {

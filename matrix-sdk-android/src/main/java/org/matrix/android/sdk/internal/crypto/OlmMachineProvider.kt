@@ -16,6 +16,9 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import com.squareup.moshi.Moshi
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UserId
@@ -28,10 +31,16 @@ internal class OlmMachineProvider @Inject constructor(
         @UserId private val userId: String,
         @DeviceId private val deviceId: String?,
         @SessionFilesDirectory private val dataDir: File,
-        requestSender: RequestSender
+        requestSender: RequestSender,
+        coroutineDispatchers: MatrixCoroutineDispatchers,
+        moshi: Moshi
 ) {
 
-    private val deviceObserver: DeviceUpdateObserver = DeviceUpdateObserver()
-
-    var olmMachine: OlmMachine = OlmMachine(userId, deviceId!!, dataDir, deviceObserver, requestSender)
+    var olmMachine: OlmMachine = OlmMachine(
+            user_id = userId,
+            device_id = deviceId!!,
+            path = dataDir,
+            requestSender = requestSender,
+            coroutineDispatchers = coroutineDispatchers,
+            moshi = moshi)
 }

@@ -125,21 +125,21 @@ class FlowSession(private val session: Session) {
     }
 
     fun liveUserCryptoDevices(userId: String): Flow<List<CryptoDeviceInfo>> {
-        return session.cryptoService().getLiveCryptoDeviceInfo(userId).asFlow()
+        return session.cryptoService().getLiveCryptoDeviceInfoList(userId)
                 .startWith(session.coroutineDispatchers.io) {
-                    session.cryptoService().getCryptoDeviceInfo(userId)
+                    session.cryptoService().getCryptoDeviceInfoList(userId)
                 }
     }
 
     fun liveCrossSigningInfo(userId: String): Flow<Optional<MXCrossSigningInfo>> {
-        return session.cryptoService().crossSigningService().getLiveCrossSigningKeys(userId).asFlow()
+        return session.cryptoService().crossSigningService().getLiveCrossSigningKeys(userId)
                 .startWith(session.coroutineDispatchers.io) {
                     session.cryptoService().crossSigningService().getUserCrossSigningKeys(userId).toOptional()
                 }
     }
 
     fun liveCrossSigningPrivateKeys(): Flow<Optional<PrivateKeysInfo>> {
-        return session.cryptoService().crossSigningService().getLiveCrossSigningPrivateKeys().asFlow()
+        return session.cryptoService().crossSigningService().getLiveCrossSigningPrivateKeys()
                 .startWith(session.coroutineDispatchers.io) {
                     session.cryptoService().crossSigningService().getCrossSigningPrivateKeys().toOptional()
                 }

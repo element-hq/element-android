@@ -16,14 +16,14 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoCrossSigningKey
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import uniffi.olm.CryptoStoreException
 import uniffi.olm.SignatureException
@@ -65,7 +65,7 @@ sealed class UserIdentities {
     /**
      * Convert the identity into a MxCrossSigningInfo class.
      */
-    abstract fun toMxCrossSigningInfo(): MXCrossSigningInfo
+    abstract suspend fun toMxCrossSigningInfo(): MXCrossSigningInfo
 }
 
 /**
@@ -80,11 +80,12 @@ internal class OwnUserIdentity(
         private val userSigningKey: CryptoCrossSigningKey,
         private val trustsOurOwnDevice: Boolean,
         private val olmMachine: OlmMachine,
-        private val requestSender: RequestSender) : UserIdentities() {
+        private val requestSender: RequestSender,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers) : UserIdentities() {
     /**
      * Our own user id.
      */
-    override fun userId() = this.userId
+    override fun userId() = userId
 
     /**
      * Manually verify our user identity.
@@ -95,8 +96,8 @@ internal class OwnUserIdentity(
      */
     @Throws(SignatureException::class)
     override suspend fun verify() {
-        val request = withContext(Dispatchers.Default) { olmMachine.inner().verifyIdentity(userId) }
-        this.requestSender.sendSignatureUpload(request)
+        val request = withContext(coroutineDispatchers.computation) { olmMachine.inner().verifyIdentity(userId) }
+        requestSender.sendSignatureUpload(request)
     }
 
     /**
@@ -106,13 +107,13 @@ internal class OwnUserIdentity(
      */
     @Throws(CryptoStoreException::class)
     override suspend fun verified(): Boolean {
-        return withContext(Dispatchers.IO) { olmMachine.inner().isIdentityVerified(userId) }
+        return withContext(coroutineDispatchers.io) { olmMachine.inner().isIdentityVerified(userId) }
     }
 
     /**
      * Does the identity trust our own device.
      */
-    fun trustsOurOwnDevice() = this.trustsOurOwnDevice
+    fun trustsOurOwnDevice() = trustsOurOwnDevice
 
     /**
      * Request an interactive verification to begin
@@ -133,32 +134,33 @@ internal class OwnUserIdentity(
     @Throws(CryptoStoreException::class)
     suspend fun requestVerification(methods: List<VerificationMethod>): VerificationRequest {
         val stringMethods = prepareMethods(methods)
-        val result = this.olmMachine.inner().requestSelfVerification(stringMethods)
-        this.requestSender.sendVerificationRequest(result!!.request)
+        val result = olmMachine.inner().requestSelfVerification(stringMethods)
+        requestSender.sendVerificationRequest(result!!.request)
 
         return VerificationRequest(
-                this.olmMachine.inner(),
-                result.verification,
-                this.requestSender,
-                this.olmMachine.verificationListeners
+                machine = olmMachine.inner(),
+                inner = result.verification,
+                sender = requestSender,
+                coroutineDispatchers = coroutineDispatchers,
+                listeners = olmMachine.verificationListeners
         )
     }
 
     /**
      * Convert the identity into a MxCrossSigningInfo class.
      */
-    override fun toMxCrossSigningInfo(): MXCrossSigningInfo {
-        val masterKey = this.masterKey
-        val selfSigningKey = this.selfSigningKey
-        val userSigningKey = this.userSigningKey
-        val trustLevel = DeviceTrustLevel(runBlocking { verified() }, false)
+    override suspend fun toMxCrossSigningInfo(): MXCrossSigningInfo {
+        val masterKey = masterKey
+        val selfSigningKey = selfSigningKey
+        val userSigningKey = userSigningKey
+        val trustLevel = DeviceTrustLevel(verified(), false)
         // TODO remove this, this is silly, we have way too many methods to check if a user is verified
         masterKey.trustLevel = trustLevel
         selfSigningKey.trustLevel = trustLevel
         userSigningKey.trustLevel = trustLevel
 
         val crossSigningKeys = listOf(masterKey, selfSigningKey, userSigningKey)
-        return MXCrossSigningInfo(this.userId, crossSigningKeys)
+        return MXCrossSigningInfo(userId, crossSigningKeys)
     }
 }
 
@@ -172,11 +174,12 @@ internal class UserIdentity(
         private val masterKey: CryptoCrossSigningKey,
         private val selfSigningKey: CryptoCrossSigningKey,
         private val olmMachine: OlmMachine,
-        private val requestSender: RequestSender) : UserIdentities() {
+        private val requestSender: RequestSender,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers) : UserIdentities() {
     /**
      * The unique ID of the user that this identity belongs to.
      */
-    override fun userId() = this.userId
+    override fun userId() = userId
 
     /**
      * Manually verify this user identity.
@@ -189,8 +192,8 @@ internal class UserIdentity(
      */
     @Throws(SignatureException::class)
     override suspend fun verify() {
-        val request = withContext(Dispatchers.Default) { olmMachine.inner().verifyIdentity(userId) }
-        this.requestSender.sendSignatureUpload(request)
+        val request = withContext(coroutineDispatchers.computation) { olmMachine.inner().verifyIdentity(userId) }
+        requestSender.sendSignatureUpload(request)
     }
 
     /**
@@ -199,7 +202,7 @@ internal class UserIdentity(
      * @return True if the identity is considered to be verified and trusted, false otherwise.
      */
     override suspend fun verified(): Boolean {
-        return withContext(Dispatchers.IO) { olmMachine.inner().isIdentityVerified(userId) }
+        return withContext(coroutineDispatchers.io) { olmMachine.inner().isIdentityVerified(userId) }
     }
 
     /**
@@ -232,32 +235,33 @@ internal class UserIdentity(
             transactionId: String
     ): VerificationRequest {
         val stringMethods = prepareMethods(methods)
-        val content = this.olmMachine.inner().verificationRequestContent(this.userId, stringMethods)!!
+        val content = olmMachine.inner().verificationRequestContent(userId, stringMethods)!!
 
-        val eventID = requestSender.sendRoomMessage(EventType.MESSAGE, roomId, content, transactionId)
+        val eventID = requestSender.sendRoomMessage(EventType.MESSAGE, roomId, content, transactionId).eventId
 
-        val innerRequest = this.olmMachine.inner().requestVerification(this.userId, roomId, eventID, stringMethods)!!
+        val innerRequest = olmMachine.inner().requestVerification(userId, roomId, eventID, stringMethods)!!
 
         return VerificationRequest(
-                this.olmMachine.inner(),
-                innerRequest,
-                this.requestSender,
-                this.olmMachine.verificationListeners
+                machine = olmMachine.inner(),
+                inner = innerRequest,
+                sender = requestSender,
+                coroutineDispatchers = coroutineDispatchers,
+                listeners = olmMachine.verificationListeners
         )
     }
 
     /**
      * Convert the identity into a MxCrossSigningInfo class.
      */
-    override fun toMxCrossSigningInfo(): MXCrossSigningInfo {
-//        val crossSigningKeys = listOf(this.masterKey, this.selfSigningKey)
-        val trustLevel = DeviceTrustLevel(runBlocking { verified() }, false)
+    override suspend fun toMxCrossSigningInfo(): MXCrossSigningInfo {
+//        val crossSigningKeys = listOf(masterKey, selfSigningKey)
+        val trustLevel = DeviceTrustLevel(verified(), false)
         // TODO remove this, this is silly, we have way too many methods to check if a user is verified
         masterKey.trustLevel = trustLevel
         selfSigningKey.trustLevel = trustLevel
-        return MXCrossSigningInfo(this.userId, listOf(
-                this.masterKey.also { it.trustLevel = trustLevel },
-                this.selfSigningKey.also { it.trustLevel = trustLevel }
+        return MXCrossSigningInfo(userId, listOf(
+                masterKey.also { it.trustLevel = trustLevel },
+                selfSigningKey.also { it.trustLevel = trustLevel }
         ))
     }
 }

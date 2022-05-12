@@ -80,7 +80,10 @@ class KeysBackupTestHelper(
             }
         }
 
-        Assert.assertEquals(2, cryptoTestData.firstSession.cryptoService().keysBackupService().getTotalNumbersOfBackedUpKeys())
+        val totalNumbersOfBackedUpKeys = testHelper.runBlockingTest {
+            cryptoTestData.firstSession.cryptoService().keysBackupService().getTotalNumbersOfBackedUpKeys()
+        }
+        Assert.assertEquals(2, totalNumbersOfBackedUpKeys)
 
         val aliceUserId = cryptoTestData.firstSession.myUserId
 
@@ -88,15 +91,21 @@ class KeysBackupTestHelper(
         val aliceSession2 = testHelper.logIntoAccount(aliceUserId, KeysBackupTestConstants.defaultSessionParamsWithInitialSync)
 
         // Test check: aliceSession2 has no keys at login
-        Assert.assertEquals(0, aliceSession2.cryptoService().inboundGroupSessionsCount(false))
+        val inboundGroupSessionCount = testHelper.runBlockingTest {
+            aliceSession2.cryptoService().inboundGroupSessionsCount(false)
+        }
+        Assert.assertEquals(0, inboundGroupSessionCount)
 
         // Wait for backup state to be NotTrusted
         waitForKeysBackupToBeInState(aliceSession2, KeysBackupState.NotTrusted)
 
         stateObserver.stopAndCheckStates(null)
 
+        val totalNumbersOfBackedUpKeysFromNewSession = testHelper.runBlockingTest {
+            aliceSession2.cryptoService().keysBackupService().getTotalNumbersOfBackedUpKeys()
+        }
         return KeysBackupScenarioData(cryptoTestData,
-                aliceSession2.cryptoService().keysBackupService().getTotalNumbersOfBackedUpKeys(),
+                totalNumbersOfBackedUpKeysFromNewSession,
                 prepareKeysBackupDataResult,
                 aliceSession2)
     }
@@ -182,7 +191,10 @@ class KeysBackupTestHelper(
         Assert.assertEquals(total, imported)
 
         // - The new device must have the same count of megolm keys
-        Assert.assertEquals(testData.aliceKeys, testData.aliceSession2.cryptoService().inboundGroupSessionsCount(false))
+        val inboundGroupSessionCount = testHelper.runBlockingTest {
+            testData.aliceSession2.cryptoService().inboundGroupSessionsCount(false)
+        }
+        Assert.assertEquals(testData.aliceKeys, inboundGroupSessionCount)
 
         // - Alice must have the same keys on both devices
 //

@@ -22,18 +22,17 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
-import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -55,7 +54,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
@@ -65,8 +63,9 @@ import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyWithHeldContent
 import org.matrix.android.sdk.internal.crypto.model.event.SecretSendEventContent
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
-import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import org.matrix.android.sdk.internal.crypto.model.rest.ForwardedRoomKeyContent
+import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.DeleteDeviceTask
@@ -76,14 +75,9 @@ import org.matrix.android.sdk.internal.crypto.tasks.SetDeviceNameTask
 import org.matrix.android.sdk.internal.crypto.verification.RustVerificationService
 import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.TaskThread
-import org.matrix.android.sdk.internal.task.configureWith
-import org.matrix.android.sdk.internal.task.launchToCallback
 import timber.log.Timber
 import uniffi.olm.Request
 import uniffi.olm.RequestType
@@ -130,9 +124,8 @@ internal class DefaultCryptoService @Inject constructor(
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val sender: RequestSender,
+        private val requestSender: RequestSender,
         private val crossSigningService: CrossSigningService,
         private val verificationService: RustVerificationService,
         private val keysBackupService: RustKeyBackupService,
@@ -153,7 +146,12 @@ internal class DefaultCryptoService @Inject constructor(
 
     // Locks for some of our operations
     private val keyClaimLock: Mutex = Mutex()
-    private val outgoingRequestsLock: Mutex = Mutex()
+    private val outgoingRequestsProcessor = OutgoingRequestsProcessor(
+            requestSender = requestSender,
+            coroutineScope = cryptoCoroutineScope,
+            cryptoSessionInfoProvider = cryptoSessionInfoProvider,
+            shieldComputer = crossSigningService::shieldForGroup
+    )
     private val roomKeyShareLocks: ConcurrentHashMap<String, Mutex> = ConcurrentHashMap()
 
     fun onStateEvent(roomId: String, event: Event) {
@@ -166,51 +164,33 @@ internal class DefaultCryptoService @Inject constructor(
 
     fun onLiveEvent(roomId: String, event: Event) {
         if (event.isStateEvent()) {
-        when (event.getClearType()) {
-            EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
-            EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
-            EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
-            else                                    -> cryptoCoroutineScope.launch {
-                this@DefaultCryptoService.verificationService.onEvent(event)
+            when (event.getClearType()) {
+                EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
+                EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
+                EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
             }
-        }
+        } else {
+            cryptoCoroutineScope.launch {
+                verificationService.onEvent(roomId, event)
+            }
         }
     }
 
     private val gossipingBuffer = mutableListOf<Event>()
 
-    override fun setDeviceName(deviceId: String, deviceName: String, callback: MatrixCallback<Unit>) {
-        setDeviceNameTask
-                .configureWith(SetDeviceNameTask.Params(deviceId, deviceName)) {
-                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = object : MatrixCallback<Unit> {
-                        override fun onSuccess(data: Unit) {
-                            // bg refresh of crypto device
-                            cryptoCoroutineScope.launch {
-                                try {
-                                    downloadKeys(listOf(userId), true)
-                                } catch (failure: Throwable) {
-                                    Timber.tag(loggerTag.value).w(failure, "setDeviceName: Failed to refresh of crypto device")
-                                }
-                            }
-                            callback.onSuccess(data)
-                        }
-
-                        override fun onFailure(failure: Throwable) {
-                            callback.onFailure(failure)
-                        }
-                    }
-                }
-                .executeBy(taskExecutor)
+    override suspend fun setDeviceName(deviceId: String, deviceName: String) {
+        val params = SetDeviceNameTask.Params(deviceId, deviceName)
+        setDeviceNameTask.execute(params)
+        try {
+            downloadKeys(listOf(userId), true)
+        } catch (failure: Throwable) {
+            Timber.tag(loggerTag.value).w(failure, "setDeviceName: Failed to refresh of crypto device")
+        }
     }
 
-    override fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor, callback: MatrixCallback<Unit>) {
-        deleteDeviceTask
-                .configureWith(DeleteDeviceTask.Params(deviceId, userInteractiveAuthInterceptor, null)) {
-                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun deleteDevice(deviceId: String, userInteractiveAuthInterceptor: UserInteractiveAuthInterceptor) {
+        val params = DeleteDeviceTask.Params(deviceId, userInteractiveAuthInterceptor, null)
+        deleteDeviceTask.execute(params)
     }
 
     override fun getCryptoVersion(context: Context, longFormat: Boolean): String {
@@ -218,27 +198,16 @@ internal class DefaultCryptoService @Inject constructor(
         return if (longFormat) "Rust SDK 0.3" else "0.3"
     }
 
-    override fun getMyDevice(): CryptoDeviceInfo {
-        return runBlocking { olmMachine.ownDevice() }
+    override suspend fun getMyCryptoDevice(): CryptoDeviceInfo {
+        return olmMachine.ownDevice()
     }
 
-    override fun fetchDevicesList(callback: MatrixCallback<DevicesListResponse>) {
-        getDevicesTask
-                .configureWith {
-                    //                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = object : MatrixCallback<DevicesListResponse> {
-                        override fun onFailure(failure: Throwable) {
-                            callback.onFailure(failure)
-                        }
-
-                        override fun onSuccess(data: DevicesListResponse) {
-                            // Save in local DB
-                            cryptoStore.saveMyDevicesInfo(data.devices.orEmpty())
-                            callback.onSuccess(data)
-                        }
-                    }
-                }
-                .executeBy(taskExecutor)
+    override suspend fun fetchDevicesList(): List<DeviceInfo> {
+        val devicesList = tryOrNull {
+            getDevicesTask.execute(Unit).devices
+        }.orEmpty()
+        cryptoStore.saveMyDevicesInfo(devicesList)
+        return devicesList
     }
 
     override fun getLiveMyDevicesInfo(): LiveData<List<DeviceInfo>> {
@@ -249,36 +218,18 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getMyDevicesInfo()
     }
 
-    override fun getDeviceInfo(deviceId: String, callback: MatrixCallback<DeviceInfo>) {
-        getDeviceInfoTask
-                .configureWith(GetDeviceInfoTask.Params(deviceId)) {
-                    this.executionThread = TaskThread.CRYPTO
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
+    override suspend fun fetchDeviceInfo(deviceId: String): DeviceInfo {
+        val params = GetDeviceInfoTask.Params(deviceId)
+        return getDeviceInfoTask.execute(params)
     }
 
-    override fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
+    override suspend fun inboundGroupSessionsCount(onlyBackedUp: Boolean): Int {
         return if (onlyBackedUp) {
             keysBackupService.getTotalNumbersOfBackedUpKeys()
         } else {
             keysBackupService.getTotalNumbersOfKeys()
         }
         // return cryptoStore.inboundGroupSessionsCount(onlyBackedUp)
-    }
-
-    /**
-     * Provides the tracking status
-     *
-     * @param userId the user id
-     * @return the tracking status
-     */
-    override fun getDeviceTrackingStatus(userId: String): Int {
-        return if (olmMachine.isUserTracked(userId)) {
-            3
-        } else {
-            -1
-        }
     }
 
     /**
@@ -299,26 +250,10 @@ internal class DefaultCryptoService @Inject constructor(
      */
     fun start() {
         internalStart()
-        // Just update
-        fetchDevicesList(NoOpMatrixCallback())
-
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        cryptoCoroutineScope.launch {
+            // Just update
+            fetchDevicesList()
             cryptoStore.tidyUpDataBase()
-        }
-    }
-
-    fun ensureDevice() {
-        cryptoCoroutineScope.launchToCallback(coroutineDispatchers.crypto, NoOpMatrixCallback()) {
-            // Open the store
-            cryptoStore.open()
-
-            // this can throw if no backup
-            /*
-            TODO
-            tryOrNull {
-                keysBackupService.checkAndStartKeysBackup()
-            }
-            */
         }
     }
 
@@ -355,9 +290,13 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * Close the crypto
      */
-    fun close() = runBlocking(coroutineDispatchers.crypto) {
+    fun close() {
         cryptoCoroutineScope.coroutineContext.cancelChildren(CancellationException("Closing crypto module"))
-        cryptoStore.close()
+        cryptoCoroutineScope.launch {
+            withContext(coroutineDispatchers.crypto + NonCancellable) {
+                cryptoStore.close()
+            }
+        }
     }
 
     // Always enabled on Matrix Android SDK2
@@ -380,7 +319,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     suspend fun onSyncCompleted() {
         if (isStarted()) {
-            sendOutgoingRequests()
+            outgoingRequestsProcessor.process(olmMachine)
             // This isn't a copy paste error. Sending the outgoing requests may
             // claim one-time keys and establish 1-to-1 Olm sessions with devices, while some
             // outgoing requests are waiting for an Olm session to be established (e.g. forwarding
@@ -389,7 +328,7 @@ internal class DefaultCryptoService @Inject constructor(
             // The second call sends out those requests that are waiting for the
             // keys claim request to be sent out.
             // This could be omitted but then devices might be waiting for the next
-            sendOutgoingRequests()
+            outgoingRequestsProcessor.process(olmMachine)
 
             keysBackupService.maybeBackupKeys()
         }
@@ -410,41 +349,19 @@ internal class DefaultCryptoService @Inject constructor(
      * @param userId   the user id
      * @param deviceId the device id
      */
-    override fun getDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
-        return if (userId.isNotEmpty() && !deviceId.isNullOrEmpty()) {
-            runBlocking {
-                this@DefaultCryptoService.olmMachine.getCryptoDeviceInfo(userId, deviceId)
-            }
-        } else {
-            null
-        }
+    override suspend fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo? {
+        if (userId.isEmpty() || deviceId.isNullOrEmpty()) return null
+        return olmMachine.getCryptoDeviceInfo(userId, deviceId)
     }
 
-    override fun getCryptoDeviceInfo(userId: String): List<CryptoDeviceInfo> {
-        return runBlocking {
-            this@DefaultCryptoService.olmMachine.getCryptoDeviceInfo(userId)
-        }
+    override suspend fun getCryptoDeviceInfoList(userId: String): List<CryptoDeviceInfo> {
+        return olmMachine.getCryptoDeviceInfo(userId)
     }
 
-    override fun getLiveCryptoDeviceInfo(userId: String): LiveData<List<CryptoDeviceInfo>> {
-        return getLiveCryptoDeviceInfo(listOf(userId))
-    }
+    override fun getLiveCryptoDeviceInfoList(userId: String) = getLiveCryptoDeviceInfoList(listOf(userId))
 
-    override fun getLiveCryptoDeviceInfo(userIds: List<String>): LiveData<List<CryptoDeviceInfo>> {
-        return runBlocking {
-            this@DefaultCryptoService.olmMachine.getLiveDevices(userIds) // ?: LiveDevice(userIds, deviceObserver)
-        }
-    }
-
-    /**
-     * Update the blocked/verified state of the given device.
-     *
-     * @param trustLevel the new trust level
-     * @param userId     the owner of the device
-     * @param deviceId   the unique identifier for the device.
-     */
-    override fun setDeviceVerification(trustLevel: DeviceTrustLevel, userId: String, deviceId: String) {
-        // TODO
+    override fun getLiveCryptoDeviceInfoList(userIds: List<String>): Flow<List<CryptoDeviceInfo>> {
+        return olmMachine.getLiveDevices(userIds)
     }
 
     /**
@@ -503,8 +420,8 @@ internal class DefaultCryptoService @Inject constructor(
     /**
      * @return the stored device keys for a user.
      */
-    override fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo> {
-        return this.getCryptoDeviceInfo(userId).toMutableList()
+    override suspend fun getUserDevices(userId: String): MutableList<CryptoDeviceInfo> {
+        return this.getCryptoDeviceInfoList(userId).toMutableList()
     }
 
     private fun isEncryptionEnabledForInvitedUser(): Boolean {
@@ -533,34 +450,29 @@ internal class DefaultCryptoService @Inject constructor(
      * @param eventContent the content of the event.
      * @param eventType    the type of the event.
      * @param roomId       the room identifier the event will be sent.
-     * @param callback     the asynchronous callback
      */
-    override fun encryptEventContent(eventContent: Content,
-                                     eventType: String,
-                                     roomId: String,
-                                     callback: MatrixCallback<MXEncryptEventContentResult>) {
+    override suspend fun encryptEventContent(eventContent: Content,
+                                             eventType: String,
+                                             roomId: String): MXEncryptEventContentResult {
         // moved to crypto scope to have up to date values
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+        return withContext(coroutineDispatchers.crypto) {
             val algorithm = getEncryptionAlgorithm(roomId)
-
             if (algorithm != null) {
                 val userIds = getRoomUserIds(roomId)
                 val t0 = System.currentTimeMillis()
                 Timber.tag(loggerTag.value).v("encryptEventContent() starts")
-                runCatching {
-                    measureTimeMillis {
-                        preshareRoomKey(roomId, userIds)
-                    }.also {
-                        Timber.d("Shared room key in room $roomId took $it ms")
-                    }
-                    val content = encrypt(roomId, eventType, eventContent)
-                    Timber.tag(loggerTag.value).v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
-                    MXEncryptEventContentResult(content, EventType.ENCRYPTED)
-                }.foldToCallback(callback)
+                measureTimeMillis {
+                    preshareRoomKey(roomId, userIds)
+                }.also {
+                    Timber.d("Shared room key in room $roomId took $it ms")
+                }
+                val content = encrypt(roomId, eventType, eventContent)
+                Timber.tag(loggerTag.value).v("## CRYPTO | encryptEventContent() : succeeds after ${System.currentTimeMillis() - t0} ms")
+                MXEncryptEventContentResult(content, EventType.ENCRYPTED)
             } else {
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
                 Timber.tag(loggerTag.value).e("encryptEventContent() : failed $reason")
-                callback.onFailure(Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason)))
+                throw Failure.CryptoError(MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_ENCRYPT, reason))
             }
         }
     }
@@ -577,22 +489,8 @@ internal class DefaultCryptoService @Inject constructor(
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
     @Throws(MXCryptoError::class)
-    override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
-        return runBlocking {
-            olmMachine.decryptRoomEvent(event)
-        }
-    }
-
-    /**
-     * Decrypt an event asynchronously
-     *
-     * @param event    the raw event.
-     * @param timeline the id of the timeline where the event is decrypted. It is used to prevent replay attack.
-     * @param callback the callback to return data or null
-     */
-    override fun decryptEventAsync(event: Event, timeline: String, callback: MatrixCallback<MXEventDecryptionResult>) {
-        // This isn't really used anywhere, maybe just remove it?
-        // TODO
+    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+        return olmMachine.decryptRoomEvent(event)
     }
 
     /**
@@ -616,7 +514,6 @@ internal class DefaultCryptoService @Inject constructor(
 //                Timber.e(throwable, "## CRYPTO | onRoomEncryptionEvent ERROR FAILED TO SETUP CRYPTO ")
 //            } finally {
             val userIds = getRoomUserIds(roomId)
-            olmMachine.updateTrackedUsers(userIds)
             setEncryptionInRoom(roomId, event.content?.get("algorithm")?.toString(), userIds)
 //            }
         }
@@ -721,7 +618,7 @@ internal class DefaultCryptoService @Inject constructor(
                         this.keysBackupService.onSecretKeyGossip(secretContent.secretValue)
                     }
                     else                         -> {
-                        this.verificationService.onEvent(event)
+                        this.verificationService.onEvent(null, event)
                     }
                 }
                 liveEventManager.get().dispatchOnLiveToDevice(event)
@@ -730,26 +627,12 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private suspend fun preshareRoomKey(roomId: String, roomMembers: List<String>) {
-        keyClaimLock.withLock {
-            val request = this.olmMachine.getMissingSessions(roomMembers)
-            // This request can only be a keys claim request.
-            if (request != null) {
-                when (request) {
-                    is Request.KeysClaim -> {
-                        claimKeys(request)
-                    }
-                    else                 -> {
-                    }
-                }
-            }
-        }
-
-        val keyShareLock = roomKeyShareLocks.getOrPut(roomId, { Mutex() })
+        claimMissingKeys(roomMembers)
+        val keyShareLock = roomKeyShareLocks.getOrPut(roomId) { Mutex() }
         var sharedKey = false
-
         keyShareLock.withLock {
             coroutineScope {
-                this@DefaultCryptoService.olmMachine.shareRoomKey(roomId, roomMembers).map {
+                olmMachine.shareRoomKey(roomId, roomMembers).map {
                     when (it) {
                         is Request.ToDevice -> {
                             sharedKey = true
@@ -775,19 +658,35 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
+    private suspend fun claimMissingKeys(roomMembers: List<String>) = keyClaimLock.withLock {
+        val request = this.olmMachine.getMissingSessions(roomMembers)
+        // This request can only be a keys claim request.
+        when (request) {
+            is Request.KeysClaim -> {
+                claimKeys(request)
+            }
+            else                 -> {
+            }
+        }
+    }
+
     private suspend fun encrypt(roomId: String, eventType: String, content: Content): Content {
         return olmMachine.encrypt(roomId, eventType, content)
     }
 
     private suspend fun uploadKeys(request: Request.KeysUpload) {
-        val response = this.sender.uploadKeys(request)
-        this.olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_UPLOAD, response)
+        try {
+            val response = requestSender.uploadKeys(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_UPLOAD, response)
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO uploadKeys(): error")
+        }
     }
 
     private suspend fun queryKeys(request: Request.KeysQuery) {
         try {
-            val response = this.sender.queryKeys(request)
-            this.olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_QUERY, response)
+            val response = requestSender.queryKeys(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_QUERY, response)
 
             // Update the shields!
             cryptoCoroutineScope.launch {
@@ -798,69 +697,44 @@ internal class DefaultCryptoService @Inject constructor(
                 }
             }
         } catch (throwable: Throwable) {
-            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO | doKeyDownloadForUsers(): error")
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO doKeyDownloadForUsers(): error")
         }
     }
 
     private suspend fun sendToDevice(request: Request.ToDevice) {
-        this.sender.sendToDevice(request)
-        olmMachine.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")
+        try {
+            requestSender.sendToDevice(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO sendToDevice(): error")
+        }
     }
 
     private suspend fun claimKeys(request: Request.KeysClaim) {
-        val response = this.sender.claimKeys(request)
-        olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, response)
+        try {
+            val response = requestSender.claimKeys(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.KEYS_CLAIM, response)
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO claimKeys(): error")
+        }
     }
 
     private suspend fun signatureUpload(request: Request.SignatureUpload) {
-        this.sender.sendSignatureUpload(request)
-        olmMachine.markRequestAsSent(request.requestId, RequestType.SIGNATURE_UPLOAD, "{}")
+        try {
+            val response = requestSender.sendSignatureUpload(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.SIGNATURE_UPLOAD, response)
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO signatureUpload(): error")
+        }
     }
 
-    private suspend fun sendOutgoingRequests() {
-        outgoingRequestsLock.withLock {
-            coroutineScope {
-                olmMachine.outgoingRequests().map {
-                    when (it) {
-                        is Request.KeysUpload      -> {
-                            async {
-                                uploadKeys(it)
-                            }
-                        }
-                        is Request.KeysQuery       -> {
-                            async {
-                                queryKeys(it)
-                            }
-                        }
-                        is Request.ToDevice        -> {
-                            async {
-                                sendToDevice(it)
-                            }
-                        }
-                        is Request.KeysClaim       -> {
-                            async {
-                                claimKeys(it)
-                            }
-                        }
-                        is Request.RoomMessage     -> {
-                            async {
-                                sender.sendRoomMessage(it)
-                            }
-                        }
-                        is Request.SignatureUpload -> {
-                            async {
-                                signatureUpload(it)
-                            }
-                        }
-                        is Request.KeysBackup      -> {
-                            async {
-                                // The rust-sdk won't ever produce KeysBackup requests here,
-                                // those only get explicitly created.
-                            }
-                        }
-                    }
-                }.joinAll()
-            }
+    private suspend fun sendRoomMessage(request: Request.RoomMessage) {
+        try {
+            Timber.v("SendRoomMessage: $request")
+            val response = requestSender.sendRoomMessage(request)
+            olmMachine.markRequestAsSent(request.requestId, RequestType.ROOM_MESSAGE, response)
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO sendRoomMessage(): error")
         }
     }
 
@@ -991,18 +865,17 @@ internal class DefaultCryptoService @Inject constructor(
             val cancellation = requestPair.cancellation
             val request = requestPair.keyRequest
 
-            if (cancellation != null) {
-                when (cancellation) {
-                    is Request.ToDevice -> {
-                        sendToDevice(cancellation)
-                    }
+            when (cancellation) {
+                is Request.ToDevice -> {
+                    sendToDevice(cancellation)
                 }
+                else                -> Unit
             }
-
             when (request) {
                 is Request.ToDevice -> {
                     sendToDevice(request)
                 }
+                else                -> Unit
             }
         }
     }
@@ -1082,18 +955,16 @@ internal class DefaultCryptoService @Inject constructor(
         cryptoStore.logDbUsageInfo()
     }
 
-    override fun prepareToEncrypt(roomId: String, callback: MatrixCallback<Unit>) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+    override suspend fun prepareToEncrypt(roomId: String) {
+        withContext(coroutineDispatchers.crypto) {
             Timber.tag(loggerTag.value).d("prepareToEncrypt() roomId:$roomId Check room members up to date")
             // Ensure to load all room members
             try {
                 loadRoomMembersTask.execute(LoadRoomMembersTask.Params(roomId))
             } catch (failure: Throwable) {
                 Timber.tag(loggerTag.value).e("prepareToEncrypt() : Failed to load room members")
-                callback.onFailure(failure)
-                return@launch
+                throw failure
             }
-
             val userIds = getRoomUserIds(roomId)
 
             val algorithm = getEncryptionAlgorithm(roomId)
@@ -1101,19 +972,13 @@ internal class DefaultCryptoService @Inject constructor(
             if (algorithm == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_ENCRYPT_REASON, MXCryptoError.NO_MORE_ALGORITHM_REASON)
                 Timber.tag(loggerTag.value).e("prepareToEncrypt() : $reason")
-                callback.onFailure(IllegalArgumentException("Missing algorithm"))
-                return@launch
+                throw IllegalArgumentException("Missing algorithm")
             }
-
-            runCatching {
+            try {
                 preshareRoomKey(roomId, userIds)
-            }.fold(
-                    { callback.onSuccess(Unit) },
-                    {
-                        Timber.tag(loggerTag.value).e(it, "prepareToEncrypt() failed.")
-                        callback.onFailure(it)
-                    }
-            )
+            } catch (failure: Throwable) {
+                Timber.tag(loggerTag.value).e("prepareToEncrypt() : Failed to PreshareRoomKey")
+            }
         }
     }
 

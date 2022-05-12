@@ -95,7 +95,7 @@ class SoftLogoutActivity : LoginActivity() {
             MainActivity.restartApp(this, MainActivityArgs())
         }
 
-        views.loginLoading.isVisible = softLogoutViewState.isLoading()
+        views.loginLoading.isVisible = softLogoutViewState.isLoading
     }
 
     companion object {

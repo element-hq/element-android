@@ -69,7 +69,6 @@ class SoftLogoutViewModel @AssistedInject constructor(
                         userId = userId,
                         deviceId = session.sessionParams.deviceId.orEmpty(),
                         userDisplayName = session.getUser(userId)?.displayName ?: userId,
-                        hasUnsavedKeys = session.hasUnsavedKeys()
                 )
             } else {
                 SoftLogoutViewState(
@@ -77,15 +76,23 @@ class SoftLogoutViewModel @AssistedInject constructor(
                         userId = "",
                         deviceId = "",
                         userDisplayName = "",
-                        hasUnsavedKeys = false
                 )
             }
         }
     }
 
     init {
+        checkHasUnsavedKeys()
         // Get the supported login flow
         getSupportedLoginFlow()
+    }
+
+    private fun checkHasUnsavedKeys() {
+        suspend {
+            session.hasUnsavedKeys()
+        }.execute {
+            copy(hasUnsavedKeys = it)
+        }
     }
 
     private fun getSupportedLoginFlow() {

@@ -21,7 +21,6 @@ import android.os.Looper
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -41,7 +40,6 @@ import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.MegolmSessionImportManager
 import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
-import org.matrix.android.sdk.internal.crypto.RequestSender
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
@@ -53,6 +51,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -95,7 +94,7 @@ internal class RustKeyBackupService @Inject constructor(
 
 //    private var backupAllGroupSessionsCallback: MatrixCallback<Unit>? = null
 
-    private val importScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val importScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.main)
 
     private var keysBackupStateListener: KeysBackupStateListener? = null
 
@@ -237,7 +236,7 @@ internal class RustKeyBackupService @Inject constructor(
         }
     }
 
-    override fun canRestoreKeys(): Boolean {
+    override suspend fun canRestoreKeys(): Boolean {
         val keyCountOnServer = keysBackupVersion?.count ?: return false
         val keyCountLocally = getTotalNumbersOfKeys()
 
@@ -246,11 +245,11 @@ internal class RustKeyBackupService @Inject constructor(
         return keyCountLocally < keyCountOnServer
     }
 
-    override fun getTotalNumbersOfKeys(): Int {
+    override suspend fun getTotalNumbersOfKeys(): Int {
         return olmMachine.roomKeyCounts().total.toInt()
     }
 
-    override fun getTotalNumbersOfBackedUpKeys(): Int {
+    override suspend fun getTotalNumbersOfBackedUpKeys(): Int {
         return olmMachine.roomKeyCounts().backedUp.toInt()
     }
 
@@ -405,7 +404,7 @@ internal class RustKeyBackupService @Inject constructor(
         }
     }
 
-    override fun getBackupProgress(progressListener: ProgressListener) {
+    override suspend fun getBackupProgress(progressListener: ProgressListener) {
         val backedUpKeys = getTotalNumbersOfBackedUpKeys()
         val total = getTotalNumbersOfKeys()
 
@@ -490,7 +489,7 @@ internal class RustKeyBackupService @Inject constructor(
         val data = getKeys(sessionId, roomId, keysVersionResult.version)
 
         return withContext(coroutineDispatchers.computation) {
-            withContext(Dispatchers.Main) {
+            withContext(coroutineDispatchers.main) {
                 stepProgressListener?.onStepProgress(StepProgressListener.Step.DecryptingKey(0, data.roomIdToRoomKeysBackupData.size))
             }
             // Decrypting by chunk of 500 keys in parallel
@@ -513,7 +512,7 @@ internal class RustKeyBackupService @Inject constructor(
                     .awaitAll()
                     .flatten()
 
-            withContext(Dispatchers.Main) {
+            withContext(coroutineDispatchers.main) {
                 val stepProgress = StepProgressListener.Step.DecryptingKey(data.roomIdToRoomKeysBackupData.size, data.roomIdToRoomKeysBackupData.size)
                 stepProgressListener?.onStepProgress(stepProgress)
             }
@@ -532,7 +531,7 @@ internal class RustKeyBackupService @Inject constructor(
             val progressListener = if (stepProgressListener != null) {
                 object : ProgressListener {
                     override fun onProgress(progress: Int, total: Int) {
-                        cryptoCoroutineScope.launch(Dispatchers.Main) {
+                        cryptoCoroutineScope.launch(coroutineDispatchers.main) {
                             val stepProgress = StepProgressListener.Step.ImportingKey(progress, total)
                             stepProgressListener.onStepProgress(stepProgress)
                         }
@@ -581,16 +580,12 @@ internal class RustKeyBackupService @Inject constructor(
     }
 
     override suspend fun getVersion(version: String): KeysVersionResult? {
-        return withContext(coroutineDispatchers.io) {
-            sender.getKeyBackupVersion(version)
-        }
+        return sender.getKeyBackupVersion(version)
     }
 
     @Throws
     override suspend fun getCurrentVersion(): KeysVersionResult? {
-        return withContext(coroutineDispatchers.io) {
-            sender.getKeyBackupVersion()
-        }
+        return sender.getKeyBackupVersion()
     }
 
     override suspend fun forceUsingLastVersion(): Boolean {
@@ -646,18 +641,16 @@ internal class RustKeyBackupService @Inject constructor(
                 Timber.w("checkAndStartKeysBackup: invalid state: $state")
                 return@withContext
             }
-
             keysBackupVersion = null
             keysBackupStateManager.state = KeysBackupState.CheckingBackUpOnHomeserver
-
-            withContext(coroutineDispatchers.io) {
-                try {
-                    val data = getCurrentVersion()
-                    withContext(coroutineDispatchers.crypto) {
-                        checkAndStartWithKeysBackupVersion(data)
-                    }
-                } catch (failure: Throwable) {
-                    Timber.e(failure, "checkAndStartKeysBackup: Failed to get current version")
+            try {
+                val data = getCurrentVersion()
+                withContext(coroutineDispatchers.crypto) {
+                    checkAndStartWithKeysBackupVersion(data)
+                }
+            } catch (failure: Throwable) {
+                Timber.e(failure, "checkAndStartKeysBackup: Failed to get current version")
+                withContext(coroutineDispatchers.crypto) {
                     keysBackupStateManager.state = KeysBackupState.Unknown
                 }
             }
@@ -725,7 +718,7 @@ internal class RustKeyBackupService @Inject constructor(
         }
     }
 
-    override fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
+    override suspend fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {
         val info = olmMachine.getBackupKeys() ?: return null
         return SavedKeyBackupKeyInfo(info.recoveryKey, info.backupVersion)
     }
@@ -878,7 +871,7 @@ internal class RustKeyBackupService @Inject constructor(
                     }
                 } catch (failure: Throwable) {
                     if (failure is Failure.ServerError) {
-                        withContext(Dispatchers.Main) {
+                        withContext(coroutineDispatchers.main) {
                             Timber.e(failure, "backupKeys: backupKeys failed.")
 
                             when (failure.error.code) {

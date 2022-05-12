@@ -22,11 +22,12 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
+import org.matrix.android.sdk.internal.session.room.send.SendResponse
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.toMatrixErrorStr
 import javax.inject.Inject
 
-internal interface SendVerificationMessageTask : Task<SendVerificationMessageTask.Params, String> {
+internal interface SendVerificationMessageTask : Task<SendVerificationMessageTask.Params, SendResponse> {
     data class Params(
             val event: Event
     )
@@ -39,10 +40,9 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val globalErrorReceiver: GlobalErrorReceiver) : SendVerificationMessageTask {
 
-    override suspend fun execute(params: SendVerificationMessageTask.Params): String {
+    override suspend fun execute(params: SendVerificationMessageTask.Params): SendResponse {
         val event = handleEncryption(params)
         val localId = event.eventId!!
-
         try {
             localEchoRepository.updateSendState(localId, event.roomId, SendState.SENDING)
             val response = executeRequest(globalErrorReceiver) {
@@ -54,7 +54,7 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
                 )
             }
             localEchoRepository.updateSendState(localId, event.roomId, SendState.SENT)
-            return response.eventId
+            return response
         } catch (e: Throwable) {
             localEchoRepository.updateSendState(localId, event.roomId, SendState.UNDELIVERED, e.toMatrixErrorStr())
             throw e
@@ -67,7 +67,6 @@ internal class DefaultSendVerificationMessageTask @Inject constructor(
                 return encryptEventTask.execute(EncryptEventTask.Params(
                         params.event.roomId ?: "",
                         params.event,
-                        listOf("m.relates_to")
                 ))
             } catch (throwable: Throwable) {
                 // We said it's ok to send verification request in clear

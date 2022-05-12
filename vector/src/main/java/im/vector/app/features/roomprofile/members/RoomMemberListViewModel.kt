@@ -16,7 +16,6 @@
 
 package im.vector.app.features.roomprofile.members
 
-import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -94,8 +93,7 @@ class RoomMemberListViewModel @AssistedInject constructor(@Assisted initialState
         if (room.isEncrypted()) {
             room.flow().liveRoomMembers(roomMemberQueryParams)
                     .flatMapLatest { membersSummary ->
-                        session.cryptoService().getLiveCryptoDeviceInfo(membersSummary.map { it.userId })
-                                .asFlow()
+                        session.cryptoService().getLiveCryptoDeviceInfoList(membersSummary.map { it.userId })
                                 .catch { Timber.e(it) }
                                 .map { deviceList ->
                                     // If any key change, emit the userIds list

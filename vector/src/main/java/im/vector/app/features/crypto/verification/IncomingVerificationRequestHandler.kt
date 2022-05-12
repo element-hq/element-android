@@ -24,6 +24,8 @@ import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.PendingVerificationRequest
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
@@ -42,7 +44,8 @@ import javax.inject.Singleton
 class IncomingVerificationRequestHandler @Inject constructor(
         private val context: Context,
         private var avatarRenderer: Provider<AvatarRenderer>,
-        private val popupAlertManager: PopupAlertManager) : VerificationService.Listener {
+        private val popupAlertManager: PopupAlertManager,
+        private val coroutineScope: CoroutineScope) : VerificationService.Listener {
 
     private var session: Session? = null
 
@@ -61,7 +64,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // TODO maybe check also if
         val uid = "kvr_${tx.transactionId}"
         when (tx.state) {
-            is VerificationTxState.OnStarted -> {
+            is VerificationTxState.OnStarted       -> {
                 // Add a notification for every incoming request
                 val user = session?.getUser(tx.otherUserId)
                 val name = user?.toMatrixItem()?.getBestName() ?: tx.otherUserId
@@ -88,12 +91,14 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                     it.navigator.performDeviceVerification(it, tx.otherUserId, tx.transactionId)
                                 }
                             }
-                            dismissedAction = Runnable {
+                            dismissedAction = LaunchCoroutineRunnable(coroutineScope) {
                                 tx.cancel()
                             }
                             addButton(
                                     context.getString(R.string.action_ignore),
-                                    { tx.cancel() }
+                                    LaunchCoroutineRunnable(coroutineScope) {
+                                        tx.cancel()
+                                    }
                             )
                             addButton(
                                     context.getString(R.string.action_open),
@@ -160,10 +165,9 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 }
                             }
                         }
-                        dismissedAction = Runnable {
-                            session?.cryptoService()?.verificationService()?.declineVerificationRequestInDMs(pr.otherUserId,
-                                    pr.transactionId ?: "",
-                                    pr.roomId ?: ""
+                        dismissedAction = LaunchCoroutineRunnable(coroutineScope) {
+                            session?.cryptoService()?.verificationService()?.cancelVerificationRequest(pr.otherUserId,
+                                    pr.transactionId ?: ""
                             )
                         }
                         colorAttribute = R.attr.vctr_notice_secondary
@@ -178,6 +182,14 @@ class IncomingVerificationRequestHandler @Inject constructor(
         // If an incoming request is readied (by another device?) we should discard the alert
         if (pr.isIncoming && (pr.isReady || pr.handledByOtherSession || pr.cancelConclusion != null)) {
             popupAlertManager.cancelAlert(uniqueIdForVerificationRequest(pr))
+        }
+    }
+
+    private class LaunchCoroutineRunnable(private val coroutineScope: CoroutineScope, private val block: suspend () -> Unit) : Runnable {
+        override fun run() {
+            coroutineScope.launch {
+                block()
+            }
         }
     }
 

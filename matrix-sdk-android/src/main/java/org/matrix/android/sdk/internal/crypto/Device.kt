@@ -16,13 +16,14 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.UnsignedDeviceInfo
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods
 import uniffi.olm.CryptoStoreException
 import uniffi.olm.OlmMachine
@@ -39,16 +40,17 @@ internal class Device(
         private val machine: OlmMachine,
         private var inner: InnerDevice,
         private val sender: RequestSender,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val listeners: ArrayList<VerificationService.Listener>
 ) {
     @Throws(CryptoStoreException::class)
     private suspend fun refreshData() {
-        val device = withContext(Dispatchers.IO) {
+        val device = withContext(coroutineDispatchers.io) {
             machine.getDevice(inner.userId, inner.deviceId)
         }
 
         if (device != null) {
-            this.inner = device
+            inner = device
         }
     }
 
@@ -66,12 +68,12 @@ internal class Device(
     @Throws(CryptoStoreException::class)
     suspend fun requestVerification(methods: List<VerificationMethod>): VerificationRequest? {
         val stringMethods = prepareMethods(methods)
-        val result = withContext(Dispatchers.IO) {
+        val result = withContext(coroutineDispatchers.io) {
             machine.requestVerificationWithDevice(inner.userId, inner.deviceId, stringMethods)
         }
 
         return if (result != null) {
-            this.sender.sendVerificationRequest(result.request)
+            sender.sendVerificationRequest(result.request)
             result.verification
         } else {
             null
@@ -89,14 +91,18 @@ internal class Device(
      */
     @Throws(CryptoStoreException::class)
     suspend fun startVerification(): SasVerification? {
-        val result = withContext(Dispatchers.IO) {
+        val result = withContext(coroutineDispatchers.io) {
             machine.startSasWithDevice(inner.userId, inner.deviceId)
         }
 
         return if (result != null) {
-            this.sender.sendVerificationRequest(result.request)
+            sender.sendVerificationRequest(result.request)
             SasVerification(
-                    this.machine, result.sas, this.sender, this.listeners,
+                    machine = machine,
+                    inner = result.sas,
+                    sender = sender,
+                    coroutineDispatchers = coroutineDispatchers,
+                    listeners = listeners
             )
         } else {
             null
@@ -111,7 +117,7 @@ internal class Device(
      */
     @Throws(CryptoStoreException::class)
     suspend fun markAsTrusted() {
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             machine.markDeviceAsTrusted(inner.userId, inner.deviceId)
         }
     }
@@ -127,11 +133,11 @@ internal class Device(
      */
     @Throws(SignatureException::class)
     suspend fun verify(): Boolean {
-        val request = withContext(Dispatchers.IO) {
+        val request = withContext(coroutineDispatchers.io) {
             machine.verifyDevice(inner.userId, inner.deviceId)
         }
 
-        this.sender.sendSignatureUpload(request)
+        sender.sendSignatureUpload(request)
 
         return true
     }
@@ -151,20 +157,20 @@ internal class Device(
      * This will not fetch out fresh data from the Rust side.
      **/
     internal fun toCryptoDeviceInfo(): CryptoDeviceInfo {
-        val keys = this.inner.keys.map { (keyId, key) -> "$keyId:$this.inner.deviceId" to key }.toMap()
+        val keys = inner.keys.map { (keyId, key) -> "$keyId:$inner.deviceId" to key }.toMap()
 
         return CryptoDeviceInfo(
-                this.inner.deviceId,
-                this.inner.userId,
-                this.inner.algorithms,
-                keys,
+                deviceId = inner.deviceId,
+                userId = inner.userId,
+                algorithms = inner.algorithms,
+                keys = keys,
                 // The Kotlin side doesn't need to care about signatures,
                 // so we're not filling this out
-                mapOf(),
-                UnsignedDeviceInfo(this.inner.displayName),
-                DeviceTrustLevel(crossSigningVerified = this.inner.crossSigningTrusted, locallyVerified = this.inner.locallyTrusted),
-                this.inner.isBlocked,
+                signatures = mapOf(),
+                unsigned = UnsignedDeviceInfo(inner.displayName),
+                trustLevel = DeviceTrustLevel(crossSigningVerified = inner.crossSigningTrusted, locallyVerified = inner.locallyTrusted),
+                isBlocked = inner.isBlocked,
                 // TODO
-                null)
+                firstTimeSeenLocalTs = null)
     }
 }

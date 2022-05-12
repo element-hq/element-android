@@ -49,7 +49,6 @@ import org.matrix.android.sdk.internal.session.room.state.SendStateTask
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.search.SearchTask
 import org.matrix.android.sdk.internal.session.space.DefaultSpace
-import org.matrix.android.sdk.internal.util.awaitCallback
 import java.security.InvalidParameterException
 
 internal class DefaultRoom(override val roomId: String,
@@ -117,9 +116,7 @@ internal class DefaultRoom(override val roomId: String,
     }
 
     override suspend fun prepareToEncrypt() {
-        awaitCallback<Unit> {
-            cryptoService.prepareToEncrypt(roomId, it)
-        }
+        cryptoService.prepareToEncrypt(roomId)
     }
 
     override suspend fun enableEncryption(algorithm: String, force: Boolean) {

@@ -16,15 +16,15 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
 import org.matrix.android.sdk.api.session.crypto.verification.EmojiRepresentation
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
+import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.UpdateDispatcher
 import org.matrix.android.sdk.internal.crypto.verification.getEmojiForCode
 import uniffi.olm.CryptoStoreException
@@ -37,6 +37,7 @@ internal class SasVerification(
         private val machine: OlmMachine,
         private var inner: Sas,
         private val sender: RequestSender,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         listeners: ArrayList<VerificationService.Listener>
 ) :
         SasVerificationTransaction {
@@ -44,27 +45,27 @@ internal class SasVerification(
 
     private fun dispatchTxUpdated() {
         refreshData()
-        this.dispatcher.dispatchTxUpdated(this)
+        dispatcher.dispatchTxUpdated(this)
     }
 
     /** The user ID of the other user that is participating in this verification flow */
-    override val otherUserId: String = this.inner.otherUserId
+    override val otherUserId: String = inner.otherUserId
 
     /** Get the device id of the other user's device participating in this verification flow */
     override var otherDeviceId: String?
-        get() = this.inner.otherDeviceId
+        get() = inner.otherDeviceId
         @Suppress("UNUSED_PARAMETER")
         set(value) {
         }
 
     /** Did the other side initiate this verification flow */
     override val isIncoming: Boolean
-        get() = !this.inner.weStarted
+        get() = !inner.weStarted
 
     override var state: VerificationTxState
         get() {
             refreshData()
-            val cancelInfo = this.inner.cancelInfo
+            val cancelInfo = inner.cancelInfo
 
             return when {
                 cancelInfo != null    -> {
@@ -84,7 +85,7 @@ internal class SasVerification(
 
     /** Get the unique id of this verification */
     override val transactionId: String
-        get() = this.inner.flowId
+        get() = inner.flowId
 
     /** Cancel the verification flow
      *
@@ -95,8 +96,8 @@ internal class SasVerification(
      *
      * The method turns into a noop, if the verification flow has already been cancelled.
      * */
-    override fun cancel() {
-        this.cancelHelper(CancelCode.User)
+    override suspend fun cancel() {
+        cancelHelper(CancelCode.User)
     }
 
     /** Cancel the verification flow
@@ -110,8 +111,8 @@ internal class SasVerification(
      *
      * @param code The cancel code that should be given as the reason for the cancellation.
      * */
-    override fun cancel(code: CancelCode) {
-        this.cancelHelper(code)
+    override suspend fun cancel(code: CancelCode) {
+        cancelHelper(code)
     }
 
     /** Cancel the verification flow
@@ -123,25 +124,17 @@ internal class SasVerification(
      *
      * The method turns into a noop, if the verification flow has already been cancelled.
      */
-    override fun shortCodeDoesNotMatch() {
-        this.cancelHelper(CancelCode.MismatchedSas)
+    override suspend fun shortCodeDoesNotMatch() {
+        cancelHelper(CancelCode.MismatchedSas)
     }
 
     /** Is this verification happening over to-device messages */
-    override fun isToDeviceTransport(): Boolean = this.inner.roomId == null
-
-    /** Does the verification flow support showing decimals as the short auth string */
-    override fun supportsDecimal(): Boolean {
-        // This is ignored anyways, throw it away?
-        // The spec also mandates that devices support at least decimal and
-        // the rust-sdk cancels if devices don't support it
-        return true
-    }
+    override fun isToDeviceTransport(): Boolean = inner.roomId == null
 
     /** Does the verification flow support showing emojis as the short auth string */
     override fun supportsEmoji(): Boolean {
         refreshData()
-        return this.inner.supportsEmoji
+        return inner.supportsEmoji
     }
 
     /** Confirm that the short authentication code matches on both sides
@@ -153,8 +146,8 @@ internal class SasVerification(
      * This method is a noop if we're not yet in a presentable state, i.e. we didn't receive
      * a m.key.verification.key event from the other side or we're cancelled.
      */
-    override fun userHasVerifiedShortCode() {
-        runBlocking { confirm() }
+    override suspend fun userHasVerifiedShortCode() {
+        confirm()
     }
 
     /** Accept the verification flow, signaling the other side that we do want to verify
@@ -165,8 +158,8 @@ internal class SasVerification(
      * This method is a noop if we send the start event out or if the verification has already
      * been accepted.
      */
-    override fun acceptVerification() {
-        runBlocking { accept() }
+    override suspend fun acceptVerification() {
+        accept()
     }
 
     /** Get the decimal representation of the short auth string
@@ -176,7 +169,7 @@ internal class SasVerification(
      * in a presentable state.
      */
     override fun getDecimalCodeRepresentation(): String {
-        val decimals = this.machine.getDecimals(this.inner.otherUserId, this.inner.flowId)
+        val decimals = machine.getDecimals(inner.otherUserId, inner.flowId)
 
         return decimals?.joinToString(" ") ?: ""
     }
@@ -188,52 +181,51 @@ internal class SasVerification(
      * state.
      */
     override fun getEmojiCodeRepresentation(): List<EmojiRepresentation> {
-        val emojiIndex = this.machine.getEmojiIndex(this.inner.otherUserId, this.inner.flowId)
+        val emojiIndex = machine.getEmojiIndex(inner.otherUserId, inner.flowId)
 
         return emojiIndex?.map { getEmojiForCode(it) } ?: listOf()
     }
 
     internal suspend fun accept() {
-        val request = this.machine.acceptSasVerification(this.inner.otherUserId, inner.flowId)
+        val request = machine.acceptSasVerification(inner.otherUserId, inner.flowId)
 
         if (request != null) {
-            this.sender.sendVerificationRequest(request)
+            sender.sendVerificationRequest(request)
             dispatchTxUpdated()
         }
     }
 
     @Throws(CryptoStoreException::class)
     private suspend fun confirm() {
-        val result = withContext(Dispatchers.IO) {
+        val result = withContext(coroutineDispatchers.io) {
             machine.confirmVerification(inner.otherUserId, inner.flowId)
         }
-
         if (result != null) {
-            this.sender.sendVerificationRequest(result.request)
-            dispatchTxUpdated()
-
-            val signatureRequest = result.signatureRequest
-
-            if (signatureRequest != null) {
-                this.sender.sendSignatureUpload(signatureRequest)
+            for (verificationRequest in result.requests) {
+                sender.sendVerificationRequest(verificationRequest)
             }
+            val signatureRequest = result.signatureRequest
+            if (signatureRequest != null) {
+                sender.sendSignatureUpload(signatureRequest)
+            }
+            dispatchTxUpdated()
         }
     }
 
-    private fun cancelHelper(code: CancelCode) {
-        val request = this.machine.cancelVerification(this.inner.otherUserId, inner.flowId, code.value)
+    private suspend fun cancelHelper(code: CancelCode) {
+        val request = machine.cancelVerification(inner.otherUserId, inner.flowId, code.value)
 
         if (request != null) {
-            runBlocking { sender.sendVerificationRequest(request) }
+            sender.sendVerificationRequest(request)
             dispatchTxUpdated()
         }
     }
 
     /** Fetch fresh data from the Rust side for our verification flow */
     private fun refreshData() {
-        when (val verification = this.machine.getVerification(this.inner.otherUserId, this.inner.flowId)) {
+        when (val verification = machine.getVerification(inner.otherUserId, inner.flowId)) {
             is Verification.SasV1 -> {
-                this.inner = verification.sas
+                inner = verification.sas
             }
             else                  -> {
             }

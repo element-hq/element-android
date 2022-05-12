@@ -994,22 +994,24 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleAcceptVerification(action: RoomDetailAction.AcceptVerificationRequest) {
         Timber.v("## SAS handleAcceptVerification ${action.otherUserId},  roomId:${room.roomId}, txId:${action.transactionId}")
-        if (session.cryptoService().verificationService().readyPendingVerificationInDMs(
-                        supportedVerificationMethodsProvider.provide(),
-                        action.otherUserId,
-                        room.roomId,
-                        action.transactionId)) {
-            _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
-        } else {
-            // TODO
+        viewModelScope.launch {
+            if (session.cryptoService().verificationService().readyPendingVerification(
+                            supportedVerificationMethodsProvider.provide(),
+                            action.otherUserId,
+                            action.transactionId)) {
+                _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
+            } else {
+                // TODO
+            }
         }
     }
 
     private fun handleDeclineVerification(action: RoomDetailAction.DeclineVerificationRequest) {
-        session.cryptoService().verificationService().declineVerificationRequestInDMs(
-                action.otherUserId,
-                action.transactionId,
-                room.roomId)
+        viewModelScope.launch {
+            session.cryptoService().verificationService().cancelVerificationRequest(
+                    action.otherUserId,
+                    action.transactionId)
+        }
     }
 
     private fun handleRequestVerification(action: RoomDetailAction.RequestVerification) {

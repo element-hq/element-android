@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -126,7 +127,9 @@ internal class TimelineEventDecryptor @Inject constructor(
             return
         }
         try {
-            val result = cryptoService.decryptEvent(request.event, timelineId)
+            val result = runBlocking {
+                cryptoService.decryptEvent(request.event, timelineId)
+            }
             Timber.v("Successfully decrypted event ${event.eventId}")
             realm.executeTransaction {
                 val eventId = event.eventId ?: return@executeTransaction

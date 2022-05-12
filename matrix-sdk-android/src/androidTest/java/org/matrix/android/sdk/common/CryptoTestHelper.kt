@@ -19,6 +19,7 @@ package org.matrix.android.sdk.common
 import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.Observer
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -29,8 +30,7 @@ import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
-import org.matrix.android.sdk.api.session.crypto.verification.OutgoingSasVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -275,7 +275,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
     }
 
     fun initializeCrossSigning(session: Session) {
-        testHelper.doSync<Unit> {
+        testHelper.runBlockingTest {
             session.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -288,7 +288,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
                                             )
                                     )
                                 }
-                            }, it)
+                            })
         }
     }
 
@@ -300,24 +300,24 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
         val aliceVerificationService = alice.cryptoService().verificationService()
         val bobVerificationService = bob.cryptoService().verificationService()
 
-        aliceVerificationService.beginKeyVerificationInDMs(
-                VerificationMethod.SAS,
-                requestID,
-                roomId,
-                bob.myUserId,
-                bob.sessionParams.credentials.deviceId!!)
+        runBlocking {
+            aliceVerificationService.beginKeyVerification(
+                    VerificationMethod.SAS,
+                    roomId,
+                    bob.myUserId,)
+        }
 
         // we should reach SHOW SAS on both
-        var alicePovTx: OutgoingSasVerificationTransaction? = null
-        var bobPovTx: IncomingSasVerificationTransaction? = null
+        var alicePovTx: SasVerificationTransaction? = null
+        var bobPovTx: SasVerificationTransaction? = null
 
         // wait for alice to get the ready
         testHelper.waitWithLatch {
             testHelper.retryPeriodicallyWithLatch(it) {
-                bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID) as? IncomingSasVerificationTransaction
-                Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
+                bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID) as? SasVerificationTransaction
+                Log.v("TEST", "== bobPovTx is ${bobPovTx?.state}")
                 if (bobPovTx?.state == VerificationTxState.OnStarted) {
-                    bobPovTx?.performAccept()
+                    bobPovTx?.acceptVerification()
                     true
                 } else {
                     false
@@ -327,18 +327,18 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
 
         testHelper.waitWithLatch {
             testHelper.retryPeriodicallyWithLatch(it) {
-                alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID) as? OutgoingSasVerificationTransaction
-                Log.v("TEST", "== alicePovTx is ${alicePovTx?.uxState}")
+                alicePovTx = aliceVerificationService.getExistingTransaction(bob.myUserId, requestID) as? SasVerificationTransaction
+                Log.v("TEST", "== alicePovTx is ${alicePovTx?.state}")
                 alicePovTx?.state == VerificationTxState.ShortCodeReady
             }
         }
         // wait for alice to get the ready
         testHelper.waitWithLatch {
             testHelper.retryPeriodicallyWithLatch(it) {
-                bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID) as? IncomingSasVerificationTransaction
-                Log.v("TEST", "== bobPovTx is ${alicePovTx?.uxState}")
+                bobPovTx = bobVerificationService.getExistingTransaction(alice.myUserId, requestID) as? SasVerificationTransaction
+                Log.v("TEST", "== bobPovTx is ${bobPovTx?.state}")
                 if (bobPovTx?.state == VerificationTxState.OnStarted) {
-                    bobPovTx?.performAccept()
+                    bobPovTx?.acceptVerification()
                 }
                 bobPovTx?.state == VerificationTxState.ShortCodeReady
             }
@@ -346,8 +346,10 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
 
         assertEquals("SAS code do not match", alicePovTx!!.getDecimalCodeRepresentation(), bobPovTx!!.getDecimalCodeRepresentation())
 
-        bobPovTx!!.userHasVerifiedShortCode()
-        alicePovTx!!.userHasVerifiedShortCode()
+        runBlocking {
+            bobPovTx!!.userHasVerifiedShortCode()
+            alicePovTx!!.userHasVerifiedShortCode()
+        }
 
         testHelper.waitWithLatch {
             testHelper.retryPeriodicallyWithLatch(it) {

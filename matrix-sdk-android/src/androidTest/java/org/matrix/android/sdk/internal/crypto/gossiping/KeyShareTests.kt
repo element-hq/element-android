@@ -23,6 +23,7 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
+import kotlinx.coroutines.delay
 import org.junit.Assert
 import org.junit.FixMethodOrder
 import org.junit.Ignore
@@ -35,7 +36,6 @@ import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
 import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
@@ -50,7 +50,6 @@ import org.matrix.android.sdk.common.SessionTestParams
 import org.matrix.android.sdk.common.TestConstants
 import org.matrix.android.sdk.internal.crypto.GossipingRequestState
 import org.matrix.android.sdk.internal.crypto.OutgoingGossipingRequestState
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustLevel
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -93,7 +92,9 @@ class KeyShareTests : InstrumentedTest {
         assert(receivedEvent!!.isEncrypted())
 
         try {
-            aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            commonTestHelper.runBlockingTest {
+                aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            }
             fail("should fail")
         } catch (failure: Throwable) {
         }
@@ -106,7 +107,7 @@ class KeyShareTests : InstrumentedTest {
 
         var outGoingRequestId: String? = null
 
-        commonTestHelper.waitWithLatch {  latch ->
+        commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
                 aliceSession2.cryptoService().getOutgoingRoomKeyRequests()
                         .filter { req ->
@@ -148,14 +149,17 @@ class KeyShareTests : InstrumentedTest {
         }
 
         try {
-            aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            commonTestHelper.runBlockingTest {
+                aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            }
             fail("should fail")
         } catch (failure: Throwable) {
         }
 
         // Mark the device as trusted
-        aliceSession.cryptoService().setDeviceVerification(DeviceTrustLevel(crossSigningVerified = false, locallyVerified = true), aliceSession.myUserId,
-                aliceSession2.sessionParams.deviceId ?: "")
+        commonTestHelper.runBlockingTest {
+            aliceSession.cryptoService().verificationService().markedLocallyAsManuallyVerified(aliceSession.myUserId, aliceSession2.sessionParams.deviceId ?: "")
+        }
 
         // Re request
         aliceSession2.cryptoService().reRequestRoomKeyForEvent(receivedEvent.root)
@@ -185,7 +189,9 @@ class KeyShareTests : InstrumentedTest {
         }
 
         try {
-            aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            commonTestHelper.runBlockingTest {
+                aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            }
         } catch (failure: Throwable) {
             fail("should have been able to decrypt")
         }
@@ -199,7 +205,7 @@ class KeyShareTests : InstrumentedTest {
     fun test_ShareSSSSSecret() {
         val aliceSession1 = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
-        commonTestHelper.doSync<Unit> {
+        commonTestHelper.runBlockingTest {
             aliceSession1.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -211,7 +217,7 @@ class KeyShareTests : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            })
         }
 
         // Also bootstrap keybackup on first session
@@ -242,27 +248,30 @@ class KeyShareTests : InstrumentedTest {
 
         aliceVerificationService1.addListener(object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
+                if (tx !is SasVerificationTransaction) return
                 Log.d("#TEST", "AA: tx incoming?:${tx.isIncoming} state ${tx.state}")
-                if (tx is SasVerificationTransaction) {
-                    if (tx.state == VerificationTxState.OnStarted) {
-                        (tx as IncomingSasVerificationTransaction).performAccept()
+                when (tx.state) {
+                    VerificationTxState.OnStarted      -> commonTestHelper.runBlockingTest {
+                        tx.acceptVerification()
                     }
-                    if (tx.state == VerificationTxState.ShortCodeReady) {
+                    VerificationTxState.ShortCodeReady -> commonTestHelper.runBlockingTest {
                         session1ShortCode = tx.getDecimalCodeRepresentation()
-                        Thread.sleep(500)
+                        delay(500)
                         tx.userHasVerifiedShortCode()
                     }
                 }
             }
-        })
+        }
+        )
 
         aliceVerificationService2.addListener(object : VerificationService.Listener {
             override fun transactionUpdated(tx: VerificationTransaction) {
+                if (tx !is SasVerificationTransaction) return
                 Log.d("#TEST", "BB: tx incoming?:${tx.isIncoming} state ${tx.state}")
-                if (tx is SasVerificationTransaction) {
-                    if (tx.state == VerificationTxState.ShortCodeReady) {
+                when (tx.state) {
+                    VerificationTxState.ShortCodeReady -> commonTestHelper.runBlockingTest {
                         session2ShortCode = tx.getDecimalCodeRepresentation()
-                        Thread.sleep(500)
+                        delay(500)
                         tx.userHasVerifiedShortCode()
                     }
                 }
@@ -270,12 +279,13 @@ class KeyShareTests : InstrumentedTest {
         })
 
         val txId = "m.testVerif12"
-        aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, aliceSession1.sessionParams.deviceId
-                ?: "", txId)
+        commonTestHelper.runBlockingTest {
+            aliceVerificationService2.beginKeyVerification(VerificationMethod.SAS, aliceSession1.myUserId, txId)
+        }
 
         commonTestHelper.waitWithLatch { latch ->
             commonTestHelper.retryPeriodicallyWithLatch(latch) {
-                aliceSession1.cryptoService().getDeviceInfo(aliceSession1.myUserId, aliceSession2.sessionParams.deviceId ?: "")?.isVerified == true
+                aliceSession1.cryptoService().getCryptoDeviceInfo(aliceSession1.myUserId, aliceSession2.sessionParams.deviceId ?: "")?.isVerified == true
             }
         }
 
@@ -312,7 +322,7 @@ class KeyShareTests : InstrumentedTest {
     fun test_ImproperKeyShareBug() {
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
-        commonTestHelper.doSync<Unit> {
+        commonTestHelper.runBlockingTest {
             aliceSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -325,7 +335,7 @@ class KeyShareTests : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            })
         }
 
         // Create an encrypted room and send a couple of messages
@@ -346,7 +356,7 @@ class KeyShareTests : InstrumentedTest {
         // Create bob session
 
         val bobSession = commonTestHelper.createAccount(TestConstants.USER_BOB, SessionTestParams(true))
-        commonTestHelper.doSync<Unit> {
+        commonTestHelper.runBlockingTest {
             bobSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(
                             object : UserInteractiveAuthInterceptor {
@@ -359,7 +369,7 @@ class KeyShareTests : InstrumentedTest {
                                             )
                                     )
                                 }
-                            }, it)
+                            })
         }
 
         // Let alice invite bob
@@ -380,7 +390,10 @@ class KeyShareTests : InstrumentedTest {
         val roomRoomBobPov = aliceSession.getRoom(roomId)
         val beforeJoin = roomRoomBobPov!!.getTimelineEvent(secondEventId)
 
-        var dRes = tryOrNull { bobSession.cryptoService().decryptEvent(beforeJoin!!.root, "") }
+        var dRes =
+                commonTestHelper.runBlockingTest {
+                    tryOrNull { bobSession.cryptoService().decryptEvent(beforeJoin!!.root, "") }
+                }
 
         assert(dRes == null)
 
@@ -391,7 +404,9 @@ class KeyShareTests : InstrumentedTest {
         Thread.sleep(3_000)
 
         // With the bug the first session would have improperly reshare that key :/
-        dRes = tryOrNull { bobSession.cryptoService().decryptEvent(beforeJoin.root, "") }
+        dRes = commonTestHelper.runBlockingTest {
+            tryOrNull { bobSession.cryptoService().decryptEvent(beforeJoin.root, "") }
+        }
         Log.d("#TEST", "KS: sgould not decrypt that ${beforeJoin.root.getClearContent().toModel<MessageContent>()?.body}")
         assert(dRes?.clearEvent == null)
     }
