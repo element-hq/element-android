@@ -61,9 +61,6 @@ complexity:
     active: false
 
 naming:
-  FunctionParameterNaming:
-    # TODO Enable it
-    active: false
   VariableNaming:
     # TODO Enable it
     active: false

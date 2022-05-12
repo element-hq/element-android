@@ -309,9 +309,9 @@ class Login2Variant(
         activity.finish()
     }
 
-    private fun updateWithState(LoginViewState2: LoginViewState2) {
+    private fun updateWithState(loginViewState2: LoginViewState2) {
         // Loading
-        setIsLoading(LoginViewState2.isLoading)
+        setIsLoading(loginViewState2.isLoading)
     }
 
     // Hack for AccountCreatedFragment
