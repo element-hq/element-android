@@ -29,6 +29,7 @@ import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.inferNoConnectivity
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.BuildMeta
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.ensureTrailingSlash
@@ -79,7 +80,8 @@ class OnboardingViewModel @AssistedInject constructor(
         private val registrationActionHandler: RegistrationActionHandler,
         private val directLoginUseCase: DirectLoginUseCase,
         private val startAuthenticationFlowUseCase: StartAuthenticationFlowUseCase,
-        private val vectorOverrides: VectorOverrides
+        private val vectorOverrides: VectorOverrides,
+        private val buildMeta: BuildMeta
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -623,17 +625,23 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun onAuthenticationStartError(it: Throwable, trigger: OnboardingAction.HomeServerChange) {
         when {
-            it.isHomeserverUnavailable() && applicationContext.inferNoConnectivity()                      -> _viewEvents.post(
+            it.isHomeserverUnavailable() && applicationContext.inferNoConnectivity(buildMeta) -> _viewEvents.post(
                     OnboardingViewEvents.Failure(it)
             )
-            it.isHomeserverUnavailable() && trigger is OnboardingAction.HomeServerChange.SelectHomeServer -> _viewEvents.post(
-                    OnboardingViewEvents.DeeplinkAuthenticationFailure(retryAction = trigger.resetToDefaultUrl())
+            deeplinkUrlIsUnavailable(it, trigger)                                             -> _viewEvents.post(
+                    OnboardingViewEvents.DeeplinkAuthenticationFailure(
+                            retryAction = (trigger as OnboardingAction.HomeServerChange.SelectHomeServer).resetToDefaultUrl()
+                    )
             )
-            else                                                                                          -> _viewEvents.post(
+            else                                                                              -> _viewEvents.post(
                     OnboardingViewEvents.Failure(it)
             )
         }
     }
+
+    private fun deeplinkUrlIsUnavailable(error: Throwable, trigger: OnboardingAction.HomeServerChange) = error.isHomeserverUnavailable() &&
+            loginConfig != null &&
+            trigger is OnboardingAction.HomeServerChange.SelectHomeServer
 
     private fun OnboardingAction.HomeServerChange.SelectHomeServer.resetToDefaultUrl() = copy(homeServerUrl = defaultHomeserverUrl)
 
