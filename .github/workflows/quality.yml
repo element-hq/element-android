@@ -147,3 +147,23 @@ jobs:
           name: release-lint-report-${{ matrix.target }}
           path: |
             vector/build/reports/*.*
+
+  detekt:
+    name: Detekt Analysis
+    runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('detekt-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('detekt-develop-{0}', github.sha) || format('detekt-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run detekt
+        run: |
+          ./gradlew detekt
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detekt-report
+          path: |
+            */build/reports/detekt/detekt.html
