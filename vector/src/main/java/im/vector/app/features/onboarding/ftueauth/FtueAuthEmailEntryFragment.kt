@@ -25,7 +25,7 @@ import im.vector.app.core.extensions.associateContentStateWith
 import im.vector.app.core.extensions.content
 import im.vector.app.core.extensions.editText
 import im.vector.app.core.extensions.isEmail
-import im.vector.app.core.extensions.setOnImeDone
+import im.vector.app.core.extensions.setOnImeDoneListener
 import im.vector.app.databinding.FragmentFtueEmailInputBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
@@ -49,7 +49,7 @@ class FtueAuthEmailEntryFragment @Inject constructor() : AbstractFtueAuthFragmen
 
     private fun setupViews() {
         views.emailEntryInput.associateContentStateWith(button = views.emailEntrySubmit)
-        views.emailEntryInput.setOnImeDone { updateEmail() }
+        views.emailEntryInput.setOnImeDoneListener { updateEmail() }
         views.emailEntrySubmit.debouncedClicks { updateEmail() }
 
         views.emailEntryInput.editText().textChanges()

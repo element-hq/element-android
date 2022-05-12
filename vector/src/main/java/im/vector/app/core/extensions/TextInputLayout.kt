@@ -19,6 +19,8 @@ package im.vector.app.core.extensions
 import android.text.Editable
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.core.view.doOnPreDraw
+import androidx.core.widget.doOnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.core.platform.SimpleTextWatcher
 import kotlinx.coroutines.flow.map
@@ -46,7 +48,7 @@ fun TextInputLayout.associateContentStateWith(button: View) {
     })
 }
 
-fun TextInputLayout.setOnImeDone(action: () -> Unit) {
+fun TextInputLayout.setOnImeDoneListener(action: () -> Unit) {
     editText?.setOnEditorActionListener { _, actionId, _ ->
         when (actionId) {
             EditorInfo.IME_ACTION_DONE -> {
