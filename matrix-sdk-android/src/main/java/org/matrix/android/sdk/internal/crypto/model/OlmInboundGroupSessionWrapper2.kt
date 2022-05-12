@@ -27,7 +27,7 @@ import java.io.Serializable
  * This allows additional checks. The class implements Serializable so that the context can be stored.
  */
 // Note used anymore, just for database migration
-@Deprecated("Use MXInboundMegolmSessionWrapper")
+// Deprecated("Use MXInboundMegolmSessionWrapper")
 internal class OlmInboundGroupSessionWrapper2 : Serializable {
 
     // The associated olm inbound group session.
