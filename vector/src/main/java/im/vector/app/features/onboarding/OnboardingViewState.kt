@@ -52,6 +52,9 @@ data class OnboardingViewState(
         val selectedHomeserver: SelectedHomeserverState = SelectedHomeserverState(),
 
         @PersistState
+        val selectedAuthenticationState: SelectedAuthenticationState = SelectedAuthenticationState(),
+
+        @PersistState
         val personalizationState: PersonalizationState = PersonalizationState()
 ) : MavericksState
 
@@ -80,3 +83,8 @@ data class PersonalizationState(
 
     fun supportsPersonalization() = supportsChangingDisplayName || supportsChangingProfilePicture
 }
+
+@Parcelize
+data class SelectedAuthenticationState(
+        val type: AuthenticationDescription.AuthenticationType? = null,
+) : Parcelable
