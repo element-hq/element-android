@@ -17,13 +17,17 @@
 package im.vector.app.features.onboarding.ftueauth
 
 import android.widget.Button
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
+import im.vector.app.R
 import im.vector.app.core.extensions.hasContentFlow
+import im.vector.app.core.extensions.inferNoConnectivity
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.onboarding.OnboardingAction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
+import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 
 fun SignMode.toAuthenticateAction(login: String, password: String, initialDeviceName: String): OnboardingAction.AuthenticateAction {
     return when (this) {

@@ -26,6 +26,7 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
+import im.vector.app.core.extensions.inferNoConnectivity
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -54,6 +55,7 @@ import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.registration.Stage
+import org.matrix.android.sdk.api.failure.isHomeserverUnavailable
 import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 import java.util.UUID
@@ -135,8 +137,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     override fun handle(action: OnboardingAction) {
         when (action) {
-            is OnboardingAction.OnGetStarted               -> handleSplashAction(action.onboardingFlow)
-            is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.onboardingFlow)
+            is OnboardingAction.SplashAction               -> handleSplashAction(action)
             is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase(action)
             OnboardingAction.ResetUseCase                  -> resetUseCase()
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
@@ -176,9 +177,9 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleSplashAction(onboardingFlow: OnboardingFlow) {
-        setState { copy(onboardingFlow = onboardingFlow) }
-        continueToPageAfterSplash(onboardingFlow)
+    private fun handleSplashAction(action: OnboardingAction.SplashAction) {
+        setState { copy(onboardingFlow = action.onboardingFlow) }
+        continueToPageAfterSplash(action.onboardingFlow)
     }
 
     private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
@@ -614,11 +615,27 @@ class OnboardingViewModel @AssistedInject constructor(
             setState { copy(isLoading = true) }
             runCatching { startAuthenticationFlowUseCase.execute(homeServerConnectionConfig) }.fold(
                     onSuccess = { onAuthenticationStartedSuccess(trigger, homeServerConnectionConfig, it, serverTypeOverride) },
-                    onFailure = { _viewEvents.post(OnboardingViewEvents.Failure(it)) }
+                    onFailure = { onAuthenticationStartError(it, trigger) }
             )
             setState { copy(isLoading = false) }
         }
     }
+
+    private fun onAuthenticationStartError(it: Throwable, trigger: OnboardingAction.HomeServerChange) {
+        when {
+            it.isHomeserverUnavailable() && applicationContext.inferNoConnectivity()                      -> _viewEvents.post(
+                    OnboardingViewEvents.Failure(it)
+            )
+            it.isHomeserverUnavailable() && trigger is OnboardingAction.HomeServerChange.SelectHomeServer -> _viewEvents.post(
+                    OnboardingViewEvents.DeeplinkAuthenticationFailure(retryAction = trigger.resetToDefaultUrl())
+            )
+            else                                                                                          -> _viewEvents.post(
+                    OnboardingViewEvents.Failure(it)
+            )
+        }
+    }
+
+    private fun OnboardingAction.HomeServerChange.SelectHomeServer.resetToDefaultUrl() = copy(homeServerUrl = defaultHomeserverUrl)
 
     private suspend fun onAuthenticationStartedSuccess(
             trigger: OnboardingAction.HomeServerChange,
