@@ -46,7 +46,7 @@ internal class PerSessionBackupQueryRateLimiter @Inject constructor(
 ) {
 
     companion object {
-        val MIN_TRY_BACKUP_PERIOD_MILLIS = 60 * 60_000 // 1 hour
+        const val MIN_TRY_BACKUP_PERIOD_MILLIS = 60 * 60_000 // 1 hour
     }
 
     data class Info(
