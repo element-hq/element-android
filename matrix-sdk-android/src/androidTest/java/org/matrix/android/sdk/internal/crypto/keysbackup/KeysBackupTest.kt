@@ -104,7 +104,6 @@ class KeysBackupTest : InstrumentedTest {
     @Test
     fun prepareKeysBackupVersionTest() {
         val testHelper = CommonTestHelper(context())
-        val cryptoTestHelper = CryptoTestHelper(testHelper)
 
         val bobSession = testHelper.createAccount(TestConstants.USER_BOB, KeysBackupTestConstants.defaultSessionParams)
 
@@ -168,7 +167,7 @@ class KeysBackupTest : InstrumentedTest {
             keysBackup.getKeysBackupTrust(versionResult!!, it)
         }
 
-        assertEquals("Should have 2 signatures", 2,  trust.signatures.size)
+        assertEquals("Should have 2 signatures", 2, trust.signatures.size)
 
         trust.signatures
                 .firstOrNull { it is KeysBackupVersionTrustSignature.DeviceSignature }
