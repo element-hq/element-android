@@ -2425,7 +2425,7 @@
     <string name="threads_notice_migration_title">Wątki zbliżają się do wersji beta 🎉</string>
     <string name="search_thread_from_a_thread">Z wątku</string>
     <string name="thread_list_empty_notice">Wskazówka: naciśnij i przytrzymaj wiadomość i użyj „%s”.</string>
-    <string name="thread_list_empty_subtitle">Dzięki wątkom Twoje rozmowy są aktualne i łatwe do śledzenia.</string>
+    <string name="thread_list_empty_subtitle">Dzięki wątkom Twoje rozmowy są zorganizowane i łatwe do śledzenia.</string>
     <string name="thread_list_empty_title">Organizuj dyskusje za pomocą wątków</string>
     <string name="thread_list_modal_my_threads_subtitle">Pokazuje wszystkie wątki, w których brałeś udział</string>
     <string name="thread_list_modal_all_threads_subtitle">Pokazuje wszystkie wątki z bieżącego pokoju</string>
