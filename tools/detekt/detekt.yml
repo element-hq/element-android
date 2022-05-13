@@ -71,3 +71,28 @@ naming:
 performance:
   SpreadOperator:
     active: false
+
+# Note: all rules for `comments` are disabled by default, but I put them here to be aware of their existence
+comments:
+  AbsentOrWrongFileLicense:
+    active: false
+    licenseTemplateFile: 'license.template'
+    licenseTemplateIsRegex: false
+  CommentOverPrivateFunction:
+    active: false
+  CommentOverPrivateProperty:
+    active: false
+  DeprecatedBlockTag:
+    active: true
+  EndOfSentenceFormat:
+    # TODO Enable it
+    active: false
+  OutdatedDocumentation:
+    # TODO Enable it
+    active: false
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
+  UndocumentedPublicProperty:
+    active: false
