@@ -194,19 +194,7 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
         val dataSourceFactory = realmDataSourceFactory.map {
             roomSummaryMapper.map(it)
-        }.map { roomSummary ->
-            val parents = roomSummary.flattenParentIds.mapNotNull { parentId ->
-                getRoomSummary(parentId)?.let { parentSummary ->
-                    SpaceParentInfo(
-                            parentId = parentSummary.flattenParentIds.firstOrNull(),
-                            roomSummary = parentSummary,
-                            canonical = true,
-                            viaServers = emptyList()
-                    )
-                }
-            }
-            roomSummary.copy(spaceParents = parents)
-        }
+        }.map { it.getWithParents()}
 
         val boundaries = MutableLiveData(ResultBoundaries())
 
@@ -243,6 +231,20 @@ internal class RoomSummaryDataSource @Inject constructor(
                     }
                 }
         }
+    }
+
+    private fun RoomSummary.getWithParents(): RoomSummary {
+        val parents = flattenParentIds.mapNotNull { parentId ->
+            getRoomSummary(parentId)?.let { parentSummary ->
+                SpaceParentInfo(
+                        parentId = parentSummary.flattenParentIds.firstOrNull(),
+                        roomSummary = parentSummary,
+                        canonical = true,
+                        viaServers = emptyList()
+                )
+            }
+        }
+        return copy(flattenParents = parents)
     }
 
     fun getCountLive(queryParams: RoomSummaryQueryParams): LiveData<Int> {

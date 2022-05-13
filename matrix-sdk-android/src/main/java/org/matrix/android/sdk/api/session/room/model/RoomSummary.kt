@@ -62,6 +62,7 @@ data class RoomSummary(
         val roomType: String? = null,
         val spaceParents: List<SpaceParentInfo>? = null,
         val spaceChildren: List<SpaceChildInfo>? = null,
+        val flattenParents: List<SpaceParentInfo> = emptyList(),
         val flattenParentIds: List<String> = emptyList(),
         val roomEncryptionAlgorithm: RoomEncryptionAlgorithm? = null
 ) {
