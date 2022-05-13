@@ -52,6 +52,8 @@ Alternatively, to install the latest Synapse release package (and not a cloned b
 pip install matrix-synapse
 ```
 
+On your first run, you will want to stop the demo and edit the config to correct the `public_baseurl` to http://10.0.2.2:8080 and restart the server.
+
 You should now have 3 running federated Synapse instances 🎉, at http://127.0.0.1:8080/, http://127.0.0.1:8081/ and  http://127.0.0.1:8082/, which should display a "It Works! Synapse is running" message.
 
 ## Run the test
