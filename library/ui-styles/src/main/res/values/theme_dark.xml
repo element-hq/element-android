@@ -146,6 +146,21 @@
 
         <!-- Location sharing -->
         <item name="vctr_live_location">@color/vctr_live_location_dark</item>
+
+        <!-- Room avatar colors -->
+        <item name="vctr_element_room_01">@color/vctr_element_room_01_dark</item>
+        <item name="vctr_element_room_02">@color/vctr_element_room_02_dark</item>
+        <item name="vctr_element_room_03">@color/vctr_element_room_03_dark</item>
+
+        <!-- Name colors -->
+        <item name="vctr_element_name_01">@color/vctr_element_name_01_dark</item>
+        <item name="vctr_element_name_02">@color/vctr_element_name_02_dark</item>
+        <item name="vctr_element_name_03">@color/vctr_element_name_03_dark</item>
+        <item name="vctr_element_name_04">@color/vctr_element_name_04_dark</item>
+        <item name="vctr_element_name_05">@color/vctr_element_name_05_dark</item>
+        <item name="vctr_element_name_06">@color/vctr_element_name_06_dark</item>
+        <item name="vctr_element_name_07">@color/vctr_element_name_07_dark</item>
+        <item name="vctr_element_name_08">@color/vctr_element_name_08_dark</item>
     </style>
 
     <style name="Theme.Vector.Dark" parent="Base.Theme.Vector.Dark" />

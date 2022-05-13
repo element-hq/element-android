@@ -37,12 +37,10 @@ class MatrixItemColorProvider @Inject constructor(
     @ColorInt
     fun getColor(matrixItem: MatrixItem): Int {
         return cache.getOrPut(matrixItem.id) {
-            colorProvider.getColor(
-                    when (matrixItem) {
-                        is MatrixItem.UserItem -> getColorFromUserId(matrixItem.id)
-                        else                   -> getColorFromRoomId(matrixItem.id)
-                    }
-            )
+            when (matrixItem) {
+                is MatrixItem.UserItem -> getColorFromUserIdColorInt(colorProvider, matrixItem.id)
+                else                   -> getColorFromRoomId(colorProvider, matrixItem.id)
+            }
         }
     }
 
@@ -93,6 +91,16 @@ class MatrixItemColorProvider @Inject constructor(
             return getUserColorByIndex(abs(hash))
         }
 
+        @ColorInt
+        @VisibleForTesting
+        fun getColorFromUserIdColorInt(colorProvider: ColorProvider, userId: String?): Int {
+            var hash = 0
+
+            userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.code }
+
+            return getUserColorByIndexColorInt(colorProvider, abs(hash))
+        }
+
         @ColorRes
         private fun getUserColorByIndex(index: Int): Int {
             return when (index % 8) {
@@ -107,12 +115,28 @@ class MatrixItemColorProvider @Inject constructor(
             }
         }
 
-        @ColorRes
+        
+        @ColorInt
+        private fun getUserColorByIndexColorInt(colorProvider: ColorProvider, index: Int): Int {
+            return when (index % 8) {
+                1    -> colorProvider.getColorFromAttribute(R.attr.vctr_element_name_02)
+                2    -> colorProvider.getColorFromAttribute(R.attr.vctr_element_name_03)
+                3    -> colorProvider.getColorFromAttribute(R.attr.vctr_element_name_04)
+                4    -> colorProvider.getColorFromAttribute(R.attr.vctr_element_name_05)
+                5    -> colorProvider.getColorFromAttribute(R.attr.vctr_element_name_06)
+                6    -> colorProvider.getColorFromAttribute(R.attr.vctr_element_name_07)
+                7    -> colorProvider.getColorFromAttribute(R.attr.vctr_element_name_08)
+                else -> colorProvider.getColorFromAttribute(R.attr.vctr_element_name_01)
+            }
+        }
+
+
+        @ColorInt
         private fun getColorFromRoomId(roomId: String?): Int {
             return when ((roomId?.toList()?.sumOf { it.code } ?: 0) % 3) {
-                1    -> R.color.element_room_02
-                2    -> R.color.element_room_03
-                else -> R.color.element_room_01
+                1    -> colorProvider.getColorFromAttribute(R.attr.vctr_element_room_02)
+                2    -> colorProvider.getColorFromAttribute(R.attr.vctr_element_room_03)
+                else -> colorProvider.getColorFromAttribute(R.attr.vctr_element_room_01)
             }
         }
     }

@@ -136,4 +136,52 @@
     <color name="shield_color_black">#17191C</color>
     <color name="shield_color_warning">#FF4B55</color>
 
+    <!-- Room avatar colors -->
+
+    <attr name="vctr_element_room_01" format="color" />
+    <color name="vctr_element_room_01_light">@color/palette_verde</color>
+    <color name="vctr_element_room_01_dark">@color/palette_verde</color>
+
+    <attr name="vctr_element_room_02" format="color" />
+    <color name="vctr_element_room_02_light">@color/palette_azure</color>
+    <color name="vctr_element_room_02_dark">@color/palette_azure</color>
+
+    <attr name="vctr_element_room_03" format="color" />
+    <color name="vctr_element_room_03_light">@color/palette_grape</color>
+    <color name="vctr_element_room_03_dark">@color/palette_grape</color>
+
+    <!-- Name colors -->
+
+    <attr name="vctr_element_name_01" format="color" />
+    <color name="vctr_element_name_01_light">@color/palette_azure</color>
+    <color name="vctr_element_name_01_dark">@color/palette_azure</color>
+
+    <attr name="vctr_element_name_02" format="color" />
+    <color name="vctr_element_name_02_light">@color/palette_grape</color>
+    <color name="vctr_element_name_02_dark">@color/palette_grape</color>
+
+    <attr name="vctr_element_name_03" format="color" />
+    <color name="vctr_element_name_03_light">@color/palette_verde</color>
+    <color name="vctr_element_name_03_dark">@color/palette_verde</color>
+
+    <attr name="vctr_element_name_04" format="color" />
+    <color name="vctr_element_name_04_light">@color/palette_polly</color>
+    <color name="vctr_element_name_04_dark">@color/palette_polly</color>
+
+    <attr name="vctr_element_name_05" format="color" />
+    <color name="vctr_element_name_05_light">@color/palette_melon</color>
+    <color name="vctr_element_name_05_dark">@color/palette_melon</color>
+
+    <attr name="vctr_element_name_06" format="color" />
+    <color name="vctr_element_name_06_light">@color/palette_aqua</color>
+    <color name="vctr_element_name_06_dark">@color/palette_aqua</color>
+
+    <attr name="vctr_element_name_07" format="color" />
+    <color name="vctr_element_name_07_light">@color/palette_prune</color>
+    <color name="vctr_element_name_07_dark">@color/palette_prune</color>
+
+    <attr name="vctr_element_name_08" format="color" />
+    <color name="vctr_element_name_08_light">@color/palette_kiwi</color>
+    <color name="vctr_element_name_08_dark">@color/palette_kiwi</color>
+
 </resources>
