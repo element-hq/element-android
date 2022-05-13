@@ -23,21 +23,15 @@ import androidx.paging.PagedList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.CryptoService
@@ -71,7 +65,7 @@ import org.matrix.android.sdk.api.session.sync.model.DeviceListResponse
 import org.matrix.android.sdk.api.session.sync.model.DeviceOneTimeKeysCountSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.ToDeviceSyncResponse
 import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
-import org.matrix.android.sdk.internal.crypto.network.OutgoingRequestsProcessor
+import org.matrix.android.sdk.internal.crypto.network.NetworkRequestsProcessor
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.repository.WarnOnUnknownDeviceRepository
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -86,13 +80,9 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import timber.log.Timber
-import uniffi.olm.Request
-import uniffi.olm.RequestType
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import kotlin.math.max
-import kotlin.system.measureTimeMillis
 
 /**
  * A `CryptoService` class instance manages the end-to-end crypto for a session.
@@ -109,14 +99,8 @@ private val loggerTag = LoggerTag("DefaultCryptoService", LoggerTag.CRYPTO)
 
 @SessionScope
 internal class DefaultCryptoService @Inject constructor(
-        @UserId
-        private val userId: String,
-        @DeviceId
-        private val deviceId: String?,
-//        @SessionId
-//        private val sessionId: String,
-//        @SessionFilesDirectory
-//        private val dataDir: File,
+        @UserId private val userId: String,
+        @DeviceId private val deviceId: String?,
         // the crypto store
         private val cryptoStore: IMXCryptoStore,
         // Set of parameters used to configure/customize the end-to-end crypto.
@@ -128,7 +112,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val getDevicesTask: GetDevicesTask,
         private val getDeviceInfoTask: GetDeviceInfoTask,
         private val setDeviceNameTask: SetDeviceNameTask,
-        private val loadRoomMembersTask: LoadRoomMembersTask,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val cryptoCoroutineScope: CoroutineScope,
@@ -141,7 +124,6 @@ internal class DefaultCryptoService @Inject constructor(
         private val liveEventManager: dagger.Lazy<StreamEventsManager>,
         private val prepareToEncrypt: PrepareToEncryptUseCase,
         private val encryptEventContent: EncryptEventContentUseCase,
-        private val shouldEncryptForInvitedMembers: ShouldEncryptForInvitedMembersUseCase,
         private val getRoomUserIds: GetRoomUserIdsUseCase,
 ) : CryptoService {
 
@@ -150,13 +132,7 @@ internal class DefaultCryptoService @Inject constructor(
 
     private val olmMachine by lazy { olmMachineProvider.olmMachine }
 
-    // The verification service.
-//    private var verificationService: RustVerificationService? = null
-
-//    private val deviceObserver: DeviceUpdateObserver = DeviceUpdateObserver()
-
-    // Locks for some of our operations
-    private val outgoingRequestsProcessor = OutgoingRequestsProcessor(
+    private val outgoingRequestsProcessor = NetworkRequestsProcessor(
             requestSender = requestSender,
             coroutineScope = cryptoCoroutineScope,
             cryptoSessionInfoProvider = cryptoSessionInfoProvider,
@@ -274,7 +250,8 @@ internal class DefaultCryptoService @Inject constructor(
             setRustLogger()
             Timber.tag(loggerTag.value).v(
                     "## CRYPTO | Successfully started up an Olm machine for " +
-                            "$userId, $deviceId, identity keys: ${this.olmMachine.identityKeys()}")
+                            "$userId, $deviceId, identity keys: ${this.olmMachine.identityKeys()}"
+            )
         } catch (throwable: Throwable) {
             Timber.tag(loggerTag.value).v("Failed create an Olm machine: $throwable")
         }
@@ -326,7 +303,7 @@ internal class DefaultCryptoService @Inject constructor(
      */
     suspend fun onSyncCompleted() {
         if (isStarted()) {
-            outgoingRequestsProcessor.process(olmMachine)
+            outgoingRequestsProcessor.processOutgoingRequests(olmMachine)
             // This isn't a copy paste error. Sending the outgoing requests may
             // claim one-time keys and establish 1-to-1 Olm sessions with devices, while some
             // outgoing requests are waiting for an Olm session to be established (e.g. forwarding
@@ -335,7 +312,7 @@ internal class DefaultCryptoService @Inject constructor(
             // The second call sends out those requests that are waiting for the
             // keys claim request to be sent out.
             // This could be omitted but then devices might be waiting for the next
-            outgoingRequestsProcessor.process(olmMachine)
+            outgoingRequestsProcessor.processOutgoingRequests(olmMachine)
 
             keysBackupService.maybeBackupKeys()
         }
@@ -598,17 +575,6 @@ internal class DefaultCryptoService @Inject constructor(
         }
     }
 
-
-
-    private suspend fun sendToDevice(request: Request.ToDevice) {
-        try {
-            requestSender.sendToDevice(request)
-            olmMachine.markRequestAsSent(request.requestId, RequestType.TO_DEVICE, "{}")
-        } catch (throwable: Throwable) {
-            Timber.tag(loggerTag.value).e(throwable, "## CRYPTO sendToDevice(): error")
-        }
-    }
-
     /**
      * Export the crypto keys
      *
@@ -737,26 +703,8 @@ internal class DefaultCryptoService @Inject constructor(
      *
      * @param event the event to decrypt again.
      */
-    override fun reRequestRoomKeyForEvent(event: Event) {
-        cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            val requestPair = olmMachine.requestRoomKey(event)
-
-            val cancellation = requestPair.cancellation
-            val request = requestPair.keyRequest
-
-            when (cancellation) {
-                is Request.ToDevice -> {
-                    sendToDevice(cancellation)
-                }
-                else                -> Unit
-            }
-            when (request) {
-                is Request.ToDevice -> {
-                    sendToDevice(request)
-                }
-                else                -> Unit
-            }
-        }
+    override suspend fun reRequestRoomKeyForEvent(event: Event) {
+        outgoingRequestsProcessor.processRequestRoomKey(olmMachine, event)
     }
 
     /**

@@ -1037,7 +1037,8 @@ class TimelineViewModel @AssistedInject constructor(
             if (session.cryptoService().verificationService().readyPendingVerification(
                             supportedVerificationMethodsProvider.provide(),
                             action.otherUserId,
-                            action.transactionId)) {
+                            action.transactionId
+                    )) {
                 _viewEvents.post(RoomDetailViewEvents.ActionSuccess(action))
             } else {
                 // TODO
@@ -1049,7 +1050,8 @@ class TimelineViewModel @AssistedInject constructor(
         viewModelScope.launch {
             session.cryptoService().verificationService().cancelVerificationRequest(
                     action.otherUserId,
-                    action.transactionId)
+                    action.transactionId
+            )
         }
     }
 
@@ -1075,10 +1077,12 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleReRequestKeys(action: RoomDetailAction.ReRequestKeys) {
-        // Check if this request is still active and handled by me
-        room.getTimelineEvent(action.eventId)?.let {
-            session.cryptoService().reRequestRoomKeyForEvent(it.root)
-            _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
+        viewModelScope.launch {
+            // Check if this request is still active and handled by me
+            room.getTimelineEvent(action.eventId)?.let {
+                session.cryptoService().reRequestRoomKeyForEvent(it.root)
+                _viewEvents.post(RoomDetailViewEvents.ShowMessage(stringProvider.getString(R.string.e2e_re_request_encryption_key_dialog_content)))
+            }
         }
     }
 

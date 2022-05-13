@@ -25,6 +25,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.crypto.OlmMachine
 import timber.log.Timber
@@ -33,10 +34,10 @@ import uniffi.olm.RequestType
 
 private val loggerTag = LoggerTag("OutgoingRequestsProcessor", LoggerTag.CRYPTO)
 
-internal class OutgoingRequestsProcessor(private val requestSender: RequestSender,
-                                         private val coroutineScope: CoroutineScope,
-                                         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-                                         private val shieldComputer: ShieldComputer) {
+internal class NetworkRequestsProcessor(private val requestSender: RequestSender,
+                                        private val coroutineScope: CoroutineScope,
+                                        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+                                        private val shieldComputer: ShieldComputer,) {
 
     fun interface ShieldComputer {
         suspend fun compute(userIds: List<String>): RoomEncryptionTrustLevel
@@ -44,7 +45,7 @@ internal class OutgoingRequestsProcessor(private val requestSender: RequestSende
 
     private val lock: Mutex = Mutex()
 
-    suspend fun process(olmMachine: OlmMachine) {
+    suspend fun processOutgoingRequests(olmMachine: OlmMachine) {
         lock.withLock {
             coroutineScope {
                 Timber.v("OutgoingRequests: ${olmMachine.outgoingRequests()}")
@@ -89,6 +90,25 @@ internal class OutgoingRequestsProcessor(private val requestSender: RequestSende
                     }
                 }.joinAll()
             }
+        }
+    }
+
+    suspend fun processRequestRoomKey(olmMachine: OlmMachine, event: Event) {
+        val requestPair = olmMachine.requestRoomKey(event)
+        val cancellation = requestPair.cancellation
+        val request = requestPair.keyRequest
+
+        when (cancellation) {
+            is Request.ToDevice -> {
+                sendToDevice(olmMachine, cancellation)
+            }
+            else                -> Unit
+        }
+        when (request) {
+            is Request.ToDevice -> {
+                sendToDevice(olmMachine, request)
+            }
+            else                -> Unit
         }
     }
 

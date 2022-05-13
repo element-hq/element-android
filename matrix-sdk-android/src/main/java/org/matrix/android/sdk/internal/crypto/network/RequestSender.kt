@@ -85,7 +85,7 @@ internal class RequestSender @Inject constructor(
         private val getSessionsDataTask: GetSessionsDataTask,
         private val getRoomSessionsDataTask: GetRoomSessionsDataTask,
         private val getRoomSessionDataTask: GetRoomSessionDataTask,
-        private val moshi: Moshi
+        private val moshi: Moshi,
 ) {
     companion object {
         const val REQUEST_RETRY_COUNT = 3

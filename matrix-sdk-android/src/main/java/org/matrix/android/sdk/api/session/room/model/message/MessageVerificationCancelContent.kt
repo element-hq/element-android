@@ -17,34 +17,14 @@ package org.matrix.android.sdk.api.session.room.model.message
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.crypto.verification.CancelCode
-import org.matrix.android.sdk.api.session.events.model.RelationType
-import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
-import org.matrix.android.sdk.internal.crypto.verification.VerificationInfoCancel
 
 @JsonClass(generateAdapter = true)
 data class MessageVerificationCancelContent(
-        @Json(name = "code") override val code: String? = null,
-        @Json(name = "reason") override val reason: String? = null,
+        @Json(name = "code") val code: String? = null,
+        @Json(name = "reason") val reason: String? = null,
         @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent?
-) : VerificationInfoCancel {
+) {
 
-    override val transactionId: String?
-        get() = relatesTo?.eventId
-
-    override fun toEventContent() = toContent()
-
-    companion object {
-        fun create(transactionId: String, reason: CancelCode): MessageVerificationCancelContent {
-            return MessageVerificationCancelContent(
-                    reason.value,
-                    reason.humanReadable,
-                    RelationDefaultContent(
-                            RelationType.REFERENCE,
-                            transactionId
-                    )
-            )
-        }
-    }
+    val transactionId: String? = relatesTo?.eventId
 }

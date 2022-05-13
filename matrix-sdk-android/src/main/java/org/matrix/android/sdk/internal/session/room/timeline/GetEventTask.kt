@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.model.OlmDecryptionResult
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.internal.crypto.DecryptEventUseCase
+import org.matrix.android.sdk.internal.crypto.DecryptRoomEventUseCase
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
@@ -37,7 +37,7 @@ internal interface GetEventTask : Task<GetEventTask.Params, Event> {
 internal class DefaultGetEventTask @Inject constructor(
         private val roomAPI: RoomAPI,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        private val decryptEvent: DecryptEventUseCase,
+        private val decryptEvent: DecryptRoomEventUseCase,
         private val clock: Clock,
 ) : GetEventTask {
 

@@ -87,7 +87,7 @@ interface CryptoService {
 
     suspend fun getCryptoDeviceInfo(userId: String, deviceId: String?): CryptoDeviceInfo?
 
-    fun reRequestRoomKeyForEvent(event: Event)
+    suspend fun reRequestRoomKeyForEvent(event: Event)
 
     fun addRoomKeysRequestListener(listener: GossipingRequestListener)
 
