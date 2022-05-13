@@ -40,6 +40,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.util.toMatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
@@ -102,10 +103,16 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             }
             if (attributes.isEncryptionAlgorithmSecure) {
                 holder.e2eTitleTextView.text = holder.expandView.resources.getString(R.string.encryption_enabled)
-                holder.e2eTitleDescriptionView.text = if (data?.isDirectRoom == true) {
-                    holder.expandView.resources.getString(R.string.direct_room_encryption_enabled_tile_description)
-                } else {
-                    holder.expandView.resources.getString(R.string.encryption_enabled_tile_description)
+                holder.e2eTitleDescriptionView.text = when {
+                    data?.isDirectRoom == true && RoomLocalEcho.isLocalEchoId(data.roomId.orEmpty()) -> {
+                        holder.expandView.resources.getString(R.string.direct_room_encryption_enabled_tile_description_future)
+                    }
+                    data?.isDirectRoom == true -> {
+                        holder.expandView.resources.getString(R.string.direct_room_encryption_enabled_tile_description)
+                    }
+                    else -> {
+                        holder.expandView.resources.getString(R.string.encryption_enabled_tile_description)
+                    }
                 }
                 holder.e2eTitleDescriptionView.textAlignment = View.TEXT_ALIGNMENT_CENTER
                 holder.e2eTitleTextView.setCompoundDrawablesWithIntrinsicBounds(
@@ -130,17 +137,29 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         val roomDisplayName = roomSummary?.displayName
         holder.roomNameText.setTextOrHide(roomDisplayName)
         val isDirect = roomSummary?.isDirect == true
+        val isLocalRoom = RoomLocalEcho.isLocalEchoId(roomSummary?.roomId.orEmpty())
         val membersCount = roomSummary?.otherMemberIds?.size ?: 0
 
-        if (isDirect) {
-            holder.roomDescriptionText.text = holder.view.resources.getString(
-                    R.string.this_is_the_beginning_of_dm,
-                    roomSummary?.displayName ?: ""
-            )
-        } else if (roomDisplayName.isNullOrBlank() || roomSummary.name.isBlank()) {
-            holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)
-        } else {
-            holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room, roomDisplayName)
+        when {
+            isDirect -> {
+                if (isLocalRoom) {
+                    holder.roomDescriptionText.text = holder.view.resources.getString(
+                            R.string.send_your_first_msg_to_invite,
+                            roomSummary?.displayName.orEmpty()
+                    )
+                } else {
+                    holder.roomDescriptionText.text = holder.view.resources.getString(
+                            R.string.this_is_the_beginning_of_dm,
+                            roomSummary?.displayName.orEmpty()
+                    )
+                }
+            }
+            roomDisplayName.isNullOrBlank() || roomSummary.name.isBlank() -> {
+                holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room_no_name)
+            }
+            else -> {
+                holder.roomDescriptionText.text = holder.view.resources.getString(R.string.this_is_the_beginning_of_room, roomDisplayName)
+            }
         }
 
         val topic = roomSummary?.topic

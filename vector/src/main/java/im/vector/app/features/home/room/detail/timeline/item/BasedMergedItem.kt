@@ -54,6 +54,7 @@ abstract class BasedMergedItem<H : BasedMergedItem.Holder> : BaseEventItem<H>() 
     }
 
     data class Data(
+            val roomId: String?,
             val localId: Long,
             val eventId: String,
             val userId: String,

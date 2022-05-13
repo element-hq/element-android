@@ -2399,7 +2399,8 @@
 
     <string name="encryption_enabled">Encryption enabled</string>
     <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
-    <string name="direct_room_encryption_enabled_tile_description">Messages in this room are end-to-end encrypted.</string>
+    <string name="direct_room_encryption_enabled_tile_description">Messages in this chat are end-to-end encrypted.</string>
+    <string name="direct_room_encryption_enabled_tile_description_future">Messages in this chat will be end-to-end encrypted.</string>
     <string name="encryption_not_enabled">Encryption not enabled</string>
     <string name="encryption_misconfigured">Encryption is misconfigured</string>
     <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
@@ -2411,6 +2412,7 @@
     <string name="this_is_the_beginning_of_room">This is the beginning of %s.</string>
     <string name="this_is_the_beginning_of_room_no_name">This is the beginning of this conversation.</string>
     <string name="this_is_the_beginning_of_dm">This is the beginning of your direct message history with %s.</string>
+    <string name="send_your_first_msg_to_invite">Send your first message to invite %s to chat</string>
     <!-- First param will be replaced by the value of add_a_topic_link_text, that will be clickable-->
     <string name="room_created_summary_no_topic_creation_text">%s to let people know what this room is about.</string>
     <string name="add_a_topic_link_text">Add a topic</string>
