@@ -65,6 +65,12 @@ data class MatrixConfiguration(
          * Thread messages default enable/disabled value
          */
         val threadMessagesEnabledDefault: Boolean = false,
+
+        /**
+         * Sync loop parameter: The maximum time to wait, in milliseconds, before returning this request.
+         * If no events (or other data) become available before this time elapses, the server will return a response with empty fields.
+         */
+        val defaultLongPoolTimeout: Long = 30_000L,
 ) {
 
     /**

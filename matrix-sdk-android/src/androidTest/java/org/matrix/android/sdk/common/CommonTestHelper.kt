@@ -68,7 +68,8 @@ class CommonTestHelper(context: Context) {
                     context,
                     MatrixConfiguration(
                             applicationFlavor = "TestFlavor",
-                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
+                            roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider(),
+                            defaultLongPoolTimeout = 5_000L
                     )
             )
         }
