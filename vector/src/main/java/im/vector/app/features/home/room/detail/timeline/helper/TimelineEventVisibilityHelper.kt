@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
+import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
@@ -173,6 +174,13 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         }
 
         if (userPreferencesProvider.areThreadMessagesEnabled() && !isFromThreadTimeline && root.isThread()) {
+            return true
+        }
+
+        // Hide fake events for local rooms
+        if (RoomLocalEcho.isLocalEchoId(roomId) &&
+                root.getClearType() == EventType.STATE_ROOM_MEMBER ||
+                root.getClearType() == EventType.STATE_ROOM_HISTORY_VISIBILITY) {
             return true
         }
 
