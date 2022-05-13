@@ -288,9 +288,8 @@ class OnboardingViewModel @AssistedInject constructor(
                                 else                   -> when (it) {
                                     is RegistrationResult.Complete         -> onSessionCreated(
                                             it.session,
-                                            authenticationDescription = AuthenticationDescription.AccountCreated(
-                                                    awaitState().selectedAuthenticationState.type ?: AuthenticationDescription.AuthenticationType.Other
-                                            )
+                                            authenticationDescription = awaitState().selectedAuthenticationState.description
+                                                    ?: AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Other)
                                     )
                                     is RegistrationResult.NextStep         -> onFlowResponse(it.flowResult, onNextRegistrationStepAction)
                                     is RegistrationResult.SendEmailSuccess -> _viewEvents.post(OnboardingViewEvents.OnSendEmailSuccess(it.email))
@@ -311,7 +310,10 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleRegisterWith(action: AuthenticateAction.Register) {
-        setState { copy(selectedAuthenticationState = SelectedAuthenticationState(AuthenticationDescription.AuthenticationType.Password)) }
+        setState {
+            val authDescription = AuthenticationDescription.Register(AuthenticationDescription.AuthenticationType.Password)
+            copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
+        }
         reAuthHelper.data = action.password
         handleRegisterAction(
                 RegisterAction.CreateAccount(
@@ -557,14 +559,14 @@ class OnboardingViewModel @AssistedInject constructor(
         session.configureAndStart(applicationContext)
 
         when (authenticationDescription) {
-            is AuthenticationDescription.AccountCreated -> {
+            is AuthenticationDescription.Register -> {
                 val personalizationState = createPersonalizationState(session, state)
                 setState {
                     copy(isLoading = false, personalizationState = personalizationState)
                 }
                 _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
             }
-            AuthenticationDescription.Login             -> {
+            AuthenticationDescription.Login       -> {
                 setState { copy(isLoading = false) }
                 _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
             }
@@ -738,7 +740,10 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     fun getSsoUrl(redirectUrl: String, deviceId: String?, provider: SsoIdentityProvider?): String? {
-        setState { copy(selectedAuthenticationState = SelectedAuthenticationState(provider.toAuthenticationType())) }
+        setState {
+            val authDescription = AuthenticationDescription.Register(provider.toAuthenticationType())
+            copy(selectedAuthenticationState = SelectedAuthenticationState(authDescription))
+        }
         return authenticationService.getSsoUrl(redirectUrl, deviceId, provider?.id)
     }
 

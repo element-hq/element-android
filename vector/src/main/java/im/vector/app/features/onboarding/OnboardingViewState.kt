@@ -86,5 +86,5 @@ data class PersonalizationState(
 
 @Parcelize
 data class SelectedAuthenticationState(
-        val type: AuthenticationDescription.AuthenticationType? = null,
+        val description: AuthenticationDescription? = null,
 ) : Parcelable

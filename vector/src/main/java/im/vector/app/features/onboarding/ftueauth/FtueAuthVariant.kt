@@ -217,7 +217,7 @@ class FtueAuthVariant(
             is OnboardingViewEvents.OnAccountCreated                           -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
             OnboardingViewEvents.OnChooseDisplayName                           -> onChooseDisplayName()
-            OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
+            OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome()
             OnboardingViewEvents.OnChooseProfilePicture                        -> onChooseProfilePicture()
             OnboardingViewEvents.OnPersonalizationComplete                     -> onPersonalizationComplete()
             OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
@@ -473,7 +473,7 @@ class FtueAuthVariant(
     }
 
     private fun onAccountSignedIn() {
-        navigateToHome(createdAccount = false)
+        navigateToHome()
     }
 
     private fun onAccountCreated() {
@@ -485,10 +485,12 @@ class FtueAuthVariant(
         )
     }
 
-    private fun navigateToHome(createdAccount: Boolean) {
-        val intent = HomeActivity.newIntent(activity, accountCreation = createdAccount)
-        activity.startActivity(intent)
-        activity.finish()
+    private fun navigateToHome() {
+        withState(onboardingViewModel) {
+            val intent = HomeActivity.newIntent(activity, authenticationDescription = it.selectedAuthenticationState.description)
+            activity.startActivity(intent)
+            activity.finish()
+        }
     }
 
     private fun onChooseDisplayName() {
