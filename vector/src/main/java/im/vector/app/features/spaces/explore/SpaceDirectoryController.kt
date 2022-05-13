@@ -17,7 +17,6 @@
 package im.vector.app.features.spaces.explore
 
 import android.view.View
-import androidx.core.util.Predicate
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
@@ -36,6 +35,7 @@ import im.vector.app.core.ui.list.genericPillItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.spaceChildInfoItem
 import im.vector.app.features.home.room.list.spaceDirectoryFilterNoResults
+import im.vector.app.features.spaces.manage.SpaceChildInfoMatchFilter
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -65,7 +65,7 @@ class SpaceDirectoryController @Inject constructor(
     }
 
     var listener: InteractionListener? = null
-    private val matchFilter = RoomSearchMatchFilter()
+    private val matchFilter = SpaceChildInfoMatchFilter()
 
     override fun buildModels(data: SpaceDirectoryState?) {
         val host = this
@@ -206,22 +206,6 @@ class SpaceDirectoryController @Inject constructor(
                         }
                     }
                 }
-            }
-        }
-    }
-
-    class RoomSearchMatchFilter : Predicate<SpaceChildInfo> {
-        var filter: String = ""
-
-        override fun test(spaceChildInfo: SpaceChildInfo): Boolean {
-            if (filter.isEmpty()) {
-                // No filter
-                return true
-            }
-            // if filter is "Jo Do", it should match "John Doe"
-            return filter.split(" ").all {
-                spaceChildInfo.name?.contains(it, ignoreCase = true).orFalse() ||
-                        spaceChildInfo.topic?.contains(it, ignoreCase = true).orFalse()
             }
         }
     }

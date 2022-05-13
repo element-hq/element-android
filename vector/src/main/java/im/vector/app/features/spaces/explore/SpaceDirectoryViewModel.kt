@@ -232,7 +232,7 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
     }
 
     private fun filter(query: String?) {
-        setState { copy(currentFilter = query ?: "") }
+        setState { copy(currentFilter = query.orEmpty()) }
     }
 
     private fun handleBack() = withState { state ->
