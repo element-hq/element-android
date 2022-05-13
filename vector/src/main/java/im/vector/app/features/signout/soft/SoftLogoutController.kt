@@ -18,6 +18,7 @@ package im.vector.app.features.signout.soft
 
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized

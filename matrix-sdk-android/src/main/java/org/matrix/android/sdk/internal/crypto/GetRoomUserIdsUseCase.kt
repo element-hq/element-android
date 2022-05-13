@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.crypto
+package org.matrix.android.sdk.internal.crypto
 
-/**
- * This listener notifies on new Megolm sessions being created
- */
-interface NewSessionListener {
+import javax.inject.Inject
 
-    /**
-     * @param roomId the room id where the new Megolm session has been created for, may be null when importing from external sessions
-     * @param sessionId the session id of the Megolm session
-     */
-    fun onNewSession(roomId: String?, sessionId: String)
+internal class GetRoomUserIdsUseCase @Inject constructor(private val shouldEncryptForInvitedMembers: ShouldEncryptForInvitedMembersUseCase,
+                                                         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider) {
+
+    operator fun invoke(roomId: String): List<String> {
+        return cryptoSessionInfoProvider.getRoomUserIds(roomId, shouldEncryptForInvitedMembers(roomId))
+    }
 }

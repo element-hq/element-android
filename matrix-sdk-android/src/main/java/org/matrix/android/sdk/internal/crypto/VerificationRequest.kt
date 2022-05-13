@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.session.crypto.verification.ValidVerificationI
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.safeValueOf
-import org.matrix.android.sdk.internal.crypto.crosssigning.toBase64NoPadding
+import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.crypto.model.rest.VERIFICATION_METHOD_QR_CODE_SCAN
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
 import org.matrix.android.sdk.internal.crypto.verification.prepareMethods

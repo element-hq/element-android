@@ -18,7 +18,7 @@ package org.matrix.android.sdk.api.session.crypto.crosssigning
 
 import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.util.Optional
 
 interface CrossSigningService {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.matrix.android.sdk.internal.crypto
 
-interface NewSessionListener {
-    fun onNewSession(roomId: String?, sessionId: String)
+import org.matrix.android.sdk.api.crypto.MXCryptoConfig
+import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import javax.inject.Inject
+
+internal class ShouldEncryptForInvitedMembersUseCase @Inject constructor(private val cryptoConfig: MXCryptoConfig,
+                                                                         private val cryptoStore: IMXCryptoStore) {
+
+    operator fun invoke(roomId: String): Boolean {
+        return cryptoConfig.enableEncryptionForInvitedMembers && cryptoStore.shouldEncryptForInvitedMembers(roomId)
+    }
 }

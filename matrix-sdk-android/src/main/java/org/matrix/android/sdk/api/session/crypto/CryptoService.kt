@@ -37,7 +37,6 @@ import org.matrix.android.sdk.api.session.crypto.verification.VerificationServic
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.content.RoomKeyWithHeldContent
-import org.matrix.android.sdk.internal.crypto.NewSessionListener
 
 interface CryptoService {
 

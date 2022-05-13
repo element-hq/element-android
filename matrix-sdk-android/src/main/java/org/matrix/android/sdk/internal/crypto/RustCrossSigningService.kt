@@ -18,15 +18,15 @@ package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
-import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
+import org.matrix.android.sdk.api.session.crypto.crosssigning.DeviceTrustResult
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.PrivateKeysInfo
+import org.matrix.android.sdk.api.session.crypto.crosssigning.UserTrustResult
+import org.matrix.android.sdk.api.session.crypto.crosssigning.isVerified
+import org.matrix.android.sdk.api.session.crypto.model.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.util.Optional
-import org.matrix.android.sdk.internal.crypto.crosssigning.DeviceTrustResult
-import org.matrix.android.sdk.internal.crypto.crosssigning.UserTrustResult
-import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
-import org.matrix.android.sdk.internal.crypto.store.PrivateKeysInfo
 import org.matrix.android.sdk.internal.di.UserId
 import javax.inject.Inject
 

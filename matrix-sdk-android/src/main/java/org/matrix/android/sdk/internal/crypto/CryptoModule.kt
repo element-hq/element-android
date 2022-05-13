@@ -26,8 +26,6 @@ import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.crosssigning.CrossSigningService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
-import org.matrix.android.sdk.internal.crypto.crosssigning.ComputeTrustTask
-import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultComputeTrustTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.api.RoomKeysApi
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.CreateKeysBackupVersionTask
 import org.matrix.android.sdk.internal.crypto.keysbackup.tasks.DefaultCreateKeysBackupVersionTask
@@ -68,7 +66,6 @@ import org.matrix.android.sdk.internal.crypto.tasks.DefaultDownloadKeysForUsers
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultEncryptEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultGetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultGetDevicesTask
-import org.matrix.android.sdk.internal.crypto.tasks.DefaultInitializeCrossSigningTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendVerificationMessageTask
@@ -81,7 +78,6 @@ import org.matrix.android.sdk.internal.crypto.tasks.DownloadKeysForUsersTask
 import org.matrix.android.sdk.internal.crypto.tasks.EncryptEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDeviceInfoTask
 import org.matrix.android.sdk.internal.crypto.tasks.GetDevicesTask
-import org.matrix.android.sdk.internal.crypto.tasks.InitializeCrossSigningTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendVerificationMessageTask
@@ -246,12 +242,6 @@ internal abstract class CryptoModule {
 
     @Binds
     abstract fun bindCryptoStore(store: RealmCryptoStore): IMXCryptoStore
-
-    @Binds
-    abstract fun bindComputeShieldTrustTask(task: DefaultComputeTrustTask): ComputeTrustTask
-
-    @Binds
-    abstract fun bindInitializeCrossSigningTask(task: DefaultInitializeCrossSigningTask): InitializeCrossSigningTask
 
     @Binds
     abstract fun bindSendEventTask(task: DefaultSendEventTask): SendEventTask

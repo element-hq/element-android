@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.api.util.awaitCallback
+import org.matrix.android.sdk.internal.crypto.keysbackup.RustKeyBackupService
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -39,7 +40,7 @@ private val loggerTag = LoggerTag("OutgoingGossipingRequestManager", LoggerTag.C
  */
 internal class PerSessionBackupQueryRateLimiter @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
-        private val keysBackupService: Lazy<DefaultKeysBackupService>,
+        private val keysBackupService: Lazy<RustKeyBackupService>,
         private val cryptoStore: IMXCryptoStore,
         private val clock: Clock,
 ) {
@@ -103,16 +104,14 @@ internal class PerSessionBackupQueryRateLimiter @Inject constructor(
 
         val successfullyImported = withContext(coroutineDispatchers.io) {
             try {
-                awaitCallback<ImportRoomKeysResult> {
                     keysBackupService.get().restoreKeysWithRecoveryKey(
                             currentVersion,
                             savedKeyBackupKeyInfo?.recoveryKey ?: "",
                             roomId,
                             sessionId,
                             null,
-                            it
                     )
-                }.successfullyNumberOfImportedKeys
+                .successfullyNumberOfImportedKeys
             } catch (failure: Throwable) {
                 // Fail silently
                 Timber.tag(loggerTag.value).v("getFromBackup failed ${failure.localizedMessage}")

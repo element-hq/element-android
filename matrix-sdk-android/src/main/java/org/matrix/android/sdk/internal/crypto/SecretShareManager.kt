@@ -24,11 +24,6 @@ import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.logger.LoggerTag
-import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
-import org.matrix.android.sdk.api.session.crypto.keysbackup.extractCurveKeyFromRecoveryKey
 import org.matrix.android.sdk.api.session.crypto.keyshare.GossipingRequestListener
 import org.matrix.android.sdk.api.session.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.api.session.crypto.model.SecretShareRequest
@@ -36,9 +31,6 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.content.SecretSendEventContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.util.toBase64NoPadding
-import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
-import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.createUniqueTxnId
@@ -54,8 +46,6 @@ internal class SecretShareManager @Inject constructor(
         private val credentials: Credentials,
         private val cryptoStore: IMXCryptoStore,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val messageEncrypter: MessageEncrypter,
-        private val ensureOlmSessionsForDevicesAction: EnsureOlmSessionsForDevicesAction,
         private val sendToDeviceTask: SendToDeviceTask,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val clock: Clock,
@@ -107,6 +97,7 @@ internal class SecretShareManager @Inject constructor(
         }
     }
 
+    /*
     suspend fun handleSecretRequest(toDevice: Event) {
         val request = toDevice.getClearContent().toModel<SecretShareRequest>()
                 ?: return Unit.also {
@@ -213,6 +204,8 @@ internal class SecretShareManager @Inject constructor(
                     .d(" Received secret share request from un-authorised device ${device.deviceId}")
         }
     }
+
+     */
 
     private suspend fun hasBeenVerifiedLessThanFiveMinutesFromNow(deviceId: String): Boolean {
         val verifTimestamp = verifMutex.withLock {

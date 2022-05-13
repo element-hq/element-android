@@ -28,31 +28,33 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.listeners.ProgressListener
 import org.matrix.android.sdk.api.listeners.StepProgressListener
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupLastVersionResult
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupService
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupStateListener
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM_BACKUP
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupVersionTrust
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersion
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupAuthData
+import org.matrix.android.sdk.api.session.crypto.keysbackup.MegolmBackupCreationInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.SavedKeyBackupKeyInfo
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import org.matrix.android.sdk.internal.crypto.MegolmSessionImportManager
 import org.matrix.android.sdk.internal.crypto.OlmMachineProvider
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.KeysBackupVersionTrust
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupAuthData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreationInfo
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.SignalableMegolmBackupAuthData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.CreateKeysBackupVersionBody
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeyBackupData
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysBackupData
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
-import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.UpdateKeysBackupVersionBody
-import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.network.RequestSender
-import org.matrix.android.sdk.internal.crypto.store.SavedKeyBackupKeyInfo
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.util.JsonCanonicalizer
@@ -263,7 +265,7 @@ internal class RustKeyBackupService @Inject constructor(
     private suspend fun checkBackupTrust(authData: MegolmBackupAuthData?): KeysBackupVersionTrust {
         return if (authData == null || authData.publicKey.isEmpty() || authData.signatures.isNullOrEmpty()) {
             Timber.v("getKeysBackupTrust: Key backup is absent or missing required data")
-            KeysBackupVersionTrust()
+            KeysBackupVersionTrust(usable = false)
         } else {
             KeysBackupVersionTrust(olmMachine.checkAuthDataSignature(authData))
         }
@@ -375,7 +377,7 @@ internal class RustKeyBackupService @Inject constructor(
         Timber.i("## CrossSigning - onSecretKeyGossip")
         withContext(coroutineDispatchers.crypto) {
             try {
-                val version = sender.getKeyBackupVersion()
+                val version = sender.getKeyBackupLastVersion()?.toKeysVersionResult()
 
                 if (version != null) {
                     val key = BackupRecoveryKey.fromBase64(secret)
@@ -584,13 +586,13 @@ internal class RustKeyBackupService @Inject constructor(
     }
 
     @Throws
-    override suspend fun getCurrentVersion(): KeysVersionResult? {
-        return sender.getKeyBackupVersion()
+    override suspend fun getCurrentVersion(): KeysBackupLastVersionResult? {
+        return sender.getKeyBackupLastVersion()
     }
 
     override suspend fun forceUsingLastVersion(): Boolean {
         val response = withContext(coroutineDispatchers.io) {
-            sender.getKeyBackupVersion()
+            sender.getKeyBackupLastVersion()?.toKeysVersionResult()
         }
 
         return withContext(coroutineDispatchers.crypto) {
@@ -644,7 +646,7 @@ internal class RustKeyBackupService @Inject constructor(
             keysBackupVersion = null
             keysBackupStateManager.state = KeysBackupState.CheckingBackUpOnHomeserver
             try {
-                val data = getCurrentVersion()
+                val data = getCurrentVersion()?.toKeysVersionResult()
                 withContext(coroutineDispatchers.crypto) {
                     checkAndStartWithKeysBackupVersion(data)
                 }
@@ -716,6 +718,10 @@ internal class RustKeyBackupService @Inject constructor(
                 false
             }
         }
+    }
+
+    override fun computePrivateKey(passphrase: String, privateKeySalt: String, privateKeyIterations: Int, progressListener: ProgressListener): ByteArray {
+        return deriveKey(passphrase, privateKeySalt, privateKeyIterations, progressListener)
     }
 
     override suspend fun getKeyBackupRecoveryKeyInfo(): SavedKeyBackupKeyInfo? {

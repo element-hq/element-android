@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.crypto.algorithms.olm
+package org.matrix.android.sdk.internal.crypto
 
-import org.matrix.android.sdk.internal.crypto.MXOlmDevice
-import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.api.session.crypto.model.MXEventDecryptionResult
+import org.matrix.android.sdk.api.session.events.model.Event
 import javax.inject.Inject
 
-internal class MXOlmDecryptionFactory @Inject constructor(private val olmDevice: MXOlmDevice,
-                                                          @UserId private val userId: String) {
+internal class DecryptEventUseCase @Inject constructor(olmMachineProvider: OlmMachineProvider) {
 
-    fun create(): MXOlmDecryption {
-        return MXOlmDecryption(
-                olmDevice,
-                userId
-        )
+    private val olmMachine = olmMachineProvider.olmMachine
+
+    suspend operator fun invoke(event: Event): MXEventDecryptionResult {
+        return olmMachine.decryptRoomEvent(event)
     }
 }
