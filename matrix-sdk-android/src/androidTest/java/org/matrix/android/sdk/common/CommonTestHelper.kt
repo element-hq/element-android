@@ -297,7 +297,7 @@ class CommonTestHelper(context: Context) {
         val session = (registrationResult as RegistrationResult.Success).session
         session.open()
         if (sessionTestParams.withInitialSync) {
-            syncSession(session, 60_000)
+            syncSession(session, 120_000)
         }
         return session
     }
