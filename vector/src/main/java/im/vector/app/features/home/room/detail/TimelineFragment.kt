@@ -1426,6 +1426,9 @@ class TimelineFragment @Inject constructor(
                 updateJumpToReadMarkerViewVisibility()
                 jumpToBottomViewVisibilityManager.maybeShowJumpToBottomViewVisibilityWithDelay()
             }
+        }.apply {
+            // For local rooms, pin the view's content to the top edge (the layout is reversed)
+            stackFromEnd = isLocalRoom()
         }
         val stateRestorer = LayoutManagerStateRestorer(layoutManager).register()
         scrollOnNewMessageCallback = ScrollOnNewMessageCallback(layoutManager, timelineEventController)
@@ -1696,14 +1699,14 @@ class TimelineFragment @Inject constructor(
 
     private fun renderToolbar(roomSummary: RoomSummary?) {
         when {
-            isLocalRoom() -> {
+            isLocalRoom()      -> {
                 views.includeRoomToolbar.roomToolbarContentView.isVisible = false
                 views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
                 setupToolbar(views.roomToolbar)
                         .setTitle(R.string.fab_menu_create_chat)
                         .allowBack(useCross = true)
             }
-            isThreadTimeLine()                -> {
+            isThreadTimeLine() -> {
                 views.includeRoomToolbar.roomToolbarContentView.isVisible = false
                 views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = true
                 timelineArgs.threadTimelineArgs?.let {
@@ -1714,7 +1717,7 @@ class TimelineFragment @Inject constructor(
                 }
                 views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
             }
-            else -> {
+            else               -> {
                 views.includeRoomToolbar.roomToolbarContentView.isVisible = true
                 views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
                 if (roomSummary == null) {
