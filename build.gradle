@@ -148,7 +148,7 @@ allprojects {
         // preconfigure defaults
         buildUponDefaultConfig = true
         // activate all available (even unstable) rules.
-        allRules = false
+        allRules = true
         // point to your custom config defining rules to run, overwriting default behavior
         config = files("$rootDir/tools/detekt/detekt.yml")
     }
