@@ -52,8 +52,6 @@ Alternatively, to install the latest Synapse release package (and not a cloned b
 pip install matrix-synapse
 ```
 
-### Integration test failures
-
 You should now have 3 running federated Synapse instances 🎉, at http://127.0.0.1:8080/, http://127.0.0.1:8081/ and  http://127.0.0.1:8082/, which should display a "It Works! Synapse is running" message.
 
 ## Run the test
